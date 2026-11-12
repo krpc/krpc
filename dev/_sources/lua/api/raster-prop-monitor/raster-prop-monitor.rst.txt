@@ -1,0 +1,125 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: RasterPropMonitor
+
+RasterPropMonitor
+=================
+
+
+.. module:: RasterPropMonitor
+
+This service provides the IVA screens, variables and external cameras of
+`Raster Prop Monitor <https://github.com/FirstPersonKSP/RasterPropMonitor>`_.
+
+.. note::
+
+   A persistent variable is a number a script and the props share: a prop shows it, and a
+   switch or numeric input sets it. Raster Prop Monitor updates the variables that depend
+   on the vessel only for the active vessel.
+
+
+
+.. attribute:: available: boolean
+
+   Whether Raster Prop Monitor is installed.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. staticmethod:: computer(part: SpaceCenter.Part): RasterPropMonitor.Computer
+
+   The computer of a part.
+   Throws an exception if the part has no Raster Prop Monitor computer.
+
+   :param part: The part.
+
+
+
+
+.. staticmethod:: computers(vessel: SpaceCenter.Vessel): List
+
+   The computers of the parts of a vessel.
+
+   :param vessel: The vessel.
+
+
+
+
+.. staticmethod:: global_persistent_variable(vessel: SpaceCenter.Vessel, name: string): number | nil
+
+   The value of a persistent variable of a vessel, or ``nil`` if it is not set.
+   Throws an exception if the vessel has no Raster Prop Monitor computer.
+
+   :param vessel: The vessel.
+   :param name: The name of the variable, without the ``PERSISTENT_`` prefix.
+
+
+
+
+.. staticmethod:: set_global_persistent_variable(vessel: SpaceCenter.Vessel, name: string, value: number)
+
+   Set a persistent variable of a vessel. The props that show it update.
+   Throws an exception if the vessel has no Raster Prop Monitor computer.
+
+   :param vessel: The vessel.
+   :param name: The name of the variable, without the ``PERSISTENT_`` prefix.
+   :param value: The value.
+
+
+
+
+.. staticmethod:: remove_global_persistent_variable(vessel: SpaceCenter.Vessel, name: string)
+
+   Remove a persistent variable of a vessel. The props that show it update.
+   Throws an exception if the vessel has no Raster Prop Monitor computer.
+
+   :param vessel: The vessel.
+   :param name: The name of the variable, without the ``PERSISTENT_`` prefix.
+
+
+
+
+.. staticmethod:: global_persistent_variable_changed(vessel: SpaceCenter.Vessel, name: string): number
+
+   An event that fires when :meth:`RasterPropMonitor.global_persistent_variable` changes.
+   The event lasts until it is removed.
+   Throws an exception if the vessel has no Raster Prop Monitor computer.
+
+   :param vessel: The vessel.
+   :param name: The name of the variable, without the ``PERSISTENT_`` prefix.
+
+
+
+
+.. staticmethod:: monitors(vessel: SpaceCenter.Vessel): List
+
+   The monitors in the IVAs of a vessel's parts.
+   Throws an exception if the vessel is not the active vessel.
+
+   :param vessel: The active vessel.
+
+   .. note::
+
+      KSP builds IVAs only for the active vessel.
+
+
+
+
+.. staticmethod:: display(vessel: SpaceCenter.Vessel, name: string): RasterPropMonitor.Display
+
+   The display of a vessel with the given name, which every page whose
+   ``KRPCDisplay`` handler names it shows.
+
+   :param vessel: The vessel.
+   :param name: The name of the display.
+
+
+
+
+.. staticmethod:: cameras(vessel: SpaceCenter.Vessel): List
+
+   The external cameras on a vessel's parts.
+
+   :param vessel: The vessel.

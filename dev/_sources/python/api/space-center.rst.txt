@@ -71,6 +71,7 @@ These services cover other mods:
 * :doc:`Docking Camera (KURS) <docking-camera>`
 * :doc:`Trajectories <trajectories>`
 * :doc:`SCANsat <scansat>`
+* :doc:`Raster Prop Monitor <raster-prop-monitor>`
 
 .. _Ferram Aerospace Research: https://github.com/KSPModStewards/Ferram-Aerospace-Research
 .. _Extended Action Groups: https://github.com/linuxgurugamer/AGExt

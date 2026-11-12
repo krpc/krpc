@@ -827,4 +827,5 @@ API Reference
    java/api/mechjeb
    java/api/kerbal-engineer-redux
    java/api/scansat
+   java/api/raster-prop-monitor
    java/api/debug

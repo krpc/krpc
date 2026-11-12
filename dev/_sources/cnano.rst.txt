@@ -802,4 +802,5 @@ API Reference
    cnano/api/mechjeb
    cnano/api/kerbal-engineer-redux
    cnano/api/scansat
+   cnano/api/raster-prop-monitor
    cnano/api/debug

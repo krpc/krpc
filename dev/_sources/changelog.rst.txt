@@ -192,6 +192,15 @@ SCANsat service
 * Add the SCANsat service, with scan coverage, the terrain, biome, anomaly and resource data the scans reveal, control of the scanners, and maps of a body as PNG or JPEG images (:issue:`1328`)
 
 
+Raster Prop Monitor service
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Add the Raster Prop Monitor service, with the persistent variables that IVA props show and switches set, reads of any RPM variable, and the pages, buttons, text and images of IVA monitors (:issue:`1335`)
+* Add screen pages that a script draws and whose button presses it answers, with an optional Module Manager patch that gives every RPM screen one (:issue:`1335`)
+* Add page button captures, so a press of an RPM page button shows a script's page (:issue:`1335`)
+* Add PNG and JPEG images from RPM's external cameras, which a stream turns into video (:issue:`424`)
+
+
 C-nano client
 ^^^^^^^^^^^^^
 

@@ -1,0 +1,206 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: RasterPropMonitor
+
+Monitor
+=======
+
+
+.. class:: Monitor
+
+   A Raster Prop Monitor screen in an IVA, such as an MFD.
+   Obtained by calling :meth:`RasterPropMonitor.monitors`.
+
+   .. note::
+
+      Raster Prop Monitor draws a monitor only while the player is in the IVA of its pod, or
+      the IVA overlay is on. Reading another monitor's text or image updates it, in any camera
+      mode.
+
+   .. attribute:: part: SpaceCenter.Part
+
+      The part the monitor is in.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: prop_name: string
+
+      The name of the prop, e.g. ``RasterPropMonitorBasicMFD``.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: pages: List
+
+      The names of the pages, in the order of the prop's configuration.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: active_page: string
+
+      Returns the name of the page the monitor shows, and sets it as a press of the page's
+      button does. Raster Prop Monitor can refuse the switch, or redirect it to another
+      page, as the prop's configuration sets. Throws an exception if the monitor has no page with
+      the name.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: buttons: List
+
+      The names of the monitor's buttons, e.g. ``button_UP``. A button's index in
+      this list is its identifier. A name is empty where the configuration leaves a gap.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         These are the buttons that the active page handles. The buttons that select pages
+         are not in the list.
+
+   .. method:: press_button(id: number)
+
+      Press and release a button, as the player does. The release is on the next frame.
+      Throws an exception if the monitor has no button with the identifier.
+
+      :param id: The button's index in :attr:`RasterPropMonitor.Monitor.buttons`.
+
+   .. attribute:: page_buttons: List
+
+      The names of the prop's buttons that select the monitor's pages, e.g.
+      ``buttonR1``. A captured button is one of them.
+
+      :Attribute: Read-only, cannot be set
+
+   .. method:: press_page_button(name: string)
+
+      Press and release a page button, as the player does. The release is on the next
+      frame. A captured button shows the page the script chose.
+      Throws an exception if the button does not select the monitor's pages.
+
+      :param name: The name of the button, from :attr:`RasterPropMonitor.Monitor.page_buttons`.
+
+   .. method:: capture_button(name: string, page: string)
+
+      Take a page button from Raster Prop Monitor. A press of the button then shows the
+      given page, such as the ``krpc`` page of the monitor's own display, in place of
+      the pages Raster Prop Monitor assigns it, and fires :meth:`RasterPropMonitor.Monitor.captured_button_pressed`.
+      The capture lasts while KSP builds the IVA again, but is not saved with the game.
+      Throws an exception if the button does not select the monitor's pages, or the
+      monitor has no page with the name.
+
+      :param name: The name of the button, from :attr:`RasterPropMonitor.Monitor.page_buttons`.
+      :param page: The name of the page to show.
+
+   .. method:: release_capture(name: string)
+
+      Give a captured page button back to Raster Prop Monitor.
+
+      :param name: The name of the button.
+
+   .. method:: captured_button_pressed(name: string): number
+
+      An event that fires when the player presses a captured page button.
+      The event lasts until it is removed.
+
+      :param name: The name of the button.
+
+   .. attribute:: display: RasterPropMonitor.Display
+
+      The monitor's own display, which its pages show when their ``KRPCDisplay``
+      handler names no display.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: screen_width: number
+
+      The width of the screen, in characters.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: screen_height: number
+
+      The height of the screen, in lines.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: screen_pixel_width: number
+
+      The width of the screen, in pixels.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: screen_pixel_height: number
+
+      The height of the screen, in pixels.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: letter_width: number
+
+      The width of a character, in pixels.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: letter_height: number
+
+      The height of a character, in pixels.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: default_color: StdLib.ColorRGBA
+
+      The color of text with no color tag, on the active page.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: text: string
+
+      The text of the active page, as the screen shows it: one line per screen line,
+      holding the characters Raster Prop Monitor draws. The tags it draws nothing for,
+      such as colors, are removed.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: raw_text: string
+
+      The text of the active page with its variables formatted, and Raster Prop
+      Monitor's markup kept: colors ``[#rrggbb]`` and ``[#rrggbbaa]``, nudges
+      ``[@xN]`` and ``[@yN]`` in pixels, ``[hw]`` and ``[dw]`` for half and
+      double width, ``[sup]``, ``[sub]`` and ``[fontN]``.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         The page's text overlay, drawn over the text, is not included.
+
+   .. attribute:: variables: List
+
+      The names of the variables the active page shows, in the order of its text.
+
+      :Attribute: Read-only, cannot be set
+
+   .. method:: image(format?: RasterPropMonitor.ImageFormat, quality?: number): string
+
+      The screen as an image, at :attr:`RasterPropMonitor.Monitor.screen_pixel_width` by
+      :attr:`RasterPropMonitor.Monitor.screen_pixel_height` pixels.
+
+      :param format: The format of the image. Defaults to ``RasterPropMonitor.ImageFormat.png``.
+      :param quality: The quality of a JPEG image, from 1 to 100. Defaults to ``75``.
+      :returns: The image data.
+
+
+
+
+.. class:: ImageFormat
+
+   The file format of an image.
+
+
+   .. data:: png
+
+      PNG, which is lossless.
+
+
+   .. data:: jpeg
+
+      JPEG, which is lossy, and smaller and faster to encode than PNG.

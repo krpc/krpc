@@ -1,0 +1,65 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.RasterPropMonitor
+
+External Camera
+===============
+
+
+.. type:: public class ExternalCamera
+
+   A Raster Prop Monitor external camera: a part that the MFD camera pages show, such as
+   the JSI External Radial-mount Camera. Obtained by calling
+   :meth:`RasterPropMonitor.cameras(SpaceCenter.Vessel)`.
+
+   .. method:: SpaceCenter.Part getPart()
+
+
+      The part the camera is on.
+
+      :Game Scenes: Flight
+
+   .. method:: String getName()
+
+
+      The camera's identifier, e.g. ``ExtCam1``, which the MFD camera pages select it
+      by. The player sets the number in the part's menu.
+
+      :Game Scenes: Flight
+
+   .. method:: float getMinFoV()
+
+
+      The smallest field of view of the camera, in degrees.
+
+      :Game Scenes: Flight
+
+   .. method:: float getMaxFoV()
+
+
+      The largest field of view of the camera, in degrees.
+
+      :Game Scenes: Flight
+
+   .. method:: float getFoV()
+
+   .. method:: void setFoV(float value)
+
+      The field of view that :meth:`ExternalCamera.image(int, int, ImageFormat, int)` renders at, in degrees. It starts at
+      :meth:`ExternalCamera.getMaxFoV()`, as on an MFD camera page, and a value set is clamped
+      to the camera's range.
+
+      :Game Scenes: Flight
+
+   .. method:: byte[] image(int width, int height, ImageFormat format, int quality)
+
+      The camera's view as an image, rendered now. Streamed at a rate, it is a video of
+      the camera, for which JPEG is smaller and faster.
+      Throws an exception if the camera is not on the active vessel.
+
+      :param int width: The width of the image, in pixels.
+      :param int height: The height of the image, in pixels.
+      :param ImageFormat format: The format of the image.
+      :param int quality: The quality of a JPEG image, from 1 to 100.
+      :returns: The image data.
+      :Game Scenes: Flight

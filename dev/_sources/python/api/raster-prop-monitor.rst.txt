@@ -1,0 +1,33 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: RasterPropMonitor
+
+Raster Prop Monitor API
+=======================
+
+Provides functionality to interact with the `Raster Prop Monitor
+<https://github.com/FirstPersonKSP/RasterPropMonitor>`_ mod.
+
+.. toctree::
+   :includehidden:
+   :maxdepth: 1
+
+   raster-prop-monitor/raster-prop-monitor
+   raster-prop-monitor/computer
+   raster-prop-monitor/monitor
+   raster-prop-monitor/display
+   raster-prop-monitor/external-camera
+
+Example
+-------
+
+kRPC adds a page named ``krpc`` to every Raster Prop Monitor screen. The page shows the screen's
+:class:`Display`, which a script draws on.
+The following example draws a page on the first screen in the active vessel's IVA, showing
+whether SAS is on. The screen's ENTER button toggles SAS, and its NAV button shows the page:
+
+.. literalinclude:: /scripts/api/raster-prop-monitor/RasterPropMonitorExample.py
+
+The page text names Raster Prop Monitor's ``SAS`` variable, and the format gives ``ON`` for 1 and
+``OFF`` for 0. Raster Prop Monitor updates the page as SAS changes, however it is switched. On the
+screens of the Mk1 Lander Can, NAV is ``buttonR1``.

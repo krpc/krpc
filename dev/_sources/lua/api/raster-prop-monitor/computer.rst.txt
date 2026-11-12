@@ -1,0 +1,94 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: RasterPropMonitor
+
+Computer
+========
+
+
+.. class:: Computer
+
+   The Raster Prop Monitor computer of a part, which holds the variables its props show.
+   Obtained by calling :meth:`RasterPropMonitor.computer` or
+   :meth:`RasterPropMonitor.computers`.
+
+   .. attribute:: part: SpaceCenter.Part
+
+      The part the computer is on.
+
+      :Attribute: Read-only, cannot be set
+
+   .. method:: persistent_variable(name: string): number | nil
+
+      The value of a persistent variable of the part, or else of the vessel, or
+      ``nil`` if neither is set. Props read it as ``PERSISTENT_name``.
+
+      :param name: The name of the variable, without the ``PERSISTENT_`` prefix.
+
+   .. method:: set_persistent_variable(name: string, value: number)
+
+      Set a persistent variable of the part. The props that show it update.
+
+      :param name: The name of the variable, without the ``PERSISTENT_`` prefix.
+      :param value: The value.
+
+   .. method:: remove_persistent_variable(name: string)
+
+      Remove a persistent variable of the part. The props that show it update.
+
+      :param name: The name of the variable, without the ``PERSISTENT_`` prefix.
+
+   .. method:: persistent_variable_changed(name: string): number
+
+      An event that fires when :meth:`RasterPropMonitor.Computer.persistent_variable` changes, such as when a
+      switch in the IVA sets it. The event lasts until it is removed.
+
+      :param name: The name of the variable, without the ``PERSISTENT_`` prefix.
+
+   .. method:: variable_type(name: string): RasterPropMonitor.VariableType
+
+      The type of a variable's current value.
+      Throws an exception if Raster Prop Monitor does not recognize the variable.
+
+      :param name: The name of the variable, e.g. ``ALTITUDE``.
+
+   .. method:: number_variable(name: string): number
+
+      The value of a number variable. Raster Prop Monitor gives a boolean as 0 or 1.
+      Throws an exception if Raster Prop Monitor does not recognize the variable, or
+      its value is a string.
+
+      :param name: The name of the variable, e.g. ``ALTITUDE``.
+
+   .. method:: string_variable(name: string): string
+
+      The value of a variable as a string. A number gives its invariant culture string.
+      Throws an exception if Raster Prop Monitor does not recognize the variable.
+
+      :param name: The name of the variable, e.g. ``ALTITUDE``.
+
+   .. method:: format_variables(text: string): string
+
+      Text with its variables formatted as a monitor page formats them, e.g.
+      ``{0:SIP6.1}m $&$ ALTITUDE``. Each line takes its own variables.
+      Throws an exception if Raster Prop Monitor does not recognize a variable, or a
+      format is invalid.
+
+      :param text: The text, in the format of a monitor page.
+
+
+
+
+.. class:: VariableType
+
+   The type of a Raster Prop Monitor variable. See :meth:`RasterPropMonitor.Computer.variable_type`.
+
+
+   .. data:: number
+
+      A number. Access using :meth:`RasterPropMonitor.Computer.number_variable`.
+
+
+   .. data:: string
+
+      A string. Access using :meth:`RasterPropMonitor.Computer.string_variable`.

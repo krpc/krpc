@@ -1,0 +1,234 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::RasterPropMonitor
+
+Monitor
+=======
+
+
+.. class:: Monitor
+
+   A Raster Prop Monitor screen in an IVA, such as an MFD.
+   Obtained by calling :func:`monitors`.
+
+   .. note::
+
+      Raster Prop Monitor draws a monitor only while the player is in the IVA of its pod, or
+      the IVA overlay is on. Reading another monitor's text or image updates it, in any camera
+      mode.
+
+   .. function:: SpaceCenter::Part part()
+
+      The part the monitor is in.
+
+      :Game Scenes: Flight
+
+   .. function:: std::string prop_name()
+
+      The name of the prop, e.g. ``RasterPropMonitorBasicMFD``.
+
+      :Game Scenes: Flight
+
+   .. function:: std::vector<std::string> pages()
+
+      The names of the pages, in the order of the prop's configuration.
+
+      :Game Scenes: Flight
+
+   .. function:: std::string active_page()
+   .. function:: void set_active_page(std::string value)
+
+      Returns the name of the page the monitor shows, and sets it as a press of the page's
+      button does. Raster Prop Monitor can refuse the switch, or redirect it to another
+      page, as the prop's configuration sets. Throws an exception if the monitor has no page with
+      the name.
+
+      :Game Scenes: Flight
+
+   .. function:: std::vector<std::string> buttons()
+
+      The names of the monitor's buttons, e.g. ``button_UP``. A button's index in
+      this list is its identifier. A name is empty where the configuration leaves a gap.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         These are the buttons that the active page handles. The buttons that select pages
+         are not in the list.
+
+   .. function:: void press_button(int32_t id)
+
+      Press and release a button, as the player does. The release is on the next frame.
+      Throws an exception if the monitor has no button with the identifier.
+
+      :Parameters:
+
+       * **id** -- The button's index in :func:`Monitor::buttons`.
+
+      :Game Scenes: Flight
+
+   .. function:: std::vector<std::string> page_buttons()
+
+      The names of the prop's buttons that select the monitor's pages, e.g.
+      ``buttonR1``. A captured button is one of them.
+
+      :Game Scenes: Flight
+
+   .. function:: void press_page_button(std::string name)
+
+      Press and release a page button, as the player does. The release is on the next
+      frame. A captured button shows the page the script chose.
+      Throws an exception if the button does not select the monitor's pages.
+
+      :Parameters:
+
+       * **name** -- The name of the button, from :func:`Monitor::page_buttons`.
+
+      :Game Scenes: Flight
+
+   .. function:: void capture_button(std::string name, std::string page)
+
+      Take a page button from Raster Prop Monitor. A press of the button then shows the
+      given page, such as the ``krpc`` page of the monitor's own display, in place of
+      the pages Raster Prop Monitor assigns it, and fires :func:`Monitor::captured_button_pressed`.
+      The capture lasts while KSP builds the IVA again, but is not saved with the game.
+      Throws an exception if the button does not select the monitor's pages, or the
+      monitor has no page with the name.
+
+      :Parameters:
+
+       * **name** -- The name of the button, from :func:`Monitor::page_buttons`.
+       * **page** -- The name of the page to show.
+
+      :Game Scenes: Flight
+
+   .. function:: void release_capture(std::string name)
+
+      Give a captured page button back to Raster Prop Monitor.
+
+      :Parameters:
+
+       * **name** -- The name of the button.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc::Event captured_button_pressed(std::string name)
+
+      An event that fires when the player presses a captured page button.
+      The event lasts until it is removed.
+
+      :Parameters:
+
+       * **name** -- The name of the button.
+
+      :Game Scenes: Flight
+
+   .. function:: Display display()
+
+      The monitor's own display, which its pages show when their ``KRPCDisplay``
+      handler names no display.
+
+      :Game Scenes: Flight
+
+   .. function:: int32_t screen_width()
+
+      The width of the screen, in characters.
+
+      :Game Scenes: Flight
+
+   .. function:: int32_t screen_height()
+
+      The height of the screen, in lines.
+
+      :Game Scenes: Flight
+
+   .. function:: int32_t screen_pixel_width()
+
+      The width of the screen, in pixels.
+
+      :Game Scenes: Flight
+
+   .. function:: int32_t screen_pixel_height()
+
+      The height of the screen, in pixels.
+
+      :Game Scenes: Flight
+
+   .. function:: int32_t letter_width()
+
+      The width of a character, in pixels.
+
+      :Game Scenes: Flight
+
+   .. function:: int32_t letter_height()
+
+      The height of a character, in pixels.
+
+      :Game Scenes: Flight
+
+   .. function:: StdLib::ColorRGBA default_color()
+
+      The color of text with no color tag, on the active page.
+
+      :Game Scenes: Flight
+
+   .. function:: std::string text()
+
+      The text of the active page, as the screen shows it: one line per screen line,
+      holding the characters Raster Prop Monitor draws. The tags it draws nothing for,
+      such as colors, are removed.
+
+      :Game Scenes: Flight
+
+   .. function:: std::string raw_text()
+
+      The text of the active page with its variables formatted, and Raster Prop
+      Monitor's markup kept: colors ``[#rrggbb]`` and ``[#rrggbbaa]``, nudges
+      ``[@xN]`` and ``[@yN]`` in pixels, ``[hw]`` and ``[dw]`` for half and
+      double width, ``[sup]``, ``[sub]`` and ``[fontN]``.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The page's text overlay, drawn over the text, is not included.
+
+   .. function:: std::vector<std::string> variables()
+
+      The names of the variables the active page shows, in the order of its text.
+
+      :Game Scenes: Flight
+
+   .. function:: std::string image(ImageFormat format = ImageFormat::png, int32_t quality = 75)
+
+      The screen as an image, at :func:`Monitor::screen_pixel_width` by
+      :func:`Monitor::screen_pixel_height` pixels.
+
+      :Parameters:
+
+       * **format** -- The format of the image.
+       * **quality** -- The quality of a JPEG image, from 1 to 100.
+
+      :returns: The image data.
+      :Game Scenes: Flight
+
+
+
+
+.. namespace:: krpc::services::RasterPropMonitor
+.. enum-struct:: ImageFormat
+
+   The file format of an image.
+
+
+   .. enumerator:: png
+
+      PNG, which is lossless.
+
+
+   .. enumerator:: jpeg
+
+      JPEG, which is lossy, and smaller and faster to encode than PNG.

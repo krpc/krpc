@@ -1,0 +1,63 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::RasterPropMonitor
+
+External Camera
+===============
+
+
+.. class:: ExternalCamera
+
+   A Raster Prop Monitor external camera: a part that the MFD camera pages show, such as
+   the JSI External Radial-mount Camera. Obtained by calling
+   :func:`cameras`.
+
+   .. function:: SpaceCenter::Part part()
+
+      The part the camera is on.
+
+      :Game Scenes: Flight
+
+   .. function:: std::string name()
+
+      The camera's identifier, e.g. ``ExtCam1``, which the MFD camera pages select it
+      by. The player sets the number in the part's menu.
+
+      :Game Scenes: Flight
+
+   .. function:: float min_fo_v()
+
+      The smallest field of view of the camera, in degrees.
+
+      :Game Scenes: Flight
+
+   .. function:: float max_fo_v()
+
+      The largest field of view of the camera, in degrees.
+
+      :Game Scenes: Flight
+
+   .. function:: float fo_v()
+   .. function:: void set_fo_v(float value)
+
+      The field of view that :func:`ExternalCamera::image` renders at, in degrees. It starts at
+      :func:`ExternalCamera::max_fo_v`, as on an MFD camera page, and a value set is clamped
+      to the camera's range.
+
+      :Game Scenes: Flight
+
+   .. function:: std::string image(int32_t width, int32_t height, ImageFormat format = ImageFormat::png, int32_t quality = 75)
+
+      The camera's view as an image, rendered now. Streamed at a rate, it is a video of
+      the camera, for which JPEG is smaller and faster.
+      Throws an exception if the camera is not on the active vessel.
+
+      :Parameters:
+
+       * **width** -- The width of the image, in pixels.
+       * **height** -- The height of the image, in pixels.
+       * **format** -- The format of the image.
+       * **quality** -- The quality of a JPEG image, from 1 to 100.
+
+      :returns: The image data.
+      :Game Scenes: Flight

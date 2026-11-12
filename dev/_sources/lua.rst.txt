@@ -478,4 +478,5 @@ API Reference
    lua/api/mechjeb
    lua/api/kerbal-engineer-redux
    lua/api/scansat
+   lua/api/raster-prop-monitor
    lua/api/debug

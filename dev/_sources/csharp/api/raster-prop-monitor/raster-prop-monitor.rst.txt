@@ -1,0 +1,133 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.RasterPropMonitor
+
+RasterPropMonitor
+=================
+
+
+.. class:: RasterPropMonitor
+
+   This service provides the IVA screens, variables and external cameras of
+   `Raster Prop Monitor <https://github.com/FirstPersonKSP/RasterPropMonitor>`_.
+
+   .. note::
+
+      A persistent variable is a number a script and the props share: a prop shows it, and a
+      switch or numeric input sets it. Raster Prop Monitor updates the variables that depend
+      on the vessel only for the active vessel.
+
+   .. property:: bool Available { get; }
+
+      Whether Raster Prop Monitor is installed.
+
+      :Game Scenes: All
+
+   .. function:: Computer Computer(SpaceCenter.Part part)
+
+      The computer of a part.
+      Throws an exception if the part has no Raster Prop Monitor computer.
+
+      :parameters:
+
+       * **part** -- The part.
+
+      :Game Scenes: Flight
+
+   .. function:: System.Collections.Generic.IList<Computer> Computers(SpaceCenter.Vessel vessel)
+
+      The computers of the parts of a vessel.
+
+      :parameters:
+
+       * **vessel** -- The vessel.
+
+      :Game Scenes: Flight
+
+   .. function:: double? GlobalPersistentVariable(SpaceCenter.Vessel vessel, string name)
+
+      The value of a persistent variable of a vessel, or ``null`` if it is not set.
+      Throws an exception if the vessel has no Raster Prop Monitor computer.
+
+      :parameters:
+
+       * **vessel** -- The vessel.
+       * **name** -- The name of the variable, without the ``PERSISTENT_`` prefix.
+
+      :Game Scenes: Flight
+
+   .. function:: void SetGlobalPersistentVariable(SpaceCenter.Vessel vessel, string name, double value)
+
+      Set a persistent variable of a vessel. The props that show it update.
+      Throws an exception if the vessel has no Raster Prop Monitor computer.
+
+      :parameters:
+
+       * **vessel** -- The vessel.
+       * **name** -- The name of the variable, without the ``PERSISTENT_`` prefix.
+       * **value** -- The value.
+
+      :Game Scenes: Flight
+
+   .. function:: void RemoveGlobalPersistentVariable(SpaceCenter.Vessel vessel, string name)
+
+      Remove a persistent variable of a vessel. The props that show it update.
+      Throws an exception if the vessel has no Raster Prop Monitor computer.
+
+      :parameters:
+
+       * **vessel** -- The vessel.
+       * **name** -- The name of the variable, without the ``PERSISTENT_`` prefix.
+
+      :Game Scenes: Flight
+
+   .. function:: KRPC.Client.Event GlobalPersistentVariableChanged(SpaceCenter.Vessel vessel, string name)
+
+      An event that fires when :meth:`RasterPropMonitor.GlobalPersistentVariable <RasterPropMonitor.RasterPropMonitor.GlobalPersistentVariable>` changes.
+      The event lasts until it is removed.
+      Throws an exception if the vessel has no Raster Prop Monitor computer.
+
+      :parameters:
+
+       * **vessel** -- The vessel.
+       * **name** -- The name of the variable, without the ``PERSISTENT_`` prefix.
+
+      :Game Scenes: Flight
+
+   .. function:: System.Collections.Generic.IList<Monitor> Monitors(SpaceCenter.Vessel vessel)
+
+      The monitors in the IVAs of a vessel's parts.
+      Throws an exception if the vessel is not the active vessel.
+
+      :parameters:
+
+       * **vessel** -- The active vessel.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         KSP builds IVAs only for the active vessel.
+
+   .. function:: Display Display(SpaceCenter.Vessel vessel, string name)
+
+      The display of a vessel with the given name, which every page whose
+      ``KRPCDisplay`` handler names it shows.
+
+      :parameters:
+
+       * **vessel** -- The vessel.
+       * **name** -- The name of the display.
+
+      :Game Scenes: Flight
+
+   .. function:: System.Collections.Generic.IList<ExternalCamera> Cameras(SpaceCenter.Vessel vessel)
+
+      The external cameras on a vessel's parts.
+
+      :parameters:
+
+       * **vessel** -- The vessel.
+
+      :Game Scenes: Flight

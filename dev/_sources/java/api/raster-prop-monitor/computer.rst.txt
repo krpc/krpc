@@ -1,0 +1,103 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.RasterPropMonitor
+
+Computer
+========
+
+
+.. type:: public class Computer
+
+   The Raster Prop Monitor computer of a part, which holds the variables its props show.
+   Obtained by calling :meth:`RasterPropMonitor.computer(SpaceCenter.Part)` or
+   :meth:`RasterPropMonitor.computers(SpaceCenter.Vessel)`.
+
+   .. method:: SpaceCenter.Part getPart()
+
+
+      The part the computer is on.
+
+      :Game Scenes: Flight
+
+   .. method:: Double persistentVariable(String name)
+
+      The value of a persistent variable of the part, or else of the vessel, or
+      ``null`` if neither is set. Props read it as ``PERSISTENT_name``.
+
+      :param String name: The name of the variable, without the ``PERSISTENT_`` prefix.
+      :Game Scenes: Flight
+
+   .. method:: void setPersistentVariable(String name, double value)
+
+      Set a persistent variable of the part. The props that show it update.
+
+      :param String name: The name of the variable, without the ``PERSISTENT_`` prefix.
+      :param double value: The value.
+      :Game Scenes: Flight
+
+   .. method:: void removePersistentVariable(String name)
+
+      Remove a persistent variable of the part. The props that show it update.
+
+      :param String name: The name of the variable, without the ``PERSISTENT_`` prefix.
+      :Game Scenes: Flight
+
+   .. method:: krpc.client.Event persistentVariableChanged(String name)
+
+      An event that fires when :meth:`Computer.persistentVariable(String)` changes, such as when a
+      switch in the IVA sets it. The event lasts until it is removed.
+
+      :param String name: The name of the variable, without the ``PERSISTENT_`` prefix.
+      :Game Scenes: Flight
+
+   .. method:: VariableType variableType(String name)
+
+      The type of a variable's current value.
+      Throws an exception if Raster Prop Monitor does not recognize the variable.
+
+      :param String name: The name of the variable, e.g. ``ALTITUDE``.
+      :Game Scenes: Flight
+
+   .. method:: double numberVariable(String name)
+
+      The value of a number variable. Raster Prop Monitor gives a boolean as 0 or 1.
+      Throws an exception if Raster Prop Monitor does not recognize the variable, or
+      its value is a string.
+
+      :param String name: The name of the variable, e.g. ``ALTITUDE``.
+      :Game Scenes: Flight
+
+   .. method:: String stringVariable(String name)
+
+      The value of a variable as a string. A number gives its invariant culture string.
+      Throws an exception if Raster Prop Monitor does not recognize the variable.
+
+      :param String name: The name of the variable, e.g. ``ALTITUDE``.
+      :Game Scenes: Flight
+
+   .. method:: String formatVariables(String text)
+
+      Text with its variables formatted as a monitor page formats them, e.g.
+      ``{0:SIP6.1}m $&$ ALTITUDE``. Each line takes its own variables.
+      Throws an exception if Raster Prop Monitor does not recognize a variable, or a
+      format is invalid.
+
+      :param String text: The text, in the format of a monitor page.
+      :Game Scenes: Flight
+
+
+
+
+.. type:: public enum VariableType
+
+   The type of a Raster Prop Monitor variable. See :meth:`Computer.variableType(String)`.
+
+
+   .. field:: public VariableType NUMBER
+
+      A number. Access using :meth:`Computer.numberVariable(String)`.
+
+
+   .. field:: public VariableType STRING
+
+      A string. Access using :meth:`Computer.stringVariable(String)`.

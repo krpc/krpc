@@ -1,0 +1,233 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Monitor
+=======
+
+
+.. type:: krpc_RasterPropMonitor_Monitor_t
+
+   A Raster Prop Monitor screen in an IVA, such as an MFD.
+   Obtained by calling :func:`krpc_RasterPropMonitor_Monitors`.
+
+   .. note::
+
+      Raster Prop Monitor draws a monitor only while the player is in the IVA of its pod, or
+      the IVA overlay is on. Reading another monitor's text or image updates it, in any camera
+      mode.
+
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Monitor_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_RasterPropMonitor_Monitor_t instance)
+
+      The part the monitor is in.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Monitor_PropName(krpc_connection_t connection, char * * returnValue, krpc_RasterPropMonitor_Monitor_t instance)
+
+      The name of the prop, e.g. ``RasterPropMonitorBasicMFD``.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Monitor_Pages(krpc_connection_t connection, krpc_list_string_t * returnValue, krpc_RasterPropMonitor_Monitor_t instance)
+
+      The names of the pages, in the order of the prop's configuration.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Monitor_ActivePage(krpc_connection_t connection, char * * returnValue, krpc_RasterPropMonitor_Monitor_t instance)
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Monitor_set_ActivePage(krpc_connection_t connection, krpc_RasterPropMonitor_Monitor_t instance, const char * value)
+
+      Returns the name of the page the monitor shows, and sets it as a press of the page's
+      button does. Raster Prop Monitor can refuse the switch, or redirect it to another
+      page, as the prop's configuration sets. Throws an exception if the monitor has no page with
+      the name.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Monitor_Buttons(krpc_connection_t connection, krpc_list_string_t * returnValue, krpc_RasterPropMonitor_Monitor_t instance)
+
+      The names of the monitor's buttons, e.g. ``button_UP``. A button's index in
+      this list is its identifier. A name is empty where the configuration leaves a gap.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         These are the buttons that the active page handles. The buttons that select pages
+         are not in the list.
+
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Monitor_PressButton(krpc_connection_t connection, krpc_RasterPropMonitor_Monitor_t instance, int32_t id)
+
+      Press and release a button, as the player does. The release is on the next frame.
+      Throws an exception if the monitor has no button with the identifier.
+
+      :Parameters:
+
+       * **id** -- The button's index in :func:`krpc_RasterPropMonitor_Monitor_Buttons`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Monitor_PageButtons(krpc_connection_t connection, krpc_list_string_t * returnValue, krpc_RasterPropMonitor_Monitor_t instance)
+
+      The names of the prop's buttons that select the monitor's pages, e.g.
+      ``buttonR1``. A captured button is one of them.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Monitor_PressPageButton(krpc_connection_t connection, krpc_RasterPropMonitor_Monitor_t instance, const char * name)
+
+      Press and release a page button, as the player does. The release is on the next
+      frame. A captured button shows the page the script chose.
+      Throws an exception if the button does not select the monitor's pages.
+
+      :Parameters:
+
+       * **name** -- The name of the button, from :func:`krpc_RasterPropMonitor_Monitor_PageButtons`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Monitor_CaptureButton(krpc_connection_t connection, krpc_RasterPropMonitor_Monitor_t instance, const char * name, const char * page)
+
+      Take a page button from Raster Prop Monitor. A press of the button then shows the
+      given page, such as the ``krpc`` page of the monitor's own display, in place of
+      the pages Raster Prop Monitor assigns it, and fires :func:`krpc_RasterPropMonitor_Monitor_CapturedButtonPressed`.
+      The capture lasts while KSP builds the IVA again, but is not saved with the game.
+      Throws an exception if the button does not select the monitor's pages, or the
+      monitor has no page with the name.
+
+      :Parameters:
+
+       * **name** -- The name of the button, from :func:`krpc_RasterPropMonitor_Monitor_PageButtons`.
+       * **page** -- The name of the page to show.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Monitor_ReleaseCapture(krpc_connection_t connection, krpc_RasterPropMonitor_Monitor_t instance, const char * name)
+
+      Give a captured page button back to Raster Prop Monitor.
+
+      :Parameters:
+
+       * **name** -- The name of the button.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Monitor_CapturedButtonPressed(krpc_connection_t connection, uint64_t * returnValue, krpc_RasterPropMonitor_Monitor_t instance, const char * name)
+
+      An event that fires when the player presses a captured page button.
+      The event lasts until it is removed.
+
+      :Parameters:
+
+       * **name** -- The name of the button.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Monitor_Display(krpc_connection_t connection, krpc_RasterPropMonitor_Display_t * returnValue, krpc_RasterPropMonitor_Monitor_t instance)
+
+      The monitor's own display, which its pages show when their ``KRPCDisplay``
+      handler names no display.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Monitor_ScreenWidth(krpc_connection_t connection, int32_t * returnValue, krpc_RasterPropMonitor_Monitor_t instance)
+
+      The width of the screen, in characters.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Monitor_ScreenHeight(krpc_connection_t connection, int32_t * returnValue, krpc_RasterPropMonitor_Monitor_t instance)
+
+      The height of the screen, in lines.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Monitor_ScreenPixelWidth(krpc_connection_t connection, int32_t * returnValue, krpc_RasterPropMonitor_Monitor_t instance)
+
+      The width of the screen, in pixels.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Monitor_ScreenPixelHeight(krpc_connection_t connection, int32_t * returnValue, krpc_RasterPropMonitor_Monitor_t instance)
+
+      The height of the screen, in pixels.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Monitor_LetterWidth(krpc_connection_t connection, int32_t * returnValue, krpc_RasterPropMonitor_Monitor_t instance)
+
+      The width of a character, in pixels.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Monitor_LetterHeight(krpc_connection_t connection, int32_t * returnValue, krpc_RasterPropMonitor_Monitor_t instance)
+
+      The height of a character, in pixels.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Monitor_DefaultColor(krpc_connection_t connection, krpc_StdLib_ColorRGBA_t * returnValue, krpc_RasterPropMonitor_Monitor_t instance)
+
+      The color of text with no color tag, on the active page.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Monitor_Text(krpc_connection_t connection, char * * returnValue, krpc_RasterPropMonitor_Monitor_t instance)
+
+      The text of the active page, as the screen shows it: one line per screen line,
+      holding the characters Raster Prop Monitor draws. The tags it draws nothing for,
+      such as colors, are removed.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Monitor_RawText(krpc_connection_t connection, char * * returnValue, krpc_RasterPropMonitor_Monitor_t instance)
+
+      The text of the active page with its variables formatted, and Raster Prop
+      Monitor's markup kept: colors ``[#rrggbb]`` and ``[#rrggbbaa]``, nudges
+      ``[@xN]`` and ``[@yN]`` in pixels, ``[hw]`` and ``[dw]`` for half and
+      double width, ``[sup]``, ``[sub]`` and ``[fontN]``.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The page's text overlay, drawn over the text, is not included.
+
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Monitor_Variables(krpc_connection_t connection, krpc_list_string_t * returnValue, krpc_RasterPropMonitor_Monitor_t instance)
+
+      The names of the variables the active page shows, in the order of its text.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Monitor_Image(krpc_connection_t connection, krpc_bytes_t * returnValue, krpc_RasterPropMonitor_Monitor_t instance, krpc_RasterPropMonitor_ImageFormat_t format, int32_t quality)
+
+      The screen as an image, at :func:`krpc_RasterPropMonitor_Monitor_ScreenPixelWidth` by
+      :func:`krpc_RasterPropMonitor_Monitor_ScreenPixelHeight` pixels.
+
+      :Parameters:
+
+       * **format** -- The format of the image.
+       * **quality** -- The quality of a JPEG image, from 1 to 100.
+
+      :returns: The image data.
+      :Game Scenes: Flight
+
+
+
+
+.. type:: krpc_RasterPropMonitor_ImageFormat_t
+
+   The file format of an image.
+
+
+   .. macro:: KRPC_RASTERPROPMONITOR_IMAGEFORMAT_PNG
+
+      PNG, which is lossless.
+
+
+   .. macro:: KRPC_RASTERPROPMONITOR_IMAGEFORMAT_JPEG
+
+      JPEG, which is lossy, and smaller and faster to encode than PNG.

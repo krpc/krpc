@@ -1,0 +1,232 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.RasterPropMonitor
+
+Monitor
+=======
+
+
+.. class:: Monitor
+
+   A Raster Prop Monitor screen in an IVA, such as an MFD.
+   Obtained by calling :meth:`RasterPropMonitor.Monitors <RasterPropMonitor.RasterPropMonitor.Monitors>`.
+
+   .. note::
+
+      Raster Prop Monitor draws a monitor only while the player is in the IVA of its pod, or
+      the IVA overlay is on. Reading another monitor's text or image updates it, in any camera
+      mode.
+
+   .. property:: SpaceCenter.Part Part { get; }
+
+      The part the monitor is in.
+
+      :Game Scenes: Flight
+
+   .. property:: string PropName { get; }
+
+      The name of the prop, e.g. ``RasterPropMonitorBasicMFD``.
+
+      :Game Scenes: Flight
+
+   .. property:: System.Collections.Generic.IList<string> Pages { get; }
+
+      The names of the pages, in the order of the prop's configuration.
+
+      :Game Scenes: Flight
+
+   .. property:: string ActivePage { get; set; }
+
+      Returns the name of the page the monitor shows, and sets it as a press of the page's
+      button does. Raster Prop Monitor can refuse the switch, or redirect it to another
+      page, as the prop's configuration sets. Throws an exception if the monitor has no page with
+      the name.
+
+      :Game Scenes: Flight
+
+   .. property:: System.Collections.Generic.IList<string> Buttons { get; }
+
+      The names of the monitor's buttons, e.g. ``button_UP``. A button's index in
+      this list is its identifier. A name is empty where the configuration leaves a gap.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         These are the buttons that the active page handles. The buttons that select pages
+         are not in the list.
+
+   .. function:: void PressButton(int id)
+
+      Press and release a button, as the player does. The release is on the next frame.
+      Throws an exception if the monitor has no button with the identifier.
+
+      :parameters:
+
+       * **id** -- The button's index in :prop:`Monitor.Buttons`.
+
+      :Game Scenes: Flight
+
+   .. property:: System.Collections.Generic.IList<string> PageButtons { get; }
+
+      The names of the prop's buttons that select the monitor's pages, e.g.
+      ``buttonR1``. A captured button is one of them.
+
+      :Game Scenes: Flight
+
+   .. function:: void PressPageButton(string name)
+
+      Press and release a page button, as the player does. The release is on the next
+      frame. A captured button shows the page the script chose.
+      Throws an exception if the button does not select the monitor's pages.
+
+      :parameters:
+
+       * **name** -- The name of the button, from :prop:`Monitor.PageButtons`.
+
+      :Game Scenes: Flight
+
+   .. function:: void CaptureButton(string name, string page)
+
+      Take a page button from Raster Prop Monitor. A press of the button then shows the
+      given page, such as the ``krpc`` page of the monitor's own display, in place of
+      the pages Raster Prop Monitor assigns it, and fires :meth:`Monitor.CapturedButtonPressed`.
+      The capture lasts while KSP builds the IVA again, but is not saved with the game.
+      Throws an exception if the button does not select the monitor's pages, or the
+      monitor has no page with the name.
+
+      :parameters:
+
+       * **name** -- The name of the button, from :prop:`Monitor.PageButtons`.
+       * **page** -- The name of the page to show.
+
+      :Game Scenes: Flight
+
+   .. function:: void ReleaseCapture(string name)
+
+      Give a captured page button back to Raster Prop Monitor.
+
+      :parameters:
+
+       * **name** -- The name of the button.
+
+      :Game Scenes: Flight
+
+   .. function:: KRPC.Client.Event CapturedButtonPressed(string name)
+
+      An event that fires when the player presses a captured page button.
+      The event lasts until it is removed.
+
+      :parameters:
+
+       * **name** -- The name of the button.
+
+      :Game Scenes: Flight
+
+   .. property:: Display Display { get; }
+
+      The monitor's own display, which its pages show when their ``KRPCDisplay``
+      handler names no display.
+
+      :Game Scenes: Flight
+
+   .. property:: int ScreenWidth { get; }
+
+      The width of the screen, in characters.
+
+      :Game Scenes: Flight
+
+   .. property:: int ScreenHeight { get; }
+
+      The height of the screen, in lines.
+
+      :Game Scenes: Flight
+
+   .. property:: int ScreenPixelWidth { get; }
+
+      The width of the screen, in pixels.
+
+      :Game Scenes: Flight
+
+   .. property:: int ScreenPixelHeight { get; }
+
+      The height of the screen, in pixels.
+
+      :Game Scenes: Flight
+
+   .. property:: int LetterWidth { get; }
+
+      The width of a character, in pixels.
+
+      :Game Scenes: Flight
+
+   .. property:: int LetterHeight { get; }
+
+      The height of a character, in pixels.
+
+      :Game Scenes: Flight
+
+   .. property:: StdLib.ColorRGBA DefaultColor { get; }
+
+      The color of text with no color tag, on the active page.
+
+      :Game Scenes: Flight
+
+   .. property:: string Text { get; }
+
+      The text of the active page, as the screen shows it: one line per screen line,
+      holding the characters Raster Prop Monitor draws. The tags it draws nothing for,
+      such as colors, are removed.
+
+      :Game Scenes: Flight
+
+   .. property:: string RawText { get; }
+
+      The text of the active page with its variables formatted, and Raster Prop
+      Monitor's markup kept: colors ``[#rrggbb]`` and ``[#rrggbbaa]``, nudges
+      ``[@xN]`` and ``[@yN]`` in pixels, ``[hw]`` and ``[dw]`` for half and
+      double width, ``[sup]``, ``[sub]`` and ``[fontN]``.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The page's text overlay, drawn over the text, is not included.
+
+   .. property:: System.Collections.Generic.IList<string> Variables { get; }
+
+      The names of the variables the active page shows, in the order of its text.
+
+      :Game Scenes: Flight
+
+   .. function:: byte[] Image(ImageFormat format = ImageFormat.PNG, int quality = 75)
+
+      The screen as an image, at :prop:`Monitor.ScreenPixelWidth` by
+      :prop:`Monitor.ScreenPixelHeight` pixels.
+
+      :parameters:
+
+       * **format** -- The format of the image.
+       * **quality** -- The quality of a JPEG image, from 1 to 100.
+
+      :returns: The image data.
+      :Game Scenes: Flight
+
+
+
+
+.. enum:: ImageFormat
+
+   The file format of an image.
+
+
+   .. enumerator:: PNG
+
+      PNG, which is lossless.
+
+
+   .. enumerator:: JPEG
+
+      JPEG, which is lossy, and smaller and faster to encode than PNG.

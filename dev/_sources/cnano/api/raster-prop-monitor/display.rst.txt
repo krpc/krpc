@@ -1,0 +1,78 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Display
+=======
+
+
+.. type:: krpc_RasterPropMonitor_Display_t
+
+   A screen page that a script draws, and whose button presses it answers. Obtained by
+   calling :func:`krpc_RasterPropMonitor_Monitor_Display` or :func:`krpc_RasterPropMonitor_Display`.
+
+   .. note::
+
+      A monitor shows a display on a page whose handler is ``KRPCDisplay``. kRPC's
+      optional Module Manager patch adds such a page, named ``krpc``, to every monitor.
+      The content is kept while KSP builds the IVA again, but not saved with the game.
+
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Display_Name(krpc_connection_t connection, char * * returnValue, bool * returnValueIsNull, krpc_RasterPropMonitor_Display_t instance)
+
+      The name of the display, or ``nullptr`` for a monitor's own display.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Display_Text(krpc_connection_t connection, char * * returnValue, krpc_RasterPropMonitor_Display_t instance)
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Display_set_Text(krpc_connection_t connection, krpc_RasterPropMonitor_Display_t instance, const char * value)
+
+      The text of the display, in Raster Prop Monitor's page format. It can hold
+      markup, such as ``[#ff0000]`` for a color, and a line can format variables, as
+      in ``{0:F0} m $&$ ALTITUDE``. Raster Prop Monitor updates the variables as
+      it draws.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Display_Image(krpc_connection_t connection, krpc_bytes_t * returnValue, bool * returnValueIsNull, krpc_RasterPropMonitor_Display_t instance)
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Display_set_Image(krpc_connection_t connection, krpc_RasterPropMonitor_Display_t instance, const krpc_bytes_t * value)
+
+      The background image of the display, drawn under the text and scaled to the
+      screen, as a PNG or JPEG image. ``nullptr`` for none.
+      Throws an exception if the image does not decode.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Display_Clear(krpc_connection_t connection, krpc_RasterPropMonitor_Display_t instance)
+
+      Clear the text and the image.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Display_Shown(krpc_connection_t connection, bool * returnValue, krpc_RasterPropMonitor_Display_t instance)
+
+      Whether a monitor shows the display now.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Display_ButtonPressed(krpc_connection_t connection, uint64_t * returnValue, krpc_RasterPropMonitor_Display_t instance, int32_t id)
+
+      An event that fires when a monitor showing the display has a button pressed.
+      The event lasts until it is removed.
+
+      :Parameters:
+
+       * **id** -- The button's index in :func:`krpc_RasterPropMonitor_Monitor_Buttons`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Display_ButtonReleased(krpc_connection_t connection, uint64_t * returnValue, krpc_RasterPropMonitor_Display_t instance, int32_t id)
+
+      An event that fires when a monitor showing the display has a button released.
+      The event lasts until it is removed.
+
+      :Parameters:
+
+       * **id** -- The button's index in :func:`krpc_RasterPropMonitor_Monitor_Buttons`.
+
+      :Game Scenes: Flight

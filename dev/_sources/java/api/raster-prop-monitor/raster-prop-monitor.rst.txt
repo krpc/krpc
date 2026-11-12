@@ -1,0 +1,107 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.RasterPropMonitor
+
+RasterPropMonitor
+=================
+
+
+.. type:: public class RasterPropMonitor
+
+   This service provides the IVA screens, variables and external cameras of
+   `Raster Prop Monitor <https://github.com/FirstPersonKSP/RasterPropMonitor>`_.
+
+   .. note::
+
+      A persistent variable is a number a script and the props share: a prop shows it, and a
+      switch or numeric input sets it. Raster Prop Monitor updates the variables that depend
+      on the vessel only for the active vessel.
+
+   .. method:: boolean getAvailable()
+
+
+      Whether Raster Prop Monitor is installed.
+
+   
+
+   .. method:: Computer computer(SpaceCenter.Part part)
+
+      The computer of a part.
+      Throws an exception if the part has no Raster Prop Monitor computer.
+
+      :param SpaceCenter.Part part: The part.
+      :Game Scenes: Flight
+
+   .. method:: java.util.List<Computer> computers(SpaceCenter.Vessel vessel)
+
+      The computers of the parts of a vessel.
+
+      :param SpaceCenter.Vessel vessel: The vessel.
+      :Game Scenes: Flight
+
+   .. method:: Double globalPersistentVariable(SpaceCenter.Vessel vessel, String name)
+
+      The value of a persistent variable of a vessel, or ``null`` if it is not set.
+      Throws an exception if the vessel has no Raster Prop Monitor computer.
+
+      :param SpaceCenter.Vessel vessel: The vessel.
+      :param String name: The name of the variable, without the ``PERSISTENT_`` prefix.
+      :Game Scenes: Flight
+
+   .. method:: void setGlobalPersistentVariable(SpaceCenter.Vessel vessel, String name, double value)
+
+      Set a persistent variable of a vessel. The props that show it update.
+      Throws an exception if the vessel has no Raster Prop Monitor computer.
+
+      :param SpaceCenter.Vessel vessel: The vessel.
+      :param String name: The name of the variable, without the ``PERSISTENT_`` prefix.
+      :param double value: The value.
+      :Game Scenes: Flight
+
+   .. method:: void removeGlobalPersistentVariable(SpaceCenter.Vessel vessel, String name)
+
+      Remove a persistent variable of a vessel. The props that show it update.
+      Throws an exception if the vessel has no Raster Prop Monitor computer.
+
+      :param SpaceCenter.Vessel vessel: The vessel.
+      :param String name: The name of the variable, without the ``PERSISTENT_`` prefix.
+      :Game Scenes: Flight
+
+   .. method:: krpc.client.Event globalPersistentVariableChanged(SpaceCenter.Vessel vessel, String name)
+
+      An event that fires when :meth:`RasterPropMonitor.globalPersistentVariable(SpaceCenter.Vessel, String)` changes.
+      The event lasts until it is removed.
+      Throws an exception if the vessel has no Raster Prop Monitor computer.
+
+      :param SpaceCenter.Vessel vessel: The vessel.
+      :param String name: The name of the variable, without the ``PERSISTENT_`` prefix.
+      :Game Scenes: Flight
+
+   .. method:: java.util.List<Monitor> monitors(SpaceCenter.Vessel vessel)
+
+      The monitors in the IVAs of a vessel's parts.
+      Throws an exception if the vessel is not the active vessel.
+
+      :param SpaceCenter.Vessel vessel: The active vessel.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         KSP builds IVAs only for the active vessel.
+
+   .. method:: Display display(SpaceCenter.Vessel vessel, String name)
+
+      The display of a vessel with the given name, which every page whose
+      ``KRPCDisplay`` handler names it shows.
+
+      :param SpaceCenter.Vessel vessel: The vessel.
+      :param String name: The name of the display.
+      :Game Scenes: Flight
+
+   .. method:: java.util.List<ExternalCamera> cameras(SpaceCenter.Vessel vessel)
+
+      The external cameras on a vessel's parts.
+
+      :param SpaceCenter.Vessel vessel: The vessel.
+      :Game Scenes: Flight

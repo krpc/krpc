@@ -1,0 +1,70 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: RasterPropMonitor
+
+External Camera
+===============
+
+
+.. class:: ExternalCamera
+
+   A Raster Prop Monitor external camera: a part that the MFD camera pages show, such as
+   the JSI External Radial-mount Camera. Obtained by calling
+   :meth:`cameras`.
+
+   .. attribute:: part
+
+      The part the camera is on.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Part`
+      :Game Scenes: Flight
+
+   .. attribute:: name
+
+      The camera's identifier, e.g. ``ExtCam1``, which the MFD camera pages select it
+      by. The player sets the number in the part's menu.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: str
+      :Game Scenes: Flight
+
+   .. attribute:: min_fo_v
+
+      The smallest field of view of the camera, in degrees.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: max_fo_v
+
+      The largest field of view of the camera, in degrees.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: fo_v
+
+      The field of view that :meth:`ExternalCamera.image` renders at, in degrees. It starts at
+      :attr:`ExternalCamera.max_fo_v`, as on an MFD camera page, and a value set is clamped
+      to the camera's range.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. method:: image(width, height, [format = ImageFormat.png], [quality = 75])
+
+      The camera's view as an image, rendered now. Streamed at a rate, it is a video of
+      the camera, for which JPEG is smaller and faster.
+      Throws an exception if the camera is not on the active vessel.
+
+      :param int width: The width of the image, in pixels.
+      :param int height: The height of the image, in pixels.
+      :param ImageFormat format: The format of the image.
+      :param int quality: The quality of a JPEG image, from 1 to 100.
+      :returns: The image data.
+      :rtype: bytes
+      :Game Scenes: Flight

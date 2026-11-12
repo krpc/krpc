@@ -1,0 +1,232 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.RasterPropMonitor
+
+Monitor
+=======
+
+
+.. type:: public class Monitor
+
+   A Raster Prop Monitor screen in an IVA, such as an MFD.
+   Obtained by calling :meth:`RasterPropMonitor.monitors(SpaceCenter.Vessel)`.
+
+   .. note::
+
+      Raster Prop Monitor draws a monitor only while the player is in the IVA of its pod, or
+      the IVA overlay is on. Reading another monitor's text or image updates it, in any camera
+      mode.
+
+   .. method:: SpaceCenter.Part getPart()
+
+
+      The part the monitor is in.
+
+      :Game Scenes: Flight
+
+   .. method:: String getPropName()
+
+
+      The name of the prop, e.g. ``RasterPropMonitorBasicMFD``.
+
+      :Game Scenes: Flight
+
+   .. method:: java.util.List<String> getPages()
+
+
+      The names of the pages, in the order of the prop's configuration.
+
+      :Game Scenes: Flight
+
+   .. method:: String getActivePage()
+
+   .. method:: void setActivePage(String value)
+
+      Returns the name of the page the monitor shows, and sets it as a press of the page's
+      button does. Raster Prop Monitor can refuse the switch, or redirect it to another
+      page, as the prop's configuration sets. Throws an exception if the monitor has no page with
+      the name.
+
+      :Game Scenes: Flight
+
+   .. method:: java.util.List<String> getButtons()
+
+
+      The names of the monitor's buttons, e.g. ``button_UP``. A button's index in
+      this list is its identifier. A name is empty where the configuration leaves a gap.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         These are the buttons that the active page handles. The buttons that select pages
+         are not in the list.
+
+   .. method:: void pressButton(int id)
+
+      Press and release a button, as the player does. The release is on the next frame.
+      Throws an exception if the monitor has no button with the identifier.
+
+      :param int id: The button's index in :meth:`Monitor.getButtons()`.
+      :Game Scenes: Flight
+
+   .. method:: java.util.List<String> getPageButtons()
+
+
+      The names of the prop's buttons that select the monitor's pages, e.g.
+      ``buttonR1``. A captured button is one of them.
+
+      :Game Scenes: Flight
+
+   .. method:: void pressPageButton(String name)
+
+      Press and release a page button, as the player does. The release is on the next
+      frame. A captured button shows the page the script chose.
+      Throws an exception if the button does not select the monitor's pages.
+
+      :param String name: The name of the button, from :meth:`Monitor.getPageButtons()`.
+      :Game Scenes: Flight
+
+   .. method:: void captureButton(String name, String page)
+
+      Take a page button from Raster Prop Monitor. A press of the button then shows the
+      given page, such as the ``krpc`` page of the monitor's own display, in place of
+      the pages Raster Prop Monitor assigns it, and fires :meth:`Monitor.capturedButtonPressed(String)`.
+      The capture lasts while KSP builds the IVA again, but is not saved with the game.
+      Throws an exception if the button does not select the monitor's pages, or the
+      monitor has no page with the name.
+
+      :param String name: The name of the button, from :meth:`Monitor.getPageButtons()`.
+      :param String page: The name of the page to show.
+      :Game Scenes: Flight
+
+   .. method:: void releaseCapture(String name)
+
+      Give a captured page button back to Raster Prop Monitor.
+
+      :param String name: The name of the button.
+      :Game Scenes: Flight
+
+   .. method:: krpc.client.Event capturedButtonPressed(String name)
+
+      An event that fires when the player presses a captured page button.
+      The event lasts until it is removed.
+
+      :param String name: The name of the button.
+      :Game Scenes: Flight
+
+   .. method:: Display getDisplay()
+
+
+      The monitor's own display, which its pages show when their ``KRPCDisplay``
+      handler names no display.
+
+      :Game Scenes: Flight
+
+   .. method:: int getScreenWidth()
+
+
+      The width of the screen, in characters.
+
+      :Game Scenes: Flight
+
+   .. method:: int getScreenHeight()
+
+
+      The height of the screen, in lines.
+
+      :Game Scenes: Flight
+
+   .. method:: int getScreenPixelWidth()
+
+
+      The width of the screen, in pixels.
+
+      :Game Scenes: Flight
+
+   .. method:: int getScreenPixelHeight()
+
+
+      The height of the screen, in pixels.
+
+      :Game Scenes: Flight
+
+   .. method:: int getLetterWidth()
+
+
+      The width of a character, in pixels.
+
+      :Game Scenes: Flight
+
+   .. method:: int getLetterHeight()
+
+
+      The height of a character, in pixels.
+
+      :Game Scenes: Flight
+
+   .. method:: StdLib.ColorRGBA getDefaultColor()
+
+
+      The color of text with no color tag, on the active page.
+
+      :Game Scenes: Flight
+
+   .. method:: String getText()
+
+
+      The text of the active page, as the screen shows it: one line per screen line,
+      holding the characters Raster Prop Monitor draws. The tags it draws nothing for,
+      such as colors, are removed.
+
+      :Game Scenes: Flight
+
+   .. method:: String getRawText()
+
+
+      The text of the active page with its variables formatted, and Raster Prop
+      Monitor's markup kept: colors ``[#rrggbb]`` and ``[#rrggbbaa]``, nudges
+      ``[@xN]`` and ``[@yN]`` in pixels, ``[hw]`` and ``[dw]`` for half and
+      double width, ``[sup]``, ``[sub]`` and ``[fontN]``.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The page's text overlay, drawn over the text, is not included.
+
+   .. method:: java.util.List<String> getVariables()
+
+
+      The names of the variables the active page shows, in the order of its text.
+
+      :Game Scenes: Flight
+
+   .. method:: byte[] image(ImageFormat format, int quality)
+
+      The screen as an image, at :meth:`Monitor.getScreenPixelWidth()` by
+      :meth:`Monitor.getScreenPixelHeight()` pixels.
+
+      :param ImageFormat format: The format of the image.
+      :param int quality: The quality of a JPEG image, from 1 to 100.
+      :returns: The image data.
+      :Game Scenes: Flight
+
+
+
+
+.. type:: public enum ImageFormat
+
+   The file format of an image.
+
+
+   .. field:: public ImageFormat PNG
+
+      PNG, which is lossless.
+
+
+   .. field:: public ImageFormat JPEG
+
+      JPEG, which is lossy, and smaller and faster to encode than PNG.

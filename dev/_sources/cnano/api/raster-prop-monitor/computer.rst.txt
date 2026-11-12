@@ -1,0 +1,126 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Computer
+========
+
+
+.. type:: krpc_RasterPropMonitor_Computer_t
+
+   The Raster Prop Monitor computer of a part, which holds the variables its props show.
+   Obtained by calling :func:`krpc_RasterPropMonitor_Computer` or
+   :func:`krpc_RasterPropMonitor_Computers`.
+
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Computer_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_RasterPropMonitor_Computer_t instance)
+
+      The part the computer is on.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Computer_PersistentVariable(krpc_connection_t connection, double * returnValue, bool * returnValueIsNull, krpc_RasterPropMonitor_Computer_t instance, const char * name)
+
+      The value of a persistent variable of the part, or else of the vessel, or
+      ``nullptr`` if neither is set. Props read it as ``PERSISTENT_name``.
+
+      :Parameters:
+
+       * **name** -- The name of the variable, without the ``PERSISTENT_`` prefix.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Computer_SetPersistentVariable(krpc_connection_t connection, krpc_RasterPropMonitor_Computer_t instance, const char * name, double value)
+
+      Set a persistent variable of the part. The props that show it update.
+
+      :Parameters:
+
+       * **name** -- The name of the variable, without the ``PERSISTENT_`` prefix.
+       * **value** -- The value.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Computer_RemovePersistentVariable(krpc_connection_t connection, krpc_RasterPropMonitor_Computer_t instance, const char * name)
+
+      Remove a persistent variable of the part. The props that show it update.
+
+      :Parameters:
+
+       * **name** -- The name of the variable, without the ``PERSISTENT_`` prefix.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Computer_PersistentVariableChanged(krpc_connection_t connection, uint64_t * returnValue, krpc_RasterPropMonitor_Computer_t instance, const char * name)
+
+      An event that fires when :func:`krpc_RasterPropMonitor_Computer_PersistentVariable` changes, such as when a
+      switch in the IVA sets it. The event lasts until it is removed.
+
+      :Parameters:
+
+       * **name** -- The name of the variable, without the ``PERSISTENT_`` prefix.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Computer_VariableType(krpc_connection_t connection, krpc_RasterPropMonitor_VariableType_t * returnValue, krpc_RasterPropMonitor_Computer_t instance, const char * name)
+
+      The type of a variable's current value.
+      Throws an exception if Raster Prop Monitor does not recognize the variable.
+
+      :Parameters:
+
+       * **name** -- The name of the variable, e.g. ``ALTITUDE``.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Computer_NumberVariable(krpc_connection_t connection, double * returnValue, krpc_RasterPropMonitor_Computer_t instance, const char * name)
+
+      The value of a number variable. Raster Prop Monitor gives a boolean as 0 or 1.
+      Throws an exception if Raster Prop Monitor does not recognize the variable, or
+      its value is a string.
+
+      :Parameters:
+
+       * **name** -- The name of the variable, e.g. ``ALTITUDE``.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Computer_StringVariable(krpc_connection_t connection, char * * returnValue, krpc_RasterPropMonitor_Computer_t instance, const char * name)
+
+      The value of a variable as a string. A number gives its invariant culture string.
+      Throws an exception if Raster Prop Monitor does not recognize the variable.
+
+      :Parameters:
+
+       * **name** -- The name of the variable, e.g. ``ALTITUDE``.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Computer_FormatVariables(krpc_connection_t connection, char * * returnValue, krpc_RasterPropMonitor_Computer_t instance, const char * text)
+
+      Text with its variables formatted as a monitor page formats them, e.g.
+      ``{0:SIP6.1}m $&$ ALTITUDE``. Each line takes its own variables.
+      Throws an exception if Raster Prop Monitor does not recognize a variable, or a
+      format is invalid.
+
+      :Parameters:
+
+       * **text** -- The text, in the format of a monitor page.
+
+      :Game Scenes: Flight
+
+
+
+
+.. type:: krpc_RasterPropMonitor_VariableType_t
+
+   The type of a Raster Prop Monitor variable. See :func:`krpc_RasterPropMonitor_Computer_VariableType`.
+
+
+   .. macro:: KRPC_RASTERPROPMONITOR_VARIABLETYPE_NUMBER
+
+      A number. Access using :func:`krpc_RasterPropMonitor_Computer_NumberVariable`.
+
+
+   .. macro:: KRPC_RASTERPROPMONITOR_VARIABLETYPE_STRING
+
+      A string. Access using :func:`krpc_RasterPropMonitor_Computer_StringVariable`.

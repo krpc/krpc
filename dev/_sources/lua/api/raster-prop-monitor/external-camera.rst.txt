@@ -1,0 +1,58 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: RasterPropMonitor
+
+External Camera
+===============
+
+
+.. class:: ExternalCamera
+
+   A Raster Prop Monitor external camera: a part that the MFD camera pages show, such as
+   the JSI External Radial-mount Camera. Obtained by calling
+   :meth:`RasterPropMonitor.cameras`.
+
+   .. attribute:: part: SpaceCenter.Part
+
+      The part the camera is on.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: name: string
+
+      The camera's identifier, e.g. ``ExtCam1``, which the MFD camera pages select it
+      by. The player sets the number in the part's menu.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: min_fo_v: number
+
+      The smallest field of view of the camera, in degrees.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: max_fo_v: number
+
+      The largest field of view of the camera, in degrees.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: fo_v: number
+
+      The field of view that :meth:`RasterPropMonitor.ExternalCamera.image` renders at, in degrees. It starts at
+      :attr:`RasterPropMonitor.ExternalCamera.max_fo_v`, as on an MFD camera page, and a value set is clamped
+      to the camera's range.
+
+      :Attribute: Can be read or written
+
+   .. method:: image(width: number, height: number, format?: RasterPropMonitor.ImageFormat, quality?: number): string
+
+      The camera's view as an image, rendered now. Streamed at a rate, it is a video of
+      the camera, for which JPEG is smaller and faster.
+      Throws an exception if the camera is not on the active vessel.
+
+      :param width: The width of the image, in pixels.
+      :param height: The height of the image, in pixels.
+      :param format: The format of the image. Defaults to ``RasterPropMonitor.ImageFormat.png``.
+      :param quality: The quality of a JPEG image, from 1 to 100. Defaults to ``75``.
+      :returns: The image data.

@@ -1,0 +1,167 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+RasterPropMonitor
+=================
+
+
+This service provides the IVA screens, variables and external cameras of
+`Raster Prop Monitor <https://github.com/FirstPersonKSP/RasterPropMonitor>`_.
+
+.. note::
+
+   A persistent variable is a number a script and the props share: a prop shows it, and a
+   switch or numeric input sets it. Raster Prop Monitor updates the variables that depend
+   on the vessel only for the active vessel.
+
+
+
+.. function:: krpc_error_t krpc_RasterPropMonitor_Available(krpc_connection_t connection, bool * returnValue)
+
+   Whether Raster Prop Monitor is installed.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_RasterPropMonitor_Computer(krpc_connection_t connection, krpc_RasterPropMonitor_Computer_t * returnValue, krpc_SpaceCenter_Part_t part)
+
+   The computer of a part.
+   Throws an exception if the part has no Raster Prop Monitor computer.
+
+   :Parameters:
+
+    * **part** -- The part.
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_RasterPropMonitor_Computers(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_SpaceCenter_Vessel_t vessel)
+
+   The computers of the parts of a vessel.
+
+   :Parameters:
+
+    * **vessel** -- The vessel.
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_RasterPropMonitor_GlobalPersistentVariable(krpc_connection_t connection, double * returnValue, bool * returnValueIsNull, krpc_SpaceCenter_Vessel_t vessel, const char * name)
+
+   The value of a persistent variable of a vessel, or ``nullptr`` if it is not set.
+   Throws an exception if the vessel has no Raster Prop Monitor computer.
+
+   :Parameters:
+
+    * **vessel** -- The vessel.
+    * **name** -- The name of the variable, without the ``PERSISTENT_`` prefix.
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_RasterPropMonitor_SetGlobalPersistentVariable(krpc_connection_t connection, krpc_SpaceCenter_Vessel_t vessel, const char * name, double value)
+
+   Set a persistent variable of a vessel. The props that show it update.
+   Throws an exception if the vessel has no Raster Prop Monitor computer.
+
+   :Parameters:
+
+    * **vessel** -- The vessel.
+    * **name** -- The name of the variable, without the ``PERSISTENT_`` prefix.
+    * **value** -- The value.
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_RasterPropMonitor_RemoveGlobalPersistentVariable(krpc_connection_t connection, krpc_SpaceCenter_Vessel_t vessel, const char * name)
+
+   Remove a persistent variable of a vessel. The props that show it update.
+   Throws an exception if the vessel has no Raster Prop Monitor computer.
+
+   :Parameters:
+
+    * **vessel** -- The vessel.
+    * **name** -- The name of the variable, without the ``PERSISTENT_`` prefix.
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_RasterPropMonitor_GlobalPersistentVariableChanged(krpc_connection_t connection, uint64_t * returnValue, krpc_SpaceCenter_Vessel_t vessel, const char * name)
+
+   An event that fires when :func:`krpc_RasterPropMonitor_GlobalPersistentVariable` changes.
+   The event lasts until it is removed.
+   Throws an exception if the vessel has no Raster Prop Monitor computer.
+
+   :Parameters:
+
+    * **vessel** -- The vessel.
+    * **name** -- The name of the variable, without the ``PERSISTENT_`` prefix.
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_RasterPropMonitor_Monitors(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_SpaceCenter_Vessel_t vessel)
+
+   The monitors in the IVAs of a vessel's parts.
+   Throws an exception if the vessel is not the active vessel.
+
+   :Parameters:
+
+    * **vessel** -- The active vessel.
+
+   :Game Scenes: Flight
+
+
+   .. note::
+
+      KSP builds IVAs only for the active vessel.
+
+
+
+
+.. function:: krpc_error_t krpc_RasterPropMonitor_Display(krpc_connection_t connection, krpc_RasterPropMonitor_Display_t * returnValue, krpc_SpaceCenter_Vessel_t vessel, const char * name)
+
+   The display of a vessel with the given name, which every page whose
+   ``KRPCDisplay`` handler names it shows.
+
+   :Parameters:
+
+    * **vessel** -- The vessel.
+    * **name** -- The name of the display.
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_RasterPropMonitor_Cameras(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_SpaceCenter_Vessel_t vessel)
+
+   The external cameras on a vessel's parts.
+
+   :Parameters:
+
+    * **vessel** -- The vessel.
+
+   :Game Scenes: Flight
