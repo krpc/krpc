@@ -92,6 +92,37 @@ namespace KRPC.Test.Service.KRPC
         }
 
         [Test]
+        public void TypesById ()
+        {
+            var service = global::KRPC.Service.Services.Instance.Signatures ["TestService"];
+            Assert.AreEqual (
+                Type.ClassType ("TestService", "TestClass"),
+                Type.ClassTypeById (service.Id, service.Classes ["TestClass"].Id));
+            Assert.AreEqual (
+                Type.EnumerationType ("TestService", "TestEnum"),
+                Type.EnumerationTypeById (service.Id, service.Enumerations ["TestEnum"].Id));
+            Assert.AreEqual (
+                Type.StructType ("TestService", "TestStruct"),
+                Type.StructTypeById (service.Id, service.Structs ["TestStruct"].Id));
+        }
+
+        [Test]
+        public void UnknownIds ()
+        {
+            var service = global::KRPC.Service.Services.Instance.Signatures ["TestService"];
+            var classId = service.Classes ["TestClass"].Id;
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Type.ClassTypeById (0, classId));
+            // A type id names one kind of type
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Type.EnumerationTypeById (service.Id, classId));
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Type.StructTypeById (service.Id, classId));
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Type.ClassTypeById (service.Id, 0));
+        }
+
+        [Test]
         public void TupleType ()
         {
             var type = Type.TupleType (new List<Type> { Type.Int (), Type.Bool () });

@@ -20,11 +20,12 @@ def service_with_a_parameter(typ):
                     "documentation": "",
                 }
             },
-            "classes": {"Thing": {"documentation": ""}},
+            "classes": {"Thing": {"id": 1, "documentation": ""}},
             "enumerations": {},
             "exceptions": {},
             "structs": {
                 "Holder": {
+                    "id": 2,
                     "documentation": "",
                     "fields": [
                         {

@@ -489,6 +489,18 @@
 
       :Game Scenes: All
 
+   .. function:: static Expression ConstantEnumById(IConnection connection, uint serviceId, uint enumerationId, int value)
+
+      A constant value of an enumeration a service defines, named by ids.
+
+      :parameters:
+
+       * **serviceId** -- The id of the service the enumeration is defined in.
+       * **enumerationId** -- The id of the enumeration.
+       * **value** -- The value of the member of the enumeration.
+
+      :Game Scenes: All
+
    .. function:: static Expression ConstantFloat(IConnection connection, float value)
 
       A constant value of single precision floating point type.
@@ -938,6 +950,24 @@
 
       :returns: The value of the field.
       :Game Scenes: All
+
+   .. function:: static Expression GetFieldByIndex(IConnection connection, Expression arg, int index)
+
+      The value of a field of a structure, named by its position. Throws an exception if
+      the value is not a structure, or the index is out of range.
+
+      :parameters:
+
+       * **arg** -- The structure.
+       * **index** -- The position of the field to access.
+
+      :returns: The value of the field.
+      :Game Scenes: All
+
+
+      .. note::
+
+         The fields are numbered from 0, in the order the structure defines them.
 
    .. function:: static Expression GreaterThan(IConnection connection, Expression arg0, Expression arg1)
 
@@ -1824,6 +1854,24 @@
          ``Error`` raise :type:`Error`. Throws an exception if the service does not
          declare it.
 
+   .. function:: static Expression ThrowById(IConnection connection, uint serviceId, uint exceptionId, Expression message)
+
+      A throw statement, which raises the exception with the given ids.
+
+      :parameters:
+
+       * **serviceId** -- The id of the service the exception is defined in.
+       * **exceptionId** -- The id of the exception.
+       * **message** -- The message of the exception.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Raises the exception as :meth:`Expression.Throw` does. Throws an exception if the
+         service does not declare it.
+
    .. function:: static Expression ToList(IConnection connection, Expression arg)
 
       A collection as a list.
@@ -1882,6 +1930,26 @@
        * **handler** -- The statement evaluated when an exception is caught.
 
       :Game Scenes: All
+
+   .. function:: static Expression TryCatchById(IConnection connection, Expression body, uint serviceId, uint exceptionId, Expression message, Expression handler)
+
+      A try-catch statement that handles the exception with the given ids.
+
+      :parameters:
+
+       * **body** -- The statement to evaluate.
+       * **serviceId** -- The id of the service the exception is defined in.
+       * **exceptionId** -- The id of the exception.
+       * **message** -- A string variable assigned the exception's message, or null.
+       * **handler** -- The statement evaluated when the exception is caught.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Handles the exception as :meth:`Expression.TryCatch` does. Throws an exception if the
+         service does not declare it.
 
    .. function:: static Expression TryFinally(IConnection connection, Expression body, Expression finalizer)
 
@@ -2012,6 +2080,17 @@
 
       :Game Scenes: All
 
+   .. function:: static Type ClassTypeById(IConnection connection, uint serviceId, uint classId)
+
+      The type of a class defined by a service, named by ids.
+
+      :parameters:
+
+       * **serviceId** -- The id of the service the class is defined in.
+       * **classId** -- The id of the class.
+
+      :Game Scenes: All
+
    .. property:: TypeCode Code { get; }
 
       The kind of the type.
@@ -2045,6 +2124,17 @@
 
        * **service** -- The name of the service the enumeration is defined in.
        * **name** -- The name of the enumeration.
+
+      :Game Scenes: All
+
+   .. function:: static Type EnumerationTypeById(IConnection connection, uint serviceId, uint enumerationId)
+
+      The type of an enumeration defined by a service, named by ids.
+
+      :parameters:
+
+       * **serviceId** -- The id of the service the enumeration is defined in.
+       * **enumerationId** -- The id of the enumeration.
 
       :Game Scenes: All
 
@@ -2138,6 +2228,17 @@
 
        * **service** -- The name of the service the structure is defined in.
        * **name** -- The name of the structure.
+
+      :Game Scenes: All
+
+   .. function:: static Type StructTypeById(IConnection connection, uint serviceId, uint structId)
+
+      The type of a structure defined by a service, named by ids.
+
+      :parameters:
+
+       * **serviceId** -- The id of the service the structure is defined in.
+       * **structId** -- The id of the structure.
 
       :Game Scenes: All
 

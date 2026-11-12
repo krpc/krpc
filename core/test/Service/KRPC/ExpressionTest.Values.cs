@@ -242,6 +242,25 @@ namespace KRPC.Test.Service.KRPC
         }
 
         [Test]
+        public void GetFieldByIndex ()
+        {
+            var obj = new global::KRPC.Test.Service.TestService.TestClass ("foo");
+            var value = BuildTestStruct (AddInstance (obj));
+            Assert.AreEqual (42, Eval<int> (Expression.GetFieldByIndex (value, 0)));
+            Assert.AreEqual ("bar", Eval<string> (Expression.GetFieldByIndex (value, 1)));
+            Assert.AreSame (
+                obj,
+                Eval<global::KRPC.Test.Service.TestService.TestClass> (
+                    Expression.GetFieldByIndex (value, 3)));
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentOutOfRangeException> (
+                () => Expression.GetFieldByIndex (value, -1));
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentOutOfRangeException> (
+                () => Expression.GetFieldByIndex (value, 99));
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.GetFieldByIndex (tuple, 0));
+        }
+
+        [Test]
         public void GetFieldOfAValueThatIsNotAStructure ()
         {
             Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (

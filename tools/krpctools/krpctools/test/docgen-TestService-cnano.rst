@@ -1496,6 +1496,10 @@ Service documentation string.
 
    Deprecated class documentation string.
 
+   .. macro:: KRPC_CLASS_TESTSERVICE_DEPRECATEDCLASS
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_TestService_DeprecatedClass_DeprecatedMethod(krpc_connection_t connection, char * * returnValue, krpc_TestService_DeprecatedClass_t instance)
 
       .. warning:: Deprecated. Use :func:`krpc_TestService_TestClass_GetValue` instead.
@@ -1531,6 +1535,10 @@ Service documentation string.
 .. type:: krpc_TestService_TestClass_t
 
    Class documentation string.
+
+   .. macro:: KRPC_CLASS_TESTSERVICE_TESTCLASS
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_TestService_TestClass_EchoNullableObject(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue, krpc_TestService_TestClass_t instance, krpc_TestService_TestClass_t value)
 
@@ -1652,6 +1660,11 @@ Service documentation string.
 
    Deprecated enum documentation string.
 
+   .. macro:: KRPC_ENUMERATION_TESTSERVICE_DEPRECATEDENUM
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
 
    .. macro:: KRPC_TESTSERVICE_DEPRECATEDENUM_VALUEA
 
@@ -1670,6 +1683,11 @@ Service documentation string.
 
    Partly deprecated enum documentation string.
 
+   .. macro:: KRPC_ENUMERATION_TESTSERVICE_PARTLYDEPRECATEDENUM
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
 
    .. macro:: KRPC_TESTSERVICE_PARTLYDEPRECATEDENUM_VALUEA
 
@@ -1687,6 +1705,11 @@ Service documentation string.
 .. type:: krpc_TestService_TestEnum_t
 
    Enum documentation string.
+
+   .. macro:: KRPC_ENUMERATION_TESTSERVICE_TESTENUM
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_TESTSERVICE_TESTENUM_VALUEA
@@ -1711,6 +1734,11 @@ Service documentation string.
    Flags documentation string.
 
    A flags enumeration. :std:ref:`cnano-client-flags` shows how to combine its values.
+
+   .. macro:: KRPC_ENUMERATION_TESTSERVICE_TESTFLAGS
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_TESTSERVICE_TESTFLAGS_NONE
@@ -1745,10 +1773,19 @@ Service documentation string.
 
    Deprecated struct documentation string.
 
+   .. macro:: KRPC_STRUCT_TESTSERVICE_DEPRECATEDSTRUCT
+
+      The service and structure ids of the structure, for :func:`krpc_KRPC_Type_StructTypeById`.
+
 
    .. member:: int32_t value
 
       Deprecated struct Value documentation string.
+
+      .. macro:: KRPC_FIELD_TESTSERVICE_DEPRECATEDSTRUCT_VALUE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: int32_t old_value
 
@@ -1756,15 +1793,29 @@ Service documentation string.
 
       Deprecated struct OldValue documentation string.
 
+      .. macro:: KRPC_FIELD_TESTSERVICE_DEPRECATEDSTRUCT_OLDVALUE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
 
 .. type:: krpc_TestService_PartlyDeprecatedStruct_t
 
    Partly deprecated struct documentation string.
 
+   .. macro:: KRPC_STRUCT_TESTSERVICE_PARTLYDEPRECATEDSTRUCT
+
+      The service and structure ids of the structure, for :func:`krpc_KRPC_Type_StructTypeById`.
+
 
    .. member:: int32_t value
 
       Partly deprecated struct Value documentation string.
+
+      .. macro:: KRPC_FIELD_TESTSERVICE_PARTLYDEPRECATEDSTRUCT_VALUE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: int32_t old_value
 
@@ -1772,14 +1823,28 @@ Service documentation string.
 
       Partly deprecated struct OldValue documentation string.
 
+      .. macro:: KRPC_FIELD_TESTSERVICE_PARTLYDEPRECATEDSTRUCT_OLDVALUE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
 
 .. type:: krpc_TestService_TestFlagsStruct_t
 
    Flags struct documentation string.
 
+   .. macro:: KRPC_STRUCT_TESTSERVICE_TESTFLAGSSTRUCT
+
+      The service and structure ids of the structure, for :func:`krpc_KRPC_Type_StructTypeById`.
+
 
    .. member:: krpc_TestService_TestFlags_t flags_field
 
+
+
+      .. macro:: KRPC_FIELD_TESTSERVICE_TESTFLAGSSTRUCT_FLAGSFIELD
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
 
 
 
@@ -1787,13 +1852,27 @@ Service documentation string.
 
    Nested nullable struct documentation string.
 
+   .. macro:: KRPC_STRUCT_TESTSERVICE_TESTNESTEDNULLABLESTRUCT
+
+      The service and structure ids of the structure, for :func:`krpc_KRPC_Type_StructTypeById`.
+
 
    .. member:: krpc_list_nullable_object_t list_field
 
 
 
+      .. macro:: KRPC_FIELD_TESTSERVICE_TESTNESTEDNULLABLESTRUCT_LISTFIELD
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: char * string_field
 
+
+
+      .. macro:: KRPC_FIELD_TESTSERVICE_TESTNESTEDNULLABLESTRUCT_STRINGFIELD
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
 
 
 
@@ -1801,17 +1880,36 @@ Service documentation string.
 
    Nested struct documentation string.
 
+   .. macro:: KRPC_STRUCT_TESTSERVICE_TESTNESTEDSTRUCT
+
+      The service and structure ids of the structure, for :func:`krpc_KRPC_Type_StructTypeById`.
+
 
    .. member:: krpc_TestService_TestStruct_t struct_field
 
+
+
+      .. macro:: KRPC_FIELD_TESTSERVICE_TESTNESTEDSTRUCT_STRUCTFIELD
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
 
 
    .. member:: krpc_TestService_TestClass_t object_field
 
 
 
+      .. macro:: KRPC_FIELD_TESTSERVICE_TESTNESTEDSTRUCT_OBJECTFIELD
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: char * string_field
 
+
+
+      .. macro:: KRPC_FIELD_TESTSERVICE_TESTNESTEDSTRUCT_STRINGFIELD
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
 
 
 
@@ -1819,25 +1917,54 @@ Service documentation string.
 
    Nullable struct documentation string.
 
+   .. macro:: KRPC_STRUCT_TESTSERVICE_TESTNULLABLESTRUCT
+
+      The service and structure ids of the structure, for :func:`krpc_KRPC_Type_StructTypeById`.
+
 
    .. member:: int32_t int_field
 
+
+
+      .. macro:: KRPC_FIELD_TESTSERVICE_TESTNULLABLESTRUCT_INTFIELD
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
 
 
    .. member:: krpc_nullable_int32_t nullable_int_field
 
 
 
+      .. macro:: KRPC_FIELD_TESTSERVICE_TESTNULLABLESTRUCT_NULLABLEINTFIELD
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: krpc_nullable_enum_t nullable_enum_field
 
+
+
+      .. macro:: KRPC_FIELD_TESTSERVICE_TESTNULLABLESTRUCT_NULLABLEENUMFIELD
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
 
 
    .. member:: krpc_nullable_string_t nullable_string_field
 
 
 
+      .. macro:: KRPC_FIELD_TESTSERVICE_TESTNULLABLESTRUCT_NULLABLESTRINGFIELD
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: krpc_nullable_object_t nullable_object_field
 
+
+
+      .. macro:: KRPC_FIELD_TESTSERVICE_TESTNULLABLESTRUCT_NULLABLEOBJECTFIELD
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
 
 
 
@@ -1845,21 +1972,45 @@ Service documentation string.
 
    Struct documentation string.
 
+   .. macro:: KRPC_STRUCT_TESTSERVICE_TESTSTRUCT
+
+      The service and structure ids of the structure, for :func:`krpc_KRPC_Type_StructTypeById`.
+
 
    .. member:: int32_t int_field
 
       Struct IntField documentation string.
 
+      .. macro:: KRPC_FIELD_TESTSERVICE_TESTSTRUCT_INTFIELD
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: char * string_field
 
+
+
+      .. macro:: KRPC_FIELD_TESTSERVICE_TESTSTRUCT_STRINGFIELD
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
 
 
    .. member:: krpc_TestService_TestEnum_t enum_field
 
 
 
+      .. macro:: KRPC_FIELD_TESTSERVICE_TESTSTRUCT_ENUMFIELD
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: krpc_list_int32_t list_field
 
+
+
+      .. macro:: KRPC_FIELD_TESTSERVICE_TESTSTRUCT_LISTFIELD
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
 
 
 

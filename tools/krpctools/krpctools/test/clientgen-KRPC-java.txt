@@ -1755,6 +1755,25 @@ public class KRPC extends RemoteService {
         }
 
         /**
+         * A constant value of an enumeration a service defines, named by ids.
+         * @param serviceId The id of the service the enumeration is defined in.
+         * @param enumerationId The id of the enumeration.
+         * @param value The value of the member of the enumeration.
+         */
+        @SuppressWarnings({ "unchecked" })
+        @RPCInfo(service = "KRPC", procedure = "Expression_static_ConstantEnumById", types = _Types.class)
+        public static krpc.client.services.KRPC.Expression constantEnumById(Connection connection, int serviceId, int enumerationId, int value)
+        {
+            ByteString[] _args = new ByteString[] {
+                Encoder.encode(serviceId, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32)),
+                Encoder.encode(enumerationId, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32)),
+                Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))
+            };
+            krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_ConstantEnumById", _args);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+        }
+
+        /**
          * A constant value of single precision floating point type.
          * @param value The value.
          */
@@ -2338,6 +2357,27 @@ public class KRPC extends RemoteService {
                 Encoder.encode(name, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_GetField", _args);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+        }
+
+        /**
+         * The value of a field of a structure, named by its position. Throws an exception if
+         * the value is not a structure, or the index is out of range.
+         *
+         * The fields are numbered from 0, in the order the structure defines them.
+         * @return The value of the field.
+         * @param arg The structure.
+         * @param index The position of the field to access.
+         */
+        @SuppressWarnings({ "unchecked" })
+        @RPCInfo(service = "KRPC", procedure = "Expression_static_GetFieldByIndex", types = _Types.class)
+        public static krpc.client.services.KRPC.Expression getFieldByIndex(Connection connection, krpc.client.services.KRPC.Expression arg, int index)
+        {
+            ByteString[] _args = new ByteString[] {
+                Encoder.encode(arg, krpc.client.Types.createClass("KRPC", "Expression")),
+                Encoder.encode(index, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))
+            };
+            krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_GetFieldByIndex", _args);
             return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
@@ -3415,6 +3455,28 @@ public class KRPC extends RemoteService {
         }
 
         /**
+         * A throw statement, which raises the exception with the given ids.
+         *
+         * Raises the exception as {@link KRPC.Expression#throw_} does. Throws an exception if the
+         * service does not declare it.
+         * @param serviceId The id of the service the exception is defined in.
+         * @param exceptionId The id of the exception.
+         * @param message The message of the exception.
+         */
+        @SuppressWarnings({ "unchecked" })
+        @RPCInfo(service = "KRPC", procedure = "Expression_static_ThrowById", types = _Types.class)
+        public static krpc.client.services.KRPC.Expression throwById(Connection connection, int serviceId, int exceptionId, krpc.client.services.KRPC.Expression message)
+        {
+            ByteString[] _args = new ByteString[] {
+                Encoder.encode(serviceId, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32)),
+                Encoder.encode(exceptionId, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32)),
+                Encoder.encode(message, krpc.client.Types.createClass("KRPC", "Expression"))
+            };
+            krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_ThrowById", _args);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+        }
+
+        /**
          * A throw statement, which raises the named exception.
          *
          * The client receives the exception as an error from the function, or from the stream
@@ -3514,6 +3576,32 @@ public class KRPC extends RemoteService {
                 Encoder.encode(handler, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_TryCatchAll", _args);
+            return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
+        }
+
+        /**
+         * A try-catch statement that handles the exception with the given ids.
+         *
+         * Handles the exception as {@link KRPC.Expression#tryCatch} does. Throws an exception if the
+         * service does not declare it.
+         * @param body The statement to evaluate.
+         * @param serviceId The id of the service the exception is defined in.
+         * @param exceptionId The id of the exception.
+         * @param message A string variable assigned the exception's message, or null.
+         * @param handler The statement evaluated when the exception is caught.
+         */
+        @SuppressWarnings({ "unchecked" })
+        @RPCInfo(service = "KRPC", procedure = "Expression_static_TryCatchById", types = _Types.class)
+        public static krpc.client.services.KRPC.Expression tryCatchById(Connection connection, krpc.client.services.KRPC.Expression body, int serviceId, int exceptionId, krpc.client.services.KRPC.Expression message, krpc.client.services.KRPC.Expression handler)
+        {
+            ByteString[] _args = new ByteString[] {
+                Encoder.encode(body, krpc.client.Types.createClass("KRPC", "Expression")),
+                Encoder.encode(serviceId, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32)),
+                Encoder.encode(exceptionId, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32)),
+                Encoder.encode(message, krpc.client.Types.createClass("KRPC", "Expression")),
+                Encoder.encode(handler, krpc.client.Types.createClass("KRPC", "Expression"))
+            };
+            krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_TryCatchById", _args);
             return (krpc.client.services.KRPC.Expression) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Expression"), connection);
         }
 
@@ -3971,6 +4059,18 @@ public class KRPC extends RemoteService {
             }
 
             /**
+             * A constant value of an enumeration a service defines, named by ids.
+             * @param serviceId The id of the service the enumeration is defined in.
+             * @param enumerationId The id of the enumeration.
+             * @param value The value of the member of the enumeration.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_ConstantEnumById", types = _Types.class)
+            public krpc.client.services.KRPC.Expression constantEnumById(int serviceId, int enumerationId, int value)
+            {
+                return krpc.client.services.KRPC.Expression.constantEnumById(connection, serviceId, enumerationId, value);
+            }
+
+            /**
              * A constant value of single precision floating point type.
              * @param value The value.
              */
@@ -4379,6 +4479,21 @@ public class KRPC extends RemoteService {
             public krpc.client.services.KRPC.Expression getField(krpc.client.services.KRPC.Expression arg, String name)
             {
                 return krpc.client.services.KRPC.Expression.getField(connection, arg, name);
+            }
+
+            /**
+             * The value of a field of a structure, named by its position. Throws an exception if
+             * the value is not a structure, or the index is out of range.
+             *
+             * The fields are numbered from 0, in the order the structure defines them.
+             * @return The value of the field.
+             * @param arg The structure.
+             * @param index The position of the field to access.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_GetFieldByIndex", types = _Types.class)
+            public krpc.client.services.KRPC.Expression getFieldByIndex(krpc.client.services.KRPC.Expression arg, int index)
+            {
+                return krpc.client.services.KRPC.Expression.getFieldByIndex(connection, arg, index);
             }
 
             /**
@@ -5121,6 +5236,21 @@ public class KRPC extends RemoteService {
             }
 
             /**
+             * A throw statement, which raises the exception with the given ids.
+             *
+             * Raises the exception as {@link KRPC.Expression#throw_} does. Throws an exception if the
+             * service does not declare it.
+             * @param serviceId The id of the service the exception is defined in.
+             * @param exceptionId The id of the exception.
+             * @param message The message of the exception.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_ThrowById", types = _Types.class)
+            public krpc.client.services.KRPC.Expression throwById(int serviceId, int exceptionId, krpc.client.services.KRPC.Expression message)
+            {
+                return krpc.client.services.KRPC.Expression.throwById(connection, serviceId, exceptionId, message);
+            }
+
+            /**
              * A throw statement, which raises the named exception.
              *
              * The client receives the exception as an error from the function, or from the stream
@@ -5188,6 +5318,23 @@ public class KRPC extends RemoteService {
             public krpc.client.services.KRPC.Expression tryCatchAll(krpc.client.services.KRPC.Expression body, krpc.client.services.KRPC.Expression message, krpc.client.services.KRPC.Expression handler)
             {
                 return krpc.client.services.KRPC.Expression.tryCatchAll(connection, body, message, handler);
+            }
+
+            /**
+             * A try-catch statement that handles the exception with the given ids.
+             *
+             * Handles the exception as {@link KRPC.Expression#tryCatch} does. Throws an exception if the
+             * service does not declare it.
+             * @param body The statement to evaluate.
+             * @param serviceId The id of the service the exception is defined in.
+             * @param exceptionId The id of the exception.
+             * @param message A string variable assigned the exception's message, or null.
+             * @param handler The statement evaluated when the exception is caught.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Expression_static_TryCatchById", types = _Types.class)
+            public krpc.client.services.KRPC.Expression tryCatchById(krpc.client.services.KRPC.Expression body, int serviceId, int exceptionId, krpc.client.services.KRPC.Expression message, krpc.client.services.KRPC.Expression handler)
+            {
+                return krpc.client.services.KRPC.Expression.tryCatchById(connection, body, serviceId, exceptionId, message, handler);
             }
 
             /**
@@ -5402,6 +5549,23 @@ public class KRPC extends RemoteService {
         }
 
         /**
+         * The type of a class defined by a service, named by ids.
+         * @param serviceId The id of the service the class is defined in.
+         * @param classId The id of the class.
+         */
+        @SuppressWarnings({ "unchecked" })
+        @RPCInfo(service = "KRPC", procedure = "Type_static_ClassTypeById", types = _Types.class)
+        public static krpc.client.services.KRPC.Type classTypeById(Connection connection, int serviceId, int classId)
+        {
+            ByteString[] _args = new ByteString[] {
+                Encoder.encode(serviceId, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32)),
+                Encoder.encode(classId, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32))
+            };
+            krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Type_static_ClassTypeById", _args);
+            return (krpc.client.services.KRPC.Type) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), connection);
+        }
+
+        /**
          * A dictionary type. Throws an exception if the key type is nullable or not a valid
          * key type.
          * @param keyType The type of the keys of the dictionary.
@@ -5444,6 +5608,23 @@ public class KRPC extends RemoteService {
                 Encoder.encode(name, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Type_static_EnumerationType", _args);
+            return (krpc.client.services.KRPC.Type) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), connection);
+        }
+
+        /**
+         * The type of an enumeration defined by a service, named by ids.
+         * @param serviceId The id of the service the enumeration is defined in.
+         * @param enumerationId The id of the enumeration.
+         */
+        @SuppressWarnings({ "unchecked" })
+        @RPCInfo(service = "KRPC", procedure = "Type_static_EnumerationTypeById", types = _Types.class)
+        public static krpc.client.services.KRPC.Type enumerationTypeById(Connection connection, int serviceId, int enumerationId)
+        {
+            ByteString[] _args = new ByteString[] {
+                Encoder.encode(serviceId, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32)),
+                Encoder.encode(enumerationId, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32))
+            };
+            krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Type_static_EnumerationTypeById", _args);
             return (krpc.client.services.KRPC.Type) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), connection);
         }
 
@@ -5554,6 +5735,23 @@ public class KRPC extends RemoteService {
         }
 
         /**
+         * The type of a structure defined by a service, named by ids.
+         * @param serviceId The id of the service the structure is defined in.
+         * @param structId The id of the structure.
+         */
+        @SuppressWarnings({ "unchecked" })
+        @RPCInfo(service = "KRPC", procedure = "Type_static_StructTypeById", types = _Types.class)
+        public static krpc.client.services.KRPC.Type structTypeById(Connection connection, int serviceId, int structId)
+        {
+            ByteString[] _args = new ByteString[] {
+                Encoder.encode(serviceId, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32)),
+                Encoder.encode(structId, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32))
+            };
+            krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Type_static_StructTypeById", _args);
+            return (krpc.client.services.KRPC.Type) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), connection);
+        }
+
+        /**
          * A tuple type. Throws an exception if there are no element types or more than seven.
          * @param valueTypes The types of the elements of the tuple.
          */
@@ -5642,6 +5840,17 @@ public class KRPC extends RemoteService {
             }
 
             /**
+             * The type of a class defined by a service, named by ids.
+             * @param serviceId The id of the service the class is defined in.
+             * @param classId The id of the class.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Type_static_ClassTypeById", types = _Types.class)
+            public krpc.client.services.KRPC.Type classTypeById(int serviceId, int classId)
+            {
+                return krpc.client.services.KRPC.Type.classTypeById(connection, serviceId, classId);
+            }
+
+            /**
              * A dictionary type. Throws an exception if the key type is nullable or not a valid
              * key type.
              * @param keyType The type of the keys of the dictionary.
@@ -5671,6 +5880,17 @@ public class KRPC extends RemoteService {
             public krpc.client.services.KRPC.Type enumerationType(String service, String name)
             {
                 return krpc.client.services.KRPC.Type.enumerationType(connection, service, name);
+            }
+
+            /**
+             * The type of an enumeration defined by a service, named by ids.
+             * @param serviceId The id of the service the enumeration is defined in.
+             * @param enumerationId The id of the enumeration.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Type_static_EnumerationTypeById", types = _Types.class)
+            public krpc.client.services.KRPC.Type enumerationTypeById(int serviceId, int enumerationId)
+            {
+                return krpc.client.services.KRPC.Type.enumerationTypeById(connection, serviceId, enumerationId);
             }
 
             /**
@@ -5748,6 +5968,17 @@ public class KRPC extends RemoteService {
             public krpc.client.services.KRPC.Type structType(String service, String name)
             {
                 return krpc.client.services.KRPC.Type.structType(connection, service, name);
+            }
+
+            /**
+             * The type of a structure defined by a service, named by ids.
+             * @param serviceId The id of the service the structure is defined in.
+             * @param structId The id of the structure.
+             */
+            @RPCInfo(service = "KRPC", procedure = "Type_static_StructTypeById", types = _Types.class)
+            public krpc.client.services.KRPC.Type structTypeById(int serviceId, int structId)
+            {
+                return krpc.client.services.KRPC.Type.structTypeById(connection, serviceId, structId);
             }
 
             /**
@@ -5880,6 +6111,8 @@ public class KRPC extends RemoteService {
             PARAMETER_TYPES.put("Expression_static_ConstantDouble", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE) });
             RETURN_TYPES.put("Expression_static_ConstantEnum", krpc.client.Types.createClass("KRPC", "Expression"));
             PARAMETER_TYPES.put("Expression_static_ConstantEnum", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32) });
+            RETURN_TYPES.put("Expression_static_ConstantEnumById", krpc.client.Types.createClass("KRPC", "Expression"));
+            PARAMETER_TYPES.put("Expression_static_ConstantEnumById", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32) });
             RETURN_TYPES.put("Expression_static_ConstantFloat", krpc.client.Types.createClass("KRPC", "Expression"));
             PARAMETER_TYPES.put("Expression_static_ConstantFloat", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT) });
             RETURN_TYPES.put("Expression_static_ConstantInt", krpc.client.Types.createClass("KRPC", "Expression"));
@@ -5896,11 +6129,11 @@ public class KRPC extends RemoteService {
             PARAMETER_TYPES.put("Expression_static_ConstantUInt", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32) });
             RETURN_TYPES.put("Expression_static_ConstantULong", krpc.client.Types.createClass("KRPC", "Expression"));
             PARAMETER_TYPES.put("Expression_static_ConstantULong", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT64) });
-            RETURN_TYPES.put("Expression_static_Contains", krpc.client.Types.createClass("KRPC", "Expression"));
-            PARAMETER_TYPES.put("Expression_static_Contains", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createClass("KRPC", "Expression") });
         }
 
         private static void initTypes1() {
+            RETURN_TYPES.put("Expression_static_Contains", krpc.client.Types.createClass("KRPC", "Expression"));
+            PARAMETER_TYPES.put("Expression_static_Contains", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createClass("KRPC", "Expression") });
             RETURN_TYPES.put("Expression_static_ContainsKey", krpc.client.Types.createClass("KRPC", "Expression"));
             PARAMETER_TYPES.put("Expression_static_ContainsKey", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createClass("KRPC", "Expression") });
             RETURN_TYPES.put("Expression_static_Continue", krpc.client.Types.createClass("KRPC", "Expression"));
@@ -5949,6 +6182,8 @@ public class KRPC extends RemoteService {
             PARAMETER_TYPES.put("Expression_static_Get", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createClass("KRPC", "Expression") });
             RETURN_TYPES.put("Expression_static_GetField", krpc.client.Types.createClass("KRPC", "Expression"));
             PARAMETER_TYPES.put("Expression_static_GetField", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
+            RETURN_TYPES.put("Expression_static_GetFieldByIndex", krpc.client.Types.createClass("KRPC", "Expression"));
+            PARAMETER_TYPES.put("Expression_static_GetFieldByIndex", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32) });
             RETURN_TYPES.put("Expression_static_GreaterThan", krpc.client.Types.createClass("KRPC", "Expression"));
             PARAMETER_TYPES.put("Expression_static_GreaterThan", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createClass("KRPC", "Expression") });
             RETURN_TYPES.put("Expression_static_GreaterThanOrEqual", krpc.client.Types.createClass("KRPC", "Expression"));
@@ -5997,13 +6232,13 @@ public class KRPC extends RemoteService {
             PARAMETER_TYPES.put("Expression_static_NotEqual", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createClass("KRPC", "Expression") });
             RETURN_TYPES.put("Expression_static_Or", krpc.client.Types.createClass("KRPC", "Expression"));
             PARAMETER_TYPES.put("Expression_static_Or", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createClass("KRPC", "Expression") });
+        }
+
+        private static void initTypes2() {
             RETURN_TYPES.put("Expression_static_OrderBy", krpc.client.Types.createClass("KRPC", "Expression"));
             PARAMETER_TYPES.put("Expression_static_OrderBy", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createClass("KRPC", "Expression") });
             RETURN_TYPES.put("Expression_static_Parameter", krpc.client.Types.createClass("KRPC", "Expression"));
             PARAMETER_TYPES.put("Expression_static_Parameter", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createClass("KRPC", "Type") });
-        }
-
-        private static void initTypes2() {
             RETURN_TYPES.put("Expression_static_Power", krpc.client.Types.createClass("KRPC", "Expression"));
             PARAMETER_TYPES.put("Expression_static_Power", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createClass("KRPC", "Expression") });
             RETURN_TYPES.put("Expression_static_Remove", krpc.client.Types.createClass("KRPC", "Expression"));
@@ -6068,6 +6303,8 @@ public class KRPC extends RemoteService {
             PARAMETER_TYPES.put("Expression_static_Switch", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createList(krpc.client.Types.createList(krpc.client.Types.createClass("KRPC", "Expression"))), krpc.client.Types.createList(krpc.client.Types.createClass("KRPC", "Expression")) });
             RETURN_TYPES.put("Expression_static_Take", krpc.client.Types.createClass("KRPC", "Expression"));
             PARAMETER_TYPES.put("Expression_static_Take", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createClass("KRPC", "Expression") });
+            RETURN_TYPES.put("Expression_static_ThrowById", krpc.client.Types.createClass("KRPC", "Expression"));
+            PARAMETER_TYPES.put("Expression_static_ThrowById", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32), krpc.client.Types.createClass("KRPC", "Expression") });
             RETURN_TYPES.put("Expression_static_Throw", krpc.client.Types.createClass("KRPC", "Expression"));
             PARAMETER_TYPES.put("Expression_static_Throw", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createClass("KRPC", "Expression") });
             RETURN_TYPES.put("Expression_static_ToList", krpc.client.Types.createClass("KRPC", "Expression"));
@@ -6078,6 +6315,8 @@ public class KRPC extends RemoteService {
             PARAMETER_TYPES.put("Expression_static_TryCatch", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createClass("KRPC", "Expression") });
             RETURN_TYPES.put("Expression_static_TryCatchAll", krpc.client.Types.createClass("KRPC", "Expression"));
             PARAMETER_TYPES.put("Expression_static_TryCatchAll", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createClass("KRPC", "Expression") });
+            RETURN_TYPES.put("Expression_static_TryCatchById", krpc.client.Types.createClass("KRPC", "Expression"));
+            PARAMETER_TYPES.put("Expression_static_TryCatchById", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32), krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createClass("KRPC", "Expression") });
             RETURN_TYPES.put("Expression_static_TryFinally", krpc.client.Types.createClass("KRPC", "Expression"));
             PARAMETER_TYPES.put("Expression_static_TryFinally", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createClass("KRPC", "Expression") });
             RETURN_TYPES.put("Expression_static_Union", krpc.client.Types.createClass("KRPC", "Expression"));
@@ -6096,6 +6335,9 @@ public class KRPC extends RemoteService {
             PARAMETER_TYPES.put("Type_get_Name", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Type") });
             RETURN_TYPES.put("Type_get_Nullable", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL));
             PARAMETER_TYPES.put("Type_get_Nullable", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Type") });
+        }
+
+        private static void initTypes3() {
             RETURN_TYPES.put("Type_get_Service", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
             PARAMETER_TYPES.put("Type_get_Service", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Type") });
             RETURN_TYPES.put("Type_get_Types", krpc.client.Types.createList(krpc.client.Types.createClass("KRPC", "Type")));
@@ -6104,17 +6346,18 @@ public class KRPC extends RemoteService {
             PARAMETER_TYPES.put("Type_static_Bool", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("Type_static_Bytes", krpc.client.Types.createClass("KRPC", "Type"));
             PARAMETER_TYPES.put("Type_static_Bytes", new krpc.schema.KRPC.Type[] {  });
-        }
-
-        private static void initTypes3() {
             RETURN_TYPES.put("Type_static_ClassType", krpc.client.Types.createClass("KRPC", "Type"));
             PARAMETER_TYPES.put("Type_static_ClassType", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
+            RETURN_TYPES.put("Type_static_ClassTypeById", krpc.client.Types.createClass("KRPC", "Type"));
+            PARAMETER_TYPES.put("Type_static_ClassTypeById", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32) });
             RETURN_TYPES.put("Type_static_DictionaryType", krpc.client.Types.createClass("KRPC", "Type"));
             PARAMETER_TYPES.put("Type_static_DictionaryType", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Type"), krpc.client.Types.createClass("KRPC", "Type") });
             RETURN_TYPES.put("Type_static_Double", krpc.client.Types.createClass("KRPC", "Type"));
             PARAMETER_TYPES.put("Type_static_Double", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("Type_static_EnumerationType", krpc.client.Types.createClass("KRPC", "Type"));
             PARAMETER_TYPES.put("Type_static_EnumerationType", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
+            RETURN_TYPES.put("Type_static_EnumerationTypeById", krpc.client.Types.createClass("KRPC", "Type"));
+            PARAMETER_TYPES.put("Type_static_EnumerationTypeById", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32) });
             RETURN_TYPES.put("Type_static_Float", krpc.client.Types.createClass("KRPC", "Type"));
             PARAMETER_TYPES.put("Type_static_Float", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("Type_static_Int", krpc.client.Types.createClass("KRPC", "Type"));
@@ -6131,6 +6374,8 @@ public class KRPC extends RemoteService {
             PARAMETER_TYPES.put("Type_static_String", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("Type_static_StructType", krpc.client.Types.createClass("KRPC", "Type"));
             PARAMETER_TYPES.put("Type_static_StructType", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
+            RETURN_TYPES.put("Type_static_StructTypeById", krpc.client.Types.createClass("KRPC", "Type"));
+            PARAMETER_TYPES.put("Type_static_StructTypeById", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32) });
             RETURN_TYPES.put("Type_static_TupleType", krpc.client.Types.createClass("KRPC", "Type"));
             PARAMETER_TYPES.put("Type_static_TupleType", new krpc.schema.KRPC.Type[] { krpc.client.Types.createList(krpc.client.Types.createClass("KRPC", "Type")) });
             RETURN_TYPES.put("Type_static_UInt", krpc.client.Types.createClass("KRPC", "Type"));

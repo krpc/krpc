@@ -858,18 +858,27 @@ namespace KRPC.Service.KRPC
         [KRPCMethod]
         public static Expression ConstantEnum (string service, string name, int value)
         {
-            Scanner.ServiceSignature signature;
-            if (!Services.Instance.Signatures.TryGetValue (service, out signature))
-                throw new ArgumentException ("Service \"" + service + "\" not found");
-            Scanner.EnumerationSignature enumeration;
-            if (!signature.Enumerations.TryGetValue (name, out enumeration))
-                throw new ArgumentException (
-                    "Enumeration \"" + name + "\" not found in service \"" + service + "\"");
+            return ConstantEnum (global::KRPC.Service.KRPC.Type.GetEnumeration (service, name), value);
+        }
+
+        /// <summary>
+        /// A constant value of an enumeration a service defines, named by ids.
+        /// </summary>
+        /// <param name="serviceId">The id of the service the enumeration is defined in.</param>
+        /// <param name="enumerationId">The id of the enumeration.</param>
+        /// <param name="value">The value of the member of the enumeration.</param>
+        [KRPCMethod]
+        public static Expression ConstantEnumById (uint serviceId, uint enumerationId, int value)
+        {
+            return ConstantEnum (global::KRPC.Service.KRPC.Type.GetEnumeration (serviceId, enumerationId), value);
+        }
+
+        static Expression ConstantEnum (Scanner.EnumerationSignature enumeration, int value)
+        {
             var type = enumeration.UnderlyingType;
             if (!Enumerations.IsValid (type, value))
                 throw new ArgumentException (
-                    value + " is not a value of enumeration \"" + name + "\" " +
-                    "in service \"" + service + "\"");
+                    value + " is not a value of enumeration \"" + enumeration.FullyQualifiedName + "\"");
             return Constant (type, System.Enum.ToObject (type, value));
         }
 

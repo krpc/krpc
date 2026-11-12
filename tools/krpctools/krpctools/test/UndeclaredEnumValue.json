@@ -22,6 +22,7 @@
     "classes": {},
     "enumerations": {
       "Mode": {
+        "id": 1,
         "documentation": "",
         "values": [
           {

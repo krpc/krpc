@@ -684,6 +684,11 @@ compilers produce the same functions.
    The C-nano and Lua clients have no events or streams, so their examples run each function
    once, with ``krpc_run_function`` in C and ``conn:run`` in Lua.
 
+A class, an enumeration, a structure or an exception is named by its service and its name, such
+as ``"SpaceCenter", "Engine"``. Each procedure that takes the names has a variant that takes the
+ids :meth:`KRPC.get_services` reports, such as :meth:`Type.class_type_by_id`. The C examples
+use them.
+
 Expression Trees
 ^^^^^^^^^^^^^^^^
 
@@ -997,7 +1002,8 @@ and build one. :meth:`Expression.get_field` reads a field by name:
 
 :meth:`Expression.create_struct` builds a structure from its type and its field values, in the
 order the structure declares them. A field's name is the one the service declares, as shown in
-the API documentation.
+the API documentation. :meth:`Expression.get_field_by_index` reads a field by its position in
+that order, counting from 0.
 
 The compilers produce both nodes from ordinary syntax. Reading a field of a structure compiles
 to :meth:`Expression.get_field`, and constructing one compiles to

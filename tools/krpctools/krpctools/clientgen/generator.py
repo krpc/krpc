@@ -248,6 +248,7 @@ class Generator(Generic[LanguageT]):
 
         for name, cls in self._get_defs("classes"):
             context["classes"][name] = {
+                "id": cls["id"],
                 "methods": {},
                 "static_methods": {},
                 "properties": {},
@@ -260,6 +261,7 @@ class Generator(Generic[LanguageT]):
 
         for name, enumeration in self._get_defs("enumerations"):
             context["enumerations"][name] = {
+                "id": enumeration["id"],
                 "values": [
                     {
                         "name": self.parse_name(x["name"]),
@@ -285,6 +287,7 @@ class Generator(Generic[LanguageT]):
 
         for name, struct in self._get_defs("structs"):
             context["structs"][name] = {
+                "id": struct["id"],
                 "fields": [
                     {
                         "name": self.parse_name(x["name"]),

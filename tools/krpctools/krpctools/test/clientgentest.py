@@ -38,6 +38,7 @@ def documented_enumeration(summary):
             "classes": {},
             "enumerations": {
                 "Mode": {
+                    "id": 1,
                     "documentation": "",
                     "values": [{"name": "A", "value": 0, "documentation": doc}],
                 }
@@ -153,6 +154,7 @@ class ClientGenTestCase(_Base):
         # A field whose type is a structure of the same name in another service refers to
         # that one, not to the structure that holds it
         struct = {
+            "id": 1,
             "documentation": "",
             "fields": [
                 {
@@ -172,7 +174,9 @@ class ClientGenTestCase(_Base):
             "structs": {"Thing": struct},
         }
         other = dict(
-            service, id=2, structs={"Thing": {"documentation": "", "fields": []}}
+            service,
+            id=2,
+            structs={"Thing": {"id": 1, "documentation": "", "fields": []}},
         )
         self.generate("ServiceA", {"ServiceA": service, "ServiceB": other})
 

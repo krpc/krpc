@@ -463,6 +463,16 @@ Main kRPC service, used by clients to interact with basic server functionality.
       :rtype: :class:`Expression`
    
 
+   .. staticmethod:: constant_enum_by_id(service_id, enumeration_id, value)
+
+      A constant value of an enumeration a service defines, named by ids.
+
+      :param int service_id: The id of the service the enumeration is defined in.
+      :param int enumeration_id: The id of the enumeration.
+      :param int value: The value of the member of the enumeration.
+      :rtype: :class:`Expression`
+   
+
    .. staticmethod:: constant_float(value)
 
       A constant value of single precision floating point type.
@@ -834,6 +844,21 @@ Main kRPC service, used by clients to interact with basic server functionality.
       :returns: The value of the field.
       :rtype: :class:`Expression`
    
+
+   .. staticmethod:: get_field_by_index(arg, index)
+
+      The value of a field of a structure, named by its position. Throws an exception if
+      the value is not a structure, or the index is out of range.
+
+      :param Expression arg: The structure.
+      :param int index: The position of the field to access.
+      :returns: The value of the field.
+      :rtype: :class:`Expression`
+   
+
+      .. note::
+
+         The fields are numbered from 0, in the order the structure defines them.
 
    .. staticmethod:: greater_than(arg0, arg1)
 
@@ -1575,6 +1600,21 @@ Main kRPC service, used by clients to interact with basic server functionality.
          ``Error`` raise :class:`Error`. Throws an exception if the service does not
          declare it.
 
+   .. staticmethod:: throw_by_id(service_id, exception_id, message)
+
+      A throw statement, which raises the exception with the given ids.
+
+      :param int service_id: The id of the service the exception is defined in.
+      :param int exception_id: The id of the exception.
+      :param Expression message: The message of the exception.
+      :rtype: :class:`Expression`
+   
+
+      .. note::
+
+         Raises the exception as :meth:`Expression.throw` does. Throws an exception if the
+         service does not declare it.
+
    .. staticmethod:: to_list(arg)
 
       A collection as a list.
@@ -1623,6 +1663,23 @@ Main kRPC service, used by clients to interact with basic server functionality.
       :param Expression handler: The statement evaluated when an exception is caught.
       :rtype: :class:`Expression`
    
+
+   .. staticmethod:: try_catch_by_id(body, service_id, exception_id, message, handler)
+
+      A try-catch statement that handles the exception with the given ids.
+
+      :param Expression body: The statement to evaluate.
+      :param int service_id: The id of the service the exception is defined in.
+      :param int exception_id: The id of the exception.
+      :param Expression or None message: A string variable assigned the exception's message, or null.
+      :param Expression handler: The statement evaluated when the exception is caught.
+      :rtype: :class:`Expression`
+   
+
+      .. note::
+
+         Handles the exception as :meth:`Expression.try_catch` does. Throws an exception if the
+         service does not declare it.
 
    .. staticmethod:: try_finally(body, finalizer)
 
@@ -1734,6 +1791,15 @@ Main kRPC service, used by clients to interact with basic server functionality.
       :rtype: :class:`Type`
    
 
+   .. staticmethod:: class_type_by_id(service_id, class_id)
+
+      The type of a class defined by a service, named by ids.
+
+      :param int service_id: The id of the service the class is defined in.
+      :param int class_id: The id of the class.
+      :rtype: :class:`Type`
+   
+
    .. attribute:: code
 
       The kind of the type.
@@ -1765,6 +1831,15 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
       :param str service: The name of the service the enumeration is defined in.
       :param str name: The name of the enumeration.
+      :rtype: :class:`Type`
+   
+
+   .. staticmethod:: enumeration_type_by_id(service_id, enumeration_id)
+
+      The type of an enumeration defined by a service, named by ids.
+
+      :param int service_id: The id of the service the enumeration is defined in.
+      :param int enumeration_id: The id of the enumeration.
       :rtype: :class:`Type`
    
 
@@ -1855,6 +1930,15 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
       :param str service: The name of the service the structure is defined in.
       :param str name: The name of the structure.
+      :rtype: :class:`Type`
+   
+
+   .. staticmethod:: struct_type_by_id(service_id, struct_id)
+
+      The type of a structure defined by a service, named by ids.
+
+      :param int service_id: The id of the service the structure is defined in.
+      :param int struct_id: The id of the structure.
       :rtype: :class:`Type`
    
 

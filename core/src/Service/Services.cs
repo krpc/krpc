@@ -112,12 +112,42 @@ namespace KRPC.Service
             if (!signature.Exceptions.TryGetValue (name, out exception))
                 throw new KRPC.ArgumentException (
                     "Exception \"" + name + "\" not found in service \"" + service + "\"");
+            return GetExceptionTypes (exception);
+        }
+
+        /// <summary>
+        /// The CLR exception types a client sees as the kRPC exception with the given ids.
+        /// </summary>
+        public IList<Type> GetExceptionTypes (uint serviceId, uint exceptionId)
+        {
+            var signature = GetServiceSignature (serviceId);
+            var exception = signature.Exceptions.Values.FirstOrDefault (x => x.Id == exceptionId);
+            if (exception == null)
+                throw new KRPC.ArgumentException (
+                    "Exception with id " + exceptionId + " not found in service \"" +
+                    signature.Name + "\"");
+            return GetExceptionTypes (exception);
+        }
+
+        IList<Type> GetExceptionTypes (ExceptionSignature exception)
+        {
             var type = exception.UnderlyingType;
             var types = new List<Type> { type };
             types.AddRange (MappedExceptionTypes
                 .Where (x => x.Value == type && x.Key != type)
                 .Select (x => x.Key));
             return types;
+        }
+
+        /// <summary>
+        /// The service with the given id. Throws an exception if there is none.
+        /// </summary>
+        public ServiceSignature GetServiceSignature (uint id)
+        {
+            ServiceSignature signature;
+            if (!ServicesById.TryGetValue (id, out signature))
+                throw new KRPC.ArgumentException ("Service with id " + id + " not found");
+            return signature;
         }
 
         /// <summary>

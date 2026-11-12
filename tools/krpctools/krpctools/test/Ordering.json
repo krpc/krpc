@@ -50,6 +50,7 @@
     "classes": {},
     "enumerations": {
       "Mode": {
+        "id": 1,
         "documentation": "<doc>\n<summary>\nHow to frob.\n</summary>\n</doc>",
         "values": [
           {

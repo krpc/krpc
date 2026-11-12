@@ -34,13 +34,35 @@ namespace KRPC.Service.KRPC
         public static Expression Throw (string service, string name, Expression message)
         {
             var value = StringOperand (message, nameof (message), "The third argument of Throw");
-            var type = ExceptionTypes (service, name) [0];
+            return BuildThrow (ExceptionTypes (service, name) [0], service, value);
+        }
+
+        /// <summary>
+        /// A throw statement, which raises the exception with the given ids.
+        /// </summary>
+        /// <remarks>
+        /// Raises the exception as <see cref="Throw"/> does. Throws an exception if the
+        /// service does not declare it.
+        /// </remarks>
+        /// <param name="serviceId">The id of the service the exception is defined in.</param>
+        /// <param name="exceptionId">The id of the exception.</param>
+        /// <param name="message">The message of the exception.</param>
+        [KRPCMethod]
+        public static Expression ThrowById (uint serviceId, uint exceptionId, Expression message)
+        {
+            var value = StringOperand (message, nameof (message), "The third argument of ThrowById");
+            var types = Services.Instance.GetExceptionTypes (serviceId, exceptionId);
+            return BuildThrow (types [0], Services.Instance.GetServiceSignature (serviceId).Name, value);
+        }
+
+        static Expression BuildThrow (System.Type type, string service, LinqExpression message)
+        {
             var constructor = type.GetConstructor (new [] { typeof (string) });
             if (constructor == null)
                 throw new InvalidOperationException (
-                    "Exception \"" + name + "\" in service \"" + service + "\" " +
+                    "Exception \"" + type.Name + "\" in service \"" + service + "\" " +
                     "cannot be raised, as it cannot be constructed from a message");
-            return new Expression (LinqExpression.Throw (LinqExpression.New (constructor, value)));
+            return new Expression (LinqExpression.Throw (LinqExpression.New (constructor, message)));
         }
 
         /// <summary>
@@ -58,11 +80,36 @@ namespace KRPC.Service.KRPC
         [KRPCMethod]
         public static Expression TryCatch (Expression body, string service, string name, [KRPCNullable] Expression message, Expression handler)
         {
-            var types = ExceptionTypes (service, name);
+            return BuildTryCatch (
+                body, ExceptionTypes (service, name), message, "The fourth argument of TryCatch", handler);
+        }
+
+        /// <summary>
+        /// A try-catch statement that handles the exception with the given ids.
+        /// </summary>
+        /// <remarks>
+        /// Handles the exception as <see cref="TryCatch"/> does. Throws an exception if the
+        /// service does not declare it.
+        /// </remarks>
+        /// <param name="body">The statement to evaluate.</param>
+        /// <param name="serviceId">The id of the service the exception is defined in.</param>
+        /// <param name="exceptionId">The id of the exception.</param>
+        /// <param name="message">A string variable assigned the exception's message, or null.</param>
+        /// <param name="handler">The statement evaluated when the exception is caught.</param>
+        [KRPCMethod]
+        public static Expression TryCatchById (Expression body, uint serviceId, uint exceptionId, [KRPCNullable] Expression message, Expression handler)
+        {
+            return BuildTryCatch (
+                body, Services.Instance.GetExceptionTypes (serviceId, exceptionId), message,
+                "The fourth argument of TryCatchById", handler);
+        }
+
+        static Expression BuildTryCatch (Expression body, IList<System.Type> types, Expression message, string messageArgument, Expression handler)
+        {
             return new Expression (LinqExpression.TryCatch (
                 AsStatement (body),
                 types.Select (x => BuildCatchBlock (
-                    x, types [0], message, "The fourth argument of TryCatch", handler)).ToArray ()));
+                    x, types [0], message, messageArgument, handler)).ToArray ()));
         }
 
         /// <summary>

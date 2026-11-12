@@ -171,6 +171,10 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
       Numeric operands of differing types are converted to a common type.
 
+   .. macro:: KRPC_CLASS_KRPC_EXPRESSION
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_KRPC_Expression_Add(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg0, krpc_KRPC_Expression_t arg1)
 
       Numerical addition.
@@ -502,6 +506,18 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
        * **service** -- The name of the service the enumeration is defined in.
        * **name** -- The name of the enumeration.
+       * **value** -- The value of the member of the enumeration.
+
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_ConstantEnumById(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, uint32_t serviceId, uint32_t enumerationId, int32_t value)
+
+      A constant value of an enumeration a service defines, named by ids.
+
+      :Parameters:
+
+       * **serviceId** -- The id of the service the enumeration is defined in.
+       * **enumerationId** -- The id of the enumeration.
        * **value** -- The value of the member of the enumeration.
 
    
@@ -941,6 +957,23 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
       :returns: The value of the field.
    
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_GetFieldByIndex(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg, int32_t index)
+
+      The value of a field of a structure, named by its position. Throws an exception if
+      the value is not a structure, or the index is out of range.
+
+      :Parameters:
+
+       * **arg** -- The structure.
+       * **index** -- The position of the field to access.
+
+      :returns: The value of the field.
+   
+
+      .. note::
+
+         The fields are numbered from 0, in the order the structure defines them.
 
    .. function:: krpc_error_t krpc_KRPC_Expression_GreaterThan(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg0, krpc_KRPC_Expression_t arg1)
 
@@ -1792,6 +1825,23 @@ Main kRPC service, used by clients to interact with basic server functionality.
          ``Error`` raise :macro:`KRPC_EXCEPTION_KRPC_ERROR`. Throws an exception if the service does not
          declare it.
 
+   .. function:: krpc_error_t krpc_KRPC_Expression_ThrowById(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, uint32_t serviceId, uint32_t exceptionId, krpc_KRPC_Expression_t message)
+
+      A throw statement, which raises the exception with the given ids.
+
+      :Parameters:
+
+       * **serviceId** -- The id of the service the exception is defined in.
+       * **exceptionId** -- The id of the exception.
+       * **message** -- The message of the exception.
+
+   
+
+      .. note::
+
+         Raises the exception as :func:`krpc_KRPC_Expression_Throw` does. Throws an exception if the
+         service does not declare it.
+
    .. function:: krpc_error_t krpc_KRPC_Expression_ToList(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg)
 
       A collection as a list.
@@ -1848,6 +1898,25 @@ Main kRPC service, used by clients to interact with basic server functionality.
        * **handler** -- The statement evaluated when an exception is caught.
 
    
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_TryCatchById(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t body, uint32_t serviceId, uint32_t exceptionId, krpc_KRPC_Expression_t message, krpc_KRPC_Expression_t handler)
+
+      A try-catch statement that handles the exception with the given ids.
+
+      :Parameters:
+
+       * **body** -- The statement to evaluate.
+       * **serviceId** -- The id of the service the exception is defined in.
+       * **exceptionId** -- The id of the exception.
+       * **message** -- A string variable assigned the exception's message, or null.
+       * **handler** -- The statement evaluated when the exception is caught.
+
+   
+
+      .. note::
+
+         Handles the exception as :func:`krpc_KRPC_Expression_TryCatch` does. Throws an exception if the
+         service does not declare it.
 
    .. function:: krpc_error_t krpc_KRPC_Expression_TryFinally(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t body, krpc_KRPC_Expression_t finalizer)
 
@@ -1948,6 +2017,10 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
    The type of a value a procedure takes or returns.
 
+   .. macro:: KRPC_CLASS_KRPC_TYPE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_KRPC_Type_Bool(krpc_connection_t connection, krpc_KRPC_Type_t * returnValue)
 
       A boolean type.
@@ -1970,6 +2043,17 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
        * **service** -- The name of the service the class is defined in.
        * **name** -- The name of the class.
+
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Type_ClassTypeById(krpc_connection_t connection, krpc_KRPC_Type_t * returnValue, uint32_t serviceId, uint32_t classId)
+
+      The type of a class defined by a service, named by ids.
+
+      :Parameters:
+
+       * **serviceId** -- The id of the service the class is defined in.
+       * **classId** -- The id of the class.
 
    
 
@@ -2006,6 +2090,17 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
        * **service** -- The name of the service the enumeration is defined in.
        * **name** -- The name of the enumeration.
+
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Type_EnumerationTypeById(krpc_connection_t connection, krpc_KRPC_Type_t * returnValue, uint32_t serviceId, uint32_t enumerationId)
+
+      The type of an enumeration defined by a service, named by ids.
+
+      :Parameters:
+
+       * **serviceId** -- The id of the service the enumeration is defined in.
+       * **enumerationId** -- The id of the enumeration.
 
    
 
@@ -2101,6 +2196,17 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
    
 
+   .. function:: krpc_error_t krpc_KRPC_Type_StructTypeById(krpc_connection_t connection, krpc_KRPC_Type_t * returnValue, uint32_t serviceId, uint32_t structId)
+
+      The type of a structure defined by a service, named by ids.
+
+      :Parameters:
+
+       * **serviceId** -- The id of the service the structure is defined in.
+       * **structId** -- The id of the structure.
+
+   
+
    .. function:: krpc_error_t krpc_KRPC_Type_TupleType(krpc_connection_t connection, krpc_KRPC_Type_t * returnValue, const krpc_list_object_t * valueTypes)
 
       A tuple type. Throws an exception if there are no element types or more than seven.
@@ -2141,6 +2247,11 @@ Main kRPC service, used by clients to interact with basic server functionality.
 .. type:: krpc_KRPC_GameScene_t
 
    The game scene. See :func:`krpc_KRPC_GameScene`.
+
+   .. macro:: KRPC_ENUMERATION_KRPC_GAMESCENE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_KRPC_GAMESCENE_ADMINISTRATION
@@ -2201,6 +2312,11 @@ Main kRPC service, used by clients to interact with basic server functionality.
 .. type:: krpc_KRPC_TypeCode_t
 
    The kind of a type, with the values of the communication protocol's type codes.
+
+   .. macro:: KRPC_ENUMERATION_KRPC_TYPECODE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_KRPC_TYPECODE_BOOL
@@ -2290,22 +2406,46 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
    .. note::
 
-      See :func:`krpc_KRPC_Clients`.
+      See :func:`krpc_KRPC_Clients`.   .. macro:: KRPC_STRUCT_KRPC_CLIENTINFO
+
+      The service and structure ids of the structure, for :func:`krpc_KRPC_Type_StructTypeById`.
+
+
    .. member:: krpc_bytes_t id
 
       The identifier of the client.
+
+      .. macro:: KRPC_FIELD_KRPC_CLIENTINFO_ID
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: char * name
 
       The name of the client, or an empty string if it has no name.
 
+      .. macro:: KRPC_FIELD_KRPC_CLIENTINFO_NAME
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: char * address
 
       The address of the client.
 
+      .. macro:: KRPC_FIELD_KRPC_CLIENTINFO_ADDRESS
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: uint32_t protocol_version
 
       The protocol version of the client's connection.
+
+      .. macro:: KRPC_FIELD_KRPC_CLIENTINFO_PROTOCOLVERSION
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
 
 .. type:: krpc_KRPC_ServerSettings_t
@@ -2314,30 +2454,64 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
    .. note::
 
-      See :member:`krpc_KRPC_ServerStatus_t.settings`.
+      See :member:`krpc_KRPC_ServerStatus_t.settings`.   .. macro:: KRPC_STRUCT_KRPC_SERVERSETTINGS
+
+      The service and structure ids of the structure, for :func:`krpc_KRPC_Type_StructTypeById`.
+
+
    .. member:: bool one_rpc_per_update
 
       Whether the server executes one call per update.
+
+      .. macro:: KRPC_FIELD_KRPC_SERVERSETTINGS_ONERPCPERUPDATE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: uint32_t max_time_per_update
 
       The current maximum time spent executing calls per update, in microseconds.
 
+      .. macro:: KRPC_FIELD_KRPC_SERVERSETTINGS_MAXTIMEPERUPDATE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: bool adaptive_rate_control
 
       Whether the server adjusts :member:`krpc_KRPC_ServerSettings_t.max_time_per_update` to hold the frame rate.
+
+      .. macro:: KRPC_FIELD_KRPC_SERVERSETTINGS_ADAPTIVERATECONTROL
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: bool blocking_recv
 
       Whether the server waits for the next call in an update.
 
+      .. macro:: KRPC_FIELD_KRPC_SERVERSETTINGS_BLOCKINGRECV
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: uint32_t recv_timeout
 
       The time the server waits for the next call, in microseconds.
 
+      .. macro:: KRPC_FIELD_KRPC_SERVERSETTINGS_RECVTIMEOUT
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: uint32_t tick_hold_timeout
 
       The longest time a client may hold the game on one physics tick, in microseconds.
+
+      .. macro:: KRPC_FIELD_KRPC_SERVERSETTINGS_TICKHOLDTIMEOUT
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
 
 .. type:: krpc_KRPC_ServerStatistics_t
@@ -2346,67 +2520,146 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
    .. note::
 
-      See :member:`krpc_KRPC_ServerStatus_t.statistics`.
+      See :member:`krpc_KRPC_ServerStatus_t.statistics`.   .. macro:: KRPC_STRUCT_KRPC_SERVERSTATISTICS
+
+      The service and structure ids of the structure, for :func:`krpc_KRPC_Type_StructTypeById`.
+
+
    .. member:: uint64_t bytes_read
 
       The number of bytes received from clients.
+
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_BYTESREAD
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: uint64_t bytes_written
 
       The number of bytes sent to clients.
 
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_BYTESWRITTEN
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: float bytes_read_rate
 
       The rate bytes are received from clients, in bytes per second.
+
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_BYTESREADRATE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: float bytes_written_rate
 
       The rate bytes are sent to clients, in bytes per second.
 
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_BYTESWRITTENRATE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: uint64_t rpcs_executed
 
       The number of calls executed.
+
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_RPCSEXECUTED
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: float rpc_rate
 
       The number of calls executed per second.
 
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_RPCRATE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: float time_per_rpc_update
 
       The time spent receiving and executing calls per update, in seconds.
+
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_TIMEPERRPCUPDATE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: float poll_time_per_rpc_update
 
       The time spent receiving calls per update, in seconds.
 
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_POLLTIMEPERRPCUPDATE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: float exec_time_per_rpc_update
 
       The time spent executing calls per update, in seconds.
+
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_EXECTIMEPERRPCUPDATE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: uint32_t deferred_calls
 
       The number of calls left for the next update, because the update ran out of time
       or the call yielded.
 
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_DEFERREDCALLS
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: uint32_t streams
 
       The number of open streams, events included.
+
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_STREAMS
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: uint64_t stream_evaluations
 
       The number of stream evaluations, one per stream per update.
 
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_STREAMEVALUATIONS
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: float stream_evaluation_rate
 
       The number of stream evaluations per second.
+
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_STREAMEVALUATIONRATE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: uint64_t stream_updates_sent
 
       The number of stream updates sent to clients.
 
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_STREAMUPDATESSENT
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: float time_per_stream_update
 
       The time spent updating streams per update, in seconds.
+
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_TIMEPERSTREAMUPDATE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
 
 .. type:: krpc_KRPC_ServerStatus_t
@@ -2415,22 +2668,46 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
    .. note::
 
-      See :func:`krpc_KRPC_GetStatus`.
+      See :func:`krpc_KRPC_GetStatus`.   .. macro:: KRPC_STRUCT_KRPC_SERVERSTATUS
+
+      The service and structure ids of the structure, for :func:`krpc_KRPC_Type_StructTypeById`.
+
+
    .. member:: char * version
 
       The version of the server, or ``unknown``.
+
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATUS_VERSION
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
    .. member:: uint32_t protocol_version
 
       The protocol version of the connection.
 
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATUS_PROTOCOLVERSION
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: krpc_KRPC_ServerSettings_t settings
 
       The settings of the server.
 
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATUS_SETTINGS
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
    .. member:: krpc_KRPC_ServerStatistics_t statistics
 
       The performance statistics of the server.
+
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATUS_STATISTICS
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
 
 
 .. macro:: KRPC_EXCEPTION_KRPC_ARGUMENTEXCEPTION

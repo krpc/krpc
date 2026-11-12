@@ -421,6 +421,44 @@ typedef enum {
   KRPC_KRPC_TYPECODE_DICTIONARY = 303
 } krpc_KRPC_TypeCode_t;
 
+#define KRPC_CLASS_KRPC_EXPRESSION 1u, 3155522758u
+#define KRPC_CLASS_KRPC_TYPE 1u, 1893707194u
+#define KRPC_ENUMERATION_KRPC_GAMESCENE 1u, 4251095244u
+#define KRPC_ENUMERATION_KRPC_TYPECODE 1u, 1337448176u
+#define KRPC_STRUCT_KRPC_CLIENTINFO 1u, 1266781925u
+#define KRPC_FIELD_KRPC_CLIENTINFO_ID 0
+#define KRPC_FIELD_KRPC_CLIENTINFO_NAME 1
+#define KRPC_FIELD_KRPC_CLIENTINFO_ADDRESS 2
+#define KRPC_FIELD_KRPC_CLIENTINFO_PROTOCOLVERSION 3
+#define KRPC_STRUCT_KRPC_SERVERSETTINGS 1u, 1855283781u
+#define KRPC_FIELD_KRPC_SERVERSETTINGS_ONERPCPERUPDATE 0
+#define KRPC_FIELD_KRPC_SERVERSETTINGS_MAXTIMEPERUPDATE 1
+#define KRPC_FIELD_KRPC_SERVERSETTINGS_ADAPTIVERATECONTROL 2
+#define KRPC_FIELD_KRPC_SERVERSETTINGS_BLOCKINGRECV 3
+#define KRPC_FIELD_KRPC_SERVERSETTINGS_RECVTIMEOUT 4
+#define KRPC_FIELD_KRPC_SERVERSETTINGS_TICKHOLDTIMEOUT 5
+#define KRPC_STRUCT_KRPC_SERVERSTATISTICS 1u, 3770033598u
+#define KRPC_FIELD_KRPC_SERVERSTATISTICS_BYTESREAD 0
+#define KRPC_FIELD_KRPC_SERVERSTATISTICS_BYTESWRITTEN 1
+#define KRPC_FIELD_KRPC_SERVERSTATISTICS_BYTESREADRATE 2
+#define KRPC_FIELD_KRPC_SERVERSTATISTICS_BYTESWRITTENRATE 3
+#define KRPC_FIELD_KRPC_SERVERSTATISTICS_RPCSEXECUTED 4
+#define KRPC_FIELD_KRPC_SERVERSTATISTICS_RPCRATE 5
+#define KRPC_FIELD_KRPC_SERVERSTATISTICS_TIMEPERRPCUPDATE 6
+#define KRPC_FIELD_KRPC_SERVERSTATISTICS_POLLTIMEPERRPCUPDATE 7
+#define KRPC_FIELD_KRPC_SERVERSTATISTICS_EXECTIMEPERRPCUPDATE 8
+#define KRPC_FIELD_KRPC_SERVERSTATISTICS_DEFERREDCALLS 9
+#define KRPC_FIELD_KRPC_SERVERSTATISTICS_STREAMS 10
+#define KRPC_FIELD_KRPC_SERVERSTATISTICS_STREAMEVALUATIONS 11
+#define KRPC_FIELD_KRPC_SERVERSTATISTICS_STREAMEVALUATIONRATE 12
+#define KRPC_FIELD_KRPC_SERVERSTATISTICS_STREAMUPDATESSENT 13
+#define KRPC_FIELD_KRPC_SERVERSTATISTICS_TIMEPERSTREAMUPDATE 14
+#define KRPC_STRUCT_KRPC_SERVERSTATUS 1u, 1932373256u
+#define KRPC_FIELD_KRPC_SERVERSTATUS_VERSION 0
+#define KRPC_FIELD_KRPC_SERVERSTATUS_PROTOCOLVERSION 1
+#define KRPC_FIELD_KRPC_SERVERSTATUS_SETTINGS 2
+#define KRPC_FIELD_KRPC_SERVERSTATUS_STATISTICS 3
+
 /**
  * A method was invoked where at least one of the passed arguments does not
  * meet the parameter specification of the method.
@@ -1107,6 +1145,22 @@ static inline krpc_error_t krpc_KRPC_Expression_ConstantEnum(krpc_connection_t c
 static inline krpc_error_t krpc_KRPC_Expression_ConstantEnum_call(krpc_schema_ProcedureCall * procedureCall, const char * service, const char * name, int32_t value);
 
 /**
+ * A constant value of an enumeration a service defines, named by ids.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
+ * @param serviceId The id of the service the enumeration is defined in.
+ * @param enumerationId The id of the enumeration.
+ * @param value The value of the member of the enumeration.
+ */
+static inline krpc_error_t krpc_KRPC_Expression_ConstantEnumById(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, uint32_t serviceId, uint32_t enumerationId, int32_t value);
+
+/**
+ * Fills in the call krpc_KRPC_Expression_ConstantEnumById() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_KRPC_Expression_ConstantEnumById_call(krpc_schema_ProcedureCall * procedureCall, uint32_t serviceId, uint32_t enumerationId, int32_t value);
+
+/**
  * A constant value of single precision floating point type.
  * @param connection A connection object.
  * @param returnValue The value returned.
@@ -1626,6 +1680,24 @@ static inline krpc_error_t krpc_KRPC_Expression_GetField(krpc_connection_t conne
  * krpc_free_procedure_call().
  */
 static inline krpc_error_t krpc_KRPC_Expression_GetField_call(krpc_schema_ProcedureCall * procedureCall, krpc_KRPC_Expression_t arg, const char * name);
+
+/**
+ * The value of a field of a structure, named by its position. Throws an exception if
+ * the value is not a structure, or the index is out of range.
+ *
+ * The fields are numbered from 0, in the order the structure defines them.
+ * @param connection A connection object.
+ * @param returnValue The value of the field.
+ * @param arg The structure.
+ * @param index The position of the field to access.
+ */
+static inline krpc_error_t krpc_KRPC_Expression_GetFieldByIndex(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg, int32_t index);
+
+/**
+ * Fills in the call krpc_KRPC_Expression_GetFieldByIndex() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_KRPC_Expression_GetFieldByIndex_call(krpc_schema_ProcedureCall * procedureCall, krpc_KRPC_Expression_t arg, int32_t index);
 
 /**
  * Greater than numerical comparison.
@@ -2581,6 +2653,25 @@ static inline krpc_error_t krpc_KRPC_Expression_Throw(krpc_connection_t connecti
 static inline krpc_error_t krpc_KRPC_Expression_Throw_call(krpc_schema_ProcedureCall * procedureCall, const char * service, const char * name, krpc_KRPC_Expression_t message);
 
 /**
+ * A throw statement, which raises the exception with the given ids.
+ *
+ * Raises the exception as krpc_KRPC_Expression_Throw() does. Throws an exception if the
+ * service does not declare it.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
+ * @param serviceId The id of the service the exception is defined in.
+ * @param exceptionId The id of the exception.
+ * @param message The message of the exception.
+ */
+static inline krpc_error_t krpc_KRPC_Expression_ThrowById(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, uint32_t serviceId, uint32_t exceptionId, krpc_KRPC_Expression_t message);
+
+/**
+ * Fills in the call krpc_KRPC_Expression_ThrowById() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_KRPC_Expression_ThrowById_call(krpc_schema_ProcedureCall * procedureCall, uint32_t serviceId, uint32_t exceptionId, krpc_KRPC_Expression_t message);
+
+/**
  * A collection as a list.
  * @param connection A connection object.
  * @param returnValue The collection as a list.
@@ -2646,6 +2737,27 @@ static inline krpc_error_t krpc_KRPC_Expression_TryCatchAll(krpc_connection_t co
  * krpc_free_procedure_call().
  */
 static inline krpc_error_t krpc_KRPC_Expression_TryCatchAll_call(krpc_schema_ProcedureCall * procedureCall, krpc_KRPC_Expression_t body, krpc_KRPC_Expression_t message, krpc_KRPC_Expression_t handler);
+
+/**
+ * A try-catch statement that handles the exception with the given ids.
+ *
+ * Handles the exception as krpc_KRPC_Expression_TryCatch() does. Throws an exception if the
+ * service does not declare it.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
+ * @param body The statement to evaluate.
+ * @param serviceId The id of the service the exception is defined in.
+ * @param exceptionId The id of the exception.
+ * @param message A string variable assigned the exception's message, or null.
+ * @param handler The statement evaluated when the exception is caught.
+ */
+static inline krpc_error_t krpc_KRPC_Expression_TryCatchById(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t body, uint32_t serviceId, uint32_t exceptionId, krpc_KRPC_Expression_t message, krpc_KRPC_Expression_t handler);
+
+/**
+ * Fills in the call krpc_KRPC_Expression_TryCatchById() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_KRPC_Expression_TryCatchById_call(krpc_schema_ProcedureCall * procedureCall, krpc_KRPC_Expression_t body, uint32_t serviceId, uint32_t exceptionId, krpc_KRPC_Expression_t message, krpc_KRPC_Expression_t handler);
 
 /**
  * A try-finally statement.
@@ -2831,6 +2943,21 @@ static inline krpc_error_t krpc_KRPC_Type_ClassType(krpc_connection_t connection
 static inline krpc_error_t krpc_KRPC_Type_ClassType_call(krpc_schema_ProcedureCall * procedureCall, const char * service, const char * name);
 
 /**
+ * The type of a class defined by a service, named by ids.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
+ * @param serviceId The id of the service the class is defined in.
+ * @param classId The id of the class.
+ */
+static inline krpc_error_t krpc_KRPC_Type_ClassTypeById(krpc_connection_t connection, krpc_KRPC_Type_t * returnValue, uint32_t serviceId, uint32_t classId);
+
+/**
+ * Fills in the call krpc_KRPC_Type_ClassTypeById() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_KRPC_Type_ClassTypeById_call(krpc_schema_ProcedureCall * procedureCall, uint32_t serviceId, uint32_t classId);
+
+/**
  * A dictionary type. Throws an exception if the key type is nullable or not a valid
  * key type.
  * @param connection A connection object.
@@ -2871,6 +2998,21 @@ static inline krpc_error_t krpc_KRPC_Type_EnumerationType(krpc_connection_t conn
  * krpc_free_procedure_call().
  */
 static inline krpc_error_t krpc_KRPC_Type_EnumerationType_call(krpc_schema_ProcedureCall * procedureCall, const char * service, const char * name);
+
+/**
+ * The type of an enumeration defined by a service, named by ids.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
+ * @param serviceId The id of the service the enumeration is defined in.
+ * @param enumerationId The id of the enumeration.
+ */
+static inline krpc_error_t krpc_KRPC_Type_EnumerationTypeById(krpc_connection_t connection, krpc_KRPC_Type_t * returnValue, uint32_t serviceId, uint32_t enumerationId);
+
+/**
+ * Fills in the call krpc_KRPC_Type_EnumerationTypeById() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_KRPC_Type_EnumerationTypeById_call(krpc_schema_ProcedureCall * procedureCall, uint32_t serviceId, uint32_t enumerationId);
 
 /**
  * A single precision floating point number type.
@@ -2972,6 +3114,21 @@ static inline krpc_error_t krpc_KRPC_Type_StructType(krpc_connection_t connectio
  * krpc_free_procedure_call().
  */
 static inline krpc_error_t krpc_KRPC_Type_StructType_call(krpc_schema_ProcedureCall * procedureCall, const char * service, const char * name);
+
+/**
+ * The type of a structure defined by a service, named by ids.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
+ * @param serviceId The id of the service the structure is defined in.
+ * @param structId The id of the structure.
+ */
+static inline krpc_error_t krpc_KRPC_Type_StructTypeById(krpc_connection_t connection, krpc_KRPC_Type_t * returnValue, uint32_t serviceId, uint32_t structId);
+
+/**
+ * Fills in the call krpc_KRPC_Type_StructTypeById() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_KRPC_Type_StructTypeById_call(krpc_schema_ProcedureCall * procedureCall, uint32_t serviceId, uint32_t structId);
 
 /**
  * A tuple type. Throws an exception if there are no element types or more than seven.
@@ -5345,6 +5502,33 @@ static inline krpc_error_t krpc_KRPC_Expression_ConstantEnum_call(krpc_schema_Pr
   return KRPC_OK;
 }
 
+static inline krpc_error_t krpc_KRPC_Expression_ConstantEnumById(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, uint32_t serviceId, uint32_t enumerationId, int32_t value) {
+  krpc_call_t _call;
+  krpc_argument_t _arguments[3];
+  KRPC_CHECK(krpc_call(&_call, 1, 190274192, 3, _arguments));
+  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_uint32, &serviceId));
+  KRPC_CHECK(krpc_add_argument(&_call, 1, &krpc_encode_callback_uint32, &enumerationId));
+  KRPC_CHECK(krpc_add_argument(&_call, 2, &krpc_encode_callback_int32, &value));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  if (returnValue) {
+    pb_istream_t _stream;
+    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+    KRPC_CHECK(krpc_decode_object(&_stream, returnValue));
+  }
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_KRPC_Expression_ConstantEnumById_call(krpc_schema_ProcedureCall * procedureCall, uint32_t serviceId, uint32_t enumerationId, int32_t value) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 1, 190274192, 3));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_uint32, &serviceId));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 1, &krpc_encode_callback_uint32, &enumerationId));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 2, &krpc_encode_callback_int32, &value));
+  return KRPC_OK;
+}
+
 static inline krpc_error_t krpc_KRPC_Expression_ConstantFloat(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, float value) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
@@ -6126,6 +6310,31 @@ static inline krpc_error_t krpc_KRPC_Expression_GetField_call(krpc_schema_Proced
   KRPC_CHECK(krpc_procedure_call(procedureCall, 1, 2008823776, 2));
   KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_object, &arg));
   KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 1, &krpc_encode_callback_string, &name));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_KRPC_Expression_GetFieldByIndex(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg, int32_t index) {
+  krpc_call_t _call;
+  krpc_argument_t _arguments[2];
+  KRPC_CHECK(krpc_call(&_call, 1, 2240288813, 2, _arguments));
+  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_object, &arg));
+  KRPC_CHECK(krpc_add_argument(&_call, 1, &krpc_encode_callback_int32, &index));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  if (returnValue) {
+    pb_istream_t _stream;
+    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+    KRPC_CHECK(krpc_decode_object(&_stream, returnValue));
+  }
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_KRPC_Expression_GetFieldByIndex_call(krpc_schema_ProcedureCall * procedureCall, krpc_KRPC_Expression_t arg, int32_t index) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 1, 2240288813, 2));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_object, &arg));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 1, &krpc_encode_callback_int32, &index));
   return KRPC_OK;
 }
 
@@ -7581,6 +7790,33 @@ static inline krpc_error_t krpc_KRPC_Expression_Throw_call(krpc_schema_Procedure
   return KRPC_OK;
 }
 
+static inline krpc_error_t krpc_KRPC_Expression_ThrowById(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, uint32_t serviceId, uint32_t exceptionId, krpc_KRPC_Expression_t message) {
+  krpc_call_t _call;
+  krpc_argument_t _arguments[3];
+  KRPC_CHECK(krpc_call(&_call, 1, 3150253298, 3, _arguments));
+  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_uint32, &serviceId));
+  KRPC_CHECK(krpc_add_argument(&_call, 1, &krpc_encode_callback_uint32, &exceptionId));
+  KRPC_CHECK(krpc_add_argument(&_call, 2, &krpc_encode_callback_object, &message));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  if (returnValue) {
+    pb_istream_t _stream;
+    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+    KRPC_CHECK(krpc_decode_object(&_stream, returnValue));
+  }
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_KRPC_Expression_ThrowById_call(krpc_schema_ProcedureCall * procedureCall, uint32_t serviceId, uint32_t exceptionId, krpc_KRPC_Expression_t message) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 1, 3150253298, 3));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_uint32, &serviceId));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 1, &krpc_encode_callback_uint32, &exceptionId));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 2, &krpc_encode_callback_object, &message));
+  return KRPC_OK;
+}
+
 static inline krpc_error_t krpc_KRPC_Expression_ToList(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
@@ -7698,6 +7934,45 @@ static inline krpc_error_t krpc_KRPC_Expression_TryCatchAll_call(krpc_schema_Pro
     KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 1, &krpc_encode_callback_object, &message));
   }
   KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 2, &krpc_encode_callback_object, &handler));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_KRPC_Expression_TryCatchById(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t body, uint32_t serviceId, uint32_t exceptionId, krpc_KRPC_Expression_t message, krpc_KRPC_Expression_t handler) {
+  krpc_call_t _call;
+  krpc_argument_t _arguments[5];
+  KRPC_CHECK(krpc_call(&_call, 1, 2497801587, 5, _arguments));
+  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_object, &body));
+  KRPC_CHECK(krpc_add_argument(&_call, 1, &krpc_encode_callback_uint32, &serviceId));
+  KRPC_CHECK(krpc_add_argument(&_call, 2, &krpc_encode_callback_uint32, &exceptionId));
+  if (message == KRPC_NULL) {
+    KRPC_CHECK(krpc_add_null_argument(&_call, 3));
+  } else {
+    KRPC_CHECK(krpc_add_argument(&_call, 3, &krpc_encode_callback_object, &message));
+  }
+  KRPC_CHECK(krpc_add_argument(&_call, 4, &krpc_encode_callback_object, &handler));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  if (returnValue) {
+    pb_istream_t _stream;
+    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+    KRPC_CHECK(krpc_decode_object(&_stream, returnValue));
+  }
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_KRPC_Expression_TryCatchById_call(krpc_schema_ProcedureCall * procedureCall, krpc_KRPC_Expression_t body, uint32_t serviceId, uint32_t exceptionId, krpc_KRPC_Expression_t message, krpc_KRPC_Expression_t handler) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 1, 2497801587, 5));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_object, &body));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 1, &krpc_encode_callback_uint32, &serviceId));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 2, &krpc_encode_callback_uint32, &exceptionId));
+  if (message == KRPC_NULL) {
+    KRPC_CHECK(krpc_procedure_call_null_argument(procedureCall, 3));
+  } else {
+    KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 3, &krpc_encode_callback_object, &message));
+  }
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 4, &krpc_encode_callback_object, &handler));
   return KRPC_OK;
 }
 
@@ -8033,6 +8308,31 @@ static inline krpc_error_t krpc_KRPC_Type_ClassType_call(krpc_schema_ProcedureCa
   return KRPC_OK;
 }
 
+static inline krpc_error_t krpc_KRPC_Type_ClassTypeById(krpc_connection_t connection, krpc_KRPC_Type_t * returnValue, uint32_t serviceId, uint32_t classId) {
+  krpc_call_t _call;
+  krpc_argument_t _arguments[2];
+  KRPC_CHECK(krpc_call(&_call, 1, 696475116, 2, _arguments));
+  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_uint32, &serviceId));
+  KRPC_CHECK(krpc_add_argument(&_call, 1, &krpc_encode_callback_uint32, &classId));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  if (returnValue) {
+    pb_istream_t _stream;
+    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+    KRPC_CHECK(krpc_decode_object(&_stream, returnValue));
+  }
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_KRPC_Type_ClassTypeById_call(krpc_schema_ProcedureCall * procedureCall, uint32_t serviceId, uint32_t classId) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 1, 696475116, 2));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_uint32, &serviceId));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 1, &krpc_encode_callback_uint32, &classId));
+  return KRPC_OK;
+}
+
 static inline krpc_error_t krpc_KRPC_Type_DictionaryType(krpc_connection_t connection, krpc_KRPC_Type_t * returnValue, krpc_KRPC_Type_t keyType, krpc_KRPC_Type_t valueType) {
   krpc_call_t _call;
   krpc_argument_t _arguments[2];
@@ -8100,6 +8400,31 @@ static inline krpc_error_t krpc_KRPC_Type_EnumerationType_call(krpc_schema_Proce
   KRPC_CHECK(krpc_procedure_call(procedureCall, 1, 3684507858, 2));
   KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_string, &service));
   KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 1, &krpc_encode_callback_string, &name));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_KRPC_Type_EnumerationTypeById(krpc_connection_t connection, krpc_KRPC_Type_t * returnValue, uint32_t serviceId, uint32_t enumerationId) {
+  krpc_call_t _call;
+  krpc_argument_t _arguments[2];
+  KRPC_CHECK(krpc_call(&_call, 1, 430603077, 2, _arguments));
+  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_uint32, &serviceId));
+  KRPC_CHECK(krpc_add_argument(&_call, 1, &krpc_encode_callback_uint32, &enumerationId));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  if (returnValue) {
+    pb_istream_t _stream;
+    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+    KRPC_CHECK(krpc_decode_object(&_stream, returnValue));
+  }
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_KRPC_Type_EnumerationTypeById_call(krpc_schema_ProcedureCall * procedureCall, uint32_t serviceId, uint32_t enumerationId) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 1, 430603077, 2));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_uint32, &serviceId));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 1, &krpc_encode_callback_uint32, &enumerationId));
   return KRPC_OK;
 }
 
@@ -8274,6 +8599,31 @@ static inline krpc_error_t krpc_KRPC_Type_StructType_call(krpc_schema_ProcedureC
   KRPC_CHECK(krpc_procedure_call(procedureCall, 1, 1427061179, 2));
   KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_string, &service));
   KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 1, &krpc_encode_callback_string, &name));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_KRPC_Type_StructTypeById(krpc_connection_t connection, krpc_KRPC_Type_t * returnValue, uint32_t serviceId, uint32_t structId) {
+  krpc_call_t _call;
+  krpc_argument_t _arguments[2];
+  KRPC_CHECK(krpc_call(&_call, 1, 1565899206, 2, _arguments));
+  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_uint32, &serviceId));
+  KRPC_CHECK(krpc_add_argument(&_call, 1, &krpc_encode_callback_uint32, &structId));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  if (returnValue) {
+    pb_istream_t _stream;
+    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+    KRPC_CHECK(krpc_decode_object(&_stream, returnValue));
+  }
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_KRPC_Type_StructTypeById_call(krpc_schema_ProcedureCall * procedureCall, uint32_t serviceId, uint32_t structId) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 1, 1565899206, 2));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_uint32, &serviceId));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 1, &krpc_encode_callback_uint32, &structId));
   return KRPC_OK;
 }
 

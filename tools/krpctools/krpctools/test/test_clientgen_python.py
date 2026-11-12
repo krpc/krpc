@@ -47,14 +47,14 @@ class TestClientGenPython(ClientGenTestCase, unittest.TestCase):
             "Main": dict(
                 empty,
                 id=1,
-                structs={"Thing": {"documentation": "", "fields": fields}},
+                structs={"Thing": {"id": 1, "documentation": "", "fields": fields}},
             )
         }
         for i, other in enumerate(others):
             defs[other] = dict(
                 empty,
                 id=i + 2,
-                structs={"Thing": {"documentation": "", "fields": []}},
+                structs={"Thing": {"id": 1, "documentation": "", "fields": []}},
             )
         lines = self.generate("Main", defs).splitlines()
         imports = [x for x in lines if x.startswith("import ") and "_service_" in x]
@@ -77,6 +77,7 @@ class TestClientGenPython(ClientGenTestCase, unittest.TestCase):
                 "exceptions": {},
                 "structs": {
                     "Thing": {
+                        "id": 1,
                         "documentation": "",
                         "fields": [
                             {
@@ -102,7 +103,7 @@ class TestClientGenPython(ClientGenTestCase, unittest.TestCase):
                 "classes": {},
                 "enumerations": {},
                 "exceptions": {},
-                "structs": {"Thing": {"documentation": "", "fields": []}},
+                "structs": {"Thing": {"id": 1, "documentation": "", "fields": []}},
             }
         includes = {"Other": "other_krpc.other", "Path": "path_krpc/path.py"}
         lines = self.generate("Main", defs, includes).splitlines()
