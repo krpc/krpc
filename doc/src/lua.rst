@@ -461,22 +461,4 @@ From Lua 5.3 on, a 64-bit value is an exact integer. Lua has no unsigned integer
 API Reference
 -------------
 
-.. toctree::
-   :maxdepth: 1
-
-   lua/api/krpc
-   lua/api/stdlib
-   lua/api/space-center
-   lua/api/drawing
-   lua/api/ui
-   lua/api/infernal-robotics
-   lua/api/kerbal-alarm-clock
-   lua/api/remote-tech
-   lua/api/lidar
-   lua/api/docking-camera
-   lua/api/trajectories
-   lua/api/mechjeb
-   lua/api/kerbal-engineer-redux
-   lua/api/scansat
-   lua/api/raster-prop-monitor
-   lua/api/debug
+.. include:: lua/api.inc

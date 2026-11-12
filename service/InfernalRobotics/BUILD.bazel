@@ -2,7 +2,5 @@ load("//service:build.bzl", "ksp_service")
 
 ksp_service(
     name = "InfernalRobotics",
-    description = "Infernal Robotics API for kRPC",
     license = True,
-    deps = ["SpaceCenter"],
 )

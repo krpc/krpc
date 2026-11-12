@@ -9,7 +9,7 @@ namespace KRPC.InfernalRobotics
     /// <summary>
     /// Provides functionality to interact with Infernal Robotics Next.
     /// </summary>
-    [KRPCService (Id = 4, GameScene = GameScene.Flight)]
+    [KRPCService (Id = ServiceInfo.Id, GameScene = GameScene.Flight)]
     public static class InfernalRobotics
     {
         static void CheckAvailable ()

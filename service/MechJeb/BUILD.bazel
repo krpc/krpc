@@ -4,6 +4,4 @@ load("//service:build.bzl", "ksp_service")
 ksp_service(
     name = "MechJeb",
     copyright = "Genhis, " + author,
-    description = "MechJeb API for kRPC",
-    deps = ["SpaceCenter"],
 )

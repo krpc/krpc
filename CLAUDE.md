@@ -85,7 +85,10 @@ the tests: a test's docstring is the requirement's text, its markers the level a
 ### C# sources
 
  * **New C# file → add `<Compile Include="…" />` to the project's `.csproj`.** `//:csproj-test` catches misses.
- * **New service → its `BUILD.bazel` is one `ksp_service` call**, from `//service:build.bzl`.
+ * **New service → an entry in `service/registry.bzl`**, and a `BUILD.bazel` that is one
+   `ksp_service` call, from `//service:build.bzl`. The build, clientgen and the docs read their
+   service lists and ids from the registry. `//service:registry-test` lists the hand-written
+   files to update.
  * **New C# target → load `csharp_library`/`csharp_binary`/`csharp_nunit_test` from `//tools/build:csharp.bzl`**,
    not `@rules_dotnet`. The wrappers run the culture analyzers (`tools/build/dotnet/analyzers.globalconfig`);
    only the doc examples use the plain rules.
@@ -407,8 +410,9 @@ by directory, holding entries in the `CHANGELOG.md` syntax:
 
  * The components are listed in `COMPONENTS` in `tools/release/changelog.py`. `tools/buildenv` and
    the projects under `experimental/` are not among them, and edit their `CHANGELOG.md` directly.
- * A new component goes in `COMPONENTS`, with its `CHANGELOG.md` in `//doc:changelog`. The docs page
-   and the release notes take their component names and order from `COMPONENTS`.
+ * A new component goes in `COMPONENTS`, with its `CHANGELOG.md` in `//doc:changelog`. A service's
+   `CHANGELOG.md` reaches `//doc:changelog` through the registry. The docs page and the release
+   notes take their component names and order from `COMPONENTS`.
  * The PR that adds a component writes its entries in the new `CHANGELOG.md`, under a
    `## [vX.Y.Z] - unreleased` header, in place of a fragment. No other PR edits that file, so
    it cannot conflict.

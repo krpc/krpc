@@ -18,7 +18,7 @@ namespace KRPC.Drawing
     /// For drawing and interacting with the user interface, see the UI service.
     /// Objects drawn by a client are removed when that client disconnects.
     /// </remarks>
-    [KRPCService (Id = 3, GameScene = GameScene.Flight | GameScene.Editor | GameScene.TrackingStation)]
+    [KRPCService (Id = ServiceInfo.Id, GameScene = GameScene.Flight | GameScene.Editor | GameScene.TrackingStation)]
     public static class Drawing
     {
         static class QuaternionIdentity

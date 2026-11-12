@@ -48,6 +48,7 @@ Options:
 """
 
 import argparse
+import json
 import re
 import shutil
 import subprocess
@@ -59,25 +60,14 @@ import changelog
 import lib
 
 # The documentation content inputs restored, unchanged in location, from the
-# content ref onto the current toolchain. The KRPC service sources are pinned
-# too, but handled separately by graft_krpc_service since their location moved
-# between releases.
+# content ref onto the current toolchain. The sources of the services in the
+# registry are restored too, by content_paths. The KRPC service sources are
+# pinned too, but handled separately by graft_krpc_service since their location
+# moved between releases.
 CONTENT_PATHS = (
     "doc/src",
     "doc/api",
     "doc/order.txt",
-    "service/SpaceCenter/src",
-    "service/Drawing/src",
-    "service/UI/src",
-    "service/InfernalRobotics/src",
-    "service/KerbalAlarmClock/src",
-    "service/RemoteTech/src",
-    "service/LiDAR/src",
-    "service/DockingCamera/src",
-    "service/MechJeb/src",
-    "service/KerbalEngineerRedux/src",
-    "service/ScanSat/src",
-    "service/RasterPropMonitor/src",
 )
 
 # The per-component CHANGELOG.md files the unified changelog page is merged from.
@@ -263,6 +253,22 @@ def content_ref(version):
     return f"v{version}"
 
 
+def content_paths(worktree, ref):
+    """CONTENT_PATHS, and the sources of each service in the toolchain's registry
+    that the content ref has. A service added since keeps the toolchain's
+    sources, and the ref's docs do not include its pages."""
+    run_in(worktree, "bazel", "build", "//service:registry")
+    registry = json.loads(
+        (worktree / "bazel-bin" / "service" / "registry.json").read_text()
+    )
+    services = [f"service/{s['package']}/src" for s in registry["services"]]
+    return CONTENT_PATHS + tuple(
+        path
+        for path in services
+        if lib.succeeds("git", "cat-file", "-e", f"{ref}:{path}")
+    )
+
+
 def graft(worktree, base, ref):
     """Restore the version's documentation content onto the current toolchain.
 
@@ -273,8 +279,9 @@ def graft(worktree, base, ref):
     custom.css and layout.html -- and restore the current checkout's versions so
     the frozen build uses the current theme and footer template.
     """
-    lib.run("git", "-C", worktree, "rm", "-rq", *CONTENT_PATHS)
-    lib.run("git", "-C", worktree, "checkout", ref, "--", *CONTENT_PATHS)
+    paths = content_paths(worktree, ref)
+    lib.run("git", "-C", worktree, "rm", "-rq", *paths)
+    lib.run("git", "-C", worktree, "checkout", ref, "--", *paths)
     graft_krpc_service(worktree, ref)
     lib.run(
         "git",

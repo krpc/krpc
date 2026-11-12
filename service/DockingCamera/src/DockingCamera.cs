@@ -9,7 +9,7 @@ namespace KRPC.DockingCamera
     /// <summary>
     /// Provides functionality to interact with Docking Camera (KURS).
     /// </summary>
-    [KRPCService(Id = 11, GameScene = GameScene.All)]
+    [KRPCService(Id = ServiceInfo.Id, GameScene = GameScene.All)]
     public static class DockingCamera
     {
         static void CheckAPI()

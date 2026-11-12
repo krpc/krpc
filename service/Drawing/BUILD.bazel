@@ -2,9 +2,4 @@ load("//service:build.bzl", "ksp_service")
 
 ksp_service(
     name = "Drawing",
-    description = "Drawing API for kRPC",
-    deps = [
-        "SpaceCenter",
-        "UI",
-    ],
 )

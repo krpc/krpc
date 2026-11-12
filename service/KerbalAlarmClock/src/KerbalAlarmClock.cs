@@ -10,7 +10,7 @@ namespace KRPC.KerbalAlarmClock
     /// <summary>
     /// Provides functionality to interact with Kerbal Alarm Clock.
     /// </summary>
-    [KRPCService (Id = 5, GameScene = GameScene.All)]
+    [KRPCService (Id = ServiceInfo.Id, GameScene = GameScene.All)]
     public static class KerbalAlarmClock
     {
         static void CheckAPI ()

@@ -6,7 +6,6 @@ ksp_service(
         "src/module-manager.cfg",
         "@module_manager//file",
     ],
-    description = "Basic service for kRPC",
     internals_visible_to = ["TestingTools"],
     license = True,
     lint_size = "medium",

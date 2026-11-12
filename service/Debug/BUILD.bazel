@@ -2,7 +2,5 @@ load("//service:build.bzl", "ksp_service")
 
 ksp_service(
     name = "Debug",
-    description = "Debug and cheat API for kRPC",
     license = True,
-    deps = ["SpaceCenter"],
 )

@@ -9,7 +9,7 @@ namespace KRPC.RemoteTech
     /// <summary>
     /// Provides functionality to interact with RemoteTech.
     /// </summary>
-    [KRPCService (Id = 6, GameScene = GameScene.All)]
+    [KRPCService (Id = ServiceInfo.Id, GameScene = GameScene.All)]
     public static class RemoteTech
     {
         static void CheckAPI ()

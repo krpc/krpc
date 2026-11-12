@@ -2,6 +2,4 @@ load("//service:build.bzl", "ksp_service")
 
 ksp_service(
     name = "ScanSat",
-    description = "SCANsat API for kRPC",
-    deps = ["SpaceCenter"],
 )

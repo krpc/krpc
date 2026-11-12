@@ -35,6 +35,9 @@
     <Compile Include="$(bazel-bin)\service\SpaceCenter\AssemblyInfo.cs">
       <Link>AssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="$(bazel-bin)\service\SpaceCenter\ServiceInfo.cs">
+      <Link>ServiceInfo.cs</Link>
+    </Compile>
     <Compile Include="..\InternalsVisibleTo.cs">
       <Link>InternalsVisibleTo.cs</Link>
     </Compile>

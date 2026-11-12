@@ -796,22 +796,4 @@ Client API Reference
 API Reference
 -------------
 
-.. toctree::
-   :maxdepth: 1
-
-   cnano/api/krpc
-   cnano/api/stdlib
-   cnano/api/space-center
-   cnano/api/drawing
-   cnano/api/ui
-   cnano/api/infernal-robotics
-   cnano/api/kerbal-alarm-clock
-   cnano/api/remote-tech
-   cnano/api/lidar
-   cnano/api/docking-camera
-   cnano/api/trajectories
-   cnano/api/mechjeb
-   cnano/api/kerbal-engineer-redux
-   cnano/api/scansat
-   cnano/api/raster-prop-monitor
-   cnano/api/debug
+.. include:: cnano/api.inc

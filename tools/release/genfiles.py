@@ -23,6 +23,7 @@ CONTENTS = (
     "bazel-bin/protobuf/KRPC.cs",
     "bazel-bin/client/csharp/Services/",
     "bazel-bin/service/*/AssemblyInfo.cs",
+    "bazel-bin/service/*/ServiceInfo.cs",
     "bazel-bin/tools/*/AssemblyInfo.cs",
     "bazel-krpc/external/+http_archive+ksp/KSP_Data/Managed",
     "bazel-bin/tools/build/ksp/Google.Protobuf.dll",

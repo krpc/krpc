@@ -6,6 +6,7 @@ load("//tools/build:csharp.bzl", "csharp_library")
 load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
 load("//tools/build/ksp:build.bzl", "ksp_unity_libs")
 load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
+load(":registry.bzl", "CORE_SERVICES", "SERVICES")
 
 # Default dependencies for service assemblies
 service_deps = [
@@ -14,10 +15,92 @@ service_deps = [
     "//tools/build/ksp:Google.Protobuf",
 ] + ksp_unity_libs
 
+def _service_info_impl(ctx):
+    content = [
+        "namespace %s" % ctx.attr.namespace,
+        "{",
+        "    static class ServiceInfo",
+        "    {",
+        "        public const uint Id = %d;" % ctx.attr.id,
+        "    }",
+        "}",
+    ]
+    ctx.actions.write(output = ctx.outputs.out, content = "\n".join(content) + "\n")
+
+service_info = rule(
+    doc = "Generates the ServiceInfo.cs of a service, holding its id from the registry.",
+    implementation = _service_info_impl,
+    attrs = {
+        "id": attr.int(mandatory = True),
+        "namespace": attr.string(mandatory = True),
+    },
+    outputs = {"out": "%{name}.cs"},
+)
+
+def _entry(field, value):
+    for service in SERVICES:
+        if getattr(service, field) == value:
+            return service
+    fail("No service with %s %s in SERVICES in //service:registry.bzl" % (field, value))
+
+def registry_entry(package):
+    """The SERVICES entry of the service in a directory under service/.
+
+    Args:
+      package: The directory's name.
+
+    Returns:
+      The entry.
+    """
+    return _entry("package", package)
+
+def service_libraries(deps):
+    """The assemblies of the services a service depends on.
+
+    Args:
+      deps: The services, by name. Those of the core are left out.
+
+    Returns:
+      The labels of the assemblies.
+    """
+    libraries = []
+    for dep in deps:
+        if dep not in CORE_SERVICES:
+            package = _entry("name", dep).package
+            libraries.append("//service/%s:KRPC.%s" % (package, package))
+    return libraries
+
+def service_targets(target = None):
+    """A target of every service's package, such as its test suite.
+
+    Args:
+      target: The target's name, or None for the package's default target.
+
+    Returns:
+      The labels.
+    """
+    return [
+        "//service/%s%s" % (service.package, ":" + target if target else "")
+        for service in SERVICES
+    ]
+
+def service_zip_path_map():
+    """The path map of the services' files in the mod archive.
+
+    Returns:
+      The archive path of each path prefix.
+    """
+    path_map = {}
+    for service in SERVICES:
+        package = "service/%s/" % service.package
+        path_map[package] = "GameData/kRPC/"
+        path_map[package + "KRPC.%s/net472/" % service.package] = "GameData/kRPC/"
+        path_map[package + "CHANGELOG.md"] = "GameData/kRPC/CHANGELOG.%s.md" % service.package
+        path_map[package + "LICENSE"] = "LICENSE.KRPC." + service.package
+    return path_map
+
 def ksp_service(
         name,
-        description,
-        deps = [],
         copyright = author,
         license = False,
         data = [],
@@ -25,19 +108,20 @@ def ksp_service(
         lint_size = "small"):
     """Declares the targets of a KSP service, built from its package.
 
+    The service's description and dependencies are its entry in SERVICES.
+
     Args:
-      name: The service's name, which is also the name of its package and of its KRPC.<name>
+      name: The name of the service's package, which is also the name of its KRPC.<name>
         assembly.
-      description: The assembly description.
-      deps: The services whose assemblies this service uses, by name.
       copyright: The assembly copyright.
       license: Whether the package has a LICENSE file to ship with the service.
       data: Other files the mod archive ships, from the package or another repository.
       internals_visible_to: Assemblies that can see the service's internal members.
       lint_size: The size of the ruff test.
     """
+    service = registry_entry(name)
     assembly = "KRPC." + name
-    dep_libs = ["//service/%s:KRPC.%s" % (dep, dep) for dep in deps]
+    dep_libs = service_libraries(service.deps)
 
     native.exports_files(["CHANGELOG.md"])
 
@@ -54,7 +138,7 @@ def ksp_service(
         name = "AssemblyInfo",
         cls_compliant = False,
         copyright = copyright,
-        description = description,
+        description = service.description,
         title = assembly,
         version = assembly_version,
         visibility = [
@@ -62,9 +146,15 @@ def ksp_service(
         ],
     )
 
+    service_info(
+        name = "ServiceInfo",
+        id = service.id,
+        namespace = assembly,
+    )
+
     csharp_library(
         name = assembly,
-        srcs = [":AssemblyInfo"] + native.glob(["src/**/*.cs"]),
+        srcs = [":AssemblyInfo", ":ServiceInfo"] + native.glob(["src/**/*.cs"]),
         internals_visible_to = internals_visible_to,
         target_frameworks = ["net472"],
         treat_warnings_as_errors = True,
@@ -77,7 +167,7 @@ def ksp_service(
         name = "ServiceDefinitions",
         out = assembly + ".json",
         assemblies = [":" + assembly] + dep_libs + ["//server:KRPC"],
-        service = name,
+        service = service.name,
         visibility = ["//visibility:public"],
     )
 
@@ -119,5 +209,8 @@ def ksp_service(
             "**/*.cs",
             "**/*.csproj",
         ]),
-        visibility = ["//:__pkg__"],
+        visibility = [
+            "//:__pkg__",
+            "//service:__pkg__",
+        ],
     )

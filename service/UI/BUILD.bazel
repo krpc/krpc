@@ -2,7 +2,5 @@ load("//service:build.bzl", "ksp_service")
 
 ksp_service(
     name = "UI",
-    description = "User Interface API for kRPC",
     lint_size = "medium",
-    deps = ["SpaceCenter"],
 )

@@ -3,6 +3,4 @@ load("//service:build.bzl", "ksp_service")
 ksp_service(
     name = "RasterPropMonitor",
     data = ["RasterPropMonitorDisplay.cfg"],
-    description = "Raster Prop Monitor API for kRPC",
-    deps = ["SpaceCenter"],
 )

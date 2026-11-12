@@ -41,7 +41,7 @@ namespace KRPC.UI
     /// disconnects, and when the game scene changes. A client that needs its
     /// interface in more than one scene must create it again in each of them.
     /// </remarks>
-    [KRPCService (Id = 7, GameScene = GameScene.All)]
+    [KRPCService (Id = ServiceInfo.Id, GameScene = GameScene.All)]
     public static class UI
     {
         /// <summary>

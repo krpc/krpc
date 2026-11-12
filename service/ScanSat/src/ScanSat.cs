@@ -15,7 +15,7 @@ namespace KRPC.ScanSat
     /// The readouts at a position return <c>null</c> where the scans they need have not
     /// covered it, as the maps of the mod show nothing there.
     /// </remarks>
-    [KRPCService (Id = 16, GameScene = GameScene.All)]
+    [KRPCService (Id = ServiceInfo.Id, GameScene = GameScene.All)]
     public static class ScanSat
     {
         // The scenes with SCANsat's scenario module, which holds the scan data

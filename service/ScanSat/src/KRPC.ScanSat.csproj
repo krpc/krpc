@@ -39,6 +39,9 @@
     <Compile Include="$(bazel-bin)\service\ScanSat\AssemblyInfo.cs">
       <Link>AssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="$(bazel-bin)\service\ScanSat\ServiceInfo.cs">
+      <Link>ServiceInfo.cs</Link>
+    </Compile>
     <Compile Include="Addon.cs" />
     <Compile Include="Anomaly.cs" />
     <Compile Include="API.cs" />
