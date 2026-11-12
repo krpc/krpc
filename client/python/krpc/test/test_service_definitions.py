@@ -5,7 +5,7 @@ import krpc.schema.KRPC_pb2 as KRPC
 from krpc.declarations import Lookup, connection_lookup, register, registered
 from krpc.definitions import register_all
 from krpc.service import create_service, service_definitions
-from krpc.types import DocEnum, Types
+from krpc.types import RemoteEnum, Types
 
 
 class FakeConnection:
@@ -19,7 +19,7 @@ class FakeConnection:
 
 
 # The classes of a generated module for the service Generated
-class Mode(DocEnum):
+class Mode(RemoteEnum):
     slow = 0
     fast = 1
 
@@ -135,7 +135,7 @@ class TestServiceDefinitions(unittest.TestCase):
             register("Generated", Failure)
 
     def test_an_enumeration_with_an_alias_uses_the_generated_class(self) -> None:
-        class Aliased(DocEnum):
+        class Aliased(RemoteEnum):
             slow = 0
             fast = 1
             quick = 1
@@ -160,7 +160,7 @@ class TestServiceDefinitions(unittest.TestCase):
         self.assertRaises(ValueError, connection._types.coerce_to, Mode.fast, mode_type)
 
     def test_a_later_registration_replaces_an_earlier_one(self) -> None:
-        class Newer(DocEnum):
+        class Newer(RemoteEnum):
             slow = 0
             fast = 1
 
@@ -181,7 +181,7 @@ class TestServiceDefinitions(unittest.TestCase):
             register("Generated", Mode)
 
     def test_a_connection_type_module_lacking_a_class_builds_it(self) -> None:
-        class Other(DocEnum):
+        class Other(RemoteEnum):
             first = 0
 
         register("Generated", Other)

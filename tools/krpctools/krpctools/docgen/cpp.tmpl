@@ -1,6 +1,6 @@
 {% macro service(x) %}{{ mark_documented(x) }}
 .. namespace:: krpc::services
-.. class:: {{ x.name }} : public krpc::Service
+.. class:: {{ x.name }} : public krpc::RemoteService
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 

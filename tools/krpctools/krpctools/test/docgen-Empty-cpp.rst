@@ -5,7 +5,7 @@
 
 
 .. namespace:: krpc::services
-.. class:: EmptyService : public krpc::Service
+.. class:: EmptyService : public krpc::RemoteService
 
 
 

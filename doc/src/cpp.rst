@@ -668,13 +668,13 @@ Client API Reference
       Removes a stream update callback, given the tag :func:`add_stream_update_callback`
       returned.
 
-.. class:: template <typename T> Object
+.. class:: template <typename T> RemoteObject
 
    The base class of remote objects. Two objects compare equal with ``==`` when they identify
    the same thing in the game. ``<`` and the other comparisons order objects by their
    identifiers, and ``<<`` writes an object's class name and identifier to a stream.
 
-.. function:: template <typename T> uint64_t get_object_id(const Object<T>& object)
+.. function:: template <typename T> uint64_t get_object_id(const RemoteObject<T>& object)
 
    The identifier of a remote object on the server, e.g. to pass to
    :func:`~krpc::services::KRPC::Expression::constant_object`. Throws ``std::invalid_argument`` for

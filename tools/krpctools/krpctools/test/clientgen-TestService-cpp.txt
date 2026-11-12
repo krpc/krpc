@@ -15,8 +15,8 @@
 #include <krpc/error.hpp>
 #include <krpc/event.hpp>
 #include <krpc/hash.hpp>
-#include <krpc/object.hpp>
-#include <krpc/service.hpp>
+#include <krpc/remote_object.hpp>
+#include <krpc/remote_service.hpp>
 #include <krpc/stream.hpp>
 
 #include <KRPC>
@@ -34,7 +34,7 @@
 namespace krpc {
 namespace services {
 
-class TestService : public Service {
+class TestService : public ::krpc::RemoteService {
  public:
   explicit TestService(const ::krpc::Connection& connection);
 
@@ -988,7 +988,7 @@ class TestService : public Service {
    *
    * \deprecated Use TestClass instead.
    */
-  class [[deprecated("Use TestClass instead.")]] DeprecatedClass : public krpc::Object<DeprecatedClass> {
+  class [[deprecated("Use TestClass instead.")]] DeprecatedClass : public ::krpc::RemoteObject<DeprecatedClass> {
    public:
     DeprecatedClass();
     DeprecatedClass(const ::krpc::Connection& connection, uint64_t id);
@@ -1081,7 +1081,7 @@ class TestService : public Service {
   /**
    * Class documentation string.
    */
-  class TestClass : public krpc::Object<TestClass> {
+  class TestClass : public ::krpc::RemoteObject<TestClass> {
    public:
     TestClass();
     TestClass(const ::krpc::Connection& connection, uint64_t id);
@@ -1857,7 +1857,7 @@ namespace services {
 namespace services {
 
 inline TestService::TestService(const ::krpc::Connection& connection):
-  Service(connection) {
+  RemoteService(connection) {
   _connection.add_exception_thrower(
     "TestService", "CustomException",
     [] (const std::string& msg) { throw CustomException(msg); });
@@ -4675,10 +4675,10 @@ inline ::krpc::schema::ProcedureCall TestService::string_property_private_set_ca
 }
 
 inline TestService::DeprecatedClass::DeprecatedClass():
-  Object("TestService::DeprecatedClass") {}
+  RemoteObject("TestService::DeprecatedClass") {}
 
 inline TestService::DeprecatedClass::DeprecatedClass(const ::krpc::Connection& connection, uint64_t id):
-  Object(connection, "TestService::DeprecatedClass", id) {}
+  RemoteObject(connection, "TestService::DeprecatedClass", id) {}
 
 inline std::string TestService::DeprecatedClass::deprecated_method() {
   std::vector<krpc::encoder::Value> _args;
@@ -4799,10 +4799,10 @@ inline TestService::DeprecatedClass::Bound TestService::DeprecatedClass::bind(co
 }
 
 inline TestService::TestClass::TestClass():
-  Object("TestService::TestClass") {}
+  RemoteObject("TestService::TestClass") {}
 
 inline TestService::TestClass::TestClass(const ::krpc::Connection& connection, uint64_t id):
-  Object(connection, "TestService::TestClass", id) {}
+  RemoteObject(connection, "TestService::TestClass", id) {}
 
 inline std::optional<TestService::TestClass> TestService::TestClass::echo_nullable_object(std::optional<TestService::TestClass> value) {
   std::vector<krpc::encoder::Value> _args;

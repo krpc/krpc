@@ -120,9 +120,9 @@ local function to_value(value)
     next_handle = next_handle + 1
     objects[handle] = value
     return { object = { handle = handle, id = value._object_id } }
-  elseif Types.Enum:class_of(value) then
+  elseif Types.RemoteEnum:class_of(value) then
     return { enum = { value = value.value } }
-  elseif Types.StructBase:class_of(value) then
+  elseif Types.RemoteStruct:class_of(value) then
     local fields = {}
     for i, name in ipairs(value._field_names) do
       fields[i] = to_value(value[name])

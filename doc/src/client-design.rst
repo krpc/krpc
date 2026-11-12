@@ -293,6 +293,14 @@ or a Java ``addStream`` takes them as it takes a service's methods. A C++ ``Boun
 for the calls that build large expression trees. It has no ``_stream`` or ``_call`` forms, which
 stay on the static method.
 
+Names
+-----
+
+The base class of each kind of generated type is named ``Remote<Kind>``: ``RemoteObject``,
+``RemoteEnum``, ``RemoteFlags``, ``RemoteStruct`` and ``RemoteService``. A client keeps its
+language's own form where it has one, such as an enum and a struct in C++ and C#, and a
+``NamedTuple`` for a Python structure.
+
 .. toctree::
    :hidden:
 

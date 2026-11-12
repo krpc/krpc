@@ -8,12 +8,12 @@ import sys
 from collections.abc import Callable
 from typing import TYPE_CHECKING, Any
 
-from krpc.types import ClassBase
+from krpc.types import RemoteObject
 from krpc.utils import snake_case
 
 # The base of a declared class, which gives type checkers the members every remote object has
 if TYPE_CHECKING:
-    DeclaredObject = ClassBase
+    DeclaredObject = RemoteObject
 else:
     DeclaredObject = object
 
@@ -70,7 +70,7 @@ def is_class_type(value: object) -> bool:
     of one"""
     if not isinstance(value, type):
         return False
-    if issubclass(value, ClassBase):
+    if issubclass(value, RemoteObject):
         return True
     return isinstance(value, DeclaredClass) and value._class_name is not None
 

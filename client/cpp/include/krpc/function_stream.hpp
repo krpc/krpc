@@ -13,7 +13,7 @@
 
 #include "krpc/event.hpp"
 #include "krpc/internal_procedures.hpp"
-#include "krpc/object.hpp"
+#include "krpc/remote_object.hpp"
 #include "krpc/services/krpc.hpp"
 #include "krpc/stream.hpp"
 
@@ -106,7 +106,7 @@ template <typename T>
 bool describes(type_tag<T>, const schema::Type& type) {
   static_assert(std::is_class_v<T> || std::is_enum_v<T>,
                 "The template type must be one a server side function can evaluate to");
-  if constexpr (std::is_base_of_v<Object<T>, T>)
+  if constexpr (std::is_base_of_v<RemoteObject<T>, T>)
     return type.code() == schema::Type::CLASS;
   else if constexpr (std::is_enum_v<T>)
     return type.code() == schema::Type::ENUMERATION;

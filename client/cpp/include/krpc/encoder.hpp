@@ -20,7 +20,7 @@ class MessageLite;
 namespace krpc {
 
 template <typename T>
-class Object;
+class RemoteObject;
 
 namespace encoder {
 
@@ -35,7 +35,7 @@ std::string encode(const char* value);
 std::string encode(const std::string& value);
 std::string encode(const google::protobuf::MessageLite& message);
 template <typename T>
-std::string encode(const Object<T>& object);
+std::string encode(const RemoteObject<T>& object);
 
 template <typename T>
 std::string encode(const std::vector<T>& list);
@@ -58,7 +58,7 @@ std::string encode_message_with_size(const google::protobuf::MessageLite& messag
 void encode_message_with_size(const google::protobuf::MessageLite& message, std::string* data);
 
 template <typename T>
-inline std::string encode(const Object<T>& object) {
+inline std::string encode(const RemoteObject<T>& object) {
   return encode(object._id);
 }
 

@@ -294,7 +294,7 @@ end
 
 --- Raise an error for a value that is not a KRPC.Expression object
 function Connection:_check_function(func)
-  if not (Types.ClassBase:class_of(func) and func._service_name == 'KRPC' and
+  if not (Types.RemoteObject:class_of(func) and func._service_name == 'KRPC' and
           func._class_name == 'Expression') then
     error('Expected a KRPC.Expression object, got ' .. tostring(func), 3)
   end

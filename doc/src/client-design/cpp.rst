@@ -25,9 +25,9 @@ References
 
 The connection state holds the ``StreamManager``, which holds the ``Session``.
 
-The program keeps the connection open through what it holds. A ``Connection``, ``Service`` or
-``Object`` holds the ``Connection::State``. A ``Stream`` or ``Event`` holds its ``StreamImpl``,
-which holds the ``Connection::State``.
+The program keeps the connection open through what it holds. A ``Connection``, ``RemoteService``
+or ``RemoteObject`` holds the ``Connection::State``. A ``Stream`` or ``Event`` holds its
+``StreamImpl``, which holds the ``Connection::State``.
 
 These references are strong. With a non-owning pointer, a returned object would dangle when its
 connection is destroyed, moved or reallocated. A weak handle would need a non-owning ``Connection``

@@ -15,8 +15,8 @@
 #include <krpc/error.hpp>
 #include <krpc/event.hpp>
 #include <krpc/hash.hpp>
-#include <krpc/object.hpp>
-#include <krpc/service.hpp>
+#include <krpc/remote_object.hpp>
+#include <krpc/remote_service.hpp>
 #include <krpc/stream.hpp>
 
 #include <ServiceB>
@@ -34,7 +34,7 @@
 namespace krpc {
 namespace services {
 
-class ServiceA : public Service {
+class ServiceA : public ::krpc::RemoteService {
  public:
   explicit ServiceA(const ::krpc::Connection& connection);
 
@@ -62,7 +62,7 @@ class ServiceA : public Service {
 namespace services {
 
 inline ServiceA::ServiceA(const ::krpc::Connection& connection):
-  Service(connection) {
+  RemoteService(connection) {
 }
 
 inline void ServiceA::frob(ServiceB::Mode mode = ServiceB::Mode::fast) {

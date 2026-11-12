@@ -28,7 +28,7 @@ from krpc.docmath import to_text
 from krpc.types import (
     DefaultArgument,
     DeprecatedDefinition,
-    DynamicClassBase,
+    DynamicRemoteObject,
     DynamicType,
     TypeBase,
     Types,
@@ -457,10 +457,10 @@ def create_service(connection: Connection, service: KRPC.Service) -> object:
     if service.deprecated:
         doc = _deprecated_doc(doc, service.deprecated_reason, service.name)
     cls = cast(
-        ServiceBase,
+        RemoteService,
         type(
             str(service.name),
-            (ServiceBase,),
+            (RemoteService,),
             {
                 "_connection": connection,
                 "_name": service.name,
@@ -523,7 +523,7 @@ def create_service(connection: Connection, service: KRPC.Service) -> object:
     return cls()  # pyright: ignore[reportCallIssue]
 
 
-def _add_class_members(cls: ServiceBase, service: KRPC.Service) -> None:
+def _add_class_members(cls: RemoteService, service: KRPC.Service) -> None:
     """Attach the members that a service declares for its classes to the class types."""
 
     def attach(
@@ -584,7 +584,7 @@ def _add_class_members(cls: ServiceBase, service: KRPC.Service) -> None:
         )
 
 
-class ServiceBase(DynamicType):
+class RemoteService(DynamicType):
     """Base class for service objects, created at runtime
     using information received from the server."""
 
@@ -805,7 +805,7 @@ class ServiceBase(DynamicType):
     ) -> None:
         """Add a method to a class"""
         class_cls = cast(
-            DynamicClassBase,
+            DynamicRemoteObject,
             cls._connection._types.class_type(cls._name, class_name).python_type,
         )
         param_names, param_types, param_required, param_default, return_type = (
@@ -856,7 +856,7 @@ class ServiceBase(DynamicType):
     ) -> None:
         """Add a static method to a class"""
         class_cls = cast(
-            DynamicClassBase,
+            DynamicRemoteObject,
             cls._connection._types.class_type(cls._name, class_name).python_type,
         )
         param_names, param_types, param_required, param_default, return_type = (
@@ -908,7 +908,7 @@ class ServiceBase(DynamicType):
     ) -> None:
         """Add a property to a class"""
         class_cls = cast(
-            DynamicClassBase,
+            DynamicRemoteObject,
             cls._connection._types.class_type(cls._name, class_name).python_type,
         )
         member_name = _member_name(property_name)

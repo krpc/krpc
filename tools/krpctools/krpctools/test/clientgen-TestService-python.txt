@@ -5,13 +5,13 @@ import krpc.limits
 from krpc.declarations import DeclaredClass, DeclaredObject, declaration_error as _declaration, register as _register
 from krpc.event import Event
 from krpc.schema import KRPC_pb2
-from krpc.types import DocEnum, DocFlag, deprecate_attribute, deprecated
+from krpc.types import RemoteEnum, RemoteFlags, deprecate_attribute, deprecated
 import krpc.services.krpc as _service_krpc
 
 
 
 @deprecated("Use TestEnum instead.")
-class DeprecatedEnum(DocEnum):
+class DeprecatedEnum(RemoteEnum):
     """
     Deprecated. Use TestEnum instead.
 
@@ -29,7 +29,7 @@ deprecate_attribute(DeprecatedEnum, "value_a", "TestService.DeprecatedEnum.value
 deprecate_attribute(DeprecatedEnum, "value_b", "TestService.DeprecatedEnum.value_b is deprecated: Use DeprecatedEnum.value_a instead.")
 
 
-class PartlyDeprecatedEnum(DocEnum):
+class PartlyDeprecatedEnum(RemoteEnum):
     """
     Partly deprecated enum documentation string.
     """
@@ -44,7 +44,7 @@ Partly deprecated enum ValueB documentation string.
 deprecate_attribute(PartlyDeprecatedEnum, "value_b", "TestService.PartlyDeprecatedEnum.value_b is deprecated: Use PartlyDeprecatedEnum.value_a instead.")
 
 
-class TestEnum(DocEnum):
+class TestEnum(RemoteEnum):
     """
     Enum documentation string.
     """
@@ -60,7 +60,7 @@ Enum ValueC documentation string, in m/s², equal to
 """
 
 
-class TestFlags(DocFlag):
+class TestFlags(RemoteFlags):
     """
     Flags documentation string.
     """

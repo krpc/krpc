@@ -15,7 +15,7 @@
 namespace krpc {
 
 template <typename T>
-class Object;
+class RemoteObject;
 
 /** Mix a hash into a running one. The constant and the shifts are the ones boost::hash_combine
     uses, which spread the bits of each value it is given across the result. */
@@ -42,7 +42,7 @@ template <typename T, typename std::enable_if<
 std::size_t hash_value(const T& value);
 std::size_t hash_value(const std::string& value);
 template <typename T>
-std::size_t hash_value(const Object<T>& object);
+std::size_t hash_value(const RemoteObject<T>& object);
 template <typename T>
 std::size_t hash_value(const std::optional<T>& value);
 template <typename T>
@@ -65,7 +65,7 @@ inline std::size_t hash_value(const std::string& value) { return std::hash<std::
 /** An object is a handle to something on the server, and is equal to another handle to the
     same thing, so its identifier is what it hashes as. */
 template <typename T>
-inline std::size_t hash_value(const Object<T>& object) {
+inline std::size_t hash_value(const RemoteObject<T>& object) {
   return std::hash<uint64_t>()(object._id);
 }
 

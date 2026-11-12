@@ -5,7 +5,7 @@
 
 
 .. namespace:: krpc::services
-.. class:: TestService : public krpc::Service
+.. class:: TestService : public krpc::RemoteService
 
    Service documentation string.
 

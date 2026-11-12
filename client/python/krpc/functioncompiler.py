@@ -62,7 +62,7 @@ from krpc.functionstatements import (
 )
 from krpc.service import _member_name
 from krpc.stream import Stream
-from krpc.types import ClassBase, ClassType, EnumerationType, StructType, TypeBase
+from krpc.types import ClassType, EnumerationType, RemoteObject, StructType, TypeBase
 
 if TYPE_CHECKING:
     from krpc.connection import Connection
@@ -791,7 +791,7 @@ class _Compiler:
         base = self._compile(node.value)
         if base.is_value:
             value = base.value
-            if isinstance(value, ClassBase) or self._is_service_object(value):
+            if isinstance(value, RemoteObject) or self._is_service_object(value):
                 if not hasattr(value, "_build_call__" + node.attr):
                     member = getattr(value, node.attr, None)
                     # The class, enumeration and structure types a service defines
@@ -901,7 +901,7 @@ class _Compiler:
                 attribute: object = getattr(base.value, func.attr)
                 return self._compile_client_call(node, attribute, arguments)
             if base.is_value and (
-                isinstance(base.value, ClassBase)
+                isinstance(base.value, RemoteObject)
                 or self._is_service_object(base.value)
                 or self._is_remote_class(base.value)
             ):
@@ -1172,7 +1172,7 @@ class _Compiler:
         if owner is None or not isinstance(name, str):
             return None
         if (
-            isinstance(owner, ClassBase)
+            isinstance(owner, RemoteObject)
             or self._is_service_object(owner)
             or self._is_remote_class(owner)
         ):
@@ -4218,7 +4218,7 @@ class _Compiler:
                 expression=expr.constant_bytes(value),
                 ptype=build_ptype(KRPC.Type.BYTES),
             )
-        if isinstance(value, ClassBase):
+        if isinstance(value, RemoteObject):
             ptype = self._class_ptype(type(value))
             return _Result(
                 expression=expr.constant_object(value._object_id), ptype=ptype
@@ -4731,9 +4731,9 @@ class _Compiler:
     def _is_service_object(value: object) -> bool:
         """Whether the value is a service object, or a service class (remote
         members of dynamically created services are bound to the class)."""
-        if isinstance(value, ClassBase):
+        if isinstance(value, RemoteObject):
             return False
-        if isinstance(value, type) and issubclass(value, ClassBase):
+        if isinstance(value, type) and issubclass(value, RemoteObject):
             return False
         cls = value if isinstance(value, type) else type(value)
         return any(name.startswith("_build_call__") for name in dir(cls))

@@ -157,15 +157,15 @@ function service.inherit_deprecation(svc)
   end
 end
 
-local ServiceBase = class(Types.DynamicType)
+local RemoteService = class(Types.DynamicType)
 
 --- Whether a value is the service of the given name, from any connection
 function service.is_service(value, name)
-  return ServiceBase:class_of(value) and value._name == name
+  return RemoteService:class_of(value) and value._name == name
 end
 
 --- A function that warns of the use of a member, if it is deprecated, then calls the given one
-function ServiceBase:_deprecating(member, qualified_name, func)
+function RemoteService:_deprecating(member, qualified_name, func)
   if not member.deprecated then
     return func
   end
@@ -187,7 +187,7 @@ end
 
 --- Add a class, enumeration or structure type. A deprecated type is left out of the service's
 --- class table, so that reading it reaches __index, set up by create_service
-function ServiceBase:_add_service_type(member, lua_type)
+function RemoteService:_add_service_type(member, lua_type)
   if member.deprecated then
     self._deprecated_members[member.name] = {
       value = lua_type,
@@ -198,7 +198,7 @@ function ServiceBase:_add_service_type(member, lua_type)
   end
 end
 
-function ServiceBase:_parse_procedure(procedure)
+function RemoteService:_parse_procedure(procedure)
 
   local param_names = seq.copy(seq.map(function (x) return service.to_snake_case(x.name) end, procedure.parameters))
   local param_types = seq.copy(seq.map(function (x) return self._connection._types:as_type(x.type) end, procedure.parameters))
@@ -262,22 +262,22 @@ end
 -- of the service
 
 --- Add a class type
-function ServiceBase:_add_service_class(cls)
+function RemoteService:_add_service_class(cls)
   self:_add_service_type(cls, self._connection._types:class_type(self._name, cls.name).lua_type)
 end
 
 --- Add an enumeration type
-function ServiceBase:_add_service_enumeration(enum)
+function RemoteService:_add_service_enumeration(enum)
   self:_add_service_type(enum, self._connection._types:enumeration_type(self._name, enum.name).lua_type)
 end
 
 --- Add a structure type
-function ServiceBase:_add_service_struct(struct)
+function RemoteService:_add_service_struct(struct)
   self:_add_service_type(struct, self._connection._types:struct_type(self._name, struct.name).lua_type)
 end
 
 --- Add a procedure
-function ServiceBase:_add_service_procedure(procedure)
+function RemoteService:_add_service_procedure(procedure)
   local param_names, param_types, param_required, return_type = self:_parse_procedure(procedure)
   local func = _construct_func(self, procedure.name, List{}, param_names, param_types, param_required, return_type)
   --build_request = ...
@@ -285,7 +285,7 @@ function ServiceBase:_add_service_procedure(procedure)
   return self:_add_static_method(name, self:_deprecating(procedure, name, func))
 end
 
-function ServiceBase:_add_service_property(name, getter, setter)
+function RemoteService:_add_service_property(name, getter, setter)
   name = service.to_snake_case(name)
   if getter then
     local getter_name = getter.name
@@ -303,7 +303,7 @@ function ServiceBase:_add_service_property(name, getter, setter)
 end
 
 --- Add a method to a class
-function ServiceBase:_add_service_class_method(class_name, method_name, procedure)
+function RemoteService:_add_service_class_method(class_name, method_name, procedure)
   local class_cls = self._connection._types:class_type(self._name, class_name).lua_type
   local param_names, param_types, param_required, return_type = self:_parse_procedure(procedure)
   -- Rename this to self if it doesn't cause a name clash
@@ -316,7 +316,7 @@ function ServiceBase:_add_service_class_method(class_name, method_name, procedur
 end
 
 --- Add a static method to a class
-function ServiceBase:_add_service_class_static_method(class_name, method_name, procedure)
+function RemoteService:_add_service_class_static_method(class_name, method_name, procedure)
   local class_cls = self._connection._types:class_type(self._name, class_name).lua_type
   local param_names, param_types, param_required, return_type = self:_parse_procedure(procedure)
   local func = _construct_func(self, procedure.name, nil, param_names, param_types, param_required, return_type)
@@ -326,7 +326,7 @@ function ServiceBase:_add_service_class_static_method(class_name, method_name, p
 end
 
 --- Add a property to a class
-function ServiceBase:_add_service_class_property(class_name, property_name, getter, setter)
+function RemoteService:_add_service_class_property(class_name, property_name, getter, setter)
   local class_cls = self._connection._types:class_type(self._name, class_name).lua_type
   local qualified_name = class_name .. '.' .. service.to_snake_case(property_name)
   if getter then
@@ -364,7 +364,7 @@ end
 
 --- Create a new service type
 function service.create_service(connection, svc)
-  local cls = class(ServiceBase)
+  local cls = class(RemoteService)
   cls._connection = connection
   cls._name = svc.name
   cls._invoke = bind1(connection._invoke, connection)

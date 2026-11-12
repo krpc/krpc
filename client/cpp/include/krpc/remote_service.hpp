@@ -4,9 +4,9 @@
 
 namespace krpc {
 
-class Service {
+class RemoteService {
  public:
-  explicit Service(const Connection& connection) : _connection(connection) {}
+  explicit RemoteService(const Connection& connection) : _connection(connection) {}
 
  protected:
   Connection _connection;

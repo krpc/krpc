@@ -5,11 +5,11 @@ import krpc.limits
 from krpc.declarations import DeclaredClass, DeclaredObject, declaration_error as _declaration, register as _register
 from krpc.event import Event
 from krpc.schema import KRPC_pb2
-from krpc.types import DocEnum, DocFlag, deprecate_attribute, deprecated
+from krpc.types import RemoteEnum, RemoteFlags, deprecate_attribute, deprecated
 
 
 
-class GameScene(DocEnum):
+class GameScene(RemoteEnum):
     """
     The game scene. See :attr:`krpc.services.krpc.KRPC.game_scene`.
     """
@@ -49,7 +49,7 @@ administration facility is open within the space center scene.
 """
 
 
-class TypeCode(DocEnum):
+class TypeCode(RemoteEnum):
     """
     The kind of a type, with the values of the communication protocol's type codes.
     """

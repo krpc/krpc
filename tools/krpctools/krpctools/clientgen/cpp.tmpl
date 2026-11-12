@@ -44,8 +44,8 @@ return {% if is_static %}_connection.{% else %}this->_connection.{% endif %}buil
 #include <krpc/error.hpp>
 #include <krpc/event.hpp>
 #include <krpc/hash.hpp>
-#include <krpc/object.hpp>
-#include <krpc/service.hpp>
+#include <krpc/remote_object.hpp>
+#include <krpc/remote_service.hpp>
 #include <krpc/stream.hpp>
 {% if includes %}
 
@@ -67,7 +67,7 @@ return {% if is_static %}_connection.{% else %}this->_connection.{% endif %}buil
 namespace krpc {
 namespace services {
 
-class {% if service_deprecated %}[[deprecated{% if service_deprecated_reason %}("{{ service_deprecated_reason | string_literal }}"){% endif %}]] {% endif %}{{ service_name }} : public Service {
+class {% if service_deprecated %}[[deprecated{% if service_deprecated_reason %}("{{ service_deprecated_reason | string_literal }}"){% endif %}]] {% endif %}{{ service_name }} : public ::krpc::RemoteService {
  public:
   explicit {{ service_name }}(const ::krpc::Connection& connection);
   {% if classes | length > 0 %}
@@ -177,7 +177,7 @@ class {% if service_deprecated %}[[deprecated{% if service_deprecated_reason %}(
 
 {% if cls.documentation %}{{ cls.documentation | indent(width=2) }}
 {% endif %}
-  class {% if cls.deprecated %}[[deprecated{% if cls.deprecated_reason %}("{{ cls.deprecated_reason | string_literal }}"){% endif %}]] {% endif %}{{ class_name }} : public krpc::Object<{{ class_name }}> {
+  class {% if cls.deprecated %}[[deprecated{% if cls.deprecated_reason %}("{{ cls.deprecated_reason | string_literal }}"){% endif %}]] {% endif %}{{ class_name }} : public ::krpc::RemoteObject<{{ class_name }}> {
    public:
     {{ class_name }}();
     {{ class_name }}(const ::krpc::Connection& connection, uint64_t id);
@@ -395,7 +395,7 @@ namespace services {
 namespace services {
 
 inline {{ service_name }}::{{ service_name }}(const ::krpc::Connection& connection):
-  Service(connection) {
+  RemoteService(connection) {
   {% for exception_name,exception in exceptions.items() %}
   _connection.add_exception_thrower(
     "{{ service_name }}", "{{ exception_name }}",
@@ -433,10 +433,10 @@ inline ::krpc::schema::ProcedureCall {{ service_name }}::{{ procedure_name }}_ca
 {% for class_name,cls in classes.items() %}
 
 inline {{ service_name }}::{{ class_name }}::{{ class_name }}():
-  Object("{{ service_name }}::{{ class_name }}") {}
+  RemoteObject("{{ service_name }}::{{ class_name }}") {}
 
 inline {{ service_name }}::{{ class_name }}::{{ class_name }}(const ::krpc::Connection& connection, uint64_t id):
-  Object(connection, "{{ service_name }}::{{ class_name }}", id) {}
+  RemoteObject(connection, "{{ service_name }}::{{ class_name }}", id) {}
 {% for method_name,method in cls.methods.items()|list + cls.properties.items()|list %}
 
 inline {{ method.return_type }} {{ service_name }}::{{ class_name }}::{{ method_name }}({{ impl_parameters(method.parameters) }}) {

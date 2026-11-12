@@ -5,12 +5,12 @@ import krpc.limits
 from krpc.declarations import DeclaredClass, DeclaredObject, declaration_error as _declaration, register as _register
 from krpc.event import Event
 from krpc.schema import KRPC_pb2
-from krpc.types import DocEnum, DocFlag, deprecate_attribute, deprecated
+from krpc.types import RemoteEnum, RemoteFlags, deprecate_attribute, deprecated
 
 
 
 @deprecated("Use TestService instead.")
-class ServiceEnum(DocEnum):
+class ServiceEnum(RemoteEnum):
     """
     Deprecated. Use TestService instead.
 

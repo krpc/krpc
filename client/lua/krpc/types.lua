@@ -300,7 +300,7 @@ function Types:coerce_to(value, typ)
     return value
   end
   -- Coerce identical class types from different client connections
-  if typ:is_a(Types.ClassType) and Types.ClassBase:class_of(value) then
+  if typ:is_a(Types.ClassType) and Types.RemoteObject:class_of(value) then
     if typ.lua_type._service_name == value._service_name and
        typ.lua_type._class_name == value._class_name then
       return typ.lua_type(value._object_id)
@@ -338,43 +338,43 @@ function Types:coerce_to(value, typ)
 end
 
 local function _create_class_type(service_name, class_name)
-  local cls = class(Types.ClassBase)
+  local cls = class(Types.RemoteObject)
   cls['_service_name'] = service_name
   cls['_class_name'] = class_name
   return cls
 end
 
-Types.Enum = class()
+Types.RemoteEnum = class()
 
-function Types.Enum:_init(value)
+function Types.RemoteEnum:_init(value)
   self.value = value
 end
 
 --- A value of a flags enumeration: a combination of the values the enumeration declares.
-Types.Flags = class(Types.Enum)
+Types.RemoteFlags = class(Types.RemoteEnum)
 
 --- The combination of this value and another.
-function Types.Flags:union(other)
+function Types.RemoteFlags:union(other)
   return self._class(compat.bor(self.value, other.value))
 end
 
 --- The flags this value shares with another.
-function Types.Flags:intersection(other)
+function Types.RemoteFlags:intersection(other)
   return self._class(compat.band(self.value, other.value))
 end
 
 --- This value with the flags of another removed.
-function Types.Flags:difference(other)
+function Types.RemoteFlags:difference(other)
   return self._class(compat.bandnot(self.value, other.value))
 end
 
 --- Whether this value holds every flag of another.
-function Types.Flags:contains(other)
+function Types.RemoteFlags:contains(other)
   return compat.band(self.value, other.value) == other.value
 end
 
 local function _create_struct_type(service_name, struct_name, field_names)
-  local cls = class(Types.StructBase)
+  local cls = class(Types.RemoteStruct)
   cls['_service_name'] = service_name
   cls['_struct_name'] = struct_name
   cls['_field_names'] = field_names
@@ -383,7 +383,7 @@ end
 
 -- A deprecated value is left out of the class table, so that reading it reaches __index
 local function _create_enum_type(_service_name, _class_name, values, flags, deprecated, warn)
-  local cls = class(flags and Types.Flags or Types.Enum)
+  local cls = class(flags and Types.RemoteFlags or Types.RemoteEnum)
   local deprecated_values = {}
   for k, v in pairs(values) do
     if deprecated[k] then
@@ -405,8 +405,8 @@ local function _create_enum_type(_service_name, _class_name, values, flags, depr
   if flags then
     cls.__index = function(_, key)
       local member = rawget(cls, key)
-      if getmetatable(member) == cls and Types.Flags[key] ~= nil then
-        return Types.Flags[key]
+      if getmetatable(member) == cls and Types.RemoteFlags[key] ~= nil then
+        return Types.RemoteFlags[key]
       end
       return member
     end
@@ -720,11 +720,11 @@ function Types.DynamicType:_add_property(name, getter, setter)
   end
 end
 
-Types.StructBase = class()
+Types.RemoteStruct = class()
 
 --- A structure value, built from the values of its fields in the order the structure
 --- declares them
-function Types.StructBase:_init(...)
+function Types.RemoteStruct:_init(...)
   local values = {...}
   for i, name in ipairs(self._field_names) do
     self[name] = values[i]
@@ -733,8 +733,8 @@ end
 
 -- From Lua 5.3 on, the comparison calls the metamethod of either operand, so either may be a
 -- value of another kind
-function Types.StructBase:__eq(other)
-  if not (Types.StructBase:class_of(self) and Types.StructBase:class_of(other)) then
+function Types.RemoteStruct:__eq(other)
+  if not (Types.RemoteStruct:class_of(self) and Types.RemoteStruct:class_of(other)) then
     return false
   end
   for _, name in ipairs(self._field_names) do
@@ -749,7 +749,7 @@ end
 --- if Lua ordered tables. A field whose type Lua does not order, such as a collection or an
 --- enumeration value, raises when the two values differ. Two values that are unequal but
 --- order neither way, as two NaNs are, move on to the next field.
-function Types.StructBase:__lt(other)
+function Types.RemoteStruct:__lt(other)
   for _, name in ipairs(self._field_names) do
     if self[name] ~= other[name] then
       if self[name] < other[name] then
@@ -763,12 +763,12 @@ function Types.StructBase:__lt(other)
   return false
 end
 
-function Types.StructBase:__le(other)
+function Types.RemoteStruct:__le(other)
   -- Both sides are structures, which compare with __lt
   return not (other < self) -- luacheck: ignore 581
 end
 
-function Types.StructBase:__tostring()
+function Types.RemoteStruct:__tostring()
   local parts = {}
   for i, name in ipairs(self._field_names) do
     parts[i] = name .. ' = ' .. tostring(self[name])
@@ -776,21 +776,21 @@ function Types.StructBase:__tostring()
   return self._struct_name .. '{' .. stringx.join(', ', parts) .. '}'
 end
 
-Types.ClassBase = class(Types.DynamicType)
+Types.RemoteObject = class(Types.DynamicType)
 
-function Types.ClassBase:_init(object_id)
+function Types.RemoteObject:_init(object_id)
   self._object_id = object_id
 end
 
 -- Either operand may be a value of another kind, as for a structure
-function Types.ClassBase:__eq(other)
-  if not (Types.ClassBase:class_of(self) and Types.ClassBase:class_of(other)) then
+function Types.RemoteObject:__eq(other)
+  if not (Types.RemoteObject:class_of(self) and Types.RemoteObject:class_of(other)) then
     return false
   end
   return self._object_id == other._object_id
 end
 
-function Types.ClassBase:__tostring()
+function Types.RemoteObject:__tostring()
   return string.format('<%s.%s remote object #%d>', self._service_name, self._class_name, self._object_id)
 end
 

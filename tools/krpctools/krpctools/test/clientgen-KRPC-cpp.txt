@@ -15,8 +15,8 @@
 #include <krpc/error.hpp>
 #include <krpc/event.hpp>
 #include <krpc/hash.hpp>
-#include <krpc/object.hpp>
-#include <krpc/service.hpp>
+#include <krpc/remote_object.hpp>
+#include <krpc/remote_service.hpp>
 #include <krpc/stream.hpp>
 
 // Generated code uses the deprecated declarations it makes, such as a stream of a deprecated
@@ -32,7 +32,7 @@
 namespace krpc {
 namespace services {
 
-class KRPC : public Service {
+class KRPC : public ::krpc::RemoteService {
  public:
   explicit KRPC(const ::krpc::Connection& connection);
 
@@ -472,7 +472,7 @@ class KRPC : public Service {
    *
    * Numeric operands of differing types are converted to a common type.
    */
-  class Expression : public krpc::Object<Expression> {
+  class Expression : public ::krpc::RemoteObject<Expression> {
    public:
     Expression();
     Expression(const ::krpc::Connection& connection, uint64_t id);
@@ -3326,7 +3326,7 @@ class KRPC : public Service {
   /**
    * The type of a value a procedure takes or returns.
    */
-  class Type : public krpc::Object<Type> {
+  class Type : public ::krpc::RemoteObject<Type> {
    public:
     Type();
     Type(const ::krpc::Connection& connection, uint64_t id);
@@ -4276,7 +4276,7 @@ namespace services {
 namespace services {
 
 inline KRPC::KRPC(const ::krpc::Connection& connection):
-  Service(connection) {
+  RemoteService(connection) {
   _connection.add_exception_thrower(
     "KRPC", "ArgumentException",
     [] (const std::string& msg) { throw ArgumentException(msg); });
@@ -4520,10 +4520,10 @@ inline ::krpc::schema::ProcedureCall KRPC::set_paused_call(bool value) {
 }
 
 inline KRPC::Expression::Expression():
-  Object("KRPC::Expression") {}
+  RemoteObject("KRPC::Expression") {}
 
 inline KRPC::Expression::Expression(const ::krpc::Connection& connection, uint64_t id):
-  Object(connection, "KRPC::Expression", id) {}
+  RemoteObject(connection, "KRPC::Expression", id) {}
 
 inline bool KRPC::Expression::has_return_type() {
   std::vector<krpc::encoder::Value> _args;
@@ -8485,10 +8485,10 @@ inline KRPC::Expression::Bound KRPC::Expression::bind(const ::krpc::Connection& 
 }
 
 inline KRPC::Type::Type():
-  Object("KRPC::Type") {}
+  RemoteObject("KRPC::Type") {}
 
 inline KRPC::Type::Type(const ::krpc::Connection& connection, uint64_t id):
-  Object(connection, "KRPC::Type", id) {}
+  RemoteObject(connection, "KRPC::Type", id) {}
 
 inline KRPC::TypeCode KRPC::Type::code() {
   std::vector<krpc::encoder::Value> _args;

@@ -25,7 +25,7 @@ from krpc.transport import (
     TCPIPTransport,
     Transport,
 )
-from krpc.types import ClassBase
+from krpc.types import RemoteObject
 from krpc.version import __version__
 
 if TYPE_CHECKING:
@@ -156,7 +156,7 @@ else:
     connect_local = _Connector("connect_local", _connect_local, None)
 
 
-def get_object_id(obj: ClassBase) -> int:
+def get_object_id(obj: RemoteObject) -> int:
     """
     The identifier of a remote object on the server, e.g. to pass to
     Expression.constant_object. Raises ValueError if the object is None.

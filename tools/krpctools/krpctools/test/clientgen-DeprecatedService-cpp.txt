@@ -15,8 +15,8 @@
 #include <krpc/error.hpp>
 #include <krpc/event.hpp>
 #include <krpc/hash.hpp>
-#include <krpc/object.hpp>
-#include <krpc/service.hpp>
+#include <krpc/remote_object.hpp>
+#include <krpc/remote_service.hpp>
 #include <krpc/stream.hpp>
 
 // Generated code uses the deprecated declarations it makes, such as a stream of a deprecated
@@ -32,7 +32,7 @@
 namespace krpc {
 namespace services {
 
-class [[deprecated("Use TestService instead.")]] DeprecatedService : public Service {
+class [[deprecated("Use TestService instead.")]] DeprecatedService : public ::krpc::RemoteService {
  public:
   explicit DeprecatedService(const ::krpc::Connection& connection);
 
@@ -118,7 +118,7 @@ class [[deprecated("Use TestService instead.")]] DeprecatedService : public Serv
    *
    * \deprecated Use "TestService.TestClass" instead.
    */
-  class [[deprecated("Use \"TestService.TestClass\" instead.")]] ReasonedClass : public krpc::Object<ReasonedClass> {
+  class [[deprecated("Use \"TestService.TestClass\" instead.")]] ReasonedClass : public ::krpc::RemoteObject<ReasonedClass> {
    public:
     ReasonedClass();
     ReasonedClass(const ::krpc::Connection& connection, uint64_t id);
@@ -167,7 +167,7 @@ class [[deprecated("Use TestService instead.")]] DeprecatedService : public Serv
    *
    * \deprecated Use TestService instead.
    */
-  class [[deprecated("Use TestService instead.")]] ServiceClass : public krpc::Object<ServiceClass> {
+  class [[deprecated("Use TestService instead.")]] ServiceClass : public ::krpc::RemoteObject<ServiceClass> {
    public:
     ServiceClass();
     ServiceClass(const ::krpc::Connection& connection, uint64_t id);
@@ -330,7 +330,7 @@ namespace services {
 namespace services {
 
 inline DeprecatedService::DeprecatedService(const ::krpc::Connection& connection):
-  Service(connection) {
+  RemoteService(connection) {
   _connection.add_exception_thrower(
     "DeprecatedService", "ServiceException",
     [] (const std::string& msg) { throw ServiceException(msg); });
@@ -399,10 +399,10 @@ inline ::krpc::schema::ProcedureCall DeprecatedService::set_property_call(std::s
 }
 
 inline DeprecatedService::ReasonedClass::ReasonedClass():
-  Object("DeprecatedService::ReasonedClass") {}
+  RemoteObject("DeprecatedService::ReasonedClass") {}
 
 inline DeprecatedService::ReasonedClass::ReasonedClass(const ::krpc::Connection& connection, uint64_t id):
-  Object(connection, "DeprecatedService::ReasonedClass", id) {}
+  RemoteObject(connection, "DeprecatedService::ReasonedClass", id) {}
 
 inline std::string DeprecatedService::ReasonedClass::static_method(::krpc::Connection& _connection) {
   auto _data = _connection.invoke("DeprecatedService", "ReasonedClass_static_StaticMethod", {}, ::krpc::Connection::Returns::value);
@@ -432,10 +432,10 @@ inline DeprecatedService::ReasonedClass::Bound DeprecatedService::ReasonedClass:
 }
 
 inline DeprecatedService::ServiceClass::ServiceClass():
-  Object("DeprecatedService::ServiceClass") {}
+  RemoteObject("DeprecatedService::ServiceClass") {}
 
 inline DeprecatedService::ServiceClass::ServiceClass(const ::krpc::Connection& connection, uint64_t id):
-  Object(connection, "DeprecatedService::ServiceClass", id) {}
+  RemoteObject(connection, "DeprecatedService::ServiceClass", id) {}
 
 inline std::string DeprecatedService::ServiceClass::method() {
   std::vector<krpc::encoder::Value> _args;

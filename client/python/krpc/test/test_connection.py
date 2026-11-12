@@ -10,7 +10,7 @@ from krpc.encoder import Encoder
 from krpc.event import Event
 from krpc.services import testservice
 from krpc.test.servertestcase import ServerTestCase
-from krpc.types import DocEnum
+from krpc.types import RemoteEnum
 
 
 class TestConnection(ServerTestCase, unittest.TestCase):
@@ -69,7 +69,7 @@ class TestConnection(ServerTestCase, unittest.TestCase):
         )
 
     def test_a_number_the_server_lacks_names_the_enumeration(self) -> None:
-        class TestEnum(DocEnum):
+        class TestEnum(RemoteEnum):
             value_a = 0
             value_z = 25
 

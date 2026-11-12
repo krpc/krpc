@@ -25,7 +25,7 @@ namespace krpc {
 class Connection;
 class Event;
 template <typename T>
-class Object;
+class RemoteObject;
 
 namespace decoder {
 
@@ -42,7 +42,7 @@ void decode(google::protobuf::MessageLite& message, const std::string& data,
             Connection* connection = nullptr);
 
 template <typename T>
-void decode(Object<T>& object, const std::string& data, Connection* connection = nullptr);
+void decode(RemoteObject<T>& object, const std::string& data, Connection* connection = nullptr);
 
 template <typename... Ts>
 void decode(std::tuple<Ts...>& tuple, const std::string& data, Connection* connection = nullptr);
@@ -68,7 +68,7 @@ uint32_t decode_size(const std::string& data);
 bool decode_size_prefix(const char* data, size_t length, uint32_t* size, size_t* prefix_length);
 
 template <typename T>
-inline void decode(Object<T>& object, const std::string& data, Connection* connection) {
+inline void decode(RemoteObject<T>& object, const std::string& data, Connection* connection) {
   uint64_t id;
   decode(id, data, connection);
   object._connection = connection != nullptr ? *connection : Connection();

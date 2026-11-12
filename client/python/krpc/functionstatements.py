@@ -33,7 +33,7 @@ from krpc.expressionutils import (
     same_shape,
     with_nullable,
 )
-from krpc.types import NATIVE_EXCEPTIONS, ClassBase
+from krpc.types import NATIVE_EXCEPTIONS, RemoteObject
 
 if TYPE_CHECKING:
     from krpc.functioncompiler import _Compiler
@@ -1224,7 +1224,7 @@ class _StatementCompiler:
         self, node: ast.stmt, target: ast.Attribute, value: _Result
     ) -> Expression:
         base = self._compiler._compile(target.value)
-        if base.is_value and isinstance(base.value, ClassBase):
+        if base.is_value and isinstance(base.value, RemoteObject):
             protobuf_type = self._compiler._class_ptype(type(base.value))
             service, procedure = self._compiler._member(
                 node,

@@ -30,9 +30,9 @@ from krpc.connection import Connection
 from krpc.decoder import Decoder
 from krpc.encoder import Encoder
 from krpc.event import Event
-from krpc.service import ServiceBase
+from krpc.service import RemoteService
 from krpc.transport import Transport
-from krpc.types import ClassBase, TypeBase
+from krpc.types import RemoteObject, TypeBase
 from krpc.utils import snake_case
 
 PROFILES = [
@@ -140,7 +140,7 @@ class Testee:
         # The name of the connection the command a thread is running is for
         self._local = threading.local()
         self._next_handle = 1
-        self._objects: dict[int, ClassBase] = {}
+        self._objects: dict[int, RemoteObject] = {}
         self._streams: dict[int, Any] = {}
         # The function streams of a type named without "nullable"
         self._not_nullable: set[int] = set()
@@ -778,7 +778,7 @@ class Testee:
         elif isinstance(value, Event):
             # Events share the table of streams, as both end and are removed alike
             result.event = self._add_handle(self._streams, value)
-        elif isinstance(value, ClassBase):
+        elif isinstance(value, RemoteObject):
             result.object.handle = self._add_handle(self._objects, value)
             result.object.id = krpc.get_object_id(value)
         elif isinstance(value, enum.Enum):
@@ -835,7 +835,7 @@ def declared_type(service: str, name: str) -> Any:
 
 def is_service(value: object) -> bool:
     """Whether a value is a service, which the client builds from the server's definitions."""
-    return isinstance(value, ServiceBase)
+    return isinstance(value, RemoteService)
 
 
 class Unsupported(Exception):
