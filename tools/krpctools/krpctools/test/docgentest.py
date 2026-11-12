@@ -134,6 +134,11 @@ class DocGenTestCase(_Base):
         # The test service depends on KRPC, whose definitions its documentation links to
         self.run_test("TestService", "TestService", deps=["KRPC"])
 
+    def test_krpc(self):
+        # The KRPC service has mapped exceptions, exceptions with no native type in some
+        # languages, and the exception a removed stream raises
+        self.run_test("KRPC", "KRPC")
+
     def test_ordering(self):
         self.run_test("ServiceA", "Ordering")
 
