@@ -181,6 +181,8 @@ class CnanoDomain(Domain[CnanoLanguage]):
             return "krpc_" + "_".join(name) + "_t." + field
         if isinstance(obj, (Property, ClassProperty)) and obj.getter is None:
             name[-1] = "set_" + name[-1]
+        if isinstance(obj, ExceptionNode):
+            return "KRPC_EXCEPTION_" + "_".join(name).upper()
         ref = "krpc_" + "_".join(name)
         if isinstance(obj, EnumerationValue):
             ref = ref.upper()
@@ -207,8 +209,7 @@ class CnanoDomain(Domain[CnanoLanguage]):
         elif isinstance(obj, StructField):
             prefix = "member"
         elif isinstance(obj, ExceptionNode):
-            # The C-nano client has no exception types, only the name in an error message
-            return self.code(obj.fullname)
+            prefix = "macro"
         else:
             raise RuntimeError(str(obj))
         return ":%s:`%s`" % (prefix, self.ref(obj))

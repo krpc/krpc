@@ -19,7 +19,9 @@ name throughout:
 
 In a client with error types, the connection, server, stream and encoding errors derive one type
 of the client's own, its remote error type. A server exception with a mapped type raises the
-language's own type for it, which does not derive the remote error type.
+language's own type for it, which does not derive the remote error type. A client whose errors are
+codes, such as C-nano, has a code per kind and no remote error type. It names a server error's
+exception by its ids.
 
 An error that another error caused carries the cause's message after its own.
 

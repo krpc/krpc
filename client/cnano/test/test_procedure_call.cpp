@@ -64,28 +64,26 @@ TEST_F(ProcedureCallTest, CallWithNoArguments) {
 TEST_F(ProcedureCallTest, PositionOutOfRange) {
   const uint32_t value = 7;
   ASSERT_EQ(KRPC_OK, krpc_procedure_call(&call, 1, 2, 1));
-  EXPECT_EQ(KRPC_ERROR_ENCODING_FAILED,
+  EXPECT_EQ(KRPC_ERROR_ARGUMENT,
             krpc_procedure_call_argument(&call, 1, &krpc_encode_callback_uint32, &value));
-  EXPECT_EQ(KRPC_ERROR_ENCODING_FAILED, krpc_procedure_call_null_argument(&call, 1));
+  EXPECT_EQ(KRPC_ERROR_ARGUMENT, krpc_procedure_call_null_argument(&call, 1));
   EXPECT_EQ(KRPC_OK, krpc_free_procedure_call(&call));
   EXPECT_EQ(0, live_blocks);
 }
 
 TEST_F(ProcedureCallTest, ArgumentOfACallNotFilledIn) {
   const uint32_t value = 7;
-  EXPECT_EQ(KRPC_ERROR_ENCODING_FAILED,
+  EXPECT_EQ(KRPC_ERROR_ARGUMENT,
             krpc_procedure_call_argument(&call, 0, &krpc_encode_callback_uint32, &value));
-  EXPECT_EQ(KRPC_ERROR_ENCODING_FAILED, krpc_procedure_call_null_argument(&call, 0));
+  EXPECT_EQ(KRPC_ERROR_ARGUMENT, krpc_procedure_call_null_argument(&call, 0));
 }
 
 TEST_F(ProcedureCallTest, EncodeFailsPartWay) {
   const uint32_t value = 7;
   ASSERT_EQ(KRPC_OK, krpc_procedure_call(&call, 1, 2, 3));
   ASSERT_EQ(KRPC_OK, krpc_procedure_call_argument(&call, 0, &krpc_encode_callback_uint32, &value));
-  EXPECT_EQ(KRPC_ERROR_ENCODING_FAILED,
-            krpc_procedure_call_argument(&call, 1, &fail_to_size, nullptr));
-  EXPECT_EQ(KRPC_ERROR_ENCODING_FAILED,
-            krpc_procedure_call_argument(&call, 2, &fail_to_write, nullptr));
+  EXPECT_EQ(KRPC_ERROR_ENCODING, krpc_procedure_call_argument(&call, 1, &fail_to_size, nullptr));
+  EXPECT_EQ(KRPC_ERROR_ENCODING, krpc_procedure_call_argument(&call, 2, &fail_to_write, nullptr));
   EXPECT_EQ(KRPC_OK, krpc_free_procedure_call(&call));
   EXPECT_EQ(0, live_blocks);
 }
@@ -130,8 +128,7 @@ TEST_F(ProcedureCallTest, FailingToFillInAnArgumentAgainLeavesItUnfilled) {
   const uint32_t value = 7;
   ASSERT_EQ(KRPC_OK, krpc_procedure_call(&call, 1, 2, 1));
   ASSERT_EQ(KRPC_OK, krpc_procedure_call_argument(&call, 0, &krpc_encode_callback_uint32, &value));
-  EXPECT_EQ(KRPC_ERROR_ENCODING_FAILED,
-            krpc_procedure_call_argument(&call, 0, &fail_to_size, nullptr));
+  EXPECT_EQ(KRPC_ERROR_ENCODING, krpc_procedure_call_argument(&call, 0, &fail_to_size, nullptr));
 
   std::vector<pb_byte_t> buffer(32);
   pb_ostream_t stream = pb_ostream_from_buffer(buffer.data(), buffer.size());
@@ -172,7 +169,7 @@ TEST_F(ProcedureCallTest, GeneratedCallOutOfMemory) {
   for (int i = 0; i < allocations; i++) {
     krpc_schema_ProcedureCall failed = krpc_schema_ProcedureCall_init_default;
     allocations_left = i;
-    EXPECT_EQ(KRPC_ERROR_ENCODING_FAILED, krpc_KRPC_Expression_Add_call(&failed, 1, 2)) << i;
+    EXPECT_EQ(KRPC_ERROR_NO_MEMORY, krpc_KRPC_Expression_Add_call(&failed, 1, 2)) << i;
     allocations_left = -1;
     EXPECT_EQ(KRPC_OK, krpc_free_procedure_call(&failed)) << i;
     EXPECT_EQ(0, live_blocks) << i;

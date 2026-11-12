@@ -39,6 +39,17 @@ def is_removed_error(client: Client, error: pb.Error) -> bool:
     return error.kind in (pb.Error.STREAM, pb.Error.SERVER)
 
 
+def error_codes(client: Client) -> bool:
+    """Whether the client's errors are codes, with no remote error type. Such a client starts a
+    server error's message with ``Service.Name:``, as a client without error types does."""
+    return error_types(client) and client.conventions.remote_error is None
+
+
+def message_prefix(client: Client) -> bool:
+    """Whether the client starts a server error's message with ``Service.Name:``."""
+    return not error_types(client) or error_codes(client)
+
+
 def remote_error(client: Client) -> str:
     """The base type of the client's own errors, from its conventions."""
     remote = client.conventions.remote_error
@@ -97,7 +108,8 @@ def assert_native_error(
         native = native_type(client, control, name)
         if native is None:
             assert (error.service, error.name) == ("KRPC", name), error
-            assert remote_error(client) in error.native_types, error
+            if not error_codes(client):
+                assert remote_error(client) in error.native_types, error
         else:
             assert native in error.native_types, error
             assert remote_error(client) not in error.native_types, error

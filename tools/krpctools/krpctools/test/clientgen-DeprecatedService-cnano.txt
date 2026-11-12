@@ -61,6 +61,11 @@ typedef enum {
 } krpc_DeprecatedService_ServiceEnum_t;
 
 /**
+ * An exception.
+ */
+#define KRPC_EXCEPTION_DEPRECATEDSERVICE_SERVICEEXCEPTION 1973646969u, 1421447440u
+
+/**
  * A procedure.
  */
 KRPC_DEPRECATED("Use TestService instead.")
@@ -230,7 +235,7 @@ static inline krpc_error_t krpc_decode_DeprecatedService_ServiceStruct(
   message.items.arg = &state;
   KRPC_RETURN_ON_ERROR(krpc_decode_message_Tuple(stream, &message));
   if (state.pos < 1)
-    KRPC_RETURN_ERROR(DECODING_FAILED, "too few fields for a DeprecatedService_ServiceStruct");
+    KRPC_FAIL(ENCODING, "Too few fields for a DeprecatedService_ServiceStruct");
   return KRPC_OK;
 }
 

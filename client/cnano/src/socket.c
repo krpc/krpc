@@ -75,7 +75,10 @@ static krpc_error_t krpc_start_winsock(void) {
   static int started = 0;
   WSADATA winsock;
   if (started) return KRPC_OK;
-  if (WSAStartup(MAKEWORD(2, 2), &winsock) != 0) KRPC_RETURN_ERROR(IO, "failed to start winsock");
+  if (WSAStartup(MAKEWORD(2, 2), &winsock) != 0) {
+    krpc_set_system_error_cause();
+    KRPC_FAIL_CAUSE(CONNECTION, "Failed to start winsock", KRPC_ERROR_IO);
+  }
   started = 1;
   return KRPC_OK;
 }
@@ -99,9 +102,10 @@ static krpc_error_t krpc_socket_read(uintptr_t handle, uint8_t* buf, size_t coun
         recv((SOCKET)handle, (char*)(buf + total), (int)(count - total), 0);
     if (result < 0) {
       if (KRPC_INTERRUPTED()) continue;
-      KRPC_RETURN_ERROR(IO, "read failed");
+      krpc_set_system_error_cause();
+      return KRPC_ERROR_IO;
     } else if (result == 0) {
-      KRPC_RETURN_ERROR(EOF, "eof received");
+      KRPC_TRANSPORT_FAIL(EOF, "Connection closed by the peer");
     } else {
       total += (size_t)result;
     }
@@ -116,7 +120,11 @@ static krpc_error_t krpc_socket_write(uintptr_t handle, const uint8_t* buf, size
         send((SOCKET)handle, (const char*)(buf + total), (int)(count - total), KRPC_SEND_FLAGS);
     if (result <= 0) {
       if (result < 0 && KRPC_INTERRUPTED()) continue;
-      KRPC_RETURN_ERROR(IO, "write failed");
+      if (result < 0) {
+        krpc_set_system_error_cause();
+        return KRPC_ERROR_IO;
+      }
+      KRPC_TRANSPORT_FAIL(IO, "Write failed");
     }
     total += (size_t)result;
   }
@@ -145,7 +153,7 @@ krpc_error_t krpc_open_tcp(krpc_connection_t* connection, const char* address, u
   int nodelay = 1;
   connection->transport = NULL;
   connection->handle = 0;
-  if (address == NULL) KRPC_RETURN_ERROR(IO, "no server address to connect to");
+  if (address == NULL) KRPC_FAIL(ARGUMENT, "No server address to connect to");
 #ifdef _WIN32
   KRPC_RETURN_ON_ERROR(krpc_start_winsock());
 #endif
@@ -153,19 +161,32 @@ krpc_error_t krpc_open_tcp(krpc_connection_t* connection, const char* address, u
   memset(&hints, 0, sizeof(hints));
   hints.ai_family = AF_UNSPEC;
   hints.ai_socktype = SOCK_STREAM;
-  if (getaddrinfo(address, service, &hints, &addresses) != 0)
-    KRPC_RETURN_ERROR(IO, "failed to resolve server address");
+  {
+    int error = getaddrinfo(address, service, &hints, &addresses);
+    if (error != 0) {
+#if defined(KRPC_ERROR_MESSAGES) && !defined(_WIN32)
+      krpc_set_error_cause(gai_strerror(error));
+#else
+      (void)error;
+      krpc_set_system_error_cause();
+#endif
+      KRPC_FAIL_CAUSE(CONNECTION, "Failed to resolve the server address", KRPC_ERROR_IO);
+    }
+  }
   /* The address may resolve to several endpoints, IPv6 and IPv4 among them, and only one of them
      need be listening. Try each until one connects. */
   for (candidate = addresses; candidate != NULL; candidate = candidate->ai_next) {
     result = socket(candidate->ai_family, candidate->ai_socktype, candidate->ai_protocol);
     if (result == INVALID_SOCKET) continue;
     if (connect(result, candidate->ai_addr, (int)candidate->ai_addrlen) == 0) break;
+    // The failure of the last endpoint is the cause, as a later one may yet connect
+    if (candidate->ai_next == NULL) krpc_set_system_error_cause();
     closesocket(result);
     result = INVALID_SOCKET;
   }
   freeaddrinfo(addresses);
-  if (result == INVALID_SOCKET) KRPC_RETURN_ERROR(IO, "failed to connect to server");
+  if (result == INVALID_SOCKET)
+    KRPC_FAIL_CAUSE(CONNECTION, "Failed to connect to the server", KRPC_ERROR_IO);
   /* A request is written in full and then waited on, so holding one back in the hope of more to
      send with it only adds that wait to every call. */
   setsockopt(result, IPPROTO_TCP, TCP_NODELAY, (const char*)&nodelay, sizeof(nodelay));
@@ -183,11 +204,11 @@ krpc_error_t krpc_open_localsocket(krpc_connection_t* connection, const char* pa
   size_t length;
   connection->transport = NULL;
   connection->handle = 0;
-  if (path == NULL) KRPC_RETURN_ERROR(IO, "no socket path to connect to");
+  if (path == NULL) KRPC_FAIL(ARGUMENT, "No socket path to connect to");
   /* The path is copied into a field of a fixed size, so one that does not fit has to be reported
      rather than truncated to name a socket the caller did not ask for. */
   length = strlen(path);
-  if (length >= sizeof(address.sun_path)) KRPC_RETURN_ERROR(IO, "socket path too long");
+  if (length >= sizeof(address.sun_path)) KRPC_FAIL(ARGUMENT, "Socket path too long");
 #ifdef _WIN32
   KRPC_RETURN_ON_ERROR(krpc_start_winsock());
 #endif
@@ -197,10 +218,14 @@ krpc_error_t krpc_open_localsocket(krpc_connection_t* connection, const char* pa
   address.sun_family = AF_UNIX;
   memcpy(address.sun_path, path, length);
   result = socket(AF_UNIX, SOCK_STREAM, 0);
-  if (result == INVALID_SOCKET) KRPC_RETURN_ERROR(IO, "failed to create socket");
+  if (result == INVALID_SOCKET) {
+    krpc_set_system_error_cause();
+    KRPC_FAIL_CAUSE(CONNECTION, "Failed to create a socket", KRPC_ERROR_IO);
+  }
   if (connect(result, (struct sockaddr*)&address, (int)sizeof(address)) != 0) {
+    krpc_set_system_error_cause();
     closesocket(result);
-    KRPC_RETURN_ERROR(IO, "failed to connect to socket");
+    KRPC_FAIL_CAUSE(CONNECTION, "Failed to connect to the socket", KRPC_ERROR_IO);
   }
   krpc_suppress_sigpipe(result);
   connection->transport = &krpc_transport_socket;

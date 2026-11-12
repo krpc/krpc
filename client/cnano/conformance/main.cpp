@@ -9,6 +9,7 @@
 #include <cstdint>
 #include <cstdio>
 #include <iostream>
+#include <map>
 #include <optional>
 #include <stdexcept>
 #include <string>
@@ -31,6 +32,9 @@ namespace krpc_conformance {
 /** Whether a write fault is armed for the client's next write. */
 bool write_fault = false;
 
+/** The message of the armed write fault. */
+std::string write_fault_message;
+
 /** The transport the connection was opened over, which the faulting transport wraps. */
 krpc_transport_t wrapped;
 
@@ -38,6 +42,7 @@ krpc_transport_t wrapped;
 krpc_error_t write_or_fault(uintptr_t handle, const uint8_t* buf, size_t count) {
   if (write_fault) {
     write_fault = false;
+    krpc_set_error_cause(write_fault_message.c_str());
     return KRPC_ERROR_IO;
   }
   return wrapped.write(handle, buf, count);
@@ -62,27 +67,157 @@ using krpc::conformance::Reply;
 
 void write(const Output& message) { write_line(message); }
 
+/** The service and name of an exception, and the macro of its ids. */
+struct ExceptionName {
+  std::string service;
+  std::string name;
+  std::string macro;
+};
+
+#define KRPC_CONFORMANCE_EXCEPTION(service, name, macro)           \
+  {                                                                \
+    std::make_pair(macro), ExceptionName { service, name, #macro } \
+  }
+
+/** The exceptions of the services the testee calls, by their ids. */
+const std::map<std::pair<uint32_t, uint32_t>, ExceptionName> kExceptions = {
+    KRPC_CONFORMANCE_EXCEPTION("KRPC", "InvalidOperationException",
+                               KRPC_EXCEPTION_KRPC_INVALIDOPERATIONEXCEPTION),
+    KRPC_CONFORMANCE_EXCEPTION("KRPC", "ArgumentException", KRPC_EXCEPTION_KRPC_ARGUMENTEXCEPTION),
+    KRPC_CONFORMANCE_EXCEPTION("KRPC", "ArgumentNullException",
+                               KRPC_EXCEPTION_KRPC_ARGUMENTNULLEXCEPTION),
+    KRPC_CONFORMANCE_EXCEPTION("KRPC", "ArgumentOutOfRangeException",
+                               KRPC_EXCEPTION_KRPC_ARGUMENTOUTOFRANGEEXCEPTION),
+    KRPC_CONFORMANCE_EXCEPTION("KRPC", "NullReferenceException",
+                               KRPC_EXCEPTION_KRPC_NULLREFERENCEEXCEPTION),
+    KRPC_CONFORMANCE_EXCEPTION("KRPC", "KeyNotFoundException",
+                               KRPC_EXCEPTION_KRPC_KEYNOTFOUNDEXCEPTION),
+    KRPC_CONFORMANCE_EXCEPTION("KRPC", "IndexOutOfRangeException",
+                               KRPC_EXCEPTION_KRPC_INDEXOUTOFRANGEEXCEPTION),
+    KRPC_CONFORMANCE_EXCEPTION("KRPC", "DivideByZeroException",
+                               KRPC_EXCEPTION_KRPC_DIVIDEBYZEROEXCEPTION),
+    KRPC_CONFORMANCE_EXCEPTION("KRPC", "NotSupportedException",
+                               KRPC_EXCEPTION_KRPC_NOTSUPPORTEDEXCEPTION),
+    KRPC_CONFORMANCE_EXCEPTION("KRPC", "TimeoutException", KRPC_EXCEPTION_KRPC_TIMEOUTEXCEPTION),
+    KRPC_CONFORMANCE_EXCEPTION("KRPC", "OverflowException", KRPC_EXCEPTION_KRPC_OVERFLOWEXCEPTION),
+    KRPC_CONFORMANCE_EXCEPTION("KRPC", "ObjectDestroyedException",
+                               KRPC_EXCEPTION_KRPC_OBJECTDESTROYEDEXCEPTION),
+    KRPC_CONFORMANCE_EXCEPTION("KRPC", "ObjectNotLoadedException",
+                               KRPC_EXCEPTION_KRPC_OBJECTNOTLOADEDEXCEPTION),
+    KRPC_CONFORMANCE_EXCEPTION("KRPC", "UnsupportedSceneException",
+                               KRPC_EXCEPTION_KRPC_UNSUPPORTEDSCENEEXCEPTION),
+    KRPC_CONFORMANCE_EXCEPTION("KRPC", "StreamRemovedException",
+                               KRPC_EXCEPTION_KRPC_STREAMREMOVEDEXCEPTION),
+    KRPC_CONFORMANCE_EXCEPTION("TestService", "CustomException",
+                               KRPC_EXCEPTION_TESTSERVICE_CUSTOMEXCEPTION),
+};
+
+/** The name of an error code, the testee's native type for an error with no exception. */
+std::string code_name(krpc_error_t code) {
+  switch (code) {
+    case KRPC_ERROR_CONNECTION:
+      return "KRPC_ERROR_CONNECTION";
+    case KRPC_ERROR_CONNECTION_REFUSED:
+      return "KRPC_ERROR_CONNECTION_REFUSED";
+    case KRPC_ERROR_SERVER:
+      return "KRPC_ERROR_SERVER";
+    case KRPC_ERROR_ENCODING:
+      return "KRPC_ERROR_ENCODING";
+    case KRPC_ERROR_ARGUMENT:
+      return "KRPC_ERROR_ARGUMENT";
+    case KRPC_ERROR_NO_MEMORY:
+      return "KRPC_ERROR_NO_MEMORY";
+    case KRPC_ERROR_BUFFER_TOO_SMALL:
+      return "KRPC_ERROR_BUFFER_TOO_SMALL";
+    case KRPC_ERROR_IO:
+      return "KRPC_ERROR_IO";
+    case KRPC_ERROR_EOF:
+      return "KRPC_ERROR_EOF";
+    default:
+      return std::to_string(static_cast<int>(code));
+  }
+}
+
+/** The name of a ConnectionResponse status, or its number for one the protocol lacks. */
+std::string status_name(int16_t status) {
+  switch (status) {
+    case krpc_schema_ConnectionResponse_Status_OK:
+      return "OK";
+    case krpc_schema_ConnectionResponse_Status_MALFORMED_MESSAGE:
+      return "MALFORMED_MESSAGE";
+    case krpc_schema_ConnectionResponse_Status_TIMEOUT:
+      return "TIMEOUT";
+    case krpc_schema_ConnectionResponse_Status_WRONG_PROTOCOL_VERSION:
+      return "WRONG_PROTOCOL_VERSION";
+    case krpc_schema_ConnectionResponse_Status_DENIED:
+      return "DENIED";
+    default:
+      return std::to_string(status);
+  }
+}
+
+/** The name of a Disconnect reason, or its number for one the protocol lacks. */
+std::string reason_name(int16_t reason) {
+  switch (reason) {
+    case krpc_schema_Disconnect_Reason_CLOSED:
+      return "CLOSED";
+    case krpc_schema_Disconnect_Reason_SERVER_STOPPED:
+      return "SERVER_STOPPED";
+    case krpc_schema_Disconnect_Reason_REMOVED:
+      return "REMOVED";
+    case krpc_schema_Disconnect_Reason_MALFORMED_MESSAGE:
+      return "MALFORMED_MESSAGE";
+    case krpc_schema_Disconnect_Reason_PROTOCOL_ERROR:
+      return "PROTOCOL_ERROR";
+    case krpc_schema_Disconnect_Reason_TIMEOUT:
+      return "TIMEOUT";
+    default:
+      return std::to_string(reason);
+  }
+}
+
+/** The kind of error a code is, and the details the client recorded for it. */
+void classify(const ClientError& client_error, Error* error) {
+  const auto& info = client_error.info;
+  switch (client_error.code) {
+    case KRPC_ERROR_CONNECTION:
+    case KRPC_ERROR_CONNECTION_REFUSED:
+    case KRPC_ERROR_IO:
+    case KRPC_ERROR_EOF:
+      error->set_kind(Error::CONNECTION);
+      break;
+    case KRPC_ERROR_SERVER:
+      error->set_kind(Error::SERVER);
+      break;
+    case KRPC_ERROR_ENCODING:
+      error->set_kind(Error::ENCODING);
+      break;
+    case KRPC_ERROR_ARGUMENT:
+    case KRPC_ERROR_BUFFER_TOO_SMALL:
+      error->set_kind(Error::ARGUMENT);
+      break;
+    default:
+      error->set_kind(Error::KIND_UNSPECIFIED);
+      break;
+  }
+  auto exception = kExceptions.find(std::make_pair(info.service, info.exception));
+  if (client_error.code == KRPC_ERROR_SERVER && exception != kExceptions.end()) {
+    error->set_service(exception->second.service);
+    error->set_name(exception->second.name);
+    error->add_native_types(exception->second.macro);
+  } else {
+    error->add_native_types(code_name(client_error.code));
+  }
+  if (info.status != -1) error->set_status(status_name(info.status));
+  if (info.reason != -1) error->set_reason(reason_name(info.reason));
+}
+
 Error to_error(const std::exception& exn) {
   Error error;
   error.set_message(exn.what());
   error.set_kind(Error::SERVER);
   if (dynamic_cast<const Unsupported*>(&exn) != nullptr) error.set_kind(Error::UNSUPPORTED);
-  if (auto client_error = dynamic_cast<const ClientError*>(&exn)) {
-    switch (client_error->code) {
-      case KRPC_ERROR_IO:
-      case KRPC_ERROR_EOF:
-      case KRPC_ERROR_CONNECTION_FAILED:
-      case KRPC_ERROR_CONNECTION_REFUSED:
-        error.set_kind(Error::CONNECTION);
-        break;
-      case KRPC_ERROR_ENCODING_FAILED:
-      case KRPC_ERROR_DECODING_FAILED:
-        error.set_kind(Error::ENCODING);
-        break;
-      default:
-        break;
-    }
-  }
+  if (auto client_error = dynamic_cast<const ClientError*>(&exn)) classify(*client_error, &error);
   return error;
 }
 
@@ -220,8 +355,8 @@ class Testee {
         break;
       }
       case Command::kFailWrite:
-        // The client's errors carry no message, so the fault's message goes unused
         write_fault = true;
+        write_fault_message = command.fail_write().message();
         *reply->mutable_value() = result_none();
         break;
       default:
@@ -317,11 +452,11 @@ class Testee {
     result = with_write_faults(result);
     krpc_error_t error = krpc_connect(result, command.name().c_str());
     if (error != KRPC_OK) {
-      std::string message = krpc_get_error_message();
-      // A failed connect over a serial port leaves the line open for a retry. Every other
-      // failed connect has closed the connection.
-      if (error == KRPC_ERROR_CONNECTION_FAILED && result.transport->resumable) krpc_close(result);
-      throw ClientError(error, message);
+      ClientError client_error(error);
+      // A failed handshake over a serial port leaves the line open for a retry. A refusal, and
+      // every failed connect over another transport, has closed the connection.
+      if (result.transport->resumable && error != KRPC_ERROR_CONNECTION_REFUSED) krpc_close(result);
+      throw client_error;
     }
     connection = result;
     open = true;
@@ -342,6 +477,7 @@ int main() {
   krpc::conformance::Output hello;
   hello.mutable_hello()->set_client("cnano");
   hello.mutable_hello()->add_profiles("core");
+  hello.mutable_hello()->add_profiles("error-types");
   hello.mutable_hello()->add_profiles("functions");
   hello.mutable_hello()->add_protocols("tcpip");
   hello.mutable_hello()->add_protocols("localsocket");

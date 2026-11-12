@@ -301,6 +301,52 @@ The base class of each kind of generated type is named ``Remote<Kind>``: ``Remot
 language's own form where it has one, such as an enum and a struct in C++ and C#, and a
 ``NamedTuple`` for a Python structure.
 
+Errors
+------
+
+The :doc:`specification </client-spec/errors>` gives the kinds of error and the situations that
+raise each. The clients name them alike:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Error
+     - Raised for
+   * - ``RemoteError``
+     - Never raised itself. The base of the others
+   * - ``ConnectionError``
+     - The connection error
+   * - ``ServerError``
+     - The server error, when the language has no type for the exception
+   * - ``StreamError``
+     - The stream error
+   * - ``EncodingError``
+     - The encoding error
+   * - ``CompilationError``
+     - Code that does not compile into a server side function, in Python and C#
+
+C++ uses these names in ``krpc::``. C# and Java end each with ``Exception`` in place of ``Error``,
+as their conventions do. Lua has no ``StreamError``, as it has no streams. C-nano returns a code
+per kind.
+
+* **The base follows the generated bases.** ``RemoteError`` is named as ``RemoteObject`` and
+  ``RemoteService`` are. A program catches every error of the client's own with it.
+* **The server error is named for where it comes from.** A server error reaches the program through
+  a call, a stream or an event, so a name for one of them would mislead. It can still be the
+  program's mistake, such as ``KRPC.ArgumentException``.
+* **A mapped server exception is only the language's own type.** It is caught as the same failure
+  in local code would be. Deriving ``ServerError`` as well would take multiple inheritance in
+  Python and C++, which C# and Java lack. A program that handles every error uses the language's
+  catch-all.
+* **No generated class stands for a mapped exception the client never raises.** A ``catch`` naming
+  such a class would never fire. C# and Java generate no class, and C++ generates an alias of the
+  native type. A mapped exception with no native type in a language is a generated class deriving
+  ``ServerError``.
+* **Misuse is the language's own error.** An argument the client rejects raises the language's
+  argument error. A call in a state the client rejects raises its state error, such as Python's
+  ``TypeError`` for calling a declaration. Neither derives ``RemoteError``, as nothing remote has
+  failed.
+
 .. toctree::
    :hidden:
 

@@ -21,6 +21,7 @@ typedef struct {
   uint8_t *data;
   size_t size;
   size_t used;
+  bool wrote;
 } krpc_writer_t;
 
 /* The most room the size a message is prefixed with can need in front of it */
@@ -84,30 +85,193 @@ static krpc_error_t krpc_send_disconnect(krpc_connection_t connection,
   return krpc_send_message(connection, krpc_schema_Message_fields, &message);
 }
 
+/* Fail with the connection error for a transport's error, which ends the session */
+static krpc_error_t krpc_connection_failed(krpc_error_t cause) {
+  krpc_session_ended = true;
+  (void)cause;
+  KRPC_FAIL_CAUSE(CONNECTION, "Connection failed", cause);
+}
+
 /* End the session on a message the server should not have sent */
 static krpc_error_t krpc_protocol_error(krpc_connection_t connection) {
   krpc_send_disconnect(connection, krpc_schema_Disconnect_Reason_PROTOCOL_ERROR);
   krpc_session_ended = true;
-  KRPC_RETURN_ERROR(CONNECTION_FAILED, "unexpected message from the server");
+  krpc_clear_error_cause();
+  KRPC_FAIL(CONNECTION, "Unexpected message from the server");
 }
 
 /* End the session on a message that fails to parse */
 static krpc_error_t krpc_malformed_message(krpc_connection_t connection) {
   krpc_send_disconnect(connection, krpc_schema_Disconnect_Reason_MALFORMED_MESSAGE);
   krpc_session_ended = true;
-  KRPC_RETURN_ERROR(CONNECTION_FAILED, "failed to parse a message from the server");
+  krpc_clear_error_cause();
+  KRPC_FAIL(CONNECTION, "Malformed message from the server");
 }
 
-/* Close a connection whose handshake failed. No session started, so krpc_disconnect has none to
-   end. */
-static void krpc_close_failed(krpc_connection_t connection) {
+/* End a handshake that failed. No session started, so krpc_disconnect has none to end. A
+   resumable link stays open for the program to retry, unless the server refused the
+   connection. */
+static krpc_error_t krpc_handshake_failed(krpc_connection_t connection, krpc_error_t error) {
   krpc_session_ended = true;
-  krpc_close(connection);
+  if (!connection.transport->resumable || error == KRPC_ERROR_CONNECTION_REFUSED)
+    krpc_close(connection);
+  return error;
+}
+
+#ifdef KRPC_ERROR_MESSAGES
+
+/* Add what is left of a string field to the message, in chunks, to avoid needing a buffer as
+   large as the field */
+static bool krpc_append_error_field(pb_istream_t *stream) {
+  char chunk[32];
+  while (stream->bytes_left > 0) {
+    size_t size = stream->bytes_left < sizeof(chunk) ? stream->bytes_left : sizeof(chunk);
+    if (!pb_read(stream, (pb_byte_t *)chunk, size))
+      KRPC_CALLBACK_RETURN_STREAM_ERROR("failed to decode an error message", stream);
+    krpc_append_error_message(chunk, size);
+  }
+  return true;
+}
+
+/* Decode the message of a connection response or a disconnect, as the cause of the error it
+   fails with */
+static bool krpc_decode_callback_cause(pb_istream_t *stream, const pb_field_t *field, void **arg) {
+  (void)field;
+  (void)arg;
+  krpc_begin_error_cause();
+  return krpc_append_error_field(stream);
+}
+
+/* Whether the colon after the name of a server error's exception has been added */
+static bool krpc_error_described;
+
+/* Add the colon that follows the name of an exception, once */
+static void krpc_describe_error(void) {
+  if (!krpc_error_described && krpc_get_error_message()[0] != '\0')
+    krpc_append_error_message(": ", 2);
+  krpc_error_described = true;
+}
+
+/* Decode one of the string fields of a server error onto the end of the message, after the
+   separator that comes before it. A separator is skipped when nothing has been added yet, so
+   that the fields the server left empty leave no stray punctuation behind. */
+static bool krpc_decode_callback_error_string(pb_istream_t *stream, const pb_field_t *field,
+                                              void **arg) {
+  (void)arg;
+  if (stream->bytes_left == 0) return true;
+  if (field->tag == krpc_schema_Error_exception_tag) {
+    if (krpc_get_error_message()[0] != '\0') krpc_append_error_message(".", 1);
+  } else if (field->tag == krpc_schema_Error_description_tag) {
+    krpc_describe_error();
+  } else if (field->tag == krpc_schema_Error_stack_trace_tag) {
+    krpc_describe_error();
+    krpc_append_error_message("\nServer stack trace:\n", 21);
+  }
+  return krpc_append_error_field(stream);
+}
+
+#endif
+
+/* The server error a response holds */
+typedef struct {
+  bool failed;
+  uint32_t service;
+  uint32_t exception;
+} krpc_server_error_t;
+
+static bool krpc_decode_callback_error(pb_istream_t *stream, const pb_field_t *field, void **arg) {
+  krpc_server_error_t *server_error = (krpc_server_error_t *)(*arg);
+  (void)field;
+  server_error->failed = true;
+#ifdef KRPC_ERROR_CODES_ONLY
+  // Only the code is kept, so the error is skipped unparsed
+  if (!pb_read(stream, NULL, stream->bytes_left))
+    KRPC_CALLBACK_RETURN_STREAM_ERROR("failed to skip an error", stream);
+#else
+  {
+    krpc_schema_Error error = krpc_schema_Error_init_default;
+#ifdef KRPC_ERROR_MESSAGES
+    krpc_begin_error_cause();
+    krpc_error_described = false;
+    error.service.funcs.decode = &krpc_decode_callback_error_string;
+    error.exception.funcs.decode = &krpc_decode_callback_error_string;
+    error.description.funcs.decode = &krpc_decode_callback_error_string;
+    error.stack_trace.funcs.decode = &krpc_decode_callback_error_string;
+#endif
+    if (!pb_decode(stream, krpc_schema_Error_fields, &error))
+      KRPC_CALLBACK_RETURN_STREAM_ERROR("failed to decode an error", stream);
+#ifdef KRPC_ERROR_MESSAGES
+    // An exception with an empty description keeps the colon after its name
+    krpc_describe_error();
+#endif
+    server_error->service = error.service_id;
+    server_error->exception = error.exception_id;
+  }
+#endif
+  return true;
+}
+
+/* What the content callback of a message needs: the result to copy in, which carries the decode
+   callback for its value, and the server error the decode callbacks for an error report to.
+   Both are null in the handshake. */
+typedef struct {
+  const krpc_schema_ProcedureResult *result;
+  krpc_server_error_t *server_error;
+} krpc_message_decoding_t;
+
+/* Set up the decode callbacks of a message once nanopb has started decoding it. Decoding the
+   tag of a case of a Message clears the case's fields, which would discard callbacks set any
+   earlier. */
+static bool krpc_decode_callback_content(pb_istream_t *stream, const pb_field_t *field,
+                                         void **arg) {
+  const krpc_message_decoding_t *decoding = (const krpc_message_decoding_t *)(*arg);
+  (void)stream;
+  if (field->tag == krpc_schema_Message_response_tag && decoding->result != NULL) {
+    krpc_schema_Response *response = (krpc_schema_Response *)field->pData;
+    response->results[0] = *decoding->result;
+    response->error.funcs.decode = &krpc_decode_callback_error;
+    response->error.arg = decoding->server_error;
+    response->results[0].error.funcs.decode = &krpc_decode_callback_error;
+    response->results[0].error.arg = decoding->server_error;
+  }
+#ifdef KRPC_ERROR_MESSAGES
+  if (field->tag == krpc_schema_Message_connection_response_tag)
+    ((krpc_schema_ConnectionResponse *)field->pData)->message.funcs.decode =
+        &krpc_decode_callback_cause;
+  if (field->tag == krpc_schema_Message_disconnect_tag)
+    ((krpc_schema_Disconnect *)field->pData)->message.funcs.decode = &krpc_decode_callback_cause;
+#endif
+  return true;
+}
+
+/* Fail on a disconnect from the server, with its reason */
+static krpc_error_t krpc_disconnected(const krpc_schema_Disconnect *disconnect) {
+  krpc_error_t error =
+      KRPC_FAILED(KRPC_ERROR_CONNECTION, "Connection ended by the server", KRPC_NO_CAUSE);
+  KRPC_SET_ERROR_DETAIL(reason, (int16_t)disconnect->reason);
+  return error;
+}
+
+/* Fail on a connection response with a status other than OK. DENIED and
+   WRONG_PROTOCOL_VERSION refuse the connection. On a resumable link, any other status means the
+   server read part of an earlier session's message, or nothing, as the request. */
+static krpc_error_t krpc_refused(const krpc_schema_ConnectionResponse *response) {
+  krpc_error_t error;
+  if (response->status == krpc_schema_ConnectionResponse_Status_DENIED ||
+      response->status == krpc_schema_ConnectionResponse_Status_WRONG_PROTOCOL_VERSION)
+    error = KRPC_FAILED(KRPC_ERROR_CONNECTION_REFUSED, "Connection refused by the server",
+                        KRPC_NO_CAUSE);
+  else
+    error =
+        KRPC_FAILED(KRPC_ERROR_CONNECTION, "Connection not accepted by the server", KRPC_NO_CAUSE);
+  KRPC_SET_ERROR_DETAIL(status, (int16_t)response->status);
+  return error;
 }
 
 krpc_error_t krpc_connect(krpc_connection_t connection, const char *client_name) {
   bool resumable;
-  if (connection.transport == NULL) KRPC_RETURN_ERROR(IO, "connection is not open");
+  krpc_clear_error_cause();
+  if (connection.transport == NULL) KRPC_FAIL(CONNECTION, "The connection is not open");
   resumable = connection.transport->resumable;
   krpc_next_id = 1;
   krpc_session_ended = false;
@@ -116,163 +280,79 @@ krpc_error_t krpc_connect(krpc_connection_t connection, const char *client_name)
     // Send connection request message
     krpc_schema_Message message = krpc_schema_Message_init_default;
     krpc_schema_ConnectionRequest *request = &message.content.connection_request;
+    krpc_error_t error;
     message.which_content = krpc_schema_Message_connection_request_tag;
     request->protocol_version = KRPC_PROTOCOL_VERSION;
     request->client_name.funcs.encode = &krpc_encode_callback_cstring;
     request->client_name.arg = (void *)client_name;
-    if (krpc_send_message(connection, krpc_schema_Message_fields, &message) != KRPC_OK) {
-      krpc_close_failed(connection);
-      KRPC_RETURN_ERROR(ENCODING_FAILED, "failed to send connection request");
-    }
+    error = krpc_send_message(connection, krpc_schema_Message_fields, &message);
+    if (error != KRPC_OK) return krpc_handshake_failed(connection, error);
   }
 
   while (true) {
     // Receive connection response message
     krpc_schema_Message message = krpc_schema_Message_init_default;
     krpc_schema_ConnectionResponse *response = &message.content.connection_response;
-    if (krpc_receive_message(connection, krpc_schema_Message_fields, &message) != KRPC_OK) {
-      // Part of an earlier session's message, read as one of its own. The line stays open for
-      // the program to retry.
-      if (resumable)
-        KRPC_RETURN_ERROR(CONNECTION_FAILED, "failed to receive connection response, retry");
-      krpc_close_failed(connection);
-      KRPC_RETURN_ERROR(CONNECTION_FAILED, "failed to receive connection response");
+    krpc_message_decoding_t decoding = {NULL, NULL};
+    krpc_error_t error;
+    message.cb_content.funcs.decode = &krpc_decode_callback_content;
+    message.cb_content.arg = &decoding;
+    error = krpc_receive_message(connection, krpc_schema_Message_fields, &message);
+    if (error != KRPC_OK) {
+      // On a resumable link this can be part of an earlier session's message, read as one of
+      // its own
+      if (error != KRPC_ERROR_CONNECTION) {
+        krpc_clear_error_cause();
+        error = KRPC_FAILED(KRPC_ERROR_CONNECTION, "Malformed connection response", KRPC_NO_CAUSE);
+      }
+      return krpc_handshake_failed(connection, error);
     }
     if (message.which_content != krpc_schema_Message_connection_response_tag) {
-      if (resumable) {
-        // A disconnect ends the session the request landed in, such as part of an earlier
-        // session's message. The server then waits for a new request.
-        if (message.which_content == krpc_schema_Message_disconnect_tag)
-          KRPC_RETURN_ERROR(CONNECTION_FAILED, "connection ended by server, retry");
-        // A message left on the line by an earlier session
-        continue;
-      }
-      krpc_close_failed(connection);
+      // On a resumable link, a disconnect can end the session the request landed in, such as
+      // part of an earlier session's message. The server then waits for a new request.
       if (message.which_content == krpc_schema_Message_disconnect_tag)
-        KRPC_RETURN_ERROR(CONNECTION_FAILED, "connection ended by server");
-      KRPC_RETURN_ERROR(CONNECTION_FAILED, "expected a response to the connection request");
+        return krpc_handshake_failed(connection, krpc_disconnected(&message.content.disconnect));
+      // A message left on the line by an earlier session
+      if (resumable) continue;
+      krpc_clear_error_cause();
+      return krpc_handshake_failed(
+          connection, KRPC_FAILED(KRPC_ERROR_CONNECTION,
+                                  "Expected a response to the connection request", KRPC_NO_CAUSE));
     }
 
-    // Check the connection status
-    if (response->status == krpc_schema_ConnectionResponse_Status_DENIED) {
-      krpc_close_failed(connection);
-      KRPC_RETURN_ERROR(CONNECTION_REFUSED, "connection denied by server");
-    }
-    if (response->status == krpc_schema_ConnectionResponse_Status_WRONG_PROTOCOL_VERSION) {
-      krpc_close_failed(connection);
-      KRPC_RETURN_ERROR(CONNECTION_REFUSED,
-                        "server does not support the client's protocol version");
-    }
-    if (response->status != krpc_schema_ConnectionResponse_Status_OK) {
-      // The server read part of an earlier session's message, or nothing, as the request. The
-      // line stays open for the program to retry.
-      if (resumable) KRPC_RETURN_ERROR(CONNECTION_FAILED, "connection request was not read, retry");
-      krpc_close_failed(connection);
-      KRPC_RETURN_ERROR(CONNECTION_FAILED, "connection refused by server");
-    }
-    if (response->protocol_version != KRPC_PROTOCOL_VERSION) {
-      krpc_close_failed(connection);
-      KRPC_RETURN_ERROR(CONNECTION_REFUSED,
-                        "server does not support the client's protocol version");
-    }
+    if (response->status != krpc_schema_ConnectionResponse_Status_OK)
+      return krpc_handshake_failed(connection, krpc_refused(response));
+    krpc_clear_error_cause();
+    if (response->protocol_version != KRPC_PROTOCOL_VERSION)
+      return krpc_handshake_failed(
+          connection,
+          KRPC_FAILED(KRPC_ERROR_CONNECTION_REFUSED,
+                      "The server does not support the client's protocol version", KRPC_NO_CAUSE));
     return KRPC_OK;
   }
 }
 
 krpc_error_t krpc_disconnect(krpc_connection_t connection) {
-  if (!krpc_session_ended) krpc_send_disconnect(connection, krpc_schema_Disconnect_Reason_CLOSED);
+  krpc_error_t error;
+  krpc_clear_error_cause();
+  if (connection.transport == NULL) KRPC_FAIL(CONNECTION, "The connection is not open");
+  if (!krpc_session_ended) {
+    // The connection closes whether or not the server hears of it
+    KRPC_MUTE_FAILURES(true);
+    krpc_send_disconnect(connection, krpc_schema_Disconnect_Reason_CLOSED);
+    KRPC_MUTE_FAILURES(false);
+  }
   krpc_session_ended = true;
-  return krpc_close(connection);
-}
-
-#ifdef KRPC_ERROR_MESSAGES
-
-static char krpc_error_message[KRPC_ERROR_MESSAGE_LENGTH];
-
-const char *krpc_get_error_message(void) { return krpc_error_message; }
-
-/* Append to the error message, discarding whatever does not fit */
-static void krpc_append_error_message(const char *str, size_t length) {
-  size_t used = strlen(krpc_error_message);
-  size_t space = KRPC_ERROR_MESSAGE_LENGTH - used - 1;
-  if (length > space) length = space;
-  memcpy(krpc_error_message + used, str, length);
-  krpc_error_message[used + length] = '\0';
-}
-
-/* Decode one of the string fields of an error message onto the end of the error message,
- * preceded by the separator passed as arg. The separator is skipped when nothing has been
- * appended yet, so that fields the server left empty do not leave stray punctuation behind.
- * The string is copied in chunks to avoid needing a buffer as large as the field. */
-static bool krpc_decode_callback_error_string(pb_istream_t *stream, const pb_field_t *field,
-                                              void **arg) {
-  (void)field;
-  if (stream->bytes_left == 0) return true;
-  if (krpc_error_message[0] != '\0') {
-    const char *separator = (const char *)(*arg);
-    krpc_append_error_message(separator, strlen(separator));
-  }
-  char chunk[32];
-  while (stream->bytes_left > 0) {
-    size_t size = stream->bytes_left < sizeof(chunk) ? stream->bytes_left : sizeof(chunk);
-    if (!pb_read(stream, (pb_byte_t *)chunk, size))
-      KRPC_CALLBACK_RETURN_STREAM_ERROR("failed to decode error message field", stream);
-    krpc_append_error_message(chunk, size);
-  }
-  return true;
-}
-
-#endif
-
-static bool krpc_decode_callback_error(pb_istream_t *stream, const pb_field_t *field, void **arg) {
-  krpc_error_t *error_code = (krpc_error_t *)(*arg);
-  *error_code = KRPC_ERROR_RPC_FAILED;
-  krpc_schema_Error error = krpc_schema_Error_init_default;
-#ifdef KRPC_ERROR_MESSAGES
-  krpc_error_message[0] = '\0';
-  error.service.funcs.decode = &krpc_decode_callback_error_string;
-  error.service.arg = (void *)"";
-  error.exception.funcs.decode = &krpc_decode_callback_error_string;
-  error.exception.arg = (void *)".";
-  error.description.funcs.decode = &krpc_decode_callback_error_string;
-  error.description.arg = (void *)": ";
-  error.stack_trace.funcs.decode = &krpc_decode_callback_error_string;
-  error.stack_trace.arg = (void *)"\nServer stack trace:\n";
-#endif
-  if (!pb_decode(stream, krpc_schema_Error_fields, &error))
-    KRPC_RETURN_STREAM_ERROR(DECODING_FAILED, "failed to decode error message", stream);
-  return true;
-}
-
-/* What the content callback of a response needs: the result to copy in, which carries the decode
-   callback for its value, and the error the decode callbacks for an error report to */
-typedef struct {
-  const krpc_schema_ProcedureResult *result;
-  krpc_error_t *rpc_error;
-} krpc_response_decoding_t;
-
-/* Set up the decode callbacks of a response once nanopb has started decoding it. Decoding the
-   tag of a case of a Message clears the case's fields, which would discard callbacks set any
-   earlier. */
-static bool krpc_decode_callback_content(pb_istream_t *stream, const pb_field_t *field,
-                                         void **arg) {
-  (void)stream;
-  if (field->tag == krpc_schema_Message_response_tag) {
-    const krpc_response_decoding_t *decoding = (const krpc_response_decoding_t *)(*arg);
-    krpc_schema_Response *response = (krpc_schema_Response *)field->pData;
-    response->results[0] = *decoding->result;
-    response->error.funcs.decode = &krpc_decode_callback_error;
-    response->error.arg = decoding->rpc_error;
-    response->results[0].error.funcs.decode = &krpc_decode_callback_error;
-    response->results[0].error.arg = decoding->rpc_error;
-  }
-  return true;
+  error = krpc_close(connection);
+  if (error != KRPC_OK) KRPC_FAIL_CAUSE(CONNECTION, "Failed to close the connection", error);
+  return KRPC_OK;
 }
 
 krpc_error_t krpc_invoke(krpc_connection_t connection, krpc_schema_ProcedureResult *result,
                          krpc_schema_ProcedureCall *call) {
   uint64_t id;
-  if (krpc_session_ended) KRPC_RETURN_ERROR(CONNECTION_FAILED, "connection ended");
+  krpc_clear_error_cause();
+  if (krpc_session_ended) KRPC_FAIL(CONNECTION, "The connection has ended");
   id = krpc_next_id++;
   {
     // Create request message containing the procedure call
@@ -282,36 +362,24 @@ krpc_error_t krpc_invoke(krpc_connection_t connection, krpc_schema_ProcedureResu
     request->id = id;
     request->calls[0] = *call;
     request->calls_count = 1;
-
-    // Send request message. A failed write ends the session.
-    {
-      krpc_error_t error = krpc_send_message(connection, krpc_schema_Message_fields, &message);
-      if (error != KRPC_OK) {
-        krpc_session_ended = true;
-        return error;
-      }
-    }
+    KRPC_RETURN_ON_ERROR(krpc_send_message(connection, krpc_schema_Message_fields, &message));
   }
 
   while (true) {
     // Receive response message
     krpc_schema_Message message = krpc_schema_Message_init_default;
     krpc_schema_Response *response = &message.content.response;
-    krpc_error_t rpc_error = KRPC_OK;
-    krpc_response_decoding_t decoding;
+    krpc_server_error_t server_error = {false, 0, 0};
+    krpc_message_decoding_t decoding;
     decoding.result = result;
-    decoding.rpc_error = &rpc_error;
+    decoding.server_error = &server_error;
     message.cb_content.funcs.decode = &krpc_decode_callback_content;
     message.cb_content.arg = &decoding;
 
     {
       krpc_error_t error = krpc_receive_message(connection, krpc_schema_Message_fields, &message);
-      if (error == KRPC_ERROR_DECODING_FAILED) return krpc_malformed_message(connection);
-      // A transport that fails, or ends, ends the session
-      if (error != KRPC_OK) {
-        krpc_session_ended = true;
-        return error;
-      }
+      if (error == KRPC_ERROR_ENCODING) return krpc_malformed_message(connection);
+      if (error != KRPC_OK) return error;
     }
 
     switch (message.which_content) {
@@ -319,7 +387,7 @@ krpc_error_t krpc_invoke(krpc_connection_t connection, krpc_schema_ProcedureResu
         break;
       case krpc_schema_Message_disconnect_tag:
         krpc_session_ended = true;
-        KRPC_RETURN_ERROR(CONNECTION_FAILED, "connection ended by server");
+        return krpc_disconnected(&message.content.disconnect);
       case krpc_schema_Message_connection_response_tag:
         // Each connection request that queued while the server was not reading starts a new
         // session, and its OK replaces the current one
@@ -327,8 +395,9 @@ krpc_error_t krpc_invoke(krpc_connection_t connection, krpc_schema_ProcedureResu
           if (message.content.connection_response.status !=
               krpc_schema_ConnectionResponse_Status_OK) {
             krpc_session_ended = true;
-            KRPC_RETURN_ERROR(CONNECTION_FAILED, "connection refused by server");
+            return krpc_refused(&message.content.connection_response);
           }
+          krpc_clear_error_cause();
           continue;
         }
         return krpc_protocol_error(connection);
@@ -342,17 +411,20 @@ krpc_error_t krpc_invoke(krpc_connection_t connection, krpc_schema_ProcedureResu
     if (response->id != id) return krpc_protocol_error(connection);
     krpc_awaiting_first_response = false;
 
-    if (rpc_error != KRPC_OK) {
-#ifdef KRPC_ERROR_MESSAGES
-      KRPC_RETURN_ERROR(RPC_FAILED, krpc_get_error_message());
-#else
-      KRPC_RETURN_ERROR(RPC_FAILED, "rpc returned an error");
+    if (server_error.failed) {
+      // The message is the one decoded from the error
+#ifndef KRPC_ERROR_CODES_ONLY
+      krpc_fail(KRPC_ERROR_SERVER, NULL, KRPC_NO_CAUSE);
+      krpc_last_error.service = server_error.service;
+      krpc_last_error.exception = server_error.exception;
+#elif defined(KRPC_PRINTS_ERRORS)
+      krpc_fail(KRPC_ERROR_SERVER, "The server returned an error", KRPC_NO_CAUSE);
 #endif
+      return KRPC_ERROR_SERVER;
     }
 
-    // Extract the procedure result message from the response
-    if (response->results_count != 1)
-      KRPC_RETURN_ERROR(NO_RESULTS, "response message does not contain a single result");
+    // A response holds one result, for its one call
+    if (response->results_count != 1) return krpc_protocol_error(connection);
     *result = response->results[0];
     return KRPC_OK;
   }
@@ -362,6 +434,8 @@ static bool buffer_write_callback(pb_ostream_t *stream, const uint8_t *buf, size
   krpc_buffer_t *buffer = (krpc_buffer_t *)stream->state;
   if (count > buffer->size - buffer->used) {
     buffer->overflowed = true;
+    // The message is encoded again, so the failure the overflow causes is not one
+    KRPC_MUTE_FAILURES(true);
     return false;
   }
   memcpy(buffer->data + buffer->used, buf, count);
@@ -374,6 +448,7 @@ static krpc_error_t krpc_writer_flush(krpc_writer_t *writer) {
   size_t used = writer->used;
   writer->used = 0;
   if (used == 0) return KRPC_OK;
+  writer->wrote = true;
   return krpc_write(writer->connection, writer->data, used);
 }
 
@@ -396,7 +471,7 @@ static bool write_callback(pb_ostream_t *stream, const uint8_t *buf, size_t coun
 /* Ask the connection for as much of what the message has left to come as the buffer will hold */
 static krpc_error_t krpc_reader_fill(krpc_reader_t *reader) {
   size_t wanted = reader->remaining;
-  if (wanted == 0) KRPC_RETURN_ERROR(EOF, "read past the end of the message");
+  if (wanted == 0) KRPC_FAIL(ENCODING, "Read past the end of the message");
   if (wanted > sizeof(reader->buffer)) wanted = sizeof(reader->buffer);
   KRPC_RETURN_ON_ERROR(krpc_read(reader->connection, reader->buffer, wanted));
   reader->position = 0;
@@ -433,14 +508,14 @@ static krpc_error_t krpc_read_size(krpc_connection_t connection, size_t *size) {
   unsigned int shift = 0;
   do {
     // A size is 32 bits, so five bytes carry the whole of it, the fifth its top four bits
-    if (shift >= 35) KRPC_RETURN_ERROR(DECODING_FAILED, "message size too big");
+    if (shift >= 35) KRPC_FAIL(ENCODING, "Message size too big");
     KRPC_RETURN_ON_ERROR(krpc_read(connection, &byte, 1));
-    if (shift == 28 && (byte & 0x70)) KRPC_RETURN_ERROR(DECODING_FAILED, "message size too big");
+    if (shift == 28 && (byte & 0x70)) KRPC_FAIL(ENCODING, "Message size too big");
     result |= (uint32_t)(byte & 0x7F) << shift;
     shift += 7;
   } while (byte & 0x80);
 #if SIZE_MAX < UINT32_MAX
-  if (result > SIZE_MAX) KRPC_RETURN_ERROR(DECODING_FAILED, "message size too big");
+  if (result > SIZE_MAX) KRPC_FAIL(ENCODING, "Message size too big");
 #endif
   *size = (size_t)result;
   return KRPC_OK;
@@ -461,16 +536,22 @@ static krpc_error_t krpc_send_message(krpc_connection_t connection, const pb_msg
   uint8_t data[KRPC_BUFFER_SIZE];
   krpc_buffer_t buffer;
   pb_ostream_t stream = {&buffer_write_callback, NULL, SIZE_MAX, 0};
+  bool encoded;
+  bool muted;
   buffer.data = data + KRPC_SIZE_PREFIX_MAX;
   buffer.size = sizeof(data) - KRPC_SIZE_PREFIX_MAX;
   buffer.used = 0;
   buffer.overflowed = false;
   stream.state = &buffer;
+  krpc_callback_error = KRPC_OK;
+  muted = KRPC_FAILURES_MUTED;
   /* A message is prefixed with its size, so writing one in order means knowing how long it is
      before it has been encoded, which costs a pass over it to measure. Encoding it into the
      buffer with room left in front instead means the size is known once it is there, and can
      be written into the room left for it. That halves what encoding a message costs. */
-  if (pb_encode(&stream, fields, message)) {
+  encoded = pb_encode(&stream, fields, message);
+  KRPC_MUTE_FAILURES(muted);
+  if (encoded) {
     size_t size = buffer.used;
     size_t length = krpc_size_prefix_length(size);
     uint8_t *at = buffer.data - length;
@@ -480,12 +561,15 @@ static krpc_error_t krpc_send_message(krpc_connection_t connection, const pb_msg
       size >>= 7;
     }
     *at = (uint8_t)size;
-    return krpc_write(connection, start, length + buffer.used);
+    {
+      krpc_error_t error = krpc_write(connection, start, length + buffer.used);
+      if (error != KRPC_OK) return krpc_connection_failed(error);
+    }
+    return KRPC_OK;
   }
   /* A message that failed to encode for any other reason would only fail the same way again,
      so it is reported here rather than encoded a second time. */
-  if (!buffer.overflowed)
-    KRPC_RETURN_STREAM_ERROR(ENCODING_FAILED, "failed to encode message", &stream);
+  if (!buffer.overflowed) KRPC_FAIL_STREAM(ENCODING, "Failed to encode a message", &stream);
   /* Larger than the buffer, so it is measured and then written a bufferful at a time, through
      the same buffer the message did not fit in. */
   {
@@ -495,10 +579,22 @@ static krpc_error_t krpc_send_message(krpc_connection_t connection, const pb_msg
     writer.data = data;
     writer.size = sizeof(data);
     writer.used = 0;
+    writer.wrote = false;
     streamed.state = &writer;
-    if (!pb_encode_delimited(&streamed, fields, message))
-      KRPC_RETURN_STREAM_ERROR(ENCODING_FAILED, "failed to encode message", &streamed);
-    return krpc_writer_flush(&writer);
+    krpc_callback_error = KRPC_OK;
+    if (!pb_encode_delimited(&streamed, fields, message)) {
+      krpc_error_t error =
+          krpc_stream_failed(KRPC_ERROR_ENCODING, KRPC_ERROR_TEXT("Failed to encode a message"));
+      if (error == KRPC_ERROR_IO || error == KRPC_ERROR_EOF) return krpc_connection_failed(error);
+      // Part of the message has been sent, so the session cannot go on
+      if (writer.wrote) krpc_session_ended = true;
+      return error;
+    }
+    {
+      krpc_error_t error = krpc_writer_flush(&writer);
+      if (error != KRPC_OK) return krpc_connection_failed(error);
+    }
+    return KRPC_OK;
   }
 }
 
@@ -507,14 +603,28 @@ static krpc_error_t krpc_receive_message(krpc_connection_t connection, const pb_
   krpc_reader_t reader;
   pb_istream_t stream = {&read_callback, NULL, 0};
   size_t size;
-  KRPC_RETURN_ON_ERROR(krpc_read_size(connection, &size));
+  {
+    krpc_error_t error = krpc_read_size(connection, &size);
+    if (error == KRPC_ERROR_IO || error == KRPC_ERROR_EOF) return krpc_connection_failed(error);
+    if (error != KRPC_OK) return error;
+  }
   reader.connection = connection;
   reader.remaining = size;
   reader.position = 0;
   reader.available = 0;
   stream.state = &reader;
   stream.bytes_left = size;
-  if (!pb_decode(&stream, fields, message))
-    KRPC_RETURN_STREAM_ERROR(DECODING_FAILED, "failed to decode message", &stream);
+  krpc_callback_error = KRPC_OK;
+  if (!pb_decode(&stream, fields, message)) {
+    krpc_error_t error =
+        krpc_stream_failed(KRPC_ERROR_ENCODING, KRPC_ERROR_TEXT("Failed to decode a message"));
+    if (error == KRPC_ERROR_IO || error == KRPC_ERROR_EOF) return krpc_connection_failed(error);
+    // The rest of the message is skipped, so the next read starts at the next message
+    while (reader.remaining > 0) {
+      krpc_error_t skipped = krpc_reader_fill(&reader);
+      if (skipped != KRPC_OK) return krpc_connection_failed(skipped);
+    }
+    return error;
+  }
   return KRPC_OK;
 }

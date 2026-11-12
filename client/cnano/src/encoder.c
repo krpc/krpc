@@ -71,12 +71,12 @@ krpc_error_t krpc_add_null_argument(krpc_call_t* call, uint32_t position) {
 krpc_error_t krpc_encode_double(pb_ostream_t* stream, double value) {
 #ifndef __AVR__
   if (!pb_encode_fixed64(stream, &value))
-    KRPC_RETURN_STREAM_ERROR(ENCODING_FAILED, "failed to encode double", stream);
+    KRPC_FAIL_STREAM(ENCODING, "Failed to encode double", stream);
 #else
   uint64_t tmp;
   krpc_float32_to_float64(&value, &tmp);
   if (!pb_encode_fixed64(stream, &tmp))
-    KRPC_RETURN_STREAM_ERROR(ENCODING_FAILED, "failed to encode double", stream);
+    KRPC_FAIL_STREAM(ENCODING, "Failed to encode double", stream);
 #endif
   return KRPC_OK;
 }
@@ -119,7 +119,7 @@ for typ, ctyp, enc, getval, _ in types:
     cog.outl("""
 krpc_error_t krpc_encode_""" + typ + """(pb_ostream_t * stream, """ + ctyp + """ value) {
   if (!pb_encode_""" + enc + """(stream, """ + getval + """value))
-    KRPC_RETURN_STREAM_ERROR(ENCODING_FAILED, "failed to encode """ + typ + """", stream);
+    KRPC_FAIL_STREAM(ENCODING, "Failed to encode """ + typ + """", stream);
   return KRPC_OK;
 }""")
 
@@ -171,49 +171,48 @@ bool krpc_encode_callback_""" + typ + """(
 
 krpc_error_t krpc_encode_float(pb_ostream_t* stream, float value) {
   if (!pb_encode_fixed32(stream, &value))
-    KRPC_RETURN_STREAM_ERROR(ENCODING_FAILED, "failed to encode float", stream);
+    KRPC_FAIL_STREAM(ENCODING, "Failed to encode float", stream);
   return KRPC_OK;
 }
 
 krpc_error_t krpc_encode_int32(pb_ostream_t* stream, int32_t value) {
   if (!pb_encode_svarint(stream, value))
-    KRPC_RETURN_STREAM_ERROR(ENCODING_FAILED, "failed to encode int32", stream);
+    KRPC_FAIL_STREAM(ENCODING, "Failed to encode int32", stream);
   return KRPC_OK;
 }
 
 krpc_error_t krpc_encode_int64(pb_ostream_t* stream, int64_t value) {
   if (!pb_encode_svarint(stream, value))
-    KRPC_RETURN_STREAM_ERROR(ENCODING_FAILED, "failed to encode int64", stream);
+    KRPC_FAIL_STREAM(ENCODING, "Failed to encode int64", stream);
   return KRPC_OK;
 }
 
 krpc_error_t krpc_encode_uint32(pb_ostream_t* stream, uint32_t value) {
   if (!pb_encode_varint(stream, value))
-    KRPC_RETURN_STREAM_ERROR(ENCODING_FAILED, "failed to encode uint32", stream);
+    KRPC_FAIL_STREAM(ENCODING, "Failed to encode uint32", stream);
   return KRPC_OK;
 }
 
 krpc_error_t krpc_encode_uint64(pb_ostream_t* stream, uint64_t value) {
   if (!pb_encode_varint(stream, value))
-    KRPC_RETURN_STREAM_ERROR(ENCODING_FAILED, "failed to encode uint64", stream);
+    KRPC_FAIL_STREAM(ENCODING, "Failed to encode uint64", stream);
   return KRPC_OK;
 }
 
 krpc_error_t krpc_encode_bool(pb_ostream_t* stream, bool value) {
-  if (!pb_encode_varint(stream, value))
-    KRPC_RETURN_STREAM_ERROR(ENCODING_FAILED, "failed to encode bool", stream);
+  if (!pb_encode_varint(stream, value)) KRPC_FAIL_STREAM(ENCODING, "Failed to encode bool", stream);
   return KRPC_OK;
 }
 
 krpc_error_t krpc_encode_object(pb_ostream_t* stream, krpc_object_t value) {
   if (!pb_encode_varint(stream, value))
-    KRPC_RETURN_STREAM_ERROR(ENCODING_FAILED, "failed to encode object", stream);
+    KRPC_FAIL_STREAM(ENCODING, "Failed to encode object", stream);
   return KRPC_OK;
 }
 
 krpc_error_t krpc_encode_enum(pb_ostream_t* stream, krpc_enum_t value) {
   if (!pb_encode_svarint(stream, value))
-    KRPC_RETURN_STREAM_ERROR(ENCODING_FAILED, "failed to encode enum", stream);
+    KRPC_FAIL_STREAM(ENCODING, "Failed to encode enum", stream);
   return KRPC_OK;
 }
 
@@ -354,16 +353,16 @@ bool krpc_encode_callback_enum(pb_ostream_t* stream, const pb_field_t* field, vo
 // [[[end]]]
 
 krpc_error_t krpc_encode_string(pb_ostream_t* stream, const char* str) {
+  if (str == NULL) KRPC_FAIL(ARGUMENT, "A string is null");
   if (!pb_encode_string(stream, (const pb_byte_t*)str, strlen(str)))
-    KRPC_RETURN_STREAM_ERROR(ENCODING_FAILED, "failed to encode string", stream);
+    KRPC_FAIL_STREAM(ENCODING, "Failed to encode string", stream);
   return KRPC_OK;
 }
 
 krpc_error_t krpc_encode_bytes(pb_ostream_t* stream, krpc_bytes_t bytes) {
-  if (bytes.size > 0 && bytes.data == NULL)
-    KRPC_RETURN_ERROR(ENCODING_FAILED, "bytes data is null");
+  if (bytes.size > 0 && bytes.data == NULL) KRPC_FAIL(ARGUMENT, "Bytes data is null");
   if (!pb_encode_string(stream, bytes.data, bytes.size))
-    KRPC_RETURN_STREAM_ERROR(ENCODING_FAILED, "failed to encode bytes", stream);
+    KRPC_FAIL_STREAM(ENCODING, "Failed to encode bytes", stream);
   return KRPC_OK;
 }
 
@@ -396,8 +395,7 @@ bool krpc_encode_callback_bytes(pb_ostream_t* stream, const pb_field_t* field, v
   if (!pb_encode_tag_for_field(stream, field)) KRPC_CALLBACK_RETURN_ERROR("encoding tag for bytes");
   krpc_bytes_t* value = (krpc_bytes_t*)(*arg);
   size_t size;
-  if (KRPC_OK != krpc_encode_size_bytes(&size, *value))
-    KRPC_CALLBACK_RETURN_ERROR("getting size for bytes");
+  KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_bytes(&size, *value));
   if (!pb_encode_varint(stream, size)) KRPC_CALLBACK_RETURN_ERROR("encoding size for bytes");
   KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_bytes(stream, *value));
   return true;
@@ -410,7 +408,7 @@ for typ in types:
 krpc_error_t krpc_encode_message_""" + typ + """(
   pb_ostream_t * stream, const krpc_schema_""" + typ + """ * value) {
   if (!pb_encode(stream, krpc_schema_""" + typ + """_fields, value))
-    KRPC_RETURN_STREAM_ERROR(ENCODING_FAILED, "failed to encode """ + typ + """", stream);
+    KRPC_FAIL_STREAM(ENCODING, "Failed to encode """ + typ + """", stream);
   return KRPC_OK;
 }""")
 for typ in types:
@@ -441,39 +439,39 @@ bool krpc_encode_callback_message_""" + typ + """(
 krpc_error_t krpc_encode_message_ProcedureCall(pb_ostream_t* stream,
                                                const krpc_schema_ProcedureCall* value) {
   if (!pb_encode(stream, krpc_schema_ProcedureCall_fields, value))
-    KRPC_RETURN_STREAM_ERROR(ENCODING_FAILED, "failed to encode ProcedureCall", stream);
+    KRPC_FAIL_STREAM(ENCODING, "Failed to encode ProcedureCall", stream);
   return KRPC_OK;
 }
 
 krpc_error_t krpc_encode_message_Tuple(pb_ostream_t* stream, const krpc_schema_Tuple* value) {
   if (!pb_encode(stream, krpc_schema_Tuple_fields, value))
-    KRPC_RETURN_STREAM_ERROR(ENCODING_FAILED, "failed to encode Tuple", stream);
+    KRPC_FAIL_STREAM(ENCODING, "Failed to encode Tuple", stream);
   return KRPC_OK;
 }
 
 krpc_error_t krpc_encode_message_List(pb_ostream_t* stream, const krpc_schema_List* value) {
   if (!pb_encode(stream, krpc_schema_List_fields, value))
-    KRPC_RETURN_STREAM_ERROR(ENCODING_FAILED, "failed to encode List", stream);
+    KRPC_FAIL_STREAM(ENCODING, "Failed to encode List", stream);
   return KRPC_OK;
 }
 
 krpc_error_t krpc_encode_message_Set(pb_ostream_t* stream, const krpc_schema_Set* value) {
   if (!pb_encode(stream, krpc_schema_Set_fields, value))
-    KRPC_RETURN_STREAM_ERROR(ENCODING_FAILED, "failed to encode Set", stream);
+    KRPC_FAIL_STREAM(ENCODING, "Failed to encode Set", stream);
   return KRPC_OK;
 }
 
 krpc_error_t krpc_encode_message_Dictionary(pb_ostream_t* stream,
                                             const krpc_schema_Dictionary* value) {
   if (!pb_encode(stream, krpc_schema_Dictionary_fields, value))
-    KRPC_RETURN_STREAM_ERROR(ENCODING_FAILED, "failed to encode Dictionary", stream);
+    KRPC_FAIL_STREAM(ENCODING, "Failed to encode Dictionary", stream);
   return KRPC_OK;
 }
 
 krpc_error_t krpc_encode_message_DictionaryEntry(pb_ostream_t* stream,
                                                  const krpc_schema_DictionaryEntry* value) {
   if (!pb_encode(stream, krpc_schema_DictionaryEntry_fields, value))
-    KRPC_RETURN_STREAM_ERROR(ENCODING_FAILED, "failed to encode DictionaryEntry", stream);
+    KRPC_FAIL_STREAM(ENCODING, "Failed to encode DictionaryEntry", stream);
   return KRPC_OK;
 }
 

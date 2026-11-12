@@ -12,9 +12,10 @@ static krpc_error_t krpc_serial_read(uintptr_t handle, uint8_t* buf, size_t coun
   while (total < count) {
     ssize_t result = read((int)handle, buf + total, count - total);
     if (result == -1) {
-      KRPC_RETURN_ERROR(IO, "read failed");
+      krpc_set_system_error_cause();
+      return KRPC_ERROR_IO;
     } else if (result == 0) {
-      KRPC_RETURN_ERROR(EOF, "eof received");
+      KRPC_TRANSPORT_FAIL(EOF, "End of file on the serial port");
     } else {
       total += result;
     }
@@ -23,7 +24,12 @@ static krpc_error_t krpc_serial_read(uintptr_t handle, uint8_t* buf, size_t coun
 }
 
 static krpc_error_t krpc_serial_write(uintptr_t handle, const uint8_t* buf, size_t count) {
-  if ((ssize_t)count != write((int)handle, buf, count)) KRPC_RETURN_ERROR(IO, "write failed");
+  ssize_t result = write((int)handle, buf, count);
+  if (result < 0) {
+    krpc_set_system_error_cause();
+    return KRPC_ERROR_IO;
+  }
+  if ((size_t)result != count) KRPC_TRANSPORT_FAIL(IO, "Write failed");
   return KRPC_OK;
 }
 
@@ -39,9 +45,12 @@ krpc_error_t krpc_open_serial(krpc_connection_t* connection, const char* port) {
   int fd;
   connection->transport = NULL;
   connection->handle = 0;
-  if (port == NULL) KRPC_RETURN_ERROR(IO, "no serial port to open");
+  if (port == NULL) KRPC_FAIL(ARGUMENT, "No serial port to open");
   fd = open(port, O_RDWR | O_NOCTTY);
-  if (fd < 0) KRPC_RETURN_ERROR(IO, "failed to open serial port");
+  if (fd < 0) {
+    krpc_set_system_error_cause();
+    KRPC_FAIL_CAUSE(CONNECTION, "Failed to open the serial port", KRPC_ERROR_IO);
+  }
   connection->transport = &krpc_transport_serial;
   connection->handle = (uintptr_t)fd;
   return KRPC_OK;
@@ -60,9 +69,11 @@ static krpc_error_t krpc_serial_read(uintptr_t handle, uint8_t* buf, size_t coun
   size_t total = 0;
   while (total < count) {
     DWORD bytes_read = 0;
-    if (!ReadFile((HANDLE)handle, buf + total, (DWORD)(count - total), &bytes_read, NULL))
-      KRPC_RETURN_ERROR(IO, "read failed");
-    if (bytes_read == 0) KRPC_RETURN_ERROR(EOF, "eof received");
+    if (!ReadFile((HANDLE)handle, buf + total, (DWORD)(count - total), &bytes_read, NULL)) {
+      krpc_set_system_error_cause();
+      return KRPC_ERROR_IO;
+    }
+    if (bytes_read == 0) KRPC_TRANSPORT_FAIL(EOF, "End of file on the serial port");
     total += bytes_read;
   }
   return KRPC_OK;
@@ -70,9 +81,11 @@ static krpc_error_t krpc_serial_read(uintptr_t handle, uint8_t* buf, size_t coun
 
 static krpc_error_t krpc_serial_write(uintptr_t handle, const uint8_t* buf, size_t count) {
   DWORD bytes_written = 0;
-  if (!WriteFile((HANDLE)handle, buf, (DWORD)count, &bytes_written, NULL) ||
-      bytes_written != (DWORD)count)
-    KRPC_RETURN_ERROR(IO, "write failed");
+  if (!WriteFile((HANDLE)handle, buf, (DWORD)count, &bytes_written, NULL)) {
+    krpc_set_system_error_cause();
+    return KRPC_ERROR_IO;
+  }
+  if (bytes_written != (DWORD)count) KRPC_TRANSPORT_FAIL(IO, "Write failed");
   return KRPC_OK;
 }
 
@@ -88,10 +101,13 @@ krpc_error_t krpc_open_serial(krpc_connection_t* connection, const char* port) {
   HANDLE handle;
   connection->transport = NULL;
   connection->handle = 0;
-  if (port == NULL) KRPC_RETURN_ERROR(IO, "no serial port to open");
+  if (port == NULL) KRPC_FAIL(ARGUMENT, "No serial port to open");
   handle = CreateFileA(port, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING,
                        FILE_ATTRIBUTE_NORMAL, NULL);
-  if (handle == INVALID_HANDLE_VALUE) KRPC_RETURN_ERROR(IO, "failed to open serial port");
+  if (handle == INVALID_HANDLE_VALUE) {
+    krpc_set_system_error_cause();
+    KRPC_FAIL_CAUSE(CONNECTION, "Failed to open the serial port", KRPC_ERROR_IO);
+  }
   connection->transport = &krpc_transport_serial;
   connection->handle = (uintptr_t)handle;
   return KRPC_OK;

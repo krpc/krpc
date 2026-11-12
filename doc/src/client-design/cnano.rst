@@ -61,11 +61,11 @@ so a connection closes only as follows:
 
 * ``krpc_disconnect`` sends a ``disconnect`` if the session is live, then closes.
 * ``krpc_close`` closes with no message.
-* ``krpc_connect`` closes on a refusal, a failed write, and any failure over a non-resumable
-  transport. Over a resumable one, other failures keep the line open for the program to retry.
+* ``krpc_connect`` closes on a refusal, and on any failure over a non-resumable transport. Over a
+  resumable one, other failures keep the line open for the program to retry.
 
 A session that fails during a call leaves the connection open. Later calls return
-``KRPC_ERROR_CONNECTION_FAILED`` without using it, and ``krpc_disconnect`` then only closes.
+``KRPC_ERROR_CONNECTION`` without using it, and ``krpc_disconnect`` then only closes.
 
 Threads
 -------
@@ -116,22 +116,68 @@ connection. The platform decides at compile time which tables exist:
 Errors
 ------
 
-Library functions return a ``krpc_error_t``. ``KRPC_CHECK`` applies only in the stubs and
-``functions.h``, where ``KRPC_ERROR_CHECK_ASSERT``, ``KRPC_ERROR_CHECK_EXIT`` and
-``KRPC_ERROR_CHECK_FN`` replace its ``return``.
+Library functions return a ``krpc_error_t``, one code per kind of error a program handles
+differently. A refusal has a code of its own, apart from the other connection errors, as a
+program retries a garbled handshake on a serial line and gives up on a refusal.
+
+``KRPC_CHECK`` applies only in the stubs and ``functions.h``, where ``KRPC_ERROR_CHECK_ASSERT``,
+``KRPC_ERROR_CHECK_EXIT`` and ``KRPC_ERROR_CHECK_FN`` replace its ``return``.
+
+* **Transports keep their own codes.** A transport's functions, ``krpc_read`` and ``krpc_write``
+  return ``KRPC_ERROR_IO`` and ``KRPC_ERROR_EOF``. A library function turns either into
+  ``KRPC_ERROR_CONNECTION``, with the transport's code as the cause, so custom transports stay as
+  they are.
+* **One record holds the last error**, as ``errno`` does. The client runs one session at a time on
+  the calling thread, so one static record serves. A field that does not apply is -1, as
+  ``KRPC_OK``, the status ``OK`` and the reason ``CLOSED`` are real values. The ids are 0, which is
+  never an id.
+* **A server exception is told apart by its ids.** Comparing the names would put them in flash.
+  The stubs define ``KRPC_EXCEPTION_<SERVICE>_<NAME>`` as the pair, which ``KRPC_IS_EXCEPTION``
+  compares with the record.
+* **One macro fills the record at each failure site.** ``KRPC_FAIL`` takes a sentence, compiled only
+  when the library keeps or prints messages. On AVR a kept sentence is a ``PSTR`` string, so it
+  stays in flash.
+* **A callback's failure keeps its code.** A nanopb callback returns only false, so it stores its
+  code in ``krpc_callback_error``. The function that ran nanopb returns that code in place of
+  ``KRPC_ERROR_ENCODING``. A null string argument thus returns ``KRPC_ERROR_ARGUMENT``.
+* **A cause's message comes first and the sentence goes in front of it.** A transport or the
+  server gives the cause's message before the library knows the failure. ``krpc_fail`` then moves
+  the message along to put the sentence and a colon in front, cutting what does not fit.
+
+The detail levels trade memory for what the program can tell:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Define
+     - Kept
+     - Cost
+   * - ``KRPC_ERROR_CODES_ONLY``
+     - The returned code
+     - None. A server error is skipped without parsing, so the ``Error`` descriptor is not linked
+   * - None, the default
+     - The last-error record
+     - 16 bytes of RAM on AVR, and a few stores at each failure
+   * - ``KRPC_ERROR_MESSAGES``
+     - The record and the message
+     - ``KRPC_ERROR_MESSAGE_LENGTH`` bytes of RAM, and each sentence in flash
+
+The record is the default, as an Arduino sketch nearly always has its 16 bytes to spare.
+``KRPC_ERROR_BUFFER_TOO_SMALL`` stays apart from ``KRPC_ERROR_ARGUMENT``, as a program retries
+with a larger buffer.
 
 A session ends on a failed read or write, a ``disconnect``, an unexpected message and a message that
-fails to parse. It survives a server error and a return value that fails to decode, as those
-responses have been read in full. A transport failing partway through a message reaches
-``krpc_invoke`` as a decode failure, so the call returns ``KRPC_ERROR_CONNECTION_FAILED``.
+fails to parse. A response with other than one result is an unexpected message. A session survives
+a server error and a return value that fails to decode, as those responses have been read in full.
+A result the client has no memory for is skipped to the end of its message, so the session survives
+that too. A request that fails to encode ends the session only once part of it has been written.
 
 A null result returns no error code, as null is a valid value and the code would trip
 ``KRPC_CHECK``.
 
 ``KRPC_CHECK`` and ``KRPC_ALLOC_BLOCK_SIZE`` are read when the program compiles the stubs.
-``KRPC_BUFFER_SIZE``, ``KRPC_ERROR_MESSAGES`` and ``KRPC_CUSTOM_MEMORY_ALLOC`` are read when the
-library compiles. ``KRPC_ERROR_CHECK_FN`` is read by both. ``KRPC_ERROR_MESSAGES`` is optional, as
-its buffer costs static memory on a small target.
+``KRPC_BUFFER_SIZE``, the detail level and ``KRPC_CUSTOM_MEMORY_ALLOC`` are read when the library
+compiles. ``KRPC_ERROR_CHECK_FN`` is read by both.
 
 Service Stubs
 -------------
@@ -180,11 +226,17 @@ Mapping the Spec to C
    * - Closing a connection
      - ``krpc_disconnect``, with no half-close or drain
    * - Connection error
-     - ``KRPC_ERROR_CONNECTION_FAILED``, ``_CONNECTION_REFUSED``, ``_IO``, ``_EOF``
+     - ``KRPC_ERROR_CONNECTION``, and ``KRPC_ERROR_CONNECTION_REFUSED`` for a refusal, with the
+       status, reason and cause in the last error
    * - Encoding error
-     - ``KRPC_ERROR_ENCODING_FAILED``, ``KRPC_ERROR_DECODING_FAILED``
+     - ``KRPC_ERROR_ENCODING``
    * - Server error
-     - ``KRPC_ERROR_RPC_FAILED``, with a message only under ``KRPC_ERROR_MESSAGES``
+     - ``KRPC_ERROR_SERVER``, with the exception's ids in the last error
+   * - Argument error
+     - ``KRPC_ERROR_ARGUMENT``, and ``KRPC_ERROR_BUFFER_TOO_SMALL``
+   * - Error types
+     - The codes, and a ``KRPC_EXCEPTION_`` macro per exception. The conventions name no remote
+       error type, and a server error's message starts with ``Service.Name:``
    * - Null object
      - ``KRPC_NULL``, the id 0
    * - Nullable argument, result

@@ -197,6 +197,12 @@ typedef enum {
   {% endfor %}
 } krpc_{{service_name}}_{{ enum_name }}_t;
 {% endfor %}
+{% for exception_name,exception in exceptions.items() %}
+
+{% if exception.documentation %}{{ exception.documentation }}
+{% endif %}
+#define KRPC_EXCEPTION_{{ service_name | upper }}_{{ exception_name | upper }} {{ service_id }}u, {{ exception.id }}u
+{% endfor %}
 {% for procedure_name,procedure in procedures.items() %}
 
 {% if procedure.documentation %}{{ procedure.documentation }}
@@ -500,7 +506,7 @@ static inline krpc_error_t krpc_decode_{{ typ.name }}(
   KRPC_RETURN_ON_ERROR(krpc_decode_message_Tuple(stream, &message));
 {% if typ.kind == 'struct' %}
   if (state.pos < {{ typ.value_types | length }})
-    KRPC_RETURN_ERROR(DECODING_FAILED, "too few fields for a {{ typ.name }}");
+    KRPC_FAIL(ENCODING, "Too few fields for a {{ typ.name }}");
 {% endif %}
 {% elif typ.kind in ('list', 'set') %}
   typedef struct State { size_t capacity; {{ typ.ctype }} * value; } State;

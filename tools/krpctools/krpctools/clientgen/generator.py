@@ -308,6 +308,7 @@ class Generator(Generic[LanguageT]):
 
         for name, exception in self._get_defs("exceptions"):
             context["exceptions"][name] = {
+                "id": exception["id"],
                 "documentation": self.parse_documentation(exception["documentation"]),
                 "deprecated": exception.get("deprecated", False),
                 "deprecated_reason": self.parse_deprecation_reason(

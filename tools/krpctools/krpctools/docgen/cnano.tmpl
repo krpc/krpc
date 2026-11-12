@@ -172,14 +172,17 @@
 {% endmacro %}
 
 {% macro exception(x) %}{{ mark_documented(x) }}
-Exception class {{ x.name }}
+.. macro:: {{ domain.ref(x) }}
 
-{% if x.deprecated %}{{ deprecated(x) }}
+{% if x.deprecated %}{{ deprecated(x) | indent }}
 
 {% endif %}
-{{ gendoc(x.documentation) }}
+{{ gendoc(x.documentation) | indent }}
 
-{% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) }}{% endif %}
+   The service and exception ids of the exception, for :macro:`KRPC_IS_EXCEPTION`. A call
+   that fails with it returns :macro:`KRPC_ERROR_SERVER`.
+
+{% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}{% endif %}
 {% endmacro %}
 
 {% macro parameters(return_type, parameters, instance=None) %}

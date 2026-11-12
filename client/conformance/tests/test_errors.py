@@ -6,7 +6,8 @@ from driver import profile, raw, section, should, values
 from driver.errors import (
     assert_native_error,
     assert_remote_error,
-    error_types,
+    error_codes,
+    message_prefix,
     native_type,
 )
 from driver.scripted import ScriptedServer, definitions
@@ -67,13 +68,13 @@ def raised(connected, service, procedure, *args):
 
 def full_message(connected, server, service, procedure, *args):
     """The whole message of the error a call reports, from the error the server sends for
-    it, and the prefix of a client without error types."""
+    it, and the prefix of a client that starts the message with one."""
     expected = raw.call(server, service, procedure, *[encoded(x) for x in args]).error
     message = expected.description
     if expected.stack_trace:
         message += "\nServer stack trace:\n" + expected.stack_trace
     prefix = ""
-    if not error_types(connected):
+    if message_prefix(connected):
         prefix = "%s.%s: " % (expected.service, expected.exception)
     return prefix + message, prefix
 
@@ -261,7 +262,9 @@ def test_remote_error(client, server, category):
     """Every error of the client's own derives one type, its remote error type, named in the
     conventions file. This covers the connection, server and encoding errors, and a
     service's exception types. A mapped exception and the language's own errors, such as its
-    argument error, do not derive it."""
+    argument error, do not derive it. A client whose errors are codes has no such type."""
+    if error_codes(client):
+        pytest.skip("The client's errors are codes, with no remote error type")
     error = remote_error_of(client, server, category)
     assert_remote_error(client, error)
 
@@ -280,11 +283,12 @@ def test_stream_remote_error(connected):
 section("Messages")
 
 
-@profile("!error-types")
 @pytest.mark.parametrize("name", sorted(EXCEPTIONS))
 def test_message_prefix(connected, name):
-    """A client without error types starts the message with ``Service.Name:``, the
-    service and name the error carries."""
+    """A client without error types, or whose errors are codes in place of types, starts the
+    message with ``Service.Name:``, the service and name the error carries."""
+    if not message_prefix(connected):
+        pytest.skip("The client names the exception by its type")
     procedure, args = EXCEPTIONS[name]
     service = "TestService" if name == "CustomException" else "KRPC"
     error = raised(connected, "TestService", procedure, *args)

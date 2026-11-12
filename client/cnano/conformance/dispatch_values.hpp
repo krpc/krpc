@@ -23,12 +23,14 @@ namespace krpc_conformance {
 using Value = krpc::conformance::Value;
 using Arguments = google::protobuf::RepeatedPtrField<Value>;
 
-/** An error a client function returned, with the message the client recorded for it. */
+/** An error a client function returned, with the message and the details the client recorded
+    for it. */
 class ClientError : public std::runtime_error {
  public:
-  ClientError(krpc_error_t code, const std::string& message)
-      : std::runtime_error(message), code(code) {}
+  explicit ClientError(krpc_error_t code)
+      : std::runtime_error(krpc_get_error_message()), code(code), info(*krpc_get_error_info()) {}
   krpc_error_t code;
+  krpc_error_info_t info;
 };
 
 /** The client offers no way to do what a command asks. */
@@ -38,7 +40,7 @@ class Unsupported : public std::runtime_error {
 };
 
 inline void check(krpc_error_t error) {
-  if (error != KRPC_OK) throw ClientError(error, krpc_get_error_message());
+  if (error != KRPC_OK) throw ClientError(error);
 }
 
 /** The objects the testee holds, by handle. An object is its id, and each object a call returns
@@ -292,12 +294,15 @@ struct Dictionary {
   }
 };
 
-/** A value at a position that cannot hold null, which the C type of the value cannot refuse */
+/** A value at a position that cannot hold null. A string is passed as NULL, which the client
+    refuses, and any other C type cannot refuse null. */
 template <typename Tag>
 struct NotNull {
   using type = typename Tag::type;
   static type arg(const Value& value) {
-    if (value.value_case() == Value::kNull) throw Unsupported("The C type cannot refuse null");
+    if constexpr (!std::is_same_v<type, char*>) {
+      if (value.value_case() == Value::kNull) throw Unsupported("The C type cannot refuse null");
+    }
     return Tag::arg(value);
   }
   static Value result(const type& x) { return Tag::result(x); }

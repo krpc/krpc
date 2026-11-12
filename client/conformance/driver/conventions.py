@@ -10,6 +10,7 @@ own mapping fails the suite.
   }
 
 remote_error names the type every error of the client's own derives, as the testee reports it.
+It is null for a client whose errors are codes, with no type to derive.
 A key of native_types is the mapped type of a KRPC exception, the .NET exception it stands for.
 A null value is an exception the client raises only as a type of its own.
 A client with the error-types profile needs remote_error and native_types, and one with the
@@ -30,6 +31,9 @@ SECTIONS = {
     "native_types": "error-types",
     "naming": "definitions",
 }
+
+# The sections a client with the profile can set to null
+NULLABLE = {"remote_error"}
 
 # The function that converts a name to each case
 CASES: dict[str, Callable[[str], str]] = {"snake": snake_case}
@@ -54,6 +58,8 @@ class Conventions:
     remote_error: str | None = None
     native_types: dict[str, str | None] | None = None
     naming: Naming | None = None
+    # The sections the file holds, null ones included
+    sections: frozenset[str] = frozenset()
 
 
 def read(path: str) -> Conventions:
@@ -70,6 +76,7 @@ def read(path: str) -> Conventions:
         remote_error=content.get("remote_error"),
         native_types=content.get("native_types"),
         naming=None if naming is None else _naming(path, naming),
+        sections=frozenset(content),
     )
 
 
@@ -98,5 +105,9 @@ def missing(conventions: Conventions, profiles: list[str]) -> list[str]:
     return [
         name
         for name, profile in SECTIONS.items()
-        if profile in profiles and getattr(conventions, name) is None
+        if profile in profiles
+        and (
+            name not in conventions.sections
+            or (name not in NULLABLE and getattr(conventions, name) is None)
+        )
     ]

@@ -1,3 +1,20 @@
+## client/cnano
+
+- Errors
+  - **Breaking:** Replace the error codes with one per kind of error: `KRPC_ERROR_CONNECTION`,
+    `KRPC_ERROR_SERVER`, `KRPC_ERROR_ENCODING`, `KRPC_ERROR_ARGUMENT` and `KRPC_ERROR_NO_MEMORY`.
+    `KRPC_ERROR_CONNECTION_REFUSED`, `KRPC_ERROR_BUFFER_TOO_SMALL`, `KRPC_ERROR_IO` and
+    `KRPC_ERROR_EOF` stay (#1333)
+  - Add `krpc_get_error_info`, the details of the last error: the ids of a server exception, the
+    status of a refused connection, the reason of a disconnect and the transport's failure (#1333)
+  - Add a `KRPC_EXCEPTION_` macro for each exception of a service, and `KRPC_IS_EXCEPTION` to
+    check the last error against it (#1333)
+  - Add `KRPC_ERROR_CODES_ONLY`, which keeps only the code of each error (#1333)
+  - **Breaking:** Give a message for every error under `KRPC_ERROR_MESSAGES`, with the message of
+    its cause, which a transport gives with the new `krpc_set_error_cause` (#1333)
+  - **Breaking:** Return `KRPC_ERROR_ARGUMENT` for a null string argument, a null argument to a
+    `krpc_open_` function, and a local socket path that is too long (#1333)
+
 ## client/cpp
 
 - Errors
@@ -78,3 +95,4 @@
   exceptions from `ServerError` or `ServerException` (#1333)
 - Generate no class for a mapped exception in C# and Java stubs (#1333)
 - Say in the reference docs what each client raises for each exception of a service (#1333)
+- Generate a `KRPC_EXCEPTION_` macro of the ids of each exception in C-nano stubs (#1333)

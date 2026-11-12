@@ -1362,7 +1362,7 @@ Service documentation string.
 
 .. function:: krpc_error_t krpc_TestService_ThrowCustomException(krpc_connection_t connection, int32_t * returnValue)
 
-   Throws a ``TestService.CustomException``.
+   Throws a :macro:`KRPC_EXCEPTION_TESTSERVICE_CUSTOMEXCEPTION`.
 
 
    
@@ -1370,7 +1370,7 @@ Service documentation string.
    .. note::
 
       Links to each kind of member: TestService, :type:`krpc_TestService_TestClass_t`,
-      :type:`krpc_TestService_TestEnum_t`, :type:`krpc_TestService_TestStruct_t`, ``KRPC.InvalidOperationException``,
+      :type:`krpc_TestService_TestEnum_t`, :type:`krpc_TestService_TestStruct_t`, :macro:`KRPC_EXCEPTION_KRPC_INVALIDOPERATIONEXCEPTION`,
       :func:`krpc_TestService_FloatToString`, :func:`krpc_TestService_StringProperty`,
       :func:`krpc_TestService_set_StringPropertyPrivateGet`, :func:`krpc_TestService_TestClass_FloatToString`,
       :func:`krpc_TestService_TestClass_StaticMethod`, :func:`krpc_TestService_TestClass_IntProperty`,
@@ -1863,14 +1863,20 @@ Service documentation string.
 
 
 
-Exception class CustomException
+.. macro:: KRPC_EXCEPTION_TESTSERVICE_CUSTOMEXCEPTION
 
 
 
+   The service and exception ids of the exception, for :macro:`KRPC_IS_EXCEPTION`. A call
+   that fails with it returns :macro:`KRPC_ERROR_SERVER`.
 
 
-Exception class DeprecatedException
 
-.. warning:: Deprecated. Use ``TestService.CustomException`` instead.
+.. macro:: KRPC_EXCEPTION_TESTSERVICE_DEPRECATEDEXCEPTION
 
-Deprecated exception documentation string.
+   .. warning:: Deprecated. Use :macro:`KRPC_EXCEPTION_TESTSERVICE_CUSTOMEXCEPTION` instead.
+
+   Deprecated exception documentation string.
+
+   The service and exception ids of the exception, for :macro:`KRPC_IS_EXCEPTION`. A call
+   that fails with it returns :macro:`KRPC_ERROR_SERVER`.
