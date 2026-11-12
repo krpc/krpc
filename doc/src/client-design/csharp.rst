@@ -5,6 +5,39 @@ The internal design of the C# client. This page builds on the :doc:`shared clien
 </client-design>` and the :doc:`client specification </client-spec>`. Usage is in
 the :doc:`C# guide </csharp>`. Paths are relative to ``client/csharp/``.
 
+Generated Stubs and Target Framework
+------------------------------------
+
+``clientgen`` writes ``Services/<Service>.cs`` from ``csharp.tmpl`` in ``krpctools``, compiled into
+one ``netstandard2.0`` assembly. A .NET 5 or later project references it with no compatibility shim.
+``UnixEndPoint`` exists because ``netstandard2.0`` has no endpoint for unix domain sockets. It
+passes the local socket tests on .NET 10, so the client has no separate ``net10.0`` assembly.
+The tests run on .NET 10, and none run on .NET Framework or Mono.
+
+* A service is an extension method of ``IConnection``. Stubs use only that interface.
+* Constructing a service registers its exception types on that connection. ``Connection`` registers
+  the ``KRPC`` ones itself. Types with a ``System`` equivalent are a table in ``GetException``,
+  which adds no public member to ``IConnection``. The argument exceptions also take their arguments
+  in different orders.
+
+Streams from Expressions
+------------------------
+
+``AddStream`` takes an expression tree, and reads the procedure from the stub's ``RPCAttribute``:
+
+* A single call or property read with fixed arguments streams that call. ``GetCall`` evaluates the
+  object and the arguments once, on the client. Conversions to its own type and multiplications by
+  one, which F# units of measure add, still count as a single call.
+* Conversions of a ``KRPC`` service call run on the client, as a function cannot call that service.
+* ``FunctionCompiler`` translates any other lambda into a server side function, one call per node.
+
+A C# type cannot say that a reference-typed position inside a collection is nullable. ``GetCall``
+reads the spec from ``RPCAttribute.Types``, the service's generated ``TypeSpecs`` class. A compiled
+lambda holding a reference inside a collection or tuple asks the server for its return type.
+
+Connections carried by the lambda's objects, its services, a static method's argument and a
+``Bound`` object are not used or checked.
+
 Ownership
 ---------
 
@@ -69,39 +102,6 @@ Streams and Events
 ``Stream<T> : Stream`` follows ``Task<T> : Task``. The base holds everything except ``new T Get ()``
 and ``AddCallback (Action<T>)``, so a stream with no value is a plain ``Stream``. ``Event`` holds a
 ``Stream<bool>``.
-
-Streams from Expressions
-------------------------
-
-``AddStream`` takes an expression tree, and reads the procedure from the stub's ``RPCAttribute``:
-
-* A single call or property read with fixed arguments streams that call. ``GetCall`` evaluates the
-  object and the arguments once, on the client. Conversions to its own type and multiplications by
-  one, which F# units of measure add, still count as a single call.
-* Conversions of a ``KRPC`` service call run on the client, as a function cannot call that service.
-* ``FunctionCompiler`` translates any other lambda into a server side function, one call per node.
-
-A C# type cannot say that a reference-typed position inside a collection is nullable. ``GetCall``
-reads the spec from ``RPCAttribute.Types``, the service's generated ``TypeSpecs`` class. A compiled
-lambda holding a reference inside a collection or tuple asks the server for its return type.
-
-Connections carried by the lambda's objects, its services, a static method's argument and a
-``Bound`` object are not used or checked.
-
-Generated Stubs and Target Framework
-------------------------------------
-
-``clientgen`` writes ``Services/<Service>.cs`` from ``csharp.tmpl`` in ``krpctools``, compiled into
-one ``netstandard2.0`` assembly. A .NET 5 or later project references it with no compatibility shim.
-``UnixEndPoint`` exists because ``netstandard2.0`` has no endpoint for unix domain sockets. It
-passes the local socket tests on .NET 10, so the client has no separate ``net10.0`` assembly.
-The tests run on .NET 10, and none run on .NET Framework or Mono.
-
-* A service is an extension method of ``IConnection``. Stubs use only that interface.
-* Constructing a service registers its exception types on that connection. ``Connection`` registers
-  the ``KRPC`` ones itself. Types with a ``System`` equivalent are a table in ``GetException``,
-  which adds no public member to ``IConnection``. The argument exceptions also take their arguments
-  in different orders.
 
 Mapping the Spec to C#
 ----------------------

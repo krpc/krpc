@@ -5,6 +5,29 @@ The internal design of the Java client. This page builds on the :doc:`shared cli
 </client-design>` and the :doc:`client specification </client-spec>`. Usage is in
 the :doc:`Java guide </java>`. Paths are relative to ``client/java/``.
 
+Generics and Generated Stubs
+----------------------------
+
+Erasure removes the element type of a ``List<Integer>`` at run time. Generated stubs therefore pass
+a ``krpc.schema.KRPC.Type`` descriptor to ``Encoder.encode`` and ``Decoder.decode``, and cast the
+result.
+
+``clientgen`` writes one class per service in the fixed package ``krpc.client.services``, and the
+jar includes the stubs of the shipped services.
+
+* ``Encoder`` and ``Decoder`` find a class by the name ``krpc.client.services.<Service>$<Name>``,
+  and call its constructor, ``fromValue``, ``fieldTypes`` or ``fromFieldValues`` by reflection. A
+  wire type names a structure and omits its fields, so the generated class supplies them.
+* ``addStream`` and ``getCall`` find a method by name and the run-time classes of its arguments.
+  ``@RPCInfo`` names the ``_Types`` class holding its descriptors. ``T`` is unchecked, so a wrong
+  ``T`` throws ``ClassCastException`` at the assignment.
+* ``_Types`` fills maps in initializers of 50 procedures each, as a single ``switch`` for a large
+  service passes the JVM's 64 KB method limit.
+* A service's exception types register on the connection in its ``newInstance``. The ``Connection``
+  constructor does this for ``KRPC`` only.
+* A stream registers before its first update. The return type in ``_Types`` shows that a call adds
+  one, or one ``GetServices`` call if the stubs are not loaded.
+
 Ownership
 ---------
 
@@ -84,29 +107,6 @@ interrupted. Selector waits are capped at 1 s, as closing the channel does not w
   ``java.util.concurrent.CancellationException`` and keep the interrupt flag, and the connection
   stays open. ``InterruptedException`` is checked, so the unchecked API cannot throw it.
 * A write holds an interrupt back until it ends, as a partial message breaks the framing.
-
-Generics and Generated Stubs
-----------------------------
-
-Erasure removes the element type of a ``List<Integer>`` at run time. Generated stubs therefore pass
-a ``krpc.schema.KRPC.Type`` descriptor to ``Encoder.encode`` and ``Decoder.decode``, and cast the
-result.
-
-``clientgen`` writes one class per service in the fixed package ``krpc.client.services``, and the
-jar includes the stubs of the shipped services.
-
-* ``Encoder`` and ``Decoder`` find a class by the name ``krpc.client.services.<Service>$<Name>``,
-  and call its constructor, ``fromValue``, ``fieldTypes`` or ``fromFieldValues`` by reflection. A
-  wire type names a structure and omits its fields, so the generated class supplies them.
-* ``addStream`` and ``getCall`` find a method by name and the run-time classes of its arguments.
-  ``@RPCInfo`` names the ``_Types`` class holding its descriptors. ``T`` is unchecked, so a wrong
-  ``T`` throws ``ClassCastException`` at the assignment.
-* ``_Types`` fills maps in initializers of 50 procedures each, as a single ``switch`` for a large
-  service passes the JVM's 64 KB method limit.
-* A service's exception types register on the connection in its ``newInstance``. The ``Connection``
-  constructor does this for ``KRPC`` only.
-* A stream registers before its first update. The return type in ``_Types`` shows that a call adds
-  one, or one ``GetServices`` call if the stubs are not loaded.
 
 Mapping the Spec to Java
 ------------------------

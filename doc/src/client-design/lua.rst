@@ -5,58 +5,15 @@ The internal design of the Lua client. This page builds on the :doc:`shared clie
 </client-design>` and the :doc:`client specification </client-spec>`. Usage is in
 the :doc:`Lua guide </lua>`. Paths are relative to ``client/lua/``.
 
-Ownership
----------
+Lua Versions
+------------
 
-``krpc.connect`` returns a ``Connection`` table. The garbage collector tracks every holder, and an
-object holds its client through the methods of its class:
+The client runs on Lua 5.1 to 5.4 and LuaJIT. CI builds and tests on 5.4 only.
 
-.. code-block:: lua
-
-   local function active_vessel()
-     local conn = krpc.connect()
-     return conn.space_center.active_vessel
-     -- Holds the connection after conn goes out of scope
-   end
-
-References
-^^^^^^^^^^
-
-The client holds its ``Transport``, ``Types`` and service instances. The ``Transport`` holds the
-luasocket socket, and ``Types`` holds the class, enumeration and structure tables.
-
-Each connection has its own ``Types``, and so its own class tables. ``==`` compares object ids
-across connections. An object passed to another connection is rebuilt in that connection's class.
-
-The objects the program keeps also hold the client. An ``Object`` holds its class tables, whose
-method closures hold the ``Connection``. A service instance holds its service class, which also
-holds the ``Connection``.
-
-The cycles are collected together. The socket's finalizer is the only finalizer among these objects.
-Enumeration values hold no client. A structure holds one only through a field holding an object.
-
-Lifetime
-^^^^^^^^
-
-* The connection closes on ``close()``, on a transport or protocol failure, or when the socket is
-  collected.
-* ``close()`` closes the sending side of the socket, then drains it for up to a second.
-* After a close or a failure, ``Connection._error`` holds the ``ConnectionError``, and a call
-  through any holder raises it. A second ``close()`` does nothing.
-* ``Connection`` has no ``__gc`` or ``__close``. luasocket's finalizer closes a collected socket,
-  including at the end of the program, and sends no ``disconnect``. An orderly close needs
-  ``close()``.
-
-Single Thread
--------------
-
-Calls follow the :doc:`single-threaded design </client-design>`, on a blocking socket, so the client
-has no polling and no ``socket.select``.
-
-* Only the handshake and the drain of a close have a socket timeout, as a luasocket timeout adds a
-  cost to every call. A stalled message blocks a call, with no way to interrupt it.
-* No client code yields. A call blocks every coroutine in the Lua state, and two calls on one state
-  do not interleave.
+* Version differences live in ``krpc/compat.lua`` and Penlight's ``pl.compat``. luacheck's ``min``
+  std flags a global that any supported version lacks.
+* ``compat.native_integers`` picks the number model once, by whether ``math.type`` exists. The
+  doubles of 5.1, 5.2 and LuaJIT are described in the guide's Numeric Limits.
 
 Dynamic Stubs
 -------------
@@ -114,15 +71,58 @@ are no function streams or events, as the client has no streams.
   the ``KRPC.Expression``, through the connection running it, once per function. It caches them by
   object id. A null value is ``nil`` at any type.
 
-Lua Versions
-------------
+Ownership
+---------
 
-The client runs on Lua 5.1 to 5.4 and LuaJIT. CI builds and tests on 5.4 only.
+``krpc.connect`` returns a ``Connection`` table. The garbage collector tracks every holder, and an
+object holds its client through the methods of its class:
 
-* Version differences live in ``krpc/compat.lua`` and Penlight's ``pl.compat``. luacheck's ``min``
-  std flags a global that any supported version lacks.
-* ``compat.native_integers`` picks the number model once, by whether ``math.type`` exists. The
-  doubles of 5.1, 5.2 and LuaJIT are described in the guide's Numeric Limits.
+.. code-block:: lua
+
+   local function active_vessel()
+     local conn = krpc.connect()
+     return conn.space_center.active_vessel
+     -- Holds the connection after conn goes out of scope
+   end
+
+References
+^^^^^^^^^^
+
+The client holds its ``Transport``, ``Types`` and service instances. The ``Transport`` holds the
+luasocket socket, and ``Types`` holds the class, enumeration and structure tables.
+
+Each connection has its own ``Types``, and so its own class tables. ``==`` compares object ids
+across connections. An object passed to another connection is rebuilt in that connection's class.
+
+The objects the program keeps also hold the client. An ``Object`` holds its class tables, whose
+method closures hold the ``Connection``. A service instance holds its service class, which also
+holds the ``Connection``.
+
+The cycles are collected together. The socket's finalizer is the only finalizer among these objects.
+Enumeration values hold no client. A structure holds one only through a field holding an object.
+
+Lifetime
+^^^^^^^^
+
+* The connection closes on ``close()``, on a transport or protocol failure, or when the socket is
+  collected.
+* ``close()`` closes the sending side of the socket, then drains it for up to a second.
+* After a close or a failure, ``Connection._error`` holds the ``ConnectionError``, and a call
+  through any holder raises it. A second ``close()`` does nothing.
+* ``Connection`` has no ``__gc`` or ``__close``. luasocket's finalizer closes a collected socket,
+  including at the end of the program, and sends no ``disconnect``. An orderly close needs
+  ``close()``.
+
+Single Thread
+-------------
+
+Calls follow the :doc:`single-threaded design </client-design>`, on a blocking socket, so the client
+has no polling and no ``socket.select``.
+
+* Only the handshake and the drain of a close have a socket timeout, as a luasocket timeout adds a
+  cost to every call. A stalled message blocks a call, with no way to interrupt it.
+* No client code yields. A call blocks every coroutine in the Lua state, and two calls on one state
+  do not interleave.
 
 lua-protobuf
 ------------
