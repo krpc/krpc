@@ -39,7 +39,9 @@ class TestDockingCamera(TestCase):
         """The camera's image, or None while the camera is off."""
         try:
             return camera.image()
-        except RuntimeError:
+        except RuntimeError as exn:
+            if "The camera is off or not started" not in str(exn):
+                raise
             return None
 
     @classmethod
