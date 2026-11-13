@@ -260,3 +260,6 @@ waker
 DMagic
 Firespitter
 subtype
+accessor
+accessors
+lowerCamel

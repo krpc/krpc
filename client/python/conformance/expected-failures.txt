@@ -61,3 +61,4 @@ test_streams.py::test_wake_waiter[close] @flaky  # As test_streams.py::test_wake
 test_concurrency.py::test_wake_waiter_holding_another[close] @flaky  # As test_streams.py::test_wake_waiter[remove]
 test_streams.py::test_wake_waiter[connection-failure] @flaky  # As test_streams.py::test_wake_waiter[remove]
 test_concurrency.py::test_wake_waiter_holding_another[connection-failure] @flaky  # As test_streams.py::test_wake_waiter[remove]
+test_calls.py::test_member_name_case  # Compound words, plural acronyms and digits before a capital split apart, e.g. UTF8 is ut_f8

@@ -55,6 +55,179 @@ The base class of each kind of generated type is named ``Remote<Kind>``: ``Remot
 language's own form where it has one, such as an enum and a struct in C++ and C#, and a
 ``NamedTuple`` for a Python structure.
 
+.. _client-design-name-case:
+
+Case Conversion
+^^^^^^^^^^^^^^^
+
+Each client converts the names in a service definition to its own case. Every client splits a name
+into words by the same rules, so ``UInt64ToString`` is ``uint64_to_string`` in Python and
+``uint64ToString`` in Java. The test vectors are in ``client/conformance/names.json``. Clients that
+build their services at run time test them through the conformance suite, and the generators test
+them in their own unit tests.
+
+A name is split at each ``_`` into parts, and each part is converted on its own. The
+:ref:`identifier rules <service-api-identifiers>` keep every name in a service definition ASCII,
+with no ``_``, but a client still converts a name that has one.
+
+A part is split into words from left to right. At each position, the first of these rules that
+matches gives the next word:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Rule
+     - Matches
+     - Examples
+   * - 1. Compound word
+     - A compound word, not followed by a lower case letter
+     - ``UInt`` 64, Max ``FoV``
+   * - 2. Plural acronym
+     - Two or more capitals and an ``s``, not followed by a lower case letter
+     - ``EVAs``, ``IDs``
+   * - 3. Acronym
+     - The longest run of capitals not followed by a lower case letter
+     - ``RCS`` Thrust, Mean Anomaly At ``UT``, ``DEFAULT``
+   * - 4. Word
+     - An optional capital, then lower case letters
+     - ``Active`` ``Vessel``, ``reset`` PID
+   * - 5. Number
+     - Digits, and the acronym after them by rule 3 or the lower case letters after them
+     - ``32`` To String, Vector ``3D``, ``3rd`` Party
+
+Rules 1 to 4 also take the digits after the word and the lower case letters after the digits,
+unless an acronym follows the digits: ``UInt64``, ``UTF8`` String, ``Atan2``, ``Int32s``,
+``Get3rd`` Party. Rule 3 ends a run of capitals before its last capital when a lower case letter
+follows, as that capital starts the next word: ``RCSThrust`` is ``RCS`` and ``Thrust``.
+
+The compound words are ``UInt``, ``ULong``, ``SInt`` and ``FoV``. Each is written with more than one
+capital, and the other rules would split it. Every client holds the same list.
+
+As a regular expression, tried at each position in turn, where ``D`` stands for the digits a word
+takes, ``(?:[0-9]+(?![0-9])(?![A-Z]+(?![a-z]))[a-z]*)?``:
+
+.. code-block:: none
+
+   (?:UInt|ULong|SInt|FoV)(?![a-z])D
+   |[A-Z]{2,}s(?![a-z])D
+   |[A-Z]+(?![a-z])D
+   |[A-Z]?[a-z]+D
+   |[0-9]+(?:[A-Z]+(?![a-z])|[a-z]+)?
+
+Each case is built from the words:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Case
+     - From the words
+     - ``UInt64ToString``, ``RCSThrust``, ``EVAs``
+     - Parts joined by
+   * - snake
+     - Lower case, joined by ``_``
+     - ``uint64_to_string``, ``rcs_thrust``, ``evas``
+     - ``__``
+   * - UPPER_SNAKE
+     - Upper case, joined by ``_``
+     - ``UINT64_TO_STRING``, ``RCS_THRUST``, ``EVAS``
+     - ``__``
+   * - lowerCamel
+     - The first word lower case, the others as written
+     - ``uint64ToString``, ``rcsThrust``, ``evas``
+     - ``_``
+   * - UpperCamel
+     - The name unchanged
+     - ``UInt64ToString``, ``RCSThrust``, ``EVAs``
+     - ``_``
+   * - lower
+     - The name lower case, with no words
+     - ``uint64tostring``, ``rcsthrust``, ``evas``
+     - ``_``
+   * - UPPER
+     - The name upper case, with no words
+     - ``UINT64TOSTRING``, ``RCSTHRUST``, ``EVAS``
+     - ``_``
+
+A conversion only changes case and inserts separators. Two names that convert to one client name
+then differ only in case, and the server's :ref:`case-insensitive name rules
+<service-api-identifiers>` keep them apart.
+
+lowerCamel keeps acronyms after the first word in capitals, as in ``meanAnomalyAtUT``, so it stays
+close to the C# name. A property accessor is ``get`` or ``set`` and the UpperCamel name, as in
+``getRCSThrust``. A C-nano macro joins its names with ``_``, as in
+``KRPC_SPACECENTER_SASMODE_STABILITYASSIST``, so it upper cases each name with no words. Splitting
+them would make enumeration ``FooBar`` value ``Baz`` and enumeration ``Foo`` value ``BarBaz`` one
+macro.
+
+The case of each name in each client:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Name
+     - C#
+     - C++
+     - C-nano
+     - Java
+     - Python
+     - Lua
+   * - Service
+     - UpperCamel
+     - UpperCamel, snake header
+     - UpperCamel, snake header
+     - UpperCamel
+     - snake attribute, lower module
+     - snake
+   * - Type
+     - UpperCamel
+     - UpperCamel
+     - UpperCamel
+     - UpperCamel
+     - UpperCamel
+     - UpperCamel
+   * - Procedure or method
+     - UpperCamel
+     - snake
+     - UpperCamel
+     - lowerCamel
+     - snake
+     - snake
+   * - Property
+     - UpperCamel
+     - snake, and ``set_`` and snake
+     - UpperCamel, and ``set_`` and UpperCamel
+     - Accessors
+     - snake
+     - snake
+   * - Enumeration value
+     - UpperCamel
+     - snake
+     - UPPER, in a macro
+     - UPPER_SNAKE
+     - snake
+     - snake
+   * - Structure field
+     - UpperCamel, and lowerCamel constructor parameter
+     - snake
+     - snake
+     - lowerCamel, and ``get`` and UpperCamel
+     - snake
+     - snake
+   * - Parameter
+     - As written
+     - snake
+     - As written
+     - lowerCamel
+     - snake
+     - snake
+   * - Exception
+     - UpperCamel
+     - UpperCamel
+     - UPPER, in a macro
+     - UpperCamel
+     - UpperCamel
+     - UpperCamel
+
 Stream and Call Forms
 ---------------------
 
