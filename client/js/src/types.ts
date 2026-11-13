@@ -2,7 +2,7 @@ import type { DescMessage } from "@bufbuild/protobuf";
 import { deprecationMessage } from "./deprecation.js";
 import { EncodingError } from "./errors.js";
 import { camelCase } from "./naming.js";
-import { registered } from "./registry.js";
+import { name as nameValue, registered } from "./registry.js";
 import {
   ProcedureCallSchema,
   type Type as ProtobufType,
@@ -199,6 +199,7 @@ export class StructDeclaration {
       }
     };
     Object.defineProperty(cls, "name", { value: name });
+    nameValue(cls, { kind: "struct", declaration: this });
     this.valueClass = cls;
   }
 

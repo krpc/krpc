@@ -29,3 +29,27 @@ export function register(service: string, name: string, declared: Declared): voi
 export function registered(service: string, name: string): Declared | undefined {
   return registry.get(`${service}.${name}`);
 }
+
+/** What a value of a connection or a generated module stands for, which the function compiler
+ * reads from a captured value. */
+export type Named =
+  | { readonly kind: "service"; readonly service: string }
+  | { readonly kind: "class"; readonly service: string; readonly name: string }
+  | { readonly kind: "enumeration"; readonly enumeration: Enumeration }
+  | { readonly kind: "struct"; readonly declaration: StructDeclaration }
+  | { readonly kind: "exception"; readonly service: string; readonly name: string };
+
+const names = new WeakMap<object, Named>();
+
+/** Records what a service object, a class, the object of an enumeration's values, a structure's
+ * class or an exception class stands for. */
+export function name(value: object, named: Named): void {
+  names.set(value, named);
+}
+
+/** What a value stands for, or undefined for a value that is none of the named kinds. */
+export function namedOf(value: unknown): Named | undefined {
+  return (typeof value === "object" || typeof value === "function") && value !== null
+    ? names.get(value)
+    : undefined;
+}

@@ -337,7 +337,7 @@ raise each. The clients name them alike:
    * - ``EncodingError``
      - The encoding error
    * - ``CompilationError``
-     - Code that does not compile into a server side function, in Python and C#
+     - Code that does not compile into a server side function, in Python, C# and JavaScript
 
 C++ uses these names in ``krpc::``. C# and Java end each with ``Exception`` in place of ``Error``,
 as their conventions do. Lua has no ``StreamError``, as it has no streams. C-nano returns a code

@@ -133,3 +133,18 @@ export class StreamError extends RemoteError {}
 export function isStreamRemoved(service: string, name: string): boolean {
   return service === "KRPC" && name === "StreamRemovedException";
 }
+
+/** A function the client cannot compile into a server side function. The message names the
+ * construct, and its line and column in the function's source. */
+export class CompilationError extends RemoteError {
+  /** The line of the construct in the function's source, counting from 1, or 0 for none. */
+  readonly line: number;
+  /** The column of the construct in its line, counting from 1, or 0 for none. */
+  readonly column: number;
+
+  constructor(message: string, line = 0, column = 0) {
+    super(line === 0 ? message : `${message} (line ${line}, column ${column} of the function)`);
+    this.line = line;
+    this.column = column;
+  }
+}

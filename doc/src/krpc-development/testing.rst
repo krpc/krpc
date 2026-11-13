@@ -32,6 +32,7 @@ Each client's ``:test`` suite groups its tests by what they depend on:
 * ``:unit`` - encoding and decoding values, without a server or a transport.
 * ``:conformance`` - the conformance tests, described below.
 * ``:client-tcpip`` - the client's own API against a ``TestServer``.
+* ``:compiler-test`` - for the JavaScript client, the function compiler against a ``TestServer``.
 * ``:communication-*`` - for the C-nano client, each transport against a server the test listens
   on.
 * ``:lint`` - the language's linters, where it has them.
