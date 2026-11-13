@@ -302,6 +302,15 @@ its source with ``Function.prototype.toString`` and parses it with acorn.
 * **A catch records which branch matched.** Each ``e instanceof X`` branch catches its exceptions
   by name, innermost first, and the branches run after the catches, so an exception from one
   branch is not caught by the next, as in Python.
+* **The body is typed by server forms.** Each generated module declares a ``Server`` namespace,
+  with a synchronous form of the service and each class, and adds them to the package's
+  ``ServerTypes`` and ``ClientTypes`` interfaces by declaration merging, so mods' modules join
+  in. ``OnServer`` maps a captured value to its server form through the brands of
+  ``RemoteObject`` and ``RemoteService``, and ``OnClient`` maps a result back.
+  ``ServerFunction<P, R>`` carries a compiled function's types, so ``run`` checks its arguments.
+* **Parameter types are inferred from the tuple of type values**, mapped to value types by
+  ``ValuesOf``. A union of the forms of a type value would also infer from the static methods
+  of a class.
 * **Strict comparison with null is an error.** The server has one null, and the codec gives it
   as ``null``, so ``=== undefined`` would differ from the client. ``== null`` matches both.
 * **Sets and maps are the server's**, with .NET's order. Insertion order after a delete would need

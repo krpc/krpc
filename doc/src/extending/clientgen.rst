@@ -147,3 +147,7 @@ client's ``Services`` interface:
        readonly launchControl: LaunchControl.Service;
      }
    }
+
+The module also adds the forms its service and classes take in a :ref:`compiled function
+<js-client-compiling-functions>` to the package's ``ServerTypes``, so a function that captures them
+is typed once the module is imported.

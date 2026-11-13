@@ -29,6 +29,7 @@ import {
   type Service,
   ServicesSchema,
 } from "./schema/krpc_pb.js";
+import type { ArgumentsOf, OnClient, OnServer, OnServerAll, ServerFunction } from "./server.js";
 import type { Services } from "./services/index.js";
 import type { Expression } from "./services/KRPC.js";
 import { Session } from "./session.js";
@@ -40,7 +41,7 @@ import {
   Types,
   UnknownTypeError,
 } from "./types.js";
-import type { TypeLike } from "./typevalues.js";
+import type { TypeLike, ValuesOf } from "./typevalues.js";
 
 /** The options of a connection. */
 export interface ConnectOptions {
@@ -79,13 +80,16 @@ export class Connection {
    * `conn.addStream(() => flight.getMeanAltitude())`. The function is run to build the call,
    * which it does not send. */
   addStream<T>(call: () => Promise<T>): Promise<Stream<T>>;
-  /** Adds a stream of the value of a server side function, a KRPC.Expression with no
-   * parameters. The type parameter names the type of the value, which is not checked. */
-  addStream<T = unknown>(fn: Expression): Promise<Stream<T>>;
+  /** Adds a stream of the value of a server side function with no parameters: a compiled
+   * function, or a KRPC.Expression. The type of the value of an expression is not checked. */
+  addStream<R = unknown>(fn: ServerFunction<[], R>): Promise<Stream<R>>;
   /** Compiles a JavaScript function into a server side function, and adds a stream of its value.
    * The function's first parameter is an object pattern that receives the captured values, such
    * as `({ flight }) => flight.meanAltitude` with `{ flight }`. */
-  addStream<T = unknown>(fn: (captures: any) => unknown, captures: object): Promise<Stream<T>>;
+  addStream<C extends object, R>(
+    fn: (captures: OnServer<C>) => R,
+    captures: C,
+  ): Promise<Stream<OnClient<R>>>;
   async addStream(
     call: (() => Promise<unknown>) | ((captures: any) => unknown) | Expression,
     captures?: object,
@@ -104,9 +108,11 @@ export class Connection {
     return await context.streams.add(captured.call, captured.signature.result);
   }
 
-  /** Adds an event over a server side function of a bool with no parameters: a KRPC.Expression,
-   * or a JavaScript function compiled with the captured values. The event fires when the value
-   * becomes true, and each time it becomes true again. */
+  /** Adds an event over a server side function of a bool with no parameters: a compiled
+   * function, a KRPC.Expression, or a JavaScript function compiled with the captured values. The
+   * event fires when the value becomes true, and each time it becomes true again. */
+  addEvent(fn: ServerFunction<[], boolean>): Promise<Event>;
+  addEvent<C extends object>(fn: (captures: OnServer<C>) => boolean, captures?: C): Promise<Event>;
   addEvent(fn: Expression | ((captures: any) => unknown), captures?: object): Promise<Event> {
     return contextOf(this).functions.addEvent(fn, captures);
   }
@@ -119,14 +125,17 @@ export class Connection {
   }
 
   /** Compiles a server side function on the server, so that its first run is as fast as later
-   * ones. A JavaScript function is first compiled into a server side function, with the captured
-   * values and the types of its parameters after the captures. Resolves with the function. */
-  compile(fn: Expression): Promise<Expression>;
-  compile(
-    fn: (captures: any, ...parameters: any[]) => unknown,
-    captures?: object,
-    parameters?: readonly TypeLike[],
-  ): Promise<Expression>;
+   * ones. Resolves with the function. */
+  compile<R = unknown, P extends unknown[] = unknown[]>(
+    fn: ServerFunction<P, R>,
+  ): Promise<ServerFunction<P, R>>;
+  /** Compiles a JavaScript function into a server side function, with the captured values and
+   * the types of its parameters after the captures, and compiles it on the server. */
+  compile<C extends object, R, const L extends readonly TypeLike[] = []>(
+    fn: (captures: OnServer<C>, ...parameters: OnServerAll<ValuesOf<L>>) => R,
+    captures?: C,
+    parameters?: L,
+  ): Promise<ServerFunction<ValuesOf<L>, OnClient<R>>>;
   compile(
     fn: Expression | ((captures: any, ...parameters: any[]) => unknown),
     captures?: object,
@@ -135,14 +144,16 @@ export class Connection {
     return contextOf(this).functions.compile(fn, captures, parameters);
   }
 
-  /** Runs a server side function, a KRPC.Expression, within a single physics tick, and resolves
-   * with its value. The arguments are passed to the function's parameters, in order. The type
-   * parameter names the type of the value, which is not checked. Resolves with undefined for a
-   * function with no value. */
-  run<T = unknown>(fn: Expression, ...args: unknown[]): Promise<T>;
+  /** Runs a server side function within a single physics tick, and resolves with its value. The
+   * arguments are passed to the function's parameters, in order. Resolves with undefined for a
+   * function with no value. The type of the value of a KRPC.Expression is not checked. */
+  run<R = unknown, P extends unknown[] = unknown[]>(
+    fn: ServerFunction<P, R>,
+    ...args: NoInfer<ArgumentsOf<P>>
+  ): Promise<R>;
   /** Compiles a JavaScript function with no parameters into a server side function, and runs it
    * once with the captured values. */
-  run<T = unknown>(fn: (captures: any) => unknown, captures?: object): Promise<T>;
+  run<C extends object, R>(fn: (captures: OnServer<C>) => R, captures?: C): Promise<OnClient<R>>;
   run(fn: Expression | ((captures: any) => unknown), ...args: unknown[]): Promise<unknown> {
     const functions = contextOf(this).functions;
     if (typeof fn === "function") {

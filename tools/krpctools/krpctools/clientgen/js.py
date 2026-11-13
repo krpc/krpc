@@ -97,9 +97,10 @@ class JsGenerator(Generator[JsLanguage]):
         self._message_imports = set()
         # The other services whose types the declarations use
         self._service_imports = set()
+        # Whether links in documentation name the server forms of properties
+        self._server_links = False
 
     def parse_context(self, context):
-        defs = self._defs
         service = self._service
         members = []
         for name, info in context["procedures"].items():
@@ -267,14 +268,12 @@ class JsGenerator(Generator[JsLanguage]):
 
         exceptions = self._exceptions(context)
 
-        self._client_imports.add("RemoteService")
-        local_names = (
-            set(defs.get("classes", {}))
-            | set(defs.get("enumerations", {}))
-            | set(defs.get("structs", {}))
-            | set(defs.get("exceptions", {}))
-            | {"Service"}
+        server_members, server_classes, uses_client_service = self._server_forms(
+            context
         )
+
+        self._client_imports.add("RemoteService")
+        local_names = self._defined_names() | {"Service", "Server", "ClientService"}
         for name in self._service_imports | self._client_imports | self._value_imports:
             if name in local_names:
                 raise RuntimeError(
@@ -328,7 +327,94 @@ class JsGenerator(Generator[JsLanguage]):
             "enumerations": enumerations,
             "structs": structs,
             "exceptions": exceptions,
+            "server_members": indent(render(server_members)),
+            "server_classes": server_classes,
+            "uses_client_service": uses_client_service,
         }
+
+    def _server_forms(self, context):
+        """The server forms of the service and its classes, as a compiled function reads them:
+        the members of the service, the classes, and whether a member names a value of the
+        client's form of the service"""
+        service = self._service
+        self._client_imports.add("ServerObject")
+        server_members = self._server_members(
+            context["procedures"], context["properties"]
+        )
+        uses_client_service = False
+        for name, info in context["classes"].items():
+            static = [
+                self._member(
+                    self._server_documentation(m["procedure"]["documentation"]),
+                    self._procedure(n, m, True),
+                    m,
+                )
+                for n, m in info["static_methods"].items()
+            ]
+            # A class is a value, which names a type and holds the static methods
+            server_members.append(
+                self._member(
+                    self._server_definition_documentation("classes", name),
+                    self._value_type(
+                        name,
+                        "[Symbol.hasInstance](value: unknown): value is %s;" % name,
+                        static,
+                    ),
+                    info,
+                )
+            )
+        for kind in ("enumerations", "structs", "exceptions"):
+            for name, info in context[kind].items():
+                uses_client_service = True
+                server_members.append(
+                    self._member(
+                        self._server_definition_documentation(kind, name),
+                        ['readonly %s: ClientService["%s"];' % (name, name)],
+                        info,
+                    )
+                )
+        server_classes = []
+        for name, info in context["classes"].items():
+            server_classes.append(
+                {
+                    "name": name,
+                    "documentation": doc_comment(
+                        self._documentation(
+                            dict(
+                                info,
+                                documentation=self._server_definition_documentation(
+                                    "classes", name
+                                ),
+                            )
+                        )
+                    ),
+                    "brand": "%s.%s" % (service, name),
+                    "members": indent(
+                        render(
+                            self._server_members(info["methods"], info["properties"])
+                        )
+                    ),
+                }
+            )
+        return server_members, server_classes, uses_client_service
+
+    def _defined_names(self):
+        """The names of the classes, enumerations, structures and exceptions of the service,
+        none of which can be a name the declarations of its server forms use"""
+        defs = self._defs
+        defined = (
+            set(defs.get("classes", {}))
+            | set(defs.get("enumerations", {}))
+            | set(defs.get("structs", {}))
+            | set(defs.get("exceptions", {}))
+        )
+        for name in ("Server", "ClientService"):
+            if name in defined:
+                raise RuntimeError(
+                    "%s defines %s, the name of the declarations of its server forms"
+                    % (self._service, name)
+                )
+        return defined
 
     def _exceptions(self, context):
         """The exceptions of the service, each declared as a type and a value"""
@@ -398,16 +484,18 @@ class JsGenerator(Generator[JsLanguage]):
         lines.append("};")
         return lines
 
-    def _procedure(self, name, info):
+    def _procedure(self, name, info, server=False):
         """The signatures of a procedure or method: its arguments in order, then, when it has
-        defaults, the arguments without one followed by the others by name"""
-        parameters = self._parameters(info)
-        result = self._result_type(info["procedure"])
+        defaults, the arguments without one followed by the others by name. On the server, a
+        call returns its value"""
+        parameters = self._parameters(info, server)
+        result = self._result_type(info["procedure"], server)
+        returned = result if server else "Promise<%s>" % result
         positional = ", ".join(
             "%s%s: %s" % (p["name"], "?" if p["optional"] else "", p["type"])
             for p in parameters
         )
-        lines = ["%s(%s): Promise<%s>;" % (name, positional, result)]
+        lines = ["%s(%s): %s;" % (name, positional, returned)]
         optional = [p for p in parameters if p["optional"]]
         if optional:
             required = [
@@ -417,10 +505,10 @@ class JsGenerator(Generator[JsLanguage]):
             ]
             options = "; ".join("%s?: %s" % (p["key"], p["type"]) for p in optional)
             arguments = ", ".join(required + ["options: { %s }" % options])
-            lines.append("%s(%s): Promise<%s>;" % (name, arguments, result))
+            lines.append("%s(%s): %s;" % (name, arguments, returned))
         return lines
 
-    def _parameters(self, info):
+    def _parameters(self, info, server=False):
         """The parameters of a procedure, leaving out the object of a method"""
         definitions = info["procedure"]["parameters"]
         definitions = definitions[len(definitions) - len(info["parameters"]) :]
@@ -431,15 +519,63 @@ class JsGenerator(Generator[JsLanguage]):
                 {
                     "key": key,
                     "name": key + "_" if key in RESERVED_WORDS else key,
-                    "type": self.ts_type(self.as_type(definition["type"]), True),
+                    "type": self.ts_type(
+                        self.as_type(definition["type"]), True, server
+                    ),
                     "optional": "default_value" in definition,
                 }
             )
         return result
 
-    def _result_type(self, procedure):
+    def _result_type(self, procedure, server=False):
         typ = self.get_return_type(procedure)
-        return "void" if typ is None else self.ts_type(typ, False)
+        return "void" if typ is None else self.ts_type(typ, False, server)
+
+    def _server_property(self, info):
+        """A property as a compiled function reads it, writable where it has a setter"""
+        getter = info["getter"]
+        setter = info["setter"]
+        if getter is not None:
+            remote = getter["remote_name"]
+            documentation = getter["procedure"]["documentation"]
+            value = self._result_type(getter["procedure"], True)
+        else:
+            remote = setter["remote_name"]
+            documentation = setter["procedure"]["documentation"]
+            parameter = setter["procedure"]["parameters"][-1]
+            value = self.ts_type(self.as_type(parameter["type"]), True, True)
+        name = lower_camel_case(self._property_name(remote))
+        if getter is None:
+            # A property with no getter cannot be read
+            lines = ["set %s(value: %s);" % (name, value)]
+        elif setter is None:
+            lines = ["readonly %s: %s;" % (name, value)]
+        else:
+            argument = self.ts_type(
+                self.as_type(setter["procedure"]["parameters"][-1]["type"]), True, True
+            )
+            if argument == value:
+                lines = ["%s: %s;" % (name, value)]
+            else:
+                # A setter takes its argument form, such as a number for a 64-bit integer
+                lines = [
+                    "get %s(): %s;" % (name, value),
+                    "set %s(value: %s);" % (name, argument),
+                ]
+        return self._member(self._server_documentation(documentation), lines, info)
+
+    def _server_members(self, procedures, properties):
+        """The members of a service or class as a compiled function reads them"""
+        members = [
+            self._member(
+                self._server_documentation(x["procedure"]["documentation"]),
+                self._procedure(name, x, True),
+                x,
+            )
+            for name, x in procedures.items()
+        ]
+        members.extend(self._server_property(x) for x in properties.values())
+        return members
 
     def _property(self, info):
         """The getter and setter methods of a property"""
@@ -477,15 +613,16 @@ class JsGenerator(Generator[JsLanguage]):
             return Attributes.get_property_name(remote)
         return Attributes.get_class_member_name(remote)
 
-    def ts_type(self, typ, argument):
+    def ts_type(self, typ, argument, server=False):
         """The TypeScript type of a value. An argument takes a wider type than a result, such
-        as a number for a 64-bit integer, or a read-only array"""
-        name = self._ts_type(typ, argument)
+        as a number for a 64-bit integer, or a read-only array. On the server, an object of a
+        class has the class's server form"""
+        name = self._ts_type(typ, argument, server)
         if typ.nullable:
             return "%s | null" % name
         return name
 
-    def _ts_type(self, typ, argument):
+    def _ts_type(self, typ, argument, server):
         if isinstance(typ, ValueType):
             code = typ.protobuf_type.code
             if code in (Type.SINT64, Type.UINT64):
@@ -501,22 +638,26 @@ class JsGenerator(Generator[JsLanguage]):
             return "schema.%s" % typ.python_type.__name__
         if isinstance(typ, (ClassType, EnumerationType, StructType)):
             service = typ.protobuf_type.service
+            # Within the Server namespace, a class's name is its server form
+            prefix = "Server." if server and isinstance(typ, ClassType) else ""
             if service == self._service:
                 return typ.protobuf_type.name
             self._service_imports.add(service)
-            return "%s.%s" % (service, typ.protobuf_type.name)
+            return "%s.%s%s" % (service, prefix, typ.protobuf_type.name)
         if isinstance(typ, ListType):
-            item = _parenthesize(self.ts_type(typ.value_type, argument))
+            item = _parenthesize(self.ts_type(typ.value_type, argument, server))
             return ("readonly %s[]" if argument else "%s[]") % item
         if isinstance(typ, TupleType):
-            items = ", ".join(self.ts_type(x, argument) for x in typ.value_types)
+            items = ", ".join(
+                self.ts_type(x, argument, server) for x in typ.value_types
+            )
             return ("readonly [%s]" if argument else "[%s]") % items
         if isinstance(typ, SetType):
-            item = self.ts_type(typ.value_type, argument)
+            item = self.ts_type(typ.value_type, argument, server)
             return ("ReadonlySet<%s>" if argument else "Set<%s>") % item
         if isinstance(typ, DictionaryType):
-            key = self.ts_type(typ.key_type, argument)
-            value = self.ts_type(typ.value_type, argument)
+            key = self.ts_type(typ.key_type, argument, server)
+            value = self.ts_type(typ.value_type, argument, server)
             return ("ReadonlyMap<%s, %s>" if argument else "Map<%s, %s>") % (key, value)
         raise RuntimeError("Unknown type " + str(typ))
 
@@ -530,7 +671,10 @@ class JsGenerator(Generator[JsLanguage]):
         else:
             member = target.member
             if target.kind in (crefs.PROPERTY, crefs.CLASS_PROPERTY):
-                member = accessor_name("get" if target.getter else "set", member)
+                if self._server_links:
+                    member = lower_camel_case(member)
+                else:
+                    member = accessor_name("get" if target.getter else "set", member)
             else:
                 member = self.language.parse_name(member)
             if target.kind in (crefs.CLASS_STATIC_METHOD, crefs.ENUMERATION_VALUE):
@@ -544,6 +688,20 @@ class JsGenerator(Generator[JsLanguage]):
     def parse_documentation(self, documentation):
         documentation = JsDocParser(self.parse_cref).parse(documentation).strip()
         return re.sub(r"\n{3,}", "\n\n", documentation)
+
+    def _server_documentation(self, documentation):
+        """Documentation as a server form carries it, linking to the server forms of
+        properties"""
+        self._server_links = True
+        try:
+            return self.parse_documentation(documentation)
+        finally:
+            self._server_links = False
+
+    def _server_definition_documentation(self, kind, name):
+        """The documentation of a class, enumeration, structure or exception of the service,
+        as its server form carries it"""
+        return self._server_documentation(self._defs[kind][name]["documentation"])
 
 
 def deprecation_message(qualified_name, info):
@@ -577,6 +735,11 @@ def doc_comment(documentation):
     if len(lines) == 1:
         return ["/** %s */" % lines[0]]
     return ["/**"] + [(" * " + line).rstrip() for line in lines] + [" */"]
+
+
+def indent(text):
+    """Text indented one more level, for the members of a namespace"""
+    return "\n".join(("  " + line) if line else line for line in text.split("\n"))
 
 
 def render(members):

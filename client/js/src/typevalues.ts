@@ -11,6 +11,7 @@ export type NamedType =
   | (abstract new (
       ...args: any[]
     ) => RemoteStruct)
+  | { [Symbol.hasInstance](value: unknown): boolean }
   | Readonly<Record<string, RemoteEnum>>;
 
 /** A type of a server side function's values: a TypeValue or a NamedType. */
@@ -45,16 +46,21 @@ export class TypeValue<T = unknown> {
 }
 
 /** The value type of a TypeLike. */
-type ValueOf<T> =
+export type ValueOf<T> =
   T extends TypeValue<infer V>
     ? V
-    : T extends abstract new (
-          ...args: any[]
-        ) => infer I
+    : T extends { [Symbol.hasInstance](value: unknown): value is infer I }
       ? I
-      : T extends Readonly<Record<string, infer E>>
-        ? E
-        : never;
+      : T extends abstract new (
+            ...args: any[]
+          ) => infer I
+        ? I
+        : T extends Readonly<Record<string, infer E>>
+          ? E
+          : never;
+
+/** The value types of a tuple of TypeLikes. */
+export type ValuesOf<L extends readonly unknown[]> = { -readonly [K in keyof L]: ValueOf<L[K]> };
 
 /** The types of the values of server side functions, for the parameters of a compiled function
  * and for `cast`. */

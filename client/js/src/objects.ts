@@ -76,8 +76,15 @@ export class RemoteObject<C extends string = string> {
   }
 }
 
-/** The base class of a server's services. A connection has one instance of it per service. */
-export class RemoteService {}
+/** The key of the property that tells the services apart in their types. The property exists in
+ * types only. */
+declare const serviceBrand: unique symbol;
+
+/** The base class of a server's services. A connection has one instance of it per service. The
+ * type parameter names the service, such as `"SpaceCenter"`. */
+export class RemoteService<S extends string = string> {
+  declare readonly [serviceBrand]?: S;
+}
 
 /** The server's id for an object. Throws a TypeError for a value that is not an object of a
  * service's class, such as null. */
