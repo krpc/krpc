@@ -47,12 +47,16 @@ class TestPartsRealChute(TestCase):
             self.assertEqual(parachute.state, self.state.deployed)
             self.assertFalse(parachute.armed)
 
+        # Each of RC_stack's two canopies opens after its own random delay of up to a
+        # second. A cut while one canopy is still stowed arms the part, and that canopy
+        # opens next, so we cut again until both are cut.
+        def cut(parachute):
+            if parachute.state == self.state.deployed:
+                parachute.cut()
+            return parachute.state == self.state.cut
+
         for parachute in self.parachutes:
-            parachute.cut()
-        for parachute in self.parachutes:
-            self.wait_until(
-                lambda p=parachute: p.state == self.state.cut, message="cut"
-            )
+            self.wait_until(lambda p=parachute: cut(p), message="cut")
             self.assertFalse(parachute.deployed)
             self.assertFalse(parachute.armed)
 
