@@ -15,3 +15,10 @@
 
 - Keep the FAR, RealFuels, RealAntennas and Action Groups Extended RPCs working when a mod update
   removes members, and fail only the RPCs that use them (#1341)
+
+## service/KerbalAlarmClock
+
+- Keep working when a Kerbal Alarm Clock update removes members, and fail only the RPCs that use
+  them (#1341)
+- Limit the service to the scenes Kerbal Alarm Clock runs in, apart from `Available`, which
+  reports whether it is installed in any scene (#1341)

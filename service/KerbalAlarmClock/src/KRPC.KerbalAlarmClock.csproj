@@ -38,13 +38,12 @@
     <Compile Include="$(bazel-bin)\service\KerbalAlarmClock\ServiceInfo.cs">
       <Link>ServiceInfo.cs</Link>
     </Compile>
-    <Compile Include="Addon.cs" />
+    <Compile Include="API.cs" />
     <Compile Include="Alarm.cs" />
     <Compile Include="AlarmAction.cs" />
     <Compile Include="AlarmType.cs" />
     <Compile Include="ExtensionMethods\AlarmActionExtensions.cs" />
     <Compile Include="ExtensionMethods\AlarmTypeExtensions.cs" />
-    <Compile Include="KACWrapper.cs" />
     <Compile Include="KerbalAlarmClock.cs" />
   </ItemGroup>
 </Project>
