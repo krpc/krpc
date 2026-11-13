@@ -123,3 +123,13 @@ function serverMessage(error: ServerErrorDetails): string {
 
 /** A value that failed to encode or decode, such as a malformed result from the server. */
 export class EncodingError extends RemoteError {}
+
+/** A stream or an event that was removed, by the program or by the server, or that cannot be
+ * added. Reading a stream's value before its first value throws one too. It is the class of
+ * `KRPC.StreamRemovedException`. */
+export class StreamError extends RemoteError {}
+
+/** Whether an exception is the one the server removes a stream with, which is a StreamError. */
+export function isStreamRemoved(service: string, name: string): boolean {
+  return service === "KRPC" && name === "StreamRemovedException";
+}

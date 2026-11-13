@@ -22,6 +22,7 @@ import {
   RemoteError,
   ServerError,
   type ServerErrorDetails,
+  StreamError,
 } from "../src/errors.js";
 import { camelCase } from "../src/naming.js";
 import { getObjectId, RemoteObject } from "../src/objects.js";
@@ -34,9 +35,12 @@ import {
 } from "../src/schema/krpc_pb.js";
 // The generated module of the test service, which declares its enumerations and structures
 import * as TestService from "../src/services/TestService.js";
+import { Event, Stream } from "../src/streams.js";
 import { RemoteEnum, RemoteFlags, RemoteStruct, type Type } from "../src/types.js";
 import { equals } from "../src/values.js";
 import {
+  type AddStream,
+  type Behavior,
   type Command,
   CommandSchema,
   type Connect,
@@ -47,6 +51,7 @@ import {
   ErrorSchema,
   type Invoke,
   type Members,
+  type NotificationSchema,
   OutputSchema,
   type Reply,
   ReplySchema,
@@ -64,12 +69,16 @@ const PROFILES = [
   "named-arguments",
   "connections",
   "concurrency",
+  "streams",
+  "events",
+  "callbacks",
 ];
 
 /** The error classes an error can be an instance of, by name. */
 const NATIVE_ERRORS: [string, new (...args: never[]) => object][] = [
   ["RemoteError", RemoteError],
   ["ServerError", ServerError],
+  ["StreamError", StreamError],
   ["Error", Error],
   ["TypeError", TypeError],
   ["RangeError", RangeError],
@@ -91,6 +100,18 @@ const objects = new Map<bigint, RemoteObject>();
 let nextHandle = 1n;
 /** The end of the chain of each task, which the task's next command runs after. */
 const tasks = new Map<string, Promise<void>>();
+/** The streams and events the testee holds, by handle, with the type of a stream's values. A copy
+ * of a handle names the same object. */
+const handles = new Map<bigint, { value: Stream<unknown> | Event; type: Type | undefined }>();
+/** The functions that remove the callbacks the driver added, by callback id. */
+const removers = new Map<bigint, () => void>();
+/** The releases of each callback's blocked calls: those given ahead of a call, and the calls
+ * waiting for one. */
+const releases = new Map<bigint, { given: number; waiting: (() => void)[] }>();
+/** The task whose command is running, while it runs without awaiting, or undefined. */
+let currentTask: string | undefined;
+/** The task a callback reports when the client calls it outside every command. */
+const CALLBACK_TASK = "client";
 
 /** Stands for a negative zero in JSON, which JSON.stringify writes as 0. */
 const NEGATIVE_ZERO = "\u0000-0";
@@ -240,6 +261,9 @@ function toValueCase(
   if (value instanceof Uint8Array) {
     return { case: "bytes", value };
   }
+  if (value instanceof Event) {
+    return { case: "event", value: addHandle(value, undefined) };
+  }
   if (value instanceof RemoteObject) {
     const handle = nextHandle++;
     objects.set(handle, value);
@@ -294,6 +318,152 @@ function itemType(type: Type | undefined, index: number): Type | undefined {
     default:
       return undefined;
   }
+}
+
+/** A new handle for a stream or an event. */
+function addHandle(value: Stream<unknown> | Event, type: Type | undefined): bigint {
+  const handle = nextHandle++;
+  handles.set(handle, { value, type });
+  return handle;
+}
+
+function handleOf(handle: bigint): { value: Stream<unknown> | Event; type: Type | undefined } {
+  const result = handles.get(handle);
+  if (result === undefined) {
+    throw new Error(`No stream or event with handle ${handle}`);
+  }
+  return result;
+}
+
+function streamOf(handle: bigint): Stream<unknown> {
+  const { value } = handleOf(handle);
+  if (!(value instanceof Stream)) {
+    throw new Error(`Handle ${handle} is not a stream`);
+  }
+  return value;
+}
+
+function eventOf(handle: bigint): Event {
+  const { value } = handleOf(handle);
+  if (!(value instanceof Event)) {
+    throw new Error(`Handle ${handle} is not an event`);
+  }
+  return value;
+}
+
+/** A timeout in seconds as the client's, in milliseconds. */
+function milliseconds(timeout: number | undefined): number | undefined {
+  return timeout === undefined ? undefined : timeout * 1000;
+}
+
+/** Adds a stream of a call. A scoped stream is read and removed in an await using block. */
+async function addStream(conn: DynamicConnection, command: AddStream): Promise<Reply["result"]> {
+  if (command.invoke === undefined) {
+    throw new Error("No call to stream");
+  }
+  const call = resolve(conn, command.invoke);
+  const type = resultType(conn, command.invoke);
+  if (command.scoped) {
+    await using stream = await conn.addStream(call);
+    await stream.get();
+    return { case: "value", value: toValue(null) };
+  }
+  const stream = await conn.addStream(call);
+  return { case: "stream", value: addHandle(stream, type) };
+}
+
+type Call = MessageInitShape<typeof NotificationSchema>["call"];
+
+/** The function the client calls for a callback the driver adds. It writes a notification for
+ * each call, then does what the behavior says. A behavior that sleeps, blocks or runs a command
+ * makes the callback return a promise. */
+function callback(id: bigint, behavior: Behavior | undefined, call: (arg: unknown) => Call) {
+  if (behavior?.action.case === "failFatally") {
+    throw new Unsupported("JavaScript has no kind of error apart from its ordinary ones");
+  }
+  let calls = 0;
+  return (arg?: unknown): unknown => {
+    const task = currentTask ?? CALLBACK_TASK;
+    write({ content: { case: "notification", value: { callback: id, call: call(arg), task } } });
+    calls++;
+    if (
+      behavior === undefined ||
+      calls <= behavior.skip ||
+      (0 < behavior.only && behavior.only < calls)
+    ) {
+      return undefined;
+    }
+    const action = behavior.action;
+    const returned = () => {
+      if (behavior.reportReturn) {
+        write({ content: { case: "notification", value: { callback: id, task, returned: true } } });
+      }
+    };
+    if (behavior.sleep === 0 && action.case !== "block" && action.case !== "run") {
+      try {
+        if (action.case === "fail") {
+          throw new Error(action.value);
+        }
+      } finally {
+        returned();
+      }
+      return undefined;
+    }
+    return (async () => {
+      try {
+        if (behavior.sleep > 0) {
+          await new Promise((resolve) => setTimeout(resolve, behavior.sleep * 1000));
+        }
+        if (action.case === "block") {
+          await blocked(id);
+        } else if (action.case === "run") {
+          const result = await reply(action.value, task);
+          write({ content: { case: "notification", value: { callback: id, task, result } } });
+        } else if (action.case === "fail") {
+          throw new Error(action.value);
+        }
+      } finally {
+        returned();
+      }
+    })();
+  };
+}
+
+/** Waits for a release of a callback's blocked call. */
+function blocked(id: bigint): Promise<void> {
+  const release = releasesOf(id);
+  if (release.given > 0) {
+    release.given--;
+    return Promise.resolve();
+  }
+  return new Promise((resolve) => release.waiting.push(resolve));
+}
+
+function releasesOf(id: bigint): { given: number; waiting: (() => void)[] } {
+  let release = releases.get(id);
+  if (release === undefined) {
+    release = { given: 0, waiting: [] };
+    releases.set(id, release);
+  }
+  return release;
+}
+
+function release(id: bigint): void {
+  const release = releasesOf(id);
+  const waiting = release.waiting.shift();
+  if (waiting === undefined) {
+    release.given++;
+  } else {
+    waiting();
+  }
+}
+
+function valueCall(type: Type | undefined): (value: unknown) => Call {
+  return (value) => ({ case: "value", value: toValue(value, type) });
+}
+
+function endingCall(error: unknown): Call {
+  return { case: "ending", value: { error: error === undefined ? undefined : toError(error) } };
 }
 
 /** The type a procedure returns, or undefined for none. */
@@ -368,6 +538,7 @@ async function connectCommand(command: Connect, name: string): Promise<void> {
     const all = [...connections.values()];
     connections.clear();
     objects.clear();
+    handles.clear();
     await Promise.all(all.map((x) => x.close()));
   } else {
     await connections.get(name)?.close();
@@ -467,11 +638,12 @@ function splitTypes(names: string): string[] {
 /** A function that uses a member of a service: a call of a procedure, or a read of the service,
  * a type, a value of an enumeration or a field of a structure. */
 function memberUse(conn: DynamicConnection, command: DeprecationSignals): () => unknown {
-  if (command.use !== "") {
+  if (command.use !== "" && (command.use !== "stream" || command.invoke === undefined)) {
     throw new Unsupported(`No ${command.use} of a procedure`);
   }
   if (command.invoke !== undefined) {
-    return resolve(conn, command.invoke);
+    const call = resolve(conn, command.invoke);
+    return command.use === "stream" ? () => conn.addStream(call) : call;
   }
   const serviceName = camelCase(command.service);
   if (command.member === "") {
@@ -534,7 +706,126 @@ function failWrite(message: string): void {
   };
 }
 
-async function dispatch(command: Command): Promise<Value> {
+async function dispatch(command: Command): Promise<Reply["result"]> {
+  const content = command.command;
+  switch (content.case) {
+    case "addStream":
+      return await addStream(connection(command), content.value);
+    case "get": {
+      const { value, type } = handleOf(content.value.stream);
+      const stream = value instanceof Event ? value.stream : value;
+      return { case: "value", value: toValue(await stream.get(), type) };
+    }
+    case "wait":
+      return {
+        case: "value",
+        value: toValue(
+          await streamOf(content.value.stream).wait(milliseconds(content.value.timeout)),
+        ),
+      };
+    case "waitEvent":
+      return {
+        case: "value",
+        value: toValue(
+          await eventOf(content.value.event).wait(milliseconds(content.value.timeout)),
+        ),
+      };
+    case "setRate":
+      await streamOf(content.value.stream).setRate(content.value.rate);
+      return { case: "value", value: toValue(undefined) };
+    case "getRate":
+      return {
+        case: "value",
+        value: create(ValueSchema, {
+          value: { case: "float", value: streamOf(content.value.stream).rate },
+        }),
+      };
+    case "remove": {
+      const { value } = handleOf(content.value.stream);
+      await value.remove();
+      return { case: "value", value: toValue(undefined) };
+    }
+    case "copyStream": {
+      const { value, type } = handleOf(content.value.stream);
+      return { case: "stream", value: addHandle(value, type) };
+    }
+    case "eventStream":
+      return {
+        case: "stream",
+        value: addHandle(eventOf(content.value.event).stream, { kind: "bool", nullable: false }),
+      };
+    case "scopeEvent": {
+      const conn = connection(command);
+      if (content.value.invoke === undefined) {
+        throw new Error("No call");
+      }
+      const event = await invoke(conn, content.value.invoke);
+      if (!(event instanceof Event)) {
+        throw new Error("The call returned no event");
+      }
+      await using scoped = event;
+      await scoped.stream.get();
+      return { case: "value", value: toValue(null) };
+    }
+    case "compareHandles":
+      return {
+        case: "value",
+        value: toValue(handleOf(content.value.a).value === handleOf(content.value.b).value),
+      };
+    case "hashHandle":
+      // JavaScript has no hash of a value
+      return { case: "value", value: toValue(null) };
+    case "dropHandle":
+      handles.delete(content.value.stream);
+      (globalThis as { gc?: () => void }).gc?.();
+      return { case: "value", value: toValue(undefined) };
+    case "addCallback": {
+      const { stream, callback: id, behavior } = content.value;
+      const { type } = handleOf(stream);
+      const target = streamOf(stream);
+      const fn = callback(id, behavior, valueCall(type));
+      removers.set(id, () => target.removeCallback(fn));
+      target.addCallback(fn);
+      return { case: "value", value: toValue(undefined) };
+    }
+    case "addEventCallback": {
+      const { event, callback: id, behavior } = content.value;
+      const target = eventOf(event);
+      const fn = callback(id, behavior, () => ({ case: undefined }));
+      removers.set(id, () => target.removeCallback(fn));
+      target.addCallback(fn);
+      return { case: "value", value: toValue(undefined) };
+    }
+    case "addEndCallback": {
+      const { stream, callback: id, behavior } = content.value;
+      const target = handleOf(stream).value;
+      const fn = callback(id, behavior, endingCall);
+      removers.set(id, () => target.removeEndCallback(fn));
+      target.addEndCallback(fn);
+      return { case: "value", value: toValue(undefined) };
+    }
+    case "addUpdateCallback": {
+      const { callback: id, behavior } = content.value;
+      const conn = connection(command);
+      const fn = callback(id, behavior, () => ({ case: undefined }));
+      removers.set(id, () => conn.removeUpdateCallback(fn));
+      conn.addUpdateCallback(fn);
+      return { case: "value", value: toValue(undefined) };
+    }
+    case "removeCallback":
+    case "removeEndCallback":
+    case "removeUpdateCallback":
+      removers.get(content.value.callback)?.();
+      return { case: "value", value: toValue(undefined) };
+    case "release":
+      release(content.value.callback);
+      return { case: "value", value: toValue(undefined) };
+    default:
+      return { case: "value", value: await dispatchValue(command) };
+  }
+}
+
+async function dispatchValue(command: Command): Promise<Value> {
   const content = command.command;
   switch (content.case) {
     case "connect":
@@ -626,6 +917,8 @@ function toError(error: unknown): ErrorMessage {
     result.name = error.exception;
   } else if (error instanceof EncodingError) {
     result.kind = ErrorKind.ENCODING;
+  } else if (error instanceof StreamError) {
+    result.kind = ErrorKind.STREAM;
   } else if (error instanceof TypeError || error instanceof RangeError) {
     result.kind = ErrorKind.ARGUMENT;
   }
@@ -636,14 +929,28 @@ function toError(error: unknown): ErrorMessage {
   return result;
 }
 
-async function run(command: Command, task: string): Promise<void> {
-  const reply: Reply = create(ReplySchema, { id: command.id, task });
+/** Runs a command on a task, and returns the reply. A callback the client calls before the
+ * command first awaits reports the task. */
+async function reply(command: Command, task: string): Promise<Reply> {
+  const result: Reply = create(ReplySchema, { id: command.id, task });
+  const outer = currentTask;
+  currentTask = task;
+  let pending: Promise<Reply["result"]>;
   try {
-    reply.result = { case: "value", value: await dispatch(command) };
-  } catch (error) {
-    reply.result = { case: "error", value: toError(error) };
+    pending = dispatch(command);
+  } finally {
+    currentTask = outer;
   }
-  write({ content: { case: "reply", value: reply } });
+  try {
+    result.result = await pending;
+  } catch (error) {
+    result.result = { case: "error", value: toError(error) };
+  }
+  return result;
+}
+
+async function run(command: Command, task: string): Promise<void> {
+  write({ content: { case: "reply", value: await reply(command, task) } });
 }
 
 async function main(): Promise<void> {

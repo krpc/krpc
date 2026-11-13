@@ -169,11 +169,13 @@ values then compare with ``===``, and ``instanceof`` works with the package's cl
 to a server with a different definition builds its own type. A value of the package's enumeration
 still passes as an argument, by its number, and :func:`equals` compares values of the two by number.
 
+.. _js-client-web-page:
+
 Using the Client in a Web Page
 ------------------------------
 
-The following script shows the altitude of the active vessel in a page, and updates it twice a
-second:
+The following script shows the altitude of the active vessel in a page. A stream with a callback
+updates it each time it changes, at most 10 times a second:
 
 .. literalinclude:: /scripts/js/Dashboard.js
 
@@ -214,6 +216,8 @@ The client's own errors each extend :class:`RemoteError`, as :class:`ServerError
   connection, its ``reason`` names the reason, such as ``SERVER_STOPPED``. A call made once the
   connection has closed or failed rejects with it too.
 * :class:`EncodingError` for a malformed result from the server.
+* :class:`StreamError` for a stream that has been removed or cannot be added, and for
+  :attr:`Stream.value` before the first value. See :ref:`js-client-stream-endings`.
 
 A call with an argument of the wrong type rejects with a ``TypeError``, and one with a number
 outside the range of its type with a ``RangeError``. These errors and the standard errors, such
@@ -238,11 +242,103 @@ it rejects with ``conn.krpc.ObjectDestroyedException``.
 .. seealso:: :doc:`/user-guide/object-lifetime` describes how each kind of object behaves in more
              detail.
 
-Streams and Events
-------------------
+Streaming Data
+--------------
 
-The JavaScript client has no streams or events yet. Read a value by calling its procedure in a
-loop instead.
+A common use of kRPC is to read data from the game continuously. Calling a procedure in a loop
+sends a request and waits for its response each time. A *stream* is more efficient. The server
+runs the call repeatedly, and sends your program the result each time it changes:
+
+.. literalinclude:: /scripts/js/Streaming.js
+
+:meth:`Connection.addStream` takes a function that returns one call, such as
+``() => flightInfo.getMeanAltitude()``, and returns a ``Promise`` of a :class:`Stream`. The client
+runs the function to build the call, without sending it. The stream's type comes from the call, so
+TypeScript types ``altitude`` as a ``Stream<number>``.
+
+:meth:`Stream.get` waits for the stream's first value, and :attr:`Stream.value` is its latest
+value. :meth:`Stream.wait` waits for the next value. It takes a timeout in milliseconds, and
+resolves with ``false`` when it elapses before an update.
+
+Each call to :meth:`Connection.addStream` creates another stream. A stream of a procedure with no
+return value, such as a property setter, runs the call on each update for its effects. Its value
+is ``undefined``.
+
+A stream runs until you remove it with :meth:`Stream.remove`, or the connection closes. It keeps
+running after your program drops its last reference to it, so remove a stream you no longer need.
+An ``await using`` declaration removes a stream at the end of its block. It needs Node.js 24 or a
+recent browser, or TypeScript to compile it:
+
+.. literalinclude:: /scripts/js/StreamScope.js
+
+By default, the server sends a stream's value each time it changes. :meth:`Stream.setRate` limits
+how many times a second the stream updates, as in the :ref:`web page example <js-client-web-page>`.
+
+Callbacks
+^^^^^^^^^
+
+A callback is a function the client calls with each new value of a stream. The following adds two
+callbacks to a stream of the abort button:
+
+.. literalinclude:: /scripts/js/Callbacks.js
+
+A callback added to a stream that already has a value is called with that value before
+:meth:`Stream.addCallback` returns. It is then called with each new value, in order. The client
+calls it once it has handled the message holding the value, so a callback can make calls and
+await them.
+
+A callback that returns a ``Promise`` is not called again until the ``Promise`` settles. It is then
+called with the latest value, and skips the values in between. An error a callback throws
+goes to ``reportError`` in a web page, or ``console.error`` in Node.js. The stream keeps running.
+
+.. _js-client-stream-endings:
+
+Stream Endings
+^^^^^^^^^^^^^^
+
+A stream ends when its procedure throws an exception, when the server removes it, when you remove
+it, or when the connection closes. :meth:`Stream.get`, :attr:`Stream.value` and :meth:`Stream.wait`
+then throw the error that ended it. The following streams the temperature of a part until the part
+is destroyed:
+
+.. literalinclude:: /scripts/js/StreamEnd.js
+
+The error is the one the procedure threw, or one of the following:
+
+* :class:`StreamError` when you or the server remove the stream.
+* :class:`ConnectionError` when the connection closes or fails.
+
+An exception for an object that is not loaded, or for a procedure not available in the current
+game scene, does not end the stream. It pauses the stream's updates, and the stream keeps its last
+value. The updates resume once the object or the scene is available.
+
+.. seealso:: :doc:`/user-guide/object-lifetime` describes when each kind of object is not loaded,
+             and how streams behave around a load.
+
+:meth:`Stream.addEndCallback` adds a callback that is called once when the stream ends, with the
+error:
+
+.. literalinclude:: /scripts/js/EndCallback.js
+
+Events
+------
+
+An *event* tells your program when something happens in the game. A procedure that returns an
+event, such as one from a mod's service, gives you an :class:`Event`:
+
+.. code-block:: js
+
+   const event = await conn.myMod.onDocked();
+   await event.wait();
+
+:meth:`Event.wait` waits for the event to fire. It returns at once if the event has fired since
+your last wait, so a firing between two waits is not missed. :meth:`Event.addCallback` adds a
+function to call each time the event fires.
+
+An event ends in the same ways as a :ref:`stream <js-client-stream-endings>`. When the event fires
+just before the server ends it, your next wait returns for that firing first. Removing the event
+or closing the connection ends it at once. :attr:`Event.stream` is the event's stream, of a
+``boolean`` that is ``true`` once the event has fired.
 
 Deprecated Members
 ------------------
@@ -317,12 +413,135 @@ Client API Reference
    .. method:: close()
 
       Closes the connection. Each call waiting for a response rejects with a
-      :class:`ConnectionError`. Closing a connection that is already closed does nothing.
+      :class:`ConnectionError`, and each stream ends with one. Closing a connection that is
+      already closed does nothing.
+
+   .. method:: addStream(call)
+
+      Adds a stream of a call.
+
+      :param call: A function that returns one call of a procedure, method or property getter,
+                   such as ``() => flight.getMeanAltitude()``. The client runs it to build the
+                   call, which it does not send.
+      :returns: A ``Promise`` of the :class:`Stream`.
+
+      Rejects with a :class:`StreamError` for a procedure that returns an event, and with a
+      ``TypeError`` for a function that does not return one call.
+
+   .. method:: addUpdateCallback(callback)
+
+      Adds a function to call once for each stream update message from the server, after the
+      callbacks of its streams.
+
+   .. method:: removeUpdateCallback(callback)
+
+      Removes a function added with :meth:`addUpdateCallback`.
 
    .. attribute:: krpc
 
       The ``KRPC`` service, providing the server's basic functionality. Each of the server's other
       services is a property too, such as ``spaceCenter``.
+
+.. class:: Stream()
+
+   A stream of a call, which the server repeats, sending each new value. Obtain one by calling
+   :meth:`Connection.addStream`.
+
+   .. method:: get()
+
+      The stream's latest value. Waits for the first value.
+
+      :returns: A ``Promise`` of the value. Rejects with the error that ended the stream.
+
+   .. attribute:: value
+
+      The stream's latest value. Throws a :class:`StreamError` before the first value, and the
+      error that ended the stream once it has ended.
+
+   .. method:: wait(timeout)
+
+      Waits for the stream's next value.
+
+      :param timeout: The time to wait, in milliseconds. Leave it out, or pass ``Infinity``, to
+                      wait indefinitely.
+      :returns: A ``Promise`` of ``true`` on an update, or ``false`` once the timeout elapses.
+                Rejects with the error that ends the stream, and with a ``RangeError`` for a
+                negative or ``NaN`` timeout.
+
+   .. attribute:: rate
+
+      The most times a second the server sends the stream's value. Zero means no limit.
+
+   .. method:: setRate(rate)
+
+      Sets the most times a second the server sends the stream's value. Zero means no limit.
+
+      :returns: A ``Promise`` that resolves once the server has the rate.
+
+   .. method:: addCallback(callback)
+
+      Adds a function to call with each new value. A stream that has a value calls it with that
+      value before this returns. A callback that returns a ``Promise`` is not called again until
+      it settles.
+
+   .. method:: removeCallback(callback)
+
+      Removes a function added with :meth:`addCallback`.
+
+   .. method:: addEndCallback(callback)
+
+      Adds a function to call once when the stream ends, with the error that ended it. A stream
+      that has ended calls it before this returns.
+
+   .. method:: removeEndCallback(callback)
+
+      Removes a function added with :meth:`addEndCallback`.
+
+   .. method:: remove()
+
+      Removes the stream, and calls its end callbacks. Reads and waits then throw a
+      :class:`StreamError`. Removing a stream that has ended does nothing.
+
+      :returns: A ``Promise`` that resolves once the server has removed the stream.
+
+.. class:: Event()
+
+   An event, which fires each time its stream's value becomes ``true``. A procedure that returns an
+   event gives one.
+
+   .. method:: wait(timeout)
+
+      Waits for the event to fire. Resolves at once for a firing since the last wait.
+
+      :param timeout: The time to wait, in milliseconds. Leave it out, or pass ``Infinity``, to
+                      wait indefinitely.
+      :returns: A ``Promise`` of ``true`` when the event fires, or ``false`` once the timeout
+                elapses. Rejects with the error that ends the event.
+
+   .. method:: addCallback(callback)
+
+      Adds a function to call each time the event fires. It is called before this returns for a
+      firing since the last wait that no callback has been called for.
+
+   .. method:: removeCallback(callback)
+
+      Removes a function added with :meth:`addCallback`.
+
+   .. method:: addEndCallback(callback)
+
+      Adds a function to call once when the event ends, with the error that ended it.
+
+   .. method:: removeEndCallback(callback)
+
+      Removes a function added with :meth:`addEndCallback`.
+
+   .. method:: remove()
+
+      Removes the event, and calls its end callbacks.
+
+   .. attribute:: stream
+
+      The event's :class:`Stream`, of a ``boolean`` that is ``true`` once the event has fired.
 
 .. class:: DynamicConnection()
 
@@ -417,6 +636,12 @@ Client API Reference
 .. class:: EncodingError()
 
    A value that failed to encode or decode, such as a malformed result from the server.
+
+.. class:: StreamError()
+
+   A stream or an event that you or the server removed, or that cannot be added. Reading
+   :attr:`Stream.value` before the first value throws one too. It is the class of
+   ``KRPC.StreamRemovedException``.
 
 API Reference
 -------------

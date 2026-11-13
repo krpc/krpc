@@ -2705,7 +2705,7 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
    A stream was removed by the server, e.g. an event that has finished.
 
-   A subclass of :class:`~@krpc-org/krpc.ServerError`.
+   An alias of :class:`~@krpc-org/krpc.StreamError`.
 
 
 

@@ -41,6 +41,11 @@ class JsDomain(Domain[JsLanguage]):
     language = JsLanguage()
 
     def raised_as(self, exception):
+        alias = self.language.exception_alias(
+            exception.service_name, exception.name, exception.mapped_type
+        )
+        if alias is not None:
+            return "An alias of :class:`~@krpc-org/krpc.%s`." % alias
         native = self.language.native_exception(exception.mapped_type)
         if native is not None:
             return "A subclass of the builtin ``%s`` alone." % native
@@ -83,7 +88,9 @@ class JsDomain(Domain[JsLanguage]):
             if typ.protobuf_type.code in (Type.SINT64, Type.UINT64) and argument:
                 return "``number`` or ``bigint``"
             return "``%s``" % self.language.parse_type(typ)
-        if isinstance(typ, (StreamType, EventType)):
+        if isinstance(typ, EventType):
+            return ":class:`~@krpc-org/krpc.Event`"
+        if isinstance(typ, StreamType):
             return "``never``"
         if isinstance(typ, MessageType):
             return "``schema.%s``" % typ.python_type.__name__

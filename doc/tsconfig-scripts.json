@@ -3,7 +3,7 @@
     "target": "ES2022",
     "module": "ES2022",
     "moduleResolution": "Bundler",
-    "lib": ["ES2022", "DOM"],
+    "lib": ["ES2022", "ESNext.Disposable", "DOM"],
     "types": [],
     "strict": true,
     // The examples leave out null checks for brevity

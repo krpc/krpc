@@ -48,7 +48,7 @@ Clients
      - Dynamic
    * - :doc:`JavaScript <client-design/js>`
      - Single, with calls in flight at once
-     - No
+     - Yes
      - Dynamic, with generated declarations
 
 Names
@@ -253,7 +253,8 @@ it gets a call as a value, such as to use in an expression. The clients do this 
 
 * Python, C# and Java have one method for each purpose, ``add_stream`` and ``get_call`` or their
   equivalents. It takes any property or method, and works out the procedure at run time. Lua has
-  only ``get_call``, as it has no streams.
+  only ``get_call``, as it has no streams. JavaScript has only ``addStream``, which takes a
+  function returning the call, as C#'s lambda does.
 * C++ and C-nano cannot look up a method at run time. Their generated stubs instead have extra
   functions for each procedure. C++ adds ones ending in ``_stream`` and ``_call``. C-nano has no
   streams, so it adds only ``_call``.
@@ -285,12 +286,12 @@ For the ``MeanAltitude`` property of a ``Flight`` object:
      - None
      - ``conn:get_call(flight.get_mean_altitude, flight)``
    * - JavaScript
-     - None
+     - ``conn.addStream(() => flight.getMeanAltitude())``
      - None
 
-In Python, C# and Java, the stream runs on the connection the method is called on, whichever
-connection the object came from. In C++, it runs on the object's client, or for a static method the
-client passed to it.
+In Python, C#, Java and JavaScript, the stream runs on the connection the method is called on,
+whichever connection the object came from. In C++, it runs on the object's client, or for a
+static method the client passed to it.
 
 Static Methods
 --------------
@@ -339,8 +340,8 @@ raise each. The clients name them alike:
      - Code that does not compile into a server side function, in Python and C#
 
 C++ uses these names in ``krpc::``. C# and Java end each with ``Exception`` in place of ``Error``,
-as their conventions do. Lua and JavaScript have no ``StreamError``, as they have no streams.
-C-nano returns a code per kind.
+as their conventions do. Lua has no ``StreamError``, as it has no streams. C-nano returns a code
+per kind.
 
 * **The base follows the generated bases.** ``RemoteError`` is named as ``RemoteObject`` and
   ``RemoteService`` are. A program catches every error of the client's own with it.
@@ -394,9 +395,9 @@ Each client signals the use of a deprecated member with the language's own mecha
        and ``@deprecated`` for editors
      -
 
-A stream, and the call a server side function makes, use a procedure too. Python and Lua warn when
-the client builds the call. In C++ and C-nano, the ``_stream`` and ``_call`` functions carry the
-attribute. In C#, the lambda that names the procedure warns.
+A stream, and the call a server side function makes, use a procedure too. Python, Lua and
+JavaScript warn when the client builds the call. In C++ and C-nano, the ``_stream`` and ``_call``
+functions carry the attribute. In C#, the lambda that names the procedure warns.
 
 A member of a deprecated service, class, enumeration or structure is deprecated. A member with no
 reason of its own takes the reason of its nearest deprecated container. ``clientgen`` and the
@@ -423,7 +424,8 @@ The read loop skips a message case it does not know, and fails the call on a ``d
 C-nano treat any other message as a protocol error, including a ``stream_update``.
 
 JavaScript also runs on one thread, but the socket's ``message`` event reads each message, so
-several calls can wait at once. The :doc:`JavaScript page <client-design/js>` covers it.
+several calls can wait at once and stream updates arrive between calls. The :doc:`JavaScript page
+<client-design/js>` covers it.
 
 Threaded Clients
 ----------------
