@@ -1,6 +1,7 @@
 " clientgen tool "
 
 load("@bazel_skylib//rules:expand_template.bzl", "expand_template")
+load("@bazel_skylib//rules:write_file.bzl", "write_file")
 load(":services.bzl", "CONFORMANCE_SERVICES", "SERVICES")
 
 ClientgenInfo = provider(
@@ -36,6 +37,9 @@ def _impl(ctx):
     include = ctx.attr.out.name
     if include.startswith("include/"):
         include = include[len("include/"):]
+    if language == "js":
+        # A JavaScript module imports one beside it by the path of its compiled output
+        include = "./%s.js" % include.rpartition("/")[2].removesuffix(".ts")
     return [ClientgenInfo(service = service, include = include, defs = defs)]
 
 clientgen = rule(
@@ -190,11 +194,64 @@ def clientgen_python(name, service, defs, out = None, deps = []):
         language = "python",
     )
 
+# buildifier: disable=function-docstring
+def clientgen_js(name, service, defs, out = None, deps = []):
+    if out == None:
+        out = "src/services/%s.ts" % service
+    clientgen(
+        name = name,
+        service = service,
+        defs = defs,
+        deps = deps,
+        out = out,
+        language = "js",
+    )
+
+def _lower_camel_case(name):
+    """Converts a name to lower camel case, as the JavaScript client names a service."""
+    capitals = 0
+    for i in range(len(name)):
+        if not name[i].isupper():
+            break
+        capitals = i + 1
+    if capitals > 1 and capitals < len(name) and name[capitals].islower():
+        capitals -= 1
+    return name[:capitals].lower() + name[capitals:]
+
+def clientgen_js_index(name, out):
+    """Writes the module of the JavaScript client that names the services a release ships.
+
+    Args:
+        name: the name of the target.
+        out: the output path of the module.
+    """
+    services = [service.name for service in SERVICES if not service.test]
+    lines = [
+        "// The services of a kRPC release, generated from the services clientgen generates.",
+        "",
+    ]
+    lines += ['import type * as %s from "./%s.js";' % (x, x) for x in services]
+    lines.append("")
+    lines += ['export type * as %s from "./%s.js";' % (x, x) for x in services]
+    lines += [
+        "",
+        "/** The services of a connection, each a property in lower camel case. */",
+        "export interface Services {",
+    ]
+    lines += ["  readonly %s: %s.Service;" % (_lower_camel_case(x), x) for x in services]
+    lines += ["}", ""]
+    write_file(
+        name = name,
+        out = out,
+        content = lines,
+    )
+
 _CLIENTGEN = {
     "cnano": clientgen_cnano,
     "cpp": clientgen_cpp,
     "csharp": clientgen_csharp,
     "java": clientgen_java,
+    "js": clientgen_js,
     "python": clientgen_python,
 }
 

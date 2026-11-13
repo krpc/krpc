@@ -7,5 +7,5 @@ try {
   if (!(error instanceof conn.krpc.ArgumentException)) {
     throw error;
   }
-  console.log(`Failed to load the save: ${error}`);
+  console.log(`Failed to load the save: ${error.description}`);
 }

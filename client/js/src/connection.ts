@@ -8,7 +8,7 @@ import {
   type ServerErrorDetails,
 } from "./errors.js";
 import { accessorName, camelCase } from "./naming.js";
-import { ObjectCache, RemoteObject } from "./objects.js";
+import { ObjectCache, RemoteObject, RemoteService } from "./objects.js";
 import {
   type Argument,
   ArgumentSchema,
@@ -16,6 +16,7 @@ import {
   type Service,
   ServicesSchema,
 } from "./schema/krpc_pb.js";
+import type { Services } from "./services/index.js";
 import { Session } from "./session.js";
 import {
   MalformedDefinitionsError,
@@ -38,8 +39,12 @@ export interface ConnectOptions {
   handshakeTimeout?: number;
 }
 
+// The type of a connection holds the services a kRPC release ships
+export interface Connection extends Services {}
+
 /** A connection to a kRPC server. It has a property for each service of the server, in lower
  * camel case, such as `conn.spaceCenter`. */
+// biome-ignore lint/suspicious/noUnsafeDeclarationMerging: the connection defines the services at run time
 export class Connection {
   readonly #session: Session;
 
@@ -55,8 +60,8 @@ export class Connection {
   }
 }
 
-/** A connection, with its services. The services are built at run time from the server's
- * definitions, so their members have no static types. */
+/** A connection, typed to call any service the server has, such as one a mod adds. Its
+ * members have no static types. */
 export type DynamicConnection = Connection & { readonly [service: string]: any };
 
 /** What the services of a connection need to make calls, and what the conformance testee
@@ -85,7 +90,7 @@ const DEFAULT_HANDSHAKE_TIMEOUT = 5000;
 /** Connects to a kRPC server over WebSockets, and builds its services. Rejects with a
  * ConnectionError when the server cannot be reached, refuses the connection or sends service
  * definitions the client cannot build its services from. */
-export async function connect(options: ConnectOptions = {}): Promise<DynamicConnection> {
+export async function connect(options: ConnectOptions = {}): Promise<Connection> {
   const timeout = options.handshakeTimeout ?? DEFAULT_HANDSHAKE_TIMEOUT;
   if (!(timeout > 0)) {
     throw new RangeError(`The handshake timeout ${timeout} is not positive`);
@@ -140,7 +145,7 @@ export async function connect(options: ConnectOptions = {}): Promise<DynamicConn
         });
       }
     }
-    return connection as DynamicConnection;
+    return connection;
   } catch (error) {
     await session.close();
     if (error instanceof MalformedDefinitionsError) {
@@ -352,7 +357,7 @@ function serviceMembers(
   classes: Map<string, new (id: bigint) => RemoteObject>,
   exceptions: Map<string, new (error: ServerErrorDetails) => Error>,
 ): object | null {
-  const members: Record<string, unknown> = {};
+  const members: Record<string, unknown> = Object.create(RemoteService.prototype);
   let hasMembers =
     service.classes.length > 0 || service.enumerations.length > 0 || service.exceptions.length > 0;
   for (const procedure of service.procedures) {

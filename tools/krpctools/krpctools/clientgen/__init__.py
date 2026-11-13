@@ -21,6 +21,7 @@ from .dispatch import (
 )
 from .docparser import DocumentationMarkupWarning
 from .java import JavaGenerator
+from .js import JsGenerator
 from .python import PythonGenerator
 
 _default_show_warning = warnings.showwarning
@@ -37,6 +38,7 @@ GENERATORS = {
     "csharp": CsharpGenerator,
     "cpp": CppGenerator,
     "java": JavaGenerator,
+    "js": JsGenerator,
     "cnano": CnanoGenerator,
     "python": PythonGenerator,
     # The dispatch of a conformance testee
@@ -113,8 +115,8 @@ def main():
         metavar="SERVICE=PATH",
         help="Include the generated code of another service, whose types the service "
         + "uses, from the given path. Required by the C++ and C nano generators for "
-        + "each such service. For Python, the path is the module of the service, "
-        + "which defaults to the module it ships in.",
+        + "each such service. For Python and JavaScript, the path is the module of the "
+        + "service, which defaults to the module it ships in.",
     )
     parser.add_argument(
         "--output-defs",
