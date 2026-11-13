@@ -15,3 +15,4 @@ and the `Discord server <https://discord.gg/bXuaTrj>`_.
    cnano
    java
    lua
+   js
