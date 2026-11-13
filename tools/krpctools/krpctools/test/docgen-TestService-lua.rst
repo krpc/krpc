@@ -338,7 +338,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: echo_nullable_u_int(value: number | Types.none): number | nil
+.. staticmethod:: echo_nullable_uint(value: number | Types.none): number | nil
 
 
 
@@ -346,7 +346,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: echo_nullable_u_long(value: number | Types.none): number | nil
+.. staticmethod:: echo_nullable_ulong(value: number | Types.none): number | nil
 
 
 
@@ -830,7 +830,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: string_to_u_int32(value: string): number
+.. staticmethod:: string_to_uint32(value: string): number
 
 
 
@@ -838,7 +838,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: string_to_u_int64(value: string): number
+.. staticmethod:: string_to_uint64(value: string): number
 
 
 
@@ -963,7 +963,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: u_int32_to_string(value: number): string
+.. staticmethod:: uint32_to_string(value: number): string
 
 
 
@@ -971,7 +971,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: u_int64_to_string(value: number): string
+.. staticmethod:: uint64_to_string(value: number): string
 
 
 

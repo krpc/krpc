@@ -50,4 +50,3 @@ test_functions.py::test_argument_types[uint64-max]  # As test_default_values[uin
 test_functions.py::test_run_argument_errors[out-of-range]  # As test_values.py::test_out_of_range[sint32-above]
 test_functions.py::test_run_argument_errors[out-of-range-list-item]  # As test_values.py::test_out_of_range[sint32-above]
 test_calls.py::test_malformed_definitions[structure-twice]  # The client does not check for a structure defined twice, so the connect succeeds
-test_calls.py::test_member_name_case  # Compound words, plural acronyms and digits before a capital split apart, e.g. UTF8 is ut_f8

@@ -1060,7 +1060,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         service = self.conn.test_service
 
         def large(x: str) -> int:
-            match service.string_to_u_int64(x):
+            match service.string_to_uint64(x):
                 case 18446744073709551615:
                     return 1
                 case 0:

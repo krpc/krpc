@@ -823,14 +823,14 @@
       :param org.javatuples.Pair<Integer,Boolean> x:
    
 
-   .. method:: String uInt32ToString(int value)
+   .. method:: String uint32ToString(int value)
 
 
 
       :param int value:
    
 
-   .. method:: String uInt64ToString(long value)
+   .. method:: String uint64ToString(long value)
 
 
 

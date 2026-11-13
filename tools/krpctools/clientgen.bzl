@@ -56,19 +56,73 @@ clientgen = rule(
     },
 )
 
-def _snake_case(name):
-    """Converts a camel case name to snake case, as krpc.utils.snake_case does."""
-    result = ""
-    for i in range(len(name)):
-        before = name[i - 1] if i > 0 else ""
-        after = name[i + 1] if i + 1 < len(name) else ""
-        if name[i] == "_" and i > 0:
-            result += "_"
-        elif name[i].isupper() and (before.islower() or before.isdigit() or
-                                    (before.isupper() and (after.islower() or after.isdigit()))):
-            result += "_"
-        result += name[i]
-    return result.lower()
+_UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+_LOWER = "abcdefghijklmnopqrstuvwxyz"
+_DIGIT = "0123456789"
+_COMPOUND_WORDS = ["UInt", "ULong", "SInt", "FoV"]
+
+def _char(name, i):
+    return name[i] if i < len(name) else ""
+
+def _skip(name, i, chars):
+    """The index past the run of characters from chars at i."""
+    for j in range(i, len(name)):
+        if name[j] not in chars:
+            return j
+    return len(name)
+
+def _acronym(name, i):
+    """The index past the acronym at i, or None if there is none."""
+    stop = _skip(name, i, _UPPER)
+    if stop > i and (_char(name, stop) == "" or _char(name, stop) not in _LOWER):
+        return stop
+    if stop > i + 1:
+        return stop - 1
+    return None
+
+def _word_digits(name, i):
+    """The index past the digits at i, with their lower case letters, that the word before takes."""
+    stop = _skip(name, i, _DIGIT)
+    if stop > i and _acronym(name, stop) == None:
+        return _skip(name, stop, _LOWER)
+    return i
+
+def _is_lower(name, i):
+    return _char(name, i) != "" and _char(name, i) in _LOWER
+
+def _word_end(name, i):
+    """The index past the word at i, by the rules of krpc.utils.words."""
+    for word in _COMPOUND_WORDS:
+        if name[i:i + len(word)] == word and not _is_lower(name, i + len(word)):
+            return _word_digits(name, i + len(word))
+    capitals = _skip(name, i, _UPPER)
+    if capitals > i + 1 and _char(name, capitals) == "s" and not _is_lower(name, capitals + 1):
+        return _word_digits(name, capitals + 1)
+    stop = _acronym(name, i)
+    if stop != None:
+        return _word_digits(name, stop)
+    start = i + 1 if name[i] in _UPPER else i
+    stop = _skip(name, start, _LOWER)
+    if stop > start:
+        return _word_digits(name, stop)
+    stop = _skip(name, i, _DIGIT)
+    if stop > i:
+        return _acronym(name, stop) or _skip(name, stop, _LOWER)
+    return i + 1
+
+def _words(name):
+    """The words of a name with no underscore, as krpc.utils.words gives them."""
+    words = []
+    i = 0
+    for j in range(len(name)):
+        if j == i:
+            i = _word_end(name, j)
+            words.append(name[j:i])
+    return words
+
+def snake_case(name):
+    """Converts a name to snake case, as krpc.utils.snake_case does."""
+    return "__".join(["_".join(_words(part)).lower() for part in name.split("_")])
 
 # buildifier: disable=function-docstring
 def clientgen_csharp(name, service, defs, out = None, deps = [], visibility = []):
@@ -87,7 +141,7 @@ def clientgen_csharp(name, service, defs, out = None, deps = [], visibility = []
 # buildifier: disable=function-docstring
 def clientgen_cpp(name, service, defs, out = None, deps = []):
     if out == None:
-        out = "include/krpc/services/%s.hpp" % _snake_case(service)
+        out = "include/krpc/services/%s.hpp" % snake_case(service)
     clientgen(
         name = name,
         service = service,
@@ -113,7 +167,7 @@ def clientgen_java(name, service, defs, out = None, deps = []):
 # buildifier: disable=function-docstring
 def clientgen_cnano(name, service, defs, out = None, deps = []):
     if out == None:
-        out = "include/krpc_cnano/services/%s.h" % _snake_case(service)
+        out = "include/krpc_cnano/services/%s.h" % snake_case(service)
     clientgen(
         name = name,
         service = service,
@@ -194,7 +248,7 @@ def clientgen_dispatch(language, out, services_out = None):
             defs = service.defs,
             out = services_out.format(
                 service = service.name,
-                snake_service = _snake_case(service.name),
+                snake_service = snake_case(service.name),
             ) if services_out else None,
             deps = [_target(dep) for dep in service.deps],
         )
@@ -207,7 +261,7 @@ def clientgen_dispatch(language, out, services_out = None):
             name = target,
             service = service.name,
             defs = service.defs,
-            out = out.format(service = service.name, snake_service = _snake_case(service.name)),
+            out = out.format(service = service.name, snake_service = snake_case(service.name)),
             deps = [_target(dep) for dep in service.deps],
             language = language + "-dispatch",
             testonly = True,

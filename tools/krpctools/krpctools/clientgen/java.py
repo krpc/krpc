@@ -2,6 +2,7 @@ import collections
 import hashlib
 import itertools
 
+from krpc.attributes import Attributes
 from krpc.schema.KRPC_pb2 import Type
 from krpc.types import (
     ClassType,
@@ -16,12 +17,22 @@ from krpc.types import (
     TupleType,
     ValueType,
 )
+from krpc.utils import lower_camel_case
 
 from ..lang.java import JavaLanguage
-from ..utils import as_type, is_nullable, lower_camel_case, upper_camel_case
+from ..utils import as_type, is_nullable
 from . import crefs
 from .docparser import DocParser
 from .generator import Generator
+
+
+def _accessor_name(accessor):
+    """The name a property accessor takes after get or set: the property's name as the server
+    gives it."""
+    name = accessor["remote_name"]
+    if Attributes.is_a_class_member(name):
+        return Attributes.get_class_member_name(name)
+    return Attributes.get_property_name(name)
 
 
 class JavaGenerator(Generator[JavaLanguage]):
@@ -104,14 +115,14 @@ class JavaGenerator(Generator[JavaLanguage]):
             name += "." + target.type
         if target.member is None:
             return "{@link %s}" % name
-        member = self.language.parse_name(target.member)
         if target.kind in (crefs.PROPERTY, crefs.CLASS_PROPERTY):
-            member = upper_camel_case(member)
-            member = "get" + member + "()" if target.getter else "set" + member
+            member = ("get%s()" if target.getter else "set%s") % target.member
         elif target.kind == crefs.ENUMERATION_VALUE:
-            member = self.language.parse_const_name(member)
+            member = self.language.parse_const_name(target.member)
         elif target.kind == crefs.STRUCT_FIELD:
-            member = "get" + upper_camel_case(member) + "()"
+            member = "get%s()" % target.member
+        else:
+            member = self.language.parse_name(target.member)
         return "{@link %s#%s}" % (name, member)
 
     def _make_return_type(self, info):
@@ -129,14 +140,14 @@ class JavaGenerator(Generator[JavaLanguage]):
         for struct_info in context["structs"].values():
             for field in struct_info["fields"]:
                 field["spec"] = self._at_position(field["krpc_type"])
-                field["accessor_name"] = upper_camel_case(field["name"])
+                field["accessor_name"] = field["remote_name"]
 
     def parse_context(self, context):
         # Expand service properties into get and set methods
         properties = collections.OrderedDict()
-        for name, info in context["properties"].items():
+        for info in context["properties"].values():
             if info["getter"]:
-                properties["get" + upper_camel_case(name)] = {
+                properties["get" + _accessor_name(info["getter"])] = {
                     "procedure": info["getter"]["procedure"],
                     "remote_name": info["getter"]["remote_name"],
                     "parameters": [],
@@ -146,7 +157,7 @@ class JavaGenerator(Generator[JavaLanguage]):
                     "deprecated_reason": info["deprecated_reason"],
                 }
             if info["setter"]:
-                properties["set" + upper_camel_case(name)] = {
+                properties["set" + _accessor_name(info["setter"])] = {
                     "procedure": info["setter"]["procedure"],
                     "remote_name": info["setter"]["remote_name"],
                     "parameters": self.generate_context_parameters(
@@ -162,9 +173,9 @@ class JavaGenerator(Generator[JavaLanguage]):
         # Expand class properties into get and set methods
         for class_info in context["classes"].values():
             class_properties = collections.OrderedDict()
-            for name, info in class_info["properties"].items():
+            for info in class_info["properties"].values():
                 if info["getter"]:
-                    class_properties["get" + upper_camel_case(name)] = {
+                    class_properties["get" + _accessor_name(info["getter"])] = {
                         "procedure": info["getter"]["procedure"],
                         "remote_name": info["getter"]["remote_name"],
                         "parameters": [],
@@ -174,7 +185,7 @@ class JavaGenerator(Generator[JavaLanguage]):
                         "deprecated_reason": info["deprecated_reason"],
                     }
                 if info["setter"]:
-                    class_properties["set" + upper_camel_case(name)] = {
+                    class_properties["set" + _accessor_name(info["setter"])] = {
                         "procedure": info["setter"]["procedure"],
                         "remote_name": info["setter"]["remote_name"],
                         "parameters": [
@@ -236,7 +247,7 @@ class JavaGenerator(Generator[JavaLanguage]):
         # Make enumeration members UPPER_SNAKE_CASE
         for enm in context["enumerations"].values():
             for value in enm["values"]:
-                value["name"] = self.language.parse_const_name(value["name"])
+                value["name"] = self.language.parse_const_name(value["remote_name"])
 
         self.add_struct_field_specifications(context)
 

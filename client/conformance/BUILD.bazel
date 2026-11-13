@@ -182,6 +182,7 @@ filegroup(
         "driver/*.py",
         "tests/*.py",
     ]) + [
+        "names.json",
         "profiles.py",
         "pytest.ini",
         "testee.proto",

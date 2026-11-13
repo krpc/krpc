@@ -222,19 +222,19 @@ class KRPC : public ::krpc::RemoteService {
     /**
      * A signed 32-bit integer.
      */
-    s_int32 = 3,
+    sint32 = 3,
     /**
      * A signed 64-bit integer.
      */
-    s_int64 = 4,
+    sint64 = 4,
     /**
      * An unsigned 32-bit integer.
      */
-    u_int32 = 5,
+    uint32 = 5,
     /**
      * An unsigned 64-bit integer.
      */
-    u_int64 = 6,
+    uint64 = 6,
     /**
      * A boolean.
      */
@@ -745,14 +745,14 @@ class KRPC : public ::krpc::RemoteService {
      * @param connection A connection object.
      * @param value The value.
      */
-    static KRPC::Expression constant_u_int(::krpc::Connection& connection, uint32_t value);
+    static KRPC::Expression constant_uint(::krpc::Connection& connection, uint32_t value);
 
     /**
      * A constant value of unsigned long integer type.
      * @param connection A connection object.
      * @param value The value.
      */
-    static KRPC::Expression constant_u_long(::krpc::Connection& connection, uint64_t value);
+    static KRPC::Expression constant_ulong(::krpc::Connection& connection, uint64_t value);
 
     /**
      * Whether a collection contains a value.
@@ -1816,9 +1816,9 @@ class KRPC : public ::krpc::RemoteService {
 
     static ::krpc::Stream<KRPC::Expression> constant_string_stream(::krpc::Connection& connection, std::string value);
 
-    static ::krpc::Stream<KRPC::Expression> constant_u_int_stream(::krpc::Connection& connection, uint32_t value);
+    static ::krpc::Stream<KRPC::Expression> constant_uint_stream(::krpc::Connection& connection, uint32_t value);
 
-    static ::krpc::Stream<KRPC::Expression> constant_u_long_stream(::krpc::Connection& connection, uint64_t value);
+    static ::krpc::Stream<KRPC::Expression> constant_ulong_stream(::krpc::Connection& connection, uint64_t value);
 
     static ::krpc::Stream<KRPC::Expression> contains_stream(::krpc::Connection& connection, KRPC::Expression arg, KRPC::Expression value);
 
@@ -2084,9 +2084,9 @@ class KRPC : public ::krpc::RemoteService {
 
     static ::krpc::schema::ProcedureCall constant_string_call(::krpc::Connection& connection, std::string value);
 
-    static ::krpc::schema::ProcedureCall constant_u_int_call(::krpc::Connection& connection, uint32_t value);
+    static ::krpc::schema::ProcedureCall constant_uint_call(::krpc::Connection& connection, uint32_t value);
 
-    static ::krpc::schema::ProcedureCall constant_u_long_call(::krpc::Connection& connection, uint64_t value);
+    static ::krpc::schema::ProcedureCall constant_ulong_call(::krpc::Connection& connection, uint64_t value);
 
     static ::krpc::schema::ProcedureCall contains_call(::krpc::Connection& connection, KRPC::Expression arg, KRPC::Expression value);
 
@@ -2558,13 +2558,13 @@ class KRPC : public ::krpc::RemoteService {
        * A constant value of unsigned integer type.
        * @param value The value.
        */
-      KRPC::Expression constant_u_int(uint32_t value) const;
+      KRPC::Expression constant_uint(uint32_t value) const;
 
       /**
        * A constant value of unsigned long integer type.
        * @param value The value.
        */
-      KRPC::Expression constant_u_long(uint64_t value) const;
+      KRPC::Expression constant_ulong(uint64_t value) const;
 
       /**
        * Whether a collection contains a value.
@@ -3587,12 +3587,12 @@ class KRPC : public ::krpc::RemoteService {
     /**
      * An unsigned 32-bit integer type.
      */
-    static KRPC::Type u_int(::krpc::Connection& connection);
+    static KRPC::Type uint(::krpc::Connection& connection);
 
     /**
      * An unsigned 64-bit integer type.
      */
-    static KRPC::Type u_long(::krpc::Connection& connection);
+    static KRPC::Type ulong(::krpc::Connection& connection);
 
     /**
      * The kind of the type.
@@ -3661,9 +3661,9 @@ class KRPC : public ::krpc::RemoteService {
 
     static ::krpc::Stream<KRPC::Type> tuple_type_stream(::krpc::Connection& connection, std::vector<KRPC::Type> value_types);
 
-    static ::krpc::Stream<KRPC::Type> u_int_stream(::krpc::Connection& connection);
+    static ::krpc::Stream<KRPC::Type> uint_stream(::krpc::Connection& connection);
 
-    static ::krpc::Stream<KRPC::Type> u_long_stream(::krpc::Connection& connection);
+    static ::krpc::Stream<KRPC::Type> ulong_stream(::krpc::Connection& connection);
 
     ::krpc::Stream<KRPC::TypeCode> code_stream();
 
@@ -3711,9 +3711,9 @@ class KRPC : public ::krpc::RemoteService {
 
     static ::krpc::schema::ProcedureCall tuple_type_call(::krpc::Connection& connection, std::vector<KRPC::Type> value_types);
 
-    static ::krpc::schema::ProcedureCall u_int_call(::krpc::Connection& connection);
+    static ::krpc::schema::ProcedureCall uint_call(::krpc::Connection& connection);
 
-    static ::krpc::schema::ProcedureCall u_long_call(::krpc::Connection& connection);
+    static ::krpc::schema::ProcedureCall ulong_call(::krpc::Connection& connection);
 
     ::krpc::schema::ProcedureCall code_call();
 
@@ -3844,12 +3844,12 @@ class KRPC : public ::krpc::RemoteService {
       /**
        * An unsigned 32-bit integer type.
        */
-      KRPC::Type u_int() const;
+      KRPC::Type uint() const;
 
       /**
        * An unsigned 64-bit integer type.
        */
-      KRPC::Type u_long() const;
+      KRPC::Type ulong() const;
 
      private:
       mutable ::krpc::Connection _connection;
@@ -5120,7 +5120,7 @@ inline KRPC::Expression KRPC::Expression::constant_string(::krpc::Connection& _c
   return _result;
 }
 
-inline KRPC::Expression KRPC::Expression::constant_u_int(::krpc::Connection& _connection, uint32_t value) {
+inline KRPC::Expression KRPC::Expression::constant_uint(::krpc::Connection& _connection, uint32_t value) {
     std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
@@ -5131,7 +5131,7 @@ inline KRPC::Expression KRPC::Expression::constant_u_int(::krpc::Connection& _co
   return _result;
 }
 
-inline KRPC::Expression KRPC::Expression::constant_u_long(::krpc::Connection& _connection, uint64_t value) {
+inline KRPC::Expression KRPC::Expression::constant_ulong(::krpc::Connection& _connection, uint64_t value) {
     std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
@@ -6551,14 +6551,14 @@ inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::constant_string_stream
   return ::krpc::Stream<KRPC::Expression>(_connection, _connection.build_call("KRPC", "Expression_static_ConstantString", _args));
 }
 
-inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::constant_u_int_stream(::krpc::Connection& _connection, uint32_t value) {
+inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::constant_uint_stream(::krpc::Connection& _connection, uint32_t value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
   return ::krpc::Stream<KRPC::Expression>(_connection, _connection.build_call("KRPC", "Expression_static_ConstantUInt", _args));
 }
 
-inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::constant_u_long_stream(::krpc::Connection& _connection, uint64_t value) {
+inline ::krpc::Stream<KRPC::Expression> KRPC::Expression::constant_ulong_stream(::krpc::Connection& _connection, uint64_t value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
@@ -7586,14 +7586,14 @@ inline ::krpc::schema::ProcedureCall KRPC::Expression::constant_string_call(::kr
   return _connection.build_call("KRPC", "Expression_static_ConstantString", _args);
 }
 
-inline ::krpc::schema::ProcedureCall KRPC::Expression::constant_u_int_call(::krpc::Connection& _connection, uint32_t value) {
+inline ::krpc::schema::ProcedureCall KRPC::Expression::constant_uint_call(::krpc::Connection& _connection, uint32_t value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
   return _connection.build_call("KRPC", "Expression_static_ConstantUInt", _args);
 }
 
-inline ::krpc::schema::ProcedureCall KRPC::Expression::constant_u_long_call(::krpc::Connection& _connection, uint64_t value) {
+inline ::krpc::schema::ProcedureCall KRPC::Expression::constant_ulong_call(::krpc::Connection& _connection, uint64_t value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
@@ -8487,12 +8487,12 @@ inline KRPC::Expression KRPC::Expression::Bound::constant_string(std::string val
   return KRPC::Expression::constant_string(_connection, value);
 }
 
-inline KRPC::Expression KRPC::Expression::Bound::constant_u_int(uint32_t value) const {
-  return KRPC::Expression::constant_u_int(_connection, value);
+inline KRPC::Expression KRPC::Expression::Bound::constant_uint(uint32_t value) const {
+  return KRPC::Expression::constant_uint(_connection, value);
 }
 
-inline KRPC::Expression KRPC::Expression::Bound::constant_u_long(uint64_t value) const {
-  return KRPC::Expression::constant_u_long(_connection, value);
+inline KRPC::Expression KRPC::Expression::Bound::constant_ulong(uint64_t value) const {
+  return KRPC::Expression::constant_ulong(_connection, value);
 }
 
 inline KRPC::Expression KRPC::Expression::Bound::contains(KRPC::Expression arg, KRPC::Expression value) const {
@@ -9132,7 +9132,7 @@ inline KRPC::Type KRPC::Type::tuple_type(::krpc::Connection& _connection, std::v
   return _result;
 }
 
-inline KRPC::Type KRPC::Type::u_int(::krpc::Connection& _connection) {
+inline KRPC::Type KRPC::Type::uint(::krpc::Connection& _connection) {
   auto _data = _connection.invoke("KRPC", "Type_static_UInt", {}, ::krpc::Connection::Returns::value);
     KRPC::Type _result{};
   if (!_data.is_null())
@@ -9140,7 +9140,7 @@ inline KRPC::Type KRPC::Type::u_int(::krpc::Connection& _connection) {
   return _result;
 }
 
-inline KRPC::Type KRPC::Type::u_long(::krpc::Connection& _connection) {
+inline KRPC::Type KRPC::Type::ulong(::krpc::Connection& _connection) {
   auto _data = _connection.invoke("KRPC", "Type_static_ULong", {}, ::krpc::Connection::Returns::value);
     KRPC::Type _result{};
   if (!_data.is_null())
@@ -9295,11 +9295,11 @@ inline ::krpc::Stream<KRPC::Type> KRPC::Type::tuple_type_stream(::krpc::Connecti
   return ::krpc::Stream<KRPC::Type>(_connection, _connection.build_call("KRPC", "Type_static_TupleType", _args));
 }
 
-inline ::krpc::Stream<KRPC::Type> KRPC::Type::u_int_stream(::krpc::Connection& _connection) {
+inline ::krpc::Stream<KRPC::Type> KRPC::Type::uint_stream(::krpc::Connection& _connection) {
   return ::krpc::Stream<KRPC::Type>(_connection, _connection.build_call("KRPC", "Type_static_UInt"));
 }
 
-inline ::krpc::Stream<KRPC::Type> KRPC::Type::u_long_stream(::krpc::Connection& _connection) {
+inline ::krpc::Stream<KRPC::Type> KRPC::Type::ulong_stream(::krpc::Connection& _connection) {
   return ::krpc::Stream<KRPC::Type>(_connection, _connection.build_call("KRPC", "Type_static_ULong"));
 }
 
@@ -9450,11 +9450,11 @@ inline ::krpc::schema::ProcedureCall KRPC::Type::tuple_type_call(::krpc::Connect
   return _connection.build_call("KRPC", "Type_static_TupleType", _args);
 }
 
-inline ::krpc::schema::ProcedureCall KRPC::Type::u_int_call(::krpc::Connection& _connection) {
+inline ::krpc::schema::ProcedureCall KRPC::Type::uint_call(::krpc::Connection& _connection) {
   return _connection.build_call("KRPC", "Type_static_UInt");
 }
 
-inline ::krpc::schema::ProcedureCall KRPC::Type::u_long_call(::krpc::Connection& _connection) {
+inline ::krpc::schema::ProcedureCall KRPC::Type::ulong_call(::krpc::Connection& _connection) {
   return _connection.build_call("KRPC", "Type_static_ULong");
 }
 
@@ -9533,12 +9533,12 @@ inline KRPC::Type KRPC::Type::Bound::tuple_type(std::vector<KRPC::Type> value_ty
   return KRPC::Type::tuple_type(_connection, value_types);
 }
 
-inline KRPC::Type KRPC::Type::Bound::u_int() const {
-  return KRPC::Type::u_int(_connection);
+inline KRPC::Type KRPC::Type::Bound::uint() const {
+  return KRPC::Type::uint(_connection);
 }
 
-inline KRPC::Type KRPC::Type::Bound::u_long() const {
-  return KRPC::Type::u_long(_connection);
+inline KRPC::Type KRPC::Type::Bound::ulong() const {
+  return KRPC::Type::ulong(_connection);
 }
 
 inline KRPC::Type::Bound KRPC::Type::bind(const ::krpc::Connection& connection) {

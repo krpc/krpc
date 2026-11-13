@@ -18,7 +18,7 @@ from krpc.types import (
     StructType,
     TupleType,
 )
-from krpc.utils import snake_case
+from krpc.utils import lower_camel_case, snake_case
 
 from ..lang.language import Language
 from ..utils import (
@@ -26,7 +26,6 @@ from ..utils import (
     decode_default_value,
     indent,
     is_nullable,
-    lower_camel_case,
     single_line,
 )
 from .crefs import resolve_cref
@@ -265,6 +264,7 @@ class Generator(Generic[LanguageT]):
                 "values": [
                     {
                         "name": self.parse_name(x["name"]),
+                        "remote_name": x["name"],
                         "value": x["value"],
                         "documentation": self.parse_documentation(x["documentation"]),
                         "deprecated": x.get("deprecated", False),

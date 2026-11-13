@@ -560,7 +560,7 @@
 
    
 
-   .. function:: static Expression constant_u_int(krpc::Connection& connection, uint32_t value)
+   .. function:: static Expression constant_uint(krpc::Connection& connection, uint32_t value)
 
       A constant value of unsigned integer type.
 
@@ -570,7 +570,7 @@
 
    
 
-   .. function:: static Expression constant_u_long(krpc::Connection& connection, uint64_t value)
+   .. function:: static Expression constant_ulong(krpc::Connection& connection, uint64_t value)
 
       A constant value of unsigned long integer type.
 
@@ -2194,14 +2194,14 @@
          The value types of a tuple, the value type of a list or set, or the key and value
          types of a dictionary. An empty list for any other type.
 
-   .. function:: static Type u_int(krpc::Connection& connection)
+   .. function:: static Type uint(krpc::Connection& connection)
 
       An unsigned 32-bit integer type.
 
 
    
 
-   .. function:: static Type u_long(krpc::Connection& connection)
+   .. function:: static Type ulong(krpc::Connection& connection)
 
       An unsigned 64-bit integer type.
 
@@ -2317,12 +2317,12 @@
       A list, with the type of its values in :func:`Type::types`.
 
 
-   .. enumerator:: s_int32
+   .. enumerator:: sint32
 
       A signed 32-bit integer.
 
 
-   .. enumerator:: s_int64
+   .. enumerator:: sint64
 
       A signed 64-bit integer.
 
@@ -2347,12 +2347,12 @@
       A tuple, with the types of its values in :func:`Type::types`.
 
 
-   .. enumerator:: u_int32
+   .. enumerator:: uint32
 
       An unsigned 32-bit integer.
 
 
-   .. enumerator:: u_int64
+   .. enumerator:: uint64
 
       An unsigned 64-bit integer.
 

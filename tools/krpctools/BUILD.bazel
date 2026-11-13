@@ -1,8 +1,10 @@
 load("@bazel_skylib//rules:copy_file.bzl", "copy_file")
+load("@bazel_skylib//rules:write_file.bzl", "write_file")
 load("@rules_python//python:defs.bzl", "py_binary", "py_library", native_py_test = "py_test")
 load("//:config.bzl", "python_version", "version_parts")
 load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test", "py_test", "py_wheel")
 load("//tools/TestServer:rids.bzl", "RIDS")
+load(":clientgen.bzl", "snake_case")
 
 exports_files(["CHANGELOG.md"])
 
@@ -247,6 +249,7 @@ test_suite(
         ":conformance-test",
         ":krpctoolstest",
         ":lint",
+        ":naming-test",
     ],
 )
 
@@ -262,6 +265,87 @@ py_test(
     src = ":krpctools",
     tests = ["krpctools/test"],
     deps = deps,
+)
+
+# The names of client/conformance/names.json, which Starlark cannot read, and the snake case
+# clientgen.bzl gives each. naming-test checks the list against the file.
+NAMING_TEST_NAMES = [
+    "Server",
+    "MyServer",
+    "ActiveVessel",
+    "GForce",
+    "WithANullableObject",
+    "foobar",
+    "referenceFrame",
+    "HTTPS",
+    "HTTPServer",
+    "MyHTTPServer",
+    "HTTPServerSSL",
+    "RCSThrust",
+    "MeanAnomalyAtUT",
+    "DEFAULT",
+    "ASet",
+    "resetPID",
+    "ColorRGBA",
+    "EVAs",
+    "IDs",
+    "IDsOf",
+    "MyIDs",
+    "UInt",
+    "ULong",
+    "SInt32",
+    "MyUInt64",
+    "UInt64ToString",
+    "FoV",
+    "MaxFoV",
+    "UInteger",
+    "UIntValue",
+    "Int32ToString",
+    "ToInt32",
+    "IsValidUTF8",
+    "UTF8String",
+    "Atan2",
+    "CustomAxis01",
+    "Vector3",
+    "Vector3Dot",
+    "Vector3D",
+    "Int32s",
+    "Vector3d",
+    "Get3rdParty",
+    "Vector32D",
+    "Get2DPosition",
+    "32ToString",
+    "3DModel",
+    "3D",
+    "3rdParty",
+    "HTTP_Server",
+    "foo_bar",
+    "Foo_UInt64",
+]
+
+write_file(
+    name = "starlark-snake-case",
+    out = "starlark_snake_case.json",
+    content = [json.encode({x: snake_case(x) for x in NAMING_TEST_NAMES})],
+)
+
+native_py_test(
+    name = "naming-test",
+    size = "small",
+    srcs = ["naming_test.py"],
+    args = [
+        "$(rootpath //client/conformance:names.json)",
+        "$(rootpath :starlark-snake-case)",
+    ],
+    data = [
+        ":starlark-snake-case",
+        "//client/conformance:names.json",
+    ],
+    main = "naming_test.py",
+    deps = [
+        ":krpctools_lib",
+        "@krpc_pypi//pytest",
+    ],
 )
 
 # The conformance driver as the package ships it, with its bundled TestServer

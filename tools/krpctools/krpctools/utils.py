@@ -1,23 +1,8 @@
 import array
 import base64
-import re
 
 from krpc import definitions
 from krpc.schema.KRPC_pb2 import Type
-
-_CAMEL_CASE_REGEX = re.compile(r"([^A-Z]+|[A-Z][^A-Z]*)")
-
-
-def lower_camel_case(string):
-    """Convert from CamelCase to lowerCamelCase"""
-    parts = re.findall(_CAMEL_CASE_REGEX, string)
-    parts[0] = parts[0].lower()
-    return "".join(parts)
-
-
-def upper_camel_case(string):
-    """Convert from lowerCamelCase to CamelCase"""
-    return string[0].upper() + string[1:]
 
 
 def indent(string, width=3):

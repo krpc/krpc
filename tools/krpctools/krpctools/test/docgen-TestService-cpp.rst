@@ -407,7 +407,7 @@
 
    
 
-   .. function:: std::optional<uint32_t> echo_nullable_u_int(std::optional<uint32_t> value)
+   .. function:: std::optional<uint32_t> echo_nullable_uint(std::optional<uint32_t> value)
 
 
 
@@ -417,7 +417,7 @@
 
    
 
-   .. function:: std::optional<uint64_t> echo_nullable_u_long(std::optional<uint64_t> value)
+   .. function:: std::optional<uint64_t> echo_nullable_ulong(std::optional<uint64_t> value)
 
 
 
@@ -967,7 +967,7 @@
 
    
 
-   .. function:: uint32_t string_to_u_int32(std::string value)
+   .. function:: uint32_t string_to_uint32(std::string value)
 
 
 
@@ -977,7 +977,7 @@
 
    
 
-   .. function:: uint64_t string_to_u_int64(std::string value)
+   .. function:: uint64_t string_to_uint64(std::string value)
 
 
 
@@ -1113,7 +1113,7 @@
 
    
 
-   .. function:: std::string u_int32_to_string(uint32_t value)
+   .. function:: std::string uint32_to_string(uint32_t value)
 
 
 
@@ -1123,7 +1123,7 @@
 
    
 
-   .. function:: std::string u_int64_to_string(uint64_t value)
+   .. function:: std::string uint64_to_string(uint64_t value)
 
 
 

@@ -57,17 +57,17 @@ public class FunctionStreamTest {
     assertThrows(IllegalArgumentException.class,
         () -> connection.run(toDouble, new AtomicLong(1)));
     assertThrows(IllegalArgumentException.class,
-        () -> connection.run(identity(Type.uLong(connection)), -1.5));
+        () -> connection.run(identity(Type.ulong(connection)), -1.5));
   }
 
   @Test
   public void testNarrowerSignedArgumentConvertsToUnsignedParameterIfNotNegative() {
-    Expression toUnsignedLong = identity(Type.uLong(connection));
+    Expression toUnsignedLong = identity(Type.ulong(connection));
     assertEquals(5L, (long) connection.run(toUnsignedLong, 5));
     IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
         () -> connection.run(toUnsignedLong, -5));
     assertTrue(e.getMessage().contains("Argument 1 is negative"));
-    Expression toUnsignedInt = identity(Type.uInt(connection));
+    Expression toUnsignedInt = identity(Type.uint(connection));
     assertEquals(5, (int) connection.run(toUnsignedInt, (short) 5));
     assertThrows(IllegalArgumentException.class,
         () -> connection.run(toUnsignedInt, (short) -5));
@@ -78,11 +78,11 @@ public class FunctionStreamTest {
   @Test
   public void testUnsignedParameterTakesItsOwnJavaTypeBitForBit() {
     // The maximum of each unsigned type reads back as -1
-    Expression toUnsignedLong = identity(Type.uLong(connection));
+    Expression toUnsignedLong = identity(Type.ulong(connection));
     long maxLong = connection.run(toUnsignedLong, -1L);
     assertEquals(-1L, maxLong);
     assertEquals(-1L, (long) connection.run(toUnsignedLong, maxLong));
-    Expression toUnsignedInt = identity(Type.uInt(connection));
+    Expression toUnsignedInt = identity(Type.uint(connection));
     int maxInt = connection.run(toUnsignedInt, -1);
     assertEquals(-1, maxInt);
     assertEquals(-1, (int) connection.run(toUnsignedInt, maxInt));

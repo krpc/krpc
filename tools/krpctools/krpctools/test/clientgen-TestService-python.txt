@@ -580,10 +580,10 @@ class TestService(metaclass=DeclaredClass):
     def echo_nullable_tuple(self, t: Optional[Tuple[int,int]]) -> Optional[Tuple[int,int]]:
         raise _declaration("TestService", None)
 
-    def echo_nullable_u_int(self, value: Optional[int]) -> Optional[int]:
+    def echo_nullable_uint(self, value: Optional[int]) -> Optional[int]:
         raise _declaration("TestService", None)
 
-    def echo_nullable_u_long(self, value: Optional[int]) -> Optional[int]:
+    def echo_nullable_ulong(self, value: Optional[int]) -> Optional[int]:
         raise _declaration("TestService", None)
 
     def echo_string_set(self, h: Set[str]) -> Set[str]:
@@ -765,10 +765,10 @@ class TestService(metaclass=DeclaredClass):
     def string_to_int64(self, value: str) -> int:
         raise _declaration("TestService", None)
 
-    def string_to_u_int32(self, value: str) -> int:
+    def string_to_uint32(self, value: str) -> int:
         raise _declaration("TestService", None)
 
-    def string_to_u_int64(self, value: str) -> int:
+    def string_to_uint64(self, value: str) -> int:
         raise _declaration("TestService", None)
 
     def struct_default(self, x: TestStruct = TestStruct(42, 'alpha', TestEnum.value_b, [1, 2, 3])) -> TestStruct:
@@ -825,22 +825,22 @@ class TestService(metaclass=DeclaredClass):
     def tuple_default(self, x: Tuple[int,bool] = (1, False)) -> Tuple[int,bool]:
         raise _declaration("TestService", None)
 
-    def u_int32_to_string(self, value: int) -> str:
-        raise _declaration("TestService", None)
-
-    def u_int64_to_string(self, value: int) -> str:
-        raise _declaration("TestService", None)
-
     def uint32_special_defaults(self, maximum: int = krpc.limits.UINT32_MAX) -> List[int]:
         """
         Procedure whose default is the largest uint.
         """
         raise _declaration("TestService", None)
 
+    def uint32_to_string(self, value: int) -> str:
+        raise _declaration("TestService", None)
+
     def uint64_special_defaults(self, maximum: int = krpc.limits.UINT64_MAX) -> List[int]:
         """
         Procedure whose default is the largest ulong.
         """
+        raise _declaration("TestService", None)
+
+    def uint64_to_string(self, value: int) -> str:
         raise _declaration("TestService", None)
 
 

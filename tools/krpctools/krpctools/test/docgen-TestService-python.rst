@@ -448,7 +448,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: echo_nullable_u_int(value)
+.. staticmethod:: echo_nullable_uint(value)
 
 
 
@@ -459,7 +459,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: echo_nullable_u_long(value)
+.. staticmethod:: echo_nullable_ulong(value)
 
 
 
@@ -1087,7 +1087,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: string_to_u_int32(value)
+.. staticmethod:: string_to_uint32(value)
 
 
 
@@ -1098,7 +1098,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: string_to_u_int64(value)
+.. staticmethod:: string_to_uint64(value)
 
 
 
@@ -1258,7 +1258,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: u_int32_to_string(value)
+.. staticmethod:: uint32_to_string(value)
 
 
 
@@ -1269,7 +1269,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: u_int64_to_string(value)
+.. staticmethod:: uint64_to_string(value)
 
 
 

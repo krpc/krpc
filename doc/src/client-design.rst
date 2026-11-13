@@ -94,6 +94,9 @@ matches gives the next word:
    * - 5. Number
      - Digits, and the acronym after them by rule 3 or the lower case letters after them
      - ``32`` To String, Vector ``3D``, ``3rd`` Party
+   * - 6. Other
+     - Any other character
+     -
 
 Rules 1 to 4 also take the digits after the word and the lower case letters after the digits,
 unless an acronym follows the digits: ``UInt64``, ``UTF8`` String, ``Atan2``, ``Int32s``,
@@ -113,6 +116,7 @@ takes, ``(?:[0-9]+(?![0-9])(?![A-Z]+(?![a-z]))[a-z]*)?``:
    |[A-Z]+(?![a-z])D
    |[A-Z]?[a-z]+D
    |[0-9]+(?:[A-Z]+(?![a-z])|[a-z]+)?
+   |.
 
 Each case is built from the words:
 

@@ -60,16 +60,16 @@ A double precision floating point number.
     float = 2, """
 A single precision floating point number.
 """
-    s_int32 = 3, """
+    sint32 = 3, """
 A signed 32-bit integer.
 """
-    s_int64 = 4, """
+    sint64 = 4, """
 A signed 64-bit integer.
 """
-    u_int32 = 5, """
+    uint32 = 5, """
 An unsigned 32-bit integer.
 """
-    u_int64 = 6, """
+    uint64 = 6, """
 An unsigned 64-bit integer.
 """
     bool = 7, """
@@ -783,7 +783,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         raise _declaration("KRPC", "Expression")
 
     @staticmethod
-    def constant_u_int(value: int) -> Expression:
+    def constant_uint(value: int) -> Expression:
         """
         A constant value of unsigned integer type.
 
@@ -792,7 +792,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         raise _declaration("KRPC", "Expression")
 
     @staticmethod
-    def constant_u_long(value: int) -> Expression:
+    def constant_ulong(value: int) -> Expression:
         """
         A constant value of unsigned long integer type.
 
@@ -2328,14 +2328,14 @@ class Type(DeclaredObject, metaclass=DeclaredClass):
         raise _declaration("KRPC", "Type")
 
     @staticmethod
-    def u_int() -> Type:
+    def uint() -> Type:
         """
         An unsigned 32-bit integer type.
         """
         raise _declaration("KRPC", "Type")
 
     @staticmethod
-    def u_long() -> Type:
+    def ulong() -> Type:
         """
         An unsigned 64-bit integer type.
         """
