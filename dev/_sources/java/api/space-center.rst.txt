@@ -35,6 +35,7 @@ Supported Mods
 
 The SpaceCenter service supports the following mods. None of them needs to be installed, but
 some functionality requires one of them, and the docs note where it does.
+A property gives whether each one is installed, such as :meth:`SpaceCenter.getFARAvailable()`.
 
 * `Ferram Aerospace Research`_: :type:`Flight` works with the stock
   aerodynamics or with Ferram Aerospace Research, and reads from whichever is in use. Some

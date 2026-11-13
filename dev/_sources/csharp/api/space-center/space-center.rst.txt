@@ -487,9 +487,75 @@ SpaceCenter
 
       :Game Scenes: All
 
+   .. property:: bool AGExtAvailable { get; }
+
+      Whether Action Groups Extended is installed.
+
+      :Game Scenes: All
+
    .. property:: bool RealFuelsAvailable { get; }
 
       Whether RealFuels is installed.
+
+      :Game Scenes: All
+
+   .. property:: bool RealChuteAvailable { get; }
+
+      Whether RealChute is installed.
+
+      :Game Scenes: All
+
+   .. property:: bool ProceduralFairingsAvailable { get; }
+
+      Whether Procedural Fairings is installed.
+
+      :Game Scenes: All
+
+   .. property:: bool NearFutureSolarAvailable { get; }
+
+      Whether Near Future Solar is installed.
+
+      :Game Scenes: All
+
+   .. property:: bool DMagicAvailable { get; }
+
+      Whether DMagic's DMModuleScienceAnimateGeneric is installed.
+
+      :Game Scenes: All
+
+   .. property:: bool FirespitterAvailable { get; }
+
+      Whether Firespitter is installed.
+
+      :Game Scenes: All
+
+   .. property:: bool KerbalActuatorsAvailable { get; }
+
+      Whether KerbalActuators is installed.
+
+      :Game Scenes: All
+
+   .. property:: bool KSPCommunityPartModulesAvailable { get; }
+
+      Whether KSPCommunityPartModules is installed.
+
+      :Game Scenes: All
+
+   .. property:: bool KOSAvailable { get; }
+
+      Whether kOS is installed.
+
+      :Game Scenes: All
+
+   .. property:: bool B9PartSwitchAvailable { get; }
+
+      Whether B9PartSwitch is installed.
+
+      :Game Scenes: All
+
+   .. property:: bool TweakScaleRescaledAvailable { get; }
+
+      Whether TweakScale Rescaled is installed.
 
       :Game Scenes: All
 

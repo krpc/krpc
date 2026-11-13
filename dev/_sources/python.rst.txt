@@ -1136,22 +1136,4 @@ The minimum of an unsigned type is ``0``, so it has no constant.
 API Reference
 -------------
 
-.. toctree::
-   :maxdepth: 1
-
-   python/api/krpc
-   python/api/stdlib
-   python/api/space-center
-   python/api/drawing
-   python/api/ui
-   python/api/infernal-robotics
-   python/api/kerbal-alarm-clock
-   python/api/remote-tech
-   python/api/lidar
-   python/api/docking-camera
-   python/api/trajectories
-   python/api/mechjeb
-   python/api/kerbal-engineer-redux
-   python/api/scansat
-   python/api/raster-prop-monitor
-   python/api/debug
+.. include:: python/api.inc

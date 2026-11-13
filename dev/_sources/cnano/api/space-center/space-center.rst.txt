@@ -636,9 +636,108 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 
 
+.. function:: krpc_error_t krpc_SpaceCenter_AGExtAvailable(krpc_connection_t connection, bool * returnValue)
+
+   Whether Action Groups Extended is installed.
+
+   
+
+
+
+
 .. function:: krpc_error_t krpc_SpaceCenter_RealFuelsAvailable(krpc_connection_t connection, bool * returnValue)
 
    Whether RealFuels is installed.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_SpaceCenter_RealChuteAvailable(krpc_connection_t connection, bool * returnValue)
+
+   Whether RealChute is installed.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_SpaceCenter_ProceduralFairingsAvailable(krpc_connection_t connection, bool * returnValue)
+
+   Whether Procedural Fairings is installed.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_SpaceCenter_NearFutureSolarAvailable(krpc_connection_t connection, bool * returnValue)
+
+   Whether Near Future Solar is installed.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_SpaceCenter_DMagicAvailable(krpc_connection_t connection, bool * returnValue)
+
+   Whether DMagic's DMModuleScienceAnimateGeneric is installed.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_SpaceCenter_FirespitterAvailable(krpc_connection_t connection, bool * returnValue)
+
+   Whether Firespitter is installed.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_SpaceCenter_KerbalActuatorsAvailable(krpc_connection_t connection, bool * returnValue)
+
+   Whether KerbalActuators is installed.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_SpaceCenter_KSPCommunityPartModulesAvailable(krpc_connection_t connection, bool * returnValue)
+
+   Whether KSPCommunityPartModules is installed.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_SpaceCenter_KOSAvailable(krpc_connection_t connection, bool * returnValue)
+
+   Whether kOS is installed.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_SpaceCenter_B9PartSwitchAvailable(krpc_connection_t connection, bool * returnValue)
+
+   Whether B9PartSwitch is installed.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_SpaceCenter_TweakScaleRescaledAvailable(krpc_connection_t connection, bool * returnValue)
+
+   Whether TweakScale Rescaled is installed.
 
    
 

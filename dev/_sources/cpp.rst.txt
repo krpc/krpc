@@ -981,22 +981,4 @@ Client API Reference
 API Reference
 -------------
 
-.. toctree::
-   :maxdepth: 1
-
-   cpp/api/krpc
-   cpp/api/stdlib
-   cpp/api/space-center
-   cpp/api/drawing
-   cpp/api/ui
-   cpp/api/infernal-robotics
-   cpp/api/kerbal-alarm-clock
-   cpp/api/remote-tech
-   cpp/api/lidar
-   cpp/api/docking-camera
-   cpp/api/trajectories
-   cpp/api/mechjeb
-   cpp/api/kerbal-engineer-redux
-   cpp/api/scansat
-   cpp/api/raster-prop-monitor
-   cpp/api/debug
+.. include:: cpp/api.inc

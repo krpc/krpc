@@ -494,9 +494,75 @@ SpaceCenter
 
    
 
+   .. function:: bool ag_ext_available()
+
+      Whether Action Groups Extended is installed.
+
+   
+
    .. function:: bool real_fuels_available()
 
       Whether RealFuels is installed.
+
+   
+
+   .. function:: bool real_chute_available()
+
+      Whether RealChute is installed.
+
+   
+
+   .. function:: bool procedural_fairings_available()
+
+      Whether Procedural Fairings is installed.
+
+   
+
+   .. function:: bool near_future_solar_available()
+
+      Whether Near Future Solar is installed.
+
+   
+
+   .. function:: bool d_magic_available()
+
+      Whether DMagic's DMModuleScienceAnimateGeneric is installed.
+
+   
+
+   .. function:: bool firespitter_available()
+
+      Whether Firespitter is installed.
+
+   
+
+   .. function:: bool kerbal_actuators_available()
+
+      Whether KerbalActuators is installed.
+
+   
+
+   .. function:: bool ksp_community_part_modules_available()
+
+      Whether KSPCommunityPartModules is installed.
+
+   
+
+   .. function:: bool kos_available()
+
+      Whether kOS is installed.
+
+   
+
+   .. function:: bool b9_part_switch_available()
+
+      Whether B9PartSwitch is installed.
+
+   
+
+   .. function:: bool tweak_scale_rescaled_available()
+
+      Whether TweakScale Rescaled is installed.
 
    
 

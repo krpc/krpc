@@ -22,8 +22,7 @@ Provides functionality to interact with Trajectories.
 
    :Attribute: Read-only, cannot be set
    :rtype: bool
-   :Game Scenes: Flight
-
+   
 
 
 

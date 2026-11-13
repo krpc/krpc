@@ -19,7 +19,7 @@ Trajectories
 
       Whether Trajectories is available.
 
-      :Game Scenes: Flight
+   
 
    .. method:: Patch impactPatch()
 

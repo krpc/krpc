@@ -142,6 +142,7 @@ SpaceCenter service
   * List each antenna of a part with several in ``Parts.Antennas`` (:issue:`1320`)
   * Add ``SpaceCenter.RealAntennasAvailable`` (:issue:`1320`)
 
+* Add ``<Mod>Available`` for each supported mod that lacked one, such as ``RealChuteAvailable`` (:issue:`1340`)
 
 
 InfernalRobotics service
@@ -176,6 +177,7 @@ Trajectories service
 ^^^^^^^^^^^^^^^^^^^^
 
 * Add Trajectories service
+* Make ``Available`` callable in every game scene (:issue:`1340`)
 
 
 MechJeb service

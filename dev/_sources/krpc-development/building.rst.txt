@@ -93,11 +93,8 @@ Build outputs are in ``bazel-bin``, and ``bazel build //...`` builds everything.
 its own target:
 
 * ``//server`` - the server plugin.
-* ``//service/SpaceCenter``, ``//service/Debug``, ``//service/Drawing``, ``//service/UI``,
-  ``//service/DockingCamera``, ``//service/InfernalRobotics``, ``//service/KerbalAlarmClock``,
-  ``//service/KerbalEngineerRedux``, ``//service/LiDAR``, ``//service/MechJeb``,
-  ``//service/RasterPropMonitor``, ``//service/RemoteTech``, ``//service/ScanSat``,
-  ``//service/Trajectories`` - the services.
+* ``//service/<name>``, such as ``//service/SpaceCenter`` - a service. ``service/registry.bzl``
+  lists them.
 * ``//client/python``, ``//client/csharp``, ``//client/cpp``, ``//client/cnano``,
   ``//client/java``, ``//client/lua`` - the client libraries.
 * ``//protobuf:csharp``, ``//protobuf:java``, ``//protobuf:lua``, ``//protobuf:python`` - the

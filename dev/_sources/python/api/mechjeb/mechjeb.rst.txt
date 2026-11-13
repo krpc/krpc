@@ -17,7 +17,18 @@ This service provides functionality to interact with MechJeb 2.
 
 
 
-.. attribute:: api_ready
+.. attribute:: available
+
+   Whether MechJeb is installed.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: bool
+   
+
+
+
+
+.. attribute:: ready
 
    Whether MechJeb is installed and the active vessel has MechJeb.
 

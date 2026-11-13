@@ -542,9 +542,108 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 
 
+.. attribute:: ag_ext_available: boolean
+
+   Whether Action Groups Extended is installed.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
 .. attribute:: real_fuels_available: boolean
 
    Whether RealFuels is installed.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: real_chute_available: boolean
+
+   Whether RealChute is installed.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: procedural_fairings_available: boolean
+
+   Whether Procedural Fairings is installed.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: near_future_solar_available: boolean
+
+   Whether Near Future Solar is installed.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: d_magic_available: boolean
+
+   Whether DMagic's DMModuleScienceAnimateGeneric is installed.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: firespitter_available: boolean
+
+   Whether Firespitter is installed.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: kerbal_actuators_available: boolean
+
+   Whether KerbalActuators is installed.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: ksp_community_part_modules_available: boolean
+
+   Whether KSPCommunityPartModules is installed.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: kos_available: boolean
+
+   Whether kOS is installed.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: b9_part_switch_available: boolean
+
+   Whether B9PartSwitch is installed.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: tweak_scale_rescaled_available: boolean
+
+   Whether TweakScale Rescaled is installed.
 
    :Attribute: Read-only, cannot be set
 

@@ -464,10 +464,87 @@ SpaceCenter
 
    
 
+   .. method:: boolean getAGExtAvailable()
+
+
+      Whether Action Groups Extended is installed.
+
+   
+
    .. method:: boolean getRealFuelsAvailable()
 
 
       Whether RealFuels is installed.
+
+   
+
+   .. method:: boolean getRealChuteAvailable()
+
+
+      Whether RealChute is installed.
+
+   
+
+   .. method:: boolean getProceduralFairingsAvailable()
+
+
+      Whether Procedural Fairings is installed.
+
+   
+
+   .. method:: boolean getNearFutureSolarAvailable()
+
+
+      Whether Near Future Solar is installed.
+
+   
+
+   .. method:: boolean getDMagicAvailable()
+
+
+      Whether DMagic's DMModuleScienceAnimateGeneric is installed.
+
+   
+
+   .. method:: boolean getFirespitterAvailable()
+
+
+      Whether Firespitter is installed.
+
+   
+
+   .. method:: boolean getKerbalActuatorsAvailable()
+
+
+      Whether KerbalActuators is installed.
+
+   
+
+   .. method:: boolean getKSPCommunityPartModulesAvailable()
+
+
+      Whether KSPCommunityPartModules is installed.
+
+   
+
+   .. method:: boolean getKOSAvailable()
+
+
+      Whether kOS is installed.
+
+   
+
+   .. method:: boolean getB9PartSwitchAvailable()
+
+
+      Whether B9PartSwitch is installed.
+
+   
+
+   .. method:: boolean getTweakScaleRescaledAvailable()
+
+
+      Whether TweakScale Rescaled is installed.
 
    
 

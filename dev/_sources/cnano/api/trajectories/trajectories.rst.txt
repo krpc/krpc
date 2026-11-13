@@ -18,8 +18,7 @@ Provides functionality to interact with Trajectories.
 
    Whether Trajectories is available.
 
-   :Game Scenes: Flight
-
+   
 
 
 

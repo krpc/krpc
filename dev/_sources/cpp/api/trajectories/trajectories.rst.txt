@@ -23,7 +23,7 @@ Trajectories
 
       Whether Trajectories is available.
 
-      :Game Scenes: Flight
+   
 
    .. function:: std::optional<Patch> impact_patch()
 

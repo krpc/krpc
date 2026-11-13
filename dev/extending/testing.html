@@ -607,18 +607,21 @@ exactly those mods and the mods they require:</p>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">setUpClass</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">new_save</span><span class="p">()</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">launch_vessel_from_vab</span><span class="p">(</span><span class="s2">"Capsule"</span><span class="p">)</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">vessel</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">vessel</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">launch</span><span class="p">(</span><span class="s2">"Capsule"</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">test_heatshield</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">parts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">with_name</span><span class="p">(</span><span class="s2">"heatshield.large"</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">))</span>
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">launch_vessel_from_vab</span></code> takes the craft from a <code class="docutils literal notranslate"><span class="pre">craft</span></code> directory beside the test file, or
-from the game’s stock craft. The <code class="docutils literal notranslate"><span class="pre">TestCase</span></code> also places a vessel in orbit, on the ground or in
-flight, and has assertions with a tolerance.</p>
+<p><code class="docutils literal notranslate"><span class="pre">launch</span></code> loads a new save, launches the craft, removes the other vessels and returns the active
+vessel. It takes the craft from a <code class="docutils literal notranslate"><span class="pre">craft</span></code> directory beside the test file, or from the game’s
+stock craft. <code class="docutils literal notranslate"><span class="pre">directory</span></code> names another directory, and <code class="docutils literal notranslate"><span class="pre">editor=&quot;SPH&quot;</span></code> launches onto the runway.
+The craft takes its default crew, or the Kerbals named in <code class="docutils literal notranslate"><span class="pre">crew</span></code>, and its crew become pilots.
+<code class="docutils literal notranslate"><span class="pre">save=None</span></code> launches in the current save, and <code class="docutils literal notranslate"><span class="pre">keep_other_vessels=True</span></code> keeps the vessels
+already there.
+The <code class="docutils literal notranslate"><span class="pre">TestCase</span></code> also places a vessel in orbit, on the ground or in flight, and has assertions
+with a tolerance. <code class="docutils literal notranslate"><span class="pre">krpctools.game.images</span></code> checks the PNG and JPEG images an RPC returns.</p>
 <p>Run the suite with the plugin loaded:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pytest<span class="w"> </span>-p<span class="w"> </span>krpctools.game.pytest_plugin
 </pre></div>
@@ -646,8 +649,8 @@ defaults to <code class="docutils literal notranslate"><span class="pre">ksp</sp
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--krpc</span></code></p></td>
 <td><p>The kRPC archive to install, in place of the release krpctools was built with.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--mod</span> <span class="pre">NAME=SOURCE</span></code></p></td>
-<td><p>Installs a mod from a path or a URL, in place of its pinned archive.</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--mod</span> <span class="pre">NAME</span> <span class="pre">SOURCE</span></code></p></td>
+<td><p>Installs a mod from a path or a URL, in place of its latest pinned archive.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--skip-install-check</span></code></p></td>
 <td><p>Allows mods outside the requested set in GameData.</p></td>

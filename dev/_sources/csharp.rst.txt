@@ -1022,22 +1022,4 @@ Client API Reference
 API Reference
 -------------
 
-.. toctree::
-   :maxdepth: 1
-
-   csharp/api/krpc
-   csharp/api/stdlib
-   csharp/api/space-center
-   csharp/api/drawing
-   csharp/api/ui
-   csharp/api/infernal-robotics
-   csharp/api/kerbal-alarm-clock
-   csharp/api/remote-tech
-   csharp/api/lidar
-   csharp/api/docking-camera
-   csharp/api/trajectories
-   csharp/api/mechjeb
-   csharp/api/kerbal-engineer-redux
-   csharp/api/scansat
-   csharp/api/raster-prop-monitor
-   csharp/api/debug
+.. include:: csharp/api.inc

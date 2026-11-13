@@ -20,7 +20,13 @@ MechJeb
 
       Construct an instance of this service.
 
-   .. function:: bool api_ready()
+   .. function:: bool available()
+
+      Whether MechJeb is installed.
+
+   
+
+   .. function:: bool ready()
 
       Whether MechJeb is installed and the active vessel has MechJeb.
 

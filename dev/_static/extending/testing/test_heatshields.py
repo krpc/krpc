@@ -6,9 +6,7 @@ class TestHeatshields(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("Capsule")
-        cls.vessel = cls.connect().space_center.active_vessel
+        cls.vessel = cls.launch("Capsule")
 
     def test_heatshield(self):
         parts = self.vessel.parts.with_name("heatshield.large")

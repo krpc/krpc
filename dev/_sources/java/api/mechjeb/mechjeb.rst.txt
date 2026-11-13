@@ -15,7 +15,14 @@ MechJeb
       The objects act on the MechJeb of the active vessel, and stay valid after the active
       vessel changes.
 
-   .. method:: boolean getAPIReady()
+   .. method:: boolean getAvailable()
+
+
+      Whether MechJeb is installed.
+
+   
+
+   .. method:: boolean getReady()
 
 
       Whether MechJeb is installed and the active vessel has MechJeb.

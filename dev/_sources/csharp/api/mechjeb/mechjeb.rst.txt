@@ -15,7 +15,13 @@ MechJeb
       The objects act on the MechJeb of the active vessel, and stay valid after the active
       vessel changes.
 
-   .. property:: bool APIReady { get; }
+   .. property:: bool Available { get; }
+
+      Whether MechJeb is installed.
+
+      :Game Scenes: All
+
+   .. property:: bool Ready { get; }
 
       Whether MechJeb is installed and the active vessel has MechJeb.
 
