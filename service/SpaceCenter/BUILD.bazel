@@ -6,7 +6,10 @@ ksp_service(
         "src/module-manager.cfg",
         "@module_manager//file",
     ],
-    internals_visible_to = ["TestingTools"],
+    internals_visible_to = [
+        "KRPC.RemoteTech",
+        "TestingTools",
+    ],
     license = True,
     lint_size = "medium",
 )

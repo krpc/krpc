@@ -42,8 +42,6 @@
     <Compile Include="$(bazel-bin)\service\RemoteTech\ServiceInfo.cs">
       <Link>ServiceInfo.cs</Link>
     </Compile>
-    <Compile Include="Addon.cs" />
-    <Compile Include="API.cs" />
     <Compile Include="Antenna.cs" />
     <Compile Include="Comms.cs" />
     <Compile Include="RemoteTech.cs" />

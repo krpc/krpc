@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service;
 using KRPC.Service.Attributes;
+using KRPC.Utils;
+using API = KRPC.SpaceCenter.ExternalAPI.RemoteTech;
 
 namespace KRPC.RemoteTech
 {
@@ -14,8 +16,7 @@ namespace KRPC.RemoteTech
     {
         static void CheckAPI ()
         {
-            if (!API.IsAvailable)
-                throw new InvalidOperationException ("RemoteTech is not available");
+            ModAPI.Get<API> ().CheckAvailable ();
         }
 
         /// <summary>
@@ -23,7 +24,7 @@ namespace KRPC.RemoteTech
         /// </summary>
         [KRPCProperty]
         public static bool Available {
-            get { return API.IsAvailable; }
+            get { return ModAPI.Get<API> ().IsAvailable; }
         }
 
         /// <summary>

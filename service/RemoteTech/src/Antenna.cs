@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
+using API = KRPC.SpaceCenter.ExternalAPI.RemoteTech;
 using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
 
 namespace KRPC.RemoteTech
