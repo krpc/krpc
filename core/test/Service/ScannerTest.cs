@@ -22,9 +22,9 @@ namespace KRPC.Test.Service
         [Test]
         public void Services ()
         {
-            Assert.AreEqual (6, services.ServicesList.Count);
+            Assert.AreEqual (7, services.ServicesList.Count);
             CollectionAssert.AreEquivalent (
-                new [] { "KRPC", "StdLib", "TestService", "TestService2", "TestService3Name", "TestServiceDeprecated" },
+                new [] { "KRPC", "StdLib", "TestService", "TestService2", "TestService3Name", "TestServiceDeprecated", "TestServiceMod" },
                 services.ServicesList.Select (x => x.Name).ToList ());
         }
 

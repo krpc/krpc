@@ -1089,14 +1089,14 @@ namespace KRPC.Service.KRPC
                     LinqExpression.Constant (constValues [0], parameters [0].Spec.Type);
 
             var procedureExpr = LinqExpression.Constant (procedure);
-            var sceneCheck = LinqExpression.Call (
-                typeof (Services).GetMethod (nameof (Services.CheckExpressionGameScene)),
+            var availableCheck = LinqExpression.Call (
+                typeof (Services).GetMethod (nameof (Services.CheckExpressionAvailable)),
                 procedureExpr);
 
             var callExpr = BuildMethodCall (instanceExpr, method, arguments);
 
             if (!procedure.HasReturnType)
-                return new Expression (LinqExpression.Block (typeof (void), sceneCheck, callExpr));
+                return new Expression (LinqExpression.Block (typeof (void), availableCheck, callExpr));
 
             // The declared type of a nullable value-type return is Nullable<T>, which keeps a
             // null representable
@@ -1104,7 +1104,7 @@ namespace KRPC.Service.KRPC
             var returnSpec = TypeSpec.Create (callExpr.Type, procedure.ReturnSpec);
             if (returnType.IsValueType || procedure.ReturnSpec.Nullable)
                 return new Expression (LinqExpression.Block (
-                    sceneCheck, CopyOfResult (callExpr, procedure.ReturnSpec)), returnSpec);
+                    availableCheck, CopyOfResult (callExpr, procedure.ReturnSpec)), returnSpec);
 
             // The return type is a reference type that must not be null; check the
             // value on every evaluation
@@ -1114,7 +1114,7 @@ namespace KRPC.Service.KRPC
                 procedureExpr, returnValue);
             return new Expression (LinqExpression.Block (
                 new [] { returnValue },
-                sceneCheck,
+                availableCheck,
                 LinqExpression.Assign (returnValue, callExpr),
                 returnValueCheck,
                 CopyOfResult (returnValue, procedure.ReturnSpec)), returnSpec);

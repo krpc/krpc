@@ -222,13 +222,13 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The RealAntennas part module. Throws if RealAntennas is not available.
+        /// The RealAntennas part module. Throws if the antenna has none.
         /// </summary>
         PartModule RealAntennaModule {
             get {
                 var module = InternalTransmitter;
                 if (!RealAntennasAPI.IsModule (module))
-                    throw new InvalidOperationException ("RealAntennas is not available");
+                    throw new InvalidOperationException ("The antenna has no RealAntennas module");
                 return module;
             }
         }
@@ -260,6 +260,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Requires RealAntennas.
         /// </remarks>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
+        [RequiresMod (typeof (RealAntennasAPI))]
         public float Gain {
             get { return RealAntennasAPI.Gain (RealAntenna); }
         }
@@ -272,6 +273,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Requires RealAntennas.
         /// </remarks>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
+        [RequiresMod (typeof (RealAntennasAPI))]
         public float TransmitPower {
             get { return RealAntennasAPI.TxPower (RealAntenna); }
             set {
@@ -289,6 +291,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Requires RealAntennas.
         /// </remarks>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
+        [RequiresMod (typeof (RealAntennasAPI))]
         public float MaxTransmitPower {
             get { return RealAntennasAPI.MaxTxPower (RealAntennaModule); }
         }
@@ -301,6 +304,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Requires RealAntennas.
         /// </remarks>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
+        [RequiresMod (typeof (RealAntennasAPI))]
         public int TechLevel {
             get { return RealAntennasAPI.TechLevel (RealAntenna); }
             set {
@@ -318,6 +322,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Requires RealAntennas.
         /// </remarks>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
+        [RequiresMod (typeof (RealAntennasAPI))]
         public int MaxTechLevel {
             get { return RealAntennasAPI.MaxTechLevel (RealAntennaModule); }
         }
@@ -329,6 +334,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Requires RealAntennas.
         /// </remarks>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
+        [RequiresMod (typeof (RealAntennasAPI))]
         public string Band {
             get { return RealAntennasAPI.Band (RealAntenna); }
         }
@@ -340,6 +346,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Requires RealAntennas.
         /// </remarks>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
+        [RequiresMod (typeof (RealAntennasAPI))]
         public double Frequency {
             get { return RealAntennasAPI.Frequency (RealAntenna); }
         }
@@ -351,6 +358,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Requires RealAntennas.
         /// </remarks>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
+        [RequiresMod (typeof (RealAntennasAPI))]
         public double DataRate {
             get { return RealAntennasAPI.DataRate (RealAntenna); }
         }
@@ -362,6 +370,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Requires RealAntennas.
         /// </remarks>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
+        [RequiresMod (typeof (RealAntennasAPI))]
         public double Beamwidth {
             get { return RealAntennasAPI.Beamwidth (RealAntenna); }
         }
@@ -373,6 +382,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Requires RealAntennas.
         /// </remarks>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
+        [RequiresMod (typeof (RealAntennasAPI))]
         public double IdlePowerDraw {
             get { return RealAntennasAPI.IdlePowerDraw (RealAntenna) * 1000d; }
         }
@@ -385,6 +395,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Requires RealAntennas.
         /// </remarks>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
+        [RequiresMod (typeof (RealAntennasAPI))]
         public double ActivePowerDraw {
             get {
                 var antenna = RealAntenna;
@@ -400,6 +411,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Requires RealAntennas. A disabled antenna does not communicate and draws no power.
         /// </remarks>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
+        [RequiresMod (typeof (RealAntennasAPI))]
         public bool Enabled {
             get { return RealAntennasAPI.Enabled (RealAntennaModule); }
             set {
@@ -415,6 +427,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Requires RealAntennas.
         /// </remarks>
         [KRPCMethod]
+        [RequiresMod (typeof (RealAntennasAPI))]
         public void DisablePermanently ()
         {
             RealAntennasAPI.PermanentShutdown (RealAntennaModule);
@@ -437,6 +450,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Requires RealAntennas.
         /// </remarks>
         [KRPCProperty]
+        [RequiresMod (typeof (RealAntennasAPI))]
         public bool CanTarget {
             get { return RealAntennasAPI.IsDish (RealAntenna); }
         }
@@ -457,6 +471,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Requires RealAntennas.
         /// </remarks>
         [KRPCProperty]
+        [RequiresMod (typeof (RealAntennasAPI))]
         public AntennaTargetMode TargetMode {
             get {
                 var node = TargetNode;
@@ -492,6 +507,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// (see <see cref="CanTarget"/>).
         /// </remarks>
         [KRPCProperty (Nullable = true)]
+        [RequiresMod (typeof (RealAntennasAPI))]
         public Vessel TargetVessel {
             get {
                 var node = TargetNode;
@@ -516,6 +532,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// the antenna cannot be pointed (see <see cref="CanTarget"/>).
         /// </remarks>
         [KRPCProperty (Nullable = true)]
+        [RequiresMod (typeof (RealAntennasAPI))]
         public CelestialBody TargetBody {
             get {
                 var node = TargetNode;
@@ -540,6 +557,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Requires RealAntennas.
         /// </remarks>
         [KRPCMethod]
+        [RequiresMod (typeof (RealAntennasAPI))]
         public Tuple3 TargetDirection (ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals (referenceFrame, null))
@@ -577,6 +595,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// (see <see cref="CanTarget"/>).
         /// </remarks>
         [KRPCMethod]
+        [RequiresMod (typeof (RealAntennasAPI))]
         public void SetTargetPosition (CelestialBody body, double latitude, double longitude, double altitude)
         {
             if (ReferenceEquals (body, null))
@@ -597,6 +616,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// (see <see cref="CanTarget"/>).
         /// </remarks>
         [KRPCMethod]
+        [RequiresMod (typeof (RealAntennasAPI))]
         public void SetTargetAzimuthElevation (double azimuth, double elevation)
         {
             if (azimuth < 0 || azimuth > 360)
@@ -620,6 +640,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// (see <see cref="CanTarget"/>).
         /// </remarks>
         [KRPCMethod]
+        [RequiresMod (typeof (RealAntennasAPI))]
         public void SetTargetOrbitRelative (double deflection, double elevation)
         {
             if (deflection < -180 || deflection > 180)

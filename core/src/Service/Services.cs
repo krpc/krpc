@@ -207,6 +207,7 @@ namespace KRPC.Service
         /// </summary>
         internal object Invoke (ProcedureSignature procedure, object instance, object[] arguments)
         {
+            CheckRequiredMod (procedure);
             if ((CallContext.GameScene & procedure.GameScene) == 0)
                 throw new KRPC.UnsupportedSceneException ("Procedure not available in game scene '" + GameSceneUtils.Name(CallContext.GameScene) + "'");
             object returnValue = procedure.Handler.Invoke (instance, arguments);
@@ -215,15 +216,24 @@ namespace KRPC.Service
             return returnValue;
         }
 
+        // Runs before the game scene check, as a missing mod is the more useful error
+        static void CheckRequiredMod (ProcedureSignature procedure)
+        {
+            var mods = procedure.RequiredMods;
+            if (mods != null)
+                mods.Check ();
+        }
+
         /// <summary>
-        /// Checks that a procedure is available in the current game scene, throwing
-        /// RPCException if not. Called from a compiled server side function before each
-        /// call to the procedure's method.
+        /// Checks that a procedure is available: that its mod integration is available, and
+        /// that it is available in the current game scene. Called from a compiled server side
+        /// function before each call to the procedure's method.
         /// </summary>
-        public static void CheckExpressionGameScene (ProcedureSignature procedure)
+        public static void CheckExpressionAvailable (ProcedureSignature procedure)
         {
             if (procedure == null)
                 throw new ArgumentNullException (nameof (procedure));
+            CheckRequiredMod (procedure);
             if ((CallContext.GameScene & procedure.GameScene) == 0)
                 throw new RPCException ("Procedure not available in game scene '" + GameSceneUtils.Name (CallContext.GameScene) + "'");
         }
@@ -323,6 +333,7 @@ namespace KRPC.Service
         {
             object returnValue;
             try {
+                CheckRequiredMod (procedure);
                 if ((CallContext.GameScene & procedure.GameScene) == 0)
                     throw new KRPC.UnsupportedSceneException ("Procedure not available in game scene '" + GameSceneUtils.Name (CallContext.GameScene) + "'");
                 returnValue = procedure.Handler.Invoke (instance, arguments);

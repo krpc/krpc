@@ -32,5 +32,20 @@ class TestInfernalRobotics(TestCase):
         self.assertIsNone(servo3)
 
 
+class TestInfernalRoboticsNotInstalled(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
+
+    def test_not_installed(self):
+        conn = self.connect()
+        vessel = conn.space_center.active_vessel
+        assert vessel is not None
+        with self.assertRaisesRegex(
+            RuntimeError, "InfernalRobotics is not available: not installed"
+        ):
+            conn.infernal_robotics.servo_groups(vessel)
+
+
 if __name__ == "__main__":
     unittest.main()

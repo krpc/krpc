@@ -209,5 +209,14 @@ class TestKerbalAlarmClock(TestCase):
             alarm.remove()
 
 
+class TestKerbalAlarmClockNotInstalled(TestCase):
+    def test_not_installed(self):
+        conn = self.connect()
+        with self.assertRaisesRegex(
+            RuntimeError, "KerbalAlarmClock is not available: not installed"
+        ):
+            _ = conn.kerbal_alarm_clock.alarms
+
+
 if __name__ == "__main__":
     unittest.main()

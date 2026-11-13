@@ -330,5 +330,14 @@ def norm(a):
     return math.sqrt(dot(a, a))
 
 
+class TestKerbalEngineerReduxNotInstalled(TestCase):
+    def test_not_installed(self):
+        conn = self.connect()
+        with self.assertRaisesRegex(
+            RuntimeError, "KerbalEngineerRedux is not available: not installed"
+        ):
+            conn.kerbal_engineer_redux.editor_stages(conn.space_center.bodies["Kerbin"])
+
+
 if __name__ == "__main__":
     unittest.main()

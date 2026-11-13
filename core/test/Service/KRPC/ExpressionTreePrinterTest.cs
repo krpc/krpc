@@ -78,7 +78,7 @@ namespace KRPC.Test.Service.KRPC
             var obj = new global::KRPC.Test.Service.TestService.TestClass ("foo");
             Check (
                 "Block<System.Int32>\n" +
-                "  Call<System.Void> static KRPC.Service.Services.CheckExpressionGameScene\n" +
+                "  Call<System.Void> static KRPC.Service.Services.CheckExpressionAvailable\n" +
                 "    Constant<KRPC.Service.Scanner.ProcedureSignature> TestService.TestClass_get_IntProperty\n" +
                 "  Call<System.Int32> KRPC.Test.Service.TestService.TestClass.get_IntProperty\n" +
                 "    Constant<KRPC.Test.Service.TestService.TestClass> <KRPC.Test.Service.TestService.TestClass>\n",
@@ -92,7 +92,7 @@ namespace KRPC.Test.Service.KRPC
             var obj = new global::KRPC.Test.Service.TestService.TestClass ("foo");
             Check (
                 "Block<System.String> (returnValue#0: System.String)\n" +
-                "  Call<System.Void> static KRPC.Service.Services.CheckExpressionGameScene\n" +
+                "  Call<System.Void> static KRPC.Service.Services.CheckExpressionAvailable\n" +
                 "    Constant<KRPC.Service.Scanner.ProcedureSignature> TestService.TestClass_FloatToString\n" +
                 "  Assign<System.String>\n" +
                 "    Parameter<System.String> returnValue#0\n" +
@@ -112,7 +112,7 @@ namespace KRPC.Test.Service.KRPC
         {
             Check (
                 "Block<System.Void>\n" +
-                "  Call<System.Void> static KRPC.Service.Services.CheckExpressionGameScene\n" +
+                "  Call<System.Void> static KRPC.Service.Services.CheckExpressionAvailable\n" +
                 "    Constant<KRPC.Service.Scanner.ProcedureSignature> TestService.ProcedureSingleOptionalArgNoReturn\n" +
                 "  Call<System.Void> static KRPC.Test.Service.TestService.ProcedureSingleOptionalArgNoReturn\n" +
                 "    Constant<System.String> \"foo\"\n",
@@ -131,7 +131,7 @@ namespace KRPC.Test.Service.KRPC
                 "Lambda<System.Func<KRPC.Test.Service.TestService.TestClass, System.String>> (x#0)\n" +
                 "  Label<System.String> label#0\n" +
                 "    Block<System.String> (returnValue#1: System.String)\n" +
-                "      Call<System.Void> static KRPC.Service.Services.CheckExpressionGameScene\n" +
+                "      Call<System.Void> static KRPC.Service.Services.CheckExpressionAvailable\n" +
                 "        Constant<KRPC.Service.Scanner.ProcedureSignature> TestService.TestClass_FloatToString\n" +
                 "      Assign<System.String>\n" +
                 "        Parameter<System.String> returnValue#1\n" +
@@ -560,7 +560,7 @@ namespace KRPC.Test.Service.KRPC
         {
             Check (
                 "Block<System.Void>\n" +
-                "  Call<System.Void> static KRPC.Service.Services.CheckExpressionGameScene\n" +
+                "  Call<System.Void> static KRPC.Service.Services.CheckExpressionAvailable\n" +
                 "    Constant<KRPC.Service.Scanner.ProcedureSignature> TestService.ProcedureEnumArg\n" +
                 "  Call<System.Void> static KRPC.Test.Service.TestService.ProcedureEnumArg\n" +
                 "    Constant<KRPC.Test.Service.TestService.TestEnum> KRPC.Test.Service.TestService.TestEnum.Y\n",

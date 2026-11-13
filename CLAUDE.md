@@ -124,7 +124,9 @@ invocation, with no boxing.
    null to detect an optional member.
  * Bind a mod in a subclass of `KRPC.Utils.ModAPI`, one per integration. Its `Bind` sets static
    fields through a `ModBinder`, whose `Type` gives a `MemberBinder` per type. The server runs
-   every `Bind` as the game starts. RPCs check `ModAPI.Get<T> ().CheckAvailable ()`.
+   every `Bind` as the game starts. `[RequiresMod (typeof (T))]` on a service, class or member
+   fails its calls while the integration is not available, or its `NotReady` gives a reason. A
+   service's `Available` is exempt.
  * A missing type or member logs a warning and binds a delegate that throws
    `ModMemberMissingException`, so a mod update fails only the RPCs that use the member. `Require`
    makes a missing type or member fail the load, and an exception from `Bind` does the same.
@@ -164,7 +166,8 @@ bazel run //tools/game:test-ksp -- -k test_camera_mode                          
    Downloads are cached in `~/.cache/krpctools`. `--mod NAME PATH` installs a local build in
    place of the latest pin.
  * A pin bump updates the version's `sha256` and `assembly_sha256`. Installing the mod fails when
-   `assembly_sha256` does not match the archive's `<assembly>.dll`.
+   `assembly_sha256` does not match the archive's `<assembly>.dll`. The API pages list the pinned
+   versions as the tested ones, through `doc/mods.bzl`.
  * Install reconciles GameData to **exactly** the requested set (plus kRPC) — required-but-missing and
    installed-but-unneeded are both wrong.
  * Pytest groups tests by mod set; game restarts at most once per set.

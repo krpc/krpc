@@ -43,6 +43,7 @@ class PartsTagAvailableTest(PartsTagTest):
 
 class PartsTagUnavailableTest(PartsTagTest):
     module = None
+    error = ""
 
     def test_module(self):
         modules = [x.name for x in self.pod.modules]
@@ -50,18 +51,19 @@ class PartsTagUnavailableTest(PartsTagTest):
         self.assertNotIn("KOSNameTag", modules)
 
     def test_tag(self):
-        with self.assertRaises(RuntimeError):
+        with self.assertRaisesRegex(RuntimeError, self.error):
             _ = self.pod.tag
-        with self.assertRaises(RuntimeError):
+        with self.assertRaisesRegex(RuntimeError, self.error):
             self.pod.tag = "capsule"
 
 
 class TestPartsTagNoMods(PartsTagUnavailableTest, TestCase):
-    pass
+    error = "KSPCommunityPartModules or kOS is not available: not installed"
 
 
 class TestPartsTagOldCommunityPartModules(PartsTagUnavailableTest, TestCase):
     mods = ["KSPCommunityPartModules==0.4.0"]
+    error = "Part has no name tag module"
 
 
 class TestPartsTagCommunityPartModules(PartsTagAvailableTest, TestCase):

@@ -10,13 +10,9 @@ namespace KRPC.DockingCamera
     /// Provides functionality to interact with Docking Camera (KURS).
     /// </summary>
     [KRPCService(Id = ServiceInfo.Id, GameScene = GameScene.All)]
+    [RequiresMod(typeof(API))]
     public static class DockingCamera
     {
-        static void CheckAPI()
-        {
-            ModAPI.Get<API>().CheckAvailable();
-        }
-
         /// <summary>
         /// Whether Docking Camera (KURS) is available.
         /// </summary>
@@ -34,7 +30,6 @@ namespace KRPC.DockingCamera
         [KRPCProcedure]
         public static Camera Camera(SpaceCenter.Services.Parts.Part part)
         {
-            CheckAPI();
             return new Camera(part);
         }
     }

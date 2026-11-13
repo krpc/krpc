@@ -21,6 +21,7 @@ namespace KRPC.KerbalEngineerRedux
     /// the next result.
     /// </remarks>
     [KRPCService (Id = ServiceInfo.Id, GameScene = GameScene.All)]
+    [RequiresMod (typeof (API))]
     public static class KerbalEngineerRedux
     {
         const double degreesToRadians = Math.PI / 180;
@@ -30,14 +31,8 @@ namespace KRPC.KerbalEngineerRedux
         const double standardGravity = 9.81;
         const double kilopascalsPerAtmosphere = 101.325;
 
-        static void CheckAPI ()
-        {
-            ModAPI.Get<API> ().CheckAvailable ();
-        }
-
         static void CheckActiveVessel (SpaceCenter.Services.Vessel vessel)
         {
-            CheckAPI ();
             if (ReferenceEquals (vessel, null))
                 throw new ArgumentNullException (nameof (vessel));
             if (vessel.InternalVessel != FlightGlobals.ActiveVessel)
@@ -148,7 +143,6 @@ namespace KRPC.KerbalEngineerRedux
         [KRPCProcedure (GameScene = GameScene.Editor)]
         public static IList<Stage> EditorStages (SpaceCenter.Services.CelestialBody body, double altitude = 0, double mach = 0)
         {
-            CheckAPI ();
             if (ReferenceEquals (body, null))
                 throw new ArgumentNullException (nameof (body));
             if (altitude < 0)

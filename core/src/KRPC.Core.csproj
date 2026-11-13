@@ -113,6 +113,7 @@
     <Compile Include="Service\Attributes\KRPCPropertyAttribute.cs" />
     <Compile Include="Service\Attributes\KRPCServiceAttribute.cs" />
     <Compile Include="Service\Attributes\KRPCStructAttribute.cs" />
+    <Compile Include="Service\Attributes\RequiresModAttribute.cs" />
     <Compile Include="Service\CallContext.cs" />
     <Compile Include="Service\ClassMethodHandler.cs" />
     <Compile Include="Service\ClassStaticMethodHandler.cs" />
@@ -226,6 +227,7 @@
     <Compile Include="Utils\Logger.cs" />
     <Compile Include="Utils\MemberBinder.cs" />
     <Compile Include="Utils\ModAPI.cs" />
+    <Compile Include="Utils\ModRequirement.cs" />
     <Compile Include="Utils\ModBinder.cs" />
     <Compile Include="Utils\ModMemberMissingException.cs" />
     <Compile Include="Utils\ModTypeMissingException.cs" />

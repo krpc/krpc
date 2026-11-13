@@ -83,7 +83,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public static bool KSPCommunityPartModulesAvailable {
-            get { return ModAssembly.IsLoaded (ServiceInfo.Mods.KSPCommunityPartModules.Assembly); }
+            get { return ModAPI.Get<ExternalAPI.KSPCommunityPartModules> ().IsAvailable; }
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public static bool KOSAvailable {
-            get { return ModAssembly.IsLoaded (ServiceInfo.Mods.kOS.Assembly); }
+            get { return ModAPI.Get<ExternalAPI.KOS> ().IsAvailable; }
         }
 
         /// <summary>

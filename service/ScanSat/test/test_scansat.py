@@ -370,5 +370,14 @@ class TestScanSatLanded(TestCase):
         self.assertAlmostEqual(flight.longitude, anomaly.longitude, delta=0.1)
 
 
+class TestScanSatNotInstalled(TestCase):
+    def test_not_installed(self):
+        conn = self.connect()
+        with self.assertRaisesRegex(
+            RuntimeError, "SCANsat is not available: not installed"
+        ):
+            _ = conn.scan_sat.resources
+
+
 if __name__ == "__main__":
     unittest.main()

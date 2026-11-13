@@ -786,5 +786,20 @@ class TestDisplay(MonitorTestCase):
         self.assertEqual(["Kept"], self.lines())
 
 
+class TestRasterPropMonitorNotInstalled(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
+
+    def test_not_installed(self):
+        conn = self.connect()
+        vessel = conn.space_center.active_vessel
+        assert vessel is not None
+        with self.assertRaisesRegex(
+            RuntimeError, "RasterPropMonitor is not available: not installed"
+        ):
+            conn.raster_prop_monitor.computers(vessel)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -551,6 +551,56 @@ namespace KRPC.Service
         }
 
         /// <summary>
+        /// Get the mod integrations the given service, class or member requires, from its
+        /// RequiresMod attributes, or <paramref name="inherited"/> if it has none.
+        /// </summary>
+        public static ModRequirement GetRequiredMod (ICustomAttributeProvider member, ModRequirement inherited)
+        {
+            var attributes = Reflection.GetAttributes<RequiresModAttribute> (member).ToList ();
+            if (attributes.Count == 0)
+                return inherited;
+            var alternatives = new List<IList<ModAPI>> ();
+            foreach (var attribute in attributes) {
+                if (attribute.Types.Length == 0)
+                    throw new ServiceException ("RequiresMod on " + member + " names no integration");
+                alternatives.Add (attribute.Types.Select (type => GetModAPI (member, type)).ToList ().AsReadOnly ());
+            }
+            return new ModRequirement (alternatives.AsReadOnly ());
+        }
+
+        /// <summary>
+        /// Get the mod integrations the given property requires, as
+        /// <see cref="GetRequiredMod"/>. Throws an exception if an accessor of the property
+        /// has a RequiresMod attribute, as only the property's own attributes apply.
+        /// </summary>
+        public static ModRequirement GetPropertyRequiredMod (PropertyInfo property, ModRequirement inherited)
+        {
+            foreach (var accessor in property.GetAccessors (true)) {
+                if (Reflection.GetAttributes<RequiresModAttribute> (accessor).Any ())
+                    throw new ServiceException (
+                        "RequiresMod on an accessor of " + property.Name + ", in place of on the property");
+            }
+            return GetRequiredMod (property, inherited);
+        }
+
+        static ModAPI GetModAPI (ICustomAttributeProvider member, Type type)
+        {
+            if (type == null || type.IsAbstract || !type.IsSubclassOf (typeof (ModAPI)))
+                throw new ServiceException (
+                    "RequiresMod on " + member + " names " + (type == null ? "null" : type.ToString ()) +
+                    ", which is not a subclass of " + typeof (ModAPI));
+            var flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+            if (type.GetConstructor (flags, null, Type.EmptyTypes, null) == null)
+                throw new ServiceException (
+                    "RequiresMod on " + member + " names " + type + ", which has no parameterless constructor");
+            try {
+                return ModAPI.Get (type);
+            } catch (InvalidOperationException exn) {
+                throw new ServiceException ("RequiresMod on " + member + " names " + type + ": " + exn.Message);
+            }
+        }
+
+        /// <summary>
         /// Get the name of the service for the given KRPCEnum annotated type
         /// </summary>
         public static string GetEnumServiceName (Type type)

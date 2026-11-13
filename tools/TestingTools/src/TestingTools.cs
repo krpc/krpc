@@ -1,6 +1,7 @@
 #pragma warning disable 0618
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service;
 using KRPC.Service.Attributes;
@@ -73,6 +74,26 @@ namespace TestingTools
                 if (assembly.name == name)
                     return assembly.versionMajor + "." + assembly.versionMinor;
             return string.Empty;
+        }
+
+        /// <summary>
+        /// The problems of the mod integrations whose mod is installed, by the mod's name. A
+        /// problem is why the integration failed to load, or the members it bound as stubs.
+        /// </summary>
+        [KRPCProcedure]
+        public static IDictionary<string, string> ModProblems ()
+        {
+            var problems = new Dictionary<string, string> ();
+            foreach (var mod in ServiceProblems.Mods) {
+                var problem = mod.IsAvailable
+                    ? "missing " + string.Join (", ", mod.MissingMembers.ToArray ())
+                    : mod.Reason;
+                string other;
+                if (problems.TryGetValue (mod.Name, out other))
+                    problem = other + "; " + problem;
+                problems [mod.Name] = problem;
+            }
+            return problems;
         }
 
         /// <summary>

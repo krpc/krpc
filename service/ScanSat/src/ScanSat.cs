@@ -18,6 +18,7 @@ namespace KRPC.ScanSat
     /// covered it, as the maps of the mod show nothing there.
     /// </remarks>
     [KRPCService (Id = ServiceInfo.Id, GameScene = GameScene.All)]
+    [RequiresMod (typeof (API))]
     public static class ScanSat
     {
         // The scenes with SCANsat's scenario module, which holds the scan data
@@ -30,14 +31,8 @@ namespace KRPC.ScanSat
         const int minMapWidth = 360;
         const int maxMapWidth = 1440;
 
-        static void CheckAPI ()
-        {
-            ModAPI.Get<API> ().CheckAvailable ();
-        }
-
         static global::CelestialBody InternalBody (SpaceCenter.Services.CelestialBody body)
         {
-            CheckAPI ();
             if (ReferenceEquals (body, null))
                 throw new ArgumentNullException (nameof (body));
             return body.InternalBody;
@@ -219,15 +214,11 @@ namespace KRPC.ScanSat
         /// </summary>
         [KRPCProperty]
         public static IList<string> Resources {
-            get {
-                CheckAPI ();
-                return API.Settings.GlobalResource () ? API.ResourceNames () : new List<string> ();
-            }
+            get { return API.Settings.GlobalResource () ? API.ResourceNames () : new List<string> (); }
         }
 
         static object Settings {
             get {
-                CheckAPI ();
                 var settings = API.Settings.Instance ();
                 if (settings == null)
                     throw new InvalidOperationException ("SCANsat settings are not loaded");
@@ -258,10 +249,7 @@ namespace KRPC.ScanSat
         /// </summary>
         [KRPCProperty]
         public static bool InstantResourceScan {
-            get {
-                CheckAPI ();
-                return API.Settings.InstantResourceScan ();
-            }
+            get { return API.Settings.InstantResourceScan (); }
         }
 
         /// <summary>
@@ -269,10 +257,7 @@ namespace KRPC.ScanSat
         /// </summary>
         [KRPCProperty]
         public static bool StockResourceScan {
-            get {
-                CheckAPI ();
-                return API.Settings.StockResourceScan ();
-            }
+            get { return API.Settings.StockResourceScan (); }
         }
 
         /// <summary>
@@ -281,10 +266,7 @@ namespace KRPC.ScanSat
         /// </summary>
         [KRPCProperty]
         public static bool BiomeLock {
-            get {
-                CheckAPI ();
-                return API.Settings.BiomeLock ();
-            }
+            get { return API.Settings.BiomeLock (); }
         }
 
         /// <summary>
@@ -293,10 +275,7 @@ namespace KRPC.ScanSat
         /// </summary>
         [KRPCProperty]
         public static bool RequireNarrowBand {
-            get {
-                CheckAPI ();
-                return API.Settings.RequireNarrowBand ();
-            }
+            get { return API.Settings.RequireNarrowBand (); }
         }
 
         /// <summary>
@@ -307,7 +286,6 @@ namespace KRPC.ScanSat
         [KRPCProcedure (GameScene = GameScene.Flight)]
         public static Scanner Scanner (SpaceCenter.Services.Parts.Part part)
         {
-            CheckAPI ();
             return new Scanner (part);
         }
 
@@ -318,7 +296,6 @@ namespace KRPC.ScanSat
         [KRPCProcedure (GameScene = GameScene.Flight)]
         public static IList<Scanner> Scanners (SpaceCenter.Services.Vessel vessel)
         {
-            CheckAPI ();
             if (ReferenceEquals (vessel, null))
                 throw new ArgumentNullException (nameof (vessel));
             return vessel.Parts.All.Where (global::KRPC.ScanSat.Scanner.Is).Select (x => new Scanner (x)).ToList ();

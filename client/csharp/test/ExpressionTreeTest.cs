@@ -48,7 +48,7 @@ namespace KRPC.Client.Test
                 "    Multiply<System.Double>\n" +
                 "      Convert<System.Double>\n" +
                 "        Block<System.Int32>\n" +
-                "          Call<System.Void> static KRPC.Service.Services.CheckExpressionGameScene\n" +
+                "          Call<System.Void> static KRPC.Service.Services.CheckExpressionAvailable\n" +
                 "            Constant<KRPC.Service.Scanner.ProcedureSignature> TestService.TestClass_get_IntProperty\n" +
                 "          Call<System.Int32> TestServer.TestService.TestClass.get_IntProperty\n" +
                 "            Call<TestServer.TestService.TestClass> static KRPC.Service.Services.CheckExpressionArgument\n" +
@@ -67,7 +67,7 @@ namespace KRPC.Client.Test
             Check (
                 "Equal<System.Boolean> System.String.op_Equality\n" +
                 "  Block<System.String> (returnValue#0: System.String)\n" +
-                "    Call<System.Void> static KRPC.Service.Services.CheckExpressionGameScene\n" +
+                "    Call<System.Void> static KRPC.Service.Services.CheckExpressionAvailable\n" +
                 "      Constant<KRPC.Service.Scanner.ProcedureSignature> TestService.get_StringProperty\n" +
                 "    Assign<System.String>\n" +
                 "      Parameter<System.String> returnValue#0\n" +
@@ -88,7 +88,7 @@ namespace KRPC.Client.Test
             Check (
                 "Block<System.Boolean>\n" +
                 "  Block<System.String> (returnValue#0: System.String)\n" +
-                "    Call<System.Void> static KRPC.Service.Services.CheckExpressionGameScene\n" +
+                "    Call<System.Void> static KRPC.Service.Services.CheckExpressionAvailable\n" +
                 "      Constant<KRPC.Service.Scanner.ProcedureSignature> TestService.get_StringProperty\n" +
                 "    Assign<System.String>\n" +
                 "      Parameter<System.String> returnValue#0\n" +
@@ -107,12 +107,12 @@ namespace KRPC.Client.Test
             var obj = Connection.TestService ().CreateTestObject ("golden");
             Check (
                 "Block<System.Double>\n" +
-                "  Call<System.Void> static KRPC.Service.Services.CheckExpressionGameScene\n" +
+                "  Call<System.Void> static KRPC.Service.Services.CheckExpressionAvailable\n" +
                 "    Constant<KRPC.Service.Scanner.ProcedureSignature> StdLib.Sqrt\n" +
                 "  Call<System.Double> static KRPC.Service.StdLib.StdLib.Sqrt\n" +
                 "    Convert<System.Double>\n" +
                 "      Block<System.Int32>\n" +
-                "        Call<System.Void> static KRPC.Service.Services.CheckExpressionGameScene\n" +
+                "        Call<System.Void> static KRPC.Service.Services.CheckExpressionAvailable\n" +
                 "          Constant<KRPC.Service.Scanner.ProcedureSignature> TestService.TestClass_get_IntProperty\n" +
                 "        Call<System.Int32> TestServer.TestService.TestClass.get_IntProperty\n" +
                 "          Constant<TestServer.TestService.TestClass> <TestServer.TestService.TestClass>\n",
@@ -125,14 +125,14 @@ namespace KRPC.Client.Test
             var obj = Connection.TestService ().CreateTestObject ("golden");
             Check (
                 "Block<System.Void>\n" +
-                "  Call<System.Void> static KRPC.Service.Services.CheckExpressionGameScene\n" +
+                "  Call<System.Void> static KRPC.Service.Services.CheckExpressionAvailable\n" +
                 "    Constant<KRPC.Service.Scanner.ProcedureSignature> StdLib.Print\n" +
                 "  Call<System.Void> static KRPC.Service.StdLib.StdLib.Print\n" +
                 "    Call<System.String> static KRPC.Service.Services.CheckExpressionArgument\n" +
                 "      Constant<KRPC.Service.Scanner.ProcedureSignature> StdLib.Print\n" +
                 "      Constant<System.Int32> 0\n" +
                 "      Block<System.String> (returnValue#0: System.String)\n" +
-                "        Call<System.Void> static KRPC.Service.Services.CheckExpressionGameScene\n" +
+                "        Call<System.Void> static KRPC.Service.Services.CheckExpressionAvailable\n" +
                 "          Constant<KRPC.Service.Scanner.ProcedureSignature> TestService.TestClass_GetValue\n" +
                 "        Assign<System.String>\n" +
                 "          Parameter<System.String> returnValue#0\n" +
@@ -162,7 +162,7 @@ namespace KRPC.Client.Test
                 "      Lambda<System.Func<System.Single, System.String>> (x#0)\n" +
                 "        Label<System.String> label#0\n" +
                 "          Block<System.String> (returnValue#1: System.String)\n" +
-                "            Call<System.Void> static KRPC.Service.Services.CheckExpressionGameScene\n" +
+                "            Call<System.Void> static KRPC.Service.Services.CheckExpressionAvailable\n" +
                 "              Constant<KRPC.Service.Scanner.ProcedureSignature> TestService.TestClass_FloatToString\n" +
                 "            Assign<System.String>\n" +
                 "              Parameter<System.String> returnValue#1\n" +
@@ -184,7 +184,7 @@ namespace KRPC.Client.Test
                 "Call<System.String> static System.String.Concat\n" +
                 "  NewArrayInit<System.String[]>\n" +
                 "    Block<System.String> (returnValue#0: System.String)\n" +
-                "      Call<System.Void> static KRPC.Service.Services.CheckExpressionGameScene\n" +
+                "      Call<System.Void> static KRPC.Service.Services.CheckExpressionAvailable\n" +
                 "        Constant<KRPC.Service.Scanner.ProcedureSignature> TestService.get_StringProperty\n" +
                 "      Assign<System.String>\n" +
                 "        Parameter<System.String> returnValue#0\n" +
@@ -204,7 +204,7 @@ namespace KRPC.Client.Test
             Check (
                 "MemberAccess<System.String> TestServer.TestService.TestStruct.StringField\n" +
                 "  Block<TestServer.TestService.TestStruct>\n" +
-                "    Call<System.Void> static KRPC.Service.Services.CheckExpressionGameScene\n" +
+                "    Call<System.Void> static KRPC.Service.Services.CheckExpressionAvailable\n" +
                 "      Constant<KRPC.Service.Scanner.ProcedureSignature> TestService.StructEcho\n" +
                 "    Block<TestServer.TestService.TestStruct> (param#0: TestServer.TestService.TestStruct)\n" +
                 "      Assign<TestServer.TestService.TestStruct>\n" +
@@ -253,7 +253,7 @@ namespace KRPC.Client.Test
                 "Conditional<System.String>\n" +
                 "  GreaterThan<System.Boolean>\n" +
                 "    Block<System.Int32>\n" +
-                "      Call<System.Void> static KRPC.Service.Services.CheckExpressionGameScene\n" +
+                "      Call<System.Void> static KRPC.Service.Services.CheckExpressionAvailable\n" +
                 "        Constant<KRPC.Service.Scanner.ProcedureSignature> TestService.TestClass_get_IntProperty\n" +
                 "      Call<System.Int32> TestServer.TestService.TestClass.get_IntProperty\n" +
                 "        Constant<TestServer.TestService.TestClass> <TestServer.TestService.TestClass>\n" +
@@ -272,7 +272,7 @@ namespace KRPC.Client.Test
                 "AndAlso<System.Boolean>\n" +
                 "  GreaterThan<System.Boolean>\n" +
                 "    Block<System.Int32>\n" +
-                "      Call<System.Void> static KRPC.Service.Services.CheckExpressionGameScene\n" +
+                "      Call<System.Void> static KRPC.Service.Services.CheckExpressionAvailable\n" +
                 "        Constant<KRPC.Service.Scanner.ProcedureSignature> TestService.TestClass_get_IntProperty\n" +
                 "      Call<System.Int32> TestServer.TestService.TestClass.get_IntProperty\n" +
                 "        Constant<TestServer.TestService.TestClass> <TestServer.TestService.TestClass>\n" +
@@ -283,7 +283,7 @@ namespace KRPC.Client.Test
                 "And<System.Boolean>\n" +
                 "  GreaterThan<System.Boolean>\n" +
                 "    Block<System.Int32>\n" +
-                "      Call<System.Void> static KRPC.Service.Services.CheckExpressionGameScene\n" +
+                "      Call<System.Void> static KRPC.Service.Services.CheckExpressionAvailable\n" +
                 "        Constant<KRPC.Service.Scanner.ProcedureSignature> TestService.TestClass_get_IntProperty\n" +
                 "      Call<System.Int32> TestServer.TestService.TestClass.get_IntProperty\n" +
                 "        Constant<TestServer.TestService.TestClass> <TestServer.TestService.TestClass>\n" +

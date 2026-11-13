@@ -293,14 +293,6 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Check that FAR is installed and that it is active for the vessel
-        /// </summary>
-        static void CheckFAR ()
-        {
-            ModAPI.Get<FAR> ().CheckAvailable ();
-        }
-
-        /// <summary>
         /// Whether an airflow is too slow for FAR to compute a force from. FAR normalizes the
         /// airflow to get the direction the air comes from, which is not a number when the air
         /// is still, so answer such a state directly instead of passing the NaN on. The stock
@@ -1243,11 +1235,9 @@ namespace KRPC.SpaceCenter.Services
         /// Requires Ferram Aerospace Research.
         /// </remarks>
         [KRPCProperty]
+        [RequiresMod (typeof (FAR))]
         public float ReynoldsNumber {
-            get {
-                CheckFAR ();
-                return (float)FAR.VesselReynoldsNumber (InternalVessel);
-            }
+            get { return (float)FAR.VesselReynoldsNumber (InternalVessel); }
         }
 
         /// <summary>
@@ -1349,9 +1339,9 @@ namespace KRPC.SpaceCenter.Services
         /// Requires Ferram Aerospace Research.
         /// </remarks>
         [KRPCProperty]
+        [RequiresMod (typeof (FAR))]
         public float StallFraction {
             get {
-                CheckFAR ();
                 // FAR averages how far each of the vessel's lifting surfaces is stalled,
                 // weighted by their area, which is zero over zero for a vessel that has
                 // none. Nothing on such a vessel can stall, so report no stall
@@ -1368,11 +1358,9 @@ namespace KRPC.SpaceCenter.Services
         /// Requires Ferram Aerospace Research.
         /// </remarks>
         [KRPCProperty]
+        [RequiresMod (typeof (FAR))]
         public float DragCoefficient {
-            get {
-                CheckFAR ();
-                return (float)FAR.VesselDragCoeff (InternalVessel);
-            }
+            get { return (float)FAR.VesselDragCoeff (InternalVessel); }
         }
 
         /// <summary>
@@ -1383,11 +1371,9 @@ namespace KRPC.SpaceCenter.Services
         /// Requires Ferram Aerospace Research.
         /// </remarks>
         [KRPCProperty]
+        [RequiresMod (typeof (FAR))]
         public float LiftCoefficient {
-            get {
-                CheckFAR ();
-                return (float)FAR.VesselLiftCoeff (InternalVessel);
-            }
+            get { return (float)FAR.VesselLiftCoeff (InternalVessel); }
         }
 
         /// <summary>
@@ -1397,11 +1383,9 @@ namespace KRPC.SpaceCenter.Services
         /// Requires Ferram Aerospace Research.
         /// </remarks>
         [KRPCProperty]
+        [RequiresMod (typeof (FAR))]
         public float BallisticCoefficient {
-            get {
-                CheckFAR ();
-                return (float)FAR.VesselBallisticCoeff (InternalVessel);
-            }
+            get { return (float)FAR.VesselBallisticCoeff (InternalVessel); }
         }
 
         /// <summary>
@@ -1414,11 +1398,9 @@ namespace KRPC.SpaceCenter.Services
         /// Requires Ferram Aerospace Research.
         /// </remarks>
         [KRPCProperty]
+        [RequiresMod (typeof (FAR))]
         public float ThrustSpecificFuelConsumption {
-            get {
-                CheckFAR ();
-                return (float)FAR.VesselTSFC (InternalVessel);
-            }
+            get { return (float)FAR.VesselTSFC (InternalVessel); }
         }
     }
 }

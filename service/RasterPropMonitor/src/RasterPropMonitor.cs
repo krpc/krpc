@@ -17,13 +17,9 @@ namespace KRPC.RasterPropMonitor
     /// on the vessel only for the active vessel.
     /// </remarks>
     [KRPCService (Id = ServiceInfo.Id, GameScene = GameScene.All)]
+    [RequiresMod (typeof (API))]
     public static class RasterPropMonitor
     {
-        static void CheckAPI ()
-        {
-            ModAPI.Get<API> ().CheckAvailable ();
-        }
-
         /// <summary>
         /// Whether Raster Prop Monitor is installed.
         /// </summary>
@@ -40,7 +36,6 @@ namespace KRPC.RasterPropMonitor
         [KRPCProcedure (GameScene = GameScene.Flight)]
         public static Computer Computer (SpaceCenter.Services.Parts.Part part)
         {
-            CheckAPI ();
             if (ReferenceEquals (part, null))
                 throw new ArgumentNullException (nameof (part));
             return new Computer (part);
@@ -53,7 +48,6 @@ namespace KRPC.RasterPropMonitor
         [KRPCProcedure (GameScene = GameScene.Flight)]
         public static IList<Computer> Computers (SpaceCenter.Services.Vessel vessel)
         {
-            CheckAPI ();
             if (ReferenceEquals (vessel, null))
                 throw new ArgumentNullException (nameof (vessel));
             return API.Computers (vessel.InternalVessel)
@@ -72,7 +66,6 @@ namespace KRPC.RasterPropMonitor
         [KRPCProcedure (GameScene = GameScene.Flight)]
         public static IList<Monitor> Monitors (SpaceCenter.Services.Vessel vessel)
         {
-            CheckAPI ();
             if (ReferenceEquals (vessel, null))
                 throw new ArgumentNullException (nameof (vessel));
             if (vessel.InternalVessel != FlightGlobals.ActiveVessel)
@@ -89,7 +82,6 @@ namespace KRPC.RasterPropMonitor
         [KRPCProcedure (GameScene = GameScene.Flight)]
         public static Display Display (SpaceCenter.Services.Vessel vessel, string name)
         {
-            CheckAPI ();
             if (ReferenceEquals (vessel, null))
                 throw new ArgumentNullException (nameof (vessel));
             if (string.IsNullOrEmpty (name) || name.Trim ().Length == 0)
@@ -104,7 +96,6 @@ namespace KRPC.RasterPropMonitor
         [KRPCProcedure (GameScene = GameScene.Flight)]
         public static IList<ExternalCamera> Cameras (SpaceCenter.Services.Vessel vessel)
         {
-            CheckAPI ();
             if (ReferenceEquals (vessel, null))
                 throw new ArgumentNullException (nameof (vessel));
             return ExternalCamera.Of (vessel.InternalVessel);
@@ -113,7 +104,6 @@ namespace KRPC.RasterPropMonitor
         // A computer on the vessel, through which RPM reaches the vessel's persistent variables
         static PartModule VesselComputer (SpaceCenter.Services.Vessel vessel)
         {
-            CheckAPI ();
             if (ReferenceEquals (vessel, null))
                 throw new ArgumentNullException (nameof (vessel));
             var computer = API.Computers (vessel.InternalVessel).FirstOrDefault ();

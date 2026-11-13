@@ -1,6 +1,7 @@
 import unittest
 
 from krpctools.game.geometry import distance, dot, norm, normalize
+from krpctools.game.ksp import TestCase
 from service.Trajectories.test.trajectories_testcase import (
     KERBIN_RADIUS,
     MUN_RADIUS,
@@ -190,6 +191,15 @@ class TestImpactAtMun(MunImpactCase):
             self.some(impact.velocity(inertial)),
             self.some(impact.velocity(self.mun.reference_frame)),
         )
+
+
+class TestTrajectoriesNotInstalled(TestCase):
+    def test_not_installed(self):
+        conn = self.connect()
+        with self.assertRaisesRegex(
+            RuntimeError, "Trajectories is not available: not installed"
+        ):
+            conn.trajectories.impact_patch()
 
 
 if __name__ == "__main__":
