@@ -49,7 +49,9 @@ def main():
         src, dst = spec.split("=", 1)
         shutil.copy(src, dst)
 
-    result = subprocess.run([opts.protoc] + protoc_args, check=False)
+    # Drop this script's runfiles variables, so a plugin finds its own runfiles
+    env = {k: v for k, v in os.environ.items() if not k.startswith("RUNFILES_")}
+    result = subprocess.run([opts.protoc] + protoc_args, env=env, check=False)
     if result.returncode != 0:
         return result.returncode
 

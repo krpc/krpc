@@ -2,9 +2,9 @@ Building from Source
 ====================
 
 kRPC builds with `Bazel <https://bazel.build>`_. The build is hermetic. It downloads the
-toolchains for C#, Python, Java, C, C++ and Lua, and a set of stub KSP assemblies from the
-`ksp-lib <https://github.com/krpc/ksp-lib>`_ repository. You do not need Mono, the .NET SDK, a JDK
-or a copy of the game to build it.
+toolchains for C#, Python, Java, C, C++, Lua and JavaScript, and a set of stub KSP assemblies
+from the `ksp-lib <https://github.com/krpc/ksp-lib>`_ repository. You do not need Mono, the .NET
+SDK, a JDK, Node.js or a copy of the game to build it.
 
 Requirements
 ------------
@@ -96,7 +96,7 @@ its own target:
 * ``//service/<name>``, such as ``//service/SpaceCenter`` - a service. ``service/registry.bzl``
   lists them.
 * ``//client/python``, ``//client/csharp``, ``//client/cpp``, ``//client/cnano``,
-  ``//client/java``, ``//client/lua`` - the client libraries.
+  ``//client/java``, ``//client/js``, ``//client/lua`` - the client libraries.
 * ``//protobuf:csharp``, ``//protobuf:java``, ``//protobuf:lua``, ``//protobuf:python`` - the
   protobuf code for each language.
 * ``//doc:html`` - the documentation.

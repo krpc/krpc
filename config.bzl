@@ -29,6 +29,10 @@ nuget_version = \
 # Lua rock version: x.y.z[.w]
 lua_version = ".".join(version_parts[:4])
 
+# npm package version, semver: x.y.z[-build.w]
+npm_version = \
+    ".".join(version_parts[:3]) if len(version_parts) == 3 else ".".join(version_parts[:3]) + "-build." + version_parts[3]
+
 # CMake version: x.y.z[.build] — purely numeric; sha suffix dropped
 cmake_version = ".".join(version_parts[:4]) if len(version_parts) > 3 else version
 

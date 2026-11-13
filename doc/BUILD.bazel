@@ -128,6 +128,7 @@ changeloggen(
         "//client/csharp:CHANGELOG.md",
         "//client/cpp:CHANGELOG.md",
         "//client/java:CHANGELOG.md",
+        "//client/js:CHANGELOG.md",
         "//client/lua:CHANGELOG.md",
         "//client/python:CHANGELOG.md",
         "//tools/krpctools:CHANGELOG.md",

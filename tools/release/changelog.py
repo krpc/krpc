@@ -50,6 +50,7 @@ COMPONENTS = {
     "client/csharp": "C# client",
     "client/cpp": "C++ client",
     "client/java": "Java client",
+    "client/js": "JavaScript client",
     "client/lua": "Lua client",
     "client/python": "Python client",
     "tools/krpctools": "krpctools",
