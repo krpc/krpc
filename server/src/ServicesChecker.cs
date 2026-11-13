@@ -1,3 +1,6 @@
+using System;
+using System.Diagnostics;
+using System.Linq;
 using KRPC.Service;
 using UnityEngine;
 
@@ -32,6 +35,37 @@ namespace KRPC
             Addon.InitLogger ();
             Utils.ModAPI.LoadAll (new Utils.GameModAssemblies ());
             ok = ServiceProblems.Load ();
+            if (!ok.Value)
+                return;
+            // The check is best effort, and kRPC runs without it
+            try {
+                CheckMissingMembers ();
+            } catch (Exception exn) {
+                Utils.Logger.WriteLine ("Failed to check the RPCs for missing members: " + exn, Utils.Logger.Severity.Error);
+            }
+        }
+
+        /// <summary>
+        /// List the RPCs that use a missing member as a problem.
+        /// </summary>
+        static void CheckMissingMembers ()
+        {
+            var running = new Version (Versioning.version_major, Versioning.version_minor, Versioning.Revision);
+            var builtFor = new Version (((AssemblyKSPVersionAttribute)typeof (ServicesChecker).Assembly
+                .GetCustomAttributes (typeof (AssemblyKSPVersionAttribute), false) [0]).MaxVersion);
+            builtFor = new Version (builtFor.Major, builtFor.Minor, builtFor.Build);
+            if (running != builtFor)
+                Utils.Logger.WriteLine ("kRPC was built for KSP " + builtFor + ", and this is KSP " + running, Utils.Logger.Severity.Warning);
+            var timer = Stopwatch.StartNew ();
+            var broken = BrokenProcedures.Find ();
+            Utils.Logger.WriteLine ("Checked the RPCs for missing members in " + timer.ElapsedMilliseconds + " ms", Utils.Logger.Severity.Debug);
+            if (broken.Count == 0)
+                return;
+            var title = running == builtFor ? "RPCs broken by missing members" :
+                "RPCs broken by KSP " + running + " (kRPC was built for KSP " + builtFor + ")";
+            var lines = broken.Select (x => x.Key + ": " + x.Value).ToList ();
+            Utils.Logger.WriteLine (title + ":\n  " + string.Join ("\n  ", lines.ToArray ()), Utils.Logger.Severity.Error);
+            ServiceProblems.Add (new ProblemCategory (title, lines));
         }
     }
 

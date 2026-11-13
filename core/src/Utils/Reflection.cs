@@ -74,7 +74,7 @@ namespace KRPC.Utils
         /// Whether the given assembly can declare the given attribute, which it can only do by
         /// being, or by referencing, the assembly the attribute comes from.
         /// </summary>
-        static bool CanDeclare (Assembly assembly, Assembly attributeAssembly)
+        internal static bool CanDeclare (Assembly assembly, Assembly attributeAssembly)
         {
             if (assembly == attributeAssembly)
                 return true;

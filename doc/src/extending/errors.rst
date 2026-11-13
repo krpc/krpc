@@ -37,6 +37,10 @@ fails with a "procedure not found" error.
 
 kRPC does not run without its ``KRPC`` service, so a clash that leaves it out disables kRPC.
 
+The server also checks that each member a procedure's code uses exists. A game or mod update can
+remove a member, and then the procedures that use it fail when called. They are listed as a
+problem, with the member they are missing.
+
 A warning leaves the members in. A class of :ref:`extension members
 <service-api-extension-members>` that is not public gets one, as its members are out of
 reach.
