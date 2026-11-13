@@ -136,6 +136,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Requires KSPCommunityPartModules 0.5 or later, or kOS, which share one name tag.
         /// </remarks>
         [KRPCProperty]
+        [RequiresMod (typeof (KSPCommunityPartModules))]
+        [RequiresMod (typeof (KOS))]
         public string Tag {
             get { return NameTag.Get (TagModule); }
             set { NameTag.Set (TagModule, value); }
@@ -1352,6 +1354,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Requires RealFuels.
         /// </remarks>
         [KRPCProperty]
+        [RequiresMod (typeof (RealFuels))]
         public bool HighlyPressurized {
             get { return RealFuelsTankModule.HighlyPressurized; }
         }
@@ -1369,6 +1372,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Requires RealFuels.
         /// </remarks>
         [KRPCProperty]
+        [RequiresMod (typeof (RealFuels))]
         public double BoiloffRate {
             get { return RealFuelsTankModule.BoiloffRate; }
         }

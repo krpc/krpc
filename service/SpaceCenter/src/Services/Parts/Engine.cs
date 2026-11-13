@@ -755,6 +755,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Requires RealFuels.
         /// </remarks>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
+        [RequiresMod (typeof (ExternalAPI.RealFuels))]
         public int Ignitions {
             get { return RealFuelsEngineModule.Ignitions; }
         }
@@ -769,6 +770,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Requires RealFuels.
         /// </remarks>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
+        [RequiresMod (typeof (ExternalAPI.RealFuels))]
         public IDictionary<string, double> IgnitionResources {
             get { return RealFuelsEngineModule.IgnitionResources; }
         }
@@ -782,6 +784,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Requires RealFuels.
         /// </remarks>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
+        [RequiresMod (typeof (ExternalAPI.RealFuels))]
         public bool HasUllage {
             get { return RealFuelsEngineModule.HasUllage; }
         }
@@ -796,6 +799,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Requires RealFuels.
         /// </remarks>
         [KRPCProperty]
+        [RequiresMod (typeof (ExternalAPI.RealFuels))]
         public double PropellantStability {
             get { return RealFuelsEngineModule.PropellantStability; }
         }
@@ -811,6 +815,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Requires RealFuels.
         /// </remarks>
         [KRPCProperty]
+        [RequiresMod (typeof (ExternalAPI.RealFuels))]
         public double PropellantReliability {
             get { return RealFuelsEngineModule.PropellantReliability; }
         }
@@ -824,6 +829,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Requires RealFuels.
         /// </remarks>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
+        [RequiresMod (typeof (ExternalAPI.RealFuels))]
         public bool PressureFed {
             get { return RealFuelsEngineModule.PressureFed; }
         }
@@ -837,6 +843,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Requires RealFuels.
         /// </remarks>
         [KRPCProperty]
+        [RequiresMod (typeof (ExternalAPI.RealFuels))]
         public bool HasFeedPressure {
             get { return RealFuelsEngineModule.HasFeedPressure; }
         }

@@ -98,6 +98,7 @@
     <Compile Include="NameTagWarningAddon.cs" />
     <Compile Include="ExternalAPI\AGExt.cs" />
     <Compile Include="ExternalAPI\FAR.cs" />
+    <Compile Include="ExternalAPI\NameTagMods.cs" />
     <Compile Include="ExternalAPI\RealAntennas.cs" />
     <Compile Include="ExternalAPI\RealFuels.cs" />
     <Compile Include="ExternalAPI\RemoteTech.cs" />

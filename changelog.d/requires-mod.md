@@ -7,3 +7,8 @@
 
 - Fail the class members of a mod service with the reason when its mod is missing or failed to
   load (#1342)
+
+## service/SpaceCenter
+
+- Fail the FAR and RealFuels members, and `Part.Tag`, with the reason when the mod is missing or
+  failed to load (#1342)

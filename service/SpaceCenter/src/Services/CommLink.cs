@@ -171,14 +171,14 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The RealAntennas link. Throws if RealAntennas is not available. A link's
+        /// The RealAntennas link. Throws if the link is not one. A link's
         /// forward direction is from <see cref="Start"/> to <see cref="End"/>.
         /// </summary>
         CommNet.CommLink RealAntennasLink {
             get {
                 var link = InternalLink;
                 if (!RealAntennasAPI.IsLink (link))
-                    throw new InvalidOperationException ("RealAntennas is not available");
+                    throw new InvalidOperationException ("The link is not a RealAntennas link");
                 return link;
             }
         }
@@ -190,6 +190,7 @@ namespace KRPC.SpaceCenter.Services
         /// Requires RealAntennas.
         /// </remarks>
         [KRPCProperty]
+        [RequiresMod (typeof (RealAntennasAPI))]
         public double ForwardDataRate {
             get { return RealAntennasAPI.ForwardDataRate (RealAntennasLink); }
         }
@@ -201,6 +202,7 @@ namespace KRPC.SpaceCenter.Services
         /// Requires RealAntennas.
         /// </remarks>
         [KRPCProperty]
+        [RequiresMod (typeof (RealAntennasAPI))]
         public double ReverseDataRate {
             get { return RealAntennasAPI.ReverseDataRate (RealAntennasLink); }
         }
@@ -213,6 +215,7 @@ namespace KRPC.SpaceCenter.Services
         /// Requires RealAntennas.
         /// </remarks>
         [KRPCProperty (Nullable = true)]
+        [RequiresMod (typeof (RealAntennasAPI))]
         public Parts.Antenna StartAntenna {
             get { return ToAntenna (RealAntennasAPI.ForwardTransmitter (RealAntennasLink)); }
         }
@@ -225,6 +228,7 @@ namespace KRPC.SpaceCenter.Services
         /// Requires RealAntennas.
         /// </remarks>
         [KRPCProperty (Nullable = true)]
+        [RequiresMod (typeof (RealAntennasAPI))]
         public Parts.Antenna EndAntenna {
             get { return ToAntenna (RealAntennasAPI.ForwardReceiver (RealAntennasLink)); }
         }
