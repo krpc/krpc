@@ -19,6 +19,7 @@ from .csharp import CsharpDomain
 from .docgen import DocumentationGenerator
 from .extensions import AppendExtension
 from .java import JavaDomain
+from .js import JsDomain
 from .lua import LuaDomain
 from .nodes import Service
 from .python import PythonDomain
@@ -103,6 +104,7 @@ DOMAINS = {
     "cpp": CppDomain,
     "csharp": CsharpDomain,
     "java": JavaDomain,
+    "js": JsDomain,
     "lua": LuaDomain,
     "python": PythonDomain,
 }

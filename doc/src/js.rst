@@ -354,3 +354,11 @@ Client API Reference
 .. class:: EncodingError()
 
    A value that failed to encode or decode, such as a malformed result from the server.
+
+API Reference
+-------------
+
+Each procedure and method, including the getter and setter of a property, returns a ``Promise``.
+It resolves to a value of the return type listed for it.
+
+.. include:: js/api.inc
