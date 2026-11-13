@@ -104,10 +104,11 @@ class JsLanguage(Language):
                 return "%dn" % value
             return str(value)
         if isinstance(typ, EnumerationType):
-            return "%s.%s" % (
-                self.parse_type(typ),
-                lower_camel_case(value.name),
-            )
+            names = [
+                "%s.%s" % (self.parse_type(typ), lower_camel_case(name))
+                for name in self.enum_value_names(value)
+            ]
+            return names[0] + "".join(".union(%s)" % x for x in names[1:])
         if isinstance(typ, StructType):
             fields = (
                 "%s: %s"

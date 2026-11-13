@@ -97,7 +97,7 @@ class JsGenerator(Generator[JsLanguage]):
         members = []
         for name, info in context["procedures"].items():
             members.append(
-                self._member(info["documentation"], self._procedure(name, info))
+                self._member(info["documentation"], self._procedure(name, info), info)
             )
         for info in context["properties"].values():
             members.extend(self._property(info))
@@ -106,7 +106,9 @@ class JsGenerator(Generator[JsLanguage]):
             for method_name, method in info["static_methods"].items():
                 static.append(
                     self._member(
-                        method["documentation"], self._procedure(method_name, method)
+                        method["documentation"],
+                        self._procedure(method_name, method),
+                        method,
                     )
                 )
             members.append(
@@ -181,7 +183,9 @@ class JsGenerator(Generator[JsLanguage]):
             for method_name, method in info["methods"].items():
                 class_members.append(
                     self._member(
-                        method["documentation"], self._procedure(method_name, method)
+                        method["documentation"],
+                        self._procedure(method_name, method),
+                        method,
                     )
                 )
             for prop in info["properties"].values():
@@ -197,10 +201,12 @@ class JsGenerator(Generator[JsLanguage]):
 
         enumerations = []
         for name, info in context["enumerations"].items():
-            self._client_imports.add("RemoteEnum")
+            base = "RemoteFlags" if info["flags"] else "RemoteEnum"
+            self._client_imports.add(base)
             enumerations.append(
                 {
                     "name": name,
+                    "base": base,
                     "documentation": doc_comment(self._documentation(info)),
                     "brand": "%s.%s" % (service, name),
                 }
@@ -263,13 +269,25 @@ class JsGenerator(Generator[JsLanguage]):
 
         return {
             "service_name": service,
-            "service_documentation": doc_comment(context["service_documentation"]),
+            "service_documentation": doc_comment(
+                self._documentation(
+                    {
+                        "documentation": context["service_documentation"],
+                        "deprecated": context["service_deprecated"],
+                        "deprecated_reason": context["service_deprecated_reason"],
+                    }
+                )
+            ),
             "imports": imports,
             "members": render(members),
             "classes": classes,
             "enumerations": enumerations,
             "structs": structs,
         }
+
+    @staticmethod
+    def parse_plain_cref_member(name):
+        return lower_camel_case(name)
 
     def _documentation(self, info):
         """The documentation of a definition, with its deprecation"""

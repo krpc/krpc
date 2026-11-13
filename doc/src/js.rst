@@ -103,41 +103,30 @@ have, rejects with a ``TypeError``.
 Values
 ^^^^^^
 
-Each kRPC type has a JavaScript type:
+Procedures take and return JavaScript values, such as ``number``, ``string``, ``Array`` and
+``Map``, and ``null`` for a null. The services also define their own types:
 
-.. list-table::
-   :header-rows: 1
-
-   * - kRPC type
-     - JavaScript type
-   * - ``float``, ``double``, ``sint32``, ``uint32``
-     - ``number``
-   * - ``sint64``, ``uint64``
-     - ``bigint`` results. Arguments take a ``number`` or a ``bigint``.
-   * - ``bool``
-     - ``boolean``
-   * - ``string``
-     - ``string``
-   * - ``bytes``
-     - ``Uint8Array``
-   * - list, tuple
-     - ``Array``
-   * - set
-     - ``Set``
-   * - dictionary
-     - ``Map``
-   * - structure
-     - An object of the service's class for it, such as ``conn.spaceCenter.BoundingBox``. It is
-       frozen, and has a property for each field, in lower camel case. Make one with ``new``,
-       passing an object of the fields.
-   * - enumeration
-     - A :class:`RemoteEnum`, such as ``conn.spaceCenter.VesselSituation.orbiting``
-   * - class
-     - An object of the service's class, such as ``SpaceCenter.Vessel``
-   * - null
-     - ``null``
+* A class is a remote object, such as a ``SpaceCenter.Vessel``.
+* A structure is a frozen object of the service's class, such as ``conn.spaceCenter.BoundingBox``,
+  with a property for each field. Make one with ``new``, passing an object of the fields.
+* An enumeration value is a :class:`RemoteEnum`, such as
+  ``conn.spaceCenter.VesselSituation.orbiting``, or a :class:`RemoteFlags` for a
+  :ref:`flags enumeration <js-client-flags>`.
 
 The :func:`equals` function compares two values by their contents, such as two structures.
+
+.. _js-client-flags:
+
+Flags Enumerations
+^^^^^^^^^^^^^^^^^^
+
+A flags enumeration, such as :class:`~SpaceCenter.MapFilterType`, holds any combination of its
+values. You combine values with ``union``, and test for one with ``contains``:
+
+.. literalinclude:: /scripts/js/Flags.js
+
+``intersection`` and ``difference`` give the other combinations of two values. Each combination is
+one object, so combinations compare with ``===``.
 
 Using the Client in a Web Page
 ------------------------------
@@ -213,6 +202,16 @@ Streams and Events
 
 The JavaScript client has no streams or events yet. Read a value by calling its procedure in a
 loop instead.
+
+Deprecated Members
+------------------
+
+A member of a service can be deprecated, when a newer member replaces it. A deprecated member
+still works, but may be removed in a future release, so move to its replacement.
+
+The API reference and the TypeScript declarations mark it as ``@deprecated``, and name the
+replacement. A use of it emits a warning naming the replacement, once per member on a connection.
+The warning is a ``DeprecationWarning`` in Node.js, and a console warning in a web browser.
 
 Service Stubs
 -------------
@@ -312,6 +311,28 @@ Client API Reference
    .. attribute:: value
 
       The value's number.
+
+.. class:: RemoteFlags()
+
+   A value of a flags enumeration, which holds any combination of the enumeration's values. It
+   extends :class:`RemoteEnum`. Each combination is one object, so combinations compare with
+   ``===``.
+
+   .. method:: union(other)
+
+      The combination of the flags of this value and another.
+
+   .. method:: intersection(other)
+
+      The flags this value and another both hold.
+
+   .. method:: difference(other)
+
+      This value without the flags of another.
+
+   .. method:: contains(other)
+
+      Whether this value holds every flag of another.
 
 .. class:: RemoteError()
 

@@ -9,5 +9,5 @@ export {
 export { getObjectId, RemoteObject, RemoteService } from "./objects.js";
 export type * as schema from "./schema/krpc_pb.js";
 export type * from "./services/index.js";
-export { RemoteEnum, RemoteStruct } from "./types.js";
+export { RemoteEnum, RemoteFlags, RemoteStruct } from "./types.js";
 export { equals } from "./values.js";

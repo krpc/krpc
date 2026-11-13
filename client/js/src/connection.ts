@@ -1,6 +1,12 @@
 import { create, fromBinary, isMessage } from "@bufbuild/protobuf";
 import { decode, encode, type ObjectFactory } from "./codec.js";
 import {
+  type Deprecatable,
+  Deprecations,
+  deprecationMessage,
+  inheritDeprecation,
+} from "./deprecation.js";
+import {
   ConnectionError,
   EncodingError,
   exceptionClass,
@@ -70,6 +76,8 @@ export interface Context extends ObjectFactory {
   readonly session: Session;
   readonly types: Types;
   readonly services: readonly Service[];
+  /** Warns of the use of a deprecated member, once per member. */
+  readonly warn: (message: string) => void;
 }
 
 const contexts = new WeakMap<Connection, Context>();
@@ -104,13 +112,19 @@ export async function connect(options: ConnectOptions = {}): Promise<Connection>
   try {
     const result = await session.call("KRPC", "GetServices", []);
     const services = fromBinary(ServicesSchema, result.value).services;
+    for (const service of services) {
+      inheritDeprecation(service);
+    }
+    const deprecations = new Deprecations();
+    const warn = (message: string) => deprecations.warn(message);
     const connection = new Connection(session);
     const objects = new ObjectCache();
     const classes = new Map<string, new (id: bigint) => RemoteObject>();
     const context: Context = {
       session,
-      types: new Types(services),
+      types: new Types(services, warn),
       services,
+      warn,
       object(service, className, id) {
         const cls = classes.get(`${service}.${className}`);
         if (cls === undefined) {
@@ -139,10 +153,8 @@ export async function connect(options: ConnectOptions = {}): Promise<Connection>
     for (const service of services) {
       const members = serviceMembers(context, service, classes, exceptions);
       if (members !== null) {
-        Object.defineProperty(connection, camelCase(service.name), {
-          value: members,
-          enumerable: true,
-        });
+        const message = deprecationMessage(service, service.name, service.name);
+        expose(context, connection, camelCase(service.name), members, message);
       }
     }
     return connection;
@@ -324,7 +336,16 @@ function addClassMembers(
       if (name.includes("_static_")) {
         const cls = classes.get(`${service.name}.${className}`);
         if (cls !== undefined) {
-          define(cls, camelCase(member), (...args: unknown[]) => invoke(context, sig, args));
+          const key = camelCase(member);
+          const message = deprecationMessage(
+            procedure,
+            service.name,
+            `${service.name}.${className}.${key}`,
+          );
+          define(cls, key, (...args: unknown[]) => {
+            warnOf(context, message);
+            return invoke(context, sig, args);
+          });
         }
         continue;
       }
@@ -342,7 +363,13 @@ function addClassMembers(
       } else if (name.includes("_set_")) {
         key = accessorName("set", member);
       }
+      const message = deprecationMessage(
+        procedure,
+        service.name,
+        `${instance.service}.${instance.name}.${key}`,
+      );
       define(cls.prototype, key, function (this: RemoteObject, ...args: unknown[]) {
+        warnOf(context, message);
         return invoke(context, sig, [this, ...args], 1);
       });
     }
@@ -350,7 +377,8 @@ function addClassMembers(
 }
 
 /** The members of a service, or null for a service with none of its own. A member whose
- * procedure has a type the client cannot use is left out. */
+ * procedure has a type the client cannot use is left out. A deprecated member warns when it is
+ * called, or for a type, when it is read. */
 function serviceMembers(
   context: Context,
   service: Service,
@@ -358,6 +386,10 @@ function serviceMembers(
   exceptions: Map<string, new (error: ServerErrorDetails) => Error>,
 ): object | null {
   const members: Record<string, unknown> = Object.create(RemoteService.prototype);
+  const add = (key: string, value: unknown, member: Deprecatable) => {
+    const message = deprecationMessage(member, service.name, `${service.name}.${key}`);
+    expose(context, members, key, value, message);
+  };
   let hasMembers =
     service.classes.length > 0 || service.enumerations.length > 0 || service.exceptions.length > 0;
   for (const procedure of service.procedures) {
@@ -383,16 +415,27 @@ function serviceMembers(
     } else if (name.startsWith("set_")) {
       key = accessorName("set", name.slice(4));
     }
-    members[key] = (...args: unknown[]) => invoke(context, sig, args);
+    const message = deprecationMessage(procedure, service.name, `${service.name}.${key}`);
+    members[key] = (...args: unknown[]) => {
+      warnOf(context, message);
+      return invoke(context, sig, args);
+    };
   }
   for (const x of service.classes) {
-    members[x.name] = classes.get(`${service.name}.${x.name}`);
+    add(x.name, classes.get(`${service.name}.${x.name}`), x);
   }
   for (const x of service.enumerations) {
-    members[x.name] = context.types.enumeration(service.name, x.name)?.values;
+    const values = context.types.enumeration(service.name, x.name)?.values ?? {};
+    const exposed: Record<string, unknown> = {};
+    for (const value of x.values) {
+      const key = camelCase(value.name);
+      const message = deprecationMessage(value, service.name, `${service.name}.${x.name}.${key}`);
+      expose(context, exposed, key, values[key], message);
+    }
+    add(x.name, Object.freeze(exposed), x);
   }
   for (const x of service.exceptions) {
-    members[x.name] = exceptions.get(`${service.name}.${x.name}`);
+    add(x.name, exceptions.get(`${service.name}.${x.name}`), x);
   }
   for (const x of service.structs) {
     hasMembers = true;
@@ -405,9 +448,36 @@ function serviceMembers(
       }
       throw error;
     }
-    members[x.name] = struct.valueClass;
+    add(x.name, struct.valueClass, x);
   }
   return hasMembers ? Object.freeze(members) : null;
+}
+
+/** Defines a property holding a value. A deprecated one warns when it is read. */
+function expose(
+  context: Context,
+  target: object,
+  key: string,
+  value: unknown,
+  message: string | undefined,
+): void {
+  if (message === undefined) {
+    define(target, key, value);
+  } else {
+    Object.defineProperty(target, key, {
+      get: () => {
+        context.warn(message);
+        return value;
+      },
+      enumerable: true,
+    });
+  }
+}
+
+function warnOf(context: Context, message: string | undefined): void {
+  if (message !== undefined) {
+    context.warn(message);
+  }
 }
 
 function define(target: object, key: string, value: unknown): void {

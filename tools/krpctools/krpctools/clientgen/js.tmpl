@@ -32,7 +32,7 @@ export interface {{ x.name }} extends RemoteObject<"{{ x.brand }}"> {}
 {% for line in x.documentation %}
 {{ line }}
 {% endfor %}
-export type {{ x.name }} = RemoteEnum<"{{ x.brand }}">;
+export type {{ x.name }} = {{ x.base }}<"{{ x.brand }}">;
 {% endfor %}
 {% for x in structs %}
 

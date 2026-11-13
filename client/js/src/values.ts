@@ -46,7 +46,7 @@ export function equals(a: unknown, b: unknown): boolean {
   if (x.service !== y.service || x.name !== y.name) {
     return false;
   }
-  const fields = a as unknown as Record<string, unknown>;
-  const other = b as unknown as Record<string, unknown>;
-  return x.fields.every((field) => equals(fields[field.name], other[field.name]));
+  return x.fields.every((field) =>
+    equals(RemoteStruct.fieldOf(a, field.name), RemoteStruct.fieldOf(b, field.name)),
+  );
 }
