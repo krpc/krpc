@@ -1,0 +1,305 @@
+.. default-domain:: js
+.. highlight:: javascript
+.. module:: @krpc-org/krpc
+
+JavaScript
+==========
+
+This guide describes how to install the JavaScript client, and the features it provides. The
+:ref:`js-client-reference` describes each function and class.
+
+The client runs in a web browser and in Node.js 22 or later. It is written in TypeScript, and the
+package includes its type declarations.
+
+Installing the Library
+----------------------
+
+The library is the ``@krpc-org/krpc`` package, which can be `downloaded from GitHub
+<https://github.com/krpc/krpc/releases>`_. To install the downloaded package with npm:
+
+.. code-block:: bash
+
+   npm install krpc-js-0.8.0.tgz
+
+The package is a set of ES modules, and depends on the ``@bufbuild/protobuf`` package. A web page
+loads it through a bundler, such as `esbuild <https://esbuild.github.io>`_ or `Vite
+<https://vite.dev>`_, which resolves that dependency.
+
+Connecting to the Server
+------------------------
+
+The game must be running with the server started. :ref:`getting-started-server` in the
+getting started guide shows how to install and start it.
+
+The client connects over WebSockets, the protocol a web browser can use. The default server uses
+TCP/IP, so add a server in the server window, and select "Protobuf over WebSockets" as its
+protocol.
+
+.. note::
+
+   A server with "Auto-accept new clients" turned off answers only once the player approves the
+   connection in game. The connection fails after 5 seconds by default. Pass ``Infinity`` as the
+   ``handshakeTimeout`` to wait for the player.
+
+:func:`connect` connects to the server, and returns a :class:`Connection`. You make every call
+through this object. The following connects to a server with the default settings, address
+``127.0.0.1`` and port 50000, and prints its version:
+
+.. literalinclude:: /scripts/js/Connecting1.js
+
+:func:`connect` also takes a name for the connection, and the address and port of the server.
+These match the address and port shown in the server window. The name appears in the server window
+in the game:
+
+.. literalinclude:: /scripts/js/Connecting2.js
+
+WebSockets works over a network, so your program can run on a different machine from the game.
+
+.. note::
+
+   A browser blocks a page served over ``https://`` from connecting to a ``ws://`` address. Open
+   the page over ``http://``, or as a local file.
+
+Closing the Connection
+^^^^^^^^^^^^^^^^^^^^^^
+
+:meth:`Connection.close` closes a connection:
+
+.. literalinclude:: /scripts/js/Connecting3.js
+
+Calling Remote Procedures
+-------------------------
+
+The server provides *procedures* for your program to call, grouped into *services*.
+
+The following gets the active vessel, an object of the ``SpaceCenter.Vessel`` class. It sets the
+vessel's name, then prints its altitude:
+
+.. literalinclude:: /scripts/js/RemoteProcedures.js
+
+Each service is a property of the connection, in lower camel case, such as ``conn.spaceCenter``
+for the ``SpaceCenter`` service. Procedures and methods are in lower camel case too, as in
+``vessel.flight()``. A property is a pair of methods, such as ``vessel.getName()`` and
+``vessel.setName(name)``.
+
+Every call returns a ``Promise``, which resolves once the server responds. Several calls can be in
+flight at once, and each resolves with its own result. The following reads three values, without
+waiting for each response before sending the next call:
+
+.. literalinclude:: /scripts/js/Concurrent.js
+
+Values
+^^^^^^
+
+Each kRPC type has a JavaScript type:
+
+.. list-table::
+   :header-rows: 1
+
+   * - kRPC type
+     - JavaScript type
+   * - ``float``, ``double``, ``sint32``, ``uint32``
+     - ``number``
+   * - ``sint64``, ``uint64``
+     - ``bigint`` results. Arguments take a ``number`` or a ``bigint``.
+   * - ``bool``
+     - ``boolean``
+   * - ``string``
+     - ``string``
+   * - ``bytes``
+     - ``Uint8Array``
+   * - list, tuple
+     - ``Array``
+   * - set
+     - ``Set``
+   * - dictionary
+     - ``Map``
+   * - structure
+     - A frozen object with a property for each field, in lower camel case
+   * - enumeration
+     - A :class:`RemoteEnum`, such as ``conn.spaceCenter.VesselSituation.orbiting``
+   * - class
+     - An object of the service's class, such as ``SpaceCenter.Vessel``
+   * - null
+     - ``null``
+
+The :func:`equals` function compares two values by their contents, such as two structures.
+
+Using the Client in a Web Page
+------------------------------
+
+The following script shows the altitude of the active vessel in a page, and updates it twice a
+second:
+
+.. literalinclude:: /scripts/js/Dashboard.js
+
+Bundle the script for the page, for example with esbuild:
+
+.. code-block:: bash
+
+   npx esbuild dashboard.js --bundle --format=esm --outfile=dashboard.bundle.js
+
+Then load it from the page with ``<script type="module" src="dashboard.bundle.js"></script>``.
+
+.. note::
+
+   Any page open in the browser can connect to a server it can reach. A server with
+   "Auto-accept new clients" turned off asks the player to approve each connection.
+
+Handling Errors
+---------------
+
+A procedure that fails on the server rejects its ``Promise`` with an :class:`ServerError`. The
+following catches the error from loading a save that does not exist:
+
+.. literalinclude:: /scripts/js/Errors.js
+
+The client rejects with these errors, each a subclass of :class:`RemoteError`:
+
+* :class:`ServerError` for a procedure that fails on the server. Its message starts with the
+  server's exception, as in ``KRPC.ArgumentException: Failed to load missing``.
+* :class:`ConnectionError` for a failed connection attempt. When the server refuses the connection,
+  its ``status`` names the status the server gave, such as ``DENIED``. When the server ends the
+  connection, its ``reason`` names the reason, such as ``SERVER_STOPPED``. A call made once the
+  connection has closed or failed rejects with it too.
+* :class:`EncodingError` for a malformed result from the server.
+
+A call with an argument of the wrong type rejects with a ``TypeError``, and one with a number
+outside the range of its type with a ``RangeError``.
+
+Remote Objects
+--------------
+
+Many procedures return an object identifying something in the game, such as a vessel or a part.
+The object holds no copy of the game's state. It is just a reference to it. Each call through it
+reads the game as it is now:
+
+.. literalinclude:: /scripts/js/RemoteObjects.js
+
+A connection returns one JavaScript object for each object on the server, so two results for the
+same thing in the game compare equal with ``===``. An object works as a ``Map`` key or a ``Set``
+element.
+
+Once the thing an object identifies is destroyed, such as a part that explodes, each call through
+it rejects with an error naming ``KRPC.ObjectDestroyedException``.
+
+.. seealso:: :doc:`/user-guide/object-lifetime` describes how each kind of object behaves in more
+             detail.
+
+Streams and Events
+------------------
+
+The JavaScript client has no streams or events yet. Read a value by calling its procedure in a
+loop instead.
+
+Service Stubs
+-------------
+
+The JavaScript client has no pre-generated service stubs. When you connect, it builds every
+service from the service definitions the server sends, and the services have no static types. The
+services match the server you connect to, whatever its version, including services added by other
+mods.
+
+.. _js-client-reference:
+
+Client API Reference
+--------------------
+
+.. function:: connect(options)
+
+   Connects to a kRPC server over WebSockets, and builds its services.
+
+   :param options.name: A name for the connection, shown in the server window in the game.
+                        Defaults to ``""``.
+   :param options.address: The address of the server, as a host name or an IP address. Defaults
+                           to ``"127.0.0.1"``.
+   :param options.port: The port of the server. Defaults to 50000.
+   :param options.handshakeTimeout: How many milliseconds to wait for the server to accept the
+                                    connection. Defaults to 5000. ``Infinity`` waits indefinitely,
+                                    such as for a server that asks the player to approve each
+                                    connection.
+   :returns: A ``Promise`` of the :class:`Connection`.
+
+   Rejects with a :class:`ConnectionError` if the connection fails or the server refuses it, and
+   with a ``RangeError`` for a timeout that is not positive.
+
+.. function:: getObjectId(obj)
+
+   The identifier of a remote object on the server, e.g. to pass to
+   ``KRPC.Expression.constantObject``. Throws a ``TypeError`` if the object is ``null``.
+
+.. function:: equals(a, b)
+
+   Whether two values are equal. Objects compare by the object on the server, structures, arrays
+   and bytes item by item, sets and maps by their members, and other values with ``===``.
+
+.. class:: Connection()
+
+   A connection to the server, with a property for each of the server's services. Obtain one by
+   calling :func:`connect`.
+
+   .. method:: close()
+
+      Closes the connection. Each call waiting for a response rejects with a
+      :class:`ConnectionError`. Closing a connection that is already closed does nothing.
+
+   .. attribute:: krpc
+
+      The ``KRPC`` service, providing the server's basic functionality. Each of the server's other
+      services is a property too, such as ``spaceCenter``.
+
+.. class:: RemoteObject()
+
+   The base class of the objects of a service's classes.
+
+.. class:: RemoteEnum()
+
+   A value of an enumeration. Each value is one object, so values compare with ``===``.
+
+   .. attribute:: name
+
+      The name of the value, in lower camel case.
+
+   .. attribute:: value
+
+      The value's number.
+
+.. class:: RemoteError()
+
+   The base class of the errors the client throws and rejects with.
+
+.. class:: ServerError()
+
+   A procedure that threw an exception on the server.
+
+   .. attribute:: service
+
+      The service that lists the exception, or ``""``.
+
+   .. attribute:: exception
+
+      The name of the exception, or ``""``.
+
+   .. attribute:: description
+
+      The description of the exception, from the server.
+
+   .. attribute:: stackTrace
+
+      The stack trace of the exception on the server, or ``""``.
+
+.. class:: ConnectionError()
+
+   A connection that failed, was refused or is closed.
+
+   .. attribute:: status
+
+      The status of a refused connection, such as ``DENIED``, or ``""``.
+
+   .. attribute:: reason
+
+      The reason in the server's disconnect message, such as ``SERVER_STOPPED``, or ``""``.
+
+.. class:: EncodingError()
+
+   A value that failed to encode or decode, such as a malformed result from the server.

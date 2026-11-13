@@ -67,6 +67,7 @@ biomes
 bitwise
 bool
 boolean
+bundler
 circularization
 clickable
 clientgen
@@ -95,6 +96,7 @@ endian
 enum
 ephemeris
 erm
+esbuild
 feedforward
 fieldName
 finalizer
@@ -158,6 +160,7 @@ navball
 normangle
 nozzel
 nozzels
+npm
 ns
 nullability
 nullable
