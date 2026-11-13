@@ -15,11 +15,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         None,
         /// <summary>
-        /// A vessel. See <see cref="Antenna.SetTargetVessel"/>.
+        /// A vessel. See <see cref="Antenna.TargetVessel"/>.
         /// </summary>
         Vessel,
         /// <summary>
-        /// The center of a body. See <see cref="Antenna.SetTargetBody"/>.
+        /// The center of a body. See <see cref="Antenna.TargetBody"/>.
         /// </summary>
         Body,
         /// <summary>

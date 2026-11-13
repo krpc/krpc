@@ -1183,8 +1183,6 @@ SpaceCenter.Antenna.TargetMode
 SpaceCenter.Antenna.TargetVessel
 SpaceCenter.Antenna.TargetBody
 SpaceCenter.Antenna.TargetDirection
-SpaceCenter.Antenna.SetTargetVessel
-SpaceCenter.Antenna.SetTargetBody
 SpaceCenter.Antenna.SetTargetPosition
 SpaceCenter.Antenna.SetTargetAzimuthElevation
 SpaceCenter.Antenna.SetTargetOrbitRelative

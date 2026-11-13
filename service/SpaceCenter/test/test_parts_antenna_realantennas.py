@@ -113,7 +113,8 @@ class TestPartsAntennaRealAntennas(TestCase):
         self.assertIsNone(self.omni.target_body)
         ref = self.vessel.reference_frame
         self.assertRaises(RuntimeError, self.omni.target_direction, ref)
-        self.assertRaises(RuntimeError, self.omni.set_target_vessel, self.vessel)
+        with self.assertRaises(RuntimeError):
+            self.omni.target_vessel = self.vessel
         self.assertRaises(RuntimeError, self.omni.set_target_azimuth_elevation, 0, 0)
 
     def check_direction(self, expected, antenna, ref):
@@ -130,7 +131,7 @@ class TestPartsAntennaRealAntennas(TestCase):
 
     def test_target_body(self):
         mun = self.space_center.bodies["Mun"]
-        self.dish.set_target_body(mun)
+        self.dish.target_body = mun
         self.assertEqual(self.TargetMode.body, self.dish.target_mode)
         self.assertEqual(mun, self.dish.target_body)
         self.assertIsNone(self.dish.target_vessel)
@@ -151,7 +152,7 @@ class TestPartsAntennaRealAntennas(TestCase):
         self.check_direction(to_target, self.dish, ref)
 
     def test_target_vessel(self):
-        self.dish.set_target_vessel(self.vessel)
+        self.dish.target_vessel = self.vessel
         self.assertEqual(self.TargetMode.vessel, self.dish.target_mode)
         self.assertEqual(self.vessel, self.dish.target_vessel)
         self.assertIsNone(self.dish.target_body)
