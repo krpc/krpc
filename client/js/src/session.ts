@@ -1,5 +1,5 @@
 import { create, fromBinary, toBinary } from "@bufbuild/protobuf";
-import { ConnectionError, EncodingError, ServerError } from "./errors.js";
+import { ConnectionError, EncodingError, ServerError, type ServerErrorDetails } from "./errors.js";
 import {
   type Argument,
   ConnectionResponse_Status,
@@ -33,6 +33,8 @@ export class Session {
   readonly #closed: Promise<void>;
   #nextId = 1n;
   #ended: ConnectionError | null = null;
+  /** Makes the error a call rejects with, for an error the server sends. */
+  errorFactory: (error: ServerErrorDetails) => Error = (error) => new ServerError(error);
 
   private constructor(socket: WebSocket) {
     this.#socket = socket;
@@ -223,7 +225,7 @@ export class Session {
         this.#pending.delete(response.id);
         const error = response.error ?? response.results[0]?.error;
         if (error !== undefined) {
-          pending.reject(new ServerError(error));
+          pending.reject(this.errorFactory(error));
         } else if (response.results.length !== 1) {
           pending.reject(new EncodingError("A response has no result"));
         } else {

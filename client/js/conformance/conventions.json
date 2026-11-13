@@ -1,7 +1,22 @@
 {
+  "remote_error": "RemoteError",
+  "server_error": "ServerError",
+  "native_types": {
+    "System.InvalidOperationException": null,
+    "System.ArgumentException": "TypeError",
+    "System.ArgumentNullException": "TypeError",
+    "System.ArgumentOutOfRangeException": "RangeError",
+    "System.NullReferenceException": "TypeError",
+    "System.Collections.Generic.KeyNotFoundException": null,
+    "System.IndexOutOfRangeException": "RangeError",
+    "System.DivideByZeroException": "RangeError",
+    "System.NotSupportedException": null,
+    "System.TimeoutException": null,
+    "System.OverflowException": "RangeError"
+  },
   "naming": {
     "case": "lower_camel",
     "accessors": true,
-    "exceptions": false
+    "exceptions": true
   }
 }

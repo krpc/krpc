@@ -24,8 +24,17 @@ export class ConnectionError extends RemoteError {
   }
 }
 
-/** A procedure that threw an exception on the server. The message starts with the service and
- * name of the exception, for an exception a service lists. */
+/** An error the server sends for a call. */
+export interface ServerErrorDetails {
+  readonly service: string;
+  readonly exception: string;
+  readonly description: string;
+  readonly stackTrace: string;
+}
+
+/** A procedure that threw an exception on the server. Each exception a service lists has a class
+ * of its own, on the service, such as `conn.krpc.ObjectDestroyedException`. One the server maps to
+ * a .NET exception extends the matching JavaScript error alone, such as `TypeError`. */
 export class ServerError extends RemoteError {
   /** The service that lists the exception, or an empty string. */
   readonly service: string;
@@ -36,25 +45,75 @@ export class ServerError extends RemoteError {
   /** The stack trace of the exception on the server, or an empty string. */
   readonly stackTrace: string;
 
-  constructor(error: {
-    service: string;
-    exception: string;
-    description: string;
-    stackTrace: string;
-  }) {
-    let message = error.description;
-    if (error.exception !== "") {
-      message = `${error.service}.${error.exception}: ${message}`;
-    }
-    if (error.stackTrace !== "") {
-      message += `\nServer stack trace:\n${error.stackTrace}`;
-    }
+  /** The message names the exception, for an exception the client has no class for. */
+  constructor(error: ServerErrorDetails, message = `${prefix(error)}${serverMessage(error)}`) {
     super(message);
     this.service = error.service;
     this.exception = error.exception;
     this.description = error.description;
     this.stackTrace = error.stackTrace;
   }
+}
+
+/** The JavaScript error each .NET exception the server maps one to extends. */
+const NATIVE_ERRORS: ReadonlyMap<string, ErrorConstructor> = new Map([
+  ["System.ArgumentException", TypeError],
+  ["System.ArgumentNullException", TypeError],
+  ["System.ArgumentOutOfRangeException", RangeError],
+  ["System.NullReferenceException", TypeError],
+  ["System.IndexOutOfRangeException", RangeError],
+  ["System.DivideByZeroException", RangeError],
+  ["System.OverflowException", RangeError],
+]);
+
+/** The class of an exception a service lists, given the .NET exception the server maps it to,
+ * or an empty string. The message of its errors is the description and stack trace. */
+export function exceptionClass(
+  name: string,
+  mappedType: string,
+): new (
+  error: ServerErrorDetails,
+) => Error {
+  const native = NATIVE_ERRORS.get(mappedType);
+  let cls: new (error: ServerErrorDetails) => Error;
+  if (native === undefined) {
+    cls = class extends ServerError {
+      constructor(error: ServerErrorDetails) {
+        super(error, serverMessage(error));
+      }
+    };
+  } else {
+    const nativeClass = class extends native {
+      readonly service: string;
+      readonly exception: string;
+      readonly description: string;
+      readonly stackTrace: string;
+
+      constructor(error: ServerErrorDetails) {
+        super(serverMessage(error));
+        this.name = new.target.name;
+        this.service = error.service;
+        this.exception = error.exception;
+        this.description = error.description;
+        this.stackTrace = error.stackTrace;
+      }
+    };
+    cls = nativeClass;
+  }
+  Object.defineProperty(cls, "name", { value: name });
+  return cls;
+}
+
+function prefix(error: ServerErrorDetails): string {
+  return error.exception === "" ? "" : `${error.service}.${error.exception}: `;
+}
+
+function serverMessage(error: ServerErrorDetails): string {
+  let message = error.description;
+  if (error.stackTrace !== "") {
+    message += `\nServer stack trace:\n${error.stackTrace}`;
+  }
+  return message;
 }
 
 /** A value that failed to encode or decode, such as a malformed result from the server. */
