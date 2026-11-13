@@ -1,0 +1,5 @@
+packages:
+  - "."
+
+# No package runs an install script
+onlyBuiltDependencies: []

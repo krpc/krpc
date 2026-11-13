@@ -8,7 +8,7 @@ Current version: `tools/krpc-version.sh`. Full setup: `doc/src/krpc-development/
 
  * `server/` — server plugin; `core/` — shared C# library; `protobuf/` — wire protocol.
  * `service/` — service DLLs (SpaceCenter, Drawing, UI, InfernalRobotics, RemoteTech, …).
- * `client/` — one dir per language; `websockets` is a minimal testee for the websockets protocol.
+ * `client/` — one dir per language.
    See *Client pages* under *Keeping the docs current* before changing one.
  * `client/conformance/` — client conformance tests; the client spec (`doc/src/client-spec/`) is generated from them.
  * `tools/krpctools/` — `clientgen` (stubs), `docgen` (API docs), `servicedefs`.
@@ -79,8 +79,8 @@ the tests: a test's docstring is the requirement's text, its markers the level a
    cannot carry out goes in `client/<client>/conformance/unsupported.txt`. A stale line in
    either fails the run.
  * A client's profiles are listed in its `conformance_test` target.
- * Run every client in one command: `bazel test //client/{cnano,cpp,csharp,java,lua,python}:conformance
-   //client/websockets:conformance //client/conformance:test`.
+ * Run every client in one command: `bazel test //client/{cnano,cpp,csharp,java,js,lua,python}:conformance
+   //client/conformance:test`.
 
 ### C# sources
 
@@ -397,7 +397,7 @@ An issue or pull request takes one kind, at least one component, and the other l
 | Kind | `bug`, `feature`, `enhancement`, `question` | Exactly one. `feature` is a new capability. `enhancement` improves what exists, and covers dependency updates, refactoring, cleanup and maintenance |
 | Component | `server`, `protocol`, `service`, `client`, `tools`, `build`, `docs` | `server` covers `core` and each mod's server plugin. `client` covers any client change |
 | Game | `ksp`, `ksa` | The game a change is specific to. `core`, client and tool changes take neither |
-| Language | `python`, `cpp`, `cnano`, `csharp`, `java`, `lua` | The client a change is specific to, with `client` |
+| Language | `python`, `cpp`, `cnano`, `csharp`, `java`, `js`, `lua` | The client a change is specific to, with `client` |
 | Mods | `mods` | Added to the kind for a change that concerns another mod |
 | Dependencies | `dependencies` | Added to the kind for a dependency update. Dependabot sets it |
 | Triage | `needs-triage` | Set by the issue templates, removed once triaged |

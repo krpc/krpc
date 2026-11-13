@@ -1,0 +1,7 @@
+{
+  "naming": {
+    "case": "lower_camel",
+    "accessors": true,
+    "exceptions": false
+  }
+}

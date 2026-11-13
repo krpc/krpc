@@ -1,0 +1,195 @@
+load("@aspect_rules_js//js:defs.bzl", "js_binary", "js_library")
+load("@aspect_rules_ts//ts:defs.bzl", "ts_config", "ts_project")
+load("@bazel_skylib//rules:expand_template.bzl", "expand_template")
+load("@npm//:defs.bzl", "npm_link_all_packages")
+load("@npm//client/js:@biomejs/biome/package_json.bzl", biome = "bin")
+load("@npm//client/js:@bufbuild/protoc-gen-es/package_json.bzl", protoc_gen_es = "bin")
+load("@rules_pkg//pkg:mappings.bzl", "pkg_files")
+load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
+load("//:config.bzl", "npm_version", "version")
+load("//tools/build:conformance.bzl", "conformance_test")
+load("//tools/build/protobuf:js.bzl", "protobuf_es")
+
+exports_files([
+    "CHANGELOG.md",
+    "conformance/expected-failures.txt",
+    "conformance/unsupported.txt",
+    "package.json",
+    "pnpm-lock.yaml",
+    "pnpm-workspace.yaml",
+])
+
+npm_link_all_packages(name = "node_modules")
+
+test_suite(
+    name = "test",
+    tests = [
+        ":conformance",
+        ":lint",
+    ],
+)
+
+protoc_gen_es.protoc_gen_es_binary(
+    name = "protoc-gen-es",
+    visibility = ["//visibility:public"],
+)
+
+protobuf_es(
+    name = "schema",
+    src = "//protobuf:krpc.proto",
+    out = "src/schema/krpc_pb.ts",
+)
+
+# The package's "type": "module", which makes its .js files ES modules
+js_library(
+    name = "package_json",
+    srcs = ["package.json"],
+)
+
+ts_config(
+    name = "tsconfig",
+    src = "tsconfig.json",
+)
+
+# The library. Its tsconfig leaves out the Node.js types, so a Node.js built-in used by
+# mistake fails the type check, as it would in a browser.
+ts_project(
+    name = "lib",
+    srcs = glob(["src/**/*.ts"]) + [":schema"],
+    declaration = True,
+    transpiler = "tsc",
+    tsconfig = ":tsconfig",
+    visibility = ["//doc:__pkg__"],
+    deps = [
+        ":node_modules/@bufbuild/protobuf",
+        ":package_json",
+    ],
+)
+
+# The npm package, as the tarball npm pack makes
+pkg_tar(
+    name = "js",
+    srcs = [
+        ":package-files",
+        ":package-lib",
+    ],
+    extension = "tgz",
+    package_dir = "package",
+    package_file_name = "krpc-js-%s.tgz" % version,
+    visibility = ["//visibility:public"],
+)
+
+expand_template(
+    name = "package-json",
+    out = "package/package.json",
+    substitutions = {'"version": "0.0.0"': '"version": "%s"' % npm_version},
+    template = "package.json",
+)
+
+pkg_files(
+    name = "package-files",
+    srcs = [
+        "CHANGELOG.md",
+        "LICENSE",
+        "README.md",
+        ":package-json",
+        "//:COPYING",
+        "//:COPYING.LESSER",
+    ],
+)
+
+filegroup(
+    name = "lib-types",
+    srcs = [":lib"],
+    output_group = "types",
+)
+
+pkg_files(
+    name = "package-lib",
+    srcs = [
+        ":lib",
+        ":lib-types",
+    ],
+    prefix = "src",
+    strip_prefix = "src",
+)
+
+# The conformance tests, driving the client through its testee
+protobuf_es(
+    name = "testee-schema",
+    src = "//client/conformance:testee.proto",
+    out = "conformance/testee_pb.ts",
+)
+
+ts_config(
+    name = "conformance-tsconfig",
+    src = "conformance/tsconfig.json",
+    deps = [":tsconfig"],
+)
+
+ts_project(
+    name = "conformance-lib",
+    srcs = [
+        "conformance/testee.ts",
+        ":testee-schema",
+    ],
+    transpiler = "tsc",
+    tsconfig = ":conformance-tsconfig",
+    deps = [
+        ":lib",
+        ":node_modules/@bufbuild/protobuf",
+        ":node_modules/@types/node",
+        ":package_json",
+    ],
+)
+
+js_binary(
+    name = "conformance-testee",
+    data = [":conformance-lib"],
+    entry_point = "conformance/testee.js",
+)
+
+conformance_test(
+    name = "conformance",
+    size = "medium",
+    conventions = "conformance/conventions.json",
+    expected_failures = "conformance/expected-failures.txt",
+    profiles = [
+        "core",
+        "dynamic",
+        "definitions",
+        "defaults",
+        "connections",
+        "concurrency",
+    ],
+    protocols = ["websockets"],
+    tags = ["requires-network"],
+    testee = ":conformance-testee",
+    unsupported = "conformance/unsupported.txt",
+)
+
+# The sources to format and lint
+filegroup(
+    name = "lint-srcs",
+    srcs = glob([
+        "src/**/*.ts",
+        "conformance/*.ts",
+    ]),
+)
+
+# Formatting and lint, from biome.jsonc. The files are named one by one, as Biome skips the
+# symbolic links of the runfiles tree when it searches a directory.
+biome.biome_test(
+    name = "lint",
+    size = "small",
+    args = [
+        "ci",
+        "--colors=off",
+        "--config-path=client/js/biome.jsonc",
+        "$(rootpaths :lint-srcs)",
+    ],
+    data = [
+        "biome.jsonc",
+        ":lint-srcs",
+    ],
+)
