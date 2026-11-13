@@ -1,4 +1,6 @@
+using System;
 using KRPC.Service.Attributes;
+using KRPC.Utils;
 
 namespace KRPC.MechJeb
 {
@@ -8,16 +10,16 @@ namespace KRPC.MechJeb
     [KRPCClass (Service = "MechJeb")]
     public sealed class RendezvousAutopilot : KRPCComputerModule
     {
-        static Value<double> desiredDistance;
-        static Value<double> maxPhasingOrbits;
-        static Value<string> status;
+        static Field<object, double> desiredDistance;
+        static Field<object, double> maxPhasingOrbits;
+        static Func<object, string> status;
 
         internal static new void Load ()
         {
-            var type = Reflection.Type ("MuMech.MechJebModuleRendezvousAutopilot");
-            desiredDistance = Reflection.EditableDouble (type, "desiredDistance");
-            maxPhasingOrbits = Reflection.EditableDouble (type, "maxPhasingOrbits");
-            status = Reflection.Field<string> (type, "status");
+            var type = Bindings.Type ("MuMech.MechJebModuleRendezvousAutopilot");
+            desiredDistance = Bindings.EditableDouble (type, "desiredDistance");
+            maxPhasingOrbits = Bindings.EditableDouble (type, "maxPhasingOrbits");
+            status = type.Getter<object, string> ("status");
         }
 
         internal RendezvousAutopilot () : base ("MechJebModuleRendezvousAutopilot")
@@ -47,7 +49,7 @@ namespace KRPC.MechJeb
         /// </summary>
         [KRPCProperty]
         public string Status {
-            get { return status.Get (Instance); }
+            get { return status (Instance); }
         }
     }
 }

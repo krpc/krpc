@@ -1,6 +1,7 @@
 using System;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
+using KRPC.Utils;
 using Tuple3 = System.Tuple<double, double, double>;
 
 namespace KRPC.MechJeb
@@ -22,38 +23,38 @@ namespace KRPC.MechJeb
         static Action<object> pickPositionTargetOnMap;
         static Action<object, Vector3d> updateDirectionTarget;
         static Action<object> onFixedUpdate;
-        static Value<bool> normalTargetExists;
-        static Value<bool> positionTargetExists;
-        static Value<bool> canAlign;
-        static Value<global::Orbit> targetOrbit;
-        static Value<Vector3d> position;
-        static Value<float> distance;
-        static Value<Vector3d> relativeVelocity;
-        static Value<Vector3d> relativePosition;
-        static Value<Vector3d> dockingAxis;
-        static Value<double> targetLongitude;
+        static Func<object, bool> normalTargetExists;
+        static Func<object, bool> positionTargetExists;
+        static Func<object, bool> canAlign;
+        static Func<object, global::Orbit> targetOrbit;
+        static Func<object, Vector3d> position;
+        static Func<object, float> distance;
+        static Func<object, Vector3d> relativeVelocity;
+        static Func<object, Vector3d> relativePosition;
+        static Func<object, Vector3d> dockingAxis;
+        static Field<object, double> targetLongitude;
 
         internal static new void Load ()
         {
-            var type = Reflection.Type ("MuMech.MechJebModuleTargetController");
-            setPositionTarget = Reflection.Method<Action<object, global::CelestialBody, double, double>> (type, "SetPositionTarget");
-            getPositionTargetString = Reflection.Method<Func<object, string>> (type, "GetPositionTargetString");
-            getPositionTargetPosition = Reflection.Method<Func<object, Vector3d>> (type, "GetPositionTargetPosition");
-            setDirectionTarget = Reflection.Method<Action<object, string>> (type, "SetDirectionTarget");
-            pickPositionTargetOnMap = Reflection.Method<Action<object>> (type, "PickPositionTargetOnMap");
-            updateDirectionTarget = Reflection.Method<Action<object, Vector3d>> (type, "UpdateDirectionTarget");
-            onFixedUpdate = Reflection.Method<Action<object>> (type, "OnFixedUpdate");
-            normalTargetExists = Reflection.Field<bool> (type, "NormalTargetExists");
-            positionTargetExists = Reflection.Field<bool> (type, "PositionTargetExists");
-            canAlign = Reflection.Field<bool> (type, "CanAlign");
-            targetOrbit = Reflection.Field<global::Orbit> (type, "TargetOrbit");
-            position = Reflection.Field<Vector3d> (type, "Position");
-            distance = Reflection.Field<float> (type, "Distance");
-            relativeVelocity = Reflection.Field<Vector3d> (type, "RelativeVelocity");
-            relativePosition = Reflection.Field<Vector3d> (type, "RelativePosition");
-            dockingAxis = Reflection.Field<Vector3d> (type, "DockingAxis");
+            var type = Bindings.Type ("MuMech.MechJebModuleTargetController");
+            setPositionTarget = type.Method<Action<object, global::CelestialBody, double, double>> ("SetPositionTarget");
+            getPositionTargetString = type.Method<Func<object, string>> ("GetPositionTargetString");
+            getPositionTargetPosition = type.Method<Func<object, Vector3d>> ("GetPositionTargetPosition");
+            setDirectionTarget = type.Method<Action<object, string>> ("SetDirectionTarget");
+            pickPositionTargetOnMap = type.Method<Action<object>> ("PickPositionTargetOnMap");
+            updateDirectionTarget = type.Method<Action<object, Vector3d>> ("UpdateDirectionTarget");
+            onFixedUpdate = type.Method<Action<object>> ("OnFixedUpdate");
+            normalTargetExists = type.Getter<object, bool> ("NormalTargetExists");
+            positionTargetExists = type.Getter<object, bool> ("PositionTargetExists");
+            canAlign = type.Getter<object, bool> ("CanAlign");
+            targetOrbit = type.Getter<object, global::Orbit> ("TargetOrbit");
+            position = type.Getter<object, Vector3d> ("Position");
+            distance = type.Getter<object, float> ("Distance");
+            relativeVelocity = type.Getter<object, Vector3d> ("RelativeVelocity");
+            relativePosition = type.Getter<object, Vector3d> ("RelativePosition");
+            dockingAxis = type.Getter<object, Vector3d> ("DockingAxis");
             // An angle, which converts to its value in degrees
-            targetLongitude = Reflection.Field<double> (type, "targetLongitude");
+            targetLongitude = type.Field<object, double> ("targetLongitude");
         }
 
         internal TargetController () : base ("MechJebModuleTargetController")
@@ -70,7 +71,7 @@ namespace KRPC.MechJeb
         }
 
         internal global::Orbit InternalTargetOrbit {
-            get { return targetOrbit.Get (Instance); }
+            get { return targetOrbit (Instance); }
         }
 
         /// <summary>
@@ -149,7 +150,7 @@ namespace KRPC.MechJeb
         /// </summary>
         [KRPCProperty]
         public bool NormalTargetExists {
-            get { return normalTargetExists.Get (Instance); }
+            get { return normalTargetExists (Instance); }
         }
 
         /// <summary>
@@ -157,7 +158,7 @@ namespace KRPC.MechJeb
         /// </summary>
         [KRPCProperty]
         public bool PositionTargetExists {
-            get { return positionTargetExists.Get (Instance); }
+            get { return positionTargetExists (Instance); }
         }
 
         /// <summary>
@@ -165,7 +166,7 @@ namespace KRPC.MechJeb
         /// </summary>
         [KRPCProperty]
         public bool CanAlign {
-            get { return canAlign.Get (Instance); }
+            get { return canAlign (Instance); }
         }
 
         /// <summary>
@@ -181,7 +182,7 @@ namespace KRPC.MechJeb
         /// </summary>
         [KRPCProperty]
         public Tuple3 Position {
-            get { return position.Get (Instance).ToTuple (); }
+            get { return position (Instance).ToTuple (); }
         }
 
         /// <summary>
@@ -189,7 +190,7 @@ namespace KRPC.MechJeb
         /// </summary>
         [KRPCProperty]
         public float Distance {
-            get { return distance.Get (Instance); }
+            get { return distance (Instance); }
         }
 
         /// <summary>
@@ -197,7 +198,7 @@ namespace KRPC.MechJeb
         /// </summary>
         [KRPCProperty]
         public Tuple3 RelativeVelocity {
-            get { return relativeVelocity.Get (Instance).ToTuple (); }
+            get { return relativeVelocity (Instance).ToTuple (); }
         }
 
         /// <summary>
@@ -205,7 +206,7 @@ namespace KRPC.MechJeb
         /// </summary>
         [KRPCProperty]
         public Tuple3 RelativePosition {
-            get { return relativePosition.Get (Instance).ToTuple (); }
+            get { return relativePosition (Instance).ToTuple (); }
         }
 
         /// <summary>
@@ -213,7 +214,7 @@ namespace KRPC.MechJeb
         /// </summary>
         [KRPCProperty]
         public Tuple3 DockingAxis {
-            get { return dockingAxis.Get (Instance).ToTuple (); }
+            get { return dockingAxis (Instance).ToTuple (); }
         }
     }
 }

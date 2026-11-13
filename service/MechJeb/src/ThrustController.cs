@@ -1,4 +1,6 @@
+using System;
 using KRPC.Service.Attributes;
+using KRPC.Utils;
 
 namespace KRPC.MechJeb
 {
@@ -8,52 +10,52 @@ namespace KRPC.MechJeb
     [KRPCClass (Service = "MechJeb")]
     public sealed class ThrustController : ComputerModule
     {
-        static Value<bool> limitDynamicPressure;
-        static Value<double> maxDynamicPressure;
-        static Value<bool> limitToPreventOverheats;
-        static Value<bool> limitToPreventFlameout;
-        static Value<double> flameoutSafetyPct;
-        static Value<bool> manageIntakes;
-        static Value<bool> limitAcceleration;
-        static Value<double> maxAcceleration;
-        static Value<bool> limitThrottle;
-        static Value<double> maxThrottle;
-        static Value<bool> limiterMinThrottle;
-        static Value<double> minThrottle;
-        static Value<bool> differentialThrottle;
-        static Value<int> differentialThrottleSuccess;
-        static Value<bool> electricThrottle;
-        static Value<double> electricThrottleLo;
-        static Value<double> electricThrottleHi;
+        static Field<object, bool> limitDynamicPressure;
+        static Field<object, double> maxDynamicPressure;
+        static Field<object, bool> limitToPreventOverheats;
+        static Field<object, bool> limitToPreventFlameout;
+        static Field<object, double> flameoutSafetyPct;
+        static Field<object, bool> manageIntakes;
+        static Field<object, bool> limitAcceleration;
+        static Field<object, double> maxAcceleration;
+        static Field<object, bool> limitThrottle;
+        static Field<object, double> maxThrottle;
+        static Field<object, bool> limiterMinThrottle;
+        static Field<object, double> minThrottle;
+        static Field<object, bool> differentialThrottle;
+        static Func<object, int> differentialThrottleSuccess;
+        static Field<object, bool> electricThrottle;
+        static Field<object, double> electricThrottleLo;
+        static Field<object, double> electricThrottleHi;
 
         // The Translatron settings, which MechJeb holds in the thrust controller
-        internal static Value<int> TMode { get; private set; }
-        internal static Value<float> TransSpdAct { get; private set; }
-        internal static Value<bool> TransKillH { get; private set; }
+        internal static Func<object, int> TMode { get; private set; }
+        internal static Field<object, float> TransSpdAct { get; private set; }
+        internal static Field<object, bool> TransKillH { get; private set; }
 
         internal static new void Load ()
         {
-            var type = Reflection.Type ("MuMech.MechJebModuleThrustController");
-            limitDynamicPressure = Reflection.Field<bool> (type, "LimitDynamicPressure");
-            maxDynamicPressure = Reflection.EditableDouble (type, "MaxDynamicPressure");
-            limitToPreventOverheats = Reflection.Field<bool> (type, "LimitToPreventOverheats");
-            limitToPreventFlameout = Reflection.Field<bool> (type, "LimitToPreventFlameout");
-            flameoutSafetyPct = Reflection.EditableDouble (type, "FlameoutSafetyPct");
-            manageIntakes = Reflection.Field<bool> (type, "ManageIntakes");
-            limitAcceleration = Reflection.Field<bool> (type, "LimitAcceleration");
-            maxAcceleration = Reflection.EditableDouble (type, "MaxAcceleration");
-            limitThrottle = Reflection.Field<bool> (type, "LimitThrottle");
-            maxThrottle = Reflection.EditableDouble (type, "MaxThrottle");
-            limiterMinThrottle = Reflection.Field<bool> (type, "LimiterMinThrottle");
-            minThrottle = Reflection.EditableDouble (type, "MinThrottle");
-            differentialThrottle = Reflection.Field<bool> (type, "DifferentialThrottle");
-            differentialThrottleSuccess = Reflection.Field<int> (type, "DifferentialThrottleSuccess");
-            electricThrottle = Reflection.Field<bool> (type, "ElectricThrottle");
-            electricThrottleLo = Reflection.EditableDouble (type, "ElectricThrottleLo");
-            electricThrottleHi = Reflection.EditableDouble (type, "ElectricThrottleHi");
-            TMode = Reflection.Field<int> (type, "Tmode");
-            TransSpdAct = Reflection.Field<float> (type, "TransSpdAct");
-            TransKillH = Reflection.Field<bool> (type, "TransKillH");
+            var type = Bindings.Type ("MuMech.MechJebModuleThrustController");
+            limitDynamicPressure = type.Field<object, bool> ("LimitDynamicPressure");
+            maxDynamicPressure = Bindings.EditableDouble (type, "MaxDynamicPressure");
+            limitToPreventOverheats = type.Field<object, bool> ("LimitToPreventOverheats");
+            limitToPreventFlameout = type.Field<object, bool> ("LimitToPreventFlameout");
+            flameoutSafetyPct = Bindings.EditableDouble (type, "FlameoutSafetyPct");
+            manageIntakes = type.Field<object, bool> ("ManageIntakes");
+            limitAcceleration = type.Field<object, bool> ("LimitAcceleration");
+            maxAcceleration = Bindings.EditableDouble (type, "MaxAcceleration");
+            limitThrottle = type.Field<object, bool> ("LimitThrottle");
+            maxThrottle = Bindings.EditableDouble (type, "MaxThrottle");
+            limiterMinThrottle = type.Field<object, bool> ("LimiterMinThrottle");
+            minThrottle = Bindings.EditableDouble (type, "MinThrottle");
+            differentialThrottle = type.Field<object, bool> ("DifferentialThrottle");
+            differentialThrottleSuccess = type.Getter<object, int> ("DifferentialThrottleSuccess");
+            electricThrottle = type.Field<object, bool> ("ElectricThrottle");
+            electricThrottleLo = Bindings.EditableDouble (type, "ElectricThrottleLo");
+            electricThrottleHi = Bindings.EditableDouble (type, "ElectricThrottleHi");
+            TMode = type.Getter<object, int> ("Tmode");
+            TransSpdAct = type.Field<object, float> ("TransSpdAct");
+            TransKillH = type.Field<object, bool> ("TransKillH");
         }
 
         internal ThrustController () : base ("MechJebModuleThrustController")
@@ -187,7 +189,7 @@ namespace KRPC.MechJeb
         /// </summary>
         [KRPCProperty]
         public DifferentialThrottleStatus DifferentialThrottleStatus {
-            get { return (DifferentialThrottleStatus)differentialThrottleSuccess.Get (Instance); }
+            get { return (DifferentialThrottleStatus)differentialThrottleSuccess (Instance); }
         }
 
         /// <summary>

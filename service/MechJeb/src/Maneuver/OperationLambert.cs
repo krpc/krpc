@@ -1,5 +1,6 @@
 using System;
 using KRPC.Service.Attributes;
+using KRPC.Utils;
 
 namespace KRPC.MechJeb.Maneuver
 {
@@ -10,13 +11,13 @@ namespace KRPC.MechJeb.Maneuver
     public sealed class OperationLambert : TimedOperation
     {
         static Func<object, object> timeSelector;
-        static Value<double> interceptInterval;
+        static Field<object, double> interceptInterval;
 
         internal static new void Load ()
         {
-            var type = Reflection.Type ("MuMech.OperationLambert");
+            var type = Bindings.Type ("MuMech.OperationLambert");
             timeSelector = TimeSelectorField (type);
-            interceptInterval = Reflection.EditableDouble (type, "InterceptInterval");
+            interceptInterval = Bindings.EditableDouble (type, "InterceptInterval");
         }
 
         internal OperationLambert () : base ("OperationLambert")

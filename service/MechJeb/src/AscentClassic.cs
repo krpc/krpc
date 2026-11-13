@@ -1,4 +1,6 @@
+using System;
 using KRPC.Service.Attributes;
+using KRPC.Utils;
 
 namespace KRPC.MechJeb
 {
@@ -18,32 +20,32 @@ namespace KRPC.MechJeb
     [KRPCClass (Service = "MechJeb")]
     public sealed class AscentClassic : AscentBase
     {
-        static Value<double> turnStartAltitude;
-        static Value<double> turnStartVelocity;
-        static Value<double> turnEndAltitude;
-        static Value<double> turnEndAngle;
-        static Value<double> turnShapeExponent;
-        static Value<bool> autoPath;
-        static Value<float> autoTurnPerc;
-        static Value<float> autoTurnSpdFactor;
-        static Value<double> autoTurnStartAltitude;
-        static Value<double> autoTurnStartVelocity;
-        static Value<double> autoTurnEndAltitude;
+        static Field<object, double> turnStartAltitude;
+        static Field<object, double> turnStartVelocity;
+        static Field<object, double> turnEndAltitude;
+        static Field<object, double> turnEndAngle;
+        static Field<object, double> turnShapeExponent;
+        static Field<object, bool> autoPath;
+        static Field<object, float> autoTurnPerc;
+        static Field<object, float> autoTurnSpdFactor;
+        static Func<object, double> autoTurnStartAltitude;
+        static Func<object, double> autoTurnStartVelocity;
+        static Func<object, double> autoTurnEndAltitude;
 
         internal static new void Load ()
         {
-            var type = Reflection.Type ("MuMech.MechJebModuleAscentSettings");
-            turnStartAltitude = Reflection.EditableDouble (type, "TurnStartAltitude");
-            turnStartVelocity = Reflection.EditableDouble (type, "TurnStartVelocity");
-            turnEndAltitude = Reflection.EditableDouble (type, "TurnEndAltitude");
-            turnEndAngle = Reflection.EditableDouble (type, "TurnEndAngle");
-            turnShapeExponent = Reflection.EditableDouble (type, "TurnShapeExponent");
-            autoPath = Reflection.Field<bool> (type, "AutoPath");
-            autoTurnPerc = Reflection.Field<float> (type, "AutoTurnPerc");
-            autoTurnSpdFactor = Reflection.Field<float> (type, "AutoTurnSpdFactor");
-            autoTurnStartAltitude = Reflection.Field<double> (type, "AutoTurnStartAltitude");
-            autoTurnStartVelocity = Reflection.Field<double> (type, "AutoTurnStartVelocity");
-            autoTurnEndAltitude = Reflection.Field<double> (type, "AutoTurnEndAltitude");
+            var type = Bindings.Type ("MuMech.MechJebModuleAscentSettings");
+            turnStartAltitude = Bindings.EditableDouble (type, "TurnStartAltitude");
+            turnStartVelocity = Bindings.EditableDouble (type, "TurnStartVelocity");
+            turnEndAltitude = Bindings.EditableDouble (type, "TurnEndAltitude");
+            turnEndAngle = Bindings.EditableDouble (type, "TurnEndAngle");
+            turnShapeExponent = Bindings.EditableDouble (type, "TurnShapeExponent");
+            autoPath = type.Field<object, bool> ("AutoPath");
+            autoTurnPerc = type.Field<object, float> ("AutoTurnPerc");
+            autoTurnSpdFactor = type.Field<object, float> ("AutoTurnSpdFactor");
+            autoTurnStartAltitude = type.Getter<object, double> ("AutoTurnStartAltitude");
+            autoTurnStartVelocity = type.Getter<object, double> ("AutoTurnStartVelocity");
+            autoTurnEndAltitude = type.Getter<object, double> ("AutoTurnEndAltitude");
         }
 
         /// <summary>
@@ -126,7 +128,7 @@ namespace KRPC.MechJeb
         /// </summary>
         [KRPCProperty]
         public double AutoTurnStartAltitude {
-            get { return autoTurnStartAltitude.Get (Instance); }
+            get { return autoTurnStartAltitude (Instance); }
         }
 
         /// <summary>
@@ -134,7 +136,7 @@ namespace KRPC.MechJeb
         /// </summary>
         [KRPCProperty]
         public double AutoTurnStartVelocity {
-            get { return autoTurnStartVelocity.Get (Instance); }
+            get { return autoTurnStartVelocity (Instance); }
         }
 
         /// <summary>
@@ -142,7 +144,7 @@ namespace KRPC.MechJeb
         /// </summary>
         [KRPCProperty]
         public double AutoTurnEndAltitude {
-            get { return autoTurnEndAltitude.Get (Instance); }
+            get { return autoTurnEndAltitude (Instance); }
         }
     }
 }

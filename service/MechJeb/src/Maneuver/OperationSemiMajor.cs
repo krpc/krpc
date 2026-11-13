@@ -1,5 +1,6 @@
 using System;
 using KRPC.Service.Attributes;
+using KRPC.Utils;
 
 namespace KRPC.MechJeb.Maneuver
 {
@@ -10,13 +11,13 @@ namespace KRPC.MechJeb.Maneuver
     public sealed class OperationSemiMajor : TimedOperation
     {
         static Func<object, object> timeSelector;
-        static Value<double> newSemiMajorAxis;
+        static Field<object, double> newSemiMajorAxis;
 
         internal static new void Load ()
         {
-            var type = Reflection.Type ("MuMech.OperationSemiMajor");
+            var type = Bindings.Type ("MuMech.OperationSemiMajor");
             timeSelector = TimeSelectorField (type);
-            newSemiMajorAxis = Reflection.EditableDouble (type, "NewSma");
+            newSemiMajorAxis = Bindings.EditableDouble (type, "NewSma");
         }
 
         internal OperationSemiMajor () : base ("OperationSemiMajor")

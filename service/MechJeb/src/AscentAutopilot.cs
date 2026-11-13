@@ -1,5 +1,6 @@
 using System;
 using KRPC.Service.Attributes;
+using KRPC.Utils;
 
 namespace KRPC.MechJeb
 {
@@ -21,70 +22,68 @@ namespace KRPC.MechJeb
         const int pvg = 1;
 
         static Func<object, object> autopilot;
-        static Value<string> status;
-        static Value<bool> timedLaunch;
+        static Func<object, string> status;
+        static Field<object, bool> timedLaunch;
         static Action<object, double> startCountdown;
         static Func<double, CelestialBody, double, global::Orbit, double> timeToPhaseAngle;
         static Func<double, double, double, double, double, double> timeToPlane;
 
-        static Value<int> ascentType;
-        static Value<double> desiredOrbitAltitude;
-        static Value<double> desiredInclination;
-        static Value<bool> correctiveSteering;
-        static Value<double> correctiveSteeringGain;
-        static Value<bool> forceRoll;
-        static Value<double> verticalRoll;
-        static Value<double> turnRoll;
-        static Value<bool> autodeploySolarPanels;
-        static Value<bool> autoDeployAntennas;
-        static Value<bool> skipCircularization;
-        static Value<bool> autostage;
-        static Value<bool> limitAoA;
-        static Value<double> maxAoA;
-        static Value<double> aoaLimitFadeoutPressure;
-        static Value<double> launchPhaseAngle;
-        static Value<double> launchLANDifference;
-        static Value<int> warpCountDown;
-        static Value<bool> launchingToPlane;
-        static Value<bool> launchingToRendezvous;
-        static Value<bool> launchingToMatchLan;
-        static Value<bool> launchingToLan;
+        static Field<object, int> ascentType;
+        static Field<object, double> desiredOrbitAltitude;
+        static Field<object, double> desiredInclination;
+        static Field<object, bool> correctiveSteering;
+        static Field<object, double> correctiveSteeringGain;
+        static Field<object, bool> forceRoll;
+        static Field<object, double> verticalRoll;
+        static Field<object, double> turnRoll;
+        static Field<object, bool> autodeploySolarPanels;
+        static Field<object, bool> autoDeployAntennas;
+        static Field<object, bool> skipCircularization;
+        static Field<object, bool> autostage;
+        static Field<object, bool> limitAoA;
+        static Field<object, double> maxAoA;
+        static Field<object, double> aoaLimitFadeoutPressure;
+        static Field<object, double> launchPhaseAngle;
+        static Field<object, double> launchLANDifference;
+        static Field<object, int> warpCountDown;
+        static Field<object, bool> launchingToPlane;
+        static Field<object, bool> launchingToRendezvous;
+        static Field<object, bool> launchingToMatchLan;
+        static Field<object, bool> launchingToLan;
 
         internal static new void Load ()
         {
-            var settings = Reflection.Type ("MuMech." + settingsName);
-            autopilot = Reflection.Field<object> (settings, "AscentAutopilot").Get;
-            var type = Reflection.Type ("MuMech.MechJebModuleAscentBaseAutopilot");
-            status = Reflection.Field<string> (type, "Status");
-            timedLaunch = Reflection.Field<bool> (type, "TimedLaunch");
-            startCountdown = Reflection.Method<Action<object, double>> (type, "StartCountdown");
-            timeToPhaseAngle = Reflection.Method<Func<double, CelestialBody, double, global::Orbit, double>> (
-                Reflection.Type ("MuMech.MechJebModuleAscentMenu"), "TimeToPhaseAngle");
-            timeToPlane = Reflection.Method<Func<double, double, double, double, double, double>> (
-                Reflection.Type ("MechJebLib.Functions.Astro"), "TimeToPlane");
+            var settings = Bindings.Type ("MuMech." + settingsName);
+            autopilot = settings.Getter<object, object> ("AscentAutopilot");
+            var type = Bindings.Type ("MuMech.MechJebModuleAscentBaseAutopilot");
+            status = type.Getter<object, string> ("Status");
+            timedLaunch = type.Field<object, bool> ("TimedLaunch");
+            startCountdown = type.Method<Action<object, double>> ("StartCountdown");
+            timeToPhaseAngle = Bindings.Type ("MuMech.MechJebModuleAscentMenu").Method<Func<double, CelestialBody, double, global::Orbit, double>> ("TimeToPhaseAngle");
+            timeToPlane = Bindings.Type ("MechJebLib.Functions.Astro").Method<Func<double, double, double, double, double, double>> ("TimeToPlane");
 
-            ascentType = Reflection.Field<int> (settings, "AscentType");
-            desiredOrbitAltitude = Reflection.EditableDouble (settings, "DesiredOrbitAltitude");
-            desiredInclination = Reflection.EditableDouble (settings, "DesiredInclination");
-            correctiveSteering = Reflection.Field<bool> (settings, "CorrectiveSteering");
-            correctiveSteeringGain = Reflection.EditableDouble (settings, "CorrectiveSteeringGain");
-            forceRoll = Reflection.Field<bool> (settings, "ForceRoll");
-            verticalRoll = Reflection.EditableDouble (settings, "VerticalRoll");
-            turnRoll = Reflection.EditableDouble (settings, "TurnRoll");
-            autodeploySolarPanels = Reflection.Field<bool> (settings, "AutodeploySolarPanels");
-            autoDeployAntennas = Reflection.Field<bool> (settings, "AutoDeployAntennas");
-            skipCircularization = Reflection.Field<bool> (settings, "SkipCircularization");
-            autostage = Reflection.Field<bool> (settings, "Autostage");
-            limitAoA = Reflection.Field<bool> (settings, "LimitAoA");
-            maxAoA = Reflection.EditableDouble (settings, "MaxAoA");
-            aoaLimitFadeoutPressure = Reflection.EditableDouble (settings, "AOALimitFadeoutPressure");
-            launchPhaseAngle = Reflection.EditableDouble (settings, "LaunchPhaseAngle");
-            launchLANDifference = Reflection.EditableDouble (settings, "LaunchLANDifference");
-            warpCountDown = Reflection.EditableInt (settings, "WarpCountDown");
-            launchingToPlane = Reflection.Field<bool> (settings, "LaunchingToPlane");
-            launchingToRendezvous = Reflection.Field<bool> (settings, "LaunchingToRendezvous");
-            launchingToMatchLan = Reflection.Field<bool> (settings, "LaunchingToMatchLan");
-            launchingToLan = Reflection.Field<bool> (settings, "LaunchingToLan");
+            ascentType = settings.Field<object, int> ("AscentType");
+            desiredOrbitAltitude = Bindings.EditableDouble (settings, "DesiredOrbitAltitude");
+            desiredInclination = Bindings.EditableDouble (settings, "DesiredInclination");
+            correctiveSteering = settings.Field<object, bool> ("CorrectiveSteering");
+            correctiveSteeringGain = Bindings.EditableDouble (settings, "CorrectiveSteeringGain");
+            forceRoll = settings.Field<object, bool> ("ForceRoll");
+            verticalRoll = Bindings.EditableDouble (settings, "VerticalRoll");
+            turnRoll = Bindings.EditableDouble (settings, "TurnRoll");
+            autodeploySolarPanels = settings.Field<object, bool> ("AutodeploySolarPanels");
+            autoDeployAntennas = settings.Field<object, bool> ("AutoDeployAntennas");
+            skipCircularization = settings.Field<object, bool> ("SkipCircularization");
+            autostage = settings.Field<object, bool> ("Autostage");
+            limitAoA = settings.Field<object, bool> ("LimitAoA");
+            maxAoA = Bindings.EditableDouble (settings, "MaxAoA");
+            aoaLimitFadeoutPressure = Bindings.EditableDouble (settings, "AOALimitFadeoutPressure");
+            launchPhaseAngle = Bindings.EditableDouble (settings, "LaunchPhaseAngle");
+            launchLANDifference = Bindings.EditableDouble (settings, "LaunchLANDifference");
+            warpCountDown = Bindings.EditableInt (settings, "WarpCountDown");
+            launchingToPlane = settings.Field<object, bool> ("LaunchingToPlane");
+            launchingToRendezvous = settings.Field<object, bool> ("LaunchingToRendezvous");
+            launchingToMatchLan = settings.Field<object, bool> ("LaunchingToMatchLan");
+            launchingToLan = settings.Field<object, bool> ("LaunchingToLan");
         }
 
         internal AscentAutopilot () : base (settingsName)
@@ -130,7 +129,7 @@ namespace KRPC.MechJeb
         /// </summary>
         [KRPCProperty]
         public string Status {
-            get { return status.Get (Instance); }
+            get { return status (Instance); }
         }
 
         /// <summary>

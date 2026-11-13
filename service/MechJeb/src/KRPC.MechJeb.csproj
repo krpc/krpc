@@ -42,7 +42,6 @@
     <Compile Include="$(bazel-bin)\service\MechJeb\ServiceInfo.cs">
       <Link>ServiceInfo.cs</Link>
     </Compile>
-    <Compile Include="Addon.cs" />
     <Compile Include="AirplaneAutopilot.cs" />
     <Compile Include="AscentAutopilot.cs" />
     <Compile Include="AscentClassic.cs" />
@@ -55,7 +54,7 @@
     <Compile Include="MechJeb.cs" />
     <Compile Include="NodeExecutor.cs" />
     <Compile Include="RCSController.cs" />
-    <Compile Include="Reflection.cs" />
+    <Compile Include="Bindings.cs" />
     <Compile Include="RendezvousAutopilot.cs" />
     <Compile Include="SmartASS.cs" />
     <Compile Include="SmartRCS.cs" />

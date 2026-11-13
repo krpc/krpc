@@ -1,5 +1,6 @@
 using System;
 using KRPC.Service.Attributes;
+using KRPC.Utils;
 
 namespace KRPC.MechJeb
 {
@@ -9,28 +10,28 @@ namespace KRPC.MechJeb
     [KRPCClass (Service = "MechJeb")]
     public sealed class LandingAutopilot : AutopilotModule
     {
-        static Value<double> touchdownSpeed;
-        static Value<bool> deployGears;
-        static Value<int> limitGearsStage;
-        static Value<bool> deployChutes;
-        static Value<int> limitChutesStage;
-        static Value<bool> rcsAdjustment;
+        static Field<object, double> touchdownSpeed;
+        static Field<object, bool> deployGears;
+        static Field<object, int> limitGearsStage;
+        static Field<object, bool> deployChutes;
+        static Field<object, int> limitChutesStage;
+        static Field<object, bool> rcsAdjustment;
         static Action<object, object> landAtPositionTarget;
         static Action<object, object> landUntargeted;
         static Action<object> stopLanding;
 
         internal static new void Load ()
         {
-            var type = Reflection.Type ("MuMech.MechJebModuleLandingAutopilot");
-            touchdownSpeed = Reflection.EditableDouble (type, "TouchdownSpeed");
-            deployGears = Reflection.Field<bool> (type, "DeployGears");
-            limitGearsStage = Reflection.EditableInt (type, "LimitGearsStage");
-            deployChutes = Reflection.Field<bool> (type, "DeployChutes");
-            limitChutesStage = Reflection.EditableInt (type, "LimitChutesStage");
-            rcsAdjustment = Reflection.Field<bool> (type, "RCSAdjustment");
-            landAtPositionTarget = Reflection.Method<Action<object, object>> (type, "LandAtPositionTarget");
-            landUntargeted = Reflection.Method<Action<object, object>> (type, "LandUntargeted");
-            stopLanding = Reflection.Method<Action<object>> (type, "StopLanding");
+            var type = Bindings.Type ("MuMech.MechJebModuleLandingAutopilot");
+            touchdownSpeed = Bindings.EditableDouble (type, "TouchdownSpeed");
+            deployGears = type.Field<object, bool> ("DeployGears");
+            limitGearsStage = Bindings.EditableInt (type, "LimitGearsStage");
+            deployChutes = type.Field<object, bool> ("DeployChutes");
+            limitChutesStage = Bindings.EditableInt (type, "LimitChutesStage");
+            rcsAdjustment = type.Field<object, bool> ("RCSAdjustment");
+            landAtPositionTarget = type.Method<Action<object, object>> ("LandAtPositionTarget");
+            landUntargeted = type.Method<Action<object, object>> ("LandUntargeted");
+            stopLanding = type.Method<Action<object>> ("StopLanding");
         }
 
         internal LandingAutopilot () : base ("MechJebModuleLandingAutopilot")

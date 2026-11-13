@@ -1,4 +1,6 @@
+using System;
 using KRPC.Service.Attributes;
+using KRPC.Utils;
 
 namespace KRPC.MechJeb
 {
@@ -8,30 +10,30 @@ namespace KRPC.MechJeb
     [KRPCClass (Service = "MechJeb")]
     public sealed class DockingAutopilot : KRPCComputerModule
     {
-        static Value<string> status;
-        static Value<double> speedLimit;
-        static Value<bool> forceRoll;
-        static Value<double> roll;
-        static Value<bool> overrideSafeDistance;
-        static Value<double> overridenSafeDistance;
-        static Value<bool> overrideTargetSize;
-        static Value<double> overridenTargetSize;
-        static Value<float> safeDistance;
-        static Value<float> targetSize;
+        static Func<object, string> status;
+        static Field<object, double> speedLimit;
+        static Field<object, bool> forceRoll;
+        static Field<object, double> roll;
+        static Field<object, bool> overrideSafeDistance;
+        static Field<object, double> overridenSafeDistance;
+        static Field<object, bool> overrideTargetSize;
+        static Field<object, double> overridenTargetSize;
+        static Func<object, float> safeDistance;
+        static Func<object, float> targetSize;
 
         internal static new void Load ()
         {
-            var type = Reflection.Type ("MuMech.MechJebModuleDockingAutopilot");
-            status = Reflection.Field<string> (type, "status");
-            speedLimit = Reflection.EditableDouble (type, "speedLimit");
-            forceRoll = Reflection.Field<bool> (type, "forceRol");
-            roll = Reflection.EditableDouble (type, "rol");
-            overrideSafeDistance = Reflection.Field<bool> (type, "overrideSafeDistance");
-            overridenSafeDistance = Reflection.EditableDouble (type, "overridenSafeDistance");
-            overrideTargetSize = Reflection.Field<bool> (type, "overrideTargetSize");
-            overridenTargetSize = Reflection.EditableDouble (type, "overridenTargetSize");
-            safeDistance = Reflection.Field<float> (type, "safeDistance");
-            targetSize = Reflection.Field<float> (type, "targetSize");
+            var type = Bindings.Type ("MuMech.MechJebModuleDockingAutopilot");
+            status = type.Getter<object, string> ("status");
+            speedLimit = Bindings.EditableDouble (type, "speedLimit");
+            forceRoll = type.Field<object, bool> ("forceRol");
+            roll = Bindings.EditableDouble (type, "rol");
+            overrideSafeDistance = type.Field<object, bool> ("overrideSafeDistance");
+            overridenSafeDistance = Bindings.EditableDouble (type, "overridenSafeDistance");
+            overrideTargetSize = type.Field<object, bool> ("overrideTargetSize");
+            overridenTargetSize = Bindings.EditableDouble (type, "overridenTargetSize");
+            safeDistance = type.Getter<object, float> ("safeDistance");
+            targetSize = type.Getter<object, float> ("targetSize");
         }
 
         internal DockingAutopilot () : base ("MechJebModuleDockingAutopilot")
@@ -43,7 +45,7 @@ namespace KRPC.MechJeb
         /// </summary>
         [KRPCProperty]
         public string Status {
-            get { return status.Get (Instance); }
+            get { return status (Instance); }
         }
 
         /// <summary>
@@ -117,7 +119,7 @@ namespace KRPC.MechJeb
         /// </summary>
         [KRPCProperty]
         public float SafeDistance {
-            get { return safeDistance.Get (Instance); }
+            get { return safeDistance (Instance); }
         }
 
         /// <summary>
@@ -125,7 +127,7 @@ namespace KRPC.MechJeb
         /// </summary>
         [KRPCProperty]
         public float TargetSize {
-            get { return targetSize.Get (Instance); }
+            get { return targetSize (Instance); }
         }
     }
 }

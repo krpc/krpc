@@ -1,5 +1,6 @@
 using System;
 using KRPC.Service.Attributes;
+using KRPC.Utils;
 
 namespace KRPC.MechJeb
 {
@@ -9,16 +10,16 @@ namespace KRPC.MechJeb
     [KRPCClass (Service = "MechJeb")]
     public sealed class SmartRCS : DisplayModule
     {
-        static Value<int> target;
-        static Value<bool> autoDisableSmartRCS;
+        static Field<object, int> target;
+        static Field<object, bool> autoDisableSmartRCS;
         static Action<object> engage;
 
         internal static new void Load ()
         {
-            var type = Reflection.Type ("MuMech.MechJebModuleSmartRcs");
-            target = Reflection.Field<int> (type, "target");
-            autoDisableSmartRCS = Reflection.Field<bool> (type, "autoDisableSmartRCS");
-            engage = Reflection.Method<Action<object>> (type, "Engage");
+            var type = Bindings.Type ("MuMech.MechJebModuleSmartRcs");
+            target = type.Field<object, int> ("target");
+            autoDisableSmartRCS = type.Field<object, bool> ("autoDisableSmartRCS");
+            engage = type.Method<Action<object>> ("Engage");
         }
 
         internal SmartRCS () : base ("MechJebModuleSmartRcs")

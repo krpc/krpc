@@ -1,4 +1,5 @@
 using KRPC.Service.Attributes;
+using KRPC.Utils;
 
 namespace KRPC.MechJeb.Maneuver
 {
@@ -8,12 +9,12 @@ namespace KRPC.MechJeb.Maneuver
     [KRPCClass (Service = "MechJeb")]
     public sealed class OperationMoonReturn : Operation
     {
-        static Value<double> moonReturnAltitude;
+        static Field<object, double> moonReturnAltitude;
 
         internal static new void Load ()
         {
-            var type = Reflection.Type ("MuMech.OperationMoonReturn");
-            moonReturnAltitude = Reflection.EditableDouble (type, "MoonReturnAltitude");
+            var type = Bindings.Type ("MuMech.OperationMoonReturn");
+            moonReturnAltitude = Bindings.EditableDouble (type, "MoonReturnAltitude");
         }
 
         internal OperationMoonReturn () : base ("OperationMoonReturn")

@@ -1,4 +1,6 @@
+using System;
 using KRPC.Service.Attributes;
+using KRPC.Utils;
 
 namespace KRPC.MechJeb
 {
@@ -8,34 +10,34 @@ namespace KRPC.MechJeb
     [KRPCClass (Service = "MechJeb")]
     public sealed class AscentPVG : AscentBase
     {
-        static Value<double> pitchStartVelocity;
-        static Value<double> pitchRate;
-        static Value<double> desiredApoapsis;
-        static Value<bool> attachAltFlag;
-        static Value<double> desiredAttachAlt;
-        static Value<double> desiredAttachAltFixed;
-        static Value<int> optimizeStage;
-        static Value<double> dynamicPressureTrigger;
-        static Value<int> stagingTrigger;
-        static Value<bool> stagingTriggerFlag;
-        static Value<bool> fixedCoast;
-        static Value<double> fixedCoastLength;
+        static Field<object, double> pitchStartVelocity;
+        static Field<object, double> pitchRate;
+        static Field<object, double> desiredApoapsis;
+        static Field<object, bool> attachAltFlag;
+        static Field<object, double> desiredAttachAlt;
+        static Field<object, double> desiredAttachAltFixed;
+        static Func<object, int> optimizeStage;
+        static Field<object, double> dynamicPressureTrigger;
+        static Field<object, int> stagingTrigger;
+        static Field<object, bool> stagingTriggerFlag;
+        static Field<object, bool> fixedCoast;
+        static Field<object, double> fixedCoastLength;
 
         internal static new void Load ()
         {
-            var type = Reflection.Type ("MuMech.MechJebModuleAscentSettings");
-            pitchStartVelocity = Reflection.EditableDouble (type, "PitchStartVelocity");
-            pitchRate = Reflection.EditableDouble (type, "PitchRate");
-            desiredApoapsis = Reflection.EditableDouble (type, "DesiredApoapsis");
-            attachAltFlag = Reflection.Field<bool> (type, "AttachAltFlag");
-            desiredAttachAlt = Reflection.EditableDouble (type, "DesiredAttachAlt");
-            desiredAttachAltFixed = Reflection.EditableDouble (type, "DesiredAttachAltFixed");
-            optimizeStage = Reflection.Field<int> (type, "OptimizeStage");
-            dynamicPressureTrigger = Reflection.EditableDouble (type, "DynamicPressureTrigger");
-            stagingTrigger = Reflection.EditableInt (type, "StagingTrigger");
-            stagingTriggerFlag = Reflection.Field<bool> (type, "StagingTriggerFlag");
-            fixedCoast = Reflection.Field<bool> (type, "FixedCoast");
-            fixedCoastLength = Reflection.EditableDouble (type, "FixedCoastLength");
+            var type = Bindings.Type ("MuMech.MechJebModuleAscentSettings");
+            pitchStartVelocity = Bindings.EditableDouble (type, "PitchStartVelocity");
+            pitchRate = Bindings.EditableDouble (type, "PitchRate");
+            desiredApoapsis = Bindings.EditableDouble (type, "DesiredApoapsis");
+            attachAltFlag = type.Field<object, bool> ("AttachAltFlag");
+            desiredAttachAlt = Bindings.EditableDouble (type, "DesiredAttachAlt");
+            desiredAttachAltFixed = Bindings.EditableDouble (type, "DesiredAttachAltFixed");
+            optimizeStage = type.Getter<object, int> ("OptimizeStage");
+            dynamicPressureTrigger = Bindings.EditableDouble (type, "DynamicPressureTrigger");
+            stagingTrigger = Bindings.EditableInt (type, "StagingTrigger");
+            stagingTriggerFlag = type.Field<object, bool> ("StagingTriggerFlag");
+            fixedCoast = type.Field<object, bool> ("FixedCoast");
+            fixedCoastLength = Bindings.EditableDouble (type, "FixedCoastLength");
         }
 
         /// <summary>
@@ -92,8 +94,8 @@ namespace KRPC.MechJeb
         }
 
         // MechJeb keeps a separate attach altitude for an ascent with no early shutoff stage
-        Value<double> AttachAltitude {
-            get { return optimizeStage.Get (Instance) < 0 ? desiredAttachAltFixed : desiredAttachAlt; }
+        Field<object, double> AttachAltitude {
+            get { return optimizeStage (Instance) < 0 ? desiredAttachAltFixed : desiredAttachAlt; }
         }
 
         /// <summary>

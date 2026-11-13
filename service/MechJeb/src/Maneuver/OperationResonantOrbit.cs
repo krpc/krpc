@@ -1,5 +1,6 @@
 using System;
 using KRPC.Service.Attributes;
+using KRPC.Utils;
 
 namespace KRPC.MechJeb.Maneuver
 {
@@ -15,15 +16,15 @@ namespace KRPC.MechJeb.Maneuver
     public sealed class OperationResonantOrbit : TimedOperation
     {
         static Func<object, object> timeSelector;
-        static Value<int> resonanceNumerator;
-        static Value<int> resonanceDenominator;
+        static Field<object, int> resonanceNumerator;
+        static Field<object, int> resonanceDenominator;
 
         internal static new void Load ()
         {
-            var type = Reflection.Type ("MuMech.OperationResonantOrbit");
+            var type = Bindings.Type ("MuMech.OperationResonantOrbit");
             timeSelector = TimeSelectorField (type);
-            resonanceNumerator = Reflection.EditableInt (type, "ResonanceNumerator");
-            resonanceDenominator = Reflection.EditableInt (type, "ResonanceDenominator");
+            resonanceNumerator = Bindings.EditableInt (type, "ResonanceNumerator");
+            resonanceDenominator = Bindings.EditableInt (type, "ResonanceDenominator");
         }
 
         internal OperationResonantOrbit () : base ("OperationResonantOrbit")

@@ -18,7 +18,7 @@ namespace KRPC.MechJeb.Maneuver
 
         internal static new void Load ()
         {
-            var type = Reflection.Type ("MuMech.OperationCircularize");
+            var type = Bindings.Type ("MuMech.OperationCircularize");
             timeSelector = TimeSelectorField (type);
         }
 

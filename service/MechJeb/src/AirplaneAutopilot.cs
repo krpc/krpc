@@ -1,4 +1,5 @@
 using KRPC.Service.Attributes;
+using KRPC.Utils;
 
 namespace KRPC.MechJeb
 {
@@ -8,64 +9,64 @@ namespace KRPC.MechJeb
     [KRPCClass (Service = "MechJeb")]
     public sealed class AirplaneAutopilot : KRPCComputerModule
     {
-        static Value<bool> headingHoldEnabled;
-        static Value<bool> altitudeHoldEnabled;
-        static Value<bool> vertSpeedHoldEnabled;
-        static Value<bool> rollHoldEnabled;
-        static Value<bool> speedHoldEnabled;
-        static Value<double> altitudeTarget;
-        static Value<double> headingTarget;
-        static Value<double> rollTarget;
-        static Value<double> speedTarget;
-        static Value<double> vertSpeedTarget;
-        static Value<double> bankAngle;
-        static Value<double> accKp;
-        static Value<double> accKi;
-        static Value<double> accKd;
-        static Value<double> pitKp;
-        static Value<double> pitKi;
-        static Value<double> pitKd;
-        static Value<double> rolKp;
-        static Value<double> rolKi;
-        static Value<double> rolKd;
-        static Value<double> yawKp;
-        static Value<double> yawKi;
-        static Value<double> yawKd;
-        static Value<double> yawLimit;
-        static Value<double> rollLimit;
-        static Value<double> pitchUpLimit;
-        static Value<double> pitchDownLimit;
+        static Field<object, bool> headingHoldEnabled;
+        static Field<object, bool> altitudeHoldEnabled;
+        static Field<object, bool> vertSpeedHoldEnabled;
+        static Field<object, bool> rollHoldEnabled;
+        static Field<object, bool> speedHoldEnabled;
+        static Field<object, double> altitudeTarget;
+        static Field<object, double> headingTarget;
+        static Field<object, double> rollTarget;
+        static Field<object, double> speedTarget;
+        static Field<object, double> vertSpeedTarget;
+        static Field<object, double> bankAngle;
+        static Field<object, double> accKp;
+        static Field<object, double> accKi;
+        static Field<object, double> accKd;
+        static Field<object, double> pitKp;
+        static Field<object, double> pitKi;
+        static Field<object, double> pitKd;
+        static Field<object, double> rolKp;
+        static Field<object, double> rolKi;
+        static Field<object, double> rolKd;
+        static Field<object, double> yawKp;
+        static Field<object, double> yawKi;
+        static Field<object, double> yawKd;
+        static Field<object, double> yawLimit;
+        static Field<object, double> rollLimit;
+        static Field<object, double> pitchUpLimit;
+        static Field<object, double> pitchDownLimit;
 
         internal static new void Load ()
         {
-            var type = Reflection.Type ("MuMech.MechJebModuleAirplaneAutopilot");
-            headingHoldEnabled = Reflection.Field<bool> (type, "HeadingHoldEnabled");
-            altitudeHoldEnabled = Reflection.Field<bool> (type, "AltitudeHoldEnabled");
-            vertSpeedHoldEnabled = Reflection.Field<bool> (type, "VertSpeedHoldEnabled");
-            rollHoldEnabled = Reflection.Field<bool> (type, "RollHoldEnabled");
-            speedHoldEnabled = Reflection.Field<bool> (type, "SpeedHoldEnabled");
-            altitudeTarget = Reflection.Field<double> (type, "AltitudeTarget");
-            headingTarget = Reflection.Field<double> (type, "HeadingTarget");
-            rollTarget = Reflection.Field<double> (type, "RollTarget");
-            speedTarget = Reflection.Field<double> (type, "SpeedTarget");
-            vertSpeedTarget = Reflection.Field<double> (type, "VertSpeedTarget");
-            bankAngle = Reflection.Field<double> (type, "BankAngle");
-            accKp = Reflection.EditableDouble (type, "AccKp");
-            accKi = Reflection.EditableDouble (type, "AccKi");
-            accKd = Reflection.EditableDouble (type, "AccKd");
-            pitKp = Reflection.EditableDouble (type, "PitKp");
-            pitKi = Reflection.EditableDouble (type, "PitKi");
-            pitKd = Reflection.EditableDouble (type, "PitKd");
-            rolKp = Reflection.EditableDouble (type, "RolKp");
-            rolKi = Reflection.EditableDouble (type, "RolKi");
-            rolKd = Reflection.EditableDouble (type, "RolKd");
-            yawKp = Reflection.EditableDouble (type, "YawKp");
-            yawKi = Reflection.EditableDouble (type, "YawKi");
-            yawKd = Reflection.EditableDouble (type, "YawKd");
-            yawLimit = Reflection.EditableDouble (type, "YawLimit");
-            rollLimit = Reflection.EditableDouble (type, "RollLimit");
-            pitchUpLimit = Reflection.EditableDouble (type, "PitchUpLimit");
-            pitchDownLimit = Reflection.EditableDouble (type, "PitchDownLimit");
+            var type = Bindings.Type ("MuMech.MechJebModuleAirplaneAutopilot");
+            headingHoldEnabled = type.Field<object, bool> ("HeadingHoldEnabled");
+            altitudeHoldEnabled = type.Field<object, bool> ("AltitudeHoldEnabled");
+            vertSpeedHoldEnabled = type.Field<object, bool> ("VertSpeedHoldEnabled");
+            rollHoldEnabled = type.Field<object, bool> ("RollHoldEnabled");
+            speedHoldEnabled = type.Field<object, bool> ("SpeedHoldEnabled");
+            altitudeTarget = type.Field<object, double> ("AltitudeTarget");
+            headingTarget = type.Field<object, double> ("HeadingTarget");
+            rollTarget = type.Field<object, double> ("RollTarget");
+            speedTarget = type.Field<object, double> ("SpeedTarget");
+            vertSpeedTarget = type.Field<object, double> ("VertSpeedTarget");
+            bankAngle = type.Field<object, double> ("BankAngle");
+            accKp = Bindings.EditableDouble (type, "AccKp");
+            accKi = Bindings.EditableDouble (type, "AccKi");
+            accKd = Bindings.EditableDouble (type, "AccKd");
+            pitKp = Bindings.EditableDouble (type, "PitKp");
+            pitKi = Bindings.EditableDouble (type, "PitKi");
+            pitKd = Bindings.EditableDouble (type, "PitKd");
+            rolKp = Bindings.EditableDouble (type, "RolKp");
+            rolKi = Bindings.EditableDouble (type, "RolKi");
+            rolKd = Bindings.EditableDouble (type, "RolKd");
+            yawKp = Bindings.EditableDouble (type, "YawKp");
+            yawKi = Bindings.EditableDouble (type, "YawKi");
+            yawKd = Bindings.EditableDouble (type, "YawKd");
+            yawLimit = Bindings.EditableDouble (type, "YawLimit");
+            rollLimit = Bindings.EditableDouble (type, "RollLimit");
+            pitchUpLimit = Bindings.EditableDouble (type, "PitchUpLimit");
+            pitchDownLimit = Bindings.EditableDouble (type, "PitchDownLimit");
         }
 
         internal AirplaneAutopilot () : base ("MechJebModuleAirplaneAutopilot")

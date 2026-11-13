@@ -2,6 +2,7 @@ using System;
 using KRPC.MechJeb.Maneuver;
 using KRPC.Service;
 using KRPC.Service.Attributes;
+using KRPC.Utils;
 
 namespace KRPC.MechJeb
 {
@@ -35,22 +36,16 @@ namespace KRPC.MechJeb
         static readonly TargetController targetController = new TargetController ();
         static readonly ThrustController thrustController = new ThrustController ();
 
-        /// <summary>
-        /// Whether MechJeb is installed, and its members bound.
-        /// </summary>
-        internal static bool Loaded { get; private set; }
+        static bool Loaded {
+            get { return ModAPI.Get<Bindings> ().IsAvailable; }
+        }
 
         internal static void Load ()
         {
-            Reflection.Load ();
-            var core = Reflection.Type ("MuMech.MechJebCore");
-            var extensions = Reflection.Type ("MuMech.VesselExtensions");
-            if (core == null || extensions == null) {
-                Loaded = false;
-                return;
-            }
-            getMasterMechJeb = Reflection.Method<Func<global::Vessel, object>> (extensions, "GetMasterMechJeb");
-            getComputerModule = Reflection.Method<Func<object, string, object>> (core, "GetComputerModule");
+            var core = Bindings.Type ("MuMech.MechJebCore");
+            var extensions = Bindings.Type ("MuMech.VesselExtensions");
+            getMasterMechJeb = extensions.Method<Func<global::Vessel, object>> ("GetMasterMechJeb");
+            getComputerModule = core.Method<Func<object, string, object>> ("GetComputerModule");
             ComputerModule.Load ();
             AutopilotModule.Load ();
             VesselState.Load (core);
@@ -73,8 +68,6 @@ namespace KRPC.MechJeb
             Translatron.Load ();
             Operation.Load ();
             TimeSelector.Load ();
-            Reflection.LogMissing ();
-            Loaded = true;
         }
 
         /// <summary>
@@ -89,8 +82,7 @@ namespace KRPC.MechJeb
 
         internal static void CheckAPI ()
         {
-            if (!Loaded)
-                throw new InvalidOperationException ("MechJeb is not available");
+            ModAPI.Get<Bindings> ().CheckAvailable ();
         }
 
         /// <summary>
