@@ -295,13 +295,15 @@ export class StreamManager implements StreamHandler {
   }
 
   /** Adds a stream of a call, whose values have the given type, or null for none. */
-  async add<T>(call: ProcedureCall, type: Type | null): Promise<Stream<T>> {
+  add<T>(call: ProcedureCall, type: Type | null): Promise<Stream<T>> {
+    return this.addWith("AddStream", toBinary(ProcedureCallSchema, call), type);
+  }
+
+  /** Adds a stream with a KRPC procedure that returns one, given its encoded argument. */
+  async addWith<T>(procedure: string, argument: Uint8Array, type: Type | null): Promise<Stream<T>> {
     let state: StreamState | undefined;
-    const argument = create(ArgumentSchema, {
-      position: 0,
-      value: toBinary(ProcedureCallSchema, call),
-    });
-    await this.#session.call("KRPC", "AddStream", [argument], (result) => {
+    const args = [create(ArgumentSchema, { position: 0, value: argument })];
+    await this.#session.call("KRPC", procedure, args, (result) => {
       state = this.#register(streamId(result), type);
     });
     return new Stream<T>(state as StreamState, this);

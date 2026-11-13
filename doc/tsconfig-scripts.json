@@ -17,6 +17,7 @@
   },
   "include": [
     "src/scripts/js/*.js",
-    "src/scripts/api/**/*.js"
+    "src/scripts/api/**/*.js",
+    "src/scripts/user-guide/**/*.js"
   ]
 }

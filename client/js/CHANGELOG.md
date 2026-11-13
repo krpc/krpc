@@ -3,3 +3,5 @@
 - Export each service's enumerations, structures and exceptions from the package, for use without a
   connection (#1346)
 - Add streams, with `Connection.addStream`, and events, each with callbacks (#1346)
+- Add server side functions built with the expression API, run with `Connection.run`, or
+  streamed with `Connection.addStream` and `Connection.addEvent` (#1346)

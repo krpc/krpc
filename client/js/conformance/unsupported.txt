@@ -14,3 +14,9 @@ test_streams.py::test_first_call_fatal_error  # As test_streams.py::test_callbac
 test_streams.py::test_end_callback_fatal_error_on_remove  # As test_streams.py::test_callback_fatal_error
 test_streams.py::test_end_callback_fatal_error_on_close  # As test_streams.py::test_callback_fatal_error
 test_streams.py::test_late_end_callback_fatal_error  # As test_streams.py::test_callback_fatal_error
+test_functions.py::test_null_for_non_nullable_type[double]  # A JavaScript value can be null at any type
+test_functions.py::test_null_for_non_nullable_type[TestClass]  # As test_null_for_non_nullable_type[double]
+test_functions.py::test_stream_null_for_non_nullable_type[double]  # As test_null_for_non_nullable_type[double]
+test_functions.py::test_stream_null_for_non_nullable_type[TestClass]  # As test_null_for_non_nullable_type[double]
+test_functions.py::test_null_in_callback[double]  # As test_null_for_non_nullable_type[double]
+test_functions.py::test_null_in_callback[TestClass]  # As test_null_for_non_nullable_type[double]

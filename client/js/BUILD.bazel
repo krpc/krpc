@@ -209,6 +209,7 @@ conformance_test(
         "streams",
         "events",
         "callbacks",
+        "functions",
     ],
     protocols = ["websockets"],
     tags = ["requires-network"],
