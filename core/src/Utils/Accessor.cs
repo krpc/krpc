@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace KRPC.Utils
 {
@@ -13,6 +14,8 @@ namespace KRPC.Utils
     public static class Accessor
     {
         const BindingFlags Flags = BindingFlags.Public | BindingFlags.NonPublic;
+
+        static readonly ConditionalWeakTable<Delegate, string> missing = new ConditionalWeakTable<Delegate, string> ();
 
         /// <summary>
         /// A getter for a field or property of <typeparamref name="TInstance"/>.
@@ -96,12 +99,12 @@ namespace KRPC.Utils
         /// <summary>
         /// A getter and setter for a field or property of <paramref name="type"/>, a type
         /// derived from <typeparamref name="TInstance"/>. The setter is null for a read-only
-        /// field or property, and is compiled on first use.
+        /// field or property.
         /// </summary>
         public static Field<TInstance, TValue> Field<TInstance, TValue> (Type type, string name)
         {
             var get = Getter<TInstance, TValue> (type, name);
-            return get == null ? null : new Field<TInstance, TValue> (get, () => Setter<TInstance, TValue> (type, name));
+            return get == null ? null : new Field<TInstance, TValue> (get, Setter<TInstance, TValue> (type, name));
         }
 
         /// <summary>
@@ -116,6 +119,8 @@ namespace KRPC.Utils
         /// </remarks>
         public static TDelegate Method<TDelegate> (Type type, string name) where TDelegate : class
         {
+            if (type == null)
+                return null;
             var invoke = typeof (TDelegate).GetMethod ("Invoke");
             var parameters = invoke.GetParameters ()
                 .Select (p => Expression.Parameter (p.ParameterType, p.Name)).ToArray ();
@@ -177,6 +182,65 @@ namespace KRPC.Utils
                 return null;
             var body = Convert (Expression.New (constructor, arguments), invoke.ReturnType);
             return body == null ? null : Expression.Lambda<TDelegate> (body, parameters).Compile ();
+        }
+
+        /// <summary>
+        /// The type of a field or property of <paramref name="type"/>, or null if there is no
+        /// such member.
+        /// </summary>
+        public static Type MemberType (Type type, string name)
+        {
+            var member = FindMember (type, name, BindingFlags.Instance) ?? FindMember (type, name, BindingFlags.Static);
+            var field = member as FieldInfo;
+            if (field != null)
+                return field.FieldType;
+            var property = member as PropertyInfo;
+            return property == null ? null : property.PropertyType;
+        }
+
+        /// <summary>
+        /// A delegate that throws a <see cref="MissingMemberException"/> with the message when
+        /// called, standing in for a member that was not found.
+        /// </summary>
+        public static TDelegate Missing<TDelegate> (string message) where TDelegate : class
+        {
+            return (TDelegate)(object)Missing (typeof (TDelegate), message);
+        }
+
+        /// <summary>
+        /// A delegate of type <paramref name="delegateType"/> that throws a
+        /// <see cref="MissingMemberException"/> with the message when called.
+        /// </summary>
+        public static Delegate Missing (Type delegateType, string message)
+        {
+            return Missing (delegateType, message, Expression.New (
+                typeof (MissingMemberException).GetConstructor (new [] { typeof (string) }),
+                Expression.Constant (message)));
+        }
+
+        /// <summary>
+        /// A delegate of type <paramref name="delegateType"/> that throws the exception the
+        /// expression creates when called.
+        /// </summary>
+        internal static Delegate Missing (Type delegateType, string message, NewExpression exception)
+        {
+            if (!typeof (Delegate).IsAssignableFrom (delegateType))
+                throw new ArgumentException ("Not a delegate type", nameof (delegateType));
+            var invoke = delegateType.GetMethod ("Invoke");
+            var parameters = invoke.GetParameters ().Select (p => Expression.Parameter (p.ParameterType, p.Name));
+            var body = Expression.Throw (exception, invoke.ReturnType);
+            var result = Expression.Lambda (delegateType, body, parameters).Compile ();
+            missing.Add (result, message);
+            return result;
+        }
+
+        /// <summary>
+        /// Whether the delegate is null or was created by <see cref="Missing(Type, string)"/>.
+        /// </summary>
+        public static bool IsMissing (Delegate value)
+        {
+            string message;
+            return value == null || missing.TryGetValue (value, out message);
         }
 
         static MethodInfo FindMethod (Type type, string name, BindingFlags kind, Type [] types)

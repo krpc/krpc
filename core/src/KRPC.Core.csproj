@@ -222,6 +222,8 @@
     <Compile Include="Utils\IGameObjectState.cs" />
     <Compile Include="Utils\IScheduler.cs" />
     <Compile Include="Utils\Logger.cs" />
+    <Compile Include="Utils\MemberBinder.cs" />
+    <Compile Include="Utils\ModMemberMissingException.cs" />
     <Compile Include="Utils\Naming.cs" />
     <Compile Include="Utils\Reflection.cs" />
     <Compile Include="Utils\RoundRobinScheduler.cs" />

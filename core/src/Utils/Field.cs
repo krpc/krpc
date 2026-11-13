@@ -7,15 +7,13 @@ namespace KRPC.Utils
     /// </summary>
     public sealed class Field<TInstance, TValue>
     {
-        readonly Lazy<Action<TInstance, TValue>> set;
-
         /// <summary>
-        /// Create a field from its getter, and a function that creates its setter on first use.
+        /// Create a field from its getter and setter.
         /// </summary>
-        public Field (Func<TInstance, TValue> get, Func<Action<TInstance, TValue>> createSet)
+        public Field (Func<TInstance, TValue> get, Action<TInstance, TValue> set)
         {
             Get = get;
-            set = new Lazy<Action<TInstance, TValue>> (createSet);
+            Set = set;
         }
 
         /// <summary>
@@ -26,8 +24,6 @@ namespace KRPC.Utils
         /// <summary>
         /// The setter, or null for a read-only field or property.
         /// </summary>
-        public Action<TInstance, TValue> Set {
-            get { return set.Value; }
-        }
+        public Action<TInstance, TValue> Set { get; private set; }
     }
 }
