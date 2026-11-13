@@ -163,6 +163,17 @@ class TestEditor(TestCase):
             editor.load_vessel("VAB", "Staging")
         self.assertEqual("Staging", editor.vessel.name)
 
+    def test_stock_vessel_name_and_description(self):
+        # A stock craft stores its name and description as localization tags
+        editor = self.space_center.editor
+        self._stage_craft("Kerbal X", "VAB", None)
+        try:
+            editor.load_vessel("VAB", "Kerbal X")
+            self.assertEqual("Kerbal X", editor.vessel.name)
+            self.assertTrue(editor.vessel.description.startswith("The Kerbal X is"))
+        finally:
+            editor.load_vessel("VAB", "Staging")
+
 
 class TestEditorSPH(TestCase):
     @classmethod

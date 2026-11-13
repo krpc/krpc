@@ -5,6 +5,7 @@ using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
+using KSP.Localization;
 using UnityEngine;
 using Parts = KRPC.SpaceCenter.Services.Parts;
 using Tuple3 = System.Tuple<double, double, double>;
@@ -55,7 +56,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public string Name {
-            get { return InternalShipConstruct.shipName; }
+            get { return Localizer.Format (InternalShipConstruct.shipName); }
             set { InternalShipConstruct.shipName = value; }
         }
 
@@ -64,7 +65,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public string Description {
-            get { return InternalShipConstruct.shipDescription; }
+            get { return Localizer.Format (InternalShipConstruct.shipDescription); }
             set { InternalShipConstruct.shipDescription = value; }
         }
 
