@@ -112,7 +112,7 @@ CelestialBody
       :param double longitude: Longitude in degrees.
    
 
-   .. method:: org.javatuples.Triplet<Double,Double,Double> mSLPosition(double latitude, double longitude, ReferenceFrame referenceFrame)
+   .. method:: org.javatuples.Triplet<Double,Double,Double> mslPosition(double latitude, double longitude, ReferenceFrame referenceFrame)
 
       The position at mean sea level at the given latitude and longitude,
       in the given reference frame.
@@ -176,7 +176,7 @@ CelestialBody
 
          Each call returns a new frame, as for :meth:`ReferenceFrame.createRelative(ReferenceFrame, org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Quartet<Double,Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>)`.
 
-   .. method:: org.javatuples.Triplet<Double,Double,Double> mSLNormal(double latitude, double longitude, ReferenceFrame referenceFrame)
+   .. method:: org.javatuples.Triplet<Double,Double,Double> mslNormal(double latitude, double longitude, ReferenceFrame referenceFrame)
 
       The normal to the sphere at mean sea level, at the given latitude and longitude,
       in the given reference frame. This points straight up, away from the center of

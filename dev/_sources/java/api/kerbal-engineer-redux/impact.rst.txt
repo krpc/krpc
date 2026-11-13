@@ -10,7 +10,7 @@ Impact
 
    The point where the vessel's orbit meets the terrain.
 
-   .. constructor:: public Impact(double uT, double timeTo, double latitude, double longitude, double elevation, String biome)
+   .. constructor:: public Impact(double ut, double timeTo, double latitude, double longitude, double elevation, String biome)
 
       Construct a Impact from the values of its fields.
 

@@ -29,7 +29,7 @@ External Camera
       :rtype: str
       :Game Scenes: Flight
 
-   .. attribute:: min_fo_v
+   .. attribute:: min_fov
 
       The smallest field of view of the camera, in degrees.
 
@@ -37,7 +37,7 @@ External Camera
       :rtype: float
       :Game Scenes: Flight
 
-   .. attribute:: max_fo_v
+   .. attribute:: max_fov
 
       The largest field of view of the camera, in degrees.
 
@@ -45,10 +45,10 @@ External Camera
       :rtype: float
       :Game Scenes: Flight
 
-   .. attribute:: fo_v
+   .. attribute:: fov
 
       The field of view that :meth:`ExternalCamera.image` renders at, in degrees. It starts at
-      :attr:`ExternalCamera.max_fo_v`, as on an MFD camera page, and a value set is clamped
+      :attr:`ExternalCamera.max_fov`, as on an MFD camera page, and a value set is clamped
       to the camera's range.
 
       :Attribute: Can be read or written

@@ -76,13 +76,13 @@ assembled and run.
 
       :param value: The value.
 
-   .. staticmethod:: constant_u_int(value: number): KRPC.Expression
+   .. staticmethod:: constant_uint(value: number): KRPC.Expression
 
       A constant value of unsigned integer type.
 
       :param value: The value.
 
-   .. staticmethod:: constant_u_long(value: number): KRPC.Expression
+   .. staticmethod:: constant_ulong(value: number): KRPC.Expression
 
       A constant value of unsigned long integer type.
 
@@ -1355,11 +1355,11 @@ assembled and run.
 
       A signed 64-bit integer type.
 
-   .. staticmethod:: u_int(): KRPC.Type
+   .. staticmethod:: uint(): KRPC.Type
 
       An unsigned 32-bit integer type.
 
-   .. staticmethod:: u_long(): KRPC.Type
+   .. staticmethod:: ulong(): KRPC.Type
 
       An unsigned 64-bit integer type.
 
@@ -1506,22 +1506,22 @@ assembled and run.
       A single precision floating point number.
 
 
-   .. data:: s_int32
+   .. data:: sint32
 
       A signed 32-bit integer.
 
 
-   .. data:: s_int64
+   .. data:: sint64
 
       A signed 64-bit integer.
 
 
-   .. data:: u_int32
+   .. data:: uint32
 
       An unsigned 32-bit integer.
 
 
-   .. data:: u_int64
+   .. data:: uint64
 
       An unsigned 64-bit integer.
 

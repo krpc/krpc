@@ -12,6 +12,32 @@ conventions. The names of parameters and enumeration values follow the same rule
 with a lower case letter. The ``_`` character is reserved for joining the parts of a procedure name,
 such as ``Vessel_get_Name``.
 
+Each client converts an identifier to its own case, by splitting it into words:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Identifier
+     - Python
+     - Java
+   * - ``RCSThrust``
+     - ``rcs_thrust``
+     - ``rcsThrust``
+   * - ``MeanAnomalyAtUT``
+     - ``mean_anomaly_at_ut``
+     - ``meanAnomalyAtUT``
+   * - ``EVAs``
+     - ``evas``
+     - ``evas``
+   * - ``Vector3D``
+     - ``vector_3d``
+     - ``vector3D``
+
+A run of capitals is an acronym, and a run of capitals ending in ``s`` is a plural acronym. A word
+with more than one capital, such as ``PeA``, splits at each capital unless it is a compound word,
+such as ``UInt``. Spell it out, as in ``PeriapsisAltitude``. :ref:`client-design-name-case`
+specifies the rules and lists the compound words.
+
 Names are unique within their scope, compared case-insensitively. Some clients convert names that
 differ only in case to one name: ``RCSEnabled`` and ``RcsEnabled`` are both ``rcs_enabled`` in
 Python. The scopes are:

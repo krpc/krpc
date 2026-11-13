@@ -745,7 +745,7 @@ SpaceCenter
       Bases.
 
 
-   .. enumerator:: ev_as
+   .. enumerator:: evas
 
       EVAs.
 

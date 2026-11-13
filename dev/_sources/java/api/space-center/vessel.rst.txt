@@ -1156,7 +1156,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. method:: Vessel eVA()
+   .. method:: Vessel eva()
 
       Send the crew member outside on EVA, through the hatch of the part it is in, and
       return the vessel it becomes. The game switches to that vessel, which can then be

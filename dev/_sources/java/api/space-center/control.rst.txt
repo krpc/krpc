@@ -31,7 +31,7 @@ Control
       :meth:`Control.getRCS()` deploys and stows the jetpack and :meth:`Control.getLights()`
       switches the helmet lamp. The remaining controls do nothing for a kerbal.
       A kerbal is also sent out and brought back in from here: with
-      :meth:`CrewMember.eVA()` and :meth:`Control.board()`, and
+      :meth:`CrewMember.eva()` and :meth:`Control.board()`, and
       :meth:`Control.grabLadder()` and :meth:`Control.releaseLadder()` for the ladders it
       passes on the way.
 

@@ -934,7 +934,7 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
       Bases.
 
 
-   .. data:: ev_as
+   .. data:: evas
 
       EVAs.
 

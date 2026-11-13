@@ -65,11 +65,11 @@ Camera
 
       :Game Scenes: Flight
 
-   .. function:: float fo_v()
-   .. function:: void set_fo_v(float value)
+   .. function:: float fov()
+   .. function:: void set_fov(float value)
 
       The Field of View of the camera, in degrees.
-      A value between :func:`Camera::min_fo_v` and :func:`Camera::max_fo_v`.
+      A value between :func:`Camera::min_fov` and :func:`Camera::max_fov`.
 
       :Game Scenes: Flight
 
@@ -97,13 +97,13 @@ Camera
 
       :Game Scenes: Flight
 
-   .. function:: float min_fo_v()
+   .. function:: float min_fov()
 
       The minimum field of view the camera in degrees.
 
       :Game Scenes: Flight
 
-   .. function:: float max_fo_v()
+   .. function:: float max_fov()
 
       The maximum field of view the camera in degrees.
 
@@ -115,7 +115,7 @@ Camera
 
       :Game Scenes: Flight
 
-   .. function:: float default_fo_v()
+   .. function:: float default_fov()
 
       The default field of view the camera in degrees.
 

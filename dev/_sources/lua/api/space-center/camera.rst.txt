@@ -54,10 +54,10 @@ Camera
 
       :Attribute: Can be read or written
 
-   .. attribute:: fo_v: number
+   .. attribute:: fov: number
 
       The Field of View of the camera, in degrees.
-      A value between :attr:`SpaceCenter.Camera.min_fo_v` and :attr:`SpaceCenter.Camera.max_fo_v`.
+      A value between :attr:`SpaceCenter.Camera.min_fov` and :attr:`SpaceCenter.Camera.max_fov`.
 
       :Attribute: Can be read or written
 
@@ -85,13 +85,13 @@ Camera
 
       :Attribute: Read-only, cannot be set
 
-   .. attribute:: min_fo_v: number
+   .. attribute:: min_fov: number
 
       The minimum field of view the camera in degrees.
 
       :Attribute: Read-only, cannot be set
 
-   .. attribute:: max_fo_v: number
+   .. attribute:: max_fov: number
 
       The maximum field of view the camera in degrees.
 
@@ -103,7 +103,7 @@ Camera
 
       :Attribute: Read-only, cannot be set
 
-   .. attribute:: default_fo_v: number
+   .. attribute:: default_fov: number
 
       The default field of view the camera in degrees.
 

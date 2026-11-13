@@ -554,6 +554,38 @@ letter. They should follow <a class="reference external" href="https://en.wikipe
 conventions. The names of parameters and enumeration values follow the same rule, but can also start
 with a lower case letter. The <code class="docutils literal notranslate"><span class="pre">_</span></code> character is reserved for joining the parts of a procedure name,
 such as <code class="docutils literal notranslate"><span class="pre">Vessel_get_Name</span></code>.</p>
+<p>Each client converts an identifier to its own case, by splitting it into words:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Identifier</p></th>
+<th class="head"><p>Python</p></th>
+<th class="head"><p>Java</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RCSThrust</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">rcs_thrust</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">rcsThrust</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">MeanAnomalyAtUT</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">mean_anomaly_at_ut</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">meanAnomalyAtUT</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">EVAs</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">evas</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">evas</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Vector3D</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">vector_3d</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">vector3D</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>A run of capitals is an acronym, and a run of capitals ending in <code class="docutils literal notranslate"><span class="pre">s</span></code> is a plural acronym. A word
+with more than one capital, such as <code class="docutils literal notranslate"><span class="pre">PeA</span></code>, splits at each capital unless it is a compound word,
+such as <code class="docutils literal notranslate"><span class="pre">UInt</span></code>. Spell it out, as in <code class="docutils literal notranslate"><span class="pre">PeriapsisAltitude</span></code>. <a class="reference internal" href="../client-design.html#client-design-name-case"><span class="std std-ref">Case Conversion</span></a>
+specifies the rules and lists the compound words.</p>
 <p>Names are unique within their scope, compared case-insensitively. Some clients convert names that
 differ only in case to one name: <code class="docutils literal notranslate"><span class="pre">RCSEnabled</span></code> and <code class="docutils literal notranslate"><span class="pre">RcsEnabled</span></code> are both <code class="docutils literal notranslate"><span class="pre">rcs_enabled</span></code> in
 Python. The scopes are:</p>

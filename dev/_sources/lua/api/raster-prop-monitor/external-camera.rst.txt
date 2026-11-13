@@ -25,22 +25,22 @@ External Camera
 
       :Attribute: Read-only, cannot be set
 
-   .. attribute:: min_fo_v: number
+   .. attribute:: min_fov: number
 
       The smallest field of view of the camera, in degrees.
 
       :Attribute: Read-only, cannot be set
 
-   .. attribute:: max_fo_v: number
+   .. attribute:: max_fov: number
 
       The largest field of view of the camera, in degrees.
 
       :Attribute: Read-only, cannot be set
 
-   .. attribute:: fo_v: number
+   .. attribute:: fov: number
 
       The field of view that :meth:`RasterPropMonitor.ExternalCamera.image` renders at, in degrees. It starts at
-      :attr:`RasterPropMonitor.ExternalCamera.max_fo_v`, as on an MFD camera page, and a value set is clamped
+      :attr:`RasterPropMonitor.ExternalCamera.max_fov`, as on an MFD camera page, and a value set is clamped
       to the camera's range.
 
       :Attribute: Can be read or written

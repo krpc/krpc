@@ -510,7 +510,7 @@ Orbit
       :param double radius: The orbital radius in meters.
    
 
-   .. method:: double uTAtTrueAnomaly(double trueAnomaly)
+   .. method:: double utAtTrueAnomaly(double trueAnomaly)
 
       The universal time, in seconds, corresponding to the given true anomaly.
 

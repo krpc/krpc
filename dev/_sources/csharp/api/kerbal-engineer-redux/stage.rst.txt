@@ -10,7 +10,7 @@ Stage
 
    A stage of the vessel, from the simulation of Kerbal Engineer Redux.
 
-   .. function:: Stage(int number, double deltaV, double totalDeltaV, double specificImpulse, double thrust, double availableThrust, double tWR, double availableTWR, double maxTWR, double startMass, double massLost, double resourceMass, double burnTime, double totalBurnTime, double availableThrustTorque, double thrustOffsetAngle, double rCSSpecificImpulse, double rCSThrust, double rCSStartDeltaV, double rCSEndDeltaV, double rCSStartTWR, double rCSEndTWR, double rCSBurnTime, double startCost, double costLost, int startPartCount, int droppedPartCount)
+   .. function:: Stage(int number, double deltaV, double totalDeltaV, double specificImpulse, double thrust, double availableThrust, double twr, double availableTWR, double maxTWR, double startMass, double massLost, double resourceMass, double burnTime, double totalBurnTime, double availableThrustTorque, double thrustOffsetAngle, double rcsSpecificImpulse, double rcsThrust, double rcsStartDeltaV, double rcsEndDeltaV, double rcsStartTWR, double rcsEndTWR, double rcsBurnTime, double startCost, double costLost, int startPartCount, int droppedPartCount)
 
       Construct a Stage from the values of its fields.
 

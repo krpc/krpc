@@ -67,10 +67,10 @@ Camera
       :rtype: float
       :Game Scenes: Flight
 
-   .. attribute:: fo_v
+   .. attribute:: fov
 
       The Field of View of the camera, in degrees.
-      A value between :attr:`Camera.min_fo_v` and :attr:`Camera.max_fo_v`.
+      A value between :attr:`Camera.min_fov` and :attr:`Camera.max_fov`.
 
       :Attribute: Can be read or written
       :rtype: float
@@ -108,7 +108,7 @@ Camera
       :rtype: float
       :Game Scenes: Flight
 
-   .. attribute:: min_fo_v
+   .. attribute:: min_fov
 
       The minimum field of view the camera in degrees.
 
@@ -116,7 +116,7 @@ Camera
       :rtype: float
       :Game Scenes: Flight
 
-   .. attribute:: max_fo_v
+   .. attribute:: max_fov
 
       The maximum field of view the camera in degrees.
 
@@ -132,7 +132,7 @@ Camera
       :rtype: float
       :Game Scenes: Flight
 
-   .. attribute:: default_fo_v
+   .. attribute:: default_fov
 
       The default field of view the camera in degrees.
 

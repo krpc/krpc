@@ -1500,13 +1500,13 @@ assembled and run.
 
    
 
-   .. method:: static Type uInt(Connection connection)
+   .. method:: static Type uint(Connection connection)
 
       An unsigned 32-bit integer type.
 
    
 
-   .. method:: static Type uLong(Connection connection)
+   .. method:: static Type ulong(Connection connection)
 
       An unsigned 64-bit integer type.
 
@@ -1677,22 +1677,22 @@ assembled and run.
       A single precision floating point number.
 
 
-   .. field:: public TypeCode S_INT32
+   .. field:: public TypeCode SINT32
 
       A signed 32-bit integer.
 
 
-   .. field:: public TypeCode S_INT64
+   .. field:: public TypeCode SINT64
 
       A signed 64-bit integer.
 
 
-   .. field:: public TypeCode U_INT32
+   .. field:: public TypeCode UINT32
 
       An unsigned 32-bit integer.
 
 
-   .. field:: public TypeCode U_INT64
+   .. field:: public TypeCode UINT64
 
       An unsigned 64-bit integer.
 

@@ -10,7 +10,7 @@ Impact
 
    The point where the vessel's orbit meets the terrain.
 
-   .. function:: Impact(double uT, double timeTo, double latitude, double longitude, double elevation, string biome)
+   .. function:: Impact(double ut, double timeTo, double latitude, double longitude, double elevation, string biome)
 
       Construct a Impact from the values of its fields.
 

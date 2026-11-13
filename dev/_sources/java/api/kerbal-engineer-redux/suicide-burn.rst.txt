@@ -11,7 +11,7 @@ Suicide Burn
    The latest burn at full thrust, against the surface velocity, that stops the vessel at
    the terrain.
 
-   .. constructor:: public SuicideBurn(double uT, double timeTo, double altitude, double deltaV, double distance, double duration)
+   .. constructor:: public SuicideBurn(double ut, double timeTo, double altitude, double deltaV, double distance, double duration)
 
       Construct a SuicideBurn from the values of its fields.
 

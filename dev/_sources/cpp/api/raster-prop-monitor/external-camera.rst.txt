@@ -25,23 +25,23 @@ External Camera
 
       :Game Scenes: Flight
 
-   .. function:: float min_fo_v()
+   .. function:: float min_fov()
 
       The smallest field of view of the camera, in degrees.
 
       :Game Scenes: Flight
 
-   .. function:: float max_fo_v()
+   .. function:: float max_fov()
 
       The largest field of view of the camera, in degrees.
 
       :Game Scenes: Flight
 
-   .. function:: float fo_v()
-   .. function:: void set_fo_v(float value)
+   .. function:: float fov()
+   .. function:: void set_fov(float value)
 
       The field of view that :func:`ExternalCamera::image` renders at, in degrees. It starts at
-      :func:`ExternalCamera::max_fo_v`, as on an MFD camera page, and a value set is clamped
+      :func:`ExternalCamera::max_fov`, as on an MFD camera page, and a value set is clamped
       to the camera's range.
 
       :Game Scenes: Flight

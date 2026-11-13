@@ -602,6 +602,219 @@ lists where it departs from this page.</p>
 <code class="docutils literal notranslate"><span class="pre">RemoteEnum</span></code>, <code class="docutils literal notranslate"><span class="pre">RemoteFlags</span></code>, <code class="docutils literal notranslate"><span class="pre">RemoteStruct</span></code> and <code class="docutils literal notranslate"><span class="pre">RemoteService</span></code>. A client keeps its
 language’s own form where it has one, such as an enum and a struct in C++ and C#, and a
 <code class="docutils literal notranslate"><span class="pre">NamedTuple</span></code> for a Python structure.</p>
+<section id="case-conversion">
+<span id="client-design-name-case"></span><h3>Case Conversion<a class="headerlink" href="#case-conversion" title="Link to this heading">#</a></h3>
+<p>Each client converts the names in a service definition to its own case. Every client splits a name
+into words by the same rules, so <code class="docutils literal notranslate"><span class="pre">UInt64ToString</span></code> is <code class="docutils literal notranslate"><span class="pre">uint64_to_string</span></code> in Python and
+<code class="docutils literal notranslate"><span class="pre">uint64ToString</span></code> in Java. The test vectors are in <code class="docutils literal notranslate"><span class="pre">client/conformance/names.json</span></code>. Clients that
+build their services at run time test them through the conformance suite, and the generators test
+them in their own unit tests.</p>
+<p>A name is split at each <code class="docutils literal notranslate"><span class="pre">_</span></code> into parts, and each part is converted on its own. The
+<a class="reference internal" href="extending/types.html#service-api-identifiers"><span class="std std-ref">identifier rules</span></a> keep every name in a service definition ASCII,
+with no <code class="docutils literal notranslate"><span class="pre">_</span></code>, but a client still converts a name that has one.</p>
+<p>A part is split into words from left to right. At each position, the first of these rules that
+matches gives the next word:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Rule</p></th>
+<th class="head"><p>Matches</p></th>
+<th class="head"><p>Examples</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><ol class="arabic simple">
+<li><p>Compound word</p></li>
+</ol>
+</td>
+<td><p>A compound word, not followed by a lower case letter</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UInt</span></code> 64, Max <code class="docutils literal notranslate"><span class="pre">FoV</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><ol class="arabic simple" start="2">
+<li><p>Plural acronym</p></li>
+</ol>
+</td>
+<td><p>Two or more capitals and an <code class="docutils literal notranslate"><span class="pre">s</span></code>, not followed by a lower case letter</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVAs</span></code>, <code class="docutils literal notranslate"><span class="pre">IDs</span></code></p></td>
+</tr>
+<tr class="row-even"><td><ol class="arabic simple" start="3">
+<li><p>Acronym</p></li>
+</ol>
+</td>
+<td><p>The longest run of capitals not followed by a lower case letter</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">RCS</span></code> Thrust, Mean Anomaly At <code class="docutils literal notranslate"><span class="pre">UT</span></code>, <code class="docutils literal notranslate"><span class="pre">DEFAULT</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><ol class="arabic simple" start="4">
+<li><p>Word</p></li>
+</ol>
+</td>
+<td><p>An optional capital, then lower case letters</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Active</span></code> <code class="docutils literal notranslate"><span class="pre">Vessel</span></code>, <code class="docutils literal notranslate"><span class="pre">reset</span></code> PID</p></td>
+</tr>
+<tr class="row-even"><td><ol class="arabic simple" start="5">
+<li><p>Number</p></li>
+</ol>
+</td>
+<td><p>Digits, and the acronym after them by rule 3 or the lower case letters after them</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">32</span></code> To String, Vector <code class="docutils literal notranslate"><span class="pre">3D</span></code>, <code class="docutils literal notranslate"><span class="pre">3rd</span></code> Party</p></td>
+</tr>
+<tr class="row-odd"><td><ol class="arabic simple" start="6">
+<li><p>Other</p></li>
+</ol>
+</td>
+<td><p>Any other character</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Rules 1 to 4 also take the digits after the word and the lower case letters after the digits,
+unless an acronym follows the digits: <code class="docutils literal notranslate"><span class="pre">UInt64</span></code>, <code class="docutils literal notranslate"><span class="pre">UTF8</span></code> String, <code class="docutils literal notranslate"><span class="pre">Atan2</span></code>, <code class="docutils literal notranslate"><span class="pre">Int32s</span></code>,
+<code class="docutils literal notranslate"><span class="pre">Get3rd</span></code> Party. Rule 3 ends a run of capitals before its last capital when a lower case letter
+follows, as that capital starts the next word: <code class="docutils literal notranslate"><span class="pre">RCSThrust</span></code> is <code class="docutils literal notranslate"><span class="pre">RCS</span></code> and <code class="docutils literal notranslate"><span class="pre">Thrust</span></code>.</p>
+<p>The compound words are <code class="docutils literal notranslate"><span class="pre">UInt</span></code>, <code class="docutils literal notranslate"><span class="pre">ULong</span></code>, <code class="docutils literal notranslate"><span class="pre">SInt</span></code> and <code class="docutils literal notranslate"><span class="pre">FoV</span></code>. Each is written with more than one
+capital, and the other rules would split it. Every client holds the same list.</p>
+<p>As a regular expression, tried at each position in turn, where <code class="docutils literal notranslate"><span class="pre">D</span></code> stands for the digits a word
+takes, <code class="docutils literal notranslate"><span class="pre">(?:[0-9]+(?![0-9])(?![A-Z]+(?![a-z]))[a-z]*)?</span></code>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(?:UInt|ULong|SInt|FoV)(?![a-z])D
+|[A-Z]{2,}s(?![a-z])D
+|[A-Z]+(?![a-z])D
+|[A-Z]?[a-z]+D
+|[0-9]+(?:[A-Z]+(?![a-z])|[a-z]+)?
+|.
+</pre></div>
+</div>
+<p>Each case is built from the words:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Case</p></th>
+<th class="head"><p>From the words</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">UInt64ToString</span></code>, <code class="docutils literal notranslate"><span class="pre">RCSThrust</span></code>, <code class="docutils literal notranslate"><span class="pre">EVAs</span></code></p></th>
+<th class="head"><p>Parts joined by</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>snake</p></td>
+<td><p>Lower case, joined by <code class="docutils literal notranslate"><span class="pre">_</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">uint64_to_string</span></code>, <code class="docutils literal notranslate"><span class="pre">rcs_thrust</span></code>, <code class="docutils literal notranslate"><span class="pre">evas</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">__</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>UPPER_SNAKE</p></td>
+<td><p>Upper case, joined by <code class="docutils literal notranslate"><span class="pre">_</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UINT64_TO_STRING</span></code>, <code class="docutils literal notranslate"><span class="pre">RCS_THRUST</span></code>, <code class="docutils literal notranslate"><span class="pre">EVAS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">__</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>lowerCamel</p></td>
+<td><p>The first word lower case, the others as written</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">uint64ToString</span></code>, <code class="docutils literal notranslate"><span class="pre">rcsThrust</span></code>, <code class="docutils literal notranslate"><span class="pre">evas</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">_</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>UpperCamel</p></td>
+<td><p>The name unchanged</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UInt64ToString</span></code>, <code class="docutils literal notranslate"><span class="pre">RCSThrust</span></code>, <code class="docutils literal notranslate"><span class="pre">EVAs</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">_</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>lower</p></td>
+<td><p>The name lower case, with no words</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">uint64tostring</span></code>, <code class="docutils literal notranslate"><span class="pre">rcsthrust</span></code>, <code class="docutils literal notranslate"><span class="pre">evas</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">_</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>UPPER</p></td>
+<td><p>The name upper case, with no words</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UINT64TOSTRING</span></code>, <code class="docutils literal notranslate"><span class="pre">RCSTHRUST</span></code>, <code class="docutils literal notranslate"><span class="pre">EVAS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">_</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>A conversion only changes case and inserts separators. Two names that convert to one client name
+then differ only in case, and the server’s <a class="reference internal" href="extending/types.html#service-api-identifiers"><span class="std std-ref">case-insensitive name rules</span></a> keep them apart.</p>
+<p>lowerCamel keeps acronyms after the first word in capitals, as in <code class="docutils literal notranslate"><span class="pre">meanAnomalyAtUT</span></code>, so it stays
+close to the C# name. A property accessor is <code class="docutils literal notranslate"><span class="pre">get</span></code> or <code class="docutils literal notranslate"><span class="pre">set</span></code> and the UpperCamel name, as in
+<code class="docutils literal notranslate"><span class="pre">getRCSThrust</span></code>. A C-nano macro joins its names with <code class="docutils literal notranslate"><span class="pre">_</span></code>, as in
+<code class="docutils literal notranslate"><span class="pre">KRPC_SPACECENTER_SASMODE_STABILITYASSIST</span></code>, so it upper cases each name with no words. Splitting
+them would make enumeration <code class="docutils literal notranslate"><span class="pre">FooBar</span></code> value <code class="docutils literal notranslate"><span class="pre">Baz</span></code> and enumeration <code class="docutils literal notranslate"><span class="pre">Foo</span></code> value <code class="docutils literal notranslate"><span class="pre">BarBaz</span></code> one
+macro.</p>
+<p>The case of each name in each client:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>C#</p></th>
+<th class="head"><p>C++</p></th>
+<th class="head"><p>C-nano</p></th>
+<th class="head"><p>Java</p></th>
+<th class="head"><p>Python</p></th>
+<th class="head"><p>Lua</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Service</p></td>
+<td><p>UpperCamel</p></td>
+<td><p>UpperCamel, snake header</p></td>
+<td><p>UpperCamel, snake header</p></td>
+<td><p>UpperCamel</p></td>
+<td><p>snake attribute, lower module</p></td>
+<td><p>snake</p></td>
+</tr>
+<tr class="row-odd"><td><p>Type</p></td>
+<td><p>UpperCamel</p></td>
+<td><p>UpperCamel</p></td>
+<td><p>UpperCamel</p></td>
+<td><p>UpperCamel</p></td>
+<td><p>UpperCamel</p></td>
+<td><p>UpperCamel</p></td>
+</tr>
+<tr class="row-even"><td><p>Procedure or method</p></td>
+<td><p>UpperCamel</p></td>
+<td><p>snake</p></td>
+<td><p>UpperCamel</p></td>
+<td><p>lowerCamel</p></td>
+<td><p>snake</p></td>
+<td><p>snake</p></td>
+</tr>
+<tr class="row-odd"><td><p>Property</p></td>
+<td><p>UpperCamel</p></td>
+<td><p>snake, and <code class="docutils literal notranslate"><span class="pre">set_</span></code> and snake</p></td>
+<td><p>UpperCamel, and <code class="docutils literal notranslate"><span class="pre">set_</span></code> and UpperCamel</p></td>
+<td><p>Accessors</p></td>
+<td><p>snake</p></td>
+<td><p>snake</p></td>
+</tr>
+<tr class="row-even"><td><p>Enumeration value</p></td>
+<td><p>UpperCamel</p></td>
+<td><p>snake</p></td>
+<td><p>UPPER, in a macro</p></td>
+<td><p>UPPER_SNAKE</p></td>
+<td><p>snake</p></td>
+<td><p>snake</p></td>
+</tr>
+<tr class="row-odd"><td><p>Structure field</p></td>
+<td><p>UpperCamel, and lowerCamel constructor parameter</p></td>
+<td><p>snake</p></td>
+<td><p>snake</p></td>
+<td><p>lowerCamel, and <code class="docutils literal notranslate"><span class="pre">get</span></code> and UpperCamel</p></td>
+<td><p>snake</p></td>
+<td><p>snake</p></td>
+</tr>
+<tr class="row-even"><td><p>Parameter</p></td>
+<td><p>As written</p></td>
+<td><p>snake</p></td>
+<td><p>As written</p></td>
+<td><p>lowerCamel</p></td>
+<td><p>snake</p></td>
+<td><p>snake</p></td>
+</tr>
+<tr class="row-odd"><td><p>Exception</p></td>
+<td><p>UpperCamel</p></td>
+<td><p>UpperCamel</p></td>
+<td><p>UPPER, in a macro</p></td>
+<td><p>UpperCamel</p></td>
+<td><p>UpperCamel</p></td>
+<td><p>UpperCamel</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
 </section>
 <section id="stream-and-call-forms">
 <h2>Stream and Call Forms<a class="headerlink" href="#stream-and-call-forms" title="Link to this heading">#</a></h2>
@@ -1027,7 +1240,10 @@ waiting for that condition.</p></li>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#clients">Clients</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#names">Names</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#names">Names</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#case-conversion">Case Conversion</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stream-and-call-forms">Stream and Call Forms</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#static-methods">Static Methods</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#errors">Errors</a></li>

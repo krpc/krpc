@@ -90,7 +90,7 @@ assembled and run.
       :rtype: :class:`Expression`
    
 
-   .. staticmethod:: constant_u_int(value)
+   .. staticmethod:: constant_uint(value)
 
       A constant value of unsigned integer type.
 
@@ -98,7 +98,7 @@ assembled and run.
       :rtype: :class:`Expression`
    
 
-   .. staticmethod:: constant_u_long(value)
+   .. staticmethod:: constant_ulong(value)
 
       A constant value of unsigned long integer type.
 
@@ -1638,14 +1638,14 @@ assembled and run.
       :rtype: :class:`Type`
    
 
-   .. staticmethod:: u_int()
+   .. staticmethod:: uint()
 
       An unsigned 32-bit integer type.
 
       :rtype: :class:`Type`
    
 
-   .. staticmethod:: u_long()
+   .. staticmethod:: ulong()
 
       An unsigned 64-bit integer type.
 
@@ -1836,22 +1836,22 @@ assembled and run.
       A single precision floating point number.
 
 
-   .. data:: s_int32
+   .. data:: sint32
 
       A signed 32-bit integer.
 
 
-   .. data:: s_int64
+   .. data:: sint64
 
       A signed 64-bit integer.
 
 
-   .. data:: u_int32
+   .. data:: uint32
 
       An unsigned 32-bit integer.
 
 
-   .. data:: u_int64
+   .. data:: uint64
 
       An unsigned 64-bit integer.
 

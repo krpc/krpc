@@ -364,6 +364,7 @@ C++ client
   * :breaking:`Breaking` Throw ``std::invalid_argument`` for a local socket path that is too long (:issue:`1333`)
   * :breaking:`Breaking` Throw ``EncodingError`` for a null function value of a type that cannot hold null (:issue:`1333`)
 
+* :breaking:`Breaking` Convert names with ``UInt``, ``ULong``, ``SInt``, ``FoV``, a plural acronym or digits next to an acronym as written, e.g. ``Type::uint``, ``Camera::fov`` and ``MapFilterType::evas`` in place of ``u_int``, ``fo_v`` and ``ev_as`` (:issue:`1339`)
 
 
 Java client
@@ -418,6 +419,8 @@ Java client
   * Throw ``EncodingException`` for a tuple with too few items (:issue:`1333`)
   * Give an ``EncodingException`` the message of its cause (:issue:`1333`)
 
+* :breaking:`Breaking` Name enumeration constants in upper snake case, e.g. ``AltimeterMode.AGL``, ``AlarmType.SOI_CHANGE`` and ``TypeCode.UINT32`` in place of ``A_GL``, ``S_OI_CHANGE`` and ``U_INT32`` (:issue:`1339`)
+* :breaking:`Breaking` Lower case a leading acronym in method and field names, e.g. ``CelestialBody.mslPosition`` and ``Type.uint`` in place of ``mSLPosition`` and ``uInt`` (:issue:`1339`)
 
 
 Lua client
@@ -449,6 +452,7 @@ Lua client
   * :breaking:`Breaking` Raise ``ConnectionError`` for malformed service definitions (:issue:`1333`)
   * :breaking:`Breaking` Raise ``bad argument :issue:`2` to 'connect_local'`` for a local socket path that is too long (:issue:`1333`)
 
+* :breaking:`Breaking` Convert names with ``UInt``, ``ULong``, ``SInt``, ``FoV``, a plural acronym or digits next to an acronym as written, e.g. ``Type.uint``, ``Camera.fov`` and ``MapFilterType.evas`` in place of ``u_int``, ``fo_v`` and ``ev_as`` (:issue:`1339`)
 
 
 Python client
@@ -528,6 +532,7 @@ Python client
   * Raise ``EncodingError`` for every value that fails to decode, including a string or tuple cut short (:issue:`1333`)
 
 * Compile ``match`` statements in server side functions (:issue:`1337`)
+* :breaking:`Breaking` Convert names with ``UInt``, ``ULong``, ``SInt``, ``FoV``, a plural acronym or digits next to an acronym as written, e.g. ``Type.uint``, ``Camera.fov`` and ``MapFilterType.evas`` in place of ``u_int``, ``fo_v`` and ``ev_as`` (:issue:`1339`)
 
 
 krpctools

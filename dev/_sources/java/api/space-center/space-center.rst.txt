@@ -711,7 +711,7 @@ SpaceCenter
       Bases.
 
 
-   .. field:: public static final MapFilterType EV_AS
+   .. field:: public static final MapFilterType EVAS
 
       EVAs.
 

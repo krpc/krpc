@@ -855,6 +855,7 @@
 <li><p><span class="changelog-marker breaking">Breaking</span> Throw <code class="docutils literal notranslate"><span class="pre">EncodingError</span></code> for a null function value of a type that cannot hold null (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1333">#1333</a>)</p></li>
 </ul>
 </li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Convert names with <code class="docutils literal notranslate"><span class="pre">UInt</span></code>, <code class="docutils literal notranslate"><span class="pre">ULong</span></code>, <code class="docutils literal notranslate"><span class="pre">SInt</span></code>, <code class="docutils literal notranslate"><span class="pre">FoV</span></code>, a plural acronym or digits next to an acronym as written, e.g. <code class="docutils literal notranslate"><span class="pre">Type::uint</span></code>, <code class="docutils literal notranslate"><span class="pre">Camera::fov</span></code> and <code class="docutils literal notranslate"><span class="pre">MapFilterType::evas</span></code> in place of <code class="docutils literal notranslate"><span class="pre">u_int</span></code>, <code class="docutils literal notranslate"><span class="pre">fo_v</span></code> and <code class="docutils literal notranslate"><span class="pre">ev_as</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1339">#1339</a>)</p></li>
 </ul>
 </section>
 <section id="java-client">
@@ -913,6 +914,8 @@
 <li><p>Give an <code class="docutils literal notranslate"><span class="pre">EncodingException</span></code> the message of its cause (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1333">#1333</a>)</p></li>
 </ul>
 </li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Name enumeration constants in upper snake case, e.g. <code class="docutils literal notranslate"><span class="pre">AltimeterMode.AGL</span></code>, <code class="docutils literal notranslate"><span class="pre">AlarmType.SOI_CHANGE</span></code> and <code class="docutils literal notranslate"><span class="pre">TypeCode.UINT32</span></code> in place of <code class="docutils literal notranslate"><span class="pre">A_GL</span></code>, <code class="docutils literal notranslate"><span class="pre">S_OI_CHANGE</span></code> and <code class="docutils literal notranslate"><span class="pre">U_INT32</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1339">#1339</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Lower case a leading acronym in method and field names, e.g. <code class="docutils literal notranslate"><span class="pre">CelestialBody.mslPosition</span></code> and <code class="docutils literal notranslate"><span class="pre">Type.uint</span></code> in place of <code class="docutils literal notranslate"><span class="pre">mSLPosition</span></code> and <code class="docutils literal notranslate"><span class="pre">uInt</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1339">#1339</a>)</p></li>
 </ul>
 </section>
 <section id="lua-client">
@@ -946,6 +949,7 @@
 <li><p><span class="changelog-marker breaking">Breaking</span> Raise <code class="docutils literal notranslate"><span class="pre">bad</span> <span class="pre">argument</span> <span class="pre">:issue:`2`</span> <span class="pre">to</span> <span class="pre">'connect_local'</span></code> for a local socket path that is too long (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1333">#1333</a>)</p></li>
 </ul>
 </li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Convert names with <code class="docutils literal notranslate"><span class="pre">UInt</span></code>, <code class="docutils literal notranslate"><span class="pre">ULong</span></code>, <code class="docutils literal notranslate"><span class="pre">SInt</span></code>, <code class="docutils literal notranslate"><span class="pre">FoV</span></code>, a plural acronym or digits next to an acronym as written, e.g. <code class="docutils literal notranslate"><span class="pre">Type.uint</span></code>, <code class="docutils literal notranslate"><span class="pre">Camera.fov</span></code> and <code class="docutils literal notranslate"><span class="pre">MapFilterType.evas</span></code> in place of <code class="docutils literal notranslate"><span class="pre">u_int</span></code>, <code class="docutils literal notranslate"><span class="pre">fo_v</span></code> and <code class="docutils literal notranslate"><span class="pre">ev_as</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1339">#1339</a>)</p></li>
 </ul>
 </section>
 <section id="python-client">
@@ -1031,6 +1035,7 @@
 </ul>
 </li>
 <li><p>Compile <code class="docutils literal notranslate"><span class="pre">match</span></code> statements in server side functions (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1337">#1337</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Convert names with <code class="docutils literal notranslate"><span class="pre">UInt</span></code>, <code class="docutils literal notranslate"><span class="pre">ULong</span></code>, <code class="docutils literal notranslate"><span class="pre">SInt</span></code>, <code class="docutils literal notranslate"><span class="pre">FoV</span></code>, a plural acronym or digits next to an acronym as written, e.g. <code class="docutils literal notranslate"><span class="pre">Type.uint</span></code>, <code class="docutils literal notranslate"><span class="pre">Camera.fov</span></code> and <code class="docutils literal notranslate"><span class="pre">MapFilterType.evas</span></code> in place of <code class="docutils literal notranslate"><span class="pre">u_int</span></code>, <code class="docutils literal notranslate"><span class="pre">fo_v</span></code> and <code class="docutils literal notranslate"><span class="pre">ev_as</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1339">#1339</a>)</p></li>
 </ul>
 </section>
 <section id="krpctools">
