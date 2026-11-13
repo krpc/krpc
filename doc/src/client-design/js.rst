@@ -65,7 +65,8 @@ program compares:
   false.
 
 Structures are classes, so a plain object is never a value. A trailing plain object, with the
-prototype ``Object.prototype`` or ``null``, then holds arguments by name.
+prototype ``Object.prototype`` or ``null``, then holds arguments by name. A protobuf message, such
+as a ``ProcedureCall``, is a plain object too, and ``isMessage`` tells it apart.
 
 ``codec.ts`` encodes values with the ``BinaryReader`` and ``BinaryWriter`` of
 ``@bufbuild/protobuf``. Its 64-bit integers are ``bigint``, so a ``uint64`` above 2^53 round
@@ -241,6 +242,24 @@ only for its callbacks would stop at random.
 stream at the end of its block. Removing a stream ends it before the ``RemoveStream`` call, so a
 value that arrives during the call is dropped.
 
+Server Side Functions
+---------------------
+
+``functions.ts`` adds the server side functions built with the expression API. The client has no
+function compiler yet.
+
+* ``getCall`` takes a function returning one call, as ``addStream`` does, and returns the
+  ``ProcedureCall`` it captures. It is synchronous, as the capture sends nothing.
+* ``addStream`` takes a ``KRPC.Expression`` in place of a function, and ``addEvent`` takes one
+  too. They call ``KRPC.AddFunctionStream`` and ``KRPC.AddEvent``, which the services leave out as
+  internal. The stream is registered in the message handler, as for ``AddStream``.
+* **The function supplies its types.** ``run`` and ``addStream`` read the types of the parameters
+  and the value from the ``KRPC.Expression``, as in the :doc:`Lua client <lua>`. They read them
+  once per function, cached in a ``WeakMap`` keyed by the object. TypeScript erases a type
+  argument, so ``run<T>`` and ``addStream<T>`` name a type the client cannot check.
+* A function with parameters has no stream or event, as nothing passes its arguments. The client
+  rejects one with a ``TypeError`` before calling the server.
+
 Transports
 ----------
 
@@ -259,8 +278,8 @@ Mapping the Spec to JavaScript
    * - Calls
      - A ``Promise`` per call, resolved with the result
    * - Streams, events
-     - ``Connection.addStream``, ``Stream`` and ``Event``, whose reads and waits return a
-       ``Promise``. The ``value`` getter reads a stream's latest value at once
+     - ``Connection.addStream``, ``Connection.addEvent``, ``Stream`` and ``Event``, whose reads and
+       waits return a ``Promise``. The ``value`` getter reads a stream's latest value at once
    * - Stream error
      - ``StreamError``, extending ``RemoteError``. It is also ``KRPC.StreamRemovedException``
    * - Callbacks
@@ -299,6 +318,10 @@ Mapping the Spec to JavaScript
      - Unsupported, as JavaScript has no kind of error apart from its ordinary ones
    * - Conditions
      - None. See `Values and Waits`_
+   * - Getting a call as a value
+     - ``Connection.getCall``, given a function returning one call
+   * - Value type of a server side function
+     - The function's own type, read from the server. A null value is ``null`` at any type
    * - Flags enumeration
      - A ``RemoteFlags``, combined with ``union``, ``intersection``, ``difference`` and
        ``contains``, as JavaScript has no operator overloading

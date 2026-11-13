@@ -26,7 +26,8 @@ compiled code translates into, which every client can build directly.
 .. note::
 
    Compiled functions need the Python or C# client. Events and function streams need the Python,
-   C#, C++ or Java client. ``Run`` needs one of those, the C-nano client or the Lua client.
+   C#, C++, Java or JavaScript client. ``Run`` needs one of those, the C-nano client or the Lua
+   client.
 
 .. _server-side-functions-compiled:
 
@@ -583,6 +584,10 @@ running, catch the exception in the function:
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/NotLoadedCheck.lua
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/NotLoadedEvent.js
+
 The event's handler gives ``False``, so the event does not fire. A stream's handler can give a
 last good value, kept in a state variable. With the expression API, :meth:`Expression.try_catch`
 names the exception as ``"KRPC", "ObjectNotLoadedException"``.
@@ -675,9 +680,9 @@ server.
 The Expression API
 ------------------
 
-The expression API builds a server side function node by node. It is how the C++, Java, C-nano
-and Lua clients write functions, and how C# writes the statements a lambda cannot hold. The
-compilers produce the same functions.
+The expression API builds a server side function node by node. It is how the C++, Java, C-nano,
+Lua and JavaScript clients write functions, and how C# writes the statements a lambda cannot
+hold. The compilers produce the same functions.
 
 .. note::
 
@@ -750,6 +755,10 @@ and a comparison:
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/AltitudeCheck.lua
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/CustomEvent.js
+
 Two kinds of object appear here:
 
 * A **procedure call message** describes an RPC without invoking it. Each client builds one
@@ -764,8 +773,9 @@ Building a function costs one RPC per node, paid once.
 
 The factory methods are static methods. In C#, Java and C++, the examples call them through the
 class bound to the connection, which passes the connection to each one: ``Expression.Bind`` in C#
-and ``bind`` in Java and C++. Python and Lua reach the class through the connection, as
-``conn.krpc.Expression``.
+and ``bind`` in Java and C++. Python, Lua and JavaScript reach the class through the connection, as
+``conn.krpc.Expression``. In JavaScript, each factory method returns a ``Promise``, so the
+example awaits each node.
 
 Operators and Types
 ^^^^^^^^^^^^^^^^^^^
@@ -820,6 +830,13 @@ This truncates the altitude to a whole number of meters:
          :start-after: [docs]
          :end-before: [/docs]
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/TruncateAltitude.js
+         :language: js
+         :start-after: [docs]
+         :end-before: [/docs]
+
 Expressions are statically typed, with the types of the server's procedures. Numbers of
 different types convert to a common type, so an integer multiplies a double directly.
 
@@ -869,6 +886,10 @@ streamed too, and runs for its effects, as in :ref:`server-side-functions-contro
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/FunctionStream.lua
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/FunctionStream.js
+
 Some clients take the type of the stream's values as a type argument, and others read the
 function's return type from the server. A function stream behaves like any other stream, and its
 rate can be limited in the usual way.
@@ -905,6 +926,10 @@ the procedure, so any engine can supply it:
    .. group-tab:: Lua
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/OutOfFuelCheck.lua
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/CollectionEvent.js
 
 A function passed to a collection operation is built from two pieces:
 
@@ -1000,6 +1025,13 @@ and build one. :meth:`Expression.get_field` reads a field by name:
          :start-after: [docs]
          :end-before: [/docs]
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/StructureField.js
+         :language: js
+         :start-after: [docs]
+         :end-before: [/docs]
+
 :meth:`Expression.create_struct` builds a structure from its type and its field values, in the
 order the structure declares them. A field's name is the one the service declares, as shown in
 the API documentation. :meth:`Expression.get_field_by_index` reads a field by its position in
@@ -1041,6 +1073,10 @@ This builds and runs ``total = 0; for x in [1, 2, 3]: total += x``, which return
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/FunctionStatements.lua
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/FunctionStatements.js
+
 Statements are ordinary expression nodes. :meth:`Expression.block_with_variables` sequences
 statements and declares local variables, and its value is the value of its last statement.
 
@@ -1079,6 +1115,10 @@ This loop adds 10 to a total for the values 1 and 2, and 1 for any other value. 
    .. group-tab:: Lua
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/SwitchStatement.lua
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/SwitchStatement.js
 
 :meth:`Expression.match` takes the value, the test values of each case and the body of each
 case. It runs the body of the first case with a test value equal to the value, as
@@ -1151,10 +1191,18 @@ particular vessel:
          :start-after: [docs]
          :end-before: [/docs]
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/TargetEvent.js
+         :language: js
+         :start-after: [docs]
+         :end-before: [/docs]
+
 :meth:`Expression.constant_object` takes the object's identifier in the communication protocol.
-Each client has a function that returns it: ``krpc.get_object_id`` in Python and Lua, ``RemoteObject.GetObjectId`` in
-C#, ``krpc::get_object_id`` in C++ and ``RemoteObject.getObjectId`` in Java. In C, an object's
-handle is its identifier. The compilers embed a captured remote object this way.
+Each client has a function that returns it: ``krpc.get_object_id`` in Python and Lua,
+``RemoteObject.GetObjectId`` in C#, ``krpc::get_object_id`` in C++, ``RemoteObject.getObjectId``
+in Java and ``getObjectId`` in JavaScript. In C, an object's handle is its identifier. The
+compilers embed a captured remote object this way.
 
 Exceptions in the Expression API
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1207,6 +1255,13 @@ fuel check from :ref:`Exceptions <server-side-functions-exceptions>`:
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/ThrowException.lua
          :language: lua
+         :start-after: [docs]
+         :end-before: [/docs]
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/ThrowException.js
+         :language: js
          :start-after: [docs]
          :end-before: [/docs]
 

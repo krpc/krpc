@@ -16,6 +16,7 @@ import {
   type ServerErrorDetails,
   StreamError,
 } from "./errors.js";
+import { Functions } from "./functions.js";
 import { accessorName, camelCase } from "./naming.js";
 import { ObjectCache, RemoteObject, RemoteService } from "./objects.js";
 import { registered } from "./registry.js";
@@ -29,8 +30,9 @@ import {
   ServicesSchema,
 } from "./schema/krpc_pb.js";
 import type { Services } from "./services/index.js";
+import type { Expression } from "./services/KRPC.js";
 import { Session } from "./session.js";
-import { type Stream, StreamManager } from "./streams.js";
+import { type Event, type Stream, StreamManager } from "./streams.js";
 import {
   MalformedDefinitionsError,
   type Struct,
@@ -75,8 +77,15 @@ export class Connection {
   /** Adds a stream of the call the function returns, such as
    * `conn.addStream(() => flight.getMeanAltitude())`. The function is run to build the call,
    * which it does not send. */
-  async addStream<T>(call: () => Promise<T>): Promise<Stream<T>> {
+  addStream<T>(call: () => Promise<T>): Promise<Stream<T>>;
+  /** Adds a stream of the value of a server side function, a KRPC.Expression with no
+   * parameters. The type parameter names the type of the value, which is not checked. */
+  addStream<T = unknown>(fn: Expression): Promise<Stream<T>>;
+  async addStream(call: (() => Promise<unknown>) | Expression): Promise<Stream<unknown>> {
     const context = contextOf(this);
+    if (typeof call !== "function") {
+      return await context.functions.addStream(call);
+    }
     const captured = capture(call);
     const kind = captured.signature.result?.kind;
     if (kind === "event" || kind === "stream") {
@@ -84,7 +93,34 @@ export class Connection {
         `${captured.signature.procedure} returns a ${kind}, which has a stream of its own`,
       );
     }
-    return await context.streams.add<T>(captured.call, captured.signature.result);
+    return await context.streams.add(captured.call, captured.signature.result);
+  }
+
+  /** Adds an event over a server side function, a KRPC.Expression of a bool with no parameters.
+   * The event fires when the value becomes true, and each time it becomes true again. */
+  addEvent(fn: Expression): Promise<Event> {
+    return contextOf(this).functions.addEvent(fn);
+  }
+
+  /** Returns the call the function returns, such as
+   * `conn.getCall(() => flight.getMeanAltitude())`, for `KRPC.Expression.call`. The function is
+   * run to build the call, which it does not send. */
+  getCall(call: () => Promise<unknown>): ProcedureCall {
+    return capture(call).call;
+  }
+
+  /** Compiles a server side function, a KRPC.Expression, on the server, so that its first run
+   * is as fast as later ones. Resolves with the function. */
+  compile(fn: Expression): Promise<Expression> {
+    return contextOf(this).functions.compile(fn);
+  }
+
+  /** Runs a server side function, a KRPC.Expression, within a single physics tick, and resolves
+   * with its value. The arguments are passed to the function's parameters, in order. The type
+   * parameter names the type of the value, which is not checked. Resolves with undefined for a
+   * function with no value. */
+  run<T = unknown>(fn: Expression, ...args: unknown[]): Promise<T> {
+    return contextOf(this).functions.run(fn, args) as Promise<T>;
   }
 
   /** Adds a function to call once for each stream update message, after the callbacks of its
@@ -107,6 +143,7 @@ export type DynamicConnection = Connection & { readonly [service: string]: any }
 export interface Context extends ObjectFactory {
   readonly session: Session;
   readonly streams: StreamManager;
+  readonly functions: Functions;
   readonly types: Types;
   readonly services: readonly Service[];
   /** Warns of the use of a deprecated member, once per member. */
@@ -162,10 +199,18 @@ export async function connect(options: ConnectOptions = {}): Promise<Connection>
         return new cls(id);
       },
     };
+    const types = new Types(services, warn);
+    const streams = new StreamManager(session, factory);
     const context: Context = {
       session,
-      streams: new StreamManager(session, factory),
-      types: new Types(services, warn),
+      streams,
+      functions: new Functions(
+        (procedure, args) => callKRPC(context, procedure, args),
+        types,
+        streams,
+        factory,
+      ),
+      types,
       services,
       warn,
       object: factory.object,
@@ -269,7 +314,20 @@ function signature(types: Types, service: string, procedure: Procedure): Signatu
   }
 }
 
-/** A call built by a member while addStream runs its function, which the member does not send. */
+/** Calls a procedure of the KRPC service, such as an internal one the services leave out. */
+function callKRPC(context: Context, name: string, args: readonly unknown[]): Promise<unknown> {
+  const procedure = context.services
+    .find((x) => x.name === "KRPC")
+    ?.procedures.find((x) => x.name === name);
+  const sig = procedure === undefined ? null : signature(context.types, "KRPC", procedure);
+  if (sig === null) {
+    return Promise.reject(new TypeError(`The server has no procedure KRPC.${name}`));
+  }
+  return invoke(context, sig, args);
+}
+
+/** A call built by a member while addStream or getCall runs its function, which the member does
+ * not send. */
 interface CapturedCall {
   readonly signature: Signature;
   readonly call: ProcedureCall;

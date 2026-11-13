@@ -324,7 +324,8 @@ Events
 ------
 
 An *event* tells your program when something happens in the game. A procedure that returns an
-event, such as one from a mod's service, gives you an :class:`Event`:
+event, such as one from a mod's service, gives you an :class:`Event`. So does
+:meth:`Connection.addEvent`, for a :ref:`server side function <js-client-functions>`:
 
 .. code-block:: js
 
@@ -339,6 +340,51 @@ An event ends in the same ways as a :ref:`stream <js-client-stream-endings>`. Wh
 just before the server ends it, your next wait returns for that firing first. Removing the event
 or closing the connection ends it at once. :attr:`Event.stream` is the event's stream, of a
 ``boolean`` that is ``true`` once the event has fired.
+
+.. _js-client-functions:
+
+Server Side Functions
+---------------------
+
+A server side function runs inside the game. You build it in your program with the expression
+API, and the client sends it to the server, which runs it there. The following reads the vessel's
+altitude and speed together:
+
+.. literalinclude:: /scripts/js/RunFunction.js
+
+:meth:`Connection.getCall` takes a function that returns one call, as :meth:`Connection.addStream`
+does, and returns the call as a message for ``Expression.call`` to embed in the function. Each
+method of ``conn.krpc.Expression`` builds one node of the function on the server, and returns a
+``Promise`` of it. :ref:`server-side-functions-api` in the :ref:`server side functions guide
+<server-side-functions>` describes how to build functions.
+
+Running a Function
+^^^^^^^^^^^^^^^^^^
+
+:meth:`Connection.run` runs a function once, and returns its value. The server runs the whole
+function within one physics tick, so every value it reads comes from the same moment in the game.
+In the example, the altitude and the speed are consistent with each other, which two separate calls
+cannot guarantee.
+
+A function takes arguments through its parameters. The following compiles a function ahead of its
+first run, then passes it an argument:
+
+.. literalinclude:: /scripts/js/RunFunctionArguments.js
+
+:meth:`Connection.compile` makes the first run as fast as later ones. The client reads the types
+of a function's parameters and value from the server, once per function. TypeScript types the
+value as ``unknown``, or as the type you name with ``run<T>``, which the client does not check.
+
+Function Streams and Events
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+:meth:`Connection.addEvent` adds an event that fires when a function's value becomes ``true``.
+:meth:`Connection.addStream` also takes a function, and streams its value:
+
+.. literalinclude:: /scripts/js/FunctionEvent.js
+
+The server computes the function on each stream update. A function stream or event behaves as any
+other, and takes no arguments, so a function with parameters rejects with a ``TypeError``.
 
 Deprecated Members
 ------------------
@@ -418,15 +464,53 @@ Client API Reference
 
    .. method:: addStream(call)
 
-      Adds a stream of a call.
+      Adds a stream of a call, or of the value of a server side function.
 
       :param call: A function that returns one call of a procedure, method or property getter,
                    such as ``() => flight.getMeanAltitude()``. The client runs it to build the
-                   call, which it does not send.
+                   call, which it does not send. Or a ``KRPC.Expression`` with no parameters.
       :returns: A ``Promise`` of the :class:`Stream`.
 
       Rejects with a :class:`StreamError` for a procedure that returns an event, and with a
-      ``TypeError`` for a function that does not return one call.
+      ``TypeError`` for a function that does not return one call, or a server side function with
+      parameters.
+
+   .. method:: addEvent(fn)
+
+      Adds an event that fires when the value of a server side function becomes ``true``, and
+      each time it becomes ``true`` again.
+
+      :param fn: A ``KRPC.Expression`` of a ``boolean``, with no parameters.
+      :returns: A ``Promise`` of the :class:`Event`.
+
+   .. method:: getCall(call)
+
+      The call a function returns, as a ``ProcedureCall`` message for ``KRPC.Expression.call``.
+
+      :param call: A function that returns one call, as for :meth:`addStream`. The client runs it
+                   to build the call, which it does not send.
+
+      Throws a ``TypeError`` for a function that does not return one call.
+
+   .. method:: compile(fn)
+
+      Compiles a server side function on the server, so that its first run is as fast as later
+      ones.
+
+      :param fn: A ``KRPC.Expression``.
+      :returns: A ``Promise`` of the function.
+
+   .. method:: run(fn, ...args)
+
+      Runs a server side function once, within a single physics tick.
+
+      :param fn: A ``KRPC.Expression``.
+      :param args: The arguments, one for each of the function's parameters, in order.
+      :returns: A ``Promise`` of the function's value, or of ``undefined`` for a function with no
+                value.
+
+      Rejects with a ``TypeError`` for the wrong number of arguments, or an argument of the wrong
+      type, and with the error the function throws.
 
    .. method:: addUpdateCallback(callback)
 
@@ -507,7 +591,7 @@ Client API Reference
 .. class:: Event()
 
    An event, which fires each time its stream's value becomes ``true``. A procedure that returns an
-   event gives one.
+   event gives one, as does :meth:`Connection.addEvent`.
 
    .. method:: wait(timeout)
 

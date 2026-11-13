@@ -353,6 +353,7 @@ ts_project(
     srcs = glob([
         "src/scripts/js/*.js",
         "src/scripts/api/**/*.js",
+        "src/scripts/user-guide/**/*.js",
     ]),
     allow_js = True,
     no_emit = True,

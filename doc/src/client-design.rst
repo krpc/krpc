@@ -251,10 +251,10 @@ Stream and Call Forms
 A program adding a stream needs to name a remote procedure without calling it. The same applies when
 it gets a call as a value, such as to use in an expression. The clients do this in two ways:
 
-* Python, C# and Java have one method for each purpose, ``add_stream`` and ``get_call`` or their
-  equivalents. It takes any property or method, and works out the procedure at run time. Lua has
-  only ``get_call``, as it has no streams. JavaScript has only ``addStream``, which takes a
-  function returning the call, as C#'s lambda does.
+* Python, C#, Java and JavaScript have one method for each purpose, ``add_stream`` and
+  ``get_call`` or their equivalents. It takes any property or method, and works out the procedure
+  at run time. Lua has only ``get_call``, as it has no streams. JavaScript's take a function
+  returning the call, as C#'s lambda does.
 * C++ and C-nano cannot look up a method at run time. Their generated stubs instead have extra
   functions for each procedure. C++ adds ones ending in ``_stream`` and ``_call``. C-nano has no
   streams, so it adds only ``_call``.
@@ -287,7 +287,7 @@ For the ``MeanAltitude`` property of a ``Flight`` object:
      - ``conn:get_call(flight.get_mean_altitude, flight)``
    * - JavaScript
      - ``conn.addStream(() => flight.getMeanAltitude())``
-     - None
+     - ``conn.getCall(() => flight.getMeanAltitude())``
 
 In Python, C#, Java and JavaScript, the stream runs on the connection the method is called on,
 whichever connection the object came from. In C++, it runs on the object's client, or for a

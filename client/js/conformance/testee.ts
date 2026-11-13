@@ -33,12 +33,14 @@ import {
   Type_TypeCode as TypeCode,
   TypeSchema,
 } from "../src/schema/krpc_pb.js";
+import type { Expression } from "../src/services/KRPC.js";
 // The generated module of the test service, which declares its enumerations and structures
 import * as TestService from "../src/services/TestService.js";
 import { Event, Stream } from "../src/streams.js";
 import { RemoteEnum, RemoteFlags, RemoteStruct, type Type } from "../src/types.js";
 import { equals } from "../src/values.js";
 import {
+  type AddFunctionStream,
   type AddStream,
   type Behavior,
   type Command,
@@ -55,6 +57,7 @@ import {
   OutputSchema,
   type Reply,
   ReplySchema,
+  type RunFunction,
   type Value,
   ValueSchema,
 } from "./testee_pb.js";
@@ -72,6 +75,7 @@ const PROFILES = [
   "streams",
   "events",
   "callbacks",
+  "functions",
 ];
 
 /** The error classes an error can be an instance of, by name. */
@@ -103,6 +107,9 @@ const tasks = new Map<string, Promise<void>>();
 /** The streams and events the testee holds, by handle, with the type of a stream's values. A copy
  * of a handle names the same object. */
 const handles = new Map<bigint, { value: Stream<unknown> | Event; type: Type | undefined }>();
+/** The handles of streams of server side functions whose type, as the driver names it, cannot
+ * hold null. */
+const notNullable = new Set<bigint>();
 /** The functions that remove the callbacks the driver added, by callback id. */
 const removers = new Map<bigint, () => void>();
 /** The releases of each callback's blocked calls: those given ahead of a call, and the calls
@@ -275,7 +282,9 @@ function toValueCase(
   }
   if (Array.isArray(value)) {
     const items = value.map((x, i) => toValue(x, itemType(type, i)));
-    return { case: "list", value: { items } };
+    return type?.kind === "tuple"
+      ? { case: "tuple", value: { items } }
+      : { case: "list", value: { items } };
   }
   if (value instanceof Set) {
     return { case: "set", value: { items: [...value].map((x) => toValue(x, itemType(type, 0))) } };
@@ -370,6 +379,36 @@ async function addStream(conn: DynamicConnection, command: AddStream): Promise<R
   }
   const stream = await conn.addStream(call);
   return { case: "stream", value: addHandle(stream, type) };
+}
+
+/** The type of a function's value the driver names, or undefined for none. */
+function functionType(conn: Connection, name: string): Type | undefined {
+  return name === "" ? undefined : codecType(conn, name);
+}
+
+/** Adds a stream of a server side function. */
+async function addFunctionStream(
+  conn: DynamicConnection,
+  command: AddFunctionStream,
+): Promise<Reply["result"]> {
+  const type = functionType(conn, command.type);
+  const stream = await conn.addStream(fromValue(conn, command.function) as Expression);
+  const handle = addHandle(stream, type);
+  if (type !== undefined && !type.nullable) {
+    notNullable.add(handle);
+  }
+  return { case: "stream", value: handle };
+}
+
+/** Runs a server side function. */
+async function runFunction(conn: DynamicConnection, command: RunFunction): Promise<Value> {
+  const type = functionType(conn, command.type);
+  const args = command.arguments.map((x) => fromValue(conn, x));
+  const result = await conn.run(fromValue(conn, command.function) as Expression, ...args);
+  if (result === null && type !== undefined && !type.nullable) {
+    throw new Unsupported("A JavaScript value can be null at any type");
+  }
+  return toValue(result, type);
 }
 
 type Call = MessageInitShape<typeof NotificationSchema>["call"];
@@ -638,12 +677,21 @@ function splitTypes(names: string): string[] {
 /** A function that uses a member of a service: a call of a procedure, or a read of the service,
  * a type, a value of an enumeration or a field of a structure. */
 function memberUse(conn: DynamicConnection, command: DeprecationSignals): () => unknown {
-  if (command.use !== "" && (command.use !== "stream" || command.invoke === undefined)) {
+  if (command.use !== "" && command.invoke === undefined) {
     throw new Unsupported(`No ${command.use} of a procedure`);
   }
   if (command.invoke !== undefined) {
     const call = resolve(conn, command.invoke);
-    return command.use === "stream" ? () => conn.addStream(call) : call;
+    switch (command.use) {
+      case "":
+        return call;
+      case "stream":
+        return () => conn.addStream(call);
+      case "call":
+        return () => conn.getCall(call);
+      default:
+        throw new Unsupported(`No ${command.use} of a procedure`);
+    }
   }
   const serviceName = camelCase(command.service);
   if (command.member === "") {
@@ -714,7 +762,11 @@ async function dispatch(command: Command): Promise<Reply["result"]> {
     case "get": {
       const { value, type } = handleOf(content.value.stream);
       const stream = value instanceof Event ? value.stream : value;
-      return { case: "value", value: toValue(await stream.get(), type) };
+      const result = await stream.get();
+      if (result === null && notNullable.has(content.value.stream)) {
+        throw new Unsupported("A JavaScript value can be null at any type");
+      }
+      return { case: "value", value: toValue(result, type) };
     }
     case "wait":
       return {
@@ -747,8 +799,14 @@ async function dispatch(command: Command): Promise<Reply["result"]> {
     }
     case "copyStream": {
       const { value, type } = handleOf(content.value.stream);
-      return { case: "stream", value: addHandle(value, type) };
+      const handle = addHandle(value, type);
+      if (notNullable.has(content.value.stream)) {
+        notNullable.add(handle);
+      }
+      return { case: "stream", value: handle };
     }
+    case "addFunctionStream":
+      return await addFunctionStream(connection(command), content.value);
     case "eventStream":
       return {
         case: "stream",
@@ -862,6 +920,39 @@ async function dispatchValue(command: Command): Promise<Value> {
     }
     case "deprecationSignals":
       return await deprecationSignals(connection(command), content.value);
+    case "call": {
+      const conn = connection(command);
+      if (content.value.invoke === undefined) {
+        throw new Error("No call");
+      }
+      const call = conn.getCall(resolve(conn, content.value.invoke));
+      return toValue(await conn.krpc.Expression.call(call));
+    }
+    case "callWithArguments": {
+      const conn = connection(command);
+      if (content.value.invoke === undefined) {
+        throw new Error("No call");
+      }
+      const call = conn.getCall(resolve(conn, content.value.invoke));
+      const args = new Map(
+        Object.entries(content.value.arguments).map(([position, x]) => [
+          Number(position),
+          fromValue(conn, x) as Expression,
+        ]),
+      );
+      return toValue(await conn.krpc.Expression.callWithArguments(call, args));
+    }
+    case "compileFunction": {
+      const conn = connection(command);
+      await conn.compile(fromValue(conn, content.value.function) as Expression);
+      return toValue(undefined);
+    }
+    case "addFunctionEvent": {
+      const conn = connection(command);
+      return toValue(await conn.addEvent(fromValue(conn, content.value.function) as Expression));
+    }
+    case "runFunction":
+      return await runFunction(connection(command), content.value);
     case "hash":
       // JavaScript has no hash of a value
       return toValue(null);
