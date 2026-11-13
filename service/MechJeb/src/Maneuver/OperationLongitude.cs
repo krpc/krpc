@@ -13,7 +13,7 @@ namespace KRPC.MechJeb.Maneuver
 
         internal static new void Load ()
         {
-            timeSelector = TimeSelectorField (Reflection.Type ("MuMech.OperationLongitude"));
+            timeSelector = TimeSelectorField (Bindings.Type ("MuMech.OperationLongitude"));
         }
 
         internal OperationLongitude () : base ("OperationLongitude")

@@ -4,14 +4,25 @@ using KRPC.Utils;
 
 namespace KRPC.SpaceCenter.ExternalAPI
 {
-    static class RemoteTech
+    /// <summary>
+    /// RemoteTech's API, which the autopilot and the RemoteTech service both use. SpaceCenter
+    /// supports no RemoteTech parts, so its registry entry does not name the mod.
+    /// </summary>
+    sealed class RemoteTech : ModAPI
     {
-        public static void Load ()
+        public RemoteTech () : base ("RemoteTech", "RemoteTech")
         {
-            IsAvailable = (APILoader.Load (typeof(RemoteTech), "RemoteTech", "RemoteTech.API.API", new Version (1, 8)) != null);
         }
 
-        public static bool IsAvailable { get; private set; }
+        protected override void Bind (ModBinder mod)
+        {
+            mod.Statics (typeof (RemoteTech), "RemoteTech.API.API");
+            // The autopilot calls these every physics frame, so a missing one fails the load
+            var api = mod.Type ("RemoteTech.API.API").Require;
+            HasFlightComputer = api.Method<Func<Guid, bool>> ("HasFlightComputer");
+            AddSanctionedPilot = api.Method<Action<Guid, Action<FlightCtrlState>>> ("AddSanctionedPilot");
+            RemoveSanctionedPilot = api.Method<Action<Guid, Action<FlightCtrlState>>> ("RemoveSanctionedPilot");
+        }
 
         public static Func<Guid, bool> HasLocalControl { get; internal set; }
 

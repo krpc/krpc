@@ -393,8 +393,7 @@ namespace KRPC.SpaceCenter
             Action<FlightCtrlState> action;
             if (controlDelegates.TryGetValue (vessel, out action)) {
                 vessel.OnFlyByWire -= new FlightInputCallback (action);
-                if (RemoteTech.IsAvailable && remoteTechSanctionedDelegates.Contains (vessel) &&
-                    RemoteTech.RemoveSanctionedPilot != null)
+                if (ModAPI.Get<RemoteTech> ().IsAvailable && remoteTechSanctionedDelegates.Contains (vessel))
                     RemoteTech.RemoveSanctionedPilot (vessel.id, action);
                 controlDelegates.Remove (vessel);
             }
@@ -492,7 +491,7 @@ namespace KRPC.SpaceCenter
                 controlDelegates [vessel] = action;
                 vessel.OnFlyByWire += new FlightInputCallback (action);
             }
-            if (!RemoteTech.IsAvailable)
+            if (!ModAPI.Get<RemoteTech> ().IsAvailable)
                 return;
             // RemoteTech runs a sanctioned pilot from its own fly-by-wire hook, after the
             // flight computer's commands. The vessel's callback would merge the inputs a

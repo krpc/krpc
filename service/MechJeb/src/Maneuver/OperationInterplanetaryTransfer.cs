@@ -1,4 +1,5 @@
 using KRPC.Service.Attributes;
+using KRPC.Utils;
 
 namespace KRPC.MechJeb.Maneuver
 {
@@ -8,12 +9,12 @@ namespace KRPC.MechJeb.Maneuver
     [KRPCClass (Service = "MechJeb")]
     public sealed class OperationInterplanetaryTransfer : Operation
     {
-        static Value<bool> waitForPhaseAngle;
+        static Field<object, bool> waitForPhaseAngle;
 
         internal static new void Load ()
         {
-            var type = Reflection.Type ("MuMech.OperationInterplanetaryTransfer");
-            waitForPhaseAngle = Reflection.Field<bool> (type, "WaitForPhaseAngle");
+            var type = Bindings.Type ("MuMech.OperationInterplanetaryTransfer");
+            waitForPhaseAngle = type.Field<object, bool> ("WaitForPhaseAngle");
         }
 
         internal OperationInterplanetaryTransfer () : base ("OperationInterplanetaryTransfer")

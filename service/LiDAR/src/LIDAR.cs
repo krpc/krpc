@@ -15,8 +15,7 @@ namespace KRPC.LiDAR
     {
         static void CheckAPI()
         {
-            if (!API.IsAvailable)
-                throw new InvalidOperationException("LiDAR is not available");
+            ModAPI.Get<API>().CheckAvailable();
         }
 
         /// <summary>
@@ -25,7 +24,7 @@ namespace KRPC.LiDAR
         [KRPCProperty]
         public static bool Available
         {
-            get { return API.IsAvailable; }
+            get { return ModAPI.Get<API>().IsAvailable; }
         }
 
         /// <summary>

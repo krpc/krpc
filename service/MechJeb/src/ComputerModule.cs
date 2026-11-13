@@ -1,5 +1,6 @@
 using System;
 using KRPC.Service.Attributes;
+using KRPC.Utils;
 
 namespace KRPC.MechJeb
 {
@@ -8,7 +9,7 @@ namespace KRPC.MechJeb
     /// </summary>
     public abstract class ComputerModule
     {
-        static Value<bool> enabled;
+        static Func<object, bool> enabled;
         static Func<object, object> users;
         static Action<object, object> usersAdd;
         static Action<object, object> usersRemove;
@@ -17,12 +18,12 @@ namespace KRPC.MechJeb
 
         internal static void Load ()
         {
-            var type = Reflection.Type ("MuMech.ComputerModule");
-            enabled = Reflection.Field<bool> (type, "Enabled");
-            users = Reflection.Field<object> (type, "Users").Get;
-            var userPool = Reflection.Type ("MuMech.UserPool");
-            usersAdd = Reflection.Method<Action<object, object>> (userPool, "Add");
-            usersRemove = Reflection.Method<Action<object, object>> (userPool, "Remove");
+            var type = Bindings.Type ("MuMech.ComputerModule");
+            enabled = type.Getter<object, bool> ("Enabled");
+            users = type.Getter<object, object> ("Users");
+            var userPool = Bindings.Type ("MuMech.UserPool");
+            usersAdd = userPool.Method<Action<object, object>> ("Add");
+            usersRemove = userPool.Method<Action<object, object>> ("Remove");
         }
 
         /// <summary>
@@ -48,7 +49,7 @@ namespace KRPC.MechJeb
         /// module stays enabled while any other user holds it.
         /// </remarks>
         public virtual bool Enabled {
-            get { return enabled.Get (Instance); }
+            get { return enabled (Instance); }
             set { SetEnabled (Instance, value); }
         }
 
@@ -89,11 +90,11 @@ namespace KRPC.MechJeb
     /// </summary>
     public abstract class AutopilotModule : KRPCComputerModule
     {
-        static Value<string> status;
+        static Func<object, string> status;
 
         internal static new void Load ()
         {
-            status = Reflection.Field<string> (Reflection.Type ("MuMech.AutopilotModule"), "Status");
+            status = Bindings.Type ("MuMech.AutopilotModule").Getter<object, string> ("Status");
         }
 
         internal AutopilotModule (string name) : base (name)
@@ -105,7 +106,7 @@ namespace KRPC.MechJeb
         /// </summary>
         [KRPCProperty]
         public string Status {
-            get { return status.Get (Instance); }
+            get { return status (Instance); }
         }
     }
 

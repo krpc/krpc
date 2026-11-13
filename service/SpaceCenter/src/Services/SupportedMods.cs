@@ -11,7 +11,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public static bool FARAvailable {
-            get { return ExternalAPI.FAR.IsAvailable; }
+            get { return ModAPI.Get<ExternalAPI.FAR> ().IsAvailable; }
         }
 
         /// <summary>
@@ -19,7 +19,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public static bool AGExtAvailable {
-            get { return ExternalAPI.AGExt.IsAvailable; }
+            get { return ModAPI.Get<ExternalAPI.AGExt> ().IsAvailable; }
         }
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public static bool RealFuelsAvailable {
-            get { return ExternalAPI.RealFuels.IsAvailable; }
+            get { return ModAPI.Get<ExternalAPI.RealFuels> ().IsAvailable; }
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public static bool RealAntennasAvailable {
-            get { return ExternalAPI.RealAntennas.IsAvailable; }
+            get { return ModAPI.Get<ExternalAPI.RealAntennas> ().IsAvailable; }
         }
     }
 }

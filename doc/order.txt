@@ -311,6 +311,9 @@ StdLib.ColorRGBA.R
 StdLib.ColorRGBA.G
 StdLib.ColorRGBA.B
 StdLib.ColorRGBA.A
+StdLib.ImageFormat
+StdLib.ImageFormat.PNG
+StdLib.ImageFormat.JPEG
 SpaceCenter
 SpaceCenter.GameMode
 SpaceCenter.Expansions
@@ -2105,7 +2108,6 @@ Drawing.Text.LineSpacing
 Drawing.Text.Anchor
 InfernalRobotics
 InfernalRobotics.Available
-InfernalRobotics.Ready
 InfernalRobotics.ServoGroups
 InfernalRobotics.ServoGroupWithName
 InfernalRobotics.ServoWithName
@@ -2488,9 +2490,6 @@ DockingCamera.Available
 DockingCamera.Camera
 DockingCamera.Camera.Part
 DockingCamera.Camera.Image
-DockingCamera.ImageFormat
-DockingCamera.ImageFormat.PNG
-DockingCamera.ImageFormat.JPEG
 Trajectories
 Trajectories.Available
 Trajectories.ImpactPatch
@@ -3049,9 +3048,6 @@ ScanSat.MapProjection
 ScanSat.MapProjection.Rectangular
 ScanSat.MapProjection.KavrayskiyVII
 ScanSat.MapProjection.Polar
-ScanSat.ImageFormat
-ScanSat.ImageFormat.PNG
-ScanSat.ImageFormat.JPEG
 RasterPropMonitor
 RasterPropMonitor.Available
 RasterPropMonitor.Computer
@@ -3099,9 +3095,6 @@ RasterPropMonitor.Monitor.Text
 RasterPropMonitor.Monitor.RawText
 RasterPropMonitor.Monitor.Variables
 RasterPropMonitor.Monitor.Image
-RasterPropMonitor.ImageFormat
-RasterPropMonitor.ImageFormat.PNG
-RasterPropMonitor.ImageFormat.JPEG
 RasterPropMonitor.Display.Name
 RasterPropMonitor.Display.Text
 RasterPropMonitor.Display.Image

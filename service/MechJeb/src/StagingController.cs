@@ -1,4 +1,5 @@
 using KRPC.Service.Attributes;
+using KRPC.Utils;
 
 namespace KRPC.MechJeb
 {
@@ -8,30 +9,30 @@ namespace KRPC.MechJeb
     [KRPCClass (Service = "MechJeb")]
     public sealed class StagingController : KRPCComputerModule
     {
-        static Value<double> autostagePreDelay;
-        static Value<double> autostagePostDelay;
-        static Value<int> autostageLimit;
-        static Value<double> fairingMaxDynamicPressure;
-        static Value<double> fairingMinAltitude;
-        static Value<double> clampAutoStageThrustPct;
-        static Value<double> fairingMaxAerothermalFlux;
-        static Value<bool> hotStaging;
-        static Value<double> hotStagingLeadTime;
-        static Value<bool> autostagingOnce;
+        static Field<object, double> autostagePreDelay;
+        static Field<object, double> autostagePostDelay;
+        static Field<object, int> autostageLimit;
+        static Field<object, double> fairingMaxDynamicPressure;
+        static Field<object, double> fairingMinAltitude;
+        static Field<object, double> clampAutoStageThrustPct;
+        static Field<object, double> fairingMaxAerothermalFlux;
+        static Field<object, bool> hotStaging;
+        static Field<object, double> hotStagingLeadTime;
+        static Field<object, bool> autostagingOnce;
 
         internal static new void Load ()
         {
-            var type = Reflection.Type ("MuMech.MechJebModuleStagingController");
-            autostagePreDelay = Reflection.EditableDouble (type, "AutostagePreDelay");
-            autostagePostDelay = Reflection.EditableDouble (type, "AutostagePostDelay");
-            autostageLimit = Reflection.EditableInt (type, "AutostageLimit");
-            fairingMaxDynamicPressure = Reflection.EditableDouble (type, "FairingMaxDynamicPressure");
-            fairingMinAltitude = Reflection.EditableDouble (type, "FairingMinAltitude");
-            clampAutoStageThrustPct = Reflection.EditableDouble (type, "ClampAutoStageThrustPct");
-            fairingMaxAerothermalFlux = Reflection.EditableDouble (type, "FairingMaxAerothermalFlux");
-            hotStaging = Reflection.Field<bool> (type, "HotStaging");
-            hotStagingLeadTime = Reflection.EditableDouble (type, "HotStagingLeadTime");
-            autostagingOnce = Reflection.Field<bool> (type, "AutostagingOnce");
+            var type = Bindings.Type ("MuMech.MechJebModuleStagingController");
+            autostagePreDelay = Bindings.EditableDouble (type, "AutostagePreDelay");
+            autostagePostDelay = Bindings.EditableDouble (type, "AutostagePostDelay");
+            autostageLimit = Bindings.EditableInt (type, "AutostageLimit");
+            fairingMaxDynamicPressure = Bindings.EditableDouble (type, "FairingMaxDynamicPressure");
+            fairingMinAltitude = Bindings.EditableDouble (type, "FairingMinAltitude");
+            clampAutoStageThrustPct = Bindings.EditableDouble (type, "ClampAutoStageThrustPct");
+            fairingMaxAerothermalFlux = Bindings.EditableDouble (type, "FairingMaxAerothermalFlux");
+            hotStaging = type.Field<object, bool> ("HotStaging");
+            hotStagingLeadTime = Bindings.EditableDouble (type, "HotStagingLeadTime");
+            autostagingOnce = type.Field<object, bool> ("AutostagingOnce");
         }
 
         internal StagingController () : base ("MechJebModuleStagingController")

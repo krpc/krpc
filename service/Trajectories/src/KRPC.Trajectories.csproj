@@ -42,7 +42,6 @@
     <Compile Include="$(bazel-bin)\service\Trajectories\ServiceInfo.cs">
       <Link>ServiceInfo.cs</Link>
     </Compile>
-    <Compile Include="Addon.cs" />
     <Compile Include="API.cs" />
     <Compile Include="DescentProfile.cs" />
     <Compile Include="DescentProfileNode.cs" />

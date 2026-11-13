@@ -1,4 +1,5 @@
 using KRPC.Service.Attributes;
+using KRPC.Utils;
 
 namespace KRPC.MechJeb.Maneuver
 {
@@ -8,14 +9,14 @@ namespace KRPC.MechJeb.Maneuver
     [KRPCClass (Service = "MechJeb")]
     public sealed class OperationCourseCorrection : Operation
     {
-        static Value<double> courseCorrectFinalPeA;
-        static Value<double> interceptDistance;
+        static Field<object, double> courseCorrectFinalPeA;
+        static Field<object, double> interceptDistance;
 
         internal static new void Load ()
         {
-            var type = Reflection.Type ("MuMech.OperationCourseCorrection");
-            courseCorrectFinalPeA = Reflection.EditableDouble (type, "CourseCorrectFinalPeA");
-            interceptDistance = Reflection.EditableDouble (type, "InterceptDistance");
+            var type = Bindings.Type ("MuMech.OperationCourseCorrection");
+            courseCorrectFinalPeA = Bindings.EditableDouble (type, "CourseCorrectFinalPeA");
+            interceptDistance = Bindings.EditableDouble (type, "InterceptDistance");
         }
 
         internal OperationCourseCorrection () : base ("OperationCourseCorrection")

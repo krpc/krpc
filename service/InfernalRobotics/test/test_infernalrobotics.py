@@ -11,9 +11,6 @@ class TestInfernalRobotics(TestCase):
         cls.vessel = cls.launch("InfernalRobotics")
         cls.ir = cls.connect().infernal_robotics
 
-    def test_ready(self):
-        self.assertTrue(self.ir.ready)
-
     def test_servo_groups(self):
         groups = self.ir.servo_groups(self.vessel)
         self.assertCountEqual(["Group1", "Group2"], [g.name for g in groups])

@@ -45,20 +45,19 @@ namespace KRPC.MechJeb.Maneuver
         static Func<object, string> errorMessage;
         static Func<object, global::Orbit, double, object, IEnumerable> makeNodesImpl;
         static Func<global::Vessel, global::Orbit, Vector3d, double, ManeuverNode> placeManeuverNode;
-        static Value<Vector3d> dV;
-        static Value<double> uT;
+        static Func<object, Vector3d> dV;
+        static Func<object, double> uT;
 
         internal static void Load ()
         {
-            operationException = Reflection.Type ("MuMech.OperationException");
-            var type = Reflection.Type ("MuMech.Operation");
-            errorMessage = Reflection.Method<Func<object, string>> (type, "GetErrorMessage");
-            makeNodesImpl = Reflection.Method<Func<object, global::Orbit, double, object, IEnumerable>> (type, "MakeNodesImpl");
-            placeManeuverNode = Reflection.Method<Func<global::Vessel, global::Orbit, Vector3d, double, ManeuverNode>> (
-                Reflection.Type ("MuMech.VesselExtensions"), "PlaceManeuverNode");
-            var parameters = Reflection.Type ("MuMech.ManeuverParameters");
-            dV = Reflection.Field<Vector3d> (parameters, "dV");
-            uT = Reflection.Field<double> (parameters, "UT");
+            operationException = Bindings.Type ("MuMech.OperationException").Type;
+            var type = Bindings.Type ("MuMech.Operation");
+            errorMessage = type.Method<Func<object, string>> ("GetErrorMessage");
+            makeNodesImpl = type.Method<Func<object, global::Orbit, double, object, IEnumerable>> ("MakeNodesImpl");
+            placeManeuverNode = Bindings.Type ("MuMech.VesselExtensions").Method<Func<global::Vessel, global::Orbit, Vector3d, double, ManeuverNode>> ("PlaceManeuverNode");
+            var parameters = Bindings.Type ("MuMech.ManeuverParameters");
+            dV = parameters.Getter<object, Vector3d> ("dV");
+            uT = parameters.Getter<object, double> ("UT");
             OperationApoapsis.Load ();
             OperationCircularize.Load ();
             OperationCourseCorrection.Load ();
@@ -138,7 +137,7 @@ namespace KRPC.MechJeb.Maneuver
             }
             var nodes = new List<Node> ();
             foreach (var parameter in parameters)
-                nodes.Add (new Node (vessel, placeManeuverNode (vessel, vessel.orbit, dV.Get (parameter), uT.Get (parameter))));
+                nodes.Add (new Node (vessel, placeManeuverNode (vessel, vessel.orbit, dV (parameter), uT (parameter))));
             return nodes;
         }
     }
@@ -157,14 +156,12 @@ namespace KRPC.MechJeb.Maneuver
         /// A getter for the time selector of an operation type. MechJeb holds it in a static
         /// field for most operations, and in an instance field for the others.
         /// </summary>
-        internal static Func<object, object> TimeSelectorField (Type type)
+        internal static Func<object, object> TimeSelectorField (MemberBinder type)
         {
-            if (type == null)
-                return Reflection.Field<object> (null, "_timeSelector").Get;
-            var field = Accessor.Getter<object, object> (type, "_timeSelector");
+            var field = type.Type == null ? null : Accessor.Getter<object, object> (type.Type, "_timeSelector");
             if (field != null)
                 return field;
-            var staticField = Reflection.Static<object> (type, "_timeSelector");
+            var staticField = type.StaticGetter<object> ("_timeSelector");
             return instance => staticField ();
         }
 

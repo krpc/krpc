@@ -1,5 +1,6 @@
 using System;
 using KRPC.Service.Attributes;
+using KRPC.Utils;
 
 namespace KRPC.MechJeb
 {
@@ -9,20 +10,20 @@ namespace KRPC.MechJeb
     [KRPCClass (Service = "MechJeb")]
     public sealed class NodeExecutor : ComputerModule
     {
-        static Value<bool> autowarp;
-        static Value<double> leadTime;
+        static Field<object, bool> autowarp;
+        static Field<object, double> leadTime;
         static Action<object, object> executeOneNode;
         static Action<object, object> executeAllNodes;
         static Action<object> abort;
 
         internal static new void Load ()
         {
-            var type = Reflection.Type ("MuMech.MechJebModuleNodeExecutor");
-            autowarp = Reflection.Field<bool> (type, "Autowarp");
-            leadTime = Reflection.EditableDouble (type, "LeadTime");
-            executeOneNode = Reflection.Method<Action<object, object>> (type, "ExecuteOneNode");
-            executeAllNodes = Reflection.Method<Action<object, object>> (type, "ExecuteAllNodes");
-            abort = Reflection.Method<Action<object>> (type, "Abort");
+            var type = Bindings.Type ("MuMech.MechJebModuleNodeExecutor");
+            autowarp = type.Field<object, bool> ("Autowarp");
+            leadTime = Bindings.EditableDouble (type, "LeadTime");
+            executeOneNode = type.Method<Action<object, object>> ("ExecuteOneNode");
+            executeAllNodes = type.Method<Action<object, object>> ("ExecuteAllNodes");
+            abort = type.Method<Action<object>> ("Abort");
         }
 
         internal NodeExecutor () : base ("MechJebModuleNodeExecutor")

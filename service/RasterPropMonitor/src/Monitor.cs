@@ -52,7 +52,7 @@ namespace KRPC.RasterPropMonitor
                 foreach (var prop in model.props) {
                     int count = 0;
                     foreach (var module in prop.internalModules) {
-                        if (!MonitorAPI.Type.IsInstanceOfType (module))
+                        if (!KRPC.RasterPropMonitor.API.IsInstance (MonitorAPI.Type, module))
                             continue;
                         if (wrapped == null)
                             wrapped = new SpaceCenter.Services.Parts.Part (innerPart);
@@ -109,7 +109,7 @@ namespace KRPC.RasterPropMonitor
             var prop = model.props.FirstOrDefault (p => p.propID == propID);
             if (prop == null)
                 return null;
-            return prop.internalModules.Where (MonitorAPI.Type.IsInstanceOfType).Skip (index).FirstOrDefault ();
+            return prop.internalModules.Where (module => KRPC.RasterPropMonitor.API.IsInstance (MonitorAPI.Type, module)).Skip (index).FirstOrDefault ();
         }
 
         // The monitor module. Every member that reaches the mod goes through this

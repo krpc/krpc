@@ -1,5 +1,6 @@
 using System;
 using KRPC.Service.Attributes;
+using KRPC.Utils;
 
 namespace KRPC.MechJeb.Maneuver
 {
@@ -15,15 +16,15 @@ namespace KRPC.MechJeb.Maneuver
     public sealed class OperationTransfer : TimedOperation
     {
         static Func<object, object> timeSelector;
-        static Value<bool> capture;
-        static Value<bool> coplanar;
+        static Field<object, bool> capture;
+        static Field<object, bool> coplanar;
 
         internal static new void Load ()
         {
-            var type = Reflection.Type ("MuMech.OperationGeneric");
+            var type = Bindings.Type ("MuMech.OperationGeneric");
             timeSelector = TimeSelectorField (type);
-            capture = Reflection.Field<bool> (type, "Capture");
-            coplanar = Reflection.Field<bool> (type, "Coplanar");
+            capture = type.Field<object, bool> ("Capture");
+            coplanar = type.Field<object, bool> ("Coplanar");
         }
 
         internal OperationTransfer () : base ("OperationGeneric")

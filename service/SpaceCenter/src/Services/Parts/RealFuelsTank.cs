@@ -1,4 +1,5 @@
 using KRPC.SpaceCenter.ExtensionMethods;
+using KRPC.Utils;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
@@ -23,7 +24,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         static PartModule TankModule (global::Part part)
         {
-            if (!ExternalAPI.RealFuels.IsAvailable)
+            if (!ModAPI.Get<ExternalAPI.RealFuels> ().CheckInstalled ())
                 return null;
             var module = part.Module ("ModuleFuelTanks");
             // Every field the adapter reads must be present before it claims the module.

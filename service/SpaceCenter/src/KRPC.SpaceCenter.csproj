@@ -94,7 +94,6 @@
     <Compile Include="CreatedReferenceFramesAddon.cs" />
     <Compile Include="EditorShipAddon.cs" />
     <Compile Include="EVAAddon.cs" />
-    <Compile Include="ExternalAPIAddon.cs" />
     <Compile Include="NameTag.cs" />
     <Compile Include="NameTagWarningAddon.cs" />
     <Compile Include="ExternalAPI\AGExt.cs" />

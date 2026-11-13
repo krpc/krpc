@@ -1,5 +1,6 @@
 using System;
 using KRPC.Service.Attributes;
+using KRPC.Utils;
 
 namespace KRPC.MechJeb
 {
@@ -9,18 +10,18 @@ namespace KRPC.MechJeb
     [KRPCClass (Service = "MechJeb")]
     public sealed class DeployableController : ComputerModule
     {
-        static Value<bool> autoDeploy;
+        static Field<object, bool> autoDeploy;
         static Action<object> extendAll;
         static Action<object> retractAll;
         static Func<object, bool> allRetracted;
 
         internal static new void Load ()
         {
-            var type = Reflection.Type ("MuMech.MechJebModuleDeployableController");
-            autoDeploy = Reflection.Field<bool> (type, "autoDeploy");
-            extendAll = Reflection.Method<Action<object>> (type, "ExtendAll");
-            retractAll = Reflection.Method<Action<object>> (type, "RetractAll");
-            allRetracted = Reflection.Method<Func<object, bool>> (type, "AllRetracted");
+            var type = Bindings.Type ("MuMech.MechJebModuleDeployableController");
+            autoDeploy = type.Field<object, bool> ("autoDeploy");
+            extendAll = type.Method<Action<object>> ("ExtendAll");
+            retractAll = type.Method<Action<object>> ("RetractAll");
+            allRetracted = type.Method<Func<object, bool>> ("AllRetracted");
         }
 
         internal DeployableController (string name) : base (name)

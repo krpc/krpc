@@ -1,4 +1,5 @@
 using System;
+using KRPC.Utils;
 
 namespace KRPC.MechJeb
 {
@@ -8,20 +9,20 @@ namespace KRPC.MechJeb
     static class VesselState
     {
         static Func<object, object> instance;
-        static Value<double> time;
-        static Value<double> celestialLongitude;
-        static Value<double> latitude;
-        static Value<double> longitude;
+        static Func<object, double> time;
+        static Func<object, double> celestialLongitude;
+        static Func<object, double> latitude;
+        static Func<object, double> longitude;
 
-        internal static void Load (Type core)
+        internal static void Load (MemberBinder core)
         {
-            instance = Reflection.Field<object> (core, "VesselState").Get;
-            var type = Reflection.Type ("MuMech.VesselState");
-            time = Reflection.Field<double> (type, "time");
+            instance = core.Getter<object, object> ("VesselState");
+            var type = Bindings.Type ("MuMech.VesselState");
+            time = type.Getter<object, double> ("time");
             // Moving averages, which convert to their value
-            celestialLongitude = Reflection.Field<double> (type, "celestialLongitude");
-            latitude = Reflection.Field<double> (type, "latitude");
-            longitude = Reflection.Field<double> (type, "longitude");
+            celestialLongitude = type.Getter<object, double> ("celestialLongitude");
+            latitude = type.Getter<object, double> ("latitude");
+            longitude = type.Getter<object, double> ("longitude");
         }
 
         static object Instance {
@@ -29,19 +30,19 @@ namespace KRPC.MechJeb
         }
 
         public static double Time {
-            get { return time.Get (Instance); }
+            get { return time (Instance); }
         }
 
         public static double CelestialLongitude {
-            get { return celestialLongitude.Get (Instance); }
+            get { return celestialLongitude (Instance); }
         }
 
         public static double Latitude {
-            get { return latitude.Get (Instance); }
+            get { return latitude (Instance); }
         }
 
         public static double Longitude {
-            get { return longitude.Get (Instance); }
+            get { return longitude (Instance); }
         }
     }
 }

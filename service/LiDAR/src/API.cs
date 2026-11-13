@@ -4,13 +4,15 @@ using KRPC.Utils;
 
 namespace KRPC.LiDAR
 {
-    static class API
+    sealed class API : ModAPI
     {
-        public static bool IsAvailable { get; private set; }
-
-        public static void Load()
+        public API() : base(ServiceInfo.Mods.LiDAR.Name, ServiceInfo.Mods.LiDAR.Assembly)
         {
-            IsAvailable = (APILoader.Load(typeof(API), "LiDAR", "LiDAR.API") != null);
+        }
+
+        protected override void Bind(ModBinder mod)
+        {
+            mod.Statics(typeof(API), "LiDAR.API");
         }
 
         public static Func<Part, IList<double>> GetCloud { get; internal set; }

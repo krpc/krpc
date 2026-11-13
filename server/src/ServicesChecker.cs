@@ -6,24 +6,36 @@ using UnityEngine;
 namespace KRPC
 {
     /// <summary>
-    /// Check kRPC services.
+    /// Binds the mod integrations and checks the kRPC services, once. The loading screen runs
+    /// the check as its last step, after each mod has set up and the parts have loaded.
     /// </summary>
-    [KSPAddon (KSPAddon.Startup.Instantly, true)]
-    public sealed class ServicesChecker : MonoBehaviour
+    static class ServicesChecker
     {
-        internal static bool OK { get; private set; }
+        static bool? ok;
 
         /// <summary>
-        /// Start the services checker addon
+        /// Whether the services are valid. Runs the check if the loading screen has not.
         /// </summary>
-        public void Start ()
+        internal static bool OK {
+            get {
+                Run ();
+                return ok.Value;
+            }
+        }
+
+        /// <summary>
+        /// Run the check, if it has not run.
+        /// </summary>
+        internal static void Run ()
         {
+            if (ok.HasValue)
+                return;
             Addon.InitLogger ();
-            OK = true;
+            Utils.ModAPI.LoadAll (new Utils.GameModAssemblies ());
             var errors = new List<string>();
             Scanner.GetServices (errors);
+            ok = !errors.Any ();
             if (errors.Any()) {
-                OK = false;
                 Utils.Logger.WriteLine("Service errors encountered, plugin has been disabled. Errors were:", Utils.Logger.Severity.Error);
                 foreach (var error in errors)
                     Utils.Logger.WriteLine(error, Utils.Logger.Severity.Error);
@@ -32,6 +44,52 @@ namespace KRPC
                     "Service errors encountered, plugin has been disabled. See the log for more information.",
                     "OK", true, HighLogic.UISkin);
             }
+        }
+    }
+
+    /// <summary>
+    /// The loading screen step that runs <see cref="ServicesChecker"/>.
+    /// </summary>
+    sealed class ServicesCheckerLoadingStep : LoadingSystem
+    {
+        bool ready;
+
+        public override bool IsReady ()
+        {
+            return ready;
+        }
+
+        public override string ProgressTitle ()
+        {
+            return "kRPC";
+        }
+
+        public override float ProgressFraction ()
+        {
+            return ready ? 1f : 0f;
+        }
+
+        public override void StartLoad ()
+        {
+            ServicesChecker.Run ();
+            ready = true;
+        }
+    }
+
+    /// <summary>
+    /// Adds <see cref="ServicesCheckerLoadingStep"/> to the end of the loading screen's steps.
+    /// </summary>
+    [KSPAddon (KSPAddon.Startup.Instantly, true)]
+    public sealed class ServicesCheckerAddon : MonoBehaviour
+    {
+        /// <summary>
+        /// Add the step. Without a loading screen, the first read of
+        /// <see cref="ServicesChecker.OK"/> runs the check.
+        /// </summary>
+        public void Awake ()
+        {
+            if (LoadingScreen.Instance != null)
+                LoadingScreen.Instance.loaders.Add (gameObject.AddComponent<ServicesCheckerLoadingStep> ());
         }
     }
 }

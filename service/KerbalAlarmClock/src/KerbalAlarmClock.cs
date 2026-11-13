@@ -4,27 +4,27 @@ using System.Linq;
 using KRPC.KerbalAlarmClock.ExtensionMethods;
 using KRPC.Service;
 using KRPC.Service.Attributes;
+using KRPC.Utils;
 
 namespace KRPC.KerbalAlarmClock
 {
     /// <summary>
     /// Provides functionality to interact with Kerbal Alarm Clock.
     /// </summary>
-    [KRPCService (Id = ServiceInfo.Id, GameScene = GameScene.All)]
+    [KRPCService (Id = ServiceInfo.Id, GameScene = GameScene.All & ~GameScene.MissionBuilder)]
     public static class KerbalAlarmClock
     {
         static void CheckAPI ()
         {
-            if (!KACWrapper.APIReady)
-                throw new InvalidOperationException ("Kerbal Alarm Clock is not available");
+            ModAPI.Get<API> ().CheckAvailable ();
         }
 
         /// <summary>
         /// Whether Kerbal Alarm Clock is available.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.All)]
         public static bool Available {
-            get { return KACWrapper.APIReady; }
+            get { return ModAPI.Get<API> ().IsAvailable; }
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace KRPC.KerbalAlarmClock
         public static IList<Alarm> Alarms {
             get {
                 CheckAPI ();
-                return KACWrapper.KAC.Alarms.Select (x => new Alarm (x)).ToList ();
+                return API.Alarms.Cast<object> ().Select (x => new Alarm (x)).ToList ();
             }
         }
 
@@ -48,7 +48,7 @@ namespace KRPC.KerbalAlarmClock
         public static Alarm AlarmWithName (string name)
         {
             CheckAPI ();
-            var alarm = KACWrapper.KAC.Alarms.FirstOrDefault (x => x.Name == name);
+            var alarm = API.Alarms.Cast<object> ().FirstOrDefault (x => API.Alarm.Name.Get (x) == name);
             return alarm != null ? new Alarm (alarm) : null;
         }
 
@@ -60,8 +60,8 @@ namespace KRPC.KerbalAlarmClock
         public static IList<Alarm> AlarmsWithType (AlarmType type)
         {
             CheckAPI ();
-            return KACWrapper.KAC.Alarms
-                .Where (x => x.AlarmType == type.FromAlarmType ())
+            return API.Alarms.Cast<object> ()
+                .Where (x => API.Alarm.Type (x) == type.FromAlarmType ())
                 .Select (x => new Alarm (x))
                 .ToList ();
         }
@@ -76,8 +76,8 @@ namespace KRPC.KerbalAlarmClock
         public static Alarm CreateAlarm (AlarmType type, string name, double ut)
         {
             CheckAPI ();
-            var id = KACWrapper.KAC.CreateAlarm (type.FromAlarmType (), name, ut);
-            return new Alarm (KACWrapper.KAC.Alarms.First (x => x.ID == id));
+            var id = API.CreateAlarm (type.FromAlarmType (), name, ut);
+            return new Alarm (API.FindAlarm (id));
         }
     }
 }

@@ -34,7 +34,7 @@ namespace KRPC.MechJeb
 
         internal static void Load ()
         {
-            operations = Reflection.Static<Array> (Reflection.Type ("MuMech.MechJebModuleManeuverPlanner"), "_operation");
+            operations = Bindings.Type ("MuMech.MechJebModuleManeuverPlanner").StaticGetter<Array> ("_operation");
         }
 
         internal ManeuverPlanner ()

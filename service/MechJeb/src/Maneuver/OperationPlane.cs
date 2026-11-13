@@ -13,7 +13,7 @@ namespace KRPC.MechJeb.Maneuver
 
         internal static new void Load ()
         {
-            var type = Reflection.Type ("MuMech.OperationPlane");
+            var type = Bindings.Type ("MuMech.OperationPlane");
             timeSelector = TimeSelectorField (type);
         }
 

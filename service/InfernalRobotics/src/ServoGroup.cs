@@ -68,9 +68,9 @@ namespace KRPC.InfernalRobotics
         }
 
         // The group the mod has on the vessel under the name, or null if it has none.
-        IRWrapper.IServoGroup Find ()
+        IServoGroup Find ()
         {
-            var groups = IRWrapper.ServoGroupsForVessel (vessel.InternalVessel);
+            var groups = API.ServoGroupsForVessel (vessel.InternalVessel);
             for (var i = 0; i < groups.Count; i++) {
                 if (groups [i].Name == name)
                     return groups [i];
@@ -80,7 +80,7 @@ namespace KRPC.InfernalRobotics
 
         // The group the mod has on the vessel now. Every member reaches the mod through this, so
         // a group taken before a game state was replaced drives the servos that stand in its place
-        IRWrapper.IServoGroup Internal {
+        IServoGroup Internal {
             get {
                 var group = Find ();
                 if (group == null)

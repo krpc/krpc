@@ -179,8 +179,9 @@ class TestNonActiveVessel(TestCase):
     def test_unsupported_group_members(self):
         # Group state that IR keeps only for the active vessel is unavailable here.
         group = self.ir.servo_group_with_name(self.vessel, "Group1")
-        with self.assertRaises(RuntimeError):
+        with self.assertRaises(RuntimeError) as cm:
             _ = group.speed
+        self.assertIn("non-active vessel", str(cm.exception))
         with self.assertRaises(RuntimeError):
             group.speed = 1
         with self.assertRaises(RuntimeError):

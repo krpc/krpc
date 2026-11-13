@@ -339,5 +339,56 @@ namespace KRPC.Test.Utils
             Assert.IsNull (Accessor.Constructor<Func<string, int>> (typeof (Base)));
             Assert.IsNull (Accessor.Constructor<Func<object>> (typeof (Abstract)));
         }
+
+        [Test]
+        public void NullType ()
+        {
+            Assert.IsNull (Accessor.Getter<object, int> (null, "number"));
+            Assert.IsNull (Accessor.Setter<object, int> (null, "number"));
+            Assert.IsNull (Accessor.StaticGetter<string> (null, "label"));
+            Assert.IsNull (Accessor.Method<Func<object, string>> (null, "Describe"));
+            Assert.IsNull (Accessor.MemberType (null, "number"));
+        }
+
+        [Test]
+        public void MemberType ()
+        {
+            Assert.AreEqual (typeof (int), Accessor.MemberType (typeof (Derived), "number"));
+            Assert.AreEqual (typeof (double), Accessor.MemberType (typeof (Base), "Ratio"));
+            Assert.AreEqual (typeof (string), Accessor.MemberType (typeof (Base), "label"));
+            Assert.IsNull (Accessor.MemberType (typeof (Base), "missing"));
+        }
+
+        [Test]
+        public void MissingThrows ()
+        {
+            var get = Accessor.Missing<Func<Base, int>> ("gone");
+            var error = Assert.Throws<MissingMemberException> (() => get (new Base ()));
+            Assert.AreEqual ("gone", error.Message);
+            var set = Accessor.Missing<Action<Base, int>> ("gone");
+            Assert.Throws<MissingMemberException> (() => set (new Base (), 1));
+        }
+
+        [Test]
+        public void MissingOutParameters ()
+        {
+            var split = Accessor.Missing<SplitDelegate> ("gone");
+            int half, rest;
+            Assert.Throws<MissingMemberException> (() => split (5, out half, out rest));
+        }
+
+        [Test]
+        public void MissingNotADelegate ()
+        {
+            Assert.Throws<ArgumentException> (() => Accessor.Missing (typeof (int), "gone"));
+        }
+
+        [Test]
+        public void IsMissing ()
+        {
+            Assert.IsTrue (Accessor.IsMissing (null));
+            Assert.IsTrue (Accessor.IsMissing (Accessor.Missing<Func<Base, int>> ("gone")));
+            Assert.IsFalse (Accessor.IsMissing (Accessor.Getter<Base, int> ("number")));
+        }
     }
 }

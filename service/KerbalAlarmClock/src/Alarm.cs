@@ -22,11 +22,11 @@ namespace KRPC.KerbalAlarmClock
         // was listed in, so the object itself is not held
         readonly string id;
 
-        internal Alarm (KACWrapper.KACAPI.KACAlarm innerAlarm)
+        internal Alarm (object innerAlarm)
         {
             if (innerAlarm == null)
                 throw new ArgumentNullException (nameof (innerAlarm));
-            id = innerAlarm.ID;
+            id = API.Alarm.ID (innerAlarm);
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace KRPC.KerbalAlarmClock
         /// </summary>
         public GameObjectState GameObjectState {
             get {
-                if (!KACWrapper.APIReady)
+                if (!ModAPI.Get<API> ().IsAvailable || API.WhyNotReady () != null)
                     return GameObjectState.Dormant;
                 if (Find () != null)
                     return GameObjectState.Live;
@@ -64,16 +64,9 @@ namespace KRPC.KerbalAlarmClock
         /// <summary>
         /// The alarm the mod has under the identifier, or null if it has none.
         /// </summary>
-        KACWrapper.KACAPI.KACAlarm Find ()
+        object Find ()
         {
-            if (!KACWrapper.APIReady)
-                return null;
-            var alarms = KACWrapper.KAC.Alarms;
-            for (var i = 0; i < alarms.Count; i++) {
-                if (alarms [i].ID == id)
-                    return alarms [i];
-            }
-            return null;
+            return ModAPI.Get<API> ().IsAvailable ? API.FindAlarm (id) : null;
         }
 
         /// <summary>
@@ -81,7 +74,7 @@ namespace KRPC.KerbalAlarmClock
         /// alarm rebuilt by a game being loaded is read in place of the one this was built
         /// from.
         /// </summary>
-        KACWrapper.KACAPI.KACAlarm Internal {
+        object Internal {
             get {
                 var found = Find ();
                 if (found == null)
@@ -101,7 +94,7 @@ namespace KRPC.KerbalAlarmClock
                     "The alarm no longer exists, as Kerbal Alarm Clock no longer has an " +
                     "alarm with its id.");
             return new ObjectNotLoadedException (
-                "The alarm is not available, as Kerbal Alarm Clock is not ready. " +
+                "The alarm is not available, as Kerbal Alarm Clock is not running. " +
                 "It can be used again once it is.");
         }
 
@@ -114,8 +107,8 @@ namespace KRPC.KerbalAlarmClock
         /// </remarks>
         [KRPCProperty]
         public AlarmAction Action {
-            get { return Internal.AlarmAction.ToAlarmAction (); }
-            set { Internal.AlarmAction = value.FromAlarmAction (); }
+            get { return API.Alarm.Action.Get (Internal).ToAlarmAction (); }
+            set { API.Alarm.Action.Set (Internal, value.FromAlarmAction ()); }
         }
 
         /// <summary>
@@ -123,8 +116,8 @@ namespace KRPC.KerbalAlarmClock
         /// </summary>
         [KRPCProperty]
         public double Margin {
-            get { return Internal.AlarmMargin; }
-            set { Internal.AlarmMargin = value; }
+            get { return API.Alarm.Margin.Get (Internal); }
+            set { API.Alarm.Margin.Set (Internal, value); }
         }
 
         /// <summary>
@@ -132,8 +125,8 @@ namespace KRPC.KerbalAlarmClock
         /// </summary>
         [KRPCProperty]
         public double Time {
-            get { return Internal.AlarmTime; }
-            set { Internal.AlarmTime = value; }
+            get { return API.Alarm.Time.Get (Internal); }
+            set { API.Alarm.Time.Set (Internal, value); }
         }
 
         /// <summary>
@@ -141,7 +134,7 @@ namespace KRPC.KerbalAlarmClock
         /// </summary>
         [KRPCProperty]
         public AlarmType Type {
-            get { return Internal.AlarmType.ToAlarmType (); }
+            get { return API.Alarm.Type (Internal).ToAlarmType (); }
         }
 
         /// <summary>
@@ -149,7 +142,7 @@ namespace KRPC.KerbalAlarmClock
         /// </summary>
         [KRPCProperty]
         public string ID {
-            get { return Internal.ID; }
+            get { return API.Alarm.ID (Internal); }
         }
 
         /// <summary>
@@ -157,8 +150,8 @@ namespace KRPC.KerbalAlarmClock
         /// </summary>
         [KRPCProperty]
         public string Name {
-            get { return Internal.Name; }
-            set { Internal.Name = value; }
+            get { return API.Alarm.Name.Get (Internal); }
+            set { API.Alarm.Name.Set (Internal, value); }
         }
 
         /// <summary>
@@ -166,8 +159,8 @@ namespace KRPC.KerbalAlarmClock
         /// </summary>
         [KRPCProperty]
         public string Notes {
-            get { return Internal.Notes; }
-            set { Internal.Notes = value; }
+            get { return API.Alarm.Notes.Get (Internal); }
+            set { API.Alarm.Notes.Set (Internal, value); }
         }
 
         /// <summary>
@@ -176,8 +169,8 @@ namespace KRPC.KerbalAlarmClock
         [KRPCProperty]
         public double Remaining {
             // Computed from the alarm time. The mod stores its remaining time as a KSPTimeSpan
-            // object, which the wrapper cannot unbox to a double
-            get { return Internal.AlarmTime - Planetarium.GetUniversalTime (); }
+            // object
+            get { return API.Alarm.Time.Get (Internal) - Planetarium.GetUniversalTime (); }
         }
 
         /// <summary>
@@ -185,8 +178,8 @@ namespace KRPC.KerbalAlarmClock
         /// </summary>
         [KRPCProperty]
         public bool Enabled {
-            get { return Internal.Enabled; }
-            set { Internal.Enabled = value; }
+            get { return API.Alarm.Enabled.Get (Internal); }
+            set { API.Alarm.Enabled.Set (Internal, value); }
         }
 
         /// <summary>
@@ -198,8 +191,8 @@ namespace KRPC.KerbalAlarmClock
         /// </remarks>
         [KRPCProperty]
         public bool PlaySound {
-            get { return Internal.PlaySound; }
-            set { Internal.PlaySound = value; }
+            get { return API.Alarm.PlaySound.Get (API.Alarm.Actions (Internal)); }
+            set { API.Alarm.PlaySound.Set (API.Alarm.Actions (Internal), value); }
         }
 
         /// <summary>
@@ -209,7 +202,7 @@ namespace KRPC.KerbalAlarmClock
         /// </summary>
         [KRPCProperty]
         public bool Triggered {
-            get { return Internal.Triggered; }
+            get { return API.Alarm.Triggered (Internal); }
         }
 
         /// <summary>
@@ -219,8 +212,8 @@ namespace KRPC.KerbalAlarmClock
         /// </summary>
         [KRPCProperty]
         public bool Repeat {
-            get { return Internal.RepeatAlarm; }
-            set { Internal.RepeatAlarm = value; }
+            get { return API.Alarm.Repeat.Get (Internal); }
+            set { API.Alarm.Repeat.Set (Internal, value); }
         }
 
         /// <summary>
@@ -229,7 +222,7 @@ namespace KRPC.KerbalAlarmClock
         /// </summary>
         [KRPCProperty]
         public bool SupportsRepeat {
-            get { return Internal.SupportsRepeat; }
+            get { return API.Alarm.SupportsRepeat (Internal); }
         }
 
         /// <summary>
@@ -239,8 +232,15 @@ namespace KRPC.KerbalAlarmClock
         /// </summary>
         [KRPCProperty]
         public double RepeatPeriod {
-            get { return Internal.RepeatAlarmPeriod; }
-            set { Internal.RepeatAlarmPeriod = value; }
+            get {
+                try {
+                    return API.Alarm.RepeatPeriod.Get (Internal);
+                } catch (NullReferenceException) {
+                    // An alarm with no repeat period
+                    return 0;
+                }
+            }
+            set { API.Alarm.RepeatPeriod.Set (Internal, value); }
         }
 
         /// <summary>
@@ -249,7 +249,7 @@ namespace KRPC.KerbalAlarmClock
         /// </summary>
         [KRPCProperty]
         public bool SupportsRepeatPeriod {
-            get { return Internal.SupportsRepeatPeriod; }
+            get { return API.Alarm.SupportsRepeatPeriod (Internal); }
         }
 
         /// <summary>
@@ -258,12 +258,12 @@ namespace KRPC.KerbalAlarmClock
         [KRPCProperty]
         public SpaceCenter.Services.Vessel Vessel {
             get {
-                var vesselId = Internal.VesselID;
+                var vesselId = API.Alarm.VesselID.Get (Internal);
                 var vessel = FlightGlobals.Vessels.First (x => x.id.ToString () == vesselId);
                 return new SpaceCenter.Services.Vessel (vessel);
             }
             set {
-                Internal.VesselID = value.Id.ToString ();
+                API.Alarm.VesselID.Set (Internal, value.Id.ToString ());
             }
         }
 
@@ -273,12 +273,12 @@ namespace KRPC.KerbalAlarmClock
         [KRPCProperty]
         public SpaceCenter.Services.CelestialBody XferOriginBody {
             get {
-                var bodyName = Internal.XferOriginBodyName;
+                var bodyName = API.Alarm.XferOriginBodyName.Get (Internal);
                 var body = FlightGlobals.Bodies.First (x => bodyName == x.bodyName);
                 return new SpaceCenter.Services.CelestialBody (body);
             }
             set {
-                Internal.XferOriginBodyName = value.InternalBody.bodyName;
+                API.Alarm.XferOriginBodyName.Set (Internal, value.InternalBody.bodyName);
             }
         }
 
@@ -288,12 +288,12 @@ namespace KRPC.KerbalAlarmClock
         [KRPCProperty]
         public SpaceCenter.Services.CelestialBody XferTargetBody {
             get {
-                var bodyName = Internal.XferTargetBodyName;
+                var bodyName = API.Alarm.XferTargetBodyName.Get (Internal);
                 var body = FlightGlobals.Bodies.First (x => bodyName == x.bodyName);
                 return new SpaceCenter.Services.CelestialBody (body);
             }
             set {
-                Internal.XferTargetBodyName = value.InternalBody.bodyName;
+                API.Alarm.XferTargetBodyName.Set (Internal, value.InternalBody.bodyName);
             }
         }
 
@@ -306,7 +306,7 @@ namespace KRPC.KerbalAlarmClock
         [KRPCMethod]
         public void Remove ()
         {
-            KACWrapper.KAC.DeleteAlarm (Internal.ID);
+            API.DeleteAlarm (API.Alarm.ID (Internal));
         }
     }
 }

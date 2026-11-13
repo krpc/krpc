@@ -42,14 +42,12 @@
     <Compile Include="$(bazel-bin)\service\RasterPropMonitor\ServiceInfo.cs">
       <Link>ServiceInfo.cs</Link>
     </Compile>
-    <Compile Include="Addon.cs" />
     <Compile Include="API.cs" />
     <Compile Include="ButtonCaptures.cs" />
     <Compile Include="Computer.cs" />
     <Compile Include="Display.cs" />
     <Compile Include="DisplayState.cs" />
     <Compile Include="ExternalCamera.cs" />
-    <Compile Include="ImageFormat.cs" />
     <Compile Include="KRPCDisplay.cs" />
     <Compile Include="Monitor.cs" />
     <Compile Include="RasterPropMonitor.cs" />

@@ -1,3 +1,4 @@
+using KRPC.Utils;
 using UnityEngine;
 using MonitorAPI = KRPC.RasterPropMonitor.API.Monitor;
 using PageAPI = KRPC.RasterPropMonitor.API.Page;
@@ -43,7 +44,7 @@ namespace KRPC.RasterPropMonitor
         {
             int index = 0;
             foreach (var module in internalProp.internalModules) {
-                if (!MonitorAPI.Type.IsInstanceOfType (module))
+                if (!KRPC.RasterPropMonitor.API.IsInstance (MonitorAPI.Type, module))
                     continue;
                 foreach (var page in MonitorAPI.Pages (module)) {
                     if (ReferenceEquals (PageAPI.PageHandler (page), this) ||
@@ -60,7 +61,7 @@ namespace KRPC.RasterPropMonitor
         /// </summary>
         public string Text (int screenWidth, int screenHeight)
         {
-            return API.IsAvailable ? State.Text : string.Empty;
+            return ModAPI.Get<API> ().IsAvailable ? State.Text : string.Empty;
         }
 
         /// <summary>
@@ -69,7 +70,7 @@ namespace KRPC.RasterPropMonitor
         /// </summary>
         public bool RenderBackground (RenderTexture screen, float aspect)
         {
-            var texture = API.IsAvailable ? State.Texture : null;
+            var texture = ModAPI.Get<API> ().IsAvailable ? State.Texture : null;
             if (texture == null)
                 return false;
             GL.Clear (true, true, Color.black);
@@ -82,7 +83,7 @@ namespace KRPC.RasterPropMonitor
         /// </summary>
         public void ButtonClick (int buttonID)
         {
-            if (API.IsAvailable)
+            if (ModAPI.Get<API> ().IsAvailable)
                 State.Press (buttonID);
         }
 
@@ -91,7 +92,7 @@ namespace KRPC.RasterPropMonitor
         /// </summary>
         public void ButtonRelease (int buttonID)
         {
-            if (API.IsAvailable)
+            if (ModAPI.Get<API> ().IsAvailable)
                 State.Release (buttonID);
         }
 
@@ -100,7 +101,7 @@ namespace KRPC.RasterPropMonitor
         /// </summary>
         public void PageActive (bool active, int pageNumber)
         {
-            if (API.IsAvailable)
+            if (ModAPI.Get<API> ().IsAvailable)
                 State.SetShown (this, active);
         }
 

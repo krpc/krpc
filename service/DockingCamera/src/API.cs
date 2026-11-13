@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using KRPC.Service.StdLib;
 using KRPC.Utils;
 using UnityEngine;
-using Logger = KRPC.Utils.Logger;
 
 namespace KRPC.DockingCamera
 {
     // Reads the cameras of Docking Camera (KURS) by reflection. The mod has no public API, so
     // we bind to the private members of its 1.3.9 release.
-    static class API
+    sealed class API : ModAPI
     {
-        const string assemblyName = "DockingCamKURS";
+        public API() : base(ServiceInfo.Mods.DockingCamera.Name, ServiceInfo.Mods.DockingCamera.Assembly)
+        {
+        }
 
         // The camera modules, in order of preference for a part with both. MM_KSPCamera.cfg adds
         // DockingCameraModule to each docking port.
@@ -22,32 +24,12 @@ namespace KRPC.DockingCamera
         // BaseCamera.AllCameras, the Unity cameras for each render layer. Empty while the camera is off.
         static Func<object, List<UnityEngine.Camera>> allCameras;
 
-        public static bool IsAvailable { get; private set; }
-
-        public static void Load()
+        protected override void Bind(ModBinder mod)
         {
-            IsAvailable = false;
-            var assembly = AssemblyLoader.loadedAssemblies.FirstOrDefault(a => a.assembly.GetName().Name == assemblyName);
-            if (assembly == null) {
-                Logger.WriteLine("Load API: " + assemblyName + " not found; skipping");
-                return;
-            }
             cameras.Clear();
-            foreach (var name in moduleNames) {
-                var moduleType = assembly.assembly.GetType("OLDD_camera.Modules." + name);
-                var getter = moduleType == null ? null : Accessor.Getter<PartModule, object>(moduleType, "_camera");
-                if (getter != null)
-                    cameras[name] = getter;
-            }
-            var cameraType = assembly.assembly.GetType("OLDD_camera.Camera.BaseCamera");
-            if (cameraType != null)
-                allCameras = Accessor.Getter<object, List<UnityEngine.Camera>>(cameraType, "AllCameras");
-            if (cameras.Count != moduleNames.Length || allCameras == null) {
-                Logger.WriteLine("Load API: " + assemblyName + " camera members not found; skipping", Logger.Severity.Error);
-                return;
-            }
-            IsAvailable = true;
-            Logger.WriteLine("Load API: Successfully loaded " + assemblyName + " version " + assembly.assembly.GetName().Version);
+            foreach (var name in moduleNames)
+                cameras[name] = mod.Type("OLDD_camera.Modules." + name).Getter<PartModule, object>("_camera");
+            allCameras = mod.Type("OLDD_camera.Camera.BaseCamera").Getter<object, List<UnityEngine.Camera>>("AllCameras");
         }
 
         // The camera module on a part, or null if it has none

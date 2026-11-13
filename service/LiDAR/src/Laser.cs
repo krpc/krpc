@@ -94,7 +94,7 @@ namespace KRPC.LiDAR
         public IList<double> Cloud
         {
             get {
-                if (API.IsAvailable)
+                if (ModAPI.Get<API>().IsAvailable)
                     return API.GetCloud(InternalPart);
                 else
                     return new List<double>();

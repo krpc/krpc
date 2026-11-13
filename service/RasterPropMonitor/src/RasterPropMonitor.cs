@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service;
 using KRPC.Service.Attributes;
+using KRPC.Utils;
 
 namespace KRPC.RasterPropMonitor
 {
@@ -20,8 +21,7 @@ namespace KRPC.RasterPropMonitor
     {
         static void CheckAPI ()
         {
-            if (!API.IsAvailable)
-                throw new InvalidOperationException ("Raster Prop Monitor is not available");
+            ModAPI.Get<API> ().CheckAvailable ();
         }
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace KRPC.RasterPropMonitor
         /// </summary>
         [KRPCProperty]
         public static bool Available {
-            get { return API.IsAvailable; }
+            get { return ModAPI.Get<API> ().IsAvailable; }
         }
 
         /// <summary>

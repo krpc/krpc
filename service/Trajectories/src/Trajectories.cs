@@ -2,6 +2,7 @@ using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.Services;
+using KRPC.Utils;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -29,9 +30,7 @@ namespace KRPC.Trajectories
         {
             get
             {
-                return API.API.IsAvailable && API.DescentProfile.IsAvailable &&
-                    API.Trajectory.IsAvailable && API.TargetProfile.IsAvailable &&
-                    API.Settings.IsAvailable;
+                return ModAPI.Get<API.TrajectoriesAPI>().IsAvailable;
             }
         }
 

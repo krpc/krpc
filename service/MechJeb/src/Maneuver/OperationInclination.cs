@@ -1,5 +1,6 @@
 using System;
 using KRPC.Service.Attributes;
+using KRPC.Utils;
 
 namespace KRPC.MechJeb.Maneuver
 {
@@ -10,13 +11,13 @@ namespace KRPC.MechJeb.Maneuver
     public sealed class OperationInclination : TimedOperation
     {
         static Func<object, object> timeSelector;
-        static Value<double> newInclination;
+        static Field<object, double> newInclination;
 
         internal static new void Load ()
         {
-            var type = Reflection.Type ("MuMech.OperationInclination");
+            var type = Bindings.Type ("MuMech.OperationInclination");
             timeSelector = TimeSelectorField (type);
-            newInclination = Reflection.EditableDouble (type, "NewInc");
+            newInclination = Bindings.EditableDouble (type, "NewInc");
         }
 
         internal OperationInclination () : base ("OperationInclination")

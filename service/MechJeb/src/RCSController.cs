@@ -1,4 +1,5 @@
 using KRPC.Service.Attributes;
+using KRPC.Utils;
 
 namespace KRPC.MechJeb
 {
@@ -8,14 +9,14 @@ namespace KRPC.MechJeb
     [KRPCClass (Service = "MechJeb")]
     public sealed class RCSController : ComputerModule
     {
-        static Value<bool> rcsThrottle;
-        static Value<bool> rcsForRotation;
+        static Field<object, bool> rcsThrottle;
+        static Field<object, bool> rcsForRotation;
 
         internal static new void Load ()
         {
-            var type = Reflection.Type ("MuMech.MechJebModuleRCSController");
-            rcsThrottle = Reflection.Field<bool> (type, "rcsThrottle");
-            rcsForRotation = Reflection.Field<bool> (type, "rcsForRotation");
+            var type = Bindings.Type ("MuMech.MechJebModuleRCSController");
+            rcsThrottle = type.Field<object, bool> ("rcsThrottle");
+            rcsForRotation = type.Field<object, bool> ("rcsForRotation");
         }
 
         internal RCSController () : base ("MechJebModuleRCSController")

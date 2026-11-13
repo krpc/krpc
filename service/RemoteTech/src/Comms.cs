@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
+using API = KRPC.SpaceCenter.ExternalAPI.RemoteTech;
 
 namespace KRPC.RemoteTech
 {
@@ -16,8 +17,7 @@ namespace KRPC.RemoteTech
 
         internal Comms (SpaceCenter.Services.Vessel innerVessel)
         {
-            if (!API.IsAvailable)
-                throw new InvalidOperationException ("RemoteTech is not installed");
+            ModAPI.Get<API> ().CheckAvailable ();
             if (ReferenceEquals (innerVessel, null))
                 throw new ArgumentNullException (nameof (innerVessel));
             vessel = innerVessel;

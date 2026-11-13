@@ -1,5 +1,6 @@
 using System;
 using KRPC.Service.Attributes;
+using KRPC.Utils;
 
 namespace KRPC.MechJeb
 {
@@ -12,16 +13,16 @@ namespace KRPC.MechJeb
         // MechJeb's value of the DIRECT mode, which comes after KeepVertical
         const int direct = 4;
 
-        static Value<double> transSpd;
+        static Field<object, double> transSpd;
         static Action<object, int> setMode;
         static Action<object> panicSwitch;
 
         internal static new void Load ()
         {
-            var type = Reflection.Type ("MuMech.MechJebModuleTranslatron");
-            transSpd = Reflection.EditableDouble (type, "trans_spd");
-            setMode = Reflection.Method<Action<object, int>> (type, "SetMode");
-            panicSwitch = Reflection.Method<Action<object>> (type, "PanicSwitch");
+            var type = Bindings.Type ("MuMech.MechJebModuleTranslatron");
+            transSpd = Bindings.EditableDouble (type, "trans_spd");
+            setMode = type.Method<Action<object, int>> ("SetMode");
+            panicSwitch = type.Method<Action<object>> ("PanicSwitch");
         }
 
         internal Translatron () : base ("MechJebModuleTranslatron")
@@ -60,7 +61,7 @@ namespace KRPC.MechJeb
         [KRPCProperty]
         public TranslatronMode Mode {
             get {
-                var mode = ThrustController.TMode.Get (Thrust);
+                var mode = ThrustController.TMode (Thrust);
                 return mode == direct ? TranslatronMode.Direct : (TranslatronMode)mode;
             }
             set {

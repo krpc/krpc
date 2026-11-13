@@ -100,6 +100,19 @@ namespace KRPC.Utils
         }
 
         /// <summary>
+        /// Returns the classes derived from <typeparamref name="T"/> that are not abstract. Only
+        /// the assemblies that reference the base class's assembly are searched.
+        /// </summary>
+        public static IEnumerable<Type> GetSubclasses<T> ()
+        {
+            var baseAssembly = typeof(T).Assembly;
+            foreach (var type in AllTypes (x => CanDeclare (x, baseAssembly))) {
+                if (type.IsClass && !type.IsAbstract && type.IsSubclassOf (typeof(T)))
+                    yield return type;
+            }
+        }
+
+        /// <summary>
         /// Returns all properties within a given type that have the specified attribute.
         /// </summary>
         public static IEnumerable<PropertyInfo> GetPropertiesWith<TAttribute> (Type cls, bool inherit = false)

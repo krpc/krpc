@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using KRPC.Utils;
 using UnityEngine;
 using ButtonAPI = KRPC.RasterPropMonitor.API.Button;
 using MonitorAPI = KRPC.RasterPropMonitor.API.Monitor;
@@ -158,6 +159,8 @@ namespace KRPC.RasterPropMonitor
         // The buttons of the monitor's prop
         static IEnumerable<Component> Buttons (InternalModule monitor)
         {
+            if (ButtonAPI.Type == null)
+                return new Component [0];
             return monitor.internalProp.GetComponentsInChildren (ButtonAPI.Type, true);
         }
 
@@ -181,7 +184,7 @@ namespace KRPC.RasterPropMonitor
         /// </summary>
         public void Update ()
         {
-            if (API.IsAvailable)
+            if (ModAPI.Get<API> ().IsAvailable)
                 ButtonCaptures.ApplyAll ();
         }
     }

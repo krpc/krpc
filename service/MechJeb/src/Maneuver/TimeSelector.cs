@@ -1,5 +1,6 @@
 using System;
 using KRPC.Service.Attributes;
+using KRPC.Utils;
 
 namespace KRPC.MechJeb.Maneuver
 {
@@ -9,18 +10,18 @@ namespace KRPC.MechJeb.Maneuver
     [KRPCClass (Service = "MechJeb")]
     public sealed class TimeSelector
     {
-        static Value<Array> allowedTimeRef;
-        static Value<int> currentTimeRef;
-        static Value<double> leadTime;
-        static Value<double> circularizeAltitude;
+        static Func<object, Array> allowedTimeRef;
+        static Field<object, int> currentTimeRef;
+        static Field<object, double> leadTime;
+        static Field<object, double> circularizeAltitude;
 
         internal static void Load ()
         {
-            var type = Reflection.Type ("MuMech.TimeSelector");
-            allowedTimeRef = Reflection.Field<Array> (type, "_allowedTimeRef");
-            currentTimeRef = Reflection.Field<int> (type, "_currentTimeRef");
-            leadTime = Reflection.EditableDouble (type, "LeadTime");
-            circularizeAltitude = Reflection.EditableDouble (type, "CircularizeAltitude");
+            var type = Bindings.Type ("MuMech.TimeSelector");
+            allowedTimeRef = type.Getter<object, Array> ("_allowedTimeRef");
+            currentTimeRef = type.Field<object, int> ("_currentTimeRef");
+            leadTime = Bindings.EditableDouble (type, "LeadTime");
+            circularizeAltitude = Bindings.EditableDouble (type, "CircularizeAltitude");
         }
 
         readonly TimedOperation operation;
@@ -42,11 +43,11 @@ namespace KRPC.MechJeb.Maneuver
         public TimeReference TimeReference {
             get {
                 var instance = Instance;
-                return (TimeReference)(int)allowedTimeRef.Get (instance).GetValue (currentTimeRef.Get (instance));
+                return (TimeReference)(int)allowedTimeRef (instance).GetValue (currentTimeRef.Get (instance));
             }
             set {
                 var instance = Instance;
-                var allowed = allowedTimeRef.Get (instance);
+                var allowed = allowedTimeRef (instance);
                 for (int i = 0; i < allowed.Length; i++) {
                     if ((int)allowed.GetValue (i) == (int)value) {
                         currentTimeRef.Set (instance, i);

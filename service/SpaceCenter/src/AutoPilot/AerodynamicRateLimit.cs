@@ -1,6 +1,7 @@
 using System;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.ExternalAPI;
+using KRPC.Utils;
 using UnityEngine;
 
 namespace KRPC.SpaceCenter.AutoPilot
@@ -89,7 +90,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             PositiveLimit = Unlimited;
             NegativeLimit = Unlimited;
             var body = vessel.mainBody;
-            if (FAR.IsAvailable || !body.atmosphere || vessel.dynamicPressurekPa <= 0)
+            if (ModAPI.Get<FAR> ().IsInstalled || !body.atmosphere || vessel.dynamicPressurekPa <= 0)
                 return;
             var air = new Air (vessel);
             if (air.Speed < 1)

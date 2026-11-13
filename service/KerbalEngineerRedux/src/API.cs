@@ -10,16 +10,15 @@ namespace KRPC.KerbalEngineerRedux
     // Reads the readout processors of Kerbal Engineer Redux by reflection. The mod has no public
     // API, so we bind to the members of its 1.1.9.5 release. Each processor is a singleton whose
     // Update computes static properties for the active vessel.
-    static class API
+    sealed class API : ModAPI
     {
-        const string assemblyName = "KerbalEngineer";
+        public API () : base (ServiceInfo.Mods.KerbalEngineerRedux.Name, ServiceInfo.Mods.KerbalEngineerRedux.Assembly)
+        {
+        }
+
         const string readouts = "KerbalEngineer.Flight.Readouts.";
         // The longest wait for the first simulation result, in seconds of real time
         const float simulationTimeout = 5;
-
-        static readonly List<string> missing = new List<string> ();
-
-        public static bool IsAvailable { get; private set; }
 
         public static Processor ImpactProcessor { get; private set; }
         public static Processor SimulationProcessor { get; private set; }
@@ -59,8 +58,15 @@ namespace KRPC.KerbalEngineerRedux
 
         public static class EditorSimulation
         {
-            // A simulation of our own, so the editor windows of the mod leave its inputs alone
-            public static object Instance;
+            // A simulation of our own, so the editor windows of the mod leave its inputs alone.
+            // We create it on first use, so a missing constructor fails only the calls that need it
+            public static Func<object> Create;
+            static object instance;
+
+            public static object Instance {
+                get { return instance ?? (instance = Create ()); }
+            }
+
             public static Func<object, object, List<global::Part>, double, double, double, bool, bool, bool, bool> Prepare;
             public static Func<object, object, object> Run;
             public static Action UpdateModSettings;
@@ -119,132 +125,90 @@ namespace KRPC.KerbalEngineerRedux
         }
 
 
-        public static void Load ()
+        protected override void Bind (ModBinder mod)
         {
-            IsAvailable = false;
-            var loaded = AssemblyLoader.loadedAssemblies.FirstOrDefault (a => a.assembly.GetName ().Name == assemblyName);
-            if (loaded == null) {
-                Logger.WriteLine ("Load API: " + assemblyName + " not found; skipping");
-                return;
-            }
-            var assembly = loaded.assembly;
-            missing.Clear ();
+            var impact = mod.Type (readouts + "Surface.ImpactProcessor");
+            ImpactProcessor = new Processor (impact);
+            Impact.ShowDetails = impact.StaticGetter<bool> ("ShowDetails");
+            Impact.Time = impact.StaticGetter<double> ("Time");
+            Impact.Latitude = impact.StaticGetter<double> ("Latitude");
+            Impact.Longitude = impact.StaticGetter<double> ("Longitude");
+            Impact.Altitude = impact.StaticGetter<double> ("Altitude");
+            Impact.Biome = impact.StaticGetter<string> ("Biome");
+            Impact.SuicideDeltaV = impact.StaticGetter<double> ("SuicideDeltaV");
+            Impact.SuicideDistance = impact.StaticGetter<double> ("SuicideDistance");
+            Impact.SuicideAltitude = impact.StaticGetter<double> ("SuicideAltitude");
+            Impact.SuicideLength = impact.StaticGetter<double> ("SuicideLength");
+            Impact.SuicideCountdown = impact.StaticGetter<double> ("SuicideCountdown");
 
-            var impact = assembly.GetType (readouts + "Surface.ImpactProcessor");
-            ImpactProcessor = Processor.Bind (impact, missing);
-            Impact.ShowDetails = Static<bool> (impact, "ShowDetails");
-            Impact.Time = Static<double> (impact, "Time");
-            Impact.Latitude = Static<double> (impact, "Latitude");
-            Impact.Longitude = Static<double> (impact, "Longitude");
-            Impact.Altitude = Static<double> (impact, "Altitude");
-            Impact.Biome = Static<string> (impact, "Biome");
-            Impact.SuicideDeltaV = Static<double> (impact, "SuicideDeltaV");
-            Impact.SuicideDistance = Static<double> (impact, "SuicideDistance");
-            Impact.SuicideAltitude = Static<double> (impact, "SuicideAltitude");
-            Impact.SuicideLength = Static<double> (impact, "SuicideLength");
-            Impact.SuicideCountdown = Static<double> (impact, "SuicideCountdown");
+            var simulation = mod.Type (readouts + "Vessel.SimulationProcessor");
+            SimulationProcessor = new Processor (simulation);
+            Simulation.Stages = simulation.StaticGetter<object> ("Stages");
+            var manager = mod.Type ("KerbalEngineer.VesselSimulator.SimManager");
+            Simulation.FailMessage = manager.StaticGetter<string> ("failMessage");
+            Simulation.ResultsReady = manager.Method<Func<bool>> ("ResultsReady");
+            var locker = manager.StaticGetter<object> ("locker");
+            Simulation.Lock = Accessor.IsMissing (locker) ? new object () : locker ();
+            var manoeuvre = mod.Type (readouts + "Orbital.ManoeuvreNode.ManoeuvreProcessor");
+            Simulation.BurnTime = manoeuvre.Method<BurnTimeFunction> ("GetBurnTime");
 
-            var simulation = assembly.GetType (readouts + "Vessel.SimulationProcessor");
-            SimulationProcessor = Processor.Bind (simulation, missing);
-            Simulation.Stages = Static<object> (simulation, "Stages");
-            var manager = assembly.GetType ("KerbalEngineer.VesselSimulator.SimManager");
-            Simulation.FailMessage = Static<string> (manager, "failMessage");
-            Simulation.ResultsReady = manager == null ? null : Accessor.Method<Func<bool>> (manager, "ResultsReady");
-            if (Simulation.ResultsReady == null)
-                missing.Add ("SimManager.ResultsReady");
-            var locker = Static<object> (manager, "locker");
-            Simulation.Lock = locker == null ? null : locker ();
-            var manoeuvre = assembly.GetType (readouts + "Orbital.ManoeuvreNode.ManoeuvreProcessor");
-            Simulation.BurnTime = manoeuvre == null ? null : Accessor.Method<BurnTimeFunction> (manoeuvre, "GetBurnTime");
-            if (Simulation.BurnTime == null)
-                missing.Add ("ManoeuvreProcessor.GetBurnTime");
+            var core = mod.Type ("KerbalEngineer.Flight.FlightEngineerCore");
+            Core.GamePaused = core.StaticGetter<bool> ("gamePaused");
+            Core.SetGamePaused = core.StaticSetter<bool> ("gamePaused");
 
-            var core = assembly.GetType ("KerbalEngineer.Flight.FlightEngineerCore");
-            Core.GamePaused = Static<bool> (core, "gamePaused");
-            Core.SetGamePaused = core == null ? null : Accessor.StaticSetter<bool> (core, "gamePaused");
-            if (Core.SetGamePaused == null)
-                missing.Add ("FlightEngineerCore.gamePaused");
+            var stage = mod.Type ("KerbalEngineer.VesselSimulator.Stage");
+            Stage.Number = stage.Getter<object, int> ("number");
+            Stage.DeltaV = stage.Getter<object, double> ("deltaV");
+            Stage.TotalDeltaV = stage.Getter<object, double> ("totalDeltaV");
+            Stage.Isp = stage.Getter<object, double> ("isp");
+            Stage.Thrust = stage.Getter<object, double> ("thrust");
+            Stage.ActualThrust = stage.Getter<object, double> ("actualThrust");
+            Stage.ThrustToWeight = stage.Getter<object, double> ("thrustToWeight");
+            Stage.MaxThrustToWeight = stage.Getter<object, double> ("maxThrustToWeight");
+            Stage.ActualThrustToWeight = stage.Getter<object, double> ("actualThrustToWeight");
+            Stage.Mass = stage.Getter<object, double> ("mass");
+            Stage.TotalMass = stage.Getter<object, double> ("totalMass");
+            Stage.ResourceMass = stage.Getter<object, double> ("resourceMass");
+            Stage.Time = stage.Getter<object, double> ("time");
+            Stage.TotalTime = stage.Getter<object, double> ("totalTime");
+            Stage.MaxThrustTorque = stage.Getter<object, double> ("maxThrustTorque");
+            Stage.ThrustOffsetAngle = stage.Getter<object, double> ("thrustOffsetAngle");
+            Stage.RCSIsp = stage.Getter<object, double> ("RCSIsp");
+            Stage.RCSThrust = stage.Getter<object, double> ("RCSThrust");
+            Stage.RCSDeltaVStart = stage.Getter<object, double> ("RCSdeltaVStart");
+            Stage.RCSDeltaVEnd = stage.Getter<object, double> ("RCSdeltaVEnd");
+            Stage.RCSTWRStart = stage.Getter<object, double> ("RCSTWRStart");
+            Stage.RCSTWREnd = stage.Getter<object, double> ("RCSTWREnd");
+            Stage.RCSBurnTime = stage.Getter<object, double> ("RCSBurnTime");
+            Stage.Cost = stage.Getter<object, double> ("cost");
+            Stage.TotalCost = stage.Getter<object, double> ("totalCost");
+            Stage.PartCount = stage.Getter<object, int> ("partCount");
+            Stage.TotalPartCount = stage.Getter<object, int> ("totalPartCount");
 
-            var stage = assembly.GetType ("KerbalEngineer.VesselSimulator.Stage");
-            Stage.Number = Field<int> (stage, "number");
-            Stage.DeltaV = Field<double> (stage, "deltaV");
-            Stage.TotalDeltaV = Field<double> (stage, "totalDeltaV");
-            Stage.Isp = Field<double> (stage, "isp");
-            Stage.Thrust = Field<double> (stage, "thrust");
-            Stage.ActualThrust = Field<double> (stage, "actualThrust");
-            Stage.ThrustToWeight = Field<double> (stage, "thrustToWeight");
-            Stage.MaxThrustToWeight = Field<double> (stage, "maxThrustToWeight");
-            Stage.ActualThrustToWeight = Field<double> (stage, "actualThrustToWeight");
-            Stage.Mass = Field<double> (stage, "mass");
-            Stage.TotalMass = Field<double> (stage, "totalMass");
-            Stage.ResourceMass = Field<double> (stage, "resourceMass");
-            Stage.Time = Field<double> (stage, "time");
-            Stage.TotalTime = Field<double> (stage, "totalTime");
-            Stage.MaxThrustTorque = Field<double> (stage, "maxThrustTorque");
-            Stage.ThrustOffsetAngle = Field<double> (stage, "thrustOffsetAngle");
-            Stage.RCSIsp = Field<double> (stage, "RCSIsp");
-            Stage.RCSThrust = Field<double> (stage, "RCSThrust");
-            Stage.RCSDeltaVStart = Field<double> (stage, "RCSdeltaVStart");
-            Stage.RCSDeltaVEnd = Field<double> (stage, "RCSdeltaVEnd");
-            Stage.RCSTWRStart = Field<double> (stage, "RCSTWRStart");
-            Stage.RCSTWREnd = Field<double> (stage, "RCSTWREnd");
-            Stage.RCSBurnTime = Field<double> (stage, "RCSBurnTime");
-            Stage.Cost = Field<double> (stage, "cost");
-            Stage.TotalCost = Field<double> (stage, "totalCost");
-            Stage.PartCount = Field<int> (stage, "partCount");
-            Stage.TotalPartCount = Field<int> (stage, "totalPartCount");
+            var simulator = mod.Type ("KerbalEngineer.VesselSimulator.Simulation");
+            EditorSimulation.Create = simulator.Constructor<Func<object>> ();
+            EditorSimulation.Prepare =
+                simulator.Method<Func<object, object, List<global::Part>, double, double, double, bool, bool, bool, bool>> ("PrepareSimulation");
+            EditorSimulation.Run = simulator.Method<Func<object, object, object>> ("RunSimulation");
+            EditorSimulation.UpdateModSettings = manager.Method<Action> ("UpdateModSettings");
+            EditorSimulation.VectoredThrust = manager.StaticGetter<bool> ("vectoredThrust");
 
-            var simulator = assembly.GetType ("KerbalEngineer.VesselSimulator.Simulation");
-            EditorSimulation.Instance = simulator == null ? null : Activator.CreateInstance (simulator);
-            EditorSimulation.Prepare = simulator == null ? null :
-                Accessor.Method<Func<object, object, List<global::Part>, double, double, double, bool, bool, bool, bool>> (simulator, "PrepareSimulation");
-            EditorSimulation.Run = simulator == null ? null : Accessor.Method<Func<object, object, object>> (simulator, "RunSimulation");
-            EditorSimulation.UpdateModSettings = manager == null ? null : Accessor.Method<Action> (manager, "UpdateModSettings");
-            EditorSimulation.VectoredThrust = Static<bool> (manager, "vectoredThrust");
-            if (EditorSimulation.Instance == null || EditorSimulation.Prepare == null || EditorSimulation.Run == null || EditorSimulation.UpdateModSettings == null)
-                missing.Add ("Simulation");
-
-            var rendezvous = assembly.GetType (readouts + "Rendezvous.RendezvousProcessor");
-            RendezvousProcessor = Processor.Bind (rendezvous, missing);
-            Rendezvous.ShowDetails = Static<bool> (rendezvous, "ShowDetails");
-            Rendezvous.LandedSamePlanet = Static<bool> (rendezvous, "landedSamePlanet");
-            Rendezvous.SourceDisplay = Static<string> (rendezvous, "sourceDisplay");
-            Rendezvous.OverrideANDN = Static<bool> (rendezvous, "overrideANDN");
-            Rendezvous.OverrideANDNRev = Static<bool> (rendezvous, "overrideANDNRev");
-            Rendezvous.PhaseAngle = Static<double> (rendezvous, "PhaseAngle");
-            Rendezvous.InterceptAngle = Static<double> (rendezvous, "InterceptAngle");
-            Rendezvous.TimeToTransferAngle = Static<double> (rendezvous, "TimeToTransferAngle");
-            Rendezvous.AngleToAscendingNode = Static<double> (rendezvous, "AngleToAscendingNode");
-            Rendezvous.AngleToDescendingNode = Static<double> (rendezvous, "AngleToDescendingNode");
-            Rendezvous.TimeToAscendingNode = Static<double> (rendezvous, "TimeToAscendingNode");
-            Rendezvous.TimeToDescendingNode = Static<double> (rendezvous, "TimeToDescendingNode");
-            Rendezvous.AngleToPlane = Static<double[]> (rendezvous, "AngleToPlane");
-            Rendezvous.TimeToPlane = Static<double[]> (rendezvous, "TimeToPlane");
-
-
-            if (missing.Count > 0) {
-                Logger.WriteLine ("Load API: " + assemblyName + " members not found: " +
-                                  string.Join (", ", missing.ToArray ()) + "; skipping", Logger.Severity.Error);
-                return;
-            }
-            IsAvailable = true;
-            Logger.WriteLine ("Load API: Successfully loaded " + assemblyName + " version " + assembly.GetName ().Version);
-        }
-
-        static Func<T> Static<T> (Type type, string name)
-        {
-            var getter = type == null ? null : Accessor.StaticGetter<T> (type, name);
-            if (getter == null)
-                missing.Add ((type == null ? "?" : type.Name) + "." + name);
-            return getter;
-        }
-
-        static Func<object, T> Field<T> (Type type, string name)
-        {
-            var getter = type == null ? null : Accessor.Getter<object, T> (type, name);
-            if (getter == null)
-                missing.Add ((type == null ? "?" : type.Name) + "." + name);
-            return getter;
+            var rendezvous = mod.Type (readouts + "Rendezvous.RendezvousProcessor");
+            RendezvousProcessor = new Processor (rendezvous);
+            Rendezvous.ShowDetails = rendezvous.StaticGetter<bool> ("ShowDetails");
+            Rendezvous.LandedSamePlanet = rendezvous.StaticGetter<bool> ("landedSamePlanet");
+            Rendezvous.SourceDisplay = rendezvous.StaticGetter<string> ("sourceDisplay");
+            Rendezvous.OverrideANDN = rendezvous.StaticGetter<bool> ("overrideANDN");
+            Rendezvous.OverrideANDNRev = rendezvous.StaticGetter<bool> ("overrideANDNRev");
+            Rendezvous.PhaseAngle = rendezvous.StaticGetter<double> ("PhaseAngle");
+            Rendezvous.InterceptAngle = rendezvous.StaticGetter<double> ("InterceptAngle");
+            Rendezvous.TimeToTransferAngle = rendezvous.StaticGetter<double> ("TimeToTransferAngle");
+            Rendezvous.AngleToAscendingNode = rendezvous.StaticGetter<double> ("AngleToAscendingNode");
+            Rendezvous.AngleToDescendingNode = rendezvous.StaticGetter<double> ("AngleToDescendingNode");
+            Rendezvous.TimeToAscendingNode = rendezvous.StaticGetter<double> ("TimeToAscendingNode");
+            Rendezvous.TimeToDescendingNode = rendezvous.StaticGetter<double> ("TimeToDescendingNode");
+            Rendezvous.AngleToPlane = rendezvous.StaticGetter<double[]> ("AngleToPlane");
+            Rendezvous.TimeToPlane = rendezvous.StaticGetter<double[]> ("TimeToPlane");
         }
 
         /// <summary>
@@ -339,29 +303,18 @@ namespace KRPC.KerbalEngineerRedux
     // its inputs, such as the target
     sealed class Processor
     {
-        readonly object instance;
+        readonly Func<object> getInstance;
         readonly Action<object> update;
 
-        Processor (object instance, Action<object> update)
+        public Processor (MemberBinder type)
         {
-            this.instance = instance;
-            this.update = update;
-        }
-
-        public static Processor Bind (Type type, List<string> missing)
-        {
-            var instance = type == null ? null : Accessor.StaticGetter<object> (type, "Instance");
-            var update = type == null ? null : Accessor.Method<Action<object>> (type, "Update");
-            if (instance == null || update == null) {
-                missing.Add (type == null ? "processor" : type.Name);
-                return null;
-            }
-            return new Processor (instance (), update);
+            getInstance = type.StaticGetter<object> ("Instance");
+            update = type.Method<Action<object>> ("Update");
         }
 
         public void Update ()
         {
-            update (instance);
+            update (getInstance ());
         }
     }
 }

@@ -42,10 +42,8 @@
     <Compile Include="$(bazel-bin)\service\DockingCamera\ServiceInfo.cs">
       <Link>ServiceInfo.cs</Link>
     </Compile>
-    <Compile Include="Addon.cs" />
     <Compile Include="API.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="DockingCamera.cs" />
-    <Compile Include="ImageFormat.cs" />
   </ItemGroup>
 </Project>

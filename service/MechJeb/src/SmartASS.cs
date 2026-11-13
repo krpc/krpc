@@ -1,6 +1,7 @@
 using System;
 using KRPC.MechJeb.Util;
 using KRPC.Service.Attributes;
+using KRPC.Utils;
 
 namespace KRPC.MechJeb
 {
@@ -16,40 +17,40 @@ namespace KRPC.MechJeb
             "RELATIVE_VELOCITY", "TARGET_ORIENTATION", "MANEUVER_NODE", "SUN", "SURFACE_HORIZONTAL"
         };
 
-        static Value<int> mode;
-        static Value<int> target;
-        static Value<bool> forceRol;
-        static Value<bool> forcePitch;
-        static Value<bool> forceYaw;
-        static Value<double> srfHdg;
-        static Value<double> srfPit;
-        static Value<double> srfRol;
-        static Value<double> srfVelYaw;
-        static Value<double> srfVelPit;
-        static Value<double> srfVelRol;
-        static Value<int> advReference;
-        static Value<int> advDirection;
+        static Field<object, int> mode;
+        static Field<object, int> target;
+        static Field<object, bool> forceRol;
+        static Field<object, bool> forcePitch;
+        static Field<object, bool> forceYaw;
+        static Field<object, double> srfHdg;
+        static Field<object, double> srfPit;
+        static Field<object, double> srfRol;
+        static Field<object, double> srfVelYaw;
+        static Field<object, double> srfVelPit;
+        static Field<object, double> srfVelRol;
+        static Field<object, int> advReference;
+        static Field<object, int> advDirection;
         static Action<object, bool> engage;
         static int [] attitudeReferences;
 
         internal static new void Load ()
         {
-            var type = Reflection.Type ("MuMech.MechJebModuleSmartASS");
-            mode = Reflection.Field<int> (type, "mode");
-            target = Reflection.Field<int> (type, "target");
-            forceRol = Reflection.Field<bool> (type, "forceRol");
-            forcePitch = Reflection.Field<bool> (type, "forcePitch");
-            forceYaw = Reflection.Field<bool> (type, "forceYaw");
-            srfHdg = Reflection.EditableDouble (type, "srfHdg");
-            srfPit = Reflection.EditableDouble (type, "srfPit");
-            srfRol = Reflection.EditableDouble (type, "srfRol");
-            srfVelYaw = Reflection.EditableDouble (type, "srfVelYaw");
-            srfVelPit = Reflection.EditableDouble (type, "srfVelPit");
-            srfVelRol = Reflection.EditableDouble (type, "srfVelRol");
-            advReference = Reflection.Field<int> (type, "advReference");
-            advDirection = Reflection.Field<int> (type, "advDirection");
-            engage = Reflection.Method<Action<object, bool>> (type, "Engage");
-            var reference = Reflection.Type ("MuMech.AttitudeReference");
+            var type = Bindings.Type ("MuMech.MechJebModuleSmartASS");
+            mode = type.Field<object, int> ("mode");
+            target = type.Field<object, int> ("target");
+            forceRol = type.Field<object, bool> ("forceRol");
+            forcePitch = type.Field<object, bool> ("forcePitch");
+            forceYaw = type.Field<object, bool> ("forceYaw");
+            srfHdg = Bindings.EditableDouble (type, "srfHdg");
+            srfPit = Bindings.EditableDouble (type, "srfPit");
+            srfRol = Bindings.EditableDouble (type, "srfRol");
+            srfVelYaw = Bindings.EditableDouble (type, "srfVelYaw");
+            srfVelPit = Bindings.EditableDouble (type, "srfVelPit");
+            srfVelRol = Bindings.EditableDouble (type, "srfVelRol");
+            advReference = type.Field<object, int> ("advReference");
+            advDirection = type.Field<object, int> ("advDirection");
+            engage = type.Method<Action<object, bool>> ("Engage");
+            var reference = Bindings.Type ("MuMech.AttitudeReference").Type;
             attitudeReferences = reference == null ? null :
                 Array.ConvertAll (attitudeReferenceNames, name => (int)Enum.Parse (reference, name));
         }

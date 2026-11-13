@@ -1,5 +1,6 @@
 using System;
 using KRPC.Service.Attributes;
+using KRPC.Utils;
 
 namespace KRPC.MechJeb.Maneuver
 {
@@ -10,15 +11,15 @@ namespace KRPC.MechJeb.Maneuver
     public sealed class OperationEllipticize : TimedOperation
     {
         static Func<object, object> timeSelector;
-        static Value<double> newApoapsis;
-        static Value<double> newPeriapsis;
+        static Field<object, double> newApoapsis;
+        static Field<object, double> newPeriapsis;
 
         internal static new void Load ()
         {
-            var type = Reflection.Type ("MuMech.OperationEllipticize");
+            var type = Bindings.Type ("MuMech.OperationEllipticize");
             timeSelector = TimeSelectorField (type);
-            newApoapsis = Reflection.EditableDouble (type, "NewApA");
-            newPeriapsis = Reflection.EditableDouble (type, "NewPeA");
+            newApoapsis = Bindings.EditableDouble (type, "NewApA");
+            newPeriapsis = Bindings.EditableDouble (type, "NewPeA");
         }
 
         internal OperationEllipticize () : base ("OperationEllipticize")

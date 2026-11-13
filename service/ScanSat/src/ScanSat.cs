@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service;
 using KRPC.Service.Attributes;
+using KRPC.Service.StdLib;
+using KRPC.Utils;
 using UnityEngine;
 
 namespace KRPC.ScanSat
@@ -30,8 +32,7 @@ namespace KRPC.ScanSat
 
         static void CheckAPI ()
         {
-            if (!API.IsAvailable)
-                throw new InvalidOperationException ("SCANsat is not available");
+            ModAPI.Get<API> ().CheckAvailable ();
         }
 
         static global::CelestialBody InternalBody (SpaceCenter.Services.CelestialBody body)
@@ -63,7 +64,7 @@ namespace KRPC.ScanSat
         /// </summary>
         [KRPCProperty]
         public static bool Available {
-            get { return API.IsAvailable; }
+            get { return ModAPI.Get<API> ().IsAvailable; }
         }
 
         /// <summary>

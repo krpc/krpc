@@ -120,8 +120,17 @@ invocation, with no boxing.
 
  * Build each delegate once: in a static field, or per type with `DictionaryExtensions.GetOrAdd`
    when the declaring type is only known at run time, such as a mod's subclass of a part module.
- * Each helper returns null when the member is missing or its type does not convert. Check at
-   load, and log a warning or mark the integration unavailable.
+ * Each helper returns null when the member is missing or its type does not convert. Use the
+   null to detect an optional member.
+ * Bind a mod in a subclass of `KRPC.Utils.ModAPI`, one per integration. Its `Bind` sets static
+   fields through a `ModBinder`, whose `Type` gives a `MemberBinder` per type. The server runs
+   every `Bind` as the game starts. RPCs check `ModAPI.Get<T> ().CheckAvailable ()`.
+ * A missing type or member logs a warning and binds a delegate that throws
+   `ModMemberMissingException`, so a mod update fails only the RPCs that use the member. `Require`
+   makes a missing type or member fail the load, and an exception from `Bind` does the same.
+ * A stock fallback runs only when the mod is not installed, as `CheckInstalled` tells. With the
+   mod installed, a missing member throws, as a stock value in place of the mod's is wrong
+   without notice.
  * Mod assemblies are never referenced at compile time. Their types are found by name at run time.
  * A KSP part module field set through `BaseField.SetValue` also fires `OnValueModified`. Keep
    that call where the module reacts to the change.

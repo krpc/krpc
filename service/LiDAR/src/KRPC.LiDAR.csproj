@@ -42,7 +42,6 @@
     <Compile Include="$(bazel-bin)\service\LiDAR\ServiceInfo.cs">
       <Link>ServiceInfo.cs</Link>
     </Compile>
-    <Compile Include="Addon.cs" />
     <Compile Include="API.cs" />
     <Compile Include="Laser.cs" />
     <Compile Include="LIDAR.cs" />

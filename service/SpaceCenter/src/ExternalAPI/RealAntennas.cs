@@ -8,8 +8,12 @@ namespace KRPC.SpaceCenter.ExternalAPI
     /// from the stock ones, so the stock members keep working on them. The members here are
     /// the link budget and targeting that RealAntennas adds.
     /// </summary>
-    static class RealAntennas
+    sealed class RealAntennas : ModAPI
     {
+        public RealAntennas () : base (ServiceInfo.Mods.RealAntennas.Name, ServiceInfo.Mods.RealAntennas.Assembly)
+        {
+        }
+
         // ModuleRealAntenna
         static Type moduleType;
         static Func<PartModule, object> moduleAntenna;
@@ -46,74 +50,54 @@ namespace KRPC.SpaceCenter.ExternalAPI
         static Func<CommNet.CommLink, object> forwardTx;
         static Func<CommNet.CommLink, object> forwardRx;
 
-        public static void Load ()
+        protected override void Bind (ModBinder mod)
         {
-            IsAvailable = false;
-            moduleType = APILoader.Load (typeof(RealAntennas), "RealAntennas", "RealAntennas.ModuleRealAntenna");
-            if (moduleType == null)
-                return;
-            var assembly = moduleType.Assembly;
-            var antennaType = assembly.GetType ("RealAntennas.RealAntenna");
-            var techLevelType = assembly.GetType ("RealAntennas.TechLevelInfo");
-            var bandType = assembly.GetType ("RealAntennas.Antenna.BandInfo");
-            var targetType = assembly.GetType ("RealAntennas.Targeting.AntennaTarget");
-            linkType = assembly.GetType ("RealAntennas.RACommLink");
-            if (antennaType == null || techLevelType == null || bandType == null || targetType == null || linkType == null) {
-                Logger.WriteLine ("Load API: RealAntennas types not found; skipping", Logger.Severity.Error);
-                return;
-            }
-            moduleAntenna = Accessor.Getter<PartModule, object> (moduleType, "RAAntenna");
-            maxTxPower = Accessor.Getter<PartModule, float> (moduleType, "MaxTxPower");
-            maxTechLevel = Accessor.Getter<PartModule, int> (moduleType, "maxTechLevel");
-            condition = Accessor.Getter<PartModule, int> (moduleType, "Condition");
-            permanentShutdown = Accessor.Method<Action<PartModule, KSPActionParam>> (moduleType, "PermanentShutdownAction");
-            gain = Accessor.Getter<object, float> (antennaType, "Gain");
-            txPower = Accessor.Getter<object, float> (antennaType, "TxPower");
-            dataRate = Accessor.Getter<object, double> (antennaType, "DataRate");
-            beamwidth = Accessor.Getter<object, float> (antennaType, "Beamwidth");
-            idlePowerDraw = Accessor.Getter<object, float> (antennaType, "IdlePowerDraw");
-            powerDrawLinear = Accessor.Getter<object, float> (antennaType, "PowerDrawLinear");
-            techLevelInfo = Accessor.Getter<object, object> (antennaType, "TechLevelInfo");
-            rfBand = Accessor.Getter<object, object> (antennaType, "RFBand");
-            shape = Accessor.Getter<object, int> (antennaType, "Shape");
-            toTarget = Accessor.Getter<object, UnityEngine.Vector3> (antennaType, "ToTarget");
-            target = Accessor.Getter<object, object> (antennaType, "Target");
-            setTarget = Accessor.Setter<object, object> (antennaType, "Target");
-            parent = Accessor.Getter<object, PartModule> (antennaType, "Parent");
-            level = Accessor.Getter<object, int> (techLevelType, "Level");
-            maxDefinedTechLevel = Accessor.StaticGetter<int> (techLevelType, "MaxTL");
-            bandName = Accessor.Getter<object, string> (bandType, "name");
-            frequency = Accessor.Getter<object, float> (bandType, "Frequency");
-            loadTarget = Accessor.Method<Func<ConfigNode, object, object>> (targetType, "LoadFromConfig");
-            saveTarget = Accessor.Method<Action<object, ConfigNode>> (targetType, "Save");
-            forwardDataRate = Accessor.Getter<CommNet.CommLink, double> (linkType, "FwdDataRate");
-            reverseDataRate = Accessor.Getter<CommNet.CommLink, double> (linkType, "RevDataRate");
-            forwardTx = Accessor.Getter<CommNet.CommLink, object> (linkType, "FwdAntennaTx");
-            forwardRx = Accessor.Getter<CommNet.CommLink, object> (linkType, "FwdAntennaRx");
-            IsAvailable =
-                moduleAntenna != null && maxTxPower != null && maxTechLevel != null &&
-                condition != null && permanentShutdown != null && gain != null &&
-                txPower != null && dataRate != null && beamwidth != null &&
-                idlePowerDraw != null && powerDrawLinear != null && techLevelInfo != null &&
-                rfBand != null && maxDefinedTechLevel != null && shape != null && toTarget != null && target != null &&
-                setTarget != null && parent != null && level != null && bandName != null &&
-                frequency != null && loadTarget != null && saveTarget != null &&
-                forwardDataRate != null && reverseDataRate != null && forwardTx != null &&
-                forwardRx != null;
-            if (!IsAvailable)
-                Logger.WriteLine ("Load API: RealAntennas is installed but does not provide the expected members; skipping", Logger.Severity.Error);
+            var module = mod.Type ("RealAntennas.ModuleRealAntenna");
+            var antenna = mod.Type ("RealAntennas.RealAntenna");
+            var techLevel = mod.Type ("RealAntennas.TechLevelInfo");
+            var band = mod.Type ("RealAntennas.Antenna.BandInfo");
+            var targetBinder = mod.Type ("RealAntennas.Targeting.AntennaTarget");
+            var link = mod.Type ("RealAntennas.RACommLink");
+            moduleType = module.Type;
+            linkType = link.Type;
+            moduleAntenna = module.Getter<PartModule, object> ("RAAntenna");
+            maxTxPower = module.Getter<PartModule, float> ("MaxTxPower");
+            maxTechLevel = module.Getter<PartModule, int> ("maxTechLevel");
+            condition = module.Getter<PartModule, int> ("Condition");
+            permanentShutdown = module.Method<Action<PartModule, KSPActionParam>> ("PermanentShutdownAction");
+            gain = antenna.Getter<object, float> ("Gain");
+            txPower = antenna.Getter<object, float> ("TxPower");
+            dataRate = antenna.Getter<object, double> ("DataRate");
+            beamwidth = antenna.Getter<object, float> ("Beamwidth");
+            idlePowerDraw = antenna.Getter<object, float> ("IdlePowerDraw");
+            powerDrawLinear = antenna.Getter<object, float> ("PowerDrawLinear");
+            techLevelInfo = antenna.Getter<object, object> ("TechLevelInfo");
+            rfBand = antenna.Getter<object, object> ("RFBand");
+            shape = antenna.Getter<object, int> ("Shape");
+            toTarget = antenna.Getter<object, UnityEngine.Vector3> ("ToTarget");
+            target = antenna.Getter<object, object> ("Target");
+            setTarget = antenna.Setter<object, object> ("Target");
+            parent = antenna.Getter<object, PartModule> ("Parent");
+            level = techLevel.Getter<object, int> ("Level");
+            maxDefinedTechLevel = techLevel.StaticGetter<int> ("MaxTL");
+            bandName = band.Getter<object, string> ("name");
+            frequency = band.Getter<object, float> ("Frequency");
+            loadTarget = targetBinder.Method<Func<ConfigNode, object, object>> ("LoadFromConfig");
+            saveTarget = targetBinder.Method<Action<object, ConfigNode>> ("Save");
+            forwardDataRate = link.Getter<CommNet.CommLink, double> ("FwdDataRate");
+            reverseDataRate = link.Getter<CommNet.CommLink, double> ("RevDataRate");
+            forwardTx = link.Getter<CommNet.CommLink, object> ("FwdAntennaTx");
+            forwardRx = link.Getter<CommNet.CommLink, object> ("FwdAntennaRx");
         }
-
-        public static bool IsAvailable { get; private set; }
 
         public static bool IsModule (PartModule module)
         {
-            return IsAvailable && moduleType.IsInstanceOfType (module);
+            return moduleType != null && moduleType.IsInstanceOfType (module);
         }
 
         public static bool IsLink (CommNet.CommLink link)
         {
-            return IsAvailable && linkType.IsInstanceOfType (link);
+            return linkType != null && linkType.IsInstanceOfType (link);
         }
 
         // ModuleRealAntenna
