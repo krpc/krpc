@@ -25,7 +25,8 @@ You can then run the script from the command line:
    $ krpc-clientgen --help
 
    usage: krpc-clientgen [-h] [-v] [-o OUTPUT] [--reference-dir DIR] [--ksp KSP]
-                         [--include SERVICE=PATH] [--output-defs OUTPUT_DEFS]
+                         [--include SERVICE=PATH] [--client-module CLIENT_MODULE]
+                         [--output-defs OUTPUT_DEFS]
                          language service input [input ...]
 
    Generate client source code for kRPC services.
@@ -55,6 +56,10 @@ You can then run the script from the command line:
                            service. For Python and JavaScript, the path is the
                            module of the service, which defaults to the module it
                            ships in.
+     --client-module CLIENT_MODULE
+                           For JavaScript, the module the generated code imports
+                           the client's functions from. Defaults to the client's
+                           package, @krpc-org/krpc.
      --output-defs OUTPUT_DEFS
                            When generating client code from a DLL, output the
                            service definitions to the given JSON file
@@ -125,11 +130,13 @@ For JavaScript, run the following:
 
 ``krpc-clientgen --reference-dir=/path/to/ksp/KSP_Data/Managed -o LaunchControl.ts js LaunchControl LaunchControl.dll``
 
-The JavaScript client builds the service when it connects, so `LaunchControl.ts` holds TypeScript
-declarations only. It imports the types of the services the client ships from the
-``@krpc-org/krpc`` package. A service from another mod needs ``--include`` with the path of its
-module, e.g. ``--include=OtherMod=./OtherMod.js``. To give the connection the service's types, add
-it to the client's ``Services`` interface:
+The JavaScript client builds the service when it connects. `LaunchControl.ts` declares its
+classes, and exports its enumerations, structures and exceptions as values. Import the module
+before you connect, and the connection uses those values where the server's definitions match.
+The module imports the client and the services it ships from the ``@krpc-org/krpc`` package. A
+service from another mod needs ``--include`` with the path of its module, e.g.
+``--include=OtherMod=./OtherMod.js``. To give the connection the service's types, add it to the
+client's ``Services`` interface:
 
 .. code-block:: ts
 

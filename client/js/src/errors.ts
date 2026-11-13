@@ -66,15 +66,20 @@ const NATIVE_ERRORS: ReadonlyMap<string, ErrorConstructor> = new Map([
   ["System.OverflowException", RangeError],
 ]);
 
-/** The class of an exception a service lists, given the .NET exception the server maps it to,
- * or an empty string. The message of its errors is the description and stack trace. */
+/** The JavaScript error the server's errors of a .NET exception extend, or undefined for a
+ * ServerError. */
+export function nativeError(mappedType: string): ErrorConstructor | undefined {
+  return NATIVE_ERRORS.get(mappedType);
+}
+
+/** The class of an exception a service lists, given the JavaScript error it extends, or
+ * undefined for a ServerError. The message of its errors is the description and stack trace. */
 export function exceptionClass(
   name: string,
-  mappedType: string,
+  native: ErrorConstructor | undefined,
 ): new (
   error: ServerErrorDetails,
 ) => Error {
-  const native = NATIVE_ERRORS.get(mappedType);
   let cls: new (error: ServerErrorDetails) => Error;
   if (native === undefined) {
     cls = class extends ServerError {

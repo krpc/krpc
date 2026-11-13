@@ -143,6 +143,7 @@ ts_project(
     name = "conformance-lib",
     srcs = [
         "conformance/testee.ts",
+        ":services-testservice",
         ":testee-schema",
     ],
     transpiler = "tsc",
@@ -171,6 +172,7 @@ conformance_test(
         "error-types",
         "dynamic",
         "definitions",
+        "declarations",
         "defaults",
         "named-arguments",
         "connections",

@@ -154,6 +154,21 @@ values. You combine values with ``union``, and test for one with ``contains``:
 ``intersection`` and ``difference`` give the other combinations of two values. Each combination is
 one object, so combinations compare with ``===``.
 
+.. _js-client-imports:
+
+Types Without a Connection
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The package exports each service of a kRPC release, with its enumerations, structures and
+exception classes. You can then use a value before you connect, such as in a default argument:
+
+.. literalinclude:: /scripts/js/Imports.js
+
+When the server defines a type as the package does, the connection uses the package's type. Its
+values then compare with ``===``, and ``instanceof`` works with the package's classes. A connection
+to a server with a different definition builds its own type. A value of the package's enumeration
+still passes as an argument, by its number, and :func:`equals` compares values of the two by number.
+
 Using the Client in a Web Page
 ------------------------------
 
@@ -246,7 +261,9 @@ When you connect, the client builds every service from the service definitions t
 so the services match the server you connect to, whatever its version. The package also holds
 TypeScript declarations of the services a kRPC release ships, which give your editor the types
 and documentation of every procedure, class and value. They type-check JavaScript as well as
-TypeScript, for example with ``// @ts-check`` at the top of a script.
+TypeScript, for example with ``// @ts-check`` at the top of a script. Their enumerations,
+structures and exceptions are values too, which you can :ref:`use without a connection
+<js-client-imports>`.
 
 A service from another mod has no declarations in the package. You can generate a module for it
 with :ref:`krpc-clientgen <service-api-clientgen>`. Without one, its members have no static

@@ -25,18 +25,22 @@ import {
 } from "../src/errors.js";
 import { camelCase } from "../src/naming.js";
 import { getObjectId, RemoteObject } from "../src/objects.js";
+import { type Declared, registered } from "../src/registry.js";
 import {
   ProcedureCallSchema,
   ServicesSchema,
   Type_TypeCode as TypeCode,
   TypeSchema,
 } from "../src/schema/krpc_pb.js";
+// The generated module of the test service, which declares its enumerations and structures
+import * as TestService from "../src/services/TestService.js";
 import { RemoteEnum, RemoteFlags, RemoteStruct, type Type } from "../src/types.js";
 import { equals } from "../src/values.js";
 import {
   type Command,
   CommandSchema,
   type Connect,
+  type Declared as DeclaredCommand,
   type DeprecationSignals,
   Error_Kind as ErrorKind,
   type Error as ErrorMessage,
@@ -55,6 +59,7 @@ const PROFILES = [
   "error-types",
   "dynamic",
   "definitions",
+  "declarations",
   "defaults",
   "named-arguments",
   "connections",
@@ -104,6 +109,27 @@ function connection(command: Command): DynamicConnection {
   return conn;
 }
 
+/** The enumeration or structure of a service its generated module declares. */
+function declaredType<K extends "enumeration" | "struct">(
+  service: string,
+  name: string,
+  kind: K,
+): Extract<Declared, { kind: K }> {
+  const declared = registered(service, name);
+  if (declared?.kind !== kind) {
+    throw new Unsupported(`No generated ${service}.${name}`);
+  }
+  return declared as Extract<Declared, { kind: K }>;
+}
+
+/** Whether the client's type for an enumeration or structure, reached through the connection,
+ * is the one its generated module declares. */
+function isDeclared(conn: DynamicConnection, command: DeclaredCommand): boolean {
+  const modules: Record<string, Record<string, unknown>> = { TestService };
+  const generated = modules[command.service]?.[command.name];
+  return generated !== undefined && serviceType(conn, command.service, command.name) === generated;
+}
+
 /** The value of a service member, by the name the server gives it. */
 function serviceType(conn: DynamicConnection, service: string, name: string): any {
   const members = conn[camelCase(service)];
@@ -135,8 +161,10 @@ function fromValue(conn: DynamicConnection, value: Value | undefined): unknown {
       return result;
     }
     case "enum": {
-      const { service, name, value: number } = content.value;
-      const enumeration = contextOf(conn).types.enumeration(service, name);
+      const { service, name, value: number, declared } = content.value;
+      const enumeration = declared
+        ? declaredType(service, name, "enumeration").enumeration
+        : contextOf(conn).types.enumeration(service, name);
       if (enumeration === undefined) {
         throw new Unsupported(`No ${service}.${name}`);
       }
@@ -157,8 +185,10 @@ function fromValue(conn: DynamicConnection, value: Value | undefined): unknown {
         content.value.entries.map((x) => [fromValue(conn, x.key), fromValue(conn, x.value)]),
       );
     case "struct": {
-      const { service, name, fields } = content.value;
-      const struct = contextOf(conn).types.struct(`${service}.${name}`);
+      const { service, name, fields, declared } = content.value;
+      const struct = declared
+        ? declaredType(service, name, "struct").declaration
+        : contextOf(conn).types.struct(`${service}.${name}`);
       const values: Record<string, unknown> = {};
       fields.forEach((field, i) => {
         // A field past the end of the structure, for a test that passes one too many
@@ -553,6 +583,8 @@ async function dispatch(command: Command): Promise<Value> {
       });
     case "members":
       return members(connection(command), content.value);
+    case "declared":
+      return toValue(isDeclared(connection(command), content.value));
     case "encode": {
       const conn = connection(command);
       const value = fromValue(conn, content.value.value);

@@ -1,3 +1,4 @@
+import json
 import re
 
 from krpc.attributes import Attributes
@@ -17,7 +18,7 @@ from krpc.types import (
 )
 from krpc.utils import lower_camel_case
 
-from ..lang.js import JsLanguage, accessor_name
+from ..lang.js import NATIVE_ERRORS, JsLanguage, accessor_name
 from . import crefs
 from .docparser import DocParser
 from .generator import Generator
@@ -76,16 +77,22 @@ RESERVED_WORDS = {
 
 
 class JsGenerator(Generator[JsLanguage]):
-    """Generates the TypeScript declarations of a service. The JavaScript client builds its
-    services at run time, so the module holds types only: an interface for the service, with
-    a member for each procedure, property, class, enumeration, structure and exception, and
-    the types of the objects and values it passes."""
+    """Generates the TypeScript module of a service. The JavaScript client builds its services
+    at run time, so the module declares the service: an interface with a member for each
+    procedure, property, class, enumeration, structure and exception, and the types of the
+    objects and values it passes. Its enumerations, structures and exceptions are values too,
+    which a connection uses where the server's definitions match."""
+
+    # The module the generated code imports the client's functions from
+    client_module = "@krpc-org/krpc"
 
     def __init__(self, macro_template, service, definitions, includes=None):
         super().__init__(macro_template, service, definitions, includes)
         self.language = JsLanguage()
         # The names the client's own module exports that the declarations use
         self._client_imports = set()
+        # The client's functions that declare the module's values
+        self._value_imports = set()
         # The client's namespace of protobuf messages, when the declarations use one
         self._message_imports = set()
         # The other services whose types the declarations use
@@ -203,12 +210,25 @@ class JsGenerator(Generator[JsLanguage]):
         for name, info in context["enumerations"].items():
             base = "RemoteFlags" if info["flags"] else "RemoteEnum"
             self._client_imports.add(base)
+            self._value_imports.add("declareEnumeration")
+            values = [
+                self._declared_member(name, x, [x["name"], x["value"]])
+                for x in info["values"]
+            ]
             enumerations.append(
                 {
                     "name": name,
                     "base": base,
                     "documentation": doc_comment(self._documentation(info)),
                     "brand": "%s.%s" % (service, name),
+                    "deprecated": deprecated_comment(info),
+                    "arguments": "%s, %s, %s%s"
+                    % (
+                        json.dumps(service),
+                        json.dumps(name),
+                        js_array(values),
+                        ", true" if info["flags"] else "",
+                    ),
                 }
             )
 
@@ -226,23 +246,33 @@ class JsGenerator(Generator[JsLanguage]):
                 )
                 for x in info["fields"]
             ]
+            self._value_imports.add("declareStruct")
+            field_names = [
+                self._declared_member(name, x, [x["name"]]) for x in info["fields"]
+            ]
             structs.append(
                 {
                     "name": name,
                     "documentation": doc_comment(self._documentation(info)),
                     "brand": "%s.%s" % (service, name),
                     "fields": render(fields),
+                    "deprecated": deprecated_comment(info),
+                    "arguments": "%s, %s, %s"
+                    % (json.dumps(service), json.dumps(name), js_array(field_names)),
                 }
             )
+
+        exceptions = self._exceptions(context)
 
         self._client_imports.add("RemoteService")
         local_names = (
             set(defs.get("classes", {}))
             | set(defs.get("enumerations", {}))
             | set(defs.get("structs", {}))
+            | set(defs.get("exceptions", {}))
             | {"Service"}
         )
-        for name in self._service_imports | self._client_imports:
+        for name in self._service_imports | self._client_imports | self._value_imports:
             if name in local_names:
                 raise RuntimeError(
                     "%s defines %s, which the declarations of the service need for "
@@ -260,6 +290,17 @@ class JsGenerator(Generator[JsLanguage]):
                 )
             else:
                 from_package.add(name)
+        # The native errors are globals, named to check that no type hides them
+        declare = self._value_imports - set(NATIVE_ERRORS.values())
+        if declare:
+            imports.insert(
+                0,
+                'import { %s } from "%s";'
+                % (
+                    ", ".join(sorted(declare, key=str.lower)),
+                    self.client_module,
+                ),
+            )
         if from_package:
             imports.insert(
                 0,
@@ -283,7 +324,40 @@ class JsGenerator(Generator[JsLanguage]):
             "classes": classes,
             "enumerations": enumerations,
             "structs": structs,
+            "exceptions": exceptions,
         }
+
+    def _exceptions(self, context):
+        """The exceptions of the service, each declared as a type and a value"""
+        exceptions = []
+        service = self._service
+        for name, info in context["exceptions"].items():
+            self._value_imports.add("declareException")
+            native = info["native"]
+            arguments = [json.dumps(service), json.dumps(name)]
+            if native is not None:
+                self._value_imports.add(native)
+                arguments.append(native)
+            exceptions.append(
+                {
+                    "name": name,
+                    "documentation": doc_comment(self._documentation(info)),
+                    "type": "ServerError"
+                    if native is None
+                    else "%s & ServerErrorDetails" % native,
+                    "deprecated": deprecated_comment(info),
+                    "arguments": ", ".join(arguments),
+                }
+            )
+        return exceptions
+
+    def _declared_member(self, type_name, info, item):
+        """The array of an enumeration value or structure field the module declares, with
+        the warning for a use of it when deprecated"""
+        if info["deprecated"]:
+            qualified = "%s.%s.%s" % (self._service, type_name, info["name"])
+            item.append(deprecation_message(qualified, info))
+        return item
 
     @staticmethod
     def parse_plain_cref_member(name):
@@ -460,6 +534,29 @@ class JsGenerator(Generator[JsLanguage]):
     def parse_documentation(self, documentation):
         documentation = JsDocParser(self.parse_cref).parse(documentation).strip()
         return re.sub(r"\n{3,}", "\n\n", documentation)
+
+
+def deprecation_message(qualified_name, info):
+    """The warning for a use of a deprecated member, as the client words it"""
+    reason = info.get("deprecated_reason", "")
+    if reason:
+        return "%s is deprecated: %s" % (qualified_name, reason)
+    return "%s is deprecated" % qualified_name
+
+
+def deprecated_comment(info):
+    """The documentation comment marking a deprecated value, or none"""
+    if not info.get("deprecated"):
+        return []
+    reason = info.get("deprecated_reason", "")
+    return doc_comment("@deprecated " + reason if reason else "@deprecated")
+
+
+def js_array(items):
+    """A JavaScript array literal of arrays of strings and numbers"""
+    return "[%s]" % ", ".join(
+        "[%s]" % ", ".join(json.dumps(x) for x in item) for item in items
+    )
 
 
 def doc_comment(documentation):

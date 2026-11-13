@@ -1,14 +1,23 @@
 import { RemoteObject } from "./objects.js";
-import { RemoteStruct } from "./types.js";
+import { RemoteEnum, RemoteStruct, StructDeclaration } from "./types.js";
 
-/** Whether two values are equal: numbers, strings and enumeration values by `===`, objects by
- * class and id, bytes and arrays item by item, structures of one name field by field, sets and maps by their members. */
+/** Whether two values are equal: numbers and strings by `===`, enumeration values of one name by
+ * number, objects by class and id, bytes and arrays item by item, structures with the same fields
+ * field by field, sets and maps by their members. */
 export function equals(a: unknown, b: unknown): boolean {
   if (a === b) {
     return true;
   }
   if (a instanceof RemoteObject) {
     return b instanceof RemoteObject && RemoteObject.sameObject(a, b);
+  }
+  if (a instanceof RemoteEnum) {
+    return (
+      b instanceof RemoteEnum &&
+      a.enumeration.service === b.enumeration.service &&
+      a.enumeration.name === b.enumeration.name &&
+      a.value === b.value
+    );
   }
   if (typeof a === "number" && typeof b === "number") {
     return Number.isNaN(a) && Number.isNaN(b);
@@ -43,7 +52,7 @@ export function equals(a: unknown, b: unknown): boolean {
     return false;
   }
   const [x, y] = [RemoteStruct.structOf(a), RemoteStruct.structOf(b)];
-  if (x.service !== y.service || x.name !== y.name) {
+  if (!StructDeclaration.same(x, y)) {
     return false;
   }
   return x.fields.every((field) =>
