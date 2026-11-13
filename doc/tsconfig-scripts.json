@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ES2022",
+    "moduleResolution": "Bundler",
+    "lib": ["ES2022", "ESNext.Disposable", "DOM"],
+    "types": [],
+    "strict": true,
+    // The examples leave out null checks for brevity
+    "strictNullChecks": false,
+    "noEmit": true,
+    "allowJs": true,
+    "checkJs": true,
+    "paths": {
+      "@krpc-org/krpc": ["../client/js/src/index.d.ts"]
+    }
+  }
+}

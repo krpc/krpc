@@ -13,4 +13,5 @@ service it can call. Clients for other languages are maintained by the community
    cnano
    java
    lua
+   js
    third-party

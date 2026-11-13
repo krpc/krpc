@@ -117,6 +117,7 @@ COVERAGE_CLIENTS = {
     "cnano": "C",
     "java": "Java",
     "lua": "Lua",
+    "js": "JavaScript",
 }
 
 # The areas in the specification's page order

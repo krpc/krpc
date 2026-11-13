@@ -21,6 +21,7 @@ from .dispatch import (
 )
 from .docparser import DocumentationMarkupWarning
 from .java import JavaGenerator
+from .js import JsGenerator
 from .python import PythonGenerator
 
 _default_show_warning = warnings.showwarning
@@ -37,6 +38,7 @@ GENERATORS = {
     "csharp": CsharpGenerator,
     "cpp": CppGenerator,
     "java": JavaGenerator,
+    "js": JsGenerator,
     "cnano": CnanoGenerator,
     "python": PythonGenerator,
     # The dispatch of a conformance testee
@@ -60,6 +62,17 @@ def _reference_dirs(args):
         else:
             raise RuntimeError("No managed assemblies found in '%s'." % args.ksp)
     return reference_dirs
+
+
+def _includes(arguments):
+    """The include paths of other services, by service, from SERVICE=PATH arguments"""
+    includes = {}
+    for include in arguments:
+        service, sep, path = include.partition("=")
+        if not sep or not service or not path:
+            raise RuntimeError("Invalid include '%s'. Expected SERVICE=PATH." % include)
+        includes[service] = path
+    return includes
 
 
 def main():
@@ -113,8 +126,13 @@ def main():
         metavar="SERVICE=PATH",
         help="Include the generated code of another service, whose types the service "
         + "uses, from the given path. Required by the C++ and C nano generators for "
-        + "each such service. For Python, the path is the module of the service, "
-        + "which defaults to the module it ships in.",
+        + "each such service. For Python and JavaScript, the path is the module of the "
+        + "service, which defaults to the module it ships in.",
+    )
+    parser.add_argument(
+        "--client-module",
+        help="For JavaScript, the module the generated code imports the client's functions "
+        + "from. Defaults to the client's package, @krpc-org/krpc.",
     )
     parser.add_argument(
         "--output-defs",
@@ -129,14 +147,7 @@ def main():
         )
 
     try:
-        includes = {}
-        for include in args.include:
-            service, sep, path = include.partition("=")
-            if not sep or not service or not path:
-                raise RuntimeError(
-                    "Invalid include '%s'. Expected SERVICE=PATH." % include
-                )
-            includes[service] = path
+        includes = _includes(args.include)
 
         # Check and expand input paths
         inputs = []
@@ -195,6 +206,8 @@ def main():
         # Run the generator, over all of the definitions that were loaded: the requested
         # service is the one generated, but the types it refers to may be defined by any of them
         g = generator(macro_template, args.service, Definitions(defs), includes)
+        if args.client_module:
+            g.client_module = args.client_module
         if args.output:
             g.generate_file(args.output)
         else:

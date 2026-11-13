@@ -47,6 +47,7 @@ RemoteTech
 Rescaled
 Translatron
 Tron
+Vitest
 Wheesley
 accelerometers
 adaptively
@@ -67,6 +68,7 @@ biomes
 bitwise
 bool
 boolean
+bundler
 circularization
 clickable
 clientgen
@@ -75,6 +77,7 @@ collidable
 collinear
 combusting
 comms
+comparator
 constructible
 convecting
 cppcheck
@@ -84,6 +87,7 @@ decoupler
 decouplers
 deployable
 destructor
+destructuring
 dict
 differencing
 dll
@@ -95,6 +99,7 @@ endian
 enum
 ephemeris
 erm
+esbuild
 feedforward
 fieldName
 finalizer
@@ -146,6 +151,8 @@ maths
 metaclass
 microcontroller
 microcontrollers
+microtask
+minifier
 mitigations
 mits
 mutex
@@ -158,6 +165,7 @@ navball
 normangle
 nozzel
 nozzels
+npm
 ns
 nullability
 nullable
@@ -223,6 +231,7 @@ toolchains
 tooltip
 tradeoff
 translational
+transpiler
 tuple
 turbofan
 uint

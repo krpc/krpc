@@ -1,0 +1,22 @@
+# The conformance tests the JavaScript client's language has no way to carry out, one per line, with the reason as a comment
+test_calls.py::test_abandoned_id  # JavaScript has no way to interrupt a call
+test_connection.py::test_close_interrupted  # As test_abandoned_id
+test_objects.py::test_hash  # JavaScript has no hash of a value
+test_objects.py::test_hash_across_connections  # As test_hash
+test_objects.py::test_static_method_through_an_object_connection  # JavaScript calls a static method through its class
+test_values.py::test_structure_hash  # As test_hash
+test_streams.py::test_hash  # JavaScript has no hash of a handle
+test_events.py::test_hash  # As test_streams.py::test_hash
+test_concurrency.py::test_interrupted_wait[stream]  # As test_calls.py::test_abandoned_id
+test_concurrency.py::test_interrupted_wait[event]  # As test_calls.py::test_abandoned_id
+test_streams.py::test_callback_fatal_error  # JavaScript has no kind of error apart from its ordinary ones
+test_streams.py::test_first_call_fatal_error  # As test_streams.py::test_callback_fatal_error
+test_streams.py::test_end_callback_fatal_error_on_remove  # As test_streams.py::test_callback_fatal_error
+test_streams.py::test_end_callback_fatal_error_on_close  # As test_streams.py::test_callback_fatal_error
+test_streams.py::test_late_end_callback_fatal_error  # As test_streams.py::test_callback_fatal_error
+test_functions.py::test_null_for_non_nullable_type[double]  # A JavaScript value can be null at any type
+test_functions.py::test_null_for_non_nullable_type[TestClass]  # As test_null_for_non_nullable_type[double]
+test_functions.py::test_stream_null_for_non_nullable_type[double]  # As test_null_for_non_nullable_type[double]
+test_functions.py::test_stream_null_for_non_nullable_type[TestClass]  # As test_null_for_non_nullable_type[double]
+test_functions.py::test_null_in_callback[double]  # As test_null_for_non_nullable_type[double]
+test_functions.py::test_null_in_callback[TestClass]  # As test_null_for_non_nullable_type[double]

@@ -10,7 +10,6 @@ is laid out as follows:
 * ``core/`` - the C# library shared by the server and services.
 * ``protobuf/`` - the schema for the communication protocol.
 * ``client/`` - the client libraries, one directory per language.
-* ``client/websockets/`` - a minimal client that runs the conformance tests over WebSockets.
 * ``client/conformance/`` - the conformance tests, which check every client library against the
   :doc:`client specification </client-spec>`.
 * ``doc/`` - the sources for this documentation. The API reference for each client is generated
