@@ -89,7 +89,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public string Name {
-            get { return InternalVessel.vesselName; }
+            get { return InternalVessel.GetDisplayName (); }
             set { InternalVessel.vesselName = value; }
         }
 

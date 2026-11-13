@@ -504,5 +504,15 @@ class TestVesselEngines(TestCase):
         self.wait(0.5)
 
 
+class TestVesselStockName(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.vessel = cls.launch("Kerbal X")
+
+    def test_name(self):
+        # A stock craft stores its name as a localization tag
+        self.assertEqual("Kerbal X", self.vessel.name)
+
+
 if __name__ == "__main__":
     unittest.main()
