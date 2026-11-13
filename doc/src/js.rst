@@ -15,12 +15,12 @@ The client runs in a web browser and in Node.js 22 or later.
 Installing the Library
 ----------------------
 
-The library is the ``@krpc-org/krpc`` package, which can be `downloaded from GitHub
-<https://github.com/krpc/krpc/releases>`_. To install the downloaded package with npm:
+The library is the ``@krpc-org/krpc`` package on npm, which can also be `downloaded from GitHub
+<https://github.com/krpc/krpc/releases>`_. To install it with npm:
 
 .. code-block:: bash
 
-   npm install krpc-js-0.8.0.tgz
+   npm install @krpc-org/krpc
 
 The package is a set of ES modules, and depends on the ``@bufbuild/protobuf`` and ``acorn``
 packages. A web page loads it through a bundler, such as `esbuild <https://esbuild.github.io>`_ or

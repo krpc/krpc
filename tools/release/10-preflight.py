@@ -127,7 +127,7 @@ def check_tools(report):
             report.fail(f"{tool} not found (required)")
     # Needed by the individual publish steps; missing ones only matter for the
     # steps that use them, so they warn rather than fail.
-    for tool in ("twine", "dotnet", "luarocks", "aws", "gpg", "gpgconf"):
+    for tool in ("twine", "dotnet", "luarocks", "aws", "gpg", "gpgconf", "npm"):
         if shutil.which(tool):
             report.ok(tool)
         else:
@@ -210,7 +210,7 @@ def check_credentials(report):
         else:
             report.fail(f"{key} is not set in {lib.CREDENTIALS_FILE}")
 
-    # GitHub, luarocks.org, AWS and the Central Portal can all be asked
+    # GitHub, luarocks.org, AWS, the Central Portal and npm can all be asked
     # whether a credential works without publishing anything, so a bad one is
     # a failure. PyPI and nuget.org offer no such check: the only thing that
     # exercises those keys is an upload, which cannot be undone. They get a
@@ -245,6 +245,18 @@ def check_credentials(report):
 
     if all(credentials.get(key) for key in maven.CREDENTIAL_KEYS):
         check_maven(report, credentials)
+
+    if credentials.get("NPM_TOKEN"):
+        check_npm(report, credentials["NPM_TOKEN"])
+
+
+def check_npm(report, token):
+    try:
+        report.ok(f"NPM_TOKEN authenticates as {lib.npm_user(token)}")
+        if lib.npm_published():
+            report.fail(f"{lib.NPM_PACKAGE} {lib.VERSION} is already on npm")
+    except lib.ReleaseError as exception:
+        report.fail(str(exception))
 
 
 def check_maven(report, credentials):

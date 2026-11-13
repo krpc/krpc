@@ -8,7 +8,7 @@ tools of the step being run.
 
 All the credentials live in one git-ignored TOML file at the root of the repository. Copy
 `tools/release/release-credentials.toml.template` to `release-credentials.toml`, fill in every value, and `chmod 600` it; the template says what each one is and where to get it. The scripts pass these to `gh`, `twine`,
-`dotnet`, `luarocks`, `aws` and `gpg` explicitly, so none of those tools needs to be configured
+`dotnet`, `luarocks`, `aws`, `gpg` and `npm` explicitly, so none of those tools needs to be configured
 or logged in beforehand, and whatever account they are already set up with is ignored. Git is the
 exception: pushes to `krpc/krpc`, `krpc-arduino` and your vcpkg fork use your normal git setup.
 
@@ -72,6 +72,7 @@ the component first, and prompts before publishing.
 17. `tools/release/66-release-vcpkg-cpp.py` - C++ client port to `microsoft/vcpkg`.
 18. `tools/release/67-release-vcpkg-cnano.py` - C-nano client port to `microsoft/vcpkg`.
 19. `tools/release/68-release-ckan.py` - confirms the mod reached CKAN.
+20. `tools/release/69-release-npm.py` - JavaScript client to npm.
 
 The Maven Central step uploads the signed bundle to the Central Portal, which validates it without
 publishing. The step publishes it only once validation passes and you confirm. A version on Maven
@@ -87,9 +88,13 @@ publishes nothing: it waits for the NetKAN bot's generated metadata to appear in
 check back on later. It too needs step 10's release published, not just drafted. If the metadata has
 not landed within the wait (inflation can lag by a few hours), re-run the step later to re-check.
 
+The npm step publishes the package as `@krpc-org/krpc`, so the release account must be a member of
+the `@krpc-org` organization on npm. A version on npm cannot be published again, even after it is
+unpublished.
+
 ## 5. Publish the mod and announce
 
-20. `tools/release/70-announcements.py` - prints the checklist of remaining manual steps:
+21. `tools/release/70-announcements.py` - prints the checklist of remaining manual steps:
     * Upload `assets/krpc-x.x.x.zip` to CurseForge and SpaceDock, linking the changelog at
       `https://krpc.github.io/krpc/<version>/changelog.html`.
     * Bump the version number on [KSP-AVC online](https://ksp-avc.cybutek.net/).
