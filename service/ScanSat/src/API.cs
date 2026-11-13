@@ -11,13 +11,11 @@ namespace KRPC.ScanSat
     // Binds to the members of SCANsat 22.1 by reflection. The coverage and settings come from the
     // public API region of SCANUtil. The readouts, the sensor status and the map renderer are
     // internal members, bound the same way.
-    static class API
+    sealed class API : ModAPI
     {
-        const string assemblyName = "SCANsat";
-
-        static readonly List<string> missing = new List<string> ();
-
-        public static bool IsAvailable { get; private set; }
+        public API () : base (ServiceInfo.Mods.SCANsat.Name, ServiceInfo.Mods.SCANsat.Assembly)
+        {
+        }
 
         public static Func<double, double, global::CelestialBody, int, bool> IsCovered;
         public static Func<int, global::CelestialBody, double> GetCoverage;
@@ -102,142 +100,77 @@ namespace KRPC.ScanSat
             public static Action<object> Destroy;
         }
 
-        public static void Load ()
+        protected override void Bind (ModBinder mod)
         {
-            IsAvailable = false;
-            var loaded = AssemblyLoader.loadedAssemblies.FirstOrDefault (a => a.assembly.GetName ().Name == assemblyName);
-            if (loaded == null) {
-                Logger.WriteLine ("Load API: " + assemblyName + " not found; skipping");
-                return;
-            }
-            var assembly = loaded.assembly;
-            missing.Clear ();
+            var util = mod.Type ("SCANsat.SCANUtil");
+            IsCovered = util.Method<Func<double, double, global::CelestialBody, int, bool>> ("isCovered");
+            GetCoverage = util.Method<Func<int, global::CelestialBody, double>> ("GetCoverage");
+            GetData = util.Method<Func<global::CelestialBody, object>> ("getData");
+            GetElevation = util.Method<Func<global::CelestialBody, double, double, double>> ("getElevation");
+            GetSlope = util.Method<Func<double, global::CelestialBody, double, double, double, double>> ("slope");
+            GetBiomeName = util.Method<Func<global::CelestialBody, double, double, string>> ("getBiomeName");
+            ResourceOverlay = util.Method<Func<double, double, string, global::CelestialBody, bool, float>> ("ResourceOverlay");
 
-            var util = assembly.GetType ("SCANsat.SCANUtil");
-            IsCovered = Method<Func<double, double, global::CelestialBody, int, bool>> (util, "isCovered");
-            GetCoverage = Method<Func<int, global::CelestialBody, double>> (util, "GetCoverage");
-            GetData = Method<Func<global::CelestialBody, object>> (util, "getData");
-            GetElevation = Method<Func<global::CelestialBody, double, double, double>> (util, "getElevation");
-            GetSlope = Method<Func<double, global::CelestialBody, double, double, double, double>> (util, "slope");
-            GetBiomeName = Method<Func<global::CelestialBody, double, double, string>> (util, "getBiomeName");
-            ResourceOverlay = Method<Func<double, double, string, global::CelestialBody, bool, float>> (util, "ResourceOverlay");
+            Settings.InstantResourceScan = util.Method<Func<bool>> ("instantResourceScanEnabled");
+            Settings.StockResourceScan = util.Method<Func<bool>> ("stockResourceScanEnabled");
+            Settings.BiomeLock = util.Method<Func<bool>> ("resourceBiomeLockEnabled");
+            Settings.RequireNarrowBand = util.Method<Func<bool>> ("narrowBandResourceRestrictionEnabled");
+            Settings.GlobalResource = mod.Type ("SCANsat.SCANconfigLoader").StaticGetter<bool> ("GlobalResource");
+            var settings = mod.Type ("SCANsat.SCAN_Settings_Config");
+            Settings.Instance = settings.StaticGetter<object> ("Instance");
+            Settings.BackgroundScanning = settings.Getter<object, bool> ("BackgroundScanning");
+            Settings.DaylightCheck = settings.Getter<object, bool> ("DaylightCheck");
 
-            Settings.InstantResourceScan = Method<Func<bool>> (util, "instantResourceScanEnabled");
-            Settings.StockResourceScan = Method<Func<bool>> (util, "stockResourceScanEnabled");
-            Settings.BiomeLock = Method<Func<bool>> (util, "resourceBiomeLockEnabled");
-            Settings.RequireNarrowBand = Method<Func<bool>> (util, "narrowBandResourceRestrictionEnabled");
-            Settings.GlobalResource = Static<bool> (assembly.GetType ("SCANsat.SCANconfigLoader"), "GlobalResource");
-            var settings = assembly.GetType ("SCANsat.SCAN_Settings_Config");
-            Settings.Instance = Static<object> (settings, "Instance");
-            Settings.BackgroundScanning = Getter<bool> (settings, "BackgroundScanning");
-            Settings.DaylightCheck = Getter<bool> (settings, "DaylightCheck");
+            var controller = mod.Type ("SCANsat.SCANcontroller");
+            var resource = mod.Type ("SCANsat.SCAN_Data.SCANresourceGlobal");
+            Resource.All = controller.Method<Func<object>> ("resources");
+            Resource.Name = resource.Getter<object, string> ("Name");
+            Resource.Get = controller.Method<Func<string, bool, object>> ("getResourceNode");
+            Resource.CurrentBodyConfig = resource.Method<Action<object, string>> ("CurrentBodyConfig");
 
-            var controller = assembly.GetType ("SCANsat.SCANcontroller");
-            var resource = assembly.GetType ("SCANsat.SCAN_Data.SCANresourceGlobal");
-            Resource.All = Method<Func<object>> (controller, "resources");
-            Resource.Name = Getter<string> (resource, "Name");
-            Resource.Get = Method<Func<string, bool, object>> (controller, "getResourceNode");
-            Resource.CurrentBodyConfig = Method<Action<object, string>> (resource, "CurrentBodyConfig");
+            var data = mod.Type ("SCANsat.SCAN_Data.SCANdata");
+            var anomaly = mod.Type ("SCANsat.SCAN_Data.SCANanomaly");
+            Anomaly.All = data.Getter<object, Array> ("Anomalies");
+            Anomaly.Known = anomaly.Getter<object, bool> ("Known");
+            Anomaly.Detail = anomaly.Getter<object, bool> ("Detail");
+            Anomaly.Name = anomaly.Getter<object, string> ("Name");
+            Anomaly.Latitude = anomaly.Getter<object, double> ("Latitude");
+            Anomaly.Longitude = anomaly.Getter<object, double> ("Longitude");
 
-            var data = assembly.GetType ("SCANsat.SCAN_Data.SCANdata");
-            var anomaly = assembly.GetType ("SCANsat.SCAN_Data.SCANanomaly");
-            Anomaly.All = Getter<Array> (data, "Anomalies");
-            Anomaly.Known = Getter<bool> (anomaly, "Known");
-            Anomaly.Detail = Getter<bool> (anomaly, "Detail");
-            Anomaly.Name = Getter<string> (anomaly, "Name");
-            Anomaly.Latitude = Getter<double> (anomaly, "Latitude");
-            Anomaly.Longitude = Getter<double> (anomaly, "Longitude");
+            var sensor = mod.Type ("SCANsat.SCANcontroller+SCANsensor");
+            Sensor.Controller = controller.StaticGetter<object> ("controller");
+            Sensor.Status = controller.Method<Func<object, global::Vessel, int, object>> ("getSensorStatus");
+            Sensor.InRange = sensor.Getter<object, bool> ("inRange");
+            Sensor.BestRange = sensor.Getter<object, bool> ("bestRange");
+            Sensor.InDarkness = sensor.Getter<object, bool> ("inDarkness");
 
-            var sensor = assembly.GetType ("SCANsat.SCANcontroller+SCANsensor");
-            Sensor.Controller = Static<object> (controller, "controller");
-            Sensor.Status = Method<Func<object, global::Vessel, int, object>> (controller, "getSensorStatus");
-            Sensor.InRange = Getter<bool> (sensor, "inRange");
-            Sensor.BestRange = Getter<bool> (sensor, "bestRange");
-            Sensor.InDarkness = Getter<bool> (sensor, "inDarkness");
+            var scanner = mod.Type ("SCANsat.SCAN_PartModules.SCANsat");
+            var resourceScanner = mod.Type ("SCANsat.SCAN_PartModules.ModuleSCANresourceScanner");
+            Module.Scanner = scanner.Type;
+            Module.ResourceScanner = resourceScanner.Type;
+            Module.SensorType = scanner.Getter<PartModule, int> ("sensorType");
+            Module.FieldOfView = scanner.Getter<PartModule, float> ("fov");
+            Module.MinAltitude = scanner.Getter<PartModule, float> ("min_alt");
+            Module.MaxAltitude = scanner.Getter<PartModule, float> ("max_alt");
+            Module.BestAltitude = scanner.Getter<PartModule, float> ("best_alt");
+            Module.RequireLight = scanner.Getter<PartModule, bool> ("requireLight");
+            Module.Scanning = scanner.Getter<PartModule, bool> ("scanningNow");
+            Module.StartScan = scanner.Method<Action<PartModule>> ("startScan");
+            Module.StopScan = scanner.Method<Action<PartModule>> ("stopScan");
+            Module.StartResourceScan = resourceScanner.Method<Action<PartModule, KSPActionParam>> ("startResourceScanAction");
 
-            var scanner = assembly.GetType ("SCANsat.SCAN_PartModules.SCANsat");
-            Module.Scanner = scanner;
-            Module.ResourceScanner = assembly.GetType ("SCANsat.SCAN_PartModules.ModuleSCANresourceScanner");
-            if (scanner == null || Module.ResourceScanner == null)
-                missing.Add ("part modules");
-            Module.SensorType = ModuleGetter<int> (scanner, "sensorType");
-            Module.FieldOfView = ModuleGetter<float> (scanner, "fov");
-            Module.MinAltitude = ModuleGetter<float> (scanner, "min_alt");
-            Module.MaxAltitude = ModuleGetter<float> (scanner, "max_alt");
-            Module.BestAltitude = ModuleGetter<float> (scanner, "best_alt");
-            Module.RequireLight = ModuleGetter<bool> (scanner, "requireLight");
-            Module.Scanning = ModuleGetter<bool> (scanner, "scanningNow");
-            Module.StartScan = Method<Action<PartModule>> (scanner, "startScan");
-            Module.StopScan = Method<Action<PartModule>> (scanner, "stopScan");
-            Module.StartResourceScan = Method<Action<PartModule, KSPActionParam>> (Module.ResourceScanner, "startResourceScanAction");
-
-            var map = assembly.GetType ("SCANsat.SCAN_Map.SCANmap");
-            Map.New = map == null ? null : Accessor.Constructor<Func<global::CelestialBody, int, object>> (map);
-            if (Map.New == null)
-                missing.Add ("SCANmap constructor");
-            Map.SetProjection = Method<Action<object, int>> (map, "setProjection");
-            Map.SetBody = Method<Action<object, global::CelestialBody>> (map, "setBody");
-            Map.SetSize = Method<Action<object, int, int, int, int, int>> (map, "setSize");
-            Map.SetColor = Setter<bool> (map, "ColorMap");
-            Map.SetResource = Setter<object> (map, "Resource");
-            Map.Reset = Method<Action<object, int, bool, bool>> (map, "resetMap");
-            Map.Build = Method<Action<object>> (map, "getPartialMap");
-            Map.IsComplete = Method<Func<object, bool>> (map, "isMapComplete");
-            Map.Texture = Getter<RenderTexture> (map, "VisualRenderTexture");
-            Map.Destroy = Method<Action<object>> (map, "Destroy");
-
-            if (missing.Count > 0) {
-                Logger.WriteLine ("Load API: " + assemblyName + " members not found: " +
-                                  string.Join (", ", missing.ToArray ()) + "; skipping", Logger.Severity.Error);
-                return;
-            }
-            IsAvailable = true;
-            Logger.WriteLine ("Load API: Successfully loaded " + assemblyName + " version " + assembly.GetName ().Version);
-        }
-
-        static string Name (Type type, string name)
-        {
-            return (type == null ? "?" : type.Name) + "." + name;
-        }
-
-        static TDelegate Method<TDelegate> (Type type, string name) where TDelegate : class
-        {
-            var method = type == null ? null : Accessor.Method<TDelegate> (type, name);
-            if (method == null)
-                missing.Add (Name (type, name));
-            return method;
-        }
-
-        static Func<T> Static<T> (Type type, string name)
-        {
-            var getter = type == null ? null : Accessor.StaticGetter<T> (type, name);
-            if (getter == null)
-                missing.Add (Name (type, name));
-            return getter;
-        }
-
-        static Func<object, T> Getter<T> (Type type, string name)
-        {
-            var getter = type == null ? null : Accessor.Getter<object, T> (type, name);
-            if (getter == null)
-                missing.Add (Name (type, name));
-            return getter;
-        }
-
-        static Func<PartModule, T> ModuleGetter<T> (Type type, string name)
-        {
-            var getter = type == null ? null : Accessor.Getter<PartModule, T> (type, name);
-            if (getter == null)
-                missing.Add (Name (type, name));
-            return getter;
-        }
-
-        static Action<object, T> Setter<T> (Type type, string name)
-        {
-            var setter = type == null ? null : Accessor.Setter<object, T> (type, name);
-            if (setter == null)
-                missing.Add (Name (type, name));
-            return setter;
+            var map = mod.Type ("SCANsat.SCAN_Map.SCANmap");
+            Map.New = map.Constructor<Func<global::CelestialBody, int, object>> ();
+            Map.SetProjection = map.Method<Action<object, int>> ("setProjection");
+            Map.SetBody = map.Method<Action<object, global::CelestialBody>> ("setBody");
+            Map.SetSize = map.Method<Action<object, int, int, int, int, int>> ("setSize");
+            Map.SetColor = map.Setter<object, bool> ("ColorMap");
+            Map.SetResource = map.Setter<object, object> ("Resource");
+            Map.Reset = map.Method<Action<object, int, bool, bool>> ("resetMap");
+            Map.Build = map.Method<Action<object>> ("getPartialMap");
+            Map.IsComplete = map.Method<Func<object, bool>> ("isMapComplete");
+            Map.Texture = map.Getter<object, RenderTexture> ("VisualRenderTexture");
+            Map.Destroy = map.Method<Action<object>> ("Destroy");
         }
 
         /// <summary>
@@ -245,6 +178,8 @@ namespace KRPC.ScanSat
         /// </summary>
         public static PartModule GetModule (global::Part part)
         {
+            if (Module.Scanner == null)
+                return null;
             var modules = part.Modules;
             for (int i = 0; i < modules.Count; i++) {
                 if (Module.Scanner.IsInstanceOfType (modules [i]))

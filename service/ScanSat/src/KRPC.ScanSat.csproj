@@ -42,7 +42,6 @@
     <Compile Include="$(bazel-bin)\service\ScanSat\ServiceInfo.cs">
       <Link>ServiceInfo.cs</Link>
     </Compile>
-    <Compile Include="Addon.cs" />
     <Compile Include="Anomaly.cs" />
     <Compile Include="API.cs" />
     <Compile Include="MapProjection.cs" />
