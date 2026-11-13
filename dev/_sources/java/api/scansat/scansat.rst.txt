@@ -109,7 +109,7 @@ ScanSat
 
    
 
-   .. method:: byte[] map(SpaceCenter.CelestialBody body, MapType type, int width, MapProjection projection, boolean color, String resource, ImageFormat format, int quality)
+   .. method:: byte[] map(SpaceCenter.CelestialBody body, MapType type, int width, MapProjection projection, boolean color, String resource, StdLib.ImageFormat format, int quality)
 
       A map of a body from the scan data, as an image. The map is half as high as it is
       wide. Building it takes several game frames.
@@ -122,7 +122,7 @@ ScanSat
       :param MapProjection projection: The projection.
       :param boolean color: Whether the map is in color, or in grayscale.
       :param String resource: The name of a resource to overlay, or an empty string for none. See :meth:`ScanSat.getResources()`.
-      :param ImageFormat format: The format of the image.
+      :param StdLib.ImageFormat format: The format of the image.
       :param int quality: The quality of a JPEG image, from 1 to 100.
       :Game Scenes: Space Center, Flight, Tracking Station
 

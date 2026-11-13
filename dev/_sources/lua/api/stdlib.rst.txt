@@ -665,3 +665,19 @@ colors other services use.
    .. attribute:: a: number
 
       The alpha component.
+
+
+
+.. class:: ImageFormat
+
+   The file format of an image.
+
+
+   .. data:: png
+
+      PNG, which is lossless.
+
+
+   .. data:: jpeg
+
+      JPEG, which is lossy, and smaller and faster to encode than PNG.

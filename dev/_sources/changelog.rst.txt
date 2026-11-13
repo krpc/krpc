@@ -93,6 +93,8 @@ Core
 * :breaking:`Breaking` Reject members of a service or class, values of an enumeration, fields of a structure, or parameters of a procedure that share a name, ignoring case (:issue:`1338`)
 * :breaking:`Breaking` Reject a method ``GetFoo`` or ``SetFoo`` beside a property ``Foo`` (:issue:`1338`)
 * :breaking:`Breaking` Reject parameter and enumeration value names that are not ASCII letters and digits, starting with a letter (:issue:`1338`)
+* Add ``StdLib.ImageFormat``, the format of the images from the DockingCamera, ScanSat and RasterPropMonitor services (:issue:`1341`)
+* Add ``ModAPI``, ``ModBinder`` and ``MemberBinder``, for a service that binds to another mod by name, and fails only the calls that use a missing member (:issue:`1341`)
 
 
 Server
@@ -108,6 +110,9 @@ Server
 * Fix the server window keeping its height after clients disconnect (:issue:`1186`)
 * Show the tick hold timeout, deferred calls and stream updates in the info window, and name the stream counters as evaluations (:issue:`1244`)
 * Fix the two "Time per update" rows in the info window showing each other's value (:issue:`1244`)
+* Load a mod's API when some of its methods are missing, and fail only the calls that use them (:issue:`1341`)
+* Disable only the integration of a mod that fails to load, and give the reason in the errors of its RPCs (:issue:`1341`)
+* Load each supported mod whatever its version (:issue:`1341`)
 
 
 SpaceCenter service
@@ -143,18 +148,23 @@ SpaceCenter service
   * Add ``SpaceCenter.RealAntennasAvailable`` (:issue:`1320`)
 
 * Add ``<Mod>Available`` for each supported mod that lacked one, such as ``RealChuteAvailable`` (:issue:`1340`)
+* Keep the FAR, RealFuels, RealAntennas and Action Groups Extended RPCs working when a mod update removes members, and fail only the RPCs that use them (:issue:`1341`)
 
 
 InfernalRobotics service
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 * Relicense the InfernalRobotics service under the GPLv3 (:issue:`1221`)
+* Keep working when an Infernal Robotics update removes members, and fail only the RPCs that use them (:issue:`1341`)
+* :breaking:`Breaking` Remove ``Ready`` (:issue:`1341`)
 
 
 KerbalAlarmClock service
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 * Fix ``Alarm.PlaySound`` having no effect (:issue:`1179`)
+* Keep working when a Kerbal Alarm Clock update removes members, and fail only the RPCs that use them (:issue:`1341`)
+* Limit the service to the scenes Kerbal Alarm Clock runs in, apart from ``Available``, which reports whether it is installed in any scene (:issue:`1341`)
 
 
 LIDAR service
@@ -170,7 +180,8 @@ DockingCamera service
 * :breaking:`Breaking` Support the public Docking Camera (KURS) 1.3.9 release, in place of an unreleased fork (:issue:`1232`)
 * :breaking:`Breaking` ``Camera.Image`` throws an exception if the camera is off or not started, in place of returning an empty array (:issue:`1232`)
 * Support the cameras Docking Camera (KURS) adds to docking ports (:issue:`1232`)
-* :breaking:`Breaking` ``Camera.Image`` is a method taking an ``ImageFormat`` and a JPEG quality (:issue:`1317`)
+* :breaking:`Breaking` ``Camera.Image`` is a method taking a ``StdLib.ImageFormat`` and a JPEG quality (:issue:`1317`)
+* Keep working when a Docking Camera update removes members, and fail only the RPCs that use them (:issue:`1341`)
 
 
 Trajectories service

@@ -128,7 +128,7 @@ ScanSat
 
       :Game Scenes: All
 
-   .. function:: byte[] Map(SpaceCenter.CelestialBody body, MapType type, int width = 720, MapProjection projection = MapProjection.Rectangular, bool color = true, string resource = "", ImageFormat format = ImageFormat.PNG, int quality = 75)
+   .. function:: byte[] Map(SpaceCenter.CelestialBody body, MapType type, int width = 720, MapProjection projection = MapProjection.Rectangular, bool color = true, string resource = "", StdLib.ImageFormat format = StdLib.ImageFormat.PNG, int quality = 75)
 
       A map of a body from the scan data, as an image. The map is half as high as it is
       wide. Building it takes several game frames.

@@ -22,18 +22,6 @@ Provides functionality to interact with Infernal Robotics Next.
 
 
 
-.. attribute:: ready
-
-   Whether Infernal Robotics API is ready.
-
-   :Attribute: Read-only, cannot be set
-   :rtype: bool
-   :Game Scenes: Flight
-
-
-
-
-
 .. staticmethod:: servo_groups(vessel)
 
    A list of all the servo groups in the given *vessel*.

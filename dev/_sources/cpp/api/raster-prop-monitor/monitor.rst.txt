@@ -202,7 +202,7 @@ Monitor
 
       :Game Scenes: Flight
 
-   .. function:: std::string image(ImageFormat format = ImageFormat::png, int32_t quality = 75)
+   .. function:: std::string image(StdLib::ImageFormat format = StdLib::ImageFormat::png, int32_t quality = 75)
 
       The screen as an image, at :func:`Monitor::screen_pixel_width` by
       :func:`Monitor::screen_pixel_height` pixels.
@@ -214,21 +214,3 @@ Monitor
 
       :returns: The image data.
       :Game Scenes: Flight
-
-
-
-
-.. namespace:: krpc::services::RasterPropMonitor
-.. enum-struct:: ImageFormat
-
-   The file format of an image.
-
-
-   .. enumerator:: png
-
-      PNG, which is lossless.
-
-
-   .. enumerator:: jpeg
-
-      JPEG, which is lossy, and smaller and faster to encode than PNG.

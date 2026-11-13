@@ -201,7 +201,7 @@ Monitor
 
       :Game Scenes: Flight
 
-   .. function:: byte[] Image(ImageFormat format = ImageFormat.PNG, int quality = 75)
+   .. function:: byte[] Image(StdLib.ImageFormat format = StdLib.ImageFormat.PNG, int quality = 75)
 
       The screen as an image, at :prop:`Monitor.ScreenPixelWidth` by
       :prop:`Monitor.ScreenPixelHeight` pixels.
@@ -213,20 +213,3 @@ Monitor
 
       :returns: The image data.
       :Game Scenes: Flight
-
-
-
-
-.. enum:: ImageFormat
-
-   The file format of an image.
-
-
-   .. enumerator:: PNG
-
-      PNG, which is lossless.
-
-
-   .. enumerator:: JPEG
-
-      JPEG, which is lossy, and smaller and faster to encode than PNG.

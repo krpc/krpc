@@ -19,7 +19,8 @@ Alarm
 
       :Attribute: Can be read or written
       :rtype: :class:`AlarmAction`
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
+
 
       .. note::
 
@@ -32,7 +33,7 @@ Alarm
 
       :Attribute: Can be read or written
       :rtype: float
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
 
    .. attribute:: time
 
@@ -40,7 +41,7 @@ Alarm
 
       :Attribute: Can be read or written
       :rtype: float
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
 
    .. attribute:: type
 
@@ -48,7 +49,7 @@ Alarm
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`AlarmType`
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
 
    .. attribute:: id
 
@@ -56,7 +57,7 @@ Alarm
 
       :Attribute: Read-only, cannot be set
       :rtype: str
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
 
    .. attribute:: name
 
@@ -64,7 +65,7 @@ Alarm
 
       :Attribute: Can be read or written
       :rtype: str
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
 
    .. attribute:: notes
 
@@ -72,7 +73,7 @@ Alarm
 
       :Attribute: Can be read or written
       :rtype: str
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
 
    .. attribute:: remaining
 
@@ -80,7 +81,7 @@ Alarm
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
 
    .. attribute:: enabled
 
@@ -88,7 +89,7 @@ Alarm
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
 
    .. attribute:: play_sound
 
@@ -96,7 +97,8 @@ Alarm
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
+
 
       .. note::
 
@@ -111,7 +113,7 @@ Alarm
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
 
    .. attribute:: repeat
 
@@ -121,7 +123,7 @@ Alarm
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
 
    .. attribute:: supports_repeat
 
@@ -130,7 +132,7 @@ Alarm
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
 
    .. attribute:: repeat_period
 
@@ -140,7 +142,7 @@ Alarm
 
       :Attribute: Can be read or written
       :rtype: float
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
 
    .. attribute:: supports_repeat_period
 
@@ -149,7 +151,7 @@ Alarm
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
 
    .. attribute:: vessel
 
@@ -157,7 +159,7 @@ Alarm
 
       :Attribute: Can be read or written
       :rtype: :class:`SpaceCenter.Vessel`
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
 
    .. attribute:: xfer_origin_body
 
@@ -165,7 +167,7 @@ Alarm
 
       :Attribute: Can be read or written
       :rtype: :class:`SpaceCenter.CelestialBody`
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
 
    .. attribute:: xfer_target_body
 
@@ -173,13 +175,14 @@ Alarm
 
       :Attribute: Can be read or written
       :rtype: :class:`SpaceCenter.CelestialBody`
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
 
    .. method:: remove()
 
       Removes the alarm. Any further use of this object throws an exception.
 
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
+
 
       .. note::
 

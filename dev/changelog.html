@@ -572,6 +572,8 @@
 <li><p><span class="changelog-marker breaking">Breaking</span> Reject members of a service or class, values of an enumeration, fields of a structure, or parameters of a procedure that share a name, ignoring case (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1338">#1338</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Reject a method <code class="docutils literal notranslate"><span class="pre">GetFoo</span></code> or <code class="docutils literal notranslate"><span class="pre">SetFoo</span></code> beside a property <code class="docutils literal notranslate"><span class="pre">Foo</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1338">#1338</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Reject parameter and enumeration value names that are not ASCII letters and digits, starting with a letter (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1338">#1338</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">StdLib.ImageFormat</span></code>, the format of the images from the DockingCamera, ScanSat and RasterPropMonitor services (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1341">#1341</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">ModAPI</span></code>, <code class="docutils literal notranslate"><span class="pre">ModBinder</span></code> and <code class="docutils literal notranslate"><span class="pre">MemberBinder</span></code>, for a service that binds to another mod by name, and fails only the calls that use a missing member (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1341">#1341</a>)</p></li>
 </ul>
 </section>
 <section id="server">
@@ -587,6 +589,9 @@
 <li><p>Fix the server window keeping its height after clients disconnect (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1186">#1186</a>)</p></li>
 <li><p>Show the tick hold timeout, deferred calls and stream updates in the info window, and name the stream counters as evaluations (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1244">#1244</a>)</p></li>
 <li><p>Fix the two “Time per update” rows in the info window showing each other’s value (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1244">#1244</a>)</p></li>
+<li><p>Load a mod’s API when some of its methods are missing, and fail only the calls that use them (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1341">#1341</a>)</p></li>
+<li><p>Disable only the integration of a mod that fails to load, and give the reason in the errors of its RPCs (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1341">#1341</a>)</p></li>
+<li><p>Load each supported mod whatever its version (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1341">#1341</a>)</p></li>
 </ul>
 </section>
 <section id="spacecenter-service">
@@ -624,18 +629,23 @@
 </ul>
 </li>
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">&lt;Mod&gt;Available</span></code> for each supported mod that lacked one, such as <code class="docutils literal notranslate"><span class="pre">RealChuteAvailable</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1340">#1340</a>)</p></li>
+<li><p>Keep the FAR, RealFuels, RealAntennas and Action Groups Extended RPCs working when a mod update removes members, and fail only the RPCs that use them (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1341">#1341</a>)</p></li>
 </ul>
 </section>
 <section id="infernalrobotics-service">
 <h3>InfernalRobotics service<a class="headerlink" href="#infernalrobotics-service" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Relicense the InfernalRobotics service under the GPLv3 (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1221">#1221</a>)</p></li>
+<li><p>Keep working when an Infernal Robotics update removes members, and fail only the RPCs that use them (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1341">#1341</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Remove <code class="docutils literal notranslate"><span class="pre">Ready</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1341">#1341</a>)</p></li>
 </ul>
 </section>
 <section id="kerbalalarmclock-service">
 <h3>KerbalAlarmClock service<a class="headerlink" href="#kerbalalarmclock-service" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Fix <code class="docutils literal notranslate"><span class="pre">Alarm.PlaySound</span></code> having no effect (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1179">#1179</a>)</p></li>
+<li><p>Keep working when a Kerbal Alarm Clock update removes members, and fail only the RPCs that use them (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1341">#1341</a>)</p></li>
+<li><p>Limit the service to the scenes Kerbal Alarm Clock runs in, apart from <code class="docutils literal notranslate"><span class="pre">Available</span></code>, which reports whether it is installed in any scene (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1341">#1341</a>)</p></li>
 </ul>
 </section>
 <section id="lidar-service">
@@ -651,7 +661,8 @@
 <li><p><span class="changelog-marker breaking">Breaking</span> Support the public Docking Camera (KURS) 1.3.9 release, in place of an unreleased fork (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1232">#1232</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> <code class="docutils literal notranslate"><span class="pre">Camera.Image</span></code> throws an exception if the camera is off or not started, in place of returning an empty array (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1232">#1232</a>)</p></li>
 <li><p>Support the cameras Docking Camera (KURS) adds to docking ports (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1232">#1232</a>)</p></li>
-<li><p><span class="changelog-marker breaking">Breaking</span> <code class="docutils literal notranslate"><span class="pre">Camera.Image</span></code> is a method taking an <code class="docutils literal notranslate"><span class="pre">ImageFormat</span></code> and a JPEG quality (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1317">#1317</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> <code class="docutils literal notranslate"><span class="pre">Camera.Image</span></code> is a method taking a <code class="docutils literal notranslate"><span class="pre">StdLib.ImageFormat</span></code> and a JPEG quality (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1317">#1317</a>)</p></li>
+<li><p>Keep working when a Docking Camera update removes members, and fail only the RPCs that use them (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1341">#1341</a>)</p></li>
 </ul>
 </section>
 <section id="trajectories-service">

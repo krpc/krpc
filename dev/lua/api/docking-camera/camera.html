@@ -1413,13 +1413,13 @@
 
 <dl class="lua method">
 <dt class="sig sig-object lua" id="lua-DockingCamera.Camera.image">
-<span class="sig-name descname"><span class="pre">image</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">format</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-DockingCamera.ImageFormat" title="DockingCamera.ImageFormat"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">DockingCamera.ImageFormat</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">quality</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><a class="headerlink" href="#lua-DockingCamera.Camera.image" title="Link to this definition">#</a><br /></dt>
+<span class="sig-name descname"><span class="pre">image</span></span><span class="p"><span class="pre">(</span></span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">format</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../stdlib.html#lua-StdLib.ImageFormat" title="StdLib.ImageFormat"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">StdLib.ImageFormat</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">quality</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><a class="headerlink" href="#lua-DockingCamera.Camera.image" title="Link to this definition">#</a></dt>
 <dd><p>The image from the camera, 256 by 256 pixels.
 Throws an exception if the camera is off or not started.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>format</strong> – The format of the image. Defaults to <code class="docutils literal notranslate"><span class="pre">DockingCamera.ImageFormat.png</span></code>.</p></li>
+<li><p><strong>format</strong> – The format of the image. Defaults to <code class="docutils literal notranslate"><span class="pre">StdLib.ImageFormat.png</span></code>.</p></li>
 <li><p><strong>quality</strong> – The quality of a JPEG image, from 1 to 100. Defaults to <code class="docutils literal notranslate"><span class="pre">75</span></code>.</p></li>
 </ul>
 </dd>
@@ -1433,24 +1433,6 @@ Throws an exception if the camera is off or not started.</p>
 <code class="docutils literal notranslate"><span class="pre">PartCameraModule</span></code> or <code class="docutils literal notranslate"><span class="pre">DockingCameraModule</span></code> to <code class="docutils literal notranslate"><span class="pre">True</span></code>, which also opens
 the camera window.</p>
 </div>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="lua class">
-<dt class="sig sig-object lua" id="lua-DockingCamera.ImageFormat">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">DockingCamera.</span></span><span class="sig-name descname"><span class="pre">ImageFormat</span></span><a class="headerlink" href="#lua-DockingCamera.ImageFormat" title="Link to this definition">#</a></dt>
-<dd><p>The file format of an image.</p>
-<dl class="lua data">
-<dt class="sig sig-object lua" id="lua-DockingCamera.ImageFormat.png">
-<span class="sig-name descname"><span class="pre">png</span></span><a class="headerlink" href="#lua-DockingCamera.ImageFormat.png" title="Link to this definition">#</a></dt>
-<dd><p>PNG, which is lossless.</p>
-</dd></dl>
-
-<dl class="lua data">
-<dt class="sig sig-object lua" id="lua-DockingCamera.ImageFormat.jpeg">
-<span class="sig-name descname"><span class="pre">jpeg</span></span><a class="headerlink" href="#lua-DockingCamera.ImageFormat.jpeg" title="Link to this definition">#</a></dt>
-<dd><p>JPEG, which is lossy, and smaller and faster to encode than PNG.</p>
 </dd></dl>
 
 </dd></dl>

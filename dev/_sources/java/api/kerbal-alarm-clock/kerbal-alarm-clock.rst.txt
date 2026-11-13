@@ -22,7 +22,7 @@ KerbalAlarmClock
 
       A list of all the alarms.
 
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
 
    .. method:: Alarm alarmWithName(String name)
 
@@ -31,14 +31,14 @@ KerbalAlarmClock
       only returns one of them.
 
       :param String name: Name of the alarm to search for.
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
 
    .. method:: java.util.List<Alarm> alarmsWithType(AlarmType type)
 
       Get a list of alarms of the specified *type*.
 
       :param AlarmType type: Type of alarm to return.
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
 
    .. method:: Alarm createAlarm(AlarmType type, String name, double ut)
 
@@ -47,3 +47,4 @@ KerbalAlarmClock
       :param AlarmType type: Type of the new alarm.
       :param String name: Name of the new alarm.
       :param double ut: Time at which the new alarm should trigger.
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration

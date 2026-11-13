@@ -179,28 +179,11 @@ Monitor
 
       :Attribute: Read-only, cannot be set
 
-   .. method:: image(format?: RasterPropMonitor.ImageFormat, quality?: number): string
+   .. method:: image(format?: StdLib.ImageFormat, quality?: number): string
 
       The screen as an image, at :attr:`RasterPropMonitor.Monitor.screen_pixel_width` by
       :attr:`RasterPropMonitor.Monitor.screen_pixel_height` pixels.
 
-      :param format: The format of the image. Defaults to ``RasterPropMonitor.ImageFormat.png``.
+      :param format: The format of the image. Defaults to ``StdLib.ImageFormat.png``.
       :param quality: The quality of a JPEG image, from 1 to 100. Defaults to ``75``.
       :returns: The image data.
-
-
-
-
-.. class:: ImageFormat
-
-   The file format of an image.
-
-
-   .. data:: png
-
-      PNG, which is lossless.
-
-
-   .. data:: jpeg
-
-      JPEG, which is lossy, and smaller and faster to encode than PNG.

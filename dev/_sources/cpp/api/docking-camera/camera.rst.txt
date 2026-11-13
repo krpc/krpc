@@ -16,7 +16,7 @@ Camera
 
    
 
-   .. function:: std::string image(ImageFormat format = ImageFormat::png, int32_t quality = 75)
+   .. function:: std::string image(StdLib::ImageFormat format = StdLib::ImageFormat::png, int32_t quality = 75)
 
       The image from the camera, 256 by 256 pixels.
       Throws an exception if the camera is off or not started.
@@ -34,21 +34,3 @@ Camera
          The camera is switched on by setting the ``IsEnabled`` field of its
          ``PartCameraModule`` or ``DockingCameraModule`` to ``true``, which also opens
          the camera window.
-
-
-
-
-.. namespace:: krpc::services::DockingCamera
-.. enum-struct:: ImageFormat
-
-   The file format of an image.
-
-
-   .. enumerator:: png
-
-      PNG, which is lossless.
-
-
-   .. enumerator:: jpeg
-
-      JPEG, which is lossy, and smaller and faster to encode than PNG.

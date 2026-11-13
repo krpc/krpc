@@ -20,7 +20,7 @@ KerbalAlarmClock
 
       A list of all the alarms.
 
-      :Game Scenes: All
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
 
    .. function:: Alarm AlarmWithName(string name)
 
@@ -32,7 +32,7 @@ KerbalAlarmClock
 
        * **name** -- Name of the alarm to search for.
 
-      :Game Scenes: All
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
 
    .. function:: System.Collections.Generic.IList<Alarm> AlarmsWithType(AlarmType type)
 
@@ -42,7 +42,7 @@ KerbalAlarmClock
 
        * **type** -- Type of alarm to return.
 
-      :Game Scenes: All
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
 
    .. function:: Alarm CreateAlarm(AlarmType type, string name, double ut)
 
@@ -54,4 +54,4 @@ KerbalAlarmClock
        * **name** -- Name of the new alarm.
        * **ut** -- Time at which the new alarm should trigger.
 
-      :Game Scenes: All
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration

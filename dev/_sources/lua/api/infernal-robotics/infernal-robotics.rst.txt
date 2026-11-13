@@ -20,15 +20,6 @@ Provides functionality to interact with Infernal Robotics Next.
 
 
 
-.. attribute:: ready: boolean
-
-   Whether Infernal Robotics API is ready.
-
-   :Attribute: Read-only, cannot be set
-
-
-
-
 .. staticmethod:: servo_groups(vessel: SpaceCenter.Vessel): List
 
    A list of all the servo groups in the given *vessel*.

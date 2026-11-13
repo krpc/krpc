@@ -570,3 +570,18 @@ Standard Library
    .. method:: float getA()
 
       The alpha component.
+
+
+.. type:: public enum ImageFormat
+
+   The file format of an image.
+
+
+   .. field:: public ImageFormat PNG
+
+      PNG, which is lossless.
+
+
+   .. field:: public ImageFormat JPEG
+
+      JPEG, which is lossy, and smaller and faster to encode than PNG.

@@ -16,12 +16,6 @@ InfernalRobotics
 
       :Game Scenes: All
 
-   .. property:: bool Ready { get; }
-
-      Whether Infernal Robotics API is ready.
-
-      :Game Scenes: Flight
-
    .. function:: System.Collections.Generic.IList<ServoGroup> ServoGroups(SpaceCenter.Vessel vessel)
 
       A list of all the servo groups in the given *vessel*.

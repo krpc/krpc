@@ -45,13 +45,13 @@ External Camera
 
    .. method:: void setFoV(float value)
 
-      The field of view that :meth:`ExternalCamera.image(int, int, ImageFormat, int)` renders at, in degrees. It starts at
+      The field of view that :meth:`ExternalCamera.image(int, int, StdLib.ImageFormat, int)` renders at, in degrees. It starts at
       :meth:`ExternalCamera.getMaxFoV()`, as on an MFD camera page, and a value set is clamped
       to the camera's range.
 
       :Game Scenes: Flight
 
-   .. method:: byte[] image(int width, int height, ImageFormat format, int quality)
+   .. method:: byte[] image(int width, int height, StdLib.ImageFormat format, int quality)
 
       The camera's view as an image, rendered now. Streamed at a rate, it is a video of
       the camera, for which JPEG is smaller and faster.
@@ -59,7 +59,7 @@ External Camera
 
       :param int width: The width of the image, in pixels.
       :param int height: The height of the image, in pixels.
-      :param ImageFormat format: The format of the image.
+      :param StdLib.ImageFormat format: The format of the image.
       :param int quality: The quality of a JPEG image, from 1 to 100.
       :returns: The image data.
       :Game Scenes: Flight

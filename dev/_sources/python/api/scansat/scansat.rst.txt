@@ -154,7 +154,7 @@ This service provides the scan data, scanners and maps of
 
 
 
-.. staticmethod:: map(body, type, [width = 720], [projection = MapProjection.rectangular], [color = True], [resource = ''], [format = ImageFormat.png], [quality = 75])
+.. staticmethod:: map(body, type, [width = 720], [projection = MapProjection.rectangular], [color = True], [resource = ''], [format = StdLib.ImageFormat.png], [quality = 75])
 
    A map of a body from the scan data, as an image. The map is half as high as it is
    wide. Building it takes several game frames.
@@ -167,7 +167,7 @@ This service provides the scan data, scanners and maps of
    :param MapProjection projection: The projection.
    :param bool color: Whether the map is in color, or in grayscale.
    :param str resource: The name of a resource to overlay, or an empty string for none. See :attr:`resources`.
-   :param ImageFormat format: The format of the image.
+   :param StdLib.ImageFormat format: The format of the image.
    :param int quality: The quality of a JPEG image, from 1 to 100.
    :rtype: bytes
    :Game Scenes: Space Center, Flight, Tracking Station

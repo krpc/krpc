@@ -907,3 +907,24 @@ colors other services use.
       .. macro:: KRPC_FIELD_STDLIB_COLORRGBA_A
 
          The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
+
+.. type:: krpc_StdLib_ImageFormat_t
+
+   The file format of an image.
+
+   .. macro:: KRPC_ENUMERATION_STDLIB_IMAGEFORMAT
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
+
+   .. macro:: KRPC_STDLIB_IMAGEFORMAT_PNG
+
+      PNG, which is lossless.
+
+
+   .. macro:: KRPC_STDLIB_IMAGEFORMAT_JPEG
+
+      JPEG, which is lossy, and smaller and faster to encode than PNG.

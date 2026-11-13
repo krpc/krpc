@@ -18,16 +18,6 @@ Provides functionality to interact with Infernal Robotics Next.
 
 
 
-.. function:: krpc_error_t krpc_InfernalRobotics_Ready(krpc_connection_t connection, bool * returnValue)
-
-   Whether Infernal Robotics API is ready.
-
-   :Game Scenes: Flight
-
-
-
-
-
 .. function:: krpc_error_t krpc_InfernalRobotics_ServoGroups(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_SpaceCenter_Vessel_t vessel)
 
    A list of all the servo groups in the given *vessel*.

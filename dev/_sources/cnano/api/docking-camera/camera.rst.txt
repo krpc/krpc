@@ -20,7 +20,7 @@ Camera
 
    
 
-   .. function:: krpc_error_t krpc_DockingCamera_Camera_Image(krpc_connection_t connection, krpc_bytes_t * returnValue, krpc_DockingCamera_Camera_t instance, krpc_DockingCamera_ImageFormat_t format, int32_t quality)
+   .. function:: krpc_error_t krpc_DockingCamera_Camera_Image(krpc_connection_t connection, krpc_bytes_t * returnValue, krpc_DockingCamera_Camera_t instance, krpc_StdLib_ImageFormat_t format, int32_t quality)
 
       The image from the camera, 256 by 256 pixels.
       Throws an exception if the camera is off or not started.
@@ -38,25 +38,3 @@ Camera
          The camera is switched on by setting the ``IsEnabled`` field of its
          ``PartCameraModule`` or ``DockingCameraModule`` to ``true``, which also opens
          the camera window.
-
-
-
-
-.. type:: krpc_DockingCamera_ImageFormat_t
-
-   The file format of an image.
-
-   .. macro:: KRPC_ENUMERATION_DOCKINGCAMERA_IMAGEFORMAT
-
-      The service and enumeration ids of the enumeration, for
-      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
-
-
-   .. macro:: KRPC_DOCKINGCAMERA_IMAGEFORMAT_PNG
-
-      PNG, which is lossless.
-
-
-   .. macro:: KRPC_DOCKINGCAMERA_IMAGEFORMAT_JPEG
-
-      JPEG, which is lossy, and smaller and faster to encode than PNG.

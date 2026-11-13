@@ -50,7 +50,7 @@ External Camera
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_RasterPropMonitor_ExternalCamera_Image(krpc_connection_t connection, krpc_bytes_t * returnValue, krpc_RasterPropMonitor_ExternalCamera_t instance, int32_t width, int32_t height, krpc_RasterPropMonitor_ImageFormat_t format, int32_t quality)
+   .. function:: krpc_error_t krpc_RasterPropMonitor_ExternalCamera_Image(krpc_connection_t connection, krpc_bytes_t * returnValue, krpc_RasterPropMonitor_ExternalCamera_t instance, int32_t width, int32_t height, krpc_StdLib_ImageFormat_t format, int32_t quality)
 
       The camera's view as an image, rendered now. Streamed at a rate, it is a video of
       the camera, for which JPEG is smaller and faster.

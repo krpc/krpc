@@ -162,7 +162,7 @@ This service provides the scan data, scanners and maps of
 
 
 
-.. function:: krpc_error_t krpc_ScanSat_Map(krpc_connection_t connection, krpc_bytes_t * returnValue, krpc_SpaceCenter_CelestialBody_t body, krpc_ScanSat_MapType_t type, int32_t width, krpc_ScanSat_MapProjection_t projection, bool color, const char * resource, krpc_ScanSat_ImageFormat_t format, int32_t quality)
+.. function:: krpc_error_t krpc_ScanSat_Map(krpc_connection_t connection, krpc_bytes_t * returnValue, krpc_SpaceCenter_CelestialBody_t body, krpc_ScanSat_MapType_t type, int32_t width, krpc_ScanSat_MapProjection_t projection, bool color, const char * resource, krpc_StdLib_ImageFormat_t format, int32_t quality)
 
    A map of a body from the scan data, as an image. The map is half as high as it is
    wide. Building it takes several game frames.

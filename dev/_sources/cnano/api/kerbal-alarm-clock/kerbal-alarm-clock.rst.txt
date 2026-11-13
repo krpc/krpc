@@ -22,7 +22,8 @@ Provides functionality to interact with Kerbal Alarm Clock.
 
    A list of all the alarms.
 
-   
+   :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
+
 
 
 
@@ -37,7 +38,8 @@ Provides functionality to interact with Kerbal Alarm Clock.
 
     * **name** -- Name of the alarm to search for.
 
-   
+   :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
+
 
 
 
@@ -50,7 +52,8 @@ Provides functionality to interact with Kerbal Alarm Clock.
 
     * **type** -- Type of alarm to return.
 
-   
+   :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
+
 
 
 
@@ -64,3 +67,5 @@ Provides functionality to interact with Kerbal Alarm Clock.
     * **type** -- Type of the new alarm.
     * **name** -- Name of the new alarm.
     * **ut** -- Time at which the new alarm should trigger.
+
+   :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration

@@ -133,7 +133,7 @@ ScanSat
 
    
 
-   .. function:: std::string map(SpaceCenter::CelestialBody body, MapType type, int32_t width = 720, MapProjection projection = MapProjection::rectangular, bool color = true, std::string resource = "", ImageFormat format = ImageFormat::png, int32_t quality = 75)
+   .. function:: std::string map(SpaceCenter::CelestialBody body, MapType type, int32_t width = 720, MapProjection projection = MapProjection::rectangular, bool color = true, std::string resource = "", StdLib::ImageFormat format = StdLib::ImageFormat::png, int32_t quality = 75)
 
       A map of a body from the scan data, as an image. The map is half as high as it is
       wide. Building it takes several game frames.

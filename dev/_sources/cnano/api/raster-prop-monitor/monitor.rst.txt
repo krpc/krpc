@@ -206,7 +206,7 @@ Monitor
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_RasterPropMonitor_Monitor_Image(krpc_connection_t connection, krpc_bytes_t * returnValue, krpc_RasterPropMonitor_Monitor_t instance, krpc_RasterPropMonitor_ImageFormat_t format, int32_t quality)
+   .. function:: krpc_error_t krpc_RasterPropMonitor_Monitor_Image(krpc_connection_t connection, krpc_bytes_t * returnValue, krpc_RasterPropMonitor_Monitor_t instance, krpc_StdLib_ImageFormat_t format, int32_t quality)
 
       The screen as an image, at :func:`krpc_RasterPropMonitor_Monitor_ScreenPixelWidth` by
       :func:`krpc_RasterPropMonitor_Monitor_ScreenPixelHeight` pixels.
@@ -218,25 +218,3 @@ Monitor
 
       :returns: The image data.
       :Game Scenes: Flight
-
-
-
-
-.. type:: krpc_RasterPropMonitor_ImageFormat_t
-
-   The file format of an image.
-
-   .. macro:: KRPC_ENUMERATION_RASTERPROPMONITOR_IMAGEFORMAT
-
-      The service and enumeration ids of the enumeration, for
-      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
-
-
-   .. macro:: KRPC_RASTERPROPMONITOR_IMAGEFORMAT_PNG
-
-      PNG, which is lossless.
-
-
-   .. macro:: KRPC_RASTERPROPMONITOR_IMAGEFORMAT_JPEG
-
-      JPEG, which is lossy, and smaller and faster to encode than PNG.

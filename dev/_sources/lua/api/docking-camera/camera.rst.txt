@@ -16,12 +16,12 @@ Camera
 
       :Attribute: Read-only, cannot be set
 
-   .. method:: image(format?: DockingCamera.ImageFormat, quality?: number): string
+   .. method:: image(format?: StdLib.ImageFormat, quality?: number): string
 
       The image from the camera, 256 by 256 pixels.
       Throws an exception if the camera is off or not started.
 
-      :param format: The format of the image. Defaults to ``DockingCamera.ImageFormat.png``.
+      :param format: The format of the image. Defaults to ``StdLib.ImageFormat.png``.
       :param quality: The quality of a JPEG image, from 1 to 100. Defaults to ``75``.
       :returns: The image data.
 
@@ -30,20 +30,3 @@ Camera
          The camera is switched on by setting the ``IsEnabled`` field of its
          ``PartCameraModule`` or ``DockingCameraModule`` to ``True``, which also opens
          the camera window.
-
-
-
-
-.. class:: ImageFormat
-
-   The file format of an image.
-
-
-   .. data:: png
-
-      PNG, which is lossless.
-
-
-   .. data:: jpeg
-
-      JPEG, which is lossy, and smaller and faster to encode than PNG.

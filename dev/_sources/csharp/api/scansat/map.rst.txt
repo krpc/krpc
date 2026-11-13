@@ -51,20 +51,3 @@ Map
    .. enumerator:: Polar
 
       Two polar views side by side, the southern hemisphere on the left.
-
-
-
-
-.. enum:: ImageFormat
-
-   The file format of an image.
-
-
-   .. enumerator:: PNG
-
-      PNG, which is lossless.
-
-
-   .. enumerator:: JPEG
-
-      JPEG, which is lossy, and smaller and faster to encode than PNG.

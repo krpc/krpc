@@ -8672,7 +8672,7 @@
 </li>
       <li><a href="java/api/ui/input-field.html#krpc.client.services.UI.InputField.getReadOnly()">getReadOnly() (Java method)</a>
 </li>
-      <li><a href="java/api/infernal-robotics/infernal-robotics.html#krpc.client.services.InfernalRobotics.InfernalRobotics.getReady()">getReady() (Java method)</a>, <a href="java/api/mechjeb/mechjeb.html#krpc.client.services.MechJeb.MechJeb.getReady()">[1]</a>
+      <li><a href="java/api/mechjeb/mechjeb.html#krpc.client.services.MechJeb.MechJeb.getReady()">getReady() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.getRealAntennasAvailable()">getRealAntennasAvailable() (Java method)</a>
 </li>
@@ -10048,36 +10048,20 @@
         <li><a href="python/api/raster-prop-monitor/monitor.html#RasterPropMonitor.Monitor.image">(Monitor method)</a>
 </li>
       </ul></li>
-      <li><a href="java/api/docking-camera/camera.html#krpc.client.services.DockingCamera.Camera.image(ImageFormat, int)">image(ImageFormat, int) (Java method)</a>, <a href="java/api/raster-prop-monitor/monitor.html#krpc.client.services.RasterPropMonitor.Monitor.image(ImageFormat, int)">[1]</a>
+      <li><a href="java/api/raster-prop-monitor/external-camera.html#krpc.client.services.RasterPropMonitor.ExternalCamera.image(int, int, StdLib.ImageFormat, int)">image(int, int, StdLib.ImageFormat, int) (Java method)</a>
 </li>
-      <li><a href="java/api/raster-prop-monitor/external-camera.html#krpc.client.services.RasterPropMonitor.ExternalCamera.image(int, int, ImageFormat, int)">image(int, int, ImageFormat, int) (Java method)</a>
+      <li><a href="java/api/docking-camera/camera.html#krpc.client.services.DockingCamera.Camera.image(StdLib.ImageFormat, int)">image(StdLib.ImageFormat, int) (Java method)</a>, <a href="java/api/raster-prop-monitor/monitor.html#krpc.client.services.RasterPropMonitor.Monitor.image(StdLib.ImageFormat, int)">[1]</a>
 </li>
-      <li><a href="lua/api/docking-camera/camera.html#lua-DockingCamera.ImageFormat">ImageFormat (class in DockingCamera)</a>, <a href="python/api/docking-camera/camera.html#DockingCamera.ImageFormat">[1]</a>
+      <li><a href="lua/api/stdlib.html#lua-StdLib.ImageFormat">ImageFormat (class in StdLib)</a>, <a href="python/api/stdlib.html#StdLib.ImageFormat">[1]</a>
 
       <ul>
-        <li><a href="lua/api/raster-prop-monitor/monitor.html#lua-RasterPropMonitor.ImageFormat">(class in RasterPropMonitor)</a>, <a href="python/api/raster-prop-monitor/monitor.html#RasterPropMonitor.ImageFormat">[1]</a>
-</li>
-        <li><a href="lua/api/scansat/map.html#lua-ScanSat.ImageFormat">(class in ScanSat)</a>, <a href="python/api/scansat/map.html#ScanSat.ImageFormat">[1]</a>
-</li>
-        <li><a href="java/api/docking-camera/camera.html#krpc.client.services.DockingCamera.ImageFormat">(Java enum)</a>, <a href="java/api/raster-prop-monitor/monitor.html#krpc.client.services.RasterPropMonitor.ImageFormat">[1]</a>, <a href="java/api/scansat/map.html#krpc.client.services.ScanSat.ImageFormat">[2]</a>
+        <li><a href="java/api/stdlib.html#krpc.client.services.StdLib.ImageFormat">(Java enum)</a>
 </li>
       </ul></li>
-      <li><a href="python/api/docking-camera/camera.html#DockingCamera.ImageFormat.jpeg">ImageFormat.jpeg (in module DockingCamera)</a>
-
-      <ul>
-        <li><a href="python/api/raster-prop-monitor/monitor.html#RasterPropMonitor.ImageFormat.jpeg">(in module RasterPropMonitor)</a>
+      <li><a href="python/api/stdlib.html#StdLib.ImageFormat.jpeg">ImageFormat.jpeg (in module StdLib)</a>
 </li>
-        <li><a href="python/api/scansat/map.html#ScanSat.ImageFormat.jpeg">(in module ScanSat)</a>
+      <li><a href="python/api/stdlib.html#StdLib.ImageFormat.png">ImageFormat.png (in module StdLib)</a>
 </li>
-      </ul></li>
-      <li><a href="python/api/docking-camera/camera.html#DockingCamera.ImageFormat.png">ImageFormat.png (in module DockingCamera)</a>
-
-      <ul>
-        <li><a href="python/api/raster-prop-monitor/monitor.html#RasterPropMonitor.ImageFormat.png">(in module RasterPropMonitor)</a>
-</li>
-        <li><a href="python/api/scansat/map.html#ScanSat.ImageFormat.png">(in module ScanSat)</a>
-</li>
-      </ul></li>
       <li><a href="lua/api/kerbal-engineer-redux/impact.html#lua-KerbalEngineerRedux.Impact">Impact (class in KerbalEngineerRedux)</a>, <a href="python/api/kerbal-engineer-redux/impact.html#KerbalEngineerRedux.Impact">[1]</a>
 </li>
       <li><a href="lua/api/drawing/map-marker.html#lua-Drawing.MapMarkerIcon.impact">impact (data in Drawing.MapMarkerIcon)</a>
@@ -10229,8 +10213,6 @@
         <li><a href="python/api/space-center/parts.html#SpaceCenter.Experiment.inoperable">(Experiment attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.MotorState.INOPERABLE">INOPERABLE (Java field)</a>
 </li>
       <li><a href="lua/api/space-center/control.html#lua-SpaceCenter.Control.input_mode">input_mode (attribute in SpaceCenter.Control)</a>
@@ -10239,6 +10221,8 @@
         <li><a href="python/api/space-center/control.html#SpaceCenter.Control.input_mode">(Control attribute)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/space-center/parts.html#lua-SpaceCenter.RCS.input_override">input_override (attribute in SpaceCenter.RCS)</a>
 
       <ul>
@@ -10589,23 +10573,17 @@
         <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Fairing.jettison()">(Java method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/space-center/parts.html#lua-SpaceCenter.Fairing.jettisoned">jettisoned (attribute in SpaceCenter.Fairing)</a>
 
       <ul>
         <li><a href="python/api/space-center/parts.html#SpaceCenter.Fairing.jettisoned">(Fairing attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="lua/api/docking-camera/camera.html#lua-DockingCamera.ImageFormat.jpeg">jpeg (data in DockingCamera.ImageFormat)</a>
-
-      <ul>
-        <li><a href="lua/api/raster-prop-monitor/monitor.html#lua-RasterPropMonitor.ImageFormat.jpeg">(data in RasterPropMonitor.ImageFormat)</a>
+      <li><a href="lua/api/stdlib.html#lua-StdLib.ImageFormat.jpeg">jpeg (data in StdLib.ImageFormat)</a>
 </li>
-        <li><a href="lua/api/scansat/map.html#lua-ScanSat.ImageFormat.jpeg">(data in ScanSat.ImageFormat)</a>
-</li>
-      </ul></li>
-      <li><a href="java/api/docking-camera/camera.html#krpc.client.services.DockingCamera.ImageFormat.JPEG">JPEG (Java field)</a>, <a href="java/api/raster-prop-monitor/monitor.html#krpc.client.services.RasterPropMonitor.ImageFormat.JPEG">[1]</a>, <a href="java/api/scansat/map.html#krpc.client.services.ScanSat.ImageFormat.JPEG">[2]</a>
+      <li><a href="java/api/stdlib.html#krpc.client.services.StdLib.ImageFormat.JPEG">JPEG (Java field)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -10879,12 +10857,6 @@
       <li><a href="csharp/api/docking-camera/docking-camera.html#property-KRPC.Client.Services.DockingCamera.DockingCamera.Available">KRPC.Client.Services.DockingCamera.DockingCamera.Available (C# property)</a>
 </li>
       <li><a href="csharp/api/docking-camera/docking-camera.html#function-KRPC.Client.Services.DockingCamera.DockingCamera.Camera">KRPC.Client.Services.DockingCamera.DockingCamera.Camera (C# function)</a>
-</li>
-      <li><a href="csharp/api/docking-camera/camera.html#enum-KRPC.Client.Services.DockingCamera.ImageFormat">KRPC.Client.Services.DockingCamera.ImageFormat (C# enum)</a>
-</li>
-      <li><a href="csharp/api/docking-camera/camera.html#enumerator-KRPC.Client.Services.DockingCamera.ImageFormat.JPEG">KRPC.Client.Services.DockingCamera.ImageFormat.JPEG (C# enumerator)</a>
-</li>
-      <li><a href="csharp/api/docking-camera/camera.html#enumerator-KRPC.Client.Services.DockingCamera.ImageFormat.PNG">KRPC.Client.Services.DockingCamera.ImageFormat.PNG (C# enumerator)</a>
 </li>
       <li><a href="java/api/drawing/arc.html#package-krpc.client.services.Drawing">krpc.client.services.Drawing (package)</a>, <a href="java/api/drawing/box.html#package-krpc.client.services.Drawing">[1]</a>, <a href="java/api/drawing/circle.html#package-krpc.client.services.Drawing">[2]</a>, <a href="java/api/drawing/drawing.html#package-krpc.client.services.Drawing">[3]</a>, <a href="java/api/drawing/image.html#package-krpc.client.services.Drawing">[4]</a>, <a href="java/api/drawing/line.html#package-krpc.client.services.Drawing">[5]</a>, <a href="java/api/drawing/map-marker.html#package-krpc.client.services.Drawing">[6]</a>, <a href="java/api/drawing/navball-marker.html#package-krpc.client.services.Drawing">[7]</a>, <a href="java/api/drawing/orbit-path.html#package-krpc.client.services.Drawing">[8]</a>, <a href="java/api/drawing/point.html#package-krpc.client.services.Drawing">[9]</a>, <a href="java/api/drawing/polygon.html#package-krpc.client.services.Drawing">[10]</a>, <a href="java/api/drawing/polyline.html#package-krpc.client.services.Drawing">[11]</a>, <a href="java/api/drawing/sphere.html#package-krpc.client.services.Drawing">[12]</a>, <a href="java/api/drawing/text.html#package-krpc.client.services.Drawing">[13]</a>
 </li>
@@ -11307,8 +11279,6 @@
       <li><a href="csharp/api/infernal-robotics/infernal-robotics.html#class-KRPC.Client.Services.InfernalRobotics.InfernalRobotics">KRPC.Client.Services.InfernalRobotics.InfernalRobotics (C# class)</a>
 </li>
       <li><a href="csharp/api/infernal-robotics/infernal-robotics.html#property-KRPC.Client.Services.InfernalRobotics.InfernalRobotics.Available">KRPC.Client.Services.InfernalRobotics.InfernalRobotics.Available (C# property)</a>
-</li>
-      <li><a href="csharp/api/infernal-robotics/infernal-robotics.html#property-KRPC.Client.Services.InfernalRobotics.InfernalRobotics.Ready">KRPC.Client.Services.InfernalRobotics.InfernalRobotics.Ready (C# property)</a>
 </li>
       <li><a href="csharp/api/infernal-robotics/infernal-robotics.html#function-KRPC.Client.Services.InfernalRobotics.InfernalRobotics.ServoGroups">KRPC.Client.Services.InfernalRobotics.InfernalRobotics.ServoGroups (C# function)</a>
 </li>
@@ -13112,12 +13082,6 @@
 </li>
       <li><a href="csharp/api/raster-prop-monitor/external-camera.html#property-KRPC.Client.Services.RasterPropMonitor.ExternalCamera.Part">KRPC.Client.Services.RasterPropMonitor.ExternalCamera.Part (C# property)</a>
 </li>
-      <li><a href="csharp/api/raster-prop-monitor/monitor.html#enum-KRPC.Client.Services.RasterPropMonitor.ImageFormat">KRPC.Client.Services.RasterPropMonitor.ImageFormat (C# enum)</a>
-</li>
-      <li><a href="csharp/api/raster-prop-monitor/monitor.html#enumerator-KRPC.Client.Services.RasterPropMonitor.ImageFormat.JPEG">KRPC.Client.Services.RasterPropMonitor.ImageFormat.JPEG (C# enumerator)</a>
-</li>
-      <li><a href="csharp/api/raster-prop-monitor/monitor.html#enumerator-KRPC.Client.Services.RasterPropMonitor.ImageFormat.PNG">KRPC.Client.Services.RasterPropMonitor.ImageFormat.PNG (C# enumerator)</a>
-</li>
       <li><a href="csharp/api/raster-prop-monitor/monitor.html#class-KRPC.Client.Services.RasterPropMonitor.Monitor">KRPC.Client.Services.RasterPropMonitor.Monitor (C# class)</a>
 </li>
       <li><a href="csharp/api/raster-prop-monitor/monitor.html#property-KRPC.Client.Services.RasterPropMonitor.Monitor.ActivePage">KRPC.Client.Services.RasterPropMonitor.Monitor.ActivePage (C# property)</a>
@@ -13263,12 +13227,6 @@
       <li><a href="csharp/api/scansat/scansat.html#property-KRPC.Client.Services.ScanSat.Anomaly.Longitude">KRPC.Client.Services.ScanSat.Anomaly.Longitude (C# property)</a>
 </li>
       <li><a href="csharp/api/scansat/scansat.html#property-KRPC.Client.Services.ScanSat.Anomaly.Name">KRPC.Client.Services.ScanSat.Anomaly.Name (C# property)</a>
-</li>
-      <li><a href="csharp/api/scansat/map.html#enum-KRPC.Client.Services.ScanSat.ImageFormat">KRPC.Client.Services.ScanSat.ImageFormat (C# enum)</a>
-</li>
-      <li><a href="csharp/api/scansat/map.html#enumerator-KRPC.Client.Services.ScanSat.ImageFormat.JPEG">KRPC.Client.Services.ScanSat.ImageFormat.JPEG (C# enumerator)</a>
-</li>
-      <li><a href="csharp/api/scansat/map.html#enumerator-KRPC.Client.Services.ScanSat.ImageFormat.PNG">KRPC.Client.Services.ScanSat.ImageFormat.PNG (C# enumerator)</a>
 </li>
       <li><a href="csharp/api/scansat/map.html#enum-KRPC.Client.Services.ScanSat.MapProjection">KRPC.Client.Services.ScanSat.MapProjection (C# enum)</a>
 </li>
@@ -16624,6 +16582,12 @@
 </li>
       <li><a href="csharp/api/stdlib.html#property-KRPC.Client.Services.StdLib.ColorRGBA.R">KRPC.Client.Services.StdLib.ColorRGBA.R (C# property)</a>
 </li>
+      <li><a href="csharp/api/stdlib.html#enum-KRPC.Client.Services.StdLib.ImageFormat">KRPC.Client.Services.StdLib.ImageFormat (C# enum)</a>
+</li>
+      <li><a href="csharp/api/stdlib.html#enumerator-KRPC.Client.Services.StdLib.ImageFormat.JPEG">KRPC.Client.Services.StdLib.ImageFormat.JPEG (C# enumerator)</a>
+</li>
+      <li><a href="csharp/api/stdlib.html#enumerator-KRPC.Client.Services.StdLib.ImageFormat.PNG">KRPC.Client.Services.StdLib.ImageFormat.PNG (C# enumerator)</a>
+</li>
       <li><a href="csharp/api/stdlib.html#class-KRPC.Client.Services.StdLib.StdLib">KRPC.Client.Services.StdLib.StdLib (C# class)</a>
 </li>
       <li><a href="csharp/api/stdlib.html#function-KRPC.Client.Services.StdLib.StdLib.Abs">KRPC.Client.Services.StdLib.StdLib.Abs (C# function)</a>
@@ -17571,17 +17535,11 @@
 </li>
       <li><a href="cpp/api/docking-camera/docking-camera.html#_CPPv4N4krpc8services13DockingCamera6cameraEN11SpaceCenter4PartE">krpc::services::DockingCamera::camera (C++ function)</a>
 </li>
-      <li><a href="cpp/api/docking-camera/camera.html#_CPPv4N4krpc8services13DockingCamera6Camera5imageE11ImageFormat7int32_t">krpc::services::DockingCamera::Camera::image (C++ function)</a>
+      <li><a href="cpp/api/docking-camera/camera.html#_CPPv4N4krpc8services13DockingCamera6Camera5imageEN6StdLib11ImageFormatE7int32_t">krpc::services::DockingCamera::Camera::image (C++ function)</a>
 </li>
       <li><a href="cpp/api/docking-camera/camera.html#_CPPv4N4krpc8services13DockingCamera6Camera4partEv">krpc::services::DockingCamera::Camera::part (C++ function)</a>
 </li>
       <li><a href="cpp/api/docking-camera/docking-camera.html#_CPPv4N4krpc8services13DockingCamera13DockingCameraERN4krpc10ConnectionE">krpc::services::DockingCamera::DockingCamera (C++ function)</a>
-</li>
-      <li><a href="cpp/api/docking-camera/camera.html#_CPPv4N4krpc8services13DockingCamera11ImageFormatE">krpc::services::DockingCamera::ImageFormat (C++ enum)</a>
-</li>
-      <li><a href="cpp/api/docking-camera/camera.html#_CPPv4N4krpc8services13DockingCamera11ImageFormat4jpegE">krpc::services::DockingCamera::ImageFormat::jpeg (C++ enumerator)</a>
-</li>
-      <li><a href="cpp/api/docking-camera/camera.html#_CPPv4N4krpc8services13DockingCamera11ImageFormat3pngE">krpc::services::DockingCamera::ImageFormat::png (C++ enumerator)</a>
 </li>
       <li><a href="cpp/api/drawing/drawing.html#_CPPv4N4krpc8services7DrawingE">krpc::services::Drawing (C++ class)</a>
 </li>
@@ -18264,8 +18222,6 @@
       <li><a href="cpp/api/infernal-robotics/infernal-robotics.html#_CPPv4N4krpc8services16InfernalRobotics9availableEv">krpc::services::InfernalRobotics::available (C++ function)</a>
 </li>
       <li><a href="cpp/api/infernal-robotics/infernal-robotics.html#_CPPv4N4krpc8services16InfernalRobotics16InfernalRoboticsERN4krpc10ConnectionE">krpc::services::InfernalRobotics::InfernalRobotics (C++ function)</a>
-</li>
-      <li><a href="cpp/api/infernal-robotics/infernal-robotics.html#_CPPv4N4krpc8services16InfernalRobotics5readyEv">krpc::services::InfernalRobotics::ready (C++ function)</a>
 </li>
       <li><a href="cpp/api/infernal-robotics/servo.html#_CPPv4N4krpc8services16InfernalRobotics5ServoE">krpc::services::InfernalRobotics::Servo (C++ class)</a>
 </li>
@@ -20429,7 +20385,7 @@
 </li>
       <li><a href="cpp/api/raster-prop-monitor/external-camera.html#_CPPv4N4krpc8services17RasterPropMonitor14ExternalCamera3fovEv">krpc::services::RasterPropMonitor::ExternalCamera::fov (C++ function)</a>
 </li>
-      <li><a href="cpp/api/raster-prop-monitor/external-camera.html#_CPPv4N4krpc8services17RasterPropMonitor14ExternalCamera5imageE7int32_t7int32_t11ImageFormat7int32_t">krpc::services::RasterPropMonitor::ExternalCamera::image (C++ function)</a>
+      <li><a href="cpp/api/raster-prop-monitor/external-camera.html#_CPPv4N4krpc8services17RasterPropMonitor14ExternalCamera5imageE7int32_t7int32_tN6StdLib11ImageFormatE7int32_t">krpc::services::RasterPropMonitor::ExternalCamera::image (C++ function)</a>
 </li>
       <li><a href="cpp/api/raster-prop-monitor/external-camera.html#_CPPv4N4krpc8services17RasterPropMonitor14ExternalCamera7max_fovEv">krpc::services::RasterPropMonitor::ExternalCamera::max_fov (C++ function)</a>
 </li>
@@ -20445,12 +20401,6 @@
 </li>
       <li><a href="cpp/api/raster-prop-monitor/raster-prop-monitor.html#_CPPv4N4krpc8services17RasterPropMonitor34global_persistent_variable_changedEN11SpaceCenter6VesselENSt6stringE">krpc::services::RasterPropMonitor::global_persistent_variable_changed (C++ function)</a>
 </li>
-      <li><a href="cpp/api/raster-prop-monitor/monitor.html#_CPPv4N4krpc8services17RasterPropMonitor11ImageFormatE">krpc::services::RasterPropMonitor::ImageFormat (C++ enum)</a>
-</li>
-      <li><a href="cpp/api/raster-prop-monitor/monitor.html#_CPPv4N4krpc8services17RasterPropMonitor11ImageFormat4jpegE">krpc::services::RasterPropMonitor::ImageFormat::jpeg (C++ enumerator)</a>
-</li>
-      <li><a href="cpp/api/raster-prop-monitor/monitor.html#_CPPv4N4krpc8services17RasterPropMonitor11ImageFormat3pngE">krpc::services::RasterPropMonitor::ImageFormat::png (C++ enumerator)</a>
-</li>
       <li><a href="cpp/api/raster-prop-monitor/monitor.html#_CPPv4N4krpc8services17RasterPropMonitor7MonitorE">krpc::services::RasterPropMonitor::Monitor (C++ class)</a>
 </li>
       <li><a href="cpp/api/raster-prop-monitor/monitor.html#_CPPv4N4krpc8services17RasterPropMonitor7Monitor11active_pageEv">krpc::services::RasterPropMonitor::Monitor::active_page (C++ function)</a>
@@ -20465,7 +20415,7 @@
 </li>
       <li><a href="cpp/api/raster-prop-monitor/monitor.html#_CPPv4N4krpc8services17RasterPropMonitor7Monitor7displayEv">krpc::services::RasterPropMonitor::Monitor::display (C++ function)</a>
 </li>
-      <li><a href="cpp/api/raster-prop-monitor/monitor.html#_CPPv4N4krpc8services17RasterPropMonitor7Monitor5imageE11ImageFormat7int32_t">krpc::services::RasterPropMonitor::Monitor::image (C++ function)</a>
+      <li><a href="cpp/api/raster-prop-monitor/monitor.html#_CPPv4N4krpc8services17RasterPropMonitor7Monitor5imageEN6StdLib11ImageFormatE7int32_t">krpc::services::RasterPropMonitor::Monitor::image (C++ function)</a>
 </li>
       <li><a href="cpp/api/raster-prop-monitor/monitor.html#_CPPv4N4krpc8services17RasterPropMonitor7Monitor13letter_heightEv">krpc::services::RasterPropMonitor::Monitor::letter_height (C++ function)</a>
 </li>
@@ -20607,17 +20557,11 @@
 </li>
       <li><a href="cpp/api/scansat/scansat.html#_CPPv4N4krpc8services7ScanSat9elevationEN11SpaceCenter13CelestialBodyEdd">krpc::services::ScanSat::elevation (C++ function)</a>
 </li>
-      <li><a href="cpp/api/scansat/map.html#_CPPv4N4krpc8services7ScanSat11ImageFormatE">krpc::services::ScanSat::ImageFormat (C++ enum)</a>
-</li>
-      <li><a href="cpp/api/scansat/map.html#_CPPv4N4krpc8services7ScanSat11ImageFormat4jpegE">krpc::services::ScanSat::ImageFormat::jpeg (C++ enumerator)</a>
-</li>
-      <li><a href="cpp/api/scansat/map.html#_CPPv4N4krpc8services7ScanSat11ImageFormat3pngE">krpc::services::ScanSat::ImageFormat::png (C++ enumerator)</a>
-</li>
       <li><a href="cpp/api/scansat/scansat.html#_CPPv4N4krpc8services7ScanSat21instant_resource_scanEv">krpc::services::ScanSat::instant_resource_scan (C++ function)</a>
 </li>
       <li><a href="cpp/api/scansat/scansat.html#_CPPv4N4krpc8services7ScanSat10is_coveredEN11SpaceCenter13CelestialBodyEdd8ScanType">krpc::services::ScanSat::is_covered (C++ function)</a>
 </li>
-      <li><a href="cpp/api/scansat/scansat.html#_CPPv4N4krpc8services7ScanSat3mapEN11SpaceCenter13CelestialBodyE7MapType7int32_t13MapProjectionbNSt6stringE11ImageFormat7int32_t">krpc::services::ScanSat::map (C++ function)</a>
+      <li><a href="cpp/api/scansat/scansat.html#_CPPv4N4krpc8services7ScanSat3mapEN11SpaceCenter13CelestialBodyE7MapType7int32_t13MapProjectionbNSt6stringEN6StdLib11ImageFormatE7int32_t">krpc::services::ScanSat::map (C++ function)</a>
 </li>
       <li><a href="cpp/api/scansat/map.html#_CPPv4N4krpc8services7ScanSat13MapProjectionE">krpc::services::ScanSat::MapProjection (C++ enum)</a>
 </li>
@@ -22221,8 +22165,6 @@
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter6Engine16propellant_namesEv">krpc::services::SpaceCenter::Engine::propellant_names (C++ function)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter6Engine17propellant_ratiosEv">krpc::services::SpaceCenter::Engine::propellant_ratios (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter6Engine22propellant_reliabilityEv">krpc::services::SpaceCenter::Engine::propellant_reliability (C++ function)</a>
@@ -22235,6 +22177,8 @@
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter6Engine20set_auto_mode_switchEb">krpc::services::SpaceCenter::Engine::set_auto_mode_switch (C++ function)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter6Engine20set_gimbal_actuationENSt5tupleIdddEE">krpc::services::SpaceCenter::Engine::set_gimbal_actuation (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter6Engine16set_gimbal_limitEf">krpc::services::SpaceCenter::Engine::set_gimbal_limit (C++ function)</a>
@@ -24473,6 +24417,12 @@
 </li>
       <li><a href="cpp/api/stdlib.html#_CPPv4N4krpc8services6StdLib5hypotEdd">krpc::services::StdLib::hypot (C++ function)</a>
 </li>
+      <li><a href="cpp/api/stdlib.html#_CPPv4N4krpc8services6StdLib11ImageFormatE">krpc::services::StdLib::ImageFormat (C++ enum)</a>
+</li>
+      <li><a href="cpp/api/stdlib.html#_CPPv4N4krpc8services6StdLib11ImageFormat4jpegE">krpc::services::StdLib::ImageFormat::jpeg (C++ enumerator)</a>
+</li>
+      <li><a href="cpp/api/stdlib.html#_CPPv4N4krpc8services6StdLib11ImageFormat3pngE">krpc::services::StdLib::ImageFormat::png (C++ enumerator)</a>
+</li>
       <li><a href="cpp/api/stdlib.html#_CPPv4N4krpc8services6StdLib12inverse_lerpEddd">krpc::services::StdLib::inverse_lerp (C++ function)</a>
 </li>
       <li><a href="cpp/api/stdlib.html#_CPPv4N4krpc8services6StdLib9is_finiteEd">krpc::services::StdLib::is_finite (C++ function)</a>
@@ -25393,14 +25343,6 @@
 </li>
       <li><a href="cnano/api/docking-camera/camera.html#c.krpc_DockingCamera_Camera_t.krpc_DockingCamera_Camera_Part">krpc_DockingCamera_Camera_t.krpc_DockingCamera_Camera_Part (C function)</a>
 </li>
-      <li><a href="cnano/api/docking-camera/camera.html#c.krpc_DockingCamera_ImageFormat_t">krpc_DockingCamera_ImageFormat_t (C type)</a>
-</li>
-      <li><a href="cnano/api/docking-camera/camera.html#c.krpc_DockingCamera_ImageFormat_t.KRPC_DOCKINGCAMERA_IMAGEFORMAT_JPEG">krpc_DockingCamera_ImageFormat_t.KRPC_DOCKINGCAMERA_IMAGEFORMAT_JPEG (C macro)</a>
-</li>
-      <li><a href="cnano/api/docking-camera/camera.html#c.krpc_DockingCamera_ImageFormat_t.KRPC_DOCKINGCAMERA_IMAGEFORMAT_PNG">krpc_DockingCamera_ImageFormat_t.KRPC_DOCKINGCAMERA_IMAGEFORMAT_PNG (C macro)</a>
-</li>
-      <li><a href="cnano/api/docking-camera/camera.html#c.krpc_DockingCamera_ImageFormat_t.KRPC_ENUMERATION_DOCKINGCAMERA_IMAGEFORMAT">krpc_DockingCamera_ImageFormat_t.KRPC_ENUMERATION_DOCKINGCAMERA_IMAGEFORMAT (C macro)</a>
-</li>
       <li><a href="cnano/api/drawing/drawing.html#c.krpc_Drawing_AddArc">krpc_Drawing_AddArc (C function)</a>
 </li>
       <li><a href="cnano/api/drawing/drawing.html#c.krpc_Drawing_AddAxes">krpc_Drawing_AddAxes (C function)</a>
@@ -26178,8 +26120,6 @@
       <li><a href="cnano.html#c.krpc_get_error_message">krpc_get_error_message (C function)</a>
 </li>
       <li><a href="cnano/api/infernal-robotics/infernal-robotics.html#c.krpc_InfernalRobotics_Available">krpc_InfernalRobotics_Available (C function)</a>
-</li>
-      <li><a href="cnano/api/infernal-robotics/infernal-robotics.html#c.krpc_InfernalRobotics_Ready">krpc_InfernalRobotics_Ready (C function)</a>
 </li>
       <li><a href="cnano/api/infernal-robotics/servo.html#c.krpc_InfernalRobotics_Servo_t">krpc_InfernalRobotics_Servo_t (C type)</a>
 </li>
@@ -28597,14 +28537,6 @@
 </li>
       <li><a href="cnano/api/raster-prop-monitor/raster-prop-monitor.html#c.krpc_RasterPropMonitor_GlobalPersistentVariableChanged">krpc_RasterPropMonitor_GlobalPersistentVariableChanged (C function)</a>
 </li>
-      <li><a href="cnano/api/raster-prop-monitor/monitor.html#c.krpc_RasterPropMonitor_ImageFormat_t">krpc_RasterPropMonitor_ImageFormat_t (C type)</a>
-</li>
-      <li><a href="cnano/api/raster-prop-monitor/monitor.html#c.krpc_RasterPropMonitor_ImageFormat_t.KRPC_ENUMERATION_RASTERPROPMONITOR_IMAGEFORMAT">krpc_RasterPropMonitor_ImageFormat_t.KRPC_ENUMERATION_RASTERPROPMONITOR_IMAGEFORMAT (C macro)</a>
-</li>
-      <li><a href="cnano/api/raster-prop-monitor/monitor.html#c.krpc_RasterPropMonitor_ImageFormat_t.KRPC_RASTERPROPMONITOR_IMAGEFORMAT_JPEG">krpc_RasterPropMonitor_ImageFormat_t.KRPC_RASTERPROPMONITOR_IMAGEFORMAT_JPEG (C macro)</a>
-</li>
-      <li><a href="cnano/api/raster-prop-monitor/monitor.html#c.krpc_RasterPropMonitor_ImageFormat_t.KRPC_RASTERPROPMONITOR_IMAGEFORMAT_PNG">krpc_RasterPropMonitor_ImageFormat_t.KRPC_RASTERPROPMONITOR_IMAGEFORMAT_PNG (C macro)</a>
-</li>
       <li><a href="cnano/api/raster-prop-monitor/monitor.html#c.krpc_RasterPropMonitor_Monitor_t">krpc_RasterPropMonitor_Monitor_t (C type)</a>
 </li>
       <li><a href="cnano/api/raster-prop-monitor/monitor.html#c.krpc_RasterPropMonitor_Monitor_t.KRPC_CLASS_RASTERPROPMONITOR_MONITOR">krpc_RasterPropMonitor_Monitor_t.KRPC_CLASS_RASTERPROPMONITOR_MONITOR (C macro)</a>
@@ -28776,14 +28708,6 @@
       <li><a href="cnano/api/scansat/scansat.html#c.krpc_ScanSat_DaylightCheck">krpc_ScanSat_DaylightCheck (C function)</a>
 </li>
       <li><a href="cnano/api/scansat/scansat.html#c.krpc_ScanSat_Elevation">krpc_ScanSat_Elevation (C function)</a>
-</li>
-      <li><a href="cnano/api/scansat/map.html#c.krpc_ScanSat_ImageFormat_t">krpc_ScanSat_ImageFormat_t (C type)</a>
-</li>
-      <li><a href="cnano/api/scansat/map.html#c.krpc_ScanSat_ImageFormat_t.KRPC_ENUMERATION_SCANSAT_IMAGEFORMAT">krpc_ScanSat_ImageFormat_t.KRPC_ENUMERATION_SCANSAT_IMAGEFORMAT (C macro)</a>
-</li>
-      <li><a href="cnano/api/scansat/map.html#c.krpc_ScanSat_ImageFormat_t.KRPC_SCANSAT_IMAGEFORMAT_JPEG">krpc_ScanSat_ImageFormat_t.KRPC_SCANSAT_IMAGEFORMAT_JPEG (C macro)</a>
-</li>
-      <li><a href="cnano/api/scansat/map.html#c.krpc_ScanSat_ImageFormat_t.KRPC_SCANSAT_IMAGEFORMAT_PNG">krpc_ScanSat_ImageFormat_t.KRPC_SCANSAT_IMAGEFORMAT_PNG (C macro)</a>
 </li>
       <li><a href="cnano/api/scansat/scansat.html#c.krpc_ScanSat_InstantResourceScan">krpc_ScanSat_InstantResourceScan (C function)</a>
 </li>
@@ -32953,6 +32877,14 @@
 </li>
       <li><a href="cnano/api/stdlib.html#c.krpc_StdLib_Hypot">krpc_StdLib_Hypot (C function)</a>
 </li>
+      <li><a href="cnano/api/stdlib.html#c.krpc_StdLib_ImageFormat_t">krpc_StdLib_ImageFormat_t (C type)</a>
+</li>
+      <li><a href="cnano/api/stdlib.html#c.krpc_StdLib_ImageFormat_t.KRPC_ENUMERATION_STDLIB_IMAGEFORMAT">krpc_StdLib_ImageFormat_t.KRPC_ENUMERATION_STDLIB_IMAGEFORMAT (C macro)</a>
+</li>
+      <li><a href="cnano/api/stdlib.html#c.krpc_StdLib_ImageFormat_t.KRPC_STDLIB_IMAGEFORMAT_JPEG">krpc_StdLib_ImageFormat_t.KRPC_STDLIB_IMAGEFORMAT_JPEG (C macro)</a>
+</li>
+      <li><a href="cnano/api/stdlib.html#c.krpc_StdLib_ImageFormat_t.KRPC_STDLIB_IMAGEFORMAT_PNG">krpc_StdLib_ImageFormat_t.KRPC_STDLIB_IMAGEFORMAT_PNG (C macro)</a>
+</li>
       <li><a href="cnano/api/stdlib.html#c.krpc_StdLib_InverseLerp">krpc_StdLib_InverseLerp (C function)</a>
 </li>
       <li><a href="cnano/api/stdlib.html#c.krpc_StdLib_IsFinite">krpc_StdLib_IsFinite (C function)</a>
@@ -34678,7 +34610,7 @@
 </li>
       <li><a href="python/api/scansat/scansat.html#ScanSat.map">map() (in module ScanSat)</a>
 </li>
-      <li><a href="java/api/scansat/scansat.html#krpc.client.services.ScanSat.ScanSat.map(SpaceCenter.CelestialBody, MapType, int, MapProjection, boolean, String, ImageFormat, int)">map(SpaceCenter.CelestialBody, MapType, int, MapProjection, boolean, String, ImageFormat, int) (Java method)</a>
+      <li><a href="java/api/scansat/scansat.html#krpc.client.services.ScanSat.ScanSat.map(SpaceCenter.CelestialBody, MapType, int, MapProjection, boolean, String, StdLib.ImageFormat, int)">map(SpaceCenter.CelestialBody, MapType, int, MapProjection, boolean, String, StdLib.ImageFormat, int) (Java method)</a>
 </li>
       <li><a href="lua/api/space-center/space-center.html#lua-SpaceCenter.map_filter">map_filter (attribute in SpaceCenter)</a>
 
@@ -37266,10 +37198,10 @@
 </li>
       <li><a href="python/api/mechjeb/target-controller.html#MechJeb.TargetController.pick_position_target_on_map">pick_position_target_on_map() (TargetController method)</a>
 </li>
-      <li><a href="java/api/mechjeb/target-controller.html#krpc.client.services.MechJeb.TargetController.pickPositionTargetOnMap()">pickPositionTargetOnMap() (Java method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="java/api/mechjeb/target-controller.html#krpc.client.services.MechJeb.TargetController.pickPositionTargetOnMap()">pickPositionTargetOnMap() (Java method)</a>
+</li>
       <li><a href="python/api/mechjeb/airplane-autopilot.html#MechJeb.AirplaneAutopilot.pit_kd">pit_kd (AirplaneAutopilot attribute)</a>
 
       <ul>
@@ -37450,15 +37382,9 @@
         <li><a href="python/api/space-center/parts.html#SpaceCenter.RoboticController.playing">(RoboticController attribute)</a>
 </li>
       </ul></li>
-      <li><a href="lua/api/docking-camera/camera.html#lua-DockingCamera.ImageFormat.png">png (data in DockingCamera.ImageFormat)</a>
-
-      <ul>
-        <li><a href="lua/api/raster-prop-monitor/monitor.html#lua-RasterPropMonitor.ImageFormat.png">(data in RasterPropMonitor.ImageFormat)</a>
+      <li><a href="lua/api/stdlib.html#lua-StdLib.ImageFormat.png">png (data in StdLib.ImageFormat)</a>
 </li>
-        <li><a href="lua/api/scansat/map.html#lua-ScanSat.ImageFormat.png">(data in ScanSat.ImageFormat)</a>
-</li>
-      </ul></li>
-      <li><a href="java/api/docking-camera/camera.html#krpc.client.services.DockingCamera.ImageFormat.PNG">PNG (Java field)</a>, <a href="java/api/raster-prop-monitor/monitor.html#krpc.client.services.RasterPropMonitor.ImageFormat.PNG">[1]</a>, <a href="java/api/scansat/map.html#krpc.client.services.ScanSat.ImageFormat.PNG">[2]</a>
+      <li><a href="java/api/stdlib.html#krpc.client.services.StdLib.ImageFormat.PNG">PNG (Java field)</a>
 </li>
       <li><a href="lua/api/drawing/point.html#lua-Drawing.Point">Point (class in Drawing)</a>, <a href="python/api/drawing/point.html#Drawing.Point">[1]</a>
 
@@ -38200,14 +38126,10 @@
         <li><a href="python/api/ui/input-field.html#UI.InputField.read_only">(InputField attribute)</a>
 </li>
       </ul></li>
-      <li><a href="lua/api/infernal-robotics/infernal-robotics.html#lua-InfernalRobotics.ready">ready (attribute in InfernalRobotics)</a>
+      <li><a href="lua/api/mechjeb/mechjeb.html#lua-MechJeb.ready">ready (attribute in MechJeb)</a>
 
       <ul>
-        <li><a href="lua/api/mechjeb/mechjeb.html#lua-MechJeb.ready">(attribute in MechJeb)</a>
-</li>
         <li><a href="lua/api/space-center/parts.html#lua-SpaceCenter.DockingPortState.ready">(data in SpaceCenter.DockingPortState)</a>
-</li>
-        <li><a href="python/api/infernal-robotics/infernal-robotics.html#InfernalRobotics.ready">(in module InfernalRobotics)</a>
 </li>
         <li><a href="python/api/mechjeb/mechjeb.html#MechJeb.ready">(in module MechJeb)</a>
 </li>

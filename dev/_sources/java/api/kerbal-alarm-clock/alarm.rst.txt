@@ -19,7 +19,8 @@ Alarm
 
       The action that the alarm triggers.
 
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
+
 
       .. note::
 
@@ -32,7 +33,7 @@ Alarm
 
       The number of seconds before the event that the alarm will fire.
 
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
 
    .. method:: double getTime()
 
@@ -40,21 +41,21 @@ Alarm
 
       The time at which the alarm will fire.
 
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
 
    .. method:: AlarmType getType()
 
 
       The type of the alarm.
 
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
 
    .. method:: String getID()
 
 
       The unique identifier for the alarm.
 
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
 
    .. method:: String getName()
 
@@ -62,7 +63,7 @@ Alarm
 
       The short name of the alarm.
 
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
 
    .. method:: String getNotes()
 
@@ -70,14 +71,14 @@ Alarm
 
       The long description of the alarm.
 
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
 
    .. method:: double getRemaining()
 
 
       The number of seconds until the alarm will fire.
 
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
 
    .. method:: boolean getEnabled()
 
@@ -85,7 +86,7 @@ Alarm
 
       Whether the alarm is enabled. A disabled alarm does not fire.
 
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
 
    .. method:: boolean getPlaySound()
 
@@ -93,7 +94,8 @@ Alarm
 
       Whether the alarm plays a sound when it fires.
 
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
+
 
       .. note::
 
@@ -107,7 +109,7 @@ Alarm
       stream this or use it in an event expression to react to the alarm
       firing.
 
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
 
    .. method:: boolean getRepeat()
 
@@ -117,7 +119,7 @@ Alarm
       Only has an effect for alarm types that support repeating
       (see :meth:`Alarm.getSupportsRepeat()`).
 
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
 
    .. method:: boolean getSupportsRepeat()
 
@@ -125,7 +127,7 @@ Alarm
       Whether this alarm's type supports repeating
       (see :meth:`Alarm.getRepeat()`).
 
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
 
    .. method:: double getRepeatPeriod()
 
@@ -135,7 +137,7 @@ Alarm
       Only has an effect for alarm types that support a repeat period
       (see :meth:`Alarm.getSupportsRepeatPeriod()`).
 
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
 
    .. method:: boolean getSupportsRepeatPeriod()
 
@@ -143,7 +145,7 @@ Alarm
       Whether this alarm's type supports a repeat period
       (see :meth:`Alarm.getRepeatPeriod()`).
 
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
 
    .. method:: SpaceCenter.Vessel getVessel()
 
@@ -151,7 +153,7 @@ Alarm
 
       The vessel that the alarm is attached to.
 
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
 
    .. method:: SpaceCenter.CelestialBody getXferOriginBody()
 
@@ -159,7 +161,7 @@ Alarm
 
       The celestial body the vessel is departing from.
 
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
 
    .. method:: SpaceCenter.CelestialBody getXferTargetBody()
 
@@ -167,13 +169,14 @@ Alarm
 
       The celestial body the vessel is arriving at.
 
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
 
    .. method:: void remove()
 
       Removes the alarm. Any further use of this object throws an exception.
 
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
+
 
       .. note::
 

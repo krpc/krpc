@@ -707,3 +707,19 @@ Standard Library
    .. member:: float a
 
       The alpha component.
+
+
+.. namespace:: krpc::services::StdLib
+.. enum-struct:: ImageFormat
+
+   The file format of an image.
+
+
+   .. enumerator:: png
+
+      PNG, which is lossless.
+
+
+   .. enumerator:: jpeg
+
+      JPEG, which is lossy, and smaller and faster to encode than PNG.

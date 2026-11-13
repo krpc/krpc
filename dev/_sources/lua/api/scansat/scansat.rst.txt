@@ -129,7 +129,7 @@ This service provides the scan data, scanners and maps of
 
 
 
-.. staticmethod:: map(body: SpaceCenter.CelestialBody, type: ScanSat.MapType, width?: number, projection?: ScanSat.MapProjection, color?: boolean, resource?: string, format?: ScanSat.ImageFormat, quality?: number): string
+.. staticmethod:: map(body: SpaceCenter.CelestialBody, type: ScanSat.MapType, width?: number, projection?: ScanSat.MapProjection, color?: boolean, resource?: string, format?: StdLib.ImageFormat, quality?: number): string
 
    A map of a body from the scan data, as an image. The map is half as high as it is
    wide. Building it takes several game frames.
@@ -142,7 +142,7 @@ This service provides the scan data, scanners and maps of
    :param projection: The projection. Defaults to ``ScanSat.MapProjection.rectangular``.
    :param color: Whether the map is in color, or in grayscale. Defaults to ``true``.
    :param resource: The name of a resource to overlay, or an empty string for none. See :attr:`ScanSat.resources`. Defaults to ``''``.
-   :param format: The format of the image. Defaults to ``ScanSat.ImageFormat.png``.
+   :param format: The format of the image. Defaults to ``StdLib.ImageFormat.png``.
    :param quality: The quality of a JPEG image, from 1 to 100. Defaults to ``75``.
 
 

@@ -221,30 +221,13 @@ Monitor
       :rtype: list(str)
       :Game Scenes: Flight
 
-   .. method:: image([format = ImageFormat.png], [quality = 75])
+   .. method:: image([format = StdLib.ImageFormat.png], [quality = 75])
 
       The screen as an image, at :attr:`Monitor.screen_pixel_width` by
       :attr:`Monitor.screen_pixel_height` pixels.
 
-      :param ImageFormat format: The format of the image.
+      :param StdLib.ImageFormat format: The format of the image.
       :param int quality: The quality of a JPEG image, from 1 to 100.
       :returns: The image data.
       :rtype: bytes
       :Game Scenes: Flight
-
-
-
-
-.. class:: ImageFormat
-
-   The file format of an image.
-
-
-   .. data:: png
-
-      PNG, which is lossless.
-
-
-   .. data:: jpeg
-
-      JPEG, which is lossy, and smaller and faster to encode than PNG.

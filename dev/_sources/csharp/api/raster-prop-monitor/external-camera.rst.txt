@@ -45,7 +45,7 @@ External Camera
 
       :Game Scenes: Flight
 
-   .. function:: byte[] Image(int width, int height, ImageFormat format = ImageFormat.PNG, int quality = 75)
+   .. function:: byte[] Image(int width, int height, StdLib.ImageFormat format = StdLib.ImageFormat.PNG, int quality = 75)
 
       The camera's view as an image, rendered now. Streamed at a rate, it is a video of
       the camera, for which JPEG is smaller and faster.

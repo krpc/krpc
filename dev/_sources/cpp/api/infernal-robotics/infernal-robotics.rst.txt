@@ -21,12 +21,6 @@ InfernalRobotics
 
    
 
-   .. function:: bool ready()
-
-      Whether Infernal Robotics API is ready.
-
-      :Game Scenes: Flight
-
    .. function:: std::vector<ServoGroup> servo_groups(SpaceCenter::Vessel vessel)
 
       A list of all the servo groups in the given *vessel*.

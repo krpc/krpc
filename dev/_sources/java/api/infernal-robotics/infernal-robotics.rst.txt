@@ -17,13 +17,6 @@ InfernalRobotics
 
    
 
-   .. method:: boolean getReady()
-
-
-      Whether Infernal Robotics API is ready.
-
-      :Game Scenes: Flight
-
    .. method:: java.util.List<ServoGroup> servoGroups(SpaceCenter.Vessel vessel)
 
       A list of all the servo groups in the given *vessel*.

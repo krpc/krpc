@@ -1492,7 +1492,7 @@ to the camera’s range.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="RasterPropMonitor.ExternalCamera.image">
-<span class="sig-name descname"><span class="pre">image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">width</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">ImageFormat.png</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">quality</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">75</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#RasterPropMonitor.ExternalCamera.image" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">width</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">StdLib.ImageFormat.png</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">quality</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">75</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#RasterPropMonitor.ExternalCamera.image" title="Link to this definition">#</a></dt>
 <dd><p>The camera’s view as an image, rendered now. Streamed at a rate, it is a video of
 the camera, for which JPEG is smaller and faster.
 Throws an exception if the camera is not on the active vessel.</p>
@@ -1501,7 +1501,7 @@ Throws an exception if the camera is not on the active vessel.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>width</strong> (<em>int</em>) – The width of the image, in pixels.</p></li>
 <li><p><strong>height</strong> (<em>int</em>) – The height of the image, in pixels.</p></li>
-<li><p><strong>format</strong> (<a class="reference internal" href="monitor.html#RasterPropMonitor.ImageFormat" title="RasterPropMonitor.ImageFormat"><em>ImageFormat</em></a>) – The format of the image.</p></li>
+<li><p><strong>format</strong> (<a class="reference internal" href="../stdlib.html#StdLib.ImageFormat" title="StdLib.ImageFormat"><em>StdLib.ImageFormat</em></a>) – The format of the image.</p></li>
 <li><p><strong>quality</strong> (<em>int</em>) – The quality of a JPEG image, from 1 to 100.</p></li>
 </ul>
 </dd>

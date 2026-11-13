@@ -590,14 +590,14 @@ uses <a class="reference external" href="https://python-pillow.org">Pillow</a> t
 <span class="kn">from</span><span class="w"> </span><span class="nn">PIL.ImageTk</span><span class="w"> </span><span class="kn">import</span> <span class="n">PhotoImage</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">krpc.services.stdlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">ImageFormat</span>
 
 <span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"Camera Video"</span><span class="p">)</span>
 <span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
 <span class="n">camera</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">raster_prop_monitor</span><span class="o">.</span><span class="n">cameras</span><span class="p">(</span><span class="n">vessel</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
 <span class="c1"># The camera's view as JPEG frames of 640 by 480 pixels, 30 times a second</span>
-<span class="n">jpeg</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">raster_prop_monitor</span><span class="o">.</span><span class="n">ImageFormat</span><span class="o">.</span><span class="n">jpeg</span>
-<span class="n">frames</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_stream</span><span class="p">(</span><span class="n">camera</span><span class="o">.</span><span class="n">image</span><span class="p">,</span> <span class="mi">640</span><span class="p">,</span> <span class="mi">480</span><span class="p">,</span> <span class="n">jpeg</span><span class="p">)</span>
+<span class="n">frames</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_stream</span><span class="p">(</span><span class="n">camera</span><span class="o">.</span><span class="n">image</span><span class="p">,</span> <span class="mi">640</span><span class="p">,</span> <span class="mi">480</span><span class="p">,</span> <span class="n">ImageFormat</span><span class="o">.</span><span class="n">jpeg</span><span class="p">)</span>
 <span class="n">frames</span><span class="o">.</span><span class="n">rate</span> <span class="o">=</span> <span class="mi">30</span>
 
 <span class="n">window</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">Tk</span><span class="p">()</span>

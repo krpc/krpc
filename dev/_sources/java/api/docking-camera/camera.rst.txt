@@ -17,12 +17,12 @@ Camera
 
    
 
-   .. method:: byte[] image(ImageFormat format, int quality)
+   .. method:: byte[] image(StdLib.ImageFormat format, int quality)
 
       The image from the camera, 256 by 256 pixels.
       Throws an exception if the camera is off or not started.
 
-      :param ImageFormat format: The format of the image.
+      :param StdLib.ImageFormat format: The format of the image.
       :param int quality: The quality of a JPEG image, from 1 to 100.
       :returns: The image data.
    
@@ -32,20 +32,3 @@ Camera
          The camera is switched on by setting the ``IsEnabled`` field of its
          ``PartCameraModule`` or ``DockingCameraModule`` to ``true``, which also opens
          the camera window.
-
-
-
-
-.. type:: public enum ImageFormat
-
-   The file format of an image.
-
-
-   .. field:: public ImageFormat PNG
-
-      PNG, which is lossless.
-
-
-   .. field:: public ImageFormat JPEG
-
-      JPEG, which is lossy, and smaller and faster to encode than PNG.

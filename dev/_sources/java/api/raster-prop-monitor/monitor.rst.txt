@@ -204,29 +204,12 @@ Monitor
 
       :Game Scenes: Flight
 
-   .. method:: byte[] image(ImageFormat format, int quality)
+   .. method:: byte[] image(StdLib.ImageFormat format, int quality)
 
       The screen as an image, at :meth:`Monitor.getScreenPixelWidth()` by
       :meth:`Monitor.getScreenPixelHeight()` pixels.
 
-      :param ImageFormat format: The format of the image.
+      :param StdLib.ImageFormat format: The format of the image.
       :param int quality: The quality of a JPEG image, from 1 to 100.
       :returns: The image data.
       :Game Scenes: Flight
-
-
-
-
-.. type:: public enum ImageFormat
-
-   The file format of an image.
-
-
-   .. field:: public ImageFormat PNG
-
-      PNG, which is lossless.
-
-
-   .. field:: public ImageFormat JPEG
-
-      JPEG, which is lossy, and smaller and faster to encode than PNG.

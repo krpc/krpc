@@ -8,7 +8,7 @@ Map
 
 .. type:: public enum MapType
 
-   The type of a map. See :meth:`ScanSat.map(SpaceCenter.CelestialBody, MapType, int, MapProjection, boolean, String, ImageFormat, int)`.
+   The type of a map. See :meth:`ScanSat.map(SpaceCenter.CelestialBody, MapType, int, MapProjection, boolean, String, StdLib.ImageFormat, int)`.
 
 
    .. field:: public MapType ALTIMETRY
@@ -35,7 +35,7 @@ Map
 
 .. type:: public enum MapProjection
 
-   The projection of a map. See :meth:`ScanSat.map(SpaceCenter.CelestialBody, MapType, int, MapProjection, boolean, String, ImageFormat, int)`.
+   The projection of a map. See :meth:`ScanSat.map(SpaceCenter.CelestialBody, MapType, int, MapProjection, boolean, String, StdLib.ImageFormat, int)`.
 
 
    .. field:: public MapProjection RECTANGULAR
@@ -51,20 +51,3 @@ Map
    .. field:: public MapProjection POLAR
 
       Two polar views side by side, the southern hemisphere on the left.
-
-
-
-
-.. type:: public enum ImageFormat
-
-   The file format of an image.
-
-
-   .. field:: public ImageFormat PNG
-
-      PNG, which is lossless.
-
-
-   .. field:: public ImageFormat JPEG
-
-      JPEG, which is lossy, and smaller and faster to encode than PNG.

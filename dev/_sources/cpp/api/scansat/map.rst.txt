@@ -53,21 +53,3 @@ Map
    .. enumerator:: polar
 
       Two polar views side by side, the southern hemisphere on the left.
-
-
-
-
-.. namespace:: krpc::services::ScanSat
-.. enum-struct:: ImageFormat
-
-   The file format of an image.
-
-
-   .. enumerator:: png
-
-      PNG, which is lossless.
-
-
-   .. enumerator:: jpeg
-
-      JPEG, which is lossy, and smaller and faster to encode than PNG.

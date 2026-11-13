@@ -25,7 +25,7 @@ KerbalAlarmClock
 
       A list of all the alarms.
 
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
 
    .. function:: std::optional<Alarm> alarm_with_name(std::string name)
 
@@ -37,7 +37,7 @@ KerbalAlarmClock
 
        * **name** -- Name of the alarm to search for.
 
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
 
    .. function:: std::vector<Alarm> alarms_with_type(AlarmType type)
 
@@ -47,7 +47,7 @@ KerbalAlarmClock
 
        * **type** -- Type of alarm to return.
 
-   
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
 
    .. function:: Alarm create_alarm(AlarmType type, std::string name, double ut)
 
@@ -58,3 +58,5 @@ KerbalAlarmClock
        * **type** -- Type of the new alarm.
        * **name** -- Name of the new alarm.
        * **ut** -- Time at which the new alarm should trigger.
+
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration

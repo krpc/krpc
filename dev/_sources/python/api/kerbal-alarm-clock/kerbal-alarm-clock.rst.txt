@@ -28,7 +28,8 @@ Provides functionality to interact with Kerbal Alarm Clock.
 
    :Attribute: Read-only, cannot be set
    :rtype: list(:class:`Alarm`)
-   
+   :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
+
 
 
 
@@ -41,7 +42,8 @@ Provides functionality to interact with Kerbal Alarm Clock.
 
    :param str name: Name of the alarm to search for.
    :rtype: :class:`Alarm` or None
-   
+   :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
+
 
 
 
@@ -52,7 +54,8 @@ Provides functionality to interact with Kerbal Alarm Clock.
 
    :param AlarmType type: Type of alarm to return.
    :rtype: list(:class:`Alarm`)
-   
+   :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
+
 
 
 
@@ -65,3 +68,4 @@ Provides functionality to interact with Kerbal Alarm Clock.
    :param str name: Name of the new alarm.
    :param float ut: Time at which the new alarm should trigger.
    :rtype: :class:`Alarm`
+   :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration

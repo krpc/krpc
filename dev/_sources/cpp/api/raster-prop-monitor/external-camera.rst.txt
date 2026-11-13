@@ -46,7 +46,7 @@ External Camera
 
       :Game Scenes: Flight
 
-   .. function:: std::string image(int32_t width, int32_t height, ImageFormat format = ImageFormat::png, int32_t quality = 75)
+   .. function:: std::string image(int32_t width, int32_t height, StdLib::ImageFormat format = StdLib::ImageFormat::png, int32_t quality = 75)
 
       The camera's view as an image, rendered now. Streamed at a rate, it is a video of
       the camera, for which JPEG is smaller and faster.

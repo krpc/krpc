@@ -45,7 +45,7 @@ External Camera
 
       :Attribute: Can be read or written
 
-   .. method:: image(width: number, height: number, format?: RasterPropMonitor.ImageFormat, quality?: number): string
+   .. method:: image(width: number, height: number, format?: StdLib.ImageFormat, quality?: number): string
 
       The camera's view as an image, rendered now. Streamed at a rate, it is a video of
       the camera, for which JPEG is smaller and faster.
@@ -53,6 +53,6 @@ External Camera
 
       :param width: The width of the image, in pixels.
       :param height: The height of the image, in pixels.
-      :param format: The format of the image. Defaults to ``RasterPropMonitor.ImageFormat.png``.
+      :param format: The format of the image. Defaults to ``StdLib.ImageFormat.png``.
       :param quality: The quality of a JPEG image, from 1 to 100. Defaults to ``75``.
       :returns: The image data.

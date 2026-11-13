@@ -61,25 +61,3 @@ Map
    .. macro:: KRPC_SCANSAT_MAPPROJECTION_POLAR
 
       Two polar views side by side, the southern hemisphere on the left.
-
-
-
-
-.. type:: krpc_ScanSat_ImageFormat_t
-
-   The file format of an image.
-
-   .. macro:: KRPC_ENUMERATION_SCANSAT_IMAGEFORMAT
-
-      The service and enumeration ids of the enumeration, for
-      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
-
-
-   .. macro:: KRPC_SCANSAT_IMAGEFORMAT_PNG
-
-      PNG, which is lossless.
-
-
-   .. macro:: KRPC_SCANSAT_IMAGEFORMAT_JPEG
-
-      JPEG, which is lossy, and smaller and faster to encode than PNG.
