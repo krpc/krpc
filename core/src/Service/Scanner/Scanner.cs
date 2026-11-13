@@ -163,6 +163,7 @@ namespace KRPC.Service.Scanner
             foreach (var service in signatures.Values) {
                 CheckProcedureIds (service, errors);
                 CheckTypes (service, errors);
+                CheckMemberNames (service, errors);
             }
             return signatures;
         }
@@ -207,6 +208,60 @@ namespace KRPC.Service.Scanner
                 var names = group.Select (x => x.Name).OrderBy (x => x, StringComparer.Ordinal).ToList ();
                 if (names.Count > 1)
                     HandleError (errors, string.Empty, "Services " + string.Join (", ", names.ToArray ()) + " share a name, compared case-insensitively");
+            }
+        }
+
+        /// <summary>
+        /// Check that no two members of a scope share a name, compared case-insensitively. The
+        /// scopes are the service, each class, enumeration and structure, and the parameters of
+        /// each procedure. A property also takes the names of its accessors, so a property Foo
+        /// shares a name with a method GetFoo.
+        /// </summary>
+        internal static void CheckMemberNames (ServiceSignature service, IList<string> errors)
+        {
+            var context = "service " + service.Name;
+            // The names each member takes, by scope and then by member
+            var scopes = new Dictionary<string, Dictionary<string, string[]>> ();
+            foreach (var procedure in service.Procedures.Keys.OrderBy (x => x, StringComparer.Ordinal)) {
+                // A procedure name is a member name, after its class name and get, set or static
+                var parts = procedure.Split ('_').ToList ();
+                var scope = service.Name;
+                if (parts.Count > 1 && parts [0] != "get" && parts [0] != "set") {
+                    scope += "." + parts [0];
+                    parts.RemoveAt (0);
+                }
+                var member = parts [parts.Count - 1];
+                var property = parts [0] == "get" || parts [0] == "set";
+                var names = property ? new [] { member, "Get" + member, "Set" + member } : new [] { member };
+                Dictionary<string, string[]> members;
+                if (!scopes.TryGetValue (scope, out members))
+                    scopes [scope] = members = new Dictionary<string, string[]> ();
+                // The getter and setter of a property are one member
+                var kind = property ? " (property)" : parts [0] == "static" ? " (static)" : string.Empty;
+                members [scope + "." + member + kind] = names;
+            }
+            foreach (var members in scopes.OrderBy (x => x.Key, StringComparer.Ordinal).Select (x => x.Value))
+                CheckNames (members.SelectMany (x => x.Value.Select (name => new KeyValuePair<string, string> (name, x.Key))), "Members", context, errors);
+            foreach (var enumeration in service.Enumerations.Values.OrderBy (x => x.Name, StringComparer.Ordinal))
+                CheckNames (enumeration.Values.Select (x => new KeyValuePair<string, string> (x.Name, x.FullyQualifiedName)), "Values", context, errors);
+            foreach (var structure in service.Structs.Values.OrderBy (x => x.Name, StringComparer.Ordinal))
+                CheckNames (structure.Fields.Select (x => new KeyValuePair<string, string> (x.Name, x.FullyQualifiedName)), "Fields", context, errors);
+            foreach (var procedure in service.Procedures.Values.OrderBy (x => x.Name, StringComparer.Ordinal))
+                CheckNames (procedure.Parameters.Select (x => new KeyValuePair<string, string> (x.Name, procedure.FullyQualifiedName + "(" + x.Name + ")")), "Parameters", context, errors);
+        }
+
+        /// <summary>
+        /// Report each set of definitions that share a name, compared case-insensitively, given
+        /// as pairs of a name and the definition that takes it. A set is reported once.
+        /// </summary>
+        static void CheckNames (IEnumerable<KeyValuePair<string, string>> names, string kind, string context, IList<string> errors)
+        {
+            var reported = new HashSet<string> ();
+            foreach (var group in names.GroupBy (x => x.Key.ToUpperInvariant ()).OrderBy (x => x.Key, StringComparer.Ordinal)) {
+                var definitions = group.Select (x => x.Value).Distinct ().OrderBy (x => x, StringComparer.Ordinal).ToArray ();
+                var list = string.Join (", ", definitions);
+                if (definitions.Length > 1 && reported.Add (list))
+                    HandleError (errors, context, kind + " " + list + " share the name " + group.Select (x => x.Key).OrderBy (x => x, StringComparer.Ordinal).First () + ", compared case-insensitively");
             }
         }
 

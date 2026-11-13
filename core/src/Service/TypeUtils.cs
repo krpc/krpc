@@ -15,11 +15,12 @@ namespace KRPC.Service
 {
     static class TypeUtils
     {
-        static Regex identifierPattern = new Regex ("^[A-Z][A-Za-z0-9]*$");
+        static Regex identifierPattern = new Regex ("^[A-Z][A-Za-z0-9]*\\z");
+        static Regex namePattern = new Regex ("^[A-Za-z][A-Za-z0-9]*\\z");
 
         /// <summary>
         /// Returns true if the given identifier is a valid kRPC identifier.
-        /// A valid identifier is a non-zero length string, containing letters and numbers,
+        /// A valid identifier is a non-zero length string, containing ASCII letters and numbers,
         /// starting with an uppercase letter.
         /// </summary>
         public static bool IsAValidIdentifier (string identifier)
@@ -586,6 +587,16 @@ namespace KRPC.Service
         {
             if (!IsAValidIdentifier (name))
                 throw new ServiceException (name + " is not a valid kRPC identifier");
+        }
+
+        /// <summary>
+        /// Check if the string is a valid name for a parameter or an enumeration value: ASCII
+        /// letters and numbers, starting with a letter.
+        /// </summary>
+        public static void ValidateName (string name, string location)
+        {
+            if (name == null || !namePattern.IsMatch (name))
+                throw new ServiceException ((name ?? "null") + " is not a valid kRPC name, for " + location);
         }
 
         /// <summary>

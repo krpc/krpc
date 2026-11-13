@@ -484,10 +484,12 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The vessel the antenna points at, or <c>null</c> if it does not point at a vessel.
+        /// Returns the vessel the antenna points at, and sets the vessel to point at.
         /// </summary>
         /// <remarks>
-        /// Requires RealAntennas.
+        /// Requires RealAntennas. <c>null</c> if the antenna does not point at a vessel. Throws an
+        /// exception if set to <c>null</c>, or if the antenna cannot be pointed
+        /// (see <see cref="CanTarget"/>).
         /// </remarks>
         [KRPCProperty (Nullable = true)]
         public Vessel TargetVessel {
@@ -498,14 +500,20 @@ namespace KRPC.SpaceCenter.Services.Parts
                 var vessel = FlightGlobals.FindVessel (new Guid (node.GetValue ("vesselId")));
                 return vessel == null ? null : new Vessel (vessel);
             }
+            set {
+                if (ReferenceEquals (value, null))
+                    throw new ArgumentNullException (nameof (value));
+                SetTarget (TargetVesselMode, node => node.AddValue ("vesselId", value.Id.ToString ()));
+            }
         }
 
         /// <summary>
-        /// The body the antenna points at, or at a position on, or <c>null</c> if it points at
-        /// neither.
+        /// Returns the body the antenna points at, and sets the body to point at the center of.
         /// </summary>
         /// <remarks>
-        /// Requires RealAntennas.
+        /// Requires RealAntennas. Also the body of a position the antenna points at, or
+        /// <c>null</c> if it points at neither. Throws an exception if set to <c>null</c>, or if
+        /// the antenna cannot be pointed (see <see cref="CanTarget"/>).
         /// </remarks>
         [KRPCProperty (Nullable = true)]
         public CelestialBody TargetBody {
@@ -513,6 +521,11 @@ namespace KRPC.SpaceCenter.Services.Parts
                 var node = TargetNode;
                 var body = node == null ? null : TargetNodeBody (node);
                 return body == null ? null : new CelestialBody (body);
+            }
+            set {
+                if (ReferenceEquals (value, null))
+                    throw new ArgumentNullException (nameof (value));
+                SetTargetPosition (value, 0, 0, -value.InternalBody.Radius);
             }
         }
 
@@ -550,38 +563,6 @@ namespace KRPC.SpaceCenter.Services.Parts
             node.AddValue ("name", mode);
             values (node);
             RealAntennasAPI.SetTarget (RealAntenna, node);
-        }
-
-        /// <summary>
-        /// Point the antenna at a vessel.
-        /// </summary>
-        /// <param name="vessel">The vessel.</param>
-        /// <remarks>
-        /// Requires RealAntennas. Throws an exception if the antenna cannot be pointed
-        /// (see <see cref="CanTarget"/>).
-        /// </remarks>
-        [KRPCMethod]
-        public void SetTargetVessel (Vessel vessel)
-        {
-            if (ReferenceEquals (vessel, null))
-                throw new ArgumentNullException (nameof (vessel));
-            SetTarget (TargetVesselMode, node => node.AddValue ("vesselId", vessel.Id.ToString ()));
-        }
-
-        /// <summary>
-        /// Point the antenna at the center of a body.
-        /// </summary>
-        /// <param name="body">The body.</param>
-        /// <remarks>
-        /// Requires RealAntennas. Throws an exception if the antenna cannot be pointed
-        /// (see <see cref="CanTarget"/>).
-        /// </remarks>
-        [KRPCMethod]
-        public void SetTargetBody (CelestialBody body)
-        {
-            if (ReferenceEquals (body, null))
-                throw new ArgumentNullException (nameof (body));
-            SetTargetPosition (body, 0, 0, -body.InternalBody.Radius);
         }
 
         /// <summary>

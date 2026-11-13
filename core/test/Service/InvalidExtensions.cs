@@ -87,6 +87,18 @@ namespace KRPC.Test.Service
             return obj.Value;
         }
 
+        [KRPCMethod]
+        public static string MethodWithParametersSharingAName (this TestService.TestClass obj, int value, int VALUE)
+        {
+            return obj.Value;
+        }
+
+        [KRPCMethod]
+        public static string MethodWithAnInvalidParameterName (this TestService.TestClass obj, int some_value)
+        {
+            return obj.Value;
+        }
+
         /// <summary>
         /// Adds a setter to a property that TestClass declares read-only.
         /// </summary>

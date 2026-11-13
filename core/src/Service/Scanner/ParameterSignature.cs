@@ -36,6 +36,7 @@ namespace KRPC.Service.Scanner
         public ParameterSignature (string fullProcedureName, ProcedureParameter parameter)
         {
             Name = parameter.Name;
+            TypeUtils.ValidateName (Name, "a parameter of " + fullProcedureName);
 
             // Check the parameter type is valid
             if (!TypeUtils.IsAValidType (parameter.Type))
