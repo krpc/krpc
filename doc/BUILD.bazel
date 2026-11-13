@@ -61,6 +61,8 @@ stage_files(
         ":images",
         ":java-api",
         ":java-api-toctree",
+        ":js-api",
+        ":js-api-toctree",
         ":lua-api",
         ":lua-api-toctree",
         ":mod-services",
@@ -243,6 +245,11 @@ api_toctree(
 )
 
 api_toctree(
+    name = "js-api-toctree",
+    language = "js",
+)
+
+api_toctree(
     name = "lua-api-toctree",
     language = "lua",
 )
@@ -282,6 +289,14 @@ docgen(
     defs = defs,
     language = "java",
     outdir = "src/java",
+)
+
+docgen(
+    name = "js-api",
+    srcs = glob(["api/**/*.tmpl"]),
+    defs = defs,
+    language = "js",
+    outdir = "src/js",
 )
 
 docgen(
@@ -335,7 +350,10 @@ py_test(
 # as a bundler for a web page resolves it
 ts_project(
     name = "check-scripts-js-project",
-    srcs = glob(["src/scripts/js/*.js"]),
+    srcs = glob([
+        "src/scripts/js/*.js",
+        "src/scripts/api/**/*.js",
+    ]),
     allow_js = True,
     no_emit = True,
     transpiler = "tsc",
@@ -383,6 +401,7 @@ test_suite(
         ":check-documented-cpp",
         ":check-documented-csharp",
         ":check-documented-java",
+        ":check-documented-js",
         ":check-documented-lua",
         ":check-documented-python",
     ],
@@ -413,6 +432,13 @@ check_documented_test(
     name = "check-documented-java",
     size = "small",
     srcs = [":java-api"],
+    members = "order.txt",
+)
+
+check_documented_test(
+    name = "check-documented-js",
+    size = "small",
+    srcs = [":js-api"],
     members = "order.txt",
 )
 
