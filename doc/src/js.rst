@@ -132,13 +132,27 @@ Each kRPC type has a JavaScript type:
        frozen, and has a property for each field, in lower camel case. Make one with ``new``,
        passing an object of the fields.
    * - enumeration
-     - A :class:`RemoteEnum`, such as ``conn.spaceCenter.VesselSituation.orbiting``
+     - A :class:`RemoteEnum`, such as ``conn.spaceCenter.VesselSituation.orbiting``, or a
+       :class:`RemoteFlags` for a :ref:`flags enumeration <js-client-flags>`
    * - class
      - An object of the service's class, such as ``SpaceCenter.Vessel``
    * - null
      - ``null``
 
 The :func:`equals` function compares two values by their contents, such as two structures.
+
+.. _js-client-flags:
+
+Flags Enumerations
+^^^^^^^^^^^^^^^^^^
+
+A flags enumeration, such as :class:`~SpaceCenter.MapFilterType`, holds any combination of its
+values. You combine values with ``union``, and test for one with ``contains``:
+
+.. literalinclude:: /scripts/js/Flags.js
+
+``intersection`` and ``difference`` give the other combinations of two values. Each combination is
+one object, so combinations compare with ``===``.
 
 Using the Client in a Web Page
 ------------------------------
@@ -214,6 +228,16 @@ Streams and Events
 
 The JavaScript client has no streams or events yet. Read a value by calling its procedure in a
 loop instead.
+
+Deprecated Members
+------------------
+
+A member of a service can be deprecated, when a newer member replaces it. A deprecated member
+still works, but may be removed in a future release, so move to its replacement.
+
+The API reference and the TypeScript declarations mark it as ``@deprecated``, and name the
+replacement. A use of it emits a warning naming the replacement, once per member on a connection.
+The warning is a ``DeprecationWarning`` in Node.js, and a console warning in a web browser.
 
 Service Stubs
 -------------
@@ -313,6 +337,28 @@ Client API Reference
    .. attribute:: value
 
       The value's number.
+
+.. class:: RemoteFlags()
+
+   A value of a flags enumeration, which holds any combination of the enumeration's values. It
+   extends :class:`RemoteEnum`. Each combination is one object, so combinations compare with
+   ``===``.
+
+   .. method:: union(other)
+
+      The combination of the flags of this value and another.
+
+   .. method:: intersection(other)
+
+      The flags this value and another both hold.
+
+   .. method:: difference(other)
+
+      This value without the flags of another.
+
+   .. method:: contains(other)
+
+      Whether this value holds every flag of another.
 
 .. class:: RemoteError()
 

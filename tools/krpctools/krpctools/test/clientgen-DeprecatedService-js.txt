@@ -2,11 +2,23 @@
 // The client builds the service at run time, so this module holds types only.
 import type { RemoteEnum, RemoteObject, RemoteService, RemoteStruct, ServerError } from "@krpc-org/krpc";
 
-/** A deprecated service, whose members are deprecated only through it, other than one class. */
+/**
+ * A deprecated service, whose members are deprecated only through it, other than one class.
+ *
+ * @deprecated Use TestService instead.
+ */
 export interface Service extends RemoteService {
-  /** A procedure. */
+  /**
+   * A procedure.
+   *
+   * @deprecated Use TestService instead.
+   */
   procedure(): Promise<string>;
-  /** A procedure returning a structure. */
+  /**
+   * A procedure returning a structure.
+   *
+   * @deprecated Use TestService instead.
+   */
   structProcedure(): Promise<ServiceStruct>;
   /**
    * A property.
@@ -27,7 +39,11 @@ export interface Service extends RemoteService {
    */
   readonly ReasonedClass: {
     [Symbol.hasInstance](value: unknown): value is ReasonedClass;
-    /** A static method. */
+    /**
+     * A static method.
+     *
+     * @deprecated Use "TestService.TestClass" instead.
+     */
     staticMethod(): Promise<string>;
   };
   /**
@@ -37,7 +53,11 @@ export interface Service extends RemoteService {
    */
   readonly ServiceClass: {
     [Symbol.hasInstance](value: unknown): value is ServiceClass;
-    /** A static method. */
+    /**
+     * A static method.
+     *
+     * @deprecated Use TestService instead.
+     */
     staticMethod(): Promise<string>;
   };
   /**
@@ -85,7 +105,11 @@ export interface ReasonedClass extends RemoteObject<"DeprecatedService.ReasonedC
  * @deprecated Use TestService instead.
  */
 export interface ServiceClass extends RemoteObject<"DeprecatedService.ServiceClass"> {
-  /** A method. */
+  /**
+   * A method.
+   *
+   * @deprecated Use TestService instead.
+   */
   method(): Promise<string>;
 }
 

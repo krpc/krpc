@@ -1,4 +1,5 @@
 import type { DescMessage } from "@bufbuild/protobuf";
+import { deprecationMessage } from "./deprecation.js";
 import { EncodingError } from "./errors.js";
 import { camelCase } from "./naming.js";
 import {
@@ -62,35 +63,103 @@ export class RemoteEnum<E extends string = string> {
   }
 }
 
-/** An enumeration a service defines, with its values by name and by number. */
+/** A value of a flags enumeration, which holds any combination of the enumeration's values. Each
+ * combination is one object, so values compare with `===`. */
+export class RemoteFlags<E extends string = string> extends RemoteEnum<E> {
+  /** The combination of the flags of this value and another. */
+  union(other: RemoteFlags<E>): RemoteFlags<E> {
+    return this.#combine(other, (a, b) => a | b);
+  }
+
+  /** The flags this value and another both hold. */
+  intersection(other: RemoteFlags<E>): RemoteFlags<E> {
+    return this.#combine(other, (a, b) => a & b);
+  }
+
+  /** This value without the flags of another. */
+  difference(other: RemoteFlags<E>): RemoteFlags<E> {
+    return this.#combine(other, (a, b) => a & ~b);
+  }
+
+  /** Whether this value holds every flag of another. */
+  contains(other: RemoteFlags<E>): boolean {
+    return (this.value & this.#operand(other)) === other.value;
+  }
+
+  #combine(other: RemoteFlags<E>, operation: (a: number, b: number) => number): RemoteFlags<E> {
+    return this.enumeration.fromNumber(
+      operation(this.value, this.#operand(other)),
+    ) as RemoteFlags<E>;
+  }
+
+  #operand(other: RemoteFlags<E>): number {
+    if (!(other instanceof RemoteFlags) || other.enumeration !== this.enumeration) {
+      throw new TypeError(
+        `${String(other)} is not a value of ${this.enumeration.service}.${this.enumeration.name}`,
+      );
+    }
+    return other.value;
+  }
+}
+
+/** An enumeration a service defines, with its values by name and by number. The values of a
+ * flags enumeration are FlagsValues, and its combinations of them too. */
 export class Enumeration {
   readonly service: string;
   readonly name: string;
+  readonly flags: boolean;
   /** The values, by name in lower camel case. */
   readonly values: Readonly<Record<string, RemoteEnum>>;
   readonly #byNumber = new Map<number, RemoteEnum>();
+  // The flags any declared value holds
+  readonly #mask: number = 0;
 
-  constructor(service: string, name: string, values: readonly { name: string; value: number }[]) {
+  constructor(
+    service: string,
+    name: string,
+    values: readonly { name: string; value: number }[],
+    flags = false,
+  ) {
     this.service = service;
     this.name = name;
+    this.flags = flags;
+    const cls = flags ? RemoteFlags : RemoteEnum;
     const byName: Record<string, RemoteEnum> = {};
     for (const x of values) {
-      const value = new RemoteEnum(this, camelCase(x.name), x.value);
+      const value = new cls(this, camelCase(x.name), x.value);
       byName[value.name] = value;
       this.#byNumber.set(x.value, value);
+      this.#mask |= x.value;
     }
     this.values = Object.freeze(byName);
   }
 
-  /** The value with the given number. Throws an EncodingError for a number the enumeration
-   * does not declare. */
+  /** The value with the given number, or the combination of flags it holds. Throws an
+   * EncodingError for a number the enumeration does not declare, or with a flag it does not
+   * declare. */
   fromNumber(value: number): RemoteEnum {
     const result = this.#byNumber.get(value);
-    if (result === undefined) {
+    if (result !== undefined) {
+      return result;
+    }
+    if (!this.flags || (value & ~this.#mask) !== 0) {
       throw new EncodingError(`${this.service}.${this.name} has no value ${value}`);
     }
-    return result;
+    // A combination is named by the single flags it holds
+    const names = [...this.#byNumber.values()]
+      .filter((x) => x.value !== 0 && (x.value & (x.value - 1)) === 0 && (value & x.value) !== 0)
+      .map((x) => x.name);
+    const combination = new RemoteFlags(this, names.join("|"), value);
+    this.#byNumber.set(value, combination);
+    return combination;
   }
+}
+
+/** A field of a structure. A deprecated field has the warning for a read of it. */
+export interface Field {
+  readonly name: string;
+  readonly type: Type;
+  readonly deprecation?: string;
 }
 
 /** A structure a service defines. Its values are instances of its class, `valueClass`. */
@@ -98,16 +167,24 @@ export class Struct {
   readonly service: string;
   readonly name: string;
   /** The fields, in the order the structure declares them. */
-  readonly fields: readonly { readonly name: string; readonly type: Type }[];
+  readonly fields: readonly Field[];
   /** The class of the structure's values. */
   readonly valueClass: new (
     fields: Readonly<Record<string, unknown>>,
   ) => RemoteStruct;
+  /** Warns of a read of a deprecated field. */
+  readonly warn: (message: string) => void;
 
-  constructor(service: string, name: string, fields: readonly { name: string; type: Type }[]) {
+  constructor(
+    service: string,
+    name: string,
+    fields: readonly Field[],
+    warn: (message: string) => void = () => {},
+  ) {
     this.service = service;
     this.name = name;
     this.fields = fields;
+    this.warn = warn;
     const struct = this;
     const cls = class extends RemoteStruct {
       constructor(values: Readonly<Record<string, unknown>>) {
@@ -125,6 +202,7 @@ export class Struct {
 export class RemoteStruct<S extends string = string> {
   declare readonly [valueBrand]?: S;
   readonly #struct: Struct;
+  readonly #values: Readonly<Record<string, unknown>>;
 
   constructor(struct: Struct, values: Readonly<Record<string, unknown>>) {
     this.#struct = struct;
@@ -136,19 +214,40 @@ export class RemoteStruct<S extends string = string> {
         throw new TypeError(`A ${struct.service}.${struct.name} has no field ${key}`);
       }
     }
-    const fields = this as unknown as Record<string, unknown>;
+    const copy: Record<string, unknown> = {};
     for (const field of struct.fields) {
       if (!(field.name in values)) {
         throw new TypeError(`A ${struct.service}.${struct.name} needs the field ${field.name}`);
       }
-      fields[field.name] = values[field.name];
+      const value = values[field.name];
+      copy[field.name] = value;
+      const { deprecation } = field;
+      Object.defineProperty(
+        this,
+        field.name,
+        deprecation === undefined
+          ? { value, enumerable: true }
+          : {
+              get: () => {
+                struct.warn(deprecation);
+                return value;
+              },
+              enumerable: true,
+            },
+      );
     }
+    this.#values = copy;
     Object.freeze(this);
   }
 
   /** The structure of a value. */
   static structOf(value: RemoteStruct): Struct {
     return value.#struct;
+  }
+
+  /** The value of a field, with no warning for a deprecated one. */
+  static fieldOf(value: RemoteStruct, name: string): unknown {
+    return value.#values[name];
   }
 }
 
@@ -182,8 +281,12 @@ export class Types {
   readonly #enumerations = new Map<string, Enumeration>();
   readonly #structs = new Map<string, Struct | null>();
   readonly #structDefinitions = new Map<string, Service["structs"][number]>();
+  readonly #warn: (message: string) => void;
 
-  constructor(services: readonly Service[]) {
+  /** The types of the given services. A read of a deprecated field of a structure calls
+   * `warn`. */
+  constructor(services: readonly Service[], warn: (message: string) => void = () => {}) {
+    this.#warn = warn;
     for (const service of services) {
       for (const x of service.classes) {
         this.#classes.add(`${service.name}.${x.name}`);
@@ -191,7 +294,7 @@ export class Types {
       for (const x of service.enumerations) {
         this.#enumerations.set(
           `${service.name}.${x.name}`,
-          new Enumeration(service.name, x.name, x.values),
+          new Enumeration(service.name, x.name, x.values, x.flags),
         );
       }
       for (const x of service.structs) {
@@ -272,8 +375,8 @@ export class Types {
       throw new UnknownTypeError(`No structure ${key}`);
     }
     const service = key.slice(0, key.indexOf("."));
-    const fields: { name: string; type: Type }[] = [];
-    const struct = new Struct(service, definition.name, fields);
+    const fields: Field[] = [];
+    const struct = new Struct(service, definition.name, fields, this.#warn);
     // Registered before its fields, as a field can name the structure it belongs to
     this.#structs.set(key, struct);
     try {
@@ -281,7 +384,12 @@ export class Types {
         if (field.type === undefined) {
           throw new UnknownTypeError(`Field ${field.name} of ${key} has no type`);
         }
-        fields.push({ name: camelCase(field.name), type: this.get(field.type) });
+        const name = camelCase(field.name);
+        fields.push({
+          name,
+          type: this.get(field.type),
+          deprecation: deprecationMessage(field, service, `${key}.${name}`),
+        });
       }
     } catch (error) {
       this.#structs.set(key, null);

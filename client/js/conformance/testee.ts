@@ -31,12 +31,13 @@ import {
   Type_TypeCode as TypeCode,
   TypeSchema,
 } from "../src/schema/krpc_pb.js";
-import { RemoteEnum, RemoteStruct, type Type } from "../src/types.js";
+import { RemoteEnum, RemoteFlags, RemoteStruct, type Type } from "../src/types.js";
 import { equals } from "../src/values.js";
 import {
   type Command,
   CommandSchema,
   type Connect,
+  type DeprecationSignals,
   Error_Kind as ErrorKind,
   type Error as ErrorMessage,
   ErrorSchema,
@@ -134,18 +135,17 @@ function fromValue(conn: DynamicConnection, value: Value | undefined): unknown {
       return result;
     }
     case "enum": {
-      const values: Record<string, RemoteEnum> = serviceType(
-        conn,
-        content.value.service,
-        content.value.name,
-      );
-      const result = Object.values(values).find((x) => x.value === content.value.value);
-      if (result === undefined) {
-        throw new TypeError(
-          `${content.value.service}.${content.value.name} has no value ${content.value.value}`,
-        );
+      const { service, name, value: number } = content.value;
+      const enumeration = contextOf(conn).types.enumeration(service, name);
+      if (enumeration === undefined) {
+        throw new Unsupported(`No ${service}.${name}`);
       }
-      return result;
+      try {
+        return enumeration.fromNumber(number);
+      } catch (error) {
+        // The client has no way to make the value, as for a wrong argument
+        throw error instanceof EncodingError ? new TypeError(error.message) : error;
+      }
     }
     case "list":
     case "tuple":
@@ -242,8 +242,11 @@ function toValueCase(
     return { case: "message", value: toBinary(ProcedureCallSchema, value) };
   }
   if (value instanceof RemoteStruct) {
-    const fields = Object.values(value).map((x, i) =>
-      toValue(x, type?.kind === "struct" ? type.struct.fields[i]?.type : undefined),
+    const fields = RemoteStruct.structOf(value).fields.map((field, i) =>
+      toValue(
+        RemoteStruct.fieldOf(value, field.name),
+        type?.kind === "struct" ? type.struct.fields[i]?.type : undefined,
+      ),
     );
     return { case: "struct", value: { fields } };
   }
@@ -275,6 +278,11 @@ function resultType(conn: Connection, command: Invoke): Type | undefined {
 /** Calls a procedure, given the name the server gives it. The arguments include the instance of
  * an instance method. */
 async function invoke(conn: DynamicConnection, command: Invoke): Promise<unknown> {
+  return await resolve(conn, command)();
+}
+
+/** A function that calls a procedure, given the name the server gives it. */
+function resolve(conn: DynamicConnection, command: Invoke): () => Promise<unknown> {
   const name = command.procedure;
   const args = command.arguments.map((x) => fromValue(conn, x));
   if (command.namedArguments.length > 0) {
@@ -320,7 +328,7 @@ async function invoke(conn: DynamicConnection, command: Invoke): Promise<unknown
   if (target === null || target === undefined || typeof target[member] !== "function") {
     throw new Unsupported(`No member ${member} for ${command.service}.${name}`);
   }
-  return await target[member](...args);
+  return () => target[member](...args);
 }
 
 /** Connecting the default connection closes every connection, and connecting a named one
@@ -394,7 +402,7 @@ function codecProtobufType(name: string): MessageInitShape<typeof TypeSchema> {
   if (name === "TestClass") {
     return { code: TypeCode.CLASS, service: "TestService", name };
   }
-  if (name === "TestEnum") {
+  if (name === "TestEnum" || name === "TestFlags") {
     return { code: TypeCode.ENUMERATION, service: "TestService", name };
   }
   if (name.startsWith("Test")) {
@@ -423,6 +431,67 @@ function splitTypes(names: string): string[] {
     }
   }
   result.push(names.slice(start));
+  return result;
+}
+
+/** A function that uses a member of a service: a call of a procedure, or a read of the service,
+ * a type, a value of an enumeration or a field of a structure. */
+function memberUse(conn: DynamicConnection, command: DeprecationSignals): () => unknown {
+  if (command.use !== "") {
+    throw new Unsupported(`No ${command.use} of a procedure`);
+  }
+  if (command.invoke !== undefined) {
+    return resolve(conn, command.invoke);
+  }
+  const serviceName = camelCase(command.service);
+  if (command.member === "") {
+    return () => conn[serviceName];
+  }
+  const service = conn[serviceName];
+  const [typeName, name] = command.member.split(".");
+  if (name === undefined) {
+    return () => service[typeName];
+  }
+  const type = service[typeName];
+  const key = camelCase(name);
+  if (typeof type === "function" && type.prototype instanceof RemoteStruct) {
+    const struct = contextOf(conn).types.struct(`${command.service}.${typeName}`);
+    const value = new type(Object.fromEntries(struct.fields.map((x) => [x.name, null])));
+    return () => value[key];
+  }
+  return () => type[key];
+}
+
+/** The deprecation warnings a use of a member emits. */
+async function deprecationSignals(
+  conn: DynamicConnection,
+  command: DeprecationSignals,
+): Promise<Value> {
+  const emitWarning = process.emitWarning;
+  const signals: string[] = [];
+  try {
+    // Reaching the member is not part of its use
+    process.emitWarning = () => {};
+    const use = memberUse(conn, command);
+    process.emitWarning = (warning: string | Error, ...rest: unknown[]) => {
+      const type = typeof rest[0] === "string" ? rest[0] : undefined;
+      if (type === "DeprecationWarning") {
+        signals.push(String(warning));
+      }
+    };
+    await use();
+  } finally {
+    process.emitWarning = emitWarning;
+  }
+  return toValue(signals);
+}
+
+/** A TestService.TestFlags value of a command. */
+function flags(conn: DynamicConnection, value: Value | undefined): RemoteFlags {
+  const result = fromValue(conn, value);
+  if (!(result instanceof RemoteFlags)) {
+    throw new TypeError(`${String(result)} is not a flags value`);
+  }
   return result;
 }
 
@@ -458,6 +527,20 @@ async function dispatch(command: Command): Promise<Value> {
       const conn = connection(command);
       return toValue(equals(fromValue(conn, content.value.a), fromValue(conn, content.value.b)));
     }
+    case "flagsUnion": {
+      const conn = connection(command);
+      return toValue(flags(conn, content.value.a).union(flags(conn, content.value.b)));
+    }
+    case "flagsContains": {
+      const conn = connection(command);
+      return toValue(flags(conn, content.value.a).contains(flags(conn, content.value.b)));
+    }
+    case "flagsDifference": {
+      const conn = connection(command);
+      return toValue(flags(conn, content.value.a).difference(flags(conn, content.value.b)));
+    }
+    case "deprecationSignals":
+      return await deprecationSignals(connection(command), content.value);
     case "hash":
       // JavaScript has no hash of a value
       return toValue(null);

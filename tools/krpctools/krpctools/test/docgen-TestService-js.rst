@@ -620,7 +620,7 @@ Service documentation string.
 
 
 
-   :param x: Defaults to ``TestService.TestFlags.valueA|ValueC``.
+   :param x: Defaults to ``TestService.TestFlags.valueA.union(TestService.TestFlags.valueC)``.
    :type x: :class:`TestService.TestFlags`
    :rtype: :class:`TestService.TestFlags`
    
@@ -1657,6 +1657,8 @@ Service documentation string.
 .. class:: TestFlags
 
    Flags documentation string.
+
+   A flags enumeration. :std:ref:`js-client-flags` shows how to combine its values.
 
 
    .. attribute:: none

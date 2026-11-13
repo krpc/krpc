@@ -1,45 +1,4 @@
 # The conformance tests the JavaScript client fails, one per line, with the reason as a comment
-test_calls.py::test_default_values[flags]  # The client has no flags enumerations yet
-test_calls.py::test_deprecated_class  # The client gives no deprecation signals yet
-test_calls.py::test_deprecated_class_member[method]  # As above
-test_calls.py::test_deprecated_class_member[property]  # As above
-test_calls.py::test_deprecated_class_member[static-method]  # As above
-test_calls.py::test_deprecated_enum  # As above
-test_calls.py::test_deprecated_enum_member  # As above
-test_calls.py::test_deprecated_enum_value  # As above
-test_calls.py::test_deprecated_exception  # As above
-test_calls.py::test_deprecated_method  # As above
-test_calls.py::test_deprecated_procedure  # As above
-test_calls.py::test_deprecated_property[getter]  # As above
-test_calls.py::test_deprecated_property[setter]  # As above
-test_calls.py::test_deprecated_reason  # As above
-test_calls.py::test_deprecated_reason_of_class  # As above
-test_calls.py::test_deprecated_reason_of_container  # As above
-test_calls.py::test_deprecated_reason_of_member  # As above
-test_calls.py::test_deprecated_service  # As above
-test_calls.py::test_deprecated_service_member[class-method]  # As above
-test_calls.py::test_deprecated_service_member[class]  # As above
-test_calls.py::test_deprecated_service_member[enum-value]  # As above
-test_calls.py::test_deprecated_service_member[enum]  # As above
-test_calls.py::test_deprecated_service_member[exception]  # As above
-test_calls.py::test_deprecated_service_member[procedure]  # As above
-test_calls.py::test_deprecated_service_member[property]  # As above
-test_calls.py::test_deprecated_service_member[struct-field]  # As above
-test_calls.py::test_deprecated_service_member[struct]  # As above
-test_calls.py::test_deprecated_struct  # As above
-test_calls.py::test_deprecated_struct_field  # As above
-test_calls.py::test_deprecated_struct_member  # As above
-test_calls.py::test_not_deprecated[class]  # As above
-test_calls.py::test_not_deprecated[enum-value]  # As above
-test_calls.py::test_not_deprecated[enum]  # As above
-test_calls.py::test_not_deprecated[exception]  # As above
-test_calls.py::test_not_deprecated[procedure]  # As above
-test_calls.py::test_not_deprecated[property]  # As above
-test_calls.py::test_not_deprecated[struct-field]  # As above
-test_calls.py::test_not_deprecated[struct]  # As above
 test_connection.py::test_stall_timeout_values[nan]  # The client has no stall timeout, as a WebSocket message arrives whole
 test_connection.py::test_stall_timeout_values[negative]  # As above
 test_connection.py::test_stall_timeout_values[zero]  # As above
-test_values.py::test_flags  # The client has no flags enumerations yet
-test_values.py::test_flags_contains  # As above
-test_values.py::test_flags_union  # As above

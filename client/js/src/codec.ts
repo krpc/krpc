@@ -181,8 +181,7 @@ function structFields(struct: Struct, value: unknown): [Type, unknown][] {
   if (!(value instanceof RemoteStruct) || !sameStruct(RemoteStruct.structOf(value), struct)) {
     throw new TypeError(`${describe(value)} is not a ${struct.service}.${struct.name}`);
   }
-  const fields = value as unknown as Record<string, unknown>;
-  return struct.fields.map((field) => [field.type, fields[field.name]]);
+  return struct.fields.map((field) => [field.type, RemoteStruct.fieldOf(value, field.name)]);
 }
 
 /** Whether two structures are one structure, which they are across connections. */
