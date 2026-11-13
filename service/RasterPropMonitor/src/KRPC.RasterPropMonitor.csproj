@@ -42,7 +42,6 @@
     <Compile Include="$(bazel-bin)\service\RasterPropMonitor\ServiceInfo.cs">
       <Link>ServiceInfo.cs</Link>
     </Compile>
-    <Compile Include="Addon.cs" />
     <Compile Include="API.cs" />
     <Compile Include="ButtonCaptures.cs" />
     <Compile Include="Computer.cs" />

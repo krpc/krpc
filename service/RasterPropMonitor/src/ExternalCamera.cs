@@ -32,7 +32,7 @@ namespace KRPC.RasterPropMonitor
         {
             var modules = part.Modules;
             for (int i = 0; i < modules.Count; i++) {
-                if (CameraAPI.SelectorType.IsInstanceOfType (modules [i]))
+                if (KRPC.RasterPropMonitor.API.IsInstance (CameraAPI.SelectorType, modules [i]))
                     return modules [i];
             }
             return null;
@@ -162,7 +162,7 @@ namespace KRPC.RasterPropMonitor
             var fieldOfView = FoV;
             // RPM's camera, as an MFD camera page uses it. It looks for the camera on its own
             // part first, then the rest of the vessel
-            var camera = Activator.CreateInstance (CameraAPI.FlyingCameraType, innerPart, (float)width / height);
+            var camera = CameraAPI.NewFlyingCamera (innerPart, (float)width / height);
             var texture = RenderTexture.GetTemporary (width, height, 24);
             var image = new Texture2D (width, height, TextureFormat.RGB24, false);
             var active = RenderTexture.active;

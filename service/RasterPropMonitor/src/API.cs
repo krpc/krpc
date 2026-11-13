@@ -11,17 +11,16 @@ namespace KRPC.RasterPropMonitor
 {
     // Binds to the members of Raster Prop Monitor 1.1.0.1 by reflection. The persistent
     // variables and the variable cache are internal to the mod.
-    static class API
+    sealed class API : ModAPI
     {
-        const string assemblyName = "RasterPropMonitor";
+        public API () : base (ServiceInfo.Mods.RasterPropMonitor.Name, ServiceInfo.Mods.RasterPropMonitor.Assembly)
+        {
+        }
+
         // The variable that props read a persistent variable through
         const string persistentPrefix = "PERSISTENT_";
         // The separator of a format string from its variables, in RPM page text
         const string variableListSeparator = "$&$";
-
-        static readonly List<string> missing = new List<string> ();
-
-        public static bool IsAvailable { get; private set; }
 
         static Type computerType;
 
@@ -84,7 +83,7 @@ namespace KRPC.RasterPropMonitor
             public static Func<object, int> Current;
             public static Func<object, float> MinFoV;
             public static Func<object, float> MaxFoV;
-            public static Type FlyingCameraType;
+            public static Func<global::Part, float, object> NewFlyingCamera;
             public static Func<object, string, float, bool> PointCamera;
             public static Func<object, RenderTexture, float, float, bool> Render;
             public static Func<object, UnityEngine.Camera []> Cameras;
@@ -115,133 +114,104 @@ namespace KRPC.RasterPropMonitor
             public static Func<object, Dictionary<char, Rect>> FontCharacters;
         }
 
-        public static void Load ()
+        protected override void Bind (ModBinder mod)
         {
-            IsAvailable = false;
-            var loaded = AssemblyLoader.loadedAssemblies.FirstOrDefault (a => a.assembly.GetName ().Name == assemblyName);
-            if (loaded == null) {
-                Logger.WriteLine ("Load API: " + assemblyName + " not found; skipping");
-                return;
-            }
-            var assembly = loaded.assembly;
-            missing.Clear ();
+            var computer = mod.Type ("JSI.RasterPropMonitorComputer");
+            computerType = computer.Type;
+            hasPersistentVariable = computer.Method<Func<object, string, bool, bool>> ("HasPersistentVariable");
+            getPersistentVariable = computer.Method<Func<object, string, double, bool, double>> ("GetPersistentVariable");
+            setPersistentVariable = computer.Method<Action<object, string, double, bool>> ("SetPersistentVariable");
+            partVariables = computer.Getter<object, object> ("m_persistentVariables");
+            variableCache = computer.Getter<object, object> ("variableCollection");
+            unrecognizedVariables = computer.Getter<object, HashSet<string>> ("unrecognizedVariables");
+            instantiateVariable = computer.Method<Func<object, string, object>> ("InstantiateVariableOrNumber");
 
-            computerType = Type (assembly, "JSI.RasterPropMonitorComputer");
-            hasPersistentVariable = Method<Func<object, string, bool, bool>> (computerType, "HasPersistentVariable");
-            getPersistentVariable = Method<Func<object, string, double, bool, double>> (computerType, "GetPersistentVariable");
-            setPersistentVariable = Method<Action<object, string, double, bool>> (computerType, "SetPersistentVariable");
-            partVariables = Field<object> (computerType, "m_persistentVariables");
-            variableCache = Field<object> (computerType, "variableCollection");
-            unrecognizedVariables = Field<HashSet<string>> (computerType, "unrecognizedVariables");
-            instantiateVariable = Method<Func<object, string, object>> (computerType, "InstantiateVariableOrNumber");
+            var vesselComputerType = mod.Type ("JSI.RPMVesselComputer");
+            vesselComputer = vesselComputerType.Method<Func<global::Vessel, object>> ("Instance");
+            vesselVariables = vesselComputerType.Getter<object, object> ("PersistentVariables");
 
-            var vesselComputerType = Type (assembly, "JSI.RPMVesselComputer");
-            vesselComputer = Method<Func<global::Vessel, object>> (vesselComputerType, "Instance");
-            vesselVariables = Field<object> (vesselComputerType, "PersistentVariables");
+            var collectionType = mod.Type ("JSI.Core.PersistentVariableCollection");
+            persistentVariables = collectionType.Getter<object, Dictionary<string, double>> ("persistentVars");
 
-            var collectionType = Type (assembly, "JSI.Core.PersistentVariableCollection");
-            persistentVariables = Field<Dictionary<string, double>> (collectionType, "persistentVars");
+            var cacheType = mod.Type ("JSI.VariableCollection");
+            cachedVariable = cacheType.Method<Func<object, string, object>> ("GetVariable");
 
-            var cacheType = Type (assembly, "JSI.VariableCollection");
-            cachedVariable = Method<Func<object, string, object>> (cacheType, "GetVariable");
+            var variableType = mod.Type ("JSI.VariableOrNumber");
+            updateVariable = variableType.Method<Action<object, object>> ("Update");
+            variableValue = variableType.Method<Func<object, object>> ("Get");
 
-            var variableType = Type (assembly, "JSI.VariableOrNumber");
-            updateVariable = Method<Action<object, object>> (variableType, "Update");
-            variableValue = Method<Func<object, object>> (variableType, "Get");
+            var formatterType = mod.Type ("JSI.StringProcessorFormatter");
+            formatProvider = formatterType.StaticGetter<IFormatProvider> ("fp");
 
-            var formatterType = Type (assembly, "JSI.StringProcessorFormatter");
-            formatProvider = formatterType == null ? null : Accessor.StaticGetter<IFormatProvider> (formatterType, "fp");
-            if (formatProvider == null)
-                missing.Add ("StringProcessorFormatter.fp");
-
-            LoadMonitor (assembly);
-
-            if (missing.Count > 0) {
-                Logger.WriteLine ("Load API: " + assemblyName + " members not found: " +
-                                  string.Join (", ", missing.ToArray ()) + "; skipping", Logger.Severity.Error);
-                return;
-            }
-            IsAvailable = true;
-            Logger.WriteLine ("Load API: Successfully loaded " + assemblyName + " version " + assembly.GetName ().Version);
+            LoadMonitor (mod, computer);
         }
 
-        static void LoadMonitor (System.Reflection.Assembly assembly)
+        static void LoadMonitor (ModBinder mod, MemberBinder computer)
         {
-            var monitor = Monitor.Type = Type (assembly, "JSI.RasterPropMonitor");
-            Monitor.Pages = Field<IList> (monitor, "pages");
-            Monitor.ActivePage = Field<object> (monitor, "activePage");
-            Monitor.PageButtonClick = Method<Action<object, object>> (monitor, "PageButtonClick");
-            Monitor.GlobalButtonClick = Method<Action<object, int>> (monitor, "GlobalButtonClick");
-            Monitor.GlobalButtonRelease = Method<Action<object, int>> (monitor, "GlobalButtonRelease");
-            Monitor.GlobalButtons = Field<string> (monitor, "globalButtons");
-            Monitor.ScreenWidth = Field<int> (monitor, "screenWidth");
-            Monitor.ScreenHeight = Field<int> (monitor, "screenHeight");
-            Monitor.ScreenPixelWidth = Field<int> (monitor, "screenPixelWidth");
-            Monitor.ScreenPixelHeight = Field<int> (monitor, "screenPixelHeight");
-            Monitor.LetterWidth = Field<int> (monitor, "fontLetterWidth");
-            Monitor.LetterHeight = Field<int> (monitor, "fontLetterHeight");
-            Monitor.StartupComplete = Field<bool> (monitor, "startupComplete");
-            Monitor.ScreenTexture = Field<RenderTexture> (monitor, "screenTexture");
-            Monitor.TextRenderer = Field<object> (monitor, "textRenderer");
-            Monitor.ShouldUpdate = Method<Func<global::Part, bool>> (Type (assembly, "JSI.JUtil"), "RasterPropMonitorShouldUpdate");
-            Monitor.Computer = Field<PartModule> (monitor, "rpmComp");
-            Monitor.FillScreenBuffer = Method<Action<object>> (monitor, "FillScreenBuffer");
-            Monitor.RenderScreen = Method<Action<object>> (monitor, "RenderScreen");
-            Monitor.UpdateVariables = Method<Action<object>> (computerType, "UpdateVariables");
+            var monitor = mod.Type ("JSI.RasterPropMonitor");
+            Monitor.Type = monitor.Type;
+            Monitor.Pages = monitor.Getter<object, IList> ("pages");
+            Monitor.ActivePage = monitor.Getter<object, object> ("activePage");
+            Monitor.PageButtonClick = monitor.Method<Action<object, object>> ("PageButtonClick");
+            Monitor.GlobalButtonClick = monitor.Method<Action<object, int>> ("GlobalButtonClick");
+            Monitor.GlobalButtonRelease = monitor.Method<Action<object, int>> ("GlobalButtonRelease");
+            Monitor.GlobalButtons = monitor.Getter<object, string> ("globalButtons");
+            Monitor.ScreenWidth = monitor.Getter<object, int> ("screenWidth");
+            Monitor.ScreenHeight = monitor.Getter<object, int> ("screenHeight");
+            Monitor.ScreenPixelWidth = monitor.Getter<object, int> ("screenPixelWidth");
+            Monitor.ScreenPixelHeight = monitor.Getter<object, int> ("screenPixelHeight");
+            Monitor.LetterWidth = monitor.Getter<object, int> ("fontLetterWidth");
+            Monitor.LetterHeight = monitor.Getter<object, int> ("fontLetterHeight");
+            Monitor.StartupComplete = monitor.Getter<object, bool> ("startupComplete");
+            Monitor.ScreenTexture = monitor.Getter<object, RenderTexture> ("screenTexture");
+            Monitor.TextRenderer = monitor.Getter<object, object> ("textRenderer");
+            Monitor.ShouldUpdate = mod.Type ("JSI.JUtil").Method<Func<global::Part, bool>> ("RasterPropMonitorShouldUpdate");
+            Monitor.Computer = monitor.Getter<object, PartModule> ("rpmComp");
+            Monitor.FillScreenBuffer = monitor.Method<Action<object>> ("FillScreenBuffer");
+            Monitor.RenderScreen = monitor.Method<Action<object>> ("RenderScreen");
+            Monitor.UpdateVariables = computer.Method<Action<object>> ("UpdateVariables");
 
-            var selector = Camera.SelectorType = Type (assembly, "JSI.JSIExternalCameraSelector");
-            Camera.Prefix = Field<string> (selector, "cameraIDPrefix");
-            Camera.Current = Field<int> (selector, "current");
-            Camera.MinFoV = Field<float> (selector, "cameraFoVMin");
-            Camera.MaxFoV = Field<float> (selector, "cameraFoVMax");
-            var flying = Camera.FlyingCameraType = Type (assembly, "JSI.FlyingCamera");
-            Camera.PointCamera = Method<Func<object, string, float, bool>> (flying, "PointCamera");
-            Camera.Render = Method<Func<object, RenderTexture, float, float, bool>> (flying, "Render");
-            Camera.Cameras = Field<UnityEngine.Camera []> (flying, "cameraObject");
-            Camera.Cleanup = Method<Action<object>> (flying, "CleanupCameraObjects");
+            var selector = mod.Type ("JSI.JSIExternalCameraSelector");
+            Camera.SelectorType = selector.Type;
+            Camera.Prefix = selector.Getter<object, string> ("cameraIDPrefix");
+            Camera.Current = selector.Getter<object, int> ("current");
+            Camera.MinFoV = selector.Getter<object, float> ("cameraFoVMin");
+            Camera.MaxFoV = selector.Getter<object, float> ("cameraFoVMax");
+            var flying = mod.Type ("JSI.FlyingCamera");
+            Camera.NewFlyingCamera = flying.Constructor<Func<global::Part, float, object>> ();
+            Camera.PointCamera = flying.Method<Func<object, string, float, bool>> ("PointCamera");
+            Camera.Render = flying.Method<Func<object, RenderTexture, float, float, bool>> ("Render");
+            Camera.Cameras = flying.Getter<object, UnityEngine.Camera []> ("cameraObject");
+            Camera.Cleanup = flying.Method<Action<object>> ("CleanupCameraObjects");
 
-            var button = Button.Type = Type (assembly, "JSI.SmarterButton");
-            Button.PageTriggers = Field<IList> (button, "pageTriggers");
-            Button.ClickHandlers = Field<List<Action>> (button, "clickHandlers");
-            Button.TriggerSelector = Field<Delegate> (Type (assembly, "JSI.SmarterButton+PageTriggerSet"), "selector");
-            Button.MouseDown = Method<Action<object>> (button, "OnMouseDown");
-            Button.MouseUp = Method<Action<object>> (button, "OnMouseUp");
+            var button = mod.Type ("JSI.SmarterButton");
+            Button.Type = button.Type;
+            Button.PageTriggers = button.Getter<object, IList> ("pageTriggers");
+            Button.ClickHandlers = button.Getter<object, List<Action>> ("clickHandlers");
+            Button.TriggerSelector = mod.Type ("JSI.SmarterButton+PageTriggerSet").Getter<object, Delegate> ("selector");
+            Button.MouseDown = button.Method<Action<object>> ("OnMouseDown");
+            Button.MouseUp = button.Method<Action<object>> ("OnMouseUp");
 
-            var page = Type (assembly, "JSI.MonitorPage");
-            Page.Name = Field<string> (page, "name");
-            Page.ProcessedText = Field<string> (page, "ProcessedText");
-            Page.TextOverlay = Field<string> (page, "textOverlay");
-            Page.DefaultColor = Field<Color> (page, "defaultColor");
-            Page.ScreenXMin = Field<int> (page, "screenXMin");
-            Page.ScreenYMin = Field<int> (page, "screenYMin");
-            Page.Text = Field<string> (page, "text");
-            Page.PageHandler = Field<MonoBehaviour> (page, "pageHandlerModule");
-            Page.BackgroundHandler = Field<MonoBehaviour> (page, "backgroundHandlerModule");
-            Page.FontCharacters = Field<Dictionary<char, Rect>> (Type (assembly, "JSI.TextRenderer"), "fontCharacters");
+            var page = mod.Type ("JSI.MonitorPage");
+            Page.Name = page.Getter<object, string> ("name");
+            Page.ProcessedText = page.Getter<object, string> ("ProcessedText");
+            Page.TextOverlay = page.Getter<object, string> ("textOverlay");
+            Page.DefaultColor = page.Getter<object, Color> ("defaultColor");
+            Page.ScreenXMin = page.Getter<object, int> ("screenXMin");
+            Page.ScreenYMin = page.Getter<object, int> ("screenYMin");
+            Page.Text = page.Getter<object, string> ("text");
+            Page.PageHandler = page.Getter<object, MonoBehaviour> ("pageHandlerModule");
+            Page.BackgroundHandler = page.Getter<object, MonoBehaviour> ("backgroundHandlerModule");
+            Page.FontCharacters = mod.Type ("JSI.TextRenderer").Getter<object, Dictionary<char, Rect>> ("fontCharacters");
         }
 
-        static Type Type (System.Reflection.Assembly assembly, string name)
+        /// <summary>
+        /// Whether the object is an instance of a type of the mod. False for a type that was not
+        /// found.
+        /// </summary>
+        public static bool IsInstance (Type type, object obj)
         {
-            var type = assembly.GetType (name);
-            if (type == null)
-                missing.Add (name);
-            return type;
-        }
-
-        static TDelegate Method<TDelegate> (Type type, string name) where TDelegate : class
-        {
-            var method = type == null ? null : Accessor.Method<TDelegate> (type, name);
-            if (method == null)
-                missing.Add ((type == null ? "?" : type.Name) + "." + name);
-            return method;
-        }
-
-        static Func<object, T> Field<T> (Type type, string name)
-        {
-            var getter = type == null ? null : Accessor.Getter<object, T> (type, name);
-            if (getter == null)
-                missing.Add ((type == null ? "?" : type.Name) + "." + name);
-            return getter;
+            return type != null && type.IsInstanceOfType (obj);
         }
 
         /// <summary>
@@ -251,7 +221,7 @@ namespace KRPC.RasterPropMonitor
         {
             var modules = part.Modules;
             for (int i = 0; i < modules.Count; i++) {
-                if (computerType.IsInstanceOfType (modules [i]))
+                if (IsInstance (computerType, modules [i]))
                     return modules [i];
             }
             return null;
