@@ -164,13 +164,13 @@ def member_name(procedure, style):
     if Attributes.is_a_class_member(procedure):
         base = Attributes.get_class_member_name(procedure)
         is_property = Attributes.is_a_class_property_accessor(procedure)
-        prefix = "set_" if Attributes.is_a_class_property_setter(procedure) else "get_"
+        prefix = "set" if Attributes.is_a_class_property_setter(procedure) else "get"
     else:
         is_property = Attributes.is_a_property_accessor(procedure)
         base = Attributes.get_property_name(procedure) if is_property else procedure
-        prefix = procedure[: len("get_")]
+        prefix = procedure[: len("get")]
     if is_property and style.accessors:
-        return prefix + convert(base)
+        return style.accessor(prefix, base)
     return convert(base)
 
 
