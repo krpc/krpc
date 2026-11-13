@@ -218,10 +218,22 @@ loop instead.
 Service Stubs
 -------------
 
-The JavaScript client has no pre-generated service stubs. When you connect, it builds every
-service from the service definitions the server sends, and the services have no static types. The
-services match the server you connect to, whatever its version, including services added by other
-mods.
+When you connect, the client builds every service from the service definitions the server sends,
+so the services match the server you connect to, whatever its version. The package also holds
+TypeScript declarations of the services a kRPC release ships, which give your editor the types
+and documentation of every procedure, class and value. They type-check JavaScript as well as
+TypeScript, for example with ``// @ts-check`` at the top of a script.
+
+A service from another mod has no declarations in the package. You can generate a module for it
+with :ref:`krpc-clientgen <service-api-clientgen>`. Without one, its members have no static
+types, and TypeScript reaches it through :class:`DynamicConnection`:
+
+.. code-block:: ts
+
+   import { connect, type DynamicConnection } from "@krpc-org/krpc";
+
+   const conn = (await connect()) as DynamicConnection;
+   await conn.myMod.doSomething();
 
 .. _js-client-reference:
 
@@ -270,6 +282,16 @@ Client API Reference
 
       The ``KRPC`` service, providing the server's basic functionality. Each of the server's other
       services is a property too, such as ``spaceCenter``.
+
+.. class:: DynamicConnection()
+
+   The type of a :class:`Connection` with a property for every service the server has, such as a
+   service from another mod. A TypeScript type only, with no static types for the services'
+   members.
+
+.. class:: RemoteService()
+
+   The base class of a connection's services.
 
 .. class:: RemoteObject()
 

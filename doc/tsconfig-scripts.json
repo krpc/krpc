@@ -6,6 +6,8 @@
     "lib": ["ES2022", "DOM"],
     "types": [],
     "strict": true,
+    // The examples leave out null checks for brevity
+    "strictNullChecks": false,
     "noEmit": true,
     "allowJs": true,
     "checkJs": true,

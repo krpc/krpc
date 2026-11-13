@@ -13,6 +13,9 @@
     "verbatimModuleSyntax": true,
     "declaration": true,
     "stripInternal": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "paths": {
+      "@krpc-org/krpc": ["./src/index.ts"]
+    }
   }
 }

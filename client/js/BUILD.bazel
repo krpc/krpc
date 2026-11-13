@@ -9,6 +9,7 @@ load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
 load("//:config.bzl", "npm_version", "version")
 load("//tools/build:conformance.bzl", "conformance_test")
 load("//tools/build/protobuf:js.bzl", "protobuf_es")
+load("//tools/krpctools:clientgen.bzl", "clientgen_js_index", "clientgen_services")
 
 exports_files([
     "CHANGELOG.md",
@@ -40,6 +41,14 @@ protobuf_es(
     out = "src/schema/krpc_pb.ts",
 )
 
+# The TypeScript declarations of the services, and the module naming them
+services = clientgen_services("js")
+
+clientgen_js_index(
+    name = "services-index",
+    out = "src/services/index.ts",
+)
+
 # The package's "type": "module", which makes its .js files ES modules
 js_library(
     name = "package_json",
@@ -55,7 +64,10 @@ ts_config(
 # mistake fails the type check, as it would in a browser.
 ts_project(
     name = "lib",
-    srcs = glob(["src/**/*.ts"]) + [":schema"],
+    srcs = glob(["src/**/*.ts"]) + services + [
+        ":schema",
+        ":services-index",
+    ],
     declaration = True,
     transpiler = "tsc",
     tsconfig = ":tsconfig",

@@ -35,8 +35,14 @@ export type Type = { readonly nullable: boolean } & (
   | { readonly kind: "stream" | "event" }
 );
 
-/** A value of an enumeration. Each value is one object, so values compare with `===`. */
-export class RemoteEnum {
+/** The key of the property that tells the values of two enumerations, or two structures,
+ * apart in their types. The property exists in types only. */
+declare const valueBrand: unique symbol;
+
+/** A value of an enumeration. Each value is one object, so values compare with `===`. The type
+ * parameter names the enumeration, such as `"SpaceCenter.VesselSituation"`. */
+export class RemoteEnum<E extends string = string> {
+  declare readonly [valueBrand]?: E;
   /** The enumeration the value belongs to. */
   readonly enumeration: Enumeration;
   /** The name of the value, in lower camel case. */
@@ -114,8 +120,10 @@ export class Struct {
 }
 
 /** The base class of the values of structures. A value is frozen, with a property for each
- * field of its structure in lower camel case. */
-export class RemoteStruct {
+ * field of its structure in lower camel case. The type parameter names the structure, such as
+ * `"SpaceCenter.BoundingBox"`. */
+export class RemoteStruct<S extends string = string> {
+  declare readonly [valueBrand]?: S;
   readonly #struct: Struct;
 
   constructor(struct: Struct, values: Readonly<Record<string, unknown>>) {

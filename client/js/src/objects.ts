@@ -18,9 +18,14 @@ export class ObjectCache {
   }
 }
 
+/** The key of the property that tells the objects of two classes apart in their types. The
+ * property exists in types only. */
+declare const classBrand: unique symbol;
+
 /** The base class of the classes of a server's services. An instance stands for an object on
- * the server, by its id. */
-export class RemoteObject {
+ * the server, by its id. The type parameter names the class, such as `"SpaceCenter.Vessel"`. */
+export class RemoteObject<C extends string = string> {
+  declare readonly [classBrand]?: C;
   // Assigned only for a new object, as the constructor returns the cached one for a known id
   readonly #id!: bigint;
   readonly #service!: string;
@@ -36,7 +41,7 @@ export class RemoteObject {
       existing.#className === className
     ) {
       // biome-ignore lint/correctness/noConstructorReturn: objects are interned by id
-      return existing;
+      return existing as RemoteObject<C>;
     }
     this.#id = id;
     this.#service = service;
@@ -65,6 +70,9 @@ export class RemoteObject {
     return `${this.#service}.${this.#className}<${this.#id}>`;
   }
 }
+
+/** The base class of a server's services. A connection has one instance of it per service. */
+export class RemoteService {}
 
 /** The server's id for an object. Throws a TypeError for a value that is not an object of a
  * service's class, such as null. */
