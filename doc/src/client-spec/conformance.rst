@@ -134,8 +134,9 @@ a JSON file, passed with ``--conventions``:
 and ``server_error`` the type a service's exception types derive. Both are ``null`` for a client
 whose errors are codes, with no type to derive. ``native_types`` gives the native error type the
 client raises for each mapped exception, by the exception's mapped type, and needs an entry for each
-one. A ``null`` entry is an exception the client raises only as a type of its own. ``naming`` is for
-the ``definitions`` profile. It gives the case of member names, whether a property is a pair of
-``get_`` and ``set_`` functions, and whether the client exposes exception types. The case is
-``snake``, the one case the driver converts names to. The run stops if the file lacks a section a
-profile needs.
+one. A ``null`` entry is an exception the client raises only as a type of its own.
+
+``naming`` is for the ``definitions`` profile. It gives the case of member names, whether a property
+is a pair of getter and setter functions, and whether the client exposes exception types. The case
+is ``snake``, as in ``get_name``, or ``lower_camel``, as in ``getName``. The run stops if the file
+lacks a section a profile needs.
