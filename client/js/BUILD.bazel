@@ -156,9 +156,11 @@ conformance_test(
     expected_failures = "conformance/expected-failures.txt",
     profiles = [
         "core",
+        "error-types",
         "dynamic",
         "definitions",
         "defaults",
+        "named-arguments",
         "connections",
         "concurrency",
     ],

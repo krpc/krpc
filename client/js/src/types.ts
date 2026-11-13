@@ -87,18 +87,60 @@ export class Enumeration {
   }
 }
 
-/** A structure a service defines. Its values are frozen plain objects, with a property for each
- * field in lower camel case. */
+/** A structure a service defines. Its values are instances of its class, `valueClass`. */
 export class Struct {
   readonly service: string;
   readonly name: string;
   /** The fields, in the order the structure declares them. */
   readonly fields: readonly { readonly name: string; readonly type: Type }[];
+  /** The class of the structure's values. */
+  readonly valueClass: new (
+    fields: Readonly<Record<string, unknown>>,
+  ) => RemoteStruct;
 
   constructor(service: string, name: string, fields: readonly { name: string; type: Type }[]) {
     this.service = service;
     this.name = name;
     this.fields = fields;
+    const struct = this;
+    const cls = class extends RemoteStruct {
+      constructor(values: Readonly<Record<string, unknown>>) {
+        super(struct, values);
+      }
+    };
+    Object.defineProperty(cls, "name", { value: name });
+    this.valueClass = cls;
+  }
+}
+
+/** The base class of the values of structures. A value is frozen, with a property for each
+ * field of its structure in lower camel case. */
+export class RemoteStruct {
+  readonly #struct: Struct;
+
+  constructor(struct: Struct, values: Readonly<Record<string, unknown>>) {
+    this.#struct = struct;
+    if (typeof values !== "object" || values === null) {
+      throw new TypeError(`A ${struct.service}.${struct.name} needs an object of its fields`);
+    }
+    for (const key of Object.keys(values)) {
+      if (!struct.fields.some((field) => field.name === key)) {
+        throw new TypeError(`A ${struct.service}.${struct.name} has no field ${key}`);
+      }
+    }
+    const fields = this as unknown as Record<string, unknown>;
+    for (const field of struct.fields) {
+      if (!(field.name in values)) {
+        throw new TypeError(`A ${struct.service}.${struct.name} needs the field ${field.name}`);
+      }
+      fields[field.name] = values[field.name];
+    }
+    Object.freeze(this);
+  }
+
+  /** The structure of a value. */
+  static structOf(value: RemoteStruct): Struct {
+    return value.#struct;
   }
 }
 

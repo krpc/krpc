@@ -1,7 +1,8 @@
 import { RemoteObject } from "./objects.js";
+import { RemoteStruct } from "./types.js";
 
 /** Whether two values are equal: numbers, strings and enumeration values by `===`, objects by
- * class and id, bytes, arrays and structures item by item, sets and maps by their members. */
+ * class and id, bytes and arrays item by item, structures of one name field by field, sets and maps by their members. */
 export function equals(a: unknown, b: unknown): boolean {
   if (a === b) {
     return true;
@@ -38,16 +39,14 @@ export function equals(a: unknown, b: unknown): boolean {
     }
     return [...a].every(([k, v]) => [...b].some(([l, w]) => equals(k, l) && equals(v, w)));
   }
-  if (
-    Object.getPrototypeOf(a) !== Object.prototype ||
-    Object.getPrototypeOf(b) !== Object.prototype
-  ) {
+  if (!(a instanceof RemoteStruct) || !(b instanceof RemoteStruct)) {
     return false;
   }
-  const keys = Object.keys(a);
-  const other = b as Record<string, unknown>;
-  return (
-    keys.length === Object.keys(b).length &&
-    keys.every((key) => key in other && equals((a as Record<string, unknown>)[key], other[key]))
-  );
+  const [x, y] = [RemoteStruct.structOf(a), RemoteStruct.structOf(b)];
+  if (x.service !== y.service || x.name !== y.name) {
+    return false;
+  }
+  const fields = a as unknown as Record<string, unknown>;
+  const other = b as unknown as Record<string, unknown>;
+  return x.fields.every((field) => equals(fields[field.name], other[field.name]));
 }

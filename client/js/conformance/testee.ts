@@ -16,7 +16,13 @@ import {
 } from "@bufbuild/protobuf";
 import { decode, encode } from "../src/codec.js";
 import { type Connection, connect, contextOf, type DynamicConnection } from "../src/connection.js";
-import { ConnectionError, EncodingError, ServerError } from "../src/errors.js";
+import {
+  ConnectionError,
+  EncodingError,
+  RemoteError,
+  ServerError,
+  type ServerErrorDetails,
+} from "../src/errors.js";
 import { camelCase } from "../src/naming.js";
 import { getObjectId, RemoteObject } from "../src/objects.js";
 import {
@@ -25,7 +31,7 @@ import {
   Type_TypeCode as TypeCode,
   TypeSchema,
 } from "../src/schema/krpc_pb.js";
-import { RemoteEnum, type Type } from "../src/types.js";
+import { RemoteEnum, RemoteStruct, type Type } from "../src/types.js";
 import { equals } from "../src/values.js";
 import {
   type Command,
@@ -43,7 +49,29 @@ import {
   ValueSchema,
 } from "./testee_pb.js";
 
-const PROFILES = ["core", "dynamic", "definitions", "defaults", "connections", "concurrency"];
+const PROFILES = [
+  "core",
+  "error-types",
+  "dynamic",
+  "definitions",
+  "defaults",
+  "named-arguments",
+  "connections",
+  "concurrency",
+];
+
+/** The error classes an error can be an instance of, by name. */
+const NATIVE_ERRORS: [string, new (...args: never[]) => object][] = [
+  ["RemoteError", RemoteError],
+  ["ServerError", ServerError],
+  ["Error", Error],
+  ["TypeError", TypeError],
+  ["RangeError", RangeError],
+  ["ReferenceError", ReferenceError],
+  ["SyntaxError", SyntaxError],
+  ["EvalError", EvalError],
+  ["URIError", URIError],
+];
 
 /** The testee offers no way to do what a command asks. */
 class Unsupported extends Error {}
@@ -131,13 +159,13 @@ function fromValue(conn: DynamicConnection, value: Value | undefined): unknown {
     case "struct": {
       const { service, name, fields } = content.value;
       const struct = contextOf(conn).types.struct(`${service}.${name}`);
-      const result: Record<string, unknown> = {};
+      const values: Record<string, unknown> = {};
       fields.forEach((field, i) => {
         // A field past the end of the structure, for a test that passes one too many
         const key = struct.fields[i]?.name ?? `field${i}`;
-        result[key] = fromValue(conn, field);
+        values[key] = fromValue(conn, field);
       });
-      return Object.freeze(result);
+      return new struct.valueClass(values);
     }
     case "event":
     case "message":
@@ -213,7 +241,7 @@ function toValueCase(
   if (isMessage(value, ProcedureCallSchema)) {
     return { case: "message", value: toBinary(ProcedureCallSchema, value) };
   }
-  if (typeof value === "object") {
+  if (value instanceof RemoteStruct) {
     const fields = Object.values(value).map((x, i) =>
       toValue(x, type?.kind === "struct" ? type.struct.fields[i]?.type : undefined),
     );
@@ -247,11 +275,15 @@ function resultType(conn: Connection, command: Invoke): Type | undefined {
 /** Calls a procedure, given the name the server gives it. The arguments include the instance of
  * an instance method. */
 async function invoke(conn: DynamicConnection, command: Invoke): Promise<unknown> {
-  if (command.namedArguments.length > 0) {
-    throw new Unsupported("No named arguments");
-  }
   const name = command.procedure;
   const args = command.arguments.map((x) => fromValue(conn, x));
+  if (command.namedArguments.length > 0) {
+    const named: Record<string, unknown> = {};
+    for (const x of command.namedArguments) {
+      named[camelCase(x.name)] = fromValue(conn, x.value);
+    }
+    args.push(named);
+  }
   const service = () => {
     const result = conn[camelCase(command.service)];
     if (result === undefined) {
@@ -453,16 +485,27 @@ async function dispatch(command: Command): Promise<Value> {
   }
 }
 
+/** Whether an error is of the class of an exception the server maps to a JavaScript error, which
+ * carries the server's details. */
+function isMappedException(error: unknown): error is Error & ServerErrorDetails {
+  return (
+    error instanceof Error && typeof (error as Partial<ServerErrorDetails>).exception === "string"
+  );
+}
+
 function toError(error: unknown): ErrorMessage {
   const message = error instanceof Error ? error.message : String(error);
-  const result = create(ErrorSchema, { message });
+  const result = create(ErrorSchema, {
+    message,
+    nativeTypes: NATIVE_ERRORS.filter(([, cls]) => error instanceof cls).map(([x]) => x),
+  });
   if (error instanceof Unsupported) {
     result.kind = ErrorKind.UNSUPPORTED;
   } else if (error instanceof ConnectionError) {
     result.kind = ErrorKind.CONNECTION;
     result.status = error.status;
     result.reason = error.reason;
-  } else if (error instanceof ServerError) {
+  } else if (error instanceof ServerError || isMappedException(error)) {
     result.kind = ErrorKind.SERVER;
     result.service = error.service;
     result.name = error.exception;

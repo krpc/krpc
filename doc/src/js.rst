@@ -88,6 +88,19 @@ waiting for each response before sending the next call:
 
 .. literalinclude:: /scripts/js/Concurrent.js
 
+Default and Named Arguments
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+A procedure can give some of its arguments default values. Pass ``undefined``, or leave out the
+trailing arguments, to take the default. A plain object after the other arguments passes
+arguments by name. The following launches a vessel without recovering the vessel on the launch
+pad, and leaves the crew argument before it at its default:
+
+.. literalinclude:: /scripts/js/Arguments.js
+
+Names are in lower camel case. Passing an argument both by position and by name, or naming an
+argument the procedure does not have, rejects with a ``TypeError``.
+
 Values
 ^^^^^^
 
@@ -115,7 +128,9 @@ Each kRPC type has a JavaScript type:
    * - dictionary
      - ``Map``
    * - structure
-     - A frozen object with a property for each field, in lower camel case
+     - An object of the service's class for it, such as ``conn.spaceCenter.BoundingBox``. It is
+       frozen, and has a property for each field, in lower camel case. Make one with ``new``,
+       passing an object of the fields.
    * - enumeration
      - A :class:`RemoteEnum`, such as ``conn.spaceCenter.VesselSituation.orbiting``
    * - class
@@ -149,15 +164,22 @@ Then load it from the page with ``<script type="module" src="dashboard.bundle.js
 Handling Errors
 ---------------
 
-A procedure that fails on the server rejects its ``Promise`` with an :class:`ServerError`. The
-following catches the error from loading a save that does not exist:
+A procedure that fails on the server rejects its ``Promise`` with an error. The following catches
+the error from loading a save that does not exist:
 
 .. literalinclude:: /scripts/js/Errors.js
 
-The client rejects with these errors, each a subclass of :class:`RemoteError`:
+The error you catch depends on the error on the server:
 
-* :class:`ServerError` for a procedure that fails on the server. Its message starts with the
-  server's exception, as in ``KRPC.ArgumentException: Failed to load missing``.
+* A standard error, such as an invalid argument, is a class that extends only the matching
+  JavaScript error. A missing save is ``conn.krpc.ArgumentException``, which extends
+  ``TypeError``.
+* An error particular to a service is a class of that service, such as
+  ``conn.krpc.ObjectDestroyedException``, which extends :class:`ServerError`.
+* Any other error is a :class:`ServerError`, with the server's description as its message.
+
+The client's own errors each extend :class:`RemoteError`, as :class:`ServerError` does:
+
 * :class:`ConnectionError` for a failed connection attempt. When the server refuses the connection,
   its ``status`` names the status the server gave, such as ``DENIED``. When the server ends the
   connection, its ``reason`` names the reason, such as ``SERVER_STOPPED``. A call made once the
@@ -165,7 +187,8 @@ The client rejects with these errors, each a subclass of :class:`RemoteError`:
 * :class:`EncodingError` for a malformed result from the server.
 
 A call with an argument of the wrong type rejects with a ``TypeError``, and one with a number
-outside the range of its type with a ``RangeError``.
+outside the range of its type with a ``RangeError``. These errors and the standard errors, such
+as ``conn.krpc.ArgumentException``, do not extend :class:`RemoteError`.
 
 Remote Objects
 --------------
@@ -181,7 +204,7 @@ same thing in the game compare equal with ``===``. An object works as a ``Map`` 
 element.
 
 Once the thing an object identifies is destroyed, such as a part that explodes, each call through
-it rejects with an error naming ``KRPC.ObjectDestroyedException``.
+it rejects with ``conn.krpc.ObjectDestroyedException``.
 
 .. seealso:: :doc:`/user-guide/object-lifetime` describes how each kind of object behaves in more
              detail.
@@ -252,6 +275,11 @@ Client API Reference
 
    The base class of the objects of a service's classes.
 
+.. class:: RemoteStruct()
+
+   The base class of the values of a service's structures. A value is frozen, with a property for
+   each field.
+
 .. class:: RemoteEnum()
 
    A value of an enumeration. Each value is one object, so values compare with ``===``.
@@ -270,7 +298,8 @@ Client API Reference
 
 .. class:: ServerError()
 
-   A procedure that threw an exception on the server.
+   A procedure that threw an exception on the server, with no JavaScript error for it. The class of
+   each such exception a service lists extends it.
 
    .. attribute:: service
 

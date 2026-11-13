@@ -3,7 +3,7 @@ import { BinaryReader, BinaryWriter, WireType } from "@bufbuild/protobuf/wire";
 import { EncodingError } from "./errors.js";
 import { RemoteObject } from "./objects.js";
 import { DictionarySchema, ListSchema, SetSchema, TupleSchema } from "./schema/krpc_pb.js";
-import { RemoteEnum, type Struct, type Type } from "./types.js";
+import { RemoteEnum, RemoteStruct, type Struct, type Type } from "./types.js";
 
 /** Makes the objects a decoded value holds, for a connection. */
 export interface ObjectFactory {
@@ -178,21 +178,16 @@ function item(type: Type, value: unknown): Uint8Array {
 }
 
 function structFields(struct: Struct, value: unknown): [Type, unknown][] {
-  if (typeof value !== "object" || value === null || Array.isArray(value)) {
+  if (!(value instanceof RemoteStruct) || !sameStruct(RemoteStruct.structOf(value), struct)) {
     throw new TypeError(`${describe(value)} is not a ${struct.service}.${struct.name}`);
   }
-  const fields = value as Record<string, unknown>;
-  for (const key of Object.keys(fields)) {
-    if (!struct.fields.some((field) => field.name === key)) {
-      throw new TypeError(`A ${struct.service}.${struct.name} has no field ${key}`);
-    }
-  }
-  return struct.fields.map((field) => {
-    if (!(field.name in fields)) {
-      throw new TypeError(`A ${struct.service}.${struct.name} has no field ${field.name}`);
-    }
-    return [field.type, fields[field.name]];
-  });
+  const fields = value as unknown as Record<string, unknown>;
+  return struct.fields.map((field) => [field.type, fields[field.name]]);
+}
+
+/** Whether two structures are one structure, which they are across connections. */
+function sameStruct(a: Struct, b: Struct): boolean {
+  return a.service === b.service && a.name === b.name;
 }
 
 function read(type: Type, data: Uint8Array, objects: ObjectFactory): unknown {
@@ -215,11 +210,11 @@ function read(type: Type, data: Uint8Array, objects: ObjectFactory): unknown {
         data,
         objects,
       );
-      const result: Record<string, unknown> = {};
+      const fields: Record<string, unknown> = {};
       type.struct.fields.forEach((field, i) => {
-        result[field.name] = values[i];
+        fields[field.name] = values[i];
       });
-      return Object.freeze(result);
+      return new type.struct.valueClass(fields);
     }
     case "dictionary": {
       const result = new Map<unknown, unknown>();

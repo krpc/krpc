@@ -1,6 +1,12 @@
-import { create, fromBinary } from "@bufbuild/protobuf";
+import { create, fromBinary, isMessage } from "@bufbuild/protobuf";
 import { decode, encode, type ObjectFactory } from "./codec.js";
-import { ConnectionError, EncodingError } from "./errors.js";
+import {
+  ConnectionError,
+  EncodingError,
+  exceptionClass,
+  ServerError,
+  type ServerErrorDetails,
+} from "./errors.js";
 import { accessorName, camelCase } from "./naming.js";
 import { ObjectCache, RemoteObject } from "./objects.js";
 import {
@@ -115,8 +121,18 @@ export async function connect(options: ConnectOptions = {}): Promise<DynamicConn
       }
     }
     addClassMembers(context, classes);
+    const exceptions = new Map<string, new (error: ServerErrorDetails) => Error>();
     for (const service of services) {
-      const members = serviceMembers(context, service, classes);
+      for (const x of service.exceptions) {
+        exceptions.set(`${service.name}.${x.name}`, exceptionClass(x.name, x.mappedType));
+      }
+    }
+    session.errorFactory = (error) => {
+      const cls = exceptions.get(`${error.service}.${error.exception}`);
+      return cls === undefined ? new ServerError(error) : new cls(error);
+    };
+    for (const service of services) {
+      const members = serviceMembers(context, service, classes, exceptions);
       if (members !== null) {
         Object.defineProperty(connection, camelCase(service.name), {
           value: members,
@@ -159,7 +175,11 @@ function remoteClass(
 interface Signature {
   readonly service: string;
   readonly procedure: string;
-  readonly parameters: readonly { readonly type: Type; readonly optional: boolean }[];
+  readonly parameters: readonly {
+    readonly name: string;
+    readonly type: Type;
+    readonly optional: boolean;
+  }[];
   readonly result: Type | null;
 }
 
@@ -173,7 +193,7 @@ function signature(types: Types, service: string, procedure: Procedure): Signatu
         if (x.type === undefined) {
           throw new UnknownTypeError(`Parameter ${x.name} has no type`);
         }
-        return { type: types.get(x.type), optional: x.hasDefaultValue };
+        return { name: camelCase(x.name), type: types.get(x.type), optional: x.hasDefaultValue };
       }),
       result: procedure.returnType === undefined ? null : types.get(procedure.returnType),
     };
@@ -185,12 +205,14 @@ function signature(types: Types, service: string, procedure: Procedure): Signatu
   }
 }
 
-/** Calls a procedure with arguments in the order of its parameters. An argument left out, or
- * undefined, takes the parameter's default value. */
+/** Calls a procedure with arguments in the order of its parameters, then optionally a plain
+ * object of arguments by name. An argument left out, or undefined, takes the parameter's default
+ * value. The first parameter of a method, the object, has no name to pass it by. */
 async function invoke(
   context: Context,
   signature: Signature,
   args: readonly unknown[],
+  first = 0,
 ): Promise<unknown> {
   const { parameters } = signature;
   const resultKind = signature.result?.kind;
@@ -199,21 +221,27 @@ async function invoke(
       `${signature.procedure} returns a ${resultKind}, which this client does not support`,
     );
   }
-  if (args.length > parameters.length) {
+  const values = [...args];
+  const last = values.length > first ? values[values.length - 1] : undefined;
+  if (isPlainObject(last)) {
+    values.pop();
+    nameArguments(signature, values, last as Record<string, unknown>, first);
+  }
+  if (values.length > parameters.length) {
     throw new TypeError(
-      `${signature.procedure} takes ${parameters.length} arguments, and was passed ${args.length}`,
+      `${signature.procedure} takes ${parameters.length} arguments, and was passed ${values.length}`,
     );
   }
   const encoded: Argument[] = [];
   parameters.forEach((parameter, position) => {
-    const value = args[position];
+    const value = values[position];
     if (value === undefined) {
       if (!parameter.optional) {
-        throw new TypeError(`${signature.procedure} is missing argument ${position}`);
+        throw new TypeError(`${signature.procedure} is missing argument ${parameter.name}`);
       }
     } else if (value === null) {
       if (!parameter.type.nullable) {
-        throw new TypeError(`Argument ${position} of ${signature.procedure} cannot be null`);
+        throw new TypeError(`Argument ${parameter.name} of ${signature.procedure} cannot be null`);
       }
       encoded.push(create(ArgumentSchema, { position, isNull: true }));
     } else {
@@ -234,6 +262,35 @@ async function invoke(
     return null;
   }
   return decode(signature.result, result.value, context);
+}
+
+/** Whether a value is a plain object, which only arguments by name are. Every value of a
+ * parameter is a primitive, an instance of a class or a protobuf message. */
+function isPlainObject(value: unknown): boolean {
+  if (typeof value !== "object" || value === null || isMessage(value)) {
+    return false;
+  }
+  const prototype = Object.getPrototypeOf(value);
+  return prototype === Object.prototype || prototype === null;
+}
+
+/** Puts each argument passed by name in its position. */
+function nameArguments(
+  signature: Signature,
+  values: unknown[],
+  named: Record<string, unknown>,
+  first: number,
+): void {
+  for (const [name, value] of Object.entries(named)) {
+    const position = signature.parameters.findIndex((x, i) => i >= first && x.name === name);
+    if (position === -1) {
+      throw new TypeError(`${signature.procedure} has no parameter ${name}`);
+    }
+    if (values[position] !== undefined) {
+      throw new TypeError(`${signature.procedure} was passed argument ${name} twice`);
+    }
+    values[position] = value;
+  }
 }
 
 /** Adds the methods, static methods and properties of each class, from the procedures of every
@@ -281,7 +338,7 @@ function addClassMembers(
         key = accessorName("set", member);
       }
       define(cls.prototype, key, function (this: RemoteObject, ...args: unknown[]) {
-        return invoke(context, sig, [this, ...args]);
+        return invoke(context, sig, [this, ...args], 1);
       });
     }
   }
@@ -293,9 +350,11 @@ function serviceMembers(
   context: Context,
   service: Service,
   classes: Map<string, new (id: bigint) => RemoteObject>,
+  exceptions: Map<string, new (error: ServerErrorDetails) => Error>,
 ): object | null {
   const members: Record<string, unknown> = {};
-  let hasMembers = service.classes.length > 0 || service.enumerations.length > 0;
+  let hasMembers =
+    service.classes.length > 0 || service.enumerations.length > 0 || service.exceptions.length > 0;
   for (const procedure of service.procedures) {
     // An internal procedure is for client libraries only
     if (procedure.internal) {
@@ -327,6 +386,9 @@ function serviceMembers(
   for (const x of service.enumerations) {
     members[x.name] = context.types.enumeration(service.name, x.name)?.values;
   }
+  for (const x of service.exceptions) {
+    members[x.name] = exceptions.get(`${service.name}.${x.name}`);
+  }
   for (const x of service.structs) {
     hasMembers = true;
     let struct: Struct;
@@ -338,27 +400,9 @@ function serviceMembers(
       }
       throw error;
     }
-    members[x.name] = structFactory(struct);
+    members[x.name] = struct.valueClass;
   }
   return hasMembers ? Object.freeze(members) : null;
-}
-
-/** A function that makes a value of a structure from an object holding its fields. */
-function structFactory(
-  struct: Struct,
-): (fields: Record<string, unknown>) => Readonly<Record<string, unknown>> {
-  const factory = (fields: Record<string, unknown>) => {
-    const result: Record<string, unknown> = {};
-    for (const field of struct.fields) {
-      if (!(field.name in fields)) {
-        throw new TypeError(`A ${struct.service}.${struct.name} needs the field ${field.name}`);
-      }
-      result[field.name] = fields[field.name];
-    }
-    return Object.freeze(result);
-  };
-  Object.defineProperty(factory, "name", { value: struct.name });
-  return factory;
 }
 
 function define(target: object, key: string, value: unknown): void {
