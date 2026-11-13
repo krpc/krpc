@@ -28,3 +28,7 @@
 - Keep working when an Infernal Robotics update removes members, and fail only the RPCs that
   use them (#1341)
 - **Breaking:** Remove `Ready` (#1341)
+
+## service/DockingCamera
+
+- Keep working when a Docking Camera update removes members, and fail only the RPCs that use them (#1341)

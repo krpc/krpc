@@ -14,8 +14,7 @@ namespace KRPC.DockingCamera
     {
         static void CheckAPI()
         {
-            if (!API.IsAvailable)
-                throw new InvalidOperationException("Docking Camera (KURS) is not available");
+            ModAPI.Get<API>().CheckAvailable();
         }
 
         /// <summary>
@@ -24,7 +23,7 @@ namespace KRPC.DockingCamera
         [KRPCProperty]
         public static bool Available
         {
-            get { return API.IsAvailable; }
+            get { return ModAPI.Get<API>().IsAvailable; }
         }
 
         /// <summary>
