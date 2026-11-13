@@ -1,6 +1,4 @@
-using System.Collections.Generic;
-using System.Linq;
-using KRPC.Service.Scanner;
+using KRPC.Service;
 using UnityEngine;
 
 namespace KRPC
@@ -14,7 +12,8 @@ namespace KRPC
         static bool? ok;
 
         /// <summary>
-        /// Whether the services are valid. Runs the check if the loading screen has not.
+        /// Whether kRPC can run. A service with errors leaves out only the members with them.
+        /// Runs the check if the loading screen has not.
         /// </summary>
         internal static bool OK {
             get {
@@ -32,18 +31,29 @@ namespace KRPC
                 return;
             Addon.InitLogger ();
             Utils.ModAPI.LoadAll (new Utils.GameModAssemblies ());
-            var errors = new List<string>();
-            Scanner.GetServices (errors);
-            ok = !errors.Any ();
-            if (errors.Any()) {
-                Utils.Logger.WriteLine("Service errors encountered, plugin has been disabled. Errors were:", Utils.Logger.Severity.Error);
-                foreach (var error in errors)
-                    Utils.Logger.WriteLine(error, Utils.Logger.Severity.Error);
-                PopupDialog.SpawnPopupDialog(
-                    new Vector2 (0.5f, 0.5f), new Vector2 (0.5f, 0.5f), "krpc-service-error", "kRPC Service Error",
-                    "Service errors encountered, plugin has been disabled. See the log for more information.",
-                    "OK", true, HighLogic.UISkin);
-            }
+            ok = ServiceProblems.Load ();
+        }
+    }
+
+    /// <summary>
+    /// Shows the problems window at the first main menu of each launch, unless the player
+    /// hid these problems.
+    /// </summary>
+    [KSPAddon (KSPAddon.Startup.MainMenu, true)]
+    public sealed class ServicesProblemsAddon : MonoBehaviour
+    {
+        /// <summary>
+        /// Show the window, if there are problems the player has not hidden.
+        /// </summary>
+        public void Start ()
+        {
+            ServicesChecker.Run ();
+            var digest = ServiceProblems.Digest;
+            if (digest == null || digest == ConfigurationFile.Instance.Configuration.HiddenServiceProblems)
+                return;
+            var window = gameObject.AddComponent<UI.ProblemsWindow> ();
+            window.Closable = true;
+            window.Visible = true;
         }
     }
 

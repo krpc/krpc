@@ -41,7 +41,8 @@ An extension member must satisfy the following criteria:
 
 * The name of the member must be a valid :ref:`kRPC identifier <service-api-identifiers>`, and must
   not clash with a member the class already has, or with another extension member. The getter and
-  the setter of an extension property must be declared in the same class.
+  the setter of an extension property must be declared in the same class. A member that clashes is
+  left out, as :ref:`service-api-errors` describes.
 
 * The parameter types and return type must be :ref:`types that kRPC can serialize
   <service-api-serializable-types>`, and may name types from any service.

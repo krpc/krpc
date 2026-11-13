@@ -28,6 +28,7 @@ namespace KRPC
         ApplicationLauncherButton applauncherButton;
         MainWindow mainWindow;
         InfoWindow infoWindow;
+        ProblemsWindow problemsWindow;
         ClientConnectingDialog clientConnectingDialog;
         ClientDisconnectDialog clientDisconnectDialog;
 
@@ -123,12 +124,18 @@ namespace KRPC
             infoWindow.Visible = config.Configuration.InfoWindowVisible;
             infoWindow.Position = config.Configuration.InfoWindowPosition.ToRect ();
 
+            // Service problems window, opened from the main window
+            problemsWindow = gameObject.AddComponent<ProblemsWindow> ();
+            problemsWindow.Closable = true;
+            problemsWindow.Visible = false;
+
             // Main window
             mainWindow = gameObject.AddComponent<MainWindow> ();
             mainWindow.Visible = config.Configuration.MainWindowVisible;
             mainWindow.Position = config.Configuration.MainWindowPosition.ToRect ();
             mainWindow.ClientDisconnectDialog = clientDisconnectDialog;
             mainWindow.InfoWindow = infoWindow;
+            mainWindow.ProblemsWindow = problemsWindow;
 
             // New connection dialog
             clientConnectingDialog = gameObject.AddComponent<ClientConnectingDialog> ();
