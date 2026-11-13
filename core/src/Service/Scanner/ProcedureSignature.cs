@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using KRPC.Utils;
 
 namespace KRPC.Service.Scanner
 {
@@ -42,6 +43,11 @@ namespace KRPC.Service.Scanner
         public GameScene GameScene { get; private set; }
 
         /// <summary>
+        /// The mod integrations the procedure requires, or null.
+        /// </summary>
+        public ModRequirement RequiredMods { get; private set; }
+
+        /// <summary>
         /// Whether the procedure is deprecated.
         /// </summary>
         public bool Deprecated { get; private set; }
@@ -74,7 +80,7 @@ namespace KRPC.Service.Scanner
         /// <summary>
         /// Create a procedure signature. An id of 0 means the id is generated from the name.
         /// </summary>
-        internal ProcedureSignature (string serviceName, string procedureName, uint id, string documentation, IProcedureHandler handler, GameScene gameScene, bool deprecated, string deprecatedReason, bool isInternal = false)
+        internal ProcedureSignature (string serviceName, string procedureName, uint id, string documentation, IProcedureHandler handler, GameScene gameScene, bool deprecated, string deprecatedReason, bool isInternal = false, ModRequirement requiredMod = null)
         {
             Name = procedureName;
             FullyQualifiedName = serviceName + "." + Name;
@@ -82,6 +88,7 @@ namespace KRPC.Service.Scanner
             Documentation = DocumentationUtils.ResolveCrefs (documentation);
             Handler = handler;
             GameScene = gameScene;
+            RequiredMods = requiredMod;
             Deprecated = deprecated;
             DeprecatedReason = deprecatedReason;
             Internal = isInternal;

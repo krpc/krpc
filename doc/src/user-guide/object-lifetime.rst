@@ -158,5 +158,5 @@ A comm link is a hop in a vessel's control path, and reports the path as it curr
 the path stops using that hop, the link reports itself as not connected, which is the
 not-loaded case above. It works again once the path uses the hop again.
 
-Objects from a mod that is not installed, or has yet to start, report themselves as
-unavailable in the same way.
+A member that needs a mod raises ``KRPC.InvalidOperationException`` while that mod is not
+available. The message names the mod and the reason, such as "not installed".

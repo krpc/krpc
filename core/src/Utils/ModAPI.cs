@@ -9,8 +9,9 @@ namespace KRPC.Utils
 {
     /// <summary>
     /// The integration of one mod. A subclass binds the mod's members in <see cref="Bind"/>, and
-    /// holds them in static fields. The load pass creates one instance of each subclass and binds
-    /// it as the game starts. The instance holds whether the integration is available.
+    /// holds them in static fields. Each subclass has one instance, created on first use, which
+    /// the load pass binds as the game starts. The instance holds whether the integration is
+    /// available.
     /// </summary>
     public abstract class ModAPI
     {
@@ -74,6 +75,15 @@ namespace KRPC.Utils
         }
 
         /// <summary>
+        /// Why the available integration's mod cannot serve a call now, or null when it can, or
+        /// when the integration is not available.
+        /// </summary>
+        internal string NotReadyReason ()
+        {
+            return IsAvailable ? NotReady () : null;
+        }
+
+        /// <summary>
         /// Why the mod cannot serve a call now, such as while it has no instance in the scene,
         /// or null when it can. Runs before each call that checks the integration, once it is
         /// available.
@@ -100,23 +110,51 @@ namespace KRPC.Utils
         /// </summary>
         protected abstract void Bind (ModBinder mod);
 
+        static readonly Dictionary<Type, ModAPI> instances = new Dictionary<Type, ModAPI> ();
+
         static class Instance<T> where T : ModAPI
         {
-            // Set by the load pass
-            #pragma warning disable 0649
-            public static T Value;
-            #pragma warning restore 0649
+            // Null for an integration that cannot be created, so Get<T> reports why on each call
+            public static readonly T Value = Create ();
+
+            static T Create ()
+            {
+                try {
+                    return (T)Get (typeof (T));
+                } catch (InvalidOperationException) {
+                    return null;
+                }
+            }
         }
 
         /// <summary>
-        /// The instance of the integration, created by the load pass.
+        /// The instance of the integration. Throws an exception if the integration cannot be
+        /// created.
         /// </summary>
         public static T Get<T> () where T : ModAPI
         {
-            var instance = Instance<T>.Value;
-            if (instance == null)
-                throw new InvalidOperationException (typeof (T).Name + " has not been loaded");
-            return instance;
+            return Instance<T>.Value ?? (T)Get (typeof (T));
+        }
+
+        /// <summary>
+        /// The instance of the integration <paramref name="type"/>, a subclass of
+        /// <see cref="ModAPI"/>.
+        /// </summary>
+        internal static ModAPI Get (Type type)
+        {
+            lock (instances) {
+                ModAPI instance;
+                if (!instances.TryGetValue (type, out instance)) {
+                    try {
+                        instance = (ModAPI)Activator.CreateInstance (type, true);
+                    } catch (Exception exn) {
+                        var error = exn is TargetInvocationException && exn.InnerException != null ? exn.InnerException : exn;
+                        throw new InvalidOperationException ("The mod integration " + type + " cannot be created: " + error.Message, error);
+                    }
+                    instances [type] = instance;
+                }
+                return instance;
+            }
         }
 
         /// <summary>
@@ -134,15 +172,13 @@ namespace KRPC.Utils
             foreach (var type in types) {
                 ModAPI instance;
                 try {
-                    instance = (ModAPI)Activator.CreateInstance (type, true);
-                } catch (Exception exn) {
+                    instance = Get (type);
+                } catch (InvalidOperationException exn) {
                     // A bug in the integration, which leaves only this one not loaded
-                    var error = exn is TargetInvocationException && exn.InnerException != null ? exn.InnerException : exn;
-                    Logger.WriteLine ("Failed to create the mod integration " + type + ": " + error, Logger.Severity.Error);
+                    Logger.WriteLine ("Failed to create the mod integration " + type + ": " + exn.InnerException, Logger.Severity.Error);
                     continue;
                 }
                 instance.Load (loaded);
-                typeof (Instance<>).MakeGenericType (type).GetField ("Value").SetValue (null, instance);
                 result.Add (instance);
             }
             ServiceProblems.Mods = new ReadOnlyCollection<ModAPI> (
@@ -152,6 +188,10 @@ namespace KRPC.Utils
 
         void Load (IList<LoadedAssembly> loaded)
         {
+            // Reset the state of an earlier load
+            IsInstalled = false;
+            IsAvailable = false;
+            missingMembers.Clear ();
             var main = loaded.FirstOrDefault (a => a.Assembly.GetName ().Name == AssemblyName);
             if (main == null) {
                 Reason = "not installed";

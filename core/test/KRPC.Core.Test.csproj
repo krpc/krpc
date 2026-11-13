@@ -88,6 +88,7 @@
     <Compile Include="Service\ProcedureSignatureTest.cs" />
     <Compile Include="Service\ProcedureHandlerTest.cs" />
     <Compile Include="Service\ProcedureParameterTest.cs" />
+    <Compile Include="Service\RequiresModTest.cs" />
     <Compile Include="Service\ScannerTest.cs" />
     <Compile Include="Service\ServiceSignatureTest.cs" />
     <Compile Include="Service\ServicesTest.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="Service\TestService3.cs" />
     <Compile Include="Service\TestServiceDeprecated.cs" />
     <Compile Include="Service\TestServiceExtensions.cs" />
+    <Compile Include="Service\TestServiceMod.cs" />
     <Compile Include="Service\TestTopLevelClass.cs" />
     <Compile Include="Service\TypeSpecTest.cs" />
     <Compile Include="Service\TypeUtilsTest.cs" />

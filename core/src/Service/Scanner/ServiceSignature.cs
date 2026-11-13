@@ -74,6 +74,17 @@ namespace KRPC.Service.Scanner
         GameScene gameScene;
 
         /// <summary>
+        /// The mod integrations the service requires, to be inherited by its procedures and
+        /// classes, or null.
+        /// </summary>
+        ModRequirement requiredMod;
+
+        /// <summary>
+        /// The mod integrations each class requires, by class name.
+        /// </summary>
+        readonly Dictionary<string, ModRequirement> classRequiredMods = new Dictionary<string, ModRequirement> ();
+
+        /// <summary>
         /// The type declaring each extension member added to this service, by procedure
         /// name, used when reporting a clash.
         /// </summary>
@@ -95,6 +106,7 @@ namespace KRPC.Service.Scanner
             Procedures = new Dictionary<string, ProcedureSignature> ();
             Exceptions = new Dictionary<string, ExceptionSignature> ();
             gameScene = TypeUtils.GetServiceGameScene (type);
+            requiredMod = TypeUtils.GetRequiredMod (type, null);
             string deprecatedReason;
             Deprecated = TypeUtils.GetDeprecated (type, out deprecatedReason);
             DeprecatedReason = deprecatedReason;
@@ -142,7 +154,8 @@ namespace KRPC.Service.Scanner
                 new ProcedureHandler (method, TypeUtils.GetNullable (method), TypeUtils.GetNullablePaths (method)),
                 TypeUtils.GetProcedureGameScene(method, gameScene),
                 deprecated, deprecatedReason,
-                TypeUtils.GetProcedureInternal (method)));
+                TypeUtils.GetProcedureInternal (method),
+                TypeUtils.GetRequiredMod (method, requiredMod)));
         }
 
         /// <summary>
@@ -178,7 +191,19 @@ namespace KRPC.Service.Scanner
             AddProcedure (new ProcedureSignature (
                 Name, method.Name, TypeUtils.GetPropertyId (property, isSetter), property.GetDocumentation (), handler,
                 TypeUtils.GetPropertyGameScene(property, gameScene),
-                deprecated, deprecatedReason));
+                deprecated, deprecatedReason,
+                requiredMod: GetPropertyRequiredMod (property)));
+        }
+
+        /// <summary>
+        /// The mod integrations a property of the service requires. The Available property
+        /// reports whether the mod is present, so it is exempt.
+        /// </summary>
+        ModRequirement GetPropertyRequiredMod (PropertyInfo property)
+        {
+            if (property.Name == "Available" && !Reflection.GetAttributes<RequiresModAttribute> (property).Any ())
+                return null;
+            return TypeUtils.GetPropertyRequiredMod (property, requiredMod);
         }
 
         /// <summary>
@@ -194,6 +219,7 @@ namespace KRPC.Service.Scanner
                 throw new ServiceException ("Service " + Name + " contains duplicate classes " + name);
             string deprecatedReason;
             var deprecated = TypeUtils.GetDeprecated (classType, out deprecatedReason);
+            classRequiredMods [name] = TypeUtils.GetRequiredMod (classType, requiredMod);
             Classes [name] = new ClassSignature (Name, name, classType, classType.GetDocumentation (), deprecated, deprecatedReason);
             return name;
         }
@@ -279,13 +305,15 @@ namespace KRPC.Service.Scanner
                 AddProcedure (new ProcedureSignature (
                     Name, cls + '_' + name, id, method.GetDocumentation (), handler,
                     TypeUtils.GetMethodGameScene(classType, method, classGameScene),
-                    deprecated, deprecatedReason));
+                    deprecated, deprecatedReason,
+                    requiredMod: TypeUtils.GetRequiredMod (method, classRequiredMods [cls])));
             } else {
                 var handler = new ClassStaticMethodHandler (method, TypeUtils.GetNullable (method), TypeUtils.GetNullablePaths (method));
                 AddProcedure (new ProcedureSignature (
                     Name, cls + "_static_" + name, id, method.GetDocumentation (), handler,
                     TypeUtils.GetMethodGameScene(classType, method, classGameScene),
-                    deprecated, deprecatedReason));
+                    deprecated, deprecatedReason,
+                    requiredMod: TypeUtils.GetRequiredMod (method, classRequiredMods [cls])));
             }
         }
 
@@ -327,7 +355,8 @@ namespace KRPC.Service.Scanner
                 Name, cls + '_' + method.Name, TypeUtils.GetClassPropertyId (classType, property, isSetter),
                 property.GetDocumentation (), handler,
                 TypeUtils.GetClassPropertyGameScene(classType, property, classGameScene),
-                deprecated, deprecatedReason));
+                deprecated, deprecatedReason,
+                requiredMod: TypeUtils.GetPropertyRequiredMod (property, classRequiredMods [cls])));
         }
 
         /// <summary>
@@ -346,7 +375,7 @@ namespace KRPC.Service.Scanner
                 cls + '_' + method.Name, TypeUtils.GetMethodId (method), method, method.GetDocumentation (),
                 new ClassStaticMethodHandler (method, TypeUtils.GetNullable (method), TypeUtils.GetNullablePaths (method), true),
                 TypeUtils.GetExtensionMethodGameScene (method, classGameScene),
-                deprecated, deprecatedReason);
+                deprecated, deprecatedReason, GetExtensionRequiredMod (cls, method));
         }
 
         /// <summary>
@@ -369,7 +398,17 @@ namespace KRPC.Service.Scanner
                 method, method.GetDocumentation (),
                 new ClassStaticMethodHandler (method, TypeUtils.GetNullable (method), TypeUtils.GetNullablePaths (method), true),
                 TypeUtils.GetExtensionPropertyGameScene (method, classGameScene),
-                deprecated, deprecatedReason);
+                deprecated, deprecatedReason, GetExtensionRequiredMod (cls, method));
+        }
+
+        /// <summary>
+        /// The mod integrations an extension member requires: from the member, then the class
+        /// that declares it, then the class it extends.
+        /// </summary>
+        ModRequirement GetExtensionRequiredMod (string cls, MethodInfo method)
+        {
+            return TypeUtils.GetRequiredMod (
+                method, TypeUtils.GetRequiredMod (method.DeclaringType, classRequiredMods [cls]));
         }
 
         void CheckClassExists (string cls)
@@ -403,13 +442,14 @@ namespace KRPC.Service.Scanner
 
         void AddExtensionProcedure (string procedureName, uint id, MethodInfo method, string documentation,
                                     IProcedureHandler handler, GameScene procedureGameScene,
-                                    bool deprecated, string deprecatedReason)
+                                    bool deprecated, string deprecatedReason, ModRequirement procedureRequiredMod)
         {
             if (Procedures.ContainsKey (procedureName))
                 throw Clash (procedureName, method);
             AddProcedure (new ProcedureSignature (
                 Name, procedureName, id, documentation, handler,
-                procedureGameScene, deprecated, deprecatedReason));
+                procedureGameScene, deprecated, deprecatedReason,
+                requiredMod: procedureRequiredMod));
             extensionMembers [procedureName] = method.DeclaringType;
         }
 

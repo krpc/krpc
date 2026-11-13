@@ -124,7 +124,9 @@ invocation, with no boxing.
    null to detect an optional member.
  * Bind a mod in a subclass of `KRPC.Utils.ModAPI`, one per integration. Its `Bind` sets static
    fields through a `ModBinder`, whose `Type` gives a `MemberBinder` per type. The server runs
-   every `Bind` as the game starts. RPCs check `ModAPI.Get<T> ().CheckAvailable ()`.
+   every `Bind` as the game starts. `[RequiresMod (typeof (T))]` on a service, class or member
+   fails its calls while the integration is not available, or its `NotReady` gives a reason. A
+   service's `Available` is exempt.
  * A missing type or member logs a warning and binds a delegate that throws
    `ModMemberMissingException`, so a mod update fails only the RPCs that use the member. `Require`
    makes a missing type or member fail the load, and an exception from `Bind` does the same.

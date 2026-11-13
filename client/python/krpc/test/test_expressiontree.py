@@ -8,7 +8,7 @@ from krpc.test.servertestcase import ServerTestCase
 REMOTE_PROPERTY_COMPARISON = """\
 Equal<System.Boolean> System.String.op_Equality
   Block<System.String> (returnValue#0: System.String)
-    Call<System.Void> static KRPC.Service.Services.CheckExpressionGameScene
+    Call<System.Void> static KRPC.Service.Services.CheckExpressionAvailable
       Constant<KRPC.Service.Scanner.ProcedureSignature> TestService.get_StringProperty
     Assign<System.String>
       Parameter<System.String> returnValue#0
@@ -24,7 +24,7 @@ TRUE_DIVISION = """\
 Divide<System.Double>
   Convert<System.Double>
     Block<System.Int32>
-      Call<System.Void> static KRPC.Service.Services.CheckExpressionGameScene
+      Call<System.Void> static KRPC.Service.Services.CheckExpressionAvailable
         Constant<KRPC.Service.Scanner.ProcedureSignature> TestService.TestClass_get_IntProperty
       Call<System.Int32> TestServer.TestService.TestClass.get_IntProperty
         Constant<TestServer.TestService.TestClass> <TestServer.TestService.TestClass>
@@ -34,12 +34,12 @@ Divide<System.Double>
 
 MATH_FUNCTION = """\
 Block<System.Double>
-  Call<System.Void> static KRPC.Service.Services.CheckExpressionGameScene
+  Call<System.Void> static KRPC.Service.Services.CheckExpressionAvailable
     Constant<KRPC.Service.Scanner.ProcedureSignature> StdLib.Sqrt
   Call<System.Double> static KRPC.Service.StdLib.StdLib.Sqrt
     Convert<System.Double>
       Block<System.Int32>
-        Call<System.Void> static KRPC.Service.Services.CheckExpressionGameScene
+        Call<System.Void> static KRPC.Service.Services.CheckExpressionAvailable
           Constant<KRPC.Service.Scanner.ProcedureSignature> TestService.TestClass_get_IntProperty
         Call<System.Int32> TestServer.TestService.TestClass.get_IntProperty
           Constant<TestServer.TestService.TestClass> <TestServer.TestService.TestClass>
@@ -47,7 +47,7 @@ Block<System.Double>
 
 PRINT = """\
 Block<System.Void>
-  Call<System.Void> static KRPC.Service.Services.CheckExpressionGameScene
+  Call<System.Void> static KRPC.Service.Services.CheckExpressionAvailable
     Constant<KRPC.Service.Scanner.ProcedureSignature> StdLib.Print
   Call<System.Void> static KRPC.Service.StdLib.StdLib.Print
     Call<System.String> static KRPC.Service.Services.CheckExpressionArgument
@@ -59,7 +59,7 @@ Block<System.Void>
           Call<System.String> static KRPC.Service.KRPC.Expression.ConvertToStringHelper
             Convert<System.Object>
               Block<System.Int32>
-                Call<System.Void> static KRPC.Service.Services.CheckExpressionGameScene
+                Call<System.Void> static KRPC.Service.Services.CheckExpressionAvailable
                   Constant<KRPC.Service.Scanner.ProcedureSignature> TestService.TestClass_get_IntProperty
                 Call<System.Int32> TestServer.TestService.TestClass.get_IntProperty
                   Constant<TestServer.TestService.TestClass> <TestServer.TestService.TestClass>
@@ -78,7 +78,7 @@ Block<System.Collections.Generic.IList<System.Int32>> (range#0: System.Collectio
     Parameter<System.Int64> end#2
     Convert<System.Int64>
       Block<System.Int32>
-        Call<System.Void> static KRPC.Service.Services.CheckExpressionGameScene
+        Call<System.Void> static KRPC.Service.Services.CheckExpressionAvailable
           Constant<KRPC.Service.Scanner.ProcedureSignature> TestService.TestClass_get_IntProperty
         Call<System.Int32> TestServer.TestService.TestClass.get_IntProperty
           Constant<TestServer.TestService.TestClass> <TestServer.TestService.TestClass>
@@ -142,7 +142,7 @@ Invoke<System.Int32>
         Conditional<System.Void>
           LessThan<System.Boolean>
             Block<System.Int32>
-              Call<System.Void> static KRPC.Service.Services.CheckExpressionGameScene
+              Call<System.Void> static KRPC.Service.Services.CheckExpressionAvailable
                 Constant<KRPC.Service.Scanner.ProcedureSignature> TestService.TestClass_get_IntProperty
               Call<System.Int32> TestServer.TestService.TestClass.get_IntProperty
                 Constant<TestServer.TestService.TestClass> <TestServer.TestService.TestClass>
@@ -152,7 +152,7 @@ Invoke<System.Int32>
               Constant<System.Int32> 0
           Default<System.Void>
         Block<System.Int32>
-          Call<System.Void> static KRPC.Service.Services.CheckExpressionGameScene
+          Call<System.Void> static KRPC.Service.Services.CheckExpressionAvailable
             Constant<KRPC.Service.Scanner.ProcedureSignature> TestService.TestClass_get_IntProperty
           Call<System.Int32> TestServer.TestService.TestClass.get_IntProperty
             Constant<TestServer.TestService.TestClass> <TestServer.TestService.TestClass>
@@ -160,7 +160,7 @@ Invoke<System.Int32>
 
 STATIC_METHOD = """\
 Block<System.String> (returnValue#0: System.String)
-  Call<System.Void> static KRPC.Service.Services.CheckExpressionGameScene
+  Call<System.Void> static KRPC.Service.Services.CheckExpressionAvailable
     Constant<KRPC.Service.Scanner.ProcedureSignature> TestService.TestClass_static_StaticMethod
   Assign<System.String>
     Parameter<System.String> returnValue#0
@@ -180,7 +180,7 @@ Lambda<System.Func<System.Int32, System.Double, System.Double>> (limit#0, scale#
       Conditional<System.Void>
         GreaterThan<System.Boolean>
           Block<System.Int32>
-            Call<System.Void> static KRPC.Service.Services.CheckExpressionGameScene
+            Call<System.Void> static KRPC.Service.Services.CheckExpressionAvailable
               Constant<KRPC.Service.Scanner.ProcedureSignature> TestService.TestClass_get_IntProperty
             Call<System.Int32> TestServer.TestService.TestClass.get_IntProperty
               Constant<TestServer.TestService.TestClass> <TestServer.TestService.TestClass>
@@ -195,7 +195,7 @@ Lambda<System.Func<System.Int32, System.Double, System.Double>> (limit#0, scale#
       Multiply<System.Double>
         Convert<System.Double>
           Block<System.Int32>
-            Call<System.Void> static KRPC.Service.Services.CheckExpressionGameScene
+            Call<System.Void> static KRPC.Service.Services.CheckExpressionAvailable
               Constant<KRPC.Service.Scanner.ProcedureSignature> TestService.TestClass_get_IntProperty
             Call<System.Int32> TestServer.TestService.TestClass.get_IntProperty
               Constant<TestServer.TestService.TestClass> <TestServer.TestService.TestClass>
@@ -211,7 +211,7 @@ Invoke<System.Nullable<System.Int32>>
           Conditional<System.Void>
             LessThan<System.Boolean>
               Block<System.Int32>
-                Call<System.Void> static KRPC.Service.Services.CheckExpressionGameScene
+                Call<System.Void> static KRPC.Service.Services.CheckExpressionAvailable
                   Constant<KRPC.Service.Scanner.ProcedureSignature> TestService.TestClass_get_IntProperty
                 Call<System.Int32> TestServer.TestService.TestClass.get_IntProperty
                   Constant<TestServer.TestService.TestClass> <TestServer.TestService.TestClass>
@@ -221,7 +221,7 @@ Invoke<System.Nullable<System.Int32>>
                 Constant<System.Nullable<System.Int32>> null
             Default<System.Void>
           Block<System.Int32>
-            Call<System.Void> static KRPC.Service.Services.CheckExpressionGameScene
+            Call<System.Void> static KRPC.Service.Services.CheckExpressionAvailable
               Constant<KRPC.Service.Scanner.ProcedureSignature> TestService.TestClass_get_IntProperty
             Call<System.Int32> TestServer.TestService.TestClass.get_IntProperty
               Constant<TestServer.TestService.TestClass> <TestServer.TestService.TestClass>
@@ -277,7 +277,7 @@ Invoke<System.Void>
     Block<System.Void>
       Block<System.Void>
         Block<System.Void>
-          Call<System.Void> static KRPC.Service.Services.CheckExpressionGameScene
+          Call<System.Void> static KRPC.Service.Services.CheckExpressionAvailable
             Constant<KRPC.Service.Scanner.ProcedureSignature> TestService.set_StringProperty
           Call<System.Void> static TestServer.TestService.set_StringProperty
             Constant<System.String> "set-by-golden"
@@ -290,7 +290,7 @@ Block<System.Boolean> ("chained comparison"#0: System.Int32)
   Assign<System.Int32>
     Parameter<System.Int32> "chained comparison"#0
     Block<System.Int32>
-      Call<System.Void> static KRPC.Service.Services.CheckExpressionGameScene
+      Call<System.Void> static KRPC.Service.Services.CheckExpressionAvailable
         Constant<KRPC.Service.Scanner.ProcedureSignature> TestService.TestClass_get_IntProperty
       Call<System.Int32> TestServer.TestService.TestClass.get_IntProperty
         Constant<TestServer.TestService.TestClass> <TestServer.TestService.TestClass>
@@ -315,7 +315,7 @@ Convert<System.Collections.Generic.IList<System.String>>
       Lambda<System.Func<System.Double, System.String>> (x#0)
         Label<System.String> label#0
           Block<System.String> (returnValue#1: System.String)
-            Call<System.Void> static KRPC.Service.Services.CheckExpressionGameScene
+            Call<System.Void> static KRPC.Service.Services.CheckExpressionAvailable
               Constant<KRPC.Service.Scanner.ProcedureSignature> TestService.TestClass_FloatToString
             Assign<System.String>
               Parameter<System.String> returnValue#1
@@ -332,7 +332,7 @@ Convert<System.Collections.Generic.IList<System.String>>
 STRUCT_CONSTRUCTION_AND_FIELD = """\
 MemberAccess<System.String> TestServer.TestService.TestStruct.StringField
   Block<TestServer.TestService.TestStruct>
-    Call<System.Void> static KRPC.Service.Services.CheckExpressionGameScene
+    Call<System.Void> static KRPC.Service.Services.CheckExpressionAvailable
       Constant<KRPC.Service.Scanner.ProcedureSignature> TestService.StructEcho
     Block<TestServer.TestService.TestStruct> (param#0: TestServer.TestService.TestStruct)
       Assign<TestServer.TestService.TestStruct>
