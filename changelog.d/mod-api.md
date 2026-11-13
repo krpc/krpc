@@ -10,6 +10,7 @@
 - Load a mod's API when some of its methods are missing, and fail only the calls that use them (#1341)
 - Disable only the integration of a mod that fails to load, and give the reason in the errors of
   its RPCs (#1341)
+- Load each supported mod whatever its version (#1341)
 
 ## service/SpaceCenter
 
