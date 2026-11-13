@@ -87,10 +87,7 @@ namespace KRPC.MechJeb.Maneuver
         /// The MechJeb operation, which MechJeb shares between vessels.
         /// </summary>
         internal object Instance {
-            get {
-                MechJeb.CheckAPI ();
-                return ManeuverPlanner.Operation (operationName);
-            }
+            get { return ManeuverPlanner.Operation (operationName); }
         }
 
         /// <summary>

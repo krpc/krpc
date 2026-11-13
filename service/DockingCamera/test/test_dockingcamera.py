@@ -88,5 +88,20 @@ class TestDockingCamera(TestCase):
                 self.set_enabled(enabled, False)
 
 
+class TestDockingCameraNotInstalled(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
+
+    def test_not_installed(self):
+        conn = self.connect()
+        vessel = conn.space_center.active_vessel
+        assert vessel is not None
+        with self.assertRaisesRegex(
+            RuntimeError, "DockingCamera is not available: not installed"
+        ):
+            conn.docking_camera.camera(vessel.parts.root)
+
+
 if __name__ == "__main__":
     unittest.main()

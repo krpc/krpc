@@ -11,13 +11,9 @@ namespace KRPC.LiDAR
     /// </summary>
     [Obsolete ("Use <see cref=\"M:KRPC.SpaceCenter.Services.SpaceCenter.RaycastDistance\"/> instead.")]
     [KRPCService(Id = ServiceInfo.Id, GameScene = GameScene.All)]
+    [RequiresMod(typeof(API))]
     public static class LIDAR
     {
-        static void CheckAPI()
-        {
-            ModAPI.Get<API>().CheckAvailable();
-        }
-
         /// <summary>
         /// Whether the LiDAR mod is installed.
         /// </summary>
@@ -33,7 +29,6 @@ namespace KRPC.LiDAR
         [KRPCProcedure]
         public static Laser Laser(SpaceCenter.Services.Parts.Part part)
         {
-            CheckAPI();
             return new Laser(part);
         }
     }

@@ -575,5 +575,14 @@ class TestMechJebEllipticalOrbit(MechJebTestCase):
             self.sc.clear_target()
 
 
+class TestMechJebNotInstalled(TestCase):
+    def test_not_installed(self):
+        conn = self.connect()
+        with self.assertRaisesRegex(
+            RuntimeError, "MechJeb is not available: not installed"
+        ):
+            _ = conn.mech_jeb.smart_ass
+
+
 if __name__ == "__main__":
     unittest.main()

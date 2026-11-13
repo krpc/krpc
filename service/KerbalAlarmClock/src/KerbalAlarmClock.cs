@@ -12,13 +12,9 @@ namespace KRPC.KerbalAlarmClock
     /// Provides functionality to interact with Kerbal Alarm Clock.
     /// </summary>
     [KRPCService (Id = ServiceInfo.Id, GameScene = GameScene.All & ~GameScene.MissionBuilder)]
+    [RequiresMod (typeof (API))]
     public static class KerbalAlarmClock
     {
-        static void CheckAPI ()
-        {
-            ModAPI.Get<API> ().CheckAvailable ();
-        }
-
         /// <summary>
         /// Whether Kerbal Alarm Clock is available.
         /// </summary>
@@ -32,10 +28,7 @@ namespace KRPC.KerbalAlarmClock
         /// </summary>
         [KRPCProperty]
         public static IList<Alarm> Alarms {
-            get {
-                CheckAPI ();
-                return API.Alarms.Cast<object> ().Select (x => new Alarm (x)).ToList ();
-            }
+            get { return API.Alarms.Cast<object> ().Select (x => new Alarm (x)).ToList (); }
         }
 
         /// <summary>
@@ -47,7 +40,6 @@ namespace KRPC.KerbalAlarmClock
         [KRPCProcedure (Nullable = true)]
         public static Alarm AlarmWithName (string name)
         {
-            CheckAPI ();
             var alarm = API.Alarms.Cast<object> ().FirstOrDefault (x => API.Alarm.Name.Get (x) == name);
             return alarm != null ? new Alarm (alarm) : null;
         }
@@ -59,7 +51,6 @@ namespace KRPC.KerbalAlarmClock
         [KRPCProcedure]
         public static IList<Alarm> AlarmsWithType (AlarmType type)
         {
-            CheckAPI ();
             return API.Alarms.Cast<object> ()
                 .Where (x => API.Alarm.Type (x) == type.FromAlarmType ())
                 .Select (x => new Alarm (x))
@@ -75,7 +66,6 @@ namespace KRPC.KerbalAlarmClock
         [KRPCProcedure]
         public static Alarm CreateAlarm (AlarmType type, string name, double ut)
         {
-            CheckAPI ();
             var id = API.CreateAlarm (type.FromAlarmType (), name, ut);
             return new Alarm (API.FindAlarm (id));
         }

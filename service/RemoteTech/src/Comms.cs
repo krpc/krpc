@@ -17,7 +17,6 @@ namespace KRPC.RemoteTech
 
         internal Comms (SpaceCenter.Services.Vessel innerVessel)
         {
-            ModAPI.Get<API> ().CheckAvailable ();
             if (ReferenceEquals (innerVessel, null))
                 throw new ArgumentNullException (nameof (innerVessel));
             vessel = innerVessel;

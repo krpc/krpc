@@ -12,13 +12,9 @@ namespace KRPC.RemoteTech
     /// Provides functionality to interact with RemoteTech.
     /// </summary>
     [KRPCService (Id = ServiceInfo.Id, GameScene = GameScene.All)]
+    [RequiresMod (typeof (API))]
     public static class RemoteTech
     {
-        static void CheckAPI ()
-        {
-            ModAPI.Get<API> ().CheckAvailable ();
-        }
-
         /// <summary>
         /// Whether RemoteTech is installed.
         /// </summary>
@@ -33,7 +29,6 @@ namespace KRPC.RemoteTech
         [KRPCProcedure]
         public static Comms Comms (SpaceCenter.Services.Vessel vessel)
         {
-            CheckAPI ();
             return new Comms (vessel);
         }
 
@@ -43,7 +38,6 @@ namespace KRPC.RemoteTech
         [KRPCProcedure]
         public static Antenna Antenna (SpaceCenter.Services.Parts.Part part)
         {
-            CheckAPI ();
             return new Antenna (part);
         }
 
@@ -52,10 +46,7 @@ namespace KRPC.RemoteTech
         /// </summary>
         [KRPCProperty]
         public static IList<string> GroundStations {
-            get {
-                CheckAPI ();
-                return API.GetGroundStations ().ToList ();
-            }
+            get { return API.GetGroundStations ().ToList (); }
         }
 
         internal static IDictionary<Guid, CelestialBody> CelestialBodyIds {

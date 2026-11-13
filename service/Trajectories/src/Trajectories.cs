@@ -18,6 +18,7 @@ namespace KRPC.Trajectories
     /// Trajectories predicts the trajectory of the active vessel only.
     /// </remarks>
     [KRPCService(Id = ServiceInfo.Id, GameScene = GameScene.Flight)]
+    [RequiresMod(typeof(API.TrajectoriesAPI))]
     public static class Trajectories
     {
         private static DescentProfile descentProfile;

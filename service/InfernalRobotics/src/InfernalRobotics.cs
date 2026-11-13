@@ -11,13 +11,9 @@ namespace KRPC.InfernalRobotics
     /// Provides functionality to interact with Infernal Robotics Next.
     /// </summary>
     [KRPCService (Id = ServiceInfo.Id, GameScene = GameScene.Flight)]
+    [RequiresMod (typeof (API))]
     public static class InfernalRobotics
     {
-        static void CheckAvailable ()
-        {
-            ModAPI.Get<API> ().CheckAvailable ();
-        }
-
         /// <summary>
         /// Whether Infernal Robotics is installed.
         /// </summary>
@@ -37,7 +33,6 @@ namespace KRPC.InfernalRobotics
         [KRPCProcedure]
         public static IList<ServoGroup> ServoGroups (SpaceCenter.Services.Vessel vessel)
         {
-            CheckAvailable ();
             return API.ServoGroupsForVessel (vessel.InternalVessel)
                 .Select (x => new ServoGroup (vessel, x.Name)).ToList ();
         }
@@ -51,7 +46,6 @@ namespace KRPC.InfernalRobotics
         [KRPCProcedure (Nullable = true)]
         public static ServoGroup ServoGroupWithName (SpaceCenter.Services.Vessel vessel, string name)
         {
-            CheckAvailable ();
             var servoGroup = API.ServoGroupsForVessel (vessel.InternalVessel).FirstOrDefault (x => x.Name == name);
             return servoGroup != null ? new ServoGroup (vessel, servoGroup.Name) : null;
         }
@@ -65,7 +59,6 @@ namespace KRPC.InfernalRobotics
         [KRPCProcedure (Nullable = true)]
         public static Servo ServoWithName (SpaceCenter.Services.Vessel vessel, string name)
         {
-            CheckAvailable ();
             var servo = API.ServosForVessel (vessel.InternalVessel).FirstOrDefault (x => x.Name == name);
             return servo != null ? new Servo (servo) : null;
         }

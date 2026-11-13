@@ -14,6 +14,7 @@ namespace KRPC.MechJeb
     /// vessel changes.
     /// </remarks>
     [KRPCService (Id = ServiceInfo.Id, GameScene = GameScene.Flight)]
+    [RequiresMod (typeof (Bindings))]
     public static class MechJeb
     {
         static Func<global::Vessel, object> getMasterMechJeb;
@@ -35,10 +36,6 @@ namespace KRPC.MechJeb
         static readonly DeployableController solarPanelController = new DeployableController ("MechJebModuleSolarPanelController");
         static readonly TargetController targetController = new TargetController ();
         static readonly ThrustController thrustController = new ThrustController ();
-
-        static bool Loaded {
-            get { return ModAPI.Get<Bindings> ().IsAvailable; }
-        }
 
         internal static void Load ()
         {
@@ -76,13 +73,8 @@ namespace KRPC.MechJeb
         static object MasterMechJeb {
             get {
                 var vessel = FlightGlobals.ActiveVessel;
-                return Loaded && vessel != null ? getMasterMechJeb (vessel) : null;
+                return vessel != null ? getMasterMechJeb (vessel) : null;
             }
-        }
-
-        internal static void CheckAPI ()
-        {
-            ModAPI.Get<Bindings> ().CheckAvailable ();
         }
 
         /// <summary>
@@ -90,7 +82,6 @@ namespace KRPC.MechJeb
         /// </summary>
         internal static object Core {
             get {
-                CheckAPI ();
                 var core = MasterMechJeb;
                 if (core == null)
                     throw new InvalidOperationException ("The active vessel has no MechJeb");
@@ -109,22 +100,16 @@ namespace KRPC.MechJeb
             return module;
         }
 
-        static T Checked<T> (T module)
-        {
-            CheckAPI ();
-            return module;
-        }
-
         /// <summary>
         /// Whether MechJeb is installed.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.All)]
         public static bool Available {
-            get { return Loaded; }
+            get { return ModAPI.Get<Bindings> ().IsAvailable; }
         }
 
         /// <summary>
-        /// Whether MechJeb is installed and the active vessel has MechJeb.
+        /// Whether the active vessel has MechJeb.
         /// </summary>
         [KRPCProperty]
         public static bool Ready {
@@ -136,7 +121,7 @@ namespace KRPC.MechJeb
         /// </summary>
         [KRPCProperty]
         public static AirplaneAutopilot AirplaneAutopilot {
-            get { return Checked (airplaneAutopilot); }
+            get { return airplaneAutopilot; }
         }
 
         /// <summary>
@@ -144,7 +129,7 @@ namespace KRPC.MechJeb
         /// </summary>
         [KRPCProperty]
         public static AscentAutopilot AscentAutopilot {
-            get { return Checked (ascentAutopilot); }
+            get { return ascentAutopilot; }
         }
 
         /// <summary>
@@ -152,7 +137,7 @@ namespace KRPC.MechJeb
         /// </summary>
         [KRPCProperty]
         public static DockingAutopilot DockingAutopilot {
-            get { return Checked (dockingAutopilot); }
+            get { return dockingAutopilot; }
         }
 
         /// <summary>
@@ -160,7 +145,7 @@ namespace KRPC.MechJeb
         /// </summary>
         [KRPCProperty]
         public static LandingAutopilot LandingAutopilot {
-            get { return Checked (landingAutopilot); }
+            get { return landingAutopilot; }
         }
 
         /// <summary>
@@ -168,7 +153,7 @@ namespace KRPC.MechJeb
         /// </summary>
         [KRPCProperty]
         public static RendezvousAutopilot RendezvousAutopilot {
-            get { return Checked (rendezvousAutopilot); }
+            get { return rendezvousAutopilot; }
         }
 
         /// <summary>
@@ -176,7 +161,7 @@ namespace KRPC.MechJeb
         /// </summary>
         [KRPCProperty]
         public static ManeuverPlanner ManeuverPlanner {
-            get { return Checked (maneuverPlanner); }
+            get { return maneuverPlanner; }
         }
 
         /// <summary>
@@ -184,7 +169,7 @@ namespace KRPC.MechJeb
         /// </summary>
         [KRPCProperty]
         public static SmartASS SmartASS {
-            get { return Checked (smartASS); }
+            get { return smartASS; }
         }
 
         /// <summary>
@@ -192,7 +177,7 @@ namespace KRPC.MechJeb
         /// </summary>
         [KRPCProperty]
         public static SmartRCS SmartRCS {
-            get { return Checked (smartRCS); }
+            get { return smartRCS; }
         }
 
         /// <summary>
@@ -200,7 +185,7 @@ namespace KRPC.MechJeb
         /// </summary>
         [KRPCProperty]
         public static Translatron Translatron {
-            get { return Checked (translatron); }
+            get { return translatron; }
         }
 
         /// <summary>
@@ -208,7 +193,7 @@ namespace KRPC.MechJeb
         /// </summary>
         [KRPCProperty]
         public static DeployableController AntennaController {
-            get { return Checked (antennaController); }
+            get { return antennaController; }
         }
 
         /// <summary>
@@ -216,7 +201,7 @@ namespace KRPC.MechJeb
         /// </summary>
         [KRPCProperty]
         public static NodeExecutor NodeExecutor {
-            get { return Checked (nodeExecutor); }
+            get { return nodeExecutor; }
         }
 
         /// <summary>
@@ -224,7 +209,7 @@ namespace KRPC.MechJeb
         /// </summary>
         [KRPCProperty]
         public static RCSController RCSController {
-            get { return Checked (rcsController); }
+            get { return rcsController; }
         }
 
         /// <summary>
@@ -232,7 +217,7 @@ namespace KRPC.MechJeb
         /// </summary>
         [KRPCProperty]
         public static StagingController StagingController {
-            get { return Checked (stagingController); }
+            get { return stagingController; }
         }
 
         /// <summary>
@@ -240,7 +225,7 @@ namespace KRPC.MechJeb
         /// </summary>
         [KRPCProperty]
         public static DeployableController SolarPanelController {
-            get { return Checked (solarPanelController); }
+            get { return solarPanelController; }
         }
 
         /// <summary>
@@ -248,7 +233,7 @@ namespace KRPC.MechJeb
         /// </summary>
         [KRPCProperty]
         public static TargetController TargetController {
-            get { return Checked (targetController); }
+            get { return targetController; }
         }
 
         /// <summary>
@@ -256,7 +241,7 @@ namespace KRPC.MechJeb
         /// </summary>
         [KRPCProperty]
         public static ThrustController ThrustController {
-            get { return Checked (thrustController); }
+            get { return thrustController; }
         }
     }
 
