@@ -1,0 +1,190 @@
+JavaScript Client Design
+========================
+
+The internal design of the JavaScript client. This page builds on the :doc:`shared client design
+</client-design>` and the :doc:`client specification </client-spec>`. Usage is in
+the :doc:`JavaScript guide </js>`. Paths are relative to ``client/js/``.
+
+Services and Declarations
+-------------------------
+
+Every service is built at connect from ``GetServices``. The client then has the members of the
+server it connects to.
+
+* A connect registers the types of every service, then the members of every class, then the
+  services. A member of a class can belong to another service.
+* Each member is a property set with ``defineProperty``. A member naming a type the client does not
+  know is left out. An internal procedure is left out too.
+* A kRPC property is a ``getX`` and a ``setX`` method. A JavaScript setter cannot return a
+  ``Promise``, so ``vessel.name = "x"`` would drop the server's error.
+* A procedure returning a stream or an event exists, so the member lists match the server, and
+  rejects with a ``TypeError`` when called.
+* ``clientgen`` and ``js.tmpl`` in ``krpctools`` generate a TypeScript module per service, in
+  ``src/services/``. It holds declarations only, and compiles to an empty module.
+* ``Connection`` merges with the interface ``Connection extends Services``, which holds the
+  services a release ships. A mod's module adds its service to ``Services`` with module
+  augmentation. ``DynamicConnection`` types any other service as ``any``.
+* ``RemoteObject``, ``RemoteEnum`` and ``RemoteStruct`` take the type's name as a type parameter. A
+  property keyed by a symbol that exists in types only holds it, so two classes with the same
+  members do not mix.
+* A procedure with default arguments has two overloads: the positional one, and the required
+  arguments followed by an options object.
+
+The library's ``tsconfig.json`` leaves out the Node.js types. A Node.js built-in used by mistake
+then fails the type check, as it would in a browser.
+
+Values
+------
+
+JavaScript has no operator overloading, so ``===`` is identity. The client interns the values a
+program compares:
+
+* ``ObjectCache`` holds one object per id per connection, as a ``WeakRef``. A
+  ``FinalizationRegistry`` removes the entry of a collected object. An object then works as a
+  ``Map`` key or a ``Set`` element.
+* An ``Enumeration`` holds one ``RemoteEnum`` per number. A flags enumeration also holds each
+  combination it has made, so combinations compare with ``===`` too.
+* A structure value is a new object for each result. ``equals`` compares structures field by field.
+
+Structures are classes, so a plain object is never a value. A trailing plain object, with the
+prototype ``Object.prototype`` or ``null``, then holds arguments by name.
+
+``codec.ts`` encodes values with the ``BinaryReader`` and ``BinaryWriter`` of
+``@bufbuild/protobuf``. Its 64-bit integers are ``bigint``, so a ``uint64`` above 2^53 round
+trips.
+
+Errors
+------
+
+Each connection builds a class for each exception a service lists. One the server maps to a .NET
+exception extends the matching JavaScript error, such as ``TypeError``, and the others extend
+``ServerError``.
+
+A class that extends a JavaScript error also has the ``service``, ``exception``, ``description``
+and ``stackTrace`` of a ``ServerError``. Its declaration narrows ``instanceof`` to the JavaScript
+error and ``ServerErrorDetails``.
+
+Deprecated Members
+------------------
+
+``inheritDeprecation`` applies the shared rule to the service definitions at connect. The client
+warns at the use of a member:
+
+* A procedure, method or static method warns when it is called.
+* A deprecated service, class, enumeration, structure, exception or enumeration value is a getter,
+  which warns when it is read.
+* A deprecated structure field is a getter on the value. The codec and ``equals`` read fields
+  through ``RemoteStruct.fieldOf``, so a value from the server, or one passed to a call, gives no
+  warning.
+
+``Deprecations`` records the warnings a connection has given, so a loop does not repeat one. It
+calls ``process.emitWarning`` when the runtime has it, and ``console.warn`` otherwise. It finds
+``process`` through ``globalThis``, as the library has no Node.js types.
+
+The generated declarations mark each deprecated member with ``@deprecated``, for editors.
+
+Ownership
+---------
+
+``connect`` returns a ``Connection``. Services and objects hold the connection's state, and none of
+them owns it:
+
+.. code-block:: js
+
+   const conn = await connect();
+   const vessel = await conn.spaceCenter.getActiveVessel();
+   await conn.close();
+   await vessel.getName();  // Rejects with a ConnectionError
+
+References
+^^^^^^^^^^
+
+The ``Connection`` holds its ``Session``, and a ``WeakMap`` in ``connection.ts`` maps it to its
+``Context``. The context holds the session, the ``Types`` and the service definitions. The session
+holds the ``WebSocket``.
+
+The objects the program keeps also hold the context. Each connection builds its own classes, whose
+methods are closures over the context. A service holds those closures too. Enumeration and
+structure values hold no connection.
+
+The open socket holds the session through its event listeners. An unclosed connection is therefore
+never collected.
+
+Lifetime
+^^^^^^^^
+
+* The connection closes on ``close()``, when the server closes the socket or sends a
+  ``disconnect``, or when a message breaks the protocol.
+* ``close()`` sends a ``disconnect`` and a close frame, then waits up to a second for the server to
+  close the socket. A second ``close()`` sends nothing.
+* After a close or a failure, ``Session.ended`` holds the ``ConnectionError``. Each call waiting for
+  a response rejects with it, and so does each later call.
+* ``Connection`` and objects have no finalizer. An object is an id and its connection's classes, and
+  sends no release to the server.
+
+Event Loop
+----------
+
+The client runs on one thread, like the :doc:`single-threaded clients </client-design>`, but no call
+reads the socket. The socket's ``message`` event reads each message, so several calls can wait at
+once:
+
+* A call adds its pending slot, keyed by request id, then sends its request. ``WebSocket.send``
+  queues the whole message, so requests never interleave.
+* The message handler holds no ``await``. No other code runs while it handles a message, and it
+  settles the ``Promise`` of the call the response is for.
+* A response with an unknown id is a protocol error, as no call can abandon its slot. JavaScript
+  has no way to interrupt a call.
+* The handler skips a ``stream_update`` and any message case it does not know. A
+  ``connection_request``, ``connection_response`` or ``request`` is a protocol error.
+* A WebSocket message arrives whole, so a message never stalls and the client has no stall timeout.
+  ``setTimeout`` bounds the upgrade and the handshake together.
+
+Transports
+----------
+
+WebSockets is the only transport, through the global ``WebSocket``, which Node.js 22 and browsers
+both have. Its ``binaryType`` is ``arraybuffer``, and a text message ends the connection as
+malformed.
+
+Mapping the Spec to JavaScript
+------------------------------
+
+.. list-table::
+   :header-rows: 1
+
+   * - Spec
+     - JavaScript
+   * - Calls
+     - A ``Promise`` per call, resolved with the result
+   * - Closing a connection
+     - ``Connection.close()``, which returns a ``Promise``
+   * - Remote error, and the connection and encoding errors
+     - ``RemoteError``, and ``ConnectionError`` and ``EncodingError`` extending it
+   * - Server error with no mapped type
+     - ``ServerError``, the base of each exception class a service lists. For an exception with no
+       class, ``Service.Name:`` comes before the description
+   * - Server exception with a mapped type
+     - A class on the service, extending only ``TypeError`` or ``RangeError``
+   * - Argument error
+     - ``TypeError``, or ``RangeError`` for a number outside the range of its type
+   * - Null object, nullable value
+     - ``null``. ``undefined`` at an argument takes its default
+   * - Member names
+     - lowerCamel, as in ``httpServer`` for ``HTTPServer``. A property is ``get`` or ``set``
+       and the name, as in ``getRCSThrust``
+   * - Named arguments
+     - A plain object after the positional arguments
+   * - 64-bit integers
+     - ``bigint`` results. Arguments take a ``number`` or a ``bigint``
+   * - List, tuple, set, dictionary
+     - ``Array``, ``Array``, ``Set``, ``Map``
+   * - Timeouts
+     - Milliseconds, with ``Infinity`` for no timeout
+   * - Static method
+     - A function on the class, reached through the service of a connection
+   * - Interrupting a call, hashes
+     - Unsupported, as JavaScript has neither
+   * - Flags enumeration
+     - A ``RemoteFlags``, combined with ``union``, ``intersection``, ``difference`` and
+       ``contains``, as JavaScript has no operator overloading
