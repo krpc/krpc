@@ -157,7 +157,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         Vector3d WorldAerodynamicForce {
             get {
-                if (FAR.IsAvailable)
+                if (FAR.Installed)
                     return (Vector3d)FAR.VesselAerodynamicForce (InternalVessel) * 1000d;
                 return WorldPartsLift + WorldPartsDrag;
             }
@@ -180,7 +180,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         Vector3d WorldAerodynamicTorque {
             get {
-                if (FAR.IsAvailable)
+                if (FAR.Installed)
                     return (Vector3d)FAR.VesselAerodynamicTorque (InternalVessel) * 1000d;
                 var com = WorldCoM;
                 Vector3d torque = Vector3d.zero;
@@ -297,8 +297,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         static void CheckFAR ()
         {
-            if (!FAR.IsAvailable)
-                throw new InvalidOperationException ("FAR is not available");
+            ModAPI.Get<FAR> ().CheckAvailable ();
         }
 
         /// <summary>
@@ -317,7 +316,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         static void CheckNoFAR ()
         {
-            if (FAR.IsAvailable)
+            if (ModAPI.Get<FAR> ().IsInstalled)
                 throw new InvalidOperationException ("Not available; FAR is installed");
         }
 
@@ -640,7 +639,7 @@ namespace KRPC.SpaceCenter.Services
         public float DynamicPressure {
             get {
                 var vessel = InternalVessel;
-                if (FAR.IsAvailable)
+                if (FAR.Installed)
                     return (float)FAR.VesselDynPres (vessel) * 1000f;
                 else
                     return (float)(0.5f * vessel.atmDensity * vessel.srf_velocity.sqrMagnitude);
@@ -983,7 +982,7 @@ namespace KRPC.SpaceCenter.Services
             QuaternionD currentWorld = vessel.ReferenceTransform.rotation;
             var delta = desiredWorld * currentWorld.Inverse ();
             Vector3 force;
-            if (!FAR.IsAvailable) {
+            if (!FAR.Installed) {
                 force = StockAerodynamics.SimAeroForce(
                     body.InternalBody, vessel, worldVelocity, worldPosition, delta);
             } else {
@@ -1050,7 +1049,7 @@ namespace KRPC.SpaceCenter.Services
             var delta = desiredWorld * currentWorld.Inverse ();
             Vector3d force;
             Vector3d torque;
-            if (!FAR.IsAvailable) {
+            if (!FAR.Installed) {
                 var wrench = StockAerodynamics.SimAeroWrench(
                     body.InternalBody, vessel, worldVelocity, worldAngularVelocity,
                     worldPosition, delta, ut, true, false);
@@ -1233,7 +1232,7 @@ namespace KRPC.SpaceCenter.Services
         public float Mach {
             get {
                 var vessel = InternalVessel;
-                return (float)(FAR.IsAvailable ? FAR.VesselMachNumber (vessel) : vessel.rootPart.machNumber);
+                return (float)(FAR.Installed ? FAR.VesselMachNumber (vessel) : vessel.rootPart.machNumber);
             }
         }
 
@@ -1280,7 +1279,7 @@ namespace KRPC.SpaceCenter.Services
         public float TerminalVelocity {
             get {
                 var vessel = InternalVessel;
-                if (FAR.IsAvailable) {
+                if (FAR.Installed) {
                     return (float)FAR.VesselTermVelEst (vessel);
                 } else {
                     var mass = vessel.parts.Sum(part => part.WetMass());
@@ -1300,7 +1299,7 @@ namespace KRPC.SpaceCenter.Services
         public float AngleOfAttack {
             get {
                 var vessel = InternalVessel;
-                if (FAR.IsAvailable) {
+                if (FAR.Installed) {
                     return (float)FAR.VesselAoA (vessel);
                 } else {
                     return (float)GeometryExtensions.ToDegrees (Math.Asin (GeometryExtensions.Clamp (Vector3d.Dot (vessel.transform.forward, vessel.srf_velocity.normalized), -1d, 1d)));
@@ -1315,7 +1314,7 @@ namespace KRPC.SpaceCenter.Services
         public float SideslipAngle {
             get {
                 var vessel = InternalVessel;
-                if (FAR.IsAvailable) {
+                if (FAR.Installed) {
                     return (float)FAR.VesselSideslip (vessel);
                 } else {
                     return (float)GeometryExtensions.ToDegrees (Math.Asin (GeometryExtensions.Clamp (Vector3d.Dot (vessel.transform.right, vessel.srf_velocity.normalized), -1d, 1d)));

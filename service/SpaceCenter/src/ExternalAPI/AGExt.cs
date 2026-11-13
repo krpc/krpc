@@ -5,22 +5,29 @@ using KRPC.Utils;
 
 namespace KRPC.SpaceCenter.ExternalAPI
 {
-    static class AGExt
+    sealed class AGExt : ModAPI
     {
         static Func<uint, int, object> groupActions;
         static Func<object, global::Part> actionPart;
         static Func<object, BaseAction> actionAction;
 
-        public static void Load ()
+        public AGExt () : base (ServiceInfo.Mods.AGExt.Name, ServiceInfo.Mods.AGExt.Assembly)
         {
-            var type = APILoader.Load (typeof(AGExt), "AGExt", "ActionGroupsExtended.AGExtExternal");
-            IsAvailable = (type != null);
-            if (IsAvailable) {
-                groupActions = Accessor.Method<Func<uint, int, object>> (type, "AGX2VslGroupActions");
-            }
         }
 
-        public static bool IsAvailable { get; private set; }
+        /// <summary>
+        /// Whether AGExt is installed, so that it replaces the stock action groups. Throws an
+        /// exception if AGExt is installed and not available.
+        /// </summary>
+        public static bool Installed {
+            get { return Get<AGExt> ().CheckInstalled (); }
+        }
+
+        protected override void Bind (ModBinder mod)
+        {
+            mod.Statics (typeof (AGExt), "ActionGroupsExtended.AGExtExternal");
+            groupActions = mod.Type ("ActionGroupsExtended.AGExtExternal").Method<Func<uint, int, object>> ("AGX2VslGroupActions");
+        }
 
         public static Func<uint, int, bool> AGX2VslGroupState { get; internal set; }
 
@@ -48,12 +55,10 @@ namespace KRPC.SpaceCenter.ExternalAPI
                 if (action == null)
                     continue;
                 if (actionPart == null) {
-                    var actionType = action.GetType ();
-                    actionPart = Accessor.Getter<object, global::Part> (actionType, "prt");
-                    actionAction = Accessor.Getter<object, BaseAction> (actionType, "ba");
+                    var actionType = new MemberBinder (ServiceInfo.Mods.AGExt.Name, action.GetType ());
+                    actionPart = actionType.Getter<object, global::Part> ("prt");
+                    actionAction = actionType.Getter<object, BaseAction> ("ba");
                 }
-                if (actionPart == null || actionAction == null)
-                    continue;
                 var part = actionPart (action);
                 var baseAction = actionAction (action);
                 if (part != null && baseAction != null)

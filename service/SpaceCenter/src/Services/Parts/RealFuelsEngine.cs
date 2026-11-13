@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using KRPC.Utils;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
@@ -23,7 +24,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         internal static bool Is (ModuleEngines engine)
         {
-            return ExternalAPI.RealFuels.IsAvailable &&
+            return ModAPI.Get<ExternalAPI.RealFuels> ().CheckInstalled () &&
                 // Nothing in RealFuels derives from ModuleEnginesRF, so an exact type name
                 // match finds every engine it manages.
                 engine.GetType ().Name == "ModuleEnginesRF" &&

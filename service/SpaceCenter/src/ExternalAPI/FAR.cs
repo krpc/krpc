@@ -4,27 +4,29 @@ using UnityEngine;
 
 namespace KRPC.SpaceCenter.ExternalAPI
 {
-    static class FAR
+    sealed class FAR : ModAPI
     {
-        public static void Load ()
+        public FAR () : base (ServiceInfo.Mods.FAR.Name, ServiceInfo.Mods.FAR.Assembly)
         {
-            var type = APILoader.Load( typeof(FAR), "FerramAerospaceResearch", "FerramAerospaceResearch.FARAPI", new Version (0, 15));
-            IsAvailable = (type != null);
-            if (IsAvailable) {
-                calculateVesselAeroForces = Accessor.Method<AeroForces> (type, "CalculateVesselAeroForces");
-                vesselAeroType = type.Assembly.GetType ("FerramAerospaceResearch.FARAeroComponents.FARVesselAero");
-                if (vesselAeroType != null) {
-                    machNumber = Accessor.Getter<Component, double> (vesselAeroType, "MachNumber");
-                    reynoldsNumber = Accessor.Getter<Component, double> (vesselAeroType, "ReynoldsNumber");
-                }
-                if (machNumber == null || reynoldsNumber == null)
-                    KRPC.Utils.Logger.WriteLine (
-                        "FAR vessel Mach and Reynolds numbers not found; they are unavailable",
-                        KRPC.Utils.Logger.Severity.Warning);
-            }
         }
 
-        public static bool IsAvailable { get; private set; }
+        /// <summary>
+        /// Whether FAR is installed, so that it replaces the stock aerodynamics. Throws an
+        /// exception if FAR is installed and not available.
+        /// </summary>
+        public static bool Installed {
+            get { return Get<FAR> ().CheckInstalled (); }
+        }
+
+        protected override void Bind (ModBinder mod)
+        {
+            mod.Statics (typeof (FAR), "FerramAerospaceResearch.FARAPI");
+            calculateVesselAeroForces = mod.Type ("FerramAerospaceResearch.FARAPI").Method<AeroForces> ("CalculateVesselAeroForces");
+            var vesselAero = mod.Type ("FerramAerospaceResearch.FARAeroComponents.FARVesselAero");
+            vesselAeroType = vesselAero.Type;
+            machNumber = vesselAero.Getter<Component, double> ("MachNumber");
+            reynoldsNumber = vesselAero.Getter<Component, double> ("ReynoldsNumber");
+        }
 
         public static Func<Vessel, double> VesselDynPres { get; internal set; }
 
@@ -65,14 +67,19 @@ namespace KRPC.SpaceCenter.ExternalAPI
         static Func<Component, double> machNumber;
         static Func<Component, double> reynoldsNumber;
 
+        static Component VesselAero (Vessel vessel)
+        {
+            return vesselAeroType == null ? null : vessel.GetComponent (vesselAeroType);
+        }
+
         public static double VesselMachNumber (Vessel vessel)
         {
-            return machNumber (vessel.GetComponent (vesselAeroType));
+            return machNumber (VesselAero (vessel));
         }
 
         public static double VesselReynoldsNumber (Vessel vessel)
         {
-            return reynoldsNumber (vessel.GetComponent (vesselAeroType));
+            return reynoldsNumber (VesselAero (vessel));
         }
 
         delegate void AeroForces (

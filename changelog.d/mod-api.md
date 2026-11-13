@@ -10,3 +10,8 @@
 - Load a mod's API when some of its methods are missing, and fail only the calls that use them (#1341)
 - Disable only the integration of a mod that fails to load, and give the reason in the errors of
   its RPCs (#1341)
+
+## service/SpaceCenter
+
+- Keep the FAR, RealFuels, RealAntennas and Action Groups Extended RPCs working when a mod update
+  removes members, and fail only the RPCs that use them (#1341)

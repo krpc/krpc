@@ -1175,7 +1175,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         static void CheckNoFAR ()
         {
-            if (FAR.IsAvailable)
+            if (ModAPI.Get<FAR> ().IsInstalled)
                 throw new InvalidOperationException ("Not available; FAR is installed");
         }
 

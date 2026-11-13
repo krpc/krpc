@@ -805,7 +805,7 @@ namespace KRPC.SpaceCenter.Services
         public bool GetActionGroup (uint group)
         {
             var vessel = InternalVessel;
-            if (AGExt.IsAvailable) {
+            if (AGExt.Installed) {
                 if (group > 250)
                     throw new ArgumentException ("Action group must be between 0 and 250 inclusive");
                 return AGExt.AGX2VslGroupState (vessel.rootPart.flightID, (int)group);
@@ -828,7 +828,7 @@ namespace KRPC.SpaceCenter.Services
         public void SetActionGroup (uint group, bool state)
         {
             var vessel = InternalVessel;
-            if (AGExt.IsAvailable) {
+            if (AGExt.Installed) {
                 if (group > 250)
                     throw new ArgumentException ("Action group must be between 0 and 250 inclusive");
                 AGExt.AGX2VslActivateGroup (vessel.rootPart.flightID, (int)group, state);
@@ -850,7 +850,7 @@ namespace KRPC.SpaceCenter.Services
         public void ToggleActionGroup (uint group)
         {
             var vessel = InternalVessel;
-            if (AGExt.IsAvailable) {
+            if (AGExt.Installed) {
                 if (group > 250)
                     throw new ArgumentException ("Action group must be between 0 and 250 inclusive");
                 AGExt.AGX2VslToggleGroup (vessel.rootPart.flightID, (int)group);
@@ -880,7 +880,7 @@ namespace KRPC.SpaceCenter.Services
         {
             var vessel = InternalVessel;
             var result = new List<Parts.ActionGroupAction> ();
-            if (AGExt.IsAvailable) {
+            if (AGExt.Installed) {
                 if (group > 250)
                     throw new ArgumentException ("Action group must be between 0 and 250 inclusive");
                 var parts = new Dictionary<global::Part, Parts.Part> ();

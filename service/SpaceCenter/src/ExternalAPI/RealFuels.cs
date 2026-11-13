@@ -10,8 +10,12 @@ namespace KRPC.SpaceCenter.ExternalAPI
     /// module API by name; the members here are the ones with no such route, so they are bound
     /// by reflection once at startup.
     /// </summary>
-    static class RealFuels
+    sealed class RealFuels : ModAPI
     {
+        public RealFuels () : base (ServiceInfo.Mods.RealFuels.Name, ServiceInfo.Mods.RealFuels.Assembly)
+        {
+        }
+
         // ModuleEnginesRF
         static Func<PartModule, object> ullageSet;
         static Func<PartModule, IEnumerable<ModuleResource>> ignitionResources;
@@ -27,43 +31,25 @@ namespace KRPC.SpaceCenter.ExternalAPI
         static Func<PartModule, bool> highlyPressurized;
 
         /// <summary>
-        /// Bind to the RealFuels assembly. No version is required: the members used are checked
-        /// for individually, which is a stronger test than the assembly version and lets any
-        /// release that still provides them work.
+        /// Bind to the RealFuels assembly. No version is required. A member missing from the
+        /// installed release fails only the calls that use it.
         /// </summary>
-        public static void Load ()
+        protected override void Bind (ModBinder mod)
         {
-            IsAvailable = false;
-            var engineType = APILoader.Load (typeof(RealFuels), "RealFuels", "RealFuels.ModuleEnginesRF");
-            if (engineType == null)
-                return;
-            var assembly = engineType.Assembly;
-            var ullageSetType = assembly.GetType ("RealFuels.Ullage.UllageSet");
-            var tankType = assembly.GetType ("RealFuels.Tanks.ModuleFuelTanks");
-            if (ullageSetType == null || tankType == null) {
-                Logger.WriteLine ("Load API: RealFuels ullage or tank type not found; skipping", Logger.Severity.Error);
-                return;
-            }
-            ullageSet = Accessor.Getter<PartModule, object> (engineType, "ullageSet");
-            ignitionResources = Accessor.Getter<PartModule, IEnumerable<ModuleResource>> (engineType, "ignitionResources");
-            ignitions = Accessor.Getter<PartModule, int> (engineType, "ignitions");
-            ullage = Accessor.Getter<PartModule, bool> (engineType, "ullage");
-            pressureFed = Accessor.Getter<PartModule, bool> (engineType, "pressureFed");
-            getUllageStability = Accessor.Method<Func<object, double>> (ullageSetType, "GetUllageStability");
-            getUllageProbability = Accessor.Method<Func<object, double>> (ullageSetType, "GetUllageProbability");
-            pressureOk = Accessor.Method<Func<object, bool>> (ullageSetType, "PressureOK");
-            boiloffMassRate = Accessor.Getter<PartModule, double> (tankType, "BoiloffMassRate");
-            highlyPressurized = Accessor.Getter<PartModule, bool> (tankType, "highlyPressurized");
-            IsAvailable =
-                ullageSet != null && ignitionResources != null &&
-                ignitions != null && ullage != null && pressureFed != null &&
-                getUllageStability != null && getUllageProbability != null &&
-                pressureOk != null && boiloffMassRate != null && highlyPressurized != null;
-            if (!IsAvailable)
-                Logger.WriteLine ("Load API: RealFuels is installed but does not provide the expected members; skipping", Logger.Severity.Error);
+            var engineMembers = mod.Type ("RealFuels.ModuleEnginesRF");
+            var ullageSetMembers = mod.Type ("RealFuels.Ullage.UllageSet");
+            var tankMembers = mod.Type ("RealFuels.Tanks.ModuleFuelTanks");
+            ullageSet = engineMembers.Getter<PartModule, object> ("ullageSet");
+            ignitionResources = engineMembers.Getter<PartModule, IEnumerable<ModuleResource>> ("ignitionResources");
+            ignitions = engineMembers.Getter<PartModule, int> ("ignitions");
+            ullage = engineMembers.Getter<PartModule, bool> ("ullage");
+            pressureFed = engineMembers.Getter<PartModule, bool> ("pressureFed");
+            getUllageStability = ullageSetMembers.Method<Func<object, double>> ("GetUllageStability");
+            getUllageProbability = ullageSetMembers.Method<Func<object, double>> ("GetUllageProbability");
+            pressureOk = ullageSetMembers.Method<Func<object, bool>> ("PressureOK");
+            boiloffMassRate = tankMembers.Getter<PartModule, double> ("BoiloffMassRate");
+            highlyPressurized = tankMembers.Getter<PartModule, bool> ("highlyPressurized");
         }
-
-        public static bool IsAvailable { get; private set; }
 
         /// <summary>
         /// The engine's ullage set, which tracks how settled its propellant is and whether its
