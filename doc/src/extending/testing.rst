@@ -86,8 +86,8 @@ Options
      - The game's install directory, in place of ``KSP_DIR``.
    * - ``--krpc``
      - The kRPC archive to install, in place of the release krpctools was built with.
-   * - ``--mod NAME=SOURCE``
-     - Installs a mod from a path or a URL, in place of its pinned archive.
+   * - ``--mod NAME SOURCE``
+     - Installs a mod from a path or a URL, in place of its latest pinned archive.
    * - ``--skip-install-check``
      - Allows mods outside the requested set in GameData.
    * - ``--skip-mod-install``

@@ -114,7 +114,7 @@ terminal. Pass ``-- --help`` to list its other options, which load a save, switc
 a craft.
 
 The third-party mods the tests install are pinned in ``service/registry.bzl``.
-To test against a local build of one, pass ``--mod NAME=PATH`` to either command.
+To test against a local build of one, pass ``--mod NAME PATH`` to either command.
 
 .. note::
 

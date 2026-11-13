@@ -10,7 +10,7 @@ import urllib.error
 import zipfile
 from unittest import mock
 
-from krpctools.game import game, install, launch
+from krpctools.game import game, install, launch, pytest_plugin
 from krpctools.game.ksp import KSP
 from krpctools.game.ksp.game import copy_file, copy_folder, source_digest
 
@@ -411,6 +411,18 @@ class TestGame(unittest.TestCase):
         self.assertEqual("FAR.zip", ksp.mod("FAR").source)
         self.assertIsNone(ksp.mod("FAR").sha256)
         self.assertEqual(("FerramAerospaceResearch",), ksp.mod("FAR").folders)
+
+    def test_mod_option_takes_a_name_and_a_source(self):
+        options = pytest_plugin.options(
+            lambda name: [["FAR", "a=b.zip"]] if name == "mod" else None
+        )
+        self.assertEqual({"FAR": "a=b.zip"}, options["mod_sources"])
+
+    def test_mod_option_rejects_a_version(self):
+        with self.assertRaises(ValueError):
+            pytest_plugin.options(
+                lambda name: [["FAR==0.16.1.2", "x.zip"]] if name == "mod" else None
+            )
 
     def test_unknown_mod_source_raises(self):
         with self.assertRaises(ValueError):

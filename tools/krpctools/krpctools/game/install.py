@@ -156,7 +156,7 @@ def install(game, mods=()):
             mod = game.mods[mod_id]
             if mod.source is None:
                 raise RuntimeError(
-                    "No source for mod %s. Give one with --mod %s=PATH."
+                    "No source for mod %s. Give one with --mod %s PATH."
                     % (mod_id, mod.name)
                 )
             mod.install(game, fetch(mod.source, mod.sha256))
