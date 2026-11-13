@@ -3,7 +3,14 @@ import { BinaryReader, BinaryWriter, WireType } from "@bufbuild/protobuf/wire";
 import { EncodingError } from "./errors.js";
 import { RemoteObject } from "./objects.js";
 import { DictionarySchema, ListSchema, SetSchema, TupleSchema } from "./schema/krpc_pb.js";
-import { RemoteEnum, RemoteStruct, type Struct, type Type } from "./types.js";
+import {
+  type Enumeration,
+  RemoteEnum,
+  RemoteStruct,
+  type Struct,
+  StructDeclaration,
+  type Type,
+} from "./types.js";
 
 /** Makes the objects a decoded value holds, for a connection. */
 export interface ObjectFactory {
@@ -93,12 +100,7 @@ function write(writer: BinaryWriter, type: Type, value: unknown): void {
       writer.uint64(RemoteObject.idOf(value));
       return;
     case "enumeration":
-      if (!(value instanceof RemoteEnum) || value.enumeration !== type.enumeration) {
-        throw new TypeError(
-          `${describe(value)} is not a value of ${type.enumeration.service}.${type.enumeration.name}`,
-        );
-      }
-      writer.sint32(value.value);
+      writer.sint32(enumNumber(type.enumeration, value));
       return;
     case "struct":
       writeItems(writer, structFields(type.struct, value));
@@ -177,16 +179,37 @@ function item(type: Type, value: unknown): Uint8Array {
   return writer.finish();
 }
 
+/** The number of an enumeration value. A value of another enumeration of the same service and
+ * name, such as one a generated module declares, converts by its number. */
+function enumNumber(enumeration: Enumeration, value: unknown): number {
+  if (value instanceof RemoteEnum) {
+    if (value.enumeration === enumeration) {
+      return value.value;
+    }
+    const other = value.enumeration;
+    if (other.service === enumeration.service && other.name === enumeration.name) {
+      try {
+        return enumeration.fromNumber(value.value).value;
+      } catch (error) {
+        throw new TypeError(errorMessage(error));
+      }
+    }
+  }
+  throw new TypeError(
+    `${describe(value)} is not a value of ${enumeration.service}.${enumeration.name}`,
+  );
+}
+
+/** The fields of a structure value, with their types. A value of the structure from another
+ * connection, or from a generated module, passes where it has the same fields. */
 function structFields(struct: Struct, value: unknown): [Type, unknown][] {
-  if (!(value instanceof RemoteStruct) || !sameStruct(RemoteStruct.structOf(value), struct)) {
+  if (
+    !(value instanceof RemoteStruct) ||
+    !StructDeclaration.same(RemoteStruct.structOf(value), struct.declaration)
+  ) {
     throw new TypeError(`${describe(value)} is not a ${struct.service}.${struct.name}`);
   }
   return struct.fields.map((field) => [field.type, RemoteStruct.fieldOf(value, field.name)]);
-}
-
-/** Whether two structures are one structure, which they are across connections. */
-function sameStruct(a: Struct, b: Struct): boolean {
-  return a.service === b.service && a.name === b.name;
 }
 
 function read(type: Type, data: Uint8Array, objects: ObjectFactory): unknown {

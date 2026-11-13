@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // The module's relative imports reach the library's declarations in dist
+    "rootDirs": ["./testservice", "./dist"],
+    "paths": {
+      "@krpc-org/krpc": ["./dist/index.d.ts"]
+    }
+  },
+  "include": ["testservice/services/TestService.ts"]
+}

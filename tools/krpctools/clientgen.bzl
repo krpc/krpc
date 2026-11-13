@@ -23,6 +23,8 @@ def _impl(ctx):
         "--include=%s=%s" % (dep[ClientgenInfo].service, dep[ClientgenInfo].include)
         for dep in ctx.attr.deps
     ]
+    if ctx.attr.client_module:
+        includes.append("--client-module=%s" % ctx.attr.client_module)
 
     ctx.actions.run(
         inputs = defs,
@@ -52,6 +54,8 @@ clientgen = rule(
         "deps": attr.label_list(providers = [ClientgenInfo]),
         "out": attr.output(mandatory = True),
         "language": attr.string(mandatory = True),
+        # The module the generated code imports the client from, where not the client's package
+        "client_module": attr.string(),
         "_clientgen": attr.label(
             default = Label("//tools/krpctools:clientgen"),
             executable = True,
@@ -205,6 +209,9 @@ def clientgen_js(name, service, defs, out = None, deps = []):
         deps = deps,
         out = out,
         language = "js",
+        # A module inside the package imports the client by its path, as the package's own
+        # name resolves to a module that imports this one
+        client_module = "../declarations.js",
     )
 
 def _lower_camel_case(name):
@@ -232,7 +239,7 @@ def clientgen_js_index(name, out):
     ]
     lines += ['import type * as %s from "./%s.js";' % (x, x) for x in services]
     lines.append("")
-    lines += ['export type * as %s from "./%s.js";' % (x, x) for x in services]
+    lines += ['export * as %s from "./%s.js";' % (x, x) for x in services]
     lines += [
         "",
         "/** The services of a connection, each a property in lower camel case. */",

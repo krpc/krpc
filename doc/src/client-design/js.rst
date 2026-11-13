@@ -20,7 +20,18 @@ server it connects to.
 * A procedure returning a stream or an event exists, so the member lists match the server, and
   rejects with a ``TypeError`` when called.
 * ``clientgen`` and ``js.tmpl`` in ``krpctools`` generate a TypeScript module per service, in
-  ``src/services/``. It holds declarations only, and compiles to an empty module.
+  ``src/services/``. Its classes and service are declarations. Its enumerations, structures and
+  exceptions are values, made by ``declareEnumeration``, ``declareStruct`` and
+  ``declareException`` in ``declarations.ts``.
+* Each of those calls registers its type in ``registry.ts``, by service and name. ``connect`` uses
+  the registered type where the server's definition matches, by the rule of the
+  :doc:`Python client <python>`. An enumeration matches on its flags,
+  names and numbers, a structure on its field names in order, and an exception on the JavaScript
+  error it extends. A matched type is also the service's member, so
+  ``conn.spaceCenter.SASMode === SpaceCenter.SASMode``.
+* The package's own modules import ``declarations.js`` by its path, through clientgen's
+  ``--client-module``. The package's name resolves to ``index.ts``, which imports the modules,
+  and ``tsc`` leaves the import path as written.
 * ``Connection`` merges with the interface ``Connection extends Services``, which holds the
   services a release ships. A mod's module adds its service to ``Services`` with module
   augmentation. ``DynamicConnection`` types any other service as ``any``.
@@ -45,6 +56,12 @@ program compares:
 * An ``Enumeration`` holds one ``RemoteEnum`` per number. A flags enumeration also holds each
   combination it has made, so combinations compare with ``===`` too.
 * A structure value is a new object for each result. ``equals`` compares structures field by field.
+* A structure's ``StructDeclaration`` holds its field names and the class of its values, and is
+  shared by the connections that match a generated module. The ``Struct`` of a connection adds the
+  field types from the server's definition.
+* An enumeration value of another ``Enumeration`` with the same service and name passes as an
+  argument by its number. ``equals`` compares two such values by number, as their ``===`` is
+  false.
 
 Structures are classes, so a plain object is never a value. A trailing plain object, with the
 prototype ``Object.prototype`` or ``null``, then holds arguments by name.
@@ -56,9 +73,9 @@ trips.
 Errors
 ------
 
-Each connection builds a class for each exception a service lists. One the server maps to a .NET
-exception extends the matching JavaScript error, such as ``TypeError``, and the others extend
-``ServerError``.
+Each connection builds a class for each exception a service lists, or uses the generated module's
+class where it matches. One the server maps to a .NET exception extends the matching JavaScript
+error, such as ``TypeError``, and the others extend ``ServerError``.
 
 A class that extends a JavaScript error also has the ``service``, ``exception``, ``description``
 and ``stackTrace`` of a ``ServerError``. Its declaration narrows ``instanceof`` to the JavaScript
@@ -81,7 +98,9 @@ warns at the use of a member:
 calls ``process.emitWarning`` when the runtime has it, and ``console.warn`` otherwise. It finds
 ``process`` through ``globalThis``, as the library has no Node.js types.
 
-The generated declarations mark each deprecated member with ``@deprecated``, for editors.
+The generated modules mark each deprecated member with ``@deprecated``, for editors. Their
+deprecated enumeration values and structure fields warn when read too, once per process, as
+those values belong to no connection.
 
 Ownership
 ---------

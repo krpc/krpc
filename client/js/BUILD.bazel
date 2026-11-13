@@ -146,6 +146,28 @@ ts_config(
     deps = [":tsconfig"],
 )
 
+# The TestService module, which the client does not ship, for the tests. It is generated
+# apart from the library and compiled into dist beside it, as the library is.
+ts_config(
+    name = "testservice-tsconfig",
+    src = "tsconfig-testservice.json",
+    deps = [":tsconfig"],
+)
+
+ts_project(
+    name = "testservice-lib",
+    srcs = [":services-testservice"],
+    declaration = True,
+    out_dir = "dist",
+    root_dir = "testservice",
+    transpiler = "tsc",
+    tsconfig = ":testservice-tsconfig",
+    deps = [
+        ":lib",
+        ":package_json",
+    ],
+)
+
 ts_project(
     name = "conformance-lib",
     srcs = [
@@ -159,6 +181,7 @@ ts_project(
         ":node_modules/@bufbuild/protobuf",
         ":node_modules/@types/node",
         ":package_json",
+        ":testservice-lib",
     ],
 )
 
@@ -178,6 +201,7 @@ conformance_test(
         "error-types",
         "dynamic",
         "definitions",
+        "declarations",
         "defaults",
         "named-arguments",
         "connections",

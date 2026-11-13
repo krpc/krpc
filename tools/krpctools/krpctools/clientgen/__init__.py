@@ -64,6 +64,17 @@ def _reference_dirs(args):
     return reference_dirs
 
 
+def _includes(arguments):
+    """The include paths of other services, by service, from SERVICE=PATH arguments"""
+    includes = {}
+    for include in arguments:
+        service, sep, path = include.partition("=")
+        if not sep or not service or not path:
+            raise RuntimeError("Invalid include '%s'. Expected SERVICE=PATH." % include)
+        includes[service] = path
+    return includes
+
+
 def main():
     prog = "krpc-clientgen"
     # The dispatch generators are for the conformance testees in the kRPC repository
@@ -119,6 +130,11 @@ def main():
         + "service, which defaults to the module it ships in.",
     )
     parser.add_argument(
+        "--client-module",
+        help="For JavaScript, the module the generated code imports the client's functions "
+        + "from. Defaults to the client's package, @krpc-org/krpc.",
+    )
+    parser.add_argument(
         "--output-defs",
         help="When generating client code from a DLL, "
         + "output the service definitions to the given JSON file",
@@ -131,14 +147,7 @@ def main():
         )
 
     try:
-        includes = {}
-        for include in args.include:
-            service, sep, path = include.partition("=")
-            if not sep or not service or not path:
-                raise RuntimeError(
-                    "Invalid include '%s'. Expected SERVICE=PATH." % include
-                )
-            includes[service] = path
+        includes = _includes(args.include)
 
         # Check and expand input paths
         inputs = []
@@ -197,6 +206,8 @@ def main():
         # Run the generator, over all of the definitions that were loaded: the requested
         # service is the one generated, but the types it refers to may be defined by any of them
         g = generator(macro_template, args.service, Definitions(defs), includes)
+        if args.client_module:
+            g.client_module = args.client_module
         if args.output:
             g.generate_file(args.output)
         else:

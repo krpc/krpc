@@ -2,6 +2,7 @@ import type { DescMessage } from "@bufbuild/protobuf";
 import { deprecationMessage } from "./deprecation.js";
 import { EncodingError } from "./errors.js";
 import { camelCase } from "./naming.js";
+import { registered } from "./registry.js";
 import {
   ProcedureCallSchema,
   type Type as ProtobufType,
@@ -155,44 +156,85 @@ export class Enumeration {
   }
 }
 
-/** A field of a structure. A deprecated field has the warning for a read of it. */
+/** A field of a structure, with the type the codec encodes it as. */
 export interface Field {
   readonly name: string;
   readonly type: Type;
+}
+
+/** A field of a structure, by name. A deprecated field has the warning for a read of it. */
+export interface FieldDeclaration {
+  readonly name: string;
   readonly deprecation?: string;
 }
 
-/** A structure a service defines. Its values are instances of its class, `valueClass`. */
-export class Struct {
+/** The service, name and fields of a structure, and the class of its values. A generated module
+ * declares one that every connection shares, where the server's definition matches it. */
+export class StructDeclaration {
   readonly service: string;
   readonly name: string;
   /** The fields, in the order the structure declares them. */
-  readonly fields: readonly Field[];
+  readonly fields: readonly FieldDeclaration[];
+  /** Warns of a read of a deprecated field. */
+  readonly warn: (message: string) => void;
   /** The class of the structure's values. */
   readonly valueClass: new (
     fields: Readonly<Record<string, unknown>>,
   ) => RemoteStruct;
-  /** Warns of a read of a deprecated field. */
-  readonly warn: (message: string) => void;
 
   constructor(
     service: string,
     name: string,
-    fields: readonly Field[],
+    fields: readonly FieldDeclaration[],
     warn: (message: string) => void = () => {},
   ) {
     this.service = service;
     this.name = name;
-    this.fields = fields;
+    this.fields = Object.freeze([...fields]);
     this.warn = warn;
-    const struct = this;
+    const declaration = this;
     const cls = class extends RemoteStruct {
       constructor(values: Readonly<Record<string, unknown>>) {
-        super(struct, values);
+        super(declaration, values);
       }
     };
     Object.defineProperty(cls, "name", { value: name });
     this.valueClass = cls;
+  }
+
+  /** Whether two declarations are of one structure with the same fields, as the declarations of
+   * one server's structure are on every connection. */
+  static same(a: StructDeclaration, b: StructDeclaration): boolean {
+    return (
+      a === b || (a.service === b.service && a.name === b.name && sameNames(a.fields, b.fields))
+    );
+  }
+}
+
+/** A structure a service defines, with the types of its fields. */
+export class Struct {
+  readonly declaration: StructDeclaration;
+  /** The fields, in the order the structure declares them. */
+  readonly fields: readonly Field[];
+
+  constructor(declaration: StructDeclaration, fields: readonly Field[]) {
+    this.declaration = declaration;
+    this.fields = fields;
+  }
+
+  get service(): string {
+    return this.declaration.service;
+  }
+
+  get name(): string {
+    return this.declaration.name;
+  }
+
+  /** The class of the structure's values. */
+  get valueClass(): new (
+    fields: Readonly<Record<string, unknown>>,
+  ) => RemoteStruct {
+    return this.declaration.valueClass;
   }
 }
 
@@ -201,10 +243,10 @@ export class Struct {
  * `"SpaceCenter.BoundingBox"`. */
 export class RemoteStruct<S extends string = string> {
   declare readonly [valueBrand]?: S;
-  readonly #struct: Struct;
+  readonly #struct: StructDeclaration;
   readonly #values: Readonly<Record<string, unknown>>;
 
-  constructor(struct: Struct, values: Readonly<Record<string, unknown>>) {
+  constructor(struct: StructDeclaration, values: Readonly<Record<string, unknown>>) {
     this.#struct = struct;
     if (typeof values !== "object" || values === null) {
       throw new TypeError(`A ${struct.service}.${struct.name} needs an object of its fields`);
@@ -241,7 +283,7 @@ export class RemoteStruct<S extends string = string> {
   }
 
   /** The structure of a value. */
-  static structOf(value: RemoteStruct): Struct {
+  static structOf(value: RemoteStruct): StructDeclaration {
     return value.#struct;
   }
 
@@ -249,6 +291,10 @@ export class RemoteStruct<S extends string = string> {
   static fieldOf(value: RemoteStruct, name: string): unknown {
     return value.#values[name];
   }
+}
+
+function sameNames(a: readonly { name: string }[], b: readonly { name: string }[]): boolean {
+  return a.length === b.length && a.every((x, i) => x.name === b[i].name);
 }
 
 /** A type a client cannot use: a type code from a later version of the protocol, or a type that
@@ -292,9 +338,12 @@ export class Types {
         this.#classes.add(`${service.name}.${x.name}`);
       }
       for (const x of service.enumerations) {
+        const declared = registered(service.name, x.name);
+        const matches =
+          declared?.kind === "enumeration" && sameValues(declared.enumeration, x.values, x.flags);
         this.#enumerations.set(
           `${service.name}.${x.name}`,
-          new Enumeration(service.name, x.name, x.values, x.flags),
+          matches ? declared.enumeration : new Enumeration(service.name, x.name, x.values, x.flags),
         );
       }
       for (const x of service.structs) {
@@ -375,8 +424,17 @@ export class Types {
       throw new UnknownTypeError(`No structure ${key}`);
     }
     const service = key.slice(0, key.indexOf("."));
+    const names = definition.fields.map((field) => {
+      const name = camelCase(field.name);
+      return { name, deprecation: deprecationMessage(field, service, `${key}.${name}`) };
+    });
+    const declared = registered(service, definition.name);
+    const declaration =
+      declared?.kind === "struct" && sameNames(declared.declaration.fields, names)
+        ? declared.declaration
+        : new StructDeclaration(service, definition.name, names, this.#warn);
     const fields: Field[] = [];
-    const struct = new Struct(service, definition.name, fields, this.#warn);
+    const struct = new Struct(declaration, fields);
     // Registered before its fields, as a field can name the structure it belongs to
     this.#structs.set(key, struct);
     try {
@@ -384,12 +442,7 @@ export class Types {
         if (field.type === undefined) {
           throw new UnknownTypeError(`Field ${field.name} of ${key} has no type`);
         }
-        const name = camelCase(field.name);
-        fields.push({
-          name,
-          type: this.get(field.type),
-          deprecation: deprecationMessage(field, service, `${key}.${name}`),
-        });
+        fields.push({ name: camelCase(field.name), type: this.get(field.type) });
       }
     } catch (error) {
       this.#structs.set(key, null);
@@ -410,4 +463,18 @@ export class Types {
     }
     return type.types[index];
   }
+}
+
+/** Whether an enumeration has the given values, by name in lower camel case and by number. */
+function sameValues(
+  enumeration: Enumeration,
+  values: readonly { name: string; value: number }[],
+  flags: boolean,
+): boolean {
+  const declared = Object.values(enumeration.values);
+  return (
+    enumeration.flags === flags &&
+    declared.length === values.length &&
+    values.every((x) => enumeration.values[camelCase(x.name)]?.value === x.value)
+  );
 }

@@ -10,11 +10,13 @@ import {
   ConnectionError,
   EncodingError,
   exceptionClass,
+  nativeError,
   ServerError,
   type ServerErrorDetails,
 } from "./errors.js";
 import { accessorName, camelCase } from "./naming.js";
 import { ObjectCache, RemoteObject, RemoteService } from "./objects.js";
+import { registered } from "./registry.js";
 import {
   type Argument,
   ArgumentSchema,
@@ -143,7 +145,14 @@ export async function connect(options: ConnectOptions = {}): Promise<Connection>
     const exceptions = new Map<string, new (error: ServerErrorDetails) => Error>();
     for (const service of services) {
       for (const x of service.exceptions) {
-        exceptions.set(`${service.name}.${x.name}`, exceptionClass(x.name, x.mappedType));
+        const native = nativeError(x.mappedType);
+        const declared = registered(service.name, x.name);
+        exceptions.set(
+          `${service.name}.${x.name}`,
+          declared?.kind === "exception" && declared.native === native
+            ? declared.cls
+            : exceptionClass(x.name, native),
+        );
       }
     }
     session.errorFactory = (error) => {
@@ -425,7 +434,13 @@ function serviceMembers(
     add(x.name, classes.get(`${service.name}.${x.name}`), x);
   }
   for (const x of service.enumerations) {
-    const values = context.types.enumeration(service.name, x.name)?.values ?? {};
+    const enumeration = context.types.enumeration(service.name, x.name);
+    const declared = registered(service.name, x.name);
+    if (declared?.kind === "enumeration" && declared.enumeration === enumeration) {
+      add(x.name, declared.values, x);
+      continue;
+    }
+    const values = enumeration?.values ?? {};
     const exposed: Record<string, unknown> = {};
     for (const value of x.values) {
       const key = camelCase(value.name);
