@@ -1,25 +1,39 @@
-using KRPC.Utils;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
+using KRPC.Utils;
 using UnityEngine;
-using Logger = KRPC.Utils.Logger;
 
 namespace KRPC.Trajectories.API
 {
     /// <summary>
-    /// APILoader wrapper for Trajectories API.
+    /// The Trajectories integration.
+    /// </summary>
+    internal sealed class TrajectoriesAPI : ModAPI
+    {
+        public TrajectoriesAPI() : base(ServiceInfo.Mods.Trajectories.Name, ServiceInfo.Mods.Trajectories.Assembly)
+        {
+        }
+
+        protected override void Bind(ModBinder mod)
+        {
+            mod.Statics(typeof(API), "Trajectories.API");
+            mod.Statics(typeof(Trajectory), "Trajectories.Trajectory");
+            Trajectory.VesselState.Load(mod);
+            Trajectory.Point.Load(mod);
+            Trajectory.Patch.Load(mod);
+            mod.Statics(typeof(TargetProfile), "Trajectories.TargetProfile");
+            mod.Statics(typeof(DescentProfile), "Trajectories.DescentProfile");
+            DescentProfile.Node.Load(mod);
+            mod.Statics(typeof(Settings), "Trajectories.Settings");
+        }
+    }
+
+    /// <summary>
+    /// The static members of Trajectories' API class.
     /// </summary>
     internal static class API
     {
-        public static bool IsAvailable { get; private set; }
-
-        public static void Load()
-        {
-            IsAvailable = (APILoader.Load(typeof(API), "Trajectories", "Trajectories.API", new Version(2, 4)) != null);
-        }
-
         public static Func<bool> get_AlwaysUpdate { get; internal set; }
         public static Action<bool> set_AlwaysUpdate { get; internal set; }
 
@@ -41,22 +55,12 @@ namespace KRPC.Trajectories.API
     }
 
     /// <summary>
-    /// APILoader wrapper for Trajectories Trajectory
+    /// Bindings for Trajectories' Trajectory
     /// </summary>
     internal static class Trajectory
     {
-        public static bool IsAvailable { get; private set; }
-
-        public static void Load()
-        {
-            IsAvailable = (APILoader.Load(typeof(Trajectory), "Trajectories", "Trajectories.Trajectory", new Version(2, 4)) != null);
-            IsAvailable &= VesselState.Load();
-            IsAvailable &= Point.Load();
-            IsAvailable &= Patch.Load();
-        }
-
         /// <summary>
-        /// APILoader wrapper for Trajectories VesselState
+        /// Bindings for Trajectories' VesselState
         /// </summary>
         public class VesselState
         {
@@ -69,24 +73,11 @@ namespace KRPC.Trajectories.API
                 internalObj = original;
             }
 
-            public static bool Load()
+            public static void Load(ModBinder mod)
             {
-                System.Type internalType = null;
-                AssemblyLoader.loadedAssemblies.TypeOperation(t =>
-                {
-                    if (t.FullName == "Trajectories.Trajectory+VesselState") { internalType = t; }
-                });
-
-                if (internalType == null)
-                {
-                    Logger.WriteLine("[Trajectories API] Failed to grab VesselState Type", Logger.Severity.Error);
-                    return false;
-                }
-
-                ReferenceBodyProp = Accessor.Getter<object, CelestialBody>(internalType, "ReferenceBody");
-                TimeProp = Accessor.Getter<object, double>(internalType, "Time");
-
-                return true;
+                var type = mod.Type("Trajectories.Trajectory+VesselState");
+                ReferenceBodyProp = type.Getter<object, CelestialBody>("ReferenceBody");
+                TimeProp = type.Getter<object, double>("Time");
             }
 
             public CelestialBody ReferenceBody { get { return ReferenceBodyProp(internalObj); } }
@@ -94,45 +85,32 @@ namespace KRPC.Trajectories.API
         }
 
         /// <summary>
-        /// APILoader wrapper for Trajectories Point
+        /// Bindings for Trajectories' Point
         /// </summary>
         public class Point
         {
             private object internalObj;
-            private static Field<object, Vector3d> posField { get; set; }
-            private static Field<object, double> timeField { get; set; }
+            private static Func<object, Vector3d> posField { get; set; }
+            private static Func<object, double> timeField { get; set; }
 
             public Point(object original)
             {
                 internalObj = original;
             }
 
-            public static bool Load()
+            public static void Load(ModBinder mod)
             {
-                System.Type internalType = null;
-                AssemblyLoader.loadedAssemblies.TypeOperation(t =>
-                {
-                    if (t.FullName == "Trajectories.Trajectory+Point") { internalType = t; }
-                });
-
-                if (internalType == null)
-                {
-                    Logger.WriteLine("[Trajectories API] Failed to grab Point Type", Logger.Severity.Error);
-                    return false;
-                }
-
-                posField = Accessor.Field<object, Vector3d>(internalType, "pos");
-                timeField = Accessor.Field<object, double>(internalType, "time");
-
-                return true;
+                var type = mod.Type("Trajectories.Trajectory+Point");
+                posField = type.Getter<object, Vector3d>("pos");
+                timeField = type.Getter<object, double>("time");
             }
 
-            public Vector3d pos { get { return posField.Get(internalObj); } }
-            public double time { get { return timeField.Get(internalObj); } }
+            public Vector3d pos { get { return posField(internalObj); } }
+            public double time { get { return timeField(internalObj); } }
         }
 
         /// <summary>
-        /// APILoader wrapper for Trajectories Patch
+        /// Bindings for Trajectories' Patch
         /// </summary>
         public class Patch
         {
@@ -151,31 +129,18 @@ namespace KRPC.Trajectories.API
                 internalObj = original;
             }
 
-            public static bool Load()
+            public static void Load(ModBinder mod)
             {
-                System.Type internalType = null;
-                AssemblyLoader.loadedAssemblies.TypeOperation(t =>
-                {
-                    if (t.FullName == "Trajectories.Trajectory+Patch") { internalType = t; }
-                });
+                var type = mod.Type("Trajectories.Trajectory+Patch");
+                StartingStateProp = type.Getter<object, object>("StartingState");
+                EndTimeProp = type.Getter<object, double>("EndTime");
 
-                if (internalType == null)
-                {
-                    Logger.WriteLine("[Trajectories API] Failed to grab Patch Type", Logger.Severity.Error);
-                    return false;
-                }
+                IsAtmosphericProp = type.Getter<object, bool>("IsAtmospheric");
+                AtmosphericTrajectoryProp = type.Getter<object, IEnumerable>("AtmosphericTrajectory");
 
-                StartingStateProp = Accessor.Getter<object, object>(internalType, "StartingState");
-                EndTimeProp = Accessor.Getter<object, double>(internalType, "EndTime");
-
-                IsAtmosphericProp = Accessor.Getter<object, bool>(internalType, "IsAtmospheric");
-                AtmosphericTrajectoryProp = Accessor.Getter<object, IEnumerable>(internalType, "AtmosphericTrajectory");
-
-                SpaceOrbitProp = Accessor.Getter<object, Orbit>(internalType, "SpaceOrbit");
-                RawImpactPositionProp = Accessor.Getter<object, Vector3d?>(internalType, "RawImpactPosition");
-                ImpactVelocityProp = Accessor.Getter<object, Vector3d?>(internalType, "ImpactVelocity");
-
-                return true;
+                SpaceOrbitProp = type.Getter<object, Orbit>("SpaceOrbit");
+                RawImpactPositionProp = type.Getter<object, Vector3d?>("RawImpactPosition");
+                ImpactVelocityProp = type.Getter<object, Vector3d?>("ImpactVelocity");
             }
 
             public VesselState StartingState
@@ -290,17 +255,10 @@ namespace KRPC.Trajectories.API
     }
 
     /// <summary>
-    /// APILoader wrapper for Trajectories TargetProfile
+    /// Bindings for Trajectories' TargetProfile
     /// </summary>
     internal static class TargetProfile
     {
-        public static bool IsAvailable { get; private set; }
-
-        public static void Load()
-        {
-            IsAvailable = (APILoader.Load(typeof(TargetProfile), "Trajectories", "Trajectories.TargetProfile", new Version(2, 4)) != null);
-        }
-
         public static Func<Vector3d?> get_LocalPosition { get; internal set; }
         //public static Func<Vector3d?> get_WorldPosition { get; internal set; }
 
@@ -315,20 +273,12 @@ namespace KRPC.Trajectories.API
     }
 
     /// <summary>
-    /// APILoader wrapper for Trajectories DescentProfile
+    /// Bindings for Trajectories' DescentProfile
     /// </summary>
     internal static class DescentProfile
     {
-        public static bool IsAvailable { get; private set; }
-
-        public static void Load()
-        {
-            IsAvailable = (APILoader.Load(typeof(DescentProfile), "Trajectories", "Trajectories.DescentProfile", new Version(2, 4)) != null);
-            IsAvailable &= Node.Load();
-        }
-
         /// <summary>
-        /// APILoader wrapper for Trajectories Node
+        /// Bindings for Trajectories' Node
         /// </summary>
         public class Node
         {
@@ -342,25 +292,12 @@ namespace KRPC.Trajectories.API
                 internalObj = original;
             }
 
-            public static bool Load()
+            public static void Load(ModBinder mod)
             {
-                System.Type internalType = null;
-                AssemblyLoader.loadedAssemblies.TypeOperation(t =>
-                {
-                    if (t.FullName == "Trajectories.DescentProfile+Node") { internalType = t; }
-                });
-
-                if (internalType == null)
-                {
-                    Logger.WriteLine("[Trajectories API] Failed to grab Node Type", Logger.Severity.Error);
-                    return false;
-                }
-
-                horizonProp = Accessor.Field<object, bool>(internalType, "Horizon");
-                angleDegProp = Accessor.Field<object, double>(internalType, "AngleDeg");
-                retrogradeProp = Accessor.Field<object, bool>(internalType, "Retrograde");
-
-                return true;
+                var type = mod.Type("Trajectories.DescentProfile+Node");
+                horizonProp = type.Field<object, bool>("Horizon");
+                angleDegProp = type.Field<object, double>("AngleDeg");
+                retrogradeProp = type.Field<object, bool>("Retrograde");
             }
 
             public bool Horizon
@@ -460,17 +397,10 @@ namespace KRPC.Trajectories.API
     }
 
     /// <summary>
-    /// APILoader wrapper for Trajectories Settings
+    /// Bindings for Trajectories' Settings
     /// </summary>
     internal static class Settings
     {
-        public static bool IsAvailable { get; private set; }
-
-        public static void Load()
-        {
-            IsAvailable = (APILoader.Load(typeof(Settings), "Trajectories", "Trajectories.Settings", new Version(2, 4)) != null);
-        }
-
         public static Func<bool> get_BodyFixedMode { get; internal set; }
     }
 }
