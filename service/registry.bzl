@@ -178,11 +178,12 @@ SERVICES = [
     ),
 ]
 
-def mod(name, versions, repo = None, assembly = None):
+def mod(name, versions, title = None, repo = None, assembly = None):
     """An entry of MODS.
 
     Args:
       name: The mod's name, by which a test or another mod requires it.
+      title: The mod's name in the docs, where it differs from the name.
       versions: The versions kRPC tests, latest first. Each is a version(). A mod with none has
         no pin, and the tests cannot install it.
       repo: The mod's GitHub repository, as owner/name.
@@ -195,6 +196,7 @@ def mod(name, versions, repo = None, assembly = None):
     """
     return struct(
         name = name,
+        title = title or name,
         repo = repo,
         assembly = assembly,
         versions = [
@@ -405,6 +407,7 @@ MODS = [
     # No version is pinned, as the LIDAR service has no in-game tests
     mod(
         name = "LiDAR",
+        repo = "nullprofile/LaserDist",
         assembly = "LiDAR",
         versions = [],
     ),
@@ -423,6 +426,7 @@ MODS = [
     ),
     mod(
         name = "InfernalRobotics",
+        title = "Infernal Robotics Next",
         repo = "meirumeiru/InfernalRobotics",
         assembly = "InfernalRoboticsNext",
         versions = [version(
@@ -436,6 +440,7 @@ MODS = [
     # The maintained fork
     mod(
         name = "KerbalAlarmClock",
+        title = "Kerbal Alarm Clock",
         repo = "linuxgurugamer/KerbalAlarmClock",
         assembly = "KerbalAlarmClock",
         versions = [version(
@@ -450,6 +455,7 @@ MODS = [
     # Docking Camera (KURS)
     mod(
         name = "DockingCamera",
+        title = "Docking Camera (KURS)",
         repo = "linuxgurugamer/DockingCam",
         assembly = "DockingCamKURS",
         versions = [version(
@@ -475,6 +481,7 @@ MODS = [
     ),
     mod(
         name = "KerbalEngineerRedux",
+        title = "Kerbal Engineer Redux",
         repo = "jrbudda/KerbalEngineer",
         assembly = "KerbalEngineer",
         versions = [version(
@@ -502,6 +509,7 @@ MODS = [
     # ModuleManager, which kRPC installs.
     mod(
         name = "RasterPropMonitor",
+        title = "Raster Prop Monitor",
         repo = "FirstPersonKSP/RasterPropMonitor",
         assembly = "RasterPropMonitor",
         versions = [version(
@@ -548,6 +556,7 @@ MODS = [
     # module alone, and the overlay adds a part that uses it.
     mod(
         name = "DMagic",
+        title = "DMModuleScienceAnimateGeneric",
         repo = "DMagic1/DMModuleScienceAnimateGeneric",
         assembly = "DMModuleScienceAnimateGeneric",
         versions = [version(
@@ -562,6 +571,7 @@ MODS = [
     # ModuleAGX module onto every part.
     mod(
         name = "AGExt",
+        title = "Extended Action Groups",
         repo = "linuxgurugamer/AGExt",
         assembly = "AGExt",
         versions = [version(
@@ -576,6 +586,7 @@ MODS = [
     # Ferram Aerospace Research, which replaces the stock aerodynamics
     mod(
         name = "FAR",
+        title = "Ferram Aerospace Research",
         repo = "KSPModStewards/Ferram-Aerospace-Research",
         assembly = "FerramAerospaceResearch",
         versions = [version(
@@ -637,6 +648,7 @@ MODS = [
     # Near Future Solar, whose ModuleCurvedSolarPanel the SolarPanel class wraps
     mod(
         name = "NearFutureSolar",
+        title = "Near Future Solar",
         repo = "post-kerbin-mining-corporation/NearFutureSolar",
         assembly = "NearFutureSolar",
         versions = [version(
@@ -733,6 +745,7 @@ MODS = [
     # TweakScale Rescaled, which scales parts and the stats of their modules
     mod(
         name = "TweakScaleRescaled",
+        title = "TweakScale Rescaled",
         repo = "JonnyOThan/TweakScale",
         assembly = "Scale",
         versions = [version(
