@@ -1,5 +1,5 @@
 import { Deprecations } from "./deprecation.js";
-import { exceptionClass, type ServerErrorDetails } from "./errors.js";
+import { exceptionClass, isStreamRemoved, type ServerErrorDetails, StreamError } from "./errors.js";
 import { register } from "./registry.js";
 import { Enumeration, type RemoteEnum, type RemoteStruct, StructDeclaration } from "./types.js";
 
@@ -71,6 +71,9 @@ export function declareException<T = new (error: ServerErrorDetails) => Error>(
   name: string,
   native?: ErrorConstructor,
 ): T {
+  if (isStreamRemoved(service, name)) {
+    return StreamError as T;
+  }
   const cls = exceptionClass(name, native);
   register(service, name, { kind: "exception", cls, native });
   return cls as T;

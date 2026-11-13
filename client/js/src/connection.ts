@@ -10,9 +10,11 @@ import {
   ConnectionError,
   EncodingError,
   exceptionClass,
+  isStreamRemoved,
   nativeError,
   ServerError,
   type ServerErrorDetails,
+  StreamError,
 } from "./errors.js";
 import { accessorName, camelCase } from "./naming.js";
 import { ObjectCache, RemoteObject, RemoteService } from "./objects.js";
@@ -21,11 +23,14 @@ import {
   type Argument,
   ArgumentSchema,
   type Procedure,
+  type ProcedureCall,
+  ProcedureCallSchema,
   type Service,
   ServicesSchema,
 } from "./schema/krpc_pb.js";
 import type { Services } from "./services/index.js";
 import { Session } from "./session.js";
+import { type Stream, StreamManager } from "./streams.js";
 import {
   MalformedDefinitionsError,
   type Struct,
@@ -61,10 +66,35 @@ export class Connection {
     this.#session = session;
   }
 
-  /** Closes the connection. Each call waiting for a response rejects with a ConnectionError.
-   * Closing a closed connection does nothing. */
+  /** Closes the connection. Each call waiting for a response rejects with a ConnectionError,
+   * and each stream ends with one. Closing a closed connection does nothing. */
   close(): Promise<void> {
     return this.#session.close();
+  }
+
+  /** Adds a stream of the call the function returns, such as
+   * `conn.addStream(() => flight.getMeanAltitude())`. The function is run to build the call,
+   * which it does not send. */
+  async addStream<T>(call: () => Promise<T>): Promise<Stream<T>> {
+    const context = contextOf(this);
+    const captured = capture(call);
+    const kind = captured.signature.result?.kind;
+    if (kind === "event" || kind === "stream") {
+      throw new StreamError(
+        `${captured.signature.procedure} returns a ${kind}, which has a stream of its own`,
+      );
+    }
+    return await context.streams.add<T>(captured.call, captured.signature.result);
+  }
+
+  /** Adds a function to call once for each stream update message, after the callbacks of its
+   * streams. */
+  addUpdateCallback(callback: () => unknown): void {
+    contextOf(this).streams.addUpdateCallback(callback);
+  }
+
+  removeUpdateCallback(callback: () => unknown): void {
+    contextOf(this).streams.removeUpdateCallback(callback);
   }
 }
 
@@ -76,6 +106,7 @@ export type DynamicConnection = Connection & { readonly [service: string]: any }
  * reads. */
 export interface Context extends ObjectFactory {
   readonly session: Session;
+  readonly streams: StreamManager;
   readonly types: Types;
   readonly services: readonly Service[];
   /** Warns of the use of a deprecated member, once per member. */
@@ -122,11 +153,7 @@ export async function connect(options: ConnectOptions = {}): Promise<Connection>
     const connection = new Connection(session);
     const objects = new ObjectCache();
     const classes = new Map<string, new (id: bigint) => RemoteObject>();
-    const context: Context = {
-      session,
-      types: new Types(services, warn),
-      services,
-      warn,
+    const factory: ObjectFactory = {
       object(service, className, id) {
         const cls = classes.get(`${service}.${className}`);
         if (cls === undefined) {
@@ -134,6 +161,14 @@ export async function connect(options: ConnectOptions = {}): Promise<Connection>
         }
         return new cls(id);
       },
+    };
+    const context: Context = {
+      session,
+      streams: new StreamManager(session, factory),
+      types: new Types(services, warn),
+      services,
+      warn,
+      object: factory.object,
     };
     contexts.set(connection, context);
     for (const service of services) {
@@ -156,6 +191,9 @@ export async function connect(options: ConnectOptions = {}): Promise<Connection>
       }
     }
     session.errorFactory = (error) => {
+      if (isStreamRemoved(error.service, error.exception)) {
+        return new StreamError(error.description);
+      }
       const cls = exceptions.get(`${error.service}.${error.exception}`);
       return cls === undefined ? new ServerError(error) : new cls(error);
     };
@@ -231,22 +269,79 @@ function signature(types: Types, service: string, procedure: Procedure): Signatu
   }
 }
 
+/** A call built by a member while addStream runs its function, which the member does not send. */
+interface CapturedCall {
+  readonly signature: Signature;
+  readonly call: ProcedureCall;
+}
+
+/** The calls the members build, and the first error, while a function runs under capture. */
+let capturing: { calls: CapturedCall[]; error: { value: unknown } | null } | null = null;
+
+/** The promise a member returns for a call it builds under capture. It never settles. */
+const CAPTURED: Promise<never> = new Promise(() => {});
+
+/** Runs a function that returns one call of a member, and returns the call it builds. */
+function capture(fn: () => unknown): CapturedCall {
+  const captured: NonNullable<typeof capturing> = { calls: [], error: null };
+  const outer = capturing;
+  capturing = captured;
+  let result: unknown;
+  try {
+    result = fn();
+  } finally {
+    capturing = outer;
+  }
+  if (captured.error !== null) {
+    throw captured.error.value;
+  }
+  if (captured.calls.length !== 1 || result !== CAPTURED) {
+    throw new TypeError(
+      "The function must return a call of a member, such as () => flight.getMeanAltitude()",
+    );
+  }
+  return captured.calls[0];
+}
+
 /** Calls a procedure with arguments in the order of its parameters, then optionally a plain
  * object of arguments by name. An argument left out, or undefined, takes the parameter's default
- * value. The first parameter of a method, the object, has no name to pass it by. */
-async function invoke(
+ * value. The first parameter of a method, the object, has no name to pass it by. Under capture,
+ * the call is built and not sent. */
+function invoke(
   context: Context,
   signature: Signature,
   args: readonly unknown[],
   first = 0,
 ): Promise<unknown> {
-  const { parameters } = signature;
-  const resultKind = signature.result?.kind;
-  if (resultKind === "stream" || resultKind === "event") {
-    throw new TypeError(
-      `${signature.procedure} returns a ${resultKind}, which this client does not support`,
-    );
+  let encoded: Argument[];
+  try {
+    encoded = encodeArguments(signature, args, first);
+  } catch (error) {
+    if (capturing !== null) {
+      capturing.error ??= { value: error };
+      return CAPTURED;
+    }
+    return Promise.reject(error);
   }
+  if (capturing !== null) {
+    const call = create(ProcedureCallSchema, {
+      service: signature.service,
+      procedure: signature.procedure,
+      arguments: encoded,
+    });
+    capturing.calls.push({ signature, call });
+    return CAPTURED;
+  }
+  return send(context, signature, encoded);
+}
+
+/** The arguments of a call, encoded. */
+function encodeArguments(
+  signature: Signature,
+  args: readonly unknown[],
+  first: number,
+): Argument[] {
+  const { parameters } = signature;
   const values = [...args];
   const last = values.length > first ? values[values.length - 1] : undefined;
   if (isPlainObject(last)) {
@@ -274,6 +369,21 @@ async function invoke(
       encoded.push(create(ArgumentSchema, { position, value: encode(parameter.type, value) }));
     }
   });
+  return encoded;
+}
+
+/** Sends a call, and returns its result. */
+async function send(context: Context, signature: Signature, encoded: Argument[]): Promise<unknown> {
+  const resultKind = signature.result?.kind;
+  if (resultKind === "stream") {
+    throw new TypeError(`${signature.procedure} returns a stream, which is not a value`);
+  }
+  if (resultKind === "event") {
+    // The event's stream is registered before its first update
+    const event = context.streams.event();
+    await context.session.call(signature.service, signature.procedure, encoded, event.receive);
+    return event.make();
+  }
   const result = await context.session.call(signature.service, signature.procedure, encoded);
   if (signature.result === null) {
     return undefined;
@@ -450,7 +560,10 @@ function serviceMembers(
     add(x.name, Object.freeze(exposed), x);
   }
   for (const x of service.exceptions) {
-    add(x.name, exceptions.get(`${service.name}.${x.name}`), x);
+    const cls = isStreamRemoved(service.name, x.name)
+      ? StreamError
+      : exceptions.get(`${service.name}.${x.name}`);
+    add(x.name, cls, x);
   }
   for (const x of service.structs) {
     hasMembers = true;

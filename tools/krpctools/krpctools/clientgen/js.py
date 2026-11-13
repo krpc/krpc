@@ -164,7 +164,10 @@ class JsGenerator(Generator[JsLanguage]):
                 )
             )
         for name, info in context["exceptions"].items():
-            if info["native"] is None:
+            if info["alias"] is not None:
+                self._client_imports.add(info["alias"])
+                instance = info["alias"]
+            elif info["native"] is None:
                 self._client_imports.add("ServerError")
                 instance = "ServerError"
             else:
@@ -338,13 +341,17 @@ class JsGenerator(Generator[JsLanguage]):
             if native is not None:
                 self._value_imports.add(native)
                 arguments.append(native)
+            if info["alias"] is not None:
+                instance = info["alias"]
+            elif native is None:
+                instance = "ServerError"
+            else:
+                instance = "%s & ServerErrorDetails" % native
             exceptions.append(
                 {
                     "name": name,
                     "documentation": doc_comment(self._documentation(info)),
-                    "type": "ServerError"
-                    if native is None
-                    else "%s & ServerErrorDetails" % native,
+                    "type": instance,
                     "deprecated": deprecated_comment(info),
                     "arguments": ", ".join(arguments),
                 }
@@ -484,7 +491,10 @@ class JsGenerator(Generator[JsLanguage]):
             if code in (Type.SINT64, Type.UINT64):
                 return "number | bigint" if argument else "bigint"
             return self.language.parse_type(typ)
-        if isinstance(typ, (StreamType, EventType)):
+        if isinstance(typ, EventType):
+            self._client_imports.add("Event")
+            return "Event"
+        if isinstance(typ, StreamType):
             return "never"
         if isinstance(typ, MessageType):
             self._message_imports.add("schema")

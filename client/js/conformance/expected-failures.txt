@@ -2,3 +2,5 @@
 test_connection.py::test_stall_timeout_values[nan]  # The client has no stall timeout, as a WebSocket message arrives whole
 test_connection.py::test_stall_timeout_values[negative]  # As above
 test_connection.py::test_stall_timeout_values[zero]  # As above
+test_streams.py::test_drop_last_handle  # Dropping the last handle leaves the stream on the server
+test_events.py::test_drop_last_handle  # As test_streams.py::test_drop_last_handle

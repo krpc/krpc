@@ -148,6 +148,7 @@ maths
 metaclass
 microcontroller
 microcontrollers
+microtask
 mitigations
 mits
 mutex

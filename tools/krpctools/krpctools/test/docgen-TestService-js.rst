@@ -971,7 +971,7 @@ Service documentation string.
    :type milliseconds: ``number``
    :param repeats: Defaults to ``1``.
    :type repeats: ``number``
-   :rtype: ``never``
+   :rtype: :class:`~@krpc-org/krpc.Event`
    
 
 
@@ -1011,7 +1011,7 @@ Service documentation string.
 
    :param milliseconds:
    :type milliseconds: ``number``
-   :rtype: ``never``
+   :rtype: :class:`~@krpc-org/krpc.Event`
    
 
 

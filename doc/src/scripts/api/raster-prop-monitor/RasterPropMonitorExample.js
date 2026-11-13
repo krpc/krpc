@@ -2,6 +2,7 @@ import { connect } from "@krpc-org/krpc";
 
 const conn = await connect({ name: "Raster Prop Monitor Example" });
 const vessel = await conn.spaceCenter.getActiveVessel();
+const control = await vessel.getControl();
 const rpm = conn.rasterPropMonitor;
 
 // The first screen in the IVA, and the content of its krpc page
@@ -13,3 +14,11 @@ await display.setText("SAS: {0:ON;OFF;OFF} $&$ SAS");
 
 // A press of the NAV button shows the page
 await monitor.captureButton("buttonR1", "krpc");
+
+// Each press of the ENTER button toggles SAS
+const enter = (await monitor.getButtons()).indexOf("button_ENTER");
+const pressed = await display.buttonPressed(enter);
+while (true) {
+  await pressed.wait();
+  await control.setSAS(!(await control.getSAS()));
+}

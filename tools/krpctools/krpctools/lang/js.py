@@ -1,5 +1,6 @@
 from krpc.schema.KRPC_pb2 import Type
 from krpc.types import (
+    STREAM_REMOVED,
     ClassType,
     DictionaryType,
     EnumerationType,
@@ -54,6 +55,12 @@ class JsLanguage(Language):
 
     def native_exception(self, mapped_type):
         return NATIVE_ERRORS.get(mapped_type)
+
+    def exception_alias(self, service, name, mapped_type):
+        # The server removes a stream with this exception, thrown as the client's StreamError
+        if (service, name) == STREAM_REMOVED:
+            return "StreamError"
+        return None
 
     def parse_type(self, typ):
         """The name of a type, as the documentation names it"""

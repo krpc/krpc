@@ -9,6 +9,7 @@ import {
   MessageSchema,
   type ProcedureResult,
   RequestSchema,
+  type StreamResult,
 } from "./schema/krpc_pb.js";
 
 /** The protocol version of the messages the client sends and accepts. */
@@ -23,6 +24,17 @@ const CLOSE_TIMEOUT = 1000;
 interface PendingCall {
   resolve(result: ProcedureResult): void;
   reject(error: Error): void;
+  /** Runs in the message handler, before the next message. Throws to reject the call. */
+  receive?: (result: ProcedureResult) => void;
+}
+
+/** What the streams of a connection need from its session. */
+export interface StreamHandler {
+  /** Applies the results of a stream update. Runs in the message handler. */
+  update(results: readonly StreamResult[]): void;
+  /** Ends every stream, once the connection has ended. The error is the one calls reject
+   * with, and failed is whether the connection failed, rather than being closed. */
+  end(error: ConnectionError, failed: boolean): void;
 }
 
 /** One connection to a server over WebSockets: the handshake, requests matched to their
@@ -33,6 +45,8 @@ export class Session {
   readonly #closed: Promise<void>;
   #nextId = 1n;
   #ended: ConnectionError | null = null;
+  /** The streams the session passes stream updates to. */
+  streams: StreamHandler | null = null;
   /** Makes the error a call rejects with, for an error the server sends. */
   errorFactory: (error: ServerErrorDetails) => Error = (error) => new ServerError(error);
 
@@ -153,8 +167,15 @@ export class Session {
   }
 
   /** Calls a procedure, and returns its result. Rejects with a ServerError for a procedure that
-   * threw an exception, and with a ConnectionError once the connection has ended. */
-  call(service: string, procedure: string, args: Argument[]): Promise<ProcedureResult> {
+   * threw an exception, and with a ConnectionError once the connection has ended. The receive
+   * function runs on the result before the session handles the next message, such as to
+   * register a stream before its first update. */
+  call(
+    service: string,
+    procedure: string,
+    args: Argument[],
+    receive?: (result: ProcedureResult) => void,
+  ): Promise<ProcedureResult> {
     if (this.#ended !== null) {
       return Promise.reject(this.#ended);
     }
@@ -162,7 +183,7 @@ export class Session {
     const request = create(RequestSchema, { id, calls: [{ service, procedure, arguments: args }] });
     const message = create(MessageSchema, { content: { case: "request", value: request } });
     return new Promise((resolve, reject) => {
-      this.#pending.set(id, { resolve, reject });
+      this.#pending.set(id, { resolve, reject, receive });
       try {
         this.#socket.send(toBinary(MessageSchema, message));
       } catch (error) {
@@ -178,7 +199,7 @@ export class Session {
    * second. Closing a closed connection does nothing. */
   async close(): Promise<void> {
     if (this.#ended === null) {
-      this.#end(new ConnectionError("The connection is closed"));
+      this.#end(new ConnectionError("The connection is closed"), false);
       try {
         this.#sendDisconnect(Disconnect_Reason.CLOSED);
         this.#socket.close(1000);
@@ -229,10 +250,18 @@ export class Session {
         } else if (response.results.length !== 1) {
           pending.reject(new EncodingError("A response has no result"));
         } else {
-          pending.resolve(response.results[0]);
+          try {
+            pending.receive?.(response.results[0]);
+            pending.resolve(response.results[0]);
+          } catch (error) {
+            pending.reject(error instanceof Error ? error : new Error(String(error)));
+          }
         }
         return;
       }
+      case "streamUpdate":
+        this.streams?.update(content.value.results);
+        return;
       case "disconnect":
         this.#end(
           new ConnectionError(content.value.message, { reason: reasonName(content.value.reason) }),
@@ -245,7 +274,7 @@ export class Session {
         this.#fail(Disconnect_Reason.PROTOCOL_ERROR, `The server sent a ${content.case}`);
         return;
       default:
-        // A stream update, or a message from a later version of the protocol
+        // A message from a later version of the protocol
         return;
     }
   }
@@ -267,9 +296,10 @@ export class Session {
     this.#socket.send(toBinary(MessageSchema, message));
   }
 
-  /** Records the error that ended the connection, and rejects each call waiting for a
-   * response with it. */
-  #end(error: ConnectionError): void {
+  /** Records the error that ended the connection, rejects each call waiting for a response
+   * with it, and ends the streams. Failed is whether the connection failed, rather than being
+   * closed by the program. */
+  #end(error: ConnectionError, failed = true): void {
     if (this.#ended !== null) {
       return;
     }
@@ -278,6 +308,7 @@ export class Session {
       pending.reject(error);
     }
     this.#pending.clear();
+    this.streams?.end(error, failed);
   }
 }
 
