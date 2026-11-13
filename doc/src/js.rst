@@ -169,6 +169,8 @@ Bundle the script for the page as shown in :ref:`js-client-installing`.
    Any page open in the browser can connect to a server it can reach. A server with
    "Auto-accept new clients" turned off asks the player to approve each connection.
 
+.. seealso:: The :doc:`/tutorials/control-panel` tutorial builds a complete page.
+
 Handling Errors
 ---------------
 
