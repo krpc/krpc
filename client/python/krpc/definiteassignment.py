@@ -33,6 +33,9 @@ def assigned_names(function: ast.AST) -> set[str]:
             names.add(node.id)
         elif isinstance(node, ast.ExceptHandler) and node.name:
             names.add(node.name)
+        elif isinstance(node, ast.pattern):
+            names.update(pattern_names(node))
+            return
         for child in ast.iter_child_nodes(node):
             visit(child)
 
@@ -42,6 +45,31 @@ def assigned_names(function: ast.AST) -> set[str]:
         for statement in cast(ast.FunctionDef, function).body:
             visit(statement)
     return names
+
+
+def pattern_names(pattern: ast.pattern) -> list[str]:
+    """The names a match pattern binds."""
+    names: list[str] = []
+    for node in ast.walk(pattern):
+        if isinstance(node, (ast.MatchAs, ast.MatchStar)) and node.name:
+            names.append(node.name)
+        elif isinstance(node, ast.MatchMapping) and node.rest:
+            names.append(node.rest)
+    return names
+
+
+def is_irrefutable(case: ast.match_case) -> bool:
+    """Whether a case of a match matches every value: a wildcard or a capture,
+    with no guard."""
+
+    def irrefutable(pattern: ast.pattern) -> bool:
+        if isinstance(pattern, ast.MatchAs):
+            return pattern.pattern is None or irrefutable(pattern.pattern)
+        if isinstance(pattern, ast.MatchOr):
+            return any(irrefutable(alternative) for alternative in pattern.patterns)
+        return False
+
+    return case.guard is None and irrefutable(case.pattern)
 
 
 def nonlocal_names(function: ast.AST) -> set[str]:
@@ -198,6 +226,8 @@ class DefiniteAssignment:
             return None
         if isinstance(statement, ast.Try):
             return self._try(statement, assigned)
+        if isinstance(statement, ast.Match):
+            return self._match(statement, assigned)
         if isinstance(statement, ast.FunctionDef):
             parameters = {argument.arg for argument in statement.args.args}
             self._local_function(
@@ -243,6 +273,22 @@ class DefiniteAssignment:
         if finished is None or after is None:
             return None
         return after | finished
+
+    def _match(self, statement: ast.Match, assigned: frozenset[str]) -> _Assigned:
+        assigned = self._expression(statement.subject, assigned)
+        # With no case that matches every value, no case may run
+        after: _Assigned = (
+            None if any(map(is_irrefutable, statement.cases)) else assigned
+        )
+        for case in statement.cases:
+            for node in ast.walk(case.pattern):
+                if isinstance(node, ast.MatchValue):
+                    self._expression(node.value, assigned)
+            bound = assigned | set(pattern_names(case.pattern))
+            if case.guard is not None:
+                bound = self._expression(case.guard, bound)
+            after = _merge(after, self._block(case.body, bound))
+        return after
 
     def _local_function(
         self,

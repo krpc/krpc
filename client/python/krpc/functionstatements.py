@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import ast
 import enum
+import functools
 from collections.abc import Callable, Iterable
 from typing import (
     TYPE_CHECKING,
@@ -19,7 +20,7 @@ from typing import (
 
 import krpc.schema.KRPC_pb2 as KRPC
 from krpc.declarations import is_class_type
-from krpc.definiteassignment import DefiniteAssignment
+from krpc.definiteassignment import DefiniteAssignment, is_irrefutable, pattern_names
 from krpc.error import CompilationError
 from krpc.expressionutils import (
     Result as _Result,
@@ -82,6 +83,15 @@ def _handlers(statement: ast.stmt) -> list[ast.ExceptHandler]:
     return cast(list[ast.ExceptHandler], getattr(statement, "handlers", []))
 
 
+def _blocks(statement: ast.stmt) -> list[list[ast.stmt]]:
+    """The blocks of statements nested in a statement, in source order"""
+    blocks = [_block(statement, "body")]
+    blocks += [handler.body for handler in _handlers(statement)]
+    if isinstance(statement, ast.Match):
+        blocks += [case.body for case in statement.cases]
+    return blocks + [_block(statement, field) for field in ("orelse", "finalbody")]
+
+
 def _jump_out_of(statements: list[ast.stmt], in_loop: bool = False) -> ast.stmt | None:
     """The first return, break or continue that leaves the statements. A break
     or continue within a loop of the statements stays in it, and a local
@@ -94,9 +104,7 @@ def _jump_out_of(statements: list[ast.stmt], in_loop: bool = False) -> ast.stmt 
         if isinstance(statement, ast.FunctionDef):
             continue
         looped = in_loop or isinstance(statement, (ast.For, ast.While))
-        nested = [_block(statement, field) for field in ("body", "finalbody")]
-        nested += [handler.body for handler in _handlers(statement)]
-        for block in nested + [_block(statement, "orelse")]:
+        for block in _blocks(statement):
             jump = _jump_out_of(block, looped)
             if jump is not None:
                 return jump
@@ -111,17 +119,15 @@ def _breaks_out_of(statements: list[ast.stmt]) -> bool:
             return True
         if isinstance(statement, (ast.For, ast.While, ast.FunctionDef)):
             continue
-        blocks = [_block(statement, field) for field in ("body", "orelse", "finalbody")]
-        blocks += [handler.body for handler in _handlers(statement)]
-        if any(_breaks_out_of(block) for block in blocks):
+        if any(_breaks_out_of(block) for block in _blocks(statement)):
             return True
     return False
 
 
 def _raises_on_every_path(statements: list[ast.stmt]) -> bool:
     """Whether the statements end with a raise, an if and else whose branches
-    both do, or a try whose body and every handler do, or whose finally
-    clause does."""
+    both do, a try whose body and every handler do, or whose finally clause
+    does, or a match with a case for every value whose cases all do."""
     if not statements:
         return False
     final = statements[-1]
@@ -134,7 +140,17 @@ def _raises_on_every_path(statements: list[ast.stmt]) -> bool:
         return _raises_on_every_path(final.finalbody) or (
             _raises_on_every_path(final.body) and handled
         )
+    if isinstance(final, ast.Match):
+        return _every_case(final, _raises_on_every_path)
     return False
+
+
+def _every_case(statement: ast.Match, test: Callable[[list[ast.stmt]], bool]) -> bool:
+    """Whether a match runs a case on every path, and the body of every case
+    passes a test."""
+    return any(map(is_irrefutable, statement.cases)) and all(
+        test(case.body) for case in statement.cases
+    )
 
 
 def _assigned(assignments: Iterable[Expression | None]) -> list[Expression]:
@@ -484,8 +500,8 @@ class _StatementCompiler:
         ):
             message = (
                 "a function that returns a value must end with a return or raise "
-                "statement, an if or try that returns or raises on every path, or a "
-                "while True loop with no break"
+                "statement, an if, match or try that returns or raises on every "
+                "path, or a while True loop with no break"
             )
             if statements:
                 raise self._compiler._error(statements[-1], message)
@@ -548,6 +564,8 @@ class _StatementCompiler:
             return [self._compile_raise(statement)]
         if isinstance(statement, ast.Try):
             return [self._compile_try(statement)]
+        if isinstance(statement, ast.Match):
+            return self._compile_match(statement)
         if isinstance(statement, ast.Break):
             return [compiler._expr.break_()]
         if isinstance(statement, ast.Continue):
@@ -564,6 +582,8 @@ class _StatementCompiler:
             return [statement.body, statement.finalbody] + [
                 handler.body for handler in statement.handlers
             ]
+        if isinstance(statement, ast.Match):
+            return [case.body for case in statement.cases]
         return []
 
     @staticmethod
@@ -594,8 +614,9 @@ class _StatementCompiler:
     def _returns_a_value(self, statements: list[ast.stmt]) -> bool:
         """Whether the statements end by returning a value on every path, with a
         return statement, an if and else whose branches both do, a try whose
-        body and every handler do, or a while True loop with no break. A raise
-        ends a path without returning."""
+        body and every handler do, a match with a case for every value whose
+        cases all do, or a while True loop with no break. A raise ends a path
+        without returning."""
         if not statements:
             return False
         final = statements[-1]
@@ -611,6 +632,8 @@ class _StatementCompiler:
             returns = self._returns_a_value
             handled = all(returns(handler.body) for handler in final.handlers)
             return returns(final.finalbody) or (returns(final.body) and handled)
+        if isinstance(final, ast.Match):
+            return _every_case(final, self._returns_a_value)
         if isinstance(final, ast.While):
             return (
                 isinstance(final.test, ast.Constant)
@@ -1515,6 +1538,173 @@ class _StatementCompiler:
             variable,
             collection.expression,
             self._compiler._expr.block(assignments + [body]),
+        )
+
+    def _compile_match(self, statement: ast.Match) -> list[Expression]:
+        """Compile a match statement. A run of cases with no guard is one Match,
+        whose default holds the cases after it. A case with a guard is an if,
+        whose else holds the cases after it."""
+        compiler = self._compiler
+        expr = compiler._expr
+        try:
+            subject = compiler._to_expression(compiler._compile(statement.subject))
+        except UntypedRead:
+            self._bind_captures(statement, _Result(value=None, is_value=True))
+            raise
+        if subject.ptype is None:
+            raise compiler._error(
+                statement.subject, "cannot determine the type of the match subject"
+            )
+        compiled: list[Expression] = []
+        value = subject.expression
+        # Held for the bindings and guarded cases
+        if any(
+            case.guard is not None or pattern_names(case.pattern)
+            for case in statement.cases
+        ):
+            value = self._hidden_variable(statement, "match", subject.ptype)
+            compiled.append(expr.assign(value, subject.expression))
+        held = _Result(expression=value, ptype=subject.ptype)
+        # Each case's test values, or None when it matches every value, its
+        # guard and its body, compiled in source order as the cases type
+        # their variables
+        cases: list[tuple[list[Expression] | None, Expression | None, Expression]] = []
+        try:
+            for case in statement.cases:
+                cases.append(self._compile_case(case, subject, held))
+        except UntypedRead:
+            self._bind_captures(statement, held)
+            raise
+        rest: Expression | None = None
+        run: list[tuple[list[Expression], Expression]] = []
+        for tests, guard, body in reversed(cases):
+            if guard is None:
+                run.insert(0, ([] if tests is None else tests, body))
+                continue
+            rest = self._match_run(value, run, rest)
+            run = []
+            if tests is not None:
+                equal = [expr.equal(value, test) for test in tests]
+                guard = expr.conditional_and(
+                    functools.reduce(expr.conditional_or, equal), guard
+                )
+            if rest is None:
+                rest = expr.if_then(guard, body)
+            else:
+                rest = expr.if_then_else(guard, body, rest)
+        rest = self._match_run(value, run, rest)
+        assert rest is not None
+        return compiled + [rest]
+
+    def _compile_case(
+        self, case: ast.match_case, subject: _Result, held: _Result
+    ) -> tuple[list[Expression] | None, Expression | None, Expression]:
+        """The test values of a case, or None when it matches every value, its
+        guard and its body. The names the pattern binds are assigned in the
+        guard when it has one, and in the body otherwise."""
+        compiler = self._compiler
+        expr = compiler._expr
+        tests, names = self._pattern_tests(case.pattern, subject)
+        bindings = _assigned(
+            self._assign_variable(case.pattern, name, held) for name in names
+        )
+        guard = None
+        if case.guard is not None:
+            # Python binds the names before it evaluates the guard
+            guard = compiler._to_expression(
+                compiler._compile_condition(case.guard)
+            ).expression
+            if bindings:
+                guard = expr.block(bindings + [guard])
+            bindings = []
+        body = self._statement_block(case.body)
+        if bindings:
+            body = expr.block(bindings + [body])
+        return tests, guard, body
+
+    def _bind_captures(self, statement: ast.Match, value: _Result) -> None:
+        """Declare the names the cases bind and that are not declared yet, when
+        a read of a variable with no type stops the compile of a match. The case
+        bodies then compile to find the variable's type."""
+        for case in statement.cases:
+            for name in pattern_names(case.pattern):
+                if name not in self._scope:
+                    self._assign_variable(case.pattern, name, value)
+
+    def _match_run(
+        self,
+        value: Expression,
+        run: list[tuple[list[Expression], Expression]],
+        rest: Expression | None,
+    ) -> Expression | None:
+        """A Match of a run of cases with no guard, with the statement of the
+        cases after them as its default."""
+        if not run:
+            return rest
+        if rest is not None:
+            run = run + [([], rest)]
+        return self._compiler._expr.match(
+            value, [tests for tests, _ in run], [body for _, body in run]
+        )
+
+    def _pattern_tests(
+        self, pattern: ast.pattern, subject: _Result
+    ) -> tuple[list[Expression] | None, list[str]]:
+        """The test values of a pattern, or None when it matches every value,
+        and the names it binds to the subject."""
+        compiler = self._compiler
+        ptype = subject.ptype
+        assert ptype is not None
+        if isinstance(pattern, ast.MatchValue):
+            value = compiler._compile(pattern.value)
+            _, value = compiler._operand_expressions(pattern, subject, value)
+            compiler._check_comparable(pattern, ptype, value.ptype)
+            return [value.expression], []
+        if isinstance(pattern, ast.MatchSingleton):
+            if pattern.value is None:
+                if not ptype.nullable:
+                    raise compiler._error(
+                        pattern, "case None needs a match subject that can be None"
+                    )
+                return [compiler._null(pattern, ptype).expression], []
+            if ptype.code != KRPC.Type.BOOL:
+                raise compiler._error(
+                    pattern, "case %s needs a bool match subject" % pattern.value
+                )
+            return [compiler._expr.constant_bool(pattern.value)], []
+        if isinstance(pattern, ast.MatchOr):
+            tests: list[Expression] = []
+            for alternative in pattern.patterns:
+                alternative_tests, names = self._pattern_tests(alternative, subject)
+                if names:
+                    raise compiler._error(
+                        alternative,
+                        "an alternative of an or-pattern cannot bind a name",
+                    )
+                if alternative_tests is None:
+                    raise compiler._error(
+                        alternative,
+                        "an alternative of an or-pattern cannot match every value; "
+                        "use case _",
+                    )
+                tests += alternative_tests
+            return tests, []
+        if isinstance(pattern, ast.MatchAs):
+            tests_or_none: list[Expression] | None = None
+            names: list[str] = []
+            if pattern.pattern is not None:
+                tests_or_none, names = self._pattern_tests(pattern.pattern, subject)
+            if pattern.name is not None:
+                names = names + [pattern.name]
+            return tests_or_none, names
+        kinds = {
+            ast.MatchSequence: "sequence",
+            ast.MatchMapping: "mapping",
+            ast.MatchClass: "class",
+        }
+        raise compiler._error(
+            pattern,
+            "%s patterns are not supported" % kinds.get(type(pattern), "these"),
         )
 
     def _compile_delete(self, statement: ast.Delete) -> list[Expression]:
