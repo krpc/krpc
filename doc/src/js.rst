@@ -474,6 +474,26 @@ web page that never compiles one does not load it.
    instruments the source, such as Istanbul, also changes the function. V8 coverage, as ``c8``
    and Vitest use by default, does not.
 
+Types of a Compiled Function
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+TypeScript checks the body of a compiled function as it runs on the server. A captured object has
+its server form, in which a property is a property and a method returns its value, as
+``flight.meanAltitude``. A property you can assign is writable. The value of the function returns
+to your program as its client form:
+
+.. code-block:: ts
+
+   const vessel = await conn.spaceCenter.getActiveVessel();
+   // A number, read in one physics tick
+   const mass = await conn.run(({ vessel }) => vessel.mass, { vessel });
+   // A SpaceCenter.Part, an object of your program
+   const root = await conn.run(({ vessel }) => vessel.parts.root, { vessel });
+
+A function compiled with parameters checks the arguments of ``run``, and a stream of its value
+has its type. The generated module of each service declares the server forms, in its ``Server``
+namespace. The same checks apply to JavaScript with ``// @ts-check``.
+
 Running a Function
 ^^^^^^^^^^^^^^^^^^
 

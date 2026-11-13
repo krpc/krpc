@@ -15,7 +15,7 @@
     "stripInternal": true,
     "isolatedModules": true,
     "paths": {
-      "@krpc-org/krpc": ["./src/index.ts"]
+      "@krpc-org/krpc": ["./src/index"]
     }
   }
 }

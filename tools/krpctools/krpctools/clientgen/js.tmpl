@@ -9,11 +9,11 @@
 {{ line }}
 {% endfor %}
 {% if members %}
-export interface Service extends RemoteService {
+export interface Service extends RemoteService<"{{ service_name }}"> {
 {{ members }}
 }
 {% else %}
-export interface Service extends RemoteService {}
+export interface Service extends RemoteService<"{{ service_name }}"> {}
 {% endif %}
 {% for x in classes %}
 
@@ -67,3 +67,47 @@ export type {{ x.name }} = {{ x.type }};
 {% endfor %}
 export const {{ x.name }} = declareException<Service["{{ x.name }}"]>({{ x.arguments }});
 {% endfor %}
+{% if uses_client_service %}
+
+type ClientService = Service;
+{% endif %}
+
+/** The service and its classes as a compiled function reads them: a property is a property,
+ * and a method returns its value. */
+export declare namespace Server {
+{% if server_members %}
+  interface Service extends ServerObject<"{{ service_name }}"> {
+{{ server_members }}
+  }
+{% else %}
+  interface Service extends ServerObject<"{{ service_name }}"> {}
+{% endif %}
+{% for x in server_classes %}
+
+{% for line in x.documentation %}
+  {{ line }}
+{% endfor %}
+{% if x.members %}
+  interface {{ x.name }} extends ServerObject<"{{ x.brand }}"> {
+{{ x.members }}
+  }
+{% else %}
+  interface {{ x.name }} extends ServerObject<"{{ x.brand }}"> {}
+{% endif %}
+{% endfor %}
+}
+
+declare module "@krpc-org/krpc" {
+  interface ServerTypes {
+    "{{ service_name }}": Server.Service;
+{% for x in server_classes %}
+    "{{ x.brand }}": Server.{{ x.name }};
+{% endfor %}
+  }
+  interface ClientTypes {
+    "{{ service_name }}": Service;
+{% for x in server_classes %}
+    "{{ x.brand }}": {{ x.name }};
+{% endfor %}
+  }
+}
