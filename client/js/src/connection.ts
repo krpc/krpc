@@ -19,7 +19,7 @@ import {
 import { Functions } from "./functions.js";
 import { accessorName, camelCase } from "./naming.js";
 import { ObjectCache, RemoteObject, RemoteService } from "./objects.js";
-import { registered } from "./registry.js";
+import { name as nameValue, registered } from "./registry.js";
 import {
   type Argument,
   ArgumentSchema,
@@ -40,6 +40,7 @@ import {
   Types,
   UnknownTypeError,
 } from "./types.js";
+import type { TypeLike } from "./typevalues.js";
 
 /** The options of a connection. */
 export interface ConnectOptions {
@@ -81,12 +82,19 @@ export class Connection {
   /** Adds a stream of the value of a server side function, a KRPC.Expression with no
    * parameters. The type parameter names the type of the value, which is not checked. */
   addStream<T = unknown>(fn: Expression): Promise<Stream<T>>;
-  async addStream(call: (() => Promise<unknown>) | Expression): Promise<Stream<unknown>> {
+  /** Compiles a JavaScript function into a server side function, and adds a stream of its value.
+   * The function's first parameter is an object pattern that receives the captured values, such
+   * as `({ flight }) => flight.meanAltitude` with `{ flight }`. */
+  addStream<T = unknown>(fn: (captures: any) => unknown, captures: object): Promise<Stream<T>>;
+  async addStream(
+    call: (() => Promise<unknown>) | ((captures: any) => unknown) | Expression,
+    captures?: object,
+  ): Promise<Stream<unknown>> {
     const context = contextOf(this);
-    if (typeof call !== "function") {
-      return await context.functions.addStream(call);
+    if (typeof call !== "function" || captures !== undefined) {
+      return await context.functions.addStream(call, captures);
     }
-    const captured = capture(call);
+    const captured = capture(call as () => Promise<unknown>);
     const kind = captured.signature.result?.kind;
     if (kind === "event" || kind === "stream") {
       throw new StreamError(
@@ -96,10 +104,11 @@ export class Connection {
     return await context.streams.add(captured.call, captured.signature.result);
   }
 
-  /** Adds an event over a server side function, a KRPC.Expression of a bool with no parameters.
-   * The event fires when the value becomes true, and each time it becomes true again. */
-  addEvent(fn: Expression): Promise<Event> {
-    return contextOf(this).functions.addEvent(fn);
+  /** Adds an event over a server side function of a bool with no parameters: a KRPC.Expression,
+   * or a JavaScript function compiled with the captured values. The event fires when the value
+   * becomes true, and each time it becomes true again. */
+  addEvent(fn: Expression | ((captures: any) => unknown), captures?: object): Promise<Event> {
+    return contextOf(this).functions.addEvent(fn, captures);
   }
 
   /** Returns the call the function returns, such as
@@ -109,18 +118,40 @@ export class Connection {
     return capture(call).call;
   }
 
-  /** Compiles a server side function, a KRPC.Expression, on the server, so that its first run
-   * is as fast as later ones. Resolves with the function. */
-  compile(fn: Expression): Promise<Expression> {
-    return contextOf(this).functions.compile(fn);
+  /** Compiles a server side function on the server, so that its first run is as fast as later
+   * ones. A JavaScript function is first compiled into a server side function, with the captured
+   * values and the types of its parameters after the captures. Resolves with the function. */
+  compile(fn: Expression): Promise<Expression>;
+  compile(
+    fn: (captures: any, ...parameters: any[]) => unknown,
+    captures?: object,
+    parameters?: readonly TypeLike[],
+  ): Promise<Expression>;
+  compile(
+    fn: Expression | ((captures: any, ...parameters: any[]) => unknown),
+    captures?: object,
+    parameters?: readonly TypeLike[],
+  ): Promise<Expression> {
+    return contextOf(this).functions.compile(fn, captures, parameters);
   }
 
   /** Runs a server side function, a KRPC.Expression, within a single physics tick, and resolves
    * with its value. The arguments are passed to the function's parameters, in order. The type
    * parameter names the type of the value, which is not checked. Resolves with undefined for a
    * function with no value. */
-  run<T = unknown>(fn: Expression, ...args: unknown[]): Promise<T> {
-    return contextOf(this).functions.run(fn, args) as Promise<T>;
+  run<T = unknown>(fn: Expression, ...args: unknown[]): Promise<T>;
+  /** Compiles a JavaScript function with no parameters into a server side function, and runs it
+   * once with the captured values. */
+  run<T = unknown>(fn: (captures: any) => unknown, captures?: object): Promise<T>;
+  run(fn: Expression | ((captures: any) => unknown), ...args: unknown[]): Promise<unknown> {
+    const functions = contextOf(this).functions;
+    if (typeof fn === "function") {
+      if (args.length > 1) {
+        throw new TypeError("A JavaScript function is run with its captured values only");
+      }
+      return functions.runFunction(fn, args[0] as object | undefined);
+    }
+    return functions.run(fn, args);
   }
 
   /** Adds a function to call once for each stream update message, after the callbacks of its
@@ -209,6 +240,8 @@ export async function connect(options: ConnectOptions = {}): Promise<Connection>
         types,
         streams,
         factory,
+        services,
+        warn,
       ),
       types,
       services,
@@ -227,12 +260,13 @@ export async function connect(options: ConnectOptions = {}): Promise<Connection>
       for (const x of service.exceptions) {
         const native = nativeError(x.mappedType);
         const declared = registered(service.name, x.name);
-        exceptions.set(
-          `${service.name}.${x.name}`,
-          declared?.kind === "exception" && declared.native === native
-            ? declared.cls
-            : exceptionClass(x.name, native),
-        );
+        let cls =
+          declared?.kind === "exception" && declared.native === native ? declared.cls : null;
+        if (cls === null) {
+          cls = exceptionClass(x.name, native);
+          nameValue(cls, { kind: "exception", service: service.name, name: x.name });
+        }
+        exceptions.set(`${service.name}.${x.name}`, cls);
       }
     }
     session.errorFactory = (error) => {
@@ -277,6 +311,7 @@ function remoteClass(
     }
   };
   Object.defineProperty(cls, "name", { value: className });
+  nameValue(cls, { kind: "class", service, name: className });
   return cls;
 }
 
@@ -563,6 +598,7 @@ function serviceMembers(
   exceptions: Map<string, new (error: ServerErrorDetails) => Error>,
 ): object | null {
   const members: Record<string, unknown> = Object.create(RemoteService.prototype);
+  nameValue(members, { kind: "service", service: service.name });
   const add = (key: string, value: unknown, member: Deprecatable) => {
     const message = deprecationMessage(member, service.name, `${service.name}.${key}`);
     expose(context, members, key, value, message);
@@ -614,6 +650,9 @@ function serviceMembers(
       const key = camelCase(value.name);
       const message = deprecationMessage(value, service.name, `${service.name}.${x.name}.${key}`);
       expose(context, exposed, key, values[key], message);
+    }
+    if (enumeration !== undefined) {
+      nameValue(exposed, { kind: "enumeration", enumeration });
     }
     add(x.name, Object.freeze(exposed), x);
   }

@@ -54,6 +54,11 @@ export class RemoteObject<C extends string = string> {
     return obj.#id;
   }
 
+  /** The service and name of an object's class. */
+  static classOf(obj: RemoteObject): { readonly service: string; readonly name: string } {
+    return { service: obj.#service, name: obj.#className };
+  }
+
   /** Whether two objects stand for one server object: objects of one class with one id, from
    * any connection. */
   static sameObject(a: RemoteObject, b: RemoteObject): boolean {

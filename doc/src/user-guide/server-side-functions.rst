@@ -25,9 +25,9 @@ compiled code translates into, which every client can build directly.
 
 .. note::
 
-   Compiled functions need the Python or C# client. Events and function streams need the Python,
-   C#, C++, Java or JavaScript client. ``Run`` needs one of those, the C-nano client or the Lua
-   client.
+   Compiled functions need the Python, C# or JavaScript client. Events and function streams
+   need the Python, C#, C++, Java or JavaScript client. ``Run`` needs one of those, the C-nano
+   client or the Lua client.
 
 .. _server-side-functions-compiled:
 
@@ -60,6 +60,12 @@ This event fires when the vessel's altitude exceeds 1000 meters:
          :start-after: [docs]
          :end-before: [/docs]
          :dedent:
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/AltitudeEvent.js
+         :start-after: [docs]
+         :end-before: [/docs]
 
 The client compiles the lambda into a server side function. The mean altitude call becomes an
 embedded RPC, re-invoked on each check. ``1000`` becomes a constant.
@@ -95,6 +101,12 @@ For example:
          :end-before: [/docs]
          :dedent:
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/CapturedValue.js
+         :start-after: [docs]
+         :end-before: [/docs]
+
 The client computes ``threshold * 2`` when it creates the event, so the function compares the
 apoapsis with the constant 100000. To use a new value of ``threshold``, compile a new function
 and remove the old event.
@@ -124,6 +136,12 @@ computation on each stream update:
          :start-after: [docs]
          :end-before: [/docs]
          :dedent:
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/AltitudeStream.js
+         :start-after: [docs]
+         :end-before: [/docs]
 
 A function can produce a collection. This streams the thrust of every engine on the vessel,
 read in a single physics tick per update:
@@ -360,6 +378,12 @@ them from the type of the value. This streams the vessel's name in upper case:
          :end-before: [/docs]
          :dedent:
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/UpperCaseName.js
+         :start-after: [docs]
+         :end-before: [/docs]
+
 The compilers translate the language's string operations, such as length, indexing,
 searching, splitting and case conversion. The expression API names them
 :meth:`Expression.string_length`, :meth:`Expression.string_get`,
@@ -468,6 +492,12 @@ angle between the vessel's facing direction and its velocity relative to the sur
          :end-before: [/docs]
          :dedent:
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/SurfaceAngle.js
+         :start-after: [docs]
+         :end-before: [/docs]
+
 The service covers:
 
 * Scalar functions, such as square roots, trigonometry and clamping, and the constants pi and e.
@@ -484,7 +514,7 @@ does:
 
 * :meth:`StdLib.round` rounds a halfway value to the nearer even number, as Python and C# do.
 * :meth:`StdLib.round_half_away_from_zero` rounds it away from zero, as C and C++ do.
-* :meth:`StdLib.round_half_up` rounds it toward positive infinity, as Java does.
+* :meth:`StdLib.round_half_up` rounds it toward positive infinity, as Java and JavaScript do.
 
 Each takes the number of decimal places, negative for tens and hundreds. A compiled rounding
 call uses the procedure for its rounding rule.
@@ -512,6 +542,12 @@ game's log, ``KSP.log``. This logs the vessel's mass from the server:
          :end-before: [/docs]
          :dedent:
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/PrintMass.js
+         :start-after: [docs]
+         :end-before: [/docs]
+
 A print in an event or stream function writes a line on every stream update.
 
 Supported Constructs
@@ -534,12 +570,15 @@ A few semantics differ from running the same code in your program:
 * In C#, a call that can run code outside the .NET base library, the kRPC client and the service
   stubs is an error. Examples are a delegate call, and a method, constructor, computed property or
   operator defined in your program.
+* In JavaScript, a function reads values from your program only as captures, and a call to a
+  captured function is an error.
 * A client side call written as a statement, such as a sleep, is an error.
 * A rounding mode must be a constant, as it selects the server side procedure.
 * The language's own rules for the code a compiler accepts still apply.
 
 Each client guide lists the constructs its compiler supports, and the rules of its language:
-:ref:`C# <csharp-client-compiling-lambdas>` and :ref:`Python <python-client-compiling-functions>`.
+:ref:`C# <csharp-client-compiling-lambdas>`, :ref:`JavaScript <js-client-compiling-functions>` and
+:ref:`Python <python-client-compiling-functions>`.
 
 .. _server-side-functions-errors:
 

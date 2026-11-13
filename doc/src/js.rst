@@ -21,9 +21,9 @@ The library is the ``@krpc-org/krpc`` package, which can be `downloaded from Git
 
    npm install krpc-js-0.8.0.tgz
 
-The package is a set of ES modules, and depends on the ``@bufbuild/protobuf`` package. A web page
-loads it through a bundler, such as `esbuild <https://esbuild.github.io>`_ or `Vite
-<https://vite.dev>`_, which resolves that dependency.
+The package is a set of ES modules, and depends on the ``@bufbuild/protobuf`` and ``acorn``
+packages. A web page loads it through a bundler, such as `esbuild <https://esbuild.github.io>`_ or
+`Vite <https://vite.dev>`_, which resolves those dependencies.
 
 Connecting to the Server
 ------------------------
@@ -346,45 +346,138 @@ or closing the connection ends it at once. :attr:`Event.stream` is the event's s
 Server Side Functions
 ---------------------
 
-A server side function runs inside the game. You build it in your program with the expression
-API, and the client sends it to the server, which runs it there. The following reads the vessel's
-altitude and speed together:
+A server side function runs inside the game. The client compiles a JavaScript function into one,
+and the server runs it there. The following reads the vessel's altitude and speed in one physics
+tick:
+
+.. literalinclude:: /scripts/js/CompiledFunction.js
+
+The function is written as it runs on the server. A property is read as a property, as in
+``flight.meanAltitude``, and a method returns its value. The :ref:`server side functions guide
+<server-side-functions>` describes what functions are for, and how the server runs them.
+
+.. _js-client-compiling-functions:
+
+Captured Values
+^^^^^^^^^^^^^^^
+
+The function reads values from your program only through its first parameter, an object pattern
+such as ``({ flight, gravity })``. The client passes it the object given after the function. A
+minifier keeps the keys of the pattern, so a compiled function survives one. A name the function
+reads that is not captured is a :class:`CompilationError`:
+
+.. literalinclude:: /scripts/js/CompilationErrors.js
+
+Each captured value is used as follows:
+
+* A remote object or a service makes its members calls in the function, made again on each
+  evaluation. A service is captured as ``conn.spaceCenter``, or through the connection, as
+  ``conn``.
+* A number, ``bigint``, string, boolean, ``null`` or enumeration value is a constant.
+* A plain object, a generated module such as ``SpaceCenter``, and the object of an enumeration's
+  values are read on the client. ``SpaceCenter.SASMode.prograde`` is a constant.
+* Any sub-expression of constants, such as ``gravity * 2``, is computed on the client, with the
+  result JavaScript gives.
+
+A function with no captures takes no parameters, or names its first one, such as ``_``, and does
+not read it. The builtins ``Math``, ``console``, ``Number``, ``String``, ``Boolean``, ``BigInt``,
+``undefined``, ``NaN`` and ``Infinity`` need no capture.
+
+Expressions
+^^^^^^^^^^^
+
+A compiled function is an arrow function whose body is one expression, or one ``return``
+statement. The following compile to the server's operations:
+
+* Property reads, and calls of methods and static methods, with arguments by name as a last
+  object, as in the client's own API.
+* Arithmetic, comparisons, ``!``, ``&&``, ``||``, ``??``, ``?.``, ``?:`` and template literals.
+* The bitwise operators, on numbers and on the values of a :ref:`flags enumeration
+  <js-client-flags>`, which also have ``union``, ``intersection``, ``difference`` and
+  ``contains``.
+* The string members ``length``, indexing, ``at``, ``slice``, ``substring``, ``toUpperCase``,
+  ``toLowerCase``, ``trim``, ``trimStart``, ``trimEnd``, ``includes``, ``startsWith``,
+  ``endsWith``, ``indexOf`` and ``replaceAll``, and ``String(x)``. The replacement of
+  ``replaceAll`` is a constant with no ``$`` pattern.
+* The ``Math`` functions with a ``StdLib`` procedure, ``Number.isNaN`` and ``Number.isFinite``.
+* ``console.log``, which writes a line to the game's log with :meth:`StdLib.print`.
+
+The values keep their JavaScript meaning:
+
+* **A number is a double.** Arithmetic on numbers is in double precision, so ``7 / 2`` is
+  ``3.5``. The bitwise operators convert their operands to 32-bit integers, as JavaScript does.
+  A number passed as an integer argument is converted toward zero.
+* **A** ``bigint`` **is a 64-bit integer**, so ``7n / 2n`` is ``3n``. Mixing a number and a
+  ``bigint`` is a :class:`CompilationError`.
+* **Truth is JavaScript's.** ``0``, ``NaN``, ``""`` and ``null`` are false.
+* **Null takes the type of the value beside it**, such as the other branch of ``?:``. Arithmetic
+  on a value that can be null is a :class:`CompilationError`. Give a value for null with
+  ``??``.
+* **Compare a server value with** ``== null`` **or** ``!= null``. The server has one null, so
+  ``=== null`` and ``=== undefined`` are a :class:`CompilationError`.
+* A number converts to a string as the server formats it, which can differ from JavaScript in
+  the last digits.
+
+Any other construct is a :class:`CompilationError` that names it, with its line and column in
+the function's source. The client loads the compiler the first time you compile a function, so a
+web page that never compiles one does not load it.
+
+.. note::
+
+   A transpiler that targets an older version of JavaScript rewrites ``?.``, ``??`` and arrow
+   functions into code the compiler rejects. Target ES2020 or later. A coverage tool that
+   instruments the source, such as Istanbul, also changes the function. V8 coverage, as ``c8``
+   and Vitest use by default, does not.
+
+Running a Function
+^^^^^^^^^^^^^^^^^^
+
+:meth:`Connection.run` compiles a function with no parameters and runs it once. The server runs
+the whole function within one physics tick, so every value it reads comes from the same moment in
+the game. In the first example, the altitude and the speed are consistent with each other, which
+two separate calls cannot guarantee.
+
+A function takes arguments through the parameters after its captures. :meth:`Connection.compile`
+compiles it once, with a type for each of those parameters, and :meth:`Connection.run` passes the
+arguments:
+
+.. literalinclude:: /scripts/js/CompiledParameters.js
+
+The ``types`` values name the types: ``types.double``, ``types.float``, ``types.int32``,
+``types.uint32``, ``types.int64``, ``types.uint64``, ``types.bool``, ``types.string`` and
+``types.bytes``, ``types.nullable(T)``, and a service's class, such as ``conn.spaceCenter.Vessel``.
+Compile a function once and run it many times, as each compile builds the function again on the
+server.
+
+Function Streams and Events
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+:meth:`Connection.addEvent` adds an event that fires when a function's value becomes ``true``.
+:meth:`Connection.addStream` streams a function's value:
+
+.. literalinclude:: /scripts/js/FunctionEvent.js
+
+The server computes the function on each stream update. A function of a stream or an event takes
+no parameters, and makes a call, as a function of constants has the same value on every update.
+
+The Expression API
+^^^^^^^^^^^^^^^^^^
+
+The methods of ``conn.krpc.Expression`` build a function node by node, as the clients with no
+compiler do. They build what one expression cannot, such as statements and loops. The following
+reads the vessel's altitude and speed into a tuple:
 
 .. literalinclude:: /scripts/js/RunFunction.js
 
 :meth:`Connection.getCall` takes a function that returns one call, as :meth:`Connection.addStream`
 does, and returns the call as a message for ``Expression.call`` to embed in the function. Each
 method of ``conn.krpc.Expression`` builds one node of the function on the server, and returns a
-``Promise`` of it. :ref:`server-side-functions-api` in the :ref:`server side functions guide
-<server-side-functions>` describes how to build functions.
-
-Running a Function
-^^^^^^^^^^^^^^^^^^
-
-:meth:`Connection.run` runs a function once, and returns its value. The server runs the whole
-function within one physics tick, so every value it reads comes from the same moment in the game.
-In the example, the altitude and the speed are consistent with each other, which two separate calls
-cannot guarantee.
-
-A function takes arguments through its parameters. The following compiles a function ahead of its
-first run, then passes it an argument:
-
-.. literalinclude:: /scripts/js/RunFunctionArguments.js
-
-:meth:`Connection.compile` makes the first run as fast as later ones. The client reads the types
-of a function's parameters and value from the server, once per function. TypeScript types the
-value as ``unknown``, or as the type you name with ``run<T>``, which the client does not check.
-
-Function Streams and Events
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-:meth:`Connection.addEvent` adds an event that fires when a function's value becomes ``true``.
-:meth:`Connection.addStream` also takes a function, and streams its value:
-
-.. literalinclude:: /scripts/js/FunctionEvent.js
-
-The server computes the function on each stream update. A function stream or event behaves as any
-other, and takes no arguments, so a function with parameters rejects with a ``TypeError``.
+``Promise`` of it. :ref:`server-side-functions-api` in the server side functions guide describes
+how to build functions. :meth:`Connection.run`, :meth:`Connection.compile`,
+:meth:`Connection.addStream` and :meth:`Connection.addEvent` take the function the expression
+API builds. The client reads the types of its parameters and value from the server, once per
+function. TypeScript types the value as ``unknown``, or as the type you name with ``run<T>``,
+which the client does not check.
 
 Deprecated Members
 ------------------
@@ -462,25 +555,29 @@ Client API Reference
       :class:`ConnectionError`, and each stream ends with one. Closing a connection that is
       already closed does nothing.
 
-   .. method:: addStream(call)
+   .. method:: addStream(call, captures)
 
       Adds a stream of a call, or of the value of a server side function.
 
       :param call: A function that returns one call of a procedure, method or property getter,
                    such as ``() => flight.getMeanAltitude()``. The client runs it to build the
-                   call, which it does not send. Or a ``KRPC.Expression`` with no parameters.
+                   call, which it does not send. Or a ``KRPC.Expression`` with no parameters, or a
+                   function to compile, with ``captures``.
+      :param captures: The captured values of a function to compile.
       :returns: A ``Promise`` of the :class:`Stream`.
 
-      Rejects with a :class:`StreamError` for a procedure that returns an event, and with a
+      Rejects with a :class:`StreamError` for a procedure that returns an event, with a
       ``TypeError`` for a function that does not return one call, or a server side function with
-      parameters.
+      parameters, and with a :class:`CompilationError` for a function that does not compile.
 
-   .. method:: addEvent(fn)
+   .. method:: addEvent(fn, captures)
 
       Adds an event that fires when the value of a server side function becomes ``true``, and
       each time it becomes ``true`` again.
 
-      :param fn: A ``KRPC.Expression`` of a ``boolean``, with no parameters.
+      :param fn: A ``KRPC.Expression`` of a ``boolean``, with no parameters, or a function to
+                 compile that returns a ``boolean``.
+      :param captures: The captured values of a function to compile, if it has any.
       :returns: A ``Promise`` of the :class:`Event`.
 
    .. method:: getCall(call)
@@ -492,25 +589,32 @@ Client API Reference
 
       Throws a ``TypeError`` for a function that does not return one call.
 
-   .. method:: compile(fn)
+   .. method:: compile(fn, captures, parameters)
 
-      Compiles a server side function on the server, so that its first run is as fast as later
-      ones.
+      Compiles a JavaScript function into a server side function, and compiles a server side
+      function on the server, so that its first run is as fast as later ones.
 
-      :param fn: A ``KRPC.Expression``.
-      :returns: A ``Promise`` of the function.
+      :param fn: A ``KRPC.Expression``, or a function to compile.
+      :param captures: The captured values of a function to compile, if it has any.
+      :param parameters: The type of each parameter of a function to compile, after its captures,
+                         such as ``[types.double]``.
+      :returns: A ``Promise`` of the ``KRPC.Expression``.
+
+      Rejects with a :class:`CompilationError` for a function that does not compile.
 
    .. method:: run(fn, ...args)
 
       Runs a server side function once, within a single physics tick.
 
-      :param fn: A ``KRPC.Expression``.
-      :param args: The arguments, one for each of the function's parameters, in order.
+      :param fn: A ``KRPC.Expression``, or a function to compile with no parameters.
+      :param args: The arguments, one for each of the function's parameters, in order. For a
+                   function to compile, its captured values, if it has any.
       :returns: A ``Promise`` of the function's value, or of ``undefined`` for a function with no
                 value.
 
       Rejects with a ``TypeError`` for the wrong number of arguments, or an argument of the wrong
-      type, and with the error the function throws.
+      type, with a :class:`CompilationError` for a function that does not compile, and with the
+      error the function throws.
 
    .. method:: addUpdateCallback(callback)
 
@@ -726,6 +830,34 @@ Client API Reference
    A stream or an event that you or the server removed, or that cannot be added. Reading
    :attr:`Stream.value` before the first value throws one too. It is the class of
    ``KRPC.StreamRemovedException``.
+
+.. class:: CompilationError()
+
+   A function the client cannot compile into a server side function. The message names the
+   construct, and its position in the function's source.
+
+   .. attribute:: line
+
+      The line of the construct in the function's source, counting from 1, or ``0``.
+
+   .. attribute:: column
+
+      The column of the construct in its line, counting from 1, or ``0``.
+
+.. data:: types
+
+   The types of the parameters of a compiled function: ``double``, ``float``, ``int32``,
+   ``uint32``, ``int64``, ``uint64``, ``bool``, ``string`` and ``bytes``, and ``nullable(T)``.
+   ``list(T)``, ``set(T)``, ``map(K, V)`` and ``tuple(T, ...)`` name collections. A service's
+   class, enumeration or structure names its own type. Each type value is a :class:`TypeValue`.
+
+.. class:: TypeValue()
+
+   A type of the values of a server side function.
+
+   .. method:: cast(value)
+
+      Returns the value. In a compiled function, gives the value this type.
 
 API Reference
 -------------

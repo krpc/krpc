@@ -245,8 +245,8 @@ value that arrives during the call is dropped.
 Server Side Functions
 ---------------------
 
-``functions.ts`` adds the server side functions built with the expression API. The client has no
-function compiler yet.
+``functions.ts`` adds the server side functions built with the expression API, and
+``compiler/`` compiles a JavaScript function into one.
 
 * ``getCall`` takes a function returning one call, as ``addStream`` does, and returns the
   ``ProcedureCall`` it captures. It is synchronous, as the capture sends nothing.
@@ -259,6 +259,40 @@ function compiler yet.
   argument, so ``run<T>`` and ``addStream<T>`` name a type the client cannot check.
 * A function with parameters has no stream or event, as nothing passes its arguments. The client
   rejects one with a ``TypeError`` before calling the server.
+
+Function Compiler
+^^^^^^^^^^^^^^^^^
+
+``compile``, ``run``, ``addStream`` and ``addEvent`` take a JavaScript function. The compiler reads
+its source with ``Function.prototype.toString`` and parses it with acorn.
+
+* **Captures are an object pattern.** JavaScript gives no access to a closure, and a minifier
+  renames local names, so every name a function reads is a capture, a parameter or a builtin
+  global. A minifier keeps the keys of the pattern ``({ vessel, limit })``, and renames each
+  binding with its uses. Positional captures were ruled out, as a wrong order goes unnoticed.
+* **The body is written as it runs on the server.** A property is read as a property, and a method
+  returns its value. Calls with ``await`` would also run on the client, but are unreadable at any
+  size.
+* **Two stages.** The compiler builds a typed tree on the client with no calls, so every
+  ``CompilationError`` is thrown before anything reaches the server. It then builds the nodes, the
+  children of a node concurrently, so a compile takes about one round trip per level of the tree.
+* **The compiler gives the function's types**, so ``run`` reads none from the server. The native
+  tests check them against the server's.
+* **A number is a double, and a** ``bigint`` **a 64-bit integer**, so arithmetic gives JavaScript's
+  results. A server integer is a ``number`` in the client, so keeping integer arithmetic would make
+  ``7 / 2`` differ from JavaScript.
+* **Strict comparison with null is an error.** The server has one null, and the codec gives it
+  as ``null``, so ``=== undefined`` would differ from the client. ``== null`` matches both.
+* **A construct the server cannot match is an error**, such as a ``replaceAll`` pattern or a
+  ``Math.log2`` of a server value. A result that differs from JavaScript goes unnoticed.
+* **Type values are values.** A parameter type is ``types.double`` or a service's class, checked
+  when the program is written. A type string would be checked only when compiling.
+* **Each call compiles again.** The captures can differ per call. The parse is cached per function
+  object, in a ``WeakMap``.
+* **The compiler is loaded with** ``import()``. acorn is larger than the rest of the client, and a
+  bundler splits the compiler into its own chunk.
+* A first parameter that is a name the body does not read, such as ``_``, takes no captures, as
+  Biome's recommended rules reject the empty pattern ``{}``.
 
 Transports
 ----------

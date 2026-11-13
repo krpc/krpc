@@ -1,6 +1,6 @@
 import { Deprecations } from "./deprecation.js";
 import { exceptionClass, isStreamRemoved, type ServerErrorDetails, StreamError } from "./errors.js";
-import { register } from "./registry.js";
+import { name as nameValue, register } from "./registry.js";
 import { Enumeration, type RemoteEnum, type RemoteStruct, StructDeclaration } from "./types.js";
 
 // The values of generated modules belong to no connection, so warn once per process
@@ -41,6 +41,7 @@ export function declareEnumeration<T = Readonly<Record<string, RemoteEnum>>>(
     );
   }
   Object.freeze(result);
+  nameValue(result, { kind: "enumeration", enumeration });
   register(service, name, { kind: "enumeration", enumeration, values: result });
   return result as T;
 }
@@ -75,6 +76,7 @@ export function declareException<T = new (error: ServerErrorDetails) => Error>(
     return StreamError as T;
   }
   const cls = exceptionClass(name, native);
+  nameValue(cls, { kind: "exception", service, name });
   register(service, name, { kind: "exception", cls, native });
   return cls as T;
 }

@@ -2,6 +2,7 @@ import { create } from "@bufbuild/protobuf";
 import { decode, encode, type ObjectFactory } from "./codec.js";
 import { EncodingError } from "./errors.js";
 import { RemoteObject } from "./objects.js";
+import type { Service } from "./schema/krpc_pb.js";
 import {
   type Type as ProtobufType,
   Type_TypeCode as TypeCode,
@@ -10,12 +11,17 @@ import {
 import type { Expression } from "./services/KRPC.js";
 import type { Event, Stream, StreamManager } from "./streams.js";
 import { type RemoteEnum, type Type, type Types, UnknownTypeError } from "./types.js";
+import type { TypeLike } from "./typevalues.js";
+
+/** A JavaScript function to compile into a server side function. Its first parameter receives
+ * the captured values. */
+export type JSFunction = (...args: any[]) => unknown;
 
 /** Calls a procedure of the KRPC service, and returns its result. */
 export type KRPCCall = (procedure: string, args: readonly unknown[]) => Promise<unknown>;
 
 /** The types of a server side function's parameters, and of its value or null for none. */
-interface FunctionTypes {
+export interface FunctionTypes {
   readonly parameters: readonly Type[];
   readonly result: Type | null;
 }
@@ -32,25 +38,72 @@ export class Functions {
   readonly #types: Types;
   readonly #streams: StreamManager;
   readonly #objects: ObjectFactory;
-  // Read from the server once per function
+  readonly #services: readonly Service[];
+  readonly #warn: (message: string) => void;
+  // Read from the server once per function, or given by the compiler
   readonly #functionTypes = new WeakMap<RemoteObject, Promise<FunctionTypes>>();
 
-  constructor(call: KRPCCall, types: Types, streams: StreamManager, objects: ObjectFactory) {
+  constructor(
+    call: KRPCCall,
+    types: Types,
+    streams: StreamManager,
+    objects: ObjectFactory,
+    services: readonly Service[],
+    warn: (message: string) => void,
+  ) {
     this.#call = call;
     this.#types = types;
     this.#streams = streams;
     this.#objects = objects;
+    this.#services = services;
+    this.#warn = warn;
   }
 
-  async compile(fn: Expression): Promise<Expression> {
+  /** Compiles a JavaScript function into a server side function, for the given use. The
+   * compiler is loaded on the first call. */
+  async #compileFunction(
+    fn: JSFunction,
+    captures: object | undefined,
+    parameters: readonly TypeLike[] | undefined,
+    use: "compile" | "run" | "stream" | "event",
+  ): Promise<Expression> {
+    const { compileFunction } = await import("./compiler/index.js");
+    const compiled = await compileFunction(
+      { call: this.#call, types: this.#types, services: this.#services, warn: this.#warn },
+      fn,
+      captures ?? {},
+      parameters ?? [],
+      use,
+    );
+    const expression = compiled.expression as Expression;
+    this.#functionTypes.set(
+      expression,
+      Promise.resolve({ parameters: compiled.parameters, result: compiled.result }),
+    );
+    return expression;
+  }
+
+  async compile(
+    fn: Expression | JSFunction,
+    captures?: object,
+    parameters?: readonly TypeLike[],
+  ): Promise<Expression> {
+    if (typeof fn === "function") {
+      fn = await this.#compileFunction(fn, captures, parameters, "compile");
+    }
     check(fn);
     await this.#call("CompileFunction", [fn]);
     return fn;
   }
 
+  /** Runs a JavaScript function on the server once, with the given captured values. */
+  async runFunction(fn: JSFunction, captures?: object): Promise<unknown> {
+    return this.run(await this.#compileFunction(fn, captures, undefined, "run"), []);
+  }
+
   async run(fn: Expression, args: readonly unknown[]): Promise<unknown> {
     check(fn);
-    const { parameters, result } = await this.#typesOf(fn);
+    const { parameters, result } = await this.typesOf(fn);
     if (args.length !== parameters.length) {
       throw new TypeError(
         `The function takes ${parameters.length} arguments, and was passed ${args.length}`,
@@ -81,28 +134,35 @@ export class Functions {
     return decode(result, data, this.#objects);
   }
 
-  async addStream<T>(fn: Expression): Promise<Stream<T>> {
+  async addStream<T>(fn: Expression | JSFunction, captures?: object): Promise<Stream<T>> {
+    if (typeof fn === "function") {
+      fn = await this.#compileFunction(fn, captures, undefined, "stream");
+    }
     check(fn);
-    const { parameters, result } = await this.#typesOf(fn);
+    const { parameters, result } = await this.typesOf(fn);
     if (parameters.length > 0) {
       throw new TypeError("A stream of a function with parameters has no arguments to pass");
     }
     return await this.#streams.addWith<T>("AddFunctionStream", encode(EXPRESSION, fn), result);
   }
 
-  async addEvent(fn: Expression): Promise<Event> {
+  async addEvent(fn: Expression | JSFunction, captures?: object): Promise<Event> {
+    if (typeof fn === "function") {
+      fn = await this.#compileFunction(fn, captures, undefined, "event");
+    }
     check(fn);
-    const { parameters } = await this.#typesOf(fn);
+    const { parameters } = await this.typesOf(fn);
     if (parameters.length > 0) {
       throw new TypeError("An event of a function with parameters has no arguments to pass");
     }
     return (await this.#call("AddEvent", [fn])) as Event;
   }
 
-  #typesOf(fn: Expression): Promise<FunctionTypes> {
+  /** The types of a function, read once. Not part of the public API. */
+  typesOf(fn: Expression): Promise<FunctionTypes> {
     let types = this.#functionTypes.get(fn);
     if (types === undefined) {
-      types = this.#readTypes(fn);
+      types = this.readTypes(fn);
       this.#functionTypes.set(fn, types);
       // A failed read is tried again on the next use
       types.catch(() => this.#functionTypes.delete(fn));
@@ -110,7 +170,9 @@ export class Functions {
     return types;
   }
 
-  async #readTypes(fn: Expression): Promise<FunctionTypes> {
+  /** The types of a function, read from the server with no cache. Not part of the public
+   * API. */
+  async readTypes(fn: Expression): Promise<FunctionTypes> {
     const [parameters, hasResult] = (await Promise.all([
       this.#call("Expression_get_ParameterTypes", [fn]),
       this.#call("Expression_get_HasReturnType", [fn]),

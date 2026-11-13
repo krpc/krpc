@@ -11,8 +11,7 @@ await ascent.setEnabled(true);
 
 await (await vessel.getControl()).activateNextStage();
 
-while (await ascent.getEnabled()) {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-}
+const event = await conn.addEvent(({ ascent }) => !ascent.enabled, { ascent });
+await event.wait();
 
 console.log("Launch complete");

@@ -7,6 +7,7 @@ load("@npm//client/js:@bufbuild/protoc-gen-es/package_json.bzl", protoc_gen_es =
 load("@rules_pkg//pkg:mappings.bzl", "pkg_files")
 load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
 load("//:config.bzl", "npm_version", "version")
+load("//tools/build:client_test.bzl", "client_test")
 load("//tools/build:conformance.bzl", "conformance_test")
 load("//tools/build/protobuf:js.bzl", "protobuf_es")
 load("//tools/krpctools:clientgen.bzl", "clientgen_js_index", "clientgen_services")
@@ -25,6 +26,7 @@ npm_link_all_packages(name = "node_modules")
 test_suite(
     name = "test",
     tests = [
+        ":compiler-test",
         ":conformance",
         ":lint",
     ],
@@ -74,6 +76,7 @@ ts_project(
     visibility = ["//doc:__pkg__"],
     deps = [
         ":node_modules/@bufbuild/protobuf",
+        ":node_modules/acorn",
         ":package_json",
     ],
 )
@@ -139,11 +142,25 @@ ts_config(
     deps = [":tsconfig"],
 )
 
+# The TestService module, which the client does not ship, for the tests
+ts_project(
+    name = "testservice-lib",
+    testonly = True,
+    srcs = [":services-testservice"],
+    declaration = True,
+    transpiler = "tsc",
+    tsconfig = ":tsconfig",
+    deps = [
+        ":lib",
+        ":package_json",
+    ],
+)
+
 ts_project(
     name = "conformance-lib",
+    testonly = True,
     srcs = [
         "conformance/testee.ts",
-        ":services-testservice",
         ":testee-schema",
     ],
     transpiler = "tsc",
@@ -153,13 +170,53 @@ ts_project(
         ":node_modules/@bufbuild/protobuf",
         ":node_modules/@types/node",
         ":package_json",
+        ":testservice-lib",
     ],
 )
 
 js_binary(
     name = "conformance-testee",
+    testonly = True,
     data = [":conformance-lib"],
     entry_point = "conformance/testee.js",
+)
+
+# The native tests: the function compiler against a TestServer. The conformance tests cover
+# what every client shares
+ts_config(
+    name = "test-tsconfig",
+    src = "test/tsconfig.json",
+    deps = [":tsconfig"],
+)
+
+ts_project(
+    name = "test-lib",
+    testonly = True,
+    srcs = glob(["test/*.ts"]),
+    transpiler = "tsc",
+    tsconfig = ":test-tsconfig",
+    deps = [
+        ":lib",
+        ":node_modules/@types/node",
+        ":package_json",
+        ":testservice-lib",
+    ],
+)
+
+js_binary(
+    name = "compiler-testee",
+    testonly = True,
+    data = [":test-lib"],
+    entry_point = "test/main.js",
+)
+
+client_test(
+    name = "compiler-test",
+    size = "medium",
+    server_executable = "//tools/TestServer",
+    server_type = "websockets",
+    tags = ["requires-network"],
+    test_executable = ":compiler-testee",
 )
 
 conformance_test(
@@ -194,6 +251,7 @@ filegroup(
     srcs = glob([
         "src/**/*.ts",
         "conformance/*.ts",
+        "test/*.ts",
     ]),
 )
 

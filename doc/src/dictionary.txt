@@ -47,6 +47,7 @@ RemoteTech
 Rescaled
 Translatron
 Tron
+Vitest
 Wheesley
 accelerometers
 adaptively
@@ -149,6 +150,7 @@ metaclass
 microcontroller
 microcontrollers
 microtask
+minifier
 mitigations
 mits
 mutex
@@ -227,6 +229,7 @@ toolchains
 tooltip
 tradeoff
 translational
+transpiler
 tuple
 turbofan
 uint
