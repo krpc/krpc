@@ -192,6 +192,8 @@ Then load it from the page with ``<script type="module" src="dashboard.bundle.js
    Any page open in the browser can connect to a server it can reach. A server with
    "Auto-accept new clients" turned off asks the player to approve each connection.
 
+.. seealso:: The :doc:`/tutorials/control-panel` tutorial builds a complete page.
+
 Handling Errors
 ---------------
 

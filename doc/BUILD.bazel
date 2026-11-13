@@ -38,6 +38,7 @@ stage_files(
         "src/scripts/**/*.ino",
         "src/scripts/**/*.cs",
         "src/scripts/**/*.cpp",
+        "src/scripts/**/*.html",
         "src/scripts/**/*.java",
         "src/scripts/**/*.lua",
         "src/scripts/**/*.py",
@@ -353,6 +354,7 @@ ts_project(
     srcs = glob([
         "src/scripts/js/*.js",
         "src/scripts/api/**/*.js",
+        "src/scripts/tutorials/**/*.js",
         "src/scripts/user-guide/**/*.js",
     ]),
     allow_js = True,
