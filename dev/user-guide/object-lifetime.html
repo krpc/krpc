@@ -628,8 +628,8 @@ left out of the save, and lasts as long as the game state it was created in.</p>
 <p>A comm link is a hop in a vessel’s control path, and reports the path as it currently is. If
 the path stops using that hop, the link reports itself as not connected, which is the
 not-loaded case above. It works again once the path uses the hop again.</p>
-<p>Objects from a mod that is not installed, or has yet to start, report themselves as
-unavailable in the same way.</p>
+<p>A member that needs a mod raises <code class="docutils literal notranslate"><span class="pre">KRPC.InvalidOperationException</span></code> while that mod is not
+available. The message names the mod and the reason, such as “not installed”.</p>
 </section>
 </section>
 

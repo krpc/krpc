@@ -95,6 +95,7 @@ Core
 * :breaking:`Breaking` Reject parameter and enumeration value names that are not ASCII letters and digits, starting with a letter (:issue:`1338`)
 * Add ``StdLib.ImageFormat``, the format of the images from the DockingCamera, ScanSat and RasterPropMonitor services (:issue:`1341`)
 * Add ``ModAPI``, ``ModBinder`` and ``MemberBinder``, for a service that binds to another mod by name, and fails only the calls that use a missing member (:issue:`1341`)
+* Add the ``RequiresMod`` attribute, which fails the calls of a member whose mod is missing, failed to load or is not ready (:issue:`1342`)
 
 
 Server
@@ -113,6 +114,7 @@ Server
 * Load a mod's API when some of its methods are missing, and fail only the calls that use them (:issue:`1341`)
 * Disable only the integration of a mod that fails to load, and give the reason in the errors of its RPCs (:issue:`1341`)
 * Load each supported mod whatever its version (:issue:`1341`)
+* Fail the class members of a mod service with the reason when its mod is missing or failed to load (:issue:`1342`)
 
 
 SpaceCenter service
@@ -149,6 +151,7 @@ SpaceCenter service
 
 * Add ``<Mod>Available`` for each supported mod that lacked one, such as ``RealChuteAvailable`` (:issue:`1340`)
 * Keep the FAR, RealFuels, RealAntennas and Action Groups Extended RPCs working when a mod update removes members, and fail only the RPCs that use them (:issue:`1341`)
+* Fail the FAR and RealFuels members, and ``Part.Tag``, with the reason when the mod is missing or failed to load (:issue:`1342`)
 
 
 InfernalRobotics service

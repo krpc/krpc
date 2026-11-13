@@ -4,7 +4,7 @@
 SCANsat API
 ===========
 
-Provides functionality to interact with the `SCANsat <https://github.com/KSPModStewards/SCANsat>`_ mod.
+Provides functionality to interact with the `SCANsat`_ mod. |SCANsat tested|
 
 .. toctree::
    :includehidden:
@@ -21,3 +21,5 @@ The following example switches on the scanners of the active vessel, then prints
 coverage of the body it orbits and the height of the terrain below it:
 
 .. literalinclude:: /scripts/api/scansat/ScanSatExample.cpp
+
+.. include:: /mods.inc

@@ -4,8 +4,8 @@
 Kerbal Engineer Redux API
 =========================
 
-Provides functionality to interact with the `Kerbal Engineer Redux
-<https://github.com/jrbudda/KerbalEngineer>`_ mod.
+Provides functionality to interact with the `Kerbal Engineer Redux`_ mod.
+|Kerbal Engineer Redux tested|
 
 .. toctree::
    :includehidden:
@@ -25,3 +25,5 @@ The following example prints the delta-v and thrust-to-weight ratio of each stag
 vessel, from the current stage onward, then the time to burn 500 m/s:
 
 .. literalinclude:: /scripts/api/kerbal-engineer-redux/KerbalEngineerReduxExample.py
+
+.. include:: /mods.inc

@@ -4,7 +4,8 @@
 InfernalRobotics API
 ====================
 
-Provides functionality to interact with `Infernal Robotics Next`_. Provides the following classes:
+Provides functionality to interact with the `Infernal Robotics Next`_ mod.
+|Infernal Robotics Next tested| Provides the following classes:
 
 .. toctree::
    :includehidden:
@@ -23,4 +24,4 @@ servos to the right for 1 second.
 
 .. literalinclude:: /scripts/api/infernal-robotics/InfernalRoboticsExample.lua
 
-.. _Infernal Robotics Next: https://github.com/meirumeiru/InfernalRobotics
+.. include:: /mods.inc

@@ -10,7 +10,7 @@ LIDAR API
    Deprecated. The LIDAR service will be removed in a future release. Use
    :func:`krpc_SpaceCenter_RaycastDistance` instead.
 
-Provides functionality to interact with the `LiDAR <https://github.com/nullprofile/LaserDist>`_ mod.
+Provides functionality to interact with the `LiDAR`_ mod.
 
 .. toctree::
    :includehidden:
@@ -26,3 +26,5 @@ A LiDAR casts a fan of rays from its part. :func:`krpc_SpaceCenter_RaycastDistan
 ray. This example casts 8 rays below the root part of the active vessel:
 
 .. literalinclude:: /scripts/api/lidar/RaycastExample.c
+
+.. include:: /mods.inc

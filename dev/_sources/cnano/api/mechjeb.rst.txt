@@ -5,7 +5,7 @@
 MechJeb API
 ===========
 
-Provides functionality to interact with the `MechJeb <https://github.com/MuMech/MechJeb2>`_ mod.
+Provides functionality to interact with the `MechJeb`_ mod. |MechJeb tested|
 Originally written by `Genhis <https://github.com/Genhis/KRPC.MechJeb>`_.
 The service acts on the MechJeb of the active vessel, which needs a part with MechJeb.
 
@@ -37,3 +37,5 @@ The following example launches the active vessel into a 100 km orbit with the as
 autopilot, and waits for the ascent to finish:
 
 .. literalinclude:: /scripts/api/mechjeb/MechJebExample.c
+
+.. include:: /mods.inc

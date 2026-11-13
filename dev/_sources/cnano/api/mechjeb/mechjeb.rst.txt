@@ -26,7 +26,7 @@ This service provides functionality to interact with MechJeb 2.
 
 .. function:: krpc_error_t krpc_MechJeb_Ready(krpc_connection_t connection, bool * returnValue)
 
-   Whether MechJeb is installed and the active vessel has MechJeb.
+   Whether the active vessel has MechJeb.
 
    :Game Scenes: Flight
 

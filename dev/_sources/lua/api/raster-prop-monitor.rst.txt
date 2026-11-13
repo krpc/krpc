@@ -5,8 +5,8 @@
 Raster Prop Monitor API
 =======================
 
-Provides functionality to interact with the `Raster Prop Monitor
-<https://github.com/FirstPersonKSP/RasterPropMonitor>`_ mod.
+Provides functionality to interact with the `Raster Prop Monitor`_ mod.
+|Raster Prop Monitor tested|
 
 .. toctree::
    :includehidden:
@@ -32,3 +32,5 @@ The page text names Raster Prop Monitor's ``SAS`` variable, and the format gives
 ``OFF`` for 0. Raster Prop Monitor updates the page as SAS changes, however it is switched. On the
 screens of the Mk1 Lander Can, NAV is ``buttonR1``.
 This client has no events, so the example does not answer the ENTER button.
+
+.. include:: /mods.inc

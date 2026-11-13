@@ -28,7 +28,7 @@ This service provides functionality to interact with MechJeb 2.
 
 .. attribute:: ready: boolean
 
-   Whether MechJeb is installed and the active vessel has MechJeb.
+   Whether the active vessel has MechJeb.
 
    :Attribute: Read-only, cannot be set
 

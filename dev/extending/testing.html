@@ -435,6 +435,7 @@
 <li class="toctree-l2"><a class="reference internal" href="game-scenes.html">Game Scenes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="deprecation.html">Deprecating Service Members</a></li>
 <li class="toctree-l2"><a class="reference internal" href="extending-other-services.html">Extending Other Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="other-mods.html">Wrapping Another Mod</a></li>
 <li class="toctree-l2"><a class="reference internal" href="documentation.html">Documentation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="clientgen.html">Generating Service Code for Static Clients</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docgen.html">API Reference Pages</a></li>
@@ -614,6 +615,8 @@ exactly those mods and the mods they require:</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">))</span>
 </pre></div>
 </div>
+<p>The class fails when the <a class="reference internal" href="other-mods.html"><span class="doc">integration</span></a> of a required mod, matched by name,
+failed to load or is missing members of the installed version.</p>
 <p><code class="docutils literal notranslate"><span class="pre">launch</span></code> loads a new save, launches the craft, removes the other vessels and returns the active
 vessel. It takes the craft from a <code class="docutils literal notranslate"><span class="pre">craft</span></code> directory beside the test file, or from the game’s
 stock craft. <code class="docutils literal notranslate"><span class="pre">directory</span></code> names another directory, and <code class="docutils literal notranslate"><span class="pre">editor=&quot;SPH&quot;</span></code> launches onto the runway.

@@ -4,7 +4,8 @@
 Docking Camera API
 ==================
 
-Provides functionality to interact with the `Docking Camera (KURS) <https://github.com/linuxgurugamer/DockingCam>`_ mod.
+Provides functionality to interact with the `Docking Camera (KURS)`_ mod.
+|Docking Camera (KURS) tested|
 
 .. toctree::
    :includehidden:
@@ -12,3 +13,5 @@ Provides functionality to interact with the `Docking Camera (KURS) <https://gith
 
    docking-camera/docking-camera
    docking-camera/camera
+
+.. include:: /mods.inc

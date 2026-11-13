@@ -574,6 +574,7 @@
 <li><p><span class="changelog-marker breaking">Breaking</span> Reject parameter and enumeration value names that are not ASCII letters and digits, starting with a letter (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1338">#1338</a>)</p></li>
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">StdLib.ImageFormat</span></code>, the format of the images from the DockingCamera, ScanSat and RasterPropMonitor services (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1341">#1341</a>)</p></li>
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">ModAPI</span></code>, <code class="docutils literal notranslate"><span class="pre">ModBinder</span></code> and <code class="docutils literal notranslate"><span class="pre">MemberBinder</span></code>, for a service that binds to another mod by name, and fails only the calls that use a missing member (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1341">#1341</a>)</p></li>
+<li><p>Add the <code class="docutils literal notranslate"><span class="pre">RequiresMod</span></code> attribute, which fails the calls of a member whose mod is missing, failed to load or is not ready (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1342">#1342</a>)</p></li>
 </ul>
 </section>
 <section id="server">
@@ -592,6 +593,7 @@
 <li><p>Load a mod’s API when some of its methods are missing, and fail only the calls that use them (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1341">#1341</a>)</p></li>
 <li><p>Disable only the integration of a mod that fails to load, and give the reason in the errors of its RPCs (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1341">#1341</a>)</p></li>
 <li><p>Load each supported mod whatever its version (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1341">#1341</a>)</p></li>
+<li><p>Fail the class members of a mod service with the reason when its mod is missing or failed to load (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1342">#1342</a>)</p></li>
 </ul>
 </section>
 <section id="spacecenter-service">
@@ -630,6 +632,7 @@
 </li>
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">&lt;Mod&gt;Available</span></code> for each supported mod that lacked one, such as <code class="docutils literal notranslate"><span class="pre">RealChuteAvailable</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1340">#1340</a>)</p></li>
 <li><p>Keep the FAR, RealFuels, RealAntennas and Action Groups Extended RPCs working when a mod update removes members, and fail only the RPCs that use them (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1341">#1341</a>)</p></li>
+<li><p>Fail the FAR and RealFuels members, and <code class="docutils literal notranslate"><span class="pre">Part.Tag</span></code>, with the reason when the mod is missing or failed to load (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1342">#1342</a>)</p></li>
 </ul>
 </section>
 <section id="infernalrobotics-service">

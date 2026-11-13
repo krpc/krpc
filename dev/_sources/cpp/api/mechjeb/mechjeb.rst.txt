@@ -28,7 +28,7 @@ MechJeb
 
    .. function:: bool ready()
 
-      Whether MechJeb is installed and the active vessel has MechJeb.
+      Whether the active vessel has MechJeb.
 
       :Game Scenes: Flight
 
