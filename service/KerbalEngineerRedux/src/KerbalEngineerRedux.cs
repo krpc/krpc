@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service;
 using KRPC.Service.Attributes;
+using KRPC.Utils;
 using ImpactAPI = KRPC.KerbalEngineerRedux.API.Impact;
 using RendezvousAPI = KRPC.KerbalEngineerRedux.API.Rendezvous;
 using StageAPI = KRPC.KerbalEngineerRedux.API.Stage;
@@ -31,8 +32,7 @@ namespace KRPC.KerbalEngineerRedux
 
         static void CheckAPI ()
         {
-            if (!API.IsAvailable)
-                throw new InvalidOperationException ("Kerbal Engineer Redux is not available");
+            ModAPI.Get<API> ().CheckAvailable ();
         }
 
         static void CheckActiveVessel (SpaceCenter.Services.Vessel vessel)
@@ -61,7 +61,7 @@ namespace KRPC.KerbalEngineerRedux
         /// </summary>
         [KRPCProperty]
         public static bool Available {
-            get { return API.IsAvailable; }
+            get { return ModAPI.Get<API> ().IsAvailable; }
         }
 
         /// <summary>
