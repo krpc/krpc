@@ -175,6 +175,24 @@ class TestLoadedModsMatch(unittest.TestCase):
         )
 
 
+class TestBindingProblems(unittest.TestCase):
+    def problems(self, required, problems):
+        ksp = KSP()
+        with mock.patch.object(KSP, "mod_problems", return_value=problems):
+            return launch._binding_problems(ksp, None, required)
+
+    def test_no_problems(self):
+        self.assertIsNone(self.problems({KAC}, {}))
+
+    def test_problem_of_unrequired_mod(self):
+        self.assertIsNone(self.problems({KAC}, {"FAR": "missing FARAPI.Foo"}))
+
+    def test_problem_of_required_mod(self):
+        message = self.problems({KAC}, {"KerbalAlarmClock": "missing KACWrapper.Foo"})
+        assert message is not None
+        self.assertIn("KerbalAlarmClock: missing KACWrapper.Foo", message)
+
+
 class TestCopyFolder(TempDirTestCase):
     def test_from_zip(self):
         archive = os.path.join(self.dir, "mod.zip")

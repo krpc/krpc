@@ -174,6 +174,21 @@ def _mismatch_message(game, required, installed):
     )
 
 
+def _binding_problems(game, conn, required):
+    """The problems of the required mods' integrations, or None when each bound in full."""
+    names = {game.mod(request).name for request in required}
+    problems = game.mod_problems(conn)
+    found = [
+        "%s: %s" % (name, problems[name]) for name in sorted(names & set(problems))
+    ]
+    if not found:
+        return None
+    return (
+        "The required mods' integrations did not bind in full in %s (%s). A mod update may "
+        "have renamed or removed a member kRPC uses." % (game.title(), "; ".join(found))
+    )
+
+
 def ensure(game, mods=()):
     """Ensure a server is running with exactly the required mods.
 
@@ -181,6 +196,8 @@ def ensure(game, mods=()):
     - Server up with other mods: restart the game when this run launched it, and raise
       otherwise.
     - No server: launch the game with the required mods, unless auto-launch is off.
+
+    Then raise when a required mod's integration failed to load or bound a stub.
     """
     required = {game.mod(request).id for request in mods}
     if frozenset(required) in game.unsatisfiable:
@@ -189,6 +206,9 @@ def ensure(game, mods=()):
     if conn is not None:
         installed = loaded_mods(game, conn, required)
         if _matches(game, required, installed):
+            problems = _binding_problems(game, conn, required)
+            if problems is not None:
+                raise RuntimeError(problems)
             return
         if game.process is None:
             raise RuntimeError(_mismatch_message(game, required, installed))
@@ -212,6 +232,9 @@ def ensure(game, mods=()):
         game.unsatisfiable.add(frozenset(required))
         stop(game)
         raise RuntimeError(_unsatisfiable_message(game, required, installed))
+    problems = _binding_problems(game, conn, required)
+    if problems is not None:
+        raise RuntimeError(problems)
 
 
 def file_stat(path):

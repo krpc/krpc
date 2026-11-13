@@ -51,6 +51,9 @@ exactly those mods and the mods they require:
 .. literalinclude:: /scripts/extending/testing/test_heatshields.py
    :language: python
 
+The class fails when the :doc:`integration <other-mods>` of a required mod, matched by name,
+failed to load or is missing members of the installed version.
+
 ``launch`` loads a new save, launches the craft, removes the other vessels and returns the active
 vessel. It takes the craft from a ``craft`` directory beside the test file, or from the game's
 stock craft. ``directory`` names another directory, and ``editor="SPH"`` launches onto the runway.

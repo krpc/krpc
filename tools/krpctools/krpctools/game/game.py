@@ -251,6 +251,11 @@ class Game:
         """Whether the running game has the mod loaded. The default for Mod.present."""
         return None
 
+    def mod_problems(self, conn):
+        """The problems of the running game's mod integrations, by mod name: why one failed to
+        load, or the members it bound as stubs."""
+        return {}
+
     def connection_type(self):
         """The connection type the tests connect with, which names the modules of the game's
         services."""

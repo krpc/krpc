@@ -426,6 +426,9 @@ class KSP(game.Game):
 
     # The running game
 
+    def mod_problems(self, conn):
+        return dict(conn.testing_tools.mod_problems())
+
     def connection_type(self):
         from krpc.ksp import KSPConnection
 
