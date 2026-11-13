@@ -50,11 +50,14 @@ export class Emitter {
       return this.type(argument.type);
     }
     if (Array.isArray(argument)) {
-      return Promise.all(argument.map((x: Node) => this.node(x)));
+      return Promise.all(argument.map((x: Argument) => this.#argument(x)));
+    }
+    if (argument instanceof Set) {
+      return Promise.all([...argument].map((x: Node) => this.node(x))).then((x) => new Set(x));
     }
     if (argument instanceof Map) {
       const entries = [...argument].map(
-        async ([key, value]: [number, Node]) => [key, await this.node(value)] as const,
+        async ([key, value]: [number | string, Node]) => [key, await this.node(value)] as const,
       );
       return Promise.all(entries).then((x) => new Map(x));
     }

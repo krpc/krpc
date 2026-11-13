@@ -281,10 +281,6 @@ its source with ``Function.prototype.toString`` and parses it with acorn.
 * **A number is a double, and a** ``bigint`` **a 64-bit integer**, so arithmetic gives JavaScript's
   results. A server integer is a ``number`` in the client, so keeping integer arithmetic would make
   ``7 / 2`` differ from JavaScript.
-* **Strict comparison with null is an error.** The server has one null, and the codec gives it
-  as ``null``, so ``=== undefined`` would differ from the client. ``== null`` matches both.
-* **A construct the server cannot match is an error**, such as a ``replaceAll`` pattern or a
-  ``Math.log2`` of a server value. A result that differs from JavaScript goes unnoticed.
 * **Type values are values.** A parameter type is ``types.double`` or a service's class, checked
   when the program is written. A type string would be checked only when compiling.
 * **Each call compiles again.** The captures can differ per call. The parse is cached per function
@@ -293,6 +289,28 @@ its source with ``Function.prototype.toString`` and parses it with acorn.
   bundler splits the compiler into its own chunk.
 * A first parameter that is a name the body does not read, such as ``_``, takes no captures, as
   Biome's recommended rules reject the empty pattern ``{}``.
+* **A later use types a value with none.** An empty array, ``Set`` or ``Map``, a ``null``, and
+  the parameters of a local function take their type from a later use or call. The use notes the
+  type, and the function is compiled again with it, as in Python. A read of a variable holding
+  ``null`` compiles as ``null`` until then.
+* **Numbers in variables are doubles**, so a variable assigned an integer and then a fraction
+  keeps JavaScript's value.
+* **A local function is one Lambda**, built at its first call and called with ``Invoke``. It
+  checks at each call that every path assigns the variables it reads.
+* **A for loop with a continue runs its update at the start of the body**, on every pass but the
+  first, as the server's ``Continue`` jumps there. A do...while runs its test there the same way.
+* **A catch records which branch matched.** Each ``e instanceof X`` branch catches its exceptions
+  by name, innermost first, and the branches run after the catches, so an exception from one
+  branch is not caught by the next, as in Python.
+* **Strict comparison with null is an error.** The server has one null, and the codec gives it
+  as ``null``, so ``=== undefined`` would differ from the client. ``== null`` matches both.
+* **Sets and maps are the server's**, with .NET's order. Insertion order after a delete would need
+  ordered collections on the server.
+* **A construct the server cannot match is an error**, such as a ``replaceAll`` pattern, a
+  ``Math.log2`` of a server value or a ``bigint`` comparator. A result that differs from JavaScript
+  goes unnoticed.
+* **State is a property of a captured object** that the function assigns or changes, in place
+  of Python's ``nonlocal``, as JavaScript has no access to a closure.
 
 Transports
 ----------

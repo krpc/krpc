@@ -1,7 +1,9 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
+    "lib": ["ES2023", "ESNext.Disposable", "DOM"],
     "types": ["node"],
-    "declaration": false
+    "declaration": false,
+    "noFallthroughCasesInSwitch": false
   }
 }

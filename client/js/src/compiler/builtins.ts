@@ -1,7 +1,17 @@
 import type { Node as SyntaxNode } from "acorn";
-import type { Argument, Builder } from "./builder.js";
+import type { Builder, Argument as Operand } from "./builder.js";
 import { ClientValue, Node, type Value } from "./ir.js";
 import { BOOL, DOUBLE, isBigint, isNumber, STRING, scalar, typeName } from "./typing.js";
+
+/** An argument, with a collection given the type its values give it. */
+interface Argument {
+  readonly value: Value;
+  readonly at: SyntaxNode;
+}
+
+function resolve(b: Builder, args: readonly Operand[]): Argument[] {
+  return args.map((x) => ({ value: b.resolved(x.value, x.at), at: x.at }));
+}
 
 /** The Math functions of one StdLib procedure, by name, with the procedure's name. */
 const MATH_PROCEDURES: Readonly<Record<string, string>> = {
@@ -29,13 +39,13 @@ export function builtinMethod(
   b: Builder,
   object: unknown,
   key: string,
-  compileArgs: () => readonly Argument[],
+  compileArgs: () => readonly Operand[],
   node: SyntaxNode,
 ): Value | null {
   if (!isBuiltin(object)) {
     return null;
   }
-  const args = compileArgs();
+  const args = resolve(b, compileArgs());
   if (object === Math) {
     return math(b, key, args, node);
   }
@@ -47,6 +57,21 @@ export function builtinMethod(
       );
     }
     return log(b, args, node);
+  }
+  if (object === Array && key === "from") {
+    if (args.length !== 1) {
+      throw b.error(node, "Array.from takes one argument in a compiled function");
+    }
+    const { value, at } = args[0];
+    const list = b.toNode(value, undefined, at);
+    const type = list.type;
+    if (type?.kind === "list") {
+      return list;
+    }
+    if (type?.kind === "set") {
+      return b.node("ToList", [list], { kind: "list", item: type.item, nullable: false });
+    }
+    throw b.error(at, "Array.from takes an array, a Set, or the keys, values or entries of a Map");
   }
   if (object === Number) {
     const procedure = { isNaN: "IsNan", isFinite: "IsFinite" }[key];
@@ -64,9 +89,10 @@ export function builtinMethod(
 export function builtinFunction(
   b: Builder,
   fn: unknown,
-  args: readonly Argument[],
+  operands: readonly Operand[],
   node: SyntaxNode,
 ): Value | null {
+  const args = resolve(b, operands);
   if (fn === String) {
     return args.length === 0 ? new ClientValue("") : b.string(args[0].value, args[0].at);
   }

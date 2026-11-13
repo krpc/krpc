@@ -1,3 +1,4 @@
+import type { Node as SyntaxNode } from "acorn";
 import type { ProcedureCall } from "../schema/krpc_pb.js";
 import type { Type } from "../types.js";
 
@@ -15,7 +16,10 @@ export type Argument =
   | Node
   | TypeArgument
   | readonly Node[]
-  | ReadonlyMap<number, Node>
+  | readonly (readonly Node[])[]
+  | ReadonlySet<Node>
+  | ReadonlyMap<number | string, Node>
+  | null
   | ProcedureCall
   | string
   | number
@@ -44,6 +48,7 @@ export class Node {
     return (
       this.method === "Variable" ||
       this.method === "Parameter" ||
+      this.method === "StateVariable" ||
       this.method.startsWith("Constant")
     );
   }
@@ -58,6 +63,33 @@ export class ClientValue {
   }
 }
 
+/** A collection written in the function, or captured, whose type comes from where it is used:
+ * an array is a tuple where a tuple goes, and a list elsewhere. */
+export class Collection {
+  readonly form: "array" | "set" | "map";
+  /** The values, or for a map, the values of its entries. */
+  readonly items: readonly Operand[];
+  /** The keys of a map's entries. */
+  readonly keys: readonly Operand[];
+  readonly at: SyntaxNode;
+
+  constructor(
+    form: "array" | "set" | "map",
+    items: readonly Operand[],
+    keys: readonly Operand[],
+    at: SyntaxNode,
+  ) {
+    this.form = form;
+    this.items = items;
+    this.keys = keys;
+    this.at = at;
+  }
+}
+
 /** The result of compiling an expression: a node of the server's tree, or a value the client
  * computed. */
 export type Value = Node | ClientValue;
+
+/** A value, or a collection typed where it is used, as the operands that take a type from their
+ * position are: arguments, assignments, returns and the values of collections. */
+export type Operand = Value | Collection;

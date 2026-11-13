@@ -383,24 +383,42 @@ A function with no captures takes no parameters, or names its first one, such as
 not read it. The builtins ``Math``, ``console``, ``Number``, ``String``, ``Boolean``, ``BigInt``,
 ``undefined``, ``NaN`` and ``Infinity`` need no capture.
 
-Expressions
-^^^^^^^^^^^
+What a Function Can Contain
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-A compiled function is an arrow function whose body is one expression, or one ``return``
-statement. The following compile to the server's operations:
+A compiled function is an arrow function, a function expression or a method. Its body holds
+statements, collections and local functions, as in your program:
 
-* Property reads, and calls of methods and static methods, with arguments by name as a last
-  object, as in the client's own API.
+.. literalinclude:: /scripts/js/CompiledStatements.js
+
+The following compile to the server's operations:
+
+* Property reads and assignments, and calls of methods and static methods, with arguments by
+  name as a last object, as in the client's own API. Destructuring reads properties too.
 * Arithmetic, comparisons, ``!``, ``&&``, ``||``, ``??``, ``?.``, ``?:`` and template literals.
 * The bitwise operators, on numbers and on the values of a :ref:`flags enumeration
   <js-client-flags>`, which also have ``union``, ``intersection``, ``difference`` and
   ``contains``.
+* ``const`` and ``let``, ``if``, ``switch``, ``while``, ``do``, ``for``, ``for...of``, ``break``,
+  ``continue`` and ``return``, assignments, compound assignments, ``++`` and ``--``. A declaration
+  in a ``case`` goes in a block.
+* Arrays, ``new Set`` and ``new Map``. An array is a tuple where the position takes a tuple, such
+  as a vector argument, and a list otherwise. A captured array, ``Set`` or ``Map`` is a constant.
+* The array members ``length``, indexing, ``at``, ``map``, ``filter``, ``some``, ``every``,
+  ``find``, ``findIndex``, ``includes``, ``indexOf``, ``reduce``, ``slice``, ``concat``, ``join``,
+  ``toSorted``, ``toReversed``, ``push``, ``pop`` and assignment to an element. ``toSorted`` takes
+  a comparator that subtracts a number, such as ``(a, b) => a.mass - b.mass``.
+* The ``Set`` and ``Map`` members ``has``, ``add``, ``get``, ``set``, ``delete``, ``clear``,
+  ``size``, ``keys``, ``values`` and ``entries``, and ``Array.from``.
+* The fields of a structure, and ``new`` of a structure's class with an object of its fields.
 * The string members ``length``, indexing, ``at``, ``slice``, ``substring``, ``toUpperCase``,
   ``toLowerCase``, ``trim``, ``trimStart``, ``trimEnd``, ``includes``, ``startsWith``,
-  ``endsWith``, ``indexOf`` and ``replaceAll``, and ``String(x)``. The replacement of
+  ``endsWith``, ``indexOf``, ``replaceAll`` and ``split``, and ``String(x)``. The replacement of
   ``replaceAll`` is a constant with no ``$`` pattern.
 * The ``Math`` functions with a ``StdLib`` procedure, ``Number.isNaN`` and ``Number.isFinite``.
 * ``console.log``, which writes a line to the game's log with :meth:`StdLib.print`.
+* ``throw new Error(message)``, ``TypeError``, ``RangeError`` and a service's exception class,
+  and ``try``, ``catch`` and ``finally``.
 
 The values keep their JavaScript meaning:
 
@@ -415,8 +433,35 @@ The values keep their JavaScript meaning:
   ``??``.
 * **Compare a server value with** ``== null`` **or** ``!= null``. The server has one null, so
   ``=== null`` and ``=== undefined`` are a :class:`CompilationError`.
+* **An empty array, Set or Map, and null, take their type from a later use**, such as a ``push``
+  or an assignment. With no such use, give one a type with ``cast``, such as
+  ``t.list(t.double).cast([])`` with the ``types`` value captured as ``t``.
+* **A function that returns a value returns one on every path**, and a variable is read only
+  where every path to the read assigns it.
+* **A Set or a Map is the server's**, a .NET ``HashSet`` or ``Dictionary``. After a ``delete``, its
+  order can differ from the order of insertion.
 * A number converts to a string as the server formats it, which can differ from JavaScript in
   the last digits.
+
+**Local functions** are called as in JavaScript, and passed by name to the array methods. Each
+parameter takes the one type that fits the arguments of every call. A function cannot call itself,
+and reads the variables it uses when called, so every path to each call assigns them.
+
+**Exceptions** reach a ``catch`` with only their message, as ``e.message``. A handler that starts
+with ``if (e instanceof RangeError)`` catches each exception the client maps to a ``RangeError``,
+and the same holds for ``TypeError`` and a service's exception class. An ``else`` that is
+``throw e`` leaves the other exceptions uncaught. A thrown ``Error`` becomes ``KRPC.Error`` on the
+server, a ``TypeError`` becomes ``KRPC.ArgumentException``, and a ``RangeError`` becomes
+``KRPC.ArgumentOutOfRangeException``.
+
+**State between evaluations.** A captured plain object whose property the function assigns, or
+changes with ``push`` and the like, keeps that property on the server between evaluations. The
+property starts as it is when the function is compiled, and your program's object keeps its
+value:
+
+.. literalinclude:: /scripts/user-guide/server-side-functions/FiringCounter.js
+   :start-after: [docs]
+   :end-before: [/docs]
 
 Any other construct is a :class:`CompilationError` that names it, with its line and column in
 the function's source. The client loads the compiler the first time you compile a function, so a
@@ -464,8 +509,7 @@ The Expression API
 ^^^^^^^^^^^^^^^^^^
 
 The methods of ``conn.krpc.Expression`` build a function node by node, as the clients with no
-compiler do. They build what one expression cannot, such as statements and loops. The following
-reads the vessel's altitude and speed into a tuple:
+compiler do. The following reads the vessel's altitude and speed into a tuple:
 
 .. literalinclude:: /scripts/js/RunFunction.js
 

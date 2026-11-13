@@ -1,4 +1,5 @@
 import { deprecationMessage } from "../deprecation.js";
+import { nativeError } from "../errors.js";
 import { camelCase } from "../naming.js";
 import type { Procedure, Service } from "../schema/krpc_pb.js";
 import { type Type, type Types, UnknownTypeError } from "../types.js";
@@ -31,15 +32,36 @@ export interface Members {
   readonly statics: Map<string, Member>;
 }
 
+/** An exception a service declares, with the JavaScript error the client raises it as. */
+export interface ExceptionInfo {
+  readonly service: string;
+  readonly name: string;
+  readonly native: ErrorConstructor | undefined;
+}
+
 /** The members of the classes and services of a connection. */
 export class MemberIndex {
   readonly #classes = new Map<string, Members>();
   readonly #services = new Map<string, Members>();
+  // The server's names of the fields of each structure, by their names in the client
+  readonly #fields = new Map<string, Map<string, string>>();
+  readonly exceptions: readonly ExceptionInfo[];
 
   constructor(services: readonly Service[], types: Types) {
+    const exceptions: ExceptionInfo[] = [];
     for (const service of services) {
       this.#services.set(service.name, emptyMembers());
+      for (const x of service.exceptions) {
+        exceptions.push({ service: service.name, name: x.name, native: nativeError(x.mappedType) });
+      }
+      for (const x of service.structs) {
+        this.#fields.set(
+          `${service.name}.${x.name}`,
+          new Map(x.fields.map((field) => [camelCase(field.name), field.name])),
+        );
+      }
     }
+    this.exceptions = exceptions;
     for (const service of services) {
       for (const procedure of service.procedures) {
         if (!procedure.internal) {
@@ -52,6 +74,11 @@ export class MemberIndex {
   /** The members of a class, by service and name. */
   ofClass(service: string, name: string): Members | undefined {
     return this.#classes.get(`${service}.${name}`);
+  }
+
+  /** The server's name of a field of a structure, from its name in the client. */
+  fieldName(service: string, struct: string, field: string): string | undefined {
+    return this.#fields.get(`${service}.${struct}`)?.get(field);
   }
 
   /** The members of a service of its own, by name. */

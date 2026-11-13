@@ -163,6 +163,12 @@ read in a single physics tick per update:
          :end-before: [/docs]
          :dedent:
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/EngineThrusts.js
+         :start-after: [docs]
+         :end-before: [/docs]
+
 Here ``engines`` is a captured variable, so the list of engines is fixed when the function is
 compiled. The server re-reads only their thrusts. Read the engine list inside the function to
 have the server fetch the list on each update. That follows staging, at the cost of extra work
@@ -193,6 +199,12 @@ engines that staging reveals:
          :end-before: [/docs]
          :dedent:
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/OutOfFuelEvent.js
+         :start-after: [docs]
+         :end-before: [/docs]
+
 Statements, Loops and Local Variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -215,6 +227,12 @@ liquid fuel left:
          :start-after: [docs]
          :end-before: [/docs]
          :dedent:
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/FuelFraction.js
+         :start-after: [docs]
+         :end-before: [/docs]
 
 A compiled function supports these statements:
 
@@ -247,6 +265,12 @@ with a type annotation:
          :end-before: [/docs]
          :dedent:
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/BurnRatings.js
+         :start-after: [docs]
+         :end-before: [/docs]
+
 A counter that starts as an integer and later holds a fraction takes an annotation too, such as
 ``total: float = 0``.
 
@@ -273,6 +297,12 @@ once, with every step in the same physics tick:
          :start-after: [docs]
          :end-before: [/docs]
          :dedent:
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/RunOnce.js
+         :start-after: [docs]
+         :end-before: [/docs]
 
 The game holds still between the steps, and the whole function costs one round trip. A function
 that returns no value gives the client's null value, or runs through a ``void`` overload where
@@ -308,25 +338,43 @@ serves many inputs. This computes how long a burn takes, for several changes in 
          :end-before: [/docs]
          :dedent:
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/BurnTime.js
+         :start-after: [docs]
+         :end-before: [/docs]
+
 In Python, the function is a ``def`` with a type annotation on each parameter. Its arguments bind
 as Python binds them, with defaults and keyword arguments. In C#, the function is a lambda with
-typed parameters. An event or a stream runs its function with no arguments.
+typed parameters. In JavaScript, the parameters follow the captures, and ``compile`` takes their
+types. An event or a stream runs its function with no arguments.
 
 State Between Updates
 ^^^^^^^^^^^^^^^^^^^^^
 
 A function can keep a value from one evaluation to the next, such as a running total. In
-Python, declare a captured variable ``nonlocal``. This stream counts the stream updates in
-which the engines are firing:
+Python, declare a captured variable ``nonlocal``. In JavaScript, assign a property of a captured
+object. This stream counts the stream updates in which the engines are firing:
 
-.. literalinclude:: /scripts/user-guide/server-side-functions/FiringCounter.py
-   :language: python
-   :start-after: [docs]
-   :end-before: [/docs]
+.. tabs::
+
+   .. group-tab:: Python
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/FiringCounter.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/FiringCounter.js
+         :start-after: [docs]
+         :end-before: [/docs]
 
 The variable starts with the value it holds when the function is compiled, and takes its type
 from that value. To give it another type, such as a list that starts empty, start the function
-with a cast of it: ``history = cast(List[float], history)``.
+with a cast of it: ``history = cast(List[float], history)`` in Python. In JavaScript, the first
+use that adds to it gives it its type, or a cast such as ``t.list(t.double).cast(state.history)``.
 
 The server keeps the value apart from the variable on the client. A compiled function keeps its
 state across every run, stream and event. The state belongs to the function, so two streams of one
@@ -344,10 +392,20 @@ A stream of a function with no value runs the function on every stream update, f
 The function is a control loop that runs in the game, with no round trip to the client. This one
 throttles back as the vertical speed nears 100 m/s:
 
-.. literalinclude:: /scripts/user-guide/server-side-functions/ThrottleLimit.py
-   :language: python
-   :start-after: [docs]
-   :end-before: [/docs]
+.. tabs::
+
+   .. group-tab:: Python
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/ThrottleLimit.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/ThrottleLimit.js
+         :start-after: [docs]
+         :end-before: [/docs]
 
 The stream's value is the client's null value. The server sends it once, after the first run, so
 a callback is called once. An error from the function ends the stream and stops the loop. Set the
@@ -425,6 +483,12 @@ on the stream or event evaluating the function:
          :end-before: [/docs]
          :dedent:
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/CheckFuel.js
+         :start-after: [docs]
+         :end-before: [/docs]
+
 A function raises the exceptions services declare, so your program catches a typed exception.
 A service's own exception classes map onto themselves.
 
@@ -452,10 +516,16 @@ A function can also handle an exception, with the language's try statement:
          :end-before: [/docs]
          :dedent:
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/SwitchModes.js
+         :start-after: [docs]
+         :end-before: [/docs]
+
 These rules apply to handlers:
 
 * **Only the message of an exception is exposed.** The variable a handler binds is a string
-  holding the message.
+  holding the message. In JavaScript, the handler reads it as ``e.message``.
 * **Naming an exception catches every form of it.** A service raises a .NET exception, which the
   server reports under its kRPC name. A handler for a kRPC exception catches the exceptions
   procedures raise, as well as the ones the function raises.
@@ -669,6 +739,12 @@ other assignment to a variable or the other branch of a conditional:
          :end-before: [/docs]
          :dedent:
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/HeaviestEngine.js
+         :start-after: [docs]
+         :end-before: [/docs]
+
 Elsewhere, give a null its type with a type annotation or a cast. The expression API has
 :meth:`Expression.constant_null`.
 
@@ -705,6 +781,12 @@ different values, give it parameters, as in :ref:`server-side-functions-argument
          :start-after: [docs]
          :end-before: [/docs]
          :dedent:
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/CompiledStep.js
+         :start-after: [docs]
+         :end-before: [/docs]
 
 Compiling a function also compiles it to native code on the server. A lambda passed straight to
 ``Run`` is compiled there on every call, on the game's main thread, so a large one can make the game

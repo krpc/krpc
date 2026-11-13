@@ -126,12 +126,108 @@ export class Scope {
     }
   }
 
-  /** The value of a name, or undefined for a name the function cannot read. */
-  lookup(name: string): Value | undefined | typeof NO_CAPTURES {
+  /** The frames of the blocks being compiled, innermost last. */
+  #frames: Frame[] = [];
+
+  /** Whether a name is a capture, rather than a name a block declares. */
+  isCapture(name: string): boolean {
+    return !this.#frames.some((x) => x.has(name)) && this.#bindings.has(name);
+  }
+
+  /** The binding of a name, or undefined for a name the function cannot read. */
+  lookup(name: string): Binding | undefined {
+    for (let i = this.#frames.length - 1; i >= 0; i--) {
+      const binding = this.#frames[i].get(name);
+      if (binding !== undefined) {
+        return binding;
+      }
+    }
     const binding = this.#bindings.get(name);
     if (binding !== undefined) {
       return binding;
     }
     return GLOBALS.has(name) ? new ClientValue(GLOBALS.get(name)) : undefined;
   }
+
+  /** Starts the frame of a block. */
+  push(): Frame {
+    const frame: Frame = new Map();
+    this.#frames.push(frame);
+    return frame;
+  }
+
+  pop(): void {
+    this.#frames.pop();
+  }
+
+  /** Declares a name in the innermost frame. */
+  declare(name: string, binding: Binding): void {
+    this.#frames[this.#frames.length - 1].set(name, binding);
+  }
+
+  /** The frames in scope, for a local function to read later. */
+  get frames(): readonly Frame[] {
+    return [...this.#frames];
+  }
+
+  /** Runs a function with the given frames in scope, such as those of a local function's
+   * definition. */
+  within<T>(frames: readonly Frame[], fn: () => T): T {
+    const outer = this.#frames;
+    this.#frames = [...frames];
+    try {
+      return fn();
+    } finally {
+      this.#frames = outer;
+    }
+  }
 }
+
+/** A local variable, a parameter of a local function, or a state variable. */
+export class Variable {
+  readonly name: string;
+  /** The key of its type in the hints, from the syntax that declares it. */
+  readonly key: string;
+  readonly constant: boolean;
+  /** The variable's node, or null for a variable whose value has no type yet. */
+  readonly node: Node | null;
+  /** The function the variable belongs to. */
+  readonly owner: object;
+  /** For a variable with no type yet, the kind of value it holds. */
+  readonly untyped: "array" | "set" | "map" | "null" | "unset" | undefined;
+  /** Whether every path assigns it, as a state variable is. */
+  readonly alwaysAssigned: boolean;
+
+  constructor(
+    name: string,
+    key: string,
+    constant: boolean,
+    node: Node | null,
+    owner: object,
+    untyped?: "array" | "set" | "map" | "null" | "unset",
+    alwaysAssigned = false,
+  ) {
+    this.name = name;
+    this.key = key;
+    this.constant = constant;
+    this.node = node;
+    this.owner = owner;
+    this.untyped = untyped;
+    this.alwaysAssigned = alwaysAssigned;
+  }
+}
+
+/** The name of a catch clause, which holds the message of the caught exception. */
+export class Caught {
+  readonly message: Node;
+
+  constructor(message: Node) {
+    this.message = message;
+  }
+}
+
+/** What a name stands for: a value, a variable, the error of a catch clause, or a local
+ * function, which the statement compiler defines. */
+export type Binding = Value | Variable | Caught | { readonly localFunction: true };
+
+export type Frame = Map<string, Binding>;

@@ -5,6 +5,7 @@ import { connect, contextOf, type DynamicConnection } from "../src/connection.js
 import type { Expression } from "../src/services/KRPC.js";
 import type { Type } from "../src/types.js";
 import type { TypeLike } from "../src/typevalues.js";
+import { equals } from "../src/values.js";
 
 export type Fn = (captures: any, ...parameters: any[]) => unknown;
 
@@ -61,7 +62,7 @@ export function same(a: unknown, b: unknown): boolean {
   if (typeof a === "number" && typeof b === "number") {
     return a === b || (Number.isNaN(a) && Number.isNaN(b));
   }
-  return a === b;
+  return equals(a, b);
 }
 
 /** Compiles a function of constants and parameters only, and checks that it gives the result
@@ -78,9 +79,13 @@ export async function onBothSides(
     const actual = await conn.run(expression, ...args);
     assert.ok(
       same(actual, expected),
-      `${fn} with ${args.map(String).join(", ")}: the server gives ${String(actual)}, and JavaScript ${String(expected)}`,
+      `${fn} with ${args.map(String).join(", ")}: the server gives ${show(actual)}, and JavaScript ${show(expected)}`,
     );
   }
+}
+
+function show(value: unknown): string {
+  return JSON.stringify(value, (_, x) => (typeof x === "bigint" ? `${x}n` : x));
 }
 
 /** The tree of a compiled function, as the TestServer prints it. */

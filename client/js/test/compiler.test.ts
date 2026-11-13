@@ -603,11 +603,11 @@ describe("errors", () => {
     await rejects(
       () => missing,
       {},
-      /missing is not a capture or a parameter.*\(line 1, column 7 of the function\)/,
+      /missing is not a capture, a parameter or a variable.*\(line 1, column 7 of the function\)/,
     );
     await rejects(({ a }) => a, {}, /The captured values have no a/);
     await rejects((x: number) => x, {}, /object pattern/);
-    await rejects(() => [1, 2], {}, /An array is not supported/);
+    await rejects(() => ({ a: 1 }), {}, /An object literal is not supported/);
     await rejects(async () => 1, {}, /An async function cannot be compiled/);
     await rejects(({ f }) => f(), { f: () => 1 }, /cannot be called in a compiled function/);
     await rejects(() => null, {}, /null has no type here/);
