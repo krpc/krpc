@@ -22,3 +22,9 @@
   them (#1341)
 - Limit the service to the scenes Kerbal Alarm Clock runs in, apart from `Available`, which
   reports whether it is installed in any scene (#1341)
+
+## service/InfernalRobotics
+
+- Keep working when an Infernal Robotics update removes members, and fail only the RPCs that
+  use them (#1341)
+- **Breaking:** Remove `Ready` (#1341)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service;
 using KRPC.Service.Attributes;
+using KRPC.Utils;
 
 namespace KRPC.InfernalRobotics
 {
@@ -14,9 +15,7 @@ namespace KRPC.InfernalRobotics
     {
         static void CheckAvailable ()
         {
-            if (!Available)
-                throw new InvalidOperationException (
-                    "Infernal Robotics is not installed.");
+            ModAPI.Get<API> ().CheckAvailable ();
         }
 
         /// <summary>
@@ -24,31 +23,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty (GameScene = GameScene.All)]
         public static bool Available {
-            get {
-                // IRWrapper.InitWrapper is only run by the addon when entering the flight
-                // scene. Run it here too so availability is reported correctly in any scene.
-                // It populates the controller type even when the full flight-only wrapping
-                // cannot finish
-                if (!IRWrapper.AssemblyExists)
-                    IRWrapper.InitWrapper ();
-                return IRWrapper.AssemblyExists;
-            }
-        }
-
-        /// <summary>
-        /// Whether Infernal Robotics API is ready.
-        /// </summary>
-        [KRPCProperty]
-        public static bool Ready{
-            get {
-                // The wrapper caches the controller's servo-group list when it first
-                // initializes at flight-scene load, before the mod has populated it.
-                // Re-initialize while the mod is present but not yet ready, so that readiness
-                // reflects the current state and not that cache
-                if (IRWrapper.AssemblyExists && !IRWrapper.APIReady)
-                    IRWrapper.InitWrapper ();
-                return IRWrapper.APIReady;
-            }
+            get { return ModAPI.Get<API> ().IsAvailable; }
         }
 
         /// <summary>
@@ -63,7 +38,7 @@ namespace KRPC.InfernalRobotics
         public static IList<ServoGroup> ServoGroups (SpaceCenter.Services.Vessel vessel)
         {
             CheckAvailable ();
-            return IRWrapper.ServoGroupsForVessel (vessel.InternalVessel)
+            return API.ServoGroupsForVessel (vessel.InternalVessel)
                 .Select (x => new ServoGroup (vessel, x.Name)).ToList ();
         }
 
@@ -77,7 +52,7 @@ namespace KRPC.InfernalRobotics
         public static ServoGroup ServoGroupWithName (SpaceCenter.Services.Vessel vessel, string name)
         {
             CheckAvailable ();
-            var servoGroup = IRWrapper.ServoGroupsForVessel (vessel.InternalVessel).FirstOrDefault (x => x.Name == name);
+            var servoGroup = API.ServoGroupsForVessel (vessel.InternalVessel).FirstOrDefault (x => x.Name == name);
             return servoGroup != null ? new ServoGroup (vessel, servoGroup.Name) : null;
         }
 
@@ -91,7 +66,7 @@ namespace KRPC.InfernalRobotics
         public static Servo ServoWithName (SpaceCenter.Services.Vessel vessel, string name)
         {
             CheckAvailable ();
-            var servo = IRWrapper.ServosForVessel (vessel.InternalVessel).FirstOrDefault (x => x.Name == name);
+            var servo = API.ServosForVessel (vessel.InternalVessel).FirstOrDefault (x => x.Name == name);
             return servo != null ? new Servo (servo) : null;
         }
     }

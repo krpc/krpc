@@ -28,7 +28,7 @@ namespace KRPC.InfernalRobotics
             part = servoPart;
         }
 
-        internal Servo (IRWrapper.IServo innerServo)
+        internal Servo (IRServo innerServo)
             : this (new SpaceCenter.Services.Parts.Part (innerServo.HostPart))
         {
         }
@@ -58,16 +58,16 @@ namespace KRPC.InfernalRobotics
                 var state = part.GameObjectState;
                 if (state != GameObjectState.Live)
                     return state;
-                return IRWrapper.ServoOnPart (part.InternalPart) != null
+                return API.ServoOnPart (part.InternalPart) != null
                     ? GameObjectState.Live : GameObjectState.Destroyed;
             }
         }
 
         // The servo the mod has on the part now. Every member reaches the mod through this, so a
         // servo taken before a game state was replaced reads the one that stands in its place
-        IRWrapper.IServo Internal {
+        IRServo Internal {
             get {
-                var servo = IRWrapper.ServoOnPart (part.InternalPart);
+                var servo = API.ServoOnPart (part.InternalPart);
                 if (servo == null)
                     throw new ObjectDestroyedException (
                         "The servo no longer exists, as its part no longer has one.");

@@ -10,13 +10,22 @@ class TestServoGroup(TestCase):
     def setUpClass(cls):
         cls.vessel = cls.launch("InfernalRobotics")
         cls.ir = cls.connect().infernal_robotics
-        # Group state such as speed factor and expanded flag lives in IR's controller, which
-        # only populates once it is ready; until then the active vessel's groups are served by
-        # the synthesized (non-active) path. Wait so those members are controller-backed.
-        for _ in range(300):
-            if cls.ir.ready:
-                break
-            cls.wait()
+        # Group state such as the speed factor lives in IR's controller, which holds the
+        # active vessel's groups shortly after the flight scene loads. Until then, reading it
+        # throws.
+        group = cls.ir.servo_group_with_name(cls.vessel, "Group1")
+
+        def controller_loaded():
+            try:
+                group.speed
+                return True
+            except RuntimeError:
+                return False
+
+        cls.wait_until(
+            controller_loaded,
+            message="Infernal Robotics did not load the vessel's groups",
+        )
 
     def _roundtrip(self, obj, attr, value, places=3):
         original = getattr(obj, attr)
