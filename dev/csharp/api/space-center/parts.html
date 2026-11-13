@@ -4583,8 +4583,8 @@ cannot.</p>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Antenna.TargetVessel">
-<a class="reference internal" href="vessel.html#class-KRPC.Client.Services.SpaceCenter.Vessel" title="class: KRPC.Client.Services.SpaceCenter.Vessel"><span class="pre">Vessel</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">TargetVessel</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Antenna.TargetVessel" title="Link to this definition">#</a></dt>
-<dd><p>The vessel the antenna points at, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if it does not point at a vessel.</p>
+<a class="reference internal" href="vessel.html#class-KRPC.Client.Services.SpaceCenter.Vessel" title="class: KRPC.Client.Services.SpaceCenter.Vessel"><span class="pre">Vessel</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">TargetVessel</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Antenna.TargetVessel" title="Link to this definition">#</a></dt>
+<dd><p>Returns the vessel the antenna points at, and sets the vessel to point at.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -4592,15 +4592,16 @@ cannot.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Requires RealAntennas.</p>
+<p>Requires RealAntennas. <code class="docutils literal notranslate"><span class="pre">null</span></code> if the antenna does not point at a vessel. Throws an
+exception if set to <code class="docutils literal notranslate"><span class="pre">null</span></code>, or if the antenna cannot be pointed
+(see <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Antenna.CanTarget" title="property: KRPC.Client.Services.SpaceCenter.Antenna.CanTarget"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Antenna.CanTarget</span></code></a>).</p>
 </div>
 </dd></dl>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Antenna.TargetBody">
-<a class="reference internal" href="celestial-body.html#class-KRPC.Client.Services.SpaceCenter.CelestialBody" title="class: KRPC.Client.Services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">TargetBody</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Antenna.TargetBody" title="Link to this definition">#</a></dt>
-<dd><p>The body the antenna points at, or at a position on, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if it points at
-neither.</p>
+<a class="reference internal" href="celestial-body.html#class-KRPC.Client.Services.SpaceCenter.CelestialBody" title="class: KRPC.Client.Services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">TargetBody</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Antenna.TargetBody" title="Link to this definition">#</a></dt>
+<dd><p>Returns the body the antenna points at, and sets the body to point at the center of.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -4608,7 +4609,9 @@ neither.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Requires RealAntennas.</p>
+<p>Requires RealAntennas. Also the body of a position the antenna points at, or
+<code class="docutils literal notranslate"><span class="pre">null</span></code> if it points at neither. Throws an exception if set to <code class="docutils literal notranslate"><span class="pre">null</span></code>, or if
+the antenna cannot be pointed (see <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Antenna.CanTarget" title="property: KRPC.Client.Services.SpaceCenter.Antenna.CanTarget"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Antenna.CanTarget</span></code></a>).</p>
 </div>
 </dd></dl>
 
@@ -4633,48 +4636,6 @@ exception if the antenna has no target (see <a class="reference internal" href="
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Requires RealAntennas.</p>
-</div>
-</dd></dl>
-
-<dl class="cs function">
-<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.Antenna.SetTargetVessel">
-<span id="function-KRPC.Client.Services.SpaceCenter.Antenna.SetTargetVessel(Vessel)"></span><span class="pre">void</span><span class="w"> </span><span class="sig-name descname"><span class="pre">SetTargetVessel</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference internal" href="vessel.html#class-KRPC.Client.Services.SpaceCenter.Vessel" title="class: KRPC.Client.Services.SpaceCenter.Vessel"><span class="pre">Vessel</span></a><span class="w"> </span><span class="n"><span class="pre">vessel</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Antenna.SetTargetVessel" title="Link to this definition">#</a></dt>
-<dd><p>Point the antenna at a vessel.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>vessel</strong> – The vessel.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
-</dd>
-</dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Requires RealAntennas. Throws an exception if the antenna cannot be pointed
-(see <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Antenna.CanTarget" title="property: KRPC.Client.Services.SpaceCenter.Antenna.CanTarget"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Antenna.CanTarget</span></code></a>).</p>
-</div>
-</dd></dl>
-
-<dl class="cs function">
-<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.Antenna.SetTargetBody">
-<span id="function-KRPC.Client.Services.SpaceCenter.Antenna.SetTargetBody(CelestialBody)"></span><span class="pre">void</span><span class="w"> </span><span class="sig-name descname"><span class="pre">SetTargetBody</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference internal" href="celestial-body.html#class-KRPC.Client.Services.SpaceCenter.CelestialBody" title="class: KRPC.Client.Services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a><span class="w"> </span><span class="n"><span class="pre">body</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Antenna.SetTargetBody" title="Link to this definition">#</a></dt>
-<dd><p>Point the antenna at the center of a body.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>body</strong> – The body.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
-</dd>
-</dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Requires RealAntennas. Throws an exception if the antenna cannot be pointed
-(see <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Antenna.CanTarget" title="property: KRPC.Client.Services.SpaceCenter.Antenna.CanTarget"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Antenna.CanTarget</span></code></a>).</p>
 </div>
 </dd></dl>
 
@@ -4761,13 +4722,13 @@ exception if the antenna has no target (see <a class="reference internal" href="
 <dl class="cs enumerator">
 <dt class="sig sig-object cs" id="enumerator-KRPC.Client.Services.SpaceCenter.AntennaTargetMode.Vessel">
 <span class="sig-name descname"><span class="pre">Vessel</span></span><a class="headerlink" href="#enumerator-KRPC.Client.Services.SpaceCenter.AntennaTargetMode.Vessel" title="Link to this definition">#</a></dt>
-<dd><p>A vessel. See <a class="reference internal" href="#function-KRPC.Client.Services.SpaceCenter.Antenna.SetTargetVessel" title="function: KRPC.Client.Services.SpaceCenter.Antenna.SetTargetVessel"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Antenna.SetTargetVessel</span></code></a>.</p>
+<dd><p>A vessel. See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Antenna.TargetVessel" title="property: KRPC.Client.Services.SpaceCenter.Antenna.TargetVessel"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Antenna.TargetVessel</span></code></a>.</p>
 </dd></dl>
 
 <dl class="cs enumerator">
 <dt class="sig sig-object cs" id="enumerator-KRPC.Client.Services.SpaceCenter.AntennaTargetMode.Body">
 <span class="sig-name descname"><span class="pre">Body</span></span><a class="headerlink" href="#enumerator-KRPC.Client.Services.SpaceCenter.AntennaTargetMode.Body" title="Link to this definition">#</a></dt>
-<dd><p>The center of a body. See <a class="reference internal" href="#function-KRPC.Client.Services.SpaceCenter.Antenna.SetTargetBody" title="function: KRPC.Client.Services.SpaceCenter.Antenna.SetTargetBody"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Antenna.SetTargetBody</span></code></a>.</p>
+<dd><p>The center of a body. See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Antenna.TargetBody" title="property: KRPC.Client.Services.SpaceCenter.Antenna.TargetBody"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Antenna.TargetBody</span></code></a>.</p>
 </dd></dl>
 
 <dl class="cs enumerator">

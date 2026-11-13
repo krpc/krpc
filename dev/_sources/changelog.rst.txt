@@ -90,6 +90,9 @@ Core
 * Start the remaining servers when one fails to start (:issue:`1330`)
 * Add ``KRPC.Expression.Match`` and ``KRPC.Expression.Switch`` statements to server side functions (:issue:`1334`)
 * Add variants of the server side function procedures that take ids in place of names, such as ``KRPC.Type.ClassTypeById`` and ``KRPC.Expression.GetFieldByIndex`` (:issue:`1336`)
+* :breaking:`Breaking` Reject members of a service or class, values of an enumeration, fields of a structure, or parameters of a procedure that share a name, ignoring case (:issue:`1338`)
+* :breaking:`Breaking` Reject a method ``GetFoo`` or ``SetFoo`` beside a property ``Foo`` (:issue:`1338`)
+* :breaking:`Breaking` Reject parameter and enumeration value names that are not ASCII letters and digits, starting with a letter (:issue:`1338`)
 
 
 Server

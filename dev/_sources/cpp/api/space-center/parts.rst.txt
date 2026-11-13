@@ -2040,27 +2040,32 @@ Antenna
          Requires RealAntennas.
 
    .. function:: std::optional<Vessel> target_vessel()
+   .. function:: void set_target_vessel(std::optional<Vessel> value)
 
-      The vessel the antenna points at, or ``NULL`` if it does not point at a vessel.
+      Returns the vessel the antenna points at, and sets the vessel to point at.
 
       :Game Scenes: Flight
 
 
       .. note::
 
-         Requires RealAntennas.
+         Requires RealAntennas. ``NULL`` if the antenna does not point at a vessel. Throws an
+         exception if set to ``NULL``, or if the antenna cannot be pointed
+         (see :func:`Antenna::can_target`).
 
    .. function:: std::optional<CelestialBody> target_body()
+   .. function:: void set_target_body(std::optional<CelestialBody> value)
 
-      The body the antenna points at, or at a position on, or ``NULL`` if it points at
-      neither.
+      Returns the body the antenna points at, and sets the body to point at the center of.
 
       :Game Scenes: Flight
 
 
       .. note::
 
-         Requires RealAntennas.
+         Requires RealAntennas. Also the body of a position the antenna points at, or
+         ``NULL`` if it points at neither. Throws an exception if set to ``NULL``, or if
+         the antenna cannot be pointed (see :func:`Antenna::can_target`).
 
    .. function:: std::tuple<double, double, double> target_direction(ReferenceFrame reference_frame)
 
@@ -2078,38 +2083,6 @@ Antenna
       .. note::
 
          Requires RealAntennas.
-
-   .. function:: void set_target_vessel(Vessel vessel)
-
-      Point the antenna at a vessel.
-
-      :Parameters:
-
-       * **vessel** -- The vessel.
-
-      :Game Scenes: Flight
-
-
-      .. note::
-
-         Requires RealAntennas. Throws an exception if the antenna cannot be pointed
-         (see :func:`Antenna::can_target`).
-
-   .. function:: void set_target_body(CelestialBody body)
-
-      Point the antenna at the center of a body.
-
-      :Parameters:
-
-       * **body** -- The body.
-
-      :Game Scenes: Flight
-
-
-      .. note::
-
-         Requires RealAntennas. Throws an exception if the antenna cannot be pointed
-         (see :func:`Antenna::can_target`).
 
    .. function:: void set_target_position(CelestialBody body, double latitude, double longitude, double altitude)
 
@@ -2180,12 +2153,12 @@ Antenna
 
    .. enumerator:: vessel
 
-      A vessel. See :func:`Antenna::set_target_vessel`.
+      A vessel. See :func:`Antenna::target_vessel`.
 
 
    .. enumerator:: body
 
-      The center of a body. See :func:`Antenna::set_target_body`.
+      The center of a body. See :func:`Antenna::target_body`.
 
 
    .. enumerator:: position

@@ -2042,28 +2042,31 @@ Antenna
 
          Requires RealAntennas.
 
-   .. property:: Vessel TargetVessel { get; }
+   .. property:: Vessel TargetVessel { get; set; }
 
-      The vessel the antenna points at, or ``null`` if it does not point at a vessel.
-
-      :Game Scenes: Flight
-
-
-      .. note::
-
-         Requires RealAntennas.
-
-   .. property:: CelestialBody TargetBody { get; }
-
-      The body the antenna points at, or at a position on, or ``null`` if it points at
-      neither.
+      Returns the vessel the antenna points at, and sets the vessel to point at.
 
       :Game Scenes: Flight
 
 
       .. note::
 
-         Requires RealAntennas.
+         Requires RealAntennas. ``null`` if the antenna does not point at a vessel. Throws an
+         exception if set to ``null``, or if the antenna cannot be pointed
+         (see :prop:`Antenna.CanTarget`).
+
+   .. property:: CelestialBody TargetBody { get; set; }
+
+      Returns the body the antenna points at, and sets the body to point at the center of.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealAntennas. Also the body of a position the antenna points at, or
+         ``null`` if it points at neither. Throws an exception if set to ``null``, or if
+         the antenna cannot be pointed (see :prop:`Antenna.CanTarget`).
 
    .. function:: System.Tuple<double,double,double> TargetDirection(ReferenceFrame referenceFrame)
 
@@ -2081,38 +2084,6 @@ Antenna
       .. note::
 
          Requires RealAntennas.
-
-   .. function:: void SetTargetVessel(Vessel vessel)
-
-      Point the antenna at a vessel.
-
-      :parameters:
-
-       * **vessel** -- The vessel.
-
-      :Game Scenes: Flight
-
-
-      .. note::
-
-         Requires RealAntennas. Throws an exception if the antenna cannot be pointed
-         (see :prop:`Antenna.CanTarget`).
-
-   .. function:: void SetTargetBody(CelestialBody body)
-
-      Point the antenna at the center of a body.
-
-      :parameters:
-
-       * **body** -- The body.
-
-      :Game Scenes: Flight
-
-
-      .. note::
-
-         Requires RealAntennas. Throws an exception if the antenna cannot be pointed
-         (see :prop:`Antenna.CanTarget`).
 
    .. function:: void SetTargetPosition(CelestialBody body, double latitude, double longitude, double altitude)
 
@@ -2182,12 +2153,12 @@ Antenna
 
    .. enumerator:: Vessel
 
-      A vessel. See :meth:`Antenna.SetTargetVessel`.
+      A vessel. See :prop:`Antenna.TargetVessel`.
 
 
    .. enumerator:: Body
 
-      The center of a body. See :meth:`Antenna.SetTargetBody`.
+      The center of a body. See :prop:`Antenna.TargetBody`.
 
 
    .. enumerator:: Position

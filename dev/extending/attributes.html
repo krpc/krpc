@@ -635,7 +635,8 @@ methods, to add them to the server as procedures.</p>
 <p>The method to which this attribute is applied must satisfy the following criteria:</p>
 <ul class="simple">
 <li><p>The method must be <code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">static</span></code>.</p></li>
-<li><p>The name of the method must be a valid <a class="reference internal" href="types.html#service-api-identifiers"><span class="std std-ref">kRPC identifier</span></a>.</p></li>
+<li><p>The name of the method must be a valid <a class="reference internal" href="types.html#service-api-identifiers"><span class="std std-ref">kRPC identifier</span></a>,
+unique in its scope.</p></li>
 <li><p>The method must be declared inside a class that is a <a class="reference internal" href="#attribute-KRPCService" title="attribute: KRPCService"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCService</span></code></a>.</p></li>
 <li><p>The parameter types and return type must be <a class="reference internal" href="types.html#service-api-serializable-types"><span class="std std-ref">types that kRPC knows how to serialize</span></a>.</p></li>
 <li><p>Parameters can have default arguments.</p></li>
@@ -750,7 +751,8 @@ class belonging to another service; see <a class="reference internal" href="exte
 <p>The method to which this attribute is applied must satisfy the following criteria:</p>
 <ul class="simple">
 <li><p>The method must be <code class="docutils literal notranslate"><span class="pre">public</span></code>.</p></li>
-<li><p>The name of the method must be a valid <a class="reference internal" href="types.html#service-api-identifiers"><span class="std std-ref">kRPC identifier</span></a>.</p></li>
+<li><p>The name of the method must be a valid <a class="reference internal" href="types.html#service-api-identifiers"><span class="std std-ref">kRPC identifier</span></a>,
+unique in its scope.</p></li>
 <li><p>The method must be declared in a <a class="reference internal" href="#attribute-KRPCClass" title="attribute: KRPCClass"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a>, or be a <code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">static</span></code> extension
 method of one.</p></li>
 <li><p>The parameter types and return type must be <a class="reference internal" href="types.html#service-api-serializable-types"><span class="std std-ref">types that kRPC can serialize</span></a>.</p></li>
@@ -798,7 +800,8 @@ properties, and comes in three flavors:</p>
 satisfy the following criteria:</p>
 <ul class="simple">
 <li><p>Must be <code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">static</span></code> and have at least one publicly accessible getter or setter.</p></li>
-<li><p>The name of the property must be a valid <a class="reference internal" href="types.html#service-api-identifiers"><span class="std std-ref">kRPC identifier</span></a>.</p></li>
+<li><p>The name of the property must be a valid <a class="reference internal" href="types.html#service-api-identifiers"><span class="std std-ref">kRPC identifier</span></a>,
+unique in its scope.</p></li>
 <li><p>Must be declared inside a <a class="reference internal" href="#attribute-KRPCService" title="attribute: KRPCService"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCService</span></code></a>.</p></li>
 </ul>
 </li>
@@ -807,7 +810,8 @@ must satisfy the following criteria:</p>
 <ul class="simple">
 <li><p>Must be <code class="docutils literal notranslate"><span class="pre">public</span></code> and <em>not</em> <code class="docutils literal notranslate"><span class="pre">static</span></code>, and have at least one publicly accessible getter or
 setter.</p></li>
-<li><p>The name of the property must be a valid <a class="reference internal" href="types.html#service-api-identifiers"><span class="std std-ref">kRPC identifier</span></a>.</p></li>
+<li><p>The name of the property must be a valid <a class="reference internal" href="types.html#service-api-identifiers"><span class="std std-ref">kRPC identifier</span></a>,
+unique in its scope.</p></li>
 <li><p>Must be declared inside a <a class="reference internal" href="#attribute-KRPCClass" title="attribute: KRPCClass"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a>.</p></li>
 </ul>
 </li>
@@ -913,6 +917,8 @@ service if it has its <code class="docutils literal notranslate"><span class="pr
 <ul class="simple">
 <li><p>The enumeration must be <code class="docutils literal notranslate"><span class="pre">public</span></code>.</p></li>
 <li><p>The name of the enumeration must be a valid <a class="reference internal" href="types.html#service-api-identifiers"><span class="std std-ref">kRPC identifier</span></a>.</p></li>
+<li><p>The names of its values must follow the <a class="reference internal" href="types.html#service-api-identifiers"><span class="std std-ref">identifier rules</span></a>, and
+be unique in the enumeration.</p></li>
 <li><p>The enumeration must either be declared inside a <a class="reference internal" href="#attribute-KRPCService" title="attribute: KRPCService"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCService</span></code></a>, or have it’s
 <code class="docutils literal notranslate"><span class="pre">Service</span></code> parameter set to the name of the service it is part of.</p></li>
 <li><p>The <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/enum">underlying C# type</a> must be an

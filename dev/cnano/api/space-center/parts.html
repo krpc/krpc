@@ -4134,7 +4134,12 @@ cannot.</p>
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_TargetVessel">
 <a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_TargetVessel</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="vessel.html#c.krpc_SpaceCenter_Vessel_t" title="krpc_SpaceCenter_Vessel_t"><span class="n"><span class="pre">krpc_SpaceCenter_Vessel_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t" title="krpc_SpaceCenter_Antenna_t"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_TargetVessel" title="Link to this definition">#</a><br /></dt>
-<dd><p>The vessel the antenna points at, or <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> if it does not point at a vessel.</p>
+<dd></dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_set_TargetVessel">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_set_TargetVessel</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t" title="krpc_SpaceCenter_Antenna_t"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <a class="reference internal" href="vessel.html#c.krpc_SpaceCenter_Vessel_t" title="krpc_SpaceCenter_Vessel_t"><span class="n"><span class="pre">krpc_SpaceCenter_Vessel_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_set_TargetVessel" title="Link to this definition">#</a><br /></dt>
+<dd><p>Returns the vessel the antenna points at, and sets the vessel to point at.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -4142,15 +4147,21 @@ cannot.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Requires RealAntennas.</p>
+<p>Requires RealAntennas. <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> if the antenna does not point at a vessel. Throws an
+exception if set to <code class="docutils literal notranslate"><span class="pre">nullptr</span></code>, or if the antenna cannot be pointed
+(see <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_CanTarget" title="krpc_SpaceCenter_Antenna_CanTarget"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Antenna_CanTarget()</span></code></a>).</p>
 </div>
 </dd></dl>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_TargetBody">
 <a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_TargetBody</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="celestial-body.html#c.krpc_SpaceCenter_CelestialBody_t" title="krpc_SpaceCenter_CelestialBody_t"><span class="n"><span class="pre">krpc_SpaceCenter_CelestialBody_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t" title="krpc_SpaceCenter_Antenna_t"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_TargetBody" title="Link to this definition">#</a><br /></dt>
-<dd><p>The body the antenna points at, or at a position on, or <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> if it points at
-neither.</p>
+<dd></dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_set_TargetBody">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_set_TargetBody</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t" title="krpc_SpaceCenter_Antenna_t"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <a class="reference internal" href="celestial-body.html#c.krpc_SpaceCenter_CelestialBody_t" title="krpc_SpaceCenter_CelestialBody_t"><span class="n"><span class="pre">krpc_SpaceCenter_CelestialBody_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_set_TargetBody" title="Link to this definition">#</a><br /></dt>
+<dd><p>Returns the body the antenna points at, and sets the body to point at the center of.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -4158,7 +4169,9 @@ neither.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Requires RealAntennas.</p>
+<p>Requires RealAntennas. Also the body of a position the antenna points at, or
+<code class="docutils literal notranslate"><span class="pre">nullptr</span></code> if it points at neither. Throws an exception if set to <code class="docutils literal notranslate"><span class="pre">nullptr</span></code>, or if
+the antenna cannot be pointed (see <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_CanTarget" title="krpc_SpaceCenter_Antenna_CanTarget"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Antenna_CanTarget()</span></code></a>).</p>
 </div>
 </dd></dl>
 
@@ -4183,48 +4196,6 @@ exception if the antenna has no target (see <a class="reference internal" href="
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Requires RealAntennas.</p>
-</div>
-</dd></dl>
-
-<dl class="c function">
-<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_SetTargetVessel">
-<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_SetTargetVessel</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t" title="krpc_SpaceCenter_Antenna_t"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <a class="reference internal" href="vessel.html#c.krpc_SpaceCenter_Vessel_t" title="krpc_SpaceCenter_Vessel_t"><span class="n"><span class="pre">krpc_SpaceCenter_Vessel_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">vessel</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_SetTargetVessel" title="Link to this definition">#</a><br /></dt>
-<dd><p>Point the antenna at a vessel.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>vessel</strong> – The vessel.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
-</dd>
-</dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Requires RealAntennas. Throws an exception if the antenna cannot be pointed
-(see <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_CanTarget" title="krpc_SpaceCenter_Antenna_CanTarget"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Antenna_CanTarget()</span></code></a>).</p>
-</div>
-</dd></dl>
-
-<dl class="c function">
-<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_SetTargetBody">
-<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_SetTargetBody</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t" title="krpc_SpaceCenter_Antenna_t"><span class="n"><span class="pre">krpc_SpaceCenter_Antenna_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <a class="reference internal" href="celestial-body.html#c.krpc_SpaceCenter_CelestialBody_t" title="krpc_SpaceCenter_CelestialBody_t"><span class="n"><span class="pre">krpc_SpaceCenter_CelestialBody_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">body</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_SetTargetBody" title="Link to this definition">#</a><br /></dt>
-<dd><p>Point the antenna at the center of a body.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>body</strong> – The body.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
-</dd>
-</dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Requires RealAntennas. Throws an exception if the antenna cannot be pointed
-(see <a class="reference internal" href="#c.krpc_SpaceCenter_Antenna_t.krpc_SpaceCenter_Antenna_CanTarget" title="krpc_SpaceCenter_Antenna_CanTarget"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Antenna_CanTarget()</span></code></a>).</p>
 </div>
 </dd></dl>
 
@@ -4318,13 +4289,13 @@ exception if the antenna has no target (see <a class="reference internal" href="
 <dl class="c macro">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_AntennaTargetMode_t.KRPC_SPACECENTER_ANTENNATARGETMODE_VESSEL">
 <span class="sig-name descname"><span class="n"><span class="pre">KRPC_SPACECENTER_ANTENNATARGETMODE_VESSEL</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_AntennaTargetMode_t.KRPC_SPACECENTER_ANTENNATARGETMODE_VESSEL" title="Link to this definition">#</a><br /></dt>
-<dd><p>A vessel. See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Antenna_SetTargetVessel()</span></code>.</p>
+<dd><p>A vessel. See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Antenna_TargetVessel()</span></code>.</p>
 </dd></dl>
 
 <dl class="c macro">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_AntennaTargetMode_t.KRPC_SPACECENTER_ANTENNATARGETMODE_BODY">
 <span class="sig-name descname"><span class="n"><span class="pre">KRPC_SPACECENTER_ANTENNATARGETMODE_BODY</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_AntennaTargetMode_t.KRPC_SPACECENTER_ANTENNATARGETMODE_BODY" title="Link to this definition">#</a><br /></dt>
-<dd><p>The center of a body. See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Antenna_SetTargetBody()</span></code>.</p>
+<dd><p>The center of a body. See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Antenna_TargetBody()</span></code>.</p>
 </dd></dl>
 
 <dl class="c macro">

@@ -2326,30 +2326,33 @@ Antenna
 
    .. attribute:: target_vessel
 
-      The vessel the antenna points at, or ``None`` if it does not point at a vessel.
+      Returns the vessel the antenna points at, and sets the vessel to point at.
 
-      :Attribute: Read-only, cannot be set
+      :Attribute: Can be read or written
       :rtype: :class:`Vessel` or None
       :Game Scenes: Flight
 
 
       .. note::
 
-         Requires RealAntennas.
+         Requires RealAntennas. ``None`` if the antenna does not point at a vessel. Throws an
+         exception if set to ``None``, or if the antenna cannot be pointed
+         (see :attr:`Antenna.can_target`).
 
    .. attribute:: target_body
 
-      The body the antenna points at, or at a position on, or ``None`` if it points at
-      neither.
+      Returns the body the antenna points at, and sets the body to point at the center of.
 
-      :Attribute: Read-only, cannot be set
+      :Attribute: Can be read or written
       :rtype: :class:`CelestialBody` or None
       :Game Scenes: Flight
 
 
       .. note::
 
-         Requires RealAntennas.
+         Requires RealAntennas. Also the body of a position the antenna points at, or
+         ``None`` if it points at neither. Throws an exception if set to ``None``, or if
+         the antenna cannot be pointed (see :attr:`Antenna.can_target`).
 
    .. method:: target_direction(reference_frame)
 
@@ -2365,32 +2368,6 @@ Antenna
       .. note::
 
          Requires RealAntennas.
-
-   .. method:: set_target_vessel(vessel)
-
-      Point the antenna at a vessel.
-
-      :param Vessel vessel: The vessel.
-      :Game Scenes: Flight
-
-
-      .. note::
-
-         Requires RealAntennas. Throws an exception if the antenna cannot be pointed
-         (see :attr:`Antenna.can_target`).
-
-   .. method:: set_target_body(body)
-
-      Point the antenna at the center of a body.
-
-      :param CelestialBody body: The body.
-      :Game Scenes: Flight
-
-
-      .. note::
-
-         Requires RealAntennas. Throws an exception if the antenna cannot be pointed
-         (see :attr:`Antenna.can_target`).
 
    .. method:: set_target_position(body, latitude, longitude, altitude)
 
@@ -2451,12 +2428,12 @@ Antenna
 
    .. data:: vessel
 
-      A vessel. See :meth:`Antenna.set_target_vessel`.
+      A vessel. See :attr:`Antenna.target_vessel`.
 
 
    .. data:: body
 
-      The center of a body. See :meth:`Antenna.set_target_body`.
+      The center of a body. See :attr:`Antenna.target_body`.
 
 
    .. data:: position

@@ -4066,7 +4066,12 @@ cannot.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Antenna13target_vesselEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter7Antenna13target_vesselEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Antenna13target_vesselEv"></span><span id="krpc::services::SpaceCenter::Antenna::target_vessel"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">optional</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="vessel.html#_CPPv4N4krpc8services11SpaceCenter6VesselE" title="krpc::services::SpaceCenter::Vessel"><span class="n"><span class="pre">Vessel</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">target_vessel</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Antenna13target_vesselEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>The vessel the antenna points at, or <code class="docutils literal notranslate"><span class="pre">NULL</span></code> if it does not point at a vessel.</p>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Antenna17set_target_vesselENSt8optionalI6VesselEE">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Antenna17set_target_vesselENSt8optionalI6VesselEE"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Antenna17set_target_vesselENSt8optionalI6VesselEE"></span><span id="krpc::services::SpaceCenter::Antenna::set_target_vessel__std::optional:Vessel:"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_target_vessel</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">optional</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="vessel.html#_CPPv4N4krpc8services11SpaceCenter6VesselE" title="krpc::services::SpaceCenter::Vessel"><span class="n"><span class="pre">Vessel</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Antenna17set_target_vesselENSt8optionalI6VesselEE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Returns the vessel the antenna points at, and sets the vessel to point at.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -4074,15 +4079,21 @@ cannot.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Requires RealAntennas.</p>
+<p>Requires RealAntennas. <code class="docutils literal notranslate"><span class="pre">NULL</span></code> if the antenna does not point at a vessel. Throws an
+exception if set to <code class="docutils literal notranslate"><span class="pre">NULL</span></code>, or if the antenna cannot be pointed
+(see <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter7Antenna10can_targetEv" title="krpc::services::SpaceCenter::Antenna::can_target"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Antenna::can_target()</span></code></a>).</p>
 </div>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Antenna11target_bodyEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter7Antenna11target_bodyEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Antenna11target_bodyEv"></span><span id="krpc::services::SpaceCenter::Antenna::target_body"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">optional</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="celestial-body.html#_CPPv4N4krpc8services11SpaceCenter13CelestialBodyE" title="krpc::services::SpaceCenter::CelestialBody"><span class="n"><span class="pre">CelestialBody</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">target_body</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Antenna11target_bodyEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>The body the antenna points at, or at a position on, or <code class="docutils literal notranslate"><span class="pre">NULL</span></code> if it points at
-neither.</p>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Antenna15set_target_bodyENSt8optionalI13CelestialBodyEE">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Antenna15set_target_bodyENSt8optionalI13CelestialBodyEE"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Antenna15set_target_bodyENSt8optionalI13CelestialBodyEE"></span><span id="krpc::services::SpaceCenter::Antenna::set_target_body__std::optional:CelestialBody:"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_target_body</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">optional</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="celestial-body.html#_CPPv4N4krpc8services11SpaceCenter13CelestialBodyE" title="krpc::services::SpaceCenter::CelestialBody"><span class="n"><span class="pre">CelestialBody</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Antenna15set_target_bodyENSt8optionalI13CelestialBodyEE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Returns the body the antenna points at, and sets the body to point at the center of.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -4090,7 +4101,9 @@ neither.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Requires RealAntennas.</p>
+<p>Requires RealAntennas. Also the body of a position the antenna points at, or
+<code class="docutils literal notranslate"><span class="pre">NULL</span></code> if it points at neither. Throws an exception if set to <code class="docutils literal notranslate"><span class="pre">NULL</span></code>, or if
+the antenna cannot be pointed (see <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter7Antenna10can_targetEv" title="krpc::services::SpaceCenter::Antenna::can_target"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Antenna::can_target()</span></code></a>).</p>
 </div>
 </dd></dl>
 
@@ -4115,48 +4128,6 @@ exception if the antenna has no target (see <a class="reference internal" href="
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Requires RealAntennas.</p>
-</div>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Antenna17set_target_vesselE6Vessel">
-<span id="_CPPv3N4krpc8services11SpaceCenter7Antenna17set_target_vesselE6Vessel"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Antenna17set_target_vesselE6Vessel"></span><span id="krpc::services::SpaceCenter::Antenna::set_target_vessel__Vessel"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_target_vessel</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="vessel.html#_CPPv4N4krpc8services11SpaceCenter6VesselE" title="krpc::services::SpaceCenter::Vessel"><span class="n"><span class="pre">Vessel</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">vessel</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Antenna17set_target_vesselE6Vessel" title="Link to this definition">#</a><br /></dt>
-<dd><p>Point the antenna at a vessel.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>vessel</strong> – The vessel.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
-</dd>
-</dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Requires RealAntennas. Throws an exception if the antenna cannot be pointed
-(see <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter7Antenna10can_targetEv" title="krpc::services::SpaceCenter::Antenna::can_target"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Antenna::can_target()</span></code></a>).</p>
-</div>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Antenna15set_target_bodyE13CelestialBody">
-<span id="_CPPv3N4krpc8services11SpaceCenter7Antenna15set_target_bodyE13CelestialBody"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Antenna15set_target_bodyE13CelestialBody"></span><span id="krpc::services::SpaceCenter::Antenna::set_target_body__CelestialBody"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_target_body</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="celestial-body.html#_CPPv4N4krpc8services11SpaceCenter13CelestialBodyE" title="krpc::services::SpaceCenter::CelestialBody"><span class="n"><span class="pre">CelestialBody</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">body</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Antenna15set_target_bodyE13CelestialBody" title="Link to this definition">#</a><br /></dt>
-<dd><p>Point the antenna at the center of a body.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>body</strong> – The body.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
-</dd>
-</dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Requires RealAntennas. Throws an exception if the antenna cannot be pointed
-(see <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter7Antenna10can_targetEv" title="krpc::services::SpaceCenter::Antenna::can_target"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Antenna::can_target()</span></code></a>).</p>
 </div>
 </dd></dl>
 
@@ -4243,13 +4214,13 @@ exception if the antenna has no target (see <a class="reference internal" href="
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter17AntennaTargetMode6vesselE">
 <span id="_CPPv3N4krpc8services11SpaceCenter17AntennaTargetMode6vesselE"></span><span id="_CPPv2N4krpc8services11SpaceCenter17AntennaTargetMode6vesselE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">vessel</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter17AntennaTargetMode6vesselE" title="Link to this definition">#</a><br /></dt>
-<dd><p>A vessel. See <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter7Antenna17set_target_vesselE6Vessel" title="krpc::services::SpaceCenter::Antenna::set_target_vessel"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Antenna::set_target_vessel()</span></code></a>.</p>
+<dd><p>A vessel. See <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter7Antenna13target_vesselEv" title="krpc::services::SpaceCenter::Antenna::target_vessel"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Antenna::target_vessel()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter17AntennaTargetMode4bodyE">
 <span id="_CPPv3N4krpc8services11SpaceCenter17AntennaTargetMode4bodyE"></span><span id="_CPPv2N4krpc8services11SpaceCenter17AntennaTargetMode4bodyE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">body</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter17AntennaTargetMode4bodyE" title="Link to this definition">#</a><br /></dt>
-<dd><p>The center of a body. See <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter7Antenna15set_target_bodyE13CelestialBody" title="krpc::services::SpaceCenter::Antenna::set_target_body"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Antenna::set_target_body()</span></code></a>.</p>
+<dd><p>The center of a body. See <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter7Antenna11target_bodyEv" title="krpc::services::SpaceCenter::Antenna::target_body"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Antenna::target_body()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="cpp enumerator">

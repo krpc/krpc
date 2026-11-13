@@ -1869,24 +1869,27 @@ Antenna
 
    .. attribute:: target_vessel: SpaceCenter.Vessel | nil
 
-      The vessel the antenna points at, or ``nil`` if it does not point at a vessel.
+      Returns the vessel the antenna points at, and sets the vessel to point at.
 
-      :Attribute: Read-only, cannot be set
+      :Attribute: Can be read or written
 
       .. note::
 
-         Requires RealAntennas.
+         Requires RealAntennas. ``nil`` if the antenna does not point at a vessel. Throws an
+         exception if set to ``nil``, or if the antenna cannot be pointed
+         (see :attr:`SpaceCenter.Antenna.can_target`).
 
    .. attribute:: target_body: SpaceCenter.CelestialBody | nil
 
-      The body the antenna points at, or at a position on, or ``nil`` if it points at
-      neither.
+      Returns the body the antenna points at, and sets the body to point at the center of.
 
-      :Attribute: Read-only, cannot be set
+      :Attribute: Can be read or written
 
       .. note::
 
-         Requires RealAntennas.
+         Requires RealAntennas. Also the body of a position the antenna points at, or
+         ``nil`` if it points at neither. Throws an exception if set to ``nil``, or if
+         the antenna cannot be pointed (see :attr:`SpaceCenter.Antenna.can_target`).
 
    .. method:: target_direction(reference_frame: SpaceCenter.ReferenceFrame): Tuple
 
@@ -1899,28 +1902,6 @@ Antenna
       .. note::
 
          Requires RealAntennas.
-
-   .. method:: set_target_vessel(vessel: SpaceCenter.Vessel)
-
-      Point the antenna at a vessel.
-
-      :param vessel: The vessel.
-
-      .. note::
-
-         Requires RealAntennas. Throws an exception if the antenna cannot be pointed
-         (see :attr:`SpaceCenter.Antenna.can_target`).
-
-   .. method:: set_target_body(body: SpaceCenter.CelestialBody)
-
-      Point the antenna at the center of a body.
-
-      :param body: The body.
-
-      .. note::
-
-         Requires RealAntennas. Throws an exception if the antenna cannot be pointed
-         (see :attr:`SpaceCenter.Antenna.can_target`).
 
    .. method:: set_target_position(body: SpaceCenter.CelestialBody, latitude: number, longitude: number, altitude: number)
 
@@ -1975,12 +1956,12 @@ Antenna
 
    .. data:: vessel
 
-      A vessel. See :meth:`SpaceCenter.Antenna.set_target_vessel`.
+      A vessel. See :attr:`SpaceCenter.Antenna.target_vessel`.
 
 
    .. data:: body
 
-      The center of a body. See :meth:`SpaceCenter.Antenna.set_target_body`.
+      The center of a body. See :attr:`SpaceCenter.Antenna.target_body`.
 
 
    .. data:: position

@@ -5316,10 +5316,10 @@ cannot.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.Antenna.target_vessel">
 <span class="sig-name descname"><span class="pre">target_vessel</span></span><a class="headerlink" href="#SpaceCenter.Antenna.target_vessel" title="Link to this definition">#</a></dt>
-<dd><p>The vessel the antenna points at, or <code class="docutils literal notranslate"><span class="pre">None</span></code> if it does not point at a vessel.</p>
+<dd><p>Returns the vessel the antenna points at, and sets the vessel to point at.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Read-only, cannot be set</p>
+<dd class="field-odd"><p>Can be read or written</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="vessel.html#SpaceCenter.Vessel" title="SpaceCenter.Vessel"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vessel</span></code></a> or None</p>
@@ -5330,18 +5330,19 @@ cannot.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Requires RealAntennas.</p>
+<p>Requires RealAntennas. <code class="docutils literal notranslate"><span class="pre">None</span></code> if the antenna does not point at a vessel. Throws an
+exception if set to <code class="docutils literal notranslate"><span class="pre">None</span></code>, or if the antenna cannot be pointed
+(see <a class="reference internal" href="#SpaceCenter.Antenna.can_target" title="SpaceCenter.Antenna.can_target"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Antenna.can_target</span></code></a>).</p>
 </div>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.Antenna.target_body">
 <span class="sig-name descname"><span class="pre">target_body</span></span><a class="headerlink" href="#SpaceCenter.Antenna.target_body" title="Link to this definition">#</a></dt>
-<dd><p>The body the antenna points at, or at a position on, or <code class="docutils literal notranslate"><span class="pre">None</span></code> if it points at
-neither.</p>
+<dd><p>Returns the body the antenna points at, and sets the body to point at the center of.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Read-only, cannot be set</p>
+<dd class="field-odd"><p>Can be read or written</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="celestial-body.html#SpaceCenter.CelestialBody" title="SpaceCenter.CelestialBody"><code class="xref py py-class docutils literal notranslate"><span class="pre">CelestialBody</span></code></a> or None</p>
@@ -5352,7 +5353,9 @@ neither.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Requires RealAntennas.</p>
+<p>Requires RealAntennas. Also the body of a position the antenna points at, or
+<code class="docutils literal notranslate"><span class="pre">None</span></code> if it points at neither. Throws an exception if set to <code class="docutils literal notranslate"><span class="pre">None</span></code>, or if
+the antenna cannot be pointed (see <a class="reference internal" href="#SpaceCenter.Antenna.can_target" title="SpaceCenter.Antenna.can_target"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Antenna.can_target</span></code></a>).</p>
 </div>
 </dd></dl>
 
@@ -5378,44 +5381,6 @@ exception if the antenna has no target (see <a class="reference internal" href="
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Requires RealAntennas.</p>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="SpaceCenter.Antenna.set_target_vessel">
-<span class="sig-name descname"><span class="pre">set_target_vessel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vessel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Antenna.set_target_vessel" title="Link to this definition">#</a></dt>
-<dd><p>Point the antenna at a vessel.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>vessel</strong> (<a class="reference internal" href="vessel.html#SpaceCenter.Vessel" title="SpaceCenter.Vessel"><em>Vessel</em></a>) – The vessel.</p>
-</dd>
-<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
-</dd>
-</dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Requires RealAntennas. Throws an exception if the antenna cannot be pointed
-(see <a class="reference internal" href="#SpaceCenter.Antenna.can_target" title="SpaceCenter.Antenna.can_target"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Antenna.can_target</span></code></a>).</p>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="SpaceCenter.Antenna.set_target_body">
-<span class="sig-name descname"><span class="pre">set_target_body</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">body</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Antenna.set_target_body" title="Link to this definition">#</a></dt>
-<dd><p>Point the antenna at the center of a body.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>body</strong> (<a class="reference internal" href="celestial-body.html#SpaceCenter.CelestialBody" title="SpaceCenter.CelestialBody"><em>CelestialBody</em></a>) – The body.</p>
-</dd>
-<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
-</dd>
-</dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Requires RealAntennas. Throws an exception if the antenna cannot be pointed
-(see <a class="reference internal" href="#SpaceCenter.Antenna.can_target" title="SpaceCenter.Antenna.can_target"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Antenna.can_target</span></code></a>).</p>
 </div>
 </dd></dl>
 
@@ -5502,13 +5467,13 @@ exception if the antenna has no target (see <a class="reference internal" href="
 <dl class="py data">
 <dt class="sig sig-object py" id="SpaceCenter.AntennaTargetMode.vessel">
 <span class="sig-name descname"><span class="pre">vessel</span></span><a class="headerlink" href="#SpaceCenter.AntennaTargetMode.vessel" title="Link to this definition">#</a></dt>
-<dd><p>A vessel. See <a class="reference internal" href="#SpaceCenter.Antenna.set_target_vessel" title="SpaceCenter.Antenna.set_target_vessel"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Antenna.set_target_vessel()</span></code></a>.</p>
+<dd><p>A vessel. See <a class="reference internal" href="#SpaceCenter.Antenna.target_vessel" title="SpaceCenter.Antenna.target_vessel"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Antenna.target_vessel</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="SpaceCenter.AntennaTargetMode.body">
 <span class="sig-name descname"><span class="pre">body</span></span><a class="headerlink" href="#SpaceCenter.AntennaTargetMode.body" title="Link to this definition">#</a></dt>
-<dd><p>The center of a body. See <a class="reference internal" href="#SpaceCenter.Antenna.set_target_body" title="SpaceCenter.Antenna.set_target_body"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Antenna.set_target_body()</span></code></a>.</p>
+<dd><p>The center of a body. See <a class="reference internal" href="#SpaceCenter.Antenna.target_body" title="SpaceCenter.Antenna.target_body"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Antenna.target_body</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py data">

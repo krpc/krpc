@@ -2137,28 +2137,33 @@ Antenna
 
    .. method:: Vessel getTargetVessel()
 
+   .. method:: void setTargetVessel(Vessel value)
 
-      The vessel the antenna points at, or ``null`` if it does not point at a vessel.
+      Returns the vessel the antenna points at, and sets the vessel to point at.
 
       :Game Scenes: Flight
 
 
       .. note::
 
-         Requires RealAntennas.
+         Requires RealAntennas. ``null`` if the antenna does not point at a vessel. Throws an
+         exception if set to ``null``, or if the antenna cannot be pointed
+         (see :meth:`Antenna.getCanTarget()`).
 
    .. method:: CelestialBody getTargetBody()
 
+   .. method:: void setTargetBody(CelestialBody value)
 
-      The body the antenna points at, or at a position on, or ``null`` if it points at
-      neither.
+      Returns the body the antenna points at, and sets the body to point at the center of.
 
       :Game Scenes: Flight
 
 
       .. note::
 
-         Requires RealAntennas.
+         Requires RealAntennas. Also the body of a position the antenna points at, or
+         ``null`` if it points at neither. Throws an exception if set to ``null``, or if
+         the antenna cannot be pointed (see :meth:`Antenna.getCanTarget()`).
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> targetDirection(ReferenceFrame referenceFrame)
 
@@ -2173,32 +2178,6 @@ Antenna
       .. note::
 
          Requires RealAntennas.
-
-   .. method:: void setTargetVessel(Vessel vessel)
-
-      Point the antenna at a vessel.
-
-      :param Vessel vessel: The vessel.
-      :Game Scenes: Flight
-
-
-      .. note::
-
-         Requires RealAntennas. Throws an exception if the antenna cannot be pointed
-         (see :meth:`Antenna.getCanTarget()`).
-
-   .. method:: void setTargetBody(CelestialBody body)
-
-      Point the antenna at the center of a body.
-
-      :param CelestialBody body: The body.
-      :Game Scenes: Flight
-
-
-      .. note::
-
-         Requires RealAntennas. Throws an exception if the antenna cannot be pointed
-         (see :meth:`Antenna.getCanTarget()`).
 
    .. method:: void setTargetPosition(CelestialBody body, double latitude, double longitude, double altitude)
 
@@ -2259,12 +2238,12 @@ Antenna
 
    .. field:: public AntennaTargetMode VESSEL
 
-      A vessel. See :meth:`Antenna.setTargetVessel(Vessel)`.
+      A vessel. See :meth:`Antenna.getTargetVessel()`.
 
 
    .. field:: public AntennaTargetMode BODY
 
-      The center of a body. See :meth:`Antenna.setTargetBody(CelestialBody)`.
+      The center of a body. See :meth:`Antenna.getTargetBody()`.
 
 
    .. field:: public AntennaTargetMode POSITION

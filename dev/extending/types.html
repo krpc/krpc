@@ -549,8 +549,23 @@
 <h1>Types<a class="headerlink" href="#types" title="Link to this heading">#</a></h1>
 <section id="service-api-identifiers">
 <span id="identifiers"></span><h2>Identifiers<a class="headerlink" href="#service-api-identifiers" title="Link to this heading">#</a></h2>
-<p>An identifier can only contain letters and numbers, and must start with an upper case letter.  They
-should follow <a class="reference external" href="https://en.wikipedia.org/wiki/CamelCase">CamelCase</a> capitalization conventions.</p>
+<p>An identifier can only contain the ASCII letters and digits, and must start with an upper case
+letter. They should follow <a class="reference external" href="https://en.wikipedia.org/wiki/CamelCase">CamelCase</a> capitalization
+conventions. The names of parameters and enumeration values follow the same rule, but can also start
+with a lower case letter. The <code class="docutils literal notranslate"><span class="pre">_</span></code> character is reserved for joining the parts of a procedure name,
+such as <code class="docutils literal notranslate"><span class="pre">Vessel_get_Name</span></code>.</p>
+<p>Names are unique within their scope, compared case-insensitively. Some clients convert names that
+differ only in case to one name: <code class="docutils literal notranslate"><span class="pre">RCSEnabled</span></code> and <code class="docutils literal notranslate"><span class="pre">RcsEnabled</span></code> are both <code class="docutils literal notranslate"><span class="pre">rcs_enabled</span></code> in
+Python. The scopes are:</p>
+<ul class="simple">
+<li><p>the procedures and properties of a service</p></li>
+<li><p>the methods, static methods and properties of a class</p></li>
+<li><p>the values of an enumeration</p></li>
+<li><p>the fields of a structure</p></li>
+<li><p>the parameters of a procedure or method</p></li>
+</ul>
+<p>A property <code class="docutils literal notranslate"><span class="pre">Foo</span></code> also takes the names <code class="docutils literal notranslate"><span class="pre">GetFoo</span></code> and <code class="docutils literal notranslate"><span class="pre">SetFoo</span></code>, as some clients name its
+getter and setter that way. A method <code class="docutils literal notranslate"><span class="pre">GetFoo</span></code> beside it is an error.</p>
 </section>
 <section id="serializable-types">
 <span id="service-api-serializable-types"></span><h2>Serializable Types<a class="headerlink" href="#serializable-types" title="Link to this heading">#</a></h2>

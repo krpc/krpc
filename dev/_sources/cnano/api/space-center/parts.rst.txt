@@ -2084,27 +2084,32 @@ Antenna
          Requires RealAntennas.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Antenna_TargetVessel(krpc_connection_t connection, krpc_SpaceCenter_Vessel_t * returnValue, krpc_SpaceCenter_Antenna_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_set_TargetVessel(krpc_connection_t connection, krpc_SpaceCenter_Antenna_t instance, krpc_SpaceCenter_Vessel_t value)
 
-      The vessel the antenna points at, or ``nullptr`` if it does not point at a vessel.
+      Returns the vessel the antenna points at, and sets the vessel to point at.
 
       :Game Scenes: Flight
 
 
       .. note::
 
-         Requires RealAntennas.
+         Requires RealAntennas. ``nullptr`` if the antenna does not point at a vessel. Throws an
+         exception if set to ``nullptr``, or if the antenna cannot be pointed
+         (see :func:`krpc_SpaceCenter_Antenna_CanTarget`).
 
    .. function:: krpc_error_t krpc_SpaceCenter_Antenna_TargetBody(krpc_connection_t connection, krpc_SpaceCenter_CelestialBody_t * returnValue, krpc_SpaceCenter_Antenna_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_set_TargetBody(krpc_connection_t connection, krpc_SpaceCenter_Antenna_t instance, krpc_SpaceCenter_CelestialBody_t value)
 
-      The body the antenna points at, or at a position on, or ``nullptr`` if it points at
-      neither.
+      Returns the body the antenna points at, and sets the body to point at the center of.
 
       :Game Scenes: Flight
 
 
       .. note::
 
-         Requires RealAntennas.
+         Requires RealAntennas. Also the body of a position the antenna points at, or
+         ``nullptr`` if it points at neither. Throws an exception if set to ``nullptr``, or if
+         the antenna cannot be pointed (see :func:`krpc_SpaceCenter_Antenna_CanTarget`).
 
    .. function:: krpc_error_t krpc_SpaceCenter_Antenna_TargetDirection(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Antenna_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
@@ -2122,38 +2127,6 @@ Antenna
       .. note::
 
          Requires RealAntennas.
-
-   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_SetTargetVessel(krpc_connection_t connection, krpc_SpaceCenter_Antenna_t instance, krpc_SpaceCenter_Vessel_t vessel)
-
-      Point the antenna at a vessel.
-
-      :Parameters:
-
-       * **vessel** -- The vessel.
-
-      :Game Scenes: Flight
-
-
-      .. note::
-
-         Requires RealAntennas. Throws an exception if the antenna cannot be pointed
-         (see :func:`krpc_SpaceCenter_Antenna_CanTarget`).
-
-   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_SetTargetBody(krpc_connection_t connection, krpc_SpaceCenter_Antenna_t instance, krpc_SpaceCenter_CelestialBody_t body)
-
-      Point the antenna at the center of a body.
-
-      :Parameters:
-
-       * **body** -- The body.
-
-      :Game Scenes: Flight
-
-
-      .. note::
-
-         Requires RealAntennas. Throws an exception if the antenna cannot be pointed
-         (see :func:`krpc_SpaceCenter_Antenna_CanTarget`).
 
    .. function:: krpc_error_t krpc_SpaceCenter_Antenna_SetTargetPosition(krpc_connection_t connection, krpc_SpaceCenter_Antenna_t instance, krpc_SpaceCenter_CelestialBody_t body, double latitude, double longitude, double altitude)
 
@@ -2228,12 +2201,12 @@ Antenna
 
    .. macro:: KRPC_SPACECENTER_ANTENNATARGETMODE_VESSEL
 
-      A vessel. See :func:`krpc_SpaceCenter_Antenna_SetTargetVessel`.
+      A vessel. See :func:`krpc_SpaceCenter_Antenna_TargetVessel`.
 
 
    .. macro:: KRPC_SPACECENTER_ANTENNATARGETMODE_BODY
 
-      The center of a body. See :func:`krpc_SpaceCenter_Antenna_SetTargetBody`.
+      The center of a body. See :func:`krpc_SpaceCenter_Antenna_TargetBody`.
 
 
    .. macro:: KRPC_SPACECENTER_ANTENNATARGETMODE_POSITION

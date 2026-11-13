@@ -4066,7 +4066,12 @@ cannot.</p>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Antenna.getTargetVessel()">
 <a class="reference internal" href="vessel.html#krpc.client.services.SpaceCenter.Vessel" title="krpc.client.services.SpaceCenter.Vessel"><span class="pre">Vessel</span></a> <span class="sig-name descname"><span class="pre">getTargetVessel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Antenna.getTargetVessel()" title="Link to this definition">#</a></dt>
-<dd><p>The vessel the antenna points at, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if it does not point at a vessel.</p>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Antenna.setTargetVessel(Vessel)">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setTargetVessel</span></span><span class="sig-paren">(</span><a class="reference internal" href="vessel.html#krpc.client.services.SpaceCenter.Vessel" title="krpc.client.services.SpaceCenter.Vessel"><span class="pre">Vessel</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Antenna.setTargetVessel(Vessel)" title="Link to this definition">#</a></dt>
+<dd><p>Returns the vessel the antenna points at, and sets the vessel to point at.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -4074,15 +4079,21 @@ cannot.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Requires RealAntennas.</p>
+<p>Requires RealAntennas. <code class="docutils literal notranslate"><span class="pre">null</span></code> if the antenna does not point at a vessel. Throws an
+exception if set to <code class="docutils literal notranslate"><span class="pre">null</span></code>, or if the antenna cannot be pointed
+(see <a class="reference internal" href="#krpc.client.services.SpaceCenter.Antenna.getCanTarget()" title="krpc.client.services.SpaceCenter.Antenna.getCanTarget()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Antenna.getCanTarget()</span></code></a>).</p>
 </div>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Antenna.getTargetBody()">
 <a class="reference internal" href="celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a> <span class="sig-name descname"><span class="pre">getTargetBody</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Antenna.getTargetBody()" title="Link to this definition">#</a></dt>
-<dd><p>The body the antenna points at, or at a position on, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if it points at
-neither.</p>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Antenna.setTargetBody(CelestialBody)">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setTargetBody</span></span><span class="sig-paren">(</span><a class="reference internal" href="celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Antenna.setTargetBody(CelestialBody)" title="Link to this definition">#</a></dt>
+<dd><p>Returns the body the antenna points at, and sets the body to point at the center of.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -4090,7 +4101,9 @@ neither.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Requires RealAntennas.</p>
+<p>Requires RealAntennas. Also the body of a position the antenna points at, or
+<code class="docutils literal notranslate"><span class="pre">null</span></code> if it points at neither. Throws an exception if set to <code class="docutils literal notranslate"><span class="pre">null</span></code>, or if
+the antenna cannot be pointed (see <a class="reference internal" href="#krpc.client.services.SpaceCenter.Antenna.getCanTarget()" title="krpc.client.services.SpaceCenter.Antenna.getCanTarget()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Antenna.getCanTarget()</span></code></a>).</p>
 </div>
 </dd></dl>
 
@@ -4115,48 +4128,6 @@ exception if the antenna has no target (see <a class="reference internal" href="
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Requires RealAntennas.</p>
-</div>
-</dd></dl>
-
-<dl class="java method">
-<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Antenna.setTargetVessel(Vessel)">
-<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setTargetVessel</span></span><span class="sig-paren">(</span><a class="reference internal" href="vessel.html#krpc.client.services.SpaceCenter.Vessel" title="krpc.client.services.SpaceCenter.Vessel"><span class="pre">Vessel</span></a><em> <span class="pre">vessel</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Antenna.setTargetVessel(Vessel)" title="Link to this definition">#</a></dt>
-<dd><p>Point the antenna at a vessel.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>vessel</strong> (<span><a class="reference internal" href="vessel.html#krpc.client.services.SpaceCenter.Vessel" title="krpc.client.services.SpaceCenter.Vessel"><code class="xref java java-type docutils literal notranslate"><span class="pre">Vessel</span></code></a></span>) – The vessel.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
-</dd>
-</dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Requires RealAntennas. Throws an exception if the antenna cannot be pointed
-(see <a class="reference internal" href="#krpc.client.services.SpaceCenter.Antenna.getCanTarget()" title="krpc.client.services.SpaceCenter.Antenna.getCanTarget()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Antenna.getCanTarget()</span></code></a>).</p>
-</div>
-</dd></dl>
-
-<dl class="java method">
-<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Antenna.setTargetBody(CelestialBody)">
-<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setTargetBody</span></span><span class="sig-paren">(</span><a class="reference internal" href="celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a><em> <span class="pre">body</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Antenna.setTargetBody(CelestialBody)" title="Link to this definition">#</a></dt>
-<dd><p>Point the antenna at the center of a body.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>body</strong> (<span><a class="reference internal" href="celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><code class="xref java java-type docutils literal notranslate"><span class="pre">CelestialBody</span></code></a></span>) – The body.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
-</dd>
-</dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Requires RealAntennas. Throws an exception if the antenna cannot be pointed
-(see <a class="reference internal" href="#krpc.client.services.SpaceCenter.Antenna.getCanTarget()" title="krpc.client.services.SpaceCenter.Antenna.getCanTarget()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Antenna.getCanTarget()</span></code></a>).</p>
 </div>
 </dd></dl>
 
@@ -4243,13 +4214,13 @@ exception if the antenna has no target (see <a class="reference internal" href="
 <dl class="java field">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AntennaTargetMode.VESSEL">
 <span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.AntennaTargetMode" title="krpc.client.services.SpaceCenter.AntennaTargetMode"><span class="pre">AntennaTargetMode</span></a> <span class="sig-name descname"><span class="pre">VESSEL</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AntennaTargetMode.VESSEL" title="Link to this definition">#</a></dt>
-<dd><p>A vessel. See <a class="reference internal" href="#krpc.client.services.SpaceCenter.Antenna.setTargetVessel(Vessel)" title="krpc.client.services.SpaceCenter.Antenna.setTargetVessel(Vessel)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Antenna.setTargetVessel(Vessel)</span></code></a>.</p>
+<dd><p>A vessel. See <a class="reference internal" href="#krpc.client.services.SpaceCenter.Antenna.getTargetVessel()" title="krpc.client.services.SpaceCenter.Antenna.getTargetVessel()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Antenna.getTargetVessel()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="java field">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AntennaTargetMode.BODY">
 <span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.AntennaTargetMode" title="krpc.client.services.SpaceCenter.AntennaTargetMode"><span class="pre">AntennaTargetMode</span></a> <span class="sig-name descname"><span class="pre">BODY</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AntennaTargetMode.BODY" title="Link to this definition">#</a></dt>
-<dd><p>The center of a body. See <a class="reference internal" href="#krpc.client.services.SpaceCenter.Antenna.setTargetBody(CelestialBody)" title="krpc.client.services.SpaceCenter.Antenna.setTargetBody(CelestialBody)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Antenna.setTargetBody(CelestialBody)</span></code></a>.</p>
+<dd><p>The center of a body. See <a class="reference internal" href="#krpc.client.services.SpaceCenter.Antenna.getTargetBody()" title="krpc.client.services.SpaceCenter.Antenna.getTargetBody()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Antenna.getTargetBody()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="java field">
