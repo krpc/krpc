@@ -9,8 +9,8 @@ import {
   type Argument as CallArgument,
   ProcedureCallSchema,
 } from "../schema/krpc_pb.js";
-import { RemoteEnum, type Type, type Types, UnknownTypeError } from "../types.js";
-import { ClientValue, Node, TypeArgument, type Value } from "./ir.js";
+import { RemoteEnum, RemoteStruct, type Type, type Types, UnknownTypeError } from "../types.js";
+import { ClientValue, Collection, Node, type Operand, TypeArgument, type Value } from "./ir.js";
 import type { Member, MemberIndex } from "./members.js";
 import { at } from "./parse.js";
 import {
@@ -35,9 +35,17 @@ export interface Environment {
   readonly warn: (message: string) => void;
 }
 
+/** Raised when a use gives a type to a value that had none, such as an empty array, after the
+ * type is noted, so the function is compiled again with it. */
+export class Recompile {}
+
+/** The message for a value that no use types. */
+export const UNTYPED_HINT =
+  "Give it a type with a cast, such as types.list(types.double).cast([]) or types.nullable(types.double).cast(null)";
+
 /** A value passed to a procedure, with the syntax it was compiled from. */
 export interface Argument {
-  readonly value: Value;
+  readonly value: Operand;
   readonly at: SyntaxNode;
 }
 
@@ -65,10 +73,25 @@ export class Builder {
   readonly #offset: number;
   /** The calls of procedures the function makes, other than to StdLib. */
   remoteCalls = 0;
+  /** The types that uses gave values with none, by a key of the syntax that declares the value.
+   * They carry over from one compile of a function to the next. */
+  readonly hints: Map<string, Type>;
 
-  constructor(env: Environment, offset: number) {
+  constructor(env: Environment, offset: number, hints: Map<string, Type>) {
     this.env = env;
     this.#offset = offset;
+    this.hints = hints;
+  }
+
+  /** Notes the type of a value that had none, and compiles the function again. Throws the
+   * error instead for a type already noted, which the value did not take. */
+  hint(key: string, type: Type, error?: () => CompilationError): never {
+    const noted = this.hints.get(key);
+    if (noted !== undefined && sameType(noted, type)) {
+      throw error?.() ?? new CompilationError("A value cannot take the type of its later uses");
+    }
+    this.hints.set(key, type);
+    throw new Recompile();
   }
 
   error(node: SyntaxNode, message: string): CompilationError {
@@ -131,6 +154,12 @@ export class Builder {
       default:
         break;
     }
+    if (Array.isArray(value) || value instanceof Set || value instanceof Map) {
+      return this.collection(collectionOf(value, node), target, node, where);
+    }
+    if (value instanceof RemoteStruct) {
+      return this.#struct(value, target, node, suffix);
+    }
     if (value instanceof Uint8Array) {
       if (target !== undefined && target.kind !== "bytes") {
         throw mismatch("a Uint8Array");
@@ -168,6 +197,158 @@ export class Builder {
     throw this.error(node, `${describe(value)} cannot be a value in a function${suffix}`);
   }
 
+  #struct(value: RemoteStruct, target: Type | undefined, node: SyntaxNode, suffix: string): Node {
+    const declaration = RemoteStruct.structOf(value);
+    const key = `${declaration.service}.${declaration.name}`;
+    let struct: ReturnType<Types["struct"]>;
+    try {
+      struct = this.env.types.struct(key);
+    } catch (error) {
+      if (error instanceof UnknownTypeError) {
+        throw this.error(node, `The server has no structure ${key}`);
+      }
+      throw error;
+    }
+    const type: Type = { kind: "struct", struct, nullable: false };
+    if (target !== undefined && !sameType(type, target, true)) {
+      throw this.error(node, `Cannot use a ${key} as a ${typeName(target)}${suffix}`);
+    }
+    const fields = struct.fields.map((field) =>
+      this.constant(RemoteStruct.fieldOf(value, field.name), field.type, node, suffix),
+    );
+    return this.node("CreateStruct", [new TypeArgument(type), fields], type);
+  }
+
+  /** A node of a collection, of the given type, or of the type its values give it. An empty
+   * collection with no type is a CompilationError. */
+  collection(value: Collection, target: Type | undefined, node: SyntaxNode, where = ""): Node {
+    const suffix = where === "" ? "" : ` ${where}`;
+    const { form, items, keys } = value;
+    if (target === undefined) {
+      if (items.length === 0) {
+        throw this.error(value.at, `${EMPTY_NAMES[form]} has no type here. ${UNTYPED_HINT}`);
+      }
+      if (form === "map") {
+        target = {
+          kind: "dictionary",
+          key: this.commonType(keys, value.at, "keys"),
+          value: this.commonType(items, value.at, "values"),
+          nullable: false,
+        };
+      } else {
+        const item = this.commonType(items, value.at, "values");
+        target = { kind: form === "set" ? "set" : "list", item, nullable: false };
+      }
+    }
+    const type = withNullable(target, false);
+    const mismatch = () =>
+      this.error(node, `Cannot use ${FORM_NAMES[form]} as a ${typeName(target ?? null)}${suffix}`);
+    if (form === "array" && type.kind === "tuple") {
+      if (items.length !== type.items.length) {
+        throw this.error(
+          node,
+          `A ${typeName(type)} has ${type.items.length} values, and the array has ${items.length}${suffix}`,
+        );
+      }
+      const values = items.map((x, i) => this.toNode(x, type.items[i], node, suffix.trim()));
+      return this.node("CreateTuple", [values], type);
+    }
+    if ((form === "array" && type.kind === "list") || (form === "set" && type.kind === "set")) {
+      if (items.length === 0) {
+        const method = type.kind === "list" ? "CreateEmptyList" : "CreateEmptySet";
+        return this.node(method, [new TypeArgument(type.item)], type);
+      }
+      const values = items.map((x) => this.toNode(x, type.item, node, suffix.trim()));
+      if (type.kind === "set") {
+        return this.node("CreateSet", [new Set(values)], type);
+      }
+      return this.node("CreateList", [values], type);
+    }
+    if (form === "map" && type.kind === "dictionary") {
+      if (items.length === 0) {
+        return this.node(
+          "CreateEmptyDictionary",
+          [new TypeArgument(type.key), new TypeArgument(type.value)],
+          type,
+        );
+      }
+      return this.node(
+        "CreateDictionary",
+        [
+          keys.map((x) => this.toNode(x, type.key, node, suffix.trim())),
+          items.map((x) => this.toNode(x, type.value, node, suffix.trim())),
+        ],
+        type,
+      );
+    }
+    throw mismatch();
+  }
+
+  /** The type of the values of a collection: doubles for numbers, and the one type of other
+   * values, which can be null when one is. */
+  commonType(values: readonly Operand[], node: SyntaxNode, what: string): Type {
+    const types: Type[] = [];
+    let nullable = false;
+    for (const value of values) {
+      if (isNullish(value)) {
+        nullable = true;
+        continue;
+      }
+      const type = this.valueType(value, node);
+      if (type === null) {
+        throw this.error(node, `A value of the collection has no type. ${UNTYPED_HINT}`);
+      }
+      types.push(type);
+    }
+    if (types.length === 0) {
+      throw this.error(node, `The ${what} of the collection are all null. ${UNTYPED_HINT}`);
+    }
+    nullable ||= types.some((x) => x.nullable);
+    if (types.every(isBigint)) {
+      const kind = types.every((x) => x.kind === "uint64") ? "uint64" : "sint64";
+      return scalar(kind, nullable);
+    }
+    const [first] = types;
+    for (const type of types) {
+      if (!sameType(type, first, true)) {
+        throw this.error(
+          node,
+          `The ${what} of the collection are a ${typeName(first)} and a ${typeName(type)}, which have no common type`,
+        );
+      }
+    }
+    return withNullable(first, nullable);
+  }
+
+  /** The type a variable takes from a value: a double for a number, as JavaScript has one type of
+   * number, and otherwise the value's type. Null for a value with no type, such as null or an
+   * empty array. */
+  valueType(value: Operand, node: SyntaxNode): Type | null {
+    if (value instanceof Collection) {
+      if (value.items.length === 0) {
+        return null;
+      }
+      return this.collection(value, undefined, node).type;
+    }
+    if (value instanceof ClientValue) {
+      const v = value.value;
+      if (v === null || v === undefined) {
+        return null;
+      }
+      if (typeof v === "number") {
+        return DOUBLE;
+      }
+      if ((Array.isArray(v) || v instanceof Set || v instanceof Map) && sizeOf(v) === 0) {
+        return null;
+      }
+      return this.constant(v, undefined, node).type;
+    }
+    if (value.type === null) {
+      throw this.error(node, "The expression has no value");
+    }
+    return isNumber(value.type) ? withNullable(DOUBLE, value.type.nullable) : value.type;
+  }
+
   #integer(value: bigint, kind: string, node: SyntaxNode, suffix: string): Node {
     const [low, high] = INTEGER_RANGES[kind];
     if (value < low || value >= high) {
@@ -183,9 +364,12 @@ export class Builder {
   /** A node of a value, converted to the given type. A constant takes the type, a number is
    * converted to the integer or floating point type, and a value of another type is a
    * CompilationError. With no type, a constant takes the type its value gives it. */
-  toNode(value: Value, target: Type | undefined, node: SyntaxNode, where = ""): Node {
+  toNode(value: Operand, target: Type | undefined, node: SyntaxNode, where = ""): Node {
     if (value instanceof ClientValue) {
       return this.constant(value.value, target, node, where);
+    }
+    if (value instanceof Collection) {
+      return this.collection(value, target, node, where);
     }
     if (value.type === null) {
       throw this.error(node, `The expression has no value`);
@@ -232,8 +416,13 @@ export class Builder {
   }
 
   /** The type of a value, or undefined for a value computed on the client. */
-  typeOf(value: Value): Type | null | undefined {
+  typeOf(value: Operand): Type | null | undefined {
     return value instanceof Node ? value.type : undefined;
+  }
+
+  /** A value as a node, or a constant for a value computed on the client. */
+  resolved(value: Operand, node: SyntaxNode): Value {
+    return value instanceof Collection ? this.collection(value, undefined, node) : value;
   }
 
   /** A number as a double. A nullable number is a CompilationError, as null is not a number. */
@@ -339,8 +528,22 @@ export class Builder {
   /** Two values as nodes of one type, as the branches of a conditional or the operands of `&&`,
    * `||` and `??` are. Numbers of differing types are doubles, and null takes the type of the
    * other value. */
-  join(a: Value, b: Value, nodes: readonly [SyntaxNode, SyntaxNode], what: string): [Node, Node] {
+  join(
+    a: Operand,
+    b: Operand,
+    nodes: readonly [SyntaxNode, SyntaxNode],
+    what: string,
+  ): [Node, Node] {
     const [x, y] = nodes;
+    if (a instanceof Collection || b instanceof Collection) {
+      const typeOfOther = (other: Operand) =>
+        other instanceof Node && other.type !== null ? withNullable(other.type, false) : undefined;
+      const na =
+        a instanceof Collection ? this.collection(a, typeOfOther(b), x, `in the ${what}`) : a;
+      const nb =
+        b instanceof Collection ? this.collection(b, typeOfOther(na), y, `in the ${what}`) : b;
+      return this.join(na, nb, nodes, what);
+    }
     const ta = this.typeOf(a);
     const tb = this.typeOf(b);
     if (ta === null || tb === null) {
@@ -552,8 +755,40 @@ export class Builder {
   }
 }
 
+const FORM_NAMES = { array: "an array", set: "a Set", map: "a Map" } as const;
+const EMPTY_NAMES = { array: "An empty array", set: "An empty Set", map: "An empty Map" } as const;
+
+/** A collection of values computed on the client. */
+export function collectionOf(
+  value: readonly unknown[] | ReadonlySet<unknown> | ReadonlyMap<unknown, unknown>,
+  node: SyntaxNode,
+): Collection {
+  if (value instanceof Map) {
+    const entries = [...value];
+    return new Collection(
+      "map",
+      entries.map(([, v]) => new ClientValue(v)),
+      entries.map(([k]) => new ClientValue(k)),
+      node,
+    );
+  }
+  const form = value instanceof Set ? "set" : "array";
+  return new Collection(
+    form,
+    [...(value as Iterable<unknown>)].map((x) => new ClientValue(x)),
+    [],
+    node,
+  );
+}
+
+function sizeOf(
+  value: readonly unknown[] | ReadonlySet<unknown> | ReadonlyMap<unknown, unknown>,
+): number {
+  return Array.isArray(value) ? value.length : (value as ReadonlySet<unknown>).size;
+}
+
 /** Whether a value is a constant null or undefined. */
-export function isNullish(value: Value): boolean {
+export function isNullish(value: Operand): boolean {
   return value instanceof ClientValue && (value.value === null || value.value === undefined);
 }
 

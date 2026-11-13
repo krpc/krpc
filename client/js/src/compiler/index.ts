@@ -1,16 +1,18 @@
-import type { BlockStatement, Expression as SyntaxExpression } from "acorn";
+import { CompilationError } from "../errors.js";
 import type { KRPCCall } from "../functions.js";
 import type { RemoteObject } from "../objects.js";
 import type { Service } from "../schema/krpc_pb.js";
 import type { Type, Types } from "../types.js";
 import type { TypeLike } from "../typevalues.js";
-import { Builder } from "./builder.js";
+import { Builder, type Environment, Recompile } from "./builder.js";
+import { CollectionCompiler } from "./collections.js";
 import { Emitter } from "./emit.js";
 import { ExpressionCompiler } from "./expressions.js";
-import { ClientValue, type Node } from "./ir.js";
+import type { Node } from "./ir.js";
 import { MemberIndex } from "./members.js";
 import { parseFunction } from "./parse.js";
 import { Scope } from "./scope.js";
+import { StatementCompiler } from "./statements.js";
 import { BOOL, sameType, typeName } from "./typing.js";
 
 /** What the compiler reads from a connection, and the calls it builds functions with. */
@@ -49,12 +51,13 @@ export async function compileFunction(
   return {
     expression,
     parameters: tree.parameters.map((x) => x.type as Type),
-    result: tree.root.type,
+    result: tree.result,
   };
 }
 
 interface Tree {
   readonly root: Node;
+  readonly result: Type | null;
   readonly parameters: readonly Node[];
 }
 
@@ -77,7 +80,38 @@ function buildTree(
     indexes.set(context.types, members);
   }
   const parsed = parseFunction(fn);
-  const builder = new Builder({ types: context.types, members, warn: context.warn }, parsed.offset);
+  const env = { types: context.types, members, warn: context.warn };
+  // A use that types a value with none, such as an empty array, notes the type, and the
+  // function is compiled again with it
+  const hints = new Map<string, Type>();
+  for (let attempt = 0; ; attempt++) {
+    try {
+      return buildOnce(env, parsed, captures, parameterTypes, use, hints);
+    } catch (error) {
+      if (!(error instanceof Recompile)) {
+        throw error;
+      }
+      if (attempt >= MAX_COMPILES) {
+        throw new CompilationError(
+          `The function has more than ${MAX_COMPILES} values typed by a later use. Give some a type with a cast`,
+        );
+      }
+    }
+  }
+}
+
+// The most compiles of a function, each with the types of more values noted
+const MAX_COMPILES = 100;
+
+function buildOnce(
+  env: Environment,
+  parsed: ReturnType<typeof parseFunction>,
+  captures: object,
+  parameterTypes: readonly TypeLike[],
+  use: Use,
+  hints: Map<string, Type>,
+): Tree {
+  const builder = new Builder(env, parsed.offset, hints);
   const scope = new Scope(builder, parsed, captures, parameterTypes);
   const node = parsed.node;
   if ((use === "stream" || use === "event" || use === "run") && scope.parameters.length > 0) {
@@ -90,50 +124,39 @@ function buildTree(
       `${what} cannot take parameters. Compile it with compile, and pass its parameter types`,
     );
   }
-  const body = returnedExpression(builder, node.body);
-  const compiler = new ExpressionCompiler(builder, scope);
-  const value = compiler.expression(body);
-  let root: Node;
-  if (value instanceof ClientValue) {
-    root = builder.toNode(value, undefined, body);
-  } else {
-    root = value;
+  const expressions = new ExpressionCompiler(builder, scope);
+  const statements = new StatementCompiler(builder, scope, expressions, node.body);
+  const collections = new CollectionCompiler(builder, expressions, statements);
+  expressions.statements = statements;
+  expressions.collections = collections;
+  statements.collections = collections;
+  let built: ReturnType<StatementCompiler["topLevel"]>;
+  try {
+    built = statements.topLevel(node, scope.parameters);
+  } catch (error) {
+    // An error after a read of a variable with no type comes of reading it as null
+    if (error instanceof CompilationError && statements.untypedRead !== null) {
+      throw statements.untypedRead;
+    }
+    throw error;
   }
+  if (statements.untypedRead !== null) {
+    throw statements.untypedRead;
+  }
+  const { root, result } = built;
   if (use === "stream" || use === "event") {
-    if (builder.remoteCalls === 0) {
+    if (builder.remoteCalls === 0 && !statements.hasState) {
       throw builder.error(
         node,
         "The function makes no remote procedure call, so its value is the same on every update",
       );
     }
   }
-  if (use === "event" && (root.type === null || !sameType(root.type, BOOL))) {
+  if (use === "event" && (result === null || !sameType(result, BOOL))) {
     throw builder.error(
-      body,
-      `The function of an event returns a bool, and this one returns ${typeName(root.type)}`,
+      node,
+      `The function of an event returns a bool, and this one returns ${typeName(result)}`,
     );
   }
-  if (scope.parameters.length > 0) {
-    root = builder.node("Lambda", [scope.parameters, root], root.type);
-  }
-  return { root, parameters: scope.parameters };
-}
-
-/** The expression a function returns: its body, or the expression of a body that is one return
- * statement. */
-function returnedExpression(
-  builder: Builder,
-  body: BlockStatement | SyntaxExpression,
-): SyntaxExpression {
-  if (body.type !== "BlockStatement") {
-    return body;
-  }
-  const [statement] = body.body;
-  if (body.body.length === 1 && statement.type === "ReturnStatement" && statement.argument) {
-    return statement.argument;
-  }
-  throw builder.error(
-    body,
-    "A function body of statements is not supported yet. Write the body as one expression",
-  );
+  return { root, result, parameters: scope.parameters };
 }

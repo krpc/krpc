@@ -6,6 +6,7 @@ import type {
   Expression,
   LogicalExpression,
   MemberExpression,
+  NewExpression,
   ObjectExpression,
   PrivateIdentifier,
   SpreadElement,
@@ -16,13 +17,17 @@ import type {
 } from "acorn";
 import { Connection } from "../connection.js";
 import { RemoteObject } from "../objects.js";
-import { RemoteFlags, type Type } from "../types.js";
+import { namedOf } from "../registry.js";
+import type { Type } from "../types.js";
+import { RemoteFlags, RemoteStruct } from "../types.js";
 import { TypeValue, types } from "../typevalues.js";
 import { type Argument, type Builder, describe, isNullish } from "./builder.js";
 import { builtinFunction, builtinMethod, concat } from "./builtins.js";
-import { ClientValue, Node, TypeArgument, type Value } from "./ir.js";
+import { CollectionCompiler } from "./collections.js";
+import { ClientValue, Collection, Node, type Operand, TypeArgument, type Value } from "./ir.js";
 import type { Members } from "./members.js";
-import { NO_CAPTURES, type Scope } from "./scope.js";
+import { Caught, NO_CAPTURES, type Scope, Variable } from "./scope.js";
+import { LocalFunction, type StatementCompiler } from "./statements.js";
 import {
   BOOL,
   DOUBLE,
@@ -46,13 +51,11 @@ const UNSUPPORTED: Readonly<Record<string, string>> = {
   SequenceExpression: "The comma operator",
   MetaProperty: "new.target and import.meta",
   ImportExpression: "import()",
-  ArrowFunctionExpression: "A function in a function",
-  FunctionExpression: "A function in a function",
-  ArrayExpression: "An array",
+  ArrowFunctionExpression: "A function here",
+  FunctionExpression: "A function here",
   ObjectExpression: "An object literal",
-  NewExpression: "new",
-  AssignmentExpression: "An assignment",
-  UpdateExpression: "++ and --",
+  AssignmentExpression: "An assignment as a value",
+  UpdateExpression: "++ and -- as a value",
 };
 
 const ARITHMETIC: Readonly<Record<string, string>> = {
@@ -124,6 +127,7 @@ const STRING_METHODS: Readonly<Record<string, readonly [number, number]>> = {
   endsWith: [1, 1],
   indexOf: [1, 1],
   replaceAll: [2, 2],
+  split: [1, 1],
 };
 
 /** A guard of an optional chain: a variable holding a value that can be null, which the chain
@@ -141,6 +145,8 @@ export class ExpressionCompiler {
   readonly #b: Builder;
   readonly #scope: Scope;
   #guards: Guard[] | null = null;
+  statements!: StatementCompiler;
+  collections!: CollectionCompiler;
 
   constructor(builder: Builder, scope: Scope) {
     this.#b = builder;
@@ -150,22 +156,8 @@ export class ExpressionCompiler {
   expression(node: Expression | SpreadElement | Super | PrivateIdentifier): Value {
     const b = this.#b;
     switch (node.type) {
-      case "Identifier": {
-        const value = this.#scope.lookup(node.name);
-        if (value === NO_CAPTURES) {
-          throw b.error(
-            node,
-            `${node.name} receives the captured values, which are read with an object pattern, such as ({ vessel }) => ...`,
-          );
-        }
-        if (value === undefined) {
-          throw b.error(
-            node,
-            `${node.name} is not a capture or a parameter. Capture it, as in ({ ${node.name} }) => ... with { ${node.name} }`,
-          );
-        }
-        return value;
-      }
+      case "Identifier":
+        return this.#identifier(node.name, node);
       case "Literal":
         if ("regex" in node && node.regex !== undefined) {
           throw b.error(node, "A regular expression is not supported in a compiled function");
@@ -192,6 +184,9 @@ export class ExpressionCompiler {
         return this.#conditional(node);
       case "ParenthesizedExpression":
         return this.expression(node.expression);
+      case "ArrayExpression":
+      case "NewExpression":
+        return b.resolved(this.operand(node), node);
       case "SpreadElement":
         throw b.error(node, "Spread is not supported in a compiled function");
       case "Super":
@@ -203,6 +198,182 @@ export class ExpressionCompiler {
         throw b.error(node, `${construct} is not supported in a compiled function`);
       }
     }
+  }
+
+  #identifier(name: string, node: SyntaxNode): Value {
+    const b = this.#b;
+    const binding = this.#scope.lookup(name);
+    if (binding === NO_CAPTURES) {
+      throw b.error(
+        node,
+        `${name} receives the captured values, which are read with an object pattern, such as ({ vessel }) => ...`,
+      );
+    }
+    if (binding === undefined) {
+      throw b.error(
+        node,
+        `${name} is not a capture, a parameter or a variable. Capture it, as in ({ ${name} }) => ... with { ${name} }`,
+      );
+    }
+    if (binding instanceof Variable) {
+      return this.statements.readVariable(binding, node);
+    }
+    if (binding instanceof Caught) {
+      throw b.error(node, `${name} is the caught error, whose message is ${name}.message`);
+    }
+    if (binding instanceof LocalFunction) {
+      return new ClientValue(binding);
+    }
+    return binding as Value;
+  }
+
+  /** The variable or state variable an expression names, when it has no type yet. */
+  #untyped(node: Expression): Variable | undefined {
+    let variable: Variable | undefined;
+    if (node.type === "Identifier") {
+      const binding = this.#scope.lookup(node.name);
+      variable = binding instanceof Variable ? binding : undefined;
+    } else if (
+      node.type === "MemberExpression" &&
+      !node.computed &&
+      node.object.type === "Identifier" &&
+      node.property.type === "Identifier"
+    ) {
+      const binding = this.#scope.lookup(node.object.name);
+      if (
+        binding instanceof ClientValue &&
+        typeof binding.value === "object" &&
+        binding.value !== null
+      ) {
+        variable = this.statements.stateVariable(
+          node.object.name,
+          binding.value,
+          node.property.name,
+          node,
+        );
+      }
+    }
+    return variable?.node === null ? variable : undefined;
+  }
+
+  /** The local function a name is bound to, or undefined. */
+  lookupFunction(node: { name: string }): LocalFunction | undefined {
+    const binding = this.#scope.lookup(node.name);
+    return binding instanceof LocalFunction ? binding : undefined;
+  }
+
+  /** The value of an expression, with a collection left to take its type from where it is
+   * used. */
+  operand(node: Expression | SpreadElement): Operand {
+    const b = this.#b;
+    switch (node.type) {
+      case "ArrayExpression":
+        return new Collection(
+          "array",
+          node.elements.map((x) => {
+            if (x === null) {
+              throw b.error(node, "An array with holes is not supported in a compiled function");
+            }
+            return this.operand(x);
+          }),
+          [],
+          node,
+        );
+      case "NewExpression":
+        return this.#new(node);
+      case "ParenthesizedExpression":
+        return this.operand(node.expression);
+      case "SpreadElement":
+        throw b.error(node, "Spread is not supported in a compiled function");
+      default:
+        return this.expression(node);
+    }
+  }
+
+  /** `new Set(...)`, `new Map(...)`, or a structure built from an object of its fields. */
+  #new(node: NewExpression): Operand {
+    const b = this.#b;
+    const callee = this.expression(node.callee as Expression);
+    const args = node.arguments;
+    const value = callee instanceof ClientValue ? callee.value : undefined;
+    if (value === Set || value === Map) {
+      if (args.length > 1) {
+        throw b.error(node, `new ${value === Set ? "Set" : "Map"} takes at most one argument`);
+      }
+      const [source] = args;
+      if (source === undefined) {
+        return new Collection(value === Set ? "set" : "map", [], [], node);
+      }
+      if (source.type === "SpreadElement") {
+        throw b.error(source, "Spread is not supported in a compiled function");
+      }
+      if (value === Set) {
+        if (source.type === "ArrayExpression") {
+          const array = this.operand(source) as Collection;
+          return new Collection("set", array.items, [], node);
+        }
+        const values = b.toNode(this.operand(source), undefined, source);
+        const type = values.type as Type;
+        if (type.kind !== "list" && type.kind !== "set") {
+          throw b.error(source, `A Set is built from an array, and this is a ${typeName(type)}`);
+        }
+        return b.node("ToSet", [values], { kind: "set", item: type.item, nullable: false });
+      }
+      if (source.type !== "ArrayExpression") {
+        throw b.error(
+          source,
+          "A Map is built from an array of [key, value] arrays in a compiled function",
+        );
+      }
+      const keys: Operand[] = [];
+      const items: Operand[] = [];
+      for (const entry of source.elements) {
+        if (entry?.type !== "ArrayExpression" || entry.elements.length !== 2) {
+          throw b.error(entry ?? source, "An entry of a Map is a [key, value] array");
+        }
+        keys.push(this.operand(entry.elements[0] as Expression));
+        items.push(this.operand(entry.elements[1] as Expression));
+      }
+      return new Collection("map", items, keys, node);
+    }
+    const named = namedOf(value);
+    if (named?.kind === "struct") {
+      return this.#newStruct(named.declaration, node);
+    }
+    if (
+      value === Error ||
+      value === TypeError ||
+      value === RangeError ||
+      named?.kind === "exception"
+    ) {
+      throw b.error(node, "An error is built in a throw statement, as throw new Error(message)");
+    }
+    throw b.error(node, `new ${describe(value)} is not supported in a compiled function`);
+  }
+
+  #newStruct(declaration: { service: string; name: string }, node: NewExpression): Node {
+    const b = this.#b;
+    const key = `${declaration.service}.${declaration.name}`;
+    const struct = b.env.types.struct(key);
+    const type: Type = { kind: "struct", struct, nullable: false };
+    const [fields] = node.arguments;
+    if (node.arguments.length !== 1 || fields?.type !== "ObjectExpression") {
+      throw b.error(node, `A ${key} is built from an object of its fields`);
+    }
+    const values = this.#named(fields);
+    for (const name of values.keys()) {
+      if (!struct.fields.some((x) => x.name === name)) {
+        throw b.error(fields, `A ${key} has no field ${name}`);
+      }
+    }
+    const nodes = struct.fields.map((field) => {
+      const value = values.get(field.name);
+      if (value === undefined) {
+        throw b.error(fields, `A ${key} needs the field ${field.name}`);
+      }
+      return b.toNode(value.value, field.type, value.at, `for field ${field.name}`);
+    });
+    return b.node("CreateStruct", [new TypeArgument(type), nodes], type);
   }
 
   /** A node of an expression's value, taking the type its value gives it. */
@@ -306,8 +477,39 @@ export class ExpressionCompiler {
 
   #member(node: MemberExpression): Value {
     const b = this.#b;
-    const object = this.#object(node);
+    if (
+      node.object.type === "Identifier" &&
+      !node.computed &&
+      node.property.type === "Identifier"
+    ) {
+      const binding = this.#scope.lookup(node.object.name);
+      if (binding instanceof Caught) {
+        if (node.property.name !== "message") {
+          throw b.error(node, "A compiled function reads only the message of a caught error");
+        }
+        return binding.message;
+      }
+      if (
+        binding instanceof ClientValue &&
+        typeof binding.value === "object" &&
+        binding.value !== null
+      ) {
+        const state = this.statements.stateVariable(
+          node.object.name,
+          binding.value,
+          node.property.name,
+          node,
+        );
+        if (state !== undefined) {
+          return this.statements.readVariable(state, node);
+        }
+      }
+    }
+    let object = this.#object(node);
     const key = this.#key(node);
+    if (object instanceof ClientValue && isClientCollection(object.value)) {
+      object = b.toNode(object, undefined, node.object);
+    }
     if (typeof key !== "string") {
       return this.#index(object, key, node);
     }
@@ -338,8 +540,15 @@ export class ExpressionCompiler {
         `Reading ${key} of ${describe(value)} is not supported in a compiled function`,
       );
     }
+    return this.memberOf(object, key, node);
+  }
+
+  /** A property of a node's value: a property of an object, a field of a structure, or the
+   * length or size of a string or collection. */
+  memberOf(object: Node, key: string, node: SyntaxNode): Value {
+    const b = this.#b;
     if (object.type === null) {
-      throw b.error(node.object, "The expression has no value");
+      throw b.error(node, "The expression has no value");
     }
     // A member of null raises an exception on the server, as a TypeError does in JavaScript
     const type = object.type;
@@ -352,10 +561,50 @@ export class ExpressionCompiler {
       }
       throw b.error(node, `String member ${key} is not supported in a compiled function`);
     }
+    if (type.kind === "struct") {
+      const field = type.struct.fields.find((x) => x.name === key);
+      const name = b.env.members.fieldName(type.struct.service, type.struct.name, key);
+      if (field === undefined || name === undefined) {
+        throw b.error(node, `${type.struct.service}.${type.struct.name} has no field ${key}`);
+      }
+      return b.node("GetField", [object, name], field.type);
+    }
+    if (CollectionCompiler.handles(type)) {
+      return this.collections.member(object, key, node);
+    }
     throw b.error(
       node,
       `Reading ${key} of a ${typeName(type)} is not supported in a compiled function`,
     );
+  }
+
+  /** An assignment to a property of an object or a service, with its setter. */
+  setProperty(object: Value, key: string, value: Operand, node: SyntaxNode): Node {
+    const b = this.#b;
+    let members: Members | undefined;
+    let instance: Node | null = null;
+    let owner: string;
+    const named = b.namedOf(object);
+    if (named?.kind === "service") {
+      members = b.env.members.ofService(named.service);
+      owner = named.service;
+    } else {
+      instance = object instanceof Node ? object : b.toNode(object, undefined, node);
+      const type = instance.type;
+      if (type?.kind !== "class") {
+        throw b.error(
+          node,
+          `A property of a ${typeName(type)} cannot be assigned in a compiled function`,
+        );
+      }
+      members = b.env.members.ofClass(type.service, type.name);
+      owner = `${type.service}.${type.name}`;
+    }
+    const setter = members?.setters.get(key);
+    if (setter === undefined) {
+      throw b.error(node, `${owner}.${key} has no setter`);
+    }
+    return b.call(setter, instance, [{ value, at: node }], new Map(), node);
   }
 
   /** Whether the properties of a captured value are read on the client: a plain object, a
@@ -378,7 +627,7 @@ export class ExpressionCompiler {
   #property(
     object: Node | null,
     key: string,
-    node: MemberExpression,
+    node: SyntaxNode,
     members?: Members,
     service?: string,
   ): Value {
@@ -414,6 +663,9 @@ export class ExpressionCompiler {
       );
     }
     const string = b.toNode(object, undefined, node.object);
+    if (CollectionCompiler.handles(string.type)) {
+      return this.collections.index(string, key, node);
+    }
     if (string.type?.kind !== "string") {
       throw b.error(
         node,
@@ -444,6 +696,10 @@ export class ExpressionCompiler {
     }
     const callee = node.callee;
     if (callee.type === "MemberExpression") {
+      const untyped = this.#untyped(callee.object as Expression);
+      if (untyped !== undefined && !callee.computed && callee.property.type === "Identifier") {
+        this.collections.typeFromMethod(untyped, callee.property.name, node);
+      }
       const object = this.#object(callee);
       const key = this.#key(callee);
       if (typeof key !== "string") {
@@ -452,6 +708,15 @@ export class ExpressionCompiler {
       return this.#method(object, key, node, callee);
     }
     const fn = this.expression(callee);
+    if (fn instanceof ClientValue && fn.value instanceof LocalFunction) {
+      const args = this.#arguments(node.arguments);
+      return this.statements.callLocal(
+        fn.value,
+        args.map((x) => x.value),
+        args.map((x) => x.at),
+        node,
+      );
+    }
     if (fn instanceof ClientValue) {
       const result = builtinFunction(b, fn.value, this.#arguments(node.arguments), node);
       if (result !== null) {
@@ -470,7 +735,7 @@ export class ExpressionCompiler {
       if (x.type === "SpreadElement") {
         throw this.#b.error(x, "Spread is not supported in a compiled function");
       }
-      return { value: this.expression(x), at: x };
+      return { value: this.operand(x), at: x };
     });
   }
 
@@ -500,13 +765,16 @@ export class ExpressionCompiler {
         property.key.type === "Identifier"
           ? property.key.name
           : String((property.key as { value: unknown }).value);
-      named.set(key, { value: this.expression(property.value as Expression), at: property });
+      named.set(key, { value: this.operand(property.value as Expression), at: property });
     }
     return named;
   }
 
   #method(object: Value, key: string, node: CallExpression, callee: MemberExpression): Value {
     const b = this.#b;
+    if (object instanceof ClientValue && isClientCollection(object.value)) {
+      object = b.toNode(object, undefined, callee.object);
+    }
     if (object instanceof ClientValue) {
       const value = object.value;
       const builtin = builtinMethod(b, value, key, () => this.#arguments(node.arguments), node);
@@ -554,6 +822,9 @@ export class ExpressionCompiler {
     if (type.kind === "enumeration" && type.enumeration.flags) {
       return this.#flagsMethod(object, key, node);
     }
+    if (CollectionCompiler.handles(type)) {
+      return this.collections.method(object, key, node);
+    }
     throw b.error(callee, `A ${typeName(type)} has no method ${key} a compiled function can call`);
   }
 
@@ -561,6 +832,14 @@ export class ExpressionCompiler {
    * `cast`. */
   #typeMethod(value: object, key: string, node: CallExpression): Value {
     const b = this.#b;
+    const [first] = node.arguments;
+    if (value instanceof TypeValue && first !== undefined && first.type !== "SpreadElement") {
+      // A cast types a variable that has no type yet, and the function is compiled again
+      const untyped = this.#untyped(first);
+      if (untyped !== undefined) {
+        b.hint(untyped.key, resolveType(b.env.types, value));
+      }
+    }
     const args = this.#arguments(node.arguments);
     if (value instanceof TypeValue) {
       if (args.length !== 1) {
@@ -680,6 +959,12 @@ export class ExpressionCompiler {
           [string, this.#search(args[0]), this.#replacement(args[1])],
           STRING,
         );
+      case "split":
+        return b.node("StringSplit", [string, text(0)], {
+          kind: "list",
+          item: STRING,
+          nullable: false,
+        });
       case "at":
         return this.#at(string, args[0], node);
       default:
@@ -781,7 +1066,7 @@ export class ExpressionCompiler {
         const value =
           x.value instanceof ClientValue && typeof x.value.value === "number"
             ? b.constant(Math.trunc(x.value.value) || 0, DOUBLE, x.at)
-            : this.#integer(b.double(x.value, x.at), node);
+            : this.#integer(b.double(b.resolved(x.value, x.at), x.at), node);
         const zero = b.constant(0, DOUBLE, node);
         if (key === "substring") {
           return b.stdlib("Clamp", [value, zero, length]);
@@ -911,14 +1196,23 @@ export class ExpressionCompiler {
   }
 
   #binary(node: BinaryExpression): Value {
-    const b = this.#b;
-    const operator = node.operator;
-    if (operator === "in" || operator === "instanceof") {
-      throw b.error(node, `${operator} is not supported in a compiled function`);
+    if (node.operator === "in" || node.operator === "instanceof") {
+      throw this.#b.error(node, `${node.operator} is not supported in a compiled function`);
     }
     const left = this.expression(node.left);
     const right = this.expression(node.right);
-    const at: [SyntaxNode, SyntaxNode] = [node.left, node.right];
+    return this.binaryValues(node.operator, left, right, node, [node.left, node.right]);
+  }
+
+  /** The value of a binary operator, such as `+`, on two values. */
+  binaryValues(
+    operator: string,
+    left: Value,
+    right: Value,
+    node: SyntaxNode,
+    at: readonly [SyntaxNode, SyntaxNode] = [node, node],
+  ): Value {
+    const b = this.#b;
     if (
       left instanceof ClientValue &&
       right instanceof ClientValue &&
@@ -932,7 +1226,7 @@ export class ExpressionCompiler {
       }
     }
     if (operator === "+" && (this.#isString(left) || this.#isString(right))) {
-      return concat(b, [b.string(left, node.left), b.string(right, node.right)], node);
+      return concat(b, [b.string(left, at[0]), b.string(right, at[1])], node);
     }
     const arithmetic = ARITHMETIC[operator];
     if (arithmetic !== undefined) {
@@ -940,7 +1234,7 @@ export class ExpressionCompiler {
         const [x, y] = this.#bigints(left, right, at);
         return b.node(arithmetic, [x, y], x.type);
       }
-      return b.node(arithmetic, [b.double(left, node.left), b.double(right, node.right)], DOUBLE);
+      return b.node(arithmetic, [b.double(left, at[0]), b.double(right, at[1])], DOUBLE);
     }
     const bitwise = BITWISE[operator];
     if (bitwise !== undefined) {
@@ -952,7 +1246,7 @@ export class ExpressionCompiler {
       if (flags !== null) {
         return b.node(bitwise, flags, flags[0].type);
       }
-      return b.node(bitwise, [b.int32(left, node.left), b.int32(right, node.right)], SINT32);
+      return b.node(bitwise, [b.int32(left, at[0]), b.int32(right, at[1])], SINT32);
     }
     if (operator === "<<" || operator === ">>" || operator === ">>>") {
       if (this.#isBigint(left) || this.#isBigint(right)) {
@@ -962,8 +1256,8 @@ export class ExpressionCompiler {
         const [x, y] = this.#bigints(left, right, at);
         return this.#bigintShift(operator === "<<", x, y, right, node);
       }
-      const value = b.int32(left, node.left);
-      const count = b.int32(right, node.right);
+      const value = b.int32(left, at[0]);
+      const count = b.int32(right, at[1]);
       if (operator === ">>>") {
         return b.node("RightShift", [b.cast(value, UINT32), count], UINT32);
       }
@@ -971,7 +1265,7 @@ export class ExpressionCompiler {
     }
     if (operator === "===" || operator === "!==" || operator === "==" || operator === "!=") {
       const strict = operator === "===" || operator === "!==";
-      const equal = this.#equal(left, right, strict, node);
+      const equal = this.#equal(left, right, strict, node, at);
       if (operator === "===" || operator === "==") {
         return equal;
       }
@@ -979,7 +1273,7 @@ export class ExpressionCompiler {
         ? new ClientValue(!equal.value)
         : b.node("Not", [equal], BOOL);
     }
-    return this.#relational(RELATIONAL[operator], left, right, node);
+    return this.#relational(RELATIONAL[operator], left, right, node, at);
   }
 
   /** A shift of a bigint, by a count the server masks to six bits and JavaScript does not. A
@@ -1092,16 +1386,22 @@ export class ExpressionCompiler {
     return [x, y];
   }
 
-  #equal(left: Value, right: Value, strict: boolean, node: BinaryExpression): Value {
+  #equal(
+    left: Value,
+    right: Value,
+    strict: boolean,
+    node: SyntaxNode,
+    at: readonly [SyntaxNode, SyntaxNode],
+  ): Value {
     const b = this.#b;
     if (isNullish(left) || isNullish(right)) {
-      const [other, at] = isNullish(left) ? [right, node.right] : [left, node.left];
+      const [other, where] = isNullish(left) ? [right, at[1]] : [left, at[0]];
       if (other instanceof ClientValue) {
         const values = [(left as ClientValue).value, (right as ClientValue).value];
         return new ClientValue(OPERATORS[strict ? "===" : "=="](values[0], values[1]));
       }
       if (other.type === null) {
-        throw b.error(at, "The expression has no value");
+        throw b.error(where, "The expression has no value");
       }
       if (!other.type.nullable) {
         return new ClientValue(false);
@@ -1121,7 +1421,7 @@ export class ExpressionCompiler {
         "A bigint and a number are never equal with ===. Convert one with BigInt() or Number()",
       );
     }
-    const [x, y] = b.join(left, right, [node.left, node.right], "operands of the comparison");
+    const [x, y] = b.join(left, right, at, "operands of the comparison");
     const kind = x.type?.kind;
     if (
       kind === "struct" ||
@@ -1138,16 +1438,21 @@ export class ExpressionCompiler {
     return b.node("Equal", [x, y], BOOL);
   }
 
-  #relational(method: string, left: Value, right: Value, node: BinaryExpression): Value {
+  #relational(
+    method: string,
+    left: Value,
+    right: Value,
+    _node: SyntaxNode,
+    at: readonly [SyntaxNode, SyntaxNode],
+  ): Value {
     const b = this.#b;
-    const at: [SyntaxNode, SyntaxNode] = [node.left, node.right];
     if (this.#isBigint(left) || this.#isBigint(right)) {
       const [x, y] = this.#bigints(left, right, at);
       return b.node(method, [x, y], BOOL);
     }
     for (const [value, syntax] of [
-      [left, node.left],
-      [right, node.right],
+      [left, at[0]],
+      [right, at[1]],
     ] as const) {
       const isANumber =
         value instanceof ClientValue ? typeof value.value === "number" : isNumber(value.type);
@@ -1227,8 +1532,8 @@ export class ExpressionCompiler {
     if (test instanceof ClientValue) {
       return this.expression(test.value ? node.consequent : node.alternate);
     }
-    const consequent = this.expression(node.consequent);
-    const alternate = this.expression(node.alternate);
+    const consequent = this.operand(node.consequent);
+    const alternate = this.operand(node.alternate);
     const tc = b.typeOf(consequent);
     const ta = b.typeOf(alternate);
     if (tc === null && ta === null) {
@@ -1246,6 +1551,16 @@ export class ExpressionCompiler {
     );
     return b.node("Conditional", [test, x, y], type);
   }
+}
+
+/** Whether a captured value is a collection or a structure, which is a constant node. */
+function isClientCollection(value: unknown): boolean {
+  return (
+    Array.isArray(value) ||
+    value instanceof Set ||
+    value instanceof Map ||
+    value instanceof RemoteStruct
+  );
 }
 
 function isPrimitive(value: unknown): boolean {
