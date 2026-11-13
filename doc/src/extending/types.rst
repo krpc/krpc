@@ -6,8 +6,24 @@ Types
 Identifiers
 -----------
 
-An identifier can only contain letters and numbers, and must start with an upper case letter.  They
-should follow `CamelCase <https://en.wikipedia.org/wiki/CamelCase>`_ capitalization conventions.
+An identifier can only contain the ASCII letters and digits, and must start with an upper case
+letter. They should follow `CamelCase <https://en.wikipedia.org/wiki/CamelCase>`_ capitalization
+conventions. The names of parameters and enumeration values follow the same rule, but can also start
+with a lower case letter. The ``_`` character is reserved for joining the parts of a procedure name,
+such as ``Vessel_get_Name``.
+
+Names are unique within their scope, compared case-insensitively. Some clients convert names that
+differ only in case to one name: ``RCSEnabled`` and ``RcsEnabled`` are both ``rcs_enabled`` in
+Python. The scopes are:
+
+* the procedures and properties of a service
+* the methods, static methods and properties of a class
+* the values of an enumeration
+* the fields of a structure
+* the parameters of a procedure or method
+
+A property ``Foo`` also takes the names ``GetFoo`` and ``SetFoo``, as some clients name its
+getter and setter that way. A method ``GetFoo`` beside it is an error.
 
 .. _service-api-serializable-types:
 

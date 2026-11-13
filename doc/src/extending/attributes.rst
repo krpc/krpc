@@ -92,7 +92,8 @@ to add functionality to the kRPC server.
 
    * The method must be ``public static``.
 
-   * The name of the method must be a valid :ref:`kRPC identifier <service-api-identifiers>`.
+   * The name of the method must be a valid :ref:`kRPC identifier <service-api-identifiers>`,
+     unique in its scope.
 
    * The method must be declared inside a class that is a :cs:attr:`KRPCService`.
 
@@ -207,7 +208,8 @@ to add functionality to the kRPC server.
 
    * The method must be ``public``.
 
-   * The name of the method must be a valid :ref:`kRPC identifier <service-api-identifiers>`.
+   * The name of the method must be a valid :ref:`kRPC identifier <service-api-identifiers>`,
+     unique in its scope.
 
    * The method must be declared in a :cs:attr:`KRPCClass`, or be a ``public static`` extension
      method of one.
@@ -255,7 +257,8 @@ to add functionality to the kRPC server.
 
       * Must be ``public static`` and have at least one publicly accessible getter or setter.
 
-      * The name of the property must be a valid :ref:`kRPC identifier <service-api-identifiers>`.
+      * The name of the property must be a valid :ref:`kRPC identifier <service-api-identifiers>`,
+        unique in its scope.
 
       * Must be declared inside a :cs:attr:`KRPCService`.
 
@@ -265,7 +268,8 @@ to add functionality to the kRPC server.
       * Must be ``public`` and *not* ``static``, and have at least one publicly accessible getter or
         setter.
 
-      * The name of the property must be a valid :ref:`kRPC identifier <service-api-identifiers>`.
+      * The name of the property must be a valid :ref:`kRPC identifier <service-api-identifiers>`,
+        unique in its scope.
 
       * Must be declared inside a :cs:attr:`KRPCClass`.
 
@@ -354,6 +358,9 @@ to add functionality to the kRPC server.
    * The enumeration must be ``public``.
 
    * The name of the enumeration must be a valid :ref:`kRPC identifier <service-api-identifiers>`.
+
+   * The names of its values must follow the :ref:`identifier rules <service-api-identifiers>`, and
+     be unique in the enumeration.
 
    * The enumeration must either be declared inside a :cs:attr:`KRPCService`, or have it's
      ``Service`` parameter set to the name of the service it is part of.

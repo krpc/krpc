@@ -44,6 +44,7 @@ namespace KRPC.Service.Scanner
         {
             Name = valueName;
             FullyQualifiedName = serviceName + "." + enumName + "." + Name;
+            TypeUtils.ValidateName (Name, "a value of " + serviceName + "." + enumName);
             Value = value;
             Documentation = DocumentationUtils.ResolveCrefs (documentation);
             Deprecated = deprecated;

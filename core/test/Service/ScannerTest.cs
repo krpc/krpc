@@ -200,6 +200,101 @@ namespace KRPC.Test.Service
         }
 
         [Test]
+        public void MemberNamesShared ()
+        {
+            var service = new global::KRPC.Service.Scanner.ServiceSignature ("TestNames", 1);
+            // The check reads the members of a scope from the procedure names
+            var procedure = global::KRPC.Service.Services.Instance.Signatures ["TestService"].Procedures ["ProcedureNoArgsNoReturn"];
+            foreach (var name in new [] {
+                "Foo", "FOO", "get_Values", "set_Values", "GetValues", "get_Name", "set_Name",
+                "get_Mode", "SetMode", "get_Speed", "get_GetSpeed",
+                "Cls_Bar", "Cls_get_BAR", "Cls_Baz", "Cls_static_Baz", "Cls_Qux", "Cls_get_Qux",
+                "Other_Bar", "Other_Baz" })
+                service.Procedures [name] = procedure;
+            var errors = new List<string> ();
+            global::KRPC.Service.Scanner.Scanner.CheckMemberNames (service, errors);
+            Assert.AreEqual (new [] {
+                "In service TestNames: Members TestNames.FOO, TestNames.Foo share the name FOO, compared case-insensitively",
+                "In service TestNames: Members TestNames.GetSpeed (property), TestNames.Speed (property) share the name GetSpeed, compared case-insensitively",
+                "In service TestNames: Members TestNames.GetValues, TestNames.Values (property) share the name GetValues, compared case-insensitively",
+                "In service TestNames: Members TestNames.Mode (property), TestNames.SetMode share the name SetMode, compared case-insensitively",
+                "In service TestNames: Members TestNames.Cls.BAR (property), TestNames.Cls.Bar share the name BAR, compared case-insensitively",
+                "In service TestNames: Members TestNames.Cls.Baz, TestNames.Cls.Baz (static) share the name Baz, compared case-insensitively",
+                "In service TestNames: Members TestNames.Cls.Qux, TestNames.Cls.Qux (property) share the name Qux, compared case-insensitively"
+            }, errors.ToArray ());
+            Assert.Throws<global::KRPC.Service.ServiceException> (
+                () => global::KRPC.Service.Scanner.Scanner.CheckMemberNames (service, null));
+        }
+
+        [Test]
+        public void ValueAndFieldNamesShared ()
+        {
+            var service = new global::KRPC.Service.Scanner.ServiceSignature ("TestNames", 1);
+            service.Enumerations ["E"] = new global::KRPC.Service.Scanner.EnumerationSignature (
+                "TestNames", "E", typeof(TestService.TestEnum), new [] {
+                    new global::KRPC.Service.Scanner.EnumerationValueSignature ("TestNames", "E", "Foo", 0, string.Empty, false, string.Empty),
+                    new global::KRPC.Service.Scanner.EnumerationValueSignature ("TestNames", "E", "FOO", 1, string.Empty, false, string.Empty)
+                }, string.Empty, false, string.Empty);
+            service.Structs ["S"] = new global::KRPC.Service.Scanner.StructSignature (
+                "TestNames", "S", typeof(TestService.TestStruct), new [] {
+                    new global::KRPC.Service.Scanner.StructFieldSignature ("TestNames", "S", "Bar", null, string.Empty, false, string.Empty),
+                    new global::KRPC.Service.Scanner.StructFieldSignature ("TestNames", "S", "BAR", null, string.Empty, false, string.Empty)
+                }, string.Empty, false, string.Empty);
+            var errors = new List<string> ();
+            global::KRPC.Service.Scanner.Scanner.CheckMemberNames (service, errors);
+            Assert.AreEqual (new [] {
+                "In service TestNames: Values TestNames.E.FOO, TestNames.E.Foo share the name FOO, compared case-insensitively",
+                "In service TestNames: Fields TestNames.S.BAR, TestNames.S.Bar share the name BAR, compared case-insensitively"
+            }, errors.ToArray ());
+        }
+
+        [Test]
+        public void ParameterNamesShared ()
+        {
+            var service = new global::KRPC.Service.Scanner.ServiceSignature (typeof(TestService), 1);
+            var classType = typeof(TestService.TestClass);
+            var cls = service.AddClass (classType);
+            service.AddClassExtensionMethod (cls, classType, typeof(InvalidExtensions).GetMethod ("MethodWithParametersSharingAName"));
+            var errors = new List<string> ();
+            global::KRPC.Service.Scanner.Scanner.CheckMemberNames (service, errors);
+            Assert.AreEqual (1, errors.Count);
+            StringAssert.Contains (
+                "Parameters TestService.TestClass_MethodWithParametersSharingAName(VALUE), " +
+                "TestService.TestClass_MethodWithParametersSharingAName(value) share the name VALUE",
+                errors [0]);
+        }
+
+        [Test]
+        public void InvalidParameterName ()
+        {
+            var service = new global::KRPC.Service.Scanner.ServiceSignature (typeof(TestService), 1);
+            var classType = typeof(TestService.TestClass);
+            var cls = service.AddClass (classType);
+            var exn = Assert.Throws<global::KRPC.Service.ServiceException> (
+                () => service.AddClassExtensionMethod (cls, classType, typeof(InvalidExtensions).GetMethod ("MethodWithAnInvalidParameterName")));
+            StringAssert.Contains ("some_value is not a valid kRPC name", exn.Message);
+        }
+
+        [TestCase ("Foo_Bar")]
+        [TestCase ("\u00dcnit")]
+        [TestCase ("1Foo")]
+        [TestCase ("Foo\n")]
+        [TestCase ("")]
+        public void InvalidEnumerationValueName (string name)
+        {
+            Assert.Throws<global::KRPC.Service.ServiceException> (
+                () => new global::KRPC.Service.Scanner.EnumerationValueSignature ("TestNames", "E", name, 0, string.Empty, false, string.Empty));
+        }
+
+        [TestCase ("Foo")]
+        [TestCase ("foo2")]
+        public void ValidEnumerationValueName (string name)
+        {
+            Assert.DoesNotThrow (
+                () => new global::KRPC.Service.Scanner.EnumerationValueSignature ("TestNames", "E", name, 0, string.Empty, false, string.Empty));
+        }
+
+        [Test]
         public void ServiceNamesShared ()
         {
             var services = new [] {
