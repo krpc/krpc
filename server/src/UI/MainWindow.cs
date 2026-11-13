@@ -17,6 +17,8 @@ namespace KRPC.UI
 
         public InfoWindow InfoWindow { private get; set; }
 
+        public ProblemsWindow ProblemsWindow { private get; set; }
+
         public ClientDisconnectDialog ClientDisconnectDialog { get; set; }
 
         public List<string> Errors { get; private set; }
@@ -88,6 +90,7 @@ namespace KRPC.UI
         const string microsecondsUnitText = "us";
         const string debugLoggingText = "Debug logging";
         const string showInfoWindowText = "Show info";
+        const string showProblemsWindowText = "Show problems";
 
         protected override void Init ()
         {
@@ -224,6 +227,7 @@ namespace KRPC.UI
 
             DrawAdvancedServerOptions();
             DrawShowInfoWindow();
+            DrawShowProblemsWindow();
             GUILayout.EndVertical();
 
             // The window grows to fit its content, but only shrinks when its height is reset
@@ -624,6 +628,15 @@ namespace KRPC.UI
             bool value = GUILayout.Toggle (InfoWindow.Visible, showInfoWindowText, toggleStyle, new GUILayoutOption[] { });
             if (value != InfoWindow.Visible)
                 InfoWindow.Visible = value;
+        }
+
+        void DrawShowProblemsWindow ()
+        {
+            if (KRPC.Service.ServiceProblems.Digest == null)
+                return;
+            bool value = GUILayout.Toggle (ProblemsWindow.Visible, showProblemsWindowText, toggleStyle, new GUILayoutOption[] { });
+            if (value != ProblemsWindow.Visible)
+                ProblemsWindow.Visible = value;
         }
 
         void SawClientActivity (object sender, ClientActivityEventArgs e)

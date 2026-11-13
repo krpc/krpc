@@ -123,12 +123,39 @@ csharp_assembly_info(
     ],
 )
 
+# Procedures built against version 1 of a library and run against version 2, which removes a
+# method they call. BrokenProceduresTest loads them, to find the procedures that reach it.
+csharp_library(
+    name = "BrokenProceduresLib.v1",
+    srcs = ["test-fixtures/broken-procedures/lib-v1/Lib.cs"],
+    out = "BrokenProceduresLib",
+    target_frameworks = ["net10.0"],
+)
+
+csharp_library(
+    name = "BrokenProceduresLib.v2",
+    srcs = ["test-fixtures/broken-procedures/lib-v2/Lib.cs"],
+    out = "BrokenProceduresLib",
+    target_frameworks = ["net10.0"],
+)
+
+csharp_library(
+    name = "BrokenProceduresFixture",
+    srcs = ["test-fixtures/broken-procedures/procedures/Procedures.cs"],
+    target_frameworks = ["net10.0"],
+    deps = [":BrokenProceduresLib.v1"],
+)
+
 csharp_nunit_test(
     name = "test-KRPC.Core",
     size = "small",
     srcs = glob(["test/**/*.cs"]) + [":TestAssemblyInfo"],
     out = "KRPC.Core.Test",
-    data = ["//client/conformance:names.json"],
+    data = [
+        ":BrokenProceduresFixture",
+        ":BrokenProceduresLib.v2",
+        "//client/conformance:names.json",
+    ],
     # CS1701: Google.Protobuf/Moq reference net5/6-era framework
     # assemblies; unification handles this at runtime (MSBuild suppresses this
     # warning by default). Matches KRPC.Core.net10 above.

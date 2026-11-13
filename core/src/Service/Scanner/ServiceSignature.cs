@@ -90,6 +90,13 @@ namespace KRPC.Service.Scanner
         /// </summary>
         readonly Dictionary<string,Type> extensionMembers = new Dictionary<string, Type> ();
 
+        // The names declared more than once, by kind, left out by RemoveDuplicates
+        readonly HashSet<string> duplicateProcedures = new HashSet<string> ();
+        readonly HashSet<string> duplicateClasses = new HashSet<string> ();
+        readonly HashSet<string> duplicateEnumerations = new HashSet<string> ();
+        readonly HashSet<string> duplicateStructs = new HashSet<string> ();
+        readonly HashSet<string> duplicateExceptions = new HashSet<string> ();
+
         /// <summary>
         /// Create a service signature from a C# type annotated with the KRPCService attribute
         /// </summary>
@@ -132,12 +139,43 @@ namespace KRPC.Service.Scanner
         }
 
         /// <summary>
+        /// Whether the procedure is an extension member, declared outside the class it extends.
+        /// </summary>
+        internal bool IsExtensionMember (string procedureName)
+        {
+            return extensionMembers.ContainsKey (procedureName);
+        }
+
+        /// <summary>
+        /// Leave out every member whose name was declared more than once, the one added first
+        /// included, so the outcome does not depend on the order of the scan. Adding the second
+        /// one threw the error that reports it.
+        /// </summary>
+        internal void RemoveDuplicates ()
+        {
+            RemoveDuplicates (Procedures, duplicateProcedures);
+            RemoveDuplicates (Classes, duplicateClasses);
+            RemoveDuplicates (Enumerations, duplicateEnumerations);
+            RemoveDuplicates (Structs, duplicateStructs);
+            RemoveDuplicates (Exceptions, duplicateExceptions);
+        }
+
+        static void RemoveDuplicates<T> (IDictionary<string, T> members, ICollection<string> duplicates)
+        {
+            foreach (var name in duplicates)
+                members.Remove (name);
+            duplicates.Clear ();
+        }
+
+        /// <summary>
         /// Add a procedure to the service
         /// </summary>
         void AddProcedure (ProcedureSignature signature)
         {
-            if (Procedures.ContainsKey (signature.Name))
-                throw new ServiceException ("Service " + Name + " contains duplicate procedures " + signature.Name);
+            if (Procedures.ContainsKey (signature.Name)) {
+                duplicateProcedures.Add (signature.Name);
+                throw new ServiceException ("Procedure " + Name + "." + signature.Name + " is declared more than once, so each copy is unavailable");
+            }
             Procedures [signature.Name] = signature;
         }
 
@@ -215,8 +253,10 @@ namespace KRPC.Service.Scanner
             TypeUtils.ValidateKRPCClass (classType);
             TypeUtils.ValidateKRPCProcedureIds (classType);
             var name = classType.Name;
-            if (Classes.ContainsKey (name))
-                throw new ServiceException ("Service " + Name + " contains duplicate classes " + name);
+            if (Classes.ContainsKey (name)) {
+                duplicateClasses.Add (name);
+                throw new ServiceException ("Class " + Name + "." + name + " is declared more than once, so each copy is unavailable");
+            }
             string deprecatedReason;
             var deprecated = TypeUtils.GetDeprecated (classType, out deprecatedReason);
             classRequiredMods [name] = TypeUtils.GetRequiredMod (classType, requiredMod);
@@ -232,8 +272,10 @@ namespace KRPC.Service.Scanner
         {
             TypeUtils.ValidateKRPCEnum (enumType);
             var name = enumType.Name;
-            if (Enumerations.ContainsKey (name))
-                throw new ServiceException ("Service " + Name + " contains duplicate enumerations " + name);
+            if (Enumerations.ContainsKey (name)) {
+                duplicateEnumerations.Add (name);
+                throw new ServiceException ("Enumeration " + Name + "." + name + " is declared more than once, so each copy is unavailable");
+            }
             var values = new List<EnumerationValueSignature> ();
             foreach (FieldInfo field in enumType.GetFields(BindingFlags.Public | BindingFlags.Static).OrderBy (x => x.MetadataToken)) {
                 string valueDeprecatedReason;
@@ -254,8 +296,10 @@ namespace KRPC.Service.Scanner
         {
             TypeUtils.ValidateKRPCStruct (structType);
             var name = structType.Name;
-            if (Structs.ContainsKey (name))
-                throw new ServiceException ("Service " + Name + " contains duplicate structs " + name);
+            if (Structs.ContainsKey (name)) {
+                duplicateStructs.Add (name);
+                throw new ServiceException ("Struct " + Name + "." + name + " is declared more than once, so each copy is unavailable");
+            }
             var fields = new List<StructFieldSignature> ();
             foreach (var property in TypeUtils.GetStructFields (structType)) {
                 string fieldDeprecatedReason;
@@ -278,8 +322,10 @@ namespace KRPC.Service.Scanner
         {
             TypeUtils.ValidateKRPCException (exnType);
             var name = exnType.Name;
-            if (Exceptions.ContainsKey (name))
-                throw new ServiceException ("Service " + Name + " contains duplicate exceptions " + name);
+            if (Exceptions.ContainsKey (name)) {
+                duplicateExceptions.Add (name);
+                throw new ServiceException ("Exception " + Name + "." + name + " is declared more than once, so each copy is unavailable");
+            }
             string deprecatedReason;
             var deprecated = TypeUtils.GetDeprecated (exnType, out deprecatedReason);
             Exceptions [name] = new ExceptionSignature (Name, name, exnType, exnType.GetDocumentation (), deprecated, deprecatedReason);
@@ -431,8 +477,21 @@ namespace KRPC.Service.Scanner
             throw Clash (procedureName, method);
         }
 
+        /// <summary>
+        /// The error for an extension member that clashes with a procedure of the class. A class
+        /// keeps its own member. Two extension members are both left out, as neither takes
+        /// precedence.
+        /// </summary>
         ServiceException Clash (string procedureName, MethodInfo method)
         {
+            if (extensionMembers.ContainsKey (procedureName)) {
+                duplicateProcedures.Add (procedureName);
+                // An accessor takes the other accessor of its property with it
+                if (procedureName.Contains ("_get_"))
+                    duplicateProcedures.Add (procedureName.Replace ("_get_", "_set_"));
+                else if (procedureName.Contains ("_set_"))
+                    duplicateProcedures.Add (procedureName.Replace ("_set_", "_get_"));
+            }
             Type owner;
             var declaredBy = extensionMembers.TryGetValue (procedureName, out owner) ? owner.ToString () : "the class itself";
             return new ServiceException (

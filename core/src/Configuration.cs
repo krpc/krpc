@@ -37,6 +37,7 @@ namespace KRPC
             MainWindowPosition = new Tuple<float,float,float,float> (0, 0, 0, 0);
             InfoWindowVisible = false;
             InfoWindowPosition = new Tuple<float,float,float,float> (0, 0, 0, 0);
+            HiddenServiceProblems = string.Empty;
             AutoStartServers = false;
             AutoAcceptConnections = true;
             ConfirmRemoveClient = true;
@@ -197,6 +198,12 @@ namespace KRPC
         /// Screen position of the info window
         /// </summary>
         public Tuple<float,float,float,float> InfoWindowPosition { get; set; }
+
+        /// <summary>
+        /// The digest of the service problems the player chose not to be shown again, or an
+        /// empty string
+        /// </summary>
+        public string HiddenServiceProblems { get; set; }
 
         /// <summary>
         /// Whether servers should be started when the game loads

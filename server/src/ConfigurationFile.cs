@@ -66,6 +66,7 @@ namespace KRPC
         [Persistent] RectStorage mainWindowPosition = new RectStorage ();
         [Persistent] bool infoWindowVisible;
         [Persistent] RectStorage infoWindowPosition = new RectStorage ();
+        [Persistent] string hiddenServiceProblems = string.Empty;
         [Persistent] bool autoStartServers;
         [Persistent] bool autoAcceptConnections;
         [Persistent] bool confirmRemoveClient;
@@ -101,6 +102,7 @@ namespace KRPC
             mainWindowPosition = RectStorage.FromRect (Configuration.MainWindowPosition.ToRect ());
             infoWindowVisible = Configuration.InfoWindowVisible;
             infoWindowPosition = RectStorage.FromRect (Configuration.InfoWindowPosition.ToRect ());
+            hiddenServiceProblems = Configuration.HiddenServiceProblems;
             autoStartServers = Configuration.AutoStartServers;
             autoAcceptConnections = Configuration.AutoAcceptConnections;
             confirmRemoveClient = Configuration.ConfirmRemoveClient;
@@ -128,6 +130,7 @@ namespace KRPC
             Configuration.MainWindowPosition = mainWindowPosition.AsRect ().ToTuple ();
             Configuration.InfoWindowVisible = infoWindowVisible;
             Configuration.InfoWindowPosition = infoWindowPosition.AsRect ().ToTuple ();
+            Configuration.HiddenServiceProblems = hiddenServiceProblems ?? string.Empty;
             Configuration.AutoStartServers = autoStartServers;
             Configuration.AutoAcceptConnections = autoAcceptConnections;
             Configuration.ConfirmRemoveClient = confirmRemoveClient;

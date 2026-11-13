@@ -1,6 +1,7 @@
-using System.Collections.Generic;
+using System;
+using System.Diagnostics;
 using System.Linq;
-using KRPC.Service.Scanner;
+using KRPC.Service;
 using UnityEngine;
 
 namespace KRPC
@@ -14,7 +15,8 @@ namespace KRPC
         static bool? ok;
 
         /// <summary>
-        /// Whether the services are valid. Runs the check if the loading screen has not.
+        /// Whether kRPC can run. A service with errors leaves out only the members with them.
+        /// Runs the check if the loading screen has not.
         /// </summary>
         internal static bool OK {
             get {
@@ -32,18 +34,60 @@ namespace KRPC
                 return;
             Addon.InitLogger ();
             Utils.ModAPI.LoadAll (new Utils.GameModAssemblies ());
-            var errors = new List<string>();
-            Scanner.GetServices (errors);
-            ok = !errors.Any ();
-            if (errors.Any()) {
-                Utils.Logger.WriteLine("Service errors encountered, plugin has been disabled. Errors were:", Utils.Logger.Severity.Error);
-                foreach (var error in errors)
-                    Utils.Logger.WriteLine(error, Utils.Logger.Severity.Error);
-                PopupDialog.SpawnPopupDialog(
-                    new Vector2 (0.5f, 0.5f), new Vector2 (0.5f, 0.5f), "krpc-service-error", "kRPC Service Error",
-                    "Service errors encountered, plugin has been disabled. See the log for more information.",
-                    "OK", true, HighLogic.UISkin);
+            ok = ServiceProblems.Load ();
+            if (!ok.Value)
+                return;
+            // The check is best effort, and kRPC runs without it
+            try {
+                CheckMissingMembers ();
+            } catch (Exception exn) {
+                Utils.Logger.WriteLine ("Failed to check the RPCs for missing members: " + exn, Utils.Logger.Severity.Error);
             }
+        }
+
+        /// <summary>
+        /// List the RPCs that use a missing member as a problem.
+        /// </summary>
+        static void CheckMissingMembers ()
+        {
+            var running = new Version (Versioning.version_major, Versioning.version_minor, Versioning.Revision);
+            var builtFor = new Version (((AssemblyKSPVersionAttribute)typeof (ServicesChecker).Assembly
+                .GetCustomAttributes (typeof (AssemblyKSPVersionAttribute), false) [0]).MaxVersion);
+            builtFor = new Version (builtFor.Major, builtFor.Minor, builtFor.Build);
+            if (running != builtFor)
+                Utils.Logger.WriteLine ("kRPC was built for KSP " + builtFor + ", and this is KSP " + running, Utils.Logger.Severity.Warning);
+            var timer = Stopwatch.StartNew ();
+            var broken = BrokenProcedures.Find ();
+            Utils.Logger.WriteLine ("Checked the RPCs for missing members in " + timer.ElapsedMilliseconds + " ms", Utils.Logger.Severity.Debug);
+            if (broken.Count == 0)
+                return;
+            var title = running == builtFor ? "RPCs broken by missing members" :
+                "RPCs broken by KSP " + running + " (kRPC was built for KSP " + builtFor + ")";
+            var lines = broken.Select (x => x.Key + ": " + x.Value).ToList ();
+            Utils.Logger.WriteLine (title + ":\n  " + string.Join ("\n  ", lines.ToArray ()), Utils.Logger.Severity.Error);
+            ServiceProblems.Add (new ProblemCategory (title, lines));
+        }
+    }
+
+    /// <summary>
+    /// Shows the problems window at the first main menu of each launch, unless the player
+    /// hid these problems.
+    /// </summary>
+    [KSPAddon (KSPAddon.Startup.MainMenu, true)]
+    public sealed class ServicesProblemsAddon : MonoBehaviour
+    {
+        /// <summary>
+        /// Show the window, if there are problems the player has not hidden.
+        /// </summary>
+        public void Start ()
+        {
+            ServicesChecker.Run ();
+            var digest = ServiceProblems.Digest;
+            if (digest == null || digest == ConfigurationFile.Instance.Configuration.HiddenServiceProblems)
+                return;
+            var window = gameObject.AddComponent<UI.ProblemsWindow> ();
+            window.Closable = true;
+            window.Visible = true;
         }
     }
 

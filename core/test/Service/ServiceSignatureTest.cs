@@ -20,7 +20,7 @@ namespace KRPC.Test.Service
         [Test]
         public void SerializeKeepsFieldOrderAndSortsMembers ()
         {
-            var definition = global::KRPC.Service.Scanner.Scanner.GetServices () ["TestService"].Serialize ();
+            var definition = global::KRPC.Service.Services.Instance.Signatures ["TestService"].Serialize ();
             CollectionAssert.AreEqual (
                 new [] { "id", "documentation", "procedures", "classes", "enumerations", "structs", "exceptions" },
                 definition.Keys);

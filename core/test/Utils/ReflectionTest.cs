@@ -48,7 +48,7 @@ namespace KRPC.Test.Utils
                 .Count (x => x.DeclaringType == typeof(TestServiceExtensions)));
             // A class that is not public is searched too, so that the scanner can report the
             // members it puts out of reach, valid or not
-            Assert.AreEqual (9, methods.Count (x => x.DeclaringType == typeof(InvalidExtensions)));
+            Assert.AreEqual (11, methods.Count (x => x.DeclaringType == typeof(InvalidExtensions)));
             CollectionAssert.Contains (methods.Select (x => x.Name).ToList (), "MethodWithoutThis");
             // Only the assemblies that can declare the attribute are searched
             var assemblies = methods.Select (x => x.DeclaringType.Assembly).Distinct ().ToList ();

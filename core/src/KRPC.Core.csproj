@@ -197,6 +197,7 @@
     <Compile Include="Service\Scanner\StructFieldSignature.cs" />
     <Compile Include="Service\Scanner\StructSignature.cs" />
     <Compile Include="Service\ServiceException.cs" />
+    <Compile Include="Service\BrokenProcedures.cs" />
     <Compile Include="Service\ServiceProblems.cs" />
     <Compile Include="Service\Services.cs" />
     <Compile Include="Service\StdLib\AxisAngle.cs" />

@@ -45,6 +45,7 @@
     <Compile Include="UI\MainWindow.cs" />
     <Compile Include="UI\MovedEventArgs.cs" />
     <Compile Include="UI\OptionDialog.cs" />
+    <Compile Include="UI\ProblemsWindow.cs" />
     <Compile Include="UI\Skin.cs" />
     <Compile Include="UI\Window.cs" />
     <Compile Include="Utils\ClientCleanupAddon.cs" />

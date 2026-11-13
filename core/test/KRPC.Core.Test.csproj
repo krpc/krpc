@@ -70,6 +70,7 @@
     <Compile Include="Server\WebSockets\FrameTest.cs" />
     <Compile Include="Server\WebSockets\HeaderTest.cs" />
     <Compile Include="Server\WebSockets\ServerTest.cs" />
+    <Compile Include="Service\BrokenProceduresTest.cs" />
     <Compile Include="Service\ClassMethodHandlerTest.cs" />
     <Compile Include="Service\ClassStaticMethodHandlerTest.cs" />
     <Compile Include="Service\DocumentationUtilsTest.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Service\RequiresModTest.cs" />
     <Compile Include="Service\ScannerTest.cs" />
     <Compile Include="Service\ServiceSignatureTest.cs" />
+    <Compile Include="Service\ServiceProblemsTest.cs" />
     <Compile Include="Service\ServicesTest.cs" />
     <Compile Include="Service\TestService.cs" />
     <Compile Include="Service\TestService2.cs" />

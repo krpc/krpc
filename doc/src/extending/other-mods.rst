@@ -24,6 +24,9 @@ missing from the installed version binds a delegate that throws when called. Onl
 that use it fail. Bind through ``mod.Require`` to fail the whole integration instead. An exception
 from ``Bind`` does the same.
 
+A missing member is a warning in the log. An integration that fails to load is an error in the
+log, and the kRPC Problems window names it.
+
 ``NotReady`` gives the reason the mod cannot serve a call yet, such as before it creates its
 instance in a scene, or null once it can. Each call checks it once the integration is available.
 
