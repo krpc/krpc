@@ -116,16 +116,23 @@ genrule(
     ]),
 )
 
-# The blank saves, the test settings and the mod config overlays of the KSP game
+# The blank saves, the test settings, the registry of mods and the mod config overlays of the
+# KSP game
 filegroup(
     name = "game-data",
-    srcs = glob(
-        [
-            "krpctools/game/ksp/mods/**",
-            "krpctools/game/ksp/saves/*.sfs",
-        ],
-        exclude = ["**/*.py"],
-    ) + ["krpctools/game/ksp/settings.cfg"],
+    srcs = glob([
+        "krpctools/game/ksp/mods/**",
+        "krpctools/game/ksp/saves/*.sfs",
+    ]) + [
+        "krpctools/game/ksp/settings.cfg",
+        ":ksp-registry",
+    ],
+)
+
+copy_file(
+    name = "ksp-registry",
+    src = "//service:registry",
+    out = "krpctools/game/ksp/registry.json",
 )
 
 # The KSP test add-on: TestingTools, and the Benchmark service its benchmarks use

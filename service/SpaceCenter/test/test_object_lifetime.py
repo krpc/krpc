@@ -11,9 +11,7 @@ class TestObjectLifetime(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("Parts")
-        cls.remove_other_vessels()
+        cls.launch("Parts")
         cls.conn = cls.connect()
         cls.space_center = cls.conn.space_center
         cls.destroyed = cls.conn.krpc.ObjectDestroyedException
@@ -434,9 +432,7 @@ class TestObjectLifetimeUnloaded(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("Multi")
-        cls.remove_other_vessels()
+        cls.launch("Multi")
         cls.set_circular_orbit("Kerbin", 100000)
         cls.conn = cls.connect()
         cls.space_center = cls.conn.space_center
@@ -485,9 +481,7 @@ class TestObjectLifetimeDestroyedVessel(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("Multi")
-        cls.remove_other_vessels()
+        cls.launch("Multi")
         cls.set_circular_orbit("Kerbin", 100000)
         cls.conn = cls.connect()
         cls.space_center = cls.conn.space_center

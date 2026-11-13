@@ -6,10 +6,7 @@ from krpctools.game.ksp import TestCase
 class TestPartsRadiator(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("PartsRadiator")
-        cls.remove_other_vessels()
-        vessel = cls.connect().space_center.active_vessel
+        vessel = cls.launch("PartsRadiator")
         parts = vessel.parts
         cls.control = vessel.control
         cls.state = cls.connect().space_center.DeployableState
@@ -67,10 +64,7 @@ class TestPartsRadiator(TestCase):
 class TestPartsRadiatorBreak(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("PartsRadiator")
-        cls.remove_other_vessels()
-        vessel = cls.connect().space_center.active_vessel
+        vessel = cls.launch("PartsRadiator")
         parts = vessel.parts
         cls.control = vessel.control
         cls.state = cls.connect().space_center.DeployableState

@@ -6,12 +6,7 @@ from krpctools.game.ksp import TestCase
 class TestPartsFuelLines(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        active_vessel = cls.connect().space_center.active_vessel
-        if active_vessel is None or active_vessel.name != "PartsFuelLines":
-            cls.launch_vessel_from_vab("PartsFuelLines")
-            cls.remove_other_vessels()
-        cls.parts = cls.connect().space_center.active_vessel.parts
+        cls.parts = cls.launch("PartsFuelLines").parts
 
     def test_fuel_line_part(self):
         part = self.parts.with_name("fuelLine")[0]

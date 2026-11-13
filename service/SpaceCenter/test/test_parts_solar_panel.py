@@ -6,10 +6,7 @@ from krpctools.game.ksp import TestCase
 class TestPartsSolarPanel(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("PartsSolarPanel")
-        cls.remove_other_vessels()
-        vessel = cls.connect().space_center.active_vessel
+        vessel = cls.launch("PartsSolarPanel")
         parts = vessel.parts
         cls.control = vessel.control
         cls.state = cls.connect().space_center.DeployableState
@@ -89,10 +86,7 @@ class TestPartsSolarPanel(TestCase):
 class TestPartsSolarPanelBreak(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("PartsSolarPanel")
-        cls.remove_other_vessels()
-        vessel = cls.connect().space_center.active_vessel
+        vessel = cls.launch("PartsSolarPanel")
         parts = vessel.parts
         cls.control = vessel.control
         cls.state = cls.connect().space_center.DeployableState

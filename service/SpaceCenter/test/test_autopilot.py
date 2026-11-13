@@ -62,11 +62,8 @@ def _make_autopilot_test_class(  # noqa: PLR0913
     class TestAutoPilotBase(TestCase):
         @classmethod
         def setUpClass(cls):
-            cls.new_save()
-            cls.remove_other_vessels()
-            cls.launch_vessel_from_vab(vessel_name)
+            cls.vessel = cls.launch(vessel_name)
             cls.set_orbit("Eve", 1070000, 0.15, 16.2, 70.5, 180.8, 1.83, 251.1)
-            cls.vessel = cls.connect().space_center.active_vessel
             cls.ap = cls.vessel.auto_pilot
             cls.ap.reset()
             cls.ap.sas = False
@@ -1658,9 +1655,7 @@ def _make_autopilot_launch_test_class(  # noqa: PLR0913
             cls.new_save()
 
         def setUp(self):
-            self.remove_other_vessels()
-            self.launch_vessel_from_vab(vessel_name)
-            self.vessel = self.connect().space_center.active_vessel
+            self.vessel = self.launch(vessel_name, save=None)
             self.ap = self.vessel.auto_pilot
             self.ap.reset()
             self.ap.sas = False
@@ -1669,7 +1664,7 @@ def _make_autopilot_launch_test_class(  # noqa: PLR0913
         def tearDown(self):
             self.ap.show_info_ui = False
 
-        def launch(self):
+        def lift_off(self):
             self.vessel.control.sas = False
             self.vessel.control.rcs = False
             self.vessel.control.throttle = throttle
@@ -1705,7 +1700,7 @@ def _make_autopilot_launch_test_class(  # noqa: PLR0913
         def test_launch(self):
             # Launch, holding vertical, and assert the actuators have settled to a
             # smooth hold with little oscillation.
-            self.launch()
+            self.lift_off()
             self.wait(launch_settle_delay)
             self.ap.diagnostic_logging = True
             self.wait(10)
@@ -1715,7 +1710,7 @@ def _make_autopilot_launch_test_class(  # noqa: PLR0913
         def test_sharp_turn(self):
             # Launch, hold vertical for 10 seconds, pitch over 5 degrees, then assert
             # the actuators have settled to a smooth hold with little oscillation.
-            self.launch()
+            self.lift_off()
             self.wait(10)
             self.ap.target_pitch_and_heading(85, 90)
             self.wait(pitch_settle_delay)
@@ -1729,7 +1724,7 @@ def _make_autopilot_launch_test_class(  # noqa: PLR0913
             # 10Hz update to the vessel pitch control.
             # Assert the actuators have settled to a smooth hold with little
             # oscillation from 10 second onwards.
-            self.launch()
+            self.lift_off()
             self.wait(10)
             self.ap.diagnostic_logging = True
             for i in range(200):
@@ -1743,7 +1738,7 @@ def _make_autopilot_launch_test_class(  # noqa: PLR0913
             # using target_smoothing_time control
             # Assert the actuators have settled to a smooth hold with little
             # oscillation from 10 second onwards.
-            self.launch()
+            self.lift_off()
             self.wait(10)
             self.ap.diagnostic_logging = True
             self.ap.target_smoothing_time = 20
@@ -1884,9 +1879,7 @@ def _make_autopilot_flight_test_class(  # noqa: PLR0913
             cls.new_save()
 
         def setUp(self):
-            self.remove_other_vessels()
-            self.launch_vessel_from_sph(vessel_name)
-            self.vessel = self.connect().space_center.active_vessel
+            self.vessel = self.launch(vessel_name, editor="SPH", save=None)
             self.ap = self.vessel.auto_pilot
             self.ap.reset()
             self.ap.sas = False
@@ -2095,9 +2088,7 @@ def _make_autopilot_reentry_test_class(  # noqa: PLR0913
             cls.new_save()
 
         def setUp(self):
-            self.remove_other_vessels()
-            self.launch_vessel_from_sph(vessel_name)
-            self.vessel = self.connect().space_center.active_vessel
+            self.vessel = self.launch(vessel_name, editor="SPH", save=None)
             self.ap = self.vessel.auto_pilot
             self.ap.reset()
             self.ap.sas = False
@@ -2186,11 +2177,8 @@ TestAutoPilotReentryAeris3A = _make_autopilot_reentry_test_class(
 class TestAutoPilotSAS(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.remove_other_vessels()
-        cls.launch_vessel_from_vab("AutoPilot")
+        cls.vessel = cls.launch("AutoPilot")
         cls.set_orbit("Eve", 1070000, 0.15, 16.2, 70.5, 180.8, 1.83, 251.1)
-        cls.vessel = cls.connect().space_center.active_vessel
         cls.ap = cls.vessel.auto_pilot
         cls.sas_mode = cls.connect().space_center.SASMode
         cls.speed_mode = cls.connect().space_center.SpeedMode
@@ -2265,9 +2253,7 @@ class TestAutoPilotSAS(TestCase):
 class TestAutoPilotOtherVessel(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("Multi")
-        cls.remove_other_vessels()
+        cls.launch("Multi")
         cls.set_orbit("Eve", 1070000, 0.15, 16.2, 70.5, 180.8, 1.83, 251.1)
         space_center = cls.connect().space_center
         next(iter(space_center.active_vessel.parts.docking_ports)).undock()
@@ -2293,9 +2279,7 @@ class TestAutoPilotRevertToLaunch(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.remove_other_vessels()
-        cls.launch_vessel_from_vab("AutoPilot")
+        cls.launch("AutoPilot")
 
     def wait_for_flight(self):
         conn = self.connect()
@@ -2365,13 +2349,10 @@ class TestAutoPilotRemovedReferenceFrame(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.remove_other_vessels()
-        cls.launch_vessel_from_vab("AutoPilot")
+        cls.vessel = cls.launch("AutoPilot")
         cls.set_orbit("Eve", 1070000, 0.15, 16.2, 70.5, 180.8, 1.83, 251.1)
         cls.conn = cls.connect()
         cls.space_center = cls.conn.space_center
-        cls.vessel = cls.space_center.active_vessel
         cls.ap = cls.vessel.auto_pilot
 
     def setUp(self):

@@ -16,10 +16,7 @@ class PartsTagTest(Mixin):
     def setUpClass(cls):
         # Inherited by the test classes, so not wrapped by TestCase to ensure the game
         cls.ensure_game()
-        cls.new_save()
-        cls.launch_vessel_from_vab(cls.craft)
-        cls.remove_other_vessels()
-        cls.parts = cls.connect().space_center.active_vessel.parts
+        cls.parts = cls.launch(cls.craft).parts
         cls.pod = cls.parts.root
 
 
@@ -64,7 +61,7 @@ class TestPartsTagNoMods(PartsTagUnavailableTest, TestCase):
 
 
 class TestPartsTagOldCommunityPartModules(PartsTagUnavailableTest, TestCase):
-    mods = ["KSPCommunityPartModules-0.4"]
+    mods = ["KSPCommunityPartModules==0.4.0"]
 
 
 class TestPartsTagCommunityPartModules(PartsTagAvailableTest, TestCase):
@@ -77,7 +74,7 @@ class TestPartsTagCommunityPartModulesLegacyCraft(PartsTagAvailableTest, TestCas
 
 
 class TestPartsTagKOSOldCommunityPartModules(PartsTagAvailableTest, TestCase):
-    mods = ["KSPCommunityPartModules-0.4", "kOS"]
+    mods = ["KSPCommunityPartModules==0.4.0", "kOS"]
     craft = "PartsTagLegacy"
     module = "KOSNameTag"
 

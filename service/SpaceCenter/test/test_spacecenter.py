@@ -14,11 +14,9 @@ if TYPE_CHECKING:
 class TestSpaceCenter(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("Basic")
-        cls.remove_other_vessels()
+        cls.launch("Basic")
         cls.set_circular_orbit("Kerbin", 1000000)
-        cls.launch_vessel_from_vab("Basic")
+        cls.launch("Basic", save=None, keep_other_vessels=True)
         cls.set_circular_orbit("Kerbin", 1010000)
         cls.sc = cls.connect().space_center
         cls.vessel = cls.sc.active_vessel
@@ -546,11 +544,8 @@ class WarpTestBase(RailsWarpTestBase):
 class TestWarpOnLaunchpad(WarpTestBase, TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("Basic")
-        cls.remove_other_vessels()
+        cls.vessel = cls.launch("Basic")
         cls.sc = cls.connect().space_center
-        cls.vessel = cls.sc.active_vessel
         cls.maximum_rails_warp_factor = 7
         cls.landed = True
 
@@ -563,12 +558,9 @@ class TestWarpOnLaunchpad(WarpTestBase, TestCase):
 class TestWarpInOrbit(WarpTestBase, TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("Basic")
-        cls.remove_other_vessels()
+        cls.vessel = cls.launch("Basic")
         cls.set_circular_orbit("Kerbin", 200000)
         cls.sc = cls.connect().space_center
-        cls.vessel = cls.sc.active_vessel
         cls.wait_for_free_fall(cls.vessel)
         # The periapsis is above the atmosphere, so the altitude limits do not apply
         cls.maximum_rails_warp_factor = 7
@@ -578,9 +570,7 @@ class TestWarpInOrbit(WarpTestBase, TestCase):
 class TestWarpInOrbitThroughAtmosphere(RailsWarpTestBase, TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("Basic")
-        cls.remove_other_vessels()
+        cls.launch("Basic")
         # At the 200 km apoapsis of an orbit with a 60 km periapsis
         radius = 600000
         apoapsis = radius + 200000
@@ -604,12 +594,9 @@ class TestWarpInOrbitThroughAtmosphere(RailsWarpTestBase, TestCase):
 class TestWarpInSpace(WarpTestBase, TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("Basic")
-        cls.remove_other_vessels()
+        cls.vessel = cls.launch("Basic")
         cls.set_circular_orbit("Kerbin", 700000)
         cls.sc = cls.connect().space_center
-        cls.vessel = cls.sc.active_vessel
         cls.wait_for_free_fall(cls.vessel)
         cls.maximum_rails_warp_factor = 7
         cls.landed = False
@@ -666,9 +653,7 @@ class TestRevertToLaunch(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("Basic")
-        cls.remove_other_vessels()
+        cls.launch("Basic")
         cls.sc = cls.connect().space_center
 
     def test_the_vessel_is_settled_when_the_call_returns(self):

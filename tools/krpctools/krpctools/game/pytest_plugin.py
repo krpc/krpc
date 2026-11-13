@@ -14,10 +14,12 @@ import pytest
 from . import game
 
 
-def _mod_source(value):
-    name, separator, source = value.partition("=")
-    if not separator or not name or not source:
-        raise ValueError("--mod takes NAME=SOURCE, got %r" % value)
+def _mod_source(name, source):
+    if "==" in name:
+        raise ValueError(
+            "--mod takes a mod name, and replaces its latest pinned version, got %r"
+            % name
+        )
     return name, source
 
 
@@ -44,9 +46,11 @@ def add_options(group, launching=True):
     group.addoption(
         "--mod",
         action="append",
+        nargs=2,
         default=[],
-        metavar="NAME=SOURCE",
-        help="install the named mod from a path or a URL, in place of its pinned archive",
+        metavar=("NAME", "SOURCE"),
+        help="install the named mod from a path or a URL, in place of its latest pinned "
+        "archive",
     )
     group.addoption(
         "--skip-install-check",
@@ -82,7 +86,7 @@ def options(get):
         "game": get("game"),
         "directory": get("game_dir"),
         "krpc": get("krpc"),
-        "mod_sources": dict(_mod_source(value) for value in get("mod") or []),
+        "mod_sources": dict(_mod_source(*value) for value in get("mod") or []),
         "auto_launch": False if get("no_launch") else None,
         "check_install": False if get("skip_install_check") else None,
         "install_mods": False if get("skip_mod_install") else None,

@@ -1,6 +1,7 @@
 """Kerbal Space Program: installing into GameData, launching, and the TestingTools add-on."""
 
 import glob
+import hashlib
 import os
 import shutil
 import subprocess
@@ -126,6 +127,43 @@ def copy_folder(source, folder, dst):
     raise RuntimeError("%s has no GameData/%s" % (source, folder))
 
 
+def _digest(data):
+    return hashlib.sha256(data).hexdigest()
+
+
+def _directory_digest(directory, name):
+    """The SHA-256 of the first file of the given name under directory, or None."""
+    for root, _, filenames in sorted(os.walk(directory)):
+        if name in filenames:
+            with open(os.path.join(root, name), "rb") as f:
+                return _digest(f.read())
+    return None
+
+
+def source_digest(source, folders, name):
+    """The SHA-256 of the file of the given name in one of the GameData folders of source, a zip
+    archive or a directory, or None."""
+    if zipfile.is_zipfile(source):
+        with zipfile.ZipFile(source) as archive:
+            for folder in folders:
+                for member, path in _folder_members(archive, folder):
+                    if path.split("/")[-1] == name:
+                        return _digest(archive.read(member))
+        return None
+    for folder in folders:
+        candidates = [
+            os.path.join(source, "GameData", folder),
+            os.path.join(source, folder),
+        ]
+        if os.path.basename(os.path.normpath(source)) == folder:
+            candidates.append(source)
+        for candidate in candidates:
+            digest = _directory_digest(candidate, name)
+            if digest is not None:
+                return digest
+    return None
+
+
 class Mod(game.Mod):
     """A KSP mod, installed as the folders and files it puts in GameData.
 
@@ -140,14 +178,8 @@ class Mod(game.Mod):
     # The files the mod installs at the top of GameData
     files = ()
 
-    # The directory of config overlays, one subdirectory per folder. The supported mods keep
-    # theirs beside their definitions.
+    # The directory of config overlays, one subdirectory per folder, or None
     overlays = None
-
-    def __init__(self, source=None, sha256=None):
-        super().__init__(source, sha256)
-        if self.overlays is None:
-            self.overlays = _resource("mods")
 
 
 class KSP(game.Game):
@@ -164,9 +196,9 @@ class KSP(game.Game):
         return "KSP"
 
     def default_mods(self):
-        from .mods import MODS
+        from .registry import mods
 
-        return [mod() for mod in MODS]
+        return mods()
 
     # Locations
 
@@ -254,8 +286,8 @@ class KSP(game.Game):
             # Mod archives ship no settings, so some mods open a first-run window that
             # blocks an unattended launch. An overlay marks those already dismissed, or adds
             # a part for the tests.
-            overlay = os.path.join(mod.overlays, folder)
-            if os.path.isdir(overlay):
+            overlay = mod.overlays and os.path.join(mod.overlays, folder)
+            if overlay and os.path.isdir(overlay):
                 shutil.copytree(overlay, dst, dirs_exist_ok=True)
             normalize_permissions(dst)
         for name in mod.files:
@@ -271,6 +303,14 @@ class KSP(game.Game):
             if os.path.exists(path):
                 os.remove(path)
 
+    def installed_digest(self, mod, name):
+        """The SHA-256 of the file of the given name in the mod's GameData folders, or None."""
+        for folder in mod.folders:
+            digest = _directory_digest(os.path.join(self.gamedata(), folder), name)
+            if digest is not None:
+                return digest
+        return None
+
     def validate_install(self, mods):
         """Fail if GameData holds anything beyond the stock game, kRPC, ModuleManager and
         the given mods. An unexpected assembly that fails to load, such as one that needs a
@@ -278,8 +318,8 @@ class KSP(game.Game):
         would then wait for a server that never comes up."""
         allowed = set(_BASELINE_GAMEDATA)
         for name in mods:
-            allowed.update(self.mods[name].folders)
-            allowed.update(self.mods[name].files)
+            allowed.update(self.mod(name).folders)
+            allowed.update(self.mod(name).files)
         gamedata = self.gamedata()
         unexpected = [
             entry

@@ -6,10 +6,7 @@ from krpctools.game.ksp import TestCase
 class TestPartsLaunchClamp(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("PartsSolarPanel")
-        cls.remove_other_vessels()
-        cls.vessel = cls.connect().space_center.active_vessel
+        cls.vessel = cls.launch("PartsSolarPanel")
         cls.clamp = cls.vessel.parts.launch_clamps[0]
 
     def test_launch_clamp(self):

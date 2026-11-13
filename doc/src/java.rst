@@ -810,22 +810,4 @@ Client API Reference
 API Reference
 -------------
 
-.. toctree::
-   :maxdepth: 1
-
-   java/api/krpc
-   java/api/stdlib
-   java/api/space-center
-   java/api/drawing
-   java/api/ui
-   java/api/infernal-robotics
-   java/api/kerbal-alarm-clock
-   java/api/remote-tech
-   java/api/lidar
-   java/api/docking-camera
-   java/api/trajectories
-   java/api/mechjeb
-   java/api/kerbal-engineer-redux
-   java/api/scansat
-   java/api/raster-prop-monitor
-   java/api/debug
+.. include:: java/api.inc

@@ -27,12 +27,9 @@ from krpctools.game.ksp import TestCase
 class TestReferenceFrame(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("Vessel")
-        cls.remove_other_vessels()
+        cls.vessel = cls.launch("Vessel")
         cls.set_circular_orbit("Kerbin", 100000)
         cls.space_center = cls.connect().space_center
-        cls.vessel = cls.space_center.active_vessel
         cls.bodies = cls.space_center.bodies
         cls.kerbin = cls.bodies["Kerbin"]
         cls.mun = cls.bodies["Mun"]
@@ -1362,12 +1359,9 @@ class TestOrbitReferenceFrame(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("Vessel")
-        cls.remove_other_vessels()
+        cls.vessel = cls.launch("Vessel")
         cls.set_circular_orbit("Kerbin", 100000)
         cls.space_center = cls.connect().space_center
-        cls.vessel = cls.space_center.active_vessel
         cls.kerbin = cls.space_center.bodies["Kerbin"]
         cls.nonrot = cls.kerbin.non_rotating_reference_frame
 

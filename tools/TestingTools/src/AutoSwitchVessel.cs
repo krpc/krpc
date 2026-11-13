@@ -26,7 +26,6 @@
  */
 
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace TestingTools
@@ -112,7 +111,7 @@ namespace TestingTools
         {
             var result = new KRPC.SpaceCenter.Services.SpaceCenter.LaunchResult();
             yield return KRPC.SpaceCenter.Services.SpaceCenter.LaunchVesselCoroutine(
-                directory, name, site, new List<string>(), result);
+                directory, name, site, null, result);
             if (!string.IsNullOrEmpty(result.Error))
                 throw Fatal.Error(
                     "Failed to launch craft \"" + name + "\": " + result.Error);

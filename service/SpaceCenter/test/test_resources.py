@@ -43,10 +43,7 @@ class ResourcesTest:
 class TestResources(TestCase, ResourcesTest):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("Resources")
-        cls.remove_other_vessels()
-        cls.vessel = cls.connect().space_center.active_vessel
+        cls.vessel = cls.launch("Resources")
         cls.num_stages = len(cls.expected.keys()) - 1
 
     expected = {

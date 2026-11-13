@@ -10,10 +10,7 @@ class TestPartsRobotic(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("PartsRobotic")
-        cls.remove_other_vessels()
-        cls.vessel = cls.connect().space_center.active_vessel
+        cls.vessel = cls.launch("PartsRobotic")
         cls.parts = cls.vessel.parts
 
     def wait_converge(self, read, target, tol, timeout=60, message="servo"):

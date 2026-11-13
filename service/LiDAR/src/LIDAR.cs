@@ -10,7 +10,7 @@ namespace KRPC.LiDAR
     /// Provides functionality to interact with the LiDAR mod.
     /// </summary>
     [Obsolete ("Use <see cref=\"M:KRPC.SpaceCenter.Services.SpaceCenter.RaycastDistance\"/> instead.")]
-    [KRPCService(Id = 10, GameScene = GameScene.All)]
+    [KRPCService(Id = ServiceInfo.Id, GameScene = GameScene.All)]
     public static class LIDAR
     {
         static void CheckAPI()

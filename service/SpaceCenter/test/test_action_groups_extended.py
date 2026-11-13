@@ -14,12 +14,8 @@ class TestActionGroupsExtended(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("ActionGroupsExtended")
-        cls.remove_other_vessels()
+        cls.control = cls.launch("ActionGroupsExtended").control
         cls.set_circular_orbit("Kerbin", 100000)
-        cls.space_center = cls.connect().space_center
-        cls.control = cls.space_center.active_vessel.control
 
     def test_extended_group_state_round_trip(self):
         # Groups beyond the stock range can be set, read back and toggled.

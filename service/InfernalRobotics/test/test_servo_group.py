@@ -8,13 +8,8 @@ class TestServoGroup(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("InfernalRobotics")
-        cls.remove_other_vessels()
+        cls.vessel = cls.launch("InfernalRobotics")
         cls.ir = cls.connect().infernal_robotics
-        vessel = cls.connect().space_center.active_vessel
-        assert vessel is not None
-        cls.vessel = vessel
         # Group state such as speed factor and expanded flag lives in IR's controller, which
         # only populates once it is ready; until then the active vessel's groups are served by
         # the synthesized (non-active) path. Wait so those members are controller-backed.

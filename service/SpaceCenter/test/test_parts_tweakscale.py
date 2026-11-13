@@ -111,10 +111,7 @@ class TestPartsTweakScaleRescaledFlight(TweakScaleTests, TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab(cls.craft)
-        cls.remove_other_vessels()
-        cls.vessel = cls.connect().space_center.active_vessel
+        cls.vessel = cls.launch(cls.craft)
         cls.find_parts(cls.vessel.parts)
 
 

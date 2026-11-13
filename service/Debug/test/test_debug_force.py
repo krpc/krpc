@@ -27,11 +27,8 @@ class TestDebugForce(TestCase):
 class TestDebugForceInOrbit(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("Basic")
-        cls.remove_other_vessels()
+        cls.vessel = cls.launch("Basic")
         cls.set_circular_orbit("Kerbin", 100000)
-        cls.vessel = cls.connect().space_center.active_vessel
 
     def angular_speed(self):
         ref = self.vessel.orbit.body.non_rotating_reference_frame

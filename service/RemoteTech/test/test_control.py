@@ -10,13 +10,8 @@ class TestControlRemoteTechConnected(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("Probe")
-        cls.remove_other_vessels()
+        cls.vessel = cls.launch("Probe")
         cls.rt = cls.connect().remote_tech
-        vessel = cls.connect().space_center.active_vessel
-        assert vessel is not None
-        cls.vessel = vessel
         cls.control = cls.vessel.control
         cls.engine = next(iter(cls.vessel.parts.engines))
         cls.engine.active = True
@@ -56,14 +51,9 @@ class TestControlRemoteTechNoConnection(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("Probe")
-        cls.remove_other_vessels()
+        cls.vessel = cls.launch("Probe")
         cls.set_circular_orbit("Jool", 20000000)
         cls.rt = cls.connect().remote_tech
-        vessel = cls.connect().space_center.active_vessel
-        assert vessel is not None
-        cls.vessel = vessel
         cls.control = cls.vessel.control
         cls.engine = next(iter(cls.vessel.parts.engines))
         cls.engine.active = True

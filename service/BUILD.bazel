@@ -1,0 +1,52 @@
+load("@bazel_skylib//rules:write_file.bzl", "write_file")
+load("@rules_python//python:defs.bzl", "py_test")
+load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
+load(":build.bzl", "service_targets")
+load(":registry.bzl", "MODS", "SERVICES")
+
+# The registry, for the Python tools
+write_file(
+    name = "registry",
+    out = "registry.json",
+    content = [json.encode_indent({
+        "mods": MODS,
+        "services": SERVICES,
+    })],
+    visibility = ["//visibility:public"],
+)
+
+test_suite(
+    name = "test",
+    tests = [
+        ":pyright",
+        ":registry-test",
+        ":ruff",
+    ],
+    visibility = ["//:__pkg__"],
+)
+
+py_test(
+    name = "registry-test",
+    size = "small",
+    srcs = ["registry_test.py"],
+    data = [
+        ":registry",
+        "//:CHANGELOG.md",
+        "//:KRPC.sln",
+    ] + service_targets("csproj-srcs"),
+    main = "registry_test.py",
+    deps = ["//:changelog"],
+)
+
+py_ruff_test(
+    name = "ruff",
+    size = "small",
+    srcs = ["registry_test.py"],
+)
+
+py_pyright_test(
+    name = "pyright",
+    size = "medium",
+    srcs = ["registry_test.py"],
+    deps = ["//:changelog"],
+)

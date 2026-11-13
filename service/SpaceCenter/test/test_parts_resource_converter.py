@@ -9,9 +9,7 @@ class TestPartsResourceConverter(TestCase):
         # Always reload the save and relaunch so the converter is tested on a
         # pristine vessel (cold core, full Ore tank) rather than whatever state a
         # previous test left behind.
-        cls.new_save(always_load=True)
-        cls.launch_vessel_from_vab("PartsHarvester")
-        cls.remove_other_vessels()
+        cls.launch("PartsHarvester", always_load=True)
         space_center = cls.connect().space_center
         cls.converter_state = space_center.ResourceConverterState
         parts = space_center.active_vessel.parts

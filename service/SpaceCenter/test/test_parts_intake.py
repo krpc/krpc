@@ -6,12 +6,7 @@ from krpctools.game.ksp import TestCase
 class TestPartsIntake(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        active_vessel = cls.connect().space_center.active_vessel
-        if active_vessel is None or active_vessel.name != "PartsIntake":
-            cls.launch_vessel_from_vab("PartsIntake")
-            cls.remove_other_vessels()
-        vessel = cls.connect().space_center.active_vessel
+        vessel = cls.launch("PartsIntake")
         parts = vessel.parts
         cls.control = vessel.control
         cls.intakes = parts.intakes

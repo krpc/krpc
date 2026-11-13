@@ -6,10 +6,7 @@ from krpctools.game.ksp import TestCase
 class TestPartsWheel(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("PartsWheel")
-        cls.remove_other_vessels()
-        vessel = cls.connect().space_center.active_vessel
+        vessel = cls.launch("PartsWheel")
         cls.parts = vessel.parts
         cls.wheels = cls.parts.wheels
         cls.deployable_wheel = cls.parts.with_name("GearMedium")[0].wheel
@@ -213,10 +210,7 @@ class TestPartsWheel(TestCase):
 class TestPartsWheelGrounded(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("PartsWheel")
-        cls.remove_other_vessels()
-        vessel = cls.connect().space_center.active_vessel
+        vessel = cls.launch("PartsWheel")
         cls.parts = vessel.parts
         cls.wheel = cls.parts.with_name("GearMedium")[0].wheel
 

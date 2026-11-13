@@ -85,6 +85,13 @@ the tests: a test's docstring is the requirement's text, its markers the level a
 ### C# sources
 
  * **New C# file → add `<Compile Include="…" />` to the project's `.csproj`.** `//:csproj-test` catches misses.
+ * **New service → an entry in `service/registry.bzl`**, and a `BUILD.bazel` that is one
+   `ksp_service` call, from `//service:build.bzl`. The build, clientgen and the docs read their
+   service lists and ids from the registry. `//service:registry-test` lists the hand-written
+   files to update.
+ * **A mod service has `Available`**, for every game scene, and SpaceCenter `<Mod>Available` for
+   each mod in its `supports`. The in-game tests check a test's mods through them, and tell the
+   installed version by the SHA-256 of `<assembly>.dll`, `assembly_sha256` in the registry.
  * **New C# target → load `csharp_library`/`csharp_binary`/`csharp_nunit_test` from `//tools/build:csharp.bzl`**,
    not `@rules_dotnet`. The wrappers run the culture analyzers (`tools/build/dotnet/analyzers.globalconfig`);
    only the doc examples use the plain rules.
@@ -143,9 +150,12 @@ bazel run //tools/game:test-ksp -- -k test_camera_mode                          
 ### Mods
 
  * Declared per test class: `mods = ["RemoteTech"]`.
- * Supported names, with their pinned archives: `tools/krpctools/krpctools/game/ksp/mods/`.
-   Downloads are cached in `~/.cache/krpctools`. `--mod NAME=PATH` installs a local build in
-   place of the pin.
+ * Supported names, with their pinned archives: `MODS` in `service/registry.bzl`. A name gets
+   the first version listed, and `name==version` another, as in `"KSPCommunityPartModules==0.4.0"`.
+   Downloads are cached in `~/.cache/krpctools`. `--mod NAME PATH` installs a local build in
+   place of the latest pin.
+ * A pin bump updates the version's `sha256` and `assembly_sha256`. Installing the mod fails when
+   `assembly_sha256` does not match the archive's `<assembly>.dll`.
  * Install reconciles GameData to **exactly** the requested set (plus kRPC) — required-but-missing and
    installed-but-unneeded are both wrong.
  * Pytest groups tests by mod set; game restarts at most once per set.
@@ -406,8 +416,9 @@ by directory, holding entries in the `CHANGELOG.md` syntax:
 
  * The components are listed in `COMPONENTS` in `tools/release/changelog.py`. `tools/buildenv` and
    the projects under `experimental/` are not among them, and edit their `CHANGELOG.md` directly.
- * A new component goes in `COMPONENTS`, with its `CHANGELOG.md` in `//doc:changelog`. The docs page
-   and the release notes take their component names and order from `COMPONENTS`.
+ * A new component goes in `COMPONENTS`, with its `CHANGELOG.md` in `//doc:changelog`. A service's
+   `CHANGELOG.md` reaches `//doc:changelog` through the registry. The docs page and the release
+   notes take their component names and order from `COMPONENTS`.
  * The PR that adds a component writes its entries in the new `CHANGELOG.md`, under a
    `## [vX.Y.Z] - unreleased` header, in place of a fragment. No other PR edits that file, so
    it cannot conflict.

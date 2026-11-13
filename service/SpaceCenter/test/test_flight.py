@@ -297,10 +297,7 @@ class TestFlightVerticalSpeed(TestCase):
 class TestFlightAtLaunchpad(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("Basic")
-        cls.remove_other_vessels()
-        cls.vessel = cls.connect().space_center.active_vessel
+        cls.vessel = cls.launch("Basic")
         cls.far = cls.connect().space_center.far_available
 
     def test_latitude_and_longitude(self):
@@ -364,11 +361,8 @@ class TestFlightAero(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("Aero")
-        cls.remove_other_vessels()
+        cls.vessel = cls.launch("Aero")
         cls.space_center = cls.connect().space_center
-        cls.vessel = cls.space_center.active_vessel
         cls.far = cls.space_center.far_available
 
     def head_on_wind(self, ref):
@@ -674,11 +668,8 @@ class TestFlightAirbrake(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("FlightAirbrake")
-        cls.remove_other_vessels()
+        cls.vessel = cls.launch("FlightAirbrake")
         cls.space_center = cls.connect().space_center
-        cls.vessel = cls.space_center.active_vessel
         cls.far = cls.space_center.far_available
 
     def _airbrakes(self):
@@ -772,11 +763,8 @@ class TestFlightFAR(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("Basic")
-        cls.remove_other_vessels()
+        cls.vessel = cls.launch("Basic")
         cls.space_center = cls.connect().space_center
-        cls.vessel = cls.space_center.active_vessel
         cls.body = cls.vessel.orbit.body
         cls.ref = cls.body.reference_frame
 

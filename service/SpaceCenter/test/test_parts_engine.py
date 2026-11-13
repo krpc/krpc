@@ -259,10 +259,7 @@ class EngineTest(EngineTestBase):
 class TestPartsEngine(EngineTestBase, TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("PartsEngine")
-        cls.remove_other_vessels()
-        cls.vessel = cls.connect().space_center.active_vessel
+        cls.vessel = cls.launch("PartsEngine")
         cls.parts = cls.vessel.parts
 
     def test_has_fuel(self):
@@ -480,10 +477,7 @@ class TestPartsEngine(EngineTestBase, TestCase):
 class TestPartsEngineMSL(EngineTest, TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("PartsEngine")
-        cls.remove_other_vessels()
-        cls.vessel = cls.connect().space_center.active_vessel
+        cls.vessel = cls.launch("PartsEngine")
         cls.parts = cls.vessel.parts
         cls.add_engine_data("liquidEngine", {"max_thrust": 205161, "isp": 265})
         cls.add_engine_data("liquidEngine2", {"max_thrust": 168430, "isp": 250})
@@ -527,11 +521,8 @@ class TestPartsEngineMSL(EngineTest, TestCase):
 class TestPartsEngineVacuum(EngineTest, TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("PartsEngine")
-        cls.remove_other_vessels()
+        cls.vessel = cls.launch("PartsEngine")
         cls.set_circular_orbit("Kerbin", 250000)
-        cls.vessel = cls.connect().space_center.active_vessel
         cls.parts = cls.vessel.parts
         cls.add_engine_data("liquidEngine", {"max_thrust": 240000, "isp": 310})
         cls.add_engine_data("liquidEngine2", {"max_thrust": 215000, "isp": 320})
@@ -581,10 +572,7 @@ class TestPartsEngineVacuum(EngineTest, TestCase):
 class TestPartsEngineReverser(EngineTestBase, TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("PartsEngineReverser")
-        cls.remove_other_vessels()
-        cls.vessel = cls.connect().space_center.active_vessel
+        cls.vessel = cls.launch("PartsEngineReverser")
         cls.parts = cls.vessel.parts
 
     def check_thrust_reverser(self, name):
@@ -632,10 +620,7 @@ class TestPartsEngineReverserFirespitter(EngineTestBase, TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("PartsEngineReverserFirespitter")
-        cls.remove_other_vessels()
-        cls.vessel = cls.connect().space_center.active_vessel
+        cls.vessel = cls.launch("PartsEngineReverserFirespitter")
         cls.parts = cls.vessel.parts
 
     def test_thrust_reverser(self):
@@ -665,10 +650,7 @@ class TestPartsEngineReverserKerbalActuators(EngineTestBase, TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("PartsEngineReverserKerbalActuators")
-        cls.remove_other_vessels()
-        cls.vessel = cls.connect().space_center.active_vessel
+        cls.vessel = cls.launch("PartsEngineReverserKerbalActuators")
         cls.parts = cls.vessel.parts
 
     def test_thrust_reverser(self):
@@ -700,11 +682,8 @@ class TestGimbalOverrideAttitude(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("Vessel")
-        cls.remove_other_vessels()
+        cls.vessel = cls.launch("Vessel")
         cls.set_circular_orbit("Kerbin", 250000)
-        cls.vessel = cls.connect().space_center.active_vessel
 
     def get_gimballed_engine(self):
         for part in self.vessel.parts.all:
@@ -770,10 +749,7 @@ class TestPartsEngineSupersonic(EngineTestBase, TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_sph("Aeris 4A")
-        cls.remove_other_vessels()
-        cls.vessel = cls.connect().space_center.active_vessel
+        cls.vessel = cls.launch("Aeris 4A", editor="SPH")
         cls.parts = cls.vessel.parts
 
     def test_thrust_flow_multiplier_capped_supersonic(self):

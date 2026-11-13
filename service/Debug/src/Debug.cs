@@ -20,7 +20,7 @@ namespace KRPC.Debug
     /// career progress made with it are not earned. It is intended for setting up a
     /// scenario to fly or a script to test, without flying there first.
     /// </remarks>
-    [KRPCService (Id = 12, GameScene = GameScene.All)]
+    [KRPCService (Id = ServiceInfo.Id, GameScene = GameScene.All)]
     public static class Debug
     {
         /// <summary>

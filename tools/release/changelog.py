@@ -28,6 +28,7 @@ FRAGMENT_DIR = "changelog.d"
 # The components on the kRPC release version, by directory, with the name the
 # docs page and the release notes show them under, in the order shown. Each has
 # a CHANGELOG.md whose unreleased header takes the version from config.bzl.
+# //service:registry-test checks the services against service/registry.bzl.
 COMPONENTS = {
     "core": "Core",
     "server": "Server",

@@ -51,9 +51,14 @@ exactly those mods and the mods they require:
 .. literalinclude:: /scripts/extending/testing/test_heatshields.py
    :language: python
 
-``launch_vessel_from_vab`` takes the craft from a ``craft`` directory beside the test file, or
-from the game's stock craft. The ``TestCase`` also places a vessel in orbit, on the ground or in
-flight, and has assertions with a tolerance.
+``launch`` loads a new save, launches the craft, removes the other vessels and returns the active
+vessel. It takes the craft from a ``craft`` directory beside the test file, or from the game's
+stock craft. ``directory`` names another directory, and ``editor="SPH"`` launches onto the runway.
+The craft takes its default crew, or the Kerbals named in ``crew``, and its crew become pilots.
+``save=None`` launches in the current save, and ``keep_other_vessels=True`` keeps the vessels
+already there.
+The ``TestCase`` also places a vessel in orbit, on the ground or in flight, and has assertions
+with a tolerance. ``krpctools.game.images`` checks the PNG and JPEG images an RPC returns.
 
 Run the suite with the plugin loaded:
 
@@ -81,8 +86,8 @@ Options
      - The game's install directory, in place of ``KSP_DIR``.
    * - ``--krpc``
      - The kRPC archive to install, in place of the release krpctools was built with.
-   * - ``--mod NAME=SOURCE``
-     - Installs a mod from a path or a URL, in place of its pinned archive.
+   * - ``--mod NAME SOURCE``
+     - Installs a mod from a path or a URL, in place of its latest pinned archive.
    * - ``--skip-install-check``
      - Allows mods outside the requested set in GameData.
    * - ``--skip-mod-install``

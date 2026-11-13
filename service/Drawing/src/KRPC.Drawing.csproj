@@ -43,6 +43,9 @@
     <Compile Include="$(bazel-bin)\service\Drawing\AssemblyInfo.cs">
       <Link>AssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="$(bazel-bin)\service\Drawing\ServiceInfo.cs">
+      <Link>ServiceInfo.cs</Link>
+    </Compile>
     <Compile Include="Addon.cs" />
     <Compile Include="Arc.cs" />
     <Compile Include="Box.cs" />

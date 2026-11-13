@@ -34,20 +34,12 @@ class TestLaunchCrew(TestCase):
             if cls.sc.get_kerbal(name) is None:
                 cls.sc.create_kerbal(name, "Pilot", True)
 
-    def launch(self, name, crew=None):
-        # crew is left unset (the default, None) to request the default crew, or set
-        # to a list to request specific crew. An empty list requests no crew.
-        if crew is None:
-            self.sc.launch_vessel("VAB", name, "LaunchPad")
-        else:
-            self.sc.launch_vessel("VAB", name, "LaunchPad", crew)
-        return self.sc.active_vessel
-
     def crew_names(self, vessel):
         return sorted(member.name for member in vessel.crew)
 
     def test_default_crew(self):
-        vessel = self.launch("Basic")
+        self.sc.launch_vessel("VAB", "Basic", "LaunchPad")
+        vessel = self.sc.active_vessel
         self.assertEqual(1, vessel.crew_count)
         self.assertTrue(vessel.crew[0].name.endswith(" Kerman"))
 
@@ -55,13 +47,15 @@ class TestLaunchCrew(TestCase):
         # Multi has crew seats but also probe cores, so it stays controllable with no
         # crew and launches without a control-warning dialog. An empty crew list
         # leaves every seat empty.
-        vessel = self.launch("Multi", [])
+        self.sc.launch_vessel("VAB", "Multi", "LaunchPad", [])
+        vessel = self.sc.active_vessel
         self.assertEqual(2, vessel.crew_capacity)
         self.assertEqual(0, vessel.crew_count)
         self.assertEqual([], vessel.crew)
 
     def test_named_crew(self):
-        vessel = self.launch("Basic", ["Alpha Kerman"])
+        self.sc.launch_vessel("VAB", "Basic", "LaunchPad", ["Alpha Kerman"])
+        vessel = self.sc.active_vessel
         self.assertEqual(["Alpha Kerman"], self.crew_names(vessel))
 
     def test_unknown_crew_raises(self):
@@ -78,7 +72,7 @@ class TestLaunchCrew(TestCase):
         self.assertEqual(before, self.sc.active_vessel)
 
     def test_unavailable_crew_raises(self):
-        self.launch("Basic", ["Busy Kerman"])
+        self.sc.launch_vessel("VAB", "Basic", "LaunchPad", ["Busy Kerman"])
         # Busy Kerman is now assigned to a vessel, so is unavailable for another launch.
         self.assertTrue(self.sc.get_kerbal("Busy Kerman").on_mission)
         self.assertRaises(
@@ -117,12 +111,14 @@ class TestLaunchCrew(TestCase):
         # so the Kerbal listed first always takes the same seat and the one listed
         # second the other seat. Two launches with different crew show this without
         # either needing to be freed from the first vessel.
-        first = self.seat_map(
-            self.launch("Multi", ["Order One Kerman", "Order Two Kerman"])
+        self.sc.launch_vessel(
+            "VAB", "Multi", "LaunchPad", ["Order One Kerman", "Order Two Kerman"]
         )
-        second = self.seat_map(
-            self.launch("Multi", ["Order Three Kerman", "Order Four Kerman"])
+        first = self.seat_map(self.sc.active_vessel)
+        self.sc.launch_vessel(
+            "VAB", "Multi", "LaunchPad", ["Order Three Kerman", "Order Four Kerman"]
         )
+        second = self.seat_map(self.sc.active_vessel)
 
         # The craft has two distinct seats, and both launches fill the same two.
         self.assertEqual(2, len(first))

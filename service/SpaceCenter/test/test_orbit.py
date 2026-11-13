@@ -345,14 +345,12 @@ class TestOrbit(TestCase):
 class TestClosestApproach(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
         # Two coplanar circular orbits. The target is inner (and so faster) and
         # trails the active vessel, so it catches up to a close approach in the
         # future rather than at the current instant.
-        cls.launch_vessel_from_vab("Basic")
-        cls.remove_other_vessels()
+        cls.launch("Basic")
         cls.set_orbit("Kerbin", 1600000, 0, 0, 0, 0, 0, 0)
-        cls.launch_vessel_from_vab("Basic")
+        cls.launch("Basic", save=None, keep_other_vessels=True)
         cls.set_orbit("Kerbin", 1650000, 0, 0, 0, 0, 0.15, 0)
         cls.conn = cls.connect()
         cls.sc = cls.conn.space_center

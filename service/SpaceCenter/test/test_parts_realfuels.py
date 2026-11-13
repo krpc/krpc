@@ -18,19 +18,13 @@ class TestPartsRealFuels(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("PartsEngine")
-        cls.remove_other_vessels()
-        cls.vessel = cls.connect().space_center.active_vessel
+        cls.vessel = cls.launch("PartsEngine")
         cls.parts = cls.vessel.parts
 
     def part_with_name(self, name):
         parts = self.parts.with_name(name)
         self.assertGreater(len(parts), 0, "no part named " + name)
         return parts[0]
-
-    def test_available(self):
-        self.assertTrue(self.connect().space_center.real_fuels_available)
 
     def test_pump_fed_engine(self):
         # LV-909 "Terrier", which RealFuels gives 24 ignitions, each costing a little
@@ -172,12 +166,10 @@ class TestPartsRealFuelsBoiloff(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("PartsRealFuels")
-        cls.remove_other_vessels()
+        vessel = cls.launch("PartsRealFuels")
         cls.set_circular_orbit("Kerbin", 100000)
         cls.space_center = cls.connect().space_center
-        cls.tank = cls.space_center.active_vessel.parts.with_name("fuelTank")[0]
+        cls.tank = vessel.parts.with_name("fuelTank")[0]
 
     def test_boiloff_rate(self):
         self.assertTrue(self.tank.has_real_fuels_tank)

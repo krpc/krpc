@@ -16,15 +16,13 @@ class TestNonActiveVessel(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("InfernalRobotics")
-        cls.remove_other_vessels()
+        vessel = cls.launch("InfernalRobotics")
         sc = cls.connect().space_center
         cls.ir = cls.connect().infernal_robotics
         # Split the craft in two by undocking the command pod.
         port = next(
             p
-            for p in sc.active_vessel.parts.docking_ports
+            for p in vessel.parts.docking_ports
             if p.state == sc.DockingPortState.docked
         )
         port.undock()

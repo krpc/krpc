@@ -1,8 +1,10 @@
 load("//:config.bzl", "assembly_version", "author")
-load("//service:build.bzl", "service_deps")
+load("//service:build.bzl", "registry_entry", "service_deps", "service_info", "service_libraries")
 load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
 load("//tools/build:csharp.bzl", "csharp_library")
 load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
+
+service = registry_entry("LiDAR")
 
 exports_files(["CHANGELOG.md"])
 
@@ -20,7 +22,7 @@ csharp_assembly_info(
     name = "AssemblyInfo",
     cls_compliant = False,
     copyright = author,
-    description = "LiDAR API for kRPC",
+    description = service.description,
     title = "KRPC.LiDAR",
     version = assembly_version,
     visibility = [
@@ -28,9 +30,18 @@ csharp_assembly_info(
     ],
 )
 
-srcs = [":AssemblyInfo"] + glob(["src/**/*.cs"])
+service_info(
+    name = "ServiceInfo",
+    namespace = "KRPC.LiDAR",
+    service = service,
+)
 
-deps = service_deps + ["//service/SpaceCenter:KRPC.SpaceCenter"]
+srcs = [
+    ":AssemblyInfo",
+    ":ServiceInfo",
+] + glob(["src/**/*.cs"])
+
+deps = service_deps + service_libraries(service.deps)
 
 csharp_library(
     name = "KRPC.LiDAR",
@@ -45,12 +56,8 @@ csharp_library(
 service_definitions(
     name = "ServiceDefinitions",
     out = "KRPC.LiDAR.json",
-    assemblies = [
-        ":KRPC.LiDAR",
-        "//service/SpaceCenter:KRPC.SpaceCenter",
-        "//server:KRPC",
-    ],
-    service = "LIDAR",
+    assemblies = [":KRPC.LiDAR"] + service_libraries(service.deps) + ["//server:KRPC"],
+    service = service.name,
     visibility = ["//visibility:public"],
 )
 
@@ -61,5 +68,14 @@ filegroup(
         "**/*.cs",
         "**/*.csproj",
     ]),
-    visibility = ["//:__pkg__"],
+    visibility = [
+        "//:__pkg__",
+        "//service:__pkg__",
+    ],
+)
+
+# The service has no tests
+test_suite(
+    name = "test",
+    tests = [],
 )

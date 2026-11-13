@@ -7,11 +7,8 @@ from krpctools.game.ksp import TestCase
 class TestPartsDockingPort(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.remove_other_vessels()
-        cls.launch_vessel_from_vab("PartsDockingPort")
+        cls.vessel = cls.launch("PartsDockingPort")
         cls.sc = cls.connect().space_center
-        cls.vessel = cls.sc.active_vessel
         cls.parts = cls.vessel.parts
         cls.State = cls.sc.DockingPortState
         cls.port1 = cls.parts.with_name("dockingPort3")[0].docking_port
@@ -156,9 +153,7 @@ class TestPartsDockingPortInFlight(TestCase):
     in flight (as opposed to pre-attached in the VAB)"""
 
     def setUp(self):
-        self.new_save()
-        self.launch_vessel_from_vab("PartsDockingPortInFlight")
-        self.remove_other_vessels()
+        self.launch("PartsDockingPortInFlight")
         self.set_circular_orbit("Kerbin", 100000)
         self.sc = self.connect().space_center
         self.state = self.sc.DockingPortState
@@ -253,10 +248,7 @@ class TestPartsDockingPortPreAttachedTo(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.remove_other_vessels()
-        cls.launch_vessel_from_vab("PartsDockingPortPreAttachedTo")
-        cls.vessel = cls.connect().space_center.active_vessel
+        cls.vessel = cls.launch("PartsDockingPortPreAttachedTo")
         cls.state = cls.connect().space_center.DockingPortState
 
         # Stack is as follows, from top to bottom:

@@ -6,11 +6,8 @@ from krpctools.game.ksp import TestCase
 class TestResourceTransfer(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("ResourceTransfer")
-        cls.remove_other_vessels()
+        vessel = cls.launch("ResourceTransfer")
         cls.sc = cls.connect().space_center
-        vessel = cls.sc.active_vessel
         cls.parts = vessel.parts
         other_vessel = vessel.parts.decouplers[0].decouple()
         cls.other_parts = other_vessel.parts
@@ -113,9 +110,7 @@ class TestResourceTransfer(TestCase):
 class TestResourceTransferCancel(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("ResourceTransfer")
-        cls.remove_other_vessels()
+        cls.launch("ResourceTransfer")
         cls.sc = cls.connect().space_center
         cls.parts = cls.sc.active_vessel.parts
 
@@ -173,9 +168,7 @@ class TestResourceTransferCancel(TestCase):
 class TestResourceTransferRemove(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("ResourceTransfer")
-        cls.remove_other_vessels()
+        cls.launch("ResourceTransfer")
         cls.conn = cls.connect()
         cls.sc = cls.conn.space_center
         cls.parts = cls.sc.active_vessel.parts
@@ -238,10 +231,7 @@ class TestResourceTransferRemove(TestCase):
 class TestResourceTransferDisconnect(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("ResourceTransfer")
-        cls.remove_other_vessels()
-        cls.parts = cls.connect().space_center.active_vessel.parts
+        cls.parts = cls.launch("ResourceTransfer").parts
 
     def test_transfer_cancelled_on_disconnect(self):
         from_part = self.parts.with_name("fuelTank")[0]

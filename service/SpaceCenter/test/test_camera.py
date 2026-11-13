@@ -166,7 +166,6 @@ class TestCameraIVACrew(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        cls.remove_other_vessels()
         space_center = cls.connect().space_center
         cls.space_center = space_center
         # Deterministic crew to launch with, and a Kerbal that stays in the roster so
@@ -174,11 +173,9 @@ class TestCameraIVACrew(TestCase):
         for name in ("IVA One Kerman", "IVA Two Kerman", "IVA Absent Kerman"):
             if space_center.get_kerbal(name) is None:
                 space_center.create_kerbal(name, "Pilot", True)
-        cls._stage_craft("Multi", "VAB", None)
-        space_center.launch_vessel(
-            "VAB", "Multi", "LaunchPad", ["IVA One Kerman", "IVA Two Kerman"]
+        cls.vessel = cls.launch(
+            "Multi", crew=["IVA One Kerman", "IVA Two Kerman"], save=None
         )
-        cls.vessel = space_center.active_vessel
         cls.camera = space_center.camera
         cls.mode = space_center.CameraMode
         cls.camera.mode = cls.mode.iva
@@ -264,7 +261,6 @@ class TestCameraIVALaunch(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        cls.remove_other_vessels()
         space_center = cls.connect().space_center
         cls.space_center = space_center
         # One Kerbal per test, as a launch leaves its crew assigned
@@ -279,23 +275,26 @@ class TestCameraIVALaunch(TestCase):
         self.camera.mode = self.mode.automatic
         self.wait(1)
 
-    def launch(self, crew):
-        self.space_center.launch_vessel("VAB", "Multi", "LaunchPad", crew)
+    # The tests call the RPC rather than launch, which waits after launching
 
     def test_enter_after_launch(self):
-        self.launch(["IVA Launch Kerman"])
+        self.space_center.launch_vessel(
+            "VAB", "Multi", "LaunchPad", ["IVA Launch Kerman"]
+        )
         self.camera.mode = self.mode.iva
         self.assertEqual(self.mode.iva, self.camera.mode)
 
     def test_enter_twice(self):
-        self.launch(["IVA Twice Kerman"])
+        self.space_center.launch_vessel(
+            "VAB", "Multi", "LaunchPad", ["IVA Twice Kerman"]
+        )
         self.camera.mode = self.mode.iva
         self.camera.mode = self.mode.iva
         self.wait(1)
         self.assertEqual(self.mode.iva, self.camera.mode)
 
     def test_no_crew(self):
-        self.launch([])
+        self.space_center.launch_vessel("VAB", "Multi", "LaunchPad", [])
         with self.assertRaises(RuntimeError) as cm:
             self.camera.mode = self.mode.iva
         self.assertIn("The active vessel has no crew", str(cm.exception))

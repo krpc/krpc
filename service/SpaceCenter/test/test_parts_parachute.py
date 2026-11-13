@@ -5,10 +5,7 @@ from krpctools.game.ksp import TestCase
 
 class TestPartsParachute(TestCase):
     def setUp(self):
-        self.new_save()
-        self.launch_vessel_from_vab("PartsParachute")
-        self.remove_other_vessels()
-        self.vessel = self.connect().space_center.active_vessel
+        self.vessel = self.launch("PartsParachute")
         self.control = self.vessel.control
         self.state = self.connect().space_center.ParachuteState
         self.safe_state = self.connect().space_center.ParachuteSafeState

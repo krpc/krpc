@@ -16,7 +16,7 @@ namespace KRPC.Trajectories
     /// <remarks>
     /// Trajectories predicts the trajectory of the active vessel only.
     /// </remarks>
-    [KRPCService(Id = 13, GameScene = GameScene.Flight)]
+    [KRPCService(Id = ServiceInfo.Id, GameScene = GameScene.Flight)]
     public static class Trajectories
     {
         private static DescentProfile descentProfile;
@@ -24,7 +24,7 @@ namespace KRPC.Trajectories
         /// <summary>
         /// Whether Trajectories is available.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.All)]
         public static bool Available
         {
             get

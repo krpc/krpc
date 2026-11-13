@@ -39,6 +39,9 @@
     <Compile Include="$(bazel-bin)\service\InfernalRobotics\AssemblyInfo.cs">
       <Link>AssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="$(bazel-bin)\service\InfernalRobotics\ServiceInfo.cs">
+      <Link>ServiceInfo.cs</Link>
+    </Compile>
     <Compile Include="Addon.cs" />
     <Compile Include="IRWrapper.cs" />
     <Compile Include="InfernalRobotics.cs" />

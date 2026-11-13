@@ -7,9 +7,6 @@ from service.Trajectories.test.trajectories_testcase import (
 
 
 class TestComputation(KerbinOrbitCase):
-    def test_available(self):
-        self.assertTrue(self.traj.available)
-
     def test_always_update(self):
         self.traj.always_update = False
         self.assertFalse(self.traj.always_update)

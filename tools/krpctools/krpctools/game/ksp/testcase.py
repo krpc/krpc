@@ -13,6 +13,7 @@ from .. import testcase
 
 if TYPE_CHECKING:
     from krpc.ksp import KSPConnection as Connection
+    from krpc.ksp.spacecenter import Vessel
 
     from .game import KSP
 
@@ -128,28 +129,38 @@ class TestCase(testcase.TestCase):
         )
 
     @classmethod
-    def launch_vessel_from_vab(cls, name, directory=None, launch_site=None):
-        cls._stage_craft(name, "VAB", directory)
-        space_center = cls.connect().space_center
-        if launch_site is None:
-            space_center.launch_vessel_from_vab(name)
-        else:
-            space_center.launch_vessel("VAB", name, launch_site)
-        # Ensure the crew are all pilots, for full control
-        cls.set_crew_to_pilot()
+    def launch(
+        cls,
+        craft: str,
+        directory: str | None = None,
+        editor: str = "VAB",
+        crew: list[str] | None = None,
+        save: str | None = "krpctest",
+        always_load: bool = False,
+        keep_other_vessels: bool = False,
+    ) -> "Vessel":
+        """Launch craft from the editor ("VAB" or "SPH"), remove the other vessels, and
+        return the active vessel. The craft comes from directory, or the craft directory
+        beside the test file, and else from the game's stock craft for the editor.
 
-    @classmethod
-    def launch_vessel_from_sph(cls, name, directory=None, launch_site=None):
-        # Launch an aircraft from the SPH (onto the runway by default). Stock aircraft
-        # (e.g. "Aeris 3A", "Stearwing A300") live in KSP's Ships/SPH directory.
-        cls._stage_craft(name, "SPH", directory)
-        space_center = cls.connect().space_center
-        if launch_site is None:
-            space_center.launch_vessel_from_sph(name)
-        else:
-            space_center.launch_vessel("SPH", name, launch_site)
-        # Ensure the crew are all pilots, for full control
+        The vessel takes the craft's default crew, or the Kerbals named in crew, and its
+        crew become pilots. An empty crew launches it with none. It launches in a new save,
+        loaded as for new_save, or in the current save when save is None.
+        keep_other_vessels keeps the vessels already in the save."""
+        if editor not in ("VAB", "SPH"):
+            raise ValueError("editor must be VAB or SPH, got %r" % editor)
+        if save is not None:
+            cls.new_save(save, always_load=always_load)
+        cls._stage_craft(craft, editor, directory)
+        site = "LaunchPad" if editor == "VAB" else "Runway"
+        cls.connect().space_center.launch_vessel(editor, craft, site, crew)
         cls.set_crew_to_pilot()
+        if not keep_other_vessels:
+            cls.remove_other_vessels()
+        vessel = cls.connect().space_center.active_vessel
+        if vessel is None:
+            raise RuntimeError("No active vessel after launching %s" % craft)
+        return vessel
 
     @classmethod
     def _set_game_scene(cls, scene, timeout=120):

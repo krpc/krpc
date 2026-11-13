@@ -67,7 +67,7 @@ Craft launch resolves the craft in one of two ways:
 - **Staged from a fixture directory.** When `--krpctest-load-craft-fixture-dir` is given and
   contains `<craft>.craft`, TestingTools copies it (and `<craft>.loadmeta`, when present) into
   `saves/<game>/Ships/<craft-directory>/` before launching. This mirrors
-  `TestCase.launch_vessel_from_vab`.
+  `TestCase.launch`.
 - **Loaded from the save.** Otherwise, the craft is launched directly from
   `saves/<game>/Ships/<craft-directory>/` and must already exist there, having been built in the
   editor or staged by a previous run. This is also the fallback when the craft is not found in the

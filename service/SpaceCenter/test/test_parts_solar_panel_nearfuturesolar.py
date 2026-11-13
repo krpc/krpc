@@ -14,10 +14,7 @@ class TestPartsSolarPanelNearFutureSolar(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("PartsSolarPanelNearFutureSolar")
-        cls.remove_other_vessels()
-        vessel = cls.connect().space_center.active_vessel
+        vessel = cls.launch("PartsSolarPanelNearFutureSolar")
         parts = vessel.parts
         cls.control = vessel.control
         cls.state = cls.connect().space_center.DeployableState

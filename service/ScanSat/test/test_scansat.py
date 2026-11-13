@@ -1,11 +1,8 @@
 import math
-import struct
 import unittest
 
+from krpctools.game.images import assert_jpeg, assert_png, png_size
 from krpctools.game.ksp import TestCase
-
-PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
-JPEG_SIGNATURE = b"\xff\xd8\xff"
 
 # The scanners on the test craft: part name, scan types, and minimum, best and maximum
 # altitudes from the part configs
@@ -21,26 +18,16 @@ ALTITUDE = 100000
 HIGH_ALTITUDE = 700000
 
 
-def png_size(image):
-    """The width and height of a PNG image, from its header."""
-    return struct.unpack(">II", image[16:24])
-
-
 class TestScanSat(TestCase):
     mods = ["SCANsat"]
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save(always_load=True)
-        cls.launch_vessel_from_vab("ScanSat")
-        cls.remove_other_vessels()
+        cls.vessel = cls.launch("ScanSat", always_load=True)
         cls.set_circular_orbit("Kerbin", ALTITUDE)
         conn = cls.connect()
         cls.scansat = conn.scan_sat
         cls.sc = conn.space_center
-        vessel = cls.sc.active_vessel
-        assert vessel is not None
-        cls.vessel = vessel
         cls.kerbin = cls.sc.bodies["Kerbin"]
         cls.mun = cls.sc.bodies["Mun"]
 
@@ -50,9 +37,6 @@ class TestScanSat(TestCase):
     def set_active(self, scanner, value):
         scanner.active = value
         self.wait_until(lambda: scanner.active == value)
-
-    def test_available(self):
-        self.assertTrue(self.scansat.available)
 
     def test_settings(self):
         self.assertTrue(self.scansat.background_scanning)
@@ -221,8 +205,7 @@ class TestScanSat(TestCase):
 
     def test_map(self):
         image = self.scansat.map(self.kerbin, self.scansat.MapType.altimetry)
-        self.assertEqual(PNG_SIGNATURE, image[:8])
-        self.assertEqual((720, 360), png_size(image))
+        assert_png(image, (720, 360))
 
     def test_map_jpeg(self):
         image = self.scansat.map(
@@ -231,7 +214,7 @@ class TestScanSat(TestCase):
             format=self.scansat.ImageFormat.jpeg,
             quality=50,
         )
-        self.assertEqual(JPEG_SIGNATURE, image[:3])
+        assert_jpeg(image)
 
     def test_map_options(self):
         cases = [
@@ -244,8 +227,7 @@ class TestScanSat(TestCase):
                 image = self.scansat.map(
                     self.kerbin, map_type, width=360, projection=projection, color=False
                 )
-                self.assertEqual(PNG_SIGNATURE, image[:8])
-                self.assertEqual((360, 180), png_size(image))
+                assert_png(image, (360, 180))
 
     def test_map_resource(self):
         image = self.scansat.map(
@@ -274,9 +256,7 @@ class TestScanSatHighOrbit(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save(always_load=True)
-        cls.launch_vessel_from_vab("ScanSat")
-        cls.remove_other_vessels()
+        cls.vessel = cls.launch("ScanSat", always_load=True)
         conn = cls.connect()
         cls.scansat = conn.scan_sat
         cls.sc = conn.space_center
@@ -284,9 +264,6 @@ class TestScanSatHighOrbit(TestCase):
         # Polar, for the stock orbital survey
         radius = cls.kerbin.equatorial_radius + HIGH_ALTITUDE
         cls.set_orbit("Kerbin", radius, 0, 90, 0, 0, 0, cls.sc.ut)
-        vessel = cls.sc.active_vessel
-        assert vessel is not None
-        cls.vessel = vessel
 
     def test_high_resolution_altimetry(self):
         scanner = self.scansat.scanner(
@@ -363,15 +340,10 @@ class TestScanSatLanded(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save(always_load=True)
-        cls.launch_vessel_from_vab("ScanSat")
-        cls.remove_other_vessels()
+        cls.vessel = cls.launch("ScanSat", always_load=True)
         conn = cls.connect()
         cls.scansat = conn.scan_sat
         cls.sc = conn.space_center
-        vessel = cls.sc.active_vessel
-        assert vessel is not None
-        cls.vessel = vessel
         cls.kerbin = cls.sc.bodies["Kerbin"]
 
     def test_anomalies(self):

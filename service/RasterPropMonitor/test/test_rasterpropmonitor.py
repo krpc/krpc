@@ -1,9 +1,8 @@
 import os
-import struct
 import time
 import unittest
-import zlib
 
+from krpctools.game.images import assert_jpeg, assert_png, png
 from krpctools.game.ksp import TestCase
 
 CRAFT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "craft")
@@ -20,24 +19,16 @@ class RasterPropMonitorTestCase(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
         # Two pods, so the part and vessel variables differ
-        cls.launch_vessel_from_vab("RasterPropMonitor", directory=CRAFT)
-        cls.remove_other_vessels()
+        cls.vessel = cls.launch("RasterPropMonitor", directory=CRAFT)
         cls.conn = cls.connect()
         cls.rpm = cls.conn.raster_prop_monitor
         cls.sc = cls.conn.space_center
-        vessel = cls.sc.active_vessel
-        assert vessel is not None
-        cls.vessel = vessel
-        cls.pods = vessel.parts.with_name(POD)
+        cls.pods = cls.vessel.parts.with_name(POD)
         assert len(cls.pods) == 2
 
 
 class TestComputer(RasterPropMonitorTestCase):
-    def test_available(self):
-        self.assertTrue(self.rpm.available)
-
     def test_computers(self):
         computers = self.rpm.computers(self.vessel)
         self.assertCountEqual(self.pods, [computer.part for computer in computers])
@@ -356,9 +347,7 @@ class TestMonitor(MonitorTestCase):
         lines = [line.strip() for line in self.monitor.text.split("\n")]
         self.assertIn("Junk Systems Inc.", lines)
         self.assertIn("Junk Systems Inc.", self.monitor.raw_text)
-        image = self.monitor.image()
-        self.assertEqual(b"\x89PNG\r\n\x1a\n", image[:8])
-        self.assertEqual((640, 640), struct.unpack(">II", image[16:24]))
+        assert_png(self.monitor.image(), (640, 640))
 
     def test_display_outside_iva(self):
         # The text follows its variable with the flight camera on
@@ -441,21 +430,16 @@ class TestMonitorIVA(MonitorTestCase):
 
     def test_image(self):
         self.show("home")
-        image = self.monitor.image()
-        self.assertEqual(b"\x89PNG\r\n\x1a\n", image[:8])
-        width, height = struct.unpack(">II", image[16:24])
-        self.assertEqual((640, 640), (width, height))
+        assert_png(self.monitor.image(), (640, 640))
 
     def test_image_jpeg(self):
         self.show("home")
-        image = self.monitor.image(self.rpm.ImageFormat.jpeg)
-        self.assertEqual(b"\xff\xd8\xff", image[:3])
-        self.assertEqual((640, 640), jpeg_size(image))
+        assert_jpeg(self.monitor.image(self.rpm.ImageFormat.jpeg), (640, 640))
         for quality in (0, 101):
             with self.assertRaises(ValueError):
                 self.monitor.image(self.rpm.ImageFormat.jpeg, quality)
         # PNG ignores the quality
-        self.assertEqual(b"\x89PNG\r\n\x1a\n", self.monitor.image(quality=0)[:8])
+        assert_png(self.monitor.image(quality=0))
 
     def test_press_button(self):
         # The target menu moves its cursor with the down button
@@ -553,10 +537,6 @@ class TestPageButtons(MonitorTestCase):
             self.monitor.capture_button("buttonR1", "krpcNoSuchPage")
 
 
-def png_size(image):
-    return struct.unpack(">II", image[16:24])
-
-
 class TestExternalCamera(RasterPropMonitorTestCase):
     @classmethod
     def setUpClass(cls):
@@ -591,9 +571,7 @@ class TestExternalCamera(RasterPropMonitorTestCase):
 
     def test_image(self):
         # The flight camera is on, as the cameras render in any camera mode
-        image = self.cameras[0].image(320, 240)
-        self.assertEqual(b"\x89PNG\r\n\x1a\n", image[:8])
-        self.assertEqual((320, 240), png_size(image))
+        assert_png(self.cameras[0].image(320, 240), (320, 240))
 
     def test_images_differ(self):
         # The cameras face different ways
@@ -613,9 +591,7 @@ class TestExternalCamera(RasterPropMonitorTestCase):
 
     def test_image_jpeg(self):
         jpeg = self.rpm.ImageFormat.jpeg
-        image = self.cameras[0].image(320, 240, jpeg)
-        self.assertEqual(b"\xff\xd8\xff", image[:3])
-        self.assertEqual((320, 240), jpeg_size(image))
+        assert_jpeg(self.cameras[0].image(320, 240, jpeg), (320, 240))
 
     def test_image_quality(self):
         camera = self.cameras[0]
@@ -629,8 +605,7 @@ class TestExternalCamera(RasterPropMonitorTestCase):
             with self.assertRaises(ValueError):
                 self.cameras[0].image(10, 10, jpeg, quality)
         # PNG ignores the quality
-        image = self.cameras[0].image(10, 10, quality=0)
-        self.assertEqual(b"\x89PNG\r\n\x1a\n", image[:8])
+        assert_png(self.cameras[0].image(10, 10, quality=0))
 
     def test_image_stream(self):
         # A stream at a rate is a video of the camera
@@ -646,33 +621,6 @@ class TestExternalCamera(RasterPropMonitorTestCase):
             self.assertAlmostEqual(20, len(frames) - count, delta=4)
         finally:
             stream.remove()
-
-
-def jpeg_size(data):
-    """The width and height of a JPEG image, from its start of frame segment."""
-    pos = 2
-    while True:
-        marker, length = struct.unpack(">2sH", data[pos : pos + 4])
-        if marker in (b"\xff\xc0", b"\xff\xc2"):
-            height, width = struct.unpack(">HH", data[pos + 5 : pos + 9])
-            return width, height
-        pos += 2 + length
-
-
-def png(width, height, rgb):
-    """A PNG image of one color."""
-
-    def chunk(kind, data):
-        body = kind + data
-        return struct.pack(">I", len(data)) + body + struct.pack(">I", zlib.crc32(body))
-
-    row = b"\x00" + bytes(rgb) * width
-    return (
-        b"\x89PNG\r\n\x1a\n"
-        + chunk(b"IHDR", struct.pack(">IIBBBBB", width, height, 8, 2, 0, 0, 0))
-        + chunk(b"IDAT", zlib.compress(row * height))
-        + chunk(b"IEND", b"")
-    )
 
 
 # Tag text and the characters RPM draws for it, from TextRenderer.ParseText. A line with no

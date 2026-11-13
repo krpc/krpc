@@ -6,10 +6,7 @@ from krpctools.game.ksp import TestCase
 class TestPartsAntenna(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.remove_other_vessels()
-        cls.launch_vessel_from_vab("PartsAntenna")
-        vessel = cls.connect().space_center.active_vessel
+        vessel = cls.launch("PartsAntenna")
         parts = vessel.parts
         cls.control = vessel.control
         cls.antennas = parts.antennas
@@ -122,10 +119,7 @@ class TestPartsAntenna(TestCase):
 class TestPartsAntennaBreak(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.remove_other_vessels()
-        cls.launch_vessel_from_vab("PartsAntenna")
-        vessel = cls.connect().space_center.active_vessel
+        vessel = cls.launch("PartsAntenna")
         parts = vessel.parts
         cls.control = vessel.control
         cls.state = cls.connect().space_center.DeployableState

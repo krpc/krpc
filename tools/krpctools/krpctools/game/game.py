@@ -7,6 +7,7 @@ present in the running game. Launching and stopping are in :mod:`krpctools.game.
 installing in :mod:`krpctools.game.install`.
 """
 
+import copy
 import importlib
 import os
 
@@ -16,7 +17,8 @@ from . import install, launch, releases
 
 
 class Mod:
-    """A mod a test can require, by name in its ``mods`` list.
+    """A version of a mod, which a test can require in its ``mods`` list by name, for the
+    first version the game lists, or as ``name==version``.
 
     ``source`` is where the mod comes from: a directory, an archive, or the URL of an archive.
     A subclass sets the pinned ``source`` and its ``sha256``, and an instance given a source
@@ -24,6 +26,7 @@ class Mod:
     """
 
     name = ""
+    version = None
     source = None
     sha256 = None
     requires = ()
@@ -32,6 +35,21 @@ class Mod:
         if source is not None:
             self.source = source
             self.sha256 = sha256
+
+    @property
+    def id(self):
+        """The mod's name and version, as name==version, or its name for a mod with no
+        version."""
+        return (
+            self.name if self.version is None else "%s==%s" % (self.name, self.version)
+        )
+
+    def with_source(self, source):
+        """A copy of the mod that installs from source, a path or a URL."""
+        mod = copy.copy(self)
+        mod.source = source
+        mod.sha256 = None
+        return mod
 
     def install(self, game, path):
         """Install the mod from its fetched source at path."""
@@ -42,18 +60,25 @@ class Mod:
         game.remove_mod(self)
 
     def present(self, game, conn):
-        """Whether the running game has the mod loaded, or None when that cannot be told."""
+        """Whether the running game has the mod loaded, at any version, or None when that
+        cannot be told."""
         return game.mod_present(self, conn)
 
+    def installed(self, game):
+        """Whether the mod's files in the install are this version, or None when that cannot
+        be told."""
+        return None
+
     def __repr__(self):
-        return "%s(%r)" % (type(self).__name__, self.source)
+        return "%s(%r, %r)" % (type(self).__name__, self.id, self.source)
 
 
 class Game:
     """A game that kRPC runs in, and how to install, launch and stop it.
 
     The constructor arguments override the defaults a subclass sets: the install directory,
-    the kRPC archive, and the mods. Each mod replaces the game's mod of the same name.
+    the kRPC archive, and the mods. Each mod replaces the game's mod of the same name and
+    version, and a mod with no version replaces every version of its name.
     """
 
     # The name --game takes for this game
@@ -74,9 +99,15 @@ class Game:
     def __init__(self, directory=None, krpc=None, mods=(), address="127.0.0.1"):
         self.directory = directory
         self.krpc = krpc
-        self.mods = {mod.name: mod for mod in self.default_mods()}
+        self.mods = {mod.id: mod for mod in self.default_mods()}
         for mod in mods:
-            self.mods[mod.name] = mod
+            if mod.version is None:
+                self.mods = {
+                    key: other
+                    for key, other in self.mods.items()
+                    if other.name != mod.name
+                }
+            self.mods[mod.id] = mod
         self.address = address
         # Whether ensure launches a game when no server is reachable
         self.auto_launch = True
@@ -107,6 +138,12 @@ class Game:
         # The launch runs the game from here, so a relative path would resolve twice
         return os.path.abspath(directory)
 
+    def has_install(self):
+        """Whether an install directory is given and exists. A game on another machine has
+        none here."""
+        directory = self.directory or os.environ.get(self.directory_variable)
+        return bool(directory) and os.path.isdir(directory)
+
     def title(self):
         """The game's name in messages."""
         return self.name.upper()
@@ -118,7 +155,8 @@ class Game:
     # Installing
 
     def default_mods(self):
-        """The mods a test can require without the suite defining them."""
+        """The mods a test can require without the suite defining them, with each mod's
+        versions latest first."""
         return []
 
     def release_assets(self, version):
@@ -136,13 +174,21 @@ class Game:
             self.name, self.release_prefixes, self.release_assets, self.krpc_release
         )
 
-    def set_mod_source(self, name, source):
-        """Install the named mod from source, a path or a URL, in place of its own."""
-        if name not in self.mods:
-            raise ValueError(
-                "Unknown mod %s (known: %s)" % (name, ", ".join(sorted(self.mods)))
-            )
-        self.mods[name] = type(self.mods[name])(source)
+    def mod(self, request):
+        """The mod a request names: name==version, or a name for the first version listed."""
+        if request in self.mods:
+            return self.mods[request]
+        for mod in self.mods.values():
+            if mod.name == request:
+                return mod
+        raise ValueError(
+            "Unknown mod %s (known: %s)" % (request, ", ".join(sorted(self.mods)))
+        )
+
+    def set_mod_source(self, request, source):
+        """Install the requested mod from source, a path or a URL, in place of its own."""
+        mod = self.mod(request)
+        self.mods[mod.id] = mod.with_source(source)
 
     def install(self, mods=()):
         """Install kRPC, the test add-on and exactly the given mods, by name."""

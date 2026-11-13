@@ -12,7 +12,7 @@ namespace KRPC.MechJeb
     /// The objects act on the MechJeb of the active vessel, and stay valid after the active
     /// vessel changes.
     /// </remarks>
-    [KRPCService (Id = 14, GameScene = GameScene.Flight)]
+    [KRPCService (Id = ServiceInfo.Id, GameScene = GameScene.Flight)]
     public static class MechJeb
     {
         static Func<global::Vessel, object> getMasterMechJeb;
@@ -124,10 +124,18 @@ namespace KRPC.MechJeb
         }
 
         /// <summary>
+        /// Whether MechJeb is installed.
+        /// </summary>
+        [KRPCProperty (GameScene = GameScene.All)]
+        public static bool Available {
+            get { return Loaded; }
+        }
+
+        /// <summary>
         /// Whether MechJeb is installed and the active vessel has MechJeb.
         /// </summary>
         [KRPCProperty]
-        public static bool APIReady {
+        public static bool Ready {
             get { return MasterMechJeb != null; }
         }
 

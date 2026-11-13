@@ -8,12 +8,9 @@ class TestAntenna(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("RemoteTech")
-        cls.remove_other_vessels()
+        cls.vessel = cls.launch("RemoteTech")
         cls.space_center = cls.connect().space_center
         cls.rt = cls.connect().remote_tech
-        cls.vessel = cls.space_center.active_vessel
         cls.other_vessel = next(iter(cls.vessel.parts.decouplers)).decouple()
         cls.antenna = cls.rt.antenna(
             next(iter(cls.vessel.parts.with_name("RTShortDish2")))

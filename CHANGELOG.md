@@ -28,6 +28,7 @@ component's unreleased section.
 - [KerbalEngineerRedux](service/KerbalEngineerRedux/CHANGELOG.md)
 - [ScanSat](service/ScanSat/CHANGELOG.md)
 - [RasterPropMonitor](service/RasterPropMonitor/CHANGELOG.md)
+- [Debug](service/Debug/CHANGELOG.md)
 
 ## Clients
 

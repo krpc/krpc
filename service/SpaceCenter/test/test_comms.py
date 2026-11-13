@@ -8,12 +8,9 @@ from krpctools.game.ksp import TestCase
 class TestCommsSingleHop(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("Probe")
-        cls.remove_other_vessels()
+        cls.vessel = cls.launch("Probe")
         cls.set_circular_orbit("Kerbin", 75e6)
         cls.space_center = cls.connect().space_center
-        cls.vessel = cls.space_center.active_vessel
         cls.comms = cls.vessel.comms
         cls.CommLinkType = cls.space_center.CommLinkType
         cls.antennas = cls.vessel.parts.antennas
@@ -69,11 +66,9 @@ class TestCommsSingleHop(TestCase):
 class TestCommsMultiHop(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("MediumRangeProbe")
-        cls.remove_other_vessels()
+        cls.launch("MediumRangeProbe")
         cls.set_orbit("Sun", 14e9 + 16e9, 0, 0, 0, 0, math.pi, 0)
-        cls.launch_vessel_from_vab("ShortRangeProbe")
+        cls.launch("ShortRangeProbe", save=None, keep_other_vessels=True)
         cls.set_orbit("Sun", 14e9 + 16e9 + 100, 0, 0, 0, 0, math.pi, 0)
         cls.space_center = cls.connect().space_center
         cls.vessel = cls.space_center.active_vessel

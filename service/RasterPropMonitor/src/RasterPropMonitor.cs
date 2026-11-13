@@ -15,7 +15,7 @@ namespace KRPC.RasterPropMonitor
     /// switch or numeric input sets it. Raster Prop Monitor updates the variables that depend
     /// on the vessel only for the active vessel.
     /// </remarks>
-    [KRPCService (Id = 17, GameScene = GameScene.All)]
+    [KRPCService (Id = ServiceInfo.Id, GameScene = GameScene.All)]
     public static class RasterPropMonitor
     {
         static void CheckAPI ()

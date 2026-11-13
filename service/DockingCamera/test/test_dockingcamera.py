@@ -1,11 +1,8 @@
 import functools
-import struct
 import unittest
 
+from krpctools.game.images import assert_jpeg, assert_png
 from krpctools.game.ksp import TestCase
-
-PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
-JPEG_SIGNATURE = b"\xff\xd8\xff"
 
 # The part of each kind of camera on the test craft, and its module
 CAMERAS = [
@@ -19,12 +16,8 @@ class TestDockingCamera(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.launch_vessel_from_vab("DockingCamera")
-        cls.remove_other_vessels()
-        conn = cls.connect()
-        cls.dc = conn.docking_camera
-        cls.parts = conn.space_center.active_vessel.parts
+        cls.parts = cls.launch("DockingCamera").parts
+        cls.dc = cls.connect().docking_camera
         cls.cameras = []
         for part_name, module_name in CAMERAS:
             part = cls.parts.with_name(part_name)[0]
@@ -51,9 +44,6 @@ class TestDockingCamera(TestCase):
     @classmethod
     def is_off(cls, camera):
         return cls.image(camera) is None
-
-    def test_available(self):
-        self.assertTrue(self.dc.available)
 
     def test_camera(self):
         for part, _ in self.cameras:
@@ -86,15 +76,12 @@ class TestDockingCamera(TestCase):
                     functools.partial(self.image, camera),
                     message="the camera to switch on",
                 )
-                self.assertEqual(PNG_SIGNATURE, image[:8])
-                # The width and height from the IHDR chunk
-                self.assertEqual((256, 256), struct.unpack(">II", image[16:24]))
-                jpeg = camera.image(self.dc.ImageFormat.jpeg)
-                self.assertEqual(JPEG_SIGNATURE, jpeg[:3])
+                assert_png(image, (256, 256))
+                assert_jpeg(camera.image(self.dc.ImageFormat.jpeg))
                 with self.assertRaises(ValueError):
                     camera.image(self.dc.ImageFormat.jpeg, 0)
                 # PNG ignores the quality
-                self.assertEqual(PNG_SIGNATURE, camera.image(quality=0)[:8])
+                assert_png(camera.image(quality=0))
                 self.set_enabled(enabled, False)
 
 

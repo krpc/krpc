@@ -39,6 +39,9 @@
     <Compile Include="$(bazel-bin)\service\KerbalEngineerRedux\AssemblyInfo.cs">
       <Link>AssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="$(bazel-bin)\service\KerbalEngineerRedux\ServiceInfo.cs">
+      <Link>ServiceInfo.cs</Link>
+    </Compile>
     <Compile Include="Addon.cs" />
     <Compile Include="API.cs" />
     <Compile Include="BurnTime.cs" />
