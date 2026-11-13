@@ -1767,13 +1767,13 @@
          The value types of a tuple, the value type of a list or set, or the key and value
          types of a dictionary. An empty list for any other type.
 
-   .. method:: static Type uInt(Connection connection)
+   .. method:: static Type uint(Connection connection)
 
       An unsigned 32-bit integer type.
 
    
 
-   .. method:: static Type uLong(Connection connection)
+   .. method:: static Type ulong(Connection connection)
 
       An unsigned 64-bit integer type.
 
@@ -1886,12 +1886,12 @@
       A list, with the type of its values in :meth:`Type.getTypes()`.
 
 
-   .. field:: public TypeCode S_INT32
+   .. field:: public TypeCode SINT32
 
       A signed 32-bit integer.
 
 
-   .. field:: public TypeCode S_INT64
+   .. field:: public TypeCode SINT64
 
       A signed 64-bit integer.
 
@@ -1916,12 +1916,12 @@
       A tuple, with the types of its values in :meth:`Type.getTypes()`.
 
 
-   .. field:: public TypeCode U_INT32
+   .. field:: public TypeCode UINT32
 
       An unsigned 32-bit integer.
 
 
-   .. field:: public TypeCode U_INT64
+   .. field:: public TypeCode UINT64
 
       An unsigned 64-bit integer.
 

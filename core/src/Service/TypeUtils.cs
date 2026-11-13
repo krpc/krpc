@@ -1176,17 +1176,7 @@ namespace KRPC.Service
                 result["code"] = "DICTIONARY";
                 result["types"] = spec.Types.Select (SerializeType).ToList ();
             } else if (IsAMessageType (type)) {
-                var name = type.ToString ();
-                var camelCase = name.Substring (name.LastIndexOf ('.') + 1);
-                var snakeCase = string.Empty;
-                for (var i = 0; i < camelCase.Length-1; i++) {
-                    if (char.IsLower(camelCase[i]) && char.IsUpper(camelCase[i+1]))
-                        snakeCase += camelCase[i] + "_";
-                    else
-                        snakeCase += camelCase[i];
-                }
-                snakeCase += camelCase[camelCase.Length-1];
-                result["code"] = snakeCase.ToUpperInvariant();
+                result["code"] = Naming.UpperSnakeCase (type.Name);
             }
             if (!result.Contains ("code"))
                 throw new ArgumentException ("Type " + type + " is not a valid kRPC type");

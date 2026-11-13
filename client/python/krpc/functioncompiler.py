@@ -4556,8 +4556,8 @@ class _Compiler:
         return {
             KRPC.Type.SINT32: self._expr.constant_int,
             KRPC.Type.SINT64: self._expr.constant_long,
-            KRPC.Type.UINT32: self._expr.constant_u_int,
-            KRPC.Type.UINT64: self._expr.constant_u_long,
+            KRPC.Type.UINT32: self._expr.constant_uint,
+            KRPC.Type.UINT64: self._expr.constant_ulong,
         }[code](value)
 
     def _widened_expression(

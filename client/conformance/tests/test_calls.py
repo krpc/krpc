@@ -1,6 +1,8 @@
 """Call requirements: calling the members of a service."""
 
+import json
 import math
+import os
 import sys
 import time
 
@@ -146,23 +148,13 @@ def to_string(value):
     return invocation("TestService", "Int32ToString", values.sint32(value))
 
 
-# Example names in each case, as the server defines them and as the client exposes them
-NAMES = {
-    "snake": {
-        "Server": "server",
-        "MyServer": "my_server",
-        "Int32ToString": "int32_to_string",
-        "32ToString": "32_to_string",
-        "ToInt32": "to_int32",
-        "HTTPS": "https",
-        "HTTPServer": "http_server",
-        "MyHTTPServer": "my_http_server",
-        "HTTPServerSSL": "http_server_ssl",
-        "HTTP_Server": "http__server",
-        "foobar": "foobar",
-        "foo_bar": "foo__bar",
-    },
-}
+# The test vectors of the name case conversion specification: each name, as the server defines it,
+# and its form in each case
+with open(
+    os.path.join(os.path.dirname(os.path.dirname(__file__)), "names.json"),
+    encoding="utf-8",
+) as names_file:
+    NAMES = json.load(names_file)
 
 
 def member_name(procedure, style):
@@ -687,14 +679,12 @@ def test_exposed_members(connected, control, roster):
 
 @profile("definitions")
 def test_member_name_case(client, server, scripted_server):
-    """Member names are in the case the language names its members in. In snake case, an
-    underscore goes before each capital that starts a word, where a word starts after a lower
-    case letter or a digit, or before the last capital of a run followed by a lower case
-    letter. An underscore in the name is doubled."""
-    names = NAMES[client.conventions.naming.case]
+    """Member names are in the case the language names its members in, converted as
+    :ref:`client-design-name-case` specifies."""
+    case = client.conventions.naming.case
     enumeration = KRPC.Enumeration(name="Names")
-    for i, name in enumerate(names):
-        enumeration.values.add(name=name, value=i)
+    for i, vector in enumerate(NAMES):
+        enumeration.values.add(name=vector["name"], value=i)
     with_definitions(
         client,
         server,
@@ -702,7 +692,7 @@ def test_member_name_case(client, server, scripted_server):
         KRPC.Service(name="Names", enumerations=[enumeration]),
     )
     try:
-        assert client.members("Names", "Names") == set(names.values())
+        assert client.members("Names", "Names") == {x[case] for x in NAMES}
     finally:
         client.close()
 

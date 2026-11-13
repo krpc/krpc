@@ -43,17 +43,17 @@ TEST_F(test_function_stream, test_a_number_argument_widens_to_its_parameter) {
 
 TEST_F(test_function_stream, test_a_number_argument_does_not_narrow_to_its_parameter) {
   ASSERT_THROW(krpc::run<float>(identity(conn, KType::float_(conn)), 2.5), std::invalid_argument);
-  auto to_unsigned = identity(conn, KType::u_int(conn));
+  auto to_unsigned = identity(conn, KType::uint(conn));
   ASSERT_THROW(krpc::run<uint32_t>(to_unsigned, static_cast<int64_t>(5)), std::invalid_argument);
   ASSERT_THROW(krpc::run<uint32_t>(to_unsigned, static_cast<uint64_t>(5)), std::invalid_argument);
 }
 
 TEST_F(test_function_stream,
        test_a_signed_argument_converts_to_an_unsigned_parameter_if_not_negative) {
-  auto to_unsigned = identity(conn, KType::u_int(conn));
+  auto to_unsigned = identity(conn, KType::uint(conn));
   ASSERT_EQ(5u, krpc::run<uint32_t>(to_unsigned, 5));
   ASSERT_EQ(5u, krpc::run<uint32_t>(to_unsigned, static_cast<int16_t>(5)));
-  auto to_unsigned_long = identity(conn, KType::u_long(conn));
+  auto to_unsigned_long = identity(conn, KType::ulong(conn));
   ASSERT_EQ(5u, krpc::run<uint64_t>(to_unsigned_long, static_cast<int64_t>(5)));
   ASSERT_EQ(5u, krpc::run<uint64_t>(to_unsigned_long, static_cast<uint32_t>(5)));
   ASSERT_THROW(krpc::run<uint64_t>(to_unsigned_long, static_cast<int64_t>(-5)),

@@ -16,10 +16,6 @@ local service = {}
 -- and the values hold no types, as Lua 5.1 and LuaJIT have no ephemeron tables.
 service.procedures = setmetatable({}, { __mode = 'k' })
 
-local regex_multi_uppercase = '([A-Z]+)([A-Z][a-z0-9])'
-local regex_single_uppercase = '([a-z0-9])([A-Z])'
-local regex_underscores = '(.)_'
-
 -- Lower case the ASCII letters in a string. string.lower goes through the C
 -- library and so follows LC_CTYPE, which in Turkish locales maps I onto a
 -- dotless i. These names have to match the identifiers the server sends
@@ -30,11 +26,89 @@ local function ascii_lower(str)
   end))
 end
 
---- Convert camel case to snake case, e.g. GetServices -> get_services
-function service.to_snake_case(camel_case)
-  local result = camel_case:gsub(regex_underscores, '%1__')
-  result = result:gsub(regex_single_uppercase, '%1_%2')
-  return ascii_lower(result:gsub(regex_multi_uppercase, '%1_%2'))
+-- The words of a name, by the rules on the client design page
+local COMPOUND_WORDS = { 'UInt', 'ULong', 'SInt', 'FoV' }
+
+local function is_upper(name, i)
+  return name:sub(i, i):match('^[A-Z]$') ~= nil
+end
+
+local function is_lower(name, i)
+  return name:sub(i, i):match('^[a-z]$') ~= nil
+end
+
+-- The index past the run of characters matching a pattern from i
+local function skip(name, i, pattern)
+  local _, last = name:find('^' .. pattern .. '*', i)
+  return last + 1
+end
+
+-- The index past the acronym at i, or nil if there is none
+local function acronym(name, i)
+  local stop = skip(name, i, '[A-Z]')
+  if stop > i and not is_lower(name, stop) then
+    return stop
+  end
+  if stop > i + 1 then
+    return stop - 1
+  end
+  return nil
+end
+
+-- The index past the digits at i and the lower case letters after them, which the word before takes
+local function word_digits(name, i)
+  local stop = skip(name, i, '[0-9]')
+  if stop > i and acronym(name, stop) == nil then
+    return skip(name, stop, '[a-z]')
+  end
+  return i
+end
+
+-- The index past the word at i, which is not past the end of the name
+local function word_end(name, i)
+  for _, word in ipairs(COMPOUND_WORDS) do
+    if name:sub(i, i + #word - 1) == word and not is_lower(name, i + #word) then
+      return word_digits(name, i + #word)
+    end
+  end
+  local capitals = skip(name, i, '[A-Z]')
+  if capitals > i + 1 and name:sub(capitals, capitals) == 's' and not is_lower(name, capitals + 1) then
+    return word_digits(name, capitals + 1)
+  end
+  local stop = acronym(name, i)
+  if stop then
+    return word_digits(name, stop)
+  end
+  stop = skip(name, is_upper(name, i) and i + 1 or i, '[a-z]')
+  if stop > i + 1 or (stop > i and not is_upper(name, i)) then
+    return word_digits(name, stop)
+  end
+  stop = skip(name, i, '[0-9]')
+  if stop > i then
+    return acronym(name, stop) or skip(name, stop, '[a-z]')
+  end
+  return i + 1
+end
+
+-- The words of a name with no underscore, e.g. UInt64ToString -> UInt64, To, String
+local function split_words(name)
+  local words = {}
+  local i = 1
+  while i <= #name do
+    local stop = word_end(name, i)
+    table.insert(words, name:sub(i, stop - 1))
+    i = stop
+  end
+  return words
+end
+
+--- Convert a name to snake case, e.g. GetServices -> get_services
+function service.to_snake_case(name)
+  local parts = {}
+  for part in (name .. '_'):gmatch('([^_]*)_') do
+    table.insert(parts, ascii_lower(table.concat(split_words(part), '_')))
+  end
+  return table.concat(parts, '__')
 end
 
 local KEYWORDS = Set{

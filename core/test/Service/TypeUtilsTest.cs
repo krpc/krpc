@@ -629,6 +629,9 @@ namespace KRPC.Test.Service
         [TestCase ("{\"code\":\"STRING\"}", typeof(string))]
         [TestCase ("{\"code\":\"SINT64\"}", typeof(long))]
         [TestCase ("{\"code\":\"STREAM\"}", typeof(global::KRPC.Service.Messages.Stream))]
+        [TestCase ("{\"code\":\"PROCEDURE_CALL\"}", typeof(global::KRPC.Service.Messages.ProcedureCall))]
+        [TestCase ("{\"code\":\"SERVICES\"}", typeof(global::KRPC.Service.Messages.Services))]
+        [TestCase ("{\"code\":\"EVENT\"}", typeof(global::KRPC.Service.Messages.Event))]
         [TestCase ("{\"code\":\"CLASS\",\"service\":\"TestService\",\"name\":\"TestClass\"}",
                    typeof(TestService.TestClass))]
         [TestCase ("{\"code\":\"ENUMERATION\",\"service\":\"TestService\",\"name\":\"TestEnum\"}",

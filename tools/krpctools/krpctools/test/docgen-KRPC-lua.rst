@@ -445,13 +445,13 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
       :param value: The value.
 
-   .. staticmethod:: constant_u_int(value: number): KRPC.Expression
+   .. staticmethod:: constant_uint(value: number): KRPC.Expression
 
       A constant value of unsigned integer type.
 
       :param value: The value.
 
-   .. staticmethod:: constant_u_long(value: number): KRPC.Expression
+   .. staticmethod:: constant_ulong(value: number): KRPC.Expression
 
       A constant value of unsigned long integer type.
 
@@ -1620,11 +1620,11 @@ Main kRPC service, used by clients to interact with basic server functionality.
          The value types of a tuple, the value type of a list or set, or the key and value
          types of a dictionary. An empty list for any other type.
 
-   .. staticmethod:: u_int(): KRPC.Type
+   .. staticmethod:: uint(): KRPC.Type
 
       An unsigned 32-bit integer type.
 
-   .. staticmethod:: u_long(): KRPC.Type
+   .. staticmethod:: ulong(): KRPC.Type
 
       An unsigned 64-bit integer type.
 
@@ -1735,12 +1735,12 @@ Main kRPC service, used by clients to interact with basic server functionality.
       A list, with the type of its values in :attr:`KRPC.Type.types`.
 
 
-   .. data:: s_int32
+   .. data:: sint32
 
       A signed 32-bit integer.
 
 
-   .. data:: s_int64
+   .. data:: sint64
 
       A signed 64-bit integer.
 
@@ -1765,12 +1765,12 @@ Main kRPC service, used by clients to interact with basic server functionality.
       A tuple, with the types of its values in :attr:`KRPC.Type.types`.
 
 
-   .. data:: u_int32
+   .. data:: uint32
 
       An unsigned 32-bit integer.
 
 
-   .. data:: u_int64
+   .. data:: uint64
 
       An unsigned 64-bit integer.
 

@@ -1219,26 +1219,6 @@ public class TestService extends RemoteService {
         return (org.javatuples.Pair<Integer,Boolean>) Decoder.decode(_data.getValue(), krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL)), this.connection);
     }
 
-    @SuppressWarnings({ "unchecked" })
-    @RPCInfo(service = "TestService", procedure = "UInt32ToString", types = _Types.class)
-    public String uInt32ToString(int value) {
-        ByteString[] _args = new ByteString[] {
-            Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32))
-        };
-        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "UInt32ToString", _args);
-        return (String) Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
-    }
-
-    @SuppressWarnings({ "unchecked" })
-    @RPCInfo(service = "TestService", procedure = "UInt64ToString", types = _Types.class)
-    public String uInt64ToString(long value) {
-        ByteString[] _args = new ByteString[] {
-            Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT64))
-        };
-        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "UInt64ToString", _args);
-        return (String) Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
-    }
-
     /**
      * Procedure whose default is the largest uint.
      */
@@ -1252,6 +1232,16 @@ public class TestService extends RemoteService {
         return (java.util.List<Integer>) Decoder.decode(_data.getValue(), krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32)), this.connection);
     }
 
+    @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "UInt32ToString", types = _Types.class)
+    public String uint32ToString(int value) {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32))
+        };
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "UInt32ToString", _args);
+        return (String) Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
+    }
+
     /**
      * Procedure whose default is the largest ulong.
      */
@@ -1263,6 +1253,16 @@ public class TestService extends RemoteService {
         };
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "Uint64SpecialDefaults", _args);
         return (java.util.List<Long>) Decoder.decode(_data.getValue(), krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT64)), this.connection);
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "UInt64ToString", types = _Types.class)
+    public String uint64ToString(long value) {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT64))
+        };
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "UInt64ToString", _args);
+        return (String) Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
     }
 
     /**
@@ -2843,14 +2843,14 @@ public class TestService extends RemoteService {
             PARAMETER_TYPES.put("ThrowMappedException", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
             RETURN_TYPES.put("TupleDefault", krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL)));
             PARAMETER_TYPES.put("TupleDefault", new krpc.schema.KRPC.Type[] { krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL)) });
-            RETURN_TYPES.put("UInt32ToString", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
-            PARAMETER_TYPES.put("UInt32ToString", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32) });
-            RETURN_TYPES.put("UInt64ToString", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
-            PARAMETER_TYPES.put("UInt64ToString", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT64) });
             RETURN_TYPES.put("Uint32SpecialDefaults", krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32)));
             PARAMETER_TYPES.put("Uint32SpecialDefaults", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32) });
+            RETURN_TYPES.put("UInt32ToString", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
+            PARAMETER_TYPES.put("UInt32ToString", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32) });
             RETURN_TYPES.put("Uint64SpecialDefaults", krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT64)));
             PARAMETER_TYPES.put("Uint64SpecialDefaults", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT64) });
+            RETURN_TYPES.put("UInt64ToString", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
+            PARAMETER_TYPES.put("UInt64ToString", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT64) });
             RETURN_TYPES.put("get_DeprecatedProperty", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
             PARAMETER_TYPES.put("get_DeprecatedProperty", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("set_DeprecatedProperty", null);

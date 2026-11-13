@@ -423,22 +423,22 @@ public class KRPC extends RemoteService {
         /**
          * A signed 32-bit integer.
          */
-        S_INT32(3),
+        SINT32(3),
 
         /**
          * A signed 64-bit integer.
          */
-        S_INT64(4),
+        SINT64(4),
 
         /**
          * An unsigned 32-bit integer.
          */
-        U_INT32(5),
+        UINT32(5),
 
         /**
          * An unsigned 64-bit integer.
          */
-        U_INT64(6),
+        UINT64(6),
 
         /**
          * A boolean.
@@ -508,13 +508,13 @@ public class KRPC extends RemoteService {
             case 2:
                  return FLOAT;
             case 3:
-                 return S_INT32;
+                 return SINT32;
             case 4:
-                 return S_INT64;
+                 return SINT64;
             case 5:
-                 return U_INT32;
+                 return UINT32;
             case 6:
-                 return U_INT64;
+                 return UINT64;
             case 7:
                  return BOOL;
             case 8:
@@ -5771,7 +5771,7 @@ public class KRPC extends RemoteService {
          */
         @SuppressWarnings({ "unchecked" })
         @RPCInfo(service = "KRPC", procedure = "Type_static_UInt", types = _Types.class)
-        public static krpc.client.services.KRPC.Type uInt(Connection connection)
+        public static krpc.client.services.KRPC.Type uint(Connection connection)
         {
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Type_static_UInt");
             return (krpc.client.services.KRPC.Type) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), connection);
@@ -5782,7 +5782,7 @@ public class KRPC extends RemoteService {
          */
         @SuppressWarnings({ "unchecked" })
         @RPCInfo(service = "KRPC", procedure = "Type_static_ULong", types = _Types.class)
-        public static krpc.client.services.KRPC.Type uLong(Connection connection)
+        public static krpc.client.services.KRPC.Type ulong(Connection connection)
         {
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Type_static_ULong");
             return (krpc.client.services.KRPC.Type) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("KRPC", "Type"), connection);
@@ -5995,18 +5995,18 @@ public class KRPC extends RemoteService {
              * An unsigned 32-bit integer type.
              */
             @RPCInfo(service = "KRPC", procedure = "Type_static_UInt", types = _Types.class)
-            public krpc.client.services.KRPC.Type uInt()
+            public krpc.client.services.KRPC.Type uint()
             {
-                return krpc.client.services.KRPC.Type.uInt(connection);
+                return krpc.client.services.KRPC.Type.uint(connection);
             }
 
             /**
              * An unsigned 64-bit integer type.
              */
             @RPCInfo(service = "KRPC", procedure = "Type_static_ULong", types = _Types.class)
-            public krpc.client.services.KRPC.Type uLong()
+            public krpc.client.services.KRPC.Type ulong()
             {
-                return krpc.client.services.KRPC.Type.uLong(connection);
+                return krpc.client.services.KRPC.Type.ulong(connection);
             }
         }
     }

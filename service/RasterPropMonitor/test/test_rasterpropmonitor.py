@@ -567,7 +567,7 @@ class TestExternalCamera(RasterPropMonitorTestCase):
 
     def tearDown(self):
         for camera in self.cameras:
-            camera.fo_v = camera.max_fo_v
+            camera.fov = camera.max_fov
 
     def test_cameras(self):
         self.assertEqual(
@@ -578,16 +578,16 @@ class TestExternalCamera(RasterPropMonitorTestCase):
 
     def test_field_of_view(self):
         camera = self.cameras[0]
-        self.assertEqual(5, camera.min_fo_v)
-        self.assertEqual(60, camera.max_fo_v)
-        self.assertEqual(60, camera.fo_v)
-        camera.fo_v = 30
-        self.assertEqual(30, camera.fo_v)
+        self.assertEqual(5, camera.min_fov)
+        self.assertEqual(60, camera.max_fov)
+        self.assertEqual(60, camera.fov)
+        camera.fov = 30
+        self.assertEqual(30, camera.fov)
         # A value outside the camera's range is clamped
-        camera.fo_v = 1
-        self.assertEqual(5, camera.fo_v)
-        camera.fo_v = 100
-        self.assertEqual(60, camera.fo_v)
+        camera.fov = 1
+        self.assertEqual(5, camera.fov)
+        camera.fov = 100
+        self.assertEqual(60, camera.fov)
 
     def test_image(self):
         # The flight camera is on, as the cameras render in any camera mode
@@ -603,7 +603,7 @@ class TestExternalCamera(RasterPropMonitorTestCase):
     def test_image_field_of_view(self):
         camera = self.cameras[0]
         wide = camera.image(160, 120)
-        camera.fo_v = camera.min_fo_v
+        camera.fov = camera.min_fov
         self.assertNotEqual(wide, camera.image(160, 120))
 
     def test_image_size(self):

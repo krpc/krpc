@@ -287,9 +287,9 @@ class TestService : public ::krpc::RemoteService {
 
   std::optional<std::tuple<int32_t, int64_t> > echo_nullable_tuple(std::optional<std::tuple<int32_t, int64_t> > t);
 
-  std::optional<uint32_t> echo_nullable_u_int(std::optional<uint32_t> value);
+  std::optional<uint32_t> echo_nullable_uint(std::optional<uint32_t> value);
 
-  std::optional<uint64_t> echo_nullable_u_long(std::optional<uint64_t> value);
+  std::optional<uint64_t> echo_nullable_ulong(std::optional<uint64_t> value);
 
   std::set<std::string> echo_string_set(std::set<std::string> h);
 
@@ -417,9 +417,9 @@ class TestService : public ::krpc::RemoteService {
 
   int64_t string_to_int64(std::string value);
 
-  uint32_t string_to_u_int32(std::string value);
+  uint32_t string_to_uint32(std::string value);
 
-  uint64_t string_to_u_int64(std::string value);
+  uint64_t string_to_uint64(std::string value);
 
   TestService::TestStruct struct_default(TestService::TestStruct x);
 
@@ -462,19 +462,19 @@ class TestService : public ::krpc::RemoteService {
 
   std::tuple<int32_t, bool> tuple_default(std::tuple<int32_t, bool> x);
 
-  std::string u_int32_to_string(uint32_t value);
-
-  std::string u_int64_to_string(uint64_t value);
-
   /**
    * Procedure whose default is the largest uint.
    */
   std::vector<uint32_t> uint32_special_defaults(uint32_t maximum);
 
+  std::string uint32_to_string(uint32_t value);
+
   /**
    * Procedure whose default is the largest ulong.
    */
   std::vector<uint64_t> uint64_special_defaults(uint64_t maximum);
+
+  std::string uint64_to_string(uint64_t value);
 
   /**
    * Deprecated property documentation string.
@@ -595,9 +595,9 @@ class TestService : public ::krpc::RemoteService {
 
   ::krpc::Stream<std::optional<std::tuple<int32_t, int64_t> >> echo_nullable_tuple_stream(std::optional<std::tuple<int32_t, int64_t> > t);
 
-  ::krpc::Stream<std::optional<uint32_t>> echo_nullable_u_int_stream(std::optional<uint32_t> value);
+  ::krpc::Stream<std::optional<uint32_t>> echo_nullable_uint_stream(std::optional<uint32_t> value);
 
-  ::krpc::Stream<std::optional<uint64_t>> echo_nullable_u_long_stream(std::optional<uint64_t> value);
+  ::krpc::Stream<std::optional<uint64_t>> echo_nullable_ulong_stream(std::optional<uint64_t> value);
 
   ::krpc::Stream<std::set<std::string>> echo_string_set_stream(std::set<std::string> h);
 
@@ -699,9 +699,9 @@ class TestService : public ::krpc::RemoteService {
 
   ::krpc::Stream<int64_t> string_to_int64_stream(std::string value);
 
-  ::krpc::Stream<uint32_t> string_to_u_int32_stream(std::string value);
+  ::krpc::Stream<uint32_t> string_to_uint32_stream(std::string value);
 
-  ::krpc::Stream<uint64_t> string_to_u_int64_stream(std::string value);
+  ::krpc::Stream<uint64_t> string_to_uint64_stream(std::string value);
 
   ::krpc::Stream<TestService::TestStruct> struct_default_stream(TestService::TestStruct x);
 
@@ -729,13 +729,13 @@ class TestService : public ::krpc::RemoteService {
 
   ::krpc::Stream<std::tuple<int32_t, bool>> tuple_default_stream(std::tuple<int32_t, bool> x);
 
-  ::krpc::Stream<std::string> u_int32_to_string_stream(uint32_t value);
-
-  ::krpc::Stream<std::string> u_int64_to_string_stream(uint64_t value);
-
   ::krpc::Stream<std::vector<uint32_t>> uint32_special_defaults_stream(uint32_t maximum);
 
+  ::krpc::Stream<std::string> uint32_to_string_stream(uint32_t value);
+
   ::krpc::Stream<std::vector<uint64_t>> uint64_special_defaults_stream(uint64_t maximum);
+
+  ::krpc::Stream<std::string> uint64_to_string_stream(uint64_t value);
 
   [[deprecated("Use string_property instead.")]] ::krpc::Stream<std::string> deprecated_property_stream();
 
@@ -821,9 +821,9 @@ class TestService : public ::krpc::RemoteService {
 
   ::krpc::schema::ProcedureCall echo_nullable_tuple_call(std::optional<std::tuple<int32_t, int64_t> > t);
 
-  ::krpc::schema::ProcedureCall echo_nullable_u_int_call(std::optional<uint32_t> value);
+  ::krpc::schema::ProcedureCall echo_nullable_uint_call(std::optional<uint32_t> value);
 
-  ::krpc::schema::ProcedureCall echo_nullable_u_long_call(std::optional<uint64_t> value);
+  ::krpc::schema::ProcedureCall echo_nullable_ulong_call(std::optional<uint64_t> value);
 
   ::krpc::schema::ProcedureCall echo_string_set_call(std::set<std::string> h);
 
@@ -925,9 +925,9 @@ class TestService : public ::krpc::RemoteService {
 
   ::krpc::schema::ProcedureCall string_to_int64_call(std::string value);
 
-  ::krpc::schema::ProcedureCall string_to_u_int32_call(std::string value);
+  ::krpc::schema::ProcedureCall string_to_uint32_call(std::string value);
 
-  ::krpc::schema::ProcedureCall string_to_u_int64_call(std::string value);
+  ::krpc::schema::ProcedureCall string_to_uint64_call(std::string value);
 
   ::krpc::schema::ProcedureCall struct_default_call(TestService::TestStruct x);
 
@@ -955,13 +955,13 @@ class TestService : public ::krpc::RemoteService {
 
   ::krpc::schema::ProcedureCall tuple_default_call(std::tuple<int32_t, bool> x);
 
-  ::krpc::schema::ProcedureCall u_int32_to_string_call(uint32_t value);
-
-  ::krpc::schema::ProcedureCall u_int64_to_string_call(uint64_t value);
-
   ::krpc::schema::ProcedureCall uint32_special_defaults_call(uint32_t maximum);
 
+  ::krpc::schema::ProcedureCall uint32_to_string_call(uint32_t value);
+
   ::krpc::schema::ProcedureCall uint64_special_defaults_call(uint64_t maximum);
+
+  ::krpc::schema::ProcedureCall uint64_to_string_call(uint64_t value);
 
   [[deprecated("Use string_property instead.")]] ::krpc::schema::ProcedureCall deprecated_property_call();
 
@@ -2278,7 +2278,7 @@ inline std::optional<std::tuple<int32_t, int64_t> > TestService::echo_nullable_t
   return _result;
 }
 
-inline std::optional<uint32_t> TestService::echo_nullable_u_int(std::optional<uint32_t> value) {
+inline std::optional<uint32_t> TestService::echo_nullable_uint(std::optional<uint32_t> value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
@@ -2289,7 +2289,7 @@ inline std::optional<uint32_t> TestService::echo_nullable_u_int(std::optional<ui
   return _result;
 }
 
-inline std::optional<uint64_t> TestService::echo_nullable_u_long(std::optional<uint64_t> value) {
+inline std::optional<uint64_t> TestService::echo_nullable_ulong(std::optional<uint64_t> value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
@@ -2838,7 +2838,7 @@ inline int64_t TestService::string_to_int64(std::string value) {
   return _result;
 }
 
-inline uint32_t TestService::string_to_u_int32(std::string value) {
+inline uint32_t TestService::string_to_uint32(std::string value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
@@ -2849,7 +2849,7 @@ inline uint32_t TestService::string_to_u_int32(std::string value) {
   return _result;
 }
 
-inline uint64_t TestService::string_to_u_int64(std::string value) {
+inline uint64_t TestService::string_to_uint64(std::string value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
@@ -2988,28 +2988,6 @@ inline std::tuple<int32_t, bool> TestService::tuple_default(std::tuple<int32_t, 
   return _result;
 }
 
-inline std::string TestService::u_int32_to_string(uint32_t value) {
-  std::vector<krpc::encoder::Value> _args;
-  _args.reserve(1);
-  _args.push_back(encoder::encode_arg(value));
-  auto _data = this->_connection.invoke("TestService", "UInt32ToString", _args, ::krpc::Connection::Returns::value);
-  std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
-  return _result;
-}
-
-inline std::string TestService::u_int64_to_string(uint64_t value) {
-  std::vector<krpc::encoder::Value> _args;
-  _args.reserve(1);
-  _args.push_back(encoder::encode_arg(value));
-  auto _data = this->_connection.invoke("TestService", "UInt64ToString", _args, ::krpc::Connection::Returns::value);
-  std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
-  return _result;
-}
-
 inline std::vector<uint32_t> TestService::uint32_special_defaults(uint32_t maximum = (std::numeric_limits<uint32_t>::max)()) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
@@ -3021,12 +2999,34 @@ inline std::vector<uint32_t> TestService::uint32_special_defaults(uint32_t maxim
   return _result;
 }
 
+inline std::string TestService::uint32_to_string(uint32_t value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  auto _data = this->_connection.invoke("TestService", "UInt32ToString", _args, ::krpc::Connection::Returns::value);
+  std::string _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), &this->_connection);
+  return _result;
+}
+
 inline std::vector<uint64_t> TestService::uint64_special_defaults(uint64_t maximum = (std::numeric_limits<uint64_t>::max)()) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(maximum));
   auto _data = this->_connection.invoke("TestService", "Uint64SpecialDefaults", _args, ::krpc::Connection::Returns::value);
   std::vector<uint64_t> _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), &this->_connection);
+  return _result;
+}
+
+inline std::string TestService::uint64_to_string(uint64_t value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  auto _data = this->_connection.invoke("TestService", "UInt64ToString", _args, ::krpc::Connection::Returns::value);
+  std::string _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), &this->_connection);
   return _result;
@@ -3371,14 +3371,14 @@ inline ::krpc::Stream<std::optional<std::tuple<int32_t, int64_t> >> TestService:
   return ::krpc::Stream<std::optional<std::tuple<int32_t, int64_t> >>(this->_connection, this->_connection.build_call("TestService", "EchoNullableTuple", _args));
 }
 
-inline ::krpc::Stream<std::optional<uint32_t>> TestService::echo_nullable_u_int_stream(std::optional<uint32_t> value) {
+inline ::krpc::Stream<std::optional<uint32_t>> TestService::echo_nullable_uint_stream(std::optional<uint32_t> value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
   return ::krpc::Stream<std::optional<uint32_t>>(this->_connection, this->_connection.build_call("TestService", "EchoNullableUInt", _args));
 }
 
-inline ::krpc::Stream<std::optional<uint64_t>> TestService::echo_nullable_u_long_stream(std::optional<uint64_t> value) {
+inline ::krpc::Stream<std::optional<uint64_t>> TestService::echo_nullable_ulong_stream(std::optional<uint64_t> value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
@@ -3735,14 +3735,14 @@ inline ::krpc::Stream<int64_t> TestService::string_to_int64_stream(std::string v
   return ::krpc::Stream<int64_t>(this->_connection, this->_connection.build_call("TestService", "StringToInt64", _args));
 }
 
-inline ::krpc::Stream<uint32_t> TestService::string_to_u_int32_stream(std::string value) {
+inline ::krpc::Stream<uint32_t> TestService::string_to_uint32_stream(std::string value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
   return ::krpc::Stream<uint32_t>(this->_connection, this->_connection.build_call("TestService", "StringToUInt32", _args));
 }
 
-inline ::krpc::Stream<uint64_t> TestService::string_to_u_int64_stream(std::string value) {
+inline ::krpc::Stream<uint64_t> TestService::string_to_uint64_stream(std::string value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
@@ -3825,20 +3825,6 @@ inline ::krpc::Stream<std::tuple<int32_t, bool>> TestService::tuple_default_stre
   return ::krpc::Stream<std::tuple<int32_t, bool>>(this->_connection, this->_connection.build_call("TestService", "TupleDefault", _args));
 }
 
-inline ::krpc::Stream<std::string> TestService::u_int32_to_string_stream(uint32_t value) {
-  std::vector<krpc::encoder::Value> _args;
-  _args.reserve(1);
-  _args.push_back(encoder::encode_arg(value));
-  return ::krpc::Stream<std::string>(this->_connection, this->_connection.build_call("TestService", "UInt32ToString", _args));
-}
-
-inline ::krpc::Stream<std::string> TestService::u_int64_to_string_stream(uint64_t value) {
-  std::vector<krpc::encoder::Value> _args;
-  _args.reserve(1);
-  _args.push_back(encoder::encode_arg(value));
-  return ::krpc::Stream<std::string>(this->_connection, this->_connection.build_call("TestService", "UInt64ToString", _args));
-}
-
 inline ::krpc::Stream<std::vector<uint32_t>> TestService::uint32_special_defaults_stream(uint32_t maximum = (std::numeric_limits<uint32_t>::max)()) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
@@ -3846,11 +3832,25 @@ inline ::krpc::Stream<std::vector<uint32_t>> TestService::uint32_special_default
   return ::krpc::Stream<std::vector<uint32_t>>(this->_connection, this->_connection.build_call("TestService", "Uint32SpecialDefaults", _args));
 }
 
+inline ::krpc::Stream<std::string> TestService::uint32_to_string_stream(uint32_t value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  return ::krpc::Stream<std::string>(this->_connection, this->_connection.build_call("TestService", "UInt32ToString", _args));
+}
+
 inline ::krpc::Stream<std::vector<uint64_t>> TestService::uint64_special_defaults_stream(uint64_t maximum = (std::numeric_limits<uint64_t>::max)()) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(maximum));
   return ::krpc::Stream<std::vector<uint64_t>>(this->_connection, this->_connection.build_call("TestService", "Uint64SpecialDefaults", _args));
+}
+
+inline ::krpc::Stream<std::string> TestService::uint64_to_string_stream(uint64_t value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  return ::krpc::Stream<std::string>(this->_connection, this->_connection.build_call("TestService", "UInt64ToString", _args));
 }
 
 inline ::krpc::Stream<std::string> TestService::deprecated_property_stream() {
@@ -4137,14 +4137,14 @@ inline ::krpc::schema::ProcedureCall TestService::echo_nullable_tuple_call(std::
   return this->_connection.build_call("TestService", "EchoNullableTuple", _args);
 }
 
-inline ::krpc::schema::ProcedureCall TestService::echo_nullable_u_int_call(std::optional<uint32_t> value) {
+inline ::krpc::schema::ProcedureCall TestService::echo_nullable_uint_call(std::optional<uint32_t> value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
   return this->_connection.build_call("TestService", "EchoNullableUInt", _args);
 }
 
-inline ::krpc::schema::ProcedureCall TestService::echo_nullable_u_long_call(std::optional<uint64_t> value) {
+inline ::krpc::schema::ProcedureCall TestService::echo_nullable_ulong_call(std::optional<uint64_t> value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
@@ -4501,14 +4501,14 @@ inline ::krpc::schema::ProcedureCall TestService::string_to_int64_call(std::stri
   return this->_connection.build_call("TestService", "StringToInt64", _args);
 }
 
-inline ::krpc::schema::ProcedureCall TestService::string_to_u_int32_call(std::string value) {
+inline ::krpc::schema::ProcedureCall TestService::string_to_uint32_call(std::string value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
   return this->_connection.build_call("TestService", "StringToUInt32", _args);
 }
 
-inline ::krpc::schema::ProcedureCall TestService::string_to_u_int64_call(std::string value) {
+inline ::krpc::schema::ProcedureCall TestService::string_to_uint64_call(std::string value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
@@ -4591,20 +4591,6 @@ inline ::krpc::schema::ProcedureCall TestService::tuple_default_call(std::tuple<
   return this->_connection.build_call("TestService", "TupleDefault", _args);
 }
 
-inline ::krpc::schema::ProcedureCall TestService::u_int32_to_string_call(uint32_t value) {
-  std::vector<krpc::encoder::Value> _args;
-  _args.reserve(1);
-  _args.push_back(encoder::encode_arg(value));
-  return this->_connection.build_call("TestService", "UInt32ToString", _args);
-}
-
-inline ::krpc::schema::ProcedureCall TestService::u_int64_to_string_call(uint64_t value) {
-  std::vector<krpc::encoder::Value> _args;
-  _args.reserve(1);
-  _args.push_back(encoder::encode_arg(value));
-  return this->_connection.build_call("TestService", "UInt64ToString", _args);
-}
-
 inline ::krpc::schema::ProcedureCall TestService::uint32_special_defaults_call(uint32_t maximum = (std::numeric_limits<uint32_t>::max)()) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
@@ -4612,11 +4598,25 @@ inline ::krpc::schema::ProcedureCall TestService::uint32_special_defaults_call(u
   return this->_connection.build_call("TestService", "Uint32SpecialDefaults", _args);
 }
 
+inline ::krpc::schema::ProcedureCall TestService::uint32_to_string_call(uint32_t value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  return this->_connection.build_call("TestService", "UInt32ToString", _args);
+}
+
 inline ::krpc::schema::ProcedureCall TestService::uint64_special_defaults_call(uint64_t maximum = (std::numeric_limits<uint64_t>::max)()) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(maximum));
   return this->_connection.build_call("TestService", "Uint64SpecialDefaults", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::uint64_to_string_call(uint64_t value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  return this->_connection.build_call("TestService", "UInt64ToString", _args);
 }
 
 inline ::krpc::schema::ProcedureCall TestService::deprecated_property_call() {

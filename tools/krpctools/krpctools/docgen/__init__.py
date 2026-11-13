@@ -8,10 +8,10 @@ from typing import cast
 
 import jinja2
 
-from krpc.utils import snake_case
+from krpc.utils import lower_camel_case, snake_case
 
 from ..definitions import Definitions
-from ..utils import indent, lower_camel_case, single_line
+from ..utils import indent, single_line
 from ..version import __version__
 from .cnano import CnanoDomain
 from .cpp import CppDomain

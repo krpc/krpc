@@ -174,9 +174,9 @@ def _build_remote_type(
     if code == KRPC.Type.SINT64:
         return types.long()
     if code == KRPC.Type.UINT32:
-        return types.u_int()
+        return types.uint()
     if code == KRPC.Type.UINT64:
-        return types.u_long()
+        return types.ulong()
     if code == KRPC.Type.BOOL:
         return types.bool()
     if code == KRPC.Type.STRING:

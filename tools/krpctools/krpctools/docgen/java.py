@@ -12,10 +12,9 @@ from krpc.types import (
     TupleType,
     ValueType,
 )
-from krpc.utils import snake_case
+from krpc.utils import lower_camel_case, upper_snake_case
 
 from ..lang.java import JavaLanguage
-from ..utils import lower_camel_case
 from .domain import Domain
 from .nodes import (
     Class,
@@ -157,7 +156,7 @@ class JavaDomain(Domain[JavaLanguage]):
             name = ".".join(name)
         elif isinstance(obj, EnumerationValue):
             name = name.split(".")
-            name[-1] = snake_case(name[-1]).upper()
+            name[-1] = upper_snake_case(name[-1])
             name = ".".join(name)
         elif isinstance(obj, StructField):
             name = name.split(".")
