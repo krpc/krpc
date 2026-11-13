@@ -107,6 +107,7 @@
     <Compile Include="Utils\EquatableTest.cs" />
     <Compile Include="Utils\HashTest.cs" />
     <Compile Include="Utils\MemberBinderTest.cs" />
+    <Compile Include="Utils\ModAPITest.cs" />
     <Compile Include="Utils\NamingTest.cs" />
     <Compile Include="Utils\ReflectionTest.cs" />
     <Compile Include="Utils\RoundRobinSchedulerTest.cs" />

@@ -19,6 +19,7 @@ namespace KRPC
         public void Start ()
         {
             Addon.InitLogger ();
+            Utils.ModAPI.LoadAll (new Utils.GameModAssemblies ());
             OK = true;
             var errors = new List<string>();
             Scanner.GetServices (errors);
