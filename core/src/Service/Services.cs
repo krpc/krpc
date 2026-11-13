@@ -16,6 +16,8 @@ namespace KRPC.Service
         internal IDictionary<uint, ServiceSignature> ServicesById { get; private set; }
         internal IDictionary<string, IDictionary<uint, ProcedureSignature>> ProceduresById { get; private set; }
         internal IDictionary<Type, Type> MappedExceptionTypes { get; private set; }
+        internal IList<string> Errors { get; private set; }
+        internal IList<string> Warnings { get; private set; }
 
         static Services instance;
 
@@ -34,10 +36,19 @@ namespace KRPC.Service
 
         /// <summary>
         /// Create a Services instance. Scans the loaded assemblies for services, procedures etc.
+        /// A member with an error is left out, and the problems are logged.
         /// </summary>
         Services ()
         {
-            Signatures = Scanner.Scanner.GetServices ();
+            var errors = new List<string> ();
+            var warnings = new List<string> ();
+            Signatures = Scanner.Scanner.GetServices (errors, warnings);
+            Errors = errors.AsReadOnly ();
+            Warnings = warnings.AsReadOnly ();
+            foreach (var error in errors)
+                Logger.WriteLine (error, Logger.Severity.Error);
+            foreach (var warning in warnings)
+                Logger.WriteLine (warning, Logger.Severity.Warning);
             ServicesById = new Dictionary<uint, ServiceSignature> ();
             ProceduresById = new Dictionary<string, IDictionary<uint, ProcedureSignature>> ();
             foreach (var service in Signatures.Values) {
@@ -47,7 +58,7 @@ namespace KRPC.Service
                     procedures [procedure.Id] = procedure;
                 ProceduresById [service.Name] = procedures;
             }
-            MappedExceptionTypes = Scanner.Scanner.GetMappedExceptionTypes ();
+            MappedExceptionTypes = Scanner.Scanner.GetMappedExceptionTypes (Signatures.Values);
         }
 
         public ServiceSignature GetServiceSignature (ProcedureCall call)

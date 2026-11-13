@@ -100,12 +100,62 @@ namespace KRPC.Test.Service
         }
 
         /// <summary>
+        /// Clashes case-insensitively with the TestClass method FloatToString.
+        /// </summary>
+        [KRPCMethod]
+        public static string FLOATTOSTRING (this TestService.TestClass obj)
+        {
+            return obj.Value;
+        }
+
+        /// <summary>
+        /// A getter for the property ClashingExtensions declares in full.
+        /// </summary>
+        [KRPCProperty]
+        public static string GetSplitProperty (this TestService.TestClass obj)
+        {
+            return obj.Value;
+        }
+
+        /// <summary>
+        /// Clashes with the extension method of the same name in ClashingExtensions.
+        /// </summary>
+        [KRPCMethod]
+        public static string ExtensionDeclaredTwice (this TestService.TestClass obj)
+        {
+            return obj.Value;
+        }
+
+        /// <summary>
         /// Adds a setter to a property that TestClass declares read-only.
         /// </summary>
         [KRPCProperty]
         public static void SetClassPropertyAvailableInInheritedGameScene (
             this TestService.TestClass obj, string value)
         {
+        }
+    }
+
+    /// <summary>
+    /// Extension members that clash with those in InvalidExtensions.
+    /// </summary>
+    internal static class ClashingExtensions
+    {
+        [KRPCProperty]
+        public static string GetSplitProperty (this TestService.TestClass obj)
+        {
+            return obj.Value;
+        }
+
+        [KRPCProperty]
+        public static void SetSplitProperty (this TestService.TestClass obj, string value)
+        {
+        }
+
+        [KRPCMethod]
+        public static string ExtensionDeclaredTwice (this TestService.TestClass obj)
+        {
+            return obj.Value;
         }
     }
 }

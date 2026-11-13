@@ -76,19 +76,32 @@ namespace KRPC.Test.Service
         [Test]
         public void ExtensionMembersInAClassThatIsNotPublic ()
         {
+            var errors = new List<string> ();
             var warnings = new List<string> ();
-            var writer = Logger.Writer;
-            var level = Logger.Level;
-            try {
-                Logger.Level = Logger.Severity.Warning;
-                Logger.Writer = (message, severity) => warnings.Add (message);
-                global::KRPC.Service.Scanner.Scanner.GetServices (new List<string> ());
-            } finally {
-                Logger.Writer = writer;
-                Logger.Level = level;
-            }
-            // InvalidExtensions is internal, so its members are named in a warning and skipped
-            Assert.AreEqual (1, warnings.Count (x => x.Contains ("InvalidExtensions")));
+            global::KRPC.Service.Scanner.Scanner.GetServices (errors, warnings);
+            CollectionAssert.IsEmpty (errors);
+            // The classes are internal, so their members are named in a warning and skipped
+            Assert.AreEqual (new [] {
+                "Ignoring the extension members of KRPC.Test.Service.InvalidExtensions, as the class is not public",
+                "Ignoring the extension members of KRPC.Test.Service.ClashingExtensions, as the class is not public"
+            }, warnings.OrderByDescending (x => x.Contains ("InvalidExtensions")).ToArray ());
+        }
+
+        [Test]
+        public void WarningsAreErrorsWithoutAWarningList ()
+        {
+            var errors = new List<string> ();
+            global::KRPC.Service.Scanner.Scanner.GetServices (errors);
+            Assert.AreEqual (2, errors.Count);
+            Assert.Throws<global::KRPC.Service.ServiceException> (
+                () => global::KRPC.Service.Scanner.Scanner.GetServices ());
+        }
+
+        [Test]
+        public void ServiceProblemsOfTheTestAssembly ()
+        {
+            CollectionAssert.IsEmpty (global::KRPC.Service.ServiceProblems.Errors);
+            Assert.AreEqual (2, global::KRPC.Service.ServiceProblems.Warnings.Count);
         }
 
         [Test]
@@ -134,8 +147,7 @@ namespace KRPC.Test.Service
                              service.Procedures ["TestClass_set_ExtensionReadWriteProperty"].Id);
         }
 
-        [Test]
-        public void ProcedureIdsShared ()
+        static global::KRPC.Service.Scanner.ServiceSignature ServiceWithProceduresSharingAnId ()
         {
             var service = new global::KRPC.Service.Scanner.ServiceSignature (typeof(TestService), 1);
             var classType = typeof(TestService.TestClass);
@@ -143,14 +155,41 @@ namespace KRPC.Test.Service
             service.AddClassExtensionMethod (cls, classType, typeof(InvalidExtensions).GetMethod ("FirstMethodSharingAnId"));
             service.AddClassExtensionMethod (cls, classType, typeof(InvalidExtensions).GetMethod ("SecondMethodSharingAnId"));
             service.AddProcedure (typeof(TestService).GetMethod ("ProcedureNoArgsNoReturn"));
+            return service;
+        }
+
+        [Test]
+        public void ProcedureIdsShared ()
+        {
+            var service = ServiceWithProceduresSharingAnId ();
             var errors = new List<string> ();
             global::KRPC.Service.Scanner.Scanner.CheckProcedureIds (service, errors);
             Assert.AreEqual (1, errors.Count);
             StringAssert.Contains (
                 "TestService.TestClass_FirstMethodSharingAnId, TestService.TestClass_SecondMethodSharingAnId share the id 7",
                 errors [0]);
+            // Neither procedure keeps the id, so both are left out
+            CollectionAssert.AreEquivalent (new [] { "ProcedureNoArgsNoReturn" }, service.Procedures.Keys);
             Assert.Throws<global::KRPC.Service.ServiceException> (
-                () => global::KRPC.Service.Scanner.Scanner.CheckProcedureIds (service, null));
+                () => global::KRPC.Service.Scanner.Scanner.CheckProcedureIds (ServiceWithProceduresSharingAnId (), null));
+        }
+
+        [Test]
+        public void ServiceIdsShared ()
+        {
+            var services = new Dictionary<string, global::KRPC.Service.Scanner.ServiceSignature> {
+                { "A", new global::KRPC.Service.Scanner.ServiceSignature ("A", 1) },
+                { "B", new global::KRPC.Service.Scanner.ServiceSignature ("B", 1) },
+                { "C", new global::KRPC.Service.Scanner.ServiceSignature ("C", 0) },
+                { "D", new global::KRPC.Service.Scanner.ServiceSignature ("D", 2) }
+            };
+            var errors = new List<string> ();
+            global::KRPC.Service.Scanner.Scanner.CheckServiceIds (services, errors);
+            Assert.AreEqual (new [] {
+                "In service C: Service has id 0",
+                "Services A, B share the id 1"
+            }, errors.ToArray ());
+            CollectionAssert.AreEquivalent (new [] { "D" }, services.Keys);
         }
 
         [Test]
@@ -183,6 +222,11 @@ namespace KRPC.Test.Service
             global::KRPC.Service.Scanner.Scanner.CheckTypes (service, errors);
             Assert.AreEqual (1, errors.Count);
             StringAssert.Contains ("TestTypes.TESTCLASS3, TestTypes.TestClass3 share a name", errors [0]);
+            CollectionAssert.IsEmpty (service.Classes);
+            CollectionAssert.IsEmpty (service.Enumerations);
+            service = new global::KRPC.Service.Scanner.ServiceSignature ("TestTypes", 1);
+            service.AddClass (typeof(TestClass3));
+            service.AddEnum (typeof(TESTCLASS3));
             Assert.Throws<global::KRPC.Service.ServiceException> (
                 () => global::KRPC.Service.Scanner.Scanner.CheckTypes (service, null));
         }
@@ -197,10 +241,11 @@ namespace KRPC.Test.Service
             global::KRPC.Service.Scanner.Scanner.CheckTypes (service, errors);
             Assert.AreEqual (1, errors.Count);
             StringAssert.Contains ("TestTypes.TestClassSharingAnId3, TestTypes.TestEnumWithAnId3 share the id 21", errors [0]);
+            CollectionAssert.IsEmpty (service.Classes);
+            CollectionAssert.IsEmpty (service.Enumerations);
         }
 
-        [Test]
-        public void MemberNamesShared ()
+        static global::KRPC.Service.Scanner.ServiceSignature ServiceWithMemberNamesShared ()
         {
             var service = new global::KRPC.Service.Scanner.ServiceSignature ("TestNames", 1);
             // The check reads the members of a scope from the procedure names
@@ -211,6 +256,13 @@ namespace KRPC.Test.Service
                 "Cls_Bar", "Cls_get_BAR", "Cls_Baz", "Cls_static_Baz", "Cls_Qux", "Cls_get_Qux",
                 "Other_Bar", "Other_Baz" })
                 service.Procedures [name] = procedure;
+            return service;
+        }
+
+        [Test]
+        public void MemberNamesShared ()
+        {
+            var service = ServiceWithMemberNamesShared ();
             var errors = new List<string> ();
             global::KRPC.Service.Scanner.Scanner.CheckMemberNames (service, errors);
             Assert.AreEqual (new [] {
@@ -222,8 +274,10 @@ namespace KRPC.Test.Service
                 "In service TestNames: Members TestNames.Cls.Baz, TestNames.Cls.Baz (static) share the name Baz, compared case-insensitively",
                 "In service TestNames: Members TestNames.Cls.Qux, TestNames.Cls.Qux (property) share the name Qux, compared case-insensitively"
             }, errors.ToArray ());
+            // Every member that shares a name is left out
+            CollectionAssert.AreEquivalent (new [] { "get_Name", "set_Name", "Other_Bar", "Other_Baz" }, service.Procedures.Keys);
             Assert.Throws<global::KRPC.Service.ServiceException> (
-                () => global::KRPC.Service.Scanner.Scanner.CheckMemberNames (service, null));
+                () => global::KRPC.Service.Scanner.Scanner.CheckMemberNames (ServiceWithMemberNamesShared (), null));
         }
 
         [Test]
@@ -246,6 +300,8 @@ namespace KRPC.Test.Service
                 "In service TestNames: Values TestNames.E.FOO, TestNames.E.Foo share the name FOO, compared case-insensitively",
                 "In service TestNames: Fields TestNames.S.BAR, TestNames.S.Bar share the name BAR, compared case-insensitively"
             }, errors.ToArray ());
+            CollectionAssert.IsEmpty (service.Enumerations);
+            CollectionAssert.IsEmpty (service.Structs);
         }
 
         [Test]
@@ -262,6 +318,170 @@ namespace KRPC.Test.Service
                 "Parameters TestService.TestClass_MethodWithParametersSharingAName(VALUE), " +
                 "TestService.TestClass_MethodWithParametersSharingAName(value) share the name VALUE",
                 errors [0]);
+            Assert.IsFalse (service.Procedures.ContainsKey ("TestClass_MethodWithParametersSharingAName"));
+        }
+
+        [Test]
+        public void ExtensionMemberNamedAsAClassMember ()
+        {
+            var service = new global::KRPC.Service.Scanner.ServiceSignature (typeof(TestService), 1);
+            var classType = typeof(TestService.TestClass);
+            var cls = service.AddClass (classType);
+            service.AddClassMethod (cls, classType, classType.GetMethod ("FloatToString"));
+            Assert.Throws<global::KRPC.Service.ServiceException> (
+                () => service.AddClassExtensionMethod (cls, classType, typeof(InvalidExtensions).GetMethod ("FloatToString")));
+            service.RemoveDuplicates ();
+            // The class keeps its own member
+            CollectionAssert.AreEquivalent (new [] { "TestClass_FloatToString" }, service.Procedures.Keys);
+        }
+
+        [Test]
+        public void ExtensionMemberSharingANameWithAClassMember ()
+        {
+            var service = new global::KRPC.Service.Scanner.ServiceSignature (typeof(TestService), 1);
+            var classType = typeof(TestService.TestClass);
+            var cls = service.AddClass (classType);
+            service.AddClassMethod (cls, classType, classType.GetMethod ("FloatToString"));
+            service.AddClassExtensionMethod (cls, classType, typeof(InvalidExtensions).GetMethod ("FLOATTOSTRING"));
+            var errors = new List<string> ();
+            global::KRPC.Service.Scanner.Scanner.CheckMemberNames (service, errors);
+            Assert.AreEqual (1, errors.Count);
+            // The class keeps its own member, and loses the extension member
+            CollectionAssert.AreEquivalent (new [] { "TestClass_FloatToString" }, service.Procedures.Keys);
+        }
+
+        [Test]
+        public void ExtensionMembersNamedAlike ()
+        {
+            var service = new global::KRPC.Service.Scanner.ServiceSignature (typeof(TestService), 1);
+            var classType = typeof(TestService.TestClass);
+            var cls = service.AddClass (classType);
+            service.AddClassExtensionMethod (cls, classType, typeof(InvalidExtensions).GetMethod ("ExtensionDeclaredTwice"));
+            var exn = Assert.Throws<global::KRPC.Service.ServiceException> (
+                () => service.AddClassExtensionMethod (cls, classType, typeof(ClashingExtensions).GetMethod ("ExtensionDeclaredTwice")));
+            StringAssert.Contains ("which is declared by KRPC.Test.Service.InvalidExtensions", exn.Message);
+            service.RemoveDuplicates ();
+            // Neither takes precedence, so both are left out
+            CollectionAssert.IsEmpty (service.Procedures);
+        }
+
+        [TestCase (false)]
+        [TestCase (true)]
+        public void ExtensionPropertySplitAcrossClasses (bool getterFirst)
+        {
+            var service = new global::KRPC.Service.Scanner.ServiceSignature (typeof(TestService), 1);
+            var classType = typeof(TestService.TestClass);
+            var cls = service.AddClass (classType);
+            var getter = typeof(InvalidExtensions).GetMethod ("GetSplitProperty");
+            var accessors = new [] {
+                typeof(ClashingExtensions).GetMethod ("GetSplitProperty"),
+                typeof(ClashingExtensions).GetMethod ("SetSplitProperty")
+            };
+            var order = getterFirst ? new [] { getter }.Concat (accessors) : accessors.Concat (new [] { getter });
+            foreach (var method in order) {
+                try {
+                    service.AddClassExtensionProperty (cls, classType, method);
+                } catch (global::KRPC.Service.ServiceException) {
+                }
+            }
+            service.RemoveDuplicates ();
+            // Neither class takes precedence, whatever the order
+            CollectionAssert.IsEmpty (service.Procedures);
+        }
+
+        [Test]
+        public void ExtensionMemberSharingANameWithTwoClassMembers ()
+        {
+            var service = new global::KRPC.Service.Scanner.ServiceSignature (typeof(TestService), 1);
+            var classType = typeof(TestService.TestClass);
+            var cls = service.AddClass (classType);
+            service.AddClassMethod (cls, classType, classType.GetMethod ("FloatToString"));
+            // Another member of the class itself, whose name differs only in case
+            service.Procedures ["TestClass_FloatTostring"] = service.Procedures ["TestClass_FloatToString"];
+            service.AddClassExtensionMethod (cls, classType, typeof(InvalidExtensions).GetMethod ("FLOATTOSTRING"));
+            var errors = new List<string> ();
+            global::KRPC.Service.Scanner.Scanner.CheckMemberNames (service, errors);
+            Assert.AreEqual (1, errors.Count);
+            // The class's own members still clash once the extension member goes, so all go
+            CollectionAssert.IsEmpty (service.Procedures);
+        }
+
+        [Test]
+        public void UnavailableTypeInAnotherService ()
+        {
+            var service = new global::KRPC.Service.Scanner.ServiceSignature (typeof(TestService), 1);
+            service.AddEnum (typeof(TestService.TestEnum));
+            service.AddStruct (typeof(TestService.TestStruct));
+            var other = new global::KRPC.Service.Scanner.ServiceSignature ("Other", 2);
+            other.AddProcedure (typeof(TestService).GetMethod ("EchoStruct"));
+            var services = new Dictionary<string, global::KRPC.Service.Scanner.ServiceSignature> {
+                { service.Name, service }, { other.Name, other }
+            };
+            var errors = new List<string> ();
+            global::KRPC.Service.Scanner.Scanner.RemoveUnavailableMembers (services, errors);
+            CollectionAssert.IsEmpty (service.Structs);
+            CollectionAssert.IsEmpty (other.Procedures);
+            Assert.AreEqual (
+                "In service Other: Procedure Other.EchoStruct is unavailable, as it uses KRPC.Test.Service.TestService+TestStruct, which is unavailable",
+                errors [1]);
+        }
+
+        [Test]
+        public void TypeDeclaredTwice ()
+        {
+            var service = new global::KRPC.Service.Scanner.ServiceSignature ("TestService3Name", 1);
+            service.AddClass (typeof(TestClass3));
+            var exn = Assert.Throws<global::KRPC.Service.ServiceException> (() => service.AddClass (typeof(TestClass3)));
+            Assert.AreEqual ("Class TestService3Name.TestClass3 is declared more than once, so each copy is unavailable", exn.Message);
+            service.AddEnum (typeof(TestEnumWithAnId3));
+            service.RemoveDuplicates ();
+            CollectionAssert.IsEmpty (service.Classes);
+            CollectionAssert.AreEquivalent (new [] { "TestEnumWithAnId3" }, service.Enumerations.Keys);
+        }
+
+        [Test]
+        public void MembersUsingAnUnavailableType ()
+        {
+            // TestStruct has a TestClass field, and the service has no TestClass
+            var service = new global::KRPC.Service.Scanner.ServiceSignature (typeof(TestService), 1);
+            service.AddEnum (typeof(TestService.TestEnum));
+            service.AddStruct (typeof(TestService.TestStruct));
+            service.AddStruct (typeof(TestService.TestNestedStruct));
+            service.AddProcedure (typeof(TestService).GetMethod ("EchoStruct"));
+            service.AddProcedure (typeof(TestService).GetMethod ("CreateTestObject"));
+            service.AddProcedure (typeof(TestService).GetMethod ("ProcedureEnumReturn"));
+            var services = new Dictionary<string, global::KRPC.Service.Scanner.ServiceSignature> { { service.Name, service } };
+            var errors = new List<string> ();
+            global::KRPC.Service.Scanner.Scanner.RemoveUnavailableMembers (services, errors);
+            // Leaving out TestStruct leaves out the struct and the procedure that use it
+            Assert.AreEqual (new [] {
+                "In service TestService: Struct TestService.TestStruct is unavailable, as its field ObjectField uses KRPC.Test.Service.TestService+TestClass, which is unavailable",
+                "In service TestService: Procedure TestService.CreateTestObject is unavailable, as it uses KRPC.Test.Service.TestService+TestClass, which is unavailable",
+                "In service TestService: Struct TestService.TestNestedStruct is unavailable, as its field StructField uses KRPC.Test.Service.TestService+TestStruct, which is unavailable",
+                "In service TestService: Procedure TestService.EchoStruct is unavailable, as it uses KRPC.Test.Service.TestService+TestStruct, which is unavailable"
+            }, errors.ToArray ());
+            CollectionAssert.AreEquivalent (new [] { "TestEnum" }, service.Enumerations.Keys);
+            CollectionAssert.IsEmpty (service.Structs);
+            CollectionAssert.AreEquivalent (new [] { "ProcedureEnumReturn" }, service.Procedures.Keys);
+        }
+
+        [Test]
+        public void MembersOfAnUnavailableClass ()
+        {
+            var service = new global::KRPC.Service.Scanner.ServiceSignature (typeof(TestService), 1);
+            var classType = typeof(TestService.TestClass);
+            var cls = service.AddClass (classType);
+            service.AddClassMethod (cls, classType, classType.GetMethod ("FloatToString"));
+            service.AddClassMethod (cls, classType, classType.GetMethod ("StaticMethod"));
+            service.AddClassExtensionMethod (cls, classType, typeof(InvalidExtensions).GetMethod ("ExtensionDeclaredTwice"));
+            service.AddProcedure (typeof(TestService).GetMethod ("ProcedureNoArgsNoReturn"));
+            service.Classes.Remove (cls);
+            var services = new Dictionary<string, global::KRPC.Service.Scanner.ServiceSignature> { { service.Name, service } };
+            var errors = new List<string> ();
+            global::KRPC.Service.Scanner.Scanner.RemoveUnavailableMembers (services, errors);
+            // The error that left out the class names it, so its members add none
+            CollectionAssert.IsEmpty (errors);
+            CollectionAssert.AreEquivalent (new [] { "ProcedureNoArgsNoReturn" }, service.Procedures.Keys);
         }
 
         [Test]
@@ -297,17 +517,18 @@ namespace KRPC.Test.Service
         [Test]
         public void ServiceNamesShared ()
         {
-            var services = new [] {
-                new global::KRPC.Service.Scanner.ServiceSignature ("TestServices", 1),
-                new global::KRPC.Service.Scanner.ServiceSignature ("TESTSERVICES", 2),
-                new global::KRPC.Service.Scanner.ServiceSignature ("OtherService", 3)
+            var services = new Dictionary<string, global::KRPC.Service.Scanner.ServiceSignature> {
+                { "TestServices", new global::KRPC.Service.Scanner.ServiceSignature ("TestServices", 1) },
+                { "TESTSERVICES", new global::KRPC.Service.Scanner.ServiceSignature ("TESTSERVICES", 2) },
+                { "OtherService", new global::KRPC.Service.Scanner.ServiceSignature ("OtherService", 3) }
             };
+            Assert.Throws<global::KRPC.Service.ServiceException> (
+                () => global::KRPC.Service.Scanner.Scanner.CheckServiceNames (services, null));
             var errors = new List<string> ();
             global::KRPC.Service.Scanner.Scanner.CheckServiceNames (services, errors);
             Assert.AreEqual (1, errors.Count);
             StringAssert.Contains ("Services TESTSERVICES, TestServices share a name", errors [0]);
-            Assert.Throws<global::KRPC.Service.ServiceException> (
-                () => global::KRPC.Service.Scanner.Scanner.CheckServiceNames (services, null));
+            CollectionAssert.AreEquivalent (new [] { "OtherService" }, services.Keys);
         }
 
         [Test]
@@ -336,6 +557,7 @@ namespace KRPC.Test.Service
             global::KRPC.Service.Scanner.Scanner.CheckTypes (service, errors);
             Assert.AreEqual (1, errors.Count);
             StringAssert.Contains ("Type TESTCLASS3.TestClass3 has the name of its service", errors [0]);
+            CollectionAssert.IsEmpty (service.Classes);
         }
 
         [Test]

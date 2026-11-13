@@ -20,6 +20,10 @@ namespace KRPC.Utils
                 try {
                     types = assembly.GetTypes ();
                 } catch (ReflectionTypeLoadException exn) {
+                    // An attribute search skips the assembly, as reading an attribute of one of
+                    // its types can throw, and GetUnloadableAssemblies reports it
+                    if (include != null)
+                        continue;
                     types = exn.Types.Where (x => x != null).ToArray ();
                 }
                 foreach (var type in types)
@@ -46,7 +50,8 @@ namespace KRPC.Utils
         public static IEnumerable<Type> GetTypesWith<TAttribute> (bool inherit = false)
             where TAttribute : Attribute
         {
-            foreach (var type in AllTypes()) {
+            var attributeAssembly = typeof(TAttribute).Assembly;
+            foreach (var type in AllTypes (x => CanDeclare (x, attributeAssembly))) {
                 if (type.IsDefined (typeof(TAttribute), inherit))
                     yield return type;
             }
@@ -79,6 +84,28 @@ namespace KRPC.Utils
                     return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// The assemblies that reference the given assembly and have types that fail to load,
+        /// such as from a missing dependency, each with the reason. The attribute searches skip
+        /// them.
+        /// </summary>
+        public static IEnumerable<KeyValuePair<Assembly, string>> GetUnloadableAssemblies (Assembly referenced)
+        {
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies ()) {
+                if (assembly.FullName.Contains ("Assembly-CSharp") || !CanDeclare (assembly, referenced))
+                    continue;
+                string reason = null;
+                try {
+                    assembly.GetTypes ();
+                } catch (ReflectionTypeLoadException exn) {
+                    var messages = exn.LoaderExceptions.Where (x => x != null).Select (x => x.Message).Distinct ().ToArray ();
+                    reason = messages.Length > 0 ? string.Join ("; ", messages) : exn.Message;
+                }
+                if (reason != null)
+                    yield return new KeyValuePair<Assembly, string> (assembly, reason);
+            }
         }
 
         /// <summary>
