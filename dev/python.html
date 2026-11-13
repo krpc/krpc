@@ -2183,9 +2183,40 @@ set, and <code class="docutils literal notranslate"><span class="pre">clear</spa
 <li><p>Local function definitions with annotated parameter types, and lambdas without parameters
 assigned to names. Calls to them run on the server.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">raise</span></code>, and <code class="docutils literal notranslate"><span class="pre">try</span></code> with <code class="docutils literal notranslate"><span class="pre">except</span></code> and <code class="docutils literal notranslate"><span class="pre">finally</span></code> clauses.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">match</span></code>, with literal, value, capture, wildcard, <code class="docutils literal notranslate"><span class="pre">|</span></code> and <code class="docutils literal notranslate"><span class="pre">as</span></code> patterns, and guards.</p></li>
 </ul>
-<p>A function that returns a value must end with a <code class="docutils literal notranslate"><span class="pre">return</span></code> or <code class="docutils literal notranslate"><span class="pre">raise</span></code> statement, an <code class="docutils literal notranslate"><span class="pre">if</span></code> or
-<code class="docutils literal notranslate"><span class="pre">try</span></code> that returns or raises on every path, or a <code class="docutils literal notranslate"><span class="pre">while</span> <span class="pre">True</span></code> loop with no <code class="docutils literal notranslate"><span class="pre">break</span></code>.</p>
+<p>A function that returns a value must end with a <code class="docutils literal notranslate"><span class="pre">return</span></code> or <code class="docutils literal notranslate"><span class="pre">raise</span></code> statement, an <code class="docutils literal notranslate"><span class="pre">if</span></code>,
+<code class="docutils literal notranslate"><span class="pre">match</span></code> or <code class="docutils literal notranslate"><span class="pre">try</span></code> that returns or raises on every path, or a <code class="docutils literal notranslate"><span class="pre">while</span> <span class="pre">True</span></code> loop with no
+<code class="docutils literal notranslate"><span class="pre">break</span></code>. A <code class="docutils literal notranslate"><span class="pre">match</span></code> covers every path when its last case is <code class="docutils literal notranslate"><span class="pre">_</span></code> or a capture, with no
+guard.</p>
+<p>This stream gives a description of where the vessel is, with a <code class="docutils literal notranslate"><span class="pre">match</span></code> on its situation:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
+<span class="n">VesselSituation</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">VesselSituation</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">where</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">match</span> <span class="n">vessel</span><span class="o">.</span><span class="n">situation</span><span class="p">:</span>
+        <span class="k">case</span> <span class="p">(</span>
+            <span class="n">VesselSituation</span><span class="o">.</span><span class="n">pre_launch</span>
+            <span class="o">|</span> <span class="n">VesselSituation</span><span class="o">.</span><span class="n">landed</span>
+            <span class="o">|</span> <span class="n">VesselSituation</span><span class="o">.</span><span class="n">splashed</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="s2">"on the surface"</span>
+        <span class="k">case</span> <span class="n">VesselSituation</span><span class="o">.</span><span class="n">orbiting</span> <span class="o">|</span> <span class="n">VesselSituation</span><span class="o">.</span><span class="n">escaping</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">"in space"</span>
+        <span class="k">case</span><span class="w"> </span><span class="k">_</span> <span class="k">if</span> <span class="n">vessel</span><span class="o">.</span><span class="n">flight</span><span class="p">()</span><span class="o">.</span><span class="n">mean_altitude</span> <span class="o">&lt;</span> <span class="mi">1000</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">"near the ground"</span>
+        <span class="k">case</span><span class="w"> </span><span class="k">_</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">"in flight"</span>
+
+
+<span class="k">with</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_stream</span><span class="p">(</span><span class="n">where</span><span class="p">)</span> <span class="k">as</span> <span class="n">situation</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"The vessel is"</span><span class="p">,</span> <span class="n">situation</span><span class="p">())</span>
+</pre></div>
+</div>
 </section>
 <section id="variables-and-types">
 <h3>Variables and Types<a class="headerlink" href="#variables-and-types" title="Link to this heading">#</a></h3>
@@ -2213,7 +2244,8 @@ elements is an error.</p></li>
 <ul class="simple">
 <li><p>A name assigned anywhere in the function is local to all of it, as in Python.</p></li>
 <li><p>Reading a variable is an error unless every path to the read assigns it first. An assignment
-in a loop or a <code class="docutils literal notranslate"><span class="pre">try</span></code> body does not count after the loop or the <code class="docutils literal notranslate"><span class="pre">try</span></code>.</p></li>
+in a loop or a <code class="docutils literal notranslate"><span class="pre">try</span></code> body does not count after the loop or the <code class="docutils literal notranslate"><span class="pre">try</span></code>. A capture in a
+<code class="docutils literal notranslate"><span class="pre">match</span></code> case with a guard does not count in the cases after it.</p></li>
 <li><p>A local function reads a variable when it is called, so the variable can be assigned after the
 function’s definition, if every path to each call assigns it.</p></li>
 <li><p>A local function defined or redefined in a nested block can only be called within that

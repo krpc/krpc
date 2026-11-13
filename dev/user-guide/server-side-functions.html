@@ -2544,7 +2544,8 @@ effects.</p>
 case. It runs the body of the first case with a test value equal to the value, as
 <a class="reference internal" href="../python/api/krpc/expressions.html#KRPC.Expression.equal" title="KRPC.Expression.equal"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Expression.equal()</span></code></a> compares them. The test values are evaluated in order, up to the first
 match. A case with no test values is the default. A <a class="reference internal" href="../python/api/krpc/expressions.html#KRPC.Expression.break_" title="KRPC.Expression.break_"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Expression.break_()</span></code></a> in a body ends the
-enclosing loop, as in Python’s <code class="docutils literal notranslate"><span class="pre">match</span></code>.</p>
+enclosing loop, as in Python’s <code class="docutils literal notranslate"><span class="pre">match</span></code>. The Python client compiles the cases of a <code class="docutils literal notranslate"><span class="pre">match</span></code>
+statement that have no guard to it.</p>
 <p><a class="reference internal" href="../python/api/krpc/expressions.html#KRPC.Expression.switch" title="KRPC.Expression.switch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Expression.switch()</span></code></a> takes the same arguments, and behaves as <code class="docutils literal notranslate"><span class="pre">switch</span></code> in C, C++, Java and
 JavaScript. It runs the bodies from the matching case on, and a <a class="reference internal" href="../python/api/krpc/expressions.html#KRPC.Expression.break_" title="KRPC.Expression.break_"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Expression.break_()</span></code></a> in a
 body ends the switch.</p>

@@ -524,6 +524,7 @@ Python client
   * :breaking:`Breaking` Raise ``ConnectionError`` for malformed service definitions (:issue:`1333`)
   * Raise ``EncodingError`` for every value that fails to decode, including a string or tuple cut short (:issue:`1333`)
 
+* Compile ``match`` statements in server side functions (:issue:`1337`)
 
 
 krpctools

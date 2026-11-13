@@ -551,9 +551,16 @@ A function body can contain:
 * Local function definitions with annotated parameter types, and lambdas without parameters
   assigned to names. Calls to them run on the server.
 * ``raise``, and ``try`` with ``except`` and ``finally`` clauses.
+* ``match``, with literal, value, capture, wildcard, ``|`` and ``as`` patterns, and guards.
 
-A function that returns a value must end with a ``return`` or ``raise`` statement, an ``if`` or
-``try`` that returns or raises on every path, or a ``while True`` loop with no ``break``.
+A function that returns a value must end with a ``return`` or ``raise`` statement, an ``if``,
+``match`` or ``try`` that returns or raises on every path, or a ``while True`` loop with no
+``break``. A ``match`` covers every path when its last case is ``_`` or a capture, with no
+guard.
+
+This stream gives a description of where the vessel is, with a ``match`` on its situation:
+
+.. literalinclude:: /scripts/python/CompiledMatch.py
 
 Variables and Types
 ^^^^^^^^^^^^^^^^^^^
@@ -580,7 +587,8 @@ Scope
 
 * A name assigned anywhere in the function is local to all of it, as in Python.
 * Reading a variable is an error unless every path to the read assigns it first. An assignment
-  in a loop or a ``try`` body does not count after the loop or the ``try``.
+  in a loop or a ``try`` body does not count after the loop or the ``try``. A capture in a
+  ``match`` case with a guard does not count in the cases after it.
 * A local function reads a variable when it is called, so the variable can be assigned after the
   function's definition, if every path to each call assigns it.
 * A local function defined or redefined in a nested block can only be called within that
