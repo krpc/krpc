@@ -1084,7 +1084,8 @@ This loop adds 10 to a total for the values 1 and 2, and 1 for any other value. 
 case. It runs the body of the first case with a test value equal to the value, as
 :meth:`Expression.equal` compares them. The test values are evaluated in order, up to the first
 match. A case with no test values is the default. A :meth:`Expression.break_` in a body ends the
-enclosing loop, as in Python's ``match``.
+enclosing loop, as in Python's ``match``. The Python client compiles the cases of a ``match``
+statement that have no guard to it.
 
 :meth:`Expression.switch` takes the same arguments, and behaves as ``switch`` in C, C++, Java and
 JavaScript. It runs the bodies from the matching case on, and a :meth:`Expression.break_` in a

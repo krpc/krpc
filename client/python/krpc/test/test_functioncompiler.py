@@ -663,6 +663,462 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
 
         self.assertEqual(5, self.conn.run(count_up))
 
+    def test_match_literals(self) -> None:
+        def classify(x: int) -> int:
+            result = 0
+            match x:
+                case 1:
+                    result = 10
+                case 2 | 3:
+                    result = 20
+                case -1:
+                    result = 30
+                case _:
+                    result = 40
+            return result
+
+        for x, expected in [(1, 10), (2, 20), (3, 20), (-1, 30), (7, 40)]:
+            self.assertEqual(expected, self.conn.run(classify, x))
+
+    def test_match_with_no_case_for_a_value_runs_no_case(self) -> None:
+        def classify(x: str) -> int:
+            result = 0
+            match x:
+                case "a":
+                    result = 1
+                case "b":
+                    pass
+            return result
+
+        self.assertEqual(1, self.conn.run(classify, "a"))
+        self.assertEqual(0, self.conn.run(classify, "b"))
+        self.assertEqual(0, self.conn.run(classify, "c"))
+
+    def test_match_value_patterns(self) -> None:
+        service = self.conn.test_service
+        TestEnum = service.TestEnum
+
+        def classify(x: int) -> int:
+            match service.enum_echo(TestEnum.value_b if x == 1 else TestEnum.value_c):
+                case TestEnum.value_a:
+                    return 1
+                case TestEnum.value_b:
+                    return 2
+                case _:
+                    return 3
+
+        self.assertEqual(2, self.conn.run(classify, 1))
+        self.assertEqual(3, self.conn.run(classify, 2))
+
+    def test_match_none_and_bools(self) -> None:
+        service = self.conn.test_service
+
+        def nullable(x: int) -> int:
+            match service.echo_nullable_int(None if x == 0 else x):
+                case None:
+                    return 0
+                case 5:
+                    return 5
+                case _:
+                    return -1
+
+        def boolean(x: bool) -> int:
+            match x:
+                case True:
+                    return 1
+                case False:
+                    return 2
+            return 3
+
+        def not_nullable(x: int) -> int:
+            match x:
+                case None:
+                    return 0
+            return 1
+
+        def not_bool(x: int) -> int:
+            match x:
+                case True:
+                    return 0
+            return 1
+
+        self.assertEqual(0, self.conn.run(nullable, 0))
+        self.assertEqual(5, self.conn.run(nullable, 5))
+        self.assertEqual(-1, self.conn.run(nullable, 6))
+        self.assertEqual(1, self.conn.run(boolean, True))
+        self.assertEqual(2, self.conn.run(boolean, False))
+        with self.assertRaisesRegex(CompilationError, "case None needs a match"):
+            self.conn.compile(not_nullable)
+        with self.assertRaisesRegex(CompilationError, "case True needs a bool"):
+            self.conn.compile(not_bool)
+
+    def test_match_captures(self) -> None:
+        def classify(x: int) -> int:
+            match x * 2:
+                case 0 | 2 as small:
+                    return small + 100
+                case other:
+                    return other
+
+        self.assertEqual(100, self.conn.run(classify, 0))
+        self.assertEqual(102, self.conn.run(classify, 1))
+        self.assertEqual(8, self.conn.run(classify, 4))
+
+    def test_match_guards(self) -> None:
+        def classify(x: int) -> int:
+            match x:
+                case 1 | 2 if x > 1:
+                    return 2
+                case 1:
+                    return 1
+                case n if n < 0:
+                    return -n
+                case 10:
+                    return 10
+                case _:
+                    return 0
+
+        for x, expected in [(1, 1), (2, 2), (-4, 4), (10, 10), (5, 0)]:
+            self.assertEqual(expected, self.conn.run(classify, x))
+
+    def test_match_evaluates_the_subject_once(self) -> None:
+        counter = self.conn.test_service.counter
+
+        def classify() -> int:
+            match counter("Compiler.match"):
+                case 0:
+                    return 0
+                case n if n > 100:
+                    return 100
+                case n:
+                    return n
+
+        self.assertEqual(1, self.conn.run(classify))
+        self.assertEqual(2, self.conn.run(classify))
+
+    def test_match_break_and_continue_belong_to_the_loop(self) -> None:
+        def total() -> int:
+            result = 0
+            for x in [1, 2, 3, 4, 5]:
+                match x:
+                    case 2:
+                        continue
+                    case 4:
+                        break
+                result += x
+            return result
+
+        self.assertEqual(4, self.conn.run(total))
+
+    def test_function_ending_in_a_match(self) -> None:
+        def returns(x: int) -> int:
+            match x:
+                case 1:
+                    return 10
+                case _:
+                    raise ValueError("unknown")
+
+        def no_default(x: int) -> int:  # pyright: ignore[reportReturnType]
+            match x:
+                case 1:
+                    return 10
+
+        self.assertEqual(10, self.conn.run(returns, 1))
+        with self.assertRaisesRegex(
+            CompilationError, "must end with a return.*if, match or try"
+        ):
+            self.conn.compile(no_default)
+
+    def test_match_definite_assignment(self) -> None:
+        def every_case(x: int) -> int:
+            match x:
+                case 1:
+                    y = 10
+                case _:
+                    y = 20
+            return y
+
+        def some_cases(x: int) -> int:
+            match x:
+                case 1:
+                    y = 10
+            return y  # pyright: ignore[reportPossiblyUnboundVariable]
+
+        def capture_of_a_failed_guard(x: int) -> int:
+            match x:
+                case n if n > 0:
+                    return 1
+                case _:
+                    return n
+
+        self.assertEqual(20, self.conn.run(every_case, 2))
+        for function, name in [(some_cases, "y"), (capture_of_a_failed_guard, "n")]:
+            with self.assertRaisesRegex(
+                CompilationError,
+                "'%s' is read before it is assigned on every path" % name,
+            ):
+                self.conn.compile(function)
+
+    def test_match_errors(self) -> None:
+        def mismatch(x: int) -> int:
+            match x:
+                case "a":
+                    return 1
+            return 0
+
+        def sequence(x: int) -> int:
+            match (x, x):
+                case (1, 1):
+                    return 1
+            return 0
+
+        def mapping(x: int) -> int:
+            match {"a": x}:
+                case {"a": 1}:
+                    return 1
+            return 0
+
+        def class_pattern(x: int) -> int:
+            match x:
+                case int():
+                    return 1
+            return 0
+
+        def or_binds(x: int) -> int:
+            match x:
+                case (1 as y) | (2 as y):
+                    return y
+            return 0
+
+        def or_matches_every_value(x: int) -> int:
+            match x:
+                case 1 | _:
+                    return 1
+
+        def bool_with_int(x: bool) -> int:
+            match x:
+                case 1:
+                    return 1
+            return 0
+
+        def none_subject() -> int:
+            match None:
+                case _:
+                    return 1
+
+        def untyped_subject() -> int:
+            x = None
+            match x:
+                case _:
+                    return 1
+
+        def return_from_finally(x: int) -> int:
+            try:
+                x += 1
+            finally:
+                match x:
+                    case 1:
+                        return 1  # noqa: B012
+            return 0
+
+        for function, message in [
+            (mismatch, "cannot compare a value of type int with a value of type str"),
+            (sequence, "sequence patterns are not supported"),
+            (mapping, "mapping patterns are not supported"),
+            (class_pattern, "class patterns are not supported"),
+            (or_binds, "an alternative of an or-pattern cannot bind a name"),
+            (or_matches_every_value, "or-pattern cannot match every value"),
+            (bool_with_int, "cannot compare a value of type bool"),
+            (none_subject, "cannot determine the type of None"),
+            (untyped_subject, "cannot determine the type of variable 'x'"),
+            (return_from_finally, "return cannot leave a finally clause"),
+        ]:
+            with self.assertRaisesRegex(CompilationError, message):
+                self.conn.compile(function)
+
+    def test_match_subject_typed_by_a_case(self) -> None:
+        def accumulate() -> int:
+            total = None
+            for x in [1, 2]:
+                match total:
+                    case t if t is not None and t > 0:
+                        total = t + x
+                    case _:
+                        total = x
+            return total if total is not None else -1
+
+        self.assertEqual(3, self.conn.run(accumulate))
+
+    def test_nested_match_in_a_local_function(self) -> None:
+        def outer(x: int, y: int) -> int:
+            def classify(a: int, b: int) -> int:
+                match a:
+                    case 1:
+                        match b:
+                            case n if n > 5:
+                                return 100 + n
+                            case _:
+                                return 10
+                    case _:
+                        return a * 1000 + b
+
+            return classify(x, y)
+
+        self.assertEqual(107, self.conn.run(outer, 1, 7))
+        self.assertEqual(10, self.conn.run(outer, 1, 3))
+        self.assertEqual(6003, self.conn.run(outer, 6, 3))
+
+    def test_match_guards_in_a_while_loop(self) -> None:
+        def total() -> int:
+            i = 0
+            result = 0
+            while True:
+                i += 1
+                match i:
+                    case n if n % 2 == 0:
+                        continue
+                    case n if n > 7:
+                        break
+                    case n:
+                        result += n
+            return result * 10 + i
+
+        # 1 + 3 + 5 + 7, ending on 9
+        self.assertEqual(169, self.conn.run(total))
+
+    def test_match_nullable_and_float_captures(self) -> None:
+        service = self.conn.test_service
+
+        def nullable(x: int) -> int:
+            match service.echo_nullable_int(None if x == 0 else x):
+                case None | 5:
+                    return -1
+                case n:
+                    return n if n is not None else -2
+
+        def halved(x: int) -> float:
+            match x / 2:
+                case 0.5:
+                    return -1.0
+                case h:
+                    return h
+
+        self.assertEqual(-1, self.conn.run(nullable, 0))
+        self.assertEqual(-1, self.conn.run(nullable, 5))
+        self.assertEqual(6, self.conn.run(nullable, 6))
+        self.assertEqual(-1.0, self.conn.run(halved, 1))
+        self.assertEqual(1.5, self.conn.run(halved, 3))
+
+    def test_match_untyped_read_in_a_guard(self) -> None:
+        def classify(x: int) -> int:
+            z = None
+            result = 0
+            for i in [1, 2]:
+                match x:
+                    case 1 if z is not None:
+                        result = 1
+                    case m:
+                        z = m
+                        result = m + i
+            return result
+
+        self.assertEqual(7, self.conn.run(classify, 5))
+
+    def test_match_capture_assigned_in_a_case_of_an_untyped_subject(self) -> None:
+        def assign() -> int:
+            x = None
+            r = 0
+            for i in [1, 2]:
+                match x:
+                    case y:
+                        y = 5
+                        r = y
+                x = i
+            return r
+
+        self.assertEqual(5, self.conn.run(assign))
+
+    def test_match_failed_pattern_skips_the_guard(self) -> None:
+        counter = self.conn.test_service.counter
+
+        def classify(x: int) -> int:
+            match x:
+                case 1 if counter("Compiler.match_guard") > 0:
+                    return 1
+                case 2:
+                    return 2
+                case _:
+                    return 0
+
+        self.assertEqual(2, self.conn.run(classify, 2))
+        self.assertEqual(0, self.conn.run(classify, 3))
+        self.assertEqual(1, self.conn.run(classify, 1))
+        # The guard ran once, for 1
+        self.assertEqual(2, counter("Compiler.match_guard"))
+
+    def test_match_uint64_and_nullable_bool_subjects(self) -> None:
+        service = self.conn.test_service
+
+        def large(x: str) -> int:
+            match service.string_to_u_int64(x):
+                case 18446744073709551615:
+                    return 1
+                case 0:
+                    return 0
+                case _:
+                    return 2
+
+        def nullable(x: int) -> int:
+            match service.echo_nullable_bool(None if x == 0 else x == 1):
+                case True:
+                    return 1
+                case False:
+                    return 2
+                case None:
+                    return 0
+            return -1
+
+        self.assertEqual(1, self.conn.run(large, "18446744073709551615"))
+        self.assertEqual(0, self.conn.run(large, "0"))
+        self.assertEqual(2, self.conn.run(large, "5"))
+        for x in [0, 1, 2]:
+            self.assertEqual(x, self.conn.run(nullable, x))
+
+    def test_match_in_the_final_if_and_returning_none(self) -> None:
+        def final_if(x: int) -> int:
+            if x > 0:
+                match x:
+                    case 1:
+                        return 10
+                    case _:
+                        return 20
+            else:
+                return 0
+
+        def maybe(x: int):
+            match x:
+                case 1:
+                    return None
+                case _:
+                    return x
+
+        self.assertEqual(10, self.conn.run(final_if, 1))
+        self.assertEqual(20, self.conn.run(final_if, 2))
+        self.assertEqual(0, self.conn.run(final_if, -1))
+        self.assertIsNone(self.conn.run(maybe, 1))
+        self.assertEqual(2, self.conn.run(maybe, 2))
+
+    def test_function_ending_in_a_match_that_raises(self) -> None:
+        def raises(x: int) -> int:
+            match x:
+                case 1:
+                    raise ValueError("one")
+                case _:
+                    raise ValueError("other")
+
+        with self.assertRaisesRegex(Exception, "other"):
+            self.conn.run(raises, 2)
+
     def test_side_effects(self) -> None:
         obj = self.conn.test_service.create_test_object("effects")
         obj.int_property = 1
