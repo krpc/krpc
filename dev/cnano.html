@@ -2013,41 +2013,15 @@ assertion or call a handler on each error from a procedure. The functions that o
 </section>
 <section id="values">
 <span id="cnano-client-values"></span><h2>Values<a class="headerlink" href="#values" title="Link to this heading">#</a></h2>
-<p>Procedures take and return values of these types:</p>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Type</p></th>
-<th class="head"><p>C type</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>Integer</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">int32_t</span></code>, <code class="docutils literal notranslate"><span class="pre">int64_t</span></code>, <code class="docutils literal notranslate"><span class="pre">uint32_t</span></code>, <code class="docutils literal notranslate"><span class="pre">uint64_t</span></code></p></td>
-</tr>
-<tr class="row-odd"><td><p>Floating point number, boolean</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">double</span></code>, <code class="docutils literal notranslate"><span class="pre">bool</span></code></p></td>
-</tr>
-<tr class="row-even"><td><p>String, bytes</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">char</span> <span class="pre">*</span></code>, <a class="reference internal" href="#c.krpc_bytes_t" title="krpc_bytes_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_bytes_t</span></code></a></p></td>
-</tr>
-<tr class="row-odd"><td><p>Tuple, list, set, dictionary</p></td>
-<td><p>A generated <code class="docutils literal notranslate"><span class="pre">struct</span></code>, such as <code class="docutils literal notranslate"><span class="pre">krpc_list_string_t</span></code></p></td>
-</tr>
-<tr class="row-even"><td><p>Class</p></td>
-<td><p>A remote object, described below</p></td>
-</tr>
-<tr class="row-odd"><td><p>Enumeration</p></td>
-<td><p>A <code class="docutils literal notranslate"><span class="pre">typedef</span> <span class="pre">enum</span></code></p></td>
-</tr>
-<tr class="row-even"><td><p>Structure</p></td>
-<td><p>A generated <code class="docutils literal notranslate"><span class="pre">struct</span></code></p></td>
-</tr>
-<tr class="row-odd"><td><p>Null</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">NULL</span></code> for an argument, and a <code class="docutils literal notranslate"><span class="pre">bool</span></code> set for a result</p></td>
-</tr>
-</tbody>
-</table>
-</div>
+<p>Procedures take and return C values, such as <code class="docutils literal notranslate"><span class="pre">int32_t</span></code>, <code class="docutils literal notranslate"><span class="pre">char</span> <span class="pre">*</span></code> and <a class="reference internal" href="#c.krpc_bytes_t" title="krpc_bytes_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_bytes_t</span></code></a>. A
+collection is a generated <code class="docutils literal notranslate"><span class="pre">struct</span></code>, such as <code class="docutils literal notranslate"><span class="pre">krpc_list_string_t</span></code>. A null argument is <code class="docutils literal notranslate"><span class="pre">NULL</span></code>,
+and a result that can be null comes with a <code class="docutils literal notranslate"><span class="pre">bool</span></code> the call sets. The services also define their
+own types:</p>
+<ul class="simple">
+<li><p>A class is a remote object, described below.</p></li>
+<li><p>A structure is a generated <code class="docutils literal notranslate"><span class="pre">struct</span></code>.</p></li>
+<li><p>An enumeration is a <code class="docutils literal notranslate"><span class="pre">typedef</span> <span class="pre">enum</span></code>.</p></li>
+</ul>
 <section id="flags-enumerations">
 <span id="cnano-client-flags"></span><h3>Flags Enumerations<a class="headerlink" href="#flags-enumerations" title="Link to this heading">#</a></h3>
 <p>A flags enumeration, such as <a class="reference internal" href="cnano/api/space-center/space-center.html#c.krpc_SpaceCenter_MapFilterType_t" title="krpc_SpaceCenter_MapFilterType_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_SpaceCenter_MapFilterType_t</span></code></a>, holds any combination of

@@ -1777,44 +1777,14 @@ catches <a class="reference external" href="https://docs.oracle.com/en/java/java
 </section>
 <section id="values">
 <span id="java-client-values"></span><h2>Values<a class="headerlink" href="#values" title="Link to this heading">#</a></h2>
-<p>Procedures take and return values of these types:</p>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Type</p></th>
-<th class="head"><p>Java type</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>Integer</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">long</span></code>, and <code class="docutils literal notranslate"><span class="pre">int</span></code> or <code class="docutils literal notranslate"><span class="pre">long</span></code> bit for bit for an unsigned integer</p></td>
-</tr>
-<tr class="row-odd"><td><p>Floating point number, boolean</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">double</span></code>, <code class="docutils literal notranslate"><span class="pre">boolean</span></code></p></td>
-</tr>
-<tr class="row-even"><td><p>String, bytes</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">String</span></code>, <code class="docutils literal notranslate"><span class="pre">byte[]</span></code></p></td>
-</tr>
-<tr class="row-odd"><td><p>Tuple</p></td>
-<td><p>A tuple of <code class="docutils literal notranslate"><span class="pre">org.javatuples</span></code>, such as <code class="docutils literal notranslate"><span class="pre">Pair</span></code></p></td>
-</tr>
-<tr class="row-even"><td><p>List, set, dictionary</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">java.util.List</span></code>, <code class="docutils literal notranslate"><span class="pre">Set</span></code>, <code class="docutils literal notranslate"><span class="pre">Map</span></code></p></td>
-</tr>
-<tr class="row-odd"><td><p>Class</p></td>
-<td><p>A remote object, described below</p></td>
-</tr>
-<tr class="row-even"><td><p>Enumeration</p></td>
-<td><p>An <code class="docutils literal notranslate"><span class="pre">enum</span></code>, or a class of constants for a flags enumeration</p></td>
-</tr>
-<tr class="row-odd"><td><p>Structure</p></td>
-<td><p>A class with a getter for each field</p></td>
-</tr>
-<tr class="row-even"><td><p>Null</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">null</span></code>, with the boxed type of a primitive</p></td>
-</tr>
-</tbody>
-</table>
-</div>
+<p>Procedures take and return Java values, such as <code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">String</span></code>, <code class="docutils literal notranslate"><span class="pre">java.util.List</span></code> and
+<code class="docutils literal notranslate"><span class="pre">Map</span></code>, and <code class="docutils literal notranslate"><span class="pre">null</span></code> for a null. A tuple is a tuple of <code class="docutils literal notranslate"><span class="pre">org.javatuples</span></code>, such as <code class="docutils literal notranslate"><span class="pre">Pair</span></code>. The
+services also define their own types:</p>
+<ul class="simple">
+<li><p>A class is a remote object, described below.</p></li>
+<li><p>A structure is a class with a getter for each field.</p></li>
+<li><p>An enumeration is an <code class="docutils literal notranslate"><span class="pre">enum</span></code>, or a class of constants for a flags enumeration.</p></li>
+</ul>
 <section id="flags-enumerations">
 <span id="java-client-flags"></span><h3>Flags Enumerations<a class="headerlink" href="#flags-enumerations" title="Link to this heading">#</a></h3>
 <p>A flags enumeration, such as <a class="reference internal" href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.MapFilterType" title="krpc.client.services.SpaceCenter.MapFilterType"><code class="xref java java-type docutils literal notranslate"><span class="pre">MapFilterType</span></code></a>, holds any

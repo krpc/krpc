@@ -1711,38 +1711,13 @@ Python exception. The example catches <code class="docutils literal notranslate"
 </section>
 <section id="values">
 <span id="python-client-values"></span><h2>Values<a class="headerlink" href="#values" title="Link to this heading">#</a></h2>
-<p>Procedures take and return values of these types:</p>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Type</p></th>
-<th class="head"><p>Python type</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>Integer, floating point number, boolean</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">bool</span></code></p></td>
-</tr>
-<tr class="row-odd"><td><p>String, bytes</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code>, <code class="docutils literal notranslate"><span class="pre">bytes</span></code></p></td>
-</tr>
-<tr class="row-even"><td><p>Tuple, list, set, dictionary</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">tuple</span></code>, <code class="docutils literal notranslate"><span class="pre">list</span></code>, <code class="docutils literal notranslate"><span class="pre">set</span></code>, <code class="docutils literal notranslate"><span class="pre">dict</span></code></p></td>
-</tr>
-<tr class="row-odd"><td><p>Class</p></td>
-<td><p>A remote object, described below</p></td>
-</tr>
-<tr class="row-even"><td><p>Enumeration</p></td>
-<td><p>An <code class="docutils literal notranslate"><span class="pre">enum.Enum</span></code>, or an <code class="docutils literal notranslate"><span class="pre">enum.Flag</span></code> for a flags enumeration</p></td>
-</tr>
-<tr class="row-odd"><td><p>Structure</p></td>
-<td><p>A <code class="docutils literal notranslate"><span class="pre">NamedTuple</span></code></p></td>
-</tr>
-<tr class="row-even"><td><p>Null</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
-</tr>
-</tbody>
-</table>
-</div>
+<p>Procedures take and return Python values, such as <code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">str</span></code>, <code class="docutils literal notranslate"><span class="pre">list</span></code> and <code class="docutils literal notranslate"><span class="pre">dict</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">None</span></code> for a null. The services also define their own types:</p>
+<ul class="simple">
+<li><p>A class is a remote object, described below.</p></li>
+<li><p>A structure is a <code class="docutils literal notranslate"><span class="pre">NamedTuple</span></code>.</p></li>
+<li><p>An enumeration is an <code class="docutils literal notranslate"><span class="pre">enum.Enum</span></code>, or an <code class="docutils literal notranslate"><span class="pre">enum.Flag</span></code> for a flags enumeration.</p></li>
+</ul>
 <section id="flags-enumerations">
 <span id="python-client-flags"></span><h3>Flags Enumerations<a class="headerlink" href="#flags-enumerations" title="Link to this heading">#</a></h3>
 <p>A flags enumeration, such as <a class="reference internal" href="python/api/space-center/space-center.html#SpaceCenter.MapFilterType" title="SpaceCenter.MapFilterType"><code class="xref py py-class docutils literal notranslate"><span class="pre">SpaceCenter.MapFilterType</span></code></a>, holds any combination of its

@@ -130,31 +130,12 @@ does not.
 Values
 ------
 
-Procedures take and return values of these types:
+Procedures take and return C# values, such as ``int``, ``string``, ``IList`` and ``IDictionary``,
+and ``null`` for a null. The services also define their own types:
 
-.. list-table::
-   :header-rows: 1
-
-   * - Type
-     - C# type
-   * - Integer
-     - ``int``, ``long``, ``uint``, ``ulong``
-   * - Floating point number, boolean
-     - ``float``, ``double``, ``bool``
-   * - String, bytes
-     - ``string``, ``byte[]``
-   * - Tuple
-     - ``Tuple``
-   * - List, set, dictionary
-     - ``IList``, ``ISet``, ``IDictionary``
-   * - Class
-     - A remote object, described below
-   * - Enumeration
-     - An ``enum``, with ``[Flags]`` for a flags enumeration
-   * - Structure
-     - A ``struct``
-   * - Null
-     - ``null``, with ``T?`` for a value type
+* A class is a remote object, described below.
+* A structure is a ``struct``.
+* An enumeration is an ``enum``, with ``[Flags]`` for a flags enumeration.
 
 .. _csharp-client-flags:
 
