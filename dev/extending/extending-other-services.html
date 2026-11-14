@@ -437,6 +437,7 @@
 <li class="toctree-l2 current active"><a aria-current="page" class="current reference internal" href="#">Extending Other Services</a></li>
 <li class="toctree-l2"><a class="reference internal" href="other-mods.html">Wrapping Another Mod</a></li>
 <li class="toctree-l2"><a class="reference internal" href="documentation.html">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors.html">Errors and Warnings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="clientgen.html">Generating Service Code for Static Clients</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docgen.html">API Reference Pages</a></li>
 <li class="toctree-l2"><a class="reference internal" href="testing.html">In-Game Tests</a></li>
@@ -592,7 +593,8 @@ and the server names it in a warning in the log.</p></li>
 with a fixed set of fields, and cannot be extended.</p></li>
 <li><p>The name of the member must be a valid <a class="reference internal" href="types.html#service-api-identifiers"><span class="std std-ref">kRPC identifier</span></a>, and must
 not clash with a member the class already has, or with another extension member. The getter and
-the setter of an extension property must be declared in the same class.</p></li>
+the setter of an extension property must be declared in the same class. A member that clashes is
+left out, as <a class="reference internal" href="errors.html#service-api-errors"><span class="std std-ref">Errors and Warnings</span></a> describes.</p></li>
 <li><p>The parameter types and return type must be <a class="reference internal" href="types.html#service-api-serializable-types"><span class="std std-ref">types that kRPC can serialize</span></a>, and may name types from any service.</p></li>
 </ul>
 <p>Deprecation and the <code class="docutils literal notranslate"><span class="pre">Nullable</span></code> parameter of the attribute work as they do for a member declared

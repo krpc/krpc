@@ -60,6 +60,7 @@ The following pages cover each part of the Service API:
 * :doc:`extending/extending-other-services`, by adding members to their classes.
 * :doc:`extending/other-mods`, binding to it as the game starts.
 * :doc:`extending/documentation` for a service, sent to clients and rendered in the API reference.
+* :doc:`extending/errors` in a service, and what the server leaves out because of them.
 * :doc:`extending/clientgen`, the stubs for clients that need them.
 * :doc:`extending/docgen` for a service, in each client language.
 
@@ -77,6 +78,7 @@ The following pages cover each part of the Service API:
    extending/extending-other-services
    extending/other-mods
    extending/documentation
+   extending/errors
    extending/clientgen
    extending/docgen
    extending/testing

@@ -115,6 +115,9 @@ Server
 * Disable only the integration of a mod that fails to load, and give the reason in the errors of its RPCs (:issue:`1341`)
 * Load each supported mod whatever its version (:issue:`1341`)
 * Fail the class members of a mod service with the reason when its mod is missing or failed to load (:issue:`1342`)
+* Keep running when a service has errors, and leave out only the members with them and the members that use them (:issue:`1345`)
+* List the members left out, and the mods whose support failed to load, in a window at the main menu, which the server window can open again (:issue:`1345`)
+* List the RPCs that use a missing member, such as after a game update (:issue:`1345`)
 
 
 SpaceCenter service

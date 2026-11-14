@@ -437,6 +437,7 @@
 <li class="toctree-l2"><a class="reference internal" href="extending-other-services.html">Extending Other Services</a></li>
 <li class="toctree-l2 current active"><a aria-current="page" class="current reference internal" href="#">Wrapping Another Mod</a></li>
 <li class="toctree-l2"><a class="reference internal" href="documentation.html">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors.html">Errors and Warnings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="clientgen.html">Generating Service Code for Static Clients</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docgen.html">API Reference Pages</a></li>
 <li class="toctree-l2"><a class="reference internal" href="testing.html">In-Game Tests</a></li>
@@ -597,6 +598,8 @@ by its full name, and binds a getter, setter, field, method or constructor of it
 missing from the installed version binds a delegate that throws when called. Only the procedures
 that use it fail. Bind through <code class="docutils literal notranslate"><span class="pre">mod.Require</span></code> to fail the whole integration instead. An exception
 from <code class="docutils literal notranslate"><span class="pre">Bind</span></code> does the same.</p>
+<p>A missing member is a warning in the log. An integration that fails to load is an error in the
+log, and the kRPC Problems window names it.</p>
 <p><code class="docutils literal notranslate"><span class="pre">NotReady</span></code> gives the reason the mod cannot serve a call yet, such as before it creates its
 instance in a scene, or null once it can. Each call checks it once the integration is available.</p>
 <dl class="cs attribute">
