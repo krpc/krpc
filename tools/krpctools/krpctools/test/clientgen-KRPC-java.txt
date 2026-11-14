@@ -667,27 +667,18 @@ public class KRPC extends RemoteService {
      * See {@link KRPC.ServerStatus#getSettings()}.
      */
     public static class ServerSettings implements RemoteStruct, Comparable<ServerSettings> {
-        private final boolean oneRpcPerUpdate;
         private final int maxTimePerUpdate;
         private final boolean adaptiveRateControl;
         private final boolean blockingRecv;
         private final int recvTimeout;
         private final int tickHoldTimeout;
 
-        public ServerSettings(boolean oneRpcPerUpdate, int maxTimePerUpdate, boolean adaptiveRateControl, boolean blockingRecv, int recvTimeout, int tickHoldTimeout) {
-            this.oneRpcPerUpdate = oneRpcPerUpdate;
+        public ServerSettings(int maxTimePerUpdate, boolean adaptiveRateControl, boolean blockingRecv, int recvTimeout, int tickHoldTimeout) {
             this.maxTimePerUpdate = maxTimePerUpdate;
             this.adaptiveRateControl = adaptiveRateControl;
             this.blockingRecv = blockingRecv;
             this.recvTimeout = recvTimeout;
             this.tickHoldTimeout = tickHoldTimeout;
-        }
-
-        /**
-         * Whether the server executes one call per update.
-         */
-        public boolean getOneRpcPerUpdate() {
-            return oneRpcPerUpdate;
         }
 
         /**
@@ -729,7 +720,6 @@ public class KRPC extends RemoteService {
 
         private static final java.util.List<krpc.schema.KRPC.Type> FIELD_TYPES =
             java.util.Collections.unmodifiableList(java.util.Arrays.asList(
-                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL),
                 krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32),
                 krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL),
                 krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL),
@@ -746,19 +736,17 @@ public class KRPC extends RemoteService {
         @SuppressWarnings("unchecked")
         public static ServerSettings fromFieldValues(Object[] values) {
             return new ServerSettings(
-                (boolean) values[0],
-                (int) values[1],
+                (int) values[0],
+                (boolean) values[1],
                 (boolean) values[2],
-                (boolean) values[3],
-                (int) values[4],
-                (int) values[5]
+                (int) values[3],
+                (int) values[4]
             );
         }
 
         @Override
         public Object[] fieldValues() {
             return new Object[] {
-                oneRpcPerUpdate,
                 maxTimePerUpdate,
                 adaptiveRateControl,
                 blockingRecv,
@@ -773,12 +761,12 @@ public class KRPC extends RemoteService {
                 return false;
             }
             ServerSettings other = (ServerSettings) obj;
-            return java.util.Objects.deepEquals(this.oneRpcPerUpdate, other.oneRpcPerUpdate)                && java.util.Objects.deepEquals(this.maxTimePerUpdate, other.maxTimePerUpdate)                && java.util.Objects.deepEquals(this.adaptiveRateControl, other.adaptiveRateControl)                && java.util.Objects.deepEquals(this.blockingRecv, other.blockingRecv)                && java.util.Objects.deepEquals(this.recvTimeout, other.recvTimeout)                && java.util.Objects.deepEquals(this.tickHoldTimeout, other.tickHoldTimeout);
+            return java.util.Objects.deepEquals(this.maxTimePerUpdate, other.maxTimePerUpdate)                && java.util.Objects.deepEquals(this.adaptiveRateControl, other.adaptiveRateControl)                && java.util.Objects.deepEquals(this.blockingRecv, other.blockingRecv)                && java.util.Objects.deepEquals(this.recvTimeout, other.recvTimeout)                && java.util.Objects.deepEquals(this.tickHoldTimeout, other.tickHoldTimeout);
         }
 
         @Override
         public int hashCode() {
-            return java.util.Arrays.deepHashCode(new Object[] {oneRpcPerUpdate, maxTimePerUpdate, adaptiveRateControl, blockingRecv, recvTimeout, tickHoldTimeout});
+            return java.util.Arrays.deepHashCode(new Object[] {maxTimePerUpdate, adaptiveRateControl, blockingRecv, recvTimeout, tickHoldTimeout});
         }
 
         /**
@@ -788,10 +776,6 @@ public class KRPC extends RemoteService {
         @Override
         public int compareTo(ServerSettings other) {
             int result;
-            result = RemoteStruct.compareFields(oneRpcPerUpdate, other.oneRpcPerUpdate);
-            if (result != 0) {
-                return result;
-            }
             result = RemoteStruct.compareFields(maxTimePerUpdate, other.maxTimePerUpdate);
             if (result != 0) {
                 return result;

@@ -45,7 +45,7 @@ namespace KRPC.UI
         internal readonly Color errorColor = Color.yellow;
         internal GUIStyle labelStyle, stretchyLabelStyle, fixedLabelStyle, textFieldStyle, longTextFieldStyle, stretchyTextFieldStyle,
             buttonStyle, toggleStyle, expandStyle, separatorStyle, lightStyle, errorLabelStyle, comboOptionsStyle, comboOptionStyle;
-        const float windowWidth = 288f;
+        const float windowWidth = 310f;
         const float textFieldWidth = 45f;
         const float longTextFieldWidth = 80f;
         const float fixedLabelWidth = 160f;
@@ -81,7 +81,6 @@ namespace KRPC.UI
         const string autoAcceptConnectionsText = "Auto-accept new clients";
         const string confirmRemoveClientText = "Confirm disconnecting a client";
         const string pauseServerWithGameText = "Pause the server when the game pauses";
-        const string oneRPCPerUpdateText = "One RPC per update";
         const string maxTimePerUpdateText = "Max. time per update";
         const string adaptiveRateControlText = "Adaptive rate control";
         const string blockingRecvText = "Blocking receives";
@@ -113,7 +112,9 @@ namespace KRPC.UI
             stretchyLabelStyle.margin = new RectOffset (0, 0, 0, 0);
             stretchyLabelStyle.stretchWidth = true;
 
+            // No vertical margin, as the text fields beside these labels have none
             fixedLabelStyle = new GUIStyle (skin.label);
+            fixedLabelStyle.margin = new RectOffset (skin.label.margin.left, skin.label.margin.right, 0, 0);
 
             textFieldStyle = new GUIStyle (skin.textField);
             textFieldStyle.margin = new RectOffset (0, 0, 0, 0);
@@ -456,11 +457,6 @@ namespace KRPC.UI
 
                 GUILayout.BeginHorizontal ();
                 GUILayout.Space (scaledIndentWidth);
-                DrawOneRPCPerUpdateToggle ();
-                GUILayout.EndHorizontal ();
-
-                GUILayout.BeginHorizontal ();
-                GUILayout.Space (scaledIndentWidth);
                 DrawMaxTimePerUpdate ();
                 GUILayout.EndHorizontal ();
 
@@ -532,15 +528,6 @@ namespace KRPC.UI
             bool confirmRemoveClient = GUILayout.Toggle (config.Configuration.ConfirmRemoveClient, confirmRemoveClientText, toggleStyle, new GUILayoutOption[] { });
             if (confirmRemoveClient != config.Configuration.ConfirmRemoveClient) {
                 config.Configuration.ConfirmRemoveClient = confirmRemoveClient;
-                config.Save ();
-            }
-        }
-
-        void DrawOneRPCPerUpdateToggle ()
-        {
-            bool oneRPCPerUpdate = GUILayout.Toggle (config.Configuration.OneRPCPerUpdate, oneRPCPerUpdateText, toggleStyle, new GUILayoutOption[] { });
-            if (oneRPCPerUpdate != config.Configuration.OneRPCPerUpdate) {
-                config.Configuration.OneRPCPerUpdate = oneRPCPerUpdate;
                 config.Save ();
             }
         }

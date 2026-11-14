@@ -20,7 +20,6 @@ namespace KRPC.UI
         const string rpcsExecutedText = "RPCs Executed";
         const string rpcRateText = "RPC Rate";
         const string rpcExecutionMode = "Execution mode";
-        const string singleRPCModeText = "One RPC per update";
         const string adaptiveModeText = "Adaptive";
         const string staticModeText = "Static";
         const string maxTimePerUpdateText = "Max. time per update";
@@ -129,8 +128,8 @@ namespace KRPC.UI
             Configuration config = Configuration.Instance;
             DrawInfo (rpcsExecutedText, core.RPCsExecuted.ToString (CultureInfo.CurrentCulture));
             DrawInfo (rpcRateText, Math.Round (core.RPCRate) + " RPC/s");
-            DrawInfo (rpcExecutionMode, config.OneRPCPerUpdate ? singleRPCModeText : (config.AdaptiveRateControl ? adaptiveModeText : staticModeText));
-            DrawInfo (maxTimePerUpdateText, config.OneRPCPerUpdate ? notApplicableText : core.MaxTimePerUpdate + " us");
+            DrawInfo (rpcExecutionMode, config.AdaptiveRateControl ? adaptiveModeText : staticModeText);
+            DrawInfo (maxTimePerUpdateText, core.MaxTimePerUpdate + " us");
             DrawInfo (rpcReceiveModeText, config.BlockingRecv ? blockingModeText : nonBlockingModeText);
             DrawInfo (recvTimeoutText, config.BlockingRecv ? config.RecvTimeout + " us" : notApplicableText);
             DrawInfo (tickHoldTimeoutText, config.TickHoldTimeout + " us");

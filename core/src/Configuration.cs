@@ -38,12 +38,11 @@ namespace KRPC
             InfoWindowVisible = false;
             InfoWindowPosition = new Tuple<float,float,float,float> (0, 0, 0, 0);
             HiddenServiceProblems = string.Empty;
-            AutoStartServers = false;
+            AutoStartServers = true;
             AutoAcceptConnections = true;
             ConfirmRemoveClient = true;
             PauseServerWithGame = false;
             VerboseErrors = true;
-            OneRPCPerUpdate = false;
             MaxTimePerUpdate = 5000;
             AdaptiveRateControl = true;
             BlockingRecv = true;
@@ -229,11 +228,6 @@ namespace KRPC
         /// Whether to write verbose error messages to the log
         /// </summary>
         public bool VerboseErrors { get; set; }
-
-        /// <summary>
-        /// Whether to execute a single RPCs per frame, or multiple up to the time limit
-        /// </summary>
-        public bool OneRPCPerUpdate { get; set; }
 
         /// <summary>
         /// Maximum amount of time to spend executing RPCs per frame

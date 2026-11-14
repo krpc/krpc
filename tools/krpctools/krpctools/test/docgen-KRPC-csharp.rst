@@ -2464,14 +2464,10 @@
 
       See :prop:`ServerStatus.Settings`.
 
-   .. function:: ServerSettings(bool oneRpcPerUpdate, uint maxTimePerUpdate, bool adaptiveRateControl, bool blockingRecv, uint recvTimeout, uint tickHoldTimeout)
+   .. function:: ServerSettings(uint maxTimePerUpdate, bool adaptiveRateControl, bool blockingRecv, uint recvTimeout, uint tickHoldTimeout)
 
       Construct a ServerSettings from the values of its fields.
 
-
-   .. property:: bool OneRpcPerUpdate { get; }
-
-      Whether the server executes one call per update.
 
    .. property:: uint MaxTimePerUpdate { get; }
 

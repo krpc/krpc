@@ -3938,10 +3938,6 @@ id(id), name(name), address(address), protocol_version(protocol_version) {}
    */
   struct ServerSettings {
     /**
-     * Whether the server executes one call per update.
-     */
-    bool one_rpc_per_update;
-    /**
      * The current maximum time spent executing calls per update, in microseconds.
      */
     uint32_t max_time_per_update;
@@ -3964,13 +3960,13 @@ id(id), name(name), address(address), protocol_version(protocol_version) {}
      */
     uint32_t tick_hold_timeout;
 
-    ServerSettings() : one_rpc_per_update(), max_time_per_update(), adaptive_rate_control(), blocking_recv(), recv_timeout(), tick_hold_timeout() {}
+    ServerSettings() : max_time_per_update(), adaptive_rate_control(), blocking_recv(), recv_timeout(), tick_hold_timeout() {}
 
-    ServerSettings(bool one_rpc_per_update, uint32_t max_time_per_update, bool adaptive_rate_control, bool blocking_recv, uint32_t recv_timeout, uint32_t tick_hold_timeout) :
-one_rpc_per_update(one_rpc_per_update), max_time_per_update(max_time_per_update), adaptive_rate_control(adaptive_rate_control), blocking_recv(blocking_recv), recv_timeout(recv_timeout), tick_hold_timeout(tick_hold_timeout) {}
+    ServerSettings(uint32_t max_time_per_update, bool adaptive_rate_control, bool blocking_recv, uint32_t recv_timeout, uint32_t tick_hold_timeout) :
+max_time_per_update(max_time_per_update), adaptive_rate_control(adaptive_rate_control), blocking_recv(blocking_recv), recv_timeout(recv_timeout), tick_hold_timeout(tick_hold_timeout) {}
 
     bool operator==(const ServerSettings& other) const {
-      return this->one_rpc_per_update == other.one_rpc_per_update && this->max_time_per_update == other.max_time_per_update && this->adaptive_rate_control == other.adaptive_rate_control && this->blocking_recv == other.blocking_recv && this->recv_timeout == other.recv_timeout && this->tick_hold_timeout == other.tick_hold_timeout;
+      return this->max_time_per_update == other.max_time_per_update && this->adaptive_rate_control == other.adaptive_rate_control && this->blocking_recv == other.blocking_recv && this->recv_timeout == other.recv_timeout && this->tick_hold_timeout == other.tick_hold_timeout;
     }
 
     bool operator!=(const ServerSettings& other) const {
@@ -3979,10 +3975,6 @@ one_rpc_per_update(one_rpc_per_update), max_time_per_update(max_time_per_update)
 
     // Ordered by the fields in turn, which is how a tuple of the same values orders
     bool operator<(const ServerSettings& other) const {
-      if (one_rpc_per_update < other.one_rpc_per_update)
-        return true;
-      if (other.one_rpc_per_update < one_rpc_per_update)
-        return false;
       if (max_time_per_update < other.max_time_per_update)
         return true;
       if (other.max_time_per_update < max_time_per_update)
@@ -4274,7 +4266,6 @@ namespace encoder {
   inline std::string encode(const services::KRPC::ServerSettings& value) {
     static thread_local krpc::schema::Tuple structMessage;
     structMessage.Clear();
-    structMessage.add_items(encode_item(value.one_rpc_per_update));
     structMessage.add_items(encode_item(value.max_time_per_update));
     structMessage.add_items(encode_item(value.adaptive_rate_control));
     structMessage.add_items(encode_item(value.blocking_recv));
@@ -4354,14 +4345,13 @@ namespace decoder {
   inline void decode(services::KRPC::ServerSettings& value, const std::string& data, ::krpc::Connection* connection) {
     static thread_local krpc::schema::Tuple structMessage;
     if (!structMessage.ParseFromString(data)) throw EncodingError("Failed to decode message");
-    if (structMessage.items_size() < 6)
+    if (structMessage.items_size() < 5)
       throw EncodingError("Value for ServerSettings does not have all of its fields");
-    decode_item(value.one_rpc_per_update, structMessage.items(0), connection);
-    decode_item(value.max_time_per_update, structMessage.items(1), connection);
-    decode_item(value.adaptive_rate_control, structMessage.items(2), connection);
-    decode_item(value.blocking_recv, structMessage.items(3), connection);
-    decode_item(value.recv_timeout, structMessage.items(4), connection);
-    decode_item(value.tick_hold_timeout, structMessage.items(5), connection);
+    decode_item(value.max_time_per_update, structMessage.items(0), connection);
+    decode_item(value.adaptive_rate_control, structMessage.items(1), connection);
+    decode_item(value.blocking_recv, structMessage.items(2), connection);
+    decode_item(value.recv_timeout, structMessage.items(3), connection);
+    decode_item(value.tick_hold_timeout, structMessage.items(4), connection);
   }
 
   // Fields are only ever appended to a structure, so a value from a newer server may carry
@@ -4414,7 +4404,6 @@ inline std::size_t hash_value(const services::KRPC::ClientInfo& value) {
 
 inline std::size_t hash_value(const services::KRPC::ServerSettings& value) {
   std::size_t seed = 0;
-  hash_combine(&seed, hash_value(value.one_rpc_per_update));
   hash_combine(&seed, hash_value(value.max_time_per_update));
   hash_combine(&seed, hash_value(value.adaptive_rate_control));
   hash_combine(&seed, hash_value(value.blocking_recv));

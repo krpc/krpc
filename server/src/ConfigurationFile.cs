@@ -73,20 +73,22 @@ namespace KRPC
         [Persistent] bool pauseServerWithGame;
         [Persistent] string logLevel = Logger.Severity.Info.ToString ();
         [Persistent] bool verboseErrors;
-        [Persistent] bool oneRPCPerUpdate;
         [Persistent] uint maxTimePerUpdate;
         [Persistent] bool adaptiveRateControl;
         [Persistent] bool blockingRecv;
         [Persistent] uint recvTimeout;
-        // Defaulted here as well as in Configuration, since a settings file written before
-        // this setting existed has nothing to load into it, and a zero timeout would end
-        // every hold immediately
-        [Persistent] uint tickHoldTimeout = 1000000;
+        [Persistent] uint tickHoldTimeout;
 
         public ConfigurationFile (string filePath, Configuration configuration) : base (filePath, "KRPCConfiguration")
         {
             Configuration = configuration;
-            Load ();
+            // Start each setting at its default, so a setting missing from the file, or with a
+            // value that does not parse, keeps it
+            BeforeSave ();
+            // Without settings, as in a new install, start with one server
+            if (!Load ())
+                Configuration.Servers.Add (new Configuration.Server ());
+            Save ();
         }
 
         protected override void BeforeSave ()
@@ -109,7 +111,6 @@ namespace KRPC
             pauseServerWithGame = Configuration.PauseServerWithGame;
             logLevel = Logger.Level.ToString ();
             verboseErrors = Configuration.VerboseErrors;
-            oneRPCPerUpdate = Configuration.OneRPCPerUpdate;
             maxTimePerUpdate = Configuration.MaxTimePerUpdate;
             adaptiveRateControl = Configuration.AdaptiveRateControl;
             blockingRecv = Configuration.BlockingRecv;
@@ -144,7 +145,6 @@ namespace KRPC
                 Logger.Level = Logger.Severity.Info;
             }
             Configuration.VerboseErrors = verboseErrors;
-            Configuration.OneRPCPerUpdate = oneRPCPerUpdate;
             Configuration.MaxTimePerUpdate = maxTimePerUpdate;
             Configuration.AdaptiveRateControl = adaptiveRateControl;
             Configuration.BlockingRecv = blockingRecv;

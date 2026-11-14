@@ -78,12 +78,6 @@ genrule(
 )
 
 genrule(
-    name = "blank_settings",
-    outs = ["GameData/kRPC/PluginData/settings.cfg"],
-    cmd = 'echo "" > "$@"',
-)
-
-genrule(
     name = "version",
     outs = ["VERSION.txt"],
     cmd = 'echo "%s" > "$@"' % version,
@@ -127,7 +121,6 @@ pkg_zip(
         # Server
         "//core",
         "//server",
-        ":blank_settings",
         "//tools/build/ksp:Google.Protobuf.dll",
         "//tools/build/protobuf:LICENSE.Google.Protobuf",
         "//tools/build/ksp:KRPC.IO.Ports.dll",

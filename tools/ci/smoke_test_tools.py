@@ -123,7 +123,7 @@ def test_game(directory):
     os.makedirs(os.path.join(ksp, "GameData", "Squad"))
     archive = os.path.join(directory, "krpc.zip")
     with zipfile.ZipFile(archive, "w") as f:
-        f.writestr("GameData/kRPC/PluginData/settings.cfg", "")
+        f.writestr("GameData/kRPC/KRPC.dll", "")
     run("krpc-game", "install", "--game-dir", ksp, "--krpc", archive)
     for name in ("TestingTools.dll", "KRPC.Benchmark.dll", "PluginData/settings.cfg"):
         if not os.path.isfile(os.path.join(ksp, "GameData", "kRPC", name)):

@@ -42,7 +42,6 @@ namespace KRPC.Service.KRPC
                 Version = core.Version ?? "unknown",
                 ProtocolVersion = client != null ? client.ProtocolVersion : 0,
                 Settings = new ServerSettings {
-                    OneRpcPerUpdate = config.OneRPCPerUpdate,
                     MaxTimePerUpdate = core.MaxTimePerUpdate,
                     AdaptiveRateControl = config.AdaptiveRateControl,
                     BlockingRecv = config.BlockingRecv,

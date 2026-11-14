@@ -24,15 +24,23 @@ namespace KRPC.Utils
         }
 
         /// <summary>
-        /// Load settings from the underlying storage
+        /// Load settings from the underlying storage. Returns whether the storage held settings.
         /// </summary>
-        public void Load ()
+        public bool Load ()
         {
-            if (FileExists) {
-                ConfigNode node = ConfigNode.Load (path);
-                if (node != null && node.HasNode (nodeName))
-                    ConfigNode.LoadObjectFromConfig (this, node.GetNode (nodeName));
+            if (!FileExists)
+                return false;
+            ConfigNode node = ConfigNode.Load (path);
+            if (node == null || !node.HasNode (nodeName)) {
+                // Keep a copy of a file with no settings in it, as the next save replaces it
+                if (File.ReadAllText (path).Trim ().Length > 0) {
+                    Logger.WriteLine ("Failed to read settings from " + path + ", copied it to " + path + ".bak", Logger.Severity.Warning);
+                    File.Copy (path, path + ".bak", true);
+                }
+                return false;
             }
+            ConfigNode.LoadObjectFromConfig (this, node.GetNode (nodeName));
+            return true;
         }
 
         /// <summary>
@@ -43,6 +51,7 @@ namespace KRPC.Utils
             ConfigNode node = AsConfigNode;
             var clsNode = new ConfigNode (nodeName);
             clsNode.AddNode (node);
+            Directory.CreateDirectory (Path.GetDirectoryName (path));
             clsNode.Save (path);
         }
 

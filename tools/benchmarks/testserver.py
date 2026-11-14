@@ -287,7 +287,6 @@ def environment(conn):
     status = conn.krpc.get_status()
     return {
         "server": status.version,
-        "one rpc per update": str(status.settings.one_rpc_per_update),
         "adaptive rate control": str(status.settings.adaptive_rate_control),
         "max time per update": "%d us" % status.settings.max_time_per_update,
         "blocking recv": str(status.settings.blocking_recv),

@@ -1965,14 +1965,10 @@
 
       See :meth:`ServerStatus.getSettings()`.
 
-   .. constructor:: public ServerSettings(boolean oneRpcPerUpdate, int maxTimePerUpdate, boolean adaptiveRateControl, boolean blockingRecv, int recvTimeout, int tickHoldTimeout)
+   .. constructor:: public ServerSettings(int maxTimePerUpdate, boolean adaptiveRateControl, boolean blockingRecv, int recvTimeout, int tickHoldTimeout)
 
       Construct a ServerSettings from the values of its fields.
 
-
-   .. method:: boolean getOneRpcPerUpdate()
-
-      Whether the server executes one call per update.
 
    .. method:: int getMaxTimePerUpdate()
 

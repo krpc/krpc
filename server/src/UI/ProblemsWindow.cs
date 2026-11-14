@@ -27,12 +27,6 @@ namespace KRPC.UI
             Title = "kRPC Problems";
             config = ConfigurationFile.Instance;
             Style.fixedWidth = windowWidth;
-            // The skin's window background is translucent, which makes a long list hard to read
-            var background = new Texture2D (1, 1);
-            background.SetPixel (0, 0, new Color (0.12f, 0.13f, 0.14f, 1f));
-            background.Apply ();
-            Style.normal.background = background;
-            Style.onNormal.background = background;
             Position = new Rect ((Screen.width - windowWidth) / 2, Screen.height / 4, windowWidth, 0f);
 
             var skin = Skin.DefaultSkin;
