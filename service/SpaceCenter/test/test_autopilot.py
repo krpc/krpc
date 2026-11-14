@@ -1813,17 +1813,20 @@ TestAutoPilotLaunchLearstarA1 = _make_autopilot_launch_test_class(
     turn_oscillation_amplitude=0.5,
 )
 
-# Shuttle-style craft: gimbal and aero control, with no clean reaction-wheel torque model. The
-# autotuned loop is too hot for the actuator authority, and at times limit-cycles until the
-# control-oscillation latch floors the bandwidth. The craft starts ~8.6 deg pitched on the pad,
-# so the launch capture takes a few seconds.
+# Shuttle-style craft, steered mostly by the slow gimbals of its two KS-25s. The craft starts
+# ~8.6 deg pitched on the pad, so the launch capture takes a few seconds.
 TestAutoPilotLaunchDynawing = _make_autopilot_launch_test_class(
     "TestAutoPilotLaunchDynawing",
     "Dynawing",
     pre_launch_sequence=True,
     launch_settle_delay=8,
-    hold_oscillation_amplitude=1.0,
-    hold_attitude_error=2.5,
+)
+
+# A booster steered only by the gimbals of three KS-25s, one of the slowest stock gimbals, with no
+# reaction wheels, RCS or fins.
+TestAutoPilotLaunchGimbal = _make_autopilot_launch_test_class(
+    "TestAutoPilotLaunchGimbal",
+    "AutoPilotGimbal",
 )
 
 TestAutoPilotLaunchOrbiterOne = _make_autopilot_launch_test_class(

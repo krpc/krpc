@@ -326,7 +326,7 @@ namespace KRPC.SpaceCenter
         }
 
         // Inner-loop PID gains (autotuned each tick when AutoTune is on): axis column headers,
-        // then a Kp and a Ki row.
+        // then a Kp, a Ki and a gimbal LAG row.
         void DrawPIDGain (Services.AutoPilot ap, bool engaged)
         {
             var gainP = engaged ? ap.PitchPIDGains : null;
@@ -347,6 +347,14 @@ namespace KRPC.SpaceCenter
             Register (gainR == null ? Blank : Gain (gainR.Item2));
             GUILayout.EndHorizontal ();
             RowTooltip ("Inner rate-loop integral gain (set by the autotuner each tick when auto-tune is on).");
+            var lag = engaged ? ap.GimbalLag : null;
+            GUILayout.BeginHorizontal ();
+            GUILayout.Label ("LAG", registerLabelStyle);
+            Register (lag == null ? Blank : Seconds (lag.Item1));
+            Register (lag == null ? Blank : Seconds (lag.Item3));
+            Register (lag == null ? Blank : Seconds (lag.Item2));
+            GUILayout.EndHorizontal ();
+            RowTooltip ("Time constant of the engine gimbals' response, which the autotuner lowers the bandwidth for.");
         }
 
         // Oscillation handling, mirroring the controller's detector, gates and mitigations
