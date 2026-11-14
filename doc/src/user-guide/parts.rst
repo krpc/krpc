@@ -1,11 +1,12 @@
 .. _user-guide-parts:
 
-Parts and Staging
-=================
+Parts
+=====
 
 A vessel is made of parts, connected to one another in a tree. This guide shows how to walk that
 tree, how fuel lines fit into it, and how the staging numbers of each part relate to the staging
-sequence. The examples use the vessel below, whose craft file you can
+sequence. It then shows how to reach any part module, including those of mods with no kRPC
+service. The examples use the vessel below, whose craft file you can
 :download:`download here </crafts/PartsTree.craft>`.
 
 .. container:: clearer
@@ -253,3 +254,42 @@ part is activated, and Figure 7 the stage in which each part is decoupled.
 
 For totals per stage, such as delta-v, thrust and fuel, use ``Vessel.Stages`` and
 ``Vessel.DecoupleStages``, which return a ``Stage`` for each stage.
+
+.. _user-guide-parts-modules:
+
+Part Modules
+------------
+
+A part's behavior comes from its modules, such as ``ModuleEngines`` for an engine. kRPC wraps the
+common modules in classes like ``Engine`` and ``SolarPanel``. Every module, including those of a
+mod, is also available directly, through ``Part.Modules`` or ``Parts.ModulesWithName``. A module
+has three lists:
+
+* ``Module.FieldList``: the module's fields, such as an engine's thrust limiter. The right-click
+  menu shows the fields whose ``PartField.Visible`` is true.
+* ``Module.EventList``: the module's events, the buttons in the right-click menu. The menu shows
+  the events whose ``PartEvent.Visible`` and ``PartEvent.Active`` are both true.
+* ``Module.ActionList``: the module's actions, the ones an action group can hold.
+
+This example reads the engine fields the right-click menu shows, limits the thrust of each engine,
+and extends the solar panels:
+
+.. literalinclude:: /scripts/user-guide/parts/PartModules.py
+   :language: python
+   :start-after: [docs]
+   :end-before: [/docs]
+   :dedent:
+
+``PartField.Name``, ``PartEvent.Name`` and ``PartAction.Name`` are the identifiers in the module's
+code, which stay the same across game versions and languages. The names the menu shows are
+``GuiName``, and they change with the game's language.
+
+``PartField.Type`` gives the type of a field, and the matching property reads and sets it, such as
+``PartField.FloatValue``. ``PartField.Value`` reads any field as a string, and sets string fields
+only. Setting a field works as the right-click menu does, so the module reacts to the change, such
+as B9PartSwitch switching a part's subtype. ``PartField.Reset`` restores the value the field had
+when the part was loaded.
+
+``PartEvent.Trigger`` clicks an event's button, and ``PartAction.Activated`` triggers an action as
+its action group does. ``Module.Config`` gives the module's configuration from the part's
+configuration file, for values the module does not expose as fields.

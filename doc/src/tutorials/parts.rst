@@ -4,14 +4,8 @@ Interacting with Parts
 ======================
 
 The following examples demonstrate use of the :ref:`python-api-parts` functionality to
-achieve various tasks. The :ref:`parts and staging guide <user-guide-parts>` explains the tree of
-parts, attachment modes, fuel lines and staging.
-
-.. note:: To interact with the fields, events and actions of a part module, use
-   :attr:`Module.field_list`, :attr:`Module.event_list` and
-   :attr:`Module.action_list`. These return :class:`PartField`,
-   :class:`PartEvent` and :class:`PartAction` objects that can be read, set and
-   triggered.
+achieve various tasks. The :ref:`parts guide <user-guide-parts>` explains the tree of
+parts, attachment modes, fuel lines, staging and part modules.
 
 Deploying all Parachutes
 ------------------------
