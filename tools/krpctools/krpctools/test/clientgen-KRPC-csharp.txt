@@ -560,20 +560,14 @@ namespace KRPC.Client.Services.KRPC
         /// <summary>
         /// Construct a ServerSettings from the values of its fields.
         /// </summary>
-        public ServerSettings (bool oneRpcPerUpdate, uint maxTimePerUpdate, bool adaptiveRateControl, bool blockingRecv, uint recvTimeout, uint tickHoldTimeout) : this ()
+        public ServerSettings (uint maxTimePerUpdate, bool adaptiveRateControl, bool blockingRecv, uint recvTimeout, uint tickHoldTimeout) : this ()
         {
-            OneRpcPerUpdate = oneRpcPerUpdate;
             MaxTimePerUpdate = maxTimePerUpdate;
             AdaptiveRateControl = adaptiveRateControl;
             BlockingRecv = blockingRecv;
             RecvTimeout = recvTimeout;
             TickHoldTimeout = tickHoldTimeout;
         }
-
-        /// <summary>
-        /// Whether the server executes one call per update.
-        /// </summary>
-        public bool OneRpcPerUpdate { get; private set; }
 
         /// <summary>
         /// The current maximum time spent executing calls per update, in microseconds.
@@ -616,7 +610,7 @@ namespace KRPC.Client.Services.KRPC
         /// </summary>
         public bool Equals (ServerSettings other)
         {
-            return global::KRPC.Client.ValueUtils.Equal (OneRpcPerUpdate, other.OneRpcPerUpdate) && global::KRPC.Client.ValueUtils.Equal (MaxTimePerUpdate, other.MaxTimePerUpdate) && global::KRPC.Client.ValueUtils.Equal (AdaptiveRateControl, other.AdaptiveRateControl) && global::KRPC.Client.ValueUtils.Equal (BlockingRecv, other.BlockingRecv) && global::KRPC.Client.ValueUtils.Equal (RecvTimeout, other.RecvTimeout) && global::KRPC.Client.ValueUtils.Equal (TickHoldTimeout, other.TickHoldTimeout);
+            return global::KRPC.Client.ValueUtils.Equal (MaxTimePerUpdate, other.MaxTimePerUpdate) && global::KRPC.Client.ValueUtils.Equal (AdaptiveRateControl, other.AdaptiveRateControl) && global::KRPC.Client.ValueUtils.Equal (BlockingRecv, other.BlockingRecv) && global::KRPC.Client.ValueUtils.Equal (RecvTimeout, other.RecvTimeout) && global::KRPC.Client.ValueUtils.Equal (TickHoldTimeout, other.TickHoldTimeout);
         }
 
         /// <summary>
@@ -625,7 +619,6 @@ namespace KRPC.Client.Services.KRPC
         public override int GetHashCode ()
         {
             int hash = 17;
-            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (OneRpcPerUpdate);
             hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (MaxTimePerUpdate);
             hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (AdaptiveRateControl);
             hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (BlockingRecv);
@@ -659,9 +652,6 @@ namespace KRPC.Client.Services.KRPC
         public int CompareTo (ServerSettings other)
         {
             int result;
-            result = global::System.Collections.Generic.Comparer<bool>.Default.Compare (OneRpcPerUpdate, other.OneRpcPerUpdate);
-            if (result != 0)
-                return result;
             result = global::System.Collections.Generic.Comparer<uint>.Default.Compare (MaxTimePerUpdate, other.MaxTimePerUpdate);
             if (result != 0)
                 return result;

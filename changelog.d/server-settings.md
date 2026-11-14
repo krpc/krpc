@@ -1,6 +1,8 @@
 ## core
 
 - Turn on "Auto-start server" by default
+- **Breaking:** Remove the "One RPC per update" setting and
+  `KRPC.ServerSettings.OneRpcPerUpdate`
 
 ## server
 

@@ -12,12 +12,6 @@ namespace KRPC.Service.KRPC
     public struct ServerSettings
     {
         /// <summary>
-        /// Whether the server executes one call per update.
-        /// </summary>
-        [KRPCProperty]
-        public bool OneRpcPerUpdate { get; set; }
-
-        /// <summary>
         /// The current maximum time spent executing calls per update, in microseconds.
         /// </summary>
         [KRPCProperty]

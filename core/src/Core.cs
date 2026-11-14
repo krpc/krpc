@@ -224,7 +224,6 @@ namespace KRPC
             text.Append (", autoAcceptConnections = ").Append (config.AutoAcceptConnections);
             text.Append (", pauseServerWithGame = ").Append (config.PauseServerWithGame);
             text.Append (", verboseErrors = ").Append (config.VerboseErrors);
-            text.Append (", oneRPCPerUpdate = ").Append (config.OneRPCPerUpdate);
             text.Append (", maxTimePerUpdate = ").Append (config.MaxTimePerUpdate.ToString (CultureInfo.InvariantCulture));
             text.Append (", adaptiveRateControl = ").Append (config.AdaptiveRateControl);
             text.Append (", blockingRecv = ").Append (config.BlockingRecv);
@@ -629,10 +628,6 @@ namespace KRPC
                 // Exit if a hold ended during this update, so that the game takes the tick
                 // before another hold can defer it
                 if (heldTick)
-                    break;
-
-                // Exit if only execute one RPC per update
-                if (config.OneRPCPerUpdate)
                     break;
 
                 // Exit if max exec time exceeded

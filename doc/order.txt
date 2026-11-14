@@ -31,7 +31,6 @@ KRPC.ServerStatus.ProtocolVersion
 KRPC.ServerStatus.Settings
 KRPC.ServerStatus.Statistics
 KRPC.ServerSettings
-KRPC.ServerSettings.OneRpcPerUpdate
 KRPC.ServerSettings.MaxTimePerUpdate
 KRPC.ServerSettings.AdaptiveRateControl
 KRPC.ServerSettings.BlockingRecv

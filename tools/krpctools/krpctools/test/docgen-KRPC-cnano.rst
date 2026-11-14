@@ -2459,15 +2459,6 @@ Main kRPC service, used by clients to interact with basic server functionality.
       The service and structure ids of the structure, for :func:`krpc_KRPC_Type_StructTypeById`.
 
 
-   .. member:: bool one_rpc_per_update
-
-      Whether the server executes one call per update.
-
-      .. macro:: KRPC_FIELD_KRPC_SERVERSETTINGS_ONERPCPERUPDATE
-
-         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
-
-
    .. member:: uint32_t max_time_per_update
 
       The current maximum time spent executing calls per update, in microseconds.

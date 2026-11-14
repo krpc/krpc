@@ -2391,10 +2391,6 @@
    .. note::
 
       See :member:`ServerStatus::settings`.
-   .. member:: bool one_rpc_per_update
-
-      Whether the server executes one call per update.
-
    .. member:: uint32_t max_time_per_update
 
       The current maximum time spent executing calls per update, in microseconds.

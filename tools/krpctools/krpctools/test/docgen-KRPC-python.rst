@@ -2157,19 +2157,13 @@ Main kRPC service, used by clients to interact with basic server functionality.
       :rtype: int
 
 
-.. class:: ServerSettings(one_rpc_per_update, max_time_per_update, adaptive_rate_control, blocking_recv, recv_timeout, tick_hold_timeout)
+.. class:: ServerSettings(max_time_per_update, adaptive_rate_control, blocking_recv, recv_timeout, tick_hold_timeout)
 
    The settings that control how the server executes calls.
 
    .. note::
 
       See :attr:`ServerStatus.settings`.
-   .. attribute:: one_rpc_per_update
-
-      Whether the server executes one call per update.
-
-      :rtype: bool
-
    .. attribute:: max_time_per_update
 
       The current maximum time spent executing calls per update, in microseconds.

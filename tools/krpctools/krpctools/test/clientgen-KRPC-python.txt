@@ -134,10 +134,6 @@ class ServerSettings(NamedTuple):
 
     See :attr:`krpc.services.krpc.ServerStatus.settings`.
     """
-    one_rpc_per_update: bool
-    """
-    Whether the server executes one call per update.
-    """
     max_time_per_update: int
     """
     The current maximum time spent executing calls per update, in microseconds.

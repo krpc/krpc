@@ -1811,11 +1811,6 @@ Main kRPC service, used by clients to interact with basic server functionality.
    .. note::
 
       See :attr:`KRPC.ServerStatus.settings`.
-   .. attribute:: one_rpc_per_update: boolean
-
-      Whether the server executes one call per update.
-
-
    .. attribute:: max_time_per_update: number
 
       The current maximum time spent executing calls per update, in microseconds.

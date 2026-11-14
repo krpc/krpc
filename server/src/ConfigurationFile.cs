@@ -73,7 +73,6 @@ namespace KRPC
         [Persistent] bool pauseServerWithGame;
         [Persistent] string logLevel = Logger.Severity.Info.ToString ();
         [Persistent] bool verboseErrors;
-        [Persistent] bool oneRPCPerUpdate;
         [Persistent] uint maxTimePerUpdate;
         [Persistent] bool adaptiveRateControl;
         [Persistent] bool blockingRecv;
@@ -112,7 +111,6 @@ namespace KRPC
             pauseServerWithGame = Configuration.PauseServerWithGame;
             logLevel = Logger.Level.ToString ();
             verboseErrors = Configuration.VerboseErrors;
-            oneRPCPerUpdate = Configuration.OneRPCPerUpdate;
             maxTimePerUpdate = Configuration.MaxTimePerUpdate;
             adaptiveRateControl = Configuration.AdaptiveRateControl;
             blockingRecv = Configuration.BlockingRecv;
@@ -147,7 +145,6 @@ namespace KRPC
                 Logger.Level = Logger.Severity.Info;
             }
             Configuration.VerboseErrors = verboseErrors;
-            Configuration.OneRPCPerUpdate = oneRPCPerUpdate;
             Configuration.MaxTimePerUpdate = maxTimePerUpdate;
             Configuration.AdaptiveRateControl = adaptiveRateControl;
             Configuration.BlockingRecv = blockingRecv;
