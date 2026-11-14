@@ -930,7 +930,7 @@ soft-start time to zero disables the fade-in.</p>
 <section id="aircraft-and-control-surfaces">
 <span id="aircraft"></span><h3>Aircraft and control surfaces<a class="headerlink" href="#aircraft-and-control-surfaces" title="Link to this heading">#</a></h3>
 <p>Control surfaces differ from reaction wheels, RCS and engine gimbals in two ways. Their
-torque depends on the airflow, and they take time to deflect. The autopilot models both,
+torque depends on the airflow, and they deflect at a fixed rate. The autopilot models both,
 so an aircraft holds and steps its attitude with the default settings. A rocket with fins
 gets the same handling, in proportion to the fins’ share of its torque.</p>
 <p>The autopilot reads each control surface’s torque, deflection range and actuator speed
@@ -966,8 +966,19 @@ section. The mechanism is described under <a class="reference internal" href="#c
 installed.</p>
 </div>
 </section>
+<section id="engine-gimbals">
+<span id="id7"></span><h3>Engine gimbals<a class="headerlink" href="#engine-gimbals" title="Link to this heading">#</a></h3>
+<p>Some engines move their gimbal toward the commanded angle at a response speed, set by
+<code class="docutils literal notranslate"><span class="pre">gimbalResponseSpeed</span></code> in the part’s configuration. The KS-25 “Vector” responds in about
+0.115 seconds, for example. The autopilot reads each gimbal’s response speed and allows for
+it when it tunes the gains. On an axis steered mostly by slow gimbals, it lowers the
+inner loop’s bandwidth below the one the time to peak sets, so the vessel holds its
+attitude without a limit cycle.</p>
+<p>The <a class="reference internal" href="#info-window"><span class="std std-ref">info window</span></a> shows the lag per axis, in the LAG row of its PID GAIN
+section. The mechanism is described under <a class="reference internal" href="#gimbal-lag-tuning"><span class="std std-ref">Gimbal lag</span></a>.</p>
+</section>
 <section id="corner-cases">
-<span id="id7"></span><h3>Corner cases<a class="headerlink" href="#corner-cases" title="Link to this heading">#</a></h3>
+<span id="id8"></span><h3>Corner cases<a class="headerlink" href="#corner-cases" title="Link to this heading">#</a></h3>
 <section id="when-sitting-on-the-launchpad">
 <h4>When sitting on the launchpad<a class="headerlink" href="#when-sitting-on-the-launchpad" title="Link to this heading">#</a></h4>
 <p>While the vessel is held on the launch clamps it cannot rotate, and with its engines
@@ -1018,13 +1029,12 @@ for reaction wheels but only approximate for a vessel whose authority is asymmet
 (different in the two directions of an axis). Because the torque is read reactively
 rather than predicted, the auto-tuner adapts to a change in authority only as fast as
 the inner loop can respond.</p>
-<p>The same single-figure model can also affect <em>stability</em>, not just accuracy. It treats
-the commanded torque as taking effect instantly, but a vessel steered by gimbaled engines
-or aerodynamic control surfaces responds with a lag — the gimbal takes time to slew, a
-control surface to deflect and its aerodynamic force to build. Working only from the
-instantaneous torque figure, the auto-tuner can then tune the loop more aggressively than
-the delayed response can support, and the controller limit-cycles: the nose orbits the
-target and the controls swing hard, even though the craft is perfectly rigid. This is
+<p>The same single-figure model can also affect <em>stability</em>, not just accuracy. A torque
+source can respond with a lag the autopilot does not model, such as a control surface’s
+aerodynamic force building or a mod’s gimbal slewing. The auto-tuner can then tune the
+loop more aggressively than the delayed response can support, and the controller
+limit-cycles: the nose orbits the target and the controls swing hard, even though the
+craft is perfectly rigid. This is
 distinct from structural flexibility — there is no bending, and the oscillation is genuine
 rigid-body motion rather than a bending mode showing up in the measured angular velocity,
 so the flexibility detector does not see it. Instead, the autopilot treats a sustained
@@ -1032,9 +1042,8 @@ so the flexibility detector does not see it. Instead, the autopilot treats a sus
 <a class="reference internal" href="#bandwidth-floor"><span class="std std-ref">bandwidth floor</span></a> it uses for a flexible craft — but keeping the
 feedforward, which the slower loop needs to hold attitude — which lets it hold cleanly. As
 with a flexible craft, the reduced bandwidth makes it track a large, continuous slew less
-precisely. The autopilot models the actuator speed of control surfaces, as described
-under <a class="reference internal" href="#aircraft"><span class="std std-ref">Aircraft and control surfaces</span></a>, but not the slew of an engine
-gimbal. A gimbal-steered craft in this state is held gently rather than tracked tightly.</p>
+precisely. The autopilot models the actuator speed of control surfaces and the response
+speed of stock engine gimbals, as described under <a class="reference internal" href="#aircraft"><span class="std std-ref">Aircraft and control surfaces</span></a> and <a class="reference internal" href="#engine-gimbals"><span class="std std-ref">Engine gimbals</span></a>.</p>
 <p>While the autopilot detects and damps structural flexibility automatically, it leans
 most heavily on <strong>reducing the affected craft’s control bandwidth</strong> while it holds
 attitude, rather than on the notch filter it also applies. In principle a notch placed
@@ -1078,7 +1087,8 @@ shows:</p>
 target the loop is currently tracking, and <code class="docutils literal notranslate"><span class="pre">COMMAND</span></code>, the commanded target, shown only
 while a change is being <a class="reference internal" href="#target-smoothing"><span class="std std-ref">smoothed</span></a> in).</p></li>
 <li><p><strong>ATTITUDE ERROR</strong> — the total and per-axis pointing error to that target.</p></li>
-<li><p><strong>PID GAIN</strong> — the autotuned inner-loop gains (<span class="math notranslate nohighlight">\(K_P\)</span> and <span class="math notranslate nohighlight">\(K_I\)</span>) per axis.</p></li>
+<li><p><strong>PID GAIN</strong> — the autotuned inner-loop gains (<span class="math notranslate nohighlight">\(K_P\)</span> and <span class="math notranslate nohighlight">\(K_I\)</span>) per axis,
+and the <a class="reference internal" href="#engine-gimbals"><span class="std std-ref">engine gimbal lag</span></a> the tuning allows for.</p></li>
 <li><p><strong>OSCILLATION</strong> — the flexible-craft handling, mirroring the <a class="reference internal" href="#oscillation"><span class="std std-ref">detector, gates and
 mitigations</span></a> structure: the detector readouts (structural level,
 control-output envelope and estimated mode frequency), the gate weights (hold factor,
@@ -1094,7 +1104,7 @@ oscillation detector, gates and mitigations working in real time.</p>
 </section>
 </section>
 <section id="how-it-works">
-<span id="id8"></span><h2>How it works<a class="headerlink" href="#how-it-works" title="Link to this heading">#</a></h2>
+<span id="id9"></span><h2>How it works<a class="headerlink" href="#how-it-works" title="Link to this heading">#</a></h2>
 <p>This part explains the control law in detail: how the autopilot turns an attitude error
 into control inputs, and how it tunes itself. It is not needed in order to use the
 autopilot, but is useful if you want a deeper understanding of how it works, or want to
@@ -1280,7 +1290,7 @@ error <span class="math notranslate nohighlight">\(\theta\)</span>, not the stop
 ramp.</p>
 </section>
 <section id="stopping-distance-feedforward">
-<span id="id9"></span><h4>Stopping-distance feedforward<a class="headerlink" href="#stopping-distance-feedforward" title="Link to this heading">#</a></h4>
+<span id="id10"></span><h4>Stopping-distance feedforward<a class="headerlink" href="#stopping-distance-feedforward" title="Link to this heading">#</a></h4>
 <p>The profile above gives the speed to aim for assuming the vessel starts from
 rest. In practice the vessel is usually already rotating — towards or away from
 the target. Feeding the raw error <span class="math notranslate nohighlight">\(\theta\)</span> into the profile would then
@@ -1305,8 +1315,9 @@ controller that is not saturated decelerates more gently than full torque, so it
 true stopping distance is larger. It is approximated by:</p>
 <div class="math notranslate nohighlight">
 \[\Delta\theta_{lin} = \frac{\omega}{\text{bw}}, \quad
-\text{bw} = K_P \frac{\tau_{max}}{I} = 2\zeta\omega_0\]</div>
-<p>where <span class="math notranslate nohighlight">\(\text{bw}\)</span> is the closed-loop bandwidth (see <a class="reference internal" href="#tuning-the-controllers"><span class="std std-ref">Controller gain tuning</span></a> for <span class="math notranslate nohighlight">\(K_P\)</span>, <span class="math notranslate nohighlight">\(\zeta\)</span> and <span class="math notranslate nohighlight">\(\omega_0\)</span>). The
+\text{bw} = K_P \frac{\tau_{max}}{I}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\text{bw}\)</span> is the closed-loop bandwidth (see <a class="reference internal" href="#tuning-the-controllers"><span class="std std-ref">Controller gain tuning</span></a> for <span class="math notranslate nohighlight">\(K_P\)</span>). It is <span class="math notranslate nohighlight">\(2\zeta\omega_0\)</span>, less on an axis
+with <a class="reference internal" href="#gimbal-lag-tuning"><span class="std std-ref">gimbal lag</span></a>. The
 <em>unfloored</em> proportional gain is used here: on a flexible craft the <a class="reference internal" href="#oscillation"><span class="std std-ref">bandwidth floor</span></a> deliberately lowers <span class="math notranslate nohighlight">\(K_P\)</span> while holding, but the stopping-distance
 term uses the gain <em>before</em> that reduction, so flooring the bandwidth does not inflate the
 predicted <span class="math notranslate nohighlight">\(1/\text{bw}\)</span> stopping distance. This term improves the approach on small,
@@ -1460,7 +1471,7 @@ autopilot damps roll rotation without holding a specific angle.</p>
 <span class="math notranslate nohighlight">\([-1, 1]\)</span>: an <em>acceleration feedforward</em> derived from the velocity setpoint, and a
 <em>gyroscopic feedforward</em> that cancels the rigid-body cross-coupling between the axes.</p>
 <section id="acceleration-feedforward">
-<span id="id10"></span><h4>Acceleration feedforward<a class="headerlink" href="#acceleration-feedforward" title="Link to this heading">#</a></h4>
+<span id="id11"></span><h4>Acceleration feedforward<a class="headerlink" href="#acceleration-feedforward" title="Link to this heading">#</a></h4>
 <p>The velocity setpoint <span class="math notranslate nohighlight">\(\omega_{ref}\)</span> changes from tick to tick as the vessel
 rotates and the bang-bang profile is re-evaluated. Its time derivative is the angular
 acceleration the vessel must produce to stay on the trajectory:</p>
@@ -1548,7 +1559,7 @@ the inner-loop bandwidth has been floored (see <a class="reference internal" hre
 on a rigid craft.</p>
 </section>
 <section id="gyroscopic-feedforward">
-<span id="id11"></span><h4>Gyroscopic feedforward<a class="headerlink" href="#gyroscopic-feedforward" title="Link to this heading">#</a></h4>
+<span id="id12"></span><h4>Gyroscopic feedforward<a class="headerlink" href="#gyroscopic-feedforward" title="Link to this heading">#</a></h4>
 <p>The <a class="reference internal" href="#tuning-the-controllers"><span class="std std-ref">controller gain tuning</span></a> models each axis as an independent
 plant <span class="math notranslate nohighlight">\(\tau = I\dot\omega\)</span>. The true rigid-body equation of motion, however,
 couples the axes through a gyroscopic term:</p>
@@ -1644,7 +1655,34 @@ the overshoot and time to peak:</p>
 the closed-loop bandwidth <span class="math notranslate nohighlight">\(\text{bw} = 2\zeta\omega_0\)</span> used in the
 <a class="reference internal" href="#stopping-distance-feedforward"><span class="std std-ref">stopping-distance feedforward</span></a> is
 proportional to <span class="math notranslate nohighlight">\(\omega_0\)</span>; increasing the time to peak <span class="math notranslate nohighlight">\(T_P\)</span> lowers
-both.</p>
+both. With gimbal lag, the feedforward uses <span class="math notranslate nohighlight">\(K_P \tau_{max} / I\)</span> from the gains below.</p>
+<section id="gimbal-lag">
+<span id="gimbal-lag-tuning"></span><h4>Gimbal lag<a class="headerlink" href="#gimbal-lag" title="Link to this heading">#</a></h4>
+<p>A gimbal with response speed <span class="math notranslate nohighlight">\(v\)</span> moves a fraction <span class="math notranslate nohighlight">\(v\,\Delta t\)</span> of the way to
+its target each physics tick of length <span class="math notranslate nohighlight">\(\Delta t\)</span>. That is a first-order lag with
+time constant:</p>
+<div class="math notranslate nohighlight">
+\[T_g = -\frac{\Delta t}{\ln(1 - v\,\Delta t)}\]</div>
+<p>Only the gimbals’ share of the torque lags. An axis therefore lags the command by each
+gimbal’s lag, weighted by its share <span class="math notranslate nohighlight">\(\tau_i / \tau_{max}\)</span> of the axis’s torque:</p>
+<div class="math notranslate nohighlight">
+\[T = \sum_i \frac{\tau_i}{\tau_{max}} T_{g,i}\]</div>
+<p>The lag adds a third pole to the closed loop. Its characteristic polynomial is:</p>
+<div class="math notranslate nohighlight">
+\[T s^3 + s^2 + \frac{K_P \tau_{max}}{I} s + \frac{K_I \tau_{max}}{I}\]</div>
+<p>The autopilot keeps the pair of poles above and puts the third at
+<span class="math notranslate nohighlight">\(p = 1/T - \text{bw}\)</span>. Equating coefficients gives:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}K_P &amp;= \frac{I}{\tau_{max}} \left( \text{bw} + T (\omega_0^2 - \text{bw}^2) \right) \\
+K_I &amp;= \frac{I}{\tau_{max}} \omega_0^2 (1 - T\,\text{bw})\end{split}\]</div>
+<p>With no lag these are the gains above. A third pole slower than the pair would dominate
+the response, so <span class="math notranslate nohighlight">\(\omega_0\)</span> is capped to keep <span class="math notranslate nohighlight">\(p \ge \omega_0\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\omega_0 \le \frac{1}{(2\zeta + 1)\,T}\]</div>
+<p>The cap scales <span class="math notranslate nohighlight">\(\text{bw}\)</span> and <span class="math notranslate nohighlight">\(\omega_0\)</span> by the same factor, so the damping
+ratio is kept. With the default overshoot it is <span class="math notranslate nohighlight">\(\omega_0 \le 0.38 / T\)</span>. On a vessel
+steered only by the KS-25 “Vector”, with <span class="math notranslate nohighlight">\(T = 0.115\)</span> seconds, that is a time to peak
+of 1.7 seconds.</p>
 <p>The gains are recomputed every physics tick, so the autopilot adapts as the
 vessel’s available torque and moment of inertia change — for example as fuel is
 burned, stages are dropped, or engines are throttled. The available torque is
@@ -1657,6 +1695,7 @@ small, slowly-varying corrections from atmospheric drag, off-axis thrust, or mas
 changes. The gains <span class="math notranslate nohighlight">\(K_P\)</span> and <span class="math notranslate nohighlight">\(K_I\)</span> derived from the overshoot and
 time-to-peak parameters remain valid for this purpose, and the same settings produce a
 less loaded controller that relies more on the feedforward for large maneuvers.</p>
+</section>
 <section id="integral-anti-windup">
 <h4>Integral anti-windup<a class="headerlink" href="#integral-anti-windup" title="Link to this heading">#</a></h4>
 <p>The integral term of a PI controller can <em>wind up</em> — accumulate a large value — whenever
@@ -1690,10 +1729,10 @@ on its own without disturbing the others (see <a class="reference internal" href
 the manual controls).</p>
 <p>In outline, the signals flow from the two measured inputs, through the observation and
 gating layers, to the four mitigations that tap into the control loop:</p>
-<figure class="align-center" id="id14">
+<figure class="align-center" id="id15">
 <img alt="../_images/autopilot-oscillation.png" src="../_images/autopilot-oscillation.png" />
 <figcaption>
-<p><span class="caption-text">Oscillation observation, gating and mitigation pipeline.</span><a class="headerlink" href="#id14" title="Link to this image">#</a></p>
+<p><span class="caption-text">Oscillation observation, gating and mitigation pipeline.</span><a class="headerlink" href="#id15" title="Link to this image">#</a></p>
 </figcaption>
 </figure>
 <p>The observation layer never acts on the craft; it only sets the latch, frequency and
@@ -1786,7 +1825,7 @@ is safe to leave always on.</p>
 </section>
 </section>
 <section id="control-surfaces">
-<span id="id12"></span><h3>Control surfaces<a class="headerlink" href="#control-surfaces" title="Link to this heading">#</a></h3>
+<span id="id13"></span><h3>Control surfaces<a class="headerlink" href="#control-surfaces" title="Link to this heading">#</a></h3>
 <p>A control surface’s torque scales with dynamic pressure, and the surface moves to a new
 deflection at a fixed actuator speed. The autopilot models the surfaces through the share
 <span class="math notranslate nohighlight">\(s\)</span> of each axis’s available torque they provide. An axis with no surfaces has
@@ -1845,7 +1884,7 @@ so <span class="math notranslate nohighlight">\(K_P\)</span> scales with <span c
 is kept.</p>
 </section>
 <section id="aerodynamic-rate-limit">
-<span id="id13"></span><h4>Aerodynamic rate limit<a class="headerlink" href="#aerodynamic-rate-limit" title="Link to this heading">#</a></h4>
+<span id="id14"></span><h4>Aerodynamic rate limit<a class="headerlink" href="#aerodynamic-rate-limit" title="Link to this heading">#</a></h4>
 <p>The steady rate a vessel holds on an axis is set by the spare control torque: the
 available torque less the trim, the slowly varying average of the command over 3 seconds.
 Every 0.5 seconds the autopilot evaluates the vessel’s aerodynamics at a range of
@@ -1943,6 +1982,7 @@ atmosphere.</p>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#aircraft-and-control-surfaces">Aircraft and control surfaces</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#engine-gimbals">Engine gimbals</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#corner-cases">Corner cases</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#when-sitting-on-the-launchpad">When sitting on the launchpad</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#when-the-available-torque-is-zero">When the available torque is zero</a></li>
@@ -1977,6 +2017,7 @@ atmosphere.</p>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#controller-gain-tuning">Controller gain tuning</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gimbal-lag">Gimbal lag</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#integral-anti-windup">Integral anti-windup</a></li>
 </ul>
 </li>

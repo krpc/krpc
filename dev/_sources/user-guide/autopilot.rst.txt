@@ -482,7 +482,7 @@ Aircraft and control surfaces
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Control surfaces differ from reaction wheels, RCS and engine gimbals in two ways. Their
-torque depends on the airflow, and they take time to deflect. The autopilot models both,
+torque depends on the airflow, and they deflect at a fixed rate. The autopilot models both,
 so an aircraft holds and steps its attitude with the default settings. A rocket with fins
 gets the same handling, in proportion to the fins' share of its torque.
 
@@ -517,6 +517,21 @@ section. The mechanism is described under :ref:`Control surfaces <control-surfac
 .. note::
    The angular velocity limit is not applied when the Ferram Aerospace Research mod is
    installed.
+
+.. _engine-gimbals:
+
+Engine gimbals
+^^^^^^^^^^^^^^
+
+Some engines move their gimbal toward the commanded angle at a response speed, set by
+``gimbalResponseSpeed`` in the part's configuration. The KS-25 "Vector" responds in about
+0.115 seconds, for example. The autopilot reads each gimbal's response speed and allows for
+it when it tunes the gains. On an axis steered mostly by slow gimbals, it lowers the
+inner loop's bandwidth below the one the time to peak sets, so the vessel holds its
+attitude without a limit cycle.
+
+The :ref:`info window <info-window>` shows the lag per axis, in the LAG row of its PID GAIN
+section. The mechanism is described under :ref:`Gimbal lag <gimbal-lag-tuning>`.
 
 .. _corner-cases:
 
@@ -582,13 +597,12 @@ for reaction wheels but only approximate for a vessel whose authority is asymmet
 rather than predicted, the auto-tuner adapts to a change in authority only as fast as
 the inner loop can respond.
 
-The same single-figure model can also affect *stability*, not just accuracy. It treats
-the commanded torque as taking effect instantly, but a vessel steered by gimbaled engines
-or aerodynamic control surfaces responds with a lag — the gimbal takes time to slew, a
-control surface to deflect and its aerodynamic force to build. Working only from the
-instantaneous torque figure, the auto-tuner can then tune the loop more aggressively than
-the delayed response can support, and the controller limit-cycles: the nose orbits the
-target and the controls swing hard, even though the craft is perfectly rigid. This is
+The same single-figure model can also affect *stability*, not just accuracy. A torque
+source can respond with a lag the autopilot does not model, such as a control surface's
+aerodynamic force building or a mod's gimbal slewing. The auto-tuner can then tune the
+loop more aggressively than the delayed response can support, and the controller
+limit-cycles: the nose orbits the target and the controls swing hard, even though the
+craft is perfectly rigid. This is
 distinct from structural flexibility — there is no bending, and the oscillation is genuine
 rigid-body motion rather than a bending mode showing up in the measured angular velocity,
 so the flexibility detector does not see it. Instead, the autopilot treats a sustained
@@ -596,9 +610,9 @@ so the flexibility detector does not see it. Instead, the autopilot treats a sus
 :ref:`bandwidth floor <bandwidth-floor>` it uses for a flexible craft — but keeping the
 feedforward, which the slower loop needs to hold attitude — which lets it hold cleanly. As
 with a flexible craft, the reduced bandwidth makes it track a large, continuous slew less
-precisely. The autopilot models the actuator speed of control surfaces, as described
-under :ref:`Aircraft and control surfaces <aircraft>`, but not the slew of an engine
-gimbal. A gimbal-steered craft in this state is held gently rather than tracked tightly.
+precisely. The autopilot models the actuator speed of control surfaces and the response
+speed of stock engine gimbals, as described under :ref:`Aircraft and control surfaces
+<aircraft>` and :ref:`Engine gimbals <engine-gimbals>`.
 
 While the autopilot detects and damps structural flexibility automatically, it leans
 most heavily on **reducing the affected craft's control bandwidth** while it holds
@@ -651,7 +665,8 @@ shows:
   target the loop is currently tracking, and ``COMMAND``, the commanded target, shown only
   while a change is being :ref:`smoothed <target-smoothing>` in).
 * **ATTITUDE ERROR** — the total and per-axis pointing error to that target.
-* **PID GAIN** — the autotuned inner-loop gains (:math:`K_P` and :math:`K_I`) per axis.
+* **PID GAIN** — the autotuned inner-loop gains (:math:`K_P` and :math:`K_I`) per axis,
+  and the :ref:`engine gimbal lag <engine-gimbals>` the tuning allows for.
 * **OSCILLATION** — the flexible-craft handling, mirroring the :ref:`detector, gates and
   mitigations <oscillation>` structure: the detector readouts (structural level,
   control-output envelope and estimated mode frequency), the gate weights (hold factor,
@@ -932,10 +947,11 @@ true stopping distance is larger. It is approximated by:
 
 .. math::
    \Delta\theta_{lin} = \frac{\omega}{\text{bw}}, \quad
-   \text{bw} = K_P \frac{\tau_{max}}{I} = 2\zeta\omega_0
+   \text{bw} = K_P \frac{\tau_{max}}{I}
 
 where :math:`\text{bw}` is the closed-loop bandwidth (see :ref:`Controller gain tuning
-<tuning-the-controllers>` for :math:`K_P`, :math:`\zeta` and :math:`\omega_0`). The
+<tuning-the-controllers>` for :math:`K_P`). It is :math:`2\zeta\omega_0`, less on an axis
+with :ref:`gimbal lag <gimbal-lag-tuning>`. The
 *unfloored* proportional gain is used here: on a flexible craft the :ref:`bandwidth floor
 <oscillation>` deliberately lowers :math:`K_P` while holding, but the stopping-distance
 term uses the gain *before* that reduction, so flooring the bandwidth does not inflate the
@@ -1354,7 +1370,48 @@ By default, kRPC uses the values :math:`O = 0.01` and :math:`T_P = 1`. Note that
 the closed-loop bandwidth :math:`\text{bw} = 2\zeta\omega_0` used in the
 :ref:`stopping-distance feedforward <stopping-distance-feedforward>` is
 proportional to :math:`\omega_0`; increasing the time to peak :math:`T_P` lowers
-both.
+both. With gimbal lag, the feedforward uses :math:`K_P \tau_{max} / I` from the gains below.
+
+.. _gimbal-lag-tuning:
+
+Gimbal lag
+""""""""""
+
+A gimbal with response speed :math:`v` moves a fraction :math:`v\,\Delta t` of the way to
+its target each physics tick of length :math:`\Delta t`. That is a first-order lag with
+time constant:
+
+.. math::
+   T_g = -\frac{\Delta t}{\ln(1 - v\,\Delta t)}
+
+Only the gimbals' share of the torque lags. An axis therefore lags the command by each
+gimbal's lag, weighted by its share :math:`\tau_i / \tau_{max}` of the axis's torque:
+
+.. math::
+   T = \sum_i \frac{\tau_i}{\tau_{max}} T_{g,i}
+
+The lag adds a third pole to the closed loop. Its characteristic polynomial is:
+
+.. math::
+   T s^3 + s^2 + \frac{K_P \tau_{max}}{I} s + \frac{K_I \tau_{max}}{I}
+
+The autopilot keeps the pair of poles above and puts the third at
+:math:`p = 1/T - \text{bw}`. Equating coefficients gives:
+
+.. math::
+   K_P &= \frac{I}{\tau_{max}} \left( \text{bw} + T (\omega_0^2 - \text{bw}^2) \right) \\
+   K_I &= \frac{I}{\tau_{max}} \omega_0^2 (1 - T\,\text{bw})
+
+With no lag these are the gains above. A third pole slower than the pair would dominate
+the response, so :math:`\omega_0` is capped to keep :math:`p \ge \omega_0`:
+
+.. math::
+   \omega_0 \le \frac{1}{(2\zeta + 1)\,T}
+
+The cap scales :math:`\text{bw}` and :math:`\omega_0` by the same factor, so the damping
+ratio is kept. With the default overshoot it is :math:`\omega_0 \le 0.38 / T`. On a vessel
+steered only by the KS-25 "Vector", with :math:`T = 0.115` seconds, that is a time to peak
+of 1.7 seconds.
 
 The gains are recomputed every physics tick, so the autopilot adapts as the
 vessel's available torque and moment of inertia change — for example as fuel is
