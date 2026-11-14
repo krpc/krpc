@@ -119,3 +119,4 @@ Going Further
 * Clients are also available for :doc:`C# <csharp>`, :doc:`C++ <cpp>`, :doc:`C <cnano>`,
   :doc:`Java <java>`, :doc:`Lua <lua>` and :doc:`JavaScript <js>`.
 * Any language can :doc:`talk to the server directly <communication-protocols>`.
+* Ask for help on the `kRPC Discord server <https://discord.gg/bXuaTrj>`_.
