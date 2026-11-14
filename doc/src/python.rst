@@ -122,27 +122,12 @@ Every error of the client's own derives :class:`krpc.error.RemoteError`. A stand
 Values
 ------
 
-Procedures take and return values of these types:
+Procedures take and return Python values, such as ``int``, ``str``, ``list`` and ``dict``, and
+``None`` for a null. The services also define their own types:
 
-.. list-table::
-   :header-rows: 1
-
-   * - Type
-     - Python type
-   * - Integer, floating point number, boolean
-     - ``int``, ``float``, ``bool``
-   * - String, bytes
-     - ``str``, ``bytes``
-   * - Tuple, list, set, dictionary
-     - ``tuple``, ``list``, ``set``, ``dict``
-   * - Class
-     - A remote object, described below
-   * - Enumeration
-     - An ``enum.Enum``, or an ``enum.Flag`` for a flags enumeration
-   * - Structure
-     - A ``NamedTuple``
-   * - Null
-     - ``None``
+* A class is a remote object, described below.
+* A structure is a ``NamedTuple``.
+* An enumeration is an ``enum.Enum``, or an ``enum.Flag`` for a flags enumeration.
 
 .. _python-client-flags:
 
