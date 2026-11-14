@@ -236,6 +236,7 @@ class DispatchGenerator(Generator):
             "result": result,
             "variants": variants,
             "stream": variants[-1]["stream"],
+            "template": self.call_template(member_kind, cls, member_name, parameters),
         }
 
     # Whether the stubs declare default arguments
@@ -295,6 +296,11 @@ class DispatchGenerator(Generator):
 
     def procedure_call(self, kind, cls, name, parameters) -> str | None:
         """The code that builds the call a stream of a member makes, as a ProcedureCall"""
+        return None
+
+    def call_template(self, kind, cls, name, parameters) -> str | None:
+        """The code that builds the call template of a member, a ProcedureCall with no
+        arguments, or None where the client has no call templates"""
         return None
 
     def bound_call(self, cls, name, parameters) -> str | None:
@@ -456,6 +462,40 @@ class CsharpDispatchGenerator(DispatchGenerator):
     def procedure_call(self, kind, cls, name, parameters):
         return "Connection.GetCall (() => %s)" % self.call(kind, cls, name, parameters)
 
+    def call_template(self, kind, cls, name, parameters):
+        service = "connection.%s ()" % self._service
+        service_class = "global::KRPC.Client.Services.%s.Service" % self._service
+        if kind == PROCEDURE:
+            defaults = ", ".join("default" for _ in parameters)
+            body = "%s.%s (%s)" % (service, name, defaults)
+        elif kind == GETTER:
+            body = "%s.%s" % (service, name)
+        elif kind == SETTER:
+            return "Connection.GetSetCallTemplate<%s> (nameof (%s.%s))" % (
+                service_class,
+                service_class,
+                name,
+            )
+        elif kind == STATIC_METHOD:
+            args = ", ".join(["connection"] + ["default" for _ in parameters])
+            body = "%s.%s (%s)" % (self.class_type(self._service, cls), name, args)
+        elif kind == CLASS_SETTER:
+            class_type = self.class_type(self._service, cls)
+            return "Connection.GetSetCallTemplate<%s> (nameof (%s.%s))" % (
+                class_type,
+                class_type,
+                name,
+            )
+        else:
+            class_type = self.class_type(self._service, cls)
+            if kind == METHOD:
+                defaults = ", ".join("default" for _ in parameters[1:])
+                body = "x.%s (%s)" % (name, defaults)
+            else:
+                body = "x.%s" % name
+            return "Connection.GetCallTemplate ((%s x) => %s)" % (class_type, body)
+        return "Connection.GetCallTemplate (() => %s)" % body
+
     def bound_call(self, cls, name, parameters):
         return "%s.Bind (connection).%s (%s)" % (
             self.class_type(self._service, cls),
@@ -616,6 +656,19 @@ class JavaDispatchGenerator(DispatchGenerator):
         return self.stream(kind, cls, name, parameters).replace(
             "connection.addStream(", "connection.getCall(", 1
         )
+
+    def call_template(self, kind, cls, name, parameters):
+        if kind in (PROCEDURE, GETTER, SETTER):
+            owner = self._service
+        else:
+            owner = self.class_type(self._service, cls)
+        if kind in (GETTER, CLASS_GETTER):
+            method = "get" + name
+        elif kind in (SETTER, CLASS_SETTER):
+            method = "set" + name
+        else:
+            method = self._name(name)
+        return 'connection.getCallTemplate(%s.class, "%s")' % (owner, method)
 
     def bound_call(self, cls, name, parameters):
         return "%s.bind(connection).%s(%s)" % (

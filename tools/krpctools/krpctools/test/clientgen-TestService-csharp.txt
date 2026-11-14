@@ -1315,6 +1315,7 @@ namespace KRPC.Client.Services.TestService
         /// </summary>
         [global::System.Obsolete ("Use StringProperty instead.")]
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "get_DeprecatedProperty", typeof(TypeSpecs))]
+        [global::KRPC.Client.Attributes.RPCSetterAttribute ("TestService", "set_DeprecatedProperty")]
         public string DeprecatedProperty {
             get {
                 var _result = connection.Invoke ("TestService", "get_DeprecatedProperty");
@@ -1329,6 +1330,7 @@ namespace KRPC.Client.Services.TestService
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "get_NullableObject", typeof(TypeSpecs))]
+        [global::KRPC.Client.Attributes.RPCSetterAttribute ("TestService", "set_NullableObject")]
         public global::KRPC.Client.Services.TestService.TestClass NullableObject {
             get {
                 var _result = connection.Invoke ("TestService", "get_NullableObject");
@@ -1349,6 +1351,7 @@ namespace KRPC.Client.Services.TestService
         /// </summary>
         /// <returns>The object, or <c>null</c>.</returns>
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "get_ObjectProperty", typeof(TypeSpecs))]
+        [global::KRPC.Client.Attributes.RPCSetterAttribute ("TestService", "set_ObjectProperty")]
         public global::KRPC.Client.Services.TestService.TestClass ObjectProperty {
             get {
                 var _result = connection.Invoke ("TestService", "get_ObjectProperty");
@@ -1368,6 +1371,7 @@ namespace KRPC.Client.Services.TestService
         /// Property documentation string.
         /// </summary>
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "get_StringProperty", typeof(TypeSpecs))]
+        [global::KRPC.Client.Attributes.RPCSetterAttribute ("TestService", "set_StringProperty")]
         public string StringProperty {
             get {
                 var _result = connection.Invoke ("TestService", "get_StringProperty");
@@ -1381,6 +1385,7 @@ namespace KRPC.Client.Services.TestService
             }
         }
 
+        [global::KRPC.Client.Attributes.RPCSetterAttribute ("TestService", "set_StringPropertyPrivateGet")]
         public string StringPropertyPrivateGet {
             set {
                 var _args = new ByteString[] {
@@ -2506,6 +2511,7 @@ namespace KRPC.Client.Services.TestService
         /// </summary>
         [global::System.Obsolete ("Use TestClass instead.")]
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "DeprecatedClass_get_InheritedProperty", typeof(TypeSpecs))]
+        [global::KRPC.Client.Attributes.RPCSetterAttribute ("TestService", "DeprecatedClass_set_InheritedProperty")]
         public string InheritedProperty {
             get {
                 var _args = new ByteString[] {
@@ -2702,6 +2708,7 @@ namespace KRPC.Client.Services.TestService
         /// Property documentation string.
         /// </summary>
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "TestClass_get_IntProperty", typeof(TypeSpecs))]
+        [global::KRPC.Client.Attributes.RPCSetterAttribute ("TestService", "TestClass_set_IntProperty")]
         public int IntProperty {
             get {
                 var _args = new ByteString[] {
@@ -2724,6 +2731,7 @@ namespace KRPC.Client.Services.TestService
         /// </summary>
         /// <returns>The other object, or <c>null</c>.</returns>
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "TestClass_get_ObjectProperty", typeof(TypeSpecs))]
+        [global::KRPC.Client.Attributes.RPCSetterAttribute ("TestService", "TestClass_set_ObjectProperty")]
         public global::KRPC.Client.Services.TestService.TestClass ObjectProperty {
             get {
                 var _args = new ByteString[] {
@@ -2743,6 +2751,7 @@ namespace KRPC.Client.Services.TestService
             }
         }
 
+        [global::KRPC.Client.Attributes.RPCSetterAttribute ("TestService", "TestClass_set_StringPropertyPrivateGet")]
         public string StringPropertyPrivateGet {
             set {
                 var _args = new ByteString[] {

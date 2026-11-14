@@ -22,3 +22,4 @@ test_calls.py::test_deprecated_reason_of_member  # As test_deprecated_reason
 test_calls.py::test_deprecated_reason_of_class  # As test_deprecated_reason
 test_calls.py::test_deprecated_stream  # A stream names its method in a string, which javac does not check
 test_calls.py::test_deprecated_call  # As test_deprecated_stream
+test_calls.py::test_deprecated_call_template  # As test_deprecated_stream

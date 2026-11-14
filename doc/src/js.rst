@@ -614,6 +614,17 @@ Client API Reference
 
       Throws a ``TypeError`` for a function that does not return one call.
 
+   .. method:: getCallTemplate(member)
+
+      The call template of a member, a ``ProcedureCall`` message that names the procedure and
+      carries no arguments, for ``KRPC.Expression.callWithArguments`` to supply each one.
+
+      :param member: A member function, reached through its class or service with no instance,
+                     such as ``Engine.prototype.getHasFuel``, ``Engine.staticMethod`` or
+                     ``conn.spaceCenter.launchVessel``.
+
+      Throws a ``TypeError`` for a function that is not a member of a service or a class.
+
    .. method:: compile(fn, captures, parameters)
 
       Compiles a JavaScript function into a server side function, and compiles a server side

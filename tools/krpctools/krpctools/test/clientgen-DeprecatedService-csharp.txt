@@ -107,6 +107,7 @@ namespace KRPC.Client.Services.DeprecatedService
         /// </summary>
         [global::System.Obsolete ("Use TestService instead.")]
         [global::KRPC.Client.Attributes.RPCAttribute ("DeprecatedService", "get_Property", typeof(TypeSpecs))]
+        [global::KRPC.Client.Attributes.RPCSetterAttribute ("DeprecatedService", "set_Property")]
         public string Property {
             get {
                 var _result = connection.Invoke ("DeprecatedService", "get_Property");

@@ -30,7 +30,9 @@ final class Functions {
     for (Map.Entry<Integer, Value> argument : command.getArgumentsMap().entrySet()) {
       arguments.put(argument.getKey(), function(argument.getValue()));
     }
-    krpc.schema.KRPC.ProcedureCall call = Dispatch.call(connection, command.getInvoke());
+    krpc.schema.KRPC.ProcedureCall call = command.getTemplate()
+        ? Dispatch.callTemplate(connection, command.getInvoke())
+        : Dispatch.call(connection, command.getInvoke());
     return Values.resultObject(Expression.callWithArguments(connection, call, arguments));
   }
 

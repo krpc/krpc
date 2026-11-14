@@ -380,7 +380,8 @@ Mapping the Spec to JavaScript
    * - Conditions
      - None. See `Values and Waits`_
    * - Getting a call as a value
-     - ``Connection.getCall``, given a function returning one call
+     - ``Connection.getCall``, given a function returning one call, or ``getCallTemplate``, given a
+       member
    * - Value type of a server side function
      - The function's own type, read from the server. A null value is ``null`` at any type
    * - Flags enumeration

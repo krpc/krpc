@@ -20,6 +20,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CallTemplateTest.cs" />
     <Compile Include="EncoderTest.cs" />
     <Compile Include="ExpressionTreeTest.cs" />
     <Compile Include="FunctionCompilerTest.cs" />

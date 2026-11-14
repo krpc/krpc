@@ -47,6 +47,20 @@ final class Dispatch {
     }
   }
 
+  static krpc.schema.KRPC.ProcedureCall callTemplate(Connection connection, Invoke invoke) {
+    switch (invoke.getService()) {
+      case "KRPC":
+        return KRPCDispatch.callTemplate(connection, invoke.getProcedure());
+      case "TestService":
+        return TestServiceDispatch.callTemplate(connection, invoke.getProcedure());
+      case "ConformanceService":
+        return ConformanceServiceDispatch.callTemplate(connection, invoke.getProcedure());
+      default:
+        throw new UnsupportedOperationException(
+            "The testee cannot build a call template of service " + invoke.getService());
+    }
+  }
+
   static krpc.schema.KRPC.ProcedureCall call(Connection connection, Invoke invoke)
       throws Exception {
     switch (invoke.getService()) {

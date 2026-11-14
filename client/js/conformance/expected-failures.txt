@@ -4,14 +4,3 @@ test_connection.py::test_stall_timeout_values[negative]  # As above
 test_connection.py::test_stall_timeout_values[zero]  # As above
 test_streams.py::test_drop_last_handle  # Dropping the last handle leaves the stream on the server
 test_events.py::test_drop_last_handle  # As test_streams.py::test_drop_last_handle
-test_calls.py::test_deprecated_call_template[method]  # The client has no call templates yet
-test_calls.py::test_deprecated_call_template[procedure]  # As above
-test_calls.py::test_deprecated_call_template[property]  # As above
-test_functions.py::test_call_template[class-getter]  # As above
-test_functions.py::test_call_template[class-setter]  # As above
-test_functions.py::test_call_template_default  # As above
-test_functions.py::test_call_template_message  # As above
-test_functions.py::test_call_template[method]  # As above
-test_functions.py::test_call_template_missing_argument  # As above
-test_functions.py::test_call_template[procedure]  # As above
-test_functions.py::test_call_template[setter]  # As above

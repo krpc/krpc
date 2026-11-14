@@ -611,6 +611,17 @@ Client API Reference
       Throws an :type:`~java.lang.IllegalArgumentException` if there is no method of that name
       taking the arguments.
 
+   .. method:: krpc.schema.KRPC.ProcedureCall getCallTemplate(Class<?> clazz, String method)
+
+      The call template of a member, a procedure call message that names the procedure and
+      carries no arguments, for ``Expression.callWithArguments`` to supply each one. The member is
+      named through its class or service, with no instance, by the name of its method, such as
+      ``getCallTemplate(SpaceCenter.Engine.class, "getHasFuel")``. A property's setter is named
+      ``set<Name>``.
+
+      Throws an :type:`~java.lang.IllegalArgumentException` if the class has no remote procedure
+      of that name.
+
 .. type:: class Stream<T>
 
    A stream. See :std:ref:`java-client-streams`.

@@ -570,6 +570,34 @@ function resolve(conn: DynamicConnection, command: Invoke): () => Promise<unknow
   return () => target[member](...args);
 }
 
+/** The member function of a call template, reached through its class or service. */
+function resolveTemplate(conn: DynamicConnection, command: Invoke): (...args: never[]) => unknown {
+  const name = command.procedure;
+  const service = conn[camelCase(command.service)];
+  if (service === undefined) {
+    throw new Unsupported(`No service ${command.service}`);
+  }
+  let target: any = service;
+  let member = camelCase(name);
+  if (name.startsWith("get_") || name.startsWith("set_")) {
+    member = name.slice(0, 3) + name.slice(4);
+  } else if (name.includes("_")) {
+    const cls = service[name.slice(0, name.indexOf("_"))];
+    const memberName = name.slice(name.lastIndexOf("_") + 1);
+    target = name.includes("_static_") ? cls : cls?.prototype;
+    member = camelCase(memberName);
+    if (name.includes("_get_")) {
+      member = `get${memberName}`;
+    } else if (name.includes("_set_")) {
+      member = `set${memberName}`;
+    }
+  }
+  if (target === null || target === undefined || typeof target[member] !== "function") {
+    throw new Unsupported(`No member ${member} for ${command.service}.${name}`);
+  }
+  return target[member];
+}
+
 /** Connecting the default connection closes every connection, and connecting a named one
  * closes only the connection of that name. */
 async function connectCommand(command: Connect, name: string): Promise<void> {
@@ -681,6 +709,10 @@ function memberUse(conn: DynamicConnection, command: DeprecationSignals): () => 
     throw new Unsupported(`No ${command.use} of a procedure`);
   }
   if (command.invoke !== undefined) {
+    if (command.use === "template") {
+      const template = resolveTemplate(conn, command.invoke);
+      return () => conn.getCallTemplate(template);
+    }
     const call = resolve(conn, command.invoke);
     switch (command.use) {
       case "":
@@ -933,7 +965,9 @@ async function dispatchValue(command: Command): Promise<Value> {
       if (content.value.invoke === undefined) {
         throw new Error("No call");
       }
-      const call = conn.getCall(resolve(conn, content.value.invoke));
+      const call = content.value.template
+        ? conn.getCallTemplate(resolveTemplate(conn, content.value.invoke))
+        : conn.getCall(resolve(conn, content.value.invoke));
       const args = new Map(
         Object.entries(content.value.arguments).map(([position, x]) => [
           Number(position),

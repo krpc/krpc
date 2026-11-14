@@ -235,6 +235,7 @@ namespace KRPC.Client.Services.KRPC
         /// cannot be saved, e.g. while under acceleration.
         /// </summary>
         [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "get_GameScene", typeof(TypeSpecs))]
+        [global::KRPC.Client.Attributes.RPCSetterAttribute ("KRPC", "set_GameScene")]
         public global::KRPC.Client.Services.KRPC.GameScene GameScene {
             get {
                 var _result = connection.Invoke ("KRPC", "get_GameScene");
@@ -266,6 +267,7 @@ namespace KRPC.Client.Services.KRPC
         /// Whether the game is paused.
         /// </summary>
         [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "get_Paused", typeof(TypeSpecs))]
+        [global::KRPC.Client.Attributes.RPCSetterAttribute ("KRPC", "set_Paused")]
         public bool Paused {
             get {
                 var _result = connection.Invoke ("KRPC", "get_Paused");

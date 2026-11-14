@@ -814,6 +814,37 @@ Client API Reference
 
       Converts a lambda expression of any delegate type, as the overload above does.
 
+   .. function:: static KRPC.Schema.KRPC.ProcedureCall GetCallTemplate<T, TResult>(Expression<Func<T, TResult>> expression)
+
+      The call template of a member of a class, a ``KRPC.Schema.KRPC.ProcedureCall`` message that
+      names the procedure and carries no arguments, for
+      :meth:`~KRPC.Client.Services.KRPC.Expression.CallWithArguments` to supply each one. The
+      lambda reads a property or calls a method of its parameter, such as
+      ``(Engine e) => e.HasFuel``, and is not evaluated. Throws an
+      :type:`System.ArgumentException` if the lambda does more than that, or names a member that
+      is not a remote procedure.
+
+   .. function:: static KRPC.Schema.KRPC.ProcedureCall GetCallTemplate<T>(Expression<Action<T>> expression)
+
+      The call template of a method with no return value, as the overload above.
+
+   .. function:: static KRPC.Schema.KRPC.ProcedureCall GetCallTemplate<TResult>(Expression<Func<TResult>> expression)
+
+      The call template of a member of a service, or of a static method. The lambda takes no
+      parameter, such as ``() => connection.SpaceCenter ().UT``, and its arguments are not
+      evaluated. Throws an :type:`System.ArgumentException` if the lambda names a member of an
+      object, which takes the overload above.
+
+   .. function:: static KRPC.Schema.KRPC.ProcedureCall GetCallTemplate(Expression<Action> expression)
+
+      The call template of a procedure with no return value, as the overload above.
+
+   .. function:: static KRPC.Schema.KRPC.ProcedureCall GetSetCallTemplate<T>(string property)
+
+      The call template of a property's setter, on a class or on a service's ``Service`` class,
+      named as ``nameof (Engine.Throttle)``. Throws an :type:`System.ArgumentException` if the
+      property has no setter that is a remote procedure.
+
 .. class:: RemoteObject
 
    The base class of remote objects. Two objects with the same identifier are equal, and hash
