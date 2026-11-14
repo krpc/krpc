@@ -23,11 +23,35 @@ covers functions written in your own language and compiled by the client, and is
 need. :ref:`The Expression API <server-side-functions-api>` covers the expression trees that
 compiled code translates into, which every client can build directly.
 
-.. note::
+Every client supports ``Run``. Support for the other features differs:
 
-   Compiled functions need the Python, C# or JavaScript client. Events and function streams
-   need the Python, C#, C++, Java or JavaScript client. ``Run`` needs one of those, the C-nano
-   client or the Lua client.
+.. list-table::
+   :header-rows: 1
+
+   * - Client
+     - Compiled functions
+     - Events and function streams
+   * - Python
+     - ✓
+     - ✓
+   * - C#
+     - ✓
+     - ✓
+   * - C++
+     - ✗
+     - ✓
+   * - C-nano
+     - ✗
+     - ✗
+   * - Java
+     - ✗
+     - ✓
+   * - Lua
+     - ✗
+     - ✗
+   * - JavaScript
+     - ✓
+     - ✓
 
 .. _server-side-functions-compiled:
 
@@ -35,9 +59,8 @@ Using Server Side Functions
 ---------------------------
 
 A client with a compiler turns a function or lambda into a server side function. It is the
-simplest way to write one. The constructs a compiler supports depend on the language. A
-language whose lambdas hold a single expression builds statements and exception handlers with
-the :ref:`expression API <server-side-functions-api>`.
+simplest way to write one. The constructs a compiler supports depend on the language. Without a compiler, the :ref:`expression API <server-side-functions-api>` defines a
+server side function directly.
 
 A First Custom Event
 ^^^^^^^^^^^^^^^^^^^^
@@ -70,14 +93,17 @@ This event fires when the vessel's altitude exceeds 1000 meters:
 The client compiles the lambda into a server side function. The mean altitude call becomes an
 embedded RPC, re-invoked on each check. ``1000`` becomes a constant.
 
+The server checks the condition every physics tick until it is true. It then sends your program
+a single message, which ends the wait. Your program makes no polling calls while it
+waits, so it uses no round trips and no CPU time.
+
 Remote Calls and Captured Values
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The compiler splits a function by what each part depends on:
 
 * Reading a property or calling a method of a remote object or service becomes part of the
-  function. The server re-invokes it on every evaluation. So does any operation on its result,
-  such as arithmetic or a square root.
+  function. The server re-invokes it on every evaluation. So does any operation on its result.
 * A sub-expression that uses only client side values, such as captured variables and literals,
   is evaluated once, when the function is compiled. That includes arithmetic and library calls
   on those values. The result becomes a constant.
@@ -111,13 +137,10 @@ The client computes ``threshold * 2`` when it creates the event, so the function
 apoapsis with the constant 100000. To use a new value of ``threshold``, compile a new function
 and remove the old event.
 
-A chain of calls is embedded whole. Both the orbit and the apoapsis altitude calls are part of
-the function, so it follows the vessel's current orbit each tick.
-
 Computed Streams
 ^^^^^^^^^^^^^^^^
 
-Pass a function when creating a stream to stream its computed value. The server runs the
+A stream created from a function carries the function's result. The server runs the
 computation on each stream update:
 
 .. tabs::
@@ -205,11 +228,51 @@ engines that staging reveals:
          :start-after: [docs]
          :end-before: [/docs]
 
+Strings
+^^^^^^^
+
+The language's string operations, such as length, indexing, searching, splitting and case
+conversion, compile to the server's string operations. This streams the vessel's name in upper
+case:
+
+.. tabs::
+
+   .. group-tab:: Python
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/UpperCaseName.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
+
+   .. group-tab:: C#
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/UpperCaseName.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/UpperCaseName.js
+         :start-after: [docs]
+         :end-before: [/docs]
+
+Two rules apply to strings:
+
+* **A character is a string of length one.** The protocol carries no character type, so
+  indexing a string produces a one character string, which works with every other string
+  operation. In a language where indexing a string produces a character, that index is an
+  unsupported construct. Take a substring instead.
+* **Case conversion and comparison are the same in every locale.** Case is converted, and
+  strings are compared, by ordinal value. A function produces the same result whatever language
+  the game runs in.
+
 Statements, Loops and Local Variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-A compiled function can contain statements before its return. This computes the fraction of
-liquid fuel left:
+A compiled function can be a sequence of statements, like any other function in your program.
+This one computes the fraction of liquid fuel left:
 
 .. tabs::
 
@@ -234,7 +297,7 @@ liquid fuel left:
          :start-after: [docs]
          :end-before: [/docs]
 
-A compiled function supports these statements:
+In outline, a compiled function supports these statements:
 
 * If statements, with else branches.
 * While and for-each loops, with break and continue.
@@ -242,11 +305,14 @@ A compiled function supports these statements:
 * Local variables, which can be reassigned and changed in place. A loop can build up a
   collection in one.
 
+The exact set depends on the language. Each client guide lists what its compiler supports:
+:ref:`C# <csharp-client-compiling-lambdas>`, :ref:`JavaScript <js-client-compiling-functions>` and
+:ref:`Python <python-client-compiling-functions>`.
+
 A collection a call returns is a copy, as it is in your program. Changing the copy in a function
 leaves the game's own collection unchanged.
 
-A variable takes its type from its first assignment. Give an empty collection its element type
-with a type annotation:
+This function collects a rating for each active engine:
 
 .. tabs::
 
@@ -271,8 +337,39 @@ with a type annotation:
          :start-after: [docs]
          :end-before: [/docs]
 
-A counter that starts as an integer and later holds a fraction takes an annotation too, such as
-``total: float = 0``.
+A variable keeps one type for the whole function. How it gets that type depends on the language:
+
+.. tabs::
+
+   .. group-tab:: Python
+
+      A variable takes its type from its first assignment. A type annotation sets the type, and
+      each value assigned then widens to it, as an integer does to a float:
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/TotalThrust.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
+
+      An empty collection takes its element type the same way, as in ``ratings: list[str] = []``
+      above.
+
+   .. group-tab:: C#
+
+      A C# lambda holds a single expression, so it has no local variables. Each value has its C#
+      type.
+
+   .. group-tab:: JavaScript
+
+      A number is always a double, so a running total needs no type:
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/TotalThrust.js
+         :start-after: [docs]
+         :end-before: [/docs]
+
+      An empty array, Set or Map takes its type from a later use, such as a ``push``. With no
+      such use, give one a type with ``cast``, as the :ref:`client guide
+      <js-client-compiling-functions>` describes.
 
 Side Effects and Run-Once Functions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -304,14 +401,15 @@ once, with every step in the same physics tick:
          :start-after: [docs]
          :end-before: [/docs]
 
-The game holds still between the steps, and the whole function costs one round trip. A function
-that returns no value gives the client's null value, or runs through a ``void`` overload where
-the client has one.
-
 .. note::
 
    An event or stream runs its function on every stream update, effects included. See
    :ref:`server-side-functions-control-loops`.
+
+.. note::
+
+   A procedure that runs over several ticks, such as ``SpaceCenter.WarpTo``, is an error in a
+   function. See :ref:`server-side-functions-errors`.
 
 .. _server-side-functions-arguments:
 
@@ -325,12 +423,17 @@ serves many inputs. This computes how long a burn takes, for several changes in 
 
    .. group-tab:: Python
 
+      The function is a ``def`` with a type annotation on each parameter. Its arguments bind as
+      Python binds them, with defaults and keyword arguments:
+
       .. literalinclude:: /scripts/user-guide/server-side-functions/BurnTime.py
          :language: python
          :start-after: [docs]
          :end-before: [/docs]
 
    .. group-tab:: C#
+
+      The function is a lambda with typed parameters:
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/BurnTime.cs
          :language: csharp
@@ -340,48 +443,59 @@ serves many inputs. This computes how long a burn takes, for several changes in 
 
    .. group-tab:: JavaScript
 
+      The parameters follow the captures, and ``compile`` takes their types:
+
       .. literalinclude:: /scripts/user-guide/server-side-functions/BurnTime.js
          :start-after: [docs]
          :end-before: [/docs]
 
-In Python, the function is a ``def`` with a type annotation on each parameter. Its arguments bind
-as Python binds them, with defaults and keyword arguments. In C#, the function is a lambda with
-typed parameters. In JavaScript, the parameters follow the captures, and ``compile`` takes their
-types. An event or a stream runs its function with no arguments.
+An event or a stream runs its function with no arguments.
 
 State Between Updates
 ^^^^^^^^^^^^^^^^^^^^^
 
-A function can keep a value from one evaluation to the next, such as a running total. In
-Python, declare a captured variable ``nonlocal``. In JavaScript, assign a property of a captured
-object. This stream counts the stream updates in which the engines are firing:
+A function can keep a value from one evaluation to the next, such as a running total. This stream
+counts the stream updates in which the engines are firing:
 
 .. tabs::
 
    .. group-tab:: Python
+
+      Declare a captured variable ``nonlocal``:
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/FiringCounter.py
          :language: python
          :start-after: [docs]
          :end-before: [/docs]
 
+      The variable takes its type from its value when the function is compiled. To give it
+      another type, such as a list that starts empty, start the function with a cast of it:
+      ``history = cast(List[float], history)``.
+
+   .. group-tab:: C#
+
+      A C# lambda is an expression tree, which cannot assign to a variable. Build the function
+      with the :ref:`expression API <server-side-functions-api>`, and create the variable with
+      :meth:`Expression.state_variable`.
+
    .. group-tab:: JavaScript
+
+      Assign a property of a captured object:
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/FiringCounter.js
          :start-after: [docs]
          :end-before: [/docs]
 
-The variable starts with the value it holds when the function is compiled, and takes its type
-from that value. To give it another type, such as a list that starts empty, start the function
-with a cast of it: ``history = cast(List[float], history)`` in Python. In JavaScript, the first
-use that adds to it gives it its type, or a cast such as ``t.list(t.double).cast(state.history)``.
+      The property takes its type from its value when the function is compiled. A property that
+      starts empty takes its type from the first use that adds to it, or from a cast such as
+      ``t.list(t.double).cast(state.history)``.
 
-The server keeps the value apart from the variable on the client. A compiled function keeps its
-state across every run, stream and event. The state belongs to the function, so two streams of one
-compiled function advance it twice per update. Compile the function twice for separate states.
+The state lives on the server. It starts with the variable's value at compile time, and changes
+to it do not reach the variable in the client program.
 
-A function passed straight to ``Run`` or a stream starts again from the captured value on each
-call. With the expression API, create the variable with :meth:`Expression.state_variable`.
+A function passed straight to ``Run`` or a stream is compiled on each call, so each call gets its
+own state. A function compiled once with ``compile`` keeps one state across every run, stream and
+event that uses it. Two streams of it advance the state twice per update.
 
 .. _server-side-functions-control-loops:
 
@@ -389,7 +503,7 @@ Control Loops on the Server
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 A stream of a function with no value runs the function on every stream update, for its effects.
-The function is a control loop that runs in the game, with no round trip to the client. This one
+Such a stream can run a control loop in the game, with no round trip to the client. This one
 throttles back as the vertical speed nears 100 m/s:
 
 .. tabs::
@@ -401,6 +515,11 @@ throttles back as the vertical speed nears 100 m/s:
          :start-after: [docs]
          :end-before: [/docs]
 
+   .. group-tab:: C#
+
+      A C# lambda is an expression tree, which cannot assign to a property. Build the function
+      with the :ref:`expression API <server-side-functions-api>`.
+
    .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/ThrottleLimit.js
@@ -411,59 +530,12 @@ The stream's value is the client's null value. The server sends it once, after t
 a callback is called once. An error from the function ends the stream and stops the loop. Set the
 stream's rate to run the function less often.
 
-A stream of a remote procedure with no return value runs the call in the same way.
-
-Strings
-^^^^^^^
-
-A string has its own operations, separate from the collection operations. The compilers choose
-them from the type of the value. This streams the vessel's name in upper case:
-
-.. tabs::
-
-   .. group-tab:: Python
-
-      .. literalinclude:: /scripts/user-guide/server-side-functions/UpperCaseName.py
-         :language: python
-         :start-after: [docs]
-         :end-before: [/docs]
-
-   .. group-tab:: C#
-
-      .. literalinclude:: /scripts/user-guide/server-side-functions/UpperCaseName.cs
-         :language: csharp
-         :start-after: [docs]
-         :end-before: [/docs]
-         :dedent:
-
-   .. group-tab:: JavaScript
-
-      .. literalinclude:: /scripts/user-guide/server-side-functions/UpperCaseName.js
-         :start-after: [docs]
-         :end-before: [/docs]
-
-The compilers translate the language's string operations, such as length, indexing,
-searching, splitting and case conversion. The expression API names them
-:meth:`Expression.string_length`, :meth:`Expression.string_get`,
-:meth:`Expression.string_substring` and so on. Passing a string to a collection operation is an
-error that points at them.
-
-Two rules apply to strings:
-
-* **A character is a string of length one.** The protocol carries no character type, so
-  indexing a string produces a one character string, which works with every other string
-  operation. In a language where indexing a string produces a character, that index is an
-  unsupported construct. Take a substring in its place.
-* **Case conversion and comparison are the same in every locale.** Case is converted, and
-  strings are compared, by ordinal value. A function produces the same result whatever language
-  the game runs in.
-
 .. _server-side-functions-exceptions:
 
 Exceptions
 ^^^^^^^^^^
 
-A function can raise an exception. It reaches your program as an error from ``Run``, or as an error
+A function can raise an exception. It reaches your program as an error when run, or as an error
 on the stream or event evaluating the function:
 
 .. tabs::
@@ -489,13 +561,7 @@ on the stream or event evaluating the function:
          :start-after: [docs]
          :end-before: [/docs]
 
-A function raises the exceptions services declare, so your program catches a typed exception.
-A service's own exception classes map onto themselves.
-
-A compiler maps the language's built-in exceptions onto the general kRPC exceptions, for
-example an invalid operation to ``InvalidOperationException`` and a bad index to
-``IndexOutOfRangeException``. The language's base exception class raises a ``KRPC.Error``, for
-a condition no other exception describes.
+Your program catches the error as an exception, as it does for an error from any other call.
 
 A function can also handle an exception, with the language's try statement:
 
@@ -526,22 +592,21 @@ These rules apply to handlers:
 
 * **Only the message of an exception is exposed.** The variable a handler binds is a string
   holding the message. In JavaScript, the handler reads it as ``e.message``.
-* **Naming an exception catches every form of it.** A service raises a .NET exception, which the
-  server reports under its kRPC name. A handler for a kRPC exception catches the exceptions
-  procedures raise, as well as the ones the function raises.
+* **A handler also catches exceptions from the calls in the function.** A handler for an
+  exception catches it whether the function raises it, or a remote procedure the function calls
+  does.
 * **A procedure that pauses execution passes through every handler**, including a catch-all.
   It is reported as an error.
-* **Two failures of an embedded call have no exception type**, so only a catch-all handles
-  them. Both reach your program as errors without a name:
-
-  * A call to a procedure that is unavailable in the current game scene.
-  * A procedure that returns null although its return type is not nullable.
+* **Some errors are caught only by a catch-all handler**, as they have no exception class to name.
+  These are a call to a procedure that is unavailable in the current game scene, and a procedure
+  that returns null when its return type does not allow it. Uncaught, each reaches your program
+  as a plain error.
 
 The Standard Library
 ^^^^^^^^^^^^^^^^^^^^
 
-The ``StdLib`` service provides mathematics for server side functions. Calls to the language's
-math library compile to the matching ``StdLib`` procedures when their arguments are computed on
+The ``StdLib`` service is a standard library for server side functions, with mathematics,
+vector and quaternion operations, and printing. Calls to the language's math library compile to the matching ``StdLib`` procedures when their arguments are computed on
 the server. Call the service directly for the vector and quaternion operations. This streams the
 angle between the vessel's facing direction and its velocity relative to the surface:
 
@@ -576,9 +641,6 @@ The service covers:
 * Quaternion operations on its rotation tuples, such as composition, inverses, rotating vectors
   and interpolation.
 
-Angles are in radians, with converters to and from degrees. :meth:`StdLib.log` takes the base of
-the logarithm, and is natural without one.
-
 Each midpoint rounding rule has its own procedure, so a function can round the way its language
 does:
 
@@ -586,8 +648,7 @@ does:
 * :meth:`StdLib.round_half_away_from_zero` rounds it away from zero, as C and C++ do.
 * :meth:`StdLib.round_half_up` rounds it toward positive infinity, as Java and JavaScript do.
 
-Each takes the number of decimal places, negative for tens and hundreds. A compiled rounding
-call uses the procedure for its rounding rule.
+Each takes the number of decimal places, negative for tens and hundreds.
 
 Printing
 ^^^^^^^^
@@ -623,32 +684,49 @@ A print in an event or stream function writes a line on every stream update.
 Supported Constructs
 ^^^^^^^^^^^^^^^^^^^^
 
-The compilers support each construct with a server side equivalent: arithmetic, comparisons,
-boolean operators, conditional expressions, collection constructors, indexing, membership tests,
-and the collection and string operations. Where the language allows them, the compilers also
-support statements, changing a collection in place, and raising and handling exceptions.
+Each client guide lists the constructs its compiler supports, and where their meaning differs
+from the language's: :ref:`C# <csharp-client-compiling-lambdas>`, :ref:`JavaScript
+<js-client-compiling-functions>` and :ref:`Python <python-client-compiling-functions>`. Any other
+construct is a compilation error that names it.
 
-Any other construct raises a compilation error that names it. Examples are a format specifier,
-and a call to a client side function with server side arguments.
+.. _server-side-functions-reuse:
 
-A few semantics differ from running the same code in your program:
+Reusing Functions
+^^^^^^^^^^^^^^^^^
 
-* A sub-expression that uses only client side values is evaluated once, when the function is
-  compiled. A remote call made inside a client side function would run only once.
-* In Python, a call to a client side function must give the same answer whenever it runs. A
-  client side function that makes a remote call is an error.
-* In C#, a call that can run code outside the .NET base library, the kRPC client and the service
-  stubs is an error. Examples are a delegate call, and a method, constructor, computed property or
-  operator defined in your program.
-* In JavaScript, a function reads values from your program only as captures, and a call to a
-  captured function is an error.
-* A client side call written as a statement, such as a sleep, is an error.
-* A rounding mode must be a constant, as it selects the server side procedure.
-* The language's own rules for the code a compiler accepts still apply.
+Passing a new lambda to run in a loop builds a new function on each pass. Each pass reads the
+lambda's captured variables again, while a compiled function keeps the values from when it was
+compiled.
 
-Each client guide lists the constructs its compiler supports, and the rules of its language:
-:ref:`C# <csharp-client-compiling-lambdas>`, :ref:`JavaScript <js-client-compiling-functions>` and
-:ref:`Python <python-client-compiling-functions>`.
+In such cases, compile the function once, and run the compiled function as often as needed. To
+run it with different values, give it parameters, as in :ref:`server-side-functions-arguments`:
+
+.. tabs::
+
+   .. group-tab:: Python
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/CompiledStep.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
+
+   .. group-tab:: C#
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/CompiledStep.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/CompiledStep.js
+         :start-after: [docs]
+         :end-before: [/docs]
+
+A large lambda passed on every call can make the game stutter. The server compiles each one to
+native code on the game's main thread. Compile a function before it is needed, such as before
+launch, and every run is fast.
 
 .. _server-side-functions-errors:
 
@@ -661,10 +739,10 @@ when it reads the stream or event. An example is an embedded call reaching a des
 The server then removes the stream, as it does for any stream whose result is an error. Build a
 new event or stream once the cause clears.
 
-**Loads and unloaded vessels.** A function that reads an object the game has not loaded raises
+**Loads and unloaded vessels.** A stream of a remote procedure pauses while its object is not
+loaded, and resumes after. A function stream or event ends instead, with
 ``KRPC.ObjectNotLoadedException``. Examples are a part of an unloaded vessel, and a vessel part
-way through a load. The exception ends a function stream or event like any other. To keep one
-running, catch the exception in the function:
+way through a load. To keep one running, catch the exception in the function:
 
 .. tabs::
 
@@ -697,27 +775,33 @@ running, catch the exception in the function:
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/NotLoadedEvent.js
 
-The event's handler gives ``False``, so the event does not fire. A stream's handler can give a
-last good value, kept in a state variable. With the expression API, :meth:`Expression.try_catch`
-names the exception as ``"KRPC", "ObjectNotLoadedException"``.
+The handler gives ``False``, so the event does not fire while the vessel loads.
 
 **Procedures that pause.** Some procedures pause execution and resume on a later tick, such as
 ``SpaceCenter.WarpTo`` and ``SpaceCenter.LaunchVessel``. Calling one is an error in any function.
 The procedure keeps its effects up to the pause, so a ``WarpTo`` called this way leaves the game
 warping.
 
+.. note::
+
+   A future release is planned to support these procedures in server side functions.
+
 **Loops run to completion.** A ``while`` loop runs to its end within a single tick, before the
-game continues. A loop that never ends hangs the game until the game is closed. Bound every loop
-by a value that is certain to change.
+game continues. A loop that never ends freezes the game for good. The only way out is to force
+quit the game, which loses any progress since the last save. No compiler check can catch such a
+loop, so bound every loop by a value that is certain to change.
 
-**Null values.** A procedure that can return null, such as ``Part.engine``, gives a value to
-compare with null, or to test with :meth:`Expression.is_null`. A value of any type can be
-nullable, and a function tracks which values are. A nullable number works in arithmetic like
-any other number.
+.. note::
 
-A null reaching a position that cannot hold one raises a ``NullReferenceException`` when the
-function runs. These positions are the arguments, operands and variables whose types are not
-nullable. A client raises it as the closest built-in exception of its language.
+   A future release is planned to stop a loop that runs for too long, with a time limit set in
+   the server settings.
+
+**Null values.** A null where the function needs a value raises a ``NullReferenceException``
+when the function runs. Examples are a null operand in arithmetic, and a null argument to a call.
+Your program receives it as the closest built-in exception of its language.
+
+Some procedures return null, such as ``Part.engine`` for a part that is not an engine. Compare
+the result with null before using it.
 
 A function can produce a null. A compiled null takes its type from where it is used, such as the
 other assignment to a variable or the other branch of a conditional:
@@ -745,75 +829,24 @@ other assignment to a variable or the other branch of a conditional:
          :start-after: [docs]
          :end-before: [/docs]
 
-Elsewhere, give a null its type with a type annotation or a cast. The expression API has
-:meth:`Expression.constant_null`.
-
-A function whose result is null gives your program the client's null value. Decoding a null into
-a type that cannot hold one is an error.
-
-A client that takes the result type as a type argument needs a type that can hold null. The same
-holds for the nulls inside a result, such as the objects in a list a procedure returns.
+Elsewhere, give a null its type with a type annotation or a cast.
 
 **Costs.** A function is evaluated on the server as native code, and only its result crosses
-the network. Even a large function evaluates quickly.
-
-**Reuse a function.** A function stays on the server until the server stops. Passing a new
-lambda to ``Run`` in a loop builds and keeps a new function on each pass. Each pass reads the
-lambda's captured variables again, while a compiled function keeps the values from when it was
-compiled.
-
-Compile a function once, and run the compiled function as often as needed. To run it with
-different values, give it parameters, as in :ref:`server-side-functions-arguments`:
-
-.. tabs::
-
-   .. group-tab:: Python
-
-      .. literalinclude:: /scripts/user-guide/server-side-functions/CompiledStep.py
-         :language: python
-         :start-after: [docs]
-         :end-before: [/docs]
-
-   .. group-tab:: C#
-
-      .. literalinclude:: /scripts/user-guide/server-side-functions/CompiledStep.cs
-         :language: csharp
-         :start-after: [docs]
-         :end-before: [/docs]
-         :dedent:
-
-   .. group-tab:: JavaScript
-
-      .. literalinclude:: /scripts/user-guide/server-side-functions/CompiledStep.js
-         :start-after: [docs]
-         :end-before: [/docs]
-
-Compiling a function also compiles it to native code on the server. A lambda passed straight to
-``Run`` is compiled there on every call, on the game's main thread, so a large one can make the game
-stutter.
-
-Compile a function before it is needed, such as before launch, and every run is fast. For a
-function built with the expression API, the client's ``compile`` function compiles it on the
-server.
+the network. Even a large function evaluates quickly. A function stream can run a full autopilot
+control loop every physics tick, as in :ref:`server-side-functions-control-loops`.
 
 .. _server-side-functions-api:
 
 The Expression API
 ------------------
 
-The expression API builds a server side function node by node. It is how the C++, Java, C-nano,
-Lua and JavaScript clients write functions, and how C# writes the statements a lambda cannot
-hold. The compilers produce the same functions.
+The expression API builds a server side function node by node. The compilers use it under the
+hood.
 
 .. note::
 
    The C-nano and Lua clients have no events or streams, so their examples run each function
    once, with ``krpc_run_function`` in C and ``conn:run`` in Lua.
-
-A class, an enumeration, a structure or an exception is named by its service and its name, such
-as ``"SpaceCenter", "Engine"``. Each procedure that takes the names has a variant that takes the
-ids :meth:`KRPC.get_services` reports, such as :meth:`Type.class_type_by_id`. The C examples
-use them.
 
 Expression Trees
 ^^^^^^^^^^^^^^^^
@@ -832,7 +865,7 @@ You use a tree in one of three ways:
 * A stream, from a function whose value can be sent to a client, such as a number, a string, a
   collection or an object. The value is recomputed on each stream update.
 * A run, which evaluates a function once, within a single physics tick, and returns its value.
-  Use it for a function with side effects.
+  Useful for a function with side effects.
 
 Two rules hold for every server side function:
 
@@ -840,8 +873,7 @@ Two rules hold for every server side function:
   values your program supplies when building the function, are fixed when the function is
   created.
 * **The whole function is evaluated within a single physics tick.** A function that reads the
-  fuel level of every engine reads them all in the same tick. The same calls made from your
-  program read them over several ticks, as the game advances.
+  fuel level of every engine reads them all in the same tick.
 
 Expression Objects
 ^^^^^^^^^^^^^^^^^^
@@ -894,13 +926,49 @@ for :meth:`Expression.call_with_arguments` to give each one as an expression. Se
 :ref:`server-side-functions-collections`.
 
 Each factory method is an RPC that creates one node on the server and returns a handle to it.
-Building a function costs one RPC per node, paid once.
 
-The factory methods are static methods. In C#, Java and C++, the examples call them through the
-class bound to the connection, which passes the connection to each one: ``Expression.Bind`` in C#
-and ``bind`` in Java and C++. Python, Lua and JavaScript reach the class through the connection, as
-``conn.krpc.Expression``. In JavaScript, each factory method returns a ``Promise``, so the
-example awaits each node.
+The factory methods are static methods of the :class:`Expression` class, and each needs a
+connection to send its RPC on:
+
+.. tabs::
+
+   .. group-tab:: Python
+
+      Reach the class through the connection, as ``conn.krpc.Expression``. Its methods use that
+      connection.
+
+   .. group-tab:: C#
+
+      ``Expression.Bind(connection)`` returns the class bound to a connection. Its methods pass
+      the connection to each static method, so ``e.ConstantDouble(1000)`` needs no connection
+      argument.
+
+   .. group-tab:: C++
+
+      ``krpc::services::KRPC::Expression::bind(conn)`` returns the class bound to a connection.
+      Its methods pass the connection to each static method, so ``e.constant_double(1000)``
+      needs no connection argument.
+
+   .. group-tab:: C
+
+      Each factory method is a function that takes the connection first and the result second,
+      such as ``krpc_KRPC_Expression_ConstantDouble(conn, &limit, 1000)``.
+
+   .. group-tab:: Java
+
+      ``Expression.bind(connection)`` returns an ``Expression.Bound`` for a connection. Its
+      methods pass the connection to each static method, so ``e.constantDouble(1000)`` needs no
+      connection argument.
+
+   .. group-tab:: Lua
+
+      Reach the class through the connection, as ``conn.krpc.Expression``. Its functions use that
+      connection.
+
+   .. group-tab:: JavaScript
+
+      Reach the class through the connection, as ``conn.krpc.Expression``. Each factory method
+      returns a ``Promise``, so await each node before passing it to the next.
 
 Operators and Types
 ^^^^^^^^^^^^^^^^^^^
@@ -973,10 +1041,12 @@ The :class:`Type` class names types, including the classes, enumerations and str
 service defines. Each type of constant has its own factory method, such as
 :meth:`Expression.constant_double`.
 
+A class, an enumeration, a structure or an exception is named by its service and its name, such
+as ``"SpaceCenter", "Engine"``. Each procedure that takes the names has a variant that takes the
+ids :meth:`KRPC.get_services` reports, such as :meth:`Type.class_type_by_id`. The C examples
+use them.
+
 Each operator has a factory method, such as :meth:`Expression.add`.
-:meth:`Expression.and_` and :meth:`Expression.or_` evaluate both operands.
-:meth:`Expression.conditional_and` and :meth:`Expression.conditional_or` evaluate the second
-operand only when the first does not decide the result.
 
 Function Streams
 ^^^^^^^^^^^^^^^^
@@ -1400,13 +1470,8 @@ handle exceptions.
 Extensibility
 ^^^^^^^^^^^^^
 
-A server side function can call the procedures of every installed service except ``KRPC``, the
-service that builds and runs the functions. To extend what functions can do, **write a
-service**. A service DLL in the game's plugin folder adds its procedures to server side functions
-on every client.
+A server side function can call any remote procedure, including those of services that other
+mods add. The one exception is the ``KRPC`` service, which builds and runs the functions.
 
-The service's documentation and client stubs are generated in the usual way. The ``StdLib``
-service is written this way, and ships with the server.
-
-The compilers resolve remote calls through the server's service definitions. The expression API
-embeds any procedure with :meth:`Expression.call_with_arguments`.
+To give functions a new capability, :ref:`write a service <extending>`. Its procedures are
+available to server side functions on every client.
