@@ -45,7 +45,7 @@ namespace KRPC.UI
         internal readonly Color errorColor = Color.yellow;
         internal GUIStyle labelStyle, stretchyLabelStyle, fixedLabelStyle, textFieldStyle, longTextFieldStyle, stretchyTextFieldStyle,
             buttonStyle, toggleStyle, expandStyle, separatorStyle, lightStyle, errorLabelStyle, comboOptionsStyle, comboOptionStyle;
-        const float windowWidth = 288f;
+        const float windowWidth = 310f;
         const float textFieldWidth = 45f;
         const float longTextFieldWidth = 80f;
         const float fixedLabelWidth = 160f;
