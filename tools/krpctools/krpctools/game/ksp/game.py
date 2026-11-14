@@ -272,6 +272,7 @@ class KSP(game.Game):
         krpc = os.path.join(self.gamedata(), "kRPC")
         for path in self.addon_files():
             shutil.copy(path, krpc)
+        os.makedirs(os.path.join(krpc, "PluginData"), exist_ok=True)
         shutil.copy(
             self.settings_file(), os.path.join(krpc, "PluginData", "settings.cfg")
         )

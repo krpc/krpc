@@ -78,15 +78,18 @@ namespace KRPC
         [Persistent] bool adaptiveRateControl;
         [Persistent] bool blockingRecv;
         [Persistent] uint recvTimeout;
-        // Defaulted here as well as in Configuration, since a settings file written before
-        // this setting existed has nothing to load into it, and a zero timeout would end
-        // every hold immediately
-        [Persistent] uint tickHoldTimeout = 1000000;
+        [Persistent] uint tickHoldTimeout;
 
         public ConfigurationFile (string filePath, Configuration configuration) : base (filePath, "KRPCConfiguration")
         {
             Configuration = configuration;
-            Load ();
+            // Start each setting at its default, so a setting missing from the file, or with a
+            // value that does not parse, keeps it
+            BeforeSave ();
+            // Without settings, as in a new install, start with one server
+            if (!Load ())
+                Configuration.Servers.Add (new Configuration.Server ());
+            Save ();
         }
 
         protected override void BeforeSave ()
