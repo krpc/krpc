@@ -1738,23 +1738,12 @@ administration facility is open within the space center scene.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="KRPC.ServerSettings">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ServerSettings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">one_rpc_per_update</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_time_per_update</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adaptive_rate_control</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blocking_recv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recv_timeout</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tick_hold_timeout</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#KRPC.ServerSettings" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ServerSettings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_time_per_update</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adaptive_rate_control</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blocking_recv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recv_timeout</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tick_hold_timeout</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#KRPC.ServerSettings" title="Link to this definition">#</a></dt>
 <dd><p>The settings that control how the server executes calls.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>See <a class="reference internal" href="#KRPC.ServerStatus.settings" title="KRPC.ServerStatus.settings"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ServerStatus.settings</span></code></a>.</p>
 </div>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="KRPC.ServerSettings.one_rpc_per_update">
-<span class="sig-name descname"><span class="pre">one_rpc_per_update</span></span><a class="headerlink" href="#KRPC.ServerSettings.one_rpc_per_update" title="Link to this definition">#</a></dt>
-<dd><p>Whether the server executes one call per update.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>bool</p>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="py attribute">
 <dt class="sig sig-object py" id="KRPC.ServerSettings.max_time_per_update">
 <span class="sig-name descname"><span class="pre">max_time_per_update</span></span><a class="headerlink" href="#KRPC.ServerSettings.max_time_per_update" title="Link to this definition">#</a></dt>

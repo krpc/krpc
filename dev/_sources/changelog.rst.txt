@@ -96,6 +96,8 @@ Core
 * Add ``StdLib.ImageFormat``, the format of the images from the DockingCamera, ScanSat and RasterPropMonitor services (:issue:`1341`)
 * Add ``ModAPI``, ``ModBinder`` and ``MemberBinder``, for a service that binds to another mod by name, and fails only the calls that use a missing member (:issue:`1341`)
 * Add the ``RequiresMod`` attribute, which fails the calls of a member whose mod is missing, failed to load or is not ready (:issue:`1342`)
+* Turn on "Auto-start server" by default (:issue:`1349`)
+* :breaking:`Breaking` Remove the "One RPC per update" setting and ``KRPC.ServerSettings.OneRpcPerUpdate`` (:issue:`1349`)
 
 
 Server
@@ -118,6 +120,12 @@ Server
 * Keep running when a service has errors, and leave out only the members with them and the members that use them (:issue:`1345`)
 * List the members left out, and the mods whose support failed to load, in a window at the main menu, which the server window can open again (:issue:`1345`)
 * List the RPCs that use a missing member, such as after a game update (:issue:`1345`)
+* Start a new install with one server, with the default settings (:issue:`1349`)
+* Keep the server settings on an upgrade, as the release no longer includes ``settings.cfg`` (:issue:`1349`)
+* Keep each readable setting from a damaged ``settings.cfg``, and back up a file with no readable settings as ``settings.cfg.bak`` (:issue:`1349`)
+* Widen the server window so the advanced settings fit (:issue:`1349`)
+* Line up the labels in the server window's advanced settings with their text fields (:issue:`1349`)
+* Give the kRPC windows an opaque background (:issue:`1349`)
 
 
 SpaceCenter service

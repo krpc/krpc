@@ -513,15 +513,10 @@ allowed to process too many RPCs per FixedUpdate, the game’s framerate would b
 adversely affected. The following settings control this behavior, and the
 resulting tradeoff between RPC throughput and game FPS:</p>
 <ol class="arabic simple">
-<li><p><strong>One RPC per update</strong>. When this is enabled, the server will execute at most
-one RPC per client per update. This will have minimal impact on the games
-framerate, while still allowing kRPC to execute RPCs. If you don’t need a
-high RPC throughput, this is a good option to use.</p></li>
-<li><p><strong>Maximum time per update</strong>. When one RPC per update is not enabled, this
-setting controls the maximum amount of time (in microseconds) that kRPC will
-spend executing RPCs per FixedUpdate.  Setting this to a high value, for
-example 20000 us, will allow the server to process many RPCs at the expense
-of the game’s framerate. A low value, for example 1000 us, won’t allow the
+<li><p><strong>Maximum time per update</strong>. This setting controls the maximum amount of
+time (in microseconds) that kRPC will spend executing RPCs per FixedUpdate.
+Setting this to a high value, for example 20000 us, will allow the server to
+process many RPCs at the expense of the game’s framerate. A low value, for example 1000 us, won’t allow the
 server to execute many RPCs per update, but will allow the game to run at a
 much higher framerate.</p></li>
 <li><p><strong>Adaptive rate control</strong>. When enabled, kRPC will automatically adjust the
@@ -529,6 +524,8 @@ maximum time per update parameter, so that the game has a minimum framerate
 of 60 FPS. Enabling this setting provides a good tradeoff between RPC
 throughput and the game framerate.</p></li>
 </ol>
+<p>A program that must act once per physics tick holds the tick, as described
+under <a class="reference internal" href="#server-performance-tick-hold"><span class="std std-ref">Holding a Tick</span></a> below.</p>
 <p>Another consideration is the responsiveness of the server. Clients must execute
 RPCs in sequence, one after another, and there is usually a (short) delay
 between them. This means that when the server finishes executing an RPC, if it
@@ -549,7 +546,7 @@ it makes. The default timeout is one millisecond, which a program written in
 Python or Lua exceeds easily.</p>
 </section>
 <section id="holding-a-tick">
-<h2>Holding a Tick<a class="headerlink" href="#holding-a-tick" title="Link to this heading">#</a></h2>
+<span id="server-performance-tick-hold"></span><h2>Holding a Tick<a class="headerlink" href="#holding-a-tick" title="Link to this heading">#</a></h2>
 <p>A client can hold the game on its current physics tick, so every call it makes is
 executed before the game advances. A control loop can then read the game state,
 compute with it and write the result back within one tick. See <a class="reference internal" href="control-loops.html#control-loops"><span class="std std-ref">the control
@@ -560,10 +557,10 @@ loops guide</span></a> for how a program uses it.</p>
 default. It bounds how long the game can be made to appear frozen, and the
 server owns it rather than the client. A hold also ends when the client
 disconnects.</p></li>
-<li><p>The maximum time per update and one RPC per update settings do not apply while
-a tick is held. Adaptive rate control skips an update that held one, which
-would otherwise count the client’s own work as time the server spent on RPCs
-and wind the limit down for every client.</p></li>
+<li><p>The maximum time per update setting does not apply while a tick is held.
+Adaptive rate control skips an update that held one, which would otherwise
+count the client’s own work as time the server spent on RPCs and wind the
+limit down for every client.</p></li>
 <li><p>The game renders no frame, takes no input and runs no physics while a tick is
 held. Physics runs on a fixed time step, so a game whose ticks are held runs
 slower than real time and simulates every tick in turn.</p></li>

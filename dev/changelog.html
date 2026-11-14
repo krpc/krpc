@@ -575,6 +575,8 @@
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">StdLib.ImageFormat</span></code>, the format of the images from the DockingCamera, ScanSat and RasterPropMonitor services (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1341">#1341</a>)</p></li>
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">ModAPI</span></code>, <code class="docutils literal notranslate"><span class="pre">ModBinder</span></code> and <code class="docutils literal notranslate"><span class="pre">MemberBinder</span></code>, for a service that binds to another mod by name, and fails only the calls that use a missing member (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1341">#1341</a>)</p></li>
 <li><p>Add the <code class="docutils literal notranslate"><span class="pre">RequiresMod</span></code> attribute, which fails the calls of a member whose mod is missing, failed to load or is not ready (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1342">#1342</a>)</p></li>
+<li><p>Turn on “Auto-start server” by default (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1349">#1349</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Remove the “One RPC per update” setting and <code class="docutils literal notranslate"><span class="pre">KRPC.ServerSettings.OneRpcPerUpdate</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1349">#1349</a>)</p></li>
 </ul>
 </section>
 <section id="server">
@@ -597,6 +599,12 @@
 <li><p>Keep running when a service has errors, and leave out only the members with them and the members that use them (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1345">#1345</a>)</p></li>
 <li><p>List the members left out, and the mods whose support failed to load, in a window at the main menu, which the server window can open again (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1345">#1345</a>)</p></li>
 <li><p>List the RPCs that use a missing member, such as after a game update (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1345">#1345</a>)</p></li>
+<li><p>Start a new install with one server, with the default settings (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1349">#1349</a>)</p></li>
+<li><p>Keep the server settings on an upgrade, as the release no longer includes <code class="docutils literal notranslate"><span class="pre">settings.cfg</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1349">#1349</a>)</p></li>
+<li><p>Keep each readable setting from a damaged <code class="docutils literal notranslate"><span class="pre">settings.cfg</span></code>, and back up a file with no readable settings as <code class="docutils literal notranslate"><span class="pre">settings.cfg.bak</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1349">#1349</a>)</p></li>
+<li><p>Widen the server window so the advanced settings fit (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1349">#1349</a>)</p></li>
+<li><p>Line up the labels in the server window’s advanced settings with their text fields (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1349">#1349</a>)</p></li>
+<li><p>Give the kRPC windows an opaque background (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1349">#1349</a>)</p></li>
 </ul>
 </section>
 <section id="spacecenter-service">
