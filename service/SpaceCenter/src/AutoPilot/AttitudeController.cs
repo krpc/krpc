@@ -109,6 +109,11 @@ namespace KRPC.SpaceCenter.AutoPilot
         Vector3d actuatorDelivered;
         // The share of each axis's available torque that comes from control surfaces
         Vector3d surfaceShare;
+        // The time constant the engine gimbals lag the command by on each axis, weighted by
+        // their share of the axis's torque, in seconds. The body frame value, and the value
+        // with pitch and yaw in the roll-invariant frame.
+        Vector3d bodyGimbalLag;
+        Vector3d gimbalLag;
         // The fraction of recent ticks each axis's command was held back by the actuator rate,
         // and the bandwidth scale applied in response
         Vector3d actuatorLimitedFraction;
@@ -159,10 +164,9 @@ namespace KRPC.SpaceCenter.AutoPilot
         // The gating layer: tool routing, latch ramps, and the hold-gated mitigation level
         // (with the oscillation-control back-off). See MitigationPolicy.
         readonly MitigationPolicy policy = new MitigationPolicy ();
-        // Unfloored autotuned proportional gain per axis, 2 * zeta * omega0 * moi /
-        // smoothedTorque, recorded by DoAutoTuneAxis before the bandwidth-floor mitigation is
-        // applied. Consumed by ProfileKp so the velocity profile's linear stopping coefficient
-        // never sees the floor.
+        // Unfloored autotuned proportional gain per axis, recorded by DoAutoTuneAxis before the
+        // bandwidth-floor mitigation is applied. Consumed by ProfileKp so the velocity profile's
+        // linear stopping coefficient never sees the floor.
         readonly double[] unflooredKp = new double[3];
         // Per-group rate-filter mode (pitch/yaw coupled, roll on its own). Automatic routes by
         // the detector latch and the estimated frequency; Off disables rate filtering only (the
@@ -722,6 +726,11 @@ namespace KRPC.SpaceCenter.AutoPilot
             get { return actuatorLag; }
         }
 
+        // The engine gimbal lag the auto-tuner allows for, in seconds
+        public Vector3d GimbalLag {
+            get { return gimbalLag; }
+        }
+
         public Vector3d ActuatorLimitedFraction {
             get { return actuatorLimitedFraction; }
         }
@@ -986,6 +995,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             var moi = vessel.MomentOfInertiaVector;
             var dt = Time.fixedDeltaTime;
             UpdateControlSurfaces (torque);
+            UpdateGimbals (torque, dt);
 
             // While the vessel sits on the launch clamps (PRELAUNCH) the autopilot is engaged but
             // must not act. The craft is physically held and the engines are unlit, so available
@@ -1490,6 +1500,48 @@ namespace KRPC.SpaceCenter.AutoPilot
         }
 
         /// <summary>
+        /// Refresh the time constant the engine gimbals lag the command by on each axis.
+        /// </summary>
+        /// <remarks>
+        /// A gimbal with a response speed <c>v</c> moves a fraction <c>v dt</c> of the way to its
+        /// target each physics tick, which is a first-order lag. Only the gimbals' share of an
+        /// axis's torque lags, so each gimbal's lag is weighted by its share.
+        /// </remarks>
+        void UpdateGimbals (Vector3d torque, double dt)
+        {
+            var weighted = Vector3d.zero;
+            double maxLag = 0;
+            foreach (var part in vessel.InternalVessel.parts) {
+                var gimbal = part.FindModuleImplementing<ModuleGimbal> ();
+                if (gimbal == null || !gimbal.useGimbalResponseSpeed || !Services.Parts.Engine.Is (part))
+                    continue;
+                var lag = GimbalTimeConstant (gimbal.gimbalResponseSpeed, dt);
+                if (lag <= 0)
+                    continue;
+                maxLag = Math.Max (maxLag, lag);
+                var available = new Services.Parts.Engine (new Services.Parts.Part (part)).AvailableTorqueVectors.Item1;
+                for (int axis = 0; axis < 3; axis++) {
+                    if (available [axis] > 0)
+                        weighted [axis] += available [axis] * lag;
+                }
+            }
+            for (int axis = 0; axis < 3; axis++)
+                bodyGimbalLag [axis] = torque [axis] > 0 ? Math.Min (maxLag, weighted [axis] / torque [axis]) : 0.0;
+        }
+
+        /// <summary>
+        /// The time constant of a gimbal that moves a fraction <c>speed * dt</c> of the way to
+        /// its target each tick, in seconds. The game clamps the fraction to 1, which is no lag.
+        /// </summary>
+        static double GimbalTimeConstant (double speed, double dt)
+        {
+            var fraction = speed * dt;
+            if (fraction <= 0 || fraction >= 1)
+                return 0.0;
+            return -dt / Math.Log (1.0 - fraction);
+        }
+
+        /// <summary>
         /// Combine <see cref="MaxAngularVelocity"/> with the aerodynamic rate limit. The
         /// aerodynamic limit is per body axis, and pitch and yaw are controlled in the
         /// roll-invariant frame, so each of those takes the radius of the body-axis limit ellipse
@@ -1506,6 +1558,7 @@ namespace KRPC.SpaceCenter.AutoPilot
                 double.IsInfinity (actuatorSlew.y) ? 0.0 : 1.0 / actuatorSlew.y,
                 double.IsInfinity (actuatorSlew.z) ? 0.0 : 1.0 / actuatorSlew.z);
             actuatorLag = ToRollInvariantAxes (bodyLag);
+            gimbalLag = ToRollInvariantAxes (bodyGimbalLag);
             rateLimit = MaxAngularVelocity;
             negativeRateLimit = MaxAngularVelocity;
             if (!LimitAngularVelocity)
@@ -1728,6 +1781,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             log.AddVector ("ki", new Vector3d (PitchPID.Ki, RollPID.Ki, YawPID.Ki), "F4");
             log.AddVector ("kp_unfloored",
                 new Vector3d (unflooredKp [0], unflooredKp [1], unflooredKp [2]), "F4");
+            log.AddVector ("gimbal_lag", gimbalLag, "F4");
             log.AddVector ("pid_out", pidOut, "F4");
             log.AddVector ("pid_i", new Vector3d (
                 PitchPID.IntegralTerm, RollPID.IntegralTerm, YawPID.IntegralTerm), "F4");
@@ -2598,20 +2652,31 @@ namespace KRPC.SpaceCenter.AutoPilot
             bandwidth *= backoff;
             bandwidthSquared *= backoff * backoff;
 
+            // Cap the bandwidth so the gimbal lag's pole stays clear of the loop's (see LagGains)
+            var lag = gimbalLag [index];
+            if (lag > 0) {
+                var cap = 1.0 / (lag * (bandwidth + Math.Sqrt (bandwidthSquared)));
+                if (cap < 1) {
+                    bandwidth *= cap;
+                    bandwidthSquared *= cap * cap;
+                }
+            }
+
             // Record the unfloored gain for the velocity profile's linear stopping coefficient
             // (see ProfileKp) before any bandwidth reduction below.
-            unflooredKp [index] = bandwidth * accelerationInv;
+            double kp, ki;
+            LagGains (bandwidth, bandwidthSquared, lag, out kp, out ki);
+            unflooredKp [index] = kp * accelerationInv;
 
             // Latched bandwidth reduction: a latched (flexible) axis has its rate-loop bandwidth
-            // 2 * zeta * omega0 = twiceZetaOmega, since Kp * alpha = 2 * zeta * omega0, pulled down
-            // toward oscillationBandwidthFloor, the primary gain stabilizer, dropping the crossover
-            // well below every structural mode so the loop cannot drive any of them. It only ever
-            // lowers bandwidth, taking the minimum against the autotuned value. It is gated on the
-            // hold-gated mitigationLevel, latch * holdFactor, so the axis is floored only while
-            // holding and runs at full bandwidth while slewing: the notch and low-pass keep the slew
-            // responsive, and the floor quiets the hold. omega0 scales
-            // with the bandwidth, so Kp scales linearly and Ki quadratically and the damping ratio zeta
-            // (the overshoot target) is preserved. A rigid craft never latches, so keeps full bandwidth.
+            // 2 * zeta * omega0 pulled down toward oscillationBandwidthFloor, the primary gain
+            // stabilizer, dropping the crossover well below every structural mode so the loop
+            // cannot drive any of them. It only ever lowers bandwidth, taking the minimum against
+            // the autotuned value. It is gated on the hold-gated mitigationLevel, latch *
+            // holdFactor, so the axis is floored only while holding and runs at full bandwidth
+            // while slewing: the notch and low-pass keep the slew responsive, and the floor quiets
+            // the hold. omega0 scales with the bandwidth, so the damping ratio zeta (the overshoot
+            // target) is preserved. A rigid craft never latches, so keeps full bandwidth.
             // The bandwidth-floor mitigation mode: Automatic follows the hold-gated mitigation
             // level; Off never floors; Forced floors fully regardless of the detector.
             var level = bandwidthFloorMode == Services.MitigationMode.Off ? 0.0
@@ -2624,9 +2689,27 @@ namespace KRPC.SpaceCenter.AutoPilot
                 bandwidthSquared *= f * f;
             }
 
-            var kp = bandwidth * accelerationInv;
-            var ki = bandwidthSquared * accelerationInv;
-            pid.SetParameters (kp, ki, 0, -1, 1);
+            LagGains (bandwidth, bandwidthSquared, lag, out kp, out ki);
+            pid.SetParameters (kp * accelerationInv, ki * accelerationInv, 0, -1, 1);
+        }
+
+        /// <summary>
+        /// The PI gains multiplied by the angular acceleration that place the closed rate loop's
+        /// poles at <c>s^2 + bandwidth s + bandwidthSquared</c> and a third pole at
+        /// <c>1/lag - bandwidth</c>, for a plant that lags the command by the time constant
+        /// <c>lag</c>. With no lag these are the bandwidth and its square.
+        /// </summary>
+        /// <remarks>
+        /// The plant <c>alpha / (s (1 + lag s))</c> under PI control has the characteristic
+        /// polynomial <c>lag s^3 + s^2 + alpha Kp s + alpha Ki</c>. Equating it with
+        /// <c>lag (s^2 + bandwidth s + bandwidthSquared) (s + p)</c> gives the gains. The cap in
+        /// DoAutoTuneAxis keeps <c>p</c> at or above the natural frequency.
+        /// </remarks>
+        static void LagGains (double bandwidth, double bandwidthSquared, double lag,
+            out double kp, out double ki)
+        {
+            kp = bandwidth + lag * (bandwidthSquared - bandwidth * bandwidth);
+            ki = bandwidthSquared * (1.0 - lag * bandwidth);
         }
     }
 }

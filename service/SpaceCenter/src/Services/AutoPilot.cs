@@ -1284,6 +1284,14 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Per-axis engine gimbal lag the auto-tuner allows for, in seconds, for the in-game
+        /// info window.
+        /// </summary>
+        internal Tuple3 GimbalLag {
+            get { return Controller.GimbalLag.ToTuple (); }
+        }
+
+        /// <summary>
         /// Per-axis fraction of recent ticks the actuator rate held back the command, in [0,1],
         /// for the in-game info window.
         /// </summary>
