@@ -9,3 +9,4 @@
 - Keep each readable setting from a damaged `settings.cfg`, and back up a file with no readable
   settings as `settings.cfg.bak`
 - Widen the server window so the advanced settings fit
+- Give the kRPC windows an opaque background

@@ -69,6 +69,8 @@ namespace KRPC.UI
             if (!hasInit) {
                 var skin = Skin.DefaultSkin;
                 Style = new GUIStyle (skin.window);
+                Style.normal.background = Skin.WindowBackground;
+                Style.onNormal.background = Skin.WindowBackground;
                 Init ();
                 closeButtonStyle = new GUIStyle (skin.button);
                 closeButtonStyle.margin = new RectOffset (0, 0, 0, 0);
