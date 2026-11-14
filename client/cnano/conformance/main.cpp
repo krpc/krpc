@@ -276,7 +276,8 @@ class Testee {
         break;
       case Command::kCallWithArguments:
         *reply->mutable_value() = call_function(command.call_with_arguments().invoke(),
-                                                &command.call_with_arguments().arguments());
+                                                &command.call_with_arguments().arguments(),
+                                                command.call_with_arguments().template_());
         break;
       case Command::kCompileFunction:
         check(
@@ -377,14 +378,32 @@ class Testee {
     }
   }
 
-  /** A server side function that makes the call an invoke command makes, with the arguments at
-      the given positions computed by functions. */
+  /** Fill in the call template of an invoke command's procedure. */
+  static void fill_call_template(krpc_schema_ProcedureCall* call,
+                                 const krpc::conformance::Invoke& invoke) {
+    if (invoke.service() == "KRPC") {
+      call_template_krpc(call, invoke.procedure());
+    } else if (invoke.service() == "TestService") {
+      call_template_test_service(call, invoke.procedure());
+    } else if (invoke.service() == "ConformanceService") {
+      call_template_conformance_service(call, invoke.procedure());
+    } else {
+      throw std::invalid_argument("The testee cannot call service " + invoke.service());
+    }
+  }
+
+  /** A server side function that makes the call an invoke command makes, or its call template,
+      with the arguments at the given positions computed by functions. */
   Value call_function(const krpc::conformance::Invoke& invoke,
-                      const google::protobuf::Map<uint32_t, Value>* arguments) {
+                      const google::protobuf::Map<uint32_t, Value>* arguments,
+                      bool call_template = false) {
     krpc_schema_ProcedureCall call = krpc_schema_ProcedureCall_init_default;
     krpc_KRPC_Expression_t function = KRPC_NULL;
     try {
-      fill_call(&call, invoke);
+      if (call_template)
+        fill_call_template(&call, invoke);
+      else
+        fill_call(&call, invoke);
       if (arguments == nullptr) {
         check(krpc_KRPC_Expression_Call(connected(), &function, &call));
       } else {

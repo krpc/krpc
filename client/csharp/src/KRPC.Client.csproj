@@ -27,6 +27,7 @@
     <Compile Include="Attributes\KRPCNullableAttribute.cs" />
     <Compile Include="Attributes\KRPCStructAttribute.cs" />
     <Compile Include="Attributes\RPCAttribute.cs" />
+    <Compile Include="Attributes\RPCSetterAttribute.cs" />
     <Compile Include="Connection.cs" />
     <Compile Include="ConnectionException.cs" />
     <Compile Include="Encoder.cs" />

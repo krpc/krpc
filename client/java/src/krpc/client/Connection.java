@@ -1077,6 +1077,30 @@ public class Connection implements AutoCloseable {
     return buildCall(method, encodedArgs);
   }
 
+  /**
+   * Get the call template of a member, a procedure call message that names the procedure and
+   * carries no arguments, for {@code Expression.callWithArguments} to supply each one. The member
+   * is named through its class, with no instance, by the name of its method: {@code getHasFuel}
+   * for a property's getter and {@code setThrottle} for its setter.
+   *
+   * @param clazz
+   *            The service, or the class the member belongs to.
+   * @param method
+   *            The name of the method.
+   *
+   * @return A procedure call message.
+   */
+  public KRPC.ProcedureCall getCallTemplate(Class<?> clazz, String method) {
+    for (Method candidate : clazz.getMethods()) {
+      RPCInfo info = candidate.getAnnotation(RPCInfo.class);
+      if (info != null && candidate.getName().equals(method)) {
+        return buildCall(info.service(), info.procedure());
+      }
+    }
+    throw new IllegalArgumentException(
+      "Method " + clazz.getName() + "." + method + " is not a remote procedure call");
+  }
+
   // Whether a method is the stub of a static method, which takes the connection first
   private static boolean isStaticStub(Class<?>[] paramTypes, Method method) {
     return Modifier.isStatic(method.getModifiers())

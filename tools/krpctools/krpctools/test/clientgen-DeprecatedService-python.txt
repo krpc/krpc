@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Tuple, Set, Dict, List, NamedTuple, Optional, TYPE_CHECKING
+from typing import Callable, Tuple, Set, Dict, List, NamedTuple, Optional, TYPE_CHECKING, Union
 import krpc.connection
 import krpc.error
 import krpc.limits

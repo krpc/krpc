@@ -228,6 +228,10 @@ function Connection:_encode_arguments(service, procedure, args, param_types, par
       -- A null argument is signaled out-of-band by is_null; the value field is left unset
       arguments[i] = Types.none
     elseif value ~= nil then
+      -- A procedure of a class or service, passed for a call, is its call template
+      if typ.protobuf_type.code == Types.PROCEDURE_CALL and Service.procedures[value] ~= nil then
+        value = self:get_call_template(value)
+      end
       local valid = false
       if type(typ.lua_type) == 'string' then
         valid = typ.lua_type == type(value)
@@ -292,6 +296,21 @@ function Connection:get_call(procedure, ...)
     end
   end
   return { service = info.service, procedure = info.procedure, arguments = arguments }
+end
+
+--- The call template of a procedure of a service or a class, a KRPC.ProcedureCall message that
+--- names the procedure and carries no arguments, to pass to KRPC.Expression.call_with_arguments.
+--- The procedure is reached through its class or service, such as Engine.get_has_fuel, with no
+--- instance.
+function Connection:get_call_template(procedure)
+  local info = Service.procedures[procedure]
+  if info == nil then
+    error('get_call_template expects a procedure of a service or a class', 2)
+  end
+  if info.deprecation ~= nil then
+    self._types:warn_deprecated(info.deprecation)
+  end
+  return { service = info.service, procedure = info.procedure, arguments = {} }
 end
 
 --- The type of a server side function, a KRPC.Expression object

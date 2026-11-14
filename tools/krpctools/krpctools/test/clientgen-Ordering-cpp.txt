@@ -55,6 +55,10 @@ class ServiceA : public ::krpc::RemoteService {
   ::krpc::schema::ProcedureCall frob_call(ServiceB::Mode mode);
 
   ::krpc::schema::ProcedureCall frob_all_call(std::vector<ServiceB::Mode> modes);
+
+  static ::krpc::schema::ProcedureCall frob_call_template();
+
+  static ::krpc::schema::ProcedureCall frob_all_call_template();
 };
 
 }  // namespace services
@@ -105,6 +109,14 @@ inline ::krpc::schema::ProcedureCall ServiceA::frob_all_call(std::vector<Service
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(modes));
   return this->_connection.build_call("ServiceA", "FrobAll", _args);
+}
+
+inline ::krpc::schema::ProcedureCall ServiceA::frob_call_template() {
+  return ::krpc::Connection::build_call("ServiceA", "Frob");
+}
+
+inline ::krpc::schema::ProcedureCall ServiceA::frob_all_call_template() {
+  return ::krpc::Connection::build_call("ServiceA", "FrobAll");
 }
 }  // namespace services
 

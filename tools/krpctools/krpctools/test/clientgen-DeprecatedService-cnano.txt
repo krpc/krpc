@@ -85,6 +85,14 @@ KRPC_DEPRECATED("Use TestService instead.")
 static inline krpc_error_t krpc_DeprecatedService_Procedure_call(krpc_schema_ProcedureCall * procedureCall);
 
 /**
+ * Fills in the call template of krpc_DeprecatedService_Procedure(), which names the procedure and carries no
+ * arguments, to pass to krpc_KRPC_Expression_CallWithArguments(). Free it with
+ * krpc_free_procedure_call().
+ */
+KRPC_DEPRECATED("Use TestService instead.")
+static inline krpc_error_t krpc_DeprecatedService_Procedure_call_template(krpc_schema_ProcedureCall * procedureCall);
+
+/**
  * A procedure returning a structure.
  */
 KRPC_DEPRECATED("Use TestService instead.")
@@ -96,6 +104,14 @@ static inline krpc_error_t krpc_DeprecatedService_StructProcedure(krpc_connectio
  */
 KRPC_DEPRECATED("Use TestService instead.")
 static inline krpc_error_t krpc_DeprecatedService_StructProcedure_call(krpc_schema_ProcedureCall * procedureCall);
+
+/**
+ * Fills in the call template of krpc_DeprecatedService_StructProcedure(), which names the procedure and carries no
+ * arguments, to pass to krpc_KRPC_Expression_CallWithArguments(). Free it with
+ * krpc_free_procedure_call().
+ */
+KRPC_DEPRECATED("Use TestService instead.")
+static inline krpc_error_t krpc_DeprecatedService_StructProcedure_call_template(krpc_schema_ProcedureCall * procedureCall);
 
 /**
  * A property.
@@ -111,6 +127,14 @@ KRPC_DEPRECATED("Use TestService instead.")
 static inline krpc_error_t krpc_DeprecatedService_Property_call(krpc_schema_ProcedureCall * procedureCall);
 
 /**
+ * Fills in the call template of krpc_DeprecatedService_Property(), which names the procedure and carries no
+ * arguments, to pass to krpc_KRPC_Expression_CallWithArguments(). Free it with
+ * krpc_free_procedure_call().
+ */
+KRPC_DEPRECATED("Use TestService instead.")
+static inline krpc_error_t krpc_DeprecatedService_Property_call_template(krpc_schema_ProcedureCall * procedureCall);
+
+/**
  * A property.
  */
 KRPC_DEPRECATED("Use TestService instead.")
@@ -122,6 +146,14 @@ static inline krpc_error_t krpc_DeprecatedService_set_Property(krpc_connection_t
  */
 KRPC_DEPRECATED("Use TestService instead.")
 static inline krpc_error_t krpc_DeprecatedService_set_Property_call(krpc_schema_ProcedureCall * procedureCall, const char * value);
+
+/**
+ * Fills in the call template of krpc_DeprecatedService_set_Property(), which names the procedure and carries no
+ * arguments, to pass to krpc_KRPC_Expression_CallWithArguments(). Free it with
+ * krpc_free_procedure_call().
+ */
+KRPC_DEPRECATED("Use TestService instead.")
+static inline krpc_error_t krpc_DeprecatedService_set_Property_call_template(krpc_schema_ProcedureCall * procedureCall);
 
 /**
  * A static method.
@@ -137,6 +169,14 @@ KRPC_DEPRECATED("Use \"TestService.TestClass\" instead.")
 static inline krpc_error_t krpc_DeprecatedService_ReasonedClass_StaticMethod_call(krpc_schema_ProcedureCall * procedureCall);
 
 /**
+ * Fills in the call template of krpc_DeprecatedService_ReasonedClass_StaticMethod(), which names the procedure and carries no
+ * arguments, to pass to krpc_KRPC_Expression_CallWithArguments(). Free it with
+ * krpc_free_procedure_call().
+ */
+KRPC_DEPRECATED("Use \"TestService.TestClass\" instead.")
+static inline krpc_error_t krpc_DeprecatedService_ReasonedClass_StaticMethod_call_template(krpc_schema_ProcedureCall * procedureCall);
+
+/**
  * A method.
  */
 KRPC_DEPRECATED("Use TestService instead.")
@@ -150,6 +190,14 @@ KRPC_DEPRECATED("Use TestService instead.")
 static inline krpc_error_t krpc_DeprecatedService_ServiceClass_Method_call(krpc_schema_ProcedureCall * procedureCall, krpc_DeprecatedService_ServiceClass_t instance);
 
 /**
+ * Fills in the call template of krpc_DeprecatedService_ServiceClass_Method(), which names the procedure and carries no
+ * arguments, to pass to krpc_KRPC_Expression_CallWithArguments(). Free it with
+ * krpc_free_procedure_call().
+ */
+KRPC_DEPRECATED("Use TestService instead.")
+static inline krpc_error_t krpc_DeprecatedService_ServiceClass_Method_call_template(krpc_schema_ProcedureCall * procedureCall);
+
+/**
  * A static method.
  */
 KRPC_DEPRECATED("Use TestService instead.")
@@ -161,6 +209,14 @@ static inline krpc_error_t krpc_DeprecatedService_ServiceClass_StaticMethod(krpc
  */
 KRPC_DEPRECATED("Use TestService instead.")
 static inline krpc_error_t krpc_DeprecatedService_ServiceClass_StaticMethod_call(krpc_schema_ProcedureCall * procedureCall);
+
+/**
+ * Fills in the call template of krpc_DeprecatedService_ServiceClass_StaticMethod(), which names the procedure and carries no
+ * arguments, to pass to krpc_KRPC_Expression_CallWithArguments(). Free it with
+ * krpc_free_procedure_call().
+ */
+KRPC_DEPRECATED("Use TestService instead.")
+static inline krpc_error_t krpc_DeprecatedService_ServiceClass_StaticMethod_call_template(krpc_schema_ProcedureCall * procedureCall);
 
 // Implementation
 
@@ -267,6 +323,10 @@ static inline krpc_error_t krpc_DeprecatedService_Procedure_call(krpc_schema_Pro
   return KRPC_OK;
 }
 
+static inline krpc_error_t krpc_DeprecatedService_Procedure_call_template(krpc_schema_ProcedureCall * procedureCall) {
+  return krpc_procedure_call(procedureCall, 1973646969, 2214733980, 0);
+}
+
 static inline krpc_error_t krpc_DeprecatedService_StructProcedure(krpc_connection_t connection, krpc_DeprecatedService_ServiceStruct_t * returnValue) {
   krpc_call_t _call;
   KRPC_CHECK(krpc_call(&_call, 1973646969, 977583504, 0, NULL));
@@ -285,6 +345,10 @@ static inline krpc_error_t krpc_DeprecatedService_StructProcedure(krpc_connectio
 static inline krpc_error_t krpc_DeprecatedService_StructProcedure_call(krpc_schema_ProcedureCall * procedureCall) {
   KRPC_CHECK(krpc_procedure_call(procedureCall, 1973646969, 977583504, 0));
   return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_DeprecatedService_StructProcedure_call_template(krpc_schema_ProcedureCall * procedureCall) {
+  return krpc_procedure_call(procedureCall, 1973646969, 977583504, 0);
 }
 
 static inline krpc_error_t krpc_DeprecatedService_Property(krpc_connection_t connection, char * * returnValue) {
@@ -307,6 +371,10 @@ static inline krpc_error_t krpc_DeprecatedService_Property_call(krpc_schema_Proc
   return KRPC_OK;
 }
 
+static inline krpc_error_t krpc_DeprecatedService_Property_call_template(krpc_schema_ProcedureCall * procedureCall) {
+  return krpc_procedure_call(procedureCall, 1973646969, 1384588030, 0);
+}
+
 static inline krpc_error_t krpc_DeprecatedService_set_Property(krpc_connection_t connection, const char * value) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
@@ -323,6 +391,10 @@ static inline krpc_error_t krpc_DeprecatedService_set_Property_call(krpc_schema_
   KRPC_CHECK(krpc_procedure_call(procedureCall, 1973646969, 3646072595, 1));
   KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_string, &value));
   return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_DeprecatedService_set_Property_call_template(krpc_schema_ProcedureCall * procedureCall) {
+  return krpc_procedure_call(procedureCall, 1973646969, 3646072595, 0);
 }
 
 static inline krpc_error_t krpc_DeprecatedService_ReasonedClass_StaticMethod(krpc_connection_t connection, char * * returnValue) {
@@ -343,6 +415,10 @@ static inline krpc_error_t krpc_DeprecatedService_ReasonedClass_StaticMethod(krp
 static inline krpc_error_t krpc_DeprecatedService_ReasonedClass_StaticMethod_call(krpc_schema_ProcedureCall * procedureCall) {
   KRPC_CHECK(krpc_procedure_call(procedureCall, 1973646969, 1032843800, 0));
   return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_DeprecatedService_ReasonedClass_StaticMethod_call_template(krpc_schema_ProcedureCall * procedureCall) {
+  return krpc_procedure_call(procedureCall, 1973646969, 1032843800, 0);
 }
 
 static inline krpc_error_t krpc_DeprecatedService_ServiceClass_Method(krpc_connection_t connection, char * * returnValue, krpc_DeprecatedService_ServiceClass_t instance) {
@@ -368,6 +444,10 @@ static inline krpc_error_t krpc_DeprecatedService_ServiceClass_Method_call(krpc_
   return KRPC_OK;
 }
 
+static inline krpc_error_t krpc_DeprecatedService_ServiceClass_Method_call_template(krpc_schema_ProcedureCall * procedureCall) {
+  return krpc_procedure_call(procedureCall, 1973646969, 1036800599, 0);
+}
+
 static inline krpc_error_t krpc_DeprecatedService_ServiceClass_StaticMethod(krpc_connection_t connection, char * * returnValue) {
   krpc_call_t _call;
   KRPC_CHECK(krpc_call(&_call, 1973646969, 1031327548, 0, NULL));
@@ -386,6 +466,10 @@ static inline krpc_error_t krpc_DeprecatedService_ServiceClass_StaticMethod(krpc
 static inline krpc_error_t krpc_DeprecatedService_ServiceClass_StaticMethod_call(krpc_schema_ProcedureCall * procedureCall) {
   KRPC_CHECK(krpc_procedure_call(procedureCall, 1973646969, 1031327548, 0));
   return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_DeprecatedService_ServiceClass_StaticMethod_call_template(krpc_schema_ProcedureCall * procedureCall) {
+  return krpc_procedure_call(procedureCall, 1973646969, 1031327548, 0);
 }
 
 KRPC_DEPRECATED_USES_END

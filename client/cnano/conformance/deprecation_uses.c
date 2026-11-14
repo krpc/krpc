@@ -31,6 +31,9 @@ void uses(krpc_connection_t connection,                                         
   krpc_TestService_DeprecatedProcedure_call(call, 1);                                   // use: TestService.DeprecatedProcedure:call
   krpc_TestService_DeprecatedProperty_call(call);                                       // use: TestService.DeprecatedProperty:call
   krpc_TestService_DeprecatedClass_DeprecatedMethod_call(call, deprecated_class);       // use: TestService.DeprecatedClass.DeprecatedMethod:call
+  krpc_TestService_DeprecatedProcedure_call_template(call);                             // use: TestService.DeprecatedProcedure:template
+  krpc_TestService_DeprecatedProperty_call_template(call);                              // use: TestService.DeprecatedProperty:template
+  krpc_TestService_DeprecatedClass_DeprecatedMethod_call_template(call);                // use: TestService.DeprecatedClass.DeprecatedMethod:template
   krpc_DeprecatedService_Procedure(connection, text);                                   // use: DeprecatedService.Procedure
   krpc_DeprecatedService_Property(connection, text);                                    // use: DeprecatedService.Property
   (void)sizeof(krpc_DeprecatedService_ServiceClass_t);                                  // use: DeprecatedService.ServiceClass
@@ -42,6 +45,7 @@ void uses(krpc_connection_t connection,                                         
   (void)service_struct->field;                                                          // use: DeprecatedService.ServiceStruct.Field
   krpc_TestService_FloatToString(connection, text, 1);                                  // use: TestService.FloatToString
   krpc_TestService_FloatToString_call(call, 1);                                         // use: TestService.FloatToString:call
+  krpc_TestService_FloatToString_call_template(call);                                   // use: TestService.FloatToString:template
   krpc_TestService_StringProperty(connection, text);                                    // use: TestService.StringProperty
   (void)sizeof(krpc_TestService_TestClass_t);                                           // use: TestService.TestClass
   (void)sizeof(krpc_TestService_TestEnum_t);                                            // use: TestService.TestEnum

@@ -338,7 +338,10 @@ and the client sends it to the server. The following reads the vessel's altitude
 .. literalinclude:: /scripts/java/RunFunction.java
 
 :meth:`~Connection.getCall` turns a call into a message, and the static methods of
-:type:`~krpc.client.services.KRPC.Expression` build the function from it. :std:ref:`The Expression
+:type:`~krpc.client.services.KRPC.Expression` build the function from it.
+:meth:`~Connection.getCallTemplate` names a procedure through its class, with no object or
+arguments, for ``Expression.callWithArguments`` to supply each argument, as in
+:std:ref:`server-side-functions-collections`. :std:ref:`The Expression
 API <server-side-functions-api>` in the server side functions guide describes these methods, and
 shows how to build larger functions.
 
@@ -610,6 +613,17 @@ Client API Reference
 
       Throws an :type:`~java.lang.IllegalArgumentException` if there is no method of that name
       taking the arguments.
+
+   .. method:: krpc.schema.KRPC.ProcedureCall getCallTemplate(Class<?> clazz, String method)
+
+      The call template of a member, a procedure call message that names the procedure and
+      carries no arguments, for ``Expression.callWithArguments`` to supply each one. The member is
+      named through its class or service, with no instance, by the name of its method, such as
+      ``getCallTemplate(SpaceCenter.Engine.class, "getHasFuel")``. A property's setter is named
+      ``set<Name>``.
+
+      Throws an :type:`~java.lang.IllegalArgumentException` if the class has no remote procedure
+      of that name.
 
 .. type:: class Stream<T>
 

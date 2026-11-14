@@ -248,6 +248,9 @@ message Call {
 message CallWithArguments {
   Invoke invoke = 1;
   map<uint32, Value> arguments = 2;
+  // Whether to build the call as the client's call template for the procedure, which names the
+  // member through its class and carries no arguments. The invoke then has no arguments.
+  bool template = 3;
 }
 
 // Adds a stream of a server side function, a KRPC.Expression object. The type is the function's
@@ -570,8 +573,9 @@ message DeprecationSignals {
   // signal replies with an UNSUPPORTED error.
   bool reason = 4;
   // How the testee uses the procedure of invoke: empty to call it, "stream" to add a stream of it,
-  // or "call" to build the call that a stream or a server side function is made from. A testee
-  // whose language has no signal for the use replies with an UNSUPPORTED error.
+  // "call" to build the call that a stream or a server side function is made from, or "template"
+  // to build its call template, when the invoke has no arguments. A testee whose language has no
+  // signal for the use replies with an UNSUPPORTED error.
   string use = 5;
 }
 

@@ -45,6 +45,20 @@ namespace KRPC.Client.Conformance
             }
         }
 
+        public static global::KRPC.Schema.KRPC.ProcedureCall CallTemplate (Connection connection, Invoke invoke)
+        {
+            switch (invoke.Service) {
+            case "KRPC":
+                return CallTemplateKRPC (connection, invoke.Procedure);
+            case "TestService":
+                return CallTemplateTestService (connection, invoke.Procedure);
+            case "ConformanceService":
+                return CallTemplateConformanceService (connection, invoke.Procedure);
+            default:
+                throw new NotSupportedException ("The testee cannot build a call template of service " + invoke.Service);
+            }
+        }
+
         public static global::KRPC.Schema.KRPC.ProcedureCall Call (Connection connection, Invoke invoke)
         {
             var args = invoke.Arguments;

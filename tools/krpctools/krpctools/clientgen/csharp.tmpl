@@ -143,6 +143,9 @@ namespace KRPC.Client.Services.{{ service_name }}
         {% if property.getter %}
         [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ property.getter.remote_name }}", typeof(TypeSpecs))]
         {% endif %}
+        {% if property.setter %}
+        [global::KRPC.Client.Attributes.RPCSetterAttribute ("{{ service_name }}", "{{ property.setter.remote_name }}")]
+        {% endif %}
         public {{ property.type }} {{ property_name }} {
         {% if property.getter %}
             get {
@@ -439,6 +442,9 @@ namespace KRPC.Client.Services.{{ service_name }}
 {% endif %}
         {% if property.getter %}
         [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ property.getter.remote_name }}", typeof(TypeSpecs))]
+        {% endif %}
+        {% if property.setter %}
+        [global::KRPC.Client.Attributes.RPCSetterAttribute ("{{ service_name }}", "{{ property.setter.remote_name }}")]
         {% endif %}
         public {{ property.type }} {{ property_name }} {
         {% if property.getter %}

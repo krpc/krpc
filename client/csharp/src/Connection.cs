@@ -922,6 +922,89 @@ namespace KRPC.Client
             return GetCall (expression, out rpc);
         }
 
+        /// <summary>
+        /// Return the call template of a member of a class, a procedure call message that names
+        /// the procedure and carries no arguments, for <c>Expression.CallWithArguments</c> to
+        /// supply each one. The lambda reads a property or calls a method of its parameter, such as
+        /// <c>(Engine e) =&gt; e.HasFuel</c>, and is not evaluated.
+        /// </summary>
+        public static ProcedureCall GetCallTemplate<T, TResult> (Expression<Func<T, TResult>> expression)
+        {
+            return GetCallTemplate ((LambdaExpression)expression);
+        }
+
+        /// <summary>
+        /// Return the call template of a method of a class with no value.
+        /// See <see cref="GetCallTemplate{T, TResult}(Expression{Func{T, TResult}})"/>.
+        /// </summary>
+        public static ProcedureCall GetCallTemplate<T> (Expression<Action<T>> expression)
+        {
+            return GetCallTemplate ((LambdaExpression)expression);
+        }
+
+        /// <summary>
+        /// Return the call template of a member of a service, or of a static method. The lambda
+        /// takes no parameter, and its arguments are not evaluated, so <c>default</c> can stand
+        /// for each one. See <see cref="GetCallTemplate{T, TResult}(Expression{Func{T, TResult}})"/>.
+        /// </summary>
+        public static ProcedureCall GetCallTemplate<TResult> (Expression<Func<TResult>> expression)
+        {
+            return GetCallTemplate ((LambdaExpression)expression);
+        }
+
+        /// <summary>
+        /// Return the call template of a procedure of a service, or of a static method, with no
+        /// value. See <see cref="GetCallTemplate{TResult}(Expression{Func{TResult}})"/>.
+        /// </summary>
+        public static ProcedureCall GetCallTemplate (Expression<Action> expression)
+        {
+            return GetCallTemplate ((LambdaExpression)expression);
+        }
+
+        /// <summary>
+        /// Return the call template of the setter of a property, of a class or of a service's
+        /// class <c>Service</c>, named as <c>nameof (Engine.Throttle)</c>.
+        /// See <see cref="GetCallTemplate{T, TResult}(Expression{Func{T, TResult}})"/>.
+        /// </summary>
+        public static ProcedureCall GetSetCallTemplate<T> (string property)
+        {
+            if (ReferenceEquals (property, null))
+                throw new ArgumentNullException (nameof (property));
+            var info = typeof(T).GetProperty (property, BindingFlags.Public | BindingFlags.Instance);
+            var attributes = info == null
+                ? new object [0] : info.GetCustomAttributes (typeof(RPCSetterAttribute), false);
+            if (attributes.Length != 1)
+                throw new ArgumentException (
+                    typeof(T) + " has no property " + property + " with a setter backed by a RPC.");
+            var attribute = (RPCSetterAttribute)attributes [0];
+            return GetCall (attribute.Service, attribute.Procedure);
+        }
+
+        static ProcedureCall GetCallTemplate (LambdaExpression expression)
+        {
+            if (ReferenceEquals (expression, null))
+                throw new ArgumentNullException (nameof (expression));
+            var body = expression.Body;
+            while (body.NodeType == ExpressionType.Convert || body.NodeType == ExpressionType.ConvertChecked)
+                body = ((UnaryExpression)body).Operand;
+            var methodCall = body as MethodCallExpression;
+            var access = body as MemberExpression;
+            if (methodCall == null && access == null)
+                throw new ArgumentException (
+                    "Invalid expression. Must consist of a method call or property accessor only.");
+            var member = methodCall != null ? (MemberInfo)methodCall.Method : access.Member;
+            var instance = methodCall != null ? methodCall.Object : access.Expression;
+            // The parameter stands for the instance, which the template leaves out
+            if (expression.Parameters.Count == 1 && instance != expression.Parameters [0])
+                throw new ArgumentException (
+                    "Invalid expression. The member must be read or called on the lambda's parameter.");
+            if (expression.Parameters.Count == 0 && instance != null && typeof(RemoteObject).IsAssignableFrom (instance.Type))
+                throw new ArgumentException (
+                    "Invalid expression. A member of a class takes the lambda form (Engine x) => x.Member.");
+            var attribute = GetRPCAttribute (member, methodCall != null ? "Method called" : "Property accessed");
+            return GetCall (attribute.Service, attribute.Procedure);
+        }
+
         static ProcedureCall GetCall (LambdaExpression expression, out Expression rpc)
         {
             if (ReferenceEquals (expression, null))

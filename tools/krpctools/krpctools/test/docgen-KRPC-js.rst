@@ -377,9 +377,9 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
    .. function:: callWithArguments(call, args)
 
-      An RPC call, where some or all of the arguments are computed by expressions.
+      An RPC call, with its arguments computed by expressions.
 
-      :param call: The RPC to call.
+      :param call: The call template.
       :type call: ``schema.ProcedureCall``
       :param args: Expressions computing the call's arguments, by position.
       :type args: ``Map`` from ``number`` to :class:`KRPC.Expression`
@@ -388,9 +388,11 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
       .. note::
 
+         The call is a call template, which names the procedure and carries no arguments.
          Position 0 is the instance of a class method or property. A position with no
-         expression takes the argument encoded in the call, or the parameter's default. A
-         collection the procedure returns is copied, as a client would receive it.
+         expression takes the parameter's default. A collection the procedure returns is
+         copied, as a client would receive it. Throws an exception if the call carries an
+         argument.
 
    .. function:: cast(arg, type)
 

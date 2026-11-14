@@ -4,11 +4,7 @@ import { CompilationError } from "../errors.js";
 import { camelCase } from "../naming.js";
 import { RemoteObject } from "../objects.js";
 import { namedOf } from "../registry.js";
-import {
-  ArgumentSchema,
-  type Argument as CallArgument,
-  ProcedureCallSchema,
-} from "../schema/krpc_pb.js";
+import { ProcedureCallSchema } from "../schema/krpc_pb.js";
 import { RemoteEnum, RemoteStruct, type Type, type Types, UnknownTypeError } from "../types.js";
 import { ClientValue, Collection, Node, type Operand, TypeArgument, type Value } from "./ir.js";
 import type { Member, MemberIndex } from "./members.js";
@@ -697,7 +693,6 @@ export class Builder {
       given.set(position, x);
     }
     const expressions = new Map<number, Node>();
-    const nulls: CallArgument[] = [];
     if (instance !== null) {
       expressions.set(0, instance);
     }
@@ -716,7 +711,7 @@ export class Builder {
         if (!parameter.type.nullable) {
           throw this.error(x.at, `Argument ${parameter.name} of ${name} cannot be null`);
         }
-        nulls.push(create(ArgumentSchema, { position, isNull: true }));
+        expressions.set(position, this.constant(null, parameter.type, x.at));
         return;
       }
       expressions.set(
@@ -730,7 +725,6 @@ export class Builder {
     const call = create(ProcedureCallSchema, {
       service: member.service,
       procedure: member.procedure.name,
-      arguments: nulls,
     });
     return this.node("CallWithArguments", [call, expressions], member.result);
   }

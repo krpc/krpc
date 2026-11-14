@@ -171,7 +171,7 @@ Mapping the Spec to Lua
    * - Protobuf message result
      - A plain table
    * - Getting a call as a value
-     - ``Connection:get_call``, given a stub
+     - ``Connection:get_call``, given a stub, or ``get_call_template`` for a call template
    * - Value type of a server side function
      - The function's own type, read from the server
    * - Enumeration value

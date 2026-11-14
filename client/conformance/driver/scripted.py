@@ -523,6 +523,11 @@ class ScriptedServer:
             return encode_size(stream_id)
         return b"\x00"
 
+    def answered_calls(self) -> list[KRPC.ProcedureCall]:
+        """The calls answered so far, in order."""
+        with self._condition:
+            return list(self._calls)
+
     def wait_for_call(self, procedure: str, count: int = 1) -> list[KRPC.ProcedureCall]:
         """The answered calls of a procedure, once there are at least count of them."""
 

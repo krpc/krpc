@@ -942,6 +942,19 @@ Client API Reference
       expression API. See :ref:`server-side-functions-api`. Pass ``getattr`` or ``setattr`` as
       *func* for a property, as with :meth:`add_stream`.
 
+   .. method:: get_call_template(func, *args)
+
+      The call template of the remote procedure *func*, a ``KRPC.ProcedureCall`` message that
+      names the procedure and carries no arguments, for
+      ``Expression.call_with_arguments`` to supply each one. Takes the forms of
+      :meth:`get_call`, with a class in place of the instance and no arguments, such as
+      ``conn.get_call_template(getattr, Engine, "has_fuel")`` or
+      ``conn.get_call_template(Engine.toggle_mode)``, where ``Engine`` is
+      ``conn.space_center.Engine``. A member passed where a call is expected, such as
+      ``Engine.has_fuel`` or ``Engine.toggle_mode``, is converted to its call template, and a
+      property gives its getter's. Raises a ``TypeError`` for a member reached through an
+      object. :ref:`server-side-functions-collections` uses a call template.
+
 .. class:: krpc.stream.Stream
 
    A stream. See :ref:`python-client-streams`.

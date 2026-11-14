@@ -92,6 +92,24 @@ function TestConnection:test_run_with_a_function_of_a_closed_connection()
   luaunit.assertEquals(1, self.conn:run(func))
 end
 
+function TestConnection:test_member_as_call()
+  -- A procedure of a class or service, passed for a call, is its call template
+  local Expression = self.conn.krpc.Expression
+  local Map = require 'pl.Map'
+  local service = self.conn.test_service
+  local TestClass = service.TestClass
+  local instance = Expression.call(self.conn:get_call(service.create_test_object, 'member'))
+  local float_to_string = Expression.call_with_arguments(
+    TestClass.float_to_string, Map{[0] = instance, [1] = Expression.constant_float(2.5)})
+  luaunit.assertEquals(self.conn:run(float_to_string), 'member2.5')
+  local int_property = Expression.call_with_arguments(TestClass.get_int_property, Map{[0] = instance})
+  luaunit.assertEquals(self.conn:run(int_property), 0)
+  local procedure = Expression.call_with_arguments(
+    service.int32_to_string, Map{[0] = Expression.constant_int(3)})
+  luaunit.assertEquals(self.conn:run(procedure), '3')
+  luaunit.assertError(Expression.call_with_arguments, print, Map{})
+end
+
 function TestConnection:test_get_call_expects_the_service()
   local service = self.conn.test_service
   local message = 'get_call expects the service TestService'

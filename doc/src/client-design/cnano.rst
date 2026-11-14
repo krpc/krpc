@@ -14,8 +14,8 @@ is ``static inline``, so a header can be included from several translation units
 A stub calls by service and procedure id, and ``src/krpc.options`` removes the name fields. This
 keeps names out of flash and off the wire.
 
-Each procedure also has a ``_call`` function, for server side functions. An unused one adds compile
-time and no code.
+Each procedure also has a ``_call`` function and a ``_call_template`` function, for server side
+functions. An unused one adds compile time and no code.
 
 ``KRPC_DEPRECATED`` goes before a declaration, the one position GCC, Clang and MSVC share. An
 enumeration value takes ``KRPC_DEPRECATED_VALUE`` after its name, as the attribute has no other
@@ -37,6 +37,8 @@ as no public procedure uses that type.
   the call. A ``krpc_schema_ProcedureCall`` outlives the ``_call`` function that fills it in, so
   each argument is encoded onto the heap, tag and length included. Encoding the message then writes
   those bytes as they are.
+* **A call template allocates nothing.** It has no arguments, so ``krpc_procedure_call`` leaves the
+  arguments field unset, and freeing it does nothing.
 * **That code has its own file**, ``src/procedure_call.c``, so a static link without functions
   leaves it out.
 * **There are no function streams or events**, as the client has no streams.
@@ -248,7 +250,7 @@ Mapping the Spec to C
    * - Nullable position in a value
      - A generated ``krpc_nullable_*_t``, the value beside ``has_value``
    * - Getting a call as a value
-     - A generated ``_call`` function
+     - A generated ``_call`` function, or ``_call_template`` for a call template
    * - Value type of a server side function
      - The program decodes encoded bytes
    * - Handshake and stall timeouts

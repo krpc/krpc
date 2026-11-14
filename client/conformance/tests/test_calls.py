@@ -553,6 +553,19 @@ def test_deprecated_call(connected, member):
     assert_signals_use(connected, member, "call")
 
 
+@should
+@profile("functions")
+@pytest.mark.parametrize("member", list(DEPRECATED_CALLS))
+def test_deprecated_call_template(connected, member):
+    """A client signals the call template it builds of a deprecated procedure, method or
+    property."""
+    name, procedure, _ = DEPRECATED_CALLS[member]
+    assert connected.deprecation_signals("TestService", name, procedure, use="template")
+    assert not connected.deprecation_signals(
+        "TestService", "FloatToString", "FloatToString", use="template"
+    )
+
+
 def assert_reason(signals, reason):
     """Check that each signal gives the reason, as the client writes names in it."""
     assert signals

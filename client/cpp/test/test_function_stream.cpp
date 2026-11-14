@@ -126,7 +126,9 @@ TEST_F(test_function_stream, test_a_null_argument_is_nullptr_or_nullopt) {
 TEST_F(test_function_stream, test_run_function_with_arguments_for_its_effects) {
   auto id = Expr::parameter(conn, "id", KType::string(conn));
   auto count = Expr::lambda(
-      conn, {id}, Expr::call_with_arguments(conn, test_service.counter_call("", 1), {{0, id}}));
+      conn, {id},
+      Expr::call_with_arguments(conn, krpc::services::TestService::counter_call_template(),
+                                {{0, id}, {1, Expr::constant_int(conn, 1)}}));
   auto before = test_service.counter("CppRunFunctionEffects", 1);
   krpc::run(count, "CppRunFunctionEffects");
   ASSERT_EQ(before + 2, test_service.counter("CppRunFunctionEffects", 1));

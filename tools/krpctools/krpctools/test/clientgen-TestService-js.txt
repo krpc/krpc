@@ -244,6 +244,7 @@ export interface Service extends RemoteService<"TestService"> {
    */
   readonly DeprecatedClass: {
     [Symbol.hasInstance](value: unknown): value is DeprecatedClass;
+    readonly prototype: DeprecatedClass;
     /**
      * Static method with no deprecation of its own documentation string.
      *
@@ -254,6 +255,7 @@ export interface Service extends RemoteService<"TestService"> {
   /** Class documentation string. */
   readonly TestClass: {
     [Symbol.hasInstance](value: unknown): value is TestClass;
+    readonly prototype: TestClass;
     /**
      * Returns static followed by `a` and `b`.
      *

@@ -301,6 +301,31 @@ local function resolve(command)
   return service()[to_snake_case(name)], args, count
 end
 
+-- The procedure of a call template, reached through its class or service, given the name the
+-- server gives it
+local function resolve_template(command)
+  local svc = conn[to_snake_case(command.service)]
+  if svc == nil then
+    error('The testee cannot call service ' .. command.service, 0)
+  end
+  local name = command.procedure
+  if Attributes.is_a_class_member(name) then
+    local member = to_snake_case(Attributes.get_class_member_name(name))
+    local class = svc[Attributes.get_class_name(name)]
+    if Attributes.is_a_class_property_getter(name) then
+      return class['get_' .. member]
+    elseif Attributes.is_a_class_property_setter(name) then
+      return class['set_' .. member]
+    end
+    return class[member]
+  elseif Attributes.is_a_property_getter(name) then
+    return svc['get_' .. to_snake_case(Attributes.get_property_name(name))]
+  elseif Attributes.is_a_property_setter(name) then
+    return svc['set_' .. to_snake_case(Attributes.get_property_name(name))]
+  end
+  return svc[to_snake_case(name)]
+end
+
 -- Call a procedure, given the name the server gives it
 local function invoke(command)
   local func, args, count = resolve(command)
@@ -319,6 +344,8 @@ local function use_member(command)
     if command.use == 'call' then
       local func, args, count = resolve(command.invoke)
       conn:get_call(func, table.unpack(args, 1, count))
+    elseif command.use == 'template' then
+      conn:get_call_template(resolve_template(command.invoke))
     else
       invoke(command.invoke)
     end
@@ -464,12 +491,17 @@ local function dispatch(command)
     return to_value(conn.krpc.Expression.call(conn:get_call(func, table.unpack(args, 1, count))))
   elseif case == 'call_with_arguments' then
     connected()
-    local func, args, count = resolve(command.call_with_arguments.invoke)
     local arguments = Map{}
     for position, value in pairs(command.call_with_arguments.arguments or {}) do
       arguments[position] = from_value(value)
     end
-    local call = conn:get_call(func, table.unpack(args, 1, count))
+    local call
+    if command.call_with_arguments.template then
+      call = conn:get_call_template(resolve_template(command.call_with_arguments.invoke))
+    else
+      local func, args, count = resolve(command.call_with_arguments.invoke)
+      call = conn:get_call(func, table.unpack(args, 1, count))
+    end
     return to_value(conn.krpc.Expression.call_with_arguments(call, arguments))
   elseif case == 'compile_function' then
     connected():compile(from_value(command.compile_function['function']))

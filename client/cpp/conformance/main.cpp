@@ -483,8 +483,10 @@ class Testee {
         for (const auto& [position, value] : command_call.arguments())
           arguments[static_cast<int32_t>(position)] =
               Object<functions::Expression>::arg(connected(), value);
-        *reply->mutable_value() = result_object(functions::Expression::call_with_arguments(
-            connected(), call(command_call.invoke()), arguments));
+        auto procedure_call = command_call.template_() ? call_template(command_call.invoke())
+                                                       : call(command_call.invoke());
+        *reply->mutable_value() = result_object(
+            functions::Expression::call_with_arguments(connected(), procedure_call, arguments));
         break;
       }
       case Command::kAddFunctionStream: {
@@ -997,6 +999,15 @@ class Testee {
     if (command.service() == "ConformanceService")
       return add_stream_conformance_service(connected(), command.procedure(), command.arguments());
     throw std::invalid_argument("The testee cannot stream service " + command.service());
+  }
+
+  static krpc::schema::ProcedureCall call_template(const krpc::conformance::Invoke& command) {
+    if (command.service() == "KRPC") return call_template_krpc(command.procedure());
+    if (command.service() == "TestService") return call_template_test_service(command.procedure());
+    if (command.service() == "ConformanceService")
+      return call_template_conformance_service(command.procedure());
+    throw std::invalid_argument("The testee cannot build a call template of service " +
+                                command.service());
   }
 
   krpc::schema::ProcedureCall call(const krpc::conformance::Invoke& command) {

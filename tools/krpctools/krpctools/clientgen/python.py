@@ -1,6 +1,7 @@
 import collections
 import itertools
 
+from krpc.schema.KRPC_pb2 import Type
 from krpc.types import (
     ClassType,
     DictionaryType,
@@ -105,6 +106,17 @@ class PythonGenerator(Generator[StubLanguage]):
         if typ.nullable:
             return "Optional[%s]" % spec
         return spec
+
+    def parse_parameter_specification(self, typ):
+        """The type of a parameter. A call is also given as a member, which the client
+        converts to its call template"""
+        if (
+            isinstance(typ, MessageType)
+            and typ.protobuf_type.code == Type.PROCEDURE_CALL
+        ):
+            spec = "Union[KRPC_pb2.ProcedureCall, property, Callable[..., object]]"
+            return "Optional[%s]" % spec if typ.nullable else spec
+        return self.parse_type_specification(typ)
 
     def parse_context(self, context):
         # Expand service properties into get and set methods
@@ -256,7 +268,7 @@ class PythonGenerator(Generator[StubLanguage]):
                 ptype = as_type(self.types, info["procedure"]["parameters"][i]["type"])
                 pinfo["type"] = {
                     "name": pinfo["type"],
-                    "spec": self.parse_type_specification(ptype),
+                    "spec": self.parse_parameter_specification(ptype),
                 }
                 pos += 1
 
@@ -280,7 +292,7 @@ class PythonGenerator(Generator[StubLanguage]):
                     )
                     pinfo["type"] = {
                         "name": pinfo["type"],
-                        "spec": self.parse_type_specification(ptype),
+                        "spec": self.parse_parameter_specification(ptype),
                     }
                     pos += 1
 

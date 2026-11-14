@@ -104,7 +104,9 @@ namespace KRPC.Client.Conformance
             var arguments = new Dictionary<int, Expression> ();
             foreach (var argument in command.Arguments)
                 arguments [(int)argument.Key] = Arg.Object<Expression> (argument.Value);
-            var call = Conformance.Dispatch.Call (connection, command.Invoke);
+            var call = command.Template
+                ? Conformance.Dispatch.CallTemplate (connection, command.Invoke)
+                : Conformance.Dispatch.Call (connection, command.Invoke);
             return Result.Object (Expression.CallWithArguments (connection, call, arguments));
         }
 

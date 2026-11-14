@@ -51,6 +51,13 @@ static inline krpc_error_t krpc_ServiceA_Frob(krpc_connection_t connection, krpc
 static inline krpc_error_t krpc_ServiceA_Frob_call(krpc_schema_ProcedureCall * procedureCall, krpc_ServiceB_Mode_t mode);
 
 /**
+ * Fills in the call template of krpc_ServiceA_Frob(), which names the procedure and carries no
+ * arguments, to pass to krpc_KRPC_Expression_CallWithArguments(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_ServiceA_Frob_call_template(krpc_schema_ProcedureCall * procedureCall);
+
+/**
  * Defaults to a collection containing a member of another service's enumeration.
  */
 static inline krpc_error_t krpc_ServiceA_FrobAll(krpc_connection_t connection, const krpc_list_enum_t * modes);
@@ -60,6 +67,13 @@ static inline krpc_error_t krpc_ServiceA_FrobAll(krpc_connection_t connection, c
  * krpc_free_procedure_call().
  */
 static inline krpc_error_t krpc_ServiceA_FrobAll_call(krpc_schema_ProcedureCall * procedureCall, const krpc_list_enum_t * modes);
+
+/**
+ * Fills in the call template of krpc_ServiceA_FrobAll(), which names the procedure and carries no
+ * arguments, to pass to krpc_KRPC_Expression_CallWithArguments(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_ServiceA_FrobAll_call_template(krpc_schema_ProcedureCall * procedureCall);
 
 // Implementation
 
@@ -162,6 +176,10 @@ static inline krpc_error_t krpc_ServiceA_Frob_call(krpc_schema_ProcedureCall * p
   return KRPC_OK;
 }
 
+static inline krpc_error_t krpc_ServiceA_Frob_call_template(krpc_schema_ProcedureCall * procedureCall) {
+  return krpc_procedure_call(procedureCall, 1, 1, 0);
+}
+
 static inline krpc_error_t krpc_ServiceA_FrobAll(krpc_connection_t connection, const krpc_list_enum_t * modes) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
@@ -178,6 +196,10 @@ static inline krpc_error_t krpc_ServiceA_FrobAll_call(krpc_schema_ProcedureCall 
   KRPC_CHECK(krpc_procedure_call(procedureCall, 1, 2, 1));
   KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_list_enum, modes));
   return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_ServiceA_FrobAll_call_template(krpc_schema_ProcedureCall * procedureCall) {
+  return krpc_procedure_call(procedureCall, 1, 2, 0);
 }
 
 KRPC_DEPRECATED_USES_END

@@ -293,6 +293,50 @@ In Python, C#, Java and JavaScript, the stream runs on the connection the method
 whichever connection the object came from. In C++, it runs on the object's client, or for a
 static method the client passed to it.
 
+Call Templates
+--------------
+
+A call template names a procedure through its class or service, with no instance and no
+arguments. ``Expression.CallWithArguments`` supplies every argument, so a function over the
+elements of a collection needs no element to build its call from. ``CallWithArguments`` throws
+an exception for a call that carries arguments, so each argument has one source. A template is
+built on the client, with no remote procedure call.
+
+Each client takes the form of its procedure call, with the class in place of the object, except
+JavaScript, whose design page gives the reason. A client
+without a lookup at run time generates a function per member, as for the procedure call. For the
+``HasFuel`` property of an ``Engine``:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Client
+     - Call template
+   * - Python
+     - ``conn.get_call_template(getattr, Engine, "has_fuel")``
+   * - C#
+     - ``Connection.GetCallTemplate ((Engine x) => x.HasFuel)``
+   * - C++
+     - ``Engine::has_fuel_call_template()``
+   * - C-nano
+     - ``krpc_SpaceCenter_Engine_HasFuel_call_template(&call)``
+   * - Java
+     - ``connection.getCallTemplate(Engine.class, "getHasFuel")``
+   * - Lua
+     - ``conn:get_call_template(Engine.get_has_fuel)``
+   * - JavaScript
+     - ``conn.getCallTemplate(Engine.prototype.getHasFuel)``
+
+A setter takes the same form in each client, except C#, whose design page gives the reason. A
+template is a separate function from the procedure call. A static method has no object to leave
+out, so a procedure call with its arguments missing could not be told from a template.
+
+Python, Lua and JavaScript also convert a member passed where a call is expected, such as
+``Engine.has_fuel`` in Python, to its call template. The conversion happens in the encoder, so
+reading the member from its class still gives the member. A Python property stands for its getter.
+The other clients have no value that names a member: a C# instance member needs an object, and a
+Java method reference and a C++ member pointer carry no name.
+
 Static Methods
 --------------
 
@@ -312,8 +356,8 @@ object holding the connection, with each static method minus that parameter. It 
 of ``conn.krpc.Expression`` in Python, and shortens an expression tree that passes the connection
 at every node. The ``Bound`` methods carry the RPC attribute of the static method, so a C# lambda
 or a Java ``addStream`` takes them as it takes a service's methods. A C++ ``Bound`` is a shorthand
-for the calls that build large expression trees. It has no ``_stream`` or ``_call`` forms, which
-stay on the static method.
+for the calls that build large expression trees. It has no ``_stream``, ``_call`` or
+``_call_template`` forms, which stay on the static method.
 
 Errors
 ------
@@ -396,8 +440,9 @@ Each client signals the use of a deprecated member with the language's own mecha
      -
 
 A stream, and the call a server side function makes, use a procedure too. Python, Lua and
-JavaScript warn when the client builds the call. In C++ and C-nano, the ``_stream`` and ``_call``
-functions carry the attribute. In C#, the lambda that names the procedure warns.
+JavaScript warn when the client builds the call or its call template. In C++ and C-nano, the
+``_stream``, ``_call`` and ``_call_template`` functions carry the attribute. In C#, the lambda that
+names the procedure warns.
 
 A member of a deprecated service, class, enumeration or structure is deprecated. A member with no
 reason of its own takes the reason of its nearest deprecated container. ``clientgen`` and the

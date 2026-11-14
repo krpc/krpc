@@ -18,9 +18,7 @@ class Program {
         var engine = e.Variable ("engine", t.ClassType ("SpaceCenter", "Engine"));
         var result = e.Variable ("result", t.String ());
         var error = e.Variable ("error", t.String ());
-        var toggleMode = Connection.GetCall (
-            (System.Linq.Expressions.Expression<Action>)
-            (() => vessel.Parts.Engines [0].ToggleMode ()));
+        var toggleMode = Connection.GetCallTemplate ((Engine x) => x.ToggleMode ());
         var switchModes = e.BlockWithVariables (
             new List<Expression> { engine, result, error },
             new List<Expression> {

@@ -55,17 +55,18 @@ krpc_error_t krpc_procedure_call(krpc_schema_ProcedureCall* call, uint32_t servi
   krpc_encoded_arguments_t* arguments;
   call->service_id = serviceId;
   call->procedure_id = procedureId;
-  call->arguments.funcs.encode = &krpc_encode_callback_encoded_arguments;
+  call->arguments.funcs.encode = NULL;
   call->arguments.arg = NULL;
+  // A call with no arguments, such as a call template, holds nothing on the heap
+  if (numArguments == 0) return KRPC_OK;
+  call->arguments.funcs.encode = &krpc_encode_callback_encoded_arguments;
   arguments = (krpc_encoded_arguments_t*)krpc_calloc(1, sizeof(krpc_encoded_arguments_t));
   if (arguments == NULL) KRPC_FAIL(NO_MEMORY, "Out of memory for a procedure call");
   call->arguments.arg = arguments;
-  if (numArguments > 0) {
-    arguments->arguments =
-        (krpc_encoded_argument_t*)krpc_calloc(numArguments, sizeof(krpc_encoded_argument_t));
-    if (arguments->arguments == NULL) KRPC_FAIL(NO_MEMORY, "Out of memory for a procedure call");
-    arguments->count = numArguments;
-  }
+  arguments->arguments =
+      (krpc_encoded_argument_t*)krpc_calloc(numArguments, sizeof(krpc_encoded_argument_t));
+  if (arguments->arguments == NULL) KRPC_FAIL(NO_MEMORY, "Out of memory for a procedure call");
+  arguments->count = numArguments;
   return KRPC_OK;
 }
 

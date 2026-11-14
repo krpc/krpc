@@ -125,8 +125,8 @@ namespace KRPC.Test.Service.KRPC
             // The function parameter provides the instance argument of the call
             var param = Expression.Parameter ("x", Type.ClassType ("TestService", "TestClass"));
             var call = Expression.CallWithArguments (
-                BuildProcedureCall ("TestClass_FloatToString", new Argument (1, 0.5f)),
-                new Dictionary<int, Expression> { { 0, param } });
+                BuildProcedureCall ("TestClass_FloatToString"),
+                new Dictionary<int, Expression> { { 0, param }, { 1, Expression.ConstantFloat (0.5f) } });
             Check (
                 "Lambda<System.Func<KRPC.Test.Service.TestService.TestClass, System.String>> (x#0)\n" +
                 "  Label<System.String> label#0\n" +

@@ -403,10 +403,14 @@ class Client:
         procedure: str,
         args: list[pb.Value],
         arguments: dict[int, values.Object],
+        template: bool = False,
     ) -> values.Object:
         """A server side function that makes a call, built over the call the client builds
-        for its stream, with the arguments at the given positions computed by functions."""
-        command = pb.CallWithArguments(invoke=_invoke(service, procedure, tuple(args)))
+        for its stream, with the arguments at the given positions computed by functions. With
+        template set, the call is the client's call template, and args is empty."""
+        command = pb.CallWithArguments(
+            invoke=_invoke(service, procedure, tuple(args)), template=template
+        )
         for position, function in arguments.items():
             command.arguments[position].CopyFrom(values.obj(function))
         reply = self.testee.run(call_with_arguments=command)

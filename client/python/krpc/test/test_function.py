@@ -13,6 +13,36 @@ class TestFunction(ServerTestCase, unittest.TestCase):
             with self.assertRaises(KeyError):
                 missing()
 
+    def test_member_as_call(self) -> None:
+        # A member passed for a call is its call template
+        expression = self.conn.krpc.Expression
+        service = self.conn.test_service
+        cls = service.TestClass
+        instance = expression.call(
+            self.conn.get_call(service.create_test_object, "memberascall")
+        )
+        int_property = expression.call_with_arguments(cls.int_property, {0: instance})
+        self.assertEqual(0, self.conn.run(int_property))
+        float_to_string = expression.call_with_arguments(
+            cls.float_to_string, {0: instance, 1: expression.constant_float(2.5)}
+        )
+        self.assertEqual("memberascall2.5", self.conn.run(float_to_string))
+        static_method = expression.call_with_arguments(
+            cls.static_method, {0: expression.constant_string("a")}
+        )
+        self.assertEqual("statica", self.conn.run(static_method))
+        procedure = expression.call_with_arguments(
+            service.int32_to_string, {0: expression.constant_int(3)}
+        )
+        self.assertEqual("3", self.conn.run(procedure))
+        with self.assertRaises(TypeError):
+            expression.call_with_arguments(len, {})
+        obj = service.create_test_object("instance")
+        with self.assertRaises(TypeError):
+            expression.call_with_arguments(obj.float_to_string, {})
+        with self.assertRaises(TypeError):
+            self.conn.get_call_template(getattr, obj, "int_property")
+
     def test_nullable_reference_call_in_a_collection(self) -> None:
         service = self.conn.test_service
         obj = service.create_test_object("nullableelement")

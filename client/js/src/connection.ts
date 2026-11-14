@@ -124,6 +124,20 @@ export class Connection {
     return capture(call).call;
   }
 
+  /** Returns the call template of a member, a call that names the procedure and carries no
+   * arguments, for `KRPC.Expression.callWithArguments` to supply each one. The member is reached
+   * through its class or service, with no instance, such as `Engine.prototype.getHasFuel`,
+   * `Engine.staticMethod` or `conn.spaceCenter.launchVessel`. */
+  getCallTemplate(member: (...args: never[]) => unknown): ProcedureCall {
+    const template = callTemplate(member);
+    if (template === undefined) {
+      throw new TypeError(
+        "getCallTemplate expects a member of a service or a class, such as Engine.prototype.getHasFuel",
+      );
+    }
+    return template;
+  }
+
   /** Compiles a server side function on the server, so that its first run is as fast as later
    * ones. Resolves with the function. */
   compile<R = unknown, P extends unknown[] = unknown[]>(
@@ -372,6 +386,48 @@ function callKRPC(context: Context, name: string, args: readonly unknown[]): Pro
   return invoke(context, sig, args);
 }
 
+/** The procedure each member function calls, for getCallTemplate, with the deprecation message
+ * a use of the member warns with. */
+const memberProcedures = new WeakMap<
+  object,
+  {
+    readonly context: Context;
+    readonly service: string;
+    readonly procedure: string;
+    readonly message: string | undefined;
+  }
+>();
+
+/** A member function that calls a procedure, registered for getCallTemplate. */
+function procedureMember<F extends (...args: never[]) => unknown>(
+  context: Context,
+  sig: Signature,
+  message: string | undefined,
+  fn: F,
+): F {
+  memberProcedures.set(fn, {
+    context,
+    service: sig.service,
+    procedure: sig.procedure,
+    message,
+  });
+  return fn;
+}
+
+/** The call template of a member function, which names its procedure and carries no arguments,
+ * or undefined for any other value. Warns for a deprecated member. */
+function callTemplate(member: unknown): ProcedureCall | undefined {
+  const procedure = typeof member === "function" ? memberProcedures.get(member) : undefined;
+  if (procedure === undefined) {
+    return undefined;
+  }
+  warnOf(procedure.context, procedure.message);
+  return create(ProcedureCallSchema, {
+    service: procedure.service,
+    procedure: procedure.procedure,
+  });
+}
+
 /** A call built by a member while addStream or getCall runs its function, which the member does
  * not send. */
 interface CapturedCall {
@@ -459,7 +515,15 @@ function encodeArguments(
   }
   const encoded: Argument[] = [];
   parameters.forEach((parameter, position) => {
-    const value = values[position];
+    let value = values[position];
+    // A member function, passed for a call, is its call template
+    if (
+      typeof value === "function" &&
+      parameter.type.kind === "message" &&
+      parameter.type.schema === ProcedureCallSchema
+    ) {
+      value = callTemplate(value) ?? value;
+    }
     if (value === undefined) {
       if (!parameter.optional) {
         throw new TypeError(`${signature.procedure} is missing argument ${parameter.name}`);
@@ -565,10 +629,14 @@ function addClassMembers(
             service.name,
             `${service.name}.${className}.${key}`,
           );
-          define(cls, key, (...args: unknown[]) => {
-            warnOf(context, message);
-            return invoke(context, sig, args);
-          });
+          define(
+            cls,
+            key,
+            procedureMember(context, sig, message, (...args: unknown[]) => {
+              warnOf(context, message);
+              return invoke(context, sig, args);
+            }),
+          );
         }
         continue;
       }
@@ -591,10 +659,14 @@ function addClassMembers(
         service.name,
         `${instance.service}.${instance.name}.${key}`,
       );
-      define(cls.prototype, key, function (this: RemoteObject, ...args: unknown[]) {
-        warnOf(context, message);
-        return invoke(context, sig, [this, ...args], 1);
-      });
+      define(
+        cls.prototype,
+        key,
+        procedureMember(context, sig, message, function (this: RemoteObject, ...args: unknown[]) {
+          warnOf(context, message);
+          return invoke(context, sig, [this, ...args], 1);
+        }),
+      );
     }
   }
 }
@@ -640,10 +712,10 @@ function serviceMembers(
       key = accessorName("set", name.slice(4));
     }
     const message = deprecationMessage(procedure, service.name, `${service.name}.${key}`);
-    members[key] = (...args: unknown[]) => {
+    members[key] = procedureMember(context, sig, message, (...args: unknown[]) => {
       warnOf(context, message);
       return invoke(context, sig, args);
-    };
+    });
   }
   for (const x of service.classes) {
     add(x.name, classes.get(`${service.name}.${x.name}`), x);

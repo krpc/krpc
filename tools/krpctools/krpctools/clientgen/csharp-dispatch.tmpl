@@ -102,6 +102,18 @@ namespace KRPC.Client.Conformance
                 throw new global::System.NotSupportedException ("The testee cannot build a call of {{ service_name }}." + procedure);
             }
         }
+
+        static global::KRPC.Schema.KRPC.ProcedureCall CallTemplate{{ service_name }} (Connection connection, string procedure)
+        {
+            switch (procedure) {
+            {% for member in members if member.template %}
+            case "{{ member.remote_name }}":
+                return {{ member.template }};
+            {% endfor %}
+            default:
+                throw new global::System.NotSupportedException ("The testee cannot build a call template of {{ service_name }}." + procedure);
+            }
+        }
         {% for struct in structs %}
 
         internal static {{ struct.class }} Arg_{{ service_name }}_{{ struct.name }} (Value value)

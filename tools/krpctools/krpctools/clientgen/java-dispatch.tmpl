@@ -110,6 +110,18 @@ final class {{ service_name }}Dispatch {
             "The testee cannot build a call of {{ service_name }}." + procedure);
     }
   }
+
+  static krpc.schema.KRPC.ProcedureCall callTemplate(Connection connection, String procedure) {
+    switch (procedure) {
+      {% for member in members if member.template %}
+      case "{{ member.remote_name }}":
+        return {{ member.template }};
+      {% endfor %}
+      default:
+        throw new UnsupportedOperationException(
+            "The testee cannot build a call template of {{ service_name }}." + procedure);
+    }
+  }
   {% for struct in structs %}
 
   static {{ struct.class }} arg{{ service_name }}{{ struct.name }}(Value value) {

@@ -41,6 +41,7 @@ export interface Service extends RemoteService<"DeprecatedService"> {
    */
   readonly ReasonedClass: {
     [Symbol.hasInstance](value: unknown): value is ReasonedClass;
+    readonly prototype: ReasonedClass;
     /**
      * A static method.
      *
@@ -55,6 +56,7 @@ export interface Service extends RemoteService<"DeprecatedService"> {
    */
   readonly ServiceClass: {
     [Symbol.hasInstance](value: unknown): value is ServiceClass;
+    readonly prototype: ServiceClass;
     /**
      * A static method.
      *
