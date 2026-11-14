@@ -376,7 +376,8 @@ Client API Reference
       The call template of a procedure of a service or a class, a ``KRPC.ProcedureCall`` message
       that names the procedure and carries no arguments, for
       :meth:`~KRPC.Expression.call_with_arguments` to supply each one. The procedure is reached
-      through its class or service, such as ``conn.space_center.Engine.get_has_fuel``.
+      through its class or service, such as ``conn.space_center.Engine.get_has_fuel``. The
+      procedure itself, passed where a call is expected, is converted to its call template.
 
    .. method:: compile(func: KRPC.Expression): KRPC.Expression
 

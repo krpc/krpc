@@ -1067,8 +1067,9 @@ expressions. Each expression is keyed by the position of its parameter, and posi
 instance.
 
 The call is a **call template**, which names the procedure through its class and carries no
-arguments. The examples build it from ``Engine``, with no engine. A position without an
-expression takes the parameter's default.
+arguments. In Python, Lua and JavaScript, the member itself stands for its call template, as
+``has_fuel`` does in the Python example. A position without an expression takes the parameter's
+default.
 
 A call message built from an instance can stand in for the template. An expression then takes the
 place of the encoded argument at its position, and a position without one takes the encoded

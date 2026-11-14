@@ -330,6 +330,12 @@ A setter takes the same form in each client, except C#, whose design page gives 
 template is a separate function from the procedure call. A static method has no object to leave
 out, so a procedure call with its arguments missing could not be told from a template.
 
+Python, Lua and JavaScript also convert a member passed where a call is expected, such as
+``Engine.has_fuel`` in Python, to its call template. The conversion happens in the encoder, so
+reading the member from its class still gives the member. A Python property stands for its getter.
+The other clients have no value that names a member: a C# instance member needs an object, and a
+Java method reference and a C++ member pointer carry no name.
+
 Static Methods
 --------------
 

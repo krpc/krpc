@@ -36,9 +36,11 @@ from krpc.types import (
     DefaultArgument,
     EnumerationValueError,
     EventType,
+    RemoteObject,
     StreamType,
     TypeBase,
     Types,
+    call_template,
     clear_type_ids,
     warn_deprecated,
 )
@@ -541,6 +543,10 @@ class Connection:
                     "get_call_template takes the class or service and the property's name"
                 )
             owner, name = args
+            if isinstance(owner, RemoteObject):
+                raise TypeError(
+                    "get_call_template takes the class of a member, with no instance"
+                )
             owner_type = owner if isinstance(owner, type) else type(owner)
             if isinstance(owner_type, DeclaredClass):
                 raise declaration_error(
@@ -559,16 +565,13 @@ class Connection:
             if args:
                 raise TypeError("get_call_template takes no arguments")
             used = func
-        procedure = getattr(used, "_procedure", None)
-        if procedure is None:
+        template = call_template(used)
+        if template is None:
             raise TypeError(
                 "get_call_template expects a procedure of a service or a class, got %r"
                 % (func,)
             )
-        deprecation = getattr(used, "_deprecation", None)
-        if deprecation:
-            warn_deprecated(deprecation)
-        return KRPC.ProcedureCall(service=procedure[0], procedure=procedure[1])
+        return template
 
     def _get_return_type(
         self,

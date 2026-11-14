@@ -1,29 +1,31 @@
 ## client/python
 
-- Add `Connection.get_call_template`, a call that names a procedure through its class and
-  carries no arguments, for `Expression.call_with_arguments` (#1352)
+- Add `Connection.get_call_template`, which builds a call with no instance or arguments, for
+  `Expression.call_with_arguments` (#1352)
+- Take a member, such as `Engine.has_fuel`, as its call template where a call is expected (#1352)
 
 ## client/lua
 
-- Add `Connection:get_call_template`, a call that names a procedure through its class and
-  carries no arguments, for `Expression.call_with_arguments` (#1352)
+- Add `Connection:get_call_template`, which builds a call with no instance or arguments, for
+  `Expression.call_with_arguments` (#1352)
+- Take a procedure, such as `Engine.get_has_fuel`, as its call template where a call is expected (#1352)
 
 ## client/csharp
 
-- Add `Connection.GetCallTemplate` and `Connection.GetSetCallTemplate`, a call that names a
-  procedure through its class and carries no arguments, for `Expression.CallWithArguments` (#1352)
+- Add `Connection.GetCallTemplate` and `Connection.GetSetCallTemplate`, which build a call with
+  no instance or arguments, for `Expression.CallWithArguments` (#1352)
 
 ## client/java
 
-- Add `Connection.getCallTemplate`, a call that names a procedure through its class and carries
-  no arguments, for `Expression.callWithArguments` (#1352)
+- Add `Connection.getCallTemplate`, which builds a call with no instance or arguments, for
+  `Expression.callWithArguments` (#1352)
 
 ## client/cpp
 
-- Add a static `_call_template` function for each member, a call that names the procedure and
-  carries no arguments, for `Expression::call_with_arguments` (#1352)
+- Add a static `_call_template` function for each member, which builds a call with no instance
+  or arguments, for `Expression::call_with_arguments` (#1352)
 
 ## client/cnano
 
-- Add a `_call_template` function for each member, a call that names the procedure and carries no
+- Add a `_call_template` function for each member, which fills in a call with no instance or
   arguments, for `krpc_KRPC_Expression_CallWithArguments` (#1352)

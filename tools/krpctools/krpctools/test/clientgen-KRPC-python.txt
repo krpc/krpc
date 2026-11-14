@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Tuple, Set, Dict, List, NamedTuple, Optional, TYPE_CHECKING
+from typing import Callable, Tuple, Set, Dict, List, NamedTuple, Optional, TYPE_CHECKING, Union
 import krpc.connection
 import krpc.error
 import krpc.limits
@@ -565,7 +565,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         raise _declaration("KRPC", "Expression")
 
     @staticmethod
-    def call(call: KRPC_pb2.ProcedureCall) -> Expression:
+    def call(call: Union[KRPC_pb2.ProcedureCall, property, Callable[..., object]]) -> Expression:
         """
         An RPC call.
 
@@ -579,7 +579,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         raise _declaration("KRPC", "Expression")
 
     @staticmethod
-    def call_with_arguments(call: KRPC_pb2.ProcedureCall, args: Dict[int, Expression]) -> Expression:
+    def call_with_arguments(call: Union[KRPC_pb2.ProcedureCall, property, Callable[..., object]], args: Dict[int, Expression]) -> Expression:
         """
         An RPC call, where some or all of the arguments are computed by expressions.
 

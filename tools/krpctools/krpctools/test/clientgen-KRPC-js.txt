@@ -245,7 +245,7 @@ export interface Service extends RemoteService<"KRPC"> {
      *
      * @param call - The procedure call.
      */
-    call(call: schema.ProcedureCall): Promise<Expression>;
+    call(call: schema.ProcedureCall | ((...args: never[]) => unknown)): Promise<Expression>;
     /**
      * An RPC call, where some or all of the arguments are computed by expressions.
      *
@@ -257,7 +257,7 @@ export interface Service extends RemoteService<"KRPC"> {
      *
      * @param args - Expressions computing the call's arguments, by position.
      */
-    callWithArguments(call: schema.ProcedureCall, args: ReadonlyMap<number, Expression>): Promise<Expression>;
+    callWithArguments(call: schema.ProcedureCall | ((...args: never[]) => unknown), args: ReadonlyMap<number, Expression>): Promise<Expression>;
     /**
      * A value cast to the given type.
      *

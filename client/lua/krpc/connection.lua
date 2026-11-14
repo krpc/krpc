@@ -228,6 +228,10 @@ function Connection:_encode_arguments(service, procedure, args, param_types, par
       -- A null argument is signaled out-of-band by is_null; the value field is left unset
       arguments[i] = Types.none
     elseif value ~= nil then
+      -- A procedure of a class or service, passed for a call, is its call template
+      if typ.protobuf_type.code == Types.PROCEDURE_CALL and Service.procedures[value] ~= nil then
+        value = self:get_call_template(value)
+      end
       local valid = false
       if type(typ.lua_type) == 'string' then
         valid = typ.lua_type == type(value)

@@ -197,8 +197,8 @@ js_binary(
     entry_point = "conformance/testee.js",
 )
 
-# The native tests: the function compiler against a TestServer. The conformance tests cover
-# what every client shares
+# The native tests: member calls and the function compiler against a TestServer. The
+# conformance tests cover what every client shares
 ts_config(
     name = "test-tsconfig",
     src = "test/tsconfig.json",

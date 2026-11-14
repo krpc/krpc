@@ -385,6 +385,14 @@ class Types:
             return None
         if isinstance(value, typ.python_type):
             return value
+        # A member of a class or service, passed for a call, is its call template
+        if (
+            isinstance(typ, MessageType)
+            and typ.protobuf_type.code == KRPC.Type.PROCEDURE_CALL
+        ):
+            template = call_template(value)
+            if template is not None:
+                return template
         # An enumeration value of the same service and name, from a definition that differs,
         # converts by its number, as a value inside a collection is sent by its number too
         if (
@@ -902,6 +910,27 @@ class DefaultArgument:
 
     def __repr__(self) -> str:
         return self._value
+
+
+def call_template(member: object) -> KRPC.ProcedureCall | None:
+    """The call template of a function the client generated for a procedure, or of a
+    property's getter, which names the procedure and carries no arguments. None for any other
+    value. Warns for a deprecated member."""
+    used = member.fget if isinstance(member, property) else member
+    if not callable(used):
+        return None
+    procedure = getattr(used, "_procedure", None)
+    if not isinstance(procedure, tuple):
+        return None
+    if isinstance(getattr(used, "__self__", None), RemoteObject):
+        raise TypeError(
+            "A call template names a member through its class, such as Engine.has_fuel, "
+            "with no instance"
+        )
+    deprecation = getattr(used, "_deprecation", None)
+    if deprecation:
+        warn_deprecated(deprecation)
+    return KRPC.ProcedureCall(service=procedure[0], procedure=procedure[1])
 
 
 def deprecation_message(name: str, reason: str) -> str:

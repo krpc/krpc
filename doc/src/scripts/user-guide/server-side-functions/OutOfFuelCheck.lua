@@ -6,7 +6,7 @@ local parts = conn.space_center.active_vessel.parts
 
 -- A function taking an engine, returning true if it is out of fuel
 local engine = Expression.parameter('engine', conn.krpc.Type.class_type('SpaceCenter', 'Engine'))
-local has_fuel = conn:get_call_template(conn.space_center.Engine.get_has_fuel)
+local has_fuel = conn.space_center.Engine.get_has_fuel
 -- A Lua keyword is not a field name, so not is reached by its string
 local out_of_fuel = Expression.lambda(
   {engine},

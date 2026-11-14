@@ -129,17 +129,13 @@ export class Connection {
    * through its class or service, with no instance, such as `Engine.prototype.getHasFuel`,
    * `Engine.staticMethod` or `conn.spaceCenter.launchVessel`. */
   getCallTemplate(member: (...args: never[]) => unknown): ProcedureCall {
-    const procedure = memberProcedures.get(member);
-    if (procedure === undefined) {
+    const template = callTemplate(member);
+    if (template === undefined) {
       throw new TypeError(
         "getCallTemplate expects a member of a service or a class, such as Engine.prototype.getHasFuel",
       );
     }
-    warnOf(procedure.context, procedure.message);
-    return create(ProcedureCallSchema, {
-      service: procedure.service,
-      procedure: procedure.procedure,
-    });
+    return template;
   }
 
   /** Compiles a server side function on the server, so that its first run is as fast as later
@@ -418,6 +414,20 @@ function procedureMember<F extends (...args: never[]) => unknown>(
   return fn;
 }
 
+/** The call template of a member function, which names its procedure and carries no arguments,
+ * or undefined for any other value. Warns for a deprecated member. */
+function callTemplate(member: unknown): ProcedureCall | undefined {
+  const procedure = typeof member === "function" ? memberProcedures.get(member) : undefined;
+  if (procedure === undefined) {
+    return undefined;
+  }
+  warnOf(procedure.context, procedure.message);
+  return create(ProcedureCallSchema, {
+    service: procedure.service,
+    procedure: procedure.procedure,
+  });
+}
+
 /** A call built by a member while addStream or getCall runs its function, which the member does
  * not send. */
 interface CapturedCall {
@@ -505,7 +515,15 @@ function encodeArguments(
   }
   const encoded: Argument[] = [];
   parameters.forEach((parameter, position) => {
-    const value = values[position];
+    let value = values[position];
+    // A member function, passed for a call, is its call template
+    if (
+      typeof value === "function" &&
+      parameter.type.kind === "message" &&
+      parameter.type.schema === ProcedureCallSchema
+    ) {
+      value = callTemplate(value) ?? value;
+    }
     if (value === undefined) {
       if (!parameter.optional) {
         throw new TypeError(`${signature.procedure} is missing argument ${parameter.name}`);

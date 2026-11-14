@@ -623,7 +623,9 @@ Client API Reference
                      such as ``Engine.prototype.getHasFuel``, ``Engine.staticMethod`` or
                      ``conn.spaceCenter.launchVessel``.
 
-      Throws a ``TypeError`` for a function that is not a member of a service or a class.
+      Throws a ``TypeError`` for a function that is not a member of a service or a class. The
+      member itself, passed where a call is expected, is converted to its call template.
+      :ref:`server-side-functions-collections` uses a call template.
 
    .. method:: compile(fn, captures, parameters)
 

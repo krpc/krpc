@@ -636,6 +636,14 @@ class JsGenerator(Generator[JsLanguage]):
             return "never"
         if isinstance(typ, MessageType):
             self._message_imports.add("schema")
+            # A call is also given as a member function, which the client converts to its
+            # call template
+            if (
+                argument
+                and not server
+                and typ.protobuf_type.code == Type.PROCEDURE_CALL
+            ):
+                return "schema.ProcedureCall | ((...args: never[]) => unknown)"
             return "schema.%s" % typ.python_type.__name__
         if isinstance(typ, (ClassType, EnumerationType, StructType)):
             service = typ.protobuf_type.service

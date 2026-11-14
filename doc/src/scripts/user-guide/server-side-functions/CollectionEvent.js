@@ -10,7 +10,7 @@ const engine = await Expression.parameter(
   "engine",
   await Type.classType("SpaceCenter", "Engine"),
 );
-const hasFuel = conn.getCallTemplate(conn.spaceCenter.Engine.prototype.getHasFuel);
+const hasFuel = conn.spaceCenter.Engine.prototype.getHasFuel;
 const outOfFuel = await Expression.lambda(
   [engine],
   await Expression.not(await Expression.callWithArguments(hasFuel, new Map([[0, engine]]))),
