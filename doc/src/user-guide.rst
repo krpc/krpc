@@ -15,3 +15,4 @@ These guides describe how kRPC and the game behave, independent of the client la
    user-guide/server-side-functions
    user-guide/buoyancy
    user-guide/server-performance
+   user-guide/streams-and-events
