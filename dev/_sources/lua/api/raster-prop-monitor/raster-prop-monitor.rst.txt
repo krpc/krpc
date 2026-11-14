@@ -2,8 +2,8 @@
 .. highlight:: lua
 .. currentmodule:: RasterPropMonitor
 
-RasterPropMonitor
-=================
+Service
+=======
 
 
 .. module:: RasterPropMonitor

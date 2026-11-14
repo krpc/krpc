@@ -2,8 +2,8 @@
 .. highlight:: lua
 .. currentmodule:: LIDAR
 
-LIDAR
-=====
+Service
+=======
 
 
 .. module:: LIDAR

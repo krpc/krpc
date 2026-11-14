@@ -2,8 +2,8 @@
 .. highlight:: cpp
 .. namespace:: krpc::services::RasterPropMonitor
 
-Raster Prop Monitor API
-=======================
+Raster Prop Monitor
+===================
 
 Provides functionality to interact with the `Raster Prop Monitor`_ mod.
 |Raster Prop Monitor tested|

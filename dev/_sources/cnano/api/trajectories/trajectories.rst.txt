@@ -2,8 +2,8 @@
 .. highlight:: c
 
 
-Trajectories
-=============
+Service
+=======
 
 
 Provides functionality to interact with Trajectories.

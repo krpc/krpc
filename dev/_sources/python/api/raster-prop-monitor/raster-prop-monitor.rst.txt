@@ -2,8 +2,8 @@
 .. highlight:: py
 .. currentmodule:: RasterPropMonitor
 
-RasterPropMonitor
-=================
+Service
+=======
 
 
 .. module:: RasterPropMonitor

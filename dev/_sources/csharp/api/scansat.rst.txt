@@ -1,8 +1,8 @@
 .. default-domain:: cs
 .. highlight:: csharp
 
-SCANsat API
-===========
+SCANsat
+=======
 
 Provides functionality to interact with the `SCANsat`_ mod. |SCANsat tested|
 

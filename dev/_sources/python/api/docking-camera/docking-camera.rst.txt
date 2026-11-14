@@ -2,8 +2,8 @@
 .. highlight:: py
 .. currentmodule:: DockingCamera
 
-DockingCamera
-=============
+Service
+=======
 
 
 .. module:: DockingCamera

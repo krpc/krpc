@@ -2,7 +2,7 @@
 .. highlight:: lua
 .. currentmodule:: ScanSat
 
-ScanSat
+Service
 =======
 
 

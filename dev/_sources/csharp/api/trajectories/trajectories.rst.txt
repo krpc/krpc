@@ -2,8 +2,8 @@
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.Trajectories
 
-Trajectories
-=============
+Service
+=======
 
 
 .. class:: Trajectories

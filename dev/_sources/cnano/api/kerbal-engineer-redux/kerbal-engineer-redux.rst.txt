@@ -2,8 +2,8 @@
 .. highlight:: c
 
 
-KerbalEngineerRedux
-===================
+Service
+=======
 
 
 This service provides the flight readouts of

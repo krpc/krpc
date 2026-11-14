@@ -2,8 +2,8 @@
 .. highlight:: lua
 .. currentmodule:: KerbalAlarmClock
 
-KerbalAlarmClock
-================
+Service
+=======
 
 
 .. module:: KerbalAlarmClock

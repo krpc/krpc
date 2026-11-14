@@ -2,8 +2,11 @@
 .. highlight:: c
 
 
-SpaceCenter API
-===============
+SpaceCenter
+===========
+
+Provides functionality to interact with Kerbal Space Program: vessels and their parts, celestial
+bodies and orbits, flight control, maneuver nodes and the auto-pilot.
 
 .. toctree::
    :includehidden:
@@ -29,6 +32,13 @@ SpaceCenter API
    space-center/contracts
    space-center/geometry-types
    space-center/alarms
+
+Example
+-------
+
+The following example prints the name of the active vessel:
+
+.. literalinclude:: /scripts/api/space-center/SpaceCenterExample.c
 
 Supported Mods
 --------------

@@ -2,7 +2,7 @@
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.ScanSat
 
-ScanSat
+Service
 =======
 
 

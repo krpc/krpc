@@ -2,7 +2,7 @@
 .. highlight:: cpp
 .. namespace:: krpc::services::ScanSat
 
-ScanSat
+Service
 =======
 
 

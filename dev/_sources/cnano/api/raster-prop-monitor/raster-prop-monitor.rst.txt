@@ -2,8 +2,8 @@
 .. highlight:: c
 
 
-RasterPropMonitor
-=================
+Service
+=======
 
 
 This service provides the IVA screens, variables and external cameras of

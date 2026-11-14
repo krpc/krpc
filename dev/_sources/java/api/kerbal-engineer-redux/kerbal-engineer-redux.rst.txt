@@ -2,8 +2,8 @@
 .. highlight:: java
 .. package:: krpc.client.services.KerbalEngineerRedux
 
-KerbalEngineerRedux
-===================
+Service
+=======
 
 
 .. type:: public class KerbalEngineerRedux

@@ -2,8 +2,8 @@
 .. highlight:: py
 .. currentmodule:: UI
 
-UI
-==
+Service
+=======
 
 
 .. module:: UI

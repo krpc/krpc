@@ -2,8 +2,8 @@
 .. highlight:: py
 .. currentmodule:: KerbalEngineerRedux
 
-KerbalEngineerRedux
-===================
+Service
+=======
 
 
 .. module:: KerbalEngineerRedux

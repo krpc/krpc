@@ -2,8 +2,8 @@
 .. highlight:: c
 
 
-Debug
-=====
+Service
+=======
 
 
 Provides functionality to modify the state of the simulation directly, in ways

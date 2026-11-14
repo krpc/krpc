@@ -2,8 +2,8 @@
 .. highlight:: java
 .. package:: krpc.client.services.RasterPropMonitor
 
-RasterPropMonitor
-=================
+Service
+=======
 
 
 .. type:: public class RasterPropMonitor

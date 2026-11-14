@@ -2,8 +2,8 @@
 .. highlight:: py
 .. currentmodule:: RemoteTech
 
-RemoteTech
-==========
+Service
+=======
 
 
 .. module:: RemoteTech

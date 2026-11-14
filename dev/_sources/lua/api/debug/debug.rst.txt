@@ -2,8 +2,8 @@
 .. highlight:: lua
 .. currentmodule:: Debug
 
-Debug
-=====
+Service
+=======
 
 
 .. module:: Debug

@@ -2,8 +2,8 @@
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.DockingCamera
 
-DockingCamera
-=============
+Service
+=======
 
 
 .. class:: DockingCamera

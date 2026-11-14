@@ -2,8 +2,8 @@
 .. highlight:: java
 .. package:: krpc.client.services.RasterPropMonitor
 
-Raster Prop Monitor API
-=======================
+Raster Prop Monitor
+===================
 
 Provides functionality to interact with the `Raster Prop Monitor`_ mod.
 |Raster Prop Monitor tested|

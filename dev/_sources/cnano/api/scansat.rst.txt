@@ -1,8 +1,8 @@
 .. default-domain:: c
 .. highlight:: c
 
-SCANsat API
-===========
+SCANsat
+=======
 
 Provides functionality to interact with the `SCANsat`_ mod. |SCANsat tested|
 

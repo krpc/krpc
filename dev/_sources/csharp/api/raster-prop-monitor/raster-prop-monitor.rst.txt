@@ -2,8 +2,8 @@
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.RasterPropMonitor
 
-RasterPropMonitor
-=================
+Service
+=======
 
 
 .. class:: RasterPropMonitor

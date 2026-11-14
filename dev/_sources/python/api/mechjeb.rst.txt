@@ -2,8 +2,8 @@
 .. highlight:: py
 .. currentmodule:: MechJeb
 
-MechJeb API
-===========
+MechJeb
+=======
 
 Provides functionality to interact with the `MechJeb`_ mod. |MechJeb tested|
 Originally written by `Genhis <https://github.com/Genhis/KRPC.MechJeb>`_.

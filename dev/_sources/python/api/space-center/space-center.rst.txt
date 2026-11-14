@@ -2,8 +2,8 @@
 .. highlight:: py
 .. currentmodule:: SpaceCenter
 
-SpaceCenter
-===========
+Service
+=======
 
 
 .. module:: SpaceCenter

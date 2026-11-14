@@ -2,8 +2,8 @@
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.InfernalRobotics
 
-InfernalRobotics
-================
+Service
+=======
 
 
 .. class:: InfernalRobotics

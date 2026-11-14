@@ -2,7 +2,7 @@
 .. highlight:: lua
 .. currentmodule:: MechJeb
 
-MechJeb
+Service
 =======
 
 

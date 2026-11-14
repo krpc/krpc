@@ -2,8 +2,8 @@
 .. highlight:: java
 .. package:: krpc.client.services.InfernalRobotics
 
-InfernalRobotics
-================
+Service
+=======
 
 
 .. type:: public class InfernalRobotics

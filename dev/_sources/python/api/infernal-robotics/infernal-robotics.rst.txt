@@ -2,8 +2,8 @@
 .. highlight:: py
 .. currentmodule:: InfernalRobotics
 
-InfernalRobotics
-================
+Service
+=======
 
 
 .. module:: InfernalRobotics

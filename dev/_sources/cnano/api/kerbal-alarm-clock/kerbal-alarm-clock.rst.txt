@@ -2,8 +2,8 @@
 .. highlight:: c
 
 
-KerbalAlarmClock
-================
+Service
+=======
 
 
 Provides functionality to interact with Kerbal Alarm Clock.

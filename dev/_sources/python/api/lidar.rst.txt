@@ -2,8 +2,8 @@
 .. highlight:: py
 .. currentmodule:: LIDAR
 
-LIDAR API
-=========
+LIDAR
+=====
 
 .. warning::
 

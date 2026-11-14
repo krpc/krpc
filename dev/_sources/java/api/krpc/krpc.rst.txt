@@ -2,8 +2,8 @@
 .. highlight:: java
 .. package:: krpc.client.services.KRPC
 
-KRPC
-====
+Service
+=======
 
 
 .. type:: public class KRPC

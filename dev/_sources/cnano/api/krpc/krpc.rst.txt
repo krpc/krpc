@@ -2,8 +2,8 @@
 .. highlight:: c
 
 
-KRPC
-====
+Service
+=======
 
 
 Main kRPC service, used by clients to interact with basic server functionality.

@@ -2,8 +2,8 @@
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.KRPC
 
-KRPC
-====
+Service
+=======
 
 
 .. class:: KRPC

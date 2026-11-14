@@ -2,8 +2,8 @@
 .. highlight:: java
 .. package:: krpc.client.services.KerbalAlarmClock
 
-KerbalAlarmClock
-================
+Service
+=======
 
 
 .. type:: public class KerbalAlarmClock

@@ -2,8 +2,8 @@
 .. highlight:: lua
 .. currentmodule:: UI
 
-UI
-==
+Service
+=======
 
 
 .. module:: UI

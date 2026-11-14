@@ -2,8 +2,8 @@
 .. highlight:: c
 
 
-LIDAR API
-=========
+LIDAR
+=====
 
 .. warning::
 

@@ -167,6 +167,17 @@ SpaceCenter service
 * Fix the auto-pilot limit-cycling on a vessel steered by slow engine gimbals, such as the KS-25 (:issue:`1348`, :issue:`1347`)
 
 
+DockingCamera service
+^^^^^^^^^^^^^^^^^^^^^
+
+* Stop logging each read of ``Camera.Image`` (:issue:`1235`)
+* :breaking:`Breaking` Support the public Docking Camera (KURS) 1.3.9 release, in place of an unreleased fork (:issue:`1232`)
+* :breaking:`Breaking` ``Camera.Image`` throws an exception if the camera is off or not started, in place of returning an empty array (:issue:`1232`)
+* Support the cameras Docking Camera (KURS) adds to docking ports (:issue:`1232`)
+* :breaking:`Breaking` ``Camera.Image`` is a method taking a ``StdLib.ImageFormat`` and a JPEG quality (:issue:`1317`)
+* Keep working when a Docking Camera update removes members, and fail only the RPCs that use them (:issue:`1341`)
+
+
 InfernalRobotics service
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -183,46 +194,22 @@ KerbalAlarmClock service
 * Limit the service to the scenes Kerbal Alarm Clock runs in, apart from ``Available``, which reports whether it is installed in any scene (:issue:`1341`)
 
 
-LIDAR service
-^^^^^^^^^^^^^
-
-* :deprecated:`Deprecated` The ``LIDAR`` service, superseded by ``SpaceCenter.RaycastDistance`` (:issue:`1233`)
-
-
-DockingCamera service
-^^^^^^^^^^^^^^^^^^^^^
-
-* Stop logging each read of ``Camera.Image`` (:issue:`1235`)
-* :breaking:`Breaking` Support the public Docking Camera (KURS) 1.3.9 release, in place of an unreleased fork (:issue:`1232`)
-* :breaking:`Breaking` ``Camera.Image`` throws an exception if the camera is off or not started, in place of returning an empty array (:issue:`1232`)
-* Support the cameras Docking Camera (KURS) adds to docking ports (:issue:`1232`)
-* :breaking:`Breaking` ``Camera.Image`` is a method taking a ``StdLib.ImageFormat`` and a JPEG quality (:issue:`1317`)
-* Keep working when a Docking Camera update removes members, and fail only the RPCs that use them (:issue:`1341`)
-
-
-Trajectories service
-^^^^^^^^^^^^^^^^^^^^
-
-* Add Trajectories service
-* Make ``Available`` callable in every game scene (:issue:`1340`)
-
-
-MechJeb service
-^^^^^^^^^^^^^^^
-
-* Add the MechJeb service, ported from Genhis' kRPC.MechJeb and updated for MechJeb 2.15.4.0 (:issue:`1326`)
-
-
 Kerbal Engineer Redux service
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * Add the Kerbal Engineer Redux service, with impact and suicide burn predictions, the staged vessel simulation in flight and the editor, burn times and rendezvous angles (:issue:`1327`)
 
 
-SCANsat service
+LIDAR service
+^^^^^^^^^^^^^
+
+* :deprecated:`Deprecated` The ``LIDAR`` service, superseded by ``SpaceCenter.RaycastDistance`` (:issue:`1233`)
+
+
+MechJeb service
 ^^^^^^^^^^^^^^^
 
-* Add the SCANsat service, with scan coverage, the terrain, biome, anomaly and resource data the scans reveal, control of the scanners, and maps of a body as PNG or JPEG images (:issue:`1328`)
+* Add the MechJeb service, ported from Genhis' kRPC.MechJeb and updated for MechJeb 2.15.4.0 (:issue:`1326`)
 
 
 Raster Prop Monitor service
@@ -232,6 +219,19 @@ Raster Prop Monitor service
 * Add screen pages that a script draws and whose button presses it answers, with an optional Module Manager patch that gives every RPM screen one (:issue:`1335`)
 * Add page button captures, so a press of an RPM page button shows a script's page (:issue:`1335`)
 * Add PNG and JPEG images from RPM's external cameras, which a stream turns into video (:issue:`424`)
+
+
+SCANsat service
+^^^^^^^^^^^^^^^
+
+* Add the SCANsat service, with scan coverage, the terrain, biome, anomaly and resource data the scans reveal, control of the scanners, and maps of a body as PNG or JPEG images (:issue:`1328`)
+
+
+Trajectories service
+^^^^^^^^^^^^^^^^^^^^
+
+* Add Trajectories service
+* Make ``Available`` callable in every game scene (:issue:`1340`)
 
 
 C-nano client
@@ -889,6 +889,18 @@ User Interface service
 
 
 
+Debug service
+^^^^^^^^^^^^^
+
+* Initial version. Provides RPCs to modify the state of the simulation directly: teleporting a vessel, setting its position, velocity and attitude, applying forces to its parts, filling its resource tanks, and the game's debug menu cheats (:issue:`1033`)
+
+
+DockingCamera service
+^^^^^^^^^^^^^^^^^^^^^
+
+* A ``Camera`` whose part is destroyed, or that is no longer a camera, raises ``KRPC.ObjectDestroyedException`` (:issue:`1051`)
+
+
 InfernalRobotics service
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -905,12 +917,6 @@ KerbalAlarmClock service
 * An alarm keeps working across a quickload, and raises ``KRPC.ObjectDestroyedException`` once the mod no longer has an alarm with its id (:issue:`1051`)
 
 
-RemoteTech service
-^^^^^^^^^^^^^^^^^^
-
-* An ``Antenna`` whose part is destroyed, or that is no longer an antenna, and a ``Comms`` whose vessel is gone, raise ``KRPC.ObjectDestroyedException`` (:issue:`1051`)
-
-
 LIDAR service
 ^^^^^^^^^^^^^
 
@@ -918,16 +924,10 @@ LIDAR service
 * A ``Laser`` whose part is destroyed, or that is no longer a laser, raises ``KRPC.ObjectDestroyedException`` (:issue:`1051`)
 
 
-DockingCamera service
-^^^^^^^^^^^^^^^^^^^^^
+RemoteTech service
+^^^^^^^^^^^^^^^^^^
 
-* A ``Camera`` whose part is destroyed, or that is no longer a camera, raises ``KRPC.ObjectDestroyedException`` (:issue:`1051`)
-
-
-Debug service
-^^^^^^^^^^^^^
-
-* Initial version. Provides RPCs to modify the state of the simulation directly: teleporting a vessel, setting its position, velocity and attitude, applying forces to its parts, filling its resource tanks, and the game's debug menu cheats (:issue:`1033`)
+* An ``Antenna`` whose part is destroyed, or that is no longer an antenna, and a ``Comms`` whose vessel is gone, raise ``KRPC.ObjectDestroyedException`` (:issue:`1051`)
 
 
 C-nano client
@@ -1398,6 +1398,12 @@ User Interface service
 * Fix locale issues with ``UI.Message`` (:issue:`993`)
 
 
+DockingCamera service
+^^^^^^^^^^^^^^^^^^^^^
+
+* Fix ``DockingCamera.Available`` incorrectly reporting false in game scenes other than flight (:issue:`937`)
+
+
 InfernalRobotics service
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -1422,22 +1428,16 @@ KerbalAlarmClock service
 * Fix accessing an alarm after it has been removed; it now fails with an "Alarm does not exist" error (:issue:`982`)
 
 
-RemoteTech service
-^^^^^^^^^^^^^^^^^^
-
-* Fix ``RemoteTech.Available`` incorrectly reporting false in game scenes other than flight (:issue:`937`)
-
-
 LIDAR service
 ^^^^^^^^^^^^^
 
 * Fix ``LiDAR.Available`` incorrectly reporting false in game scenes other than flight (:issue:`937`)
 
 
-DockingCamera service
-^^^^^^^^^^^^^^^^^^^^^
+RemoteTech service
+^^^^^^^^^^^^^^^^^^
 
-* Fix ``DockingCamera.Available`` incorrectly reporting false in game scenes other than flight (:issue:`937`)
+* Fix ``RemoteTech.Available`` incorrectly reporting false in game scenes other than flight (:issue:`937`)
 
 
 C-nano client
@@ -1740,6 +1740,12 @@ Drawing service
 * Change ``Drawing.AddDirection`` to start the line at the origin of the reference frame (:issue:`518`)
 
 
+DockingCamera service
+^^^^^^^^^^^^^^^^^^^^^
+
+* Initial version
+
+
 InfernalRobotics service
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -1756,12 +1762,6 @@ KerbalAlarmClock service
 
 LIDAR service
 ^^^^^^^^^^^^^
-
-* Initial version
-
-
-DockingCamera service
-^^^^^^^^^^^^^^^^^^^^^
 
 * Initial version
 

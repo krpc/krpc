@@ -2,8 +2,8 @@
 .. highlight:: lua
 .. currentmodule:: InfernalRobotics
 
-InfernalRobotics
-================
+Service
+=======
 
 
 .. module:: InfernalRobotics

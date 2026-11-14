@@ -1,8 +1,8 @@
 .. default-domain:: py
 .. highlight:: py
 
-Kerbal Alarm Clock API
-======================
+Kerbal Alarm Clock
+==================
 
 Provides functionality to interact with the `Kerbal Alarm Clock`_ mod.
 |Kerbal Alarm Clock tested| Provides the following classes:

@@ -2,8 +2,8 @@
 .. highlight:: c
 
 
-UI
-==
+Service
+=======
 
 
 Provides functionality for drawing and interacting with in-game user interface elements.

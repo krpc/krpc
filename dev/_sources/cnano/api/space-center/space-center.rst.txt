@@ -2,8 +2,8 @@
 .. highlight:: c
 
 
-SpaceCenter
-===========
+Service
+=======
 
 
 Provides functionality to interact with Kerbal Space Program. This includes controlling

@@ -259,6 +259,28 @@
           
           <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://discord.gg/bXuaTrj" title="Discord" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-discord fa-lg" aria-hidden="true"></i><span class="visually-hidden">Discord</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://forum.kerbalspaceprogram.com/topic/130742-1125-krpc-control-the-game-using-c-c-java-lua-python-ruby-haskell-c-arduino-v060/" title="Forum" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-comments fa-lg" aria-hidden="true"></i><span class="visually-hidden">Forum</span></a>
+        </li>
 </ul></div>
       
     </div>
@@ -405,6 +427,28 @@
           
           
           <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://discord.gg/bXuaTrj" title="Discord" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-discord fa-lg" aria-hidden="true"></i><span class="visually-hidden">Discord</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://forum.kerbalspaceprogram.com/topic/130742-1125-krpc-control-the-game-using-c-c-java-lua-python-ruby-haskell-c-arduino-v060/" title="Forum" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-comments fa-lg" aria-hidden="true"></i><span class="visually-hidden">Forum</span></a>
         </li>
 </ul></div>
         
@@ -648,6 +692,17 @@
 <li><p>Fix the auto-pilot limit-cycling on a vessel steered by slow engine gimbals, such as the KS-25 (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1348">#1348</a>, <a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1347">#1347</a>)</p></li>
 </ul>
 </section>
+<section id="dockingcamera-service">
+<h3>DockingCamera service<a class="headerlink" href="#dockingcamera-service" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Stop logging each read of <code class="docutils literal notranslate"><span class="pre">Camera.Image</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1235">#1235</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Support the public Docking Camera (KURS) 1.3.9 release, in place of an unreleased fork (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1232">#1232</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> <code class="docutils literal notranslate"><span class="pre">Camera.Image</span></code> throws an exception if the camera is off or not started, in place of returning an empty array (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1232">#1232</a>)</p></li>
+<li><p>Support the cameras Docking Camera (KURS) adds to docking ports (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1232">#1232</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> <code class="docutils literal notranslate"><span class="pre">Camera.Image</span></code> is a method taking a <code class="docutils literal notranslate"><span class="pre">StdLib.ImageFormat</span></code> and a JPEG quality (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1317">#1317</a>)</p></li>
+<li><p>Keep working when a Docking Camera update removes members, and fail only the RPCs that use them (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1341">#1341</a>)</p></li>
+</ul>
+</section>
 <section id="infernalrobotics-service">
 <h3>InfernalRobotics service<a class="headerlink" href="#infernalrobotics-service" title="Link to this heading">#</a></h3>
 <ul class="simple">
@@ -664,46 +719,22 @@
 <li><p>Limit the service to the scenes Kerbal Alarm Clock runs in, apart from <code class="docutils literal notranslate"><span class="pre">Available</span></code>, which reports whether it is installed in any scene (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1341">#1341</a>)</p></li>
 </ul>
 </section>
-<section id="lidar-service">
-<h3>LIDAR service<a class="headerlink" href="#lidar-service" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p><span class="changelog-marker deprecated">Deprecated</span> The <code class="docutils literal notranslate"><span class="pre">LIDAR</span></code> service, superseded by <code class="docutils literal notranslate"><span class="pre">SpaceCenter.RaycastDistance</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1233">#1233</a>)</p></li>
-</ul>
-</section>
-<section id="dockingcamera-service">
-<h3>DockingCamera service<a class="headerlink" href="#dockingcamera-service" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Stop logging each read of <code class="docutils literal notranslate"><span class="pre">Camera.Image</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1235">#1235</a>)</p></li>
-<li><p><span class="changelog-marker breaking">Breaking</span> Support the public Docking Camera (KURS) 1.3.9 release, in place of an unreleased fork (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1232">#1232</a>)</p></li>
-<li><p><span class="changelog-marker breaking">Breaking</span> <code class="docutils literal notranslate"><span class="pre">Camera.Image</span></code> throws an exception if the camera is off or not started, in place of returning an empty array (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1232">#1232</a>)</p></li>
-<li><p>Support the cameras Docking Camera (KURS) adds to docking ports (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1232">#1232</a>)</p></li>
-<li><p><span class="changelog-marker breaking">Breaking</span> <code class="docutils literal notranslate"><span class="pre">Camera.Image</span></code> is a method taking a <code class="docutils literal notranslate"><span class="pre">StdLib.ImageFormat</span></code> and a JPEG quality (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1317">#1317</a>)</p></li>
-<li><p>Keep working when a Docking Camera update removes members, and fail only the RPCs that use them (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1341">#1341</a>)</p></li>
-</ul>
-</section>
-<section id="trajectories-service">
-<h3>Trajectories service<a class="headerlink" href="#trajectories-service" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Add Trajectories service</p></li>
-<li><p>Make <code class="docutils literal notranslate"><span class="pre">Available</span></code> callable in every game scene (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1340">#1340</a>)</p></li>
-</ul>
-</section>
-<section id="mechjeb-service">
-<h3>MechJeb service<a class="headerlink" href="#mechjeb-service" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Add the MechJeb service, ported from Genhis’ kRPC.MechJeb and updated for MechJeb 2.15.4.0 (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1326">#1326</a>)</p></li>
-</ul>
-</section>
 <section id="kerbal-engineer-redux-service">
 <h3>Kerbal Engineer Redux service<a class="headerlink" href="#kerbal-engineer-redux-service" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Add the Kerbal Engineer Redux service, with impact and suicide burn predictions, the staged vessel simulation in flight and the editor, burn times and rendezvous angles (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1327">#1327</a>)</p></li>
 </ul>
 </section>
-<section id="scansat-service">
-<h3>SCANsat service<a class="headerlink" href="#scansat-service" title="Link to this heading">#</a></h3>
+<section id="lidar-service">
+<h3>LIDAR service<a class="headerlink" href="#lidar-service" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Add the SCANsat service, with scan coverage, the terrain, biome, anomaly and resource data the scans reveal, control of the scanners, and maps of a body as PNG or JPEG images (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1328">#1328</a>)</p></li>
+<li><p><span class="changelog-marker deprecated">Deprecated</span> The <code class="docutils literal notranslate"><span class="pre">LIDAR</span></code> service, superseded by <code class="docutils literal notranslate"><span class="pre">SpaceCenter.RaycastDistance</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1233">#1233</a>)</p></li>
+</ul>
+</section>
+<section id="mechjeb-service">
+<h3>MechJeb service<a class="headerlink" href="#mechjeb-service" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add the MechJeb service, ported from Genhis’ kRPC.MechJeb and updated for MechJeb 2.15.4.0 (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1326">#1326</a>)</p></li>
 </ul>
 </section>
 <section id="raster-prop-monitor-service">
@@ -713,6 +744,19 @@
 <li><p>Add screen pages that a script draws and whose button presses it answers, with an optional Module Manager patch that gives every RPM screen one (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1335">#1335</a>)</p></li>
 <li><p>Add page button captures, so a press of an RPM page button shows a script’s page (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1335">#1335</a>)</p></li>
 <li><p>Add PNG and JPEG images from RPM’s external cameras, which a stream turns into video (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/424">#424</a>)</p></li>
+</ul>
+</section>
+<section id="scansat-service">
+<h3>SCANsat service<a class="headerlink" href="#scansat-service" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add the SCANsat service, with scan coverage, the terrain, biome, anomaly and resource data the scans reveal, control of the scanners, and maps of a body as PNG or JPEG images (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1328">#1328</a>)</p></li>
+</ul>
+</section>
+<section id="trajectories-service">
+<h3>Trajectories service<a class="headerlink" href="#trajectories-service" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add Trajectories service</p></li>
+<li><p>Make <code class="docutils literal notranslate"><span class="pre">Available</span></code> callable in every game scene (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1340">#1340</a>)</p></li>
 </ul>
 </section>
 <section id="c-nano-client">
@@ -1415,8 +1459,20 @@
 </li>
 </ul>
 </section>
+<section id="debug-service">
+<h3>Debug service<a class="headerlink" href="#debug-service" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Initial version. Provides RPCs to modify the state of the simulation directly: teleporting a vessel, setting its position, velocity and attitude, applying forces to its parts, filling its resource tanks, and the game’s debug menu cheats (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1033">#1033</a>)</p></li>
+</ul>
+</section>
 <section id="id5">
-<h3>InfernalRobotics service<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<h3>DockingCamera service<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>A <code class="docutils literal notranslate"><span class="pre">Camera</span></code> whose part is destroyed, or that is no longer a camera, raises <code class="docutils literal notranslate"><span class="pre">KRPC.ObjectDestroyedException</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1051">#1051</a>)</p></li>
+</ul>
+</section>
+<section id="id6">
+<h3>InfernalRobotics service<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Look up a servo and a servo group on every call, so they keep working across a quickload and raise <code class="docutils literal notranslate"><span class="pre">KRPC.ObjectDestroyedException</span></code> once their part or vessel is gone (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1051">#1051</a>)</p></li>
 <li><p>Renaming a servo group destroys its objects, which must be obtained again under the new name (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1051">#1051</a>)</p></li>
@@ -1425,35 +1481,23 @@
 <li><p>Fix a servo being listed more than once in a <code class="docutils literal notranslate"><span class="pre">ServoGroup</span></code> after switching to and from its vessel (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1154">#1154</a>)</p></li>
 </ul>
 </section>
-<section id="id6">
-<h3>KerbalAlarmClock service<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
+<section id="id7">
+<h3>KerbalAlarmClock service<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>An alarm keeps working across a quickload, and raises <code class="docutils literal notranslate"><span class="pre">KRPC.ObjectDestroyedException</span></code> once the mod no longer has an alarm with its id (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1051">#1051</a>)</p></li>
+</ul>
+</section>
+<section id="id8">
+<h3>LIDAR service<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><span class="changelog-marker breaking">Breaking</span> Rename the service from <code class="docutils literal notranslate"><span class="pre">LiDAR</span></code> to <code class="docutils literal notranslate"><span class="pre">LIDAR</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1149">#1149</a>)</p></li>
+<li><p>A <code class="docutils literal notranslate"><span class="pre">Laser</span></code> whose part is destroyed, or that is no longer a laser, raises <code class="docutils literal notranslate"><span class="pre">KRPC.ObjectDestroyedException</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1051">#1051</a>)</p></li>
 </ul>
 </section>
 <section id="remotetech-service">
 <h3>RemoteTech service<a class="headerlink" href="#remotetech-service" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>An <code class="docutils literal notranslate"><span class="pre">Antenna</span></code> whose part is destroyed, or that is no longer an antenna, and a <code class="docutils literal notranslate"><span class="pre">Comms</span></code> whose vessel is gone, raise <code class="docutils literal notranslate"><span class="pre">KRPC.ObjectDestroyedException</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1051">#1051</a>)</p></li>
-</ul>
-</section>
-<section id="id7">
-<h3>LIDAR service<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p><span class="changelog-marker breaking">Breaking</span> Rename the service from <code class="docutils literal notranslate"><span class="pre">LiDAR</span></code> to <code class="docutils literal notranslate"><span class="pre">LIDAR</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1149">#1149</a>)</p></li>
-<li><p>A <code class="docutils literal notranslate"><span class="pre">Laser</span></code> whose part is destroyed, or that is no longer a laser, raises <code class="docutils literal notranslate"><span class="pre">KRPC.ObjectDestroyedException</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1051">#1051</a>)</p></li>
-</ul>
-</section>
-<section id="id8">
-<h3>DockingCamera service<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>A <code class="docutils literal notranslate"><span class="pre">Camera</span></code> whose part is destroyed, or that is no longer a camera, raises <code class="docutils literal notranslate"><span class="pre">KRPC.ObjectDestroyedException</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1051">#1051</a>)</p></li>
-</ul>
-</section>
-<section id="debug-service">
-<h3>Debug service<a class="headerlink" href="#debug-service" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Initial version. Provides RPCs to modify the state of the simulation directly: teleporting a vessel, setting its position, velocity and attitude, applying forces to its parts, filling its resource tanks, and the game’s debug menu cheats (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1033">#1033</a>)</p></li>
 </ul>
 </section>
 <section id="id9">
@@ -1960,7 +2004,13 @@
 </ul>
 </section>
 <section id="id20">
-<h3>InfernalRobotics service<a class="headerlink" href="#id20" title="Link to this heading">#</a></h3>
+<h3>DockingCamera service<a class="headerlink" href="#id20" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Fix <code class="docutils literal notranslate"><span class="pre">DockingCamera.Available</span></code> incorrectly reporting false in game scenes other than flight (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/937">#937</a>)</p></li>
+</ul>
+</section>
+<section id="id21">
+<h3>InfernalRobotics service<a class="headerlink" href="#id21" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Add to <code class="docutils literal notranslate"><span class="pre">Servo</span></code>: <code class="docutils literal notranslate"><span class="pre">UID</span></code>, <code class="docutils literal notranslate"><span class="pre">Mode</span></code> (with a new <code class="docutils literal notranslate"><span class="pre">ServoMode</span></code> enum), <code class="docutils literal notranslate"><span class="pre">TargetPosition</span></code>, <code class="docutils literal notranslate"><span class="pre">TargetSpeed</span></code>, <code class="docutils literal notranslate"><span class="pre">CommandedPosition</span></code>, <code class="docutils literal notranslate"><span class="pre">DefaultPosition</span></code>, <code class="docutils literal notranslate"><span class="pre">ForceLimit</span></code>, <code class="docutils literal notranslate"><span class="pre">MaxForce</span></code>, <code class="docutils literal notranslate"><span class="pre">MaxAcceleration</span></code>, <code class="docutils literal notranslate"><span class="pre">MaxSpeed</span></code>, <code class="docutils literal notranslate"><span class="pre">ElectricChargeRequired</span></code>, <code class="docutils literal notranslate"><span class="pre">SpringPower</span></code>, <code class="docutils literal notranslate"><span class="pre">DampingPower</span></code>, <code class="docutils literal notranslate"><span class="pre">RotorAcceleration</span></code>, <code class="docutils literal notranslate"><span class="pre">IsLimited</span></code>, <code class="docutils literal notranslate"><span class="pre">IsRotational</span></code>, <code class="docutils literal notranslate"><span class="pre">IsServo</span></code>, <code class="docutils literal notranslate"><span class="pre">CanHaveLimits</span></code>, <code class="docutils literal notranslate"><span class="pre">HasSpring</span></code>, <code class="docutils literal notranslate"><span class="pre">IsRunning</span></code>, <code class="docutils literal notranslate"><span class="pre">PresetPositions</span></code>, <code class="docutils literal notranslate"><span class="pre">AddPreset</span></code>, <code class="docutils literal notranslate"><span class="pre">RemovePresetAt</span></code> and <code class="docutils literal notranslate"><span class="pre">SortPresets</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/942">#942</a>)</p></li>
 <li><p>Add to <code class="docutils literal notranslate"><span class="pre">ServoGroup</span></code>: <code class="docutils literal notranslate"><span class="pre">Vessel</span></code>, <code class="docutils literal notranslate"><span class="pre">MovingDirection</span></code>, <code class="docutils literal notranslate"><span class="pre">AdvancedMode</span></code>, <code class="docutils literal notranslate"><span class="pre">ElectricChargeRequired</span></code>, <code class="docutils literal notranslate"><span class="pre">BuildAid</span></code> and <code class="docutils literal notranslate"><span class="pre">IKActive</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/942">#942</a>)</p></li>
@@ -1971,8 +2021,8 @@
 <li><p>Fix <code class="docutils literal notranslate"><span class="pre">InfernalRobotics.Ready</span></code> reporting false when queried before IR has finished loading (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/941">#941</a>)</p></li>
 </ul>
 </section>
-<section id="id21">
-<h3>KerbalAlarmClock service<a class="headerlink" href="#id21" title="Link to this heading">#</a></h3>
+<section id="id22">
+<h3>KerbalAlarmClock service<a class="headerlink" href="#id22" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Make available in all game scenes (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/944">#944</a>)</p></li>
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">AlarmType.ScienceLab</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/982">#982</a>)</p></li>
@@ -1983,12 +2033,6 @@
 <li><p>Fix accessing an alarm after it has been removed; it now fails with an “Alarm does not exist” error (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/982">#982</a>)</p></li>
 </ul>
 </section>
-<section id="id22">
-<h3>RemoteTech service<a class="headerlink" href="#id22" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Fix <code class="docutils literal notranslate"><span class="pre">RemoteTech.Available</span></code> incorrectly reporting false in game scenes other than flight (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/937">#937</a>)</p></li>
-</ul>
-</section>
 <section id="id23">
 <h3>LIDAR service<a class="headerlink" href="#id23" title="Link to this heading">#</a></h3>
 <ul class="simple">
@@ -1996,9 +2040,9 @@
 </ul>
 </section>
 <section id="id24">
-<h3>DockingCamera service<a class="headerlink" href="#id24" title="Link to this heading">#</a></h3>
+<h3>RemoteTech service<a class="headerlink" href="#id24" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Fix <code class="docutils literal notranslate"><span class="pre">DockingCamera.Available</span></code> incorrectly reporting false in game scenes other than flight (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/937">#937</a>)</p></li>
+<li><p>Fix <code class="docutils literal notranslate"><span class="pre">RemoteTech.Available</span></code> incorrectly reporting false in game scenes other than flight (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/937">#937</a>)</p></li>
 </ul>
 </section>
 <section id="id25">
@@ -2299,27 +2343,27 @@
 </ul>
 </section>
 <section id="id47">
-<h3>InfernalRobotics service<a class="headerlink" href="#id47" title="Link to this heading">#</a></h3>
+<h3>DockingCamera service<a class="headerlink" href="#id47" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Initial version</p></li>
+</ul>
+</section>
+<section id="id48">
+<h3>InfernalRobotics service<a class="headerlink" href="#id48" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Update to work with Infernal Robotics Next v3.1.9</p></li>
 <li><p>Drop support for original Infernal Robotics mod</p></li>
 <li><p>Remove <code class="docutils literal notranslate"><span class="pre">Servo.MoveNextPreset</span></code> and <code class="docutils literal notranslate"><span class="pre">Servo.MovePrevPreset</span></code> as they no longer exist in the mod</p></li>
 </ul>
 </section>
-<section id="id48">
-<h3>KerbalAlarmClock service<a class="headerlink" href="#id48" title="Link to this heading">#</a></h3>
+<section id="id49">
+<h3>KerbalAlarmClock service<a class="headerlink" href="#id49" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Update API wrapper to work with KerbalAlarmClock v3.13.0.0</p></li>
 </ul>
 </section>
-<section id="id49">
-<h3>LIDAR service<a class="headerlink" href="#id49" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Initial version</p></li>
-</ul>
-</section>
 <section id="id50">
-<h3>DockingCamera service<a class="headerlink" href="#id50" title="Link to this heading">#</a></h3>
+<h3>LIDAR service<a class="headerlink" href="#id50" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Initial version</p></li>
 </ul>
@@ -4031,15 +4075,15 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core">Core</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#server">Server</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#spacecenter-service">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dockingcamera-service">DockingCamera service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#infernalrobotics-service">InfernalRobotics service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kerbalalarmclock-service">KerbalAlarmClock service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lidar-service">LIDAR service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dockingcamera-service">DockingCamera service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trajectories-service">Trajectories service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mechjeb-service">MechJeb service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kerbal-engineer-redux-service">Kerbal Engineer Redux service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#scansat-service">SCANsat service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lidar-service">LIDAR service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mechjeb-service">MechJeb service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#raster-prop-monitor-service">Raster Prop Monitor service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#scansat-service">SCANsat service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trajectories-service">Trajectories service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#c-nano-client">C-nano client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#c-client">C# client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">C++ client</a></li>
@@ -4055,12 +4099,12 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">SpaceCenter service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#drawing-service">Drawing service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user-interface-service">User Interface service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">InfernalRobotics service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">KerbalAlarmClock service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#remotetech-service">RemoteTech service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">LIDAR service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">DockingCamera service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#debug-service">Debug service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">DockingCamera service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">InfernalRobotics service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">KerbalAlarmClock service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">LIDAR service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#remotetech-service">RemoteTech service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">C-nano client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">C# client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">C++ client</a></li>
@@ -4075,11 +4119,11 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">Server</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id18">SpaceCenter service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id19">User Interface service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id20">InfernalRobotics service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id21">KerbalAlarmClock service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id22">RemoteTech service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id20">DockingCamera service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id21">InfernalRobotics service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id22">KerbalAlarmClock service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id23">LIDAR service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id24">DockingCamera service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id24">RemoteTech service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id25">C-nano client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id26">C# client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id27">C++ client</a></li>
@@ -4117,10 +4161,10 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id44">Server</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id45">SpaceCenter service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id46">Drawing service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id47">InfernalRobotics service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id48">KerbalAlarmClock service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id49">LIDAR service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id50">DockingCamera service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id47">DockingCamera service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id48">InfernalRobotics service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id49">KerbalAlarmClock service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id50">LIDAR service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id51">C-nano client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id52">C# client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id53">C++ client</a></li>

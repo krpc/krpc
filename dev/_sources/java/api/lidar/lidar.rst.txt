@@ -2,8 +2,8 @@
 .. highlight:: java
 .. package:: krpc.client.services.LIDAR
 
-LIDAR
-=====
+Service
+=======
 
 
 .. type:: public class LIDAR

@@ -2,7 +2,7 @@
 .. highlight:: cpp
 .. namespace:: krpc::services::MechJeb
 
-MechJeb
+Service
 =======
 
 

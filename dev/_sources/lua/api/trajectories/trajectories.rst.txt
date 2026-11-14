@@ -2,8 +2,8 @@
 .. highlight:: lua
 .. currentmodule:: Trajectories
 
-Trajectories
-=============
+Service
+=======
 
 
 .. module:: Trajectories

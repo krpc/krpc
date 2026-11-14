@@ -2,8 +2,8 @@
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.Debug
 
-Debug
-=====
+Service
+=======
 
 
 .. class:: Debug

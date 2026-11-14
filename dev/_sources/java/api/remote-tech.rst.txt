@@ -1,8 +1,8 @@
 .. default-domain:: java
 .. highlight:: java
 
-RemoteTech API
-==============
+RemoteTech
+==========
 
 Provides functionality to interact with the `RemoteTech`_ mod. |RemoteTech tested|
 Provides the following classes:

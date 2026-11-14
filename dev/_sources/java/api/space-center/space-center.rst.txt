@@ -2,8 +2,8 @@
 .. highlight:: java
 .. package:: krpc.client.services.SpaceCenter
 
-SpaceCenter
-===========
+Service
+=======
 
 
 .. type:: public class SpaceCenter

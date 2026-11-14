@@ -2,8 +2,8 @@
 .. highlight:: c
 
 
-LIDAR
-=====
+Service
+=======
 
 
 .. warning:: Deprecated. Use :func:`krpc_SpaceCenter_RaycastDistance` instead.

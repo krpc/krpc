@@ -1,8 +1,8 @@
 .. default-domain:: cpp
 .. highlight:: cpp
 
-Kerbal Engineer Redux API
-=========================
+Kerbal Engineer Redux
+=====================
 
 Provides functionality to interact with the `Kerbal Engineer Redux`_ mod.
 |Kerbal Engineer Redux tested|

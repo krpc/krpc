@@ -2,8 +2,8 @@
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.LIDAR
 
-LIDAR
-=====
+Service
+=======
 
 
 .. class:: LIDAR

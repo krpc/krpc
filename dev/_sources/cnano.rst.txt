@@ -793,7 +793,7 @@ Client API Reference
    Frees the encoded arguments of a call that a ``_call`` function filled in. Free a call that
    failed to fill in too, and free a call before filling it in again.
 
-API Reference
--------------
+Service API Reference
+---------------------
 
 .. include:: cnano/api.inc

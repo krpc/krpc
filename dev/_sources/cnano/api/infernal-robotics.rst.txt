@@ -1,8 +1,8 @@
 .. default-domain:: c
 .. highlight:: c
 
-InfernalRobotics API
-====================
+InfernalRobotics
+================
 
 Provides functionality to interact with the `Infernal Robotics Next`_ mod.
 |Infernal Robotics Next tested| Provides the following classes:

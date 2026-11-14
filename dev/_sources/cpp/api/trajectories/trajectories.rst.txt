@@ -2,8 +2,8 @@
 .. highlight:: cpp
 .. namespace:: krpc::services::Trajectories
 
-Trajectories
-=============
+Service
+=======
 
 
 .. namespace:: krpc::services

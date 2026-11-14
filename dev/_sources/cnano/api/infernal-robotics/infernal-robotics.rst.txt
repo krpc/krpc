@@ -2,8 +2,8 @@
 .. highlight:: c
 
 
-InfernalRobotics
-================
+Service
+=======
 
 
 Provides functionality to interact with Infernal Robotics Next.

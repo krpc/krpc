@@ -2,8 +2,8 @@
 .. highlight:: lua
 .. currentmodule:: SpaceCenter
 
-SpaceCenter
-===========
+Service
+=======
 
 
 .. module:: SpaceCenter

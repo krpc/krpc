@@ -2,8 +2,8 @@
 .. highlight:: lua
 .. currentmodule:: DockingCamera
 
-DockingCamera
-=============
+Service
+=======
 
 
 .. module:: DockingCamera

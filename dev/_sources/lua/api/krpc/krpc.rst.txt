@@ -2,8 +2,8 @@
 .. highlight:: lua
 .. currentmodule:: KRPC
 
-KRPC
-====
+Service
+=======
 
 
 .. module:: KRPC

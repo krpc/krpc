@@ -2,8 +2,8 @@
 .. highlight:: cpp
 .. namespace:: krpc::services::RasterPropMonitor
 
-RasterPropMonitor
-=================
+Service
+=======
 
 
 .. namespace:: krpc::services

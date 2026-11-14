@@ -2,8 +2,8 @@
 .. highlight:: java
 .. package:: krpc.client.services.Trajectories
 
-Trajectories
-=============
+Service
+=======
 
 
 .. type:: public class Trajectories

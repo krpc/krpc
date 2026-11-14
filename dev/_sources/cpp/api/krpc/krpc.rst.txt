@@ -2,8 +2,8 @@
 .. highlight:: cpp
 .. namespace:: krpc::services::KRPC
 
-KRPC
-====
+Service
+=======
 
 
 .. namespace:: krpc::services

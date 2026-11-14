@@ -2,8 +2,8 @@
 .. highlight:: c
 
 
-DockingCamera
-=============
+Service
+=======
 
 
 Provides functionality to interact with Docking Camera (KURS).

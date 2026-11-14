@@ -2,8 +2,8 @@
 .. highlight:: java
 .. package:: krpc.client.services.DockingCamera
 
-DockingCamera
-=============
+Service
+=======
 
 
 .. type:: public class DockingCamera

@@ -2,8 +2,8 @@
 .. highlight:: c
 
 
-RemoteTech
-==========
+Service
+=======
 
 
 Provides functionality to interact with RemoteTech.

@@ -2,8 +2,8 @@
 .. highlight:: cpp
 .. namespace:: krpc::services::InfernalRobotics
 
-InfernalRobotics
-================
+Service
+=======
 
 
 .. namespace:: krpc::services

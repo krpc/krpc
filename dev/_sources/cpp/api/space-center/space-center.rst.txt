@@ -2,8 +2,8 @@
 .. highlight:: cpp
 .. namespace:: krpc::services::SpaceCenter
 
-SpaceCenter
-===========
+Service
+=======
 
 
 .. namespace:: krpc::services

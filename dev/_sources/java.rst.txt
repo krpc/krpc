@@ -807,7 +807,7 @@ Client API Reference
 
    Thrown when a value cannot be encoded or decoded.
 
-API Reference
--------------
+Service API Reference
+---------------------
 
 .. include:: java/api.inc

@@ -2,8 +2,8 @@
 .. highlight:: py
 .. currentmodule:: Debug
 
-Debug
-=====
+Service
+=======
 
 
 .. module:: Debug

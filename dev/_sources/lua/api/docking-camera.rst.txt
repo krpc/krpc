@@ -1,8 +1,8 @@
 .. default-domain:: lua
 .. highlight:: lua
 
-Docking Camera API
-==================
+Docking Camera
+==============
 
 Provides functionality to interact with the `Docking Camera (KURS)`_ mod.
 |Docking Camera (KURS) tested|
@@ -13,5 +13,13 @@ Provides functionality to interact with the `Docking Camera (KURS)`_ mod.
 
    docking-camera/docking-camera
    docking-camera/camera
+
+Example
+-------
+
+The following example saves the image from an onboard camera of the active vessel to a file. The
+camera must be switched on:
+
+.. literalinclude:: /scripts/api/docking-camera/DockingCameraExample.lua
 
 .. include:: /mods.inc

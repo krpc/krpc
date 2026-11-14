@@ -2,8 +2,8 @@
 .. highlight:: lua
 .. currentmodule:: RemoteTech
 
-RemoteTech
-==========
+Service
+=======
 
 
 .. module:: RemoteTech

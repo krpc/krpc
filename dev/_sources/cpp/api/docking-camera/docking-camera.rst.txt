@@ -2,8 +2,8 @@
 .. highlight:: cpp
 .. namespace:: krpc::services::DockingCamera
 
-DockingCamera
-=============
+Service
+=======
 
 
 .. namespace:: krpc::services

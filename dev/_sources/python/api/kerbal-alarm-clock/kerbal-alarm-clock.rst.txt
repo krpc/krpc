@@ -2,8 +2,8 @@
 .. highlight:: py
 .. currentmodule:: KerbalAlarmClock
 
-KerbalAlarmClock
-================
+Service
+=======
 
 
 .. module:: KerbalAlarmClock

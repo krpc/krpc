@@ -2,8 +2,8 @@
 .. highlight:: java
 .. package:: krpc.client.services.UI
 
-UI
-==
+Service
+=======
 
 
 .. type:: public class UI

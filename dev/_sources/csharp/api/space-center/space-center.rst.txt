@@ -2,8 +2,8 @@
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.SpaceCenter
 
-SpaceCenter
-===========
+Service
+=======
 
 
 .. class:: SpaceCenter

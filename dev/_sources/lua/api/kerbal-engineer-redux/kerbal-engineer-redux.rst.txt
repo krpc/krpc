@@ -2,8 +2,8 @@
 .. highlight:: lua
 .. currentmodule:: KerbalEngineerRedux
 
-KerbalEngineerRedux
-===================
+Service
+=======
 
 
 .. module:: KerbalEngineerRedux

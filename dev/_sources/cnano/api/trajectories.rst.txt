@@ -1,8 +1,8 @@
 .. default-domain:: c
 .. highlight:: c
 
-Trajectories API
-================
+Trajectories
+============
 
 Provides functionality to interact with the `Trajectories`_ mod.
 |Trajectories tested|
@@ -15,5 +15,13 @@ Provides functionality to interact with the `Trajectories`_ mod.
    trajectories/patch
    trajectories/descent-profile
    trajectories/descent-profile-node
+
+Example
+-------
+
+The following example prints the predicted impact position of the active vessel, in the
+reference frame of the body it orbits:
+
+.. literalinclude:: /scripts/api/trajectories/TrajectoriesExample.c
 
 .. include:: /mods.inc

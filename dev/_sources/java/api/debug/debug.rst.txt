@@ -2,8 +2,8 @@
 .. highlight:: java
 .. package:: krpc.client.services.Debug
 
-Debug
-=====
+Service
+=======
 
 
 .. type:: public class Debug
