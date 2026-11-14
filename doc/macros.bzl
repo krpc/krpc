@@ -57,18 +57,26 @@ def java_binary_multiple(name, srcs, deps, copts):
 def api_toctree(name, language):
     """Writes the toctree of a client guide's API reference, src/<language>/api.inc.
 
-    The pages are the core's, then those of the services in the registry.
+    The pages are in three groups: the core's services, the stock services, then the mod
+    services. The services keep their order in the registry.
 
     Args:
       name: The target name.
       language: The language of the client guide.
     """
-    pages = ["krpc", "stdlib"] + [service.doc for service in SERVICES]
+    groups = [
+        ("Server", ["krpc", "stdlib"]),
+        ("Game", [service.doc for service in SERVICES if not service.mods]),
+        ("Mods", [service.doc for service in SERVICES if service.mods]),
+    ]
+    content = []
+    for caption, pages in groups:
+        if content:
+            content.append("")
+        content += [".. toctree::", "   :caption: " + caption, "   :maxdepth: 1", ""]
+        content += ["   %s/api/%s" % (language, page) for page in pages]
     write_file(
         name = name,
         out = "src/%s/api.inc" % language,
-        content = [".. toctree::", "   :maxdepth: 1", ""] + [
-            "   %s/api/%s" % (language, page)
-            for page in pages
-        ],
+        content = content,
     )
