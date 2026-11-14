@@ -1822,6 +1822,13 @@ TestAutoPilotLaunchDynawing = _make_autopilot_launch_test_class(
     launch_settle_delay=8,
 )
 
+# A booster steered only by the gimbals of three KS-25s, one of the slowest stock gimbals, with no
+# reaction wheels, RCS or fins.
+TestAutoPilotLaunchGimbal = _make_autopilot_launch_test_class(
+    "TestAutoPilotLaunchGimbal",
+    "AutoPilotGimbal",
+)
+
 TestAutoPilotLaunchOrbiterOne = _make_autopilot_launch_test_class(
     "TestAutoPilotLaunchOrbiterOne",
     "Orbiter One",
