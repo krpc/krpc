@@ -116,11 +116,6 @@ Clients
       :link-type: doc
       :text-align: center
 
-   .. grid-item-card:: Others
-      :link: third-party
-      :link-type: doc
-      :text-align: center
-
 .. toctree::
    :hidden:
 
