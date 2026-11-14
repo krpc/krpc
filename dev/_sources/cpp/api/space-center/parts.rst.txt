@@ -2,14 +2,15 @@
 .. highlight:: cpp
 .. namespace:: krpc::services::SpaceCenter
 
-
-
 .. _cpp-api-parts:
 
 Parts
 =====
 
-The following classes allow interaction with a vessels individual parts.
+The following classes allow interaction with a vessel's individual parts.
+
+.. seealso:: The :std:ref:`parts guide <user-guide-parts>` walks the tree of parts, and explains
+   fuel lines, stage numbers and part modules.
 
 .. contents::
    :local:
@@ -35,7 +36,7 @@ Parts
 
    
 
-      .. note:: See the discussion on :rst:ref:`cpp-api-parts-trees-of-parts`.
+      .. note:: See the discussion on :rst:ref:`user-guide-parts-tree`.
 
    .. function:: std::optional<Part> controlling()
    .. function:: void set_controlling(std::optional<Part> value)
@@ -373,7 +374,7 @@ Part
 
    
 
-      .. note:: See the discussion on :rst:ref:`cpp-api-parts-trees-of-parts`.
+      .. note:: See the discussion on :rst:ref:`user-guide-parts-tree`.
 
    .. function:: std::vector<Part> children()
 
@@ -383,7 +384,7 @@ Part
 
    
 
-      .. note:: See the discussion on :rst:ref:`cpp-api-parts-trees-of-parts`.
+      .. note:: See the discussion on :rst:ref:`user-guide-parts-tree`.
 
    .. function:: bool axially_attached()
 
@@ -392,7 +393,7 @@ Part
 
    
 
-      .. note:: See the discussion on :rst:ref:`cpp-api-parts-attachment-modes`.
+      .. note:: See the discussion on :rst:ref:`user-guide-parts-attachment-modes`.
 
    .. function:: bool radially_attached()
 
@@ -401,7 +402,7 @@ Part
 
    
 
-      .. note:: See the discussion on :rst:ref:`cpp-api-parts-attachment-modes`.
+      .. note:: See the discussion on :rst:ref:`user-guide-parts-attachment-modes`.
 
    .. function:: int32_t stage()
 
@@ -410,7 +411,7 @@ Part
 
    
 
-      .. note:: See the discussion on :rst:ref:`cpp-api-parts-staging`.
+      .. note:: See the discussion on :rst:ref:`user-guide-parts-staging`.
 
    .. function:: int32_t decouple_stage()
 
@@ -419,7 +420,7 @@ Part
 
    
 
-      .. note:: See the discussion on :rst:ref:`cpp-api-parts-staging`.
+      .. note:: See the discussion on :rst:ref:`user-guide-parts-staging`.
 
    .. function:: bool massless()
 
@@ -733,7 +734,7 @@ Part
       :Game Scenes: Flight
 
 
-      .. note:: See the discussion on :rst:ref:`cpp-api-parts-fuel-lines`.
+      .. note:: See the discussion on :rst:ref:`user-guide-parts-fuel-lines`.
 
    .. function:: std::vector<Part> fuel_lines_to()
 
@@ -743,7 +744,7 @@ Part
       :Game Scenes: Flight
 
 
-      .. note:: See the discussion on :rst:ref:`cpp-api-parts-fuel-lines`.
+      .. note:: See the discussion on :rst:ref:`user-guide-parts-fuel-lines`.
 
    .. function:: std::vector<Module> modules()
 
@@ -5343,217 +5344,3 @@ Wheel
    .. enumerator:: not_enough_resources
 
       The motor does not have enough resources to run.
-
-
-
-.. _cpp-api-parts-trees-of-parts:
-
-Trees of Parts
---------------
-
-Vessels in KSP are comprised of a number of parts, connected to one another in a
-*tree* structure. An example vessel is shown in Figure 1, and the corresponding
-tree of parts in Figure 2. The craft file for this example can also be
-:download:`downloaded here </crafts/PartsTree.craft>`.
-
-.. container:: clearer
-
-   ..
-
-.. figure:: /images/api/parts.png
-   :align: left
-   :figwidth: 275
-
-   **Figure 1** -- Example parts making up a vessel.
-
-.. figure:: /images/api/parts-tree.png
-   :align: right
-   :figwidth: 275
-
-   **Figure 2** -- Tree of parts for the vessel in Figure 1. Arrows point from the parent part to the child part.
-
-.. container:: clearer
-
-   ..
-
-
-Traversing the Tree
-^^^^^^^^^^^^^^^^^^^
-
-The tree of parts can be traversed using the attributes :func:`Parts::root`,
-:func:`Part::parent` and :func:`Part::children`.
-
-The root of the tree is the same as the vessels *root part* (part number 1 in
-the example above) and can be obtained by calling :func:`Parts::root`.
-A parts children can be obtained by calling :func:`Part::children`.
-If the part does not have any children, :func:`Part::children`
-returns an empty list. A parts parent can be obtained by calling
-:func:`Part::parent`. If the part does not have a parent
-(as is the case for the root part), :func:`Part::parent`
-returns ``NULL``.
-
-The following C++ example uses these attributes to perform a
-depth-first traversal over all of the parts in a vessel:
-
-.. literalinclude:: /scripts/api/space-center/parts/TreeTraversal.cpp
-
-When this code is execute using the craft file for the example vessel pictured
-above, the following is printed out::
-
-    Command Pod Mk1
-     TR-18A Stack Decoupler
-      FL-T400 Fuel Tank
-       LV-909 Liquid Fuel Engine
-        TR-18A Stack Decoupler
-         FL-T800 Fuel Tank
-          LV-909 Liquid Fuel Engine
-          TT-70 Radial Decoupler
-           FL-T400 Fuel Tank
-            TT18-A Launch Stability Enhancer
-            FTX-2 External Fuel Duct
-            LV-909 Liquid Fuel Engine
-            Aerodynamic Nose Cone
-          TT-70 Radial Decoupler
-           FL-T400 Fuel Tank
-            TT18-A Launch Stability Enhancer
-            FTX-2 External Fuel Duct
-            LV-909 Liquid Fuel Engine
-            Aerodynamic Nose Cone
-       LT-1 Landing Struts
-       LT-1 Landing Struts
-     Mk16 Parachute
-
-.. _cpp-api-parts-attachment-modes:
-
-Attachment Modes
-^^^^^^^^^^^^^^^^
-
-Parts can be attached to other parts either *radially* (on the side of the
-parent part) or *axially* (on the end of the parent part, to form a stack).
-
-For example, in the vessel pictured above, the parachute (part 2) is *axially*
-connected to its parent (the command pod -- part 1), and the landing leg
-(part 5) is *radially* connected to its parent (the fuel tank -- part 4).
-
-The root part of a vessel (for example the command pod -- part 1) does not have
-a parent part, so does not have an attachment mode. However, the part is
-consider to be *axially* attached to nothing.
-
-The following C++ example does a depth-first traversal as before,
-but also prints out the attachment mode used by the part:
-
-.. literalinclude:: /scripts/api/space-center/parts/AttachmentModes.cpp
-
-When this code is execute using the craft file for the example vessel pictured
-above, the following is printed out::
-
- Command Pod Mk1 - axial
-  TR-18A Stack Decoupler - axial
-   FL-T400 Fuel Tank - axial
-    LV-909 Liquid Fuel Engine - axial
-     TR-18A Stack Decoupler - axial
-      FL-T800 Fuel Tank - axial
-       LV-909 Liquid Fuel Engine - axial
-       TT-70 Radial Decoupler - radial
-        FL-T400 Fuel Tank - radial
-         TT18-A Launch Stability Enhancer - radial
-         FTX-2 External Fuel Duct - radial
-         LV-909 Liquid Fuel Engine - axial
-         Aerodynamic Nose Cone - axial
-       TT-70 Radial Decoupler - radial
-        FL-T400 Fuel Tank - radial
-         TT18-A Launch Stability Enhancer - radial
-         FTX-2 External Fuel Duct - radial
-         LV-909 Liquid Fuel Engine - axial
-         Aerodynamic Nose Cone - axial
-    LT-1 Landing Struts - radial
-    LT-1 Landing Struts - radial
-  Mk16 Parachute - axial
-
-.. _cpp-api-parts-fuel-lines:
-
-Fuel Lines
-----------
-
-.. figure:: /images/api/parts-fuel-lines.png
-   :align: right
-   :figwidth: 200
-
-   **Figure 5** -- Fuel lines from the example in Figure 1. Fuel flows from the parts highlighted in green, into the part highlighted in blue.
-
-
-.. figure:: /images/api/parts-fuel-lines-tree.png
-   :align: right
-   :figwidth: 200
-
-   **Figure 4** -- A subset of the parts tree from Figure 2 above.
-
-
-Fuel lines are considered parts, and are included in the parts tree (for
-example, as pictured in Figure 4). However, the parts tree does not contain
-information about which parts fuel lines connect to. The parent part of a fuel
-line is the part from which it will take fuel (as shown in Figure 4) however the
-part that it will send fuel to is not represented in the parts tree.
-
-Figure 5 shows the fuel lines from the example vessel pictured earlier. Fuel
-line part 15 (in red) takes fuel from a fuel tank (part 11 -- in green) and
-feeds it into another fuel tank (part 9 -- in blue). The fuel line is therefore
-a child of part 11, but its connection to part 9 is not represented in the tree.
-
-The attributes :func:`Part::fuel_lines_from` and
-:func:`Part::fuel_lines_to` can be used to discover these
-connections. In the example in Figure 5, when
-:func:`Part::fuel_lines_to` is called on fuel tank part
-11, it will return a list of parts containing just fuel tank part 9 (the blue
-part). When :func:`Part::fuel_lines_from` is called on
-fuel tank part 9, it will return a list containing fuel tank parts 11 and 17
-(the parts colored green).
-
-.. _cpp-api-parts-staging:
-
-Staging
--------
-
-For vessel-level summaries (delta-v, thrust, fuel, and resources grouped per
-stage), use the :rst:ref:`cpp-api-stage` class via
-:func:`Vessel::stages` and
-:func:`Vessel::decouple_stages`.
-
-.. figure:: /images/api/parts-staging.png
-   :align: right
-   :figwidth: 340
-
-   **Figure 6** -- Example vessel from Figure 1 with a staging sequence.
-
-
-Each part has two staging numbers associated with it: the stage in which the
-part is *activated* and the stage in which the part is *decoupled*. These values
-can be obtained using :func:`Part::stage` and
-:func:`Part::decouple_stage` respectively. For parts that
-are not activated by staging, :func:`Part::stage` returns
--1. For parts that are never decoupled,
-:func:`Part::decouple_stage` returns a value of -1.
-
-Figure 6 shows an example staging sequence for a vessel. Figure 7 shows the
-stages in which each part of the vessel will be *activated*. Figure 8 shows the
-stages in which each part of the vessel will be *decoupled*.
-
-.. container:: clearer
-
-   ..
-
-.. figure:: /images/api/parts-staging-activate.png
-   :align: left
-   :figwidth: 250
-
-   **Figure 7** -- The stage in which each part is *activated*.
-
-.. figure:: /images/api/parts-staging-decouple.png
-   :align: right
-   :figwidth: 250
-
-   **Figure 8** -- The stage in which each part is *decoupled*.
-
-.. container:: clearer
-
-   ..

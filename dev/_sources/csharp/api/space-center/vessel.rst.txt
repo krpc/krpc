@@ -223,7 +223,7 @@ Vessel
 
 
       .. note:: Lists activation stages only (``decouple`` is ``false``). See also
-                :rst:ref:`csharp-api-parts-staging`.
+                :rst:ref:`user-guide-parts-staging`.
 
    .. function:: Stage StageAt(int stage)
 

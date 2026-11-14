@@ -237,7 +237,7 @@ Vessel
 
 
       .. note:: Lists activation stages only (``decouple`` is ``false``). See also
-                :rst:ref:`java-api-parts-staging`.
+                :rst:ref:`user-guide-parts-staging`.
 
    .. method:: Stage stageAt(int stage)
 

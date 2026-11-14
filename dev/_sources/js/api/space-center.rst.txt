@@ -31,7 +31,6 @@ bodies and orbits, flight control, maneuver nodes and the auto-pilot.
    space-center/camera
    space-center/waypoints
    space-center/contracts
-   space-center/geometry-types
    space-center/alarms
 
 Example

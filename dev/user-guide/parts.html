@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Parts &#8212; kRPC vdev documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/lua.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=a5c4661c" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=eadf7411" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="../_static/documentation_options.js?v=3ce10a4d"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/tabs.js?v=3030b3cb"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'user-guide/parts';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.24.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../_static/external-links.js?v=e8892020"></script>
+    <script src="../_static/build-info.js?v=19ceb065"></script>
+    <link rel="canonical" href="https://krpc.github.io/krpc/dev/user-guide/parts.html" />
+    <link rel="icon" href="../_static/logo-mark.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Game Scenes and Saves" href="game-scenes-and-saves.html" />
+    <link rel="prev" title="User Guides" href="../user-guide.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="dev" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo-on-light.svg" class="logo__image only-light" alt="kRPC"/>
+    <img src="../_static/logo-on-dark.svg" class="logo__image only-dark pst-js-only" alt="kRPC"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../clients.html">
+    Clients
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../developer-guide.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://discord.gg/bXuaTrj" title="Discord" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-discord fa-lg" aria-hidden="true"></i><span class="visually-hidden">Discord</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://forum.kerbalspaceprogram.com/topic/130742-1125-krpc-control-the-game-using-c-c-java-lua-python-ruby-haskell-c-arduino-v060/" title="Forum" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-comments fa-lg" aria-hidden="true"></i><span class="visually-hidden">Forum</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page" aria-expanded="false" aria-controls="pst-secondary-sidebar-modal">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../clients.html">
+    Clients
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../developer-guide.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://discord.gg/bXuaTrj" title="Discord" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-discord fa-lg" aria-hidden="true"></i><span class="visually-hidden">Discord</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://forum.kerbalspaceprogram.com/topic/130742-1125-krpc-control-the-game-using-c-c-java-lua-python-ruby-haskell-c-arduino-v060/" title="Forum" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-comments fa-lg" aria-hidden="true"></i><span class="visually-hidden">Forum</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#">Parts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="game-scenes-and-saves.html">Game Scenes and Saves</a></li>
+<li class="toctree-l1"><a class="reference internal" href="time-warp.html">Time Warp</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="vectors-and-rotations.html">Vectors and Rotations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference-frames.html">Reference Frames</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="autopilot.html">AutoPilot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="control-loops.html">Control Loops</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="streams-and-events.html">Streams and Events</a></li>
+<li class="toctree-l1"><a class="reference internal" href="object-lifetime.html">Object Lifetime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server-side-functions.html">Server Side Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server-performance.html">Server Performance</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-house"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../user-guide.html" class="nav-link">User Guides</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Parts</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="parts">
+<span id="user-guide-parts"></span><h1>Parts<a class="headerlink" href="#parts" title="Link to this heading">#</a></h1>
+<p>A vessel is made of parts, connected to one another in a tree. This guide shows how to walk that
+tree, how fuel lines fit into it, and how the staging numbers of each part relate to the staging
+sequence. It then shows how to reach any part module, including those of mods with no kRPC
+service. The examples use the vessel below, whose craft file you can
+<a class="reference download internal" download="" href="../_downloads/3224069396a197234faffa36cd3509ec/PartsTree.craft"><code class="xref download docutils literal notranslate"><span class="pre">download</span> <span class="pre">here</span></code></a>.</p>
+<div class="clearer docutils container">
+</div>
+<figure class="align-left" id="id1" style="width: 275px">
+<img alt="../_images/parts.png" src="../_images/parts.png" />
+<figcaption>
+<p><span class="caption-text"><strong>Figure 1</strong> – The parts that make up the example vessel.</span><a class="headerlink" href="#id1" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<figure class="align-right" id="id2" style="width: 275px">
+<img alt="../_images/parts-tree.png" src="../_images/parts-tree.png" />
+<figcaption>
+<p><span class="caption-text"><strong>Figure 2</strong> – The tree of parts for the vessel in Figure 1. Arrows point from each parent
+part to its children.</span><a class="headerlink" href="#id2" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<div class="clearer docutils container">
+</div>
+<section id="traversing-the-tree">
+<span id="user-guide-parts-tree"></span><h2>Traversing the Tree<a class="headerlink" href="#traversing-the-tree" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">Parts.Root</span></code> is the root of the tree, the vessel’s root part: part 1, the command pod, in the
+example. <code class="docutils literal notranslate"><span class="pre">Part.Children</span></code> gives the parts attached to a part, and is empty for a part with
+none. <code class="docutils literal notranslate"><span class="pre">Part.Parent</span></code> gives the part it is attached to, and is null for the root part.</p>
+<p>This example walks the tree depth first, and prints each part indented by its depth:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">Python</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">C#</button><button aria-controls="panel-0-0-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-2" name="0-2" role="tab" tabindex="-1">C++</button><button aria-controls="panel-0-0-3" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-3" name="0-3" role="tab" tabindex="-1">C</button><button aria-controls="panel-0-0-4" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-4" name="0-4" role="tab" tabindex="-1">Java</button><button aria-controls="panel-0-0-5" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-5" name="0-5" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-0-0-6" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-6" name="0-6" role="tab" tabindex="-1">JavaScript</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
+
+<span class="n">root</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">root</span>
+<span class="n">stack</span> <span class="o">=</span> <span class="p">[(</span><span class="n">root</span><span class="p">,</span> <span class="mi">0</span><span class="p">)]</span>
+<span class="k">while</span> <span class="n">stack</span><span class="p">:</span>
+    <span class="n">part</span><span class="p">,</span> <span class="n">depth</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">" "</span> <span class="o">*</span> <span class="n">depth</span><span class="p">,</span> <span class="n">part</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">part</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
+        <span class="n">stack</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">child</span><span class="p">,</span> <span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">System.Net</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client.Services.SpaceCenter</span><span class="p">;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TreeTraversal</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Main</span><span class="w"> </span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="p">(</span><span class="kt">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Connection</span><span class="w"> </span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">SpaceCenter</span><span class="w"> </span><span class="p">().</span><span class="n">ActiveVessel</span><span class="p">;</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">Parts</span><span class="p">.</span><span class="n">Root</span><span class="p">;</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">stack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Stack</span><span class="o">&lt;</span><span class="n">Tuple</span><span class="o">&lt;</span><span class="n">Part</span><span class="p">,</span><span class="kt">int</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="p">();</span>
+<span class="w">            </span><span class="n">stack</span><span class="p">.</span><span class="n">Push</span><span class="w"> </span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">Tuple</span><span class="o">&lt;</span><span class="n">Part</span><span class="p">,</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">));</span>
+<span class="w">            </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">stack</span><span class="p">.</span><span class="n">Count</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="kt">var</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stack</span><span class="p">.</span><span class="n">Pop</span><span class="w"> </span><span class="p">();</span>
+<span class="w">                </span><span class="n">Part</span><span class="w"> </span><span class="n">part</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">item</span><span class="p">.</span><span class="n">Item1</span><span class="p">;</span>
+<span class="w">                </span><span class="kt">int</span><span class="w"> </span><span class="n">depth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">item</span><span class="p">.</span><span class="n">Item2</span><span class="p">;</span>
+<span class="w">                </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="w"> </span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="p">(</span><span class="sc">' '</span><span class="p">,</span><span class="w"> </span><span class="n">depth</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">part</span><span class="p">.</span><span class="n">Title</span><span class="p">);</span>
+<span class="w">                </span><span class="k">foreach</span><span class="w"> </span><span class="p">(</span><span class="kt">var</span><span class="w"> </span><span class="n">child</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">part</span><span class="p">.</span><span class="n">Children</span><span class="p">)</span>
+<span class="w">                    </span><span class="n">stack</span><span class="p">.</span><span class="n">Push</span><span class="w"> </span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">Tuple</span><span class="o">&lt;</span><span class="n">Part</span><span class="p">,</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">child</span><span class="p">,</span><span class="w"> </span><span class="n">depth</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">));</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-0-2" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-2" name="0-2" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc/services/space_center.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stack&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;utility&gt;</span>
+
+<span class="k">using</span><span class="w"> </span><span class="n">SpaceCenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">services</span><span class="o">::</span><span class="n">SpaceCenter</span><span class="p">;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">krpc</span><span class="o">::</span><span class="n">Connection</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">connect</span><span class="p">(</span><span class="s">""</span><span class="p">);</span>
+<span class="w">  </span><span class="n">SpaceCenter</span><span class="w"> </span><span class="n">sc</span><span class="p">(</span><span class="n">conn</span><span class="p">);</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sc</span><span class="p">.</span><span class="n">active_vessel</span><span class="p">().</span><span class="n">value</span><span class="p">();</span>
+
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">parts</span><span class="p">().</span><span class="n">root</span><span class="p">();</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">stack</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">SpaceCenter</span><span class="o">::</span><span class="n">Part</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">stack</span><span class="p">;</span>
+<span class="w">  </span><span class="n">stack</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">SpaceCenter</span><span class="o">::</span><span class="n">Part</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">));</span>
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">stack</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">part</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stack</span><span class="p">.</span><span class="n">top</span><span class="p">().</span><span class="n">first</span><span class="p">;</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">depth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stack</span><span class="p">.</span><span class="n">top</span><span class="p">().</span><span class="n">second</span><span class="p">;</span>
+<span class="w">    </span><span class="n">stack</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">depth</span><span class="p">,</span><span class="w"> </span><span class="sc">' '</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">part</span><span class="p">.</span><span class="n">title</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">child</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">part</span><span class="p">.</span><span class="n">children</span><span class="p">())</span>
+<span class="w">      </span><span class="n">stack</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">SpaceCenter</span><span class="o">::</span><span class="n">Part</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">child</span><span class="p">,</span><span class="w"> </span><span class="n">depth</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">));</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-0-3" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-3" name="0-3" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/space_center.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">krpc_connection_t</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_open_serial</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"COM0"</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">""</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_t</span><span class="w"> </span><span class="n">vessel</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_ActiveVessel</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">vessel</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Parts_t</span><span class="w"> </span><span class="n">parts</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_Parts</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">parts</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Part_t</span><span class="w"> </span><span class="n">root</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Parts_Root</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="n">parts</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">krpc_SpaceCenter_Part_t</span><span class="w"> </span><span class="n">part</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">depth</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="n">StackEntry</span><span class="p">;</span>
+<span class="w">  </span><span class="n">StackEntry</span><span class="w"> </span><span class="n">stack</span><span class="p">[</span><span class="mi">256</span><span class="p">];</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">stackPtr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="n">stack</span><span class="p">[</span><span class="n">stackPtr</span><span class="p">].</span><span class="n">part</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">root</span><span class="p">;</span>
+<span class="w">  </span><span class="n">stack</span><span class="p">[</span><span class="n">stackPtr</span><span class="p">].</span><span class="n">depth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">stackPtr</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">krpc_SpaceCenter_Part_t</span><span class="w"> </span><span class="n">part</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stack</span><span class="p">[</span><span class="n">stackPtr</span><span class="p">].</span><span class="n">part</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">depth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stack</span><span class="p">[</span><span class="n">stackPtr</span><span class="p">].</span><span class="n">depth</span><span class="p">;</span>
+<span class="w">    </span><span class="n">stackPtr</span><span class="o">--</span><span class="p">;</span><span class="w">  </span><span class="c1">// Pop the stack</span>
+<span class="w">    </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+<span class="w">    </span><span class="n">krpc_SpaceCenter_Part_Title</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">title</span><span class="p">,</span><span class="w"> </span><span class="n">part</span><span class="p">);</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">depth</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="n">printf</span><span class="p">(</span><span class="s">" "</span><span class="p">);</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">title</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">krpc_list_object_t</span><span class="w"> </span><span class="n">children</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">KRPC_NULL_LIST</span><span class="p">;</span>
+<span class="w">    </span><span class="n">krpc_SpaceCenter_Part_Children</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">children</span><span class="p">,</span><span class="w"> </span><span class="n">part</span><span class="p">);</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">children</span><span class="p">.</span><span class="n">size</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="c1">// Push onto the stack</span>
+<span class="w">      </span><span class="n">stackPtr</span><span class="o">++</span><span class="p">;</span>
+<span class="w">      </span><span class="n">stack</span><span class="p">[</span><span class="n">stackPtr</span><span class="p">].</span><span class="n">part</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">children</span><span class="p">.</span><span class="n">items</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="w">      </span><span class="n">stack</span><span class="p">[</span><span class="n">stackPtr</span><span class="p">].</span><span class="n">depth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">depth</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-0-4" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-4" name="0-4" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter.Part</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter.Vessel</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.javatuples.Pair</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.util.ArrayDeque</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.util.Deque</span><span class="p">;</span>
+
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">TreeTraversal</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="na">newInstance</span><span class="p">();</span>
+<span class="w">        </span><span class="n">Vessel</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SpaceCenter</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">).</span><span class="na">getActiveVessel</span><span class="p">();</span>
+<span class="w">        </span><span class="n">Part</span><span class="w"> </span><span class="n">root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="na">getParts</span><span class="p">().</span><span class="na">getRoot</span><span class="p">();</span>
+<span class="w">        </span><span class="n">Deque</span><span class="o">&lt;</span><span class="n">Pair</span><span class="o">&lt;</span><span class="n">Part</span><span class="p">,</span><span class="w"> </span><span class="n">Integer</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">stack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ArrayDeque</span><span class="o">&lt;</span><span class="n">Pair</span><span class="o">&lt;</span><span class="n">Part</span><span class="p">,</span><span class="w"> </span><span class="n">Integer</span><span class="o">&gt;&gt;</span><span class="p">();</span>
+<span class="w">        </span><span class="n">stack</span><span class="p">.</span><span class="na">push</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">Pair</span><span class="o">&lt;</span><span class="n">Part</span><span class="p">,</span><span class="w"> </span><span class="n">Integer</span><span class="o">&gt;</span><span class="p">(</span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">));</span>
+<span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">stack</span><span class="p">.</span><span class="na">size</span><span class="p">()</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Pair</span><span class="o">&lt;</span><span class="n">Part</span><span class="p">,</span><span class="w"> </span><span class="n">Integer</span><span class="o">&gt;</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stack</span><span class="p">.</span><span class="na">pop</span><span class="p">();</span>
+<span class="w">            </span><span class="n">Part</span><span class="w"> </span><span class="n">part</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">item</span><span class="p">.</span><span class="na">getValue0</span><span class="p">();</span>
+<span class="w">            </span><span class="kt">int</span><span class="w"> </span><span class="n">depth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">item</span><span class="p">.</span><span class="na">getValue1</span><span class="p">();</span>
+<span class="w">            </span><span class="n">String</span><span class="w"> </span><span class="n">prefix</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">""</span><span class="p">;</span>
+<span class="w">            </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">depth</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">prefix</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s">" "</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">prefix</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">part</span><span class="p">.</span><span class="na">getTitle</span><span class="p">());</span>
+<span class="w">            </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">Part</span><span class="w"> </span><span class="n">child</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">part</span><span class="p">.</span><span class="na">getChildren</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">stack</span><span class="p">.</span><span class="na">push</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">Pair</span><span class="o">&lt;</span><span class="n">Part</span><span class="p">,</span><span class="w"> </span><span class="n">Integer</span><span class="o">&gt;</span><span class="p">(</span><span class="n">child</span><span class="p">,</span><span class="w"> </span><span class="n">depth</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">));</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">connection</span><span class="p">.</span><span class="na">close</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-0-5" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-5" name="0-5" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'krpc'</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">krpc</span><span class="p">.</span><span class="nf">connect</span><span class="p">()</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">space_center</span><span class="p">.</span><span class="py">active_vessel</span>
+
+<span class="kd">local</span><span class="w"> </span><span class="nv">root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">vessel</span><span class="p">.</span><span class="py">parts</span><span class="p">.</span><span class="py">root</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">stack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{{</span><span class="nv">root</span><span class="p">,</span><span class="mi">0</span><span class="p">}}</span>
+<span class="kr">while</span><span class="w"> </span><span class="o">#</span><span class="nv">stack</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="kr">do</span>
+<span class="w">  </span><span class="kd">local</span><span class="w"> </span><span class="nv">item</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">table.remove</span><span class="p">(</span><span class="nv">stack</span><span class="p">)</span>
+<span class="w">  </span><span class="kd">local</span><span class="w"> </span><span class="nv">part</span><span class="p">,</span><span class="nv">depth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">item</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="nv">item</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="w">  </span><span class="nb">print</span><span class="p">(</span><span class="nb">string.rep</span><span class="p">(</span><span class="s1">' '</span><span class="p">,</span><span class="w"> </span><span class="nv">depth</span><span class="p">)</span><span class="w"> </span><span class="o">..</span><span class="w"> </span><span class="nv">part</span><span class="p">.</span><span class="py">title</span><span class="p">)</span>
+<span class="w">  </span><span class="kr">for</span><span class="w"> </span><span class="nv">_</span><span class="p">,</span><span class="nv">child</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nb">ipairs</span><span class="p">(</span><span class="nv">part</span><span class="p">.</span><span class="py">children</span><span class="p">)</span><span class="w"> </span><span class="kr">do</span>
+<span class="w">    </span><span class="nb">table.insert</span><span class="p">(</span><span class="nv">stack</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nv">child</span><span class="p">,</span><span class="w"> </span><span class="nv">depth</span><span class="o">+</span><span class="mi">1</span><span class="p">})</span>
+<span class="w">  </span><span class="kr">end</span>
+<span class="kr">end</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-0-6" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-6" name="0-6" role="tabpanel" tabindex="0"><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">connect</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">"@krpc-org/krpc"</span><span class="p">;</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">connect</span><span class="p">();</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">spaceCenter</span><span class="p">.</span><span class="nx">getActiveVessel</span><span class="p">();</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="p">(</span><span class="k">await</span><span class="w"> </span><span class="nx">vessel</span><span class="p">.</span><span class="nx">getParts</span><span class="p">()).</span><span class="nx">getRoot</span><span class="p">();</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">stack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nx">part</span><span class="o">:</span><span class="w"> </span><span class="nx">root</span><span class="p">,</span><span class="w"> </span><span class="nx">depth</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="w"> </span><span class="p">}];</span>
+<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nx">stack</span><span class="p">.</span><span class="nx">length</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">part</span><span class="p">,</span><span class="w"> </span><span class="nx">depth</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">stack</span><span class="p">.</span><span class="nx">pop</span><span class="p">();</span>
+<span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">" "</span><span class="p">.</span><span class="nx">repeat</span><span class="p">(</span><span class="nx">depth</span><span class="p">),</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">part</span><span class="p">.</span><span class="nx">getTitle</span><span class="p">());</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">const</span><span class="w"> </span><span class="nx">child</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">part</span><span class="p">.</span><span class="nx">getChildren</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">stack</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span><span class="w"> </span><span class="nx">part</span><span class="o">:</span><span class="w"> </span><span class="nx">child</span><span class="p">,</span><span class="w"> </span><span class="nx">depth</span><span class="o">:</span><span class="w"> </span><span class="nx">depth</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">1</span><span class="w"> </span><span class="p">});</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></div>
+<p>For the example vessel, it prints:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Command Pod Mk1
+ TR-18A Stack Decoupler
+  FL-T400 Fuel Tank
+   LV-909 Liquid Fuel Engine
+    TR-18A Stack Decoupler
+     FL-T800 Fuel Tank
+      LV-909 Liquid Fuel Engine
+      TT-70 Radial Decoupler
+       FL-T400 Fuel Tank
+        TT18-A Launch Stability Enhancer
+        FTX-2 External Fuel Duct
+        LV-909 Liquid Fuel Engine
+        Aerodynamic Nose Cone
+      TT-70 Radial Decoupler
+       FL-T400 Fuel Tank
+        TT18-A Launch Stability Enhancer
+        FTX-2 External Fuel Duct
+        LV-909 Liquid Fuel Engine
+        Aerodynamic Nose Cone
+   LT-1 Landing Struts
+   LT-1 Landing Struts
+ Mk16 Parachute
+</pre></div>
+</div>
+</section>
+<section id="attachment-modes">
+<span id="user-guide-parts-attachment-modes"></span><h2>Attachment Modes<a class="headerlink" href="#attachment-modes" title="Link to this heading">#</a></h2>
+<p>A part is attached to its parent either <em>axially</em>, on the end of the parent to form a stack, or
+<em>radially</em>, on its side. In the example, the parachute (part 2) is attached axially to the command
+pod (part 1), and the landing leg (part 5) radially to the fuel tank (part 4). The root part has no
+parent, and counts as attached axially.</p>
+<p><code class="docutils literal notranslate"><span class="pre">Part.AxiallyAttached</span></code> and <code class="docutils literal notranslate"><span class="pre">Part.RadiallyAttached</span></code> give the mode. This example walks the tree
+as before, and prints each part’s attachment mode:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-1-1-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-1-1-0" name="1-0" role="tab" tabindex="0">Python</button><button aria-controls="panel-1-1-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-1" name="1-1" role="tab" tabindex="-1">C#</button><button aria-controls="panel-1-1-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-2" name="1-2" role="tab" tabindex="-1">C++</button><button aria-controls="panel-1-1-3" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-3" name="1-3" role="tab" tabindex="-1">C</button><button aria-controls="panel-1-1-4" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-4" name="1-4" role="tab" tabindex="-1">Java</button><button aria-controls="panel-1-1-5" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-5" name="1-5" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-1-1-6" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-6" name="1-6" role="tab" tabindex="-1">JavaScript</button></div><div aria-labelledby="tab-1-1-0" class="sphinx-tabs-panel" id="panel-1-1-0" name="1-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
+
+<span class="n">root</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">root</span>
+<span class="n">stack</span> <span class="o">=</span> <span class="p">[(</span><span class="n">root</span><span class="p">,</span> <span class="mi">0</span><span class="p">)]</span>
+<span class="k">while</span> <span class="n">stack</span><span class="p">:</span>
+    <span class="n">part</span><span class="p">,</span> <span class="n">depth</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">part</span><span class="o">.</span><span class="n">axially_attached</span><span class="p">:</span>
+        <span class="n">attach_mode</span> <span class="o">=</span> <span class="s2">"axial"</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># radially_attached</span>
+        <span class="n">attach_mode</span> <span class="o">=</span> <span class="s2">"radial"</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">" "</span> <span class="o">*</span> <span class="n">depth</span><span class="p">,</span> <span class="n">part</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="s2">"-"</span><span class="p">,</span> <span class="n">attach_mode</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">part</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
+        <span class="n">stack</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">child</span><span class="p">,</span> <span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-1-1-1" class="sphinx-tabs-panel" hidden="true" id="panel-1-1-1" name="1-1" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">System.Net</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client.Services.SpaceCenter</span><span class="p">;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">AttachmentModes</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Main</span><span class="w"> </span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="p">(</span><span class="kt">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Connection</span><span class="w"> </span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">SpaceCenter</span><span class="w"> </span><span class="p">().</span><span class="n">ActiveVessel</span><span class="p">;</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">Parts</span><span class="p">.</span><span class="n">Root</span><span class="p">;</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">stack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Stack</span><span class="o">&lt;</span><span class="n">Tuple</span><span class="o">&lt;</span><span class="n">Part</span><span class="p">,</span><span class="kt">int</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="p">();</span>
+<span class="w">            </span><span class="n">stack</span><span class="p">.</span><span class="n">Push</span><span class="w"> </span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">Tuple</span><span class="o">&lt;</span><span class="n">Part</span><span class="p">,</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">));</span>
+<span class="w">            </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">stack</span><span class="p">.</span><span class="n">Count</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="kt">var</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stack</span><span class="p">.</span><span class="n">Pop</span><span class="w"> </span><span class="p">();</span>
+<span class="w">                </span><span class="n">Part</span><span class="w"> </span><span class="n">part</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">item</span><span class="p">.</span><span class="n">Item1</span><span class="p">;</span>
+<span class="w">                </span><span class="kt">int</span><span class="w"> </span><span class="n">depth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">item</span><span class="p">.</span><span class="n">Item2</span><span class="p">;</span>
+<span class="w">                </span><span class="kt">string</span><span class="w"> </span><span class="n">attachMode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">part</span><span class="p">.</span><span class="n">AxiallyAttached</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s">"axial"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s">"radial"</span><span class="p">);</span>
+<span class="w">                </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="w"> </span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="p">(</span><span class="sc">' '</span><span class="p">,</span><span class="w"> </span><span class="n">depth</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">part</span><span class="p">.</span><span class="n">Title</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">" - "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">attachMode</span><span class="p">);</span>
+<span class="w">                </span><span class="k">foreach</span><span class="w"> </span><span class="p">(</span><span class="kt">var</span><span class="w"> </span><span class="n">child</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">part</span><span class="p">.</span><span class="n">Children</span><span class="p">)</span>
+<span class="w">                    </span><span class="n">stack</span><span class="p">.</span><span class="n">Push</span><span class="w"> </span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">Tuple</span><span class="o">&lt;</span><span class="n">Part</span><span class="p">,</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">child</span><span class="p">,</span><span class="w"> </span><span class="n">depth</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">));</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-1-1-2" class="sphinx-tabs-panel" hidden="true" id="panel-1-1-2" name="1-2" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc/services/space_center.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stack&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;utility&gt;</span>
+
+<span class="k">using</span><span class="w"> </span><span class="n">SpaceCenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">services</span><span class="o">::</span><span class="n">SpaceCenter</span><span class="p">;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">connect</span><span class="p">();</span>
+<span class="w">  </span><span class="n">SpaceCenter</span><span class="w"> </span><span class="n">sc</span><span class="p">(</span><span class="n">conn</span><span class="p">);</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sc</span><span class="p">.</span><span class="n">active_vessel</span><span class="p">().</span><span class="n">value</span><span class="p">();</span>
+
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">parts</span><span class="p">().</span><span class="n">root</span><span class="p">();</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">stack</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">SpaceCenter</span><span class="o">::</span><span class="n">Part</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">stack</span><span class="p">;</span>
+<span class="w">  </span><span class="n">stack</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">SpaceCenter</span><span class="o">::</span><span class="n">Part</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">));</span>
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">stack</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">part</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stack</span><span class="p">.</span><span class="n">top</span><span class="p">().</span><span class="n">first</span><span class="p">;</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">depth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stack</span><span class="p">.</span><span class="n">top</span><span class="p">().</span><span class="n">second</span><span class="p">;</span>
+<span class="w">    </span><span class="n">stack</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">attach_mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">part</span><span class="p">.</span><span class="n">axially_attached</span><span class="p">()</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s">"axial"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s">"radial"</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">depth</span><span class="p">,</span><span class="w"> </span><span class="sc">' '</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">part</span><span class="p">.</span><span class="n">title</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" - "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">attach_mode</span>
+<span class="w">              </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">children</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">part</span><span class="p">.</span><span class="n">children</span><span class="p">();</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">child</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">children</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">stack</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">SpaceCenter</span><span class="o">::</span><span class="n">Part</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">child</span><span class="p">,</span><span class="w"> </span><span class="n">depth</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">));</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-1-1-3" class="sphinx-tabs-panel" hidden="true" id="panel-1-1-3" name="1-3" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/space_center.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">krpc_connection_t</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_open_serial</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"COM0"</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"InfernalRobotics Example"</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_t</span><span class="w"> </span><span class="n">vessel</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_ActiveVessel</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">vessel</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Parts_t</span><span class="w"> </span><span class="n">parts</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_Parts</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">parts</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Part_t</span><span class="w"> </span><span class="n">root</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Parts_Root</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="n">parts</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">krpc_SpaceCenter_Part_t</span><span class="w"> </span><span class="n">part</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">depth</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="n">StackEntry</span><span class="p">;</span>
+<span class="w">  </span><span class="n">StackEntry</span><span class="w"> </span><span class="n">stack</span><span class="p">[</span><span class="mi">256</span><span class="p">];</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">stackPtr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="n">stack</span><span class="p">[</span><span class="n">stackPtr</span><span class="p">].</span><span class="n">part</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">root</span><span class="p">;</span>
+<span class="w">  </span><span class="n">stack</span><span class="p">[</span><span class="n">stackPtr</span><span class="p">].</span><span class="n">depth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">stackPtr</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">krpc_SpaceCenter_Part_t</span><span class="w"> </span><span class="n">part</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stack</span><span class="p">[</span><span class="n">stackPtr</span><span class="p">].</span><span class="n">part</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">depth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stack</span><span class="p">[</span><span class="n">stackPtr</span><span class="p">].</span><span class="n">depth</span><span class="p">;</span>
+<span class="w">    </span><span class="n">stackPtr</span><span class="o">--</span><span class="p">;</span><span class="w">  </span><span class="c1">// Pop the stack</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">axially_attached</span><span class="p">;</span>
+<span class="w">    </span><span class="n">krpc_SpaceCenter_Part_AxiallyAttached</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">axially_attached</span><span class="p">,</span><span class="w"> </span><span class="n">part</span><span class="p">);</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">attach_mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">axially_attached</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s">"axial"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s">"radial"</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+<span class="w">    </span><span class="n">krpc_SpaceCenter_Part_Title</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">title</span><span class="p">,</span><span class="w"> </span><span class="n">part</span><span class="p">);</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">depth</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="n">printf</span><span class="p">(</span><span class="s">" "</span><span class="p">);</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"%s - %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">title</span><span class="p">,</span><span class="w"> </span><span class="n">attach_mode</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">krpc_list_object_t</span><span class="w"> </span><span class="n">children</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">KRPC_NULL_LIST</span><span class="p">;</span>
+<span class="w">    </span><span class="n">krpc_SpaceCenter_Part_Children</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">children</span><span class="p">,</span><span class="w"> </span><span class="n">part</span><span class="p">);</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">children</span><span class="p">.</span><span class="n">size</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="c1">// Push onto the stack</span>
+<span class="w">      </span><span class="n">stackPtr</span><span class="o">++</span><span class="p">;</span>
+<span class="w">      </span><span class="n">stack</span><span class="p">[</span><span class="n">stackPtr</span><span class="p">].</span><span class="n">part</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">children</span><span class="p">.</span><span class="n">items</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="w">      </span><span class="n">stack</span><span class="p">[</span><span class="n">stackPtr</span><span class="p">].</span><span class="n">depth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">depth</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-1-1-4" class="sphinx-tabs-panel" hidden="true" id="panel-1-1-4" name="1-4" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter.Part</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter.Vessel</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.javatuples.Pair</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.util.ArrayDeque</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.util.Deque</span><span class="p">;</span>
+
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">AttachmentModes</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="na">newInstance</span><span class="p">();</span>
+<span class="w">        </span><span class="n">Vessel</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SpaceCenter</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">).</span><span class="na">getActiveVessel</span><span class="p">();</span>
+<span class="w">        </span><span class="n">Part</span><span class="w"> </span><span class="n">root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="na">getParts</span><span class="p">().</span><span class="na">getRoot</span><span class="p">();</span>
+<span class="w">        </span><span class="n">Deque</span><span class="o">&lt;</span><span class="n">Pair</span><span class="o">&lt;</span><span class="n">Part</span><span class="p">,</span><span class="w"> </span><span class="n">Integer</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">stack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ArrayDeque</span><span class="o">&lt;</span><span class="n">Pair</span><span class="o">&lt;</span><span class="n">Part</span><span class="p">,</span><span class="w"> </span><span class="n">Integer</span><span class="o">&gt;&gt;</span><span class="p">();</span>
+<span class="w">        </span><span class="n">stack</span><span class="p">.</span><span class="na">push</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">Pair</span><span class="o">&lt;</span><span class="n">Part</span><span class="p">,</span><span class="w"> </span><span class="n">Integer</span><span class="o">&gt;</span><span class="p">(</span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">));</span>
+<span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">stack</span><span class="p">.</span><span class="na">size</span><span class="p">()</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Pair</span><span class="o">&lt;</span><span class="n">Part</span><span class="p">,</span><span class="w"> </span><span class="n">Integer</span><span class="o">&gt;</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stack</span><span class="p">.</span><span class="na">pop</span><span class="p">();</span>
+<span class="w">            </span><span class="n">Part</span><span class="w"> </span><span class="n">part</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">item</span><span class="p">.</span><span class="na">getValue0</span><span class="p">();</span>
+<span class="w">            </span><span class="kt">int</span><span class="w"> </span><span class="n">depth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">item</span><span class="p">.</span><span class="na">getValue1</span><span class="p">();</span>
+<span class="w">            </span><span class="n">String</span><span class="w"> </span><span class="n">prefix</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">""</span><span class="p">;</span>
+<span class="w">            </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">depth</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">prefix</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s">" "</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="n">String</span><span class="w"> </span><span class="n">attachMode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">part</span><span class="p">.</span><span class="na">getAxiallyAttached</span><span class="p">()</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s">"axial"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s">"radial"</span><span class="p">;</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">prefix</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">part</span><span class="p">.</span><span class="na">getTitle</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">" - "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">attachMode</span><span class="p">);</span>
+<span class="w">            </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">Part</span><span class="w"> </span><span class="n">child</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">part</span><span class="p">.</span><span class="na">getChildren</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">stack</span><span class="p">.</span><span class="na">push</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">Pair</span><span class="o">&lt;</span><span class="n">Part</span><span class="p">,</span><span class="w"> </span><span class="n">Integer</span><span class="o">&gt;</span><span class="p">(</span><span class="n">child</span><span class="p">,</span><span class="w"> </span><span class="n">depth</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">));</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">connection</span><span class="p">.</span><span class="na">close</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-1-1-5" class="sphinx-tabs-panel" hidden="true" id="panel-1-1-5" name="1-5" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'krpc'</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">krpc</span><span class="p">.</span><span class="nf">connect</span><span class="p">()</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">space_center</span><span class="p">.</span><span class="py">active_vessel</span>
+
+<span class="kd">local</span><span class="w"> </span><span class="nv">root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">vessel</span><span class="p">.</span><span class="py">parts</span><span class="p">.</span><span class="py">root</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">stack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{{</span><span class="nv">root</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">}}</span>
+<span class="kr">while</span><span class="w"> </span><span class="o">#</span><span class="nv">stack</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="kr">do</span>
+<span class="w">  </span><span class="kd">local</span><span class="w"> </span><span class="nv">item</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">table.remove</span><span class="p">(</span><span class="nv">stack</span><span class="p">)</span>
+<span class="w">  </span><span class="kd">local</span><span class="w"> </span><span class="nv">part</span><span class="p">,</span><span class="nv">depth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">item</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="nv">item</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="w">  </span><span class="kd">local</span><span class="w"> </span><span class="nv">attach_mode</span>
+<span class="w">  </span><span class="kr">if</span><span class="w"> </span><span class="nv">part</span><span class="p">.</span><span class="py">axially_attached</span><span class="w"> </span><span class="kr">then</span>
+<span class="w">    </span><span class="nv">attach_mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'axial'</span>
+<span class="w">  </span><span class="kr">else</span><span class="w"> </span><span class="c1">-- radially_attached</span>
+<span class="w">    </span><span class="nv">attach_mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'radial'</span>
+<span class="w">  </span><span class="kr">end</span>
+<span class="w">  </span><span class="nb">print</span><span class="p">(</span><span class="nb">string.rep</span><span class="p">(</span><span class="s1">' '</span><span class="p">,</span><span class="w"> </span><span class="nv">depth</span><span class="p">)</span><span class="w"> </span><span class="o">..</span><span class="w"> </span><span class="nv">part</span><span class="p">.</span><span class="py">title</span><span class="w"> </span><span class="o">..</span><span class="w"> </span><span class="s1">' - '</span><span class="w"> </span><span class="o">..</span><span class="w"> </span><span class="nv">attach_mode</span><span class="p">)</span>
+<span class="w">  </span><span class="kr">for</span><span class="w"> </span><span class="nv">_</span><span class="p">,</span><span class="nv">child</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nb">ipairs</span><span class="p">(</span><span class="nv">part</span><span class="p">.</span><span class="py">children</span><span class="p">)</span><span class="w"> </span><span class="kr">do</span>
+<span class="w">    </span><span class="nb">table.insert</span><span class="p">(</span><span class="nv">stack</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nv">child</span><span class="p">,</span><span class="w"> </span><span class="nv">depth</span><span class="o">+</span><span class="mi">1</span><span class="p">})</span>
+<span class="w">  </span><span class="kr">end</span>
+<span class="kr">end</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-1-1-6" class="sphinx-tabs-panel" hidden="true" id="panel-1-1-6" name="1-6" role="tabpanel" tabindex="0"><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">connect</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">"@krpc-org/krpc"</span><span class="p">;</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">connect</span><span class="p">();</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">spaceCenter</span><span class="p">.</span><span class="nx">getActiveVessel</span><span class="p">();</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="p">(</span><span class="k">await</span><span class="w"> </span><span class="nx">vessel</span><span class="p">.</span><span class="nx">getParts</span><span class="p">()).</span><span class="nx">getRoot</span><span class="p">();</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">stack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nx">part</span><span class="o">:</span><span class="w"> </span><span class="nx">root</span><span class="p">,</span><span class="w"> </span><span class="nx">depth</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="w"> </span><span class="p">}];</span>
+<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nx">stack</span><span class="p">.</span><span class="nx">length</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">part</span><span class="p">,</span><span class="w"> </span><span class="nx">depth</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">stack</span><span class="p">.</span><span class="nx">pop</span><span class="p">();</span>
+<span class="w">  </span><span class="c1">// A part that is not axially attached is radially attached</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">attachMode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">await</span><span class="w"> </span><span class="nx">part</span><span class="p">.</span><span class="nx">getAxiallyAttached</span><span class="p">())</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s2">"axial"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">"radial"</span><span class="p">;</span>
+<span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">" "</span><span class="p">.</span><span class="nx">repeat</span><span class="p">(</span><span class="nx">depth</span><span class="p">),</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">part</span><span class="p">.</span><span class="nx">getTitle</span><span class="p">(),</span><span class="w"> </span><span class="s2">"-"</span><span class="p">,</span><span class="w"> </span><span class="nx">attachMode</span><span class="p">);</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">const</span><span class="w"> </span><span class="nx">child</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">part</span><span class="p">.</span><span class="nx">getChildren</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">stack</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span><span class="w"> </span><span class="nx">part</span><span class="o">:</span><span class="w"> </span><span class="nx">child</span><span class="p">,</span><span class="w"> </span><span class="nx">depth</span><span class="o">:</span><span class="w"> </span><span class="nx">depth</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">1</span><span class="w"> </span><span class="p">});</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></div>
+<p>For the example vessel, it prints:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Command Pod Mk1 - axial
+ TR-18A Stack Decoupler - axial
+  FL-T400 Fuel Tank - axial
+   LV-909 Liquid Fuel Engine - axial
+    TR-18A Stack Decoupler - axial
+     FL-T800 Fuel Tank - axial
+      LV-909 Liquid Fuel Engine - axial
+      TT-70 Radial Decoupler - radial
+       FL-T400 Fuel Tank - radial
+        TT18-A Launch Stability Enhancer - radial
+        FTX-2 External Fuel Duct - radial
+        LV-909 Liquid Fuel Engine - axial
+        Aerodynamic Nose Cone - axial
+      TT-70 Radial Decoupler - radial
+       FL-T400 Fuel Tank - radial
+        TT18-A Launch Stability Enhancer - radial
+        FTX-2 External Fuel Duct - radial
+        LV-909 Liquid Fuel Engine - axial
+        Aerodynamic Nose Cone - axial
+   LT-1 Landing Struts - radial
+   LT-1 Landing Struts - radial
+ Mk16 Parachute - axial
+</pre></div>
+</div>
+</section>
+<section id="fuel-lines">
+<span id="user-guide-parts-fuel-lines"></span><h2>Fuel Lines<a class="headerlink" href="#fuel-lines" title="Link to this heading">#</a></h2>
+<figure class="align-right" id="id3" style="width: 200px">
+<img alt="../_images/parts-fuel-lines-tree.png" src="../_images/parts-fuel-lines-tree.png" />
+<figcaption>
+<p><span class="caption-text"><strong>Figure 3</strong> – Part of the tree from Figure 2, with fuel line part 15.</span><a class="headerlink" href="#id3" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<figure class="align-right" id="id4" style="width: 200px">
+<img alt="../_images/parts-fuel-lines.png" src="../_images/parts-fuel-lines.png" />
+<figcaption>
+<p><span class="caption-text"><strong>Figure 4</strong> – The fuel lines of the example vessel. Fuel flows from the parts in green into
+the part in blue.</span><a class="headerlink" href="#id4" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<p>A fuel line is a part in the tree, as Figure 3 shows. Its parent is the part it takes fuel from.
+The part it feeds is not in the tree.</p>
+<p>In Figure 4, fuel line part 15 takes fuel from fuel tank part 11, in green, and feeds fuel tank
+part 9, in blue. The fuel line is a child of part 11, and nothing in the tree connects it to part 9.</p>
+<p><code class="docutils literal notranslate"><span class="pre">Part.FuelLinesTo</span></code> and <code class="docutils literal notranslate"><span class="pre">Part.FuelLinesFrom</span></code> give these connections. For fuel tank part 11,
+<code class="docutils literal notranslate"><span class="pre">Part.FuelLinesTo</span></code> returns a list holding fuel tank part 9. For fuel tank part 9,
+<code class="docutils literal notranslate"><span class="pre">Part.FuelLinesFrom</span></code> returns fuel tank parts 11 and 17, both in green.</p>
+<div class="clearer docutils container">
+</div>
+</section>
+<section id="staging">
+<span id="user-guide-parts-staging"></span><h2>Staging<a class="headerlink" href="#staging" title="Link to this heading">#</a></h2>
+<figure class="align-right" id="id5" style="width: 340px">
+<img alt="../_images/parts-staging.png" src="../_images/parts-staging.png" />
+<figcaption>
+<p><span class="caption-text"><strong>Figure 5</strong> – The example vessel with a staging sequence.</span><a class="headerlink" href="#id5" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<p>Each part has two stage numbers: the stage in which it is <em>activated</em>, from <code class="docutils literal notranslate"><span class="pre">Part.Stage</span></code>, and
+the stage in which it is <em>decoupled</em>, from <code class="docutils literal notranslate"><span class="pre">Part.DecoupleStage</span></code>. Both are -1 for a part that
+staging never activates or decouples.</p>
+<p>Figure 5 shows a staging sequence for the example vessel. Figure 6 shows the stage in which each
+part is activated, and Figure 7 the stage in which each part is decoupled.</p>
+<div class="clearer docutils container">
+</div>
+<figure class="align-left" id="id6" style="width: 250px">
+<img alt="../_images/parts-staging-activate.png" src="../_images/parts-staging-activate.png" />
+<figcaption>
+<p><span class="caption-text"><strong>Figure 6</strong> – The stage in which each part is <em>activated</em>.</span><a class="headerlink" href="#id6" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<figure class="align-right" id="id7" style="width: 250px">
+<img alt="../_images/parts-staging-decouple.png" src="../_images/parts-staging-decouple.png" />
+<figcaption>
+<p><span class="caption-text"><strong>Figure 7</strong> – The stage in which each part is <em>decoupled</em>.</span><a class="headerlink" href="#id7" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<div class="clearer docutils container">
+</div>
+<p>For totals per stage, such as delta-v, thrust and fuel, use <code class="docutils literal notranslate"><span class="pre">Vessel.Stages</span></code> and
+<code class="docutils literal notranslate"><span class="pre">Vessel.DecoupleStages</span></code>, which return a <code class="docutils literal notranslate"><span class="pre">Stage</span></code> for each stage.</p>
+</section>
+<section id="part-modules">
+<span id="user-guide-parts-modules"></span><h2>Part Modules<a class="headerlink" href="#part-modules" title="Link to this heading">#</a></h2>
+<p>A part’s behavior comes from its modules, such as <code class="docutils literal notranslate"><span class="pre">ModuleEngines</span></code> for an engine. kRPC wraps the
+common modules in classes like <code class="docutils literal notranslate"><span class="pre">Engine</span></code> and <code class="docutils literal notranslate"><span class="pre">SolarPanel</span></code>. Every module, including those of a
+mod, is also available directly, through <code class="docutils literal notranslate"><span class="pre">Part.Modules</span></code> or <code class="docutils literal notranslate"><span class="pre">Parts.ModulesWithName</span></code>. A module
+has three lists:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Module.FieldList</span></code>: the module’s fields, such as an engine’s thrust limiter. The right-click
+menu shows the fields whose <code class="docutils literal notranslate"><span class="pre">PartField.Visible</span></code> is true.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Module.EventList</span></code>: the module’s events, the buttons in the right-click menu. The menu shows
+the events whose <code class="docutils literal notranslate"><span class="pre">PartEvent.Visible</span></code> and <code class="docutils literal notranslate"><span class="pre">PartEvent.Active</span></code> are both true.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Module.ActionList</span></code>: the module’s actions, the ones an action group can hold.</p></li>
+</ul>
+<p>This example reads the engine fields the right-click menu shows, limits the thrust of each engine,
+and extends the solar panels:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Print the fields the right-click menu shows for each engine</span>
+<span class="k">for</span> <span class="n">module</span> <span class="ow">in</span> <span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">modules_with_name</span><span class="p">(</span><span class="s2">"ModuleEngines"</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">module</span><span class="o">.</span><span class="n">field_list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">visible</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">module</span><span class="o">.</span><span class="n">part</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">gui_name</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+<span class="c1"># Limit the thrust of each engine to half</span>
+<span class="k">for</span> <span class="n">module</span> <span class="ow">in</span> <span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">modules_with_name</span><span class="p">(</span><span class="s2">"ModuleEngines"</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">module</span><span class="o">.</span><span class="n">field_list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">"thrustPercentage"</span><span class="p">:</span>
+            <span class="n">field</span><span class="o">.</span><span class="n">float_value</span> <span class="o">=</span> <span class="mi">50</span>
+
+<span class="c1"># Extend the solar panels, as their Extend button does</span>
+<span class="k">for</span> <span class="n">module</span> <span class="ow">in</span> <span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">modules_with_name</span><span class="p">(</span><span class="s2">"ModuleDeployableSolarPanel"</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">module</span><span class="o">.</span><span class="n">event_list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">"Extend"</span> <span class="ow">and</span> <span class="n">event</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
+            <span class="n">event</span><span class="o">.</span><span class="n">trigger</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">PartField.Name</span></code>, <code class="docutils literal notranslate"><span class="pre">PartEvent.Name</span></code> and <code class="docutils literal notranslate"><span class="pre">PartAction.Name</span></code> are the identifiers in the module’s
+code, which stay the same across game versions and languages. The names the menu shows are
+<code class="docutils literal notranslate"><span class="pre">GuiName</span></code>, and they change with the game’s language.</p>
+<p><code class="docutils literal notranslate"><span class="pre">PartField.Type</span></code> gives the type of a field, and the matching property reads and sets it, such as
+<code class="docutils literal notranslate"><span class="pre">PartField.FloatValue</span></code>. <code class="docutils literal notranslate"><span class="pre">PartField.Value</span></code> reads any field as a string, and sets string fields
+only. Setting a field works as the right-click menu does, so the module reacts to the change, such
+as B9PartSwitch switching a part’s subtype. <code class="docutils literal notranslate"><span class="pre">PartField.Reset</span></code> restores the value the field had
+when the part was loaded.</p>
+<p><code class="docutils literal notranslate"><span class="pre">PartEvent.Trigger</span></code> clicks an event’s button, and <code class="docutils literal notranslate"><span class="pre">PartAction.Activated</span></code> triggers an action as
+its action group does. <code class="docutils literal notranslate"><span class="pre">Module.Config</span></code> gives the module’s configuration from the part’s
+configuration file, for values the module does not expose as fields.</p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../user-guide.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">User Guides</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="game-scenes-and-saves.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Game Scenes and Saves</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal" tabindex="-1"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#traversing-the-tree">Traversing the Tree</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#attachment-modes">Attachment Modes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fuel-lines">Fuel Lines</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#staging">Staging</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-modules">Part Modules</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/user-guide/parts.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2015-2026, kRPC Org.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.1.
+  </p>
+</div>
+      
+    </div>
+  
+  
+    <div class="footer-items__center">
+      
+        <div class="footer-item">
+<p class="build-info" data-build-info-url="../build-info.json"></p></div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

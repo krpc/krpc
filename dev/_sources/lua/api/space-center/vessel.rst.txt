@@ -210,7 +210,7 @@ Vessel
       :Attribute: Read-only, cannot be set
 
       .. note:: Lists activation stages only (``decouple`` is ``false``). See also
-                :rst:ref:`lua-api-parts-staging`.
+                :rst:ref:`user-guide-parts-staging`.
 
    .. method:: stage_at(stage: number): SpaceCenter.Stage
 

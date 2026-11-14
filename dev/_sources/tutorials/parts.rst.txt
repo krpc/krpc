@@ -4,65 +4,8 @@ Interacting with Parts
 ======================
 
 The following examples demonstrate use of the :ref:`python-api-parts` functionality to
-achieve various tasks. More details on specific topics can also be found in the
-API documentation:
-
-.. tabs::
-
-   .. tab:: Python
-
-      * :ref:`python-api-parts-trees-of-parts`
-      * :ref:`python-api-parts-attachment-modes`
-      * :ref:`python-api-parts-fuel-lines`
-      * :ref:`python-api-parts-staging`
-
-   .. tab:: C#
-
-      * :ref:`csharp-api-parts-trees-of-parts`
-      * :ref:`csharp-api-parts-attachment-modes`
-      * :ref:`csharp-api-parts-fuel-lines`
-      * :ref:`csharp-api-parts-staging`
-
-   .. tab:: C++
-
-      * :ref:`cpp-api-parts-trees-of-parts`
-      * :ref:`cpp-api-parts-attachment-modes`
-      * :ref:`cpp-api-parts-fuel-lines`
-      * :ref:`cpp-api-parts-staging`
-
-   .. tab:: C
-
-      * :ref:`cnano-api-parts-trees-of-parts`
-      * :ref:`cnano-api-parts-attachment-modes`
-      * :ref:`cnano-api-parts-fuel-lines`
-      * :ref:`cnano-api-parts-staging`
-
-   .. tab:: Java
-
-      * :ref:`java-api-parts-trees-of-parts`
-      * :ref:`java-api-parts-attachment-modes`
-      * :ref:`java-api-parts-fuel-lines`
-      * :ref:`java-api-parts-staging`
-
-   .. tab:: Lua
-
-      * :ref:`lua-api-parts-trees-of-parts`
-      * :ref:`lua-api-parts-attachment-modes`
-      * :ref:`lua-api-parts-fuel-lines`
-      * :ref:`lua-api-parts-staging`
-
-   .. tab:: JavaScript
-
-      * :ref:`js-api-parts-trees-of-parts`
-      * :ref:`js-api-parts-attachment-modes`
-      * :ref:`js-api-parts-fuel-lines`
-      * :ref:`js-api-parts-staging`
-
-.. note:: To interact with the fields, events and actions of a part module, use
-   :attr:`Module.field_list`, :attr:`Module.event_list` and
-   :attr:`Module.action_list`. These return :class:`PartField`,
-   :class:`PartEvent` and :class:`PartAction` objects that can be read, set and
-   triggered.
+achieve various tasks. The :ref:`parts guide <user-guide-parts>` explains the tree of
+parts, attachment modes, fuel lines, staging and part modules.
 
 Deploying all Parachutes
 ------------------------

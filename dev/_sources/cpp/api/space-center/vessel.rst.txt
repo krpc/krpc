@@ -224,7 +224,7 @@ Vessel
 
 
       .. note:: Lists activation stages only (``decouple`` is ``false``). See also
-                :rst:ref:`cpp-api-parts-staging`.
+                :rst:ref:`user-guide-parts-staging`.
 
    .. function:: Stage stage_at(int32_t stage)
 

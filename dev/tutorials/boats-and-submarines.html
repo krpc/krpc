@@ -44,7 +44,7 @@
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'user-guide/buoyancy';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/boats-and-submarines';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.24.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
@@ -55,12 +55,12 @@
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <script src="../_static/external-links.js?v=e8892020"></script>
     <script src="../_static/build-info.js?v=19ceb065"></script>
-    <link rel="canonical" href="https://krpc.github.io/krpc/dev/user-guide/buoyancy.html" />
+    <link rel="canonical" href="https://krpc.github.io/krpc/dev/tutorials/boats-and-submarines.html" />
     <link rel="icon" href="../_static/logo-mark.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Server Performance" href="server-performance.html" />
-    <link rel="prev" title="Server Side Functions" href="server-side-functions.html" />
+    <link rel="next" title="User Interface" href="user-interface.html" />
+    <link rel="prev" title="Docking Guidance" href="docking-guidance.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
@@ -160,15 +160,15 @@
 
 
 <li class="nav-item current active">
-  <a class="nav-link nav-internal" href="../user-guide.html">
-    User Guides
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../tutorials.html">
-    Tutorials
+  <a class="nav-link nav-internal" href="../user-guide.html">
+    User Guides
   </a>
 </li>
 
@@ -338,15 +338,15 @@
 
 
 <li class="nav-item current active">
-  <a class="nav-link nav-internal" href="../user-guide.html">
-    User Guides
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../tutorials.html">
-    Tutorials
+  <a class="nav-link nav-internal" href="../user-guide.html">
+    User Guides
   </a>
 </li>
 
@@ -471,13 +471,16 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="reference-frames.html">Reference Frames</a></li>
-<li class="toctree-l1"><a class="reference internal" href="object-lifetime.html">Object Lifetime</a></li>
-<li class="toctree-l1"><a class="reference internal" href="autopilot.html">AutoPilot</a></li>
-<li class="toctree-l1"><a class="reference internal" href="control-loops.html">Control Loops</a></li>
-<li class="toctree-l1"><a class="reference internal" href="server-side-functions.html">Server Side Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="suborbital-flight.html">Sub-Orbital Flight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="launch-into-orbit.html">Launch into Orbit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pitch-heading-roll.html">Pitch, Heading and Roll</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parts.html">Interacting with Parts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docking-guidance.html">Docking Guidance</a></li>
 <li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#">Boats and Submarines</a></li>
-<li class="toctree-l1"><a class="reference internal" href="server-performance.html">Server Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-interface.html">User Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="drawing.html">Drawing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="raster-prop-monitor.html">Raster Prop Monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="control-panel.html">Web Browser Control Panel</a></li>
 </ul>
 </div>
 </nav></div>
@@ -519,7 +522,7 @@
       </a>
     </li>
     
-    <li class="breadcrumb-item"><a href="../user-guide.html" class="nav-link">User Guides</a></li>
+    <li class="breadcrumb-item"><a href="../tutorials.html" class="nav-link">Tutorials</a></li>
     
     <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Boats and Submarines</span></li>
   </ul>
@@ -620,7 +623,7 @@ settings, a part is destroyed when its pressure exceeds <a class="reference inte
 </pre></div>
 </div>
 <p>The loop reads the parts with separate calls, which can land in different physics ticks. A
-<a class="reference internal" href="server-side-functions.html#server-side-functions"><span class="std std-ref">server side function</span></a> reads every part in the same tick,
+<a class="reference internal" href="../user-guide/server-side-functions.html#server-side-functions"><span class="std std-ref">server side function</span></a> reads every part in the same tick,
 with a single call:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">over_limit</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
     <span class="k">lambda</span><span class="p">:</span> <span class="p">[</span>
@@ -693,20 +696,20 @@ sits from its center of mass:</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="server-side-functions.html"
+       href="docking-guidance.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Server Side Functions</p>
+        <p class="prev-next-title">Docking Guidance</p>
       </div>
     </a>
     <a class="right-next"
-       href="server-performance.html"
+       href="user-interface.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Server Performance</p>
+        <p class="prev-next-title">User Interface</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -740,7 +743,7 @@ sits from its center of mass:</p>
   <div class="sidebar-secondary-item">
 
   <div class="tocsection sourcelink">
-    <a href="../_sources/user-guide/buoyancy.rst.txt">
+    <a href="../_sources/tutorials/boats-and-submarines.rst.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>

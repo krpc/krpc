@@ -228,7 +228,7 @@ Vessel
 
 
       .. note:: Lists activation stages only (``decouple`` is ``false``). See also
-                :rst:ref:`cnano-api-parts-staging`.
+                :rst:ref:`user-guide-parts-staging`.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Vessel_StageAt(krpc_connection_t connection, krpc_SpaceCenter_Stage_t * returnValue, krpc_SpaceCenter_Vessel_t instance, int32_t stage)
 

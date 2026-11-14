@@ -25,7 +25,8 @@ A reference frame specifies:
 * the linear velocity of the origin (if the reference frame moves)
 * The angular velocity of the coordinate axes (the speed and direction of rotation of the axes)
 
-.. note:: KSP and kRPC use a left handed coordinate system
+.. note:: KSP and kRPC use a left-handed coordinate system. :ref:`user-guide-handedness`
+   explains what this means for directions and rotations.
 
 Origin Position and Axis Orientation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

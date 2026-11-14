@@ -59,8 +59,8 @@
     <link rel="icon" href="_static/logo-mark.svg"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Reference Frames" href="user-guide/reference-frames.html" />
-    <link rel="prev" title="Getting Started" href="getting-started.html" />
+    <link rel="next" title="Parts" href="user-guide/parts.html" />
+    <link rel="prev" title="Web Browser Control Panel" href="tutorials/control-panel.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
@@ -159,16 +159,16 @@
 </li>
 
 
-<li class="nav-item current active">
-  <a class="nav-link nav-internal" href="#" aria-current="page">
-    User Guides
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="tutorials.html">
+    Tutorials
   </a>
 </li>
 
 
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="tutorials.html">
-    Tutorials
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="#" aria-current="page">
+    User Guides
   </a>
 </li>
 
@@ -337,16 +337,16 @@
 </li>
 
 
-<li class="nav-item current active">
-  <a class="nav-link nav-internal" href="#" aria-current="page">
-    User Guides
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="tutorials.html">
+    Tutorials
   </a>
 </li>
 
 
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="tutorials.html">
-    Tutorials
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="#" aria-current="page">
+    User Guides
   </a>
 </li>
 
@@ -471,12 +471,22 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="user-guide/parts.html">Parts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/game-scenes-and-saves.html">Game Scenes and Saves</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/time-warp.html">Time Warp</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="user-guide/vectors-and-rotations.html">Vectors and Rotations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-guide/reference-frames.html">Reference Frames</a></li>
-<li class="toctree-l1"><a class="reference internal" href="user-guide/object-lifetime.html">Object Lifetime</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="user-guide/autopilot.html">AutoPilot</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-guide/control-loops.html">Control Loops</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="user-guide/streams-and-events.html">Streams and Events</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/object-lifetime.html">Object Lifetime</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-guide/server-side-functions.html">Server Side Functions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="user-guide/buoyancy.html">Boats and Submarines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-guide/server-performance.html">Server Performance</a></li>
 </ul>
 </div>
@@ -538,17 +548,53 @@
   <section id="user-guides">
 <h1>User Guides<a class="headerlink" href="#user-guides" title="Link to this heading">#</a></h1>
 <p>These guides describe how kRPC and the game behave, independent of the client language.</p>
+<section id="the-game">
+<h2>The Game<a class="headerlink" href="#the-game" title="Link to this heading">#</a></h2>
+<p>How a vessel is built, how the game is organized into scenes and saves, and how time passes.</p>
 <div class="toctree-wrapper compound">
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/parts.html">Parts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/game-scenes-and-saves.html">Game Scenes and Saves</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/time-warp.html">Time Warp</a></li>
+</ul>
+</div>
+</section>
+<section id="positions-and-directions">
+<h2>Positions and Directions<a class="headerlink" href="#positions-and-directions" title="Link to this heading">#</a></h2>
+<p>How kRPC represents positions, directions and rotations, and the reference frames they are given
+in.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/vectors-and-rotations.html">Vectors and Rotations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-guide/reference-frames.html">Reference Frames</a></li>
-<li class="toctree-l1"><a class="reference internal" href="user-guide/object-lifetime.html">Object Lifetime</a></li>
+</ul>
+</div>
+</section>
+<section id="flying">
+<h2>Flying<a class="headerlink" href="#flying" title="Link to this heading">#</a></h2>
+<p>How to steer a vessel with the auto-pilot, and how to write a control loop that acts on every
+physics tick.</p>
+<div class="toctree-wrapper compound">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="user-guide/autopilot.html">AutoPilot</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-guide/control-loops.html">Control Loops</a></li>
+</ul>
+</div>
+</section>
+<section id="the-server">
+<h2>The Server<a class="headerlink" href="#the-server" title="Link to this heading">#</a></h2>
+<p>How the server runs your calls: streams and events, the lifetime of the objects it returns,
+functions that run inside the game, and the settings that trade call throughput against the game’s
+frame rate.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/streams-and-events.html">Streams and Events</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/object-lifetime.html">Object Lifetime</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-guide/server-side-functions.html">Server Side Functions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="user-guide/buoyancy.html">Boats and Submarines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-guide/server-performance.html">Server Performance</a></li>
 </ul>
 </div>
+</section>
 </section>
 
 
@@ -562,20 +608,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="getting-started.html"
+       href="tutorials/control-panel.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Getting Started</p>
+        <p class="prev-next-title">Web Browser Control Panel</p>
       </div>
     </a>
     <a class="right-next"
-       href="user-guide/reference-frames.html"
+       href="user-guide/parts.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Reference Frames</p>
+        <p class="prev-next-title">Parts</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -589,6 +635,21 @@
                 <dialog id="pst-secondary-sidebar-modal" tabindex="-1"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-game">The Game</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#positions-and-directions">Positions and Directions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flying">Flying</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-server">The Server</a></li>
+</ul>
+  </nav></div>
 
   <div class="sidebar-secondary-item">
 

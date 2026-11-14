@@ -253,7 +253,7 @@ Vessel
 
 
       .. note:: Lists activation stages only (``decouple`` is ``false``). See also
-                :rst:ref:`python-api-parts-staging`.
+                :rst:ref:`user-guide-parts-staging`.
 
    .. method:: stage_at(stage)
 

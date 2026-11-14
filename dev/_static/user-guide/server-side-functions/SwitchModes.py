@@ -5,6 +5,7 @@ vessel = conn.space_center.active_vessel
 
 
 # [docs]
+@conn.compile
 def switch_modes() -> str:
     try:
         for engine in vessel.parts.engines:
