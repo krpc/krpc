@@ -38,6 +38,19 @@ lambda holding a reference inside a collection or tuple asks the server for its 
 Connections carried by the lambda's objects, its services, a static method's argument and a
 ``Bound`` object are not used or checked.
 
+Call Templates
+--------------
+
+``GetCallTemplate`` takes a lambda over a parameter of the class, such as
+``(Engine x) => x.HasFuel``, and reads the stub's ``RPCAttribute`` without evaluating it. The member
+must be read or called on the lambda's parameter. A member of a service and a static method take a
+lambda with no parameter, such as ``() => connection.SpaceCenter ().UT``, and a member of an object
+is an error there.
+
+A setter is named by its property, as ``GetSetCallTemplate<Engine> (nameof (Engine.Throttle))``.
+An expression tree cannot assign, and cannot read a property with no getter, such as
+``Part.Glow``. The stub's property carries the setter's procedure in an ``RPCSetterAttribute``.
+
 Ownership
 ---------
 

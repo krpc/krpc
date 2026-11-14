@@ -293,6 +293,43 @@ In Python, C#, Java and JavaScript, the stream runs on the connection the method
 whichever connection the object came from. In C++, it runs on the object's client, or for a
 static method the client passed to it.
 
+Call Templates
+--------------
+
+A call template names a procedure through its class or service, with no instance and no
+arguments. ``Expression.CallWithArguments`` supplies every argument, so a function over the
+elements of a collection needs no element to build its call from. A template is built on the
+client, with no remote procedure call.
+
+Each client takes the form of its procedure call, with the class in place of the object, except
+JavaScript, whose design page gives the reason. A client
+without a lookup at run time generates a function per member, as for the procedure call. For the
+``HasFuel`` property of an ``Engine``:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Client
+     - Call template
+   * - Python
+     - ``conn.get_call_template(getattr, Engine, "has_fuel")``
+   * - C#
+     - ``Connection.GetCallTemplate ((Engine x) => x.HasFuel)``
+   * - C++
+     - ``Engine::has_fuel_call_template()``
+   * - C-nano
+     - ``krpc_SpaceCenter_Engine_HasFuel_call_template(&call)``
+   * - Java
+     - ``connection.getCallTemplate(Engine.class, "getHasFuel")``
+   * - Lua
+     - ``conn:get_call_template(Engine.get_has_fuel)``
+   * - JavaScript
+     - ``conn.getCallTemplate(Engine.prototype.getHasFuel)``
+
+A setter takes the same form in each client, except C#, whose design page gives the reason. A
+template is a separate function from the procedure call. A static method has no object to leave
+out, so a procedure call with its arguments missing could not be told from a template.
+
 Static Methods
 --------------
 

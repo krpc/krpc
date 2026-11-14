@@ -105,6 +105,7 @@ export interface Service extends RemoteService<"KRPC"> {
    */
   readonly Expression: {
     [Symbol.hasInstance](value: unknown): value is Expression;
+    readonly prototype: Expression;
     /**
      * Numerical addition.
      *
@@ -1426,6 +1427,7 @@ export interface Service extends RemoteService<"KRPC"> {
   /** The type of a value a procedure takes or returns. */
   readonly Type: {
     [Symbol.hasInstance](value: unknown): value is Type;
+    readonly prototype: Type;
     /** A boolean type. */
     bool(): Promise<Type>;
     /** A byte sequence type. */

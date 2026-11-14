@@ -844,6 +844,7 @@ Client API Reference
       The call template of a property's setter, on a class or on a service's ``Service`` class,
       named as ``nameof (Engine.Throttle)``. Throws an :type:`System.ArgumentException` if the
       property has no setter that is a remote procedure.
+      :ref:`server-side-functions-collections` uses a call template.
 
 .. class:: RemoteObject
 

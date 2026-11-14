@@ -223,9 +223,9 @@ altitude and speed together:
 :meth:`~KRPC.Expression.call` to embed in the function. A property is read through its getter,
 such as ``flight.get_speed``, with the object as the first argument.
 :meth:`~krpc.Connection.get_call_template` names a procedure through its class, with no object or
-arguments, for :meth:`~KRPC.Expression.call_with_arguments` to supply each argument.
-:ref:`server-side-functions-api` in the :ref:`server side functions guide
-<server-side-functions>` describes how to build functions.
+arguments, for :meth:`~KRPC.Expression.call_with_arguments` to supply each argument, as in
+:ref:`server-side-functions-collections`. :ref:`server-side-functions-api` in the
+:ref:`server side functions guide <server-side-functions>` describes how to build functions.
 
 Running a Function
 ^^^^^^^^^^^^^^^^^^

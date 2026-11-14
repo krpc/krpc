@@ -338,7 +338,10 @@ and the client sends it to the server. The following reads the vessel's altitude
 .. literalinclude:: /scripts/java/RunFunction.java
 
 :meth:`~Connection.getCall` turns a call into a message, and the static methods of
-:type:`~krpc.client.services.KRPC.Expression` build the function from it. :std:ref:`The Expression
+:type:`~krpc.client.services.KRPC.Expression` build the function from it.
+:meth:`~Connection.getCallTemplate` names a procedure through its class, with no object or
+arguments, for ``Expression.callWithArguments`` to supply each argument, as in
+:std:ref:`server-side-functions-collections`. :std:ref:`The Expression
 API <server-side-functions-api>` in the server side functions guide describes these methods, and
 shows how to build larger functions.
 

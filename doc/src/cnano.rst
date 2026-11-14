@@ -409,7 +409,8 @@ Each procedure has a function with ``_call`` added to its name, such as
 arguments on the heap, so free it with :func:`krpc_free_procedure_call`. A function with
 ``_call_template`` added to the name, such as ``krpc_SpaceCenter_Engine_HasFuel_call_template``,
 fills in the call template. It names the procedure and carries no arguments, for
-:func:`krpc_KRPC_Expression_CallWithArguments` to supply each one.
+:func:`krpc_KRPC_Expression_CallWithArguments` to supply each one, as in
+:ref:`server-side-functions-collections`.
 :ref:`server-side-functions-api` in the :ref:`server side functions guide
 <server-side-functions>` describes how to build functions.
 

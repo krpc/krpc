@@ -1015,11 +1015,13 @@ Some clients take the type of the stream's values as a type argument, and others
 function's return type from the server. A function stream behaves like any other stream, and its
 rate can be limited in the usual way.
 
+.. _server-side-functions-collections:
+
 Functions and Collections
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This builds the "any engine out of fuel" event from earlier. The call message only identifies
-the procedure, so any engine can supply it:
+This builds the "any engine out of fuel" event from earlier. The call names the procedure through
+the ``Engine`` class, with no engine:
 
 .. tabs::
 
@@ -1064,9 +1066,14 @@ To call an RPC on each element, take the call's instance from the function's par
 expressions. Each expression is keyed by the position of its parameter, and position 0 is the
 instance.
 
-A position without an expression takes the value encoded in the call message, then the
-parameter's default. :meth:`Expression.invoke` calls a function directly, binding values to its
-parameters by name.
+The call is a **call template**, which names the procedure through its class and carries no
+arguments. The examples build it from ``Engine``, with no engine. A position without an
+expression takes the parameter's default.
+
+A call message built from an instance can stand in for the template. An expression then takes the
+place of the encoded argument at its position, and a position without one takes the encoded
+value. :meth:`Expression.invoke` calls a function directly, binding values to its parameters by
+name.
 
 A function from :meth:`Expression.lambda_` can also be run on its own. ``Run`` passes its arguments
 to the function's parameters in order, and :attr:`Expression.parameter_types` gives their types.

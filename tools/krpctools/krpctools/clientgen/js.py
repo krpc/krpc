@@ -110,7 +110,8 @@ class JsGenerator(Generator[JsLanguage]):
         for info in context["properties"].values():
             members.extend(self._property(info))
         for name, info in context["classes"].items():
-            static = []
+            # The prototype holds the methods, for Connection.getCallTemplate
+            static = [["readonly prototype: %s;" % name]]
             for method_name, method in info["static_methods"].items():
                 static.append(
                     self._member(

@@ -418,7 +418,8 @@ returns the call as a message, for :func:`~krpc::services::KRPC::Expression::cal
 function. A static function with ``_call_template`` added to the name, such as
 ``Engine::has_fuel_call_template()``, returns the call template. It names the procedure and
 carries no arguments, for :func:`~krpc::services::KRPC::Expression::call_with_arguments` to
-supply each one. :ref:`server-side-functions-api` in the :ref:`server side functions guide
+supply each one, as in :ref:`server-side-functions-collections`.
+:ref:`server-side-functions-api` in the :ref:`server side functions guide
 <server-side-functions>` describes how to build functions.
 
 :func:`~krpc::run`, :func:`~krpc::compile`, :func:`~krpc::add_stream` and :func:`~krpc::add_event`
