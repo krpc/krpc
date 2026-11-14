@@ -1019,7 +1019,7 @@ Client API Reference
 
    The interface :type:`~KRPC.Client.Connection` implements, which the service stubs call.
 
-API Reference
--------------
+Service API Reference
+---------------------
 
 .. include:: csharp/api.inc

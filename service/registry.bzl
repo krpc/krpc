@@ -35,7 +35,8 @@ def service(name, id, title, description, doc, deps = [], mods = [], supports = 
 # The services of the core, which a service can name in its deps
 CORE_SERVICES = ["KRPC", "StdLib"]
 
-# The services, in the order the clients, the docs and the changelog list them
+# The services, in the order the clients, the docs and the changelog list them: the stock
+# services, then the mod services by name
 SERVICES = [
     service(
         name = "SpaceCenter",
@@ -78,6 +79,23 @@ SERVICES = [
         deps = ["SpaceCenter", "StdLib"],
     ),
     service(
+        name = "Debug",
+        id = 12,
+        title = "Debug",
+        description = "Debug and cheat API for kRPC",
+        doc = "debug",
+        deps = ["SpaceCenter"],
+    ),
+    service(
+        name = "DockingCamera",
+        id = 11,
+        title = "DockingCamera",
+        description = "DockingCamera API for kRPC",
+        doc = "docking-camera",
+        deps = ["SpaceCenter", "StdLib"],
+        mods = ["DockingCamera"],
+    ),
+    service(
         name = "InfernalRobotics",
         id = 4,
         title = "InfernalRobotics",
@@ -96,13 +114,13 @@ SERVICES = [
         mods = ["KerbalAlarmClock"],
     ),
     service(
-        name = "RemoteTech",
-        id = 6,
-        title = "RemoteTech",
-        description = "RemoteTech API for kRPC",
-        doc = "remote-tech",
+        name = "KerbalEngineerRedux",
+        id = 15,
+        title = "Kerbal Engineer Redux",
+        description = "Kerbal Engineer Redux API for kRPC",
+        doc = "kerbal-engineer-redux",
         deps = ["SpaceCenter"],
-        mods = ["RemoteTech"],
+        mods = ["KerbalEngineerRedux"],
     ),
     service(
         name = "LIDAR",
@@ -115,24 +133,6 @@ SERVICES = [
         package = "LiDAR",
     ),
     service(
-        name = "DockingCamera",
-        id = 11,
-        title = "DockingCamera",
-        description = "DockingCamera API for kRPC",
-        doc = "docking-camera",
-        deps = ["SpaceCenter", "StdLib"],
-        mods = ["DockingCamera"],
-    ),
-    service(
-        name = "Trajectories",
-        id = 13,
-        title = "Trajectories",
-        description = "Trajectories API for kRPC",
-        doc = "trajectories",
-        deps = ["SpaceCenter"],
-        mods = ["Trajectories"],
-    ),
-    service(
         name = "MechJeb",
         id = 14,
         title = "MechJeb",
@@ -140,24 +140,6 @@ SERVICES = [
         doc = "mechjeb",
         deps = ["SpaceCenter"],
         mods = ["MechJeb"],
-    ),
-    service(
-        name = "KerbalEngineerRedux",
-        id = 15,
-        title = "Kerbal Engineer Redux",
-        description = "Kerbal Engineer Redux API for kRPC",
-        doc = "kerbal-engineer-redux",
-        deps = ["SpaceCenter"],
-        mods = ["KerbalEngineerRedux"],
-    ),
-    service(
-        name = "ScanSat",
-        id = 16,
-        title = "SCANsat",
-        description = "SCANsat API for kRPC",
-        doc = "scansat",
-        deps = ["SpaceCenter", "StdLib"],
-        mods = ["SCANsat"],
     ),
     service(
         name = "RasterPropMonitor",
@@ -169,12 +151,31 @@ SERVICES = [
         mods = ["RasterPropMonitor"],
     ),
     service(
-        name = "Debug",
-        id = 12,
-        title = "Debug",
-        description = "Debug and cheat API for kRPC",
-        doc = "debug",
+        name = "RemoteTech",
+        id = 6,
+        title = "RemoteTech",
+        description = "RemoteTech API for kRPC",
+        doc = "remote-tech",
         deps = ["SpaceCenter"],
+        mods = ["RemoteTech"],
+    ),
+    service(
+        name = "ScanSat",
+        id = 16,
+        title = "SCANsat",
+        description = "SCANsat API for kRPC",
+        doc = "scansat",
+        deps = ["SpaceCenter", "StdLib"],
+        mods = ["SCANsat"],
+    ),
+    service(
+        name = "Trajectories",
+        id = 13,
+        title = "Trajectories",
+        description = "Trajectories API for kRPC",
+        doc = "trajectories",
+        deps = ["SpaceCenter"],
+        mods = ["Trajectories"],
     ),
 ]
 

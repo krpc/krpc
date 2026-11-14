@@ -1133,7 +1133,7 @@ The minimum of an unsigned type is ``0``, so it has no constant.
 
    The largest 64-bit unsigned integer.
 
-API Reference
--------------
+Service API Reference
+---------------------
 
 .. include:: python/api.inc
