@@ -440,6 +440,32 @@ class KRPC : public ::krpc::RemoteService {
 
   ::krpc::schema::ProcedureCall set_paused_call(bool value);
 
+  static ::krpc::schema::ProcedureCall get_client_id_call_template();
+
+  static ::krpc::schema::ProcedureCall get_client_name_call_template();
+
+  static ::krpc::schema::ProcedureCall get_services_call_template();
+
+  static ::krpc::schema::ProcedureCall get_status_call_template();
+
+  static ::krpc::schema::ProcedureCall hold_tick_call_template();
+
+  static ::krpc::schema::ProcedureCall next_tick_call_template();
+
+  static ::krpc::schema::ProcedureCall release_tick_call_template();
+
+  static ::krpc::schema::ProcedureCall clients_call_template();
+
+  static ::krpc::schema::ProcedureCall game_scene_call_template();
+
+  static ::krpc::schema::ProcedureCall set_game_scene_call_template();
+
+  static ::krpc::schema::ProcedureCall game_state_loads_call_template();
+
+  static ::krpc::schema::ProcedureCall paused_call_template();
+
+  static ::krpc::schema::ProcedureCall set_paused_call_template();
+
   /**
    * A server side expression.
    *
@@ -2288,6 +2314,274 @@ class KRPC : public ::krpc::RemoteService {
 
     ::krpc::schema::ProcedureCall return_type_call();
 
+    static ::krpc::schema::ProcedureCall add_call_template();
+
+    static ::krpc::schema::ProcedureCall aggregate_call_template();
+
+    static ::krpc::schema::ProcedureCall aggregate_with_seed_call_template();
+
+    static ::krpc::schema::ProcedureCall all_call_template();
+
+    static ::krpc::schema::ProcedureCall and__call_template();
+
+    static ::krpc::schema::ProcedureCall any_call_template();
+
+    static ::krpc::schema::ProcedureCall append_call_template();
+
+    static ::krpc::schema::ProcedureCall assign_call_template();
+
+    static ::krpc::schema::ProcedureCall average_call_template();
+
+    static ::krpc::schema::ProcedureCall block_call_template();
+
+    static ::krpc::schema::ProcedureCall block_with_variables_call_template();
+
+    static ::krpc::schema::ProcedureCall break__call_template();
+
+    static ::krpc::schema::ProcedureCall build_dictionary_call_template();
+
+    static ::krpc::schema::ProcedureCall call_call_template();
+
+    static ::krpc::schema::ProcedureCall call_with_arguments_call_template();
+
+    static ::krpc::schema::ProcedureCall cast_call_template();
+
+    static ::krpc::schema::ProcedureCall clear_call_template();
+
+    static ::krpc::schema::ProcedureCall concat_call_template();
+
+    static ::krpc::schema::ProcedureCall conditional_call_template();
+
+    static ::krpc::schema::ProcedureCall conditional_and_call_template();
+
+    static ::krpc::schema::ProcedureCall conditional_or_call_template();
+
+    static ::krpc::schema::ProcedureCall constant_bool_call_template();
+
+    static ::krpc::schema::ProcedureCall constant_bytes_call_template();
+
+    static ::krpc::schema::ProcedureCall constant_double_call_template();
+
+    static ::krpc::schema::ProcedureCall constant_enum_call_template();
+
+    static ::krpc::schema::ProcedureCall constant_enum_by_id_call_template();
+
+    static ::krpc::schema::ProcedureCall constant_float_call_template();
+
+    static ::krpc::schema::ProcedureCall constant_int_call_template();
+
+    static ::krpc::schema::ProcedureCall constant_long_call_template();
+
+    static ::krpc::schema::ProcedureCall constant_null_call_template();
+
+    static ::krpc::schema::ProcedureCall constant_object_call_template();
+
+    static ::krpc::schema::ProcedureCall constant_string_call_template();
+
+    static ::krpc::schema::ProcedureCall constant_uint_call_template();
+
+    static ::krpc::schema::ProcedureCall constant_ulong_call_template();
+
+    static ::krpc::schema::ProcedureCall contains_call_template();
+
+    static ::krpc::schema::ProcedureCall contains_key_call_template();
+
+    static ::krpc::schema::ProcedureCall continue__call_template();
+
+    static ::krpc::schema::ProcedureCall convert_to_string_call_template();
+
+    static ::krpc::schema::ProcedureCall count_call_template();
+
+    static ::krpc::schema::ProcedureCall create_dictionary_call_template();
+
+    static ::krpc::schema::ProcedureCall create_empty_dictionary_call_template();
+
+    static ::krpc::schema::ProcedureCall create_empty_list_call_template();
+
+    static ::krpc::schema::ProcedureCall create_empty_set_call_template();
+
+    static ::krpc::schema::ProcedureCall create_list_call_template();
+
+    static ::krpc::schema::ProcedureCall create_set_call_template();
+
+    static ::krpc::schema::ProcedureCall create_struct_call_template();
+
+    static ::krpc::schema::ProcedureCall create_tuple_call_template();
+
+    static ::krpc::schema::ProcedureCall dictionary_keys_call_template();
+
+    static ::krpc::schema::ProcedureCall dictionary_values_call_template();
+
+    static ::krpc::schema::ProcedureCall distinct_call_template();
+
+    static ::krpc::schema::ProcedureCall divide_call_template();
+
+    static ::krpc::schema::ProcedureCall element_at_call_template();
+
+    static ::krpc::schema::ProcedureCall equal_call_template();
+
+    static ::krpc::schema::ProcedureCall except_call_template();
+
+    static ::krpc::schema::ProcedureCall exclusive_or_call_template();
+
+    static ::krpc::schema::ProcedureCall first_call_template();
+
+    static ::krpc::schema::ProcedureCall for_each_call_template();
+
+    static ::krpc::schema::ProcedureCall get_call_template();
+
+    static ::krpc::schema::ProcedureCall get_field_call_template();
+
+    static ::krpc::schema::ProcedureCall get_field_by_index_call_template();
+
+    static ::krpc::schema::ProcedureCall greater_than_call_template();
+
+    static ::krpc::schema::ProcedureCall greater_than_or_equal_call_template();
+
+    static ::krpc::schema::ProcedureCall group_by_call_template();
+
+    static ::krpc::schema::ProcedureCall if_then_call_template();
+
+    static ::krpc::schema::ProcedureCall if_then_else_call_template();
+
+    static ::krpc::schema::ProcedureCall intersect_call_template();
+
+    static ::krpc::schema::ProcedureCall invoke_call_template();
+
+    static ::krpc::schema::ProcedureCall is_null_call_template();
+
+    static ::krpc::schema::ProcedureCall lambda_call_template();
+
+    static ::krpc::schema::ProcedureCall last_call_template();
+
+    static ::krpc::schema::ProcedureCall left_shift_call_template();
+
+    static ::krpc::schema::ProcedureCall less_than_call_template();
+
+    static ::krpc::schema::ProcedureCall less_than_or_equal_call_template();
+
+    static ::krpc::schema::ProcedureCall match_call_template();
+
+    static ::krpc::schema::ProcedureCall max_call_template();
+
+    static ::krpc::schema::ProcedureCall max_by_call_template();
+
+    static ::krpc::schema::ProcedureCall min_call_template();
+
+    static ::krpc::schema::ProcedureCall min_by_call_template();
+
+    static ::krpc::schema::ProcedureCall modulo_call_template();
+
+    static ::krpc::schema::ProcedureCall multiply_call_template();
+
+    static ::krpc::schema::ProcedureCall negate_call_template();
+
+    static ::krpc::schema::ProcedureCall not__call_template();
+
+    static ::krpc::schema::ProcedureCall not_equal_call_template();
+
+    static ::krpc::schema::ProcedureCall or__call_template();
+
+    static ::krpc::schema::ProcedureCall order_by_call_template();
+
+    static ::krpc::schema::ProcedureCall parameter_call_template();
+
+    static ::krpc::schema::ProcedureCall power_call_template();
+
+    static ::krpc::schema::ProcedureCall remove_call_template();
+
+    static ::krpc::schema::ProcedureCall remove_at_call_template();
+
+    static ::krpc::schema::ProcedureCall return__call_template();
+
+    static ::krpc::schema::ProcedureCall return_nothing_call_template();
+
+    static ::krpc::schema::ProcedureCall reverse_call_template();
+
+    static ::krpc::schema::ProcedureCall right_shift_call_template();
+
+    static ::krpc::schema::ProcedureCall select_call_template();
+
+    static ::krpc::schema::ProcedureCall select_many_call_template();
+
+    static ::krpc::schema::ProcedureCall set_call_template();
+
+    static ::krpc::schema::ProcedureCall skip_call_template();
+
+    static ::krpc::schema::ProcedureCall state_variable_call_template();
+
+    static ::krpc::schema::ProcedureCall string_concat_call_template();
+
+    static ::krpc::schema::ProcedureCall string_contains_call_template();
+
+    static ::krpc::schema::ProcedureCall string_ends_with_call_template();
+
+    static ::krpc::schema::ProcedureCall string_get_call_template();
+
+    static ::krpc::schema::ProcedureCall string_index_of_call_template();
+
+    static ::krpc::schema::ProcedureCall string_join_call_template();
+
+    static ::krpc::schema::ProcedureCall string_length_call_template();
+
+    static ::krpc::schema::ProcedureCall string_replace_call_template();
+
+    static ::krpc::schema::ProcedureCall string_split_call_template();
+
+    static ::krpc::schema::ProcedureCall string_starts_with_call_template();
+
+    static ::krpc::schema::ProcedureCall string_substring_call_template();
+
+    static ::krpc::schema::ProcedureCall string_to_lower_call_template();
+
+    static ::krpc::schema::ProcedureCall string_to_upper_call_template();
+
+    static ::krpc::schema::ProcedureCall string_trim_call_template();
+
+    static ::krpc::schema::ProcedureCall string_trim_end_call_template();
+
+    static ::krpc::schema::ProcedureCall string_trim_start_call_template();
+
+    static ::krpc::schema::ProcedureCall subtract_call_template();
+
+    static ::krpc::schema::ProcedureCall sum_call_template();
+
+    static ::krpc::schema::ProcedureCall switch__call_template();
+
+    static ::krpc::schema::ProcedureCall take_call_template();
+
+    static ::krpc::schema::ProcedureCall throw__call_template();
+
+    static ::krpc::schema::ProcedureCall throw_by_id_call_template();
+
+    static ::krpc::schema::ProcedureCall to_list_call_template();
+
+    static ::krpc::schema::ProcedureCall to_set_call_template();
+
+    static ::krpc::schema::ProcedureCall try_catch_call_template();
+
+    static ::krpc::schema::ProcedureCall try_catch_all_call_template();
+
+    static ::krpc::schema::ProcedureCall try_catch_by_id_call_template();
+
+    static ::krpc::schema::ProcedureCall try_finally_call_template();
+
+    static ::krpc::schema::ProcedureCall union__call_template();
+
+    static ::krpc::schema::ProcedureCall variable_call_template();
+
+    static ::krpc::schema::ProcedureCall where_call_template();
+
+    static ::krpc::schema::ProcedureCall while__call_template();
+
+    static ::krpc::schema::ProcedureCall zip_call_template();
+
+    static ::krpc::schema::ProcedureCall has_return_type_call_template();
+
+    static ::krpc::schema::ProcedureCall parameter_types_call_template();
+
+    static ::krpc::schema::ProcedureCall return_type_call_template();
+
     /**
      * The static methods of KRPC::Expression, bound to a connection.
      */
@@ -3725,6 +4019,56 @@ class KRPC : public ::krpc::RemoteService {
 
     ::krpc::schema::ProcedureCall types_call();
 
+    static ::krpc::schema::ProcedureCall bool__call_template();
+
+    static ::krpc::schema::ProcedureCall bytes_call_template();
+
+    static ::krpc::schema::ProcedureCall class_type_call_template();
+
+    static ::krpc::schema::ProcedureCall class_type_by_id_call_template();
+
+    static ::krpc::schema::ProcedureCall dictionary_type_call_template();
+
+    static ::krpc::schema::ProcedureCall double__call_template();
+
+    static ::krpc::schema::ProcedureCall enumeration_type_call_template();
+
+    static ::krpc::schema::ProcedureCall enumeration_type_by_id_call_template();
+
+    static ::krpc::schema::ProcedureCall float__call_template();
+
+    static ::krpc::schema::ProcedureCall int__call_template();
+
+    static ::krpc::schema::ProcedureCall list_type_call_template();
+
+    static ::krpc::schema::ProcedureCall long__call_template();
+
+    static ::krpc::schema::ProcedureCall nullable_type_call_template();
+
+    static ::krpc::schema::ProcedureCall set_type_call_template();
+
+    static ::krpc::schema::ProcedureCall string_call_template();
+
+    static ::krpc::schema::ProcedureCall struct_type_call_template();
+
+    static ::krpc::schema::ProcedureCall struct_type_by_id_call_template();
+
+    static ::krpc::schema::ProcedureCall tuple_type_call_template();
+
+    static ::krpc::schema::ProcedureCall uint_call_template();
+
+    static ::krpc::schema::ProcedureCall ulong_call_template();
+
+    static ::krpc::schema::ProcedureCall code_call_template();
+
+    static ::krpc::schema::ProcedureCall name_call_template();
+
+    static ::krpc::schema::ProcedureCall nullable_call_template();
+
+    static ::krpc::schema::ProcedureCall service_call_template();
+
+    static ::krpc::schema::ProcedureCall types_call_template();
+
     /**
      * The static methods of KRPC::Type, bound to a connection.
      */
@@ -4696,6 +5040,58 @@ inline ::krpc::schema::ProcedureCall KRPC::set_paused_call(bool value) {
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
   return this->_connection.build_call("KRPC", "set_Paused", _args);
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::get_client_id_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "GetClientID");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::get_client_name_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "GetClientName");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::get_services_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "GetServices");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::get_status_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "GetStatus");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::hold_tick_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "HoldTick");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::next_tick_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "NextTick");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::release_tick_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "ReleaseTick");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::clients_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "get_Clients");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::game_scene_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "get_GameScene");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::set_game_scene_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "set_GameScene");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::game_state_loads_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "get_GameStateLoads");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::paused_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "get_Paused");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::set_paused_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "set_Paused");
 }
 
 inline KRPC::Expression::Expression():
@@ -8345,6 +8741,542 @@ inline ::krpc::schema::ProcedureCall KRPC::Expression::zip_call(::krpc::Connecti
   return _connection.build_call("KRPC", "Expression_static_Zip", _args);
 }
 
+inline ::krpc::schema::ProcedureCall KRPC::Expression::add_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Add");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::aggregate_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Aggregate");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::aggregate_with_seed_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_AggregateWithSeed");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::all_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_All");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::and__call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_And");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::any_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Any");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::append_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Append");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::assign_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Assign");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::average_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Average");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::block_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Block");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::block_with_variables_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_BlockWithVariables");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::break__call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Break");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::build_dictionary_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_BuildDictionary");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::call_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Call");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::call_with_arguments_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_CallWithArguments");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::cast_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Cast");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::clear_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Clear");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::concat_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Concat");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::conditional_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Conditional");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::conditional_and_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_ConditionalAnd");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::conditional_or_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_ConditionalOr");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::constant_bool_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_ConstantBool");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::constant_bytes_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_ConstantBytes");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::constant_double_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_ConstantDouble");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::constant_enum_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_ConstantEnum");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::constant_enum_by_id_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_ConstantEnumById");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::constant_float_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_ConstantFloat");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::constant_int_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_ConstantInt");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::constant_long_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_ConstantLong");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::constant_null_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_ConstantNull");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::constant_object_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_ConstantObject");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::constant_string_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_ConstantString");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::constant_uint_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_ConstantUInt");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::constant_ulong_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_ConstantULong");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::contains_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Contains");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::contains_key_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_ContainsKey");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::continue__call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Continue");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::convert_to_string_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_ConvertToString");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::count_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Count");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::create_dictionary_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_CreateDictionary");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::create_empty_dictionary_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_CreateEmptyDictionary");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::create_empty_list_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_CreateEmptyList");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::create_empty_set_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_CreateEmptySet");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::create_list_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_CreateList");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::create_set_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_CreateSet");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::create_struct_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_CreateStruct");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::create_tuple_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_CreateTuple");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::dictionary_keys_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_DictionaryKeys");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::dictionary_values_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_DictionaryValues");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::distinct_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Distinct");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::divide_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Divide");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::element_at_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_ElementAt");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::equal_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Equal");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::except_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Except");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::exclusive_or_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_ExclusiveOr");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::first_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_First");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::for_each_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_ForEach");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::get_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Get");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::get_field_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_GetField");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::get_field_by_index_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_GetFieldByIndex");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::greater_than_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_GreaterThan");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::greater_than_or_equal_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_GreaterThanOrEqual");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::group_by_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_GroupBy");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::if_then_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_IfThen");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::if_then_else_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_IfThenElse");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::intersect_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Intersect");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::invoke_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Invoke");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::is_null_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_IsNull");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::lambda_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Lambda");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::last_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Last");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::left_shift_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_LeftShift");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::less_than_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_LessThan");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::less_than_or_equal_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_LessThanOrEqual");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::match_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Match");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::max_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Max");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::max_by_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_MaxBy");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::min_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Min");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::min_by_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_MinBy");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::modulo_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Modulo");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::multiply_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Multiply");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::negate_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Negate");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::not__call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Not");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::not_equal_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_NotEqual");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::or__call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Or");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::order_by_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_OrderBy");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::parameter_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Parameter");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::power_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Power");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::remove_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Remove");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::remove_at_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_RemoveAt");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::return__call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Return");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::return_nothing_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_ReturnNothing");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::reverse_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Reverse");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::right_shift_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_RightShift");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::select_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Select");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::select_many_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_SelectMany");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::set_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Set");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::skip_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Skip");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::state_variable_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_StateVariable");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::string_concat_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_StringConcat");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::string_contains_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_StringContains");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::string_ends_with_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_StringEndsWith");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::string_get_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_StringGet");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::string_index_of_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_StringIndexOf");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::string_join_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_StringJoin");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::string_length_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_StringLength");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::string_replace_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_StringReplace");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::string_split_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_StringSplit");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::string_starts_with_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_StringStartsWith");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::string_substring_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_StringSubstring");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::string_to_lower_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_StringToLower");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::string_to_upper_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_StringToUpper");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::string_trim_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_StringTrim");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::string_trim_end_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_StringTrimEnd");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::string_trim_start_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_StringTrimStart");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::subtract_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Subtract");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::sum_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Sum");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::switch__call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Switch");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::take_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Take");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::throw__call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Throw");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::throw_by_id_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_ThrowById");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::to_list_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_ToList");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::to_set_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_ToSet");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::try_catch_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_TryCatch");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::try_catch_all_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_TryCatchAll");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::try_catch_by_id_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_TryCatchById");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::try_finally_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_TryFinally");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::union__call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Union");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::variable_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Variable");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::where_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Where");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::while__call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_While");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::zip_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_static_Zip");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::has_return_type_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_get_HasReturnType");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::parameter_types_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_get_ParameterTypes");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Expression::return_type_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Expression_get_ReturnType");
+}
+
 inline KRPC::Expression::Bound::Bound(const ::krpc::Connection& connection):
   _connection(connection) {}
 
@@ -9445,6 +10377,106 @@ inline ::krpc::schema::ProcedureCall KRPC::Type::uint_call(::krpc::Connection& _
 
 inline ::krpc::schema::ProcedureCall KRPC::Type::ulong_call(::krpc::Connection& _connection) {
   return _connection.build_call("KRPC", "Type_static_ULong");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Type::bool__call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Type_static_Bool");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Type::bytes_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Type_static_Bytes");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Type::class_type_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Type_static_ClassType");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Type::class_type_by_id_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Type_static_ClassTypeById");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Type::dictionary_type_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Type_static_DictionaryType");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Type::double__call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Type_static_Double");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Type::enumeration_type_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Type_static_EnumerationType");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Type::enumeration_type_by_id_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Type_static_EnumerationTypeById");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Type::float__call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Type_static_Float");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Type::int__call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Type_static_Int");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Type::list_type_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Type_static_ListType");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Type::long__call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Type_static_Long");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Type::nullable_type_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Type_static_NullableType");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Type::set_type_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Type_static_SetType");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Type::string_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Type_static_String");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Type::struct_type_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Type_static_StructType");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Type::struct_type_by_id_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Type_static_StructTypeById");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Type::tuple_type_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Type_static_TupleType");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Type::uint_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Type_static_UInt");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Type::ulong_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Type_static_ULong");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Type::code_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Type_get_Code");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Type::name_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Type_get_Name");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Type::nullable_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Type_get_Nullable");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Type::service_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Type_get_Service");
+}
+
+inline ::krpc::schema::ProcedureCall KRPC::Type::types_call_template() {
+  return ::krpc::Connection::build_call("KRPC", "Type_get_Types");
 }
 
 inline KRPC::Type::Bound::Bound(const ::krpc::Connection& connection):

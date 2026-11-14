@@ -415,7 +415,10 @@ altitude and speed together:
 
 Each procedure has a function with ``_call`` added to its name, such as ``mean_altitude_call``. It
 returns the call as a message, for :func:`~krpc::services::KRPC::Expression::call` to embed in the
-function. :ref:`server-side-functions-api` in the :ref:`server side functions guide
+function. A static function with ``_call_template`` added to the name, such as
+``Engine::has_fuel_call_template()``, returns the call template. It names the procedure and
+carries no arguments, for :func:`~krpc::services::KRPC::Expression::call_with_arguments` to
+supply each one. :ref:`server-side-functions-api` in the :ref:`server side functions guide
 <server-side-functions>` describes how to build functions.
 
 :func:`~krpc::run`, :func:`~krpc::compile`, :func:`~krpc::add_stream` and :func:`~krpc::add_event`

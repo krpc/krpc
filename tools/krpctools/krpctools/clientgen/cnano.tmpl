@@ -106,6 +106,13 @@ return KRPC_OK;
  * krpc_free_procedure_call().
  */
 {% endmacro %}
+{% macro template_documentation(function) %}
+/**
+ * Fills in the call template of {{ function }}(), which names the procedure and carries no
+ * arguments, to pass to krpc_KRPC_Expression_CallWithArguments(). Free it with
+ * krpc_free_procedure_call().
+ */
+{% endmacro %}
 {% macro procedure_parameters(procedure) %}
 {{ parameters(procedure.return_type, procedure.parameters) }}{% endmacro %}
 {% macro method_parameters(service_name, class_name, method) %}
@@ -227,6 +234,8 @@ typedef enum {
 static inline krpc_error_t krpc_{{ service_name }}_{{ procedure_name }}({{ procedure_parameters(procedure) }});
 
 {{ call_documentation('krpc_' + service_name + '_' + procedure_name) }}{{ deprecated_macro(procedure) }}static inline krpc_error_t krpc_{{ service_name }}_{{ procedure_name }}_call({{ call_parameters(procedure.parameters) }});
+
+{{ template_documentation('krpc_' + service_name + '_' + procedure_name) }}{{ deprecated_macro(procedure) }}static inline krpc_error_t krpc_{{ service_name }}_{{ procedure_name }}_call_template(krpc_schema_ProcedureCall * procedureCall);
 {% endfor %}
 {% for property_name,property in properties.items() %}
 
@@ -237,6 +246,8 @@ static inline krpc_error_t krpc_{{ service_name }}_{{ procedure_name }}({{ proce
 static inline krpc_error_t krpc_{{ service_name }}_{{ property_name }}({{ procedure_parameters(property) }});
 
 {{ call_documentation('krpc_' + service_name + '_' + property_name) }}{{ deprecated_macro(property) }}static inline krpc_error_t krpc_{{ service_name }}_{{ property_name }}_call({{ call_parameters(property.parameters) }});
+
+{{ template_documentation('krpc_' + service_name + '_' + property_name) }}{{ deprecated_macro(property) }}static inline krpc_error_t krpc_{{ service_name }}_{{ property_name }}_call_template(krpc_schema_ProcedureCall * procedureCall);
 {% endfor %}
 {% for class_name,cls in classes.items() %}
 {% for method_name,method in cls.methods.items() %}
@@ -248,6 +259,8 @@ static inline krpc_error_t krpc_{{ service_name }}_{{ property_name }}({{ proced
 static inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_name }}({{ method_parameters(service_name, class_name, method) }});
 
 {{ call_documentation('krpc_' + service_name + '_' + class_name + '_' + method_name) }}{{ deprecated_macro(method) }}static inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_name }}_call({{ call_parameters([{'type': {'ccvtype': 'krpc_'+service_name+'_'+class_name+'_t'}, 'name': 'instance'}] + method.parameters) }});
+
+{{ template_documentation('krpc_' + service_name + '_' + class_name + '_' + method_name) }}{{ deprecated_macro(method) }}static inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_name }}_call_template(krpc_schema_ProcedureCall * procedureCall);
 {% endfor %}
 {% for method_name,method in cls.static_methods.items() %}
 
@@ -258,6 +271,8 @@ static inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_na
 static inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_name }}({{ static_method_parameters(method) }});
 
 {{ call_documentation('krpc_' + service_name + '_' + class_name + '_' + method_name) }}{{ deprecated_macro(method) }}static inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_name }}_call({{ call_parameters(method.parameters) }});
+
+{{ template_documentation('krpc_' + service_name + '_' + class_name + '_' + method_name) }}{{ deprecated_macro(method) }}static inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_name }}_call_template(krpc_schema_ProcedureCall * procedureCall);
 {% endfor %}
 {% for property_name,property in cls.properties.items() %}
 
@@ -268,6 +283,8 @@ static inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_na
 static inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ property_name }}({{ method_parameters(service_name, class_name, property) }});
 
 {{ call_documentation('krpc_' + service_name + '_' + class_name + '_' + property_name) }}{{ deprecated_macro(property) }}static inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ property_name }}_call({{ call_parameters([{'type': {'ccvtype': 'krpc_'+service_name+'_'+class_name+'_t'}, 'name': 'instance'}] + property.parameters) }});
+
+{{ template_documentation('krpc_' + service_name + '_' + class_name + '_' + property_name) }}{{ deprecated_macro(property) }}static inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ property_name }}_call_template(krpc_schema_ProcedureCall * procedureCall);
 {% endfor %}
 {% endfor %}
 
@@ -570,6 +587,10 @@ static inline krpc_error_t krpc_{{ service_name }}_{{ procedure_name }}({{ proce
 static inline krpc_error_t krpc_{{ service_name }}_{{ procedure_name }}_call({{ call_parameters(procedure.parameters) }}) {
 {{ procedure_call(service_id, procedure.remote_id, procedure.parameters) | indent(2) }}
 }
+
+static inline krpc_error_t krpc_{{ service_name }}_{{ procedure_name }}_call_template(krpc_schema_ProcedureCall * procedureCall) {
+  return krpc_procedure_call(procedureCall, {{ service_id }}, {{ procedure.remote_id }}, 0);
+}
 {% endfor %}
 {% for class_name,cls in classes.items() %}
 {% for method_name,method in cls.methods.items()|list + cls.properties.items()|list %}
@@ -582,6 +603,10 @@ static inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_na
 static inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_name }}_call({{ call_parameters([{'type': {'ccvtype': 'krpc_'+service_name+'_'+class_name+'_t'}, 'name': 'instance'}] + method.parameters) }}) {
 {{ procedure_call(service_id, method.remote_id, [{'type': {'name': 'uint64', 'getptr': '&', 'nullable': False}, 'name': 'instance'}] + method.parameters) | indent(2) }}
 }
+
+static inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_name }}_call_template(krpc_schema_ProcedureCall * procedureCall) {
+  return krpc_procedure_call(procedureCall, {{ service_id }}, {{ method.remote_id }}, 0);
+}
 {% endfor %}
 {% for method_name,method in cls.static_methods.items() %}
 
@@ -592,6 +617,10 @@ static inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_na
 
 static inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_name }}_call({{ call_parameters(method.parameters) }}) {
 {{ procedure_call(service_id, method.remote_id, method.parameters) | indent(2) }}
+}
+
+static inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_name }}_call_template(krpc_schema_ProcedureCall * procedureCall) {
+  return krpc_procedure_call(procedureCall, {{ service_id }}, {{ method.remote_id }}, 0);
 }
 {% endfor %}
 {% endfor %}

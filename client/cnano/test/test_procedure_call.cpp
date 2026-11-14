@@ -56,7 +56,26 @@ TEST_F(ProcedureCallTest, EncodesIdsAndArguments) {
 }
 
 TEST_F(ProcedureCallTest, CallWithNoArguments) {
+  // A call template has no arguments, so it allocates nothing and can be made with none left
+  allocations_left = 0;
   ASSERT_EQ(KRPC_OK, krpc_procedure_call(&call, 1, 2, 0));
+  EXPECT_EQ(0, live_blocks);
+
+  std::vector<pb_byte_t> buffer(32);
+  pb_ostream_t stream = pb_ostream_from_buffer(buffer.data(), buffer.size());
+  ASSERT_TRUE(pb_encode(&stream, krpc_schema_ProcedureCall_fields, &call));
+  buffer.resize(stream.bytes_written);
+  const std::vector<pb_byte_t> expected = {0x20, 0x01, 0x28, 0x02};
+  EXPECT_EQ(expected, buffer);
+
+  EXPECT_EQ(KRPC_OK, krpc_free_procedure_call(&call));
+  EXPECT_EQ(0, live_blocks);
+}
+
+TEST_F(ProcedureCallTest, CallTemplate) {
+  ASSERT_EQ(KRPC_OK, krpc_KRPC_Expression_ConstantInt_call_template(&call));
+  EXPECT_EQ(nullptr, call.arguments.funcs.encode);
+  EXPECT_NE(0u, call.procedure_id);
   EXPECT_EQ(KRPC_OK, krpc_free_procedure_call(&call));
   EXPECT_EQ(0, live_blocks);
 }

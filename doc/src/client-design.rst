@@ -312,8 +312,8 @@ object holding the connection, with each static method minus that parameter. It 
 of ``conn.krpc.Expression`` in Python, and shortens an expression tree that passes the connection
 at every node. The ``Bound`` methods carry the RPC attribute of the static method, so a C# lambda
 or a Java ``addStream`` takes them as it takes a service's methods. A C++ ``Bound`` is a shorthand
-for the calls that build large expression trees. It has no ``_stream`` or ``_call`` forms, which
-stay on the static method.
+for the calls that build large expression trees. It has no ``_stream``, ``_call`` or
+``_call_template`` forms, which stay on the static method.
 
 Errors
 ------
@@ -396,8 +396,9 @@ Each client signals the use of a deprecated member with the language's own mecha
      -
 
 A stream, and the call a server side function makes, use a procedure too. Python, Lua and
-JavaScript warn when the client builds the call. In C++ and C-nano, the ``_stream`` and ``_call``
-functions carry the attribute. In C#, the lambda that names the procedure warns.
+JavaScript warn when the client builds the call or its call template. In C++ and C-nano, the
+``_stream``, ``_call`` and ``_call_template`` functions carry the attribute. In C#, the lambda that
+names the procedure warns.
 
 A member of a deprecated service, class, enumeration or structure is deprecated. A member with no
 reason of its own takes the reason of its nearest deprecated container. ``clientgen`` and the

@@ -67,6 +67,9 @@ void uses(Connection& connection,                                               
   test_service.deprecated_property_call();                                  // use: TestService.DeprecatedProperty:call
   deprecated_class.deprecated_method_stream();                              // use: TestService.DeprecatedClass.DeprecatedMethod:stream
   deprecated_class.deprecated_method_call();                                // use: TestService.DeprecatedClass.DeprecatedMethod:call
+  test_service.deprecated_procedure_call_template();                        // use: TestService.DeprecatedProcedure:template
+  test_service.deprecated_property_call_template();                         // use: TestService.DeprecatedProperty:template
+  deprecated_class.deprecated_method_call_template();                       // use: TestService.DeprecatedClass.DeprecatedMethod:template
   (void)sizeof(DeprecatedService);                                          // use: DeprecatedService
   deprecated_service.procedure();                                           // use: DeprecatedService.Procedure
   deprecated_service.property();                                            // use: DeprecatedService.Property
@@ -82,6 +85,7 @@ void uses(Connection& connection,                                               
   test_service.float_to_string(1);                                          // use: TestService.FloatToString
   test_service.float_to_string_stream(1);                                   // use: TestService.FloatToString:stream
   test_service.float_to_string_call(1);                                     // use: TestService.FloatToString:call
+  test_service.float_to_string_call_template();                             // use: TestService.FloatToString:template
   test_service.string_property();                                           // use: TestService.StringProperty
   (void)sizeof(TestService::TestClass);                                     // use: TestService.TestClass
   (void)sizeof(TestService::TestEnum);                                      // use: TestService.TestEnum

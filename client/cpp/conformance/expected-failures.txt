@@ -21,13 +21,3 @@ test_concurrency.py::test_held_stream_ending_before_value  # A read on the threa
 test_concurrency.py::test_held_stream_ending @flaky  # Fails now and then, seen only on CI: a read on the thread that takes the condition raises "Stream has no value"
 test_concurrency.py::test_value_read_before_wake @flaky  # Fails now and then, seen only on CI: the read made while the update is paused returns the earlier value
 test_concurrency.py::test_wake_update_waiter[connection-failure] @flaky  # Fails now and then, seen only on CI: the waiting thread is not woken within the reply timeout
-test_calls.py::test_deprecated_call_template[method]  # The client has no call templates yet
-test_calls.py::test_deprecated_call_template[procedure]  # As above
-test_calls.py::test_deprecated_call_template[property]  # As above
-test_functions.py::test_call_template[class-getter]  # As above
-test_functions.py::test_call_template[class-setter]  # As above
-test_functions.py::test_call_template_default  # As above
-test_functions.py::test_call_template_message  # As above
-test_functions.py::test_call_template[method]  # As above
-test_functions.py::test_call_template[procedure]  # As above
-test_functions.py::test_call_template[setter]  # As above

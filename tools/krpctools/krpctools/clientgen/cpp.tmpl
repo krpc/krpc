@@ -177,6 +177,10 @@ class {% if service_deprecated %}[[deprecated{% if service_deprecated_reason %}(
 
   {{ deprecated_attribute(property) }}::krpc::schema::ProcedureCall {{ property_name }}_call({{ sig_parameters(property.parameters) }});
   {% endfor %}
+  {% for procedure_name,procedure in procedures.items()|list + properties.items()|list %}
+
+  {{ deprecated_attribute(procedure) }}static ::krpc::schema::ProcedureCall {{ procedure_name }}_call_template();
+  {% endfor %}
   {% for class_name,cls in classes.items() %}
 
 {% if cls.documentation %}{{ cls.documentation | indent(width=2) }}
@@ -234,6 +238,10 @@ class {% if service_deprecated %}[[deprecated{% if service_deprecated_reason %}(
     {% for property_name,property in cls.properties.items() %}
 
     {{ deprecated_attribute(property) }}::krpc::schema::ProcedureCall {{ property_name }}_call({{ sig_parameters(property.parameters) }});
+    {% endfor %}
+    {% for method_name,method in cls.methods.items()|list + cls.static_methods.items()|list + cls.properties.items()|list %}
+
+    {{ deprecated_attribute(method) }}static ::krpc::schema::ProcedureCall {{ method_name }}_call_template();
     {% endfor %}
     {% if cls.static_methods %}
 
@@ -434,6 +442,12 @@ inline ::krpc::schema::ProcedureCall {{ service_name }}::{{ procedure_name }}_ca
 {{ procedure_call(service_name, procedure.remote_name, procedure.return_type, procedure.parameters | length > 0) | indent(width=2) }}
 }
 {% endfor %}
+{% for procedure_name,procedure in procedures.items()|list + properties.items()|list %}
+
+inline ::krpc::schema::ProcedureCall {{ service_name }}::{{ procedure_name }}_call_template() {
+  return ::krpc::Connection::build_call("{{ service_name }}", "{{ procedure.remote_name }}");
+}
+{% endfor %}
 {% for class_name,cls in classes.items() %}
 
 inline {{ service_name }}::{{ class_name }}::{{ class_name }}():
@@ -490,6 +504,12 @@ inline ::krpc::schema::ProcedureCall {{ service_name }}::{{ class_name }}::{{ me
 {% if method.parameters | length > 0 %}{{ args(method.parameters) | indent(width=2) }}
 {% endif %}
 {{ procedure_call(service_name, method.remote_name, method.return_type, method.parameters | length > 0, True) | indent(width=2) }}
+}
+{% endfor %}
+{% for method_name,method in cls.methods.items()|list + cls.static_methods.items()|list + cls.properties.items()|list %}
+
+inline ::krpc::schema::ProcedureCall {{ service_name }}::{{ class_name }}::{{ method_name }}_call_template() {
+  return ::krpc::Connection::build_call("{{ service_name }}", "{{ method.remote_name }}");
 }
 {% endfor %}
 {% if cls.static_methods %}

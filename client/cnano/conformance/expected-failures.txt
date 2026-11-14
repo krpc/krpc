@@ -47,15 +47,3 @@ test_codec.py::test_malformed_data[list(nullable sint32)]  # A presence bool oth
 test_codec.py::test_nullable[list(nullable bool)]  # The testee has no codec type list(nullable bool)
 test_codec.py::test_nullable[list(nullable bytes)]  # The testee has no codec type list(nullable bytes)
 test_values.py::test_null_result_with_a_value  # A result with is_null set reads as null, whatever its value
-test_calls.py::test_deprecated_call_template[method]  # The client has no call templates yet
-test_calls.py::test_deprecated_call_template[procedure]  # As above
-test_calls.py::test_deprecated_call_template[property]  # As above
-test_functions.py::test_call_template[class-getter]  # As above
-test_functions.py::test_call_template[class-setter]  # As above
-test_functions.py::test_call_template_default  # As above
-test_functions.py::test_call_template_message  # As above
-test_functions.py::test_call_template[method]  # As above
-test_functions.py::test_call_template_missing_argument  # As above
-test_functions.py::test_call_template[procedure]  # As above
-test_functions.py::test_call_template[setter]  # As above
-test_functions.py::test_call_template[static-method]  # As above

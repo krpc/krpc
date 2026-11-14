@@ -774,6 +774,14 @@ class CppDispatchGenerator(DispatchGenerator):
     def procedure_call(self, kind, cls, name, parameters):
         return self.call(kind, cls, name, parameters, "_call")
 
+    def call_template(self, kind, cls, name, parameters):
+        if kind in (PROCEDURE, GETTER, SETTER):
+            owner = "::krpc::services::%s" % self._service
+        else:
+            owner = self.class_type(self._service, cls)
+        prefix = "set_" if kind in (SETTER, CLASS_SETTER) else ""
+        return "%s::%s%s_call_template()" % (owner, prefix, self._name(name))
+
     def bound_call(self, cls, name, parameters):
         return "%s::bind(connection).%s(%s)" % (
             self.class_type(self._service, cls),
@@ -887,3 +895,8 @@ class CnanoDispatchGenerator(DispatchGenerator, CnanoGenerator):
         """The function that fills in the call a member makes. It takes the call to fill in,
         then the arguments."""
         return self.call(kind, cls, name, parameters) + "_call"
+
+    def call_template(self, kind, cls, name, parameters):
+        """The function that fills in the call template of a member. It takes the call to fill
+        in."""
+        return self.call(kind, cls, name, parameters) + "_call_template"

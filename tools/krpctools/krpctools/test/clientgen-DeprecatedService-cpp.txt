@@ -113,6 +113,14 @@ class [[deprecated("Use TestService instead.")]] DeprecatedService : public ::kr
 
   [[deprecated("Use TestService instead.")]] ::krpc::schema::ProcedureCall set_property_call(std::string value);
 
+  [[deprecated("Use TestService instead.")]] static ::krpc::schema::ProcedureCall procedure_call_template();
+
+  [[deprecated("Use TestService instead.")]] static ::krpc::schema::ProcedureCall struct_procedure_call_template();
+
+  [[deprecated("Use TestService instead.")]] static ::krpc::schema::ProcedureCall property_call_template();
+
+  [[deprecated("Use TestService instead.")]] static ::krpc::schema::ProcedureCall set_property_call_template();
+
   /**
    * A class deprecated with a reason of its own.
    *
@@ -134,6 +142,8 @@ class [[deprecated("Use TestService instead.")]] DeprecatedService : public ::kr
     [[deprecated("Use \"TestService.TestClass\" instead.")]] static ::krpc::Stream<std::string> static_method_stream(::krpc::Connection& connection);
 
     [[deprecated("Use \"TestService.TestClass\" instead.")]] static ::krpc::schema::ProcedureCall static_method_call(::krpc::Connection& connection);
+
+    [[deprecated("Use \"TestService.TestClass\" instead.")]] static ::krpc::schema::ProcedureCall static_method_call_template();
 
     /**
      * The static methods of DeprecatedService::ReasonedClass, bound to a connection.
@@ -195,6 +205,10 @@ class [[deprecated("Use TestService instead.")]] DeprecatedService : public ::kr
     [[deprecated("Use TestService instead.")]] ::krpc::schema::ProcedureCall method_call();
 
     [[deprecated("Use TestService instead.")]] static ::krpc::schema::ProcedureCall static_method_call(::krpc::Connection& connection);
+
+    [[deprecated("Use TestService instead.")]] static ::krpc::schema::ProcedureCall method_call_template();
+
+    [[deprecated("Use TestService instead.")]] static ::krpc::schema::ProcedureCall static_method_call_template();
 
     /**
      * The static methods of DeprecatedService::ServiceClass, bound to a connection.
@@ -398,6 +412,22 @@ inline ::krpc::schema::ProcedureCall DeprecatedService::set_property_call(std::s
   return this->_connection.build_call("DeprecatedService", "set_Property", _args);
 }
 
+inline ::krpc::schema::ProcedureCall DeprecatedService::procedure_call_template() {
+  return ::krpc::Connection::build_call("DeprecatedService", "Procedure");
+}
+
+inline ::krpc::schema::ProcedureCall DeprecatedService::struct_procedure_call_template() {
+  return ::krpc::Connection::build_call("DeprecatedService", "StructProcedure");
+}
+
+inline ::krpc::schema::ProcedureCall DeprecatedService::property_call_template() {
+  return ::krpc::Connection::build_call("DeprecatedService", "get_Property");
+}
+
+inline ::krpc::schema::ProcedureCall DeprecatedService::set_property_call_template() {
+  return ::krpc::Connection::build_call("DeprecatedService", "set_Property");
+}
+
 inline DeprecatedService::ReasonedClass::ReasonedClass():
   RemoteObject("DeprecatedService::ReasonedClass") {}
 
@@ -418,6 +448,10 @@ inline ::krpc::Stream<std::string> DeprecatedService::ReasonedClass::static_meth
 
 inline ::krpc::schema::ProcedureCall DeprecatedService::ReasonedClass::static_method_call(::krpc::Connection& _connection) {
   return _connection.build_call("DeprecatedService", "ReasonedClass_static_StaticMethod");
+}
+
+inline ::krpc::schema::ProcedureCall DeprecatedService::ReasonedClass::static_method_call_template() {
+  return ::krpc::Connection::build_call("DeprecatedService", "ReasonedClass_static_StaticMethod");
 }
 
 inline DeprecatedService::ReasonedClass::Bound::Bound(const ::krpc::Connection& connection):
@@ -476,6 +510,14 @@ inline ::krpc::schema::ProcedureCall DeprecatedService::ServiceClass::method_cal
 
 inline ::krpc::schema::ProcedureCall DeprecatedService::ServiceClass::static_method_call(::krpc::Connection& _connection) {
   return _connection.build_call("DeprecatedService", "ServiceClass_static_StaticMethod");
+}
+
+inline ::krpc::schema::ProcedureCall DeprecatedService::ServiceClass::method_call_template() {
+  return ::krpc::Connection::build_call("DeprecatedService", "ServiceClass_Method");
+}
+
+inline ::krpc::schema::ProcedureCall DeprecatedService::ServiceClass::static_method_call_template() {
+  return ::krpc::Connection::build_call("DeprecatedService", "ServiceClass_static_StaticMethod");
 }
 
 inline DeprecatedService::ServiceClass::Bound::Bound(const ::krpc::Connection& connection):

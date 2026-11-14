@@ -983,6 +983,242 @@ class TestService : public ::krpc::RemoteService {
 
   ::krpc::schema::ProcedureCall string_property_private_set_call();
 
+  static ::krpc::schema::ProcedureCall add_multiple_values_call_template();
+
+  static ::krpc::schema::ProcedureCall add_to_object_dictionary_call_template();
+
+  static ::krpc::schema::ProcedureCall add_to_object_list_call_template();
+
+  static ::krpc::schema::ProcedureCall add_to_object_set_call_template();
+
+  static ::krpc::schema::ProcedureCall blocking_procedure_call_template();
+
+  static ::krpc::schema::ProcedureCall bool_to_string_call_template();
+
+  static ::krpc::schema::ProcedureCall bytes_default_call_template();
+
+  static ::krpc::schema::ProcedureCall bytes_to_hex_string_call_template();
+
+  static ::krpc::schema::ProcedureCall counter_call_template();
+
+  static ::krpc::schema::ProcedureCall counter_struct_call_template();
+
+  [[deprecated("Use create_test_object instead.")]] static ::krpc::schema::ProcedureCall create_deprecated_class_call_template();
+
+  static ::krpc::schema::ProcedureCall create_test_object_call_template();
+
+  [[deprecated("Use float_to_string instead.")]] static ::krpc::schema::ProcedureCall deprecated_procedure_call_template();
+
+  [[deprecated]] static ::krpc::schema::ProcedureCall deprecated_procedure_no_message_call_template();
+
+  [[deprecated("Use TestStruct instead.")]] static ::krpc::schema::ProcedureCall deprecated_struct_procedure_call_template();
+
+  static ::krpc::schema::ProcedureCall dictionary_default_call_template();
+
+  static ::krpc::schema::ProcedureCall double_special_defaults_call_template();
+
+  static ::krpc::schema::ProcedureCall double_to_string_call_template();
+
+  static ::krpc::schema::ProcedureCall dump_expression_tree_call_template();
+
+  static ::krpc::schema::ProcedureCall echo_dictionary_of_nullable_objects_call_template();
+
+  static ::krpc::schema::ProcedureCall echo_list_of_nullable_ints_call_template();
+
+  static ::krpc::schema::ProcedureCall echo_list_of_nullable_objects_call_template();
+
+  static ::krpc::schema::ProcedureCall echo_nested_list_of_nullable_objects_call_template();
+
+  static ::krpc::schema::ProcedureCall echo_nested_nullable_struct_call_template();
+
+  static ::krpc::schema::ProcedureCall echo_nullable_bool_call_template();
+
+  static ::krpc::schema::ProcedureCall echo_nullable_bytes_call_template();
+
+  static ::krpc::schema::ProcedureCall echo_nullable_dictionary_call_template();
+
+  static ::krpc::schema::ProcedureCall echo_nullable_double_call_template();
+
+  static ::krpc::schema::ProcedureCall echo_nullable_enum_call_template();
+
+  static ::krpc::schema::ProcedureCall echo_nullable_flags_call_template();
+
+  static ::krpc::schema::ProcedureCall echo_nullable_float_call_template();
+
+  static ::krpc::schema::ProcedureCall echo_nullable_int_call_template();
+
+  static ::krpc::schema::ProcedureCall echo_nullable_list_call_template();
+
+  static ::krpc::schema::ProcedureCall echo_nullable_long_call_template();
+
+  static ::krpc::schema::ProcedureCall echo_nullable_set_call_template();
+
+  static ::krpc::schema::ProcedureCall echo_nullable_string_call_template();
+
+  static ::krpc::schema::ProcedureCall echo_nullable_tuple_call_template();
+
+  static ::krpc::schema::ProcedureCall echo_nullable_uint_call_template();
+
+  static ::krpc::schema::ProcedureCall echo_nullable_ulong_call_template();
+
+  static ::krpc::schema::ProcedureCall echo_string_set_call_template();
+
+  static ::krpc::schema::ProcedureCall echo_test_object_call_template();
+
+  static ::krpc::schema::ProcedureCall echo_tuple_with_a_nullable_object_call_template();
+
+  static ::krpc::schema::ProcedureCall empty_list_default_call_template();
+
+  static ::krpc::schema::ProcedureCall enum_default_call_template();
+
+  static ::krpc::schema::ProcedureCall enum_echo_call_template();
+
+  static ::krpc::schema::ProcedureCall enum_list_default_call_template();
+
+  static ::krpc::schema::ProcedureCall enum_to_string_call_template();
+
+  static ::krpc::schema::ProcedureCall flags_default_call_template();
+
+  static ::krpc::schema::ProcedureCall flags_echo_call_template();
+
+  static ::krpc::schema::ProcedureCall flags_list_echo_call_template();
+
+  static ::krpc::schema::ProcedureCall flags_struct_echo_call_template();
+
+  static ::krpc::schema::ProcedureCall flags_to_int_call_template();
+
+  static ::krpc::schema::ProcedureCall float_special_defaults_call_template();
+
+  static ::krpc::schema::ProcedureCall float_to_string_call_template();
+
+  static ::krpc::schema::ProcedureCall hex_string_to_bytes_call_template();
+
+  static ::krpc::schema::ProcedureCall increment_dictionary_call_template();
+
+  static ::krpc::schema::ProcedureCall increment_list_call_template();
+
+  static ::krpc::schema::ProcedureCall increment_list_of_structs_call_template();
+
+  static ::krpc::schema::ProcedureCall increment_nested_collection_call_template();
+
+  static ::krpc::schema::ProcedureCall increment_set_call_template();
+
+  static ::krpc::schema::ProcedureCall increment_tuple_call_template();
+
+  static ::krpc::schema::ProcedureCall int32_special_defaults_call_template();
+
+  static ::krpc::schema::ProcedureCall int32_to_string_call_template();
+
+  static ::krpc::schema::ProcedureCall int64_special_defaults_call_template();
+
+  static ::krpc::schema::ProcedureCall int64_to_string_call_template();
+
+  static ::krpc::schema::ProcedureCall int_to_flags_call_template();
+
+  static ::krpc::schema::ProcedureCall join_with_at_sign_call_template();
+
+  static ::krpc::schema::ProcedureCall list_default_call_template();
+
+  static ::krpc::schema::ProcedureCall nested_struct_echo_call_template();
+
+  static ::krpc::schema::ProcedureCall not_nullable_object_call_template();
+
+  static ::krpc::schema::ProcedureCall null_default_call_template();
+
+  static ::krpc::schema::ProcedureCall nullable_struct_echo_call_template();
+
+  static ::krpc::schema::ProcedureCall on_timer_call_template();
+
+  static ::krpc::schema::ProcedureCall optional_arguments_call_template();
+
+  static ::krpc::schema::ProcedureCall partly_deprecated_struct_procedure_call_template();
+
+  static ::krpc::schema::ProcedureCall remove_event_after_call_template();
+
+  static ::krpc::schema::ProcedureCall remove_test_object_call_template();
+
+  static ::krpc::schema::ProcedureCall reset_custom_exception_later_call_template();
+
+  static ::krpc::schema::ProcedureCall reset_invalid_operation_exception_later_call_template();
+
+  static ::krpc::schema::ProcedureCall return_null_when_not_allowed_call_template();
+
+  static ::krpc::schema::ProcedureCall scalar_default_call_template();
+
+  static ::krpc::schema::ProcedureCall set_default_call_template();
+
+  static ::krpc::schema::ProcedureCall string_default_call_template();
+
+  static ::krpc::schema::ProcedureCall string_to_bool_call_template();
+
+  static ::krpc::schema::ProcedureCall string_to_double_call_template();
+
+  static ::krpc::schema::ProcedureCall string_to_enum_call_template();
+
+  static ::krpc::schema::ProcedureCall string_to_float_call_template();
+
+  static ::krpc::schema::ProcedureCall string_to_int32_call_template();
+
+  static ::krpc::schema::ProcedureCall string_to_int64_call_template();
+
+  static ::krpc::schema::ProcedureCall string_to_uint32_call_template();
+
+  static ::krpc::schema::ProcedureCall string_to_uint64_call_template();
+
+  static ::krpc::schema::ProcedureCall struct_default_call_template();
+
+  static ::krpc::schema::ProcedureCall struct_echo_call_template();
+
+  static ::krpc::schema::ProcedureCall struct_echo_nullable_call_template();
+
+  static ::krpc::schema::ProcedureCall swap_object_tuple_call_template();
+
+  static ::krpc::schema::ProcedureCall throw_argument_exception_call_template();
+
+  static ::krpc::schema::ProcedureCall throw_argument_null_exception_call_template();
+
+  static ::krpc::schema::ProcedureCall throw_argument_out_of_range_exception_call_template();
+
+  static ::krpc::schema::ProcedureCall throw_custom_exception_call_template();
+
+  static ::krpc::schema::ProcedureCall throw_custom_exception_later_call_template();
+
+  static ::krpc::schema::ProcedureCall throw_invalid_operation_exception_call_template();
+
+  static ::krpc::schema::ProcedureCall throw_invalid_operation_exception_later_call_template();
+
+  static ::krpc::schema::ProcedureCall throw_mapped_exception_call_template();
+
+  static ::krpc::schema::ProcedureCall tuple_default_call_template();
+
+  static ::krpc::schema::ProcedureCall uint32_special_defaults_call_template();
+
+  static ::krpc::schema::ProcedureCall uint32_to_string_call_template();
+
+  static ::krpc::schema::ProcedureCall uint64_special_defaults_call_template();
+
+  static ::krpc::schema::ProcedureCall uint64_to_string_call_template();
+
+  [[deprecated("Use string_property instead.")]] static ::krpc::schema::ProcedureCall deprecated_property_call_template();
+
+  [[deprecated("Use string_property instead.")]] static ::krpc::schema::ProcedureCall set_deprecated_property_call_template();
+
+  static ::krpc::schema::ProcedureCall nullable_object_call_template();
+
+  static ::krpc::schema::ProcedureCall set_nullable_object_call_template();
+
+  static ::krpc::schema::ProcedureCall object_property_call_template();
+
+  static ::krpc::schema::ProcedureCall set_object_property_call_template();
+
+  static ::krpc::schema::ProcedureCall string_property_call_template();
+
+  static ::krpc::schema::ProcedureCall set_string_property_call_template();
+
+  static ::krpc::schema::ProcedureCall set_string_property_private_get_call_template();
+
+  static ::krpc::schema::ProcedureCall string_property_private_set_call_template();
+
   /**
    * Deprecated class documentation string.
    *
@@ -1050,6 +1286,16 @@ class TestService : public ::krpc::RemoteService {
     [[deprecated("Use TestClass instead.")]] ::krpc::schema::ProcedureCall inherited_property_call();
 
     [[deprecated("Use TestClass instead.")]] ::krpc::schema::ProcedureCall set_inherited_property_call(std::string value);
+
+    [[deprecated("Use TestClass::get_value instead.")]] static ::krpc::schema::ProcedureCall deprecated_method_call_template();
+
+    [[deprecated("Use TestClass instead.")]] static ::krpc::schema::ProcedureCall inherited_method_call_template();
+
+    [[deprecated("Use TestClass instead.")]] static ::krpc::schema::ProcedureCall inherited_static_method_call_template();
+
+    [[deprecated("Use TestClass instead.")]] static ::krpc::schema::ProcedureCall inherited_property_call_template();
+
+    [[deprecated("Use TestClass instead.")]] static ::krpc::schema::ProcedureCall set_inherited_property_call_template();
 
     /**
      * The static methods of TestService::DeprecatedClass, bound to a connection.
@@ -1186,6 +1432,34 @@ class TestService : public ::krpc::RemoteService {
     ::krpc::schema::ProcedureCall set_string_property_private_get_call(std::string value);
 
     ::krpc::schema::ProcedureCall string_property_private_set_call();
+
+    static ::krpc::schema::ProcedureCall echo_nullable_object_call_template();
+
+    static ::krpc::schema::ProcedureCall float_to_string_call_template();
+
+    static ::krpc::schema::ProcedureCall get_value_call_template();
+
+    static ::krpc::schema::ProcedureCall object_to_string_call_template();
+
+    static ::krpc::schema::ProcedureCall optional_arguments_call_template();
+
+    static ::krpc::schema::ProcedureCall static_method_call_template();
+
+    static ::krpc::schema::ProcedureCall static_nullable_object_call_template();
+
+    static ::krpc::schema::ProcedureCall static_optional_arguments_call_template();
+
+    static ::krpc::schema::ProcedureCall int_property_call_template();
+
+    static ::krpc::schema::ProcedureCall set_int_property_call_template();
+
+    static ::krpc::schema::ProcedureCall object_property_call_template();
+
+    static ::krpc::schema::ProcedureCall set_object_property_call_template();
+
+    static ::krpc::schema::ProcedureCall set_string_property_private_get_call_template();
+
+    static ::krpc::schema::ProcedureCall string_property_private_set_call_template();
 
     /**
      * The static methods of TestService::TestClass, bound to a connection.
@@ -4674,6 +4948,478 @@ inline ::krpc::schema::ProcedureCall TestService::string_property_private_set_ca
   return this->_connection.build_call("TestService", "get_StringPropertyPrivateSet");
 }
 
+inline ::krpc::schema::ProcedureCall TestService::add_multiple_values_call_template() {
+  return ::krpc::Connection::build_call("TestService", "AddMultipleValues");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::add_to_object_dictionary_call_template() {
+  return ::krpc::Connection::build_call("TestService", "AddToObjectDictionary");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::add_to_object_list_call_template() {
+  return ::krpc::Connection::build_call("TestService", "AddToObjectList");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::add_to_object_set_call_template() {
+  return ::krpc::Connection::build_call("TestService", "AddToObjectSet");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::blocking_procedure_call_template() {
+  return ::krpc::Connection::build_call("TestService", "BlockingProcedure");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::bool_to_string_call_template() {
+  return ::krpc::Connection::build_call("TestService", "BoolToString");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::bytes_default_call_template() {
+  return ::krpc::Connection::build_call("TestService", "BytesDefault");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::bytes_to_hex_string_call_template() {
+  return ::krpc::Connection::build_call("TestService", "BytesToHexString");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::counter_call_template() {
+  return ::krpc::Connection::build_call("TestService", "Counter");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::counter_struct_call_template() {
+  return ::krpc::Connection::build_call("TestService", "CounterStruct");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::create_deprecated_class_call_template() {
+  return ::krpc::Connection::build_call("TestService", "CreateDeprecatedClass");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::create_test_object_call_template() {
+  return ::krpc::Connection::build_call("TestService", "CreateTestObject");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::deprecated_procedure_call_template() {
+  return ::krpc::Connection::build_call("TestService", "DeprecatedProcedure");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::deprecated_procedure_no_message_call_template() {
+  return ::krpc::Connection::build_call("TestService", "DeprecatedProcedureNoMessage");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::deprecated_struct_procedure_call_template() {
+  return ::krpc::Connection::build_call("TestService", "DeprecatedStructProcedure");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::dictionary_default_call_template() {
+  return ::krpc::Connection::build_call("TestService", "DictionaryDefault");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::double_special_defaults_call_template() {
+  return ::krpc::Connection::build_call("TestService", "DoubleSpecialDefaults");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::double_to_string_call_template() {
+  return ::krpc::Connection::build_call("TestService", "DoubleToString");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::dump_expression_tree_call_template() {
+  return ::krpc::Connection::build_call("TestService", "DumpExpressionTree");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::echo_dictionary_of_nullable_objects_call_template() {
+  return ::krpc::Connection::build_call("TestService", "EchoDictionaryOfNullableObjects");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::echo_list_of_nullable_ints_call_template() {
+  return ::krpc::Connection::build_call("TestService", "EchoListOfNullableInts");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::echo_list_of_nullable_objects_call_template() {
+  return ::krpc::Connection::build_call("TestService", "EchoListOfNullableObjects");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::echo_nested_list_of_nullable_objects_call_template() {
+  return ::krpc::Connection::build_call("TestService", "EchoNestedListOfNullableObjects");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::echo_nested_nullable_struct_call_template() {
+  return ::krpc::Connection::build_call("TestService", "EchoNestedNullableStruct");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::echo_nullable_bool_call_template() {
+  return ::krpc::Connection::build_call("TestService", "EchoNullableBool");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::echo_nullable_bytes_call_template() {
+  return ::krpc::Connection::build_call("TestService", "EchoNullableBytes");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::echo_nullable_dictionary_call_template() {
+  return ::krpc::Connection::build_call("TestService", "EchoNullableDictionary");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::echo_nullable_double_call_template() {
+  return ::krpc::Connection::build_call("TestService", "EchoNullableDouble");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::echo_nullable_enum_call_template() {
+  return ::krpc::Connection::build_call("TestService", "EchoNullableEnum");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::echo_nullable_flags_call_template() {
+  return ::krpc::Connection::build_call("TestService", "EchoNullableFlags");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::echo_nullable_float_call_template() {
+  return ::krpc::Connection::build_call("TestService", "EchoNullableFloat");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::echo_nullable_int_call_template() {
+  return ::krpc::Connection::build_call("TestService", "EchoNullableInt");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::echo_nullable_list_call_template() {
+  return ::krpc::Connection::build_call("TestService", "EchoNullableList");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::echo_nullable_long_call_template() {
+  return ::krpc::Connection::build_call("TestService", "EchoNullableLong");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::echo_nullable_set_call_template() {
+  return ::krpc::Connection::build_call("TestService", "EchoNullableSet");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::echo_nullable_string_call_template() {
+  return ::krpc::Connection::build_call("TestService", "EchoNullableString");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::echo_nullable_tuple_call_template() {
+  return ::krpc::Connection::build_call("TestService", "EchoNullableTuple");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::echo_nullable_uint_call_template() {
+  return ::krpc::Connection::build_call("TestService", "EchoNullableUInt");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::echo_nullable_ulong_call_template() {
+  return ::krpc::Connection::build_call("TestService", "EchoNullableULong");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::echo_string_set_call_template() {
+  return ::krpc::Connection::build_call("TestService", "EchoStringSet");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::echo_test_object_call_template() {
+  return ::krpc::Connection::build_call("TestService", "EchoTestObject");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::echo_tuple_with_a_nullable_object_call_template() {
+  return ::krpc::Connection::build_call("TestService", "EchoTupleWithANullableObject");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::empty_list_default_call_template() {
+  return ::krpc::Connection::build_call("TestService", "EmptyListDefault");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::enum_default_call_template() {
+  return ::krpc::Connection::build_call("TestService", "EnumDefault");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::enum_echo_call_template() {
+  return ::krpc::Connection::build_call("TestService", "EnumEcho");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::enum_list_default_call_template() {
+  return ::krpc::Connection::build_call("TestService", "EnumListDefault");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::enum_to_string_call_template() {
+  return ::krpc::Connection::build_call("TestService", "EnumToString");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::flags_default_call_template() {
+  return ::krpc::Connection::build_call("TestService", "FlagsDefault");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::flags_echo_call_template() {
+  return ::krpc::Connection::build_call("TestService", "FlagsEcho");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::flags_list_echo_call_template() {
+  return ::krpc::Connection::build_call("TestService", "FlagsListEcho");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::flags_struct_echo_call_template() {
+  return ::krpc::Connection::build_call("TestService", "FlagsStructEcho");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::flags_to_int_call_template() {
+  return ::krpc::Connection::build_call("TestService", "FlagsToInt");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::float_special_defaults_call_template() {
+  return ::krpc::Connection::build_call("TestService", "FloatSpecialDefaults");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::float_to_string_call_template() {
+  return ::krpc::Connection::build_call("TestService", "FloatToString");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::hex_string_to_bytes_call_template() {
+  return ::krpc::Connection::build_call("TestService", "HexStringToBytes");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::increment_dictionary_call_template() {
+  return ::krpc::Connection::build_call("TestService", "IncrementDictionary");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::increment_list_call_template() {
+  return ::krpc::Connection::build_call("TestService", "IncrementList");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::increment_list_of_structs_call_template() {
+  return ::krpc::Connection::build_call("TestService", "IncrementListOfStructs");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::increment_nested_collection_call_template() {
+  return ::krpc::Connection::build_call("TestService", "IncrementNestedCollection");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::increment_set_call_template() {
+  return ::krpc::Connection::build_call("TestService", "IncrementSet");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::increment_tuple_call_template() {
+  return ::krpc::Connection::build_call("TestService", "IncrementTuple");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::int32_special_defaults_call_template() {
+  return ::krpc::Connection::build_call("TestService", "Int32SpecialDefaults");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::int32_to_string_call_template() {
+  return ::krpc::Connection::build_call("TestService", "Int32ToString");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::int64_special_defaults_call_template() {
+  return ::krpc::Connection::build_call("TestService", "Int64SpecialDefaults");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::int64_to_string_call_template() {
+  return ::krpc::Connection::build_call("TestService", "Int64ToString");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::int_to_flags_call_template() {
+  return ::krpc::Connection::build_call("TestService", "IntToFlags");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::join_with_at_sign_call_template() {
+  return ::krpc::Connection::build_call("TestService", "JoinWithAtSign");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::list_default_call_template() {
+  return ::krpc::Connection::build_call("TestService", "ListDefault");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::nested_struct_echo_call_template() {
+  return ::krpc::Connection::build_call("TestService", "NestedStructEcho");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::not_nullable_object_call_template() {
+  return ::krpc::Connection::build_call("TestService", "NotNullableObject");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::null_default_call_template() {
+  return ::krpc::Connection::build_call("TestService", "NullDefault");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::nullable_struct_echo_call_template() {
+  return ::krpc::Connection::build_call("TestService", "NullableStructEcho");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::on_timer_call_template() {
+  return ::krpc::Connection::build_call("TestService", "OnTimer");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::optional_arguments_call_template() {
+  return ::krpc::Connection::build_call("TestService", "OptionalArguments");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::partly_deprecated_struct_procedure_call_template() {
+  return ::krpc::Connection::build_call("TestService", "PartlyDeprecatedStructProcedure");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::remove_event_after_call_template() {
+  return ::krpc::Connection::build_call("TestService", "RemoveEventAfter");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::remove_test_object_call_template() {
+  return ::krpc::Connection::build_call("TestService", "RemoveTestObject");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::reset_custom_exception_later_call_template() {
+  return ::krpc::Connection::build_call("TestService", "ResetCustomExceptionLater");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::reset_invalid_operation_exception_later_call_template() {
+  return ::krpc::Connection::build_call("TestService", "ResetInvalidOperationExceptionLater");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::return_null_when_not_allowed_call_template() {
+  return ::krpc::Connection::build_call("TestService", "ReturnNullWhenNotAllowed");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::scalar_default_call_template() {
+  return ::krpc::Connection::build_call("TestService", "ScalarDefault");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::set_default_call_template() {
+  return ::krpc::Connection::build_call("TestService", "SetDefault");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::string_default_call_template() {
+  return ::krpc::Connection::build_call("TestService", "StringDefault");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::string_to_bool_call_template() {
+  return ::krpc::Connection::build_call("TestService", "StringToBool");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::string_to_double_call_template() {
+  return ::krpc::Connection::build_call("TestService", "StringToDouble");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::string_to_enum_call_template() {
+  return ::krpc::Connection::build_call("TestService", "StringToEnum");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::string_to_float_call_template() {
+  return ::krpc::Connection::build_call("TestService", "StringToFloat");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::string_to_int32_call_template() {
+  return ::krpc::Connection::build_call("TestService", "StringToInt32");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::string_to_int64_call_template() {
+  return ::krpc::Connection::build_call("TestService", "StringToInt64");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::string_to_uint32_call_template() {
+  return ::krpc::Connection::build_call("TestService", "StringToUInt32");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::string_to_uint64_call_template() {
+  return ::krpc::Connection::build_call("TestService", "StringToUInt64");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::struct_default_call_template() {
+  return ::krpc::Connection::build_call("TestService", "StructDefault");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::struct_echo_call_template() {
+  return ::krpc::Connection::build_call("TestService", "StructEcho");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::struct_echo_nullable_call_template() {
+  return ::krpc::Connection::build_call("TestService", "StructEchoNullable");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::swap_object_tuple_call_template() {
+  return ::krpc::Connection::build_call("TestService", "SwapObjectTuple");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::throw_argument_exception_call_template() {
+  return ::krpc::Connection::build_call("TestService", "ThrowArgumentException");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::throw_argument_null_exception_call_template() {
+  return ::krpc::Connection::build_call("TestService", "ThrowArgumentNullException");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::throw_argument_out_of_range_exception_call_template() {
+  return ::krpc::Connection::build_call("TestService", "ThrowArgumentOutOfRangeException");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::throw_custom_exception_call_template() {
+  return ::krpc::Connection::build_call("TestService", "ThrowCustomException");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::throw_custom_exception_later_call_template() {
+  return ::krpc::Connection::build_call("TestService", "ThrowCustomExceptionLater");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::throw_invalid_operation_exception_call_template() {
+  return ::krpc::Connection::build_call("TestService", "ThrowInvalidOperationException");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::throw_invalid_operation_exception_later_call_template() {
+  return ::krpc::Connection::build_call("TestService", "ThrowInvalidOperationExceptionLater");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::throw_mapped_exception_call_template() {
+  return ::krpc::Connection::build_call("TestService", "ThrowMappedException");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::tuple_default_call_template() {
+  return ::krpc::Connection::build_call("TestService", "TupleDefault");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::uint32_special_defaults_call_template() {
+  return ::krpc::Connection::build_call("TestService", "Uint32SpecialDefaults");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::uint32_to_string_call_template() {
+  return ::krpc::Connection::build_call("TestService", "UInt32ToString");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::uint64_special_defaults_call_template() {
+  return ::krpc::Connection::build_call("TestService", "Uint64SpecialDefaults");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::uint64_to_string_call_template() {
+  return ::krpc::Connection::build_call("TestService", "UInt64ToString");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::deprecated_property_call_template() {
+  return ::krpc::Connection::build_call("TestService", "get_DeprecatedProperty");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::set_deprecated_property_call_template() {
+  return ::krpc::Connection::build_call("TestService", "set_DeprecatedProperty");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::nullable_object_call_template() {
+  return ::krpc::Connection::build_call("TestService", "get_NullableObject");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::set_nullable_object_call_template() {
+  return ::krpc::Connection::build_call("TestService", "set_NullableObject");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::object_property_call_template() {
+  return ::krpc::Connection::build_call("TestService", "get_ObjectProperty");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::set_object_property_call_template() {
+  return ::krpc::Connection::build_call("TestService", "set_ObjectProperty");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::string_property_call_template() {
+  return ::krpc::Connection::build_call("TestService", "get_StringProperty");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::set_string_property_call_template() {
+  return ::krpc::Connection::build_call("TestService", "set_StringProperty");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::set_string_property_private_get_call_template() {
+  return ::krpc::Connection::build_call("TestService", "set_StringPropertyPrivateGet");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::string_property_private_set_call_template() {
+  return ::krpc::Connection::build_call("TestService", "get_StringPropertyPrivateSet");
+}
+
 inline TestService::DeprecatedClass::DeprecatedClass():
   RemoteObject("TestService::DeprecatedClass") {}
 
@@ -4785,6 +5531,26 @@ inline ::krpc::schema::ProcedureCall TestService::DeprecatedClass::set_inherited
 
 inline ::krpc::schema::ProcedureCall TestService::DeprecatedClass::inherited_static_method_call(::krpc::Connection& _connection) {
   return _connection.build_call("TestService", "DeprecatedClass_static_InheritedStaticMethod");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::DeprecatedClass::deprecated_method_call_template() {
+  return ::krpc::Connection::build_call("TestService", "DeprecatedClass_DeprecatedMethod");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::DeprecatedClass::inherited_method_call_template() {
+  return ::krpc::Connection::build_call("TestService", "DeprecatedClass_InheritedMethod");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::DeprecatedClass::inherited_static_method_call_template() {
+  return ::krpc::Connection::build_call("TestService", "DeprecatedClass_static_InheritedStaticMethod");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::DeprecatedClass::inherited_property_call_template() {
+  return ::krpc::Connection::build_call("TestService", "DeprecatedClass_get_InheritedProperty");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::DeprecatedClass::set_inherited_property_call_template() {
+  return ::krpc::Connection::build_call("TestService", "DeprecatedClass_set_InheritedProperty");
 }
 
 inline TestService::DeprecatedClass::Bound::Bound(const ::krpc::Connection& connection):
@@ -5158,6 +5924,62 @@ inline ::krpc::schema::ProcedureCall TestService::TestClass::static_optional_arg
   _args.push_back(encoder::encode_arg(z));
   _args.push_back(encoder::encode_arg(obj));
   return _connection.build_call("TestService", "TestClass_static_StaticOptionalArguments", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::TestClass::echo_nullable_object_call_template() {
+  return ::krpc::Connection::build_call("TestService", "TestClass_EchoNullableObject");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::TestClass::float_to_string_call_template() {
+  return ::krpc::Connection::build_call("TestService", "TestClass_FloatToString");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::TestClass::get_value_call_template() {
+  return ::krpc::Connection::build_call("TestService", "TestClass_GetValue");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::TestClass::object_to_string_call_template() {
+  return ::krpc::Connection::build_call("TestService", "TestClass_ObjectToString");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::TestClass::optional_arguments_call_template() {
+  return ::krpc::Connection::build_call("TestService", "TestClass_OptionalArguments");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::TestClass::static_method_call_template() {
+  return ::krpc::Connection::build_call("TestService", "TestClass_static_StaticMethod");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::TestClass::static_nullable_object_call_template() {
+  return ::krpc::Connection::build_call("TestService", "TestClass_static_StaticNullableObject");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::TestClass::static_optional_arguments_call_template() {
+  return ::krpc::Connection::build_call("TestService", "TestClass_static_StaticOptionalArguments");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::TestClass::int_property_call_template() {
+  return ::krpc::Connection::build_call("TestService", "TestClass_get_IntProperty");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::TestClass::set_int_property_call_template() {
+  return ::krpc::Connection::build_call("TestService", "TestClass_set_IntProperty");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::TestClass::object_property_call_template() {
+  return ::krpc::Connection::build_call("TestService", "TestClass_get_ObjectProperty");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::TestClass::set_object_property_call_template() {
+  return ::krpc::Connection::build_call("TestService", "TestClass_set_ObjectProperty");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::TestClass::set_string_property_private_get_call_template() {
+  return ::krpc::Connection::build_call("TestService", "TestClass_set_StringPropertyPrivateGet");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::TestClass::string_property_private_set_call_template() {
+  return ::krpc::Connection::build_call("TestService", "TestClass_get_StringPropertyPrivateSet");
 }
 
 inline TestService::TestClass::Bound::Bound(const ::krpc::Connection& connection):
