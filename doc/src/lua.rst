@@ -458,7 +458,7 @@ From Lua 5.3 on, a 64-bit value is an exact integer. Lua has no unsigned integer
 
    The largest 64-bit unsigned integer.
 
-API Reference
--------------
+Service API Reference
+---------------------
 
 .. include:: lua/api.inc

@@ -978,7 +978,7 @@ Client API Reference
 
       std::unordered_set<std::tuple<double, double, double>, krpc::hash> points;
 
-API Reference
--------------
+Service API Reference
+---------------------
 
 .. include:: cpp/api.inc
