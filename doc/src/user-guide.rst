@@ -7,6 +7,7 @@ These guides describe how kRPC and the game behave, independent of the client la
    :maxdepth: 1
 
    user-guide/reference-frames
+   user-guide/vectors-and-rotations
    user-guide/object-lifetime
    user-guide/parts
    user-guide/autopilot
