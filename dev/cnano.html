@@ -2198,7 +2198,11 @@ altitude, speed and vertical speed together:</p>
 <p>Each procedure has a function with <code class="docutils literal notranslate"><span class="pre">_call</span></code> added to its name, such as
 <code class="docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Flight_Speed_call</span></code>. It fills in the call as a message, for
 <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_Call()</span></code> to embed in the function. The message holds the encoded
-arguments on the heap, so free it with <a class="reference internal" href="#c.krpc_free_procedure_call" title="krpc_free_procedure_call"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_free_procedure_call()</span></code></a>.
+arguments on the heap, so free it with <a class="reference internal" href="#c.krpc_free_procedure_call" title="krpc_free_procedure_call"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_free_procedure_call()</span></code></a>. A function with
+<code class="docutils literal notranslate"><span class="pre">_call_template</span></code> added to the name, such as <code class="docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Engine_HasFuel_call_template</span></code>,
+fills in the call template. It names the procedure and carries no arguments, for
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_CallWithArguments()</span></code> to supply each one, as in
+<a class="reference internal" href="user-guide/server-side-functions.html#server-side-functions-collections"><span class="std std-ref">Functions and Collections</span></a>.
 <a class="reference internal" href="user-guide/server-side-functions.html#server-side-functions-api"><span class="std std-ref">The Expression API</span></a> in the <a class="reference internal" href="user-guide/server-side-functions.html#server-side-functions"><span class="std std-ref">server side functions guide</span></a> describes how to build functions.</p>
 <p><a class="reference internal" href="#c.krpc_run_function" title="krpc_run_function"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_run_function()</span></code></a> runs a function once, within one physics tick. Its arguments and its
 value are encoded bytes. Encode each argument at the type of its parameter with the
@@ -2695,8 +2699,8 @@ null. <code class="docutils literal notranslate"><span class="pre">NULL</span></
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_free_procedure_call">
 <a class="reference internal" href="#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_free_procedure_call</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_schema_ProcedureCall</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">call</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_free_procedure_call" title="Link to this definition">#</a><br /></dt>
-<dd><p>Frees the encoded arguments of a call that a <code class="docutils literal notranslate"><span class="pre">_call</span></code> function filled in. Free a call that
-failed to fill in too, and free a call before filling it in again.</p>
+<dd><p>Frees the encoded arguments of a call that a <code class="docutils literal notranslate"><span class="pre">_call</span></code> or <code class="docutils literal notranslate"><span class="pre">_call_template</span></code> function filled
+in. Free a call that failed to fill in too, and free a call before filling it in again.</p>
 </dd></dl>
 
 </section>

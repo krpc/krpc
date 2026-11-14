@@ -2243,7 +2243,10 @@ and the client sends it to the server. The following reads the vessel’s altitu
 </pre></div>
 </div>
 <p><a class="reference internal" href="#krpc.client.Connection.getCall(Class, String, Object)" title="krpc.client.Connection.getCall(Class, String, Object)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">getCall</span></code></a> turns a call into a message, and the static methods of
-<a class="reference internal" href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression" title="krpc.client.services.KRPC.Expression"><code class="xref java java-type docutils literal notranslate"><span class="pre">Expression</span></code></a> build the function from it. <a class="reference internal" href="user-guide/server-side-functions.html#server-side-functions-api"><span class="std std-ref">The Expression
+<a class="reference internal" href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression" title="krpc.client.services.KRPC.Expression"><code class="xref java java-type docutils literal notranslate"><span class="pre">Expression</span></code></a> build the function from it.
+<a class="reference internal" href="#krpc.client.Connection.getCallTemplate(Class, String)" title="krpc.client.Connection.getCallTemplate(Class, String)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">getCallTemplate</span></code></a> names a procedure through its class, with no object or
+arguments, for <code class="docutils literal notranslate"><span class="pre">Expression.callWithArguments</span></code> to supply each argument, as in
+<a class="reference internal" href="user-guide/server-side-functions.html#server-side-functions-collections"><span class="std std-ref">Functions and Collections</span></a>. <a class="reference internal" href="user-guide/server-side-functions.html#server-side-functions-api"><span class="std std-ref">The Expression
 API</span></a> in the server side functions guide describes these methods, and
 shows how to build larger functions.</p>
 <section id="running-a-function">
@@ -2721,6 +2724,18 @@ boolean value, or has parameters.</p>
 side function built with the expression API. See <a class="reference internal" href="user-guide/server-side-functions.html#server-side-functions-api"><span class="std std-ref">The Expression API</span></a>.</p>
 <p>Throws an <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="java.lang.IllegalArgumentException"><code class="xref java java-type docutils literal notranslate"><span class="pre">IllegalArgumentException</span></code></a> if there is no method of that name
 taking the arguments.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Connection.getCallTemplate(Class, String)">
+<span class="pre">krpc.schema</span><span class="pre">.</span><span class="pre">KRPC</span><span class="pre">.</span><span class="pre">ProcedureCall</span> <span class="sig-name descname"><span class="pre">getCallTemplate</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="java.lang.Class"><span class="pre">Class</span></a><span class="pre">&lt;</span><span class="pre">?</span><span class="pre">&gt;</span><em> <span class="pre">clazz</span></em>, <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">method</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Connection.getCallTemplate(Class, String)" title="Link to this definition">#</a></dt>
+<dd><p>The call template of a member, a procedure call message that names the procedure and
+carries no arguments, for <code class="docutils literal notranslate"><span class="pre">Expression.callWithArguments</span></code> to supply each one. The member is
+named through its class or service, with no instance, by the name of its method, such as
+<code class="docutils literal notranslate"><span class="pre">getCallTemplate(SpaceCenter.Engine.class,</span> <span class="pre">&quot;getHasFuel&quot;)</span></code>. A property’s setter is named
+<code class="docutils literal notranslate"><span class="pre">set&lt;Name&gt;</span></code>.</p>
+<p>Throws an <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="java.lang.IllegalArgumentException"><code class="xref java java-type docutils literal notranslate"><span class="pre">IllegalArgumentException</span></code></a> if the class has no remote procedure
+of that name.</p>
 </dd></dl>
 
 </dd></dl>

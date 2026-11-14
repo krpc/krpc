@@ -602,8 +602,8 @@ the <a class="reference internal" href="../cnano.html"><span class="doc">C-nano 
 is <code class="docutils literal notranslate"><span class="pre">static</span> <span class="pre">inline</span></code>, so a header can be included from several translation units.</p>
 <p>A stub calls by service and procedure id, and <code class="docutils literal notranslate"><span class="pre">src/krpc.options</span></code> removes the name fields. This
 keeps names out of flash and off the wire.</p>
-<p>Each procedure also has a <code class="docutils literal notranslate"><span class="pre">_call</span></code> function, for server side functions. An unused one adds compile
-time and no code.</p>
+<p>Each procedure also has a <code class="docutils literal notranslate"><span class="pre">_call</span></code> function and a <code class="docutils literal notranslate"><span class="pre">_call_template</span></code> function, for server side
+functions. An unused one adds compile time and no code.</p>
 <p><code class="docutils literal notranslate"><span class="pre">KRPC_DEPRECATED</span></code> goes before a declaration, the one position GCC, Clang and MSVC share. An
 enumeration value takes <code class="docutils literal notranslate"><span class="pre">KRPC_DEPRECATED_VALUE</span></code> after its name, as the attribute has no other
 position there. MSVC has no such attribute in C, so the macro is empty for it.</p>
@@ -623,6 +623,8 @@ which leaves the list empty and the tuple’s items unset, so the program checks
 the call. A <code class="docutils literal notranslate"><span class="pre">krpc_schema_ProcedureCall</span></code> outlives the <code class="docutils literal notranslate"><span class="pre">_call</span></code> function that fills it in, so
 each argument is encoded onto the heap, tag and length included. Encoding the message then writes
 those bytes as they are.</p></li>
+<li><p><strong>A call template allocates nothing.</strong> It has no arguments, so <code class="docutils literal notranslate"><span class="pre">krpc_procedure_call</span></code> leaves the
+arguments field unset, and freeing it does nothing.</p></li>
 <li><p><strong>That code has its own file</strong>, <code class="docutils literal notranslate"><span class="pre">src/procedure_call.c</span></code>, so a static link without functions
 leaves it out.</p></li>
 <li><p><strong>There are no function streams or events</strong>, as the client has no streams.</p></li>
@@ -858,7 +860,7 @@ error type, and a server error’s message starts with <code class="docutils lit
 <td><p>A generated <code class="docutils literal notranslate"><span class="pre">krpc_nullable_*_t</span></code>, the value beside <code class="docutils literal notranslate"><span class="pre">has_value</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p>Getting a call as a value</p></td>
-<td><p>A generated <code class="docutils literal notranslate"><span class="pre">_call</span></code> function</p></td>
+<td><p>A generated <code class="docutils literal notranslate"><span class="pre">_call</span></code> function, or <code class="docutils literal notranslate"><span class="pre">_call_template</span></code> for a call template</p></td>
 </tr>
 <tr class="row-even"><td><p>Value type of a server side function</p></td>
 <td><p>The program decodes encoded bytes</p></td>

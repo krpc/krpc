@@ -222,8 +222,10 @@ altitude and speed together:
 :meth:`~krpc.Connection.get_call` returns the call a procedure makes, as a message for
 :meth:`~KRPC.Expression.call` to embed in the function. A property is read through its getter,
 such as ``flight.get_speed``, with the object as the first argument.
-:ref:`server-side-functions-api` in the :ref:`server side functions guide
-<server-side-functions>` describes how to build functions.
+:meth:`~krpc.Connection.get_call_template` names a procedure through its class, with no object or
+arguments, for :meth:`~KRPC.Expression.call_with_arguments` to supply each argument, as in
+:ref:`server-side-functions-collections`. :ref:`server-side-functions-api` in the
+:ref:`server side functions guide <server-side-functions>` describes how to build functions.
 
 Running a Function
 ^^^^^^^^^^^^^^^^^^
@@ -368,6 +370,14 @@ Client API Reference
       the object or the service as the first argument.
 
       Raises an error if a service's property is not given the service.
+
+   .. method:: get_call_template(procedure: function): table
+
+      The call template of a procedure of a service or a class, a ``KRPC.ProcedureCall`` message
+      that names the procedure and carries no arguments, for
+      :meth:`~KRPC.Expression.call_with_arguments` to supply each one. The procedure is reached
+      through its class or service, such as ``conn.space_center.Engine.get_has_fuel``. The
+      procedure itself, passed where a call is expected, is converted to its call template.
 
    .. method:: compile(func: KRPC.Expression): KRPC.Expression
 

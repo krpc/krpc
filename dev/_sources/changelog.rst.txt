@@ -98,6 +98,8 @@ Core
 * Add the ``RequiresMod`` attribute, which fails the calls of a member whose mod is missing, failed to load or is not ready (:issue:`1342`)
 * Turn on "Auto-start server" by default (:issue:`1349`)
 * :breaking:`Breaking` Remove the "One RPC per update" setting and ``KRPC.ServerSettings.OneRpcPerUpdate`` (:issue:`1349`)
+* :breaking:`Breaking` ``KRPC.Expression.CallWithArguments`` takes a call template, and throws an exception for a call that carries arguments (:issue:`1352`)
+* Fail when a server side function is built, in place of when it runs, for a null constant passed to a parameter that cannot be null (:issue:`1352`)
 
 
 Server
@@ -274,6 +276,7 @@ C-nano client
 
 * Add a ``KRPC_CLASS_``, ``KRPC_ENUMERATION_`` or ``KRPC_STRUCT_`` macro for each type of a service, with its ids for server side functions (:issue:`1336`)
 * Add a ``KRPC_FIELD_`` macro for each field of a structure, with its position for ``krpc_KRPC_Expression_GetFieldByIndex`` (:issue:`1336`)
+* Add a ``_call_template`` function for each member, which fills in a call with no instance or arguments, for ``krpc_KRPC_Expression_CallWithArguments`` (:issue:`1352`)
 
 
 C# client
@@ -333,6 +336,7 @@ C# client
   * :breaking:`Breaking` Throw ``ArgumentException`` for a function whose value does not match the type parameter (:issue:`1333`)
   * :breaking:`Breaking` Throw ``EncodingException`` for every value that fails to decode, and for a null stream value of a type that cannot hold one (:issue:`1333`)
 
+* Add ``Connection.GetCallTemplate`` and ``Connection.GetSetCallTemplate``, which build a call with no instance or arguments, for ``Expression.CallWithArguments`` (:issue:`1352`)
 
 
 C++ client
@@ -394,6 +398,7 @@ C++ client
   * :breaking:`Breaking` Throw ``EncodingError`` for a null function value of a type that cannot hold null (:issue:`1333`)
 
 * :breaking:`Breaking` Convert names with ``UInt``, ``ULong``, ``SInt``, ``FoV``, a plural acronym or digits next to an acronym as written, e.g. ``Type::uint``, ``Camera::fov`` and ``MapFilterType::evas`` in place of ``u_int``, ``fo_v`` and ``ev_as`` (:issue:`1339`)
+* Add a static ``_call_template`` function for each member, which builds a call with no instance or arguments, for ``Expression::call_with_arguments`` (:issue:`1352`)
 
 
 Java client
@@ -450,6 +455,7 @@ Java client
 
 * :breaking:`Breaking` Name enumeration constants in upper snake case, e.g. ``AltimeterMode.AGL``, ``AlarmType.SOI_CHANGE`` and ``TypeCode.UINT32`` in place of ``A_GL``, ``S_OI_CHANGE`` and ``U_INT32`` (:issue:`1339`)
 * :breaking:`Breaking` Lower case a leading acronym in method and field names, e.g. ``CelestialBody.mslPosition`` and ``Type.uint`` in place of ``mSLPosition`` and ``uInt`` (:issue:`1339`)
+* Add ``Connection.getCallTemplate``, which builds a call with no instance or arguments, for ``Expression.callWithArguments`` (:issue:`1352`)
 
 
 JavaScript client
@@ -492,6 +498,8 @@ Lua client
   * :breaking:`Breaking` Raise ``bad argument :issue:`2` to 'connect_local'`` for a local socket path that is too long (:issue:`1333`)
 
 * :breaking:`Breaking` Convert names with ``UInt``, ``ULong``, ``SInt``, ``FoV``, a plural acronym or digits next to an acronym as written, e.g. ``Type.uint``, ``Camera.fov`` and ``MapFilterType.evas`` in place of ``u_int``, ``fo_v`` and ``ev_as`` (:issue:`1339`)
+* Add ``Connection:get_call_template``, which builds a call with no instance or arguments, for ``Expression.call_with_arguments`` (:issue:`1352`)
+* Take a procedure, such as ``Engine.get_has_fuel``, as its call template where a call is expected (:issue:`1352`)
 
 
 Python client
@@ -572,6 +580,8 @@ Python client
 
 * Compile ``match`` statements in server side functions (:issue:`1337`)
 * :breaking:`Breaking` Convert names with ``UInt``, ``ULong``, ``SInt``, ``FoV``, a plural acronym or digits next to an acronym as written, e.g. ``Type.uint``, ``Camera.fov`` and ``MapFilterType.evas`` in place of ``u_int``, ``fo_v`` and ``ev_as`` (:issue:`1339`)
+* Add ``Connection.get_call_template``, which builds a call with no instance or arguments, for ``Expression.call_with_arguments`` (:issue:`1352`)
+* Take a member, such as ``Engine.has_fuel``, as its call template where a call is expected (:issue:`1352`)
 
 
 krpctools

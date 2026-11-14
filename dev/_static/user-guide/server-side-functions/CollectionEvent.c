@@ -13,8 +13,6 @@ int main() {
   krpc_SpaceCenter_ActiveVessel(conn, &vessel);
   krpc_SpaceCenter_Parts_t parts;
   krpc_SpaceCenter_Vessel_Parts(conn, &parts, vessel);
-  krpc_list_object_t vessel_engines = KRPC_NULL_LIST;
-  krpc_SpaceCenter_Parts_Engines(conn, &vessel_engines, parts);
 
   // A function taking an engine, returning true if it is out of fuel
   krpc_KRPC_Type_t engine_type;
@@ -24,7 +22,7 @@ int main() {
   krpc_KRPC_Expression_Parameter(conn, &engine, "engine", engine_type);
 
   krpc_schema_ProcedureCall has_fuel;
-  krpc_SpaceCenter_Engine_HasFuel_call(&has_fuel, vessel_engines.items[0]);
+  krpc_SpaceCenter_Engine_HasFuel_call_template(&has_fuel);
   krpc_dictionary_entry_int32_object_t entries[1] = {{0, engine}};
   krpc_dictionary_int32_object_t arguments = {1, entries};
   krpc_KRPC_Expression_t engine_has_fuel, no_fuel, out_of_fuel;
@@ -52,6 +50,5 @@ int main() {
   KRPC_FREE_BYTES(data);
   if (any_out_of_fuel) printf("An engine has run out of fuel\n");
 
-  KRPC_FREE_LIST(vessel_engines);
   krpc_disconnect(conn);
 }

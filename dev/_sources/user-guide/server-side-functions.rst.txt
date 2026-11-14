@@ -889,6 +889,10 @@ Two kinds of object appear here:
   call message, which the server invokes on each evaluation. A procedure with no return value
   embeds as a statement.
 
+A call message carries its arguments, as the call for a stream does. A call template carries none,
+for :meth:`Expression.call_with_arguments` to give each one as an expression. See
+:ref:`server-side-functions-collections`.
+
 Each factory method is an RPC that creates one node on the server and returns a handle to it.
 Building a function costs one RPC per node, paid once.
 
@@ -1015,11 +1019,13 @@ Some clients take the type of the stream's values as a type argument, and others
 function's return type from the server. A function stream behaves like any other stream, and its
 rate can be limited in the usual way.
 
+.. _server-side-functions-collections:
+
 Functions and Collections
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This builds the "any engine out of fuel" event from earlier. The call message only identifies
-the procedure, so any engine can supply it:
+This builds the "any engine out of fuel" event from earlier. The call names the procedure through
+the ``Engine`` class, with no engine:
 
 .. tabs::
 
@@ -1060,13 +1066,15 @@ A function passed to a collection operation is built from two pieces:
   body, the parameter expressions stand for the arguments.
 
 To call an RPC on each element, take the call's instance from the function's parameter.
-:meth:`Expression.call_with_arguments` embeds a call with some of its arguments given as
-expressions. Each expression is keyed by the position of its parameter, and position 0 is the
-instance.
+:meth:`Expression.call_with_arguments` embeds a call with its arguments given as expressions.
+Each expression is keyed by the position of its parameter, and position 0 is the instance.
 
-A position without an expression takes the value encoded in the call message, then the
-parameter's default. :meth:`Expression.invoke` calls a function directly, binding values to its
-parameters by name.
+The call is a **call template**, which names the procedure through its class and carries no
+arguments. In Python, Lua and JavaScript, the member itself stands for its call template, as
+``has_fuel`` does in the Python example. A position without an expression takes the parameter's
+default. A call that carries arguments, such as one built from an engine, raises an error.
+
+:meth:`Expression.invoke` calls a function directly, binding values to its parameters by name.
 
 A function from :meth:`Expression.lambda_` can also be run on its own. ``Run`` passes its arguments
 to the function's parameters in order, and :attr:`Expression.parameter_types` gives their types.

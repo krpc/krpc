@@ -1838,20 +1838,22 @@ procedure returns is copied, as a client would receive it.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC10Expression19call_with_argumentsERN4krpc10ConnectionEN4krpc6schema13ProcedureCallENSt3mapI7int32_t10ExpressionEE">
 <span id="_CPPv3N4krpc8services4KRPC10Expression19call_with_argumentsERN4krpc10ConnectionEN4krpc6schema13ProcedureCallENSt3mapI7int32_t10ExpressionEE"></span><span id="_CPPv2N4krpc8services4KRPC10Expression19call_with_argumentsERN4krpc10ConnectionEN4krpc6schema13ProcedureCallENSt3mapI7int32_t10ExpressionEE"></span><span id="krpc::services::KRPC::Expression::call_with_arguments__krpc::ConnectionR.krpc::schema::ProcedureCall.std::map:int32_t.Expression:"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4krpc8services4KRPC10ExpressionE" title="krpc::services::KRPC::Expression"><span class="n"><span class="pre">Expression</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">call_with_arguments</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../../../cpp.html#_CPPv4N4krpc10ConnectionE" title="krpc::Connection"><span class="n"><span class="pre">Connection</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">schema</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ProcedureCall</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">call</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">map</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">int32_t</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4krpc8services4KRPC10ExpressionE" title="krpc::services::KRPC::Expression"><span class="n"><span class="pre">Expression</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">args</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC10Expression19call_with_argumentsERN4krpc10ConnectionEN4krpc6schema13ProcedureCallENSt3mapI7int32_t10ExpressionEE" title="Link to this definition">#</a><br /></dt>
-<dd><p>An RPC call, where some or all of the arguments are computed by expressions.</p>
+<dd><p>An RPC call, with its arguments computed by expressions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>call</strong> – The RPC to call.</p></li>
+<li><p><strong>call</strong> – The call template.</p></li>
 <li><p><strong>args</strong> – Expressions computing the call’s arguments, by position.</p></li>
 </ul>
 </dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Position 0 is the instance of a class method or property. A position with no
-expression takes the argument encoded in the call, or the parameter’s default. A
-collection the procedure returns is copied, as a client would receive it.</p>
+<p>The call is a call template, which names the procedure and carries no arguments.
+Position 0 is the instance of a class method or property. A position with no
+expression takes the parameter’s default. A collection the procedure returns is
+copied, as a client would receive it. Throws an exception if the call carries an
+argument.</p>
 </div>
 </dd></dl>
 

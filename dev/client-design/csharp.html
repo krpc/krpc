@@ -627,6 +627,17 @@ lambda holding a reference inside a collection or tuple asks the server for its 
 <p>Connections carried by the lambda’s objects, its services, a static method’s argument and a
 <code class="docutils literal notranslate"><span class="pre">Bound</span></code> object are not used or checked.</p>
 </section>
+<section id="call-templates">
+<h2>Call Templates<a class="headerlink" href="#call-templates" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">GetCallTemplate</span></code> takes a lambda over a parameter of the class, such as
+<code class="docutils literal notranslate"><span class="pre">(Engine</span> <span class="pre">x)</span> <span class="pre">=&gt;</span> <span class="pre">x.HasFuel</span></code>, and reads the stub’s <code class="docutils literal notranslate"><span class="pre">RPCAttribute</span></code> without evaluating it. The member
+must be read or called on the lambda’s parameter. A member of a service and a static method take a
+lambda with no parameter, such as <code class="docutils literal notranslate"><span class="pre">()</span> <span class="pre">=&gt;</span> <span class="pre">connection.SpaceCenter</span> <span class="pre">().UT</span></code>, and a member of an object
+is an error there.</p>
+<p>A setter is named by its property, as <code class="docutils literal notranslate"><span class="pre">GetSetCallTemplate&lt;Engine&gt;</span> <span class="pre">(nameof</span> <span class="pre">(Engine.Throttle))</span></code>.
+An expression tree cannot assign, and cannot read a property with no getter, such as
+<code class="docutils literal notranslate"><span class="pre">Part.Glow</span></code>. The stub’s property carries the setter’s procedure in an <code class="docutils literal notranslate"><span class="pre">RPCSetterAttribute</span></code>.</p>
+</section>
 <section id="ownership">
 <h2>Ownership<a class="headerlink" href="#ownership" title="Link to this heading">#</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">Connection</span></code> owns the socket and two threads. Services, objects, streams and events each hold it,
@@ -784,6 +795,7 @@ bits too</p></td>
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generated-stubs-and-target-framework">Generated Stubs and Target Framework</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#streams-from-expressions">Streams from Expressions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#call-templates">Call Templates</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ownership">Ownership</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lifetime">Lifetime</a></li>

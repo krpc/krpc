@@ -250,6 +250,10 @@ Server Side Functions
 
 * ``getCall`` takes a function returning one call, as ``addStream`` does, and returns the
   ``ProcedureCall`` it captures. It is synchronous, as the capture sends nothing.
+* ``getCallTemplate`` takes a member function itself, such as ``Engine.prototype.getHasFuel``.
+  A ``WeakMap`` holds the procedure of each member function the connection builds. A capture
+  would need an object to call the member on, and arguments it cannot encode. The declarations
+  give each class value its ``prototype``, so TypeScript checks the member's name.
 * ``addStream`` takes a ``KRPC.Expression`` in place of a function, and ``addEvent`` takes one
   too. They call ``KRPC.AddFunctionStream`` and ``KRPC.AddEvent``, which the services leave out as
   internal. The stream is registered in the message handler, as for ``AddStream``.
@@ -380,7 +384,8 @@ Mapping the Spec to JavaScript
    * - Conditions
      - None. See `Values and Waits`_
    * - Getting a call as a value
-     - ``Connection.getCall``, given a function returning one call
+     - ``Connection.getCall``, given a function returning one call, or ``getCallTemplate``, given a
+       member
    * - Value type of a server side function
      - The function's own type, read from the server. A null value is ``null`` at any type
    * - Flags enumeration

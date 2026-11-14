@@ -18,8 +18,7 @@ public class CollectionEvent {
 
       // A function taking an engine, returning true if it is out of fuel
       Expression engine = e.parameter("engine", t.classType("SpaceCenter", "Engine"));
-      ProcedureCall hasFuel = connection.getCall(
-        vessel.getParts().getEngines().get(0), "getHasFuel");
+      ProcedureCall hasFuel = connection.getCallTemplate(SpaceCenter.Engine.class, "getHasFuel");
       Expression outOfFuel = e.lambda(Arrays.asList(engine),
         e.not(e.callWithArguments(hasFuel, Collections.singletonMap(0, engine))));
 

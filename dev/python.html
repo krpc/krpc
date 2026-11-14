@@ -2824,6 +2824,21 @@ expression API. See <a class="reference internal" href="user-guide/server-side-f
 <em>func</em> for a property, as with <a class="reference internal" href="#krpc.Connection.add_stream" title="krpc.Connection.add_stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_stream()</span></code></a>.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="krpc.Connection.get_call_template">
+<span class="sig-name descname"><span class="pre">get_call_template</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.Connection.get_call_template" title="Link to this definition">#</a></dt>
+<dd><p>The call template of the remote procedure <em>func</em>, a <code class="docutils literal notranslate"><span class="pre">KRPC.ProcedureCall</span></code> message that
+names the procedure and carries no arguments, for
+<code class="docutils literal notranslate"><span class="pre">Expression.call_with_arguments</span></code> to supply each one. Takes the forms of
+<a class="reference internal" href="#krpc.Connection.get_call" title="krpc.Connection.get_call"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_call()</span></code></a>, with a class in place of the instance and no arguments, such as
+<code class="docutils literal notranslate"><span class="pre">conn.get_call_template(getattr,</span> <span class="pre">Engine,</span> <span class="pre">&quot;has_fuel&quot;)</span></code> or
+<code class="docutils literal notranslate"><span class="pre">conn.get_call_template(Engine.toggle_mode)</span></code>, where <code class="docutils literal notranslate"><span class="pre">Engine</span></code> is
+<code class="docutils literal notranslate"><span class="pre">conn.space_center.Engine</span></code>. A member passed where a call is expected, such as
+<code class="docutils literal notranslate"><span class="pre">Engine.has_fuel</span></code> or <code class="docutils literal notranslate"><span class="pre">Engine.toggle_mode</span></code>, is converted to its call template, and a
+property gives its getter’s. Raises a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code> for a member reached through an
+object. <a class="reference internal" href="user-guide/server-side-functions.html#server-side-functions-collections"><span class="std std-ref">Functions and Collections</span></a> uses a call template.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">

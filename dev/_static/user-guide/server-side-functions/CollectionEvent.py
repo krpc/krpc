@@ -7,7 +7,7 @@ vessel = conn.space_center.active_vessel
 
 # A function taking an engine, returning true if it is out of fuel
 engine = expression.parameter("engine", types.class_type("SpaceCenter", "Engine"))
-has_fuel = conn.get_call(getattr, vessel.parts.engines[0], "has_fuel")
+has_fuel = conn.space_center.Engine.has_fuel
 out_of_fuel = expression.lambda_(
     [engine],
     expression.not_(expression.call_with_arguments(has_fuel, {0: engine})),

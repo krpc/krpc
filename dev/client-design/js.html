@@ -821,6 +821,10 @@ value that arrives during the call is dropped.</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">getCall</span></code> takes a function returning one call, as <code class="docutils literal notranslate"><span class="pre">addStream</span></code> does, and returns the
 <code class="docutils literal notranslate"><span class="pre">ProcedureCall</span></code> it captures. It is synchronous, as the capture sends nothing.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">getCallTemplate</span></code> takes a member function itself, such as <code class="docutils literal notranslate"><span class="pre">Engine.prototype.getHasFuel</span></code>.
+A <code class="docutils literal notranslate"><span class="pre">WeakMap</span></code> holds the procedure of each member function the connection builds. A capture
+would need an object to call the member on, and arguments it cannot encode. The declarations
+give each class value its <code class="docutils literal notranslate"><span class="pre">prototype</span></code>, so TypeScript checks the member’s name.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">addStream</span></code> takes a <code class="docutils literal notranslate"><span class="pre">KRPC.Expression</span></code> in place of a function, and <code class="docutils literal notranslate"><span class="pre">addEvent</span></code> takes one
 too. They call <code class="docutils literal notranslate"><span class="pre">KRPC.AddFunctionStream</span></code> and <code class="docutils literal notranslate"><span class="pre">KRPC.AddEvent</span></code>, which the services leave out as
 internal. The stream is registered in the message handler, as for <code class="docutils literal notranslate"><span class="pre">AddStream</span></code>.</p></li>
@@ -972,7 +976,8 @@ and the name, as in <code class="docutils literal notranslate"><span class="pre"
 <td><p>None. See <a class="reference internal" href="#values-and-waits">Values and Waits</a></p></td>
 </tr>
 <tr class="row-even"><td><p>Getting a call as a value</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">Connection.getCall</span></code>, given a function returning one call</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Connection.getCall</span></code>, given a function returning one call, or <code class="docutils literal notranslate"><span class="pre">getCallTemplate</span></code>, given a
+member</p></td>
 </tr>
 <tr class="row-odd"><td><p>Value type of a server side function</p></td>
 <td><p>The function’s own type, read from the server. A null value is <code class="docutils literal notranslate"><span class="pre">null</span></code> at any type</p></td>

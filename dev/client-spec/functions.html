@@ -676,12 +676,6 @@ the call with <code class="docutils literal notranslate"><span class="pre">KRPC.
 the connection. A function that makes the call returns the method’s value.</p>
 </dd>
 </dl>
-<dl class="simple" id="spec-functions-call-with-arguments">
-<dt><code class="docutils literal notranslate"><span class="pre">functions-call-with-arguments</span> <span class="pre">[functions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>The client passes the call it builds for a stream to
-<code class="docutils literal notranslate"><span class="pre">KRPC.Expression.CallWithArguments</span></code>. A position with a function takes the function’s
-value, and a position without one takes the argument encoded in the call.</p>
-</dd>
-</dl>
 <dl class="simple" id="spec-functions-call-with-a-call-argument">
 <dt><code class="docutils literal notranslate"><span class="pre">functions-call-with-a-call-argument</span> <span class="pre">[functions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A function the client builds over one call computes an argument of another call. Here
 the instance of a class method is computed by a call that creates the object.</p>
@@ -710,6 +704,37 @@ that maps it to its argument error.</p>
 </dl>
 <dl class="simple" id="spec-functions-event-with-parameters">
 <dt><code class="docutils literal notranslate"><span class="pre">functions-event-with-parameters</span> <span class="pre">[events,</span> <span class="pre">functions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Adding an event for a function with parameters raises the client’s argument error.</p>
+</dd>
+</dl>
+</section>
+<section id="call-templates">
+<h2>Call Templates<a class="headerlink" href="#call-templates" title="Link to this heading">#</a></h2>
+<p>A call template names a procedure through its class or service, with no instance. It carries no arguments, so that <code class="docutils literal notranslate"><span class="pre">KRPC.Expression.CallWithArguments</span></code> supplies each one.</p>
+<dl class="simple" id="spec-functions-call-template">
+<dt><code class="docutils literal notranslate"><span class="pre">functions-call-template</span> <span class="pre">[functions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A client builds a call template for each kind of member: a procedure, a property’s getter
+and setter, a method, a static method, and a class property’s getter and setter. A function
+that makes the call, with each argument computed by a function, gives the member’s value or
+sets it.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-functions-call-template-message">
+<dt><code class="docutils literal notranslate"><span class="pre">functions-call-template-message</span> <span class="pre">[functions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A call template names the procedure, carries no arguments, and is built with no
+remote procedure call.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-functions-call-template-default">
+<dt><code class="docutils literal notranslate"><span class="pre">functions-call-template-default</span> <span class="pre">[functions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A position that <code class="docutils literal notranslate"><span class="pre">CallWithArguments</span></code> gives no expression for takes the parameter’s
+default.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-functions-call-with-encoded-arguments">
+<dt><code class="docutils literal notranslate"><span class="pre">functions-call-with-encoded-arguments</span> <span class="pre">[functions]</span> <span class="pre">[MUST]</span></code></dt><dd><p><code class="docutils literal notranslate"><span class="pre">KRPC.Expression.CallWithArguments</span></code> raises the argument error for a call that carries
+arguments, such as the call the client builds for a stream. Each argument is a function.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-functions-call-template-missing-argument">
+<dt><code class="docutils literal notranslate"><span class="pre">functions-call-template-missing-argument</span> <span class="pre">[functions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Building a function over a call template fails with the argument error when a required
+position has no argument, the instance included.</p>
 </dd>
 </dl>
 </section>
@@ -832,6 +857,7 @@ enumeration that is not a flags enumeration, raises the server’s
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#streams">Streams</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#events">Events</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running">Running</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#call-templates">Call Templates</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#values">Values</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flags">Flags</a></li>
 </ul>

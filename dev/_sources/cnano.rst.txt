@@ -406,7 +406,11 @@ altitude, speed and vertical speed together:
 Each procedure has a function with ``_call`` added to its name, such as
 ``krpc_SpaceCenter_Flight_Speed_call``. It fills in the call as a message, for
 :func:`krpc_KRPC_Expression_Call` to embed in the function. The message holds the encoded
-arguments on the heap, so free it with :func:`krpc_free_procedure_call`.
+arguments on the heap, so free it with :func:`krpc_free_procedure_call`. A function with
+``_call_template`` added to the name, such as ``krpc_SpaceCenter_Engine_HasFuel_call_template``,
+fills in the call template. It names the procedure and carries no arguments, for
+:func:`krpc_KRPC_Expression_CallWithArguments` to supply each one, as in
+:ref:`server-side-functions-collections`.
 :ref:`server-side-functions-api` in the :ref:`server side functions guide
 <server-side-functions>` describes how to build functions.
 
@@ -775,8 +779,8 @@ Client API Reference
 
 .. function:: krpc_error_t krpc_free_procedure_call(krpc_schema_ProcedureCall * call)
 
-   Frees the encoded arguments of a call that a ``_call`` function filled in. Free a call that
-   failed to fill in too, and free a call before filling it in again.
+   Frees the encoded arguments of a call that a ``_call`` or ``_call_template`` function filled
+   in. Free a call that failed to fill in too, and free a call before filling it in again.
 
 Service API Reference
 ---------------------

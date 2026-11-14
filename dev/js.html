@@ -2405,6 +2405,25 @@ to build the call, which it does not send.</p></li>
 </dd></dl>
 
 <dl class="js method">
+<dt class="sig sig-object js" id="krpc-org-krpc.Connection.getCallTemplate">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Connection</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getCallTemplate</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">member</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc-org-krpc.Connection.getCallTemplate" title="Link to this definition">#</a></dt>
+<dd><p>The call template of a member, a <code class="docutils literal notranslate"><span class="pre">ProcedureCall</span></code> message that names the procedure and
+carries no arguments, for <code class="docutils literal notranslate"><span class="pre">KRPC.Expression.callWithArguments</span></code> to supply each one.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>member</strong> – A member function, reached through its class or service with no instance,
+such as <code class="docutils literal notranslate"><span class="pre">Engine.prototype.getHasFuel</span></code>, <code class="docutils literal notranslate"><span class="pre">Engine.staticMethod</span></code> or
+<code class="docutils literal notranslate"><span class="pre">conn.spaceCenter.launchVessel</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Throws a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code> for a function that is not a member of a service or a class. The
+member itself, passed where a call is expected, is converted to its call template.
+<a class="reference internal" href="user-guide/server-side-functions.html#server-side-functions-collections"><span class="std std-ref">Functions and Collections</span></a> uses a call template.</p>
+</dd></dl>
+
+<dl class="js method">
 <dt class="sig sig-object js" id="krpc-org-krpc.Connection.compile">
 <span class="sig-prename descclassname"><span class="n"><span class="pre">Connection</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">compile</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">captures</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc-org-krpc.Connection.compile" title="Link to this definition">#</a></dt>
 <dd><p>Compiles a JavaScript function into a server side function, and compiles a server side
