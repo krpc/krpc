@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING, Any, TypeGuard, TypeVar, cast
 import krpc.schema.KRPC_pb2 as KRPC
 import krpc.stream
 from krpc import limits
-from krpc.declarations import connection_lookup
+from krpc.declarations import DeclaredClass, connection_lookup, declaration_error
 from krpc.decoder import Decoder
 from krpc.definitions import register_all
 from krpc.encoder import Encoder
@@ -528,6 +528,47 @@ class Connection:
         if deprecation:
             warn_deprecated(deprecation)
         return cast(KRPC.ProcedureCall, builder(*args, **kwargs))
+
+    @staticmethod
+    def get_call_template(func: Callable, *args: object) -> KRPC.ProcedureCall:
+        """The call template of a member, a KRPC.ProcedureCall that names the procedure and
+        carries no arguments, for Expression.call_with_arguments. Takes the forms of get_call,
+        with the class in place of an instance, and no arguments: getattr or setattr, then the
+        class or service and the property's name, or else the method."""
+        if func in (getattr, setattr):
+            if len(args) != 2:
+                raise TypeError(
+                    "get_call_template takes the class or service and the property's name"
+                )
+            owner, name = args
+            owner_type = owner if isinstance(owner, type) else type(owner)
+            if isinstance(owner_type, DeclaredClass):
+                raise declaration_error(
+                    owner_type._service_name, owner_type._class_name
+                )
+            prop = getattr(owner_type, cast(str, name), None)
+            if not isinstance(prop, property):
+                raise TypeError("%s has no property %s" % (owner_type.__name__, name))
+            used = prop.fget if func == getattr else prop.fset
+            if used is None:
+                raise TypeError(
+                    "The property %s has no %s"
+                    % (name, "getter" if func == getattr else "setter")
+                )
+        else:
+            if args:
+                raise TypeError("get_call_template takes no arguments")
+            used = func
+        procedure = getattr(used, "_procedure", None)
+        if procedure is None:
+            raise TypeError(
+                "get_call_template expects a procedure of a service or a class, got %r"
+                % (func,)
+            )
+        deprecation = getattr(used, "_deprecation", None)
+        if deprecation:
+            warn_deprecated(deprecation)
+        return KRPC.ProcedureCall(service=procedure[0], procedure=procedure[1])
 
     def _get_return_type(
         self,

@@ -17,8 +17,10 @@ from driver.errors import (
 )
 from driver.functions import Functions
 from driver.helpers import ended, name, raised
-from driver.scripted import functions_script, null_stream_ids
+from driver.scripted import functions_script, is_call, null_stream_ids
 from driver.testee import REPLY_TIMEOUT, TesteeError, wait_until
+
+import krpc.schema.KRPC_pb2 as KRPC
 
 
 @pytest.fixture
@@ -674,6 +676,168 @@ def test_event_with_parameters(connected, functions):
     assert_argument_error(
         connected, raised(lambda: connected.add_function_event(function))
     )
+
+
+section(
+    "Call Templates",
+    "A call template names a procedure through its class or service, with no instance. "
+    "It carries no arguments, so that ``KRPC.Expression.CallWithArguments`` supplies each one.",
+)
+
+
+def template_object(connected, functions):
+    """An object, and a function whose value is the object."""
+    obj = connected.invoke("TestService", "CreateTestObject", values.string("alpha"))
+    return obj, functions.expression("ConstantObject", values.uint64(obj.id))
+
+
+def template_case(connected, functions, case):
+    """The procedure of a kind of member, the functions that compute its arguments, the type of
+    the call's value, and a function that returns the value the call gave or set."""
+    obj, instance = template_object(connected, functions)
+
+    def constant(kind, value):
+        return functions.expression(kind, value)
+
+    if case == "procedure":
+        return (
+            "Int32ToString",
+            {0: constant("ConstantInt", values.sint32(42))},
+            "string",
+            None,
+            "42",
+        )
+    if case == "getter":
+        connected.invoke("TestService", "set_StringProperty", values.string("getter"))
+        return "get_StringProperty", {}, "string", None, "getter"
+    if case == "setter":
+        return (
+            "set_StringProperty",
+            {0: constant("ConstantString", values.string("setter"))},
+            "",
+            lambda: connected.invoke("TestService", "get_StringProperty"),
+            "setter",
+        )
+    if case == "method":
+        return (
+            "TestClass_FloatToString",
+            {0: instance, 1: constant("ConstantFloat", values.float32(2.5))},
+            "string",
+            None,
+            "alpha2.5",
+        )
+    if case == "static-method":
+        return (
+            "TestClass_static_StaticMethod",
+            {
+                0: constant("ConstantString", values.string("beta")),
+                1: constant("ConstantString", values.string("gamma")),
+            },
+            "string",
+            None,
+            "staticbetagamma",
+        )
+    if case == "class-getter":
+        connected.invoke(
+            "TestService",
+            "TestClass_set_IntProperty",
+            values.obj(obj),
+            values.sint32(7),
+        )
+        return "TestClass_get_IntProperty", {0: instance}, "sint32", None, 7
+    return (
+        "TestClass_set_IntProperty",
+        {0: instance, 1: constant("ConstantInt", values.sint32(9))},
+        "",
+        lambda: connected.invoke(
+            "TestService", "TestClass_get_IntProperty", values.obj(obj)
+        ),
+        9,
+    )
+
+
+TEMPLATE_CASES = [
+    "procedure",
+    "getter",
+    "setter",
+    "method",
+    "static-method",
+    "class-getter",
+    "class-setter",
+]
+
+
+@profile("functions")
+@pytest.mark.parametrize("case", TEMPLATE_CASES)
+def test_call_template(connected, functions, case):
+    """A client builds a call template for each kind of member: a procedure, a property's getter
+    and setter, a method, a static method, and a class property's getter and setter. A function
+    that makes the call, with each argument computed by a function, gives the member's value or
+    sets it."""
+    procedure, arguments, typ, read, expected = template_case(
+        connected, functions, case
+    )
+    function = connected.call_with_arguments(
+        "TestService", procedure, [], arguments, template=True
+    )
+    result = connected.run_function(function, typ)
+    if read is not None:
+        result = read()
+    assert result == expected
+
+
+@profile("functions")
+def test_call_template_message(client, server, scripted_server):
+    """A call template names the procedure, carries no arguments, and is built with no
+    remote procedure call."""
+    scripted = functions_script(client, server, scripted_server)
+    try:
+        function = Functions(client).expression("ConstantInt", values.sint32(2))
+        client.call_with_arguments(
+            "TestService", "TestClass_FloatToString", [], {0: function}, template=True
+        )
+        (call,) = scripted.wait_for_call("Expression_static_CallWithArguments")
+        template = KRPC.ProcedureCall.FromString(call.arguments[0].value)
+        assert is_call(template, "TestClass_FloatToString"), template
+        assert template.service in ("", "TestService"), template
+        assert not template.arguments, template
+        assert not any(
+            is_call(x, "TestClass_FloatToString") for x in scripted.answered_calls()
+        )
+    finally:
+        client.close()
+
+
+@profile("functions")
+def test_call_template_default(connected, functions):
+    """A position that ``CallWithArguments`` gives no expression for takes the parameter's
+    default."""
+    _, instance = template_object(connected, functions)
+    function = connected.call_with_arguments(
+        "TestService",
+        "TestClass_OptionalArguments",
+        [],
+        {0: instance, 1: functions.expression("ConstantString", values.string("x"))},
+        template=True,
+    )
+    assert connected.run_function(function, "string") == "xfoobarnull"
+
+
+@profile("functions")
+def test_call_template_missing_argument(connected, functions):
+    """Building a function over a call template fails with the argument error when a required
+    position has no argument, the instance included."""
+    _, instance = template_object(connected, functions)
+    for arguments in (
+        {0: instance},
+        {1: functions.expression("ConstantFloat", values.float32(1))},
+    ):
+        error = raised(
+            lambda arguments=arguments: connected.call_with_arguments(
+                "TestService", "TestClass_FloatToString", [], arguments, template=True
+            )
+        )
+        assert_argument_error(connected, error)
 
 
 section("Values")

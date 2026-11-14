@@ -203,14 +203,18 @@ class Testee:
         if command.HasField("call"):
             func, args = self._resolve(command.call.invoke)
             return conn.krpc.Expression.call(conn.get_call(func, *args))
-        func, args = self._resolve(command.call_with_arguments.invoke)
         arguments = {
             position: self._from_value(value)
             for position, value in command.call_with_arguments.arguments.items()
         }
-        return conn.krpc.Expression.call_with_arguments(
-            conn.get_call(func, *args), arguments
-        )
+        if command.call_with_arguments.template:
+            call = conn.get_call_template(
+                *self._resolve_template(command.call_with_arguments.invoke)
+            )
+        else:
+            func, args = self._resolve(command.call_with_arguments.invoke)
+            call = conn.get_call(func, *args)
+        return conn.krpc.Expression.call_with_arguments(call, arguments)
 
     def _dispatch(self, command: pb.Command, reply: pb.Reply) -> None:
         case = command.WhichOneof("command")
@@ -495,6 +499,25 @@ class Testee:
             return setattr, [service, prop, args[0]]
         return getattr(service, member_name(name)), args
 
+    def _resolve_template(self, command: pb.Invoke) -> list[Any]:
+        """The arguments of get_call_template for a procedure, which name the member through
+        its class or service"""
+        name = command.procedure
+        service = getattr(self._connection(), snake_case(command.service))
+        if Attributes.is_a_class_member(name):
+            owner = getattr(service, Attributes.get_class_name(name))
+            member = Attributes.get_class_member_name(name)
+            if Attributes.is_a_class_property_getter(name):
+                return [getattr, owner, snake_case(member)]
+            if Attributes.is_a_class_property_setter(name):
+                return [setattr, owner, snake_case(member)]
+            return [getattr(owner, member_name(member))]
+        if Attributes.is_a_property_getter(name):
+            return [getattr, service, snake_case(Attributes.get_property_name(name))]
+        if Attributes.is_a_property_setter(name):
+            return [setattr, service, snake_case(Attributes.get_property_name(name))]
+        return [getattr(service, member_name(name))]
+
     def _call_back(
         self,
         callback: int,
@@ -702,8 +725,11 @@ class Testee:
         """A function that uses a member of a service: a call of a procedure, or a read of the
         service, a type, a value of an enumeration or a field of a structure."""
         if command.HasField("invoke"):
-            func, args = self._resolve(command.invoke)
             conn = self._connection()
+            if command.use == "template":
+                template = self._resolve_template(command.invoke)
+                return lambda: conn.get_call_template(*template)
+            func, args = self._resolve(command.invoke)
             if command.use == "stream":
                 return lambda: conn.add_stream(func, *args).remove()
             if command.use == "call":

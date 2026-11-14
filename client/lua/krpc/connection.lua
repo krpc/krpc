@@ -294,6 +294,21 @@ function Connection:get_call(procedure, ...)
   return { service = info.service, procedure = info.procedure, arguments = arguments }
 end
 
+--- The call template of a procedure of a service or a class, a KRPC.ProcedureCall message that
+--- names the procedure and carries no arguments, to pass to KRPC.Expression.call_with_arguments.
+--- The procedure is reached through its class or service, such as Engine.get_has_fuel, with no
+--- instance.
+function Connection:get_call_template(procedure)
+  local info = Service.procedures[procedure]
+  if info == nil then
+    error('get_call_template expects a procedure of a service or a class', 2)
+  end
+  if info.deprecation ~= nil then
+    self._types:warn_deprecated(info.deprecation)
+  end
+  return { service = info.service, procedure = info.procedure, arguments = {} }
+end
+
 --- The type of a server side function, a KRPC.Expression object
 function Connection:_expression_type()
   return self._types:class_type('KRPC', 'Expression')

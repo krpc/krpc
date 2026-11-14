@@ -115,6 +115,8 @@ def _construct_func(
         "return_type": return_type,
     }
     fn = eval(code, context)
+    # Connection.get_call_template reads the procedure the function calls
+    fn._procedure = (service_name, procedure_name)
     return cast(Callable, fn)
 
 
