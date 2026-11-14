@@ -11,6 +11,7 @@ These tutorials walk through complete scripts that fly vessels and use the featu
    tutorials/pitch-heading-roll
    tutorials/parts
    tutorials/docking-guidance
+   tutorials/boats-and-submarines
    tutorials/user-interface
    tutorials/drawing
    tutorials/raster-prop-monitor

@@ -50,17 +50,17 @@ an altitude of 10 km:
 
       Install the server plugin, install a client and run your first script.
 
-   .. grid-item-card:: :fas:`book` User Guides
-      :link: user-guide
-      :link-type: doc
-
-      How kRPC and the game behave: reference frames, object lifetime, the auto-pilot and more.
-
    .. grid-item-card:: :fas:`graduation-cap` Tutorials
       :link: tutorials
       :link-type: doc
 
       Complete scripts that launch into orbit, land, dock and draw in the game.
+
+   .. grid-item-card:: :fas:`book` User Guides
+      :link: user-guide
+      :link-type: doc
+
+      How kRPC and the game behave: parts, scenes, time warp, reference frames, streams and more.
 
    .. grid-item-card:: :fas:`code` Clients
       :link: clients
@@ -125,8 +125,8 @@ Clients
    :hidden:
 
    getting-started
-   user-guide
    tutorials
+   user-guide
    clients
    developer-guide
    changelog
