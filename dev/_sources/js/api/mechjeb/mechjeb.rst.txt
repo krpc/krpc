@@ -1,0 +1,241 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: MechJeb
+   :no-index:
+
+Service
+=======
+
+
+.. module:: MechJeb
+
+This service provides functionality to interact with MechJeb 2.
+
+.. note::
+
+   The objects act on the MechJeb of the active vessel, and stay valid after the active
+   vessel changes.
+
+
+
+.. function:: getAvailable()
+
+   Whether MechJeb is installed.
+
+   :Property: Read-only, cannot be set
+   :rtype: ``boolean``
+   
+
+
+
+
+.. function:: getReady()
+
+   Whether the active vessel has MechJeb.
+
+   :Property: Read-only, cannot be set
+   :rtype: ``boolean``
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: getAirplaneAutopilot()
+
+   The airplane autopilot.
+
+   :Property: Read-only, cannot be set
+   :rtype: :class:`MechJeb.AirplaneAutopilot`
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: getAntennaController()
+
+   The controller of the deployable antennas.
+
+   :Property: Read-only, cannot be set
+   :rtype: :class:`MechJeb.DeployableController`
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: getAscentAutopilot()
+
+   The ascent autopilot.
+
+   :Property: Read-only, cannot be set
+   :rtype: :class:`MechJeb.AscentAutopilot`
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: getDockingAutopilot()
+
+   The docking autopilot.
+
+   :Property: Read-only, cannot be set
+   :rtype: :class:`MechJeb.DockingAutopilot`
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: getLandingAutopilot()
+
+   The landing autopilot.
+
+   :Property: Read-only, cannot be set
+   :rtype: :class:`MechJeb.LandingAutopilot`
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: getManeuverPlanner()
+
+   The maneuver planner.
+
+   :Property: Read-only, cannot be set
+   :rtype: :class:`MechJeb.ManeuverPlanner`
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: getNodeExecutor()
+
+   The maneuver node executor.
+
+   :Property: Read-only, cannot be set
+   :rtype: :class:`MechJeb.NodeExecutor`
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: getRCSController()
+
+   The RCS controller.
+
+   :Property: Read-only, cannot be set
+   :rtype: :class:`MechJeb.RCSController`
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: getRendezvousAutopilot()
+
+   The rendezvous autopilot.
+
+   :Property: Read-only, cannot be set
+   :rtype: :class:`MechJeb.RendezvousAutopilot`
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: getSmartASS()
+
+   The Smart A.S.S. window.
+
+   :Property: Read-only, cannot be set
+   :rtype: :class:`MechJeb.SmartASS`
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: getSmartRCS()
+
+   The Smart RCS window.
+
+   :Property: Read-only, cannot be set
+   :rtype: :class:`MechJeb.SmartRCS`
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: getSolarPanelController()
+
+   The controller of the deployable solar panels.
+
+   :Property: Read-only, cannot be set
+   :rtype: :class:`MechJeb.DeployableController`
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: getStagingController()
+
+   The staging controller.
+
+   :Property: Read-only, cannot be set
+   :rtype: :class:`MechJeb.StagingController`
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: getTargetController()
+
+   The target controller.
+
+   :Property: Read-only, cannot be set
+   :rtype: :class:`MechJeb.TargetController`
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: getThrustController()
+
+   The thrust controller.
+
+   :Property: Read-only, cannot be set
+   :rtype: :class:`MechJeb.ThrustController`
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: getTranslatron()
+
+   The Translatron window.
+
+   :Property: Read-only, cannot be set
+   :rtype: :class:`MechJeb.Translatron`
+   :Game Scenes: Flight
+
+
+
+
+
+
+.. class:: MJServiceException
+
+   A general error in the service.
+
+   A subclass of :class:`~@krpc-org/krpc.ServerError`.

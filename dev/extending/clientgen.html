@@ -502,6 +502,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../client-design/cnano.html">C-nano Client Design</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../client-design/java.html">Java Client Design</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../client-design/lua.html">Lua Client Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-design/js.html">JavaScript Client Design</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../client-spec.html">Client Specification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -608,13 +609,14 @@ installed using pip:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>krpc-clientgen<span class="w"> </span>--help
 
 <span class="go">usage: krpc-clientgen [-h] [-v] [-o OUTPUT] [--reference-dir DIR] [--ksp KSP]</span>
-<span class="go">                      [--include SERVICE=PATH] [--output-defs OUTPUT_DEFS]</span>
+<span class="go">                      [--include SERVICE=PATH] [--client-module CLIENT_MODULE]</span>
+<span class="go">                      [--output-defs OUTPUT_DEFS]</span>
 <span class="go">                      language service input [input ...]</span>
 
 <span class="go">Generate client source code for kRPC services.</span>
 
 <span class="go">positional arguments:</span>
-<span class="go">  language              Language to generate (cnano, cpp, csharp, java,</span>
+<span class="go">  language              Language to generate (cnano, cpp, csharp, java, js,</span>
 <span class="go">                        python) or path to generator</span>
 <span class="go">  service               Name of service to generate</span>
 <span class="go">  input                 Path to service definition JSON file(s) or assembly</span>
@@ -635,8 +637,13 @@ installed using pip:</p>
 <span class="go">                        Include the generated code of another service, whose</span>
 <span class="go">                        types the service uses, from the given path. Required</span>
 <span class="go">                        by the C++ and C nano generators for each such</span>
-<span class="go">                        service. For Python, the path is the module of the</span>
-<span class="go">                        service, which defaults to the module it ships in.</span>
+<span class="go">                        service. For Python and JavaScript, the path is the</span>
+<span class="go">                        module of the service, which defaults to the module it</span>
+<span class="go">                        ships in.</span>
+<span class="go">  --client-module CLIENT_MODULE</span>
+<span class="go">                        For JavaScript, the module the generated code imports</span>
+<span class="go">                        the client's functions from. Defaults to the client's</span>
+<span class="go">                        package, @krpc-org/krpc.</span>
 <span class="go">  --output-defs OUTPUT_DEFS</span>
 <span class="go">                        When generating client code from a DLL, output the</span>
 <span class="go">                        service definitions to the given JSON file</span>
@@ -667,8 +674,8 @@ the same way:</p>
 </div>
 <section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Link to this heading">#</a></h2>
-<p>The following demonstrates how to generate code for the C++, Python and C# clients to interact
-with the LaunchControl service, given in an example previously.</p>
+<p>The following demonstrates how to generate code for the C++, Python, C# and JavaScript clients to
+interact with the LaunchControl service, given in an example previously.</p>
 <p>krpc-clientgen expects to be passed the directory of the game’s managed assemblies, the name of
 the language to generate, the name of the service (from the <a class="reference internal" href="attributes.html#attribute-KRPCService" title="attribute: KRPCService"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCService</span></code></a> attribute), a
 path to the assembly containing the service and the path to write the generated code to.</p>
@@ -687,6 +694,26 @@ client, pass <code class="docutils literal notranslate"><span class="pre">--incl
 <p><code class="docutils literal notranslate"><span class="pre">krpc-clientgen</span> <span class="pre">--reference-dir=/path/to/ksp/KSP_Data/Managed</span> <span class="pre">-o</span> <span class="pre">LaunchControl.cs</span> <span class="pre">csharp</span> <span class="pre">LaunchControl</span> <span class="pre">LaunchControl.dll</span></code></p>
 <p>To then use the LaunchControl service from a C# client, you need to reference the <cite>KRPC.Client.dll</cite>
 and include <cite>LaunchControl.cs</cite> in your project.</p>
+<p>For JavaScript, run the following:</p>
+<p><code class="docutils literal notranslate"><span class="pre">krpc-clientgen</span> <span class="pre">--reference-dir=/path/to/ksp/KSP_Data/Managed</span> <span class="pre">-o</span> <span class="pre">LaunchControl.ts</span> <span class="pre">js</span> <span class="pre">LaunchControl</span> <span class="pre">LaunchControl.dll</span></code></p>
+<p>The JavaScript client builds the service when it connects. <cite>LaunchControl.ts</cite> declares its
+classes, and exports its enumerations, structures and exceptions as values. Import the module
+before you connect, and the connection uses those values where the server’s definitions match.
+The module imports the client and the services it ships from the <code class="docutils literal notranslate"><span class="pre">&#64;krpc-org/krpc</span></code> package. A
+service from another mod needs <code class="docutils literal notranslate"><span class="pre">--include</span></code> with the path of its module, e.g.
+<code class="docutils literal notranslate"><span class="pre">--include=OtherMod=./OtherMod.js</span></code>. To give the connection the service’s types, add it to the
+client’s <code class="docutils literal notranslate"><span class="pre">Services</span></code> interface:</p>
+<div class="highlight-ts notranslate"><div class="highlight"><pre><span></span><span class="k">import</span><span class="w"> </span><span class="kr">type</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="kr">as</span><span class="w"> </span><span class="nx">LaunchControl</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">"./LaunchControl.js"</span><span class="p">;</span>
+
+<span class="kr">declare</span><span class="w"> </span><span class="nx">module</span><span class="w"> </span><span class="s2">"@krpc-org/krpc"</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">interface</span><span class="w"> </span><span class="nx">Services</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">readonly</span><span class="w"> </span><span class="nx">launchControl</span><span class="o">:</span><span class="w"> </span><span class="kt">LaunchControl.Service</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The module also adds the forms its service and classes take in a <a class="reference internal" href="../js.html#js-client-compiling-functions"><span class="std std-ref">compiled function</span></a> to the package’s <code class="docutils literal notranslate"><span class="pre">ServerTypes</span></code>, so a function that captures them
+is typed once the module is imported.</p>
 </section>
 </section>
 

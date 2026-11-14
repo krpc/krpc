@@ -991,6 +991,16 @@
 <li><p><span class="changelog-marker breaking">Breaking</span> Lower case a leading acronym in method and field names, e.g. <code class="docutils literal notranslate"><span class="pre">CelestialBody.mslPosition</span></code> and <code class="docutils literal notranslate"><span class="pre">Type.uint</span></code> in place of <code class="docutils literal notranslate"><span class="pre">mSLPosition</span></code> and <code class="docutils literal notranslate"><span class="pre">uInt</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1339">#1339</a>)</p></li>
 </ul>
 </section>
+<section id="javascript-client">
+<h3>JavaScript client<a class="headerlink" href="#javascript-client" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add a JavaScript client, for web pages and Node.js, that connects over WebSockets (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1346">#1346</a>)</p></li>
+<li><p>Export each service’s enumerations, structures and exceptions from the package, for use without a connection (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1346">#1346</a>)</p></li>
+<li><p>Add streams, with <code class="docutils literal notranslate"><span class="pre">Connection.addStream</span></code>, and events, each with callbacks (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1346">#1346</a>)</p></li>
+<li><p>Add server side functions built with the expression API, run with <code class="docutils literal notranslate"><span class="pre">Connection.run</span></code>, or streamed with <code class="docutils literal notranslate"><span class="pre">Connection.addStream</span></code> and <code class="docutils literal notranslate"><span class="pre">Connection.addEvent</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1346">#1346</a>)</p></li>
+<li><p>Compile a JavaScript function into a server side function, with its captured values, and type its body in TypeScript (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1346">#1346</a>)</p></li>
+</ul>
+</section>
 <section id="lua-client">
 <h3>Lua client<a class="headerlink" href="#lua-client" title="Link to this heading">#</a></h3>
 <ul class="simple">
@@ -1160,6 +1170,8 @@
 <li><p>Say in the reference docs what each client raises for each exception of a service (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1333">#1333</a>)</p></li>
 <li><p>Generate a <code class="docutils literal notranslate"><span class="pre">KRPC_EXCEPTION_</span></code> macro of the ids of each exception in C-nano stubs (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1333">#1333</a>)</p></li>
 <li><p>Generate the C-nano <code class="docutils literal notranslate"><span class="pre">KRPC_CLASS_</span></code>, <code class="docutils literal notranslate"><span class="pre">KRPC_ENUMERATION_</span></code>, <code class="docutils literal notranslate"><span class="pre">KRPC_STRUCT_</span></code> and <code class="docutils literal notranslate"><span class="pre">KRPC_FIELD_</span></code> macros (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1336">#1336</a>)</p></li>
+<li><p>Generate a TypeScript module of a service for the JavaScript client, with <code class="docutils literal notranslate"><span class="pre">krpc-clientgen</span> <span class="pre">js</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1346">#1346</a>)</p></li>
+<li><p>Generate the JavaScript client’s API documentation, with <code class="docutils literal notranslate"><span class="pre">krpc-docgen</span> <span class="pre">js</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1346">#1346</a>)</p></li>
 </ul>
 </section>
 </section>
@@ -4088,6 +4100,7 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#c-client">C# client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">C++ client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#java-client">Java client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#javascript-client">JavaScript client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lua-client">Lua client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#python-client">Python client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#krpctools">krpctools</a></li>

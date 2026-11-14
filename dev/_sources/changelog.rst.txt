@@ -452,6 +452,16 @@ Java client
 * :breaking:`Breaking` Lower case a leading acronym in method and field names, e.g. ``CelestialBody.mslPosition`` and ``Type.uint`` in place of ``mSLPosition`` and ``uInt`` (:issue:`1339`)
 
 
+JavaScript client
+^^^^^^^^^^^^^^^^^
+
+* Add a JavaScript client, for web pages and Node.js, that connects over WebSockets (:issue:`1346`)
+* Export each service's enumerations, structures and exceptions from the package, for use without a connection (:issue:`1346`)
+* Add streams, with ``Connection.addStream``, and events, each with callbacks (:issue:`1346`)
+* Add server side functions built with the expression API, run with ``Connection.run``, or streamed with ``Connection.addStream`` and ``Connection.addEvent`` (:issue:`1346`)
+* Compile a JavaScript function into a server side function, with its captured values, and type its body in TypeScript (:issue:`1346`)
+
+
 Lua client
 ^^^^^^^^^^
 
@@ -612,6 +622,8 @@ krpctools
 * Say in the reference docs what each client raises for each exception of a service (:issue:`1333`)
 * Generate a ``KRPC_EXCEPTION_`` macro of the ids of each exception in C-nano stubs (:issue:`1333`)
 * Generate the C-nano ``KRPC_CLASS_``, ``KRPC_ENUMERATION_``, ``KRPC_STRUCT_`` and ``KRPC_FIELD_`` macros (:issue:`1336`)
+* Generate a TypeScript module of a service for the JavaScript client, with ``krpc-clientgen js`` (:issue:`1346`)
+* Generate the JavaScript client's API documentation, with ``krpc-docgen js`` (:issue:`1346`)
 
 
 v0.7.0

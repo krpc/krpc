@@ -51,6 +51,13 @@ API documentation:
       * :ref:`lua-api-parts-fuel-lines`
       * :ref:`lua-api-parts-staging`
 
+   .. tab:: JavaScript
+
+      * :ref:`js-api-parts-trees-of-parts`
+      * :ref:`js-api-parts-attachment-modes`
+      * :ref:`js-api-parts-fuel-lines`
+      * :ref:`js-api-parts-staging`
+
 .. note:: To interact with the fields, events and actions of a part module, use
    :attr:`Module.field_list`, :attr:`Module.event_list` and
    :attr:`Module.action_list`. These return :class:`PartField`,

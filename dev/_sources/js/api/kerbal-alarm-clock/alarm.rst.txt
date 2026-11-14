@@ -1,0 +1,202 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: KerbalAlarmClock
+   :no-index:
+
+Alarm
+=====
+
+
+.. class:: Alarm
+
+   Represents an alarm. Obtained by calling
+   :func:`KerbalAlarmClock.getAlarms`,
+   :func:`KerbalAlarmClock.alarmWithName` or
+   :func:`KerbalAlarmClock.alarmsWithType`.
+
+   .. method:: getAction()
+               setAction(value)
+
+      The action that the alarm triggers.
+
+      :Property: Can be read or written
+      :rtype: :class:`KerbalAlarmClock.AlarmAction`
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
+
+
+      .. note::
+
+         An alarm that plays a sound has the action :attr:`KerbalAlarmClock.AlarmAction.custom`.
+         See :meth:`KerbalAlarmClock.Alarm.getPlaySound`.
+
+   .. method:: getMargin()
+               setMargin(value)
+
+      The number of seconds before the event that the alarm will fire.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
+
+   .. method:: getTime()
+               setTime(value)
+
+      The time at which the alarm will fire.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
+
+   .. method:: getType()
+
+      The type of the alarm.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KerbalAlarmClock.AlarmType`
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
+
+   .. method:: getID()
+
+      The unique identifier for the alarm.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``string``
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
+
+   .. method:: getName()
+               setName(value)
+
+      The short name of the alarm.
+
+      :Property: Can be read or written
+      :rtype: ``string``
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
+
+   .. method:: getNotes()
+               setNotes(value)
+
+      The long description of the alarm.
+
+      :Property: Can be read or written
+      :rtype: ``string``
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
+
+   .. method:: getRemaining()
+
+      The number of seconds until the alarm will fire.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
+
+   .. method:: getEnabled()
+               setEnabled(value)
+
+      Whether the alarm is enabled. A disabled alarm does not fire.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
+
+   .. method:: getPlaySound()
+               setPlaySound(value)
+
+      Whether the alarm plays a sound when it fires.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
+
+
+      .. note::
+
+         An alarm that plays a sound has the action :attr:`KerbalAlarmClock.AlarmAction.custom`.
+         Setting :meth:`KerbalAlarmClock.Alarm.getAction` to any other value turns the sound off.
+
+   .. method:: getTriggered()
+
+      Whether the alarm has fired. Remains true once the alarm has fired;
+      stream this or use it in an event expression to react to the alarm
+      firing.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
+
+   .. method:: getRepeat()
+               setRepeat(value)
+
+      Whether the alarm will be repeated after it has fired.
+      Only has an effect for alarm types that support repeating
+      (see :meth:`KerbalAlarmClock.Alarm.getSupportsRepeat`).
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
+
+   .. method:: getSupportsRepeat()
+
+      Whether this alarm's type supports repeating
+      (see :meth:`KerbalAlarmClock.Alarm.getRepeat`).
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
+
+   .. method:: getRepeatPeriod()
+               setRepeatPeriod(value)
+
+      The time delay to automatically create an alarm after it has fired.
+      Only has an effect for alarm types that support a repeat period
+      (see :meth:`KerbalAlarmClock.Alarm.getSupportsRepeatPeriod`).
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
+
+   .. method:: getSupportsRepeatPeriod()
+
+      Whether this alarm's type supports a repeat period
+      (see :meth:`KerbalAlarmClock.Alarm.getRepeatPeriod`).
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
+
+   .. method:: getVessel()
+               setVessel(value)
+
+      The vessel that the alarm is attached to.
+
+      :Property: Can be read or written
+      :rtype: :class:`SpaceCenter.Vessel`
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
+
+   .. method:: getXferOriginBody()
+               setXferOriginBody(value)
+
+      The celestial body the vessel is departing from.
+
+      :Property: Can be read or written
+      :rtype: :class:`SpaceCenter.CelestialBody`
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
+
+   .. method:: getXferTargetBody()
+               setXferTargetBody(value)
+
+      The celestial body the vessel is arriving at.
+
+      :Property: Can be read or written
+      :rtype: :class:`SpaceCenter.CelestialBody`
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
+
+   .. method:: remove()
+
+      Removes the alarm. Any further use of this object throws an exception.
+
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
+
+
+      .. note::
+
+         Any further use of this object throws an exception.

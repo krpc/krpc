@@ -1,0 +1,398 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: InfernalRobotics
+   :no-index:
+
+Servo
+=====
+
+
+.. class:: Servo
+
+   Represents a servo. Obtained using
+   :meth:`InfernalRobotics.ServoGroup.getServos`,
+   :meth:`InfernalRobotics.ServoGroup.servoWithName`
+   or :func:`InfernalRobotics.servoWithName`.
+
+   .. method:: getName()
+               setName(value)
+
+      The name of the servo.
+
+      :Property: Can be read or written
+      :rtype: ``string``
+      :Game Scenes: Flight
+
+   .. method:: getUID()
+
+      The unique identifier of the servo.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getPart()
+
+      The part containing the servo.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Part`
+      :Game Scenes: Flight
+
+   .. method:: getMode()
+
+      Whether the part acts as a servo or a rotor.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`InfernalRobotics.ServoMode`
+      :Game Scenes: Flight
+
+   .. method:: setHighlight(value)
+
+      Whether the servo should be highlighted in-game.
+
+      :Property: Write-only, cannot be read
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getPosition()
+
+      The position of the servo.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getMinConfigPosition()
+
+      The minimum position of the servo, specified by the part configuration.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getMaxConfigPosition()
+
+      The maximum position of the servo, specified by the part configuration.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getMinPosition()
+               setMinPosition(value)
+
+      The minimum position of the servo, specified by the in-game tweak menu.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getMaxPosition()
+               setMaxPosition(value)
+
+      The maximum position of the servo, specified by the in-game tweak menu.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getConfigSpeed()
+
+      The speed multiplier of the servo, specified by the part configuration.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getSpeed()
+               setSpeed(value)
+
+      The speed multiplier of the servo, specified by the in-game tweak menu.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getCurrentSpeed()
+
+      The current speed at which the servo is moving.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getAcceleration()
+               setAcceleration(value)
+
+      The current speed multiplier set in the UI.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getIsMoving()
+
+      Whether the servo is moving.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getIsFreeMoving()
+
+      Whether the servo is freely moving.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getIsLocked()
+               setIsLocked(value)
+
+      Whether the servo is locked.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getIsAxisInverted()
+               setIsAxisInverted(value)
+
+      Whether the servos axis is inverted.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getTargetPosition()
+
+      The target position the servo is moving towards.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getTargetSpeed()
+
+      The target speed the servo is moving at.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getCommandedPosition()
+
+      The position the servo is currently being commanded to move to.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getDefaultPosition()
+
+      The default (built) position of the servo.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getForceLimit()
+               setForceLimit(value)
+
+      The force limit of the servo, as a percentage of the maximum force.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getMaxForce()
+
+      The maximum force the servo can generate.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getMaxAcceleration()
+
+      The maximum acceleration the servo can achieve.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getMaxSpeed()
+
+      The maximum speed the servo can achieve.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getElectricChargeRequired()
+
+      The rate at which the servo consumes electric charge, in :math:`\mathrm{units/s}`,
+      when moving.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getSpringPower()
+               setSpringPower(value)
+
+      The strength of the servo's spring, when it has one.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getDampingPower()
+               setDampingPower(value)
+
+      The strength of the servo's damping.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getRotorAcceleration()
+               setRotorAcceleration(value)
+
+      The acceleration of the servo when operating as a rotor.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getIsLimited()
+               setIsLimited(value)
+
+      Whether the servo's range of movement is limited to the configured minimum and
+      maximum positions.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getIsRotational()
+
+      Whether the servo moves rotationally (as opposed to linearly).
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getIsServo()
+
+      Whether the part is operating as a servo (rather than a rotor).
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getCanHaveLimits()
+
+      Whether the servo can have its range of movement limited.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getHasSpring()
+
+      Whether the servo has a spring.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getIsRunning()
+
+      Whether the servo is running, when operating as a rotor.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getPresetPositions()
+
+      The list of preset positions configured for the servo.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of ``number``
+      :Game Scenes: Flight
+
+   .. method:: moveRight()
+
+      Moves the servo to the right.
+
+      :Game Scenes: Flight
+
+   .. method:: moveLeft()
+
+      Moves the servo to the left.
+
+      :Game Scenes: Flight
+
+   .. method:: moveCenter()
+
+      Moves the servo to the center.
+
+      :Game Scenes: Flight
+
+   .. method:: moveTo(position, speed)
+
+      Moves the servo to *position* and sets the
+      speed multiplier to *speed*.
+
+      :param position: The position to move the servo to.
+      :type position: ``number``
+      :param speed: Speed multiplier for the movement.
+      :type speed: ``number``
+      :Game Scenes: Flight
+
+   .. method:: stop()
+
+      Stops the servo.
+
+      :Game Scenes: Flight
+
+   .. method:: addPreset(position)
+
+      Adds a preset position to the servo.
+
+      :param position: The position of the preset.
+      :type position: ``number``
+      :Game Scenes: Flight
+
+   .. method:: removePresetAt(index)
+
+      Removes the preset position at the given index.
+
+      :param index: The index of the preset to remove.
+      :type index: ``number``
+      :Game Scenes: Flight
+
+   .. method:: sortPresets()
+
+      Sorts the preset positions of the servo into ascending order.
+
+      :Game Scenes: Flight
+
+
+
+.. class:: ServoMode
+
+   The mode a servo is operating in. See :meth:`InfernalRobotics.Servo.getMode`.
+
+
+   .. attribute:: servo
+
+      The part acts as a servo, driving towards a target position.
+
+
+   .. attribute:: rotor
+
+      The part acts as a rotor, spinning continuously.

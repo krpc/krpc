@@ -117,5 +117,5 @@ Going Further
 * The :doc:`Python guide <python>` covers the client in depth.
 * The :doc:`tutorials <tutorials>` show more of what kRPC can do.
 * Clients are also available for :doc:`C# <csharp>`, :doc:`C++ <cpp>`, :doc:`C <cnano>`,
-  :doc:`Java <java>` and :doc:`Lua <lua>`.
+  :doc:`Java <java>`, :doc:`Lua <lua>` and :doc:`JavaScript <js>`.
 * Any language can :doc:`talk to the server directly <communication-protocols>`.

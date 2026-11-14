@@ -1,0 +1,34 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: LIDAR
+   :no-index:
+
+Service
+=======
+
+
+.. module:: LIDAR
+
+.. warning:: Deprecated. Use :func:`SpaceCenter.raycastDistance` instead.
+
+Provides functionality to interact with the LiDAR mod.
+
+
+.. function:: getAvailable()
+
+   Whether the LiDAR mod is installed.
+
+   :Property: Read-only, cannot be set
+   :rtype: ``boolean``
+   
+
+
+
+
+.. function:: laser(part)
+
+   Get the LiDAR on a part.
+
+   :param part:
+   :type part: :class:`SpaceCenter.Part`
+   :rtype: :class:`LIDAR.Laser`

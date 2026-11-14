@@ -1,0 +1,87 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: UI
+   :no-index:
+
+Scroll View
+===========
+
+
+.. class:: ScrollView
+
+   A view onto a panel that is larger than the space available for it, with scroll bars
+   to move around it.
+   Added to a :class:`UI.Canvas` or a :class:`UI.Panel`.
+
+   .. note::
+
+      Add the elements to :meth:`UI.ScrollView.getContent`, not to the scroll view itself. Giving
+      the content a layout and setting its size fitter to the preferred size is the
+      simplest way to have it grow to hold what is put in it.
+
+   .. method:: getRectTransform()
+
+      The rect transform for the UI object.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`UI.RectTransform`
+   
+
+   .. method:: getLayoutElement()
+
+      How much space the UI object asks a layout for.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`UI.LayoutElement`
+   
+
+      .. note::
+
+         Only has an effect when the object is in a panel that has a layout. A canvas is
+         not inside a layout and does not have one.
+
+   .. method:: getVisible()
+               setVisible(value)
+
+      Whether the UI object is visible.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+      .. note::
+
+         This is the object's own setting, which is what it was last set to. An object is
+         only drawn when everything it is inside is visible as well, so an interface can
+         be built with its parts visible, inside a panel that is not, and shown all at
+         once by making that panel visible.
+
+   .. method:: getContent()
+
+      The panel that is scrolled, which the elements to show are added to.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`UI.Panel`
+   
+
+   .. method:: getHorizontal()
+               setHorizontal(value)
+
+      Whether the view can be scrolled from side to side.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+   .. method:: getVertical()
+               setVertical(value)
+
+      Whether the view can be scrolled up and down.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+   .. method:: remove()
+
+      Remove the UI object.

@@ -1,0 +1,155 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: UI
+   :no-index:
+
+Toggle
+======
+
+
+.. class:: Toggle
+
+   A control that is either checked or not.
+   Added to a :class:`UI.Canvas` or a :class:`UI.Panel`.
+
+   .. note::
+
+      On its own a toggle is a check box. Put several of them in the same
+      :class:`UI.ToggleGroup` and they become radio buttons, as only one toggle in a
+      group can be checked at a time.
+
+   .. method:: getRectTransform()
+
+      The rect transform for the UI object.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`UI.RectTransform`
+   
+
+   .. method:: getLayoutElement()
+
+      How much space the UI object asks a layout for.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`UI.LayoutElement`
+   
+
+      .. note::
+
+         Only has an effect when the object is in a panel that has a layout. A canvas is
+         not inside a layout and does not have one.
+
+   .. method:: getVisible()
+               setVisible(value)
+
+      Whether the UI object is visible.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+      .. note::
+
+         This is the object's own setting, which is what it was last set to. An object is
+         only drawn when everything it is inside is visible as well, so an interface can
+         be built with its parts visible, inside a panel that is not, and shown all at
+         once by making that panel visible.
+
+   .. method:: getText()
+
+      The text for the toggle.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`UI.Text`
+   
+
+   .. method:: getChecked()
+               setChecked(value)
+
+      Whether the toggle is checked.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+      .. note::
+
+         Checking a toggle that belongs to a :class:`UI.ToggleGroup` unchecks the rest
+         of that group, whether or not it is on the screen.
+
+   .. method:: getGroup()
+               setGroup(value)
+
+      The group that the toggle belongs to, or ``null`` if it does not belong to one.
+
+      :Property: Can be read or written
+      :rtype: :class:`UI.ToggleGroup` or ``null``
+   
+
+      .. note::
+
+         Only one toggle in a group can be checked at a time, so a group turns a set of
+         toggles into radio buttons. A group does not have to contain the toggles, so
+         they can be grouped independently of how they are laid out.
+
+   .. method:: getChanged()
+               setChanged(value)
+
+      Whether the toggle has been changed.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+      .. note::
+
+         This property is set to true when the user changes the toggle, and not when a
+         client checks or unchecks it.
+         A client script should reset the property to false in order to detect subsequent changes.
+
+   .. method:: getInteractable()
+               setInteractable(value)
+
+      Whether the control responds to the user.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+      .. note::
+
+         A control that is not interactable is drawn grayed out and ignores the user,
+         but is still visible. Set its visibility to false to hide it instead.
+
+   .. method:: getColor()
+               setColor(value)
+
+      The color the control is tinted with. White, the default, leaves the control drawn
+      as the skin has it.
+
+      :Property: Can be read or written
+      :rtype: :class:`StdLib.ColorRGBA`
+   
+
+      .. note::
+
+         The tint multiplies the sprite the control is drawn with, in every state, so
+         a control can show a state of its own, an engaged autopilot for instance, by
+         color. It is applied to the part of the control that responds to the user:
+         the body of a button, dropdown or input field, the box of a toggle, and the
+         handle of a slider. A control's label is tinted through the color of its
+         text.
+
+   .. method:: getTooltip()
+               setTooltip(value)
+
+      A short piece of text shown beside the pointer while it rests on the
+      control. Empty, the default, shows nothing.
+
+      :Property: Can be read or written
+      :rtype: ``string``
+   
+
+   .. method:: remove()
+
+      Remove the UI object.

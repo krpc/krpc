@@ -1,0 +1,219 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: UI
+   :no-index:
+
+InputField
+==========
+
+
+.. class:: InputField
+
+   An input field.
+   Added to a :class:`UI.Canvas` or a :class:`UI.Panel`.
+
+   .. method:: getRectTransform()
+
+      The rect transform for the UI object.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`UI.RectTransform`
+   
+
+   .. method:: getLayoutElement()
+
+      How much space the UI object asks a layout for.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`UI.LayoutElement`
+   
+
+      .. note::
+
+         Only has an effect when the object is in a panel that has a layout. A canvas is
+         not inside a layout and does not have one.
+
+   .. method:: getVisible()
+               setVisible(value)
+
+      Whether the UI object is visible.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+      .. note::
+
+         This is the object's own setting, which is what it was last set to. An object is
+         only drawn when everything it is inside is visible as well, so an interface can
+         be built with its parts visible, inside a panel that is not, and shown all at
+         once by making that panel visible.
+
+   .. method:: getValue()
+               setValue(value)
+
+      The value of the input field.
+
+      :Property: Can be read or written
+      :rtype: ``string``
+   
+
+   .. method:: getText()
+
+      The text component of the input field.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`UI.Text`
+   
+
+      .. note::
+
+         Use :meth:`UI.InputField.getValue` to get and set the value in the field.
+         This object can be used to alter the style of the input field's text.
+
+   .. method:: getPlaceholder()
+
+      The placeholder text component of the input field.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`UI.Text`
+   
+
+      .. note::
+
+         Set its :meth:`UI.Text.getContent` to the hint to show while the field is empty.
+         The hint is hidden as soon as the field has a value.
+
+   .. method:: getContentType()
+               setContentType(value)
+
+      The content the field accepts from the user. Keystrokes that do not fit are
+      ignored as they are typed, so a numeric field only ever shows a number.
+
+      :Property: Can be read or written
+      :rtype: :class:`UI.InputContentType`
+   
+
+      .. note::
+
+         The filter applies to typing alone. A value set by a client is shown as it is
+         given.
+
+   .. method:: getCharacterLimit()
+               setCharacterLimit(value)
+
+      The most characters the user can type into the field, or 0 for no limit.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+   
+
+   .. method:: getReadOnly()
+               setReadOnly(value)
+
+      Whether the user is stopped from editing the field. The value can still be
+      selected and copied, and a client can still set it.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+      .. note::
+
+         A read-only field is drawn as normal. Make the field not interactable instead
+         to gray it out and stop the user selecting it.
+
+   .. method:: getChanged()
+               setChanged(value)
+
+      Whether the input field has been changed.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+      .. note::
+
+         This property is set to true when the user modifies the value of the input field,
+         and not when a client sets it.
+         A client script should reset the property to false in order to detect subsequent changes.
+
+   .. method:: getInteractable()
+               setInteractable(value)
+
+      Whether the control responds to the user.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+      .. note::
+
+         A control that is not interactable is drawn grayed out and ignores the user,
+         but is still visible. Set its visibility to false to hide it instead.
+
+   .. method:: getColor()
+               setColor(value)
+
+      The color the control is tinted with. White, the default, leaves the control drawn
+      as the skin has it.
+
+      :Property: Can be read or written
+      :rtype: :class:`StdLib.ColorRGBA`
+   
+
+      .. note::
+
+         The tint multiplies the sprite the control is drawn with, in every state, so
+         a control can show a state of its own, an engaged autopilot for instance, by
+         color. It is applied to the part of the control that responds to the user:
+         the body of a button, dropdown or input field, the box of a toggle, and the
+         handle of a slider. A control's label is tinted through the color of its
+         text.
+
+   .. method:: getTooltip()
+               setTooltip(value)
+
+      A short piece of text shown beside the pointer while it rests on the
+      control. Empty, the default, shows nothing.
+
+      :Property: Can be read or written
+      :rtype: ``string``
+   
+
+   .. method:: remove()
+
+      Remove the UI object.
+
+   
+
+
+
+.. class:: InputContentType
+
+   What an input field lets the user type into it.
+
+
+   .. attribute:: standard
+
+      Any text.
+
+
+   .. attribute:: integer
+
+      A whole number: digits, with a leading minus sign.
+
+
+   .. attribute:: decimal
+
+      A number: digits, with a decimal separator and a leading minus sign.
+
+
+   .. attribute:: alphanumeric
+
+      Letters and digits.
+
+
+   .. attribute:: password
+
+      Any text, drawn as asterisks so that it cannot be read off the screen.

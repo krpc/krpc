@@ -3,8 +3,8 @@ Remote Procedure Calls for Kerbal Space Program
 
 kRPC lets you control Kerbal Space Program from scripts running outside the game. A server
 inside the game exposes the game's API, and client libraries call it from Python, C#, C++, C,
-Java and Lua. It also supports Ferram Aerospace Research, Kerbal Alarm Clock, Infernal Robotics
-and other popular mods.
+Java, Lua and JavaScript. It also supports Ferram Aerospace Research, Kerbal Alarm Clock, Infernal
+Robotics and other popular mods.
 
 This script launches the active vessel straight up, then cuts the engines once it reaches
 an altitude of 10 km:
@@ -83,7 +83,7 @@ an altitude of 10 km:
 Clients
 -------
 
-.. grid:: 2 3 7 7
+.. grid:: 2 4 8 8
    :gutter: 2
 
    .. grid-item-card:: Python
@@ -113,6 +113,11 @@ Clients
 
    .. grid-item-card:: Lua
       :link: lua
+      :link-type: doc
+      :text-align: center
+
+   .. grid-item-card:: JavaScript
+      :link: js
       :link-type: doc
       :text-align: center
 

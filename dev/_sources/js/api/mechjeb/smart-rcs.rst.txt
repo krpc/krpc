@@ -1,0 +1,60 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: MechJeb
+   :no-index:
+
+SmartRCS
+========
+
+
+.. class:: SmartRCS
+
+   The Smart RCS window, which holds a velocity with RCS.
+
+   .. method:: getAutoDisableSmartRCS()
+               setAutoDisableSmartRCS(value)
+
+      Whether Smart RCS turns off when an autopilot takes control.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getMode()
+               setMode(value)
+
+      The mode. Throws an exception if set to :attr:`MechJeb.SmartRCSMode.zeroVelocity`,
+      which MechJeb 2.15 removed.
+
+      :Property: Can be read or written
+      :rtype: :class:`MechJeb.SmartRCSMode`
+      :Game Scenes: Flight
+
+   .. method:: getRCSController()
+
+      The RCS controller. The same as :func:`MechJeb.getRCSController`.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`MechJeb.RCSController`
+      :Game Scenes: Flight
+
+
+
+.. class:: SmartRCSMode
+
+   The mode of Smart RCS. See :meth:`MechJeb.SmartRCS.getMode`.
+
+
+   .. attribute:: off
+
+      Off.
+
+
+   .. attribute:: zeroRelativeVelocity
+
+      Hold zero velocity relative to the target.
+
+
+   .. attribute:: zeroVelocity
+
+      Hold zero velocity. MechJeb 2.15 removed this mode.

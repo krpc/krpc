@@ -502,6 +502,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../client-design/cnano.html">C-nano Client Design</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../client-design/java.html">Java Client Design</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../client-design/lua.html">Lua Client Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-design/js.html">JavaScript Client Design</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../client-spec.html">Client Specification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -594,9 +595,9 @@
   <section id="building-from-source">
 <h1>Building from Source<a class="headerlink" href="#building-from-source" title="Link to this heading">#</a></h1>
 <p>kRPC builds with <a class="reference external" href="https://bazel.build">Bazel</a>. The build is hermetic. It downloads the
-toolchains for C#, Python, Java, C, C++ and Lua, and a set of stub KSP assemblies from the
-<a class="reference external" href="https://github.com/krpc/ksp-lib">ksp-lib</a> repository. You do not need Mono, the .NET SDK, a JDK
-or a copy of the game to build it.</p>
+toolchains for C#, Python, Java, C, C++, Lua and JavaScript, and a set of stub KSP assemblies
+from the <a class="reference external" href="https://github.com/krpc/ksp-lib">ksp-lib</a> repository. You do not need Mono, the .NET
+SDK, a JDK, Node.js or a copy of the game to build it.</p>
 <section id="requirements">
 <h2>Requirements<a class="headerlink" href="#requirements" title="Link to this heading">#</a></h2>
 <p>Install Bazel through <a class="reference external" href="https://github.com/bazelbuild/bazelisk">bazelisk</a>, which fetches the
@@ -667,7 +668,7 @@ its own target:</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">//service/&lt;name&gt;</span></code>, such as <code class="docutils literal notranslate"><span class="pre">//service/SpaceCenter</span></code> - a service. <code class="docutils literal notranslate"><span class="pre">service/registry.bzl</span></code>
 lists them.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">//client/python</span></code>, <code class="docutils literal notranslate"><span class="pre">//client/csharp</span></code>, <code class="docutils literal notranslate"><span class="pre">//client/cpp</span></code>, <code class="docutils literal notranslate"><span class="pre">//client/cnano</span></code>,
-<code class="docutils literal notranslate"><span class="pre">//client/java</span></code>, <code class="docutils literal notranslate"><span class="pre">//client/lua</span></code> - the client libraries.</p></li>
+<code class="docutils literal notranslate"><span class="pre">//client/java</span></code>, <code class="docutils literal notranslate"><span class="pre">//client/js</span></code>, <code class="docutils literal notranslate"><span class="pre">//client/lua</span></code> - the client libraries.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">//protobuf:csharp</span></code>, <code class="docutils literal notranslate"><span class="pre">//protobuf:java</span></code>, <code class="docutils literal notranslate"><span class="pre">//protobuf:lua</span></code>, <code class="docutils literal notranslate"><span class="pre">//protobuf:python</span></code> - the
 protobuf code for each language.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">//doc:html</span></code> - the documentation.</p></li>

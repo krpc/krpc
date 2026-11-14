@@ -1,0 +1,83 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: MechJeb
+   :no-index:
+
+Translatron
+===========
+
+
+.. class:: Translatron
+
+   The Translatron window, which holds a speed.
+
+   .. method:: getMode()
+               setMode(value)
+
+      The mode. Throws an exception if set to :attr:`MechJeb.TranslatronMode.keepRelative`
+      or :attr:`MechJeb.TranslatronMode.direct`.
+
+      :Property: Can be read or written
+      :rtype: :class:`MechJeb.TranslatronMode`
+      :Game Scenes: Flight
+
+   .. method:: getTranslationSpeed()
+               setTranslationSpeed(value)
+
+      The speed to hold, in :math:`\mathrm{m/s}`.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getKillHorizontalSpeed()
+               setKillHorizontalSpeed(value)
+
+      Whether to cancel the horizontal speed.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: panicSwitch()
+
+      Abort: separate all but the last stage and engage the landing autopilot. A call
+      during an abort cancels it.
+
+      :Game Scenes: Flight
+
+
+
+.. class:: TranslatronMode
+
+   The mode of Translatron. See :meth:`MechJeb.Translatron.getMode`.
+
+
+   .. attribute:: off
+
+      Off.
+
+
+   .. attribute:: keepOrbital
+
+      Hold the orbital speed.
+
+
+   .. attribute:: keepSurface
+
+      Hold the surface speed.
+
+
+   .. attribute:: keepVertical
+
+      Hold the vertical speed.
+
+
+   .. attribute:: keepRelative
+
+      Unused. MechJeb 2.15 has no such mode.
+
+
+   .. attribute:: direct
+
+      Set by MechJeb's autopilots. Cannot be set.

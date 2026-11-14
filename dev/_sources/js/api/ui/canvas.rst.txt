@@ -1,0 +1,154 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: UI
+   :no-index:
+
+Canvas
+======
+
+
+.. class:: Canvas
+
+   A canvas for user interface elements. See :func:`UI.getStockCanvas` and :func:`UI.addCanvas`.
+
+   .. method:: getRectTransform()
+
+      The rect transform for the UI object.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`UI.RectTransform`
+   
+
+   .. method:: getLayoutElement()
+
+      How much space the UI object asks a layout for.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`UI.LayoutElement`
+   
+
+      .. note::
+
+         Only has an effect when the object is in a panel that has a layout. A canvas is
+         not inside a layout and does not have one.
+
+   .. method:: getVisible()
+               setVisible(value)
+
+      Whether the UI object is visible.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+      .. note::
+
+         This is the object's own setting, which is what it was last set to. An object is
+         only drawn when everything it is inside is visible as well, so an interface can
+         be built with its parts visible, inside a panel that is not, and shown all at
+         once by making that panel visible.
+
+   .. method:: addPanel([visible])
+
+      Create a panel within this object.
+
+      :param visible: Whether the new panel is visible. Defaults to ``true``.
+      :type visible: ``boolean``
+      :rtype: :class:`UI.Panel`
+   
+
+   .. method:: addText(content[, visible])
+
+      Add text to this object.
+
+      :param content: The text.
+      :type content: ``string``
+      :param visible: Whether the text is visible. Defaults to ``true``.
+      :type visible: ``boolean``
+      :rtype: :class:`UI.Text`
+   
+
+   .. method:: addInputField([visible])
+
+      Add an input field to this object.
+
+      :param visible: Whether the input field is visible. Defaults to ``true``.
+      :type visible: ``boolean``
+      :rtype: :class:`UI.InputField`
+   
+
+   .. method:: addButton(content[, visible])
+
+      Add a button to this object.
+
+      :param content: The label for the button.
+      :type content: ``string``
+      :param visible: Whether the button is visible. Defaults to ``true``.
+      :type visible: ``boolean``
+      :rtype: :class:`UI.Button`
+   
+
+   .. method:: addToggle(content[, visible])
+
+      Add a toggle to this object.
+
+      :param content: The label for the toggle.
+      :type content: ``string``
+      :param visible: Whether the toggle is visible. Defaults to ``true``.
+      :type visible: ``boolean``
+      :rtype: :class:`UI.Toggle`
+   
+
+   .. method:: addToggleGroup()
+
+      Add a toggle group to this object, to make a set of toggles into radio buttons.
+
+      :rtype: :class:`UI.ToggleGroup`
+   
+
+      .. note::
+
+         The group is not drawn and does not take up any space. The toggles that belong
+         to it can be added anywhere.
+
+   .. method:: addSlider([vertical[, visible]])
+
+      Add a slider to this object.
+
+      :param vertical: Whether the slider runs from bottom to top, rather than from left to right. Defaults to ``false``.
+      :type vertical: ``boolean``
+      :param visible: Whether the slider is visible. Defaults to ``true``.
+      :type visible: ``boolean``
+      :rtype: :class:`UI.Slider`
+   
+
+   .. method:: addDropdown([visible])
+
+      Add a dropdown to this object.
+
+      :param visible: Whether the dropdown is visible. Defaults to ``true``.
+      :type visible: ``boolean``
+      :rtype: :class:`UI.Dropdown`
+   
+
+   .. method:: addImage([visible])
+
+      Add an image to this object.
+
+      :param visible: Whether the image is visible. Defaults to ``true``.
+      :type visible: ``boolean``
+      :rtype: :class:`UI.Image`
+   
+
+   .. method:: addScrollView([visible])
+
+      Add a scroll view to this object.
+
+      :param visible: Whether the scroll view is visible. Defaults to ``true``.
+      :type visible: ``boolean``
+      :rtype: :class:`UI.ScrollView`
+   
+
+   .. method:: remove()
+
+      Remove the UI object.

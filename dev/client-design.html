@@ -502,6 +502,7 @@
 <li class="toctree-l2"><a class="reference internal" href="client-design/cnano.html">C-nano Client Design</a></li>
 <li class="toctree-l2"><a class="reference internal" href="client-design/java.html">Java Client Design</a></li>
 <li class="toctree-l2"><a class="reference internal" href="client-design/lua.html">Lua Client Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client-design/js.html">JavaScript Client Design</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="client-spec.html">Client Specification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -637,6 +638,11 @@ lists where it departs from this page.</p>
 <td><p>Single</p></td>
 <td><p>No</p></td>
 <td><p>Dynamic</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="client-design/js.html"><span class="doc">JavaScript</span></a></p></td>
+<td><p>Single, with calls in flight at once</p></td>
+<td><p>Yes</p></td>
+<td><p>Dynamic, with generated declarations</p></td>
 </tr>
 </tbody>
 </table>
@@ -790,6 +796,7 @@ macro.</p>
 <th class="head"><p>Java</p></th>
 <th class="head"><p>Python</p></th>
 <th class="head"><p>Lua</p></th>
+<th class="head"><p>JavaScript</p></th>
 </tr>
 </thead>
 <tbody>
@@ -800,8 +807,10 @@ macro.</p>
 <td><p>UpperCamel</p></td>
 <td><p>snake attribute, lower module</p></td>
 <td><p>snake</p></td>
+<td><p>lowerCamel</p></td>
 </tr>
 <tr class="row-odd"><td><p>Type</p></td>
+<td><p>UpperCamel</p></td>
 <td><p>UpperCamel</p></td>
 <td><p>UpperCamel</p></td>
 <td><p>UpperCamel</p></td>
@@ -816,6 +825,7 @@ macro.</p>
 <td><p>lowerCamel</p></td>
 <td><p>snake</p></td>
 <td><p>snake</p></td>
+<td><p>lowerCamel</p></td>
 </tr>
 <tr class="row-odd"><td><p>Property</p></td>
 <td><p>UpperCamel</p></td>
@@ -824,6 +834,7 @@ macro.</p>
 <td><p>Accessors</p></td>
 <td><p>snake</p></td>
 <td><p>snake</p></td>
+<td><p>Accessors</p></td>
 </tr>
 <tr class="row-even"><td><p>Enumeration value</p></td>
 <td><p>UpperCamel</p></td>
@@ -832,6 +843,7 @@ macro.</p>
 <td><p>UPPER_SNAKE</p></td>
 <td><p>snake</p></td>
 <td><p>snake</p></td>
+<td><p>lowerCamel</p></td>
 </tr>
 <tr class="row-odd"><td><p>Structure field</p></td>
 <td><p>UpperCamel, and lowerCamel constructor parameter</p></td>
@@ -840,6 +852,7 @@ macro.</p>
 <td><p>lowerCamel, and <code class="docutils literal notranslate"><span class="pre">get</span></code> and UpperCamel</p></td>
 <td><p>snake</p></td>
 <td><p>snake</p></td>
+<td><p>lowerCamel</p></td>
 </tr>
 <tr class="row-even"><td><p>Parameter</p></td>
 <td><p>As written</p></td>
@@ -848,11 +861,13 @@ macro.</p>
 <td><p>lowerCamel</p></td>
 <td><p>snake</p></td>
 <td><p>snake</p></td>
+<td><p>lowerCamel</p></td>
 </tr>
 <tr class="row-odd"><td><p>Exception</p></td>
 <td><p>UpperCamel</p></td>
 <td><p>UpperCamel</p></td>
 <td><p>UPPER, in a macro</p></td>
+<td><p>UpperCamel</p></td>
 <td><p>UpperCamel</p></td>
 <td><p>UpperCamel</p></td>
 <td><p>UpperCamel</p></td>
@@ -867,9 +882,10 @@ macro.</p>
 <p>A program adding a stream needs to name a remote procedure without calling it. The same applies when
 it gets a call as a value, such as to use in an expression. The clients do this in two ways:</p>
 <ul class="simple">
-<li><p>Python, C# and Java have one method for each purpose, <code class="docutils literal notranslate"><span class="pre">add_stream</span></code> and <code class="docutils literal notranslate"><span class="pre">get_call</span></code> or their
-equivalents. It takes any property or method, and works out the procedure at run time. Lua has
-only <code class="docutils literal notranslate"><span class="pre">get_call</span></code>, as it has no streams.</p></li>
+<li><p>Python, C#, Java and JavaScript have one method for each purpose, <code class="docutils literal notranslate"><span class="pre">add_stream</span></code> and
+<code class="docutils literal notranslate"><span class="pre">get_call</span></code> or their equivalents. It takes any property or method, and works out the procedure
+at run time. Lua has only <code class="docutils literal notranslate"><span class="pre">get_call</span></code>, as it has no streams. JavaScript’s take a function
+returning the call, as C#’s lambda does.</p></li>
 <li><p>C++ and C-nano cannot look up a method at run time. Their generated stubs instead have extra
 functions for each procedure. C++ adds ones ending in <code class="docutils literal notranslate"><span class="pre">_stream</span></code> and <code class="docutils literal notranslate"><span class="pre">_call</span></code>. C-nano has no
 streams, so it adds only <code class="docutils literal notranslate"><span class="pre">_call</span></code>.</p></li>
@@ -907,19 +923,23 @@ streams, so it adds only <code class="docutils literal notranslate"><span class=
 <td><p>None</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">conn:get_call(flight.get_mean_altitude,</span> <span class="pre">flight)</span></code></p></td>
 </tr>
+<tr class="row-even"><td><p>JavaScript</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">conn.addStream(()</span> <span class="pre">=&gt;</span> <span class="pre">flight.getMeanAltitude())</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">conn.getCall(()</span> <span class="pre">=&gt;</span> <span class="pre">flight.getMeanAltitude())</span></code></p></td>
+</tr>
 </tbody>
 </table>
 </div>
-<p>In Python, C# and Java, the stream runs on the connection the method is called on, whichever
-connection the object came from. In C++, it runs on the object’s client, or for a static method the
-client passed to it.</p>
+<p>In Python, C#, Java and JavaScript, the stream runs on the connection the method is called on,
+whichever connection the object came from. In C++, it runs on the object’s client, or for a
+static method the client passed to it.</p>
 </section>
 <section id="static-methods">
 <h2>Static Methods<a class="headerlink" href="#static-methods" title="Link to this heading">#</a></h2>
 <p>A static method takes its connection from one place, the one its language gives a class:</p>
 <ul class="simple">
-<li><p>In Python and Lua a class is a value. Each connection builds its own, and a static method runs
-on the connection of the service the class is reached through.</p></li>
+<li><p>In Python, Lua and JavaScript a class is a value. Each connection builds its own, and a static
+method runs on the connection of the service the class is reached through.</p></li>
 <li><p>In C#, Java and C++ a class is a type. The connection is the static method’s first argument. In
 C-nano, every function takes the connection first.</p></li>
 </ul>
@@ -961,7 +981,7 @@ raise each. The clients name them alike:</p>
 <td><p>The encoding error</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CompilationError</span></code></p></td>
-<td><p>Code that does not compile into a server side function, in Python and C#</p></td>
+<td><p>Code that does not compile into a server side function, in Python, C# and JavaScript</p></td>
 </tr>
 </tbody>
 </table>
@@ -1024,19 +1044,26 @@ failed.</p></li>
 <td><p>A warning on standard error, once per member on a connection</p></td>
 <td><p>Exceptions, which have no Lua type, and structure fields</p></td>
 </tr>
+<tr class="row-even"><td><p>JavaScript</p></td>
+<td><p>A <code class="docutils literal notranslate"><span class="pre">DeprecationWarning</span></code> in Node.js, or a console warning, once per member on a connection,
+and <code class="docutils literal notranslate"><span class="pre">&#64;deprecated</span></code> for editors</p></td>
+<td></td>
+</tr>
 </tbody>
 </table>
 </div>
-<p>A stream, and the call a server side function makes, use a procedure too. Python and Lua warn when
-the client builds the call. In C++ and C-nano, the <code class="docutils literal notranslate"><span class="pre">_stream</span></code> and <code class="docutils literal notranslate"><span class="pre">_call</span></code> functions carry the
-attribute. In C#, the lambda that names the procedure warns.</p>
+<p>A stream, and the call a server side function makes, use a procedure too. Python, Lua and
+JavaScript warn when the client builds the call. In C++ and C-nano, the <code class="docutils literal notranslate"><span class="pre">_stream</span></code> and <code class="docutils literal notranslate"><span class="pre">_call</span></code>
+functions carry the attribute. In C#, the lambda that names the procedure warns.</p>
 <p>A member of a deprecated service, class, enumeration or structure is deprecated. A member with no
-reason of its own takes the reason of its nearest deprecated container. <code class="docutils literal notranslate"><span class="pre">clientgen</span></code> and the Python
-and Lua clients apply this to their copy of the definitions when they read them. The protocol and
-<code class="docutils literal notranslate"><span class="pre">docgen</span></code> keep the attributes as declared, so the API reference has one notice per page.</p>
+reason of its own takes the reason of its nearest deprecated container. <code class="docutils literal notranslate"><span class="pre">clientgen</span></code> and the
+Python, Lua and JavaScript clients apply this to their copy of the definitions when they read
+them. The protocol and <code class="docutils literal notranslate"><span class="pre">docgen</span></code> keep the attributes as declared, so the API reference has one
+notice per page.</p>
 <p>A deprecated service is marked too: the C# extension method and service class, and the C++, Java
 and Python service class. The Python and Lua clients keep it out of the client’s attributes, so
-that reading it reaches the attribute-miss hook, which warns.</p>
+that reading it reaches the attribute-miss hook, which warns. In JavaScript it is a getter on the
+connection, which warns.</p>
 <p>Generated C++ and C-nano code uses the deprecated declarations it makes, so each header suppresses
 the warning around its own contents. The suppression goes by the location of the use, so a use in a
 program still warns.</p>
@@ -1047,6 +1074,8 @@ program still warns.</p>
 These clients have no streams or events, as a stream update needs a thread to read it between calls.</p>
 <p>The read loop skips a message case it does not know, and fails the call on a <code class="docutils literal notranslate"><span class="pre">disconnect</span></code>. Lua and
 C-nano treat any other message as a protocol error, including a <code class="docutils literal notranslate"><span class="pre">stream_update</span></code>.</p>
+<p>JavaScript also runs on one thread, but the socket’s <code class="docutils literal notranslate"><span class="pre">message</span></code> event reads each message, so
+several calls can wait at once and stream updates arrive between calls. The <a class="reference internal" href="client-design/js.html"><span class="doc">JavaScript page</span></a> covers it.</p>
 </section>
 <section id="threaded-clients">
 <h2>Threaded Clients<a class="headerlink" href="#threaded-clients" title="Link to this heading">#</a></h2>

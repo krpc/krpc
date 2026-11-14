@@ -1,0 +1,142 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: MechJeb
+   :no-index:
+
+TargetController
+================
+
+
+.. class:: TargetController
+
+   The target controller, which holds MechJeb's target.
+
+   .. note::
+
+      Positions and directions are in world space, the coordinate system of the game's
+      physics.
+
+   .. method:: getCanAlign()
+
+      Whether the vessel can align with the target, which it can with a docking port.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getDistance()
+
+      The distance to the target, in meters.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getDockingAxis()
+
+      The world space docking axis of the target.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``[number, number, number]``
+      :Game Scenes: Flight
+
+   .. method:: getPositionTargetPosition()
+
+      The world space position of the position target.
+
+      :rtype: ``[number, number, number]``
+      :Game Scenes: Flight
+
+   .. method:: getPositionTargetString()
+
+      The position target as text.
+
+      :rtype: ``string``
+      :Game Scenes: Flight
+
+   .. method:: getNormalTargetExists()
+
+      Whether there is a target that is a vessel, a body or a direction target.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: pickPositionTargetOnMap()
+
+      Let the player pick the position target on the map.
+
+      :Game Scenes: Flight
+
+   .. method:: getPosition()
+
+      The world space position of the target.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``[number, number, number]``
+      :Game Scenes: Flight
+
+   .. method:: getPositionTargetExists()
+
+      Whether there is a target that is a position or a vessel.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getRelativePosition()
+
+      The world space position of the vessel relative to the target.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``[number, number, number]``
+      :Game Scenes: Flight
+
+   .. method:: getRelativeVelocity()
+
+      The world space velocity of the vessel relative to the target, in :math:`\mathrm{m/s}`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``[number, number, number]``
+      :Game Scenes: Flight
+
+   .. method:: setDirectionTarget(name)
+
+      Set the target to a direction.
+
+      :param name: The name of the target.
+      :type name: ``string``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Set the direction with :meth:`MechJeb.TargetController.updateDirectionTarget`.
+
+   .. method:: setPositionTarget(body, latitude, longitude)
+
+      Set the target to a position on the surface of a body.
+
+      :param body: The body.
+      :type body: :class:`SpaceCenter.CelestialBody`
+      :param latitude: The latitude, in degrees.
+      :type latitude: ``number``
+      :param longitude: The longitude, in degrees.
+      :type longitude: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getTargetOrbit()
+
+      The orbit of the target.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Orbit`
+      :Game Scenes: Flight
+
+   .. method:: updateDirectionTarget(direction)
+
+      Set the direction of the direction target.
+
+      :param direction: The world space direction.
+      :type direction: ``[number, number, number]``
+      :Game Scenes: Flight

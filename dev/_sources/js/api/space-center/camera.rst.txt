@@ -1,0 +1,235 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: SpaceCenter
+   :no-index:
+
+Camera
+======
+
+
+.. class:: Camera
+
+   Controls the game's camera.
+   Obtained by calling :func:`SpaceCenter.getCamera`.
+
+   .. method:: getMode()
+               setMode(value)
+
+      The current mode of the camera.
+
+      :Property: Can be read or written
+      :rtype: :class:`SpaceCenter.CameraMode`
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Setting the mode to :attr:`SpaceCenter.CameraMode.iva` throws an exception if the
+         active vessel has no crew, or none of its crew can be viewed in an interior.
+
+   .. method:: nextCamera()
+
+      Switch to the next available camera.
+      In flight, this moves to the next flight camera mode. In IVA, it moves the
+      view to the next crew member in the active vessel.
+
+      :Game Scenes: Flight
+
+   .. method:: previousCamera()
+
+      Switch to the previous available camera.
+      In flight, this moves to the previous flight camera mode. In IVA, it moves
+      the view to the previous crew member in the active vessel.
+
+      :Game Scenes: Flight
+
+   .. method:: getPitch()
+               setPitch(value)
+
+      The pitch of the camera, in degrees.
+      A value between :meth:`SpaceCenter.Camera.getMinPitch` and :meth:`SpaceCenter.Camera.getMaxPitch`
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getHeading()
+               setHeading(value)
+
+      The heading of the camera, in degrees.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getDistance()
+               setDistance(value)
+
+      The distance from the camera to the subject, in meters.
+      A value between :meth:`SpaceCenter.Camera.getMinDistance` and :meth:`SpaceCenter.Camera.getMaxDistance`.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getFoV()
+               setFoV(value)
+
+      The Field of View of the camera, in degrees.
+      A value between :meth:`SpaceCenter.Camera.getMinFoV` and :meth:`SpaceCenter.Camera.getMaxFoV`.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getMinPitch()
+
+      The minimum pitch of the camera.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getMaxPitch()
+
+      The maximum pitch of the camera.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getMinDistance()
+
+      Minimum distance from the camera to the subject, in meters.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getMaxDistance()
+
+      Maximum distance from the camera to the subject, in meters.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getMinFoV()
+
+      The minimum field of view the camera in degrees.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getMaxFoV()
+
+      The maximum field of view the camera in degrees.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getDefaultDistance()
+
+      Default distance from the camera to the subject, in meters.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getDefaultFoV()
+
+      The default field of view the camera in degrees.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getFocussedBody()
+               setFocussedBody(value)
+
+      In map mode, the celestial body that the camera is focussed on.
+      Returns ``null`` if the camera is not focussed on a celestial body.
+      Throws :class:`KRPC.InvalidOperationException` if the camera is not in map mode.
+
+      :Property: Can be read or written
+      :rtype: :class:`SpaceCenter.CelestialBody` or ``null``
+      :Game Scenes: Flight
+
+   .. method:: getFocussedVessel()
+               setFocussedVessel(value)
+
+      In map mode, the vessel that the camera is focussed on.
+      Returns ``null`` if the camera is not focussed on a vessel.
+      Throws :class:`KRPC.InvalidOperationException` if the camera is not in map mode.
+
+      :Property: Can be read or written
+      :rtype: :class:`SpaceCenter.Vessel` or ``null``
+      :Game Scenes: Flight
+
+   .. method:: getFocussedNode()
+               setFocussedNode(value)
+
+      In map mode, the maneuver node that the camera is focussed on.
+      Returns ``null`` if the camera is not focussed on a maneuver node.
+      Throws :class:`KRPC.InvalidOperationException` if the camera is not in map mode.
+
+      :Property: Can be read or written
+      :rtype: :class:`SpaceCenter.Node` or ``null``
+      :Game Scenes: Flight
+
+   .. method:: getFocussedCrewMember()
+               setFocussedCrewMember(value)
+
+      In IVA mode, the crew member whose view the camera is showing.
+      Returns ``null`` if no crew member is in view.
+      Throws :class:`KRPC.InvalidOperationException` if the camera is not in IVA mode.
+      Setting this moves the view to the given crew member, switching the camera to
+      IVA mode if it is not already. The crew member must be in the active vessel,
+      and in a part whose interior the game has placed them in.
+
+      :Property: Can be read or written
+      :rtype: :class:`SpaceCenter.CrewMember` or ``null``
+      :Game Scenes: Flight
+
+
+
+.. class:: CameraMode
+
+   See :meth:`SpaceCenter.Camera.getMode`.
+
+
+   .. attribute:: automatic
+
+      The camera is showing the active vessel, in "auto" mode.
+
+
+   .. attribute:: free
+
+      The camera is showing the active vessel, in "free" mode.
+
+
+   .. attribute:: chase
+
+      The camera is showing the active vessel, in "chase" mode.
+
+
+   .. attribute:: locked
+
+      The camera is showing the active vessel, in "locked" mode.
+
+
+   .. attribute:: orbital
+
+      The camera is showing the active vessel, in "orbital" mode.
+
+
+   .. attribute:: iva
+
+      The Intra-Vehicular Activity view is being shown.
+
+
+   .. attribute:: map
+
+      The map view is being shown.

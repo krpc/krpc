@@ -1,0 +1,77 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: KerbalAlarmClock
+   :no-index:
+
+Service
+=======
+
+
+.. module:: KerbalAlarmClock
+
+Provides functionality to interact with Kerbal Alarm Clock.
+
+
+.. function:: getAvailable()
+
+   Whether Kerbal Alarm Clock is available.
+
+   :Property: Read-only, cannot be set
+   :rtype: ``boolean``
+   
+
+
+
+
+.. function:: getAlarms()
+
+   A list of all the alarms.
+
+   :Property: Read-only, cannot be set
+   :rtype: ``Array`` of :class:`KerbalAlarmClock.Alarm`
+   :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
+
+
+
+
+
+.. function:: alarmWithName(name)
+
+   Get the alarm with the given *name*, or ``null``
+   if no alarms have that name. If more than one alarm has the name,
+   only returns one of them.
+
+   :param name: Name of the alarm to search for.
+   :type name: ``string``
+   :rtype: :class:`KerbalAlarmClock.Alarm` or ``null``
+   :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
+
+
+
+
+
+.. function:: alarmsWithType(type)
+
+   Get a list of alarms of the specified *type*.
+
+   :param type: Type of alarm to return.
+   :type type: :class:`KerbalAlarmClock.AlarmType`
+   :rtype: ``Array`` of :class:`KerbalAlarmClock.Alarm`
+   :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration
+
+
+
+
+
+.. function:: createAlarm(type, name, ut)
+
+   Create a new alarm and return it.
+
+   :param type: Type of the new alarm.
+   :type type: :class:`KerbalAlarmClock.AlarmType`
+   :param name: Name of the new alarm.
+   :type name: ``string``
+   :param ut: Time at which the new alarm should trigger.
+   :type ut: ``number``
+   :rtype: :class:`KerbalAlarmClock.Alarm`
+   :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph, Astronaut Complex, Mission Control, Research And Development, Administration

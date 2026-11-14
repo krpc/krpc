@@ -502,6 +502,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../client-design/cnano.html">C-nano Client Design</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../client-design/java.html">Java Client Design</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../client-design/lua.html">Lua Client Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-design/js.html">JavaScript Client Design</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../client-spec.html">Client Specification</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
@@ -705,11 +706,11 @@ a JSON file, passed with <code class="docutils literal notranslate"><span class=
 and <code class="docutils literal notranslate"><span class="pre">server_error</span></code> the type a service’s exception types derive. Both are <code class="docutils literal notranslate"><span class="pre">null</span></code> for a client
 whose errors are codes, with no type to derive. <code class="docutils literal notranslate"><span class="pre">native_types</span></code> gives the native error type the
 client raises for each mapped exception, by the exception’s mapped type, and needs an entry for each
-one. A <code class="docutils literal notranslate"><span class="pre">null</span></code> entry is an exception the client raises only as a type of its own. <code class="docutils literal notranslate"><span class="pre">naming</span></code> is for
-the <code class="docutils literal notranslate"><span class="pre">definitions</span></code> profile. It gives the case of member names, whether a property is a pair of
-<code class="docutils literal notranslate"><span class="pre">get_</span></code> and <code class="docutils literal notranslate"><span class="pre">set_</span></code> functions, and whether the client exposes exception types. The case is
-<code class="docutils literal notranslate"><span class="pre">snake</span></code>, the one case the driver converts names to. The run stops if the file lacks a section a
-profile needs.</p>
+one. A <code class="docutils literal notranslate"><span class="pre">null</span></code> entry is an exception the client raises only as a type of its own.</p>
+<p><code class="docutils literal notranslate"><span class="pre">naming</span></code> is for the <code class="docutils literal notranslate"><span class="pre">definitions</span></code> profile. It gives the case of member names, whether a property
+is a pair of getter and setter functions, and whether the client exposes exception types. The case
+is <code class="docutils literal notranslate"><span class="pre">snake</span></code>, as in <code class="docutils literal notranslate"><span class="pre">get_name</span></code>, or <code class="docutils literal notranslate"><span class="pre">lower_camel</span></code>, as in <code class="docutils literal notranslate"><span class="pre">getName</span></code>. The run stops if the file
+lacks a section a profile needs.</p>
 </section>
 </section>
 

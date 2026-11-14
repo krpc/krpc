@@ -1,0 +1,46 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: Trajectories
+   :no-index:
+
+DescentProfileNode
+==================
+
+
+.. class:: DescentProfileNode
+
+   A node of the descent profile.
+
+   .. method:: getAngle()
+               setAngle(value)
+
+      The angle in degrees, from -180 to 180.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getMode()
+               setMode(value)
+
+      Whether :meth:`Trajectories.DescentProfileNode.getAngle` is the angle of attack or the angle from the horizon.
+
+      :Property: Can be read or written
+      :rtype: :class:`Trajectories.DescentProfileMode`
+      :Game Scenes: Flight
+
+
+
+.. class:: DescentProfileMode
+
+   The reference for the angle of a descent profile node.
+
+
+   .. attribute:: angleOfAttack
+
+      The angle of attack, from prograde.
+
+
+   .. attribute:: horizon
+
+      The angle from the horizon.

@@ -502,6 +502,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../client-design/cnano.html">C-nano Client Design</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../client-design/java.html">Java Client Design</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../client-design/lua.html">Lua Client Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-design/js.html">JavaScript Client Design</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../client-spec.html">Client Specification</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
@@ -630,6 +631,9 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <tr class="row-odd"><td><p>Lua</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">connections</span></code>, <code class="docutils literal notranslate"><span class="pre">core</span></code>, <code class="docutils literal notranslate"><span class="pre">defaults</span></code>, <code class="docutils literal notranslate"><span class="pre">definitions</span></code>, <code class="docutils literal notranslate"><span class="pre">dynamic</span></code>, <code class="docutils literal notranslate"><span class="pre">error-types</span></code>, <code class="docutils literal notranslate"><span class="pre">functions</span></code>, <code class="docutils literal notranslate"><span class="pre">localsocket</span></code>, <code class="docutils literal notranslate"><span class="pre">ordering</span></code>, <code class="docutils literal notranslate"><span class="pre">skipped-arguments</span></code>, <code class="docutils literal notranslate"><span class="pre">tcpip</span></code></p></td>
 </tr>
+<tr class="row-even"><td><p>JavaScript</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">callbacks</span></code>, <code class="docutils literal notranslate"><span class="pre">concurrency</span></code>, <code class="docutils literal notranslate"><span class="pre">connections</span></code>, <code class="docutils literal notranslate"><span class="pre">core</span></code>, <code class="docutils literal notranslate"><span class="pre">declarations</span></code>, <code class="docutils literal notranslate"><span class="pre">defaults</span></code>, <code class="docutils literal notranslate"><span class="pre">definitions</span></code>, <code class="docutils literal notranslate"><span class="pre">dynamic</span></code>, <code class="docutils literal notranslate"><span class="pre">error-types</span></code>, <code class="docutils literal notranslate"><span class="pre">events</span></code>, <code class="docutils literal notranslate"><span class="pre">functions</span></code>, <code class="docutils literal notranslate"><span class="pre">named-arguments</span></code>, <code class="docutils literal notranslate"><span class="pre">streams</span></code>, <code class="docutils literal notranslate"><span class="pre">websockets</span></code></p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -643,6 +647,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <th class="head"><p>C</p></th>
 <th class="head"><p>Java</p></th>
 <th class="head"><p>Lua</p></th>
+<th class="head"><p>JavaScript</p></th>
 </tr>
 </thead>
 <tbody>
@@ -653,8 +658,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-default-address"><span class="std std-ref">connection-default-address</span></a></p></th>
+<td><p><span class="coverage-untested">?</span></p></td>
 <td><p><span class="coverage-untested">?</span></p></td>
 <td><p><span class="coverage-untested">?</span></p></td>
 <td><p><span class="coverage-untested">?</span></p></td>
@@ -669,10 +676,12 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-unknown-host"><span class="std std-ref">connection-unknown-host</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -685,6 +694,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-localsocket-default-path"><span class="std std-ref">connection-localsocket-default-path</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -693,6 +703,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-localsocket-fallback-path"><span class="std std-ref">connection-localsocket-fallback-path</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -701,8 +712,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-localsocket-path-too-long"><span class="std std-ref">connection-localsocket-path-too-long</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -717,6 +730,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
 <td></td>
+<td></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-websockets"><span class="std std-ref">connection-websockets</span></a></p></th>
 <td></td>
@@ -725,8 +739,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-handshake-name"><span class="std std-ref">connection-handshake-name</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -741,8 +757,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-handshake-version"><span class="std std-ref">connection-handshake-version</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -757,8 +775,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-handshake-refused"><span class="std std-ref">connection-handshake-refused</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -773,8 +793,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-handshake-disconnect"><span class="std std-ref">connection-handshake-disconnect</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -789,8 +811,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-handshake-lost"><span class="std std-ref">connection-handshake-lost</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -805,8 +829,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-handshake-malformed-size"><span class="std std-ref">connection-handshake-malformed-size</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -821,6 +847,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-partial">!</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-handshake-timeout-values"><span class="std std-ref">connection-handshake-timeout-values</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -829,8 +856,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-partial">!</span></p></td>
 <td><p><span class="coverage-partial">!</span></p></td>
 <td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-message-split-across-reads"><span class="std std-ref">connection-message-split-across-reads</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -845,8 +874,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-unknown-message"><span class="std std-ref">connection-unknown-message</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -861,8 +892,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-malformed-message"><span class="std std-ref">connection-malformed-message</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -877,8 +910,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-size-over-32-bits"><span class="std std-ref">connection-size-over-32-bits</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -893,6 +928,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-fail">✗</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-stall-while-idle"><span class="std std-ref">connection-stall-while-idle</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -901,10 +937,12 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-stall-timeout-values"><span class="std std-ref">connection-stall-timeout-values</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
 <td><p><span class="coverage-partial">!</span></p></td>
 <td><p><span class="coverage-partial">!</span></p></td>
 <td><p><span class="coverage-partial">!</span></p></td>
@@ -917,6 +955,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-fail">✗</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-websockets-close"><span class="std std-ref">connection-websockets-close</span></a></p></th>
 <td></td>
@@ -925,8 +964,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-close-wait-limit"><span class="std std-ref">connection-close-wait-limit</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -941,8 +982,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-partial">!</span></p></td>
 <td></td>
+<td></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-close-twice"><span class="std std-ref">connection-close-twice</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -957,6 +1000,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-lost-pending-calls"><span class="std std-ref">connection-lost-pending-calls</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -965,8 +1009,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-failed-write"><span class="std std-ref">connection-failed-write</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -981,12 +1027,14 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-serialio-leftovers"><span class="std std-ref">connection-serialio-leftovers</span></a></p></th>
 <td></td>
 <td></td>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
 <td></td>
 <td></td>
 </tr>
@@ -997,6 +1045,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-partial">!</span></p></td>
 <td></td>
 <td></td>
+<td></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-serialio-refusal"><span class="std std-ref">connection-serialio-refusal</span></a></p></th>
 <td></td>
@@ -1005,12 +1054,14 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
 <td></td>
+<td></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-serialio-repeated-connection-response"><span class="std std-ref">connection-serialio-repeated-connection-response</span></a></p></th>
 <td></td>
 <td></td>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
 <td></td>
 <td></td>
 </tr>
@@ -1027,10 +1078,12 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <th class="head"><p>C</p></th>
 <th class="head"><p>Java</p></th>
 <th class="head"><p>Lua</p></th>
+<th class="head"><p>JavaScript</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-service-procedure"><span class="std std-ref">calls-service-procedure</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1045,8 +1098,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-service-property"><span class="std std-ref">calls-service-property</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1061,8 +1116,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-class-static-method"><span class="std std-ref">calls-class-static-method</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1077,6 +1134,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-class-extension-members"><span class="std std-ref">calls-class-extension-members</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1085,8 +1143,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-fail">✗</span></p></td>
 <td><p><span class="coverage-fail">✗</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-deprecated-procedure"><span class="std std-ref">calls-deprecated-procedure</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1101,8 +1161,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-deprecated-class"><span class="std std-ref">calls-deprecated-class</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1117,8 +1179,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-deprecated-enum"><span class="std std-ref">calls-deprecated-enum</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1133,8 +1197,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-deprecated-struct"><span class="std std-ref">calls-deprecated-struct</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1149,6 +1215,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-deprecated-exception"><span class="std std-ref">calls-deprecated-exception</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1157,8 +1224,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-deprecated-class-member"><span class="std std-ref">calls-deprecated-class-member</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1173,6 +1242,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-deprecated-struct-member"><span class="std std-ref">calls-deprecated-struct-member</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1181,6 +1251,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-deprecated-service"><span class="std std-ref">calls-deprecated-service</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1189,8 +1260,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-deprecated-service-member"><span class="std std-ref">calls-deprecated-service-member</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1205,6 +1278,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-deprecated-call"><span class="std std-ref">calls-deprecated-call</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1212,6 +1286,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-deprecated-reason"><span class="std std-ref">calls-deprecated-reason</span></a></p></th>
@@ -1221,6 +1296,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-deprecated-reason-of-container"><span class="std std-ref">calls-deprecated-reason-of-container</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1228,6 +1304,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-deprecated-reason-of-member"><span class="std std-ref">calls-deprecated-reason-of-member</span></a></p></th>
@@ -1237,6 +1314,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-deprecated-reason-of-class"><span class="std std-ref">calls-deprecated-reason-of-class</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1245,8 +1323,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-not-deprecated"><span class="std std-ref">calls-not-deprecated</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1261,6 +1341,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-member-name-case"><span class="std std-ref">calls-member-name-case</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1268,6 +1349,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-internal-procedure"><span class="std std-ref">calls-internal-procedure</span></a></p></th>
@@ -1277,6 +1359,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-unknown-type"><span class="std std-ref">calls-unknown-type</span></a></p></th>
 <td><p><span class="coverage-fail">✗</span></p></td>
@@ -1285,6 +1368,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td></td>
 <td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-undefined-type"><span class="std std-ref">calls-undefined-type</span></a></p></th>
 <td><p><span class="coverage-partial">!</span></p></td>
@@ -1293,6 +1377,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td></td>
 <td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-malformed-definitions"><span class="std std-ref">calls-malformed-definitions</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1301,6 +1386,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td></td>
 <td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-enumeration-default"><span class="std std-ref">calls-enumeration-default</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1308,6 +1394,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-structure-default"><span class="std std-ref">calls-structure-default</span></a></p></th>
@@ -1317,8 +1404,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-several-arguments"><span class="std std-ref">calls-several-arguments</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1333,6 +1422,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-omitted-arguments"><span class="std std-ref">calls-omitted-arguments</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1340,6 +1430,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-default-values"><span class="std std-ref">calls-default-values</span></a></p></th>
@@ -1349,6 +1440,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td></td>
 <td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-named-arguments"><span class="std std-ref">calls-named-arguments</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1357,6 +1449,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-skipped-arguments"><span class="std std-ref">calls-skipped-arguments</span></a></p></th>
 <td></td>
@@ -1365,6 +1458,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-too-few-arguments"><span class="std std-ref">calls-too-few-arguments</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1372,6 +1466,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-too-many-arguments"><span class="std std-ref">calls-too-many-arguments</span></a></p></th>
@@ -1381,8 +1476,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td></td>
 <td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-undecodable-argument-fails-its-call"><span class="std std-ref">calls-undecodable-argument-fails-its-call</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1397,8 +1494,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-duplicate-argument-position-fails-its-call"><span class="std std-ref">calls-duplicate-argument-position-fails-its-call</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1413,6 +1512,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-match-by-id"><span class="std std-ref">calls-match-by-id</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1421,6 +1521,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-abandoned-id"><span class="std std-ref">calls-abandoned-id</span></a></p></th>
 <td></td>
@@ -1428,6 +1529,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
 <td></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-unknown-id"><span class="std std-ref">calls-unknown-id</span></a></p></th>
@@ -1437,8 +1539,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-slow-call"><span class="std std-ref">calls-slow-call</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1459,6 +1563,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <th class="head"><p>C</p></th>
 <th class="head"><p>Java</p></th>
 <th class="head"><p>Lua</p></th>
+<th class="head"><p>JavaScript</p></th>
 </tr>
 </thead>
 <tbody>
@@ -1469,8 +1574,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-floating-point"><span class="std std-ref">values-floating-point</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1485,8 +1592,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-enum"><span class="std std-ref">values-enum</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1501,8 +1610,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-fail">✗</span></p></td>
 <td><p><span class="coverage-fail">✗</span></p></td>
 <td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-flags"><span class="std std-ref">values-flags</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1517,8 +1628,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-flags-union"><span class="std std-ref">values-flags-union</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1533,6 +1646,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-undeclared-flags-result"><span class="std std-ref">values-undeclared-flags-result</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1541,6 +1655,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-fail">✗</span></p></td>
 <td><p><span class="coverage-fail">✗</span></p></td>
 <td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-undeclared-flags-value"><span class="std std-ref">values-undeclared-flags-value</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1549,6 +1664,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td></td>
 <td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-combined-enum-value"><span class="std std-ref">values-combined-enum-value</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1557,8 +1673,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td></td>
 <td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-flags-definitions"><span class="std std-ref">values-flags-definitions</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1573,8 +1691,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-partial">!</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-bytes"><span class="std std-ref">values-bytes</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1589,8 +1709,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-collections-of-objects"><span class="std std-ref">values-collections-of-objects</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1605,6 +1727,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-enum-equality"><span class="std std-ref">values-enum-equality</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1613,6 +1736,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-structure-equality"><span class="std std-ref">values-structure-equality</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1621,6 +1745,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-structure-hash"><span class="std std-ref">values-structure-hash</span></a></p></th>
 <td><p><span class="coverage-fail">✗</span></p></td>
@@ -1628,6 +1753,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
 <td></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-structure-sorting"><span class="std std-ref">values-structure-sorting</span></a></p></th>
@@ -1637,6 +1763,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-message-result"><span class="std std-ref">values-message-result</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1645,8 +1772,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-nullable"><span class="std std-ref">values-nullable</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1661,8 +1790,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-nullable-fields"><span class="std std-ref">values-nullable-fields</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1677,8 +1808,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-null-flag"><span class="std std-ref">values-null-flag</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1693,6 +1826,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-partial">!</span></p></td>
 <td><p><span class="coverage-partial">!</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-null-in-non-nullable-slot"><span class="std std-ref">values-null-in-non-nullable-slot</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1701,11 +1835,13 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-partial">!</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-null-result-for-non-nullable"><span class="std std-ref">values-null-result-for-non-nullable</span></a></p></th>
 <td><p><span class="coverage-fail">✗</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1717,6 +1853,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-fail">✗</span></p></td>
 <td><p><span class="coverage-fail">✗</span></p></td>
 <td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-integer-to-float"><span class="std std-ref">values-integer-to-float</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1725,6 +1862,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td></td>
 <td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-wrong-type"><span class="std std-ref">values-wrong-type</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1732,6 +1870,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-wrong-sized-tuple"><span class="std std-ref">values-wrong-sized-tuple</span></a></p></th>
@@ -1741,6 +1880,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td></td>
 <td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-out-of-range"><span class="std std-ref">values-out-of-range</span></a></p></th>
 <td><p><span class="coverage-partial">!</span></p></td>
@@ -1749,6 +1889,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td></td>
 <td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-undeclared-enum-value"><span class="std std-ref">values-undeclared-enum-value</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1757,6 +1898,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td></td>
 <td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-wrong-collection"><span class="std std-ref">values-wrong-collection</span></a></p></th>
 <td><p><span class="coverage-partial">!</span></p></td>
@@ -1765,6 +1907,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td></td>
 <td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-declared-values-as-arguments"><span class="std std-ref">values-declared-values-as-arguments</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1773,6 +1916,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-matching-definitions-share-the-type"><span class="std std-ref">values-matching-definitions-share-the-type</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1781,6 +1925,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-differing-structure-definition"><span class="std std-ref">values-differing-structure-definition</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1789,6 +1934,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 </tbody>
 </table>
@@ -1803,6 +1949,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <th class="head"><p>C</p></th>
 <th class="head"><p>Java</p></th>
 <th class="head"><p>Lua</p></th>
+<th class="head"><p>JavaScript</p></th>
 </tr>
 </thead>
 <tbody>
@@ -1813,8 +1960,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="codec.html#spec-codec-floating-point"><span class="std std-ref">codec-floating-point</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1829,8 +1978,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="codec.html#spec-codec-enum"><span class="std std-ref">codec-enum</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1845,6 +1996,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td></td>
 <td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="codec.html#spec-codec-string"><span class="std std-ref">codec-string</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1853,8 +2005,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-partial">!</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="codec.html#spec-codec-bytes"><span class="std std-ref">codec-bytes</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1869,12 +2023,14 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-fail">✗</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="codec.html#spec-codec-collections"><span class="std std-ref">codec-collections</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
@@ -1885,8 +2041,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-fail">✗</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="codec.html#spec-codec-structures"><span class="std std-ref">codec-structures</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1901,6 +2059,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-partial">!</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="codec.html#spec-codec-too-few-items"><span class="std std-ref">codec-too-few-items</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1909,12 +2068,14 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-partial">!</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="codec.html#spec-codec-nullable"><span class="std std-ref">codec-nullable</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
@@ -1925,6 +2086,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-partial">!</span></p></td>
 <td><p><span class="coverage-partial">!</span></p></td>
 <td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="codec.html#spec-codec-empty-data"><span class="std std-ref">codec-empty-data</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1933,6 +2095,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="codec.html#spec-codec-invalid-utf8"><span class="std std-ref">codec-invalid-utf8</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1941,8 +2104,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-fail">✗</span></p></td>
 <td><p><span class="coverage-fail">✗</span></p></td>
 <td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="codec.html#spec-codec-message"><span class="std std-ref">codec-message</span></a></p></th>
+<td><p><span class="coverage-untested">?</span></p></td>
 <td><p><span class="coverage-untested">?</span></p></td>
 <td><p><span class="coverage-untested">?</span></p></td>
 <td><p><span class="coverage-untested">?</span></p></td>
@@ -1963,10 +2128,12 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <th class="head"><p>C</p></th>
 <th class="head"><p>Java</p></th>
 <th class="head"><p>Lua</p></th>
+<th class="head"><p>JavaScript</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="errors.html#spec-errors-server-error"><span class="std std-ref">errors-server-error</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1981,8 +2148,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="errors.html#spec-errors-setter-error"><span class="std std-ref">errors-setter-error</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -1997,8 +2166,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="errors.html#spec-errors-request-error"><span class="std std-ref">errors-request-error</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2013,8 +2184,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="errors.html#spec-errors-mapped-exceptions"><span class="std std-ref">errors-mapped-exceptions</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2029,8 +2202,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="errors.html#spec-errors-remote-error"><span class="std std-ref">errors-remote-error</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2045,8 +2220,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="errors.html#spec-errors-message-prefix"><span class="std std-ref">errors-message-prefix</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2061,6 +2238,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="errors.html#spec-errors-whole-message"><span class="std std-ref">errors-whole-message</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2069,8 +2247,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-partial">!</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="errors.html#spec-errors-description"><span class="std std-ref">errors-description</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2091,10 +2271,12 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <th class="head"><p>C</p></th>
 <th class="head"><p>Java</p></th>
 <th class="head"><p>Lua</p></th>
+<th class="head"><p>JavaScript</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="objects.html#spec-objects-equality"><span class="std std-ref">objects-equality</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2109,6 +2291,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="objects.html#spec-objects-sorting"><span class="std std-ref">objects-sorting</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2117,12 +2300,14 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-fail">✗</span></p></td>
 <td><p><span class="coverage-fail">✗</span></p></td>
+<td></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="objects.html#spec-objects-get-object-id"><span class="std std-ref">objects-get-object-id</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
@@ -2133,8 +2318,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="objects.html#spec-objects-unknown-object-id"><span class="std std-ref">objects-unknown-object-id</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2149,12 +2336,14 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="objects.html#spec-objects-static-method-connection"><span class="std std-ref">objects-static-method-connection</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
@@ -2165,6 +2354,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="objects.html#spec-objects-static-method-through-an-object-connection"><span class="std std-ref">objects-static-method-through-an-object-connection</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2173,12 +2363,14 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="objects.html#spec-objects-object-from-another-connection"><span class="std std-ref">objects-object-from-another-connection</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
@@ -2189,6 +2381,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="objects.html#spec-objects-hash-across-connections"><span class="std std-ref">objects-hash-across-connections</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2197,8 +2390,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="objects.html#spec-objects-call-after-close"><span class="std std-ref">objects-call-after-close</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2219,6 +2414,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <th class="head"><p>C</p></th>
 <th class="head"><p>Java</p></th>
 <th class="head"><p>Lua</p></th>
+<th class="head"><p>JavaScript</p></th>
 </tr>
 </thead>
 <tbody>
@@ -2229,6 +2425,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-partial">!</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-bound-static-method"><span class="std std-ref">streams-bound-static-method</span></a></p></th>
 <td></td>
@@ -2236,6 +2433,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
 <td></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-null-stream-id"><span class="std std-ref">streams-null-stream-id</span></a></p></th>
@@ -2245,6 +2443,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-procedure-returning-an-event"><span class="std std-ref">streams-procedure-returning-an-event</span></a></p></th>
 <td><p><span class="coverage-fail">✗</span></p></td>
@@ -2253,6 +2452,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-fail">✗</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-add-twice"><span class="std std-ref">streams-add-twice</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2261,6 +2461,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-no-value"><span class="std std-ref">streams-no-value</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2269,6 +2470,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-no-value-updates-once"><span class="std std-ref">streams-no-value-updates-once</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2277,6 +2479,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-no-value-error"><span class="std std-ref">streams-no-value-error</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2285,6 +2488,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-no-value-remove"><span class="std std-ref">streams-no-value-remove</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2293,6 +2497,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-property-setter"><span class="std std-ref">streams-property-setter</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2301,6 +2506,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-equality"><span class="std std-ref">streams-equality</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2309,6 +2515,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-hash"><span class="std std-ref">streams-hash</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2316,6 +2523,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
 <td></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-rate"><span class="std std-ref">streams-rate</span></a></p></th>
@@ -2325,6 +2533,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-rate-takes-effect"><span class="std std-ref">streams-rate-takes-effect</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2333,6 +2542,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-first-value"><span class="std std-ref">streams-first-value</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2341,6 +2551,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-value-types"><span class="std std-ref">streams-value-types</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2349,6 +2560,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-value-changes"><span class="std std-ref">streams-value-changes</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2357,6 +2569,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-independent-streams"><span class="std std-ref">streams-independent-streams</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2365,6 +2578,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-current-after-call"><span class="std std-ref">streams-current-after-call</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2373,6 +2587,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-update-with-a-response"><span class="std std-ref">streams-update-with-a-response</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2381,6 +2596,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-update-with-add-response"><span class="std std-ref">streams-update-with-add-response</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2389,6 +2605,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-update-for-an-unknown-id"><span class="std std-ref">streams-update-for-an-unknown-id</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2397,6 +2614,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-error-ends-the-stream"><span class="std std-ref">streams-error-ends-the-stream</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2405,6 +2623,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-procedure-exception"><span class="std std-ref">streams-procedure-exception</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2413,6 +2632,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-partial">!</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-undecodable-value"><span class="std std-ref">streams-undecodable-value</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2421,6 +2641,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-remove"><span class="std std-ref">streams-remove</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2429,6 +2650,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-remove-twice"><span class="std std-ref">streams-remove-twice</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2437,6 +2659,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-scoped-removal"><span class="std std-ref">streams-scoped-removal</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2445,6 +2668,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-drop-last-handle"><span class="std std-ref">streams-drop-last-handle</span></a></p></th>
 <td><p><span class="coverage-fail">✗</span></p></td>
@@ -2453,6 +2677,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-fail">✗</span></p></td>
 <td></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-update-after-remove"><span class="std std-ref">streams-update-after-remove</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2461,6 +2686,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-read-after-close"><span class="std std-ref">streams-read-after-close</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2469,6 +2695,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-connection-failure-cause"><span class="std std-ref">streams-connection-failure-cause</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2477,6 +2704,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-close-after-failure"><span class="std std-ref">streams-close-after-failure</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2485,6 +2713,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-wait"><span class="std std-ref">streams-wait</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2493,6 +2722,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-wait-timeout"><span class="std std-ref">streams-wait-timeout</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2501,6 +2731,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-wait-timeout-values"><span class="std std-ref">streams-wait-timeout-values</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2509,6 +2740,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-two-waiters"><span class="std std-ref">streams-two-waiters</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2517,6 +2749,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-wake-waiter"><span class="std std-ref">streams-wake-waiter</span></a></p></th>
 <td><p><span class="coverage-partial">!</span></p></td>
@@ -2525,6 +2758,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-callback"><span class="std std-ref">streams-callback</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2533,6 +2767,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-callback-order"><span class="std std-ref">streams-callback-order</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2541,6 +2776,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-callback-values-only"><span class="std std-ref">streams-callback-values-only</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2549,6 +2785,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-remove-callback"><span class="std std-ref">streams-remove-callback</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2557,6 +2794,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-callback-after-remove"><span class="std std-ref">streams-callback-after-remove</span></a></p></th>
 <td><p><span class="coverage-fail">✗</span></p></td>
@@ -2564,6 +2802,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
 <td></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-callback-removed-during-update"><span class="std std-ref">streams-callback-removed-during-update</span></a></p></th>
@@ -2573,6 +2812,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-update-callback"><span class="std std-ref">streams-update-callback</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2581,6 +2821,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-fail">✗</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-first-call"><span class="std std-ref">streams-first-call</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2589,6 +2830,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-first-call-on-add"><span class="std std-ref">streams-first-call-on-add</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2597,6 +2839,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-first-call-superseded"><span class="std std-ref">streams-first-call-superseded</span></a></p></th>
 <td><p><span class="coverage-fail">✗</span></p></td>
@@ -2604,6 +2847,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
 <td></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-queued-value-before-ending"><span class="std std-ref">streams-queued-value-before-ending</span></a></p></th>
@@ -2613,6 +2857,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-queued-value-dropped-by-remove"><span class="std std-ref">streams-queued-value-dropped-by-remove</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2621,6 +2866,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-value-as-first-call-ends"><span class="std std-ref">streams-value-as-first-call-ends</span></a></p></th>
 <td><p><span class="coverage-fail">✗</span></p></td>
@@ -2628,6 +2874,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
 <td></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-callback-error"><span class="std std-ref">streams-callback-error</span></a></p></th>
@@ -2637,6 +2884,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-callback-fatal-error"><span class="std std-ref">streams-callback-fatal-error</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2644,6 +2892,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
 <td></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-first-call-fatal-error"><span class="std std-ref">streams-first-call-fatal-error</span></a></p></th>
@@ -2653,6 +2902,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-end-callback"><span class="std std-ref">streams-end-callback</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2661,6 +2911,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-late-end-callback"><span class="std std-ref">streams-late-end-callback</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2669,6 +2920,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-remove-end-callback"><span class="std std-ref">streams-remove-end-callback</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2677,6 +2929,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-remove-during-server-ending"><span class="std std-ref">streams-remove-during-server-ending</span></a></p></th>
 <td><p><span class="coverage-fail">✗</span></p></td>
@@ -2684,6 +2937,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
 <td></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-end-callback-fatal-error-on-remove"><span class="std std-ref">streams-end-callback-fatal-error-on-remove</span></a></p></th>
@@ -2693,6 +2947,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-end-callback-fatal-error-on-close"><span class="std std-ref">streams-end-callback-fatal-error-on-close</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2701,6 +2956,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-late-end-callback-fatal-error"><span class="std std-ref">streams-late-end-callback-fatal-error</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2708,6 +2964,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
 <td></td>
 </tr>
 </tbody>
@@ -2723,6 +2980,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <th class="head"><p>C</p></th>
 <th class="head"><p>Java</p></th>
 <th class="head"><p>Lua</p></th>
+<th class="head"><p>JavaScript</p></th>
 </tr>
 </thead>
 <tbody>
@@ -2733,6 +2991,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-event-stream"><span class="std std-ref">events-event-stream</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2741,6 +3000,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-equality"><span class="std std-ref">events-equality</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2749,6 +3009,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-hash"><span class="std std-ref">events-hash</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2756,6 +3017,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
 <td></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-callback"><span class="std std-ref">events-callback</span></a></p></th>
@@ -2765,6 +3027,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-remove-callback"><span class="std std-ref">events-remove-callback</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2773,6 +3036,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-callback-after-seen-firing"><span class="std std-ref">events-callback-after-seen-firing</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2781,6 +3045,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-callback-after-unseen-firing"><span class="std std-ref">events-callback-after-unseen-firing</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2789,6 +3054,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-first-call-on-add"><span class="std std-ref">events-first-call-on-add</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2797,6 +3063,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-one-callback-per-unseen-firing"><span class="std std-ref">events-one-callback-per-unseen-firing</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2805,6 +3072,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-stream-callback-leaves-firing"><span class="std std-ref">events-stream-callback-leaves-firing</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2813,6 +3081,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-removed-callback-leaves-firing"><span class="std std-ref">events-removed-callback-leaves-firing</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2821,6 +3090,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-callback-added-during-replay"><span class="std std-ref">events-callback-added-during-replay</span></a></p></th>
 <td><p><span class="coverage-fail">✗</span></p></td>
@@ -2828,6 +3098,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
 <td></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-callback-removed-during-add"><span class="std std-ref">events-callback-removed-during-add</span></a></p></th>
@@ -2837,6 +3108,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-callback-removed-during-update"><span class="std std-ref">events-callback-removed-during-update</span></a></p></th>
 <td><p><span class="coverage-fail">✗</span></p></td>
@@ -2844,6 +3116,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
 <td></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-server-end"><span class="std std-ref">events-server-end</span></a></p></th>
@@ -2853,6 +3126,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-ended-without-firing"><span class="std std-ref">events-ended-without-firing</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2861,6 +3135,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-remove"><span class="std std-ref">events-remove</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2869,6 +3144,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-drop-last-handle"><span class="std std-ref">events-drop-last-handle</span></a></p></th>
 <td><p><span class="coverage-fail">✗</span></p></td>
@@ -2877,6 +3153,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-fail">✗</span></p></td>
 <td></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-scoped-removal"><span class="std std-ref">events-scoped-removal</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2885,6 +3162,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-wait-after-close"><span class="std std-ref">events-wait-after-close</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2893,6 +3171,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-firing-before-wait"><span class="std std-ref">events-firing-before-wait</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2901,6 +3180,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-firings-coalesce"><span class="std std-ref">events-firings-coalesce</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2909,6 +3189,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-repeated-waits"><span class="std std-ref">events-repeated-waits</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2917,6 +3198,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-wait-timeout"><span class="std std-ref">events-wait-timeout</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2925,6 +3207,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-wait-timeout-values"><span class="std std-ref">events-wait-timeout-values</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2933,6 +3216,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-two-waiters"><span class="std std-ref">events-two-waiters</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2941,6 +3225,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-wake-waiter"><span class="std std-ref">events-wake-waiter</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2949,6 +3234,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-end-callback"><span class="std std-ref">events-end-callback</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2957,6 +3243,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 </tbody>
 </table>
@@ -2971,6 +3258,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <th class="head"><p>C</p></th>
 <th class="head"><p>Java</p></th>
 <th class="head"><p>Lua</p></th>
+<th class="head"><p>JavaScript</p></th>
 </tr>
 </thead>
 <tbody>
@@ -2981,6 +3269,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="concurrency.html#spec-concurrency-interleaved-calls"><span class="std std-ref">concurrency-interleaved-calls</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2989,6 +3278,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="concurrency.html#spec-concurrency-concurrent-stream-adds"><span class="std std-ref">concurrency-concurrent-stream-adds</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -2997,6 +3287,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="concurrency.html#spec-concurrency-close-with-a-call-in-flight"><span class="std std-ref">concurrency-close-with-a-call-in-flight</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3005,6 +3296,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="concurrency.html#spec-concurrency-response-after-close"><span class="std std-ref">concurrency-response-after-close</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3013,6 +3305,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="concurrency.html#spec-concurrency-wait-holding"><span class="std std-ref">concurrency-wait-holding</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3020,6 +3313,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
 <td></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="concurrency.html#spec-concurrency-wait-for-update"><span class="std std-ref">concurrency-wait-for-update</span></a></p></th>
@@ -3029,6 +3323,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-fail">✗</span></p></td>
 <td></td>
+<td></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="concurrency.html#spec-concurrency-held-value"><span class="std std-ref">concurrency-held-value</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3036,6 +3331,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
 <td></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="concurrency.html#spec-concurrency-held-stream-ending"><span class="std std-ref">concurrency-held-stream-ending</span></a></p></th>
@@ -3045,6 +3341,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-fail">✗</span></p></td>
 <td></td>
+<td></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="concurrency.html#spec-concurrency-held-stream-ending-before-value"><span class="std std-ref">concurrency-held-stream-ending-before-value</span></a></p></th>
 <td><p><span class="coverage-fail">✗</span></p></td>
@@ -3052,6 +3349,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-fail">✗</span></p></td>
 <td></td>
 <td><p><span class="coverage-fail">✗</span></p></td>
+<td></td>
 <td></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="concurrency.html#spec-concurrency-held-read-before-value"><span class="std std-ref">concurrency-held-read-before-value</span></a></p></th>
@@ -3061,6 +3359,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="concurrency.html#spec-concurrency-wait-for-unread-value"><span class="std std-ref">concurrency-wait-for-unread-value</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3068,6 +3367,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
 <td></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="concurrency.html#spec-concurrency-value-read-before-wake"><span class="std std-ref">concurrency-value-read-before-wake</span></a></p></th>
@@ -3077,6 +3377,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="concurrency.html#spec-concurrency-call-while-holding"><span class="std std-ref">concurrency-call-while-holding</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3084,6 +3385,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
 <td></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="concurrency.html#spec-concurrency-wait-on-condition-object"><span class="std std-ref">concurrency-wait-on-condition-object</span></a></p></th>
@@ -3093,6 +3395,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="concurrency.html#spec-concurrency-spurious-wake"><span class="std std-ref">concurrency-spurious-wake</span></a></p></th>
 <td><p><span class="coverage-partial">!</span></p></td>
@@ -3100,6 +3403,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
 <td></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="concurrency.html#spec-concurrency-hold-twice"><span class="std std-ref">concurrency-hold-twice</span></a></p></th>
@@ -3109,6 +3413,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="concurrency.html#spec-concurrency-wait-holding-twice"><span class="std std-ref">concurrency-wait-holding-twice</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3116,6 +3421,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
 <td></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="concurrency.html#spec-concurrency-copies-share-condition"><span class="std std-ref">concurrency-copies-share-condition</span></a></p></th>
@@ -3125,6 +3431,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="concurrency.html#spec-concurrency-event-shares-condition"><span class="std std-ref">concurrency-event-shares-condition</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3132,6 +3439,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
 <td></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="concurrency.html#spec-concurrency-release-through-another-handle"><span class="std std-ref">concurrency-release-through-another-handle</span></a></p></th>
@@ -3141,6 +3449,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="concurrency.html#spec-concurrency-remove-while-holding"><span class="std std-ref">concurrency-remove-while-holding</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3148,6 +3457,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
 <td></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="concurrency.html#spec-concurrency-remove-event-while-holding"><span class="std std-ref">concurrency-remove-event-while-holding</span></a></p></th>
@@ -3157,6 +3467,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="concurrency.html#spec-concurrency-close-while-holding"><span class="std std-ref">concurrency-close-while-holding</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3164,6 +3475,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
 <td><p><span class="coverage-partial">!</span></p></td>
+<td></td>
 <td></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="concurrency.html#spec-concurrency-wait-holding-another"><span class="std std-ref">concurrency-wait-holding-another</span></a></p></th>
@@ -3173,6 +3485,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-fail">✗</span></p></td>
 <td></td>
+<td></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="concurrency.html#spec-concurrency-wake-waiter-holding-another"><span class="std std-ref">concurrency-wake-waiter-holding-another</span></a></p></th>
 <td><p><span class="coverage-partial">!</span></p></td>
@@ -3180,6 +3493,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
 <td></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="concurrency.html#spec-concurrency-wake-update-waiter"><span class="std std-ref">concurrency-wake-update-waiter</span></a></p></th>
@@ -3189,6 +3503,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-partial">!</span></p></td>
 <td></td>
+<td></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="concurrency.html#spec-concurrency-interrupted-wait"><span class="std std-ref">concurrency-interrupted-wait</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3197,6 +3512,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="concurrency.html#spec-concurrency-remove-callback-while-holding"><span class="std std-ref">concurrency-remove-callback-while-holding</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3204,6 +3520,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
 <td></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="concurrency.html#spec-concurrency-close-while-callback-waits"><span class="std std-ref">concurrency-close-while-callback-waits</span></a></p></th>
@@ -3213,6 +3530,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="concurrency.html#spec-concurrency-add-callback-while-callback-waits"><span class="std std-ref">concurrency-add-callback-while-callback-waits</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3220,6 +3538,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
 <td></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="concurrency.html#spec-concurrency-callbacks-run-off-the-caller"><span class="std std-ref">concurrency-callbacks-run-off-the-caller</span></a></p></th>
@@ -3229,6 +3548,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="concurrency.html#spec-concurrency-first-call-waits"><span class="std std-ref">concurrency-first-call-waits</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3237,6 +3557,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="concurrency.html#spec-concurrency-blocked-callback"><span class="std std-ref">concurrency-blocked-callback</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3245,6 +3566,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="concurrency.html#spec-concurrency-callback-one-call-at-a-time"><span class="std std-ref">concurrency-callback-one-call-at-a-time</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3253,6 +3575,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="concurrency.html#spec-concurrency-close-during-first-call"><span class="std std-ref">concurrency-close-during-first-call</span></a></p></th>
 <td><p><span class="coverage-fail">✗</span></p></td>
@@ -3260,6 +3583,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
 <td></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="concurrency.html#spec-concurrency-update-callback-after-close"><span class="std std-ref">concurrency-update-callback-after-close</span></a></p></th>
@@ -3269,6 +3593,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-fail">✗</span></p></td>
 <td></td>
+<td></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="concurrency.html#spec-concurrency-call-from-a-callback"><span class="std std-ref">concurrency-call-from-a-callback</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3277,6 +3602,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="concurrency.html#spec-concurrency-remove-stream-from-callback"><span class="std std-ref">concurrency-remove-stream-from-callback</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3285,6 +3611,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="concurrency.html#spec-concurrency-remove-callback-from-itself"><span class="std std-ref">concurrency-remove-callback-from-itself</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3293,6 +3620,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="concurrency.html#spec-concurrency-close-from-a-callback"><span class="std std-ref">concurrency-close-from-a-callback</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3301,6 +3629,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="concurrency.html#spec-concurrency-close-from-an-end-callback"><span class="std std-ref">concurrency-close-from-an-end-callback</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3309,6 +3638,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 </tbody>
 </table>
@@ -3323,6 +3653,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <th class="head"><p>C</p></th>
 <th class="head"><p>Java</p></th>
 <th class="head"><p>Lua</p></th>
+<th class="head"><p>JavaScript</p></th>
 </tr>
 </thead>
 <tbody>
@@ -3333,6 +3664,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-stream-error"><span class="std std-ref">functions-stream-error</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3341,6 +3673,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-two-streams-of-one-function"><span class="std std-ref">functions-two-streams-of-one-function</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3349,6 +3682,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-stream-without-a-value"><span class="std std-ref">functions-stream-without-a-value</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3357,6 +3691,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-null-stream-id"><span class="std std-ref">functions-null-stream-id</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3365,6 +3700,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-null-event"><span class="std std-ref">functions-null-event</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3373,6 +3709,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-add-event"><span class="std std-ref">functions-add-event</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3381,6 +3718,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-two-events-of-one-function"><span class="std std-ref">functions-two-events-of-one-function</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3389,8 +3727,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-compile"><span class="std std-ref">functions-compile</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3405,6 +3745,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-argument-types"><span class="std std-ref">functions-argument-types</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3413,8 +3754,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-run-a-call"><span class="std std-ref">functions-run-a-call</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3429,6 +3772,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-call-bound-static-method"><span class="std std-ref">functions-call-bound-static-method</span></a></p></th>
 <td></td>
@@ -3437,8 +3781,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-call-with-arguments"><span class="std std-ref">functions-call-with-arguments</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3453,8 +3799,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-run-without-a-value"><span class="std std-ref">functions-run-without-a-value</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3469,6 +3817,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-run-argument-errors"><span class="std std-ref">functions-run-argument-errors</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3477,6 +3826,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-stream-with-parameters"><span class="std std-ref">functions-stream-with-parameters</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3485,6 +3835,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-event-with-parameters"><span class="std std-ref">functions-event-with-parameters</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3493,8 +3844,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-value-types"><span class="std std-ref">functions-value-types</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3509,11 +3862,13 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-mismatched-type"><span class="std std-ref">functions-mismatched-type</span></a></p></th>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -3525,8 +3880,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-null-for-non-nullable-type"><span class="std std-ref">functions-null-for-non-nullable-type</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3541,6 +3898,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-null-in-callback"><span class="std std-ref">functions-null-in-callback</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3549,8 +3907,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-flags-operations"><span class="std std-ref">functions-flags-operations</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3565,6 +3925,7 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-flags-stream"><span class="std std-ref">functions-flags-stream</span></a></p></th>
 <td><p><span class="coverage-pass">✓</span></p></td>
@@ -3573,8 +3934,10 @@ client does not implement, or the client lists its test as unsupported.</p></li>
 <td></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-flags-refused"><span class="std std-ref">functions-flags-refused</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>
 <td><p><span class="coverage-pass">✓</span></p></td>

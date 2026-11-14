@@ -1,0 +1,95 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: Drawing
+   :no-index:
+
+NavballMarker
+=============
+
+
+.. class:: NavballMarker
+
+   A marker drawn on the navball. Created using :func:`Drawing.addNavballMarker`.
+
+   .. method:: getDirection()
+               setDirection(value)
+
+      Direction that the marker is drawn at.
+
+      :Property: Can be read or written
+      :rtype: ``[number, number, number]``
+      :Game Scenes: Flight
+
+   .. method:: getReferenceFrame()
+               setReferenceFrame(value)
+
+      Reference frame that the direction of the marker is in.
+
+      :Property: Can be read or written
+      :rtype: :class:`SpaceCenter.ReferenceFrame`
+      :Game Scenes: Flight
+
+   .. method:: getVisible()
+               setVisible(value)
+
+      Whether the marker is visible.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A visible marker is still hidden while it is on the far side of the navball.
+
+   .. method:: getColor()
+               setColor(value)
+
+      Set the color
+
+      :Property: Can be read or written
+      :rtype: :class:`StdLib.ColorRGB`
+      :Game Scenes: Flight
+
+   .. method:: getIcon()
+               setIcon(value)
+
+      The icon that the marker is drawn with.
+      See :meth:`Drawing.NavballMarker.availableIcons` for the icons that can be used.
+
+      :Property: Can be read or written
+      :rtype: ``string``
+      :Game Scenes: Flight
+
+   .. method:: getImage()
+               setImage(value)
+
+      The image that the marker is drawn with in place of its icon, or null to draw the
+      icon.
+
+      :Property: Can be read or written
+      :rtype: :class:`Drawing.Image` or ``null``
+      :Game Scenes: Flight
+
+   .. function:: availableIcons()
+
+      A list of all available icons, taken from "GameData/Squad/Contracts/Icons/".
+
+      :rtype: ``Array`` of ``string``
+      :Game Scenes: Flight
+
+   .. method:: getSize()
+               setSize(value)
+
+      Size of the marker, relative to the size of the navball's own markers.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: remove()
+
+      Remove the marker.
+
+      :Game Scenes: Flight

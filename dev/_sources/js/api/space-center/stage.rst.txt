@@ -1,0 +1,202 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: SpaceCenter
+   :no-index:
+
+.. _js-api-stage:
+
+Stage
+=====
+
+
+.. class:: Stage
+
+   A single stage of a vessel. Obtain activation (burn) stages from
+   ``Vessel.Stages`` / ``Vessel.StageAt``, and decouple stages from
+   ``Vessel.DecoupleStages`` / ``Vessel.DecoupleStageAt``.
+
+   .. note::
+
+      Delta-v, thrust, TWR, specific impulse, burn time and mass members are only
+      available on activation stages. On decouple stages those members throw
+      :class:`KRPC.InvalidOperationException` because stock delta-v data does not
+      apply. Thrust is reported in newtons and masses in kilograms (stock values
+      are converted from kilonewtons and tonnes).
+
+   .. method:: getNumber()
+
+      The stage number (activation stage for burn stages, decouple stage otherwise).
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getParts()
+
+      The parts that belong to this stage.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`SpaceCenter.Part`
+   
+
+   .. method:: resources([cumulative])
+
+      Returns a :meth:`SpaceCenter.Stage.resources` object for this stage.
+
+      :param cumulative: When ``false``, only resources assigned to this stage. When ``true``, resources for this stage and all later activation or decouple stage numbers are included. On activation stages, unstaged resource containers (for example fuel tanks) are grouped with the first higher activation stage before they are detached. Defaults to ``true``.
+      :type cumulative: ``boolean``
+      :rtype: :class:`SpaceCenter.Resources`
+   
+
+      .. note:: This is an RPC method: call ``resources()`` (optional ``cumulative`` argument).
+                For activation stages, unstaged resource containers (for example fuel tanks)
+                are grouped with the first higher activation stage before they detach, matching
+                the C# ``Resources()`` documentation.
+
+   .. method:: getDeltaV()
+
+      Delta-v for this stage in the current situation, in :math:`\mathrm{m/s}`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+      .. note:: Delta-v is only defined for **activation** stages (``decouple`` is ``false``).
+                Calling this on a decouple stage raises an error.
+
+   .. method:: getVacuumDeltaV()
+
+      Vacuum delta-v for this stage, in :math:`\mathrm{m/s}`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getSeaLevelDeltaV()
+
+      Sea-level delta-v for this stage, in :math:`\mathrm{m/s}`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getThrust()
+
+      Thrust in the current situation, in newtons.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getVacuumThrust()
+
+      Vacuum thrust, in newtons.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getSeaLevelThrust()
+
+      Sea-level thrust, in newtons.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getTWR()
+
+      Thrust-to-weight ratio in the current situation.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getVacuumTWR()
+
+      Vacuum thrust-to-weight ratio.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getSeaLevelTWR()
+
+      Sea-level thrust-to-weight ratio.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getSpecificImpulse()
+
+      Specific impulse in the current situation, in seconds.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getVacuumSpecificImpulse()
+
+      Vacuum specific impulse, in seconds.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getSeaLevelSpecificImpulse()
+
+      Sea-level specific impulse, in seconds.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getBurnTime()
+
+      Burn time for this stage, in seconds.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getStartMass()
+
+      The mass of the vessel after the stage activates, in :math:`\mathrm{kg}`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getEndMass()
+
+      The mass of the vessel when the stage burns out, in :math:`\mathrm{kg}`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getDryMass()
+
+      The dry mass of the vessel after the stage activates, in :math:`\mathrm{kg}`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+      .. note::
+
+         Includes the parts of all later stages.
+
+   .. method:: getFuelMass()
+
+      The fuel mass of the vessel when the stage activates, in :math:`\mathrm{kg}`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+      .. note::
+
+         Includes the fuel of all later stages, and the fuel left in the parts the stage
+         decouples. The stage burns :meth:`SpaceCenter.Stage.getStartMass` minus :meth:`SpaceCenter.Stage.getEndMass`.

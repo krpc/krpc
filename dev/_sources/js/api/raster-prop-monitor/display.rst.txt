@@ -1,0 +1,84 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: RasterPropMonitor
+   :no-index:
+
+Display
+=======
+
+
+.. class:: Display
+
+   A screen page that a script draws, and whose button presses it answers. Obtained by
+   calling :meth:`RasterPropMonitor.Monitor.getDisplay` or :func:`RasterPropMonitor.display`.
+
+   .. note::
+
+      A monitor shows a display on a page whose handler is ``KRPCDisplay``. kRPC's
+      optional Module Manager patch adds such a page, named ``krpc``, to every monitor.
+      The content is kept while KSP builds the IVA again, but not saved with the game.
+
+   .. method:: getName()
+
+      The name of the display, or ``null`` for a monitor's own display.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``string`` or ``null``
+      :Game Scenes: Flight
+
+   .. method:: getText()
+               setText(value)
+
+      The text of the display, in Raster Prop Monitor's page format. It can hold
+      markup, such as ``[#ff0000]`` for a color, and a line can format variables, as
+      in ``{0:F0} m $&$ ALTITUDE``. Raster Prop Monitor updates the variables as
+      it draws.
+
+      :Property: Can be read or written
+      :rtype: ``string``
+      :Game Scenes: Flight
+
+   .. method:: getImage()
+               setImage(value)
+
+      The background image of the display, drawn under the text and scaled to the
+      screen, as a PNG or JPEG image. ``null`` for none.
+      Throws an exception if the image does not decode.
+
+      :Property: Can be read or written
+      :rtype: ``Uint8Array`` or ``null``
+      :Game Scenes: Flight
+
+   .. method:: clear()
+
+      Clear the text and the image.
+
+      :Game Scenes: Flight
+
+   .. method:: getShown()
+
+      Whether a monitor shows the display now.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: buttonPressed(id)
+
+      An event that fires when a monitor showing the display has a button pressed.
+      The event lasts until it is removed.
+
+      :param id: The button's index in :meth:`RasterPropMonitor.Monitor.getButtons`.
+      :type id: ``number``
+      :rtype: :class:`~@krpc-org/krpc.Event`
+      :Game Scenes: Flight
+
+   .. method:: buttonReleased(id)
+
+      An event that fires when a monitor showing the display has a button released.
+      The event lasts until it is removed.
+
+      :param id: The button's index in :meth:`RasterPropMonitor.Monitor.getButtons`.
+      :type id: ``number``
+      :rtype: :class:`~@krpc-org/krpc.Event`
+      :Game Scenes: Flight

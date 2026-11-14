@@ -1,0 +1,30 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: MechJeb
+   :no-index:
+
+RCSController
+=============
+
+
+.. class:: RCSController
+
+   The RCS controller.
+
+   .. method:: getRCSForRotation()
+               setRCSForRotation(value)
+
+      Whether the controller uses RCS to rotate the vessel.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getRCSThrottle()
+               setRCSThrottle(value)
+
+      Whether the controller throttles the RCS thrusters.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight

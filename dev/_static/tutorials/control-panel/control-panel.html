@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>kRPC Control Panel</title>
+  <style>
+    body { font-family: sans-serif; background: #161b22; color: #d6dde6; max-width: 640px; margin: 2em auto; }
+    section { border: 1px solid #2a313c; border-radius: 8px; padding: 1em; margin-bottom: 1em; }
+    .readouts { display: grid; grid-template-columns: 1fr 1fr; gap: 1em; }
+    .readouts output { display: block; font: bold 1.5em monospace; color: #4fc3f7; }
+    #sas-modes { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.5em; }
+    button { background: #1f2630; color: inherit; border: 1px solid #2a313c; border-radius: 6px; padding: 0.6em; cursor: pointer; }
+    button.on { border-color: #3ddc84; color: #3ddc84; }
+    #stage { width: 100%; font-size: 1.4em; font-weight: bold; border-color: #ef5350; }
+    #throttle-slider { grid-column: 1 / -1; }
+    #log { font: 0.8em monospace; color: #7d8794; max-height: 8em; overflow-y: auto; }
+  </style>
+</head>
+<body>
+  <section>
+    <input id="address" value="127.0.0.1" size="12">
+    <input id="port" value="50000" size="5">
+    <button id="connect">Connect</button>
+    <span id="vessel"></span>
+  </section>
+
+  <section class="readouts">
+    <div>Altitude <output id="altitude">-</output></div>
+    <div>Air speed <output id="airspeed">-</output></div>
+    <div>TWR <output id="twr">-</output></div>
+    <div>Throttle <output id="throttle">-</output></div>
+    <input id="throttle-slider" type="range" min="0" max="100" value="0">
+  </section>
+
+  <section>
+    <button id="stage">STAGE (next stage <span id="stage-number">-</span>)</button>
+    <p>
+      <button id="sas">SAS</button>
+      <button id="rcs">RCS</button>
+    </p>
+    <div id="sas-modes"></div>
+  </section>
+
+  <section id="log"></section>
+
+  <script src="control-panel.js"></script>
+</body>
+</html>

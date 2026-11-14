@@ -1,0 +1,56 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: MechJeb
+   :no-index:
+
+NodeExecutor
+============
+
+
+.. class:: NodeExecutor
+
+   The maneuver node executor.
+
+   .. method:: getEnabled()
+
+      Whether the executor is running.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: abort()
+
+      Stop executing the maneuver nodes.
+
+      :Game Scenes: Flight
+
+   .. method:: getAutowarp()
+               setAutowarp(value)
+
+      Whether the executor warps to the burn.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: executeAllNodes()
+
+      Execute all the maneuver nodes.
+
+      :Game Scenes: Flight
+
+   .. method:: executeOneNode()
+
+      Execute the next maneuver node.
+
+      :Game Scenes: Flight
+
+   .. method:: getLeadTime()
+               setLeadTime(value)
+
+      The time before the burn at which time warp stops, in seconds.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight

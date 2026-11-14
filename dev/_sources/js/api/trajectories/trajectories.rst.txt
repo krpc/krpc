@@ -1,0 +1,206 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: Trajectories
+   :no-index:
+
+Service
+=======
+
+
+.. module:: Trajectories
+
+Provides functionality to interact with Trajectories.
+
+.. note::
+
+   Trajectories predicts the trajectory of the active vessel only.
+
+
+
+.. function:: getAvailable()
+
+   Whether Trajectories is available.
+
+   :Property: Read-only, cannot be set
+   :rtype: ``boolean``
+   
+
+
+
+
+.. function:: impactPatch()
+
+   The patch of the trajectory that ends in an impact.
+
+   :returns: The patch, or ``null`` without an impact.
+   :rtype: :class:`Trajectories.Patch` or ``null``
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: impactPosition(referenceFrame)
+
+   The position of the impact, or ``null`` without one.
+
+   :param referenceFrame: The reference frame for the position.
+   :type referenceFrame: :class:`SpaceCenter.ReferenceFrame`
+   :rtype: ``[number, number, number]`` or ``null``
+   :Game Scenes: Flight
+
+
+   .. note::
+
+      In a reference frame that rotates with the body, the position includes the
+      rotation of the body until the impact.
+
+
+
+
+.. function:: impactVelocity(referenceFrame)
+
+   The velocity at the impact, or ``null`` without one.
+
+   :param referenceFrame: The reference frame for the velocity.
+   :type referenceFrame: :class:`SpaceCenter.ReferenceFrame`
+   :rtype: ``[number, number, number]`` or ``null``
+   :Game Scenes: Flight
+
+
+   .. note::
+
+      In a reference frame that rotates with the body, the velocity includes the
+      rotation of the body until the impact.
+
+
+
+
+.. function:: patches()
+
+   The patches of the trajectory.
+
+   :rtype: ``Array`` of :class:`Trajectories.Patch`
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: plannedDirection(referenceFrame)
+
+   The direction that the descent profile sets for the vessel.
+
+   :param referenceFrame: The reference frame for the direction.
+   :type referenceFrame: :class:`SpaceCenter.ReferenceFrame`
+   :returns: The direction, or ``null`` without a target.
+   :rtype: ``[number, number, number]`` or ``null``
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: correctedDirection(referenceFrame)
+
+   The :func:`Trajectories.plannedDirection`, corrected to steer towards the target.
+
+   :param referenceFrame: The reference frame for the direction.
+   :type referenceFrame: :class:`SpaceCenter.ReferenceFrame`
+   :returns: The direction, or ``null`` without a target.
+   :rtype: ``[number, number, number]`` or ``null``
+   :Game Scenes: Flight
+
+
+   .. note::
+
+      Suitable as the target direction of the auto-pilot.
+
+
+
+
+.. function:: setTarget(referenceFrame, position[, body])
+
+   Sets the target.
+
+   :param referenceFrame: The reference frame for the position.
+   :type referenceFrame: :class:`SpaceCenter.ReferenceFrame`
+   :param position: The position of the target.
+   :type position: ``[number, number, number]``
+   :param body: The body of the target, by default the body the active vessel orbits.
+   :type body: :class:`SpaceCenter.CelestialBody` or ``null``
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: getTargetBody()
+
+   The body of the target, or ``null`` without a target.
+
+   :Property: Read-only, cannot be set
+   :rtype: :class:`SpaceCenter.CelestialBody` or ``null``
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: targetPosition(referenceFrame)
+
+   The position of the target, or ``null`` without a target.
+
+   :param referenceFrame: The reference frame for the position.
+   :type referenceFrame: :class:`SpaceCenter.ReferenceFrame`
+   :rtype: ``[number, number, number]`` or ``null``
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: clearTarget()
+
+   Clears the target.
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: getDescentProfile()
+
+   The descent profile.
+
+   :Property: Read-only, cannot be set
+   :rtype: :class:`Trajectories.DescentProfile`
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: getAlwaysUpdate()
+              setAlwaysUpdate(value)
+
+   Whether Trajectories updates the trajectory continuously.
+
+   :Property: Can be read or written
+   :rtype: ``boolean``
+   :Game Scenes: Flight
+
+
+   .. note::
+
+      When ``false``, :func:`Trajectories.updateTrajectory` updates the trajectory.
+
+
+
+
+.. function:: updateTrajectory()
+
+   Updates the trajectory.
+
+   :Game Scenes: Flight
