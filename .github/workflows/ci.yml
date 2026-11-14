@@ -81,8 +81,11 @@ jobs:
             test: //client/lua:test
             artifact: client-lua
             path: bazel-bin/client/lua/krpc-lua-*.zip
-          - name: test-client-websockets
-            test: //client/websockets:test
+          - name: test-client-js
+            build: //client/js:js
+            test: //client/js:test
+            artifact: client-js
+            path: bazel-bin/client/js/krpc-js-*.tgz
           - name: test-tools
             test: //client/conformance:test //tools/benchmarks:test //tools/game:test //tools/krpctools:test
           - name: test-build-scripts
@@ -171,8 +174,9 @@ jobs:
           - name: test-client-lua
             build: //client/lua:lua
             test: //client/lua:test
-          - name: test-client-websockets
-            test: //client/websockets:test
+          - name: test-client-js
+            build: //client/js:js
+            test: //client/js:test
           - name: test-tools
             test: //client/conformance:test //tools/benchmarks:test //tools/game:test //tools/krpctools:test
           - name: test-build-scripts
@@ -856,6 +860,12 @@ jobs:
         with:
           name: client-lua
           path: artifacts/client-lua/
+      - name: upload-client-js
+        if: steps.merge-group-run.outputs.run-id
+        uses: actions/upload-artifact@v7
+        with:
+          name: client-js
+          path: artifacts/client-js/
       - name: upload-krpc
         if: steps.merge-group-run.outputs.run-id
         uses: actions/upload-artifact@v7

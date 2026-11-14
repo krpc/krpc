@@ -25,13 +25,14 @@ You can then run the script from the command line:
    $ krpc-clientgen --help
 
    usage: krpc-clientgen [-h] [-v] [-o OUTPUT] [--reference-dir DIR] [--ksp KSP]
-                         [--include SERVICE=PATH] [--output-defs OUTPUT_DEFS]
+                         [--include SERVICE=PATH] [--client-module CLIENT_MODULE]
+                         [--output-defs OUTPUT_DEFS]
                          language service input [input ...]
 
    Generate client source code for kRPC services.
 
    positional arguments:
-     language              Language to generate (cnano, cpp, csharp, java,
+     language              Language to generate (cnano, cpp, csharp, java, js,
                            python) or path to generator
      service               Name of service to generate
      input                 Path to service definition JSON file(s) or assembly
@@ -52,8 +53,13 @@ You can then run the script from the command line:
                            Include the generated code of another service, whose
                            types the service uses, from the given path. Required
                            by the C++ and C nano generators for each such
-                           service. For Python, the path is the module of the
-                           service, which defaults to the module it ships in.
+                           service. For Python and JavaScript, the path is the
+                           module of the service, which defaults to the module it
+                           ships in.
+     --client-module CLIENT_MODULE
+                           For JavaScript, the module the generated code imports
+                           the client's functions from. Defaults to the client's
+                           package, @krpc-org/krpc.
      --output-defs OUTPUT_DEFS
                            When generating client code from a DLL, output the
                            service definitions to the given JSON file
@@ -89,8 +95,8 @@ the same way:
 Example
 -------
 
-The following demonstrates how to generate code for the C++, Python and C# clients to interact
-with the LaunchControl service, given in an example previously.
+The following demonstrates how to generate code for the C++, Python, C# and JavaScript clients to
+interact with the LaunchControl service, given in an example previously.
 
 krpc-clientgen expects to be passed the directory of the game's managed assemblies, the name of
 the language to generate, the name of the service (from the :cs:attr:`KRPCService` attribute), a
@@ -119,3 +125,29 @@ For C#, run the following:
 
 To then use the LaunchControl service from a C# client, you need to reference the `KRPC.Client.dll`
 and include `LaunchControl.cs` in your project.
+
+For JavaScript, run the following:
+
+``krpc-clientgen --reference-dir=/path/to/ksp/KSP_Data/Managed -o LaunchControl.ts js LaunchControl LaunchControl.dll``
+
+The JavaScript client builds the service when it connects. `LaunchControl.ts` declares its
+classes, and exports its enumerations, structures and exceptions as values. Import the module
+before you connect, and the connection uses those values where the server's definitions match.
+The module imports the client and the services it ships from the ``@krpc-org/krpc`` package. A
+service from another mod needs ``--include`` with the path of its module, e.g.
+``--include=OtherMod=./OtherMod.js``. To give the connection the service's types, add it to the
+client's ``Services`` interface:
+
+.. code-block:: ts
+
+   import type * as LaunchControl from "./LaunchControl.js";
+
+   declare module "@krpc-org/krpc" {
+     interface Services {
+       readonly launchControl: LaunchControl.Service;
+     }
+   }
+
+The module also adds the forms its service and classes take in a :ref:`compiled function
+<js-client-compiling-functions>` to the package's ``ServerTypes``, so a function that captures them
+is typed once the module is imported.

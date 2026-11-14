@@ -25,8 +25,9 @@ compiled code translates into, which every client can build directly.
 
 .. note::
 
-   Compiled functions need the Python or C# client. Events and function streams need the Python,
-   C#, C++ or Java client. ``Run`` needs one of those, the C-nano client or the Lua client.
+   Compiled functions need the Python, C# or JavaScript client. Events and function streams
+   need the Python, C#, C++, Java or JavaScript client. ``Run`` needs one of those, the C-nano
+   client or the Lua client.
 
 .. _server-side-functions-compiled:
 
@@ -59,6 +60,12 @@ This event fires when the vessel's altitude exceeds 1000 meters:
          :start-after: [docs]
          :end-before: [/docs]
          :dedent:
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/AltitudeEvent.js
+         :start-after: [docs]
+         :end-before: [/docs]
 
 The client compiles the lambda into a server side function. The mean altitude call becomes an
 embedded RPC, re-invoked on each check. ``1000`` becomes a constant.
@@ -94,6 +101,12 @@ For example:
          :end-before: [/docs]
          :dedent:
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/CapturedValue.js
+         :start-after: [docs]
+         :end-before: [/docs]
+
 The client computes ``threshold * 2`` when it creates the event, so the function compares the
 apoapsis with the constant 100000. To use a new value of ``threshold``, compile a new function
 and remove the old event.
@@ -124,6 +137,12 @@ computation on each stream update:
          :end-before: [/docs]
          :dedent:
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/AltitudeStream.js
+         :start-after: [docs]
+         :end-before: [/docs]
+
 A function can produce a collection. This streams the thrust of every engine on the vessel,
 read in a single physics tick per update:
 
@@ -143,6 +162,12 @@ read in a single physics tick per update:
          :start-after: [docs]
          :end-before: [/docs]
          :dedent:
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/EngineThrusts.js
+         :start-after: [docs]
+         :end-before: [/docs]
 
 Here ``engines`` is a captured variable, so the list of engines is fixed when the function is
 compiled. The server re-reads only their thrusts. Read the engine list inside the function to
@@ -174,6 +199,12 @@ engines that staging reveals:
          :end-before: [/docs]
          :dedent:
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/OutOfFuelEvent.js
+         :start-after: [docs]
+         :end-before: [/docs]
+
 Statements, Loops and Local Variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -196,6 +227,12 @@ liquid fuel left:
          :start-after: [docs]
          :end-before: [/docs]
          :dedent:
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/FuelFraction.js
+         :start-after: [docs]
+         :end-before: [/docs]
 
 A compiled function supports these statements:
 
@@ -228,6 +265,12 @@ with a type annotation:
          :end-before: [/docs]
          :dedent:
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/BurnRatings.js
+         :start-after: [docs]
+         :end-before: [/docs]
+
 A counter that starts as an integer and later holds a fraction takes an annotation too, such as
 ``total: float = 0``.
 
@@ -254,6 +297,12 @@ once, with every step in the same physics tick:
          :start-after: [docs]
          :end-before: [/docs]
          :dedent:
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/RunOnce.js
+         :start-after: [docs]
+         :end-before: [/docs]
 
 The game holds still between the steps, and the whole function costs one round trip. A function
 that returns no value gives the client's null value, or runs through a ``void`` overload where
@@ -289,25 +338,43 @@ serves many inputs. This computes how long a burn takes, for several changes in 
          :end-before: [/docs]
          :dedent:
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/BurnTime.js
+         :start-after: [docs]
+         :end-before: [/docs]
+
 In Python, the function is a ``def`` with a type annotation on each parameter. Its arguments bind
 as Python binds them, with defaults and keyword arguments. In C#, the function is a lambda with
-typed parameters. An event or a stream runs its function with no arguments.
+typed parameters. In JavaScript, the parameters follow the captures, and ``compile`` takes their
+types. An event or a stream runs its function with no arguments.
 
 State Between Updates
 ^^^^^^^^^^^^^^^^^^^^^
 
 A function can keep a value from one evaluation to the next, such as a running total. In
-Python, declare a captured variable ``nonlocal``. This stream counts the stream updates in
-which the engines are firing:
+Python, declare a captured variable ``nonlocal``. In JavaScript, assign a property of a captured
+object. This stream counts the stream updates in which the engines are firing:
 
-.. literalinclude:: /scripts/user-guide/server-side-functions/FiringCounter.py
-   :language: python
-   :start-after: [docs]
-   :end-before: [/docs]
+.. tabs::
+
+   .. group-tab:: Python
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/FiringCounter.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/FiringCounter.js
+         :start-after: [docs]
+         :end-before: [/docs]
 
 The variable starts with the value it holds when the function is compiled, and takes its type
 from that value. To give it another type, such as a list that starts empty, start the function
-with a cast of it: ``history = cast(List[float], history)``.
+with a cast of it: ``history = cast(List[float], history)`` in Python. In JavaScript, the first
+use that adds to it gives it its type, or a cast such as ``t.list(t.double).cast(state.history)``.
 
 The server keeps the value apart from the variable on the client. A compiled function keeps its
 state across every run, stream and event. The state belongs to the function, so two streams of one
@@ -325,10 +392,20 @@ A stream of a function with no value runs the function on every stream update, f
 The function is a control loop that runs in the game, with no round trip to the client. This one
 throttles back as the vertical speed nears 100 m/s:
 
-.. literalinclude:: /scripts/user-guide/server-side-functions/ThrottleLimit.py
-   :language: python
-   :start-after: [docs]
-   :end-before: [/docs]
+.. tabs::
+
+   .. group-tab:: Python
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/ThrottleLimit.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/ThrottleLimit.js
+         :start-after: [docs]
+         :end-before: [/docs]
 
 The stream's value is the client's null value. The server sends it once, after the first run, so
 a callback is called once. An error from the function ends the stream and stops the loop. Set the
@@ -358,6 +435,12 @@ them from the type of the value. This streams the vessel's name in upper case:
          :start-after: [docs]
          :end-before: [/docs]
          :dedent:
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/UpperCaseName.js
+         :start-after: [docs]
+         :end-before: [/docs]
 
 The compilers translate the language's string operations, such as length, indexing,
 searching, splitting and case conversion. The expression API names them
@@ -400,6 +483,12 @@ on the stream or event evaluating the function:
          :end-before: [/docs]
          :dedent:
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/CheckFuel.js
+         :start-after: [docs]
+         :end-before: [/docs]
+
 A function raises the exceptions services declare, so your program catches a typed exception.
 A service's own exception classes map onto themselves.
 
@@ -427,10 +516,16 @@ A function can also handle an exception, with the language's try statement:
          :end-before: [/docs]
          :dedent:
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/SwitchModes.js
+         :start-after: [docs]
+         :end-before: [/docs]
+
 These rules apply to handlers:
 
 * **Only the message of an exception is exposed.** The variable a handler binds is a string
-  holding the message.
+  holding the message. In JavaScript, the handler reads it as ``e.message``.
 * **Naming an exception catches every form of it.** A service raises a .NET exception, which the
   server reports under its kRPC name. A handler for a kRPC exception catches the exceptions
   procedures raise, as well as the ones the function raises.
@@ -467,6 +562,12 @@ angle between the vessel's facing direction and its velocity relative to the sur
          :end-before: [/docs]
          :dedent:
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/SurfaceAngle.js
+         :start-after: [docs]
+         :end-before: [/docs]
+
 The service covers:
 
 * Scalar functions, such as square roots, trigonometry and clamping, and the constants pi and e.
@@ -483,7 +584,7 @@ does:
 
 * :meth:`StdLib.round` rounds a halfway value to the nearer even number, as Python and C# do.
 * :meth:`StdLib.round_half_away_from_zero` rounds it away from zero, as C and C++ do.
-* :meth:`StdLib.round_half_up` rounds it toward positive infinity, as Java does.
+* :meth:`StdLib.round_half_up` rounds it toward positive infinity, as Java and JavaScript do.
 
 Each takes the number of decimal places, negative for tens and hundreds. A compiled rounding
 call uses the procedure for its rounding rule.
@@ -511,6 +612,12 @@ game's log, ``KSP.log``. This logs the vessel's mass from the server:
          :end-before: [/docs]
          :dedent:
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/PrintMass.js
+         :start-after: [docs]
+         :end-before: [/docs]
+
 A print in an event or stream function writes a line on every stream update.
 
 Supported Constructs
@@ -533,12 +640,15 @@ A few semantics differ from running the same code in your program:
 * In C#, a call that can run code outside the .NET base library, the kRPC client and the service
   stubs is an error. Examples are a delegate call, and a method, constructor, computed property or
   operator defined in your program.
+* In JavaScript, a function reads values from your program only as captures, and a call to a
+  captured function is an error.
 * A client side call written as a statement, such as a sleep, is an error.
 * A rounding mode must be a constant, as it selects the server side procedure.
 * The language's own rules for the code a compiler accepts still apply.
 
 Each client guide lists the constructs its compiler supports, and the rules of its language:
-:ref:`C# <csharp-client-compiling-lambdas>` and :ref:`Python <python-client-compiling-functions>`.
+:ref:`C# <csharp-client-compiling-lambdas>`, :ref:`JavaScript <js-client-compiling-functions>` and
+:ref:`Python <python-client-compiling-functions>`.
 
 .. _server-side-functions-errors:
 
@@ -583,6 +693,10 @@ running, catch the exception in the function:
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/NotLoadedCheck.lua
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/NotLoadedEvent.js
+
 The event's handler gives ``False``, so the event does not fire. A stream's handler can give a
 last good value, kept in a state variable. With the expression API, :meth:`Expression.try_catch`
 names the exception as ``"KRPC", "ObjectNotLoadedException"``.
@@ -625,6 +739,12 @@ other assignment to a variable or the other branch of a conditional:
          :end-before: [/docs]
          :dedent:
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/HeaviestEngine.js
+         :start-after: [docs]
+         :end-before: [/docs]
+
 Elsewhere, give a null its type with a type annotation or a cast. The expression API has
 :meth:`Expression.constant_null`.
 
@@ -662,6 +782,12 @@ different values, give it parameters, as in :ref:`server-side-functions-argument
          :end-before: [/docs]
          :dedent:
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/CompiledStep.js
+         :start-after: [docs]
+         :end-before: [/docs]
+
 Compiling a function also compiles it to native code on the server. A lambda passed straight to
 ``Run`` is compiled there on every call, on the game's main thread, so a large one can make the game
 stutter.
@@ -675,9 +801,9 @@ server.
 The Expression API
 ------------------
 
-The expression API builds a server side function node by node. It is how the C++, Java, C-nano
-and Lua clients write functions, and how C# writes the statements a lambda cannot hold. The
-compilers produce the same functions.
+The expression API builds a server side function node by node. It is how the C++, Java, C-nano,
+Lua and JavaScript clients write functions, and how C# writes the statements a lambda cannot
+hold. The compilers produce the same functions.
 
 .. note::
 
@@ -750,6 +876,10 @@ and a comparison:
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/AltitudeCheck.lua
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/CustomEvent.js
+
 Two kinds of object appear here:
 
 * A **procedure call message** describes an RPC without invoking it. Each client builds one
@@ -764,8 +894,9 @@ Building a function costs one RPC per node, paid once.
 
 The factory methods are static methods. In C#, Java and C++, the examples call them through the
 class bound to the connection, which passes the connection to each one: ``Expression.Bind`` in C#
-and ``bind`` in Java and C++. Python and Lua reach the class through the connection, as
-``conn.krpc.Expression``.
+and ``bind`` in Java and C++. Python, Lua and JavaScript reach the class through the connection, as
+``conn.krpc.Expression``. In JavaScript, each factory method returns a ``Promise``, so the
+example awaits each node.
 
 Operators and Types
 ^^^^^^^^^^^^^^^^^^^
@@ -820,6 +951,13 @@ This truncates the altitude to a whole number of meters:
          :start-after: [docs]
          :end-before: [/docs]
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/TruncateAltitude.js
+         :language: js
+         :start-after: [docs]
+         :end-before: [/docs]
+
 Expressions are statically typed, with the types of the server's procedures. Numbers of
 different types convert to a common type, so an integer multiplies a double directly.
 
@@ -869,6 +1007,10 @@ streamed too, and runs for its effects, as in :ref:`server-side-functions-contro
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/FunctionStream.lua
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/FunctionStream.js
+
 Some clients take the type of the stream's values as a type argument, and others read the
 function's return type from the server. A function stream behaves like any other stream, and its
 rate can be limited in the usual way.
@@ -905,6 +1047,10 @@ the procedure, so any engine can supply it:
    .. group-tab:: Lua
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/OutOfFuelCheck.lua
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/CollectionEvent.js
 
 A function passed to a collection operation is built from two pieces:
 
@@ -1000,6 +1146,13 @@ and build one. :meth:`Expression.get_field` reads a field by name:
          :start-after: [docs]
          :end-before: [/docs]
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/StructureField.js
+         :language: js
+         :start-after: [docs]
+         :end-before: [/docs]
+
 :meth:`Expression.create_struct` builds a structure from its type and its field values, in the
 order the structure declares them. A field's name is the one the service declares, as shown in
 the API documentation. :meth:`Expression.get_field_by_index` reads a field by its position in
@@ -1041,6 +1194,10 @@ This builds and runs ``total = 0; for x in [1, 2, 3]: total += x``, which return
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/FunctionStatements.lua
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/FunctionStatements.js
+
 Statements are ordinary expression nodes. :meth:`Expression.block_with_variables` sequences
 statements and declares local variables, and its value is the value of its last statement.
 
@@ -1079,6 +1236,10 @@ This loop adds 10 to a total for the values 1 and 2, and 1 for any other value. 
    .. group-tab:: Lua
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/SwitchStatement.lua
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/SwitchStatement.js
 
 :meth:`Expression.match` takes the value, the test values of each case and the body of each
 case. It runs the body of the first case with a test value equal to the value, as
@@ -1151,10 +1312,18 @@ particular vessel:
          :start-after: [docs]
          :end-before: [/docs]
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/TargetEvent.js
+         :language: js
+         :start-after: [docs]
+         :end-before: [/docs]
+
 :meth:`Expression.constant_object` takes the object's identifier in the communication protocol.
-Each client has a function that returns it: ``krpc.get_object_id`` in Python and Lua, ``RemoteObject.GetObjectId`` in
-C#, ``krpc::get_object_id`` in C++ and ``RemoteObject.getObjectId`` in Java. In C, an object's
-handle is its identifier. The compilers embed a captured remote object this way.
+Each client has a function that returns it: ``krpc.get_object_id`` in Python and Lua,
+``RemoteObject.GetObjectId`` in C#, ``krpc::get_object_id`` in C++, ``RemoteObject.getObjectId``
+in Java and ``getObjectId`` in JavaScript. In C, an object's handle is its identifier. The
+compilers embed a captured remote object this way.
 
 Exceptions in the Expression API
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1207,6 +1376,13 @@ fuel check from :ref:`Exceptions <server-side-functions-exceptions>`:
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/ThrowException.lua
          :language: lua
+         :start-after: [docs]
+         :end-before: [/docs]
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/server-side-functions/ThrowException.js
+         :language: js
          :start-after: [docs]
          :end-before: [/docs]
 

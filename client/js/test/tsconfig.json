@@ -1,0 +1,13 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "@krpc-org/krpc": ["../dist/index.d.ts"]
+    },
+    "lib": ["ES2023", "ESNext.Disposable", "DOM"],
+    "types": ["node"],
+    "declaration": false,
+    "noFallthroughCasesInSwitch": false
+  },
+  "include": ["*.ts"]
+}

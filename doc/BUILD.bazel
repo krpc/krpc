@@ -1,3 +1,5 @@
+load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
+load("@bazel_skylib//rules:build_test.bzl", "build_test")
 load("@bazel_skylib//rules:write_file.bzl", "write_file")
 load("@rules_python//python:defs.bzl", "py_binary", "py_test")
 load("@rules_python//python/entry_points:py_console_script_binary.bzl", "py_console_script_binary")
@@ -36,6 +38,7 @@ stage_files(
         "src/scripts/**/*.ino",
         "src/scripts/**/*.cs",
         "src/scripts/**/*.cpp",
+        "src/scripts/**/*.html",
         "src/scripts/**/*.java",
         "src/scripts/**/*.lua",
         "src/scripts/**/*.py",
@@ -59,6 +62,8 @@ stage_files(
         ":images",
         ":java-api",
         ":java-api-toctree",
+        ":js-api",
+        ":js-api-toctree",
         ":lua-api",
         ":lua-api-toctree",
         ":mod-services",
@@ -128,6 +133,7 @@ changeloggen(
         "//client/csharp:CHANGELOG.md",
         "//client/cpp:CHANGELOG.md",
         "//client/java:CHANGELOG.md",
+        "//client/js:CHANGELOG.md",
         "//client/lua:CHANGELOG.md",
         "//client/python:CHANGELOG.md",
         "//tools/krpctools:CHANGELOG.md",
@@ -240,6 +246,11 @@ api_toctree(
 )
 
 api_toctree(
+    name = "js-api-toctree",
+    language = "js",
+)
+
+api_toctree(
     name = "lua-api-toctree",
     language = "lua",
 )
@@ -282,6 +293,14 @@ docgen(
 )
 
 docgen(
+    name = "js-api",
+    srcs = glob(["api/**/*.tmpl"]),
+    defs = defs,
+    language = "js",
+    outdir = "src/js",
+)
+
+docgen(
     name = "lua-api",
     srcs = glob(["api/**/*.tmpl"]),
     defs = defs,
@@ -301,6 +320,7 @@ test_suite(
     name = "test",
     tests = [
         ":check-documented",
+        ":check-scripts-js",
         ":check-scripts-pyright",
         ":lint",
         ":spelling",
@@ -309,9 +329,9 @@ test_suite(
 
 # Type-check the Python example scripts against the typed client generated from
 # this tree, so the examples cannot silently drift from the API. The C, C++, C#
-# and Java examples are compile-checked by :compile-scripts, and :luacheck lints
-# the Lua ones. The JavaScript examples and BasicArduino.ino have no automated
-# check, as the build has no toolchain for them.
+# and Java examples are compile-checked by :compile-scripts, :luacheck lints the
+# Lua ones, and :check-scripts-js type-checks the JavaScript client's ones. The
+# JavaScript protocol examples and BasicArduino.ino have no automated check.
 py_test(
     name = "check-scripts-pyright",
     size = "medium",
@@ -325,6 +345,38 @@ py_test(
         "//tools/krpctools:krpctools_lib",
         "@krpc_pypi//basedpyright",
     ],
+)
+
+# Type-check the JavaScript client's example scripts with tsc, against the client
+# as a bundler for a web page resolves it
+ts_project(
+    name = "check-scripts-js-project",
+    srcs = glob([
+        "src/scripts/js/*.js",
+        "src/scripts/api/**/*.js",
+        "src/scripts/tutorials/**/*.js",
+        "src/scripts/user-guide/**/*.js",
+    ]),
+    allow_js = True,
+    no_emit = True,
+    transpiler = "tsc",
+    tsconfig = "tsconfig-scripts.json",
+    deps = [
+        "//client/js:lib",
+        "//client/js:node_modules/@bufbuild/protobuf",
+    ],
+)
+
+# The type check, which a ts_project with no outputs runs only for this output group
+filegroup(
+    name = "check-scripts-js-typecheck",
+    srcs = [":check-scripts-js-project"],
+    output_group = "typecheck",
+)
+
+build_test(
+    name = "check-scripts-js",
+    targets = [":check-scripts-js-typecheck"],
 )
 
 sphinx_spelling_test(
@@ -352,6 +404,7 @@ test_suite(
         ":check-documented-cpp",
         ":check-documented-csharp",
         ":check-documented-java",
+        ":check-documented-js",
         ":check-documented-lua",
         ":check-documented-python",
     ],
@@ -382,6 +435,13 @@ check_documented_test(
     name = "check-documented-java",
     size = "small",
     srcs = [":java-api"],
+    members = "order.txt",
+)
+
+check_documented_test(
+    name = "check-documented-js",
+    size = "small",
+    srcs = [":js-api"],
     members = "order.txt",
 )
 

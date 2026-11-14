@@ -25,7 +25,7 @@ import json
 from collections.abc import Callable
 from dataclasses import dataclass
 
-from krpc.utils import snake_case
+from krpc.utils import lower_camel_case, snake_case
 
 # The profile each section of the file is for
 SECTIONS = {
@@ -39,12 +39,15 @@ SECTIONS = {
 NULLABLE = {"remote_error", "server_error"}
 
 # The function that converts a name to each case
-CASES: dict[str, Callable[[str], str]] = {"snake": snake_case}
+CASES: dict[str, Callable[[str], str]] = {
+    "snake": snake_case,
+    "lower_camel": lower_camel_case,
+}
 
 
 @dataclass(frozen=True)
 class Naming:
-    """The case of member names, whether a property is a pair of get_ and set_ accessor
+    """The case of member names, whether a property is a pair of getter and setter
     functions, and whether the client exposes exception types."""
 
     case: str
@@ -54,6 +57,13 @@ class Naming:
     def convert(self, name: str) -> str:
         """A name in the client's case."""
         return CASES[self.case](name)
+
+    def accessor(self, prefix: str, name: str) -> str:
+        """The name of a property accessor, for the prefix get or set: the prefix and the name
+        in snake case, or the prefix and the name as the server gives it."""
+        if self.case == "snake":
+            return "%s_%s" % (prefix, snake_case(name))
+        return prefix + name
 
 
 @dataclass(frozen=True)

@@ -217,6 +217,7 @@ CREDENTIAL_KEYS = (
     "MAVEN_CENTRAL_PASSWORD",
     "MAVEN_GPG_KEY",
     "MAVEN_GPG_PASSPHRASE",
+    "NPM_TOKEN",
 )
 
 
@@ -313,6 +314,48 @@ def luarocks_key_works(key):
         raise ReleaseError(
             f"could not reach luarocks.org: {exception.reason}"
         ) from exception
+
+
+# The JavaScript client's package on npm
+NPM_PACKAGE = "@krpc-org/krpc"
+NPM_REGISTRY = "https://registry.npmjs.org"
+
+
+def npm_user(token):
+    """The npm user a token authenticates as.
+
+    Raises for a token the registry rejects, or if it cannot be reached.
+    """
+    request = urllib.request.Request(
+        f"{NPM_REGISTRY}/-/whoami", headers={"Authorization": f"Bearer {token}"}
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=30) as response:
+            return json.load(response)["username"]
+    except urllib.error.HTTPError as exception:
+        raise ReleaseError(
+            f"npm rejected the token ({exception.code} {exception.reason})"
+        ) from exception
+    except urllib.error.URLError as exception:
+        raise ReleaseError(f"could not reach npm: {exception.reason}") from exception
+
+
+def npm_published():
+    """Whether this version of the JavaScript client is already on npm."""
+    package = urllib.parse.quote(NPM_PACKAGE, safe="@")
+    url = f"{NPM_REGISTRY}/{package}/{urllib.parse.quote(VERSION)}"
+    try:
+        with urllib.request.urlopen(url, timeout=30):
+            return True
+    except urllib.error.HTTPError as exception:
+        if exception.code == 404:
+            return False
+        raise ReleaseError(
+            f"npm could not look up {NPM_PACKAGE} {VERSION} "
+            f"({exception.code} {exception.reason})"
+        ) from exception
+    except urllib.error.URLError as exception:
+        raise ReleaseError(f"could not reach npm: {exception.reason}") from exception
 
 
 def aws_environment(credentials):

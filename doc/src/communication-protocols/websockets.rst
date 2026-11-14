@@ -4,8 +4,8 @@ WebSockets
 This protocol carries the :doc:`messages <messages>` over a websockets connection, for a client in
 a web browser.
 
-.. note:: If a client library is available for your language, you do not need to implement this
-          protocol.
+.. note:: The :doc:`JavaScript client </js>` implements this protocol, for a web page or
+          Node.js.
 
 Framing
 -------

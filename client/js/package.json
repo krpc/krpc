@@ -1,0 +1,33 @@
+{
+  "name": "@krpc-org/krpc",
+  "version": "0.0.0",
+  "description": "Client library for kRPC, for the browser and Node.js",
+  "license": "LGPL-3.0-or-later",
+  "homepage": "https://krpc.github.io/krpc/latest/js.html",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/krpc/krpc.git",
+    "directory": "client/js"
+  },
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "default": "./src/index.js"
+    }
+  },
+  "files": ["src"],
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@bufbuild/protobuf": "^2.16.0",
+    "acorn": "^8.19.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.6.5",
+    "@bufbuild/protoc-gen-es": "2.16.0",
+    "@types/node": "22.20.5",
+    "typescript": "5.9.3"
+  }
+}

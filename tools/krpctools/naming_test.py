@@ -8,6 +8,7 @@ name, as a json object.
 """
 
 import json
+import os
 import sys
 
 import pytest
@@ -43,4 +44,12 @@ def test_starlark_snake_case():
 
 
 if __name__ == "__main__":
-    sys.exit(pytest.main([__file__, "-p", "no:cacheprovider"]))
+    # An empty config file. Without a sandbox, as on Windows, pytest otherwise finds
+    # //pytest.ini and roots collection at the execroot, where other actions add and
+    # remove files.
+    here = os.path.dirname(os.path.abspath(__file__))
+    config = os.path.join(os.environ.get("TEST_TMPDIR", "."), "pytest.ini")
+    with open(config, "w", encoding="utf-8"):
+        pass
+    args = [__file__, "-c", config, "--rootdir=" + here, "-p", "no:cacheprovider"]
+    sys.exit(pytest.main(args))

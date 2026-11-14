@@ -46,6 +46,10 @@ Clients
      - Single
      - No
      - Dynamic
+   * - :doc:`JavaScript <client-design/js>`
+     - Single, with calls in flight at once
+     - Yes
+     - Dynamic, with generated declarations
 
 Names
 -----
@@ -175,6 +179,7 @@ The case of each name in each client:
      - Java
      - Python
      - Lua
+     - JavaScript
    * - Service
      - UpperCamel
      - UpperCamel, snake header
@@ -182,7 +187,9 @@ The case of each name in each client:
      - UpperCamel
      - snake attribute, lower module
      - snake
+     - lowerCamel
    * - Type
+     - UpperCamel
      - UpperCamel
      - UpperCamel
      - UpperCamel
@@ -196,6 +203,7 @@ The case of each name in each client:
      - lowerCamel
      - snake
      - snake
+     - lowerCamel
    * - Property
      - UpperCamel
      - snake, and ``set_`` and snake
@@ -203,6 +211,7 @@ The case of each name in each client:
      - Accessors
      - snake
      - snake
+     - Accessors
    * - Enumeration value
      - UpperCamel
      - snake
@@ -210,6 +219,7 @@ The case of each name in each client:
      - UPPER_SNAKE
      - snake
      - snake
+     - lowerCamel
    * - Structure field
      - UpperCamel, and lowerCamel constructor parameter
      - snake
@@ -217,6 +227,7 @@ The case of each name in each client:
      - lowerCamel, and ``get`` and UpperCamel
      - snake
      - snake
+     - lowerCamel
    * - Parameter
      - As written
      - snake
@@ -224,10 +235,12 @@ The case of each name in each client:
      - lowerCamel
      - snake
      - snake
+     - lowerCamel
    * - Exception
      - UpperCamel
      - UpperCamel
      - UPPER, in a macro
+     - UpperCamel
      - UpperCamel
      - UpperCamel
      - UpperCamel
@@ -238,9 +251,10 @@ Stream and Call Forms
 A program adding a stream needs to name a remote procedure without calling it. The same applies when
 it gets a call as a value, such as to use in an expression. The clients do this in two ways:
 
-* Python, C# and Java have one method for each purpose, ``add_stream`` and ``get_call`` or their
-  equivalents. It takes any property or method, and works out the procedure at run time. Lua has
-  only ``get_call``, as it has no streams.
+* Python, C#, Java and JavaScript have one method for each purpose, ``add_stream`` and
+  ``get_call`` or their equivalents. It takes any property or method, and works out the procedure
+  at run time. Lua has only ``get_call``, as it has no streams. JavaScript's take a function
+  returning the call, as C#'s lambda does.
 * C++ and C-nano cannot look up a method at run time. Their generated stubs instead have extra
   functions for each procedure. C++ adds ones ending in ``_stream`` and ``_call``. C-nano has no
   streams, so it adds only ``_call``.
@@ -271,18 +285,21 @@ For the ``MeanAltitude`` property of a ``Flight`` object:
    * - Lua
      - None
      - ``conn:get_call(flight.get_mean_altitude, flight)``
+   * - JavaScript
+     - ``conn.addStream(() => flight.getMeanAltitude())``
+     - ``conn.getCall(() => flight.getMeanAltitude())``
 
-In Python, C# and Java, the stream runs on the connection the method is called on, whichever
-connection the object came from. In C++, it runs on the object's client, or for a static method the
-client passed to it.
+In Python, C#, Java and JavaScript, the stream runs on the connection the method is called on,
+whichever connection the object came from. In C++, it runs on the object's client, or for a
+static method the client passed to it.
 
 Static Methods
 --------------
 
 A static method takes its connection from one place, the one its language gives a class:
 
-* In Python and Lua a class is a value. Each connection builds its own, and a static method runs
-  on the connection of the service the class is reached through.
+* In Python, Lua and JavaScript a class is a value. Each connection builds its own, and a static
+  method runs on the connection of the service the class is reached through.
 * In C#, Java and C++ a class is a type. The connection is the static method's first argument. In
   C-nano, every function takes the connection first.
 
@@ -320,7 +337,7 @@ raise each. The clients name them alike:
    * - ``EncodingError``
      - The encoding error
    * - ``CompilationError``
-     - Code that does not compile into a server side function, in Python and C#
+     - Code that does not compile into a server side function, in Python, C# and JavaScript
 
 C++ uses these names in ``krpc::``. C# and Java end each with ``Exception`` in place of ``Error``,
 as their conventions do. Lua has no ``StreamError``, as it has no streams. C-nano returns a code
@@ -373,19 +390,25 @@ Each client signals the use of a deprecated member with the language's own mecha
    * - Lua
      - A warning on standard error, once per member on a connection
      - Exceptions, which have no Lua type, and structure fields
+   * - JavaScript
+     - A ``DeprecationWarning`` in Node.js, or a console warning, once per member on a connection,
+       and ``@deprecated`` for editors
+     -
 
-A stream, and the call a server side function makes, use a procedure too. Python and Lua warn when
-the client builds the call. In C++ and C-nano, the ``_stream`` and ``_call`` functions carry the
-attribute. In C#, the lambda that names the procedure warns.
+A stream, and the call a server side function makes, use a procedure too. Python, Lua and
+JavaScript warn when the client builds the call. In C++ and C-nano, the ``_stream`` and ``_call``
+functions carry the attribute. In C#, the lambda that names the procedure warns.
 
 A member of a deprecated service, class, enumeration or structure is deprecated. A member with no
-reason of its own takes the reason of its nearest deprecated container. ``clientgen`` and the Python
-and Lua clients apply this to their copy of the definitions when they read them. The protocol and
-``docgen`` keep the attributes as declared, so the API reference has one notice per page.
+reason of its own takes the reason of its nearest deprecated container. ``clientgen`` and the
+Python, Lua and JavaScript clients apply this to their copy of the definitions when they read
+them. The protocol and ``docgen`` keep the attributes as declared, so the API reference has one
+notice per page.
 
 A deprecated service is marked too: the C# extension method and service class, and the C++, Java
 and Python service class. The Python and Lua clients keep it out of the client's attributes, so
-that reading it reaches the attribute-miss hook, which warns.
+that reading it reaches the attribute-miss hook, which warns. In JavaScript it is a getter on the
+connection, which warns.
 
 Generated C++ and C-nano code uses the deprecated declarations it makes, so each header suppresses
 the warning around its own contents. The suppression goes by the location of the use, so a use in a
@@ -399,6 +422,10 @@ These clients have no streams or events, as a stream update needs a thread to re
 
 The read loop skips a message case it does not know, and fails the call on a ``disconnect``. Lua and
 C-nano treat any other message as a protocol error, including a ``stream_update``.
+
+JavaScript also runs on one thread, but the socket's ``message`` event reads each message, so
+several calls can wait at once and stream updates arrive between calls. The :doc:`JavaScript page
+<client-design/js>` covers it.
 
 Threaded Clients
 ----------------
@@ -580,3 +607,4 @@ dispatcher thread, from a callback:
    client-design/cnano
    client-design/java
    client-design/lua
+   client-design/js
