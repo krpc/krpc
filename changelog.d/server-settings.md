@@ -1,3 +1,7 @@
+## core
+
+- Turn on "Auto-start server" by default
+
 ## server
 
 - Start a new install with one server, with the default settings

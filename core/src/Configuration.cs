@@ -38,7 +38,7 @@ namespace KRPC
             InfoWindowVisible = false;
             InfoWindowPosition = new Tuple<float,float,float,float> (0, 0, 0, 0);
             HiddenServiceProblems = string.Empty;
-            AutoStartServers = false;
+            AutoStartServers = true;
             AutoAcceptConnections = true;
             ConfirmRemoveClient = true;
             PauseServerWithGame = false;
