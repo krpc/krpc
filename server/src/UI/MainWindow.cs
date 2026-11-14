@@ -112,7 +112,9 @@ namespace KRPC.UI
             stretchyLabelStyle.margin = new RectOffset (0, 0, 0, 0);
             stretchyLabelStyle.stretchWidth = true;
 
+            // No vertical margin, as the text fields beside these labels have none
             fixedLabelStyle = new GUIStyle (skin.label);
+            fixedLabelStyle.margin = new RectOffset (skin.label.margin.left, skin.label.margin.right, 0, 0);
 
             textFieldStyle = new GUIStyle (skin.textField);
             textFieldStyle.margin = new RectOffset (0, 0, 0, 0);
