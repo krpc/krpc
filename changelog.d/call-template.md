@@ -29,3 +29,10 @@
 
 - Add a `_call_template` function for each member, which fills in a call with no instance or
   arguments, for `krpc_KRPC_Expression_CallWithArguments` (#1352)
+
+## core
+
+- **Breaking:** `KRPC.Expression.CallWithArguments` takes a call template, and throws an exception
+  for a call that carries arguments (#1352)
+- Fail when a server side function is built, in place of when it runs, for a null constant passed
+  to a parameter that cannot be null (#1352)

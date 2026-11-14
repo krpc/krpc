@@ -1573,14 +1573,16 @@ namespace KRPC.Client.Services.KRPC
         }
 
         /// <summary>
-        /// An RPC call, where some or all of the arguments are computed by expressions.
+        /// An RPC call, with its arguments computed by expressions.
         /// </summary>
         /// <remarks>
+        /// The call is a call template, which names the procedure and carries no arguments.
         /// Position 0 is the instance of a class method or property. A position with no
-        /// expression takes the argument encoded in the call, or the parameter's default. A
-        /// collection the procedure returns is copied, as a client would receive it.
+        /// expression takes the parameter's default. A collection the procedure returns is
+        /// copied, as a client would receive it. Throws an exception if the call carries an
+        /// argument.
         /// </remarks>
-        /// <param name="call">The RPC to call.</param>
+        /// <param name="call">The call template.</param>
         /// <param name="args">Expressions computing the call's arguments, by position.</param>
         /// <param name="connection">A connection object.</param>
         [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_CallWithArguments", typeof(TypeSpecs))]
@@ -4246,14 +4248,16 @@ namespace KRPC.Client.Services.KRPC
             }
 
             /// <summary>
-            /// An RPC call, where some or all of the arguments are computed by expressions.
+            /// An RPC call, with its arguments computed by expressions.
             /// </summary>
             /// <remarks>
+            /// The call is a call template, which names the procedure and carries no arguments.
             /// Position 0 is the instance of a class method or property. A position with no
-            /// expression takes the argument encoded in the call, or the parameter's default. A
-            /// collection the procedure returns is copied, as a client would receive it.
+            /// expression takes the parameter's default. A collection the procedure returns is
+            /// copied, as a client would receive it. Throws an exception if the call carries an
+            /// argument.
             /// </remarks>
-            /// <param name="call">The RPC to call.</param>
+            /// <param name="call">The call template.</param>
             /// <param name="args">Expressions computing the call's arguments, by position.</param>
             [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_CallWithArguments", typeof(TypeSpecs))]
             public global::KRPC.Client.Services.KRPC.Expression CallWithArguments (global::KRPC.Schema.KRPC.ProcedureCall call, global::System.Collections.Generic.IDictionary<int,global::KRPC.Client.Services.KRPC.Expression> args)

@@ -977,20 +977,26 @@ namespace KRPC.Service.KRPC
         }
 
         /// <summary>
-        /// An RPC call, where some or all of the arguments are computed by expressions.
+        /// An RPC call, with its arguments computed by expressions.
         /// </summary>
         /// <remarks>
+        /// The call is a call template, which names the procedure and carries no arguments.
         /// Position 0 is the instance of a class method or property. A position with no
-        /// expression takes the argument encoded in the call, or the parameter's default. A
-        /// collection the procedure returns is copied, as a client would receive it.
+        /// expression takes the parameter's default. A collection the procedure returns is
+        /// copied, as a client would receive it. Throws an exception if the call carries an
+        /// argument.
         /// </remarks>
-        /// <param name="call">The RPC to call.</param>
+        /// <param name="call">The call template.</param>
         /// <param name="args">Expressions computing the call's arguments, by position.</param>
         [KRPCMethod]
         public static Expression CallWithArguments (ProcedureCall call, IDictionary<int, Expression> args)
         {
             if (ReferenceEquals (args, null))
                 throw new ArgumentNullException (nameof (args));
+            if (!ReferenceEquals (call, null) && call.Arguments.Count > 0)
+                throw new ArgumentException (
+                    "The call to " + call.Service + "." + call.Procedure + " carries arguments. " +
+                    "CallWithArguments takes a call template, with each argument given as an expression.");
             return BuildCall (call, args);
         }
 
@@ -1045,6 +1051,10 @@ namespace KRPC.Service.KRPC
                 Expression argument;
                 if (args != null && args.TryGetValue (i, out argument) &&
                     !ReferenceEquals (argument, null)) {
+                    // A null constant for a parameter that cannot be null fails when the function is built
+                    var constant = ((LinqExpression)argument) as ConstantExpression;
+                    if (constant != null && constant.Value == null)
+                        CheckArgumentValue (procedure, parameter, null);
                     var converted = ConvertArgumentExpression (argument, parameter, procedure, i);
                     converted = CheckNulls (
                         converted, SpecAs (argument, converted.Type), parameter.Spec,

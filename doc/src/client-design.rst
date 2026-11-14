@@ -298,8 +298,9 @@ Call Templates
 
 A call template names a procedure through its class or service, with no instance and no
 arguments. ``Expression.CallWithArguments`` supplies every argument, so a function over the
-elements of a collection needs no element to build its call from. A template is built on the
-client, with no remote procedure call.
+elements of a collection needs no element to build its call from. ``CallWithArguments`` throws
+an exception for a call that carries arguments, so each argument has one source. A template is
+built on the client, with no remote procedure call.
 
 Each client takes the form of its procedure call, with the class in place of the object, except
 JavaScript, whose design page gives the reason. A client

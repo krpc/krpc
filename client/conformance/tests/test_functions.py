@@ -594,29 +594,14 @@ def test_call_bound_static_method(connected):
 
 
 @profile("functions")
-def test_call_with_arguments(connected, functions):
-    """The client passes the call it builds for a stream to
-    ``KRPC.Expression.CallWithArguments``. A position with a function takes the function's
-    value, and a position without one takes the argument encoded in the call."""
-    function = connected.call_with_arguments(
-        "TestService",
-        "TestClass_static_StaticMethod",
-        [values.string("beta"), values.string("gamma")],
-        {1: functions.expression("ConstantString", values.string("delta"))},
-    )
-    assert connected.run_function(function, "string") == "staticbetadelta"
-
-
-@profile("functions")
 def test_call_with_a_call_argument(connected):
     """A function the client builds over one call computes an argument of another call. Here
     the instance of a class method is computed by a call that creates the object."""
-    obj = connected.invoke("TestService", "CreateTestObject", values.string("alpha"))
     create = connected.call_function(
         "TestService", "CreateTestObject", values.string("beta")
     )
     function = connected.call_with_arguments(
-        "TestService", "TestClass_GetValue", [values.obj(obj)], {0: create}
+        "TestService", "TestClass_GetValue", [], {0: create}, template=True
     )
     assert connected.run_function(function, "string") == "value=beta"
 
@@ -821,6 +806,21 @@ def test_call_template_default(connected, functions):
         template=True,
     )
     assert connected.run_function(function, "string") == "xfoobarnull"
+
+
+@profile("functions")
+def test_call_with_encoded_arguments(connected, functions):
+    """``KRPC.Expression.CallWithArguments`` raises the argument error for a call that carries
+    arguments, such as the call the client builds for a stream. Each argument is a function."""
+    error = raised(
+        lambda: connected.call_with_arguments(
+            "TestService",
+            "TestClass_static_StaticMethod",
+            [values.string("beta"), values.string("gamma")],
+            {1: functions.expression("ConstantString", values.string("delta"))},
+        )
+    )
+    assert_argument_error(connected, error)
 
 
 @profile("functions")

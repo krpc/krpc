@@ -4452,10 +4452,9 @@ class _Compiler:
                 continue
             parameter = parameters[position] if position < len(parameters) else None
             if arg.is_value and arg.value is None:
-                # A null argument is a constant of the call
                 if parameter is None or not parameter.type.nullable:
                     raise self._error(node, "'%s' does not take None" % procedure.name)
-                call.arguments.add(position=position, is_null=True)
+                expressions[position] = self._null(node, parameter.type).expression
                 continue
             expressions[position] = self._argument_expression(
                 node, arg, procedure, parameter

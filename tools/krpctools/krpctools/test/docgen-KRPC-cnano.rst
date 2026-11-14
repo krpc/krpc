@@ -374,20 +374,22 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
    .. function:: krpc_error_t krpc_KRPC_Expression_CallWithArguments(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, const krpc_schema_ProcedureCall * call, const krpc_dictionary_int32_object_t * args)
 
-      An RPC call, where some or all of the arguments are computed by expressions.
+      An RPC call, with its arguments computed by expressions.
 
       :Parameters:
 
-       * **call** -- The RPC to call.
+       * **call** -- The call template.
        * **args** -- Expressions computing the call's arguments, by position.
 
    
 
       .. note::
 
+         The call is a call template, which names the procedure and carries no arguments.
          Position 0 is the instance of a class method or property. A position with no
-         expression takes the argument encoded in the call, or the parameter's default. A
-         collection the procedure returns is copied, as a client would receive it.
+         expression takes the parameter's default. A collection the procedure returns is
+         copied, as a client would receive it. Throws an exception if the call carries an
+         argument.
 
    .. function:: krpc_error_t krpc_KRPC_Expression_Cast(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg, krpc_KRPC_Type_t type)
 

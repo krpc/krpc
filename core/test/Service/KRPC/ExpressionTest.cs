@@ -156,8 +156,11 @@ namespace KRPC.Test.Service.KRPC
             var obj = new global::KRPC.Test.Service.TestService.TestClass ("foo");
             var objId = AddInstance (obj);
             var nullObject = Expression.CallWithArguments (
-                BuildProcedureCall ("TestClass_EchoNullableObject", new Argument (1, null)),
-                new Dictionary<int, Expression> { { 0, Expression.ConstantObject (objId) } });
+                BuildProcedureCall ("TestClass_EchoNullableObject"),
+                new Dictionary<int, Expression> {
+                    { 0, Expression.ConstantObject (objId) },
+                    { 1, Expression.ConstantNull (Type.ClassType ("TestService", "TestClass")) }
+                });
             var asArgument = Expression.CallWithArguments (
                 BuildProcedureCall ("TestClass_ObjectToString"),
                 new Dictionary<int, Expression> {
@@ -168,8 +171,8 @@ namespace KRPC.Test.Service.KRPC
                 () => Eval<string> (asArgument));
             StringAssert.Contains ("parameter other", exn.Message);
             var asInstance = Expression.CallWithArguments (
-                BuildProcedureCall ("TestClass_FloatToString", new Argument (1, 1f)),
-                new Dictionary<int, Expression> { { 0, nullObject } });
+                BuildProcedureCall ("TestClass_FloatToString"),
+                new Dictionary<int, Expression> { { 0, nullObject }, { 1, Expression.ConstantFloat (1f) } });
             exn = Assert.Throws<global::KRPC.Service.KRPC.NullReferenceException> (
                 () => Eval<string> (asInstance));
             StringAssert.Contains ("got null", exn.Message);
@@ -181,36 +184,35 @@ namespace KRPC.Test.Service.KRPC
             var obj = new global::KRPC.Test.Service.TestService.TestClass ("foo");
             var objId = AddInstance (obj);
             var nullObject = Expression.ConstantNull (Type.ClassType ("TestService", "TestClass"));
-            var asArgument = Expression.CallWithArguments (
-                BuildProcedureCall ("TestClass_ObjectToString"),
-                new Dictionary<int, Expression> {
-                    { 0, Expression.ConstantObject (objId) },
-                    { 1, nullObject }
-                });
-            var exn = Assert.Throws<global::KRPC.Service.KRPC.NullReferenceException> (
-                () => Eval<string> (asArgument));
+            var exn = Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.CallWithArguments (
+                    BuildProcedureCall ("TestClass_ObjectToString"),
+                    new Dictionary<int, Expression> {
+                        { 0, Expression.ConstantObject (objId) },
+                        { 1, nullObject }
+                    }));
             StringAssert.Contains ("parameter other", exn.Message);
-            var asInstance = Expression.CallWithArguments (
-                BuildProcedureCall ("TestClass_FloatToString", new Argument (1, 1f)),
-                new Dictionary<int, Expression> { { 0, nullObject } });
-            exn = Assert.Throws<global::KRPC.Service.KRPC.NullReferenceException> (
-                () => Eval<string> (asInstance));
+            exn = Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.CallWithArguments (
+                    BuildProcedureCall ("TestClass_FloatToString"),
+                    new Dictionary<int, Expression> { { 0, nullObject }, { 1, Expression.ConstantFloat (1f) } }));
             StringAssert.Contains ("got null", exn.Message);
         }
 
         [Test]
         public void CallWithANullNumberForANonNullableParameter ()
         {
-            var obj = new global::KRPC.Test.Service.TestService.TestClass ("foo");
-            var call = Expression.CallWithArguments (
-                BuildProcedureCall ("TestClass_FloatToString", new Argument (0, obj)),
-                new Dictionary<int, Expression> { { 1, Expression.ConstantNull (Type.Int ()) } });
-            var exn = Assert.Throws<global::KRPC.Service.KRPC.NullReferenceException> (() => Eval<string> (call));
+            var obj = Expression.ConstantObject (AddInstance (new global::KRPC.Test.Service.TestService.TestClass ("foo")));
+            var exn = Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.CallWithArguments (
+                    BuildProcedureCall ("TestClass_FloatToString"),
+                    new Dictionary<int, Expression> { { 0, obj }, { 1, Expression.ConstantNull (Type.Int ()) } }));
             StringAssert.Contains ("parameter x", exn.Message);
             StringAssert.Contains ("got null", exn.Message);
             var value = Expression.CallWithArguments (
-                BuildProcedureCall ("TestClass_FloatToString", new Argument (0, obj)),
+                BuildProcedureCall ("TestClass_FloatToString"),
                 new Dictionary<int, Expression> {
+                    { 0, obj },
                     { 1, Expression.Cast (Expression.ConstantInt (2), Type.NullableType (Type.Int ())) } });
             Assert.AreEqual ("foo2", Eval<string> (value));
         }
@@ -229,23 +231,19 @@ namespace KRPC.Test.Service.KRPC
         }
 
         [Test]
-        public void CallWithArgumentsPartial ()
+        public void CallWithArgumentsEncodedArgument ()
         {
             var obj = new global::KRPC.Test.Service.TestService.TestClass ("foo");
-            // Instance provided by an expression; float argument from the encoded call
-            var expr = Expression.CallWithArguments (
-                BuildProcedureCall ("TestClass_FloatToString", new Argument (1, 0.5f)),
-                new Dictionary<int, Expression> {
-                    { 0, Expression.ConstantObject (AddInstance (obj)) }
-                });
-            Assert.AreEqual ("foo0.5", Eval<string> (expr));
-            // Instance from the encoded call; float argument from an expression
-            var expr2 = Expression.CallWithArguments (
-                BuildProcedureCall ("TestClass_FloatToString", new Argument (0, obj)),
-                new Dictionary<int, Expression> {
-                    { 1, Expression.ConstantFloat (1.5f) }
-                });
-            Assert.AreEqual ("foo1.5", Eval<string> (expr2));
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.CallWithArguments (
+                    BuildProcedureCall ("TestClass_FloatToString", new Argument (1, 0.5f)),
+                    new Dictionary<int, Expression> {
+                        { 0, Expression.ConstantObject (AddInstance (obj)) }
+                    }));
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.CallWithArguments (
+                    BuildProcedureCall ("TestClass_FloatToString", new Argument (0, obj)),
+                    new Dictionary<int, Expression> ()));
         }
 
         [Test]

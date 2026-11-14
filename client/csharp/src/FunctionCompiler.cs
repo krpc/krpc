@@ -538,9 +538,12 @@ namespace KRPC.Client
             if (attribute != null) {
                 // A property backed by an RPC
                 var arguments = new List<Result> ();
-                if (ExpressionUtils.IsAClassProperty (node))
+                var types = new List<Type> ();
+                if (ExpressionUtils.IsAClassProperty (node)) {
                     arguments.Add (CompileNode (node.Expression));
-                return CallNode (attribute, arguments);
+                    types.Add (node.Expression.Type);
+                }
+                return CallNode (attribute, arguments, types);
             }
             if (IsClientSide (node))
                 return Fold (node);
@@ -1490,19 +1493,22 @@ namespace KRPC.Client
         Result CompileRPC (MethodCallExpression node, RPCAttribute attribute)
         {
             var arguments = new List<Result> ();
+            var types = new List<Type> ();
             var parameters = new List<ParameterInfo> ();
             var methodParameters = node.Method.GetParameters ();
             int position = 0;
             if (ExpressionUtils.IsAClassMethod (node)) {
                 arguments.Add (CompileNode (node.Object));
+                types.Add (node.Object.Type);
                 parameters.Add (null);
             } else if (ExpressionUtils.IsAClassStaticMethod (node))
                 position = 1;  // Skip the connection argument
             for (; position < node.Arguments.Count; position++) {
                 arguments.Add (CompileNode (node.Arguments [position]));
+                types.Add (methodParameters [position].ParameterType);
                 parameters.Add (methodParameters [position]);
             }
-            return CallNode (attribute, arguments, parameters);
+            return CallNode (attribute, arguments, types, parameters);
         }
 
         static int LambdaParameterCount (Expression node)
@@ -2212,7 +2218,7 @@ namespace KRPC.Client
         }
 
         Result CallNode (
-            RPCAttribute attribute, IList<Result> arguments,
+            RPCAttribute attribute, IList<Result> arguments, IList<Type> types,
             IList<ParameterInfo> parameters = null)
         {
             var call = new Schema.KRPC.ProcedureCall ();
@@ -2223,13 +2229,10 @@ namespace KRPC.Client
                 var argument = arguments [position];
                 if (argument.IsValue && argument.Value == null) {
                     // A null default stands for the server's default, so the argument is
-                    // left out. Any other null is passed in the call itself.
+                    // left out
                     var parameter = parameters == null ? null : parameters [position];
                     if (parameter == null || !parameter.HasDefaultValue || parameter.DefaultValue != null)
-                        call.Arguments.Add (new Schema.KRPC.Argument {
-                            Position = (uint)position,
-                            IsNull = true
-                        });
+                        expressions [position] = ToExpression (argument, types [position]);
                     continue;
                 }
                 expressions [position] = ToExpression (argument, null);
