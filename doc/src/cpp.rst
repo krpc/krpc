@@ -239,31 +239,12 @@ not.
 Values
 ------
 
-Procedures take and return values of these types:
+Procedures take and return C++ values, such as ``int32_t``, ``std::string``, ``std::vector`` and
+``std::map``, and an empty ``std::optional`` for a null. The services also define their own types:
 
-.. list-table::
-   :header-rows: 1
-
-   * - Type
-     - C++ type
-   * - Integer
-     - ``int32_t``, ``int64_t``, ``uint32_t``, ``uint64_t``
-   * - Floating point number, boolean
-     - ``float``, ``double``, ``bool``
-   * - String, bytes
-     - ``std::string``
-   * - Tuple
-     - ``std::tuple``
-   * - List, set, dictionary
-     - ``std::vector``, ``std::set``, ``std::map``
-   * - Class
-     - A remote object, described below
-   * - Enumeration
-     - An ``enum struct``, with operators for a flags enumeration
-   * - Structure
-     - A ``struct``
-   * - Null
-     - An empty ``std::optional``
+* A class is a remote object, described below.
+* A structure is a ``struct``.
+* An enumeration is an ``enum struct``, with operators for a flags enumeration.
 
 .. _cpp-client-flags:
 

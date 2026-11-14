@@ -335,29 +335,14 @@ assertion or call a handler on each error from a procedure. The functions that o
 Values
 ------
 
-Procedures take and return values of these types:
+Procedures take and return C values, such as ``int32_t``, ``char *`` and :type:`krpc_bytes_t`. A
+collection is a generated ``struct``, such as ``krpc_list_string_t``. A null argument is ``NULL``,
+and a result that can be null comes with a ``bool`` the call sets. The services also define their
+own types:
 
-.. list-table::
-   :header-rows: 1
-
-   * - Type
-     - C type
-   * - Integer
-     - ``int32_t``, ``int64_t``, ``uint32_t``, ``uint64_t``
-   * - Floating point number, boolean
-     - ``float``, ``double``, ``bool``
-   * - String, bytes
-     - ``char *``, :type:`krpc_bytes_t`
-   * - Tuple, list, set, dictionary
-     - A generated ``struct``, such as ``krpc_list_string_t``
-   * - Class
-     - A remote object, described below
-   * - Enumeration
-     - A ``typedef enum``
-   * - Structure
-     - A generated ``struct``
-   * - Null
-     - ``NULL`` for an argument, and a ``bool`` set for a result
+* A class is a remote object, described below.
+* A structure is a generated ``struct``.
+* An enumeration is a ``typedef enum``.
 
 .. _cnano-client-flags:
 

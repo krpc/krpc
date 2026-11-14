@@ -124,29 +124,14 @@ failed, and ``krpc.RemoteError:class_of(err)`` matches every error of the client
 Values
 ------
 
-Procedures take and return values of these types:
+Procedures take and return Lua values, such as ``number``, ``string`` and Penlight's ``List``,
+``Set`` and ``Map``. A null is ``nil``, or ``Types.none`` as described below. The services also
+define their own types:
 
-.. list-table::
-   :header-rows: 1
-
-   * - Type
-     - Lua type
-   * - Integer, floating point number, boolean
-     - ``number``, ``boolean``
-   * - String, bytes
-     - ``string``
-   * - Tuple, list
-     - Penlight's ``List``
-   * - Set, dictionary
-     - Penlight's ``Set`` and ``Map``
-   * - Class
-     - A remote object, described below
-   * - Enumeration
-     - A value of the enumeration, such as ``conn.space_center.MapFilterType.debris``
-   * - Structure
-     - A value with a field for each field of the structure
-   * - Null
-     - ``nil``, or ``Types.none`` as described below
+* A class is a remote object, described below.
+* A structure is a value with a field for each field of the structure.
+* An enumeration value is a value of the enumeration, such as
+  ``conn.space_center.MapFilterType.debris``.
 
 .. _lua-client-flags:
 

@@ -153,31 +153,13 @@ Every exception is unchecked. Every exception of the client's own derives
 Values
 ------
 
-Procedures take and return values of these types:
+Procedures take and return Java values, such as ``int``, ``String``, ``java.util.List`` and
+``Map``, and ``null`` for a null. A tuple is a tuple of ``org.javatuples``, such as ``Pair``. The
+services also define their own types:
 
-.. list-table::
-   :header-rows: 1
-
-   * - Type
-     - Java type
-   * - Integer
-     - ``int``, ``long``, and ``int`` or ``long`` bit for bit for an unsigned integer
-   * - Floating point number, boolean
-     - ``float``, ``double``, ``boolean``
-   * - String, bytes
-     - ``String``, ``byte[]``
-   * - Tuple
-     - A tuple of ``org.javatuples``, such as ``Pair``
-   * - List, set, dictionary
-     - ``java.util.List``, ``Set``, ``Map``
-   * - Class
-     - A remote object, described below
-   * - Enumeration
-     - An ``enum``, or a class of constants for a flags enumeration
-   * - Structure
-     - A class with a getter for each field
-   * - Null
-     - ``null``, with the boxed type of a primitive
+* A class is a remote object, described below.
+* A structure is a class with a getter for each field.
+* An enumeration is an ``enum``, or a class of constants for a flags enumeration.
 
 .. _java-client-flags:
 
