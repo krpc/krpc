@@ -271,6 +271,13 @@ filegroup(
     ]),
 )
 
+# The configuration the doc examples' Biome configuration extends
+js_library(
+    name = "biome-config",
+    srcs = ["biome.jsonc"],
+    visibility = ["//doc:__pkg__"],
+)
+
 # Formatting and lint, from biome.jsonc. The files are named one by one, as Biome skips the
 # symbolic links of the runfiles tree when it searches a directory.
 biome.biome_test(

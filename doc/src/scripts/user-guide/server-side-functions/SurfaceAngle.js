@@ -7,7 +7,9 @@ const orbit = await vessel.getOrbit();
 const frame = await (await orbit.getBody()).getReferenceFrame();
 const stream = await conn.addStream(
   ({ stdLib, vessel, frame }) =>
-    stdLib.radiansToDegrees(stdLib.vectorAngle(vessel.direction(frame), vessel.velocity(frame))),
+    stdLib.radiansToDegrees(
+      stdLib.vectorAngle(vessel.direction(frame), vessel.velocity(frame)),
+    ),
   { stdLib: conn.stdLib, vessel, frame },
 );
 // [/docs]

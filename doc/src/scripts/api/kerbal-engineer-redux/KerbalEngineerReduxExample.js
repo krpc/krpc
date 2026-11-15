@@ -5,9 +5,9 @@ const vessel = await conn.spaceCenter.getActiveVessel();
 const ker = conn.kerbalEngineerRedux;
 
 for (const stage of (await ker.stages(vessel)).reverse()) {
-  console.log(
-    `Stage ${stage.number}: ${stage.deltaV.toFixed(0)} m/s, TWR ${stage.availableTWR.toFixed(2)}`,
-  );
+  const deltaV = stage.deltaV.toFixed(0);
+  const twr = stage.availableTWR.toFixed(2);
+  console.log(`Stage ${stage.number}: ${deltaV} m/s, TWR ${twr}`);
 }
 
 const burn = await ker.burnTime(vessel, 500);

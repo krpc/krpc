@@ -10,7 +10,8 @@ for (const scanner of await scansat.scanners(vessel)) {
 
 const body = await (await vessel.getOrbit()).getBody();
 const coverage = await scansat.coverage(body, scansat.ScanType.altimetry);
-console.log(`Altimetry coverage of ${await body.getName()}: ${(coverage * 100).toFixed(1)}%`);
+const percent = (coverage * 100).toFixed(1);
+console.log(`Altimetry coverage of ${await body.getName()}: ${percent}%`);
 
 const flight = await vessel.flight();
 const elevation = await scansat.elevation(
@@ -21,5 +22,7 @@ const elevation = await scansat.elevation(
 if (elevation === null) {
   console.log("The terrain below the vessel is not scanned");
 } else {
-  console.log(`The terrain below the vessel is at ${elevation.toFixed(0)} m`);
+  console.log(
+    `The terrain below the vessel is at ${elevation.toFixed(0)} m`,
+  );
 }

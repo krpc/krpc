@@ -7,7 +7,9 @@ const burnTime = await conn.compile(
   ({ vessel }, deltaV) => {
     const exhaustVelocity = vessel.specificImpulse * 9.82;
     const finalMass = vessel.mass / Math.exp(deltaV / exhaustVelocity);
-    return ((vessel.mass - finalMass) * exhaustVelocity) / vessel.availableThrust;
+    return (
+      ((vessel.mass - finalMass) * exhaustVelocity) / vessel.availableThrust
+    );
   },
   { vessel },
   [types.double],
