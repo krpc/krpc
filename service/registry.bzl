@@ -407,6 +407,17 @@ MODS = [
             folders = ["RSS-Textures"],
         )],
     ),
+    # Keeps a vessel's joints rigid, which an RO rocket needs to hold together under thrust
+    mod(
+        name = "KerbalJointReinforcement",
+        repo = "KSP-RO/Kerbal-Joint-Reinforcement-Continued",
+        versions = [version(
+            "3.9.0.0",
+            source = "releases/download/v{version}/Kerbal-Joint-Reinforcement_v{version}.zip",
+            sha256 = "b5364dffbf116a1d13d9d2fdb961411dc3460b01873e4357f7d8beb239bd6709",
+            folders = ["KerbalJointReinforcement"],
+        )],
+    ),
 
     # The mods the services wrap
     # No version is pinned, as the LIDAR service has no in-game tests
@@ -802,6 +813,40 @@ MODS = [
             sha256 = "a92bcb4fbd88e0cfb6d295e2927f8a23df22a69c4e50e7d74b5e8fd4a6b2d5a9",
             folders = ["RealSolarSystem"],
             requires = ["Kopernicus", "RSSTextures", "KSPCommunityFixes"],
+        )],
+    ),
+    # Realism Overhaul, with the dependencies that change what a script reads: engines,
+    # aerodynamics, parachutes and joints. Its effects and thermal dependencies are left out.
+    mod(
+        name = "RealismOverhaul",
+        title = "Realism Overhaul",
+        repo = "KSP-RO/RealismOverhaul",
+        versions = [version(
+            "18.0.0.0",
+            source = "releases/download/v{version}/RealismOverhaul-v{version}.zip",
+            sha256 = "11dea71f7c2dc463757ac3af3459b17ccb835d931cc1c6c5145c5fb62a0b7494",
+            folders = ["RealismOverhaul", "EngineGroupController"],
+            requires = [
+                "RealFuels",
+                "FAR",
+                "RealChute",
+                "KerbalJointReinforcement",
+                "ROUtils",
+                "KSPCommunityFixes",
+            ],
+        )],
+    ),
+    # Tanks, structural parts and boosters of any size
+    mod(
+        name = "ProceduralParts",
+        title = "Procedural Parts",
+        repo = "KSP-RO/ProceduralParts",
+        versions = [version(
+            "2.8.0.0",
+            source = "releases/download/v{version}/ProceduralParts-v{version}.zip",
+            sha256 = "2a306673f3094f431f855ce8ad738061b7cfd85183492938b905ff32ee12b45e",
+            folders = ["ProceduralParts"],
+            requires = ["ROUtils", "KSPCommunityFixes"],
         )],
     ),
 ]
