@@ -31,6 +31,10 @@ class TestAscentGuidance(MechJebTestCase):
                 (settings, "max_angle_of_attack", 12),
                 (settings, "angle_of_attack_limit_fadeout_pressure", 1234),
                 (settings, "autowarp", False),
+                (settings, "roll_altitude", 1234),
+                (ascent, "desired_lan", 12),
+                (ascent, "desired_fpa", 2.5),
+                (ascent, "override_warp_to_plane", True),
                 (ascent, "launch_phase_angle", 12),
                 (ascent, "launch_lan_difference", 12),
                 (ascent, "warp_count_down", 12),
@@ -52,6 +56,21 @@ class TestAscentGuidance(MechJebTestCase):
                 (pvg, "staging_trigger_flag", True),
                 (pvg, "fixed_coast", False),
                 (pvg, "fixed_coast_length", 12),
+                (pvg, "min_delta_v", 12.5),
+                (pvg, "last_stage", 2),
+                (pvg, "optimize_stage_flag", False),
+                (pvg, "optimize_stage", 2),
+                (pvg, "unguided_stages_flag", True),
+                (pvg, "unguided_stages", [1, 2]),
+                (pvg, "coast_stage_flag", True),
+                (pvg, "coast_stage", 2),
+                (pvg, "coast_before_flag", True),
+                (pvg, "ullage_lead_time", 12),
+                (pvg, "spinup_stage_flag", False),
+                (pvg, "spinup_stage", 2),
+                (pvg, "spinup_angular_velocity", 0.5),
+                (pvg, "spinup_lead_time", 12),
+                (pvg, "limit_qa", 1234.5),
             ]
         )
 
@@ -64,6 +83,8 @@ class TestAscentGuidance(MechJebTestCase):
         self.assertGreater(classic.auto_turn_start_altitude, 0)
         self.assertGreater(classic.auto_turn_start_velocity, 0)
         self.assertGreater(classic.auto_turn_end_altitude, 0)
+        self.assertFalse(ascent.settings.limiting_angle_of_attack)
+        self.assertIsInstance(ascent.settings.current_max_angle_of_attack, float)
 
     def test_ascent_type(self):
         ascent = self.ascent
@@ -127,6 +148,41 @@ class TestAscentGuidance(MechJebTestCase):
             ascent.ascent_type = self.mj.AscentType.pvg
             with self.assertRaises(RuntimeError):
                 ascent.launch_to_rendezvous()
+        finally:
+            ascent.ascent_type = self.mj.AscentType.classic
+            self.sc.clear_target()
+
+    def test_unguided_stages(self):
+        pvg = self.ascent.pvg_settings
+        old = pvg.unguided_stages
+        try:
+            pvg.unguided_stages = [3, 1]
+            self.assertEqual([3, 1], pvg.unguided_stages)
+            with self.assertRaisesRegex(ValueError, "negative"):
+                pvg.unguided_stages = [-1]
+            self.assertEqual([3, 1], pvg.unguided_stages)
+        finally:
+            pvg.unguided_stages = old
+
+    def test_lan_launches(self):
+        ascent = self.ascent
+        modes = self.mj.AscentLaunchMode
+        with self.assertRaisesRegex(RuntimeError, "PVG"):
+            ascent.launch_to_lan()
+        ascent.ascent_type = self.mj.AscentType.pvg
+        self.sc.target_body = self.sc.bodies["Mun"]
+        try:
+            ascent.launch_to_lan()
+            self.assertEqual(modes.lan, ascent.launch_mode)
+            ascent.abort_timed_launch()
+            self.assertEqual(modes.normal, ascent.launch_mode)
+
+            target = self.mj.target_controller
+            self.wait_until(lambda: target.normal_target_exists)
+            ascent.launch_to_match_lan()
+            self.assertEqual(modes.match_lan, ascent.launch_mode)
+            ascent.abort_timed_launch()
+            self.assertEqual(modes.normal, ascent.launch_mode)
         finally:
             ascent.ascent_type = self.mj.AscentType.classic
             self.sc.clear_target()

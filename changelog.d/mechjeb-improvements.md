@@ -43,3 +43,9 @@
 - **Breaking:** Remove `OperationTransfer.InterceptOnly` and `SimpleTransfer`, in place of
   `Capture` and `Coplanar` (#1381)
 - Add `SmartASS.Roll`, the roll of the modes that point in a direction (#1381)
+- Add the launches to a longitude of the ascending node, `AscentGuidance.LaunchToLan` and
+  `LaunchToMatchLan`, with `DesiredLan` and their `AscentLaunchMode` values (#1381)
+- Add `AscentGuidance.DesiredFPA` and `OverrideWarpToPlane` (#1381)
+- Add `AscentSettings.RollAltitude`, `LimitingAngleOfAttack` and `CurrentMaxAngleOfAttack` (#1381)
+- Add the stage, coast, spin-up and Qα limit settings of the PVG Settings window to
+  `PVGSettings` (#1381)

@@ -1,3 +1,4 @@
+using System;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 
@@ -21,6 +22,9 @@ namespace KRPC.MechJeb
         static Field<object, bool> limitAoA;
         static Field<object, double> maxAoA;
         static Field<object, double> aoaLimitFadeoutPressure;
+        static Field<object, double> rollAltitude;
+        static Field<object, bool> limitingAoA;
+        static Func<object, double> currentMaxAoA;
 
         internal static new void Load ()
         {
@@ -37,6 +41,9 @@ namespace KRPC.MechJeb
             limitAoA = settings.Field<object, bool> ("LimitAoA");
             maxAoA = Bindings.EditableDouble (settings, "MaxAoA");
             aoaLimitFadeoutPressure = Bindings.EditableDouble (settings, "AOALimitFadeoutPressure");
+            rollAltitude = Bindings.EditableDouble (settings, "RollAltitude");
+            limitingAoA = settings.Field<object, bool> ("LimitingAoA");
+            currentMaxAoA = Bindings.Type ("MuMech.MechJebModuleAscentBaseAutopilot").Getter<object, double> ("CurrentMaxAoA");
         }
 
         /// <summary>
@@ -92,6 +99,16 @@ namespace KRPC.MechJeb
         public double TurnRoll {
             get { return turnRoll.Get (Instance); }
             set { turnRoll.Set (Instance, value); }
+        }
+
+        /// <summary>
+        /// The altitude above which the autopilot controls the roll, in meters.
+        /// </summary>
+        /// <remarks>Requires <see cref="ForceRoll"/>.</remarks>
+        [KRPCProperty]
+        public double RollAltitude {
+            get { return rollAltitude.Get (Instance); }
+            set { rollAltitude.Set (Instance, value); }
         }
 
         /// <summary>
@@ -181,6 +198,22 @@ namespace KRPC.MechJeb
         public double AngleOfAttackLimitFadeoutPressure {
             get { return aoaLimitFadeoutPressure.Get (Instance); }
             set { aoaLimitFadeoutPressure.Set (Instance, value); }
+        }
+
+        /// <summary>
+        /// Whether the angle of attack limit is limiting the steering.
+        /// </summary>
+        [KRPCProperty]
+        public bool LimitingAngleOfAttack {
+            get { return limitingAoA.Get (Instance); }
+        }
+
+        /// <summary>
+        /// The largest angle of attack the limit allows now, in degrees.
+        /// </summary>
+        [KRPCProperty]
+        public double CurrentMaxAngleOfAttack {
+            get { return currentMaxAoA (MechJeb.AscentGuidance.Instance); }
         }
 
         /// <summary>

@@ -44,6 +44,9 @@ namespace KRPC.MechJeb
         static Field<object, bool> launchingToRendezvous;
         static Field<object, bool> launchingToMatchLan;
         static Field<object, bool> launchingToLan;
+        static Field<object, double> desiredLan;
+        static Field<object, double> desiredFPA;
+        static Field<object, bool> overrideWarpToPlane;
 
         internal static new void Load ()
         {
@@ -72,6 +75,9 @@ namespace KRPC.MechJeb
             launchingToRendezvous = settings.Field<object, bool> ("LaunchingToRendezvous");
             launchingToMatchLan = settings.Field<object, bool> ("LaunchingToMatchLan");
             launchingToLan = settings.Field<object, bool> ("LaunchingToLan");
+            desiredLan = Bindings.EditableDouble (settings, "DesiredLan");
+            desiredFPA = Bindings.EditableDouble (settings, "DesiredFPA");
+            overrideWarpToPlane = settings.Field<object, bool> ("OverrideWarpToPlane");
         }
 
         internal AscentGuidance () : base (settingsName)
@@ -188,9 +194,9 @@ namespace KRPC.MechJeb
         /// Whether the orbit is attached at <see cref="DesiredAttachAlt"/>.
         /// </summary>
         /// <remarks>
-        /// Applies on the <see cref="AscentType.PVG"/> path. MechJeb reads this setting only
-        /// when its PVG settings window has an early shutoff stage. Without one, MechJeb always
-        /// attaches the orbit.
+        /// Applies on the <see cref="AscentType.PVG"/> path, with an early shutoff stage, set by
+        /// <see cref="PVGSettings.OptimizeStageFlag"/> and <see cref="PVGSettings.OptimizeStage"/>.
+        /// Without one, MechJeb always attaches the orbit.
         /// </remarks>
         [KRPCProperty]
         public bool AttachAltFlag {
@@ -203,7 +209,7 @@ namespace KRPC.MechJeb
         /// </summary>
         /// <remarks>
         /// Applies on the <see cref="AscentType.PVG"/> path. Requires <see cref="AttachAltFlag"/>,
-        /// unless MechJeb's PVG settings window has no early shutoff stage.
+        /// unless there is no early shutoff stage. See <see cref="PVGSettings.OptimizeStage"/>.
         /// </remarks>
         [KRPCProperty]
         public double DesiredAttachAlt {
@@ -214,6 +220,19 @@ namespace KRPC.MechJeb
         // MechJeb keeps a separate attach altitude for an ascent with no early shutoff stage
         static Field<object, double> AttachAltitude {
             get { return optimizeStage (SettingsModule) < 0 ? desiredAttachAltFixed : desiredAttachAlt; }
+        }
+
+        /// <summary>
+        /// The flight path angle at orbit insertion, in degrees.
+        /// </summary>
+        /// <remarks>
+        /// Applies on the <see cref="AscentType.PVG"/> path, when there is no early shutoff
+        /// stage. See <see cref="PVGSettings.OptimizeStage"/>.
+        /// </remarks>
+        [KRPCProperty]
+        public double DesiredFPA {
+            get { return desiredFPA.Get (SettingsModule) * (180d / Math.PI); }
+            set { desiredFPA.Set (SettingsModule, value * (Math.PI / 180d)); }
         }
 
         /// <summary>
@@ -233,6 +252,25 @@ namespace KRPC.MechJeb
         public double LaunchLANDifference {
             get { return launchLANDifference.Get (SettingsModule); }
             set { launchLANDifference.Set (SettingsModule, value); }
+        }
+
+        /// <summary>
+        /// The longitude of the ascending node of a launch to a LAN, in degrees.
+        /// See <see cref="LaunchToLan"/>.
+        /// </summary>
+        [KRPCProperty]
+        public double DesiredLan {
+            get { return desiredLan.Get (SettingsModule); }
+            set { desiredLan.Set (SettingsModule, value); }
+        }
+
+        /// <summary>
+        /// Whether a timed launch launches at once, rather than at the time it computes.
+        /// </summary>
+        [KRPCProperty]
+        public bool OverrideWarpToPlane {
+            get { return overrideWarpToPlane.Get (SettingsModule); }
+            set { overrideWarpToPlane.Set (SettingsModule, value); }
         }
 
         /// <summary>
@@ -257,6 +295,10 @@ namespace KRPC.MechJeb
                     return AscentLaunchMode.Rendezvous;
                 if (launchingToPlane.Get (settings))
                     return AscentLaunchMode.TargetPlane;
+                if (launchingToMatchLan.Get (settings))
+                    return AscentLaunchMode.MatchLan;
+                if (launchingToLan.Get (settings))
+                    return AscentLaunchMode.Lan;
                 return AscentLaunchMode.Unknown;
             }
         }
@@ -278,6 +320,16 @@ namespace KRPC.MechJeb
             timedLaunch.Set (Instance, false);
         }
 
+        // The orbit of MechJeb's target, updated from the game's target
+        static global::Orbit TargetOrbit ()
+        {
+            var targetController = MechJeb.TargetController;
+            targetController.Update ();
+            if (!targetController.NormalTargetExists)
+                throw new InvalidOperationException ("Invalid target");
+            return targetController.InternalTargetOrbit;
+        }
+
         void StartCountdown (double timeOffset)
         {
             startCountdown (Instance, VesselState.Time + timeOffset);
@@ -290,8 +342,7 @@ namespace KRPC.MechJeb
         [KRPCMethod]
         public void LaunchToRendezvous ()
         {
-            if (!MechJeb.TargetController.NormalTargetExists)
-                throw new InvalidOperationException ("Invalid target");
+            var target = TargetOrbit ();
             if (AscentType == AscentType.PVG)
                 throw new InvalidOperationException ("This action can't be performed in PVG path mode");
 
@@ -300,7 +351,7 @@ namespace KRPC.MechJeb
                 launchingToRendezvous.Set (SettingsModule, true);
                 StartCountdown (timeToPhaseAngle (
                     LaunchPhaseAngle, FlightGlobals.ActiveVessel.mainBody, VesselState.Longitude,
-                    MechJeb.TargetController.InternalTargetOrbit));
+                    target));
             } catch (Exception) {
                 AbortTimedLaunch ();
                 throw;
@@ -313,12 +364,9 @@ namespace KRPC.MechJeb
         [KRPCMethod]
         public void LaunchToTargetPlane ()
         {
-            if (!MechJeb.TargetController.NormalTargetExists)
-                throw new InvalidOperationException ("Invalid target");
-
+            var target = TargetOrbit ();
             AbortTimedLaunch ();
             try {
-                var target = MechJeb.TargetController.InternalTargetOrbit;
                 launchingToPlane.Set (SettingsModule, true);
                 // The sooner of the launches north and south into the plane
                 var lan = target.LAN - LaunchLANDifference;
@@ -331,6 +379,54 @@ namespace KRPC.MechJeb
                 AbortTimedLaunch ();
                 throw;
             }
+        }
+
+        /// <summary>
+        /// Launch into the plane of the target, at the time the target's longitude of the
+        /// ascending node, less <see cref="LaunchLANDifference"/>, passes overhead. Keeps
+        /// <see cref="DesiredInclination"/>. Throws an exception if there is no target, or the
+        /// ascent path is not <see cref="AscentType.PVG"/>.
+        /// </summary>
+        [KRPCMethod]
+        public void LaunchToMatchLan ()
+        {
+            var target = TargetOrbit ();
+            CheckPVG ();
+            AbortTimedLaunch ();
+            try {
+                var lan = target.LAN - LaunchLANDifference;
+                launchingToMatchLan.Set (SettingsModule, true);
+                StartCountdown (TimeToPlane (lan, DesiredInclination));
+            } catch (Exception) {
+                AbortTimedLaunch ();
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Launch into the plane with longitude of the ascending node <see cref="DesiredLan"/>
+        /// and inclination <see cref="DesiredInclination"/>. Throws an exception if the ascent
+        /// path is not <see cref="AscentType.PVG"/>.
+        /// </summary>
+        [KRPCMethod]
+        public void LaunchToLan ()
+        {
+            CheckPVG ();
+            AbortTimedLaunch ();
+            try {
+                launchingToLan.Set (SettingsModule, true);
+                StartCountdown (TimeToPlane (DesiredLan, DesiredInclination));
+            } catch (Exception) {
+                AbortTimedLaunch ();
+                throw;
+            }
+        }
+
+        // MechJeb's window offers the LAN launches on the PVG path only
+        void CheckPVG ()
+        {
+            if (AscentType != AscentType.PVG)
+                throw new InvalidOperationException ("This action can only be performed in PVG path mode");
         }
 
         static double TimeToPlane (double lan, double inclination)
@@ -361,6 +457,18 @@ namespace KRPC.MechJeb
         /// A timed launch into the plane of the target.
         /// </summary>
         TargetPlane,
+
+        /// <summary>
+        /// A timed launch to the target's longitude of the ascending node. See
+        /// <see cref="AscentGuidance.LaunchToMatchLan"/>.
+        /// </summary>
+        MatchLan,
+
+        /// <summary>
+        /// A timed launch to a longitude of the ascending node. See
+        /// <see cref="AscentGuidance.LaunchToLan"/>.
+        /// </summary>
+        Lan,
 
         /// <summary>
         /// A timed launch of another kind, started from MechJeb's window.
