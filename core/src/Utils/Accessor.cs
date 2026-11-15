@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 
 namespace KRPC.Utils
@@ -86,6 +87,37 @@ namespace KRPC.Utils
                 return null;
             var body = Expression.Assign (member, converted);
             return Expression.Lambda<Action<TInstance, TValue>> (body, instance, value).Compile ();
+        }
+
+        /// <summary>
+        /// A setter for a field of <paramref name="type"/>, a type derived from
+        /// <typeparamref name="TInstance"/>, that also writes a read-only field. Some mods
+        /// declare a setting read-only and write it through reflection. Returns null for a
+        /// property, a field of a struct, or a field whose type is not
+        /// <typeparamref name="TValue"/>.
+        /// </summary>
+        public static Action<TInstance, TValue> ReadOnlySetter<TInstance, TValue> (Type type, string name)
+        {
+            if (type == null)
+                return null;
+            FieldInfo field = null;
+            for (var t = type; t != null && field == null; t = t.BaseType)
+                field = t.GetField (name, Flags | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+            if (field == null || field.FieldType != typeof (TValue) || field.DeclaringType.IsValueType)
+                return null;
+            if (!typeof (TInstance).IsAssignableFrom (field.DeclaringType) && !field.DeclaringType.IsAssignableFrom (typeof (TInstance)))
+                return null;
+            // An expression cannot assign a read-only field, so we emit the store
+            var method = new DynamicMethod (
+                "set_" + name, null, new [] { typeof (TInstance), typeof (TValue) }, field.DeclaringType.Module, true);
+            var il = method.GetILGenerator ();
+            il.Emit (OpCodes.Ldarg_0);
+            if (field.DeclaringType != typeof (TInstance))
+                il.Emit (OpCodes.Castclass, field.DeclaringType);
+            il.Emit (OpCodes.Ldarg_1);
+            il.Emit (OpCodes.Stfld, field);
+            il.Emit (OpCodes.Ret);
+            return (Action<TInstance, TValue>)method.CreateDelegate (typeof (Action<TInstance, TValue>));
         }
 
         /// <summary>

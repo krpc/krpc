@@ -16,6 +16,13 @@ namespace KRPC.Test.Utils
         Dark
     }
 
+    struct Pair
+    {
+#pragma warning disable 0649
+        public readonly int First;
+#pragma warning restore 0649
+    }
+
     class Base
     {
 #pragma warning disable 0649, 0169, 0414
@@ -205,6 +212,40 @@ namespace KRPC.Test.Utils
         public void SetterReadOnlyField ()
         {
             Assert.IsNull (Accessor.Setter<Base, int> ("limit"));
+        }
+
+        [Test]
+        public void ReadOnlySetter ()
+        {
+            var obj = new Base ();
+            Accessor.ReadOnlySetter<Base, int> (typeof (Base), "limit") (obj, 5);
+            Assert.AreEqual (5, Accessor.Getter<Base, int> ("limit") (obj));
+        }
+
+        [Test]
+        public void ReadOnlySetterFromObject ()
+        {
+            var obj = new Base ();
+            Accessor.ReadOnlySetter<object, int> (typeof (Base), "limit") (obj, 5);
+            Assert.AreEqual (5, Accessor.Getter<Base, int> ("limit") (obj));
+        }
+
+        [Test]
+        public void ReadOnlySetterWrongType ()
+        {
+            Assert.IsNull (Accessor.ReadOnlySetter<Base, double> (typeof (Base), "limit"));
+        }
+
+        [Test]
+        public void ReadOnlySetterStruct ()
+        {
+            Assert.IsNull (Accessor.ReadOnlySetter<object, int> (typeof (Pair), "First"));
+        }
+
+        [Test]
+        public void ReadOnlySetterProperty ()
+        {
+            Assert.IsNull (Accessor.ReadOnlySetter<Base, int> (typeof (Base), "Fixed"));
         }
 
         [Test]

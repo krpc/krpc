@@ -1,3 +1,7 @@
+## core
+
+- Add `MemberBinder.ReadOnlyField`, for a mod setting that the mod declares read-only (#1381)
+
 ## service/MechJeb
 
 - Throw an exception from the `TargetController` members that need a target, when there is none

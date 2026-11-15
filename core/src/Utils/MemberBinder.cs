@@ -131,6 +131,22 @@ namespace KRPC.Utils
         }
 
         /// <summary>
+        /// A getter and setter for a field that the mod declares read-only and writes through
+        /// reflection. See <see cref="Accessor.ReadOnlySetter{TInstance, TValue}(Type, string)"/>.
+        /// </summary>
+        public Field<TInstance, TValue> ReadOnlyField<TInstance, TValue> (string name)
+        {
+            var get = Accessor.Getter<TInstance, TValue> (type, name);
+            if (get == null) {
+                var missingGet = Bind<Func<TInstance, TValue>> (null, name);
+                var missingSet = Stub<Action<TInstance, TValue>> (name);
+                return new Field<TInstance, TValue> (missingGet, missingSet);
+            }
+            var set = Bind (Accessor.ReadOnlySetter<TInstance, TValue> (type, name), name);
+            return new Field<TInstance, TValue> (get, set);
+        }
+
+        /// <summary>
         /// A delegate that calls a method. See <see cref="Accessor.Method{TDelegate}(Type, string)"/>.
         /// </summary>
         public TDelegate Method<TDelegate> (string name) where TDelegate : class
