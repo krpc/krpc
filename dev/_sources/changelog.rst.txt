@@ -100,6 +100,7 @@ Core
 * :breaking:`Breaking` Remove the "One RPC per update" setting and ``KRPC.ServerSettings.OneRpcPerUpdate`` (:issue:`1349`)
 * :breaking:`Breaking` ``KRPC.Expression.CallWithArguments`` takes a call template, and throws an exception for a call that carries arguments (:issue:`1352`)
 * Fail when a server side function is built, in place of when it runs, for a null constant passed to a parameter that cannot be null (:issue:`1352`)
+* Load the services faster in games with many mods (:issue:`1353`)
 
 
 Server
