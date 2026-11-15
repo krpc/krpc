@@ -276,6 +276,13 @@ way writing here goes wrong.
    comments, included with `:start-after: [docs]`, `:end-before: [/docs]` and `:dedent:`.
  * A downloadable script carries no markers. Part of one is included by its own text with
    `:start-at:`/`:end-at:`. Never select lines with `:lines:`.
+ * **Code in the docs is at most 76 columns wide**, the width of a rendered code block. This
+   covers the examples and every `.. code-block::`, except a transcript that must match real
+   output. `//doc:lint` checks the formatting of the C, C++, Python and JavaScript examples at
+   that width, and the line length of the Lua ones. It applies no fixes: run clang-format,
+   `ruff format` or `biome check --write` with the config in `doc/src/scripts/`. The C# and Java
+   examples are wrapped by hand. A wrapped line can break a `:start-at:`/`:end-at:` anchor that
+   quotes it.
  * **Address the reader**: "you" in the client guides, "we" when walking through a script. Do not
    write about an abstract "a client" or "a program".
  * Reuse the stock forms already in the docs.

@@ -14,7 +14,8 @@ int main() {
 
   std::vector<SpaceCenter::Engine> active_engines;
   for (auto engine : engines)
-    if (engine.active() && engine.has_fuel()) active_engines.push_back(engine);
+    if (engine.active() && engine.has_fuel())
+      active_engines.push_back(engine);
 
   std::cout << "Active engines:" << std::endl;
   for (auto engine : active_engines)

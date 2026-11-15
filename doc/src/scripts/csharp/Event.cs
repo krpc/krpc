@@ -15,7 +15,8 @@ class Program {
 
         // Build the function on the server
         var e = Expression.Bind(connection);
-        var expr = e.GreaterThan(e.Call(meanAltitude), e.ConstantDouble(1000));
+        var expr = e.GreaterThan(
+            e.Call(meanAltitude), e.ConstantDouble(1000));
 
         var evnt = connection.AddEvent(expr);
         lock (evnt.Condition) {

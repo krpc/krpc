@@ -13,7 +13,8 @@ class Program {
         var threads = new[] {
             new Thread(() => {
                 for (var i = 0; i < 10; i++)
-                    Console.WriteLine("Altitude: " + flightInfo.MeanAltitude);
+                    Console.WriteLine(
+                        "Altitude: " + flightInfo.MeanAltitude);
             }),
             new Thread(() => {
                 for (var i = 0; i < 10; i++)

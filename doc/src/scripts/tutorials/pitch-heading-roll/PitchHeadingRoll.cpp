@@ -48,7 +48,8 @@ int main() {
 
     // Compute the pitch - the angle between the vessels direction
     // and the direction in the horizon plane
-    double pitch = angle_between_vectors(vessel_direction, horizon_direction);
+    double pitch =
+        angle_between_vectors(vessel_direction, horizon_direction);
     if (std::get<0>(vessel_direction) < 0) pitch = -pitch;
 
     // Compute the heading - the angle between north

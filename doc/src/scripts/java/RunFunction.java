@@ -11,21 +11,24 @@ public class RunFunction {
   public static void main(String[] args) {
     try (Connection connection = Connection.newInstance()) {
       Vessel vessel = SpaceCenter.newInstance(connection).getActiveVessel();
-      Flight flight = vessel.flight(vessel.getOrbit().getBody().getReferenceFrame());
+      Flight flight =
+          vessel.flight(vessel.getOrbit().getBody().getReferenceFrame());
 
       // Get the remote procedure calls as message objects,
       // so they can be passed to the server
-      ProcedureCall meanAltitude = connection.getCall(flight, "getMeanAltitude");
+      ProcedureCall meanAltitude =
+          connection.getCall(flight, "getMeanAltitude");
       ProcedureCall speed = connection.getCall(flight, "getSpeed");
 
       // Build a function that reads the altitude and the speed
       Expression.Bound e = Expression.bind(connection);
-      Expression expr = e.createTuple(Arrays.asList(e.call(meanAltitude), e.call(speed)));
+      Expression expr = e.createTuple(
+          Arrays.asList(e.call(meanAltitude), e.call(speed)));
 
-      // Run the function once, so both values come from the same physics tick
+      // Run once, so both values come from the same physics tick
       Pair<Double, Double> result = connection.run(expr);
-      System.out.println(
-          "Altitude: " + result.getValue0() + " m, speed: " + result.getValue1() + " m/s");
+      System.out.println("Altitude: " + result.getValue0()
+          + " m, speed: " + result.getValue1() + " m/s");
     }
   }
 }

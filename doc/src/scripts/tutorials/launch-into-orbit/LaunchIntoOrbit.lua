@@ -38,8 +38,10 @@ local turn_angle = 0
 while true do
 
     -- Gravity turn
-    if flight.mean_altitude > turn_start_altitude and flight.mean_altitude < turn_end_altitude then
-        local frac = (flight.mean_altitude - turn_start_altitude) / (turn_end_altitude - turn_start_altitude)
+    if flight.mean_altitude > turn_start_altitude and
+       flight.mean_altitude < turn_end_altitude then
+        local frac = (flight.mean_altitude - turn_start_altitude) /
+                     (turn_end_altitude - turn_start_altitude)
         local new_turn_angle = frac * 90
         if math.abs(new_turn_angle - turn_angle) > 0.5 then
             turn_angle = new_turn_angle
@@ -84,7 +86,8 @@ local a2 = r
 local v1 = math.sqrt(mu*((2./r)-(1./a1)))
 local v2 = math.sqrt(mu*((2./r)-(1./a2)))
 local delta_v = v2 - v1
-local node = vessel.control:add_node(conn.space_center.ut + vessel.orbit.time_to_apoapsis, delta_v, 0, 0)
+local node = vessel.control:add_node(
+    conn.space_center.ut + vessel.orbit.time_to_apoapsis, delta_v, 0, 0)
 
 ---- Calculate burn time (using rocket equation)
 local F = vessel.available_thrust
@@ -102,7 +105,8 @@ vessel.auto_pilot:wait()
 
 -- Wait until burn
 print('Waiting until circularization burn')
-local burn_ut = conn.space_center.ut + vessel.orbit.time_to_apoapsis - (burn_time/2.)
+local burn_ut =
+    conn.space_center.ut + vessel.orbit.time_to_apoapsis - (burn_time/2.)
 local lead_time = 5
 conn.space_center.warp_to(burn_ut - lead_time)
 

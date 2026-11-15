@@ -9,10 +9,12 @@ public class EndCallback {
     try (Connection connection = Connection.newInstance()) {
       SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
       Part part = spaceCenter.getActiveVessel().getParts().getRoot();
-      Stream<Double> temperature = connection.addStream(part, "getTemperature");
-      temperature.addCallback(value -> System.out.println("Temperature " + value));
-      temperature.addEndCallback(
-          exn -> System.out.println("The stream ended: " + exn.getMessage()));
+      Stream<Double> temperature =
+          connection.addStream(part, "getTemperature");
+      temperature.addCallback(
+          value -> System.out.println("Temperature " + value));
+      temperature.addEndCallback(exn -> System.out.println(
+          "The stream ended: " + exn.getMessage()));
 
       // Keep the program running, while the callbacks are called
       while (true) {

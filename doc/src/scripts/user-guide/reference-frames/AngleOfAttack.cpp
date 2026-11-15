@@ -23,9 +23,9 @@ int main() {
                      std::get<2>(d) * std::get<2>(v);
 
     // Compute the magnitude of v
-    double vMag =
-        sqrt(std::get<0>(v) * std::get<0>(v) + std::get<1>(v) * std::get<1>(v) +
-             std::get<2>(v) * std::get<2>(v));
+    double vMag = sqrt(std::get<0>(v) * std::get<0>(v) +
+                       std::get<1>(v) * std::get<1>(v) +
+                       std::get<2>(v) * std::get<2>(v));
     // Note: don't need to magnitude of d as it is a unit vector
 
     // Compute the angle between the vectors

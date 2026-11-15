@@ -9,7 +9,8 @@ public class StreamRate {
     try (Connection connection = Connection.newInstance()) {
       SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
       Flight flightInfo = spaceCenter.getActiveVessel().flight(null);
-      Stream<Double> altitude = connection.addStream(flightInfo, "getMeanAltitude");
+      Stream<Double> altitude =
+          connection.addStream(flightInfo, "getMeanAltitude");
       // Update the stream at most 10 times a second
       altitude.setRate(10);
     }

@@ -6,7 +6,8 @@ class RasterPropMonitorExample
 {
     public static void Main ()
     {
-        using (var connection = new Connection ("Raster Prop Monitor Example")) {
+        using (var connection =
+                   new Connection ("Raster Prop Monitor Example")) {
             var vessel = connection.SpaceCenter ().ActiveVessel;
             var control = vessel.Control;
             var rpm = connection.RasterPropMonitor ();
@@ -15,7 +16,8 @@ class RasterPropMonitorExample
             var monitor = rpm.Monitors (vessel) [0];
             var display = monitor.Display;
 
-            // Raster Prop Monitor formats the SAS variable, and keeps it up to date
+            // Raster Prop Monitor formats the SAS variable,
+            // and keeps it up to date
             display.Text = "SAS: {0:ON;OFF;OFF} $&$ SAS";
 
             // A press of the NAV button shows the page

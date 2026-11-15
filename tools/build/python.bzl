@@ -88,8 +88,9 @@ def py_test(name, src, tests = [], deps = [], **kwargs):
         **kwargs
     )
 
+# A config that extends another lists the one it extends in config_deps
 # buildifier: disable=function-docstring
-def py_ruff_test(name, srcs, config = Label("//:ruff.toml"), **kwargs):
+def py_ruff_test(name, srcs, config = Label("//:ruff.toml"), config_deps = [], **kwargs):
     ruff_whl = "@krpc_pypi//ruff:whl"
     args = [
         "--ruff-whl=$(rootpath %s)" % ruff_whl,
@@ -101,7 +102,7 @@ def py_ruff_test(name, srcs, config = Label("//:ruff.toml"), **kwargs):
         srcs = [Label("//tools/build/python:run_ruff.py")],
         main = Label("//tools/build/python:run_ruff.py"),
         args = args,
-        data = srcs + [ruff_whl, config],
+        data = srcs + [ruff_whl, config] + config_deps,
         **kwargs
     )
 

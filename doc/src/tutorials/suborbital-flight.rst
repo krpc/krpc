@@ -160,7 +160,7 @@ take effect:
 
       .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.c
          :language: c
-         :start-at: krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading(conn, auto_pilot, 90, 90);
+         :start-at: krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading(conn, auto_pilot, 90,
          :end-at: sleep(1);
 
    .. group-tab:: Java
@@ -366,7 +366,7 @@ takes the new target:
       .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.c
          :language: c
          :start-at: printf("Gravity turn\n");
-         :end-at: krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading(conn, auto_pilot, 60, 90);
+         :end-at: 90);
 
    .. group-tab:: Java
 
@@ -491,13 +491,13 @@ vertical speed reaches zero when it lands:
 
       .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.py
          :language: python
-         :start-at: while vessel.flight(vessel.orbit.body.reference_frame).vertical_speed < -0.1:
+         :start-at: body_frame = vessel.orbit.body.reference_frame
 
    .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cs
          :language: csharp
-         :start-at: while (vessel.Flight (vessel.Orbit.Body.ReferenceFrame).VerticalSpeed < -0.1) {
+         :start-at: var bodyFrame = vessel.Orbit.Body.ReferenceFrame;
          :end-at: Console.WriteLine ("Landed!");
 
    .. group-tab:: C++
@@ -518,14 +518,14 @@ vertical speed reaches zero when it lands:
 
       .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.java
          :language: java
-         :start-at: while (vessel.flight(vessel.getOrbit().getBody().getReferenceFrame()).getVerticalSpeed() < -0.1) {
+         :start-at: ReferenceFrame bodyFrame =
          :end-at: System.out.println("Landed!");
 
    .. group-tab:: Lua
 
       .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.lua
          :language: lua
-         :start-at: while vessel:flight(vessel.orbit.body.reference_frame).vertical_speed < -0.1 do
+         :start-at: local body_frame = vessel.orbit.body.reference_frame
 
 This calls ``vessel.flight()`` again, now with a :class:`ReferenceFrame`. We want the vertical
 speed relative to the surface of Kerbin, so the flight object has to give values in a frame fixed

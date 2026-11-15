@@ -19,7 +19,7 @@ namespace Extending
             // [docs]
             [KRPCNullable]
             [KRPCNullable (Element)]
-            IList<Vessel> maybeVessels                                        // the list, and its vessels
+            IList<Vessel> maybeVessels // the list, and its vessels
             // [/docs]
         )
         {

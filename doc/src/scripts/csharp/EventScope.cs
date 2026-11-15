@@ -10,7 +10,8 @@ class Program {
         var flight = spaceCenter.ActiveVessel.Flight();
         var e = Expression.Bind(connection);
         var expr = e.GreaterThan(
-            e.Call(Connection.GetCall(() => flight.MeanAltitude)), e.ConstantDouble(1000));
+            e.Call(Connection.GetCall(() => flight.MeanAltitude)),
+            e.ConstantDouble(1000));
         using (var evnt = connection.AddEvent(expr)) {
             lock (evnt.Condition) {
                 evnt.Wait();

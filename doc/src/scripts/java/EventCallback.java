@@ -13,7 +13,8 @@ public class EventCallback {
 
       Expression.Bound e = Expression.bind(connection);
       Expression expr = e.greaterThan(
-          e.call(connection.getCall(flight, "getMeanAltitude")), e.constantDouble(1000));
+          e.call(connection.getCall(flight, "getMeanAltitude")),
+          e.constantDouble(1000));
       Event event = connection.addEvent(expr);
 
       event.addCallback(() -> System.out.println("Altitude reached 1000m"));

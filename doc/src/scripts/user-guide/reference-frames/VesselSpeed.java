@@ -11,8 +11,10 @@ public class VesselSpeed {
         Connection connection = Connection.newInstance("Vessel speed");
         SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
         Vessel vessel = spaceCenter.getActiveVessel();
-        ReferenceFrame obtFrame = vessel.getOrbit().getBody().getNonRotatingReferenceFrame();
-        ReferenceFrame srfFrame = vessel.getOrbit().getBody().getReferenceFrame();
+        ReferenceFrame obtFrame =
+          vessel.getOrbit().getBody().getNonRotatingReferenceFrame();
+        ReferenceFrame srfFrame =
+          vessel.getOrbit().getBody().getReferenceFrame();
         while (true) {
             double obtSpeed = vessel.flight(obtFrame).getSpeed();
             double srfSpeed = vessel.flight(srfFrame).getSpeed();

@@ -14,11 +14,13 @@ public class CustomEvent {
 
       // Get the remote procedure call as a message object,
       // so it can be passed to the server
-      ProcedureCall meanAltitude = connection.getCall(flight, "getMeanAltitude");
+      ProcedureCall meanAltitude =
+          connection.getCall(flight, "getMeanAltitude");
 
       // Build the function on the server
       Expression.Bound e = Expression.bind(connection);
-      Expression expr = e.greaterThan(e.call(meanAltitude), e.constantDouble(1000));
+      Expression expr = e.greaterThan(
+          e.call(meanAltitude), e.constantDouble(1000));
 
       Event event = connection.addEvent(expr);
       synchronized (event.getCondition()) {

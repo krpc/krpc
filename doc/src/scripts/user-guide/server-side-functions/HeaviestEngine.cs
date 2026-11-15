@@ -14,7 +14,8 @@ class Program {
         // [docs]
         var heaviest = connection.Run (
             () => vessel.Parts.Engines.Count == 0 ? null
-                : vessel.Parts.Engines.OrderBy (engine => engine.Part.Mass).Last ());
+                : vessel.Parts.Engines
+                    .OrderBy (engine => engine.Part.Mass).Last ());
         // [/docs]
     }
 }

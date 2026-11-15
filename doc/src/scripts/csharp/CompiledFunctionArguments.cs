@@ -7,7 +7,8 @@ class Program {
         var connection = new Connection();
         // [docs]
         var flight = connection.SpaceCenter().ActiveVessel.Flight();
-        var altitudeAbove = connection.Compile((double height) => flight.MeanAltitude - height);
+        var altitudeAbove = connection.Compile(
+            (double height) => flight.MeanAltitude - height);
         Console.WriteLine(connection.Run<double>(altitudeAbove, 70000));
         // [/docs]
     }

@@ -8,7 +8,8 @@ import org.javatuples.Triplet;
 
 public class OrbitalDirections {
     public static void main(String[] args) {
-        Connection connection = Connection.newInstance("Orbital directions");
+        Connection connection =
+            Connection.newInstance("Orbital directions");
         SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
         Vessel vessel = spaceCenter.getActiveVessel();
         AutoPilot ap = vessel.getAutoPilot();
@@ -16,15 +17,18 @@ public class OrbitalDirections {
         ap.setEngaged(true);
 
         // Point the vessel in the prograde direction
-        ap.setTargetDirection(new Triplet<Double,Double,Double> (0.0, 1.0, 0.0));
+        ap.setTargetDirection(
+            new Triplet<Double,Double,Double> (0.0, 1.0, 0.0));
         ap.wait_(-1);
 
         // Point the vessel in the orbit normal direction
-        ap.setTargetDirection(new Triplet<Double,Double,Double> (0.0, 0.0, 1.0));
+        ap.setTargetDirection(
+            new Triplet<Double,Double,Double> (0.0, 0.0, 1.0));
         ap.wait_(-1);
 
         // Point the vessel in the orbit radial direction
-        ap.setTargetDirection(new Triplet<Double,Double,Double> (-1.0, 0.0, 0.0));
+        ap.setTargetDirection(
+            new Triplet<Double,Double,Double> (-1.0, 0.0, 0.0));
         ap.wait_(-1);
 
         ap.setEngaged(false);

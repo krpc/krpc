@@ -22,7 +22,8 @@ int main() {
   krpc_KRPC_Expression_LessThan(conn, &low, fuel, limit);
   krpc_KRPC_Expression_ConstantString(conn, &message, "not enough fuel");
   krpc_KRPC_Expression_ThrowById(
-      conn, &thrown, KRPC_EXCEPTION_KRPC_INVALIDOPERATIONEXCEPTION, message);
+      conn, &thrown, KRPC_EXCEPTION_KRPC_INVALIDOPERATIONEXCEPTION,
+      message);
   krpc_KRPC_Expression_IfThen(conn, &expr, low, thrown);
   krpc_run_function(conn, NULL, NULL, expr, NULL);
   // [/docs]

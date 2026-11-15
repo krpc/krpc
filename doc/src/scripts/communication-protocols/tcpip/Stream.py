@@ -80,8 +80,8 @@ call.procedure = "AddStream"
 call.arguments.add(position=0, value=stream_call.SerializeToString())
 send_message(conn, message)
 
-# Receive the response, which carries the id of the request it answers. The stream's first
-# update follows it.
+# Receive the response, which carries the id of the request it answers. The
+# stream's first update follows it.
 response = recv_message(conn).response
 assert response.id == 1
 
@@ -102,9 +102,10 @@ while True:
     update = recv_message(conn).stream_update
     assert len(update.results) == 1
     assert stream_id == update.results[0].id
-    # Decode the return value, a ServerStatus structure sent as a Tuple of its fields. Its
-    # fourth field is the server statistics, another structure, whose second field is the
-    # number of bytes the server has written.
+    # Decode the return value, a ServerStatus structure sent as a Tuple of
+    # its fields. Its fourth field is the server statistics, another
+    # structure, whose second field is the number of bytes the server has
+    # written.
     status = KRPC.Tuple.FromString(update.results[0].result.value)
     statistics = KRPC.Tuple.FromString(status.items[3])
     print(decode_varint(statistics.items[1]))

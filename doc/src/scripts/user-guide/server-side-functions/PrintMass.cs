@@ -13,7 +13,8 @@ class Program {
         var vessel = spaceCenter.ActiveVessel;
         // [docs]
         connection.Run (
-            () => Console.WriteLine (FormattableString.Invariant ($"Mass: {vessel.Mass} kg")));
+            () => Console.WriteLine (
+                FormattableString.Invariant ($"Mass: {vessel.Mass} kg")));
         // [/docs]
     }
 }

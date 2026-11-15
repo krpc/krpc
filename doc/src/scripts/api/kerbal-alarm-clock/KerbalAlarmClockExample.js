@@ -9,5 +9,7 @@ const alarm = await kac.createAlarm(
   (await conn.spaceCenter.getUT()) + 10,
 );
 
-await alarm.setNotes("10 seconds have now passed since the alarm was created.");
+await alarm.setNotes(
+  "10 seconds have now passed since the alarm was created.",
+);
 await alarm.setAction(kac.AlarmAction.messageOnly);

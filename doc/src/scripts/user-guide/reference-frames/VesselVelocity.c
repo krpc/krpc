@@ -38,8 +38,8 @@ int main() {
     krpc_SpaceCenter_Flight_t flight;
     krpc_SpaceCenter_Vessel_Flight(conn, &flight, vessel, ref_frame);
     krpc_SpaceCenter_Flight_Velocity(conn, &velocity, flight);
-    printf("Surface velocity = %.1f, %.1f, %.1f\n", velocity.e0, velocity.e1,
-           velocity.e2);
+    printf("Surface velocity = %.1f, %.1f, %.1f\n", velocity.e0,
+           velocity.e1, velocity.e2);
     sleep(1);
   }
 }

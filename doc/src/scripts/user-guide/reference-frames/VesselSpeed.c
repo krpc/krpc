@@ -37,8 +37,8 @@ int main() {
     krpc_SpaceCenter_Flight_Speed(conn, &obt_speed, flight);
     krpc_SpaceCenter_Vessel_Flight(conn, &flight, vessel, srf_frame);
     krpc_SpaceCenter_Flight_Speed(conn, &srf_speed, flight);
-    printf("Orbital speed = %.1f m/s, Surface speed = %.1f m/s\n", obt_speed,
-           srf_speed);
+    printf("Orbital speed = %.1f m/s, Surface speed = %.1f m/s\n",
+           obt_speed, srf_speed);
     sleep(1);
   }
 }

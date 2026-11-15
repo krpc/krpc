@@ -10,10 +10,12 @@ namespace Extending
     public static class Altitude {
         // [docs]
         [KRPCProcedure]
-        public static KRPC.Service.Messages.Event OnAltitudeReached(uint altitude) {
+        public static KRPC.Service.Messages.Event OnAltitudeReached(
+            uint altitude) {
             // Create the event
             var evnt = new KRPC.Service.Event ((KRPC.Service.Event e) => {
-                bool result = FlightGlobals.ActiveVessel.terrainAltitude > altitude;
+                bool result =
+                    FlightGlobals.ActiveVessel.terrainAltitude > altitude;
                 if (result)
                     e.Remove();
                 return result;

@@ -10,8 +10,10 @@ import krpc.schema.KRPC.ProcedureCall;
 public class MechJebExample {
     public static void main(String[] args) {
         Connection connection = Connection.newInstance("MechJeb Example");
-        Vessel vessel = SpaceCenter.newInstance(connection).getActiveVessel();
-        AscentAutopilot ascent = MechJeb.newInstance(connection).getAscentAutopilot();
+        Vessel vessel =
+            SpaceCenter.newInstance(connection).getActiveVessel();
+        AscentAutopilot ascent =
+            MechJeb.newInstance(connection).getAscentAutopilot();
 
         ascent.setDesiredOrbitAltitude(100000);
         ascent.setDesiredInclination(6);

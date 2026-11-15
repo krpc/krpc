@@ -10,7 +10,8 @@ mean_altitude = conn.get_call(getattr, flight, "mean_altitude")
 
 # Build the function on the server
 expr = conn.krpc.Expression.greater_than(
-    conn.krpc.Expression.call(mean_altitude), conn.krpc.Expression.constant_double(1000)
+    conn.krpc.Expression.call(mean_altitude),
+    conn.krpc.Expression.constant_double(1000),
 )
 
 # Create an event from the function

@@ -12,7 +12,8 @@ class Program {
             Console.WriteLine(vessel.Position(frame));
 
             // Call a static method, passing the connection first
-            Console.WriteLine(Orbit.ReferencePlaneDirection(connection, frame));
+            Console.WriteLine(
+                Orbit.ReferencePlaneDirection(connection, frame));
 
             // Stream it
             var direction = connection.AddStream(

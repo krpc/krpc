@@ -15,7 +15,8 @@ namespace Extending
     public static class TestFlightExtensions {
         /// <summary>The parts that have the named failure.</summary>
         [KRPCMethod]
-        public static IList<Part> WithFailure (this Parts parts, string failure)
+        public static IList<Part> WithFailure (
+            this Parts parts, string failure)
         {
             throw new NotImplementedException ();
         }

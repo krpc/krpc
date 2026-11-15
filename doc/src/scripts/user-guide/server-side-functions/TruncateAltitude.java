@@ -14,7 +14,8 @@ public class TruncateAltitude {
       SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
       Vessel vessel = spaceCenter.getActiveVessel();
       Flight flight = vessel.flight(null);
-      ProcedureCall meanAltitude = connection.getCall(flight, "getMeanAltitude");
+      ProcedureCall meanAltitude =
+          connection.getCall(flight, "getMeanAltitude");
       // [docs]
       Expression.Bound e = Expression.bind(connection);
       Type.Bound t = Type.bind(connection);

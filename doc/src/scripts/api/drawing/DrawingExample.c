@@ -20,7 +20,8 @@ int main() {
   krpc_SpaceCenter_Vessel_ReferenceFrame(conn, &frame, vessel);
   krpc_tuple_double_double_double_t direction = {0, 1, 0};
   krpc_Drawing_Line_t line;
-  krpc_Drawing_AddDirectionFromCom(conn, &line, &direction, frame, 10, true);
+  krpc_Drawing_AddDirectionFromCom(conn, &line, &direction, frame, 10,
+                                   true);
   sleep(10);
   krpc_disconnect(conn);
 }

@@ -6,7 +6,8 @@
 int main() {
   krpc_connection_t conn;
   if (krpc_open_serial(&conn, "COM0") != KRPC_OK) return 1;
-  if (krpc_connect(conn, "Function statements example") != KRPC_OK) return 1;
+  if (krpc_connect(conn, "Function statements example") != KRPC_OK)
+    return 1;
 
   // total = 0; for x in {1, 2, 3}: total += x;
   krpc_KRPC_Type_t int_type;

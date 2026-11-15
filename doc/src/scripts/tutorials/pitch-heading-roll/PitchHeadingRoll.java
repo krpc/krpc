@@ -51,11 +51,13 @@ public class PitchHeadingRoll {
             // Get the direction of the vessel in the horizon plane
             Triplet<Double,Double,Double> horizonDirection =
                 new Triplet<Double,Double,Double>(
-                    0.0, vesselDirection.getValue1(), vesselDirection.getValue2());
+                    0.0, vesselDirection.getValue1(),
+                    vesselDirection.getValue2());
 
             // Compute the pitch - the angle between the vessels direction
             // and the direction in the horizon plane
-            double pitch = angleBetweenVectors(vesselDirection, horizonDirection);
+            double pitch =
+                angleBetweenVectors(vesselDirection, horizonDirection);
             if (vesselDirection.getValue0() < 0) {
                 pitch = -pitch;
             }
@@ -77,9 +79,11 @@ public class PitchHeadingRoll {
             Triplet<Double,Double,Double> planeNormal =
                 crossProduct(vesselDirection, up);
             // Compute the upwards direction of the vessel
-            Triplet<Double,Double,Double> vesselUp = spaceCenter.transformDirection(
-                new Triplet<Double,Double,Double>(0.0,0.0,-1.0),
-                vessel.getReferenceFrame(), vessel.getSurfaceReferenceFrame());
+            Triplet<Double,Double,Double> vesselUp =
+                spaceCenter.transformDirection(
+                    new Triplet<Double,Double,Double>(0.0,0.0,-1.0),
+                    vessel.getReferenceFrame(),
+                    vessel.getSurfaceReferenceFrame());
             // Compute the angle between the upwards direction
             // of the vessel and the plane normal
             double roll = angleBetweenVectors(vesselUp, planeNormal);

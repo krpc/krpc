@@ -9,7 +9,8 @@ class ControlFromHere
     {
         using (var conn = new Connection ()) {
             var vessel = conn.SpaceCenter ().ActiveVessel;
-            var part = vessel.Parts.WithTitle ("Clamp-O-Tron Docking Port") [0];
+            var part =
+                vessel.Parts.WithTitle ("Clamp-O-Tron Docking Port") [0];
             vessel.Parts.Controlling = part;
         }
     }

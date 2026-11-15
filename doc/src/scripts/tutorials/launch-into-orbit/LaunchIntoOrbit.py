@@ -14,7 +14,9 @@ vessel = conn.space_center.active_vessel
 ut = conn.add_stream(getattr, conn.space_center, "ut")
 altitude = conn.add_stream(getattr, vessel.flight(), "mean_altitude")
 apoapsis = conn.add_stream(getattr, vessel.orbit, "apoapsis_altitude")
-stage_2_resources = vessel.decouple_stage_at(stage=2).resources(cumulative=False)
+stage_2_resources = vessel.decouple_stage_at(stage=2).resources(
+    cumulative=False
+)
 srb_fuel = conn.add_stream(stage_2_resources.amount, "SolidFuel")
 
 # Pre-launch setup
@@ -64,7 +66,9 @@ while True:
 
 # Disable engines when target apoapsis is reached
 vessel.control.throttle = 0.25
-event = conn.add_event(lambda: vessel.orbit.apoapsis_altitude >= target_altitude)
+event = conn.add_event(
+    lambda: vessel.orbit.apoapsis_altitude >= target_altitude
+)
 with event.condition:
     event.wait()
 print("Target apoapsis reached")
@@ -85,7 +89,9 @@ a2 = r
 v1 = math.sqrt(mu * ((2.0 / r) - (1.0 / a1)))
 v2 = math.sqrt(mu * ((2.0 / r) - (1.0 / a2)))
 delta_v = v2 - v1
-node = vessel.control.add_node(ut() + vessel.orbit.time_to_apoapsis, prograde=delta_v)
+node = vessel.control.add_node(
+    ut() + vessel.orbit.time_to_apoapsis, prograde=delta_v
+)
 
 # Calculate burn time (using rocket equation)
 F = vessel.available_thrust
@@ -109,7 +115,9 @@ conn.space_center.warp_to(burn_ut - lead_time)
 
 # Execute burn
 print("Ready to execute burn")
-event = conn.add_event(lambda: vessel.orbit.time_to_apoapsis <= burn_time / 2.0)
+event = conn.add_event(
+    lambda: vessel.orbit.time_to_apoapsis <= burn_time / 2.0
+)
 with event.condition:
     event.wait()
 print("Executing burn")
@@ -117,7 +125,9 @@ vessel.control.throttle = 1.0
 time.sleep(burn_time - 0.1)
 print("Fine tuning")
 vessel.control.throttle = 0.05
-event = conn.add_event(lambda: node.remaining_burn_vector(node.reference_frame)[1] <= 0)
+event = conn.add_event(
+    lambda: node.remaining_burn_vector(node.reference_frame)[1] <= 0
+)
 with event.condition:
     event.wait()
 vessel.control.throttle = 0.0

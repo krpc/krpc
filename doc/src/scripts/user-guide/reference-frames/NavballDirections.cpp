@@ -17,7 +17,8 @@ int main() {
   ap.set_target_direction(std::make_tuple(1, 0, 0));
   ap.wait();
 
-  // Point the vessel west (heading of 270 degrees), with a pitch of 0 degrees
+  // Point the vessel west (heading of 270 degrees), with a pitch of 0
+  // degrees
   ap.set_target_direction(std::make_tuple(0, 0, -1));
   ap.wait();
 

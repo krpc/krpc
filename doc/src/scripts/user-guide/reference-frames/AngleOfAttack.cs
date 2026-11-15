@@ -14,7 +14,8 @@ class AngleOfAttack
             var v = vessel.Velocity (vessel.Orbit.Body.ReferenceFrame);
 
             // Compute the dot product of d and v
-            var dotProd = d.Item1 * v.Item1 + d.Item2 * v.Item2 + d.Item3 * v.Item3;
+            var dotProd =
+                d.Item1 * v.Item1 + d.Item2 * v.Item2 + d.Item3 * v.Item3;
 
             // Compute the magnitude of v
             var vMag = Math.Sqrt (

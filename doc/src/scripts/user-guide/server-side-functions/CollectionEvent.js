@@ -13,12 +13,17 @@ const engine = await Expression.parameter(
 const hasFuel = conn.spaceCenter.Engine.prototype.getHasFuel;
 const outOfFuel = await Expression.lambda(
   [engine],
-  await Expression.not(await Expression.callWithArguments(hasFuel, new Map([[0, engine]]))),
+  await Expression.not(
+    await Expression.callWithArguments(hasFuel, new Map([[0, engine]])),
+  ),
 );
 
 // Whether any engine satisfies it
 const engines = conn.getCall(() => parts.getEngines());
-const expr = await Expression.any(await Expression.call(engines), outOfFuel);
+const expr = await Expression.any(
+  await Expression.call(engines),
+  outOfFuel,
+);
 
 const event = await conn.addEvent(expr);
 await event.wait();

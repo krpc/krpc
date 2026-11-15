@@ -19,7 +19,8 @@ class SubOrbitalFlight
         vessel.Control.ActivateNextStage ();
 
         {
-            var evnt = conn.AddEvent (() => vessel.Resources.Amount ("SolidFuel") < 0.1f);
+            var evnt = conn.AddEvent (
+                () => vessel.Resources.Amount ("SolidFuel") < 0.1f);
             lock (evnt.Condition) {
                 evnt.Wait ();
             }
@@ -39,7 +40,8 @@ class SubOrbitalFlight
         vessel.AutoPilot.TargetPitchAndHeading (60, 90);
 
         {
-            var evnt = conn.AddEvent (() => vessel.Orbit.ApoapsisAltitude > 100000);
+            var evnt = conn.AddEvent (
+                () => vessel.Orbit.ApoapsisAltitude > 100000);
             lock (evnt.Condition) {
                 evnt.Wait ();
             }
@@ -60,8 +62,10 @@ class SubOrbitalFlight
 
         vessel.Control.ActivateNextStage ();
 
-        while (vessel.Flight (vessel.Orbit.Body.ReferenceFrame).VerticalSpeed < -0.1) {
-            Console.WriteLine ("Altitude = {0:F1} meters", flight.SurfaceAltitude);
+        var bodyFrame = vessel.Orbit.Body.ReferenceFrame;
+        while (vessel.Flight (bodyFrame).VerticalSpeed < -0.1) {
+            Console.WriteLine ("Altitude = {0:F1} meters",
+                               flight.SurfaceAltitude);
             System.Threading.Thread.Sleep (1000);
         }
         Console.WriteLine ("Landed!");

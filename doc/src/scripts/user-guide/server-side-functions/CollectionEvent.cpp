@@ -17,8 +17,10 @@ int main() {
   auto t = KType::bind(conn);
 
   // A function taking an engine, returning true if it is out of fuel
-  auto engine = e.parameter("engine", t.class_type("SpaceCenter", "Engine"));
-  auto has_fuel = krpc::services::SpaceCenter::Engine::has_fuel_call_template();
+  auto engine =
+      e.parameter("engine", t.class_type("SpaceCenter", "Engine"));
+  auto has_fuel =
+      krpc::services::SpaceCenter::Engine::has_fuel_call_template();
   auto out_of_fuel =
       e.lambda(std::vector<Expr>({engine}),
                e.not_(e.call_with_arguments(

@@ -29,7 +29,8 @@ clients over websockets and TCP/IP at the same time:
 
 .. code-block:: sh
 
-   krpc-testserver --type=websockets,protobuf --websockets-port=50001 --tcpip-port=50000
+   krpc-testserver --type=websockets,protobuf --websockets-port=50001 \
+     --tcpip-port=50000
 
 ``--localsocket-path`` names the socket of a local socket server, and ``--serialio-port`` the
 port of a serial IO server. ``krpc-testserver --help`` lists every option, including the bind

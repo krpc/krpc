@@ -53,7 +53,8 @@ int main() {
   krpc_UI_LayoutElement_t button_element;
   krpc_UI_Button_LayoutElement(conn, &button_element, button);
   krpc_tuple_double_double_t button_size = {-1, 30};
-  krpc_UI_LayoutElement_set_PreferredSize(conn, button_element, &button_size);
+  krpc_UI_LayoutElement_set_PreferredSize(conn, button_element,
+                                          &button_size);
 
   // Add a slider to set the throttle by hand
   krpc_UI_Slider_t slider;
@@ -61,7 +62,8 @@ int main() {
   krpc_UI_LayoutElement_t slider_element;
   krpc_UI_Slider_LayoutElement(conn, &slider_element, slider);
   krpc_tuple_double_double_t slider_size = {-1, 20};
-  krpc_UI_LayoutElement_set_PreferredSize(conn, slider_element, &slider_size);
+  krpc_UI_LayoutElement_set_PreferredSize(conn, slider_element,
+                                          &slider_size);
 
   // Add some text displaying the total engine thrust
   krpc_UI_Text_t text;
@@ -100,7 +102,8 @@ int main() {
     float thrust;
     krpc_SpaceCenter_Vessel_Thrust(conn, &thrust, vessel);
     char content[32];
-    snprintf(content, sizeof(content), "Thrust: %d kN", (int)(thrust / 1000));
+    snprintf(content, sizeof(content), "Thrust: %d kN",
+             (int)(thrust / 1000));
     krpc_UI_Text_set_Content(conn, text, content);
 
     sleep(1);

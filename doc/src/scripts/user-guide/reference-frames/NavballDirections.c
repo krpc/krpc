@@ -19,7 +19,8 @@ int main() {
   krpc_SpaceCenter_Vessel_t vessel;
   krpc_SpaceCenter_ActiveVessel(conn, &vessel);
   krpc_SpaceCenter_ReferenceFrame_t vessel_srf_ref;
-  krpc_SpaceCenter_Vessel_SurfaceReferenceFrame(conn, &vessel_srf_ref, vessel);
+  krpc_SpaceCenter_Vessel_SurfaceReferenceFrame(conn, &vessel_srf_ref,
+                                                vessel);
 
   krpc_SpaceCenter_AutoPilot_t ap;
   krpc_SpaceCenter_Vessel_AutoPilot(conn, &ap, vessel);
@@ -40,7 +41,8 @@ int main() {
     krpc_SpaceCenter_AutoPilot_Wait(conn, ap, -1);
   }
 
-  // Point the vessel west (heading of 270 degrees), with a pitch of 0 degrees
+  // Point the vessel west (heading of 270 degrees), with a pitch of 0
+  // degrees
   {
     krpc_tuple_double_double_double_t direction = {0, 0, -1};
     krpc_SpaceCenter_AutoPilot_set_TargetDirection(conn, ap, &direction);

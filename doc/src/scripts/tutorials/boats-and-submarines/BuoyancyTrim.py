@@ -22,9 +22,9 @@ print("Weight:        %.0f N" % weight)
 print("Floats:        %s" % (buoyancy > weight))
 print("Torque:        %.0f N m fully submerged" % math.hypot(*torque))
 
-# The trim, read in the surface reference frame. Its x axis points up, so the y and z
-# axes span the horizontal. A horizontal offset between the two centers tips the hull
-# until they line up again.
+# The trim, read in the surface reference frame. Its x axis points up, so
+# the y and z axes span the horizontal. A horizontal offset between the two
+# centers tips the hull until they line up again.
 center_of_buoyancy = flight.center_of_buoyancy
 
 if center_of_buoyancy is None:

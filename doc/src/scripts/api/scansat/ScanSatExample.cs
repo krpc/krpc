@@ -16,14 +16,19 @@ class ScanSatExample
 
             var body = vessel.Orbit.Body;
             var coverage = scansat.Coverage (body, ScanType.Altimetry);
-            Console.WriteLine ("Altimetry coverage of {0}: {1:F1}%", body.Name, coverage * 100);
+            Console.WriteLine ("Altimetry coverage of {0}: {1:F1}%",
+                               body.Name, coverage * 100);
 
             var flight = vessel.Flight ();
-            var elevation = scansat.Elevation (body, flight.Latitude, flight.Longitude);
+            var elevation = scansat.Elevation (
+                body, flight.Latitude, flight.Longitude);
             if (elevation == null)
-                Console.WriteLine ("The terrain below the vessel is not scanned");
+                Console.WriteLine (
+                    "The terrain below the vessel is not scanned");
             else
-                Console.WriteLine ("The terrain below the vessel is at {0:F0} m", elevation.Value);
+                Console.WriteLine (
+                    "The terrain below the vessel is at {0:F0} m",
+                    elevation.Value);
         }
     }
 }

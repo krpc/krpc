@@ -44,7 +44,8 @@ with event.condition:
 
 vessel.control.activate_next_stage()
 
-while vessel.flight(vessel.orbit.body.reference_frame).vertical_speed < -0.1:
+body_frame = vessel.orbit.body.reference_frame
+while vessel.flight(body_frame).vertical_speed < -0.1:
     print("Altitude = %.1f meters" % flight.surface_altitude)
     time.sleep(1)
 print("Landed!")

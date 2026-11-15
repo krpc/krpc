@@ -10,5 +10,8 @@ srf_frame = vessel.orbit.body.reference_frame
 while True:
     obt_speed = vessel.flight(obt_frame).speed
     srf_speed = vessel.flight(srf_frame).speed
-    print("Orbital speed = %.1f m/s, Surface speed = %.1f m/s" % (obt_speed, srf_speed))
+    print(
+        "Orbital speed = %.1f m/s, Surface speed = %.1f m/s"
+        % (obt_speed, srf_speed)
+    )
     time.sleep(1)

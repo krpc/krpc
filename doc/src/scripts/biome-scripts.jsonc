@@ -1,0 +1,22 @@
+// Formatting and lint for the JavaScript documentation examples. The client's
+// rules, with the 76-column line width the rendered code blocks fit.
+{
+  "extends": ["../../../client/js/biome.jsonc"],
+  "formatter": {
+    "lineWidth": 76
+  },
+  "overrides": [
+    {
+      // The protocol examples are CommonJS scripts, where strict mode is not
+      // the default
+      "includes": ["**/communication-protocols/**"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noRedundantUseStrict": "off"
+          }
+        }
+      }
+    }
+  ]
+}

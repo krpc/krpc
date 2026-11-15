@@ -13,14 +13,15 @@ class Program {
         var spaceCenter = connection.SpaceCenter();
         var flight = spaceCenter.ActiveVessel.Flight();
 
-        // A C# lambda cannot hold a handler, so the expression API builds it
-        // around a compiled condition
+        // A C# lambda cannot hold a handler, so the expression API builds
+        // it around a compiled condition
         var above = e.Variable("above", t.Bool());
         var above1000m = e.BlockWithVariables(
             new List<Expression> { above },
             new List<Expression> {
                 e.TryCatch(
-                    e.Assign(above, connection.Compile(() => flight.MeanAltitude > 1000)),
+                    e.Assign(above, connection.Compile(
+                        () => flight.MeanAltitude > 1000)),
                     "KRPC", "ObjectNotLoadedException", null,
                     e.Assign(above, e.ConstantBool(false))),
                 above

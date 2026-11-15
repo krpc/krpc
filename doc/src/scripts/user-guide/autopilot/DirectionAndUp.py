@@ -14,7 +14,7 @@ ap.set_direction_and_up((1, 0, 0), up, 0)
 ap.engaged = True
 ap.wait()
 
-# ease over towards the eastern horizon; roll stays defined through the vertical
+# ease over to the eastern horizon; roll stays defined through vertical
 for i in range(1, 91):
     pitch = math.radians(90 - i)  # 90° down to 0°
     direction = (math.sin(pitch), 0, math.cos(pitch))

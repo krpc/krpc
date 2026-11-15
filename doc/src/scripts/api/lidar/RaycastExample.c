@@ -23,7 +23,8 @@ int main() {
   krpc_tuple_double_double_double_t origin = {0, 0, 0};
   for (int i = 0; i < 8; i++) {
     double angle = (10 * i - 35) * pi / 180;
-    krpc_tuple_double_double_double_t direction = {sin(angle), -cos(angle), 0};
+    krpc_tuple_double_double_double_t direction = {sin(angle), -cos(angle),
+                                                   0};
     double distance;
     krpc_SpaceCenter_RaycastDistance(conn, &distance, &origin, &direction,
                                      frame);

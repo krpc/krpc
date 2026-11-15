@@ -20,8 +20,8 @@ int main() {
   krpc_KRPC_Expression_t value, expr;
   krpc_KRPC_Expression_Call(conn, &value, &site_info);
   krpc_free_procedure_call(&site_info);
-  krpc_KRPC_Expression_GetFieldByIndex(conn, &expr, value,
-                                       KRPC_FIELD_SPACECENTER_COMMNODE_NAME);
+  krpc_KRPC_Expression_GetFieldByIndex(
+      conn, &expr, value, KRPC_FIELD_SPACECENTER_COMMNODE_NAME);
   // [/docs]
 
   KRPC_FREE_LIST(control_path);

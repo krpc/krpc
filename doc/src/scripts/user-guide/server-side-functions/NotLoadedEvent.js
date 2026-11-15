@@ -21,7 +21,10 @@ const check = await Expression.tryCatch(
   null,
   await Expression.assign(above, await Expression.constantBool(false)),
 );
-const above1000m = await Expression.blockWithVariables([above], [check, above]);
+const above1000m = await Expression.blockWithVariables(
+  [above],
+  [check, above],
+);
 
 const event = await conn.addEvent(above1000m);
 await event.wait();

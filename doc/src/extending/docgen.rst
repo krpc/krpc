@@ -44,8 +44,8 @@ service's assembly (see :ref:`service-api-clientgen`). Then it writes a page for
 
 .. code-block:: sh
 
-   krpc-servicedefs --reference-dir=/path/to/ksp/KSP_Data/Managed -o LaunchControl.json \
-       LaunchControl LaunchControl.dll
+   krpc-servicedefs --reference-dir=/path/to/ksp/KSP_Data/Managed \
+       -o LaunchControl.json LaunchControl LaunchControl.dll
    krpc-docgen python order.txt LaunchControl.json \
        --page launch-control.tmpl python/launch-control.rst
 

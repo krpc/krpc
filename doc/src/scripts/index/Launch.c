@@ -19,7 +19,8 @@ int main() {
   char* name = NULL;
   krpc_SpaceCenter_Vessel_Name(conn, &name, vessel);
 
-  krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading(conn, auto_pilot, 90, 90);
+  krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading(conn, auto_pilot, 90,
+                                                   90);
   krpc_SpaceCenter_AutoPilot_set_Engaged(conn, auto_pilot, true);
   krpc_SpaceCenter_Control_set_Throttle(conn, control, 1);
   krpc_SpaceCenter_Control_ActivateNextStage(conn, NULL, control);

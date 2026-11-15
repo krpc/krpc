@@ -18,9 +18,11 @@ public class Launch {
       vessel.getControl().activateNextStage();
       System.out.println(vessel.getName() + " has launched");
 
-      ProcedureCall meanAltitude = connection.getCall(flight, "getMeanAltitude");
+      ProcedureCall meanAltitude =
+          connection.getCall(flight, "getMeanAltitude");
       Expression.Bound e = Expression.bind(connection);
-      Expression expr = e.greaterThan(e.call(meanAltitude), e.constantDouble(10000));
+      Expression expr = e.greaterThan(
+          e.call(meanAltitude), e.constantDouble(10000));
       Event event = connection.addEvent(expr);
       synchronized (event.getCondition()) {
         event.waitFor();

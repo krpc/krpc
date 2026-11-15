@@ -10,12 +10,14 @@ class Program {
 
         // [docs]
         var e = Expression.Bind(connection);
-        var altitude = e.Variable("altitude", Type.Bind(connection).Double());
+        var altitude = e.Variable(
+            "altitude", Type.Bind(connection).Double());
         var function = e.BlockWithVariables(
             new List<Expression> { altitude },
             new List<Expression> {
                 e.TryCatch(
-                    e.Assign(altitude, connection.Compile(() => flight.MeanAltitude / 1000)),
+                    e.Assign(altitude, connection.Compile(
+                        () => flight.MeanAltitude / 1000)),
                     "KRPC", "ObjectNotLoadedException", null,
                     e.Assign(altitude, e.ConstantDouble(0))),
                 altitude

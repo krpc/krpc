@@ -21,7 +21,8 @@ int main() {
   krpc_SpaceCenter_CelestialBody_t body;
   krpc_SpaceCenter_Orbit_Body(conn, &body, orbit);
   double coverage;
-  krpc_ScanSat_Coverage(conn, &coverage, body, KRPC_SCANSAT_SCANTYPE_ALTIMETRY);
+  krpc_ScanSat_Coverage(conn, &coverage, body,
+                        KRPC_SCANSAT_SCANTYPE_ALTIMETRY);
   printf("Altimetry coverage: %.1f%%\n", coverage * 100);
 
   krpc_SpaceCenter_Flight_t flight;
@@ -30,7 +31,8 @@ int main() {
   bool isNull;
   krpc_SpaceCenter_Flight_Latitude(conn, &latitude, flight);
   krpc_SpaceCenter_Flight_Longitude(conn, &longitude, flight);
-  krpc_ScanSat_Elevation(conn, &elevation, &isNull, body, latitude, longitude);
+  krpc_ScanSat_Elevation(conn, &elevation, &isNull, body, latitude,
+                         longitude);
   if (isNull)
     printf("The terrain below the vessel is not scanned\n");
   else

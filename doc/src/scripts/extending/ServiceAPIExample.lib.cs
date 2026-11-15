@@ -11,7 +11,8 @@ namespace LaunchControl
     public static class LaunchControl
     {
         /// <summary>
-        /// The current throttle setting for the active vessel, between 0 and 1.
+        /// The current throttle setting for the active vessel,
+        /// between 0 and 1.
         /// </summary>
         [KRPCProperty]
         public static float Throttle {

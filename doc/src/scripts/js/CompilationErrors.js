@@ -6,7 +6,9 @@ const limit = 70000;
 
 try {
   // limit is read from the program, so it must be captured
-  await conn.compile(({ vessel }) => vessel.flight().meanAltitude > limit, { vessel });
+  await conn.compile(({ vessel }) => vessel.flight().meanAltitude > limit, {
+    vessel,
+  });
 } catch (error) {
   if (error instanceof CompilationError) {
     console.log(error.message);

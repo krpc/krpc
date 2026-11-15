@@ -102,7 +102,8 @@ For a client installed with vcpkg, pass the vcpkg toolchain file when you config
 
 .. code-block:: bash
 
-   cmake -B build -DCMAKE_TOOLCHAIN_FILE=/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake
+   cmake -B build \
+     -DCMAKE_TOOLCHAIN_FILE=/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake
 
 For a client installed in a directory of your choice, pass that directory as
 ``CMAKE_PREFIX_PATH``, so that ``find_package`` finds the client there:
@@ -432,7 +433,8 @@ Each has a macro holding the pair, such as :macro:`KRPC_CLASS_SPACECENTER_ENGINE
 
 .. code-block:: c
 
-   krpc_KRPC_Type_ClassTypeById(conn, &engine_type, KRPC_CLASS_SPACECENTER_ENGINE);
+   krpc_KRPC_Type_ClassTypeById(conn, &engine_type,
+                                KRPC_CLASS_SPACECENTER_ENGINE);
 
 :func:`krpc_KRPC_Expression_GetFieldByIndex` reads a field by its position in the structure.
 Each field has a macro holding its position, such as :macro:`KRPC_FIELD_SPACECENTER_COMMNODE_NAME`.

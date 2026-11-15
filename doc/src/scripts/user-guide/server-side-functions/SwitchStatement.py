@@ -11,13 +11,19 @@ types = conn.krpc.Type
 #         case _: total += 1
 total = expression.variable("total", types.int())
 x = expression.variable("x", types.int())
-values = expression.create_list([expression.constant_int(i) for i in [1, 2, 3]])
+values = expression.create_list(
+    [expression.constant_int(i) for i in [1, 2, 3]]
+)
 body = expression.match(
     x,
     [[expression.constant_int(1), expression.constant_int(2)], []],
     [
-        expression.assign(total, expression.add(total, expression.constant_int(10))),
-        expression.assign(total, expression.add(total, expression.constant_int(1))),
+        expression.assign(
+            total, expression.add(total, expression.constant_int(10))
+        ),
+        expression.assign(
+            total, expression.add(total, expression.constant_int(1))
+        ),
     ],
 )
 program = expression.block_with_variables(

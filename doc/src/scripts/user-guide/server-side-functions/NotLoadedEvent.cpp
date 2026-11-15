@@ -22,10 +22,11 @@ int main() {
   auto above_1000m = e.block_with_variables(
       std::vector<Expr>({above}),
       std::vector<Expr>(
-          {e.try_catch(e.assign(above, e.greater_than(altitude,
-                                                      e.constant_double(1000))),
-                       "KRPC", "ObjectNotLoadedException", std::nullopt,
-                       e.assign(above, e.constant_bool(false))),
+          {e.try_catch(
+               e.assign(above,
+                        e.greater_than(altitude, e.constant_double(1000))),
+               "KRPC", "ObjectNotLoadedException", std::nullopt,
+               e.assign(above, e.constant_bool(false))),
            above}));
 
   auto event = krpc::add_event(above_1000m);
