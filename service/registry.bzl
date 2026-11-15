@@ -392,6 +392,17 @@ MODS = [
             folders = ["CommunityResourcePack"],
         )],
     ),
+    # The RSS body textures, at the lowest of the four resolutions
+    mod(
+        name = "RSSTextures",
+        repo = "KSP-RO/RSS-Textures",
+        versions = [version(
+            "18.6.1",
+            source = "releases/download/v{version}/2048.zip",
+            sha256 = "96c789aeffa42ad685ee44fe694f9ad9b8e3f3cb2c738b5dbccff84aa660b2ef",
+            folders = ["RSS-Textures"],
+        )],
+    ),
 
     # The mods the services wrap
     # No version is pinned, as the LIDAR service has no in-game tests
@@ -773,6 +784,19 @@ MODS = [
             sha256 = "7a3adadede98a24c299429f91f887a7ed5221202e7490774056387b2c27fa80d",
             folders = ["Kopernicus"],
             requires = ["KSPTextureLoader", "ModularFlightIntegrator", "Harmony"],
+        )],
+    ),
+    # Real Solar System, the solar system at real scale, through Kopernicus
+    mod(
+        name = "RealSolarSystem",
+        title = "Real Solar System",
+        repo = "KSP-RO/RealSolarSystem",
+        versions = [version(
+            "20.2.0.0",
+            source = "releases/download/v{version}/RealSolarSystem_v{version}.zip",
+            sha256 = "a92bcb4fbd88e0cfb6d295e2927f8a23df22a69c4e50e7d74b5e8fd4a6b2d5a9",
+            folders = ["RealSolarSystem"],
+            requires = ["Kopernicus", "RSSTextures", "KSPCommunityFixes"],
         )],
     ),
 ]
