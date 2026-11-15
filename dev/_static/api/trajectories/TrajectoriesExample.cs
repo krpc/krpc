@@ -9,8 +9,8 @@ class TrajectoriesExample
     {
         using (var connection = new Connection ("Trajectories Example")) {
             var body = connection.SpaceCenter ().ActiveVessel.Orbit.Body;
-            Console.WriteLine (
-                connection.Trajectories ().ImpactPosition (body.ReferenceFrame));
+            Console.WriteLine (connection.Trajectories ()
+                .ImpactPosition (body.ReferenceFrame));
         }
     }
 }

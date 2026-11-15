@@ -15,7 +15,9 @@ int main() {
   // A fan of 8 rays below the part, 10 degrees apart
   for (int i = 0; i < 8; i++) {
     double angle = (10 * i - 35) * pi / 180;
-    auto direction = std::make_tuple(std::sin(angle), -std::cos(angle), 0.0);
-    std::cout << sc.raycast_distance({0, 0, 0}, direction, frame) << std::endl;
+    auto direction =
+        std::make_tuple(std::sin(angle), -std::cos(angle), 0.0);
+    std::cout << sc.raycast_distance({0, 0, 0}, direction, frame)
+              << std::endl;
   }
 }

@@ -14,7 +14,8 @@ class Program {
         // [docs]
         // A C# lambda holds a single expression
         var stream = connection.AddStream (
-            () => vessel.Resources.Amount ("LiquidFuel") / vessel.Resources.Max ("LiquidFuel"));
+            () => vessel.Resources.Amount ("LiquidFuel") /
+                  vessel.Resources.Max ("LiquidFuel"));
         // [/docs]
     }
 }

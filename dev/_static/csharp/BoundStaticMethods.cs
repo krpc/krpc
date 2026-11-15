@@ -5,7 +5,8 @@ using KRPC.Client.Services.SpaceCenter;
 class Program {
     public static void Main() {
         using (var connection = new Connection()) {
-            var frame = connection.SpaceCenter().ActiveVessel.ReferenceFrame;
+            var frame =
+                connection.SpaceCenter().ActiveVessel.ReferenceFrame;
 
             // Bind the static methods to the connection once
             var orbit = Orbit.Bind(connection);

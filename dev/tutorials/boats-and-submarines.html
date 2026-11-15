@@ -596,8 +596,10 @@ nose-up in the vehicle assembly building is simulated floating on its bottom:</p
 <span class="n">flight</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">flight</span><span class="p">(</span><span class="n">vessel</span><span class="o">.</span><span class="n">reference_frame</span><span class="p">)</span>
 <span class="c1"># The vessel frame's z axis points out of the bottom, so up is its -z axis</span>
 <span class="n">side</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
-<span class="n">flight</span><span class="o">.</span><span class="n">surface_reference_frame</span> <span class="o">=</span> <span class="n">space_center</span><span class="o">.</span><span class="n">ReferenceFrame</span><span class="o">.</span><span class="n">create_relative</span><span class="p">(</span>
-    <span class="n">vessel</span><span class="o">.</span><span class="n">reference_frame</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">side</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">side</span><span class="p">)</span>
+<span class="n">flight</span><span class="o">.</span><span class="n">surface_reference_frame</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">space_center</span><span class="o">.</span><span class="n">ReferenceFrame</span><span class="o">.</span><span class="n">create_relative</span><span class="p">(</span>
+        <span class="n">vessel</span><span class="o">.</span><span class="n">reference_frame</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">side</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">side</span><span class="p">)</span>
+    <span class="p">)</span>
 <span class="p">)</span>
 <span class="n">torque</span> <span class="o">=</span> <span class="n">flight</span><span class="o">.</span><span class="n">buoyant_torque_at</span><span class="p">(</span><span class="n">body</span><span class="o">.</span><span class="n">ocean_density</span><span class="p">,</span> <span class="n">body</span><span class="o">.</span><span class="n">surface_gravity</span><span class="p">)</span>
 </pre></div>
@@ -665,9 +667,9 @@ sits from its center of mass:</p>
 <span class="nb">print</span><span class="p">(</span><span class="s2">"Floats:        </span><span class="si">%s</span><span class="s2">"</span> <span class="o">%</span> <span class="p">(</span><span class="n">buoyancy</span> <span class="o">&gt;</span> <span class="n">weight</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">"Torque:        </span><span class="si">%.0f</span><span class="s2"> N m fully submerged"</span> <span class="o">%</span> <span class="n">math</span><span class="o">.</span><span class="n">hypot</span><span class="p">(</span><span class="o">*</span><span class="n">torque</span><span class="p">))</span>
 
-<span class="c1"># The trim, read in the surface reference frame. Its x axis points up, so the y and z</span>
-<span class="c1"># axes span the horizontal. A horizontal offset between the two centers tips the hull</span>
-<span class="c1"># until they line up again.</span>
+<span class="c1"># The trim, read in the surface reference frame. Its x axis points up, so</span>
+<span class="c1"># the y and z axes span the horizontal. A horizontal offset between the two</span>
+<span class="c1"># centers tips the hull until they line up again.</span>
 <span class="n">center_of_buoyancy</span> <span class="o">=</span> <span class="n">flight</span><span class="o">.</span><span class="n">center_of_buoyancy</span>
 
 <span class="k">if</span> <span class="n">center_of_buoyancy</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>

@@ -9,7 +9,8 @@ import krpc.client.services.SpaceCenter.Vessel;
 
 public class RemoteTechExample {
     public static void main(String[] args) {
-        Connection connection = Connection.newInstance("RemoteTech Example");
+        Connection connection =
+            Connection.newInstance("RemoteTech Example");
         SpaceCenter sc = SpaceCenter.newInstance(connection);
         RemoteTech rt = RemoteTech.newInstance(connection);
         Vessel vessel = sc.getActiveVessel();
@@ -21,7 +22,8 @@ public class RemoteTechExample {
 
         // Get info about the vessels communications
         Comms comms = rt.comms(vessel);
-        System.out.printf("Signal delay = %.1f seconds\n", comms.getSignalDelay());
+        System.out.printf(
+            "Signal delay = %.1f seconds\n", comms.getSignalDelay());
         connection.close();
     }
 }

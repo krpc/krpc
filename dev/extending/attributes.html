@@ -1225,10 +1225,14 @@ value itself. Each step names a position of the type the step before it reached,
 <span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Fleet</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="na">[KRPCProcedure]</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Assign</span><span class="w"> </span><span class="p">(</span>
-<span class="w">        </span><span class="na">[KRPCNullable (Element)]</span><span class="w"> </span><span class="n">IList</span><span class="o">&lt;</span><span class="n">Vessel</span><span class="o">&gt;</span><span class="w"> </span><span class="n">crew</span><span class="p">,</span><span class="w"> </span><span class="c1">// the vessels may be null</span>
-<span class="w">        </span><span class="na">[KRPCNullable (Value)]</span><span class="w"> </span><span class="n">IDictionary</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="n">Vessel</span><span class="o">&gt;</span><span class="w"> </span><span class="n">byName</span><span class="p">,</span><span class="w"> </span><span class="c1">// the values may be null</span>
-<span class="w">        </span><span class="na">[KRPCNullable (Item2)]</span><span class="w"> </span><span class="n">Tuple</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="n">Vessel</span><span class="o">&gt;</span><span class="w"> </span><span class="n">named</span><span class="p">,</span><span class="w"> </span><span class="c1">// the second item may be null</span>
-<span class="w">        </span><span class="na">[KRPCNullable (Element, Element)]</span><span class="w"> </span><span class="n">IList</span><span class="o">&lt;</span><span class="n">IList</span><span class="o">&lt;</span><span class="n">Vessel</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">byStage</span><span class="p">)</span><span class="w"> </span><span class="c1">// the vessels may be null</span>
+<span class="w">        </span><span class="na">[KRPCNullable (Element)]</span>
+<span class="w">        </span><span class="n">IList</span><span class="o">&lt;</span><span class="n">Vessel</span><span class="o">&gt;</span><span class="w"> </span><span class="n">crew</span><span class="p">,</span><span class="w"> </span><span class="c1">// the vessels may be null</span>
+<span class="w">        </span><span class="na">[KRPCNullable (Value)]</span>
+<span class="w">        </span><span class="n">IDictionary</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="n">Vessel</span><span class="o">&gt;</span><span class="w"> </span><span class="n">byName</span><span class="p">,</span><span class="w"> </span><span class="c1">// the values may be null</span>
+<span class="w">        </span><span class="na">[KRPCNullable (Item2)]</span>
+<span class="w">        </span><span class="n">Tuple</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="n">Vessel</span><span class="o">&gt;</span><span class="w"> </span><span class="n">named</span><span class="p">,</span><span class="w"> </span><span class="c1">// the second item may be null</span>
+<span class="w">        </span><span class="na">[KRPCNullable (Element, Element)]</span>
+<span class="w">        </span><span class="n">IList</span><span class="o">&lt;</span><span class="n">IList</span><span class="o">&lt;</span><span class="n">Vessel</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">byStage</span><span class="p">)</span><span class="w"> </span><span class="c1">// the vessels may be null</span>
 <span class="w">    </span><span class="p">{</span>
 <span class="w">        </span><span class="c1">// ...</span>
 <span class="w">    </span><span class="p">}</span>
@@ -1266,7 +1270,7 @@ cannot be made nullable. The positions are:</p>
 <p>The attribute may be applied more than once, for a type with several nullable positions:</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="na">[KRPCNullable]</span>
 <span class="na">[KRPCNullable (Element)]</span>
-<span class="n">IList</span><span class="o">&lt;</span><span class="n">Vessel</span><span class="o">&gt;</span><span class="w"> </span><span class="n">maybeVessels</span><span class="w">                                        </span><span class="c1">// the list, and its vessels</span>
+<span class="n">IList</span><span class="o">&lt;</span><span class="n">Vessel</span><span class="o">&gt;</span><span class="w"> </span><span class="n">maybeVessels</span><span class="w"> </span><span class="c1">// the list, and its vessels</span>
 </pre></div>
 </div>
 <p>A nested position whose type is <code class="docutils literal notranslate"><span class="pre">Nullable&lt;T&gt;</span></code> needs no attribute, exactly as a parameter of that

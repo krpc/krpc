@@ -18,7 +18,8 @@ int main() {
 
   // Build a function that reads the altitude and the speed
   auto e = krpc::services::KRPC::Expression::bind(conn);
-  auto expr = e.create_tuple({e.call(mean_altitude_call), e.call(speed_call)});
+  auto expr =
+      e.create_tuple({e.call(mean_altitude_call), e.call(speed_call)});
 
   // Run the function once, so both values come from the same physics tick
   auto [altitude, speed] = krpc::run<std::tuple<double, double>>(expr);

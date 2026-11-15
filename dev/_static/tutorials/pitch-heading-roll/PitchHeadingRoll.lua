@@ -32,10 +32,12 @@ end
 
 while true do
 
-    local vessel_direction = vessel:direction(vessel.surface_reference_frame)
+    local vessel_direction =
+        vessel:direction(vessel.surface_reference_frame)
 
     -- Get the direction of the vessel in the horizon plane
-    local horizon_direction = List{0, vessel_direction[2], vessel_direction[3]}
+    local horizon_direction =
+        List{0, vessel_direction[2], vessel_direction[3]}
 
     -- Compute the pitch - the angle between the vessels direction and
     -- the direction in the horizon plane
@@ -59,7 +61,8 @@ while true do
     local plane_normal = cross_product(vessel_direction, up)
     -- Compute the upwards direction of the vessel
     local vessel_up = conn.space_center.transform_direction(
-        List{0, 0, -1}, vessel.reference_frame, vessel.surface_reference_frame)
+        List{0, 0, -1}, vessel.reference_frame,
+        vessel.surface_reference_frame)
     -- Compute the angle between the upwards direction of
     -- the vessel and the plane normal
     local roll = angle_between_vectors(vessel_up, plane_normal)

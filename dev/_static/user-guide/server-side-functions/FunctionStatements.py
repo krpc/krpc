@@ -7,7 +7,9 @@ types = conn.krpc.Type
 # total = 0; for x in [1, 2, 3]: total += x
 total = expression.variable("total", types.int())
 x = expression.variable("x", types.int())
-values = expression.create_list([expression.constant_int(i) for i in [1, 2, 3]])
+values = expression.create_list(
+    [expression.constant_int(i) for i in [1, 2, 3]]
+)
 program = expression.block_with_variables(
     [total, x],
     [

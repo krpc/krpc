@@ -576,7 +576,9 @@ output.</p>
         <span class="n">stdscr</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
         <span class="n">stdscr</span><span class="o">.</span><span class="n">addstr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"-- Docking Guidance --"</span><span class="p">)</span>
 
-        <span class="n">current</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">controlling</span><span class="o">.</span><span class="n">docking_port</span>
+        <span class="n">current</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">controlling</span><span class="o">.</span><span class="n">docking_port</span>
+        <span class="p">)</span>
         <span class="n">target</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">target_docking_port</span>
 
         <span class="k">if</span> <span class="n">current</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -624,20 +626,30 @@ output.</p>
                 <span class="n">state</span> <span class="o">=</span> <span class="s2">"Ready to dock"</span>
             <span class="k">elif</span> <span class="n">current</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">DockingPortState</span><span class="o">.</span><span class="n">docked</span><span class="p">:</span>
                 <span class="n">state</span> <span class="o">=</span> <span class="s2">"Docked"</span>
-            <span class="k">elif</span> <span class="n">current</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">DockingPortState</span><span class="o">.</span><span class="n">docking</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="p">(</span>
+                <span class="n">current</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">DockingPortState</span><span class="o">.</span><span class="n">docking</span>
+            <span class="p">):</span>
                 <span class="n">state</span> <span class="o">=</span> <span class="s2">"Docking..."</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">state</span> <span class="o">=</span> <span class="s2">"Unknown"</span>
 
             <span class="c1"># Output information</span>
             <span class="n">stdscr</span><span class="o">.</span><span class="n">addstr</span><span class="p">(</span>
-                <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"Current ship: </span><span class="si">{:30}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">current</span><span class="o">.</span><span class="n">part</span><span class="o">.</span><span class="n">vessel</span><span class="o">.</span><span class="n">name</span><span class="p">[:</span><span class="mi">30</span><span class="p">])</span>
+                <span class="mi">2</span><span class="p">,</span>
+                <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">"Current ship: </span><span class="si">{:30}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">current</span><span class="o">.</span><span class="n">part</span><span class="o">.</span><span class="n">vessel</span><span class="o">.</span><span class="n">name</span><span class="p">[:</span><span class="mi">30</span><span class="p">]),</span>
             <span class="p">)</span>
-            <span class="n">stdscr</span><span class="o">.</span><span class="n">addstr</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"Current port: </span><span class="si">{:30}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">current</span><span class="o">.</span><span class="n">part</span><span class="o">.</span><span class="n">title</span><span class="p">[:</span><span class="mi">30</span><span class="p">]))</span>
             <span class="n">stdscr</span><span class="o">.</span><span class="n">addstr</span><span class="p">(</span>
-                <span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"Target ship:  </span><span class="si">{:30}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">part</span><span class="o">.</span><span class="n">vessel</span><span class="o">.</span><span class="n">name</span><span class="p">[:</span><span class="mi">30</span><span class="p">])</span>
+                <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"Current port: </span><span class="si">{:30}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">current</span><span class="o">.</span><span class="n">part</span><span class="o">.</span><span class="n">title</span><span class="p">[:</span><span class="mi">30</span><span class="p">])</span>
             <span class="p">)</span>
-            <span class="n">stdscr</span><span class="o">.</span><span class="n">addstr</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"Target port:  </span><span class="si">{:30}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">part</span><span class="o">.</span><span class="n">title</span><span class="p">[:</span><span class="mi">30</span><span class="p">]))</span>
+            <span class="n">stdscr</span><span class="o">.</span><span class="n">addstr</span><span class="p">(</span>
+                <span class="mi">5</span><span class="p">,</span>
+                <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">"Target ship:  </span><span class="si">{:30}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">part</span><span class="o">.</span><span class="n">vessel</span><span class="o">.</span><span class="n">name</span><span class="p">[:</span><span class="mi">30</span><span class="p">]),</span>
+            <span class="p">)</span>
+            <span class="n">stdscr</span><span class="o">.</span><span class="n">addstr</span><span class="p">(</span>
+                <span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"Target port:  </span><span class="si">{:30}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">part</span><span class="o">.</span><span class="n">title</span><span class="p">[:</span><span class="mi">30</span><span class="p">])</span>
+            <span class="p">)</span>
             <span class="n">stdscr</span><span class="o">.</span><span class="n">addstr</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"Status: </span><span class="si">{:10}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">state</span><span class="p">))</span>
             <span class="n">stdscr</span><span class="o">.</span><span class="n">addstr</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"          +---------------------------+"</span><span class="p">)</span>
             <span class="n">stdscr</span><span class="o">.</span><span class="n">addstr</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"          |  Distance  |  Speed       |"</span><span class="p">)</span>
@@ -645,7 +657,9 @@ output.</p>
             <span class="n">stdscr</span><span class="o">.</span><span class="n">addstr</span><span class="p">(</span>
                 <span class="mi">13</span><span class="p">,</span>
                 <span class="mi">0</span><span class="p">,</span>
-                <span class="s2">"|         |  </span><span class="si">{:&gt;+6.2f}</span><span class="s2"> m  |  </span><span class="si">{:&gt;+6.2f}</span><span class="s2"> m/s  |"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">distance</span><span class="p">,</span> <span class="n">speed</span><span class="p">),</span>
+                <span class="s2">"|         |  </span><span class="si">{:&gt;+6.2f}</span><span class="s2"> m  |  </span><span class="si">{:&gt;+6.2f}</span><span class="s2"> m/s  |"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">distance</span><span class="p">,</span> <span class="n">speed</span>
+                <span class="p">),</span>
             <span class="p">)</span>
             <span class="n">stdscr</span><span class="o">.</span><span class="n">addstr</span><span class="p">(</span>
                 <span class="mi">14</span><span class="p">,</span>

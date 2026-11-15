@@ -13,11 +13,13 @@ class Program {
         var vessel = spaceCenter.ActiveVessel;
         // [docs]
         var e = Expression.Bind (connection);
-        // A C# lambda cannot throw, so the expression API builds the statement
-        // around a compiled condition
+        // A C# lambda cannot throw, so the expression API builds the
+        // statement around a compiled condition
         var checkFuel = e.IfThen (
-            connection.Compile (() => vessel.Resources.Amount ("LiquidFuel") < 100),
-            e.Throw ("KRPC", "InvalidOperationException", e.ConstantString ("not enough fuel")));
+            connection.Compile (
+                () => vessel.Resources.Amount ("LiquidFuel") < 100),
+            e.Throw ("KRPC", "InvalidOperationException",
+                     e.ConstantString ("not enough fuel")));
         // [/docs]
     }
 }

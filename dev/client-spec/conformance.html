@@ -666,11 +666,11 @@ requirement is the exception, as it can pass by chance. A parametrized test can 
 whole, or by its cases.</p>
 <p>A test name ending in <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> and a protocol is listed only over that protocol. An <code class="docutils literal notranslate"><span class="pre">&#64;flaky</span></code> after
 the test name marks a test the client fails only now and then, which may pass:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>test_connection.py::test_lost[partway]@serialio @flaky  # Raises an encoding error, except now and then
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>test_connection.py::test_lost[partway]@serialio @flaky  # An encoding error
 </pre></div>
 </div>
 <p>An <code class="docutils literal notranslate"><span class="pre">&#64;skip</span></code> after the test name marks a test that hangs the testee. The test is not run:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>test_concurrency.py::test_wait_holding_another @skip  # The update is never announced
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>test_concurrency.py::test_wait_holding_another @skip  # Never announced
 </pre></div>
 </div>
 </section>

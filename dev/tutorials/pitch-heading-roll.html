@@ -623,7 +623,10 @@ once per second.</p>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">roll</span> <span class="o">-=</span> <span class="mi">180</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="s2">"pitch = </span><span class="si">% 5.1f</span><span class="s2">, heading = </span><span class="si">% 5.1f</span><span class="s2">, roll = </span><span class="si">% 5.1f</span><span class="s2">"</span> <span class="o">%</span> <span class="p">(</span><span class="n">pitch</span><span class="p">,</span> <span class="n">heading</span><span class="p">,</span> <span class="n">roll</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="s2">"pitch = </span><span class="si">% 5.1f</span><span class="s2">, heading = </span><span class="si">% 5.1f</span><span class="s2">, roll = </span><span class="si">% 5.1f</span><span class="s2">"</span>
+        <span class="o">%</span> <span class="p">(</span><span class="n">pitch</span><span class="p">,</span> <span class="n">heading</span><span class="p">,</span> <span class="n">roll</span><span class="p">)</span>
+    <span class="p">)</span>
 
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
@@ -671,15 +674,17 @@ once per second.</p>
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conn</span><span class="p">.</span><span class="n">SpaceCenter</span><span class="w"> </span><span class="p">().</span><span class="n">ActiveVessel</span><span class="p">;</span>
 
 <span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="k">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">vesselDirection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">Direction</span><span class="w"> </span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="n">SurfaceReferenceFrame</span><span class="p">);</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">vesselDirection</span><span class="w"> </span><span class="o">=</span>
+<span class="w">                </span><span class="n">vessel</span><span class="p">.</span><span class="n">Direction</span><span class="w"> </span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="n">SurfaceReferenceFrame</span><span class="p">);</span>
 
 <span class="w">            </span><span class="c1">// Get the direction of the vessel in the horizon plane</span>
 <span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">horizonDirection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Vector3</span><span class="w"> </span><span class="p">(</span>
 <span class="w">                </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">vesselDirection</span><span class="p">.</span><span class="n">Item2</span><span class="p">,</span><span class="w"> </span><span class="n">vesselDirection</span><span class="p">.</span><span class="n">Item3</span><span class="p">);</span>
 
-<span class="w">            </span><span class="c1">// Compute the pitch - the angle between the vessels direction and</span>
-<span class="w">            </span><span class="c1">// the direction in the horizon plane</span>
-<span class="w">            </span><span class="kt">double</span><span class="w"> </span><span class="n">pitch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">AngleBetweenVectors</span><span class="w"> </span><span class="p">(</span><span class="n">vesselDirection</span><span class="p">,</span><span class="w"> </span><span class="n">horizonDirection</span><span class="p">);</span>
+<span class="w">            </span><span class="c1">// Compute the pitch - the angle between the vessels direction</span>
+<span class="w">            </span><span class="c1">// and the direction in the horizon plane</span>
+<span class="w">            </span><span class="kt">double</span><span class="w"> </span><span class="n">pitch</span><span class="w"> </span><span class="o">=</span>
+<span class="w">                </span><span class="n">AngleBetweenVectors</span><span class="w"> </span><span class="p">(</span><span class="n">vesselDirection</span><span class="p">,</span><span class="w"> </span><span class="n">horizonDirection</span><span class="p">);</span>
 <span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">vesselDirection</span><span class="p">.</span><span class="n">Item1</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
 <span class="w">                </span><span class="n">pitch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">pitch</span><span class="p">;</span>
 
@@ -711,8 +716,9 @@ once per second.</p>
 <span class="w">            </span><span class="k">else</span>
 <span class="w">                </span><span class="n">roll</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="mi">180</span><span class="p">;</span>
 
-<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="w"> </span><span class="p">(</span><span class="s">"pitch = {0:F1}, heading = {1:F1}, roll = {2:F1}"</span><span class="p">,</span>
-<span class="w">                               </span><span class="n">pitch</span><span class="p">,</span><span class="w"> </span><span class="n">heading</span><span class="p">,</span><span class="w"> </span><span class="n">roll</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="w"> </span><span class="p">(</span>
+<span class="w">                </span><span class="s">"pitch = {0:F1}, heading = {1:F1}, roll = {2:F1}"</span><span class="p">,</span>
+<span class="w">                </span><span class="n">pitch</span><span class="p">,</span><span class="w"> </span><span class="n">heading</span><span class="p">,</span><span class="w"> </span><span class="n">roll</span><span class="p">);</span>
 
 <span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="n">Threading</span><span class="p">.</span><span class="n">Thread</span><span class="p">.</span><span class="n">Sleep</span><span class="w"> </span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
 <span class="w">        </span><span class="p">}</span>
@@ -770,7 +776,8 @@ once per second.</p>
 
 <span class="w">    </span><span class="c1">// Compute the pitch - the angle between the vessels direction</span>
 <span class="w">    </span><span class="c1">// and the direction in the horizon plane</span>
-<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">pitch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">angle_between_vectors</span><span class="p">(</span><span class="n">vessel_direction</span><span class="p">,</span><span class="w"> </span><span class="n">horizon_direction</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">pitch</span><span class="w"> </span><span class="o">=</span>
+<span class="w">        </span><span class="n">angle_between_vectors</span><span class="p">(</span><span class="n">vessel_direction</span><span class="p">,</span><span class="w"> </span><span class="n">horizon_direction</span><span class="p">);</span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">&gt;</span><span class="p">(</span><span class="n">vessel_direction</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="n">pitch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">pitch</span><span class="p">;</span>
 
 <span class="w">    </span><span class="c1">// Compute the heading - the angle between north</span>
@@ -859,14 +866,17 @@ once per second.</p>
 
 <span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">vector3</span><span class="w"> </span><span class="n">vessel_direction</span><span class="p">;</span>
-<span class="w">    </span><span class="n">krpc_SpaceCenter_Vessel_Direction</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">vessel_direction</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">,</span><span class="w"> </span><span class="n">srf_ref</span><span class="p">);</span>
+<span class="w">    </span><span class="n">krpc_SpaceCenter_Vessel_Direction</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">vessel_direction</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">,</span>
+<span class="w">                                      </span><span class="n">srf_ref</span><span class="p">);</span>
 
 <span class="w">    </span><span class="c1">// Get the direction of the vessel in the horizon plane</span>
-<span class="w">    </span><span class="n">vector3</span><span class="w"> </span><span class="n">horizon_direction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">vessel_direction</span><span class="p">.</span><span class="n">e1</span><span class="p">,</span><span class="w"> </span><span class="n">vessel_direction</span><span class="p">.</span><span class="n">e2</span><span class="p">};</span>
+<span class="w">    </span><span class="n">vector3</span><span class="w"> </span><span class="n">horizon_direction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">vessel_direction</span><span class="p">.</span><span class="n">e1</span><span class="p">,</span>
+<span class="w">                                 </span><span class="n">vessel_direction</span><span class="p">.</span><span class="n">e2</span><span class="p">};</span>
 
 <span class="w">    </span><span class="c1">// Compute the pitch - the angle between the vessels direction</span>
 <span class="w">    </span><span class="c1">// and the direction in the horizon plane</span>
-<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">pitch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">angle_between_vectors</span><span class="p">(</span><span class="n">vessel_direction</span><span class="p">,</span><span class="w"> </span><span class="n">horizon_direction</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">pitch</span><span class="w"> </span><span class="o">=</span>
+<span class="w">        </span><span class="n">angle_between_vectors</span><span class="p">(</span><span class="n">vessel_direction</span><span class="p">,</span><span class="w"> </span><span class="n">horizon_direction</span><span class="p">);</span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">vessel_direction</span><span class="p">.</span><span class="n">e0</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="n">pitch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">pitch</span><span class="p">;</span>
 
 <span class="w">    </span><span class="c1">// Compute the heading - the angle between north</span>
@@ -897,7 +907,8 @@ once per second.</p>
 <span class="w">    </span><span class="k">else</span>
 <span class="w">      </span><span class="n">roll</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="mi">180</span><span class="p">;</span>
 
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"pitch = %.1f, heading = %.1f, roll = %.1f</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">pitch</span><span class="p">,</span><span class="w"> </span><span class="n">heading</span><span class="p">,</span><span class="w"> </span><span class="n">roll</span><span class="p">);</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"pitch = %.1f, heading = %.1f, roll = %.1f</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">pitch</span><span class="p">,</span><span class="w"> </span><span class="n">heading</span><span class="p">,</span>
+<span class="w">           </span><span class="n">roll</span><span class="p">);</span>
 <span class="w">    </span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
@@ -956,11 +967,13 @@ once per second.</p>
 <span class="w">            </span><span class="c1">// Get the direction of the vessel in the horizon plane</span>
 <span class="w">            </span><span class="n">Triplet</span><span class="o">&lt;</span><span class="n">Double</span><span class="p">,</span><span class="n">Double</span><span class="p">,</span><span class="n">Double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">horizonDirection</span><span class="w"> </span><span class="o">=</span>
 <span class="w">                </span><span class="k">new</span><span class="w"> </span><span class="n">Triplet</span><span class="o">&lt;</span><span class="n">Double</span><span class="p">,</span><span class="n">Double</span><span class="p">,</span><span class="n">Double</span><span class="o">&gt;</span><span class="p">(</span>
-<span class="w">                    </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="n">vesselDirection</span><span class="p">.</span><span class="na">getValue1</span><span class="p">(),</span><span class="w"> </span><span class="n">vesselDirection</span><span class="p">.</span><span class="na">getValue2</span><span class="p">());</span>
+<span class="w">                    </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="n">vesselDirection</span><span class="p">.</span><span class="na">getValue1</span><span class="p">(),</span>
+<span class="w">                    </span><span class="n">vesselDirection</span><span class="p">.</span><span class="na">getValue2</span><span class="p">());</span>
 
 <span class="w">            </span><span class="c1">// Compute the pitch - the angle between the vessels direction</span>
 <span class="w">            </span><span class="c1">// and the direction in the horizon plane</span>
-<span class="w">            </span><span class="kt">double</span><span class="w"> </span><span class="n">pitch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">angleBetweenVectors</span><span class="p">(</span><span class="n">vesselDirection</span><span class="p">,</span><span class="w"> </span><span class="n">horizonDirection</span><span class="p">);</span>
+<span class="w">            </span><span class="kt">double</span><span class="w"> </span><span class="n">pitch</span><span class="w"> </span><span class="o">=</span>
+<span class="w">                </span><span class="n">angleBetweenVectors</span><span class="p">(</span><span class="n">vesselDirection</span><span class="p">,</span><span class="w"> </span><span class="n">horizonDirection</span><span class="p">);</span>
 <span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">vesselDirection</span><span class="p">.</span><span class="na">getValue0</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">                </span><span class="n">pitch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">pitch</span><span class="p">;</span>
 <span class="w">            </span><span class="p">}</span>
@@ -982,9 +995,11 @@ once per second.</p>
 <span class="w">            </span><span class="n">Triplet</span><span class="o">&lt;</span><span class="n">Double</span><span class="p">,</span><span class="n">Double</span><span class="p">,</span><span class="n">Double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">planeNormal</span><span class="w"> </span><span class="o">=</span>
 <span class="w">                </span><span class="n">crossProduct</span><span class="p">(</span><span class="n">vesselDirection</span><span class="p">,</span><span class="w"> </span><span class="n">up</span><span class="p">);</span>
 <span class="w">            </span><span class="c1">// Compute the upwards direction of the vessel</span>
-<span class="w">            </span><span class="n">Triplet</span><span class="o">&lt;</span><span class="n">Double</span><span class="p">,</span><span class="n">Double</span><span class="p">,</span><span class="n">Double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">vesselUp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="na">transformDirection</span><span class="p">(</span>
-<span class="w">                </span><span class="k">new</span><span class="w"> </span><span class="n">Triplet</span><span class="o">&lt;</span><span class="n">Double</span><span class="p">,</span><span class="n">Double</span><span class="p">,</span><span class="n">Double</span><span class="o">&gt;</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="o">-</span><span class="mf">1.0</span><span class="p">),</span>
-<span class="w">                </span><span class="n">vessel</span><span class="p">.</span><span class="na">getReferenceFrame</span><span class="p">(),</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="na">getSurfaceReferenceFrame</span><span class="p">());</span>
+<span class="w">            </span><span class="n">Triplet</span><span class="o">&lt;</span><span class="n">Double</span><span class="p">,</span><span class="n">Double</span><span class="p">,</span><span class="n">Double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">vesselUp</span><span class="w"> </span><span class="o">=</span>
+<span class="w">                </span><span class="n">spaceCenter</span><span class="p">.</span><span class="na">transformDirection</span><span class="p">(</span>
+<span class="w">                    </span><span class="k">new</span><span class="w"> </span><span class="n">Triplet</span><span class="o">&lt;</span><span class="n">Double</span><span class="p">,</span><span class="n">Double</span><span class="p">,</span><span class="n">Double</span><span class="o">&gt;</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="o">-</span><span class="mf">1.0</span><span class="p">),</span>
+<span class="w">                    </span><span class="n">vessel</span><span class="p">.</span><span class="na">getReferenceFrame</span><span class="p">(),</span>
+<span class="w">                    </span><span class="n">vessel</span><span class="p">.</span><span class="na">getSurfaceReferenceFrame</span><span class="p">());</span>
 <span class="w">            </span><span class="c1">// Compute the angle between the upwards direction</span>
 <span class="w">            </span><span class="c1">// of the vessel and the plane normal</span>
 <span class="w">            </span><span class="kt">double</span><span class="w"> </span><span class="n">roll</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">angleBetweenVectors</span><span class="p">(</span><span class="n">vesselUp</span><span class="p">,</span><span class="w"> </span><span class="n">planeNormal</span><span class="p">);</span>
@@ -1040,10 +1055,12 @@ once per second.</p>
 
 <span class="kr">while</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="kr">do</span>
 
-<span class="w">    </span><span class="kd">local</span><span class="w"> </span><span class="nv">vessel_direction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">vessel</span><span class="p">:</span><span class="nf">direction</span><span class="p">(</span><span class="nv">vessel</span><span class="p">.</span><span class="py">surface_reference_frame</span><span class="p">)</span>
+<span class="w">    </span><span class="kd">local</span><span class="w"> </span><span class="nv">vessel_direction</span><span class="w"> </span><span class="o">=</span>
+<span class="w">        </span><span class="nv">vessel</span><span class="p">:</span><span class="nf">direction</span><span class="p">(</span><span class="nv">vessel</span><span class="p">.</span><span class="py">surface_reference_frame</span><span class="p">)</span>
 
 <span class="w">    </span><span class="c1">-- Get the direction of the vessel in the horizon plane</span>
-<span class="w">    </span><span class="kd">local</span><span class="w"> </span><span class="nv">horizon_direction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">List</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nv">vessel_direction</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="w"> </span><span class="nv">vessel_direction</span><span class="p">[</span><span class="mi">3</span><span class="p">]}</span>
+<span class="w">    </span><span class="kd">local</span><span class="w"> </span><span class="nv">horizon_direction</span><span class="w"> </span><span class="o">=</span>
+<span class="w">        </span><span class="nv">List</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nv">vessel_direction</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="w"> </span><span class="nv">vessel_direction</span><span class="p">[</span><span class="mi">3</span><span class="p">]}</span>
 
 <span class="w">    </span><span class="c1">-- Compute the pitch - the angle between the vessels direction and</span>
 <span class="w">    </span><span class="c1">-- the direction in the horizon plane</span>
@@ -1067,7 +1084,8 @@ once per second.</p>
 <span class="w">    </span><span class="kd">local</span><span class="w"> </span><span class="nv">plane_normal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">cross_product</span><span class="p">(</span><span class="nv">vessel_direction</span><span class="p">,</span><span class="w"> </span><span class="nv">up</span><span class="p">)</span>
 <span class="w">    </span><span class="c1">-- Compute the upwards direction of the vessel</span>
 <span class="w">    </span><span class="kd">local</span><span class="w"> </span><span class="nv">vessel_up</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">space_center</span><span class="p">.</span><span class="nf">transform_direction</span><span class="p">(</span>
-<span class="w">        </span><span class="nv">List</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">},</span><span class="w"> </span><span class="nv">vessel</span><span class="p">.</span><span class="py">reference_frame</span><span class="p">,</span><span class="w"> </span><span class="nv">vessel</span><span class="p">.</span><span class="py">surface_reference_frame</span><span class="p">)</span>
+<span class="w">        </span><span class="nv">List</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">},</span><span class="w"> </span><span class="nv">vessel</span><span class="p">.</span><span class="py">reference_frame</span><span class="p">,</span>
+<span class="w">        </span><span class="nv">vessel</span><span class="p">.</span><span class="py">surface_reference_frame</span><span class="p">)</span>
 <span class="w">    </span><span class="c1">-- Compute the angle between the upwards direction of</span>
 <span class="w">    </span><span class="c1">-- the vessel and the plane normal</span>
 <span class="w">    </span><span class="kd">local</span><span class="w"> </span><span class="nv">roll</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">angle_between_vectors</span><span class="p">(</span><span class="nv">vessel_up</span><span class="p">,</span><span class="w"> </span><span class="nv">plane_normal</span><span class="p">)</span>

@@ -614,7 +614,8 @@ free port, and prints it as <code class="docutils literal notranslate"><span cla
 <p><code class="docutils literal notranslate"><span class="pre">--type</span></code> picks the <a class="reference internal" href="../communication-protocols.html"><span class="doc">communication protocol</span></a>: <code class="docutils literal notranslate"><span class="pre">protobuf</span></code> for
 TCP/IP (the default), <code class="docutils literal notranslate"><span class="pre">localsocket</span></code>, <code class="docutils literal notranslate"><span class="pre">websockets</span></code> or <code class="docutils literal notranslate"><span class="pre">serialio</span></code>. Here the server takes
 clients over websockets and TCP/IP at the same time:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>krpc-testserver<span class="w"> </span>--type<span class="o">=</span>websockets,protobuf<span class="w"> </span>--websockets-port<span class="o">=</span><span class="m">50001</span><span class="w"> </span>--tcpip-port<span class="o">=</span><span class="m">50000</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>krpc-testserver<span class="w"> </span>--type<span class="o">=</span>websockets,protobuf<span class="w"> </span>--websockets-port<span class="o">=</span><span class="m">50001</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--tcpip-port<span class="o">=</span><span class="m">50000</span>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">--localsocket-path</span></code> names the socket of a local socket server, and <code class="docutils literal notranslate"><span class="pre">--serialio-port</span></code> the

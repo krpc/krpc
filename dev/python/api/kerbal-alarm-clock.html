@@ -1598,7 +1598,9 @@ set to trigger after 10 seconds have passed, and display a message.</p>
 <span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"Kerbal Alarm Clock Example"</span><span class="p">)</span>
 
 <span class="n">alarm</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">kerbal_alarm_clock</span><span class="o">.</span><span class="n">create_alarm</span><span class="p">(</span>
-    <span class="n">conn</span><span class="o">.</span><span class="n">kerbal_alarm_clock</span><span class="o">.</span><span class="n">AlarmType</span><span class="o">.</span><span class="n">raw</span><span class="p">,</span> <span class="s2">"My New Alarm"</span><span class="p">,</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">ut</span> <span class="o">+</span> <span class="mi">10</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">kerbal_alarm_clock</span><span class="o">.</span><span class="n">AlarmType</span><span class="o">.</span><span class="n">raw</span><span class="p">,</span>
+    <span class="s2">"My New Alarm"</span><span class="p">,</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">ut</span> <span class="o">+</span> <span class="mi">10</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="n">alarm</span><span class="o">.</span><span class="n">notes</span> <span class="o">=</span> <span class="s2">"10 seconds have now passed since the alarm was created."</span>

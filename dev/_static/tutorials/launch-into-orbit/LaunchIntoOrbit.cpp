@@ -47,13 +47,15 @@ int main() {
   double turn_angle = 0;
   while (true) {
     // Gravity turn
-    if (altitude() > turn_start_altitude && altitude() < turn_end_altitude) {
+    if (altitude() > turn_start_altitude &&
+        altitude() < turn_end_altitude) {
       double frac = (altitude() - turn_start_altitude) /
                     (turn_end_altitude - turn_start_altitude);
       double new_turn_angle = frac * 90.0;
       if (std::abs(new_turn_angle - turn_angle) > 0.5) {
         turn_angle = new_turn_angle;
-        vessel.auto_pilot().target_pitch_and_heading(90.0 - turn_angle, 90.0);
+        vessel.auto_pilot().target_pitch_and_heading(90.0 - turn_angle,
+                                                     90.0);
       }
     }
 
@@ -77,9 +79,9 @@ int main() {
   vessel.control().set_throttle(0.25);
   auto e = krpc::services::KRPC::Expression::bind(conn);
   {
-    auto expr =
-        e.greater_than_or_equal(e.call(vessel.orbit().apoapsis_altitude_call()),
-                                e.constant_double(target_altitude));
+    auto expr = e.greater_than_or_equal(
+        e.call(vessel.orbit().apoapsis_altitude_call()),
+        e.constant_double(target_altitude));
     auto event = krpc::add_event(expr);
     event.acquire();
     event.wait();
@@ -92,7 +94,8 @@ int main() {
   std::cout << "Coasting out of atmosphere" << std::endl;
   {
     auto expr = e.greater_than_or_equal(
-        e.call(vessel.flight().mean_altitude_call()), e.constant_double(70500));
+        e.call(vessel.flight().mean_altitude_call()),
+        e.constant_double(70500));
     auto event = krpc::add_event(expr);
     event.acquire();
     event.wait();
@@ -127,7 +130,8 @@ int main() {
 
   // Wait until burn
   std::cout << "Waiting until circularization burn" << std::endl;
-  double burn_ut = ut() + vessel.orbit().time_to_apoapsis() - (burn_time / 2.0);
+  double burn_ut =
+      ut() + vessel.orbit().time_to_apoapsis() - (burn_time / 2.0);
   double lead_time = 5;
   space_center.warp_to(burn_ut - lead_time);
 
@@ -144,15 +148,15 @@ int main() {
   }
   std::cout << "Executing burn" << std::endl;
   vessel.control().set_throttle(1);
-  std::this_thread::sleep_for(
-      std::chrono::milliseconds(static_cast<int>((burn_time - 0.1) * 1000)));
+  std::this_thread::sleep_for(std::chrono::milliseconds(
+      static_cast<int>((burn_time - 0.1) * 1000)));
   std::cout << "Fine tuning" << std::endl;
   vessel.control().set_throttle(0.05);
   {
     auto remaining_burn =
         e.call(node.remaining_burn_vector_call(node.reference_frame()));
-    auto expr = e.less_than_or_equal(e.get(remaining_burn, e.constant_int(1)),
-                                     e.constant_double(0));
+    auto expr = e.less_than_or_equal(
+        e.get(remaining_burn, e.constant_int(1)), e.constant_double(0));
     auto event = krpc::add_event(expr);
     event.acquire();
     event.wait();

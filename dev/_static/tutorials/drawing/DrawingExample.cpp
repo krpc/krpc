@@ -33,8 +33,8 @@ int main() {
                          Drawing::MapMarkerIcon::flag, "North pole");
 
   // Draw a yellow arrow from the vessel, pointing prograde
-  auto arrow = drawing.add_direction_from_com(std::make_tuple(0, 1, 0),
-                                              vessel.orbital_reference_frame());
+  auto arrow = drawing.add_direction_from_com(
+      std::make_tuple(0, 1, 0), vessel.orbital_reference_frame());
   arrow.set_color(krpc::services::StdLib::ColorRGB(1, 1, 0));
   arrow.set_end_arrow(true);
 

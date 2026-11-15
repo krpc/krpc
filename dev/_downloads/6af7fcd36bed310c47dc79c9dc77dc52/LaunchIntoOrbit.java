@@ -25,13 +25,16 @@ public class LaunchIntoOrbit {
 
         // Set up streams for telemetry
         spaceCenter.getUT();
-        Stream<Double> ut = connection.addStream(SpaceCenter.class, "getUT");
+        Stream<Double> ut =
+            connection.addStream(SpaceCenter.class, "getUT");
         ReferenceFrame refFrame = vessel.getSurfaceReferenceFrame();
         Flight flight = vessel.flight(refFrame);
-        Stream<Double> altitude = connection.addStream(flight, "getMeanAltitude");
+        Stream<Double> altitude =
+            connection.addStream(flight, "getMeanAltitude");
         Stream<Double> apoapsis =
             connection.addStream(vessel.getOrbit(), "getApoapsisAltitude");
-        Resources stage2Resources = vessel.decoupleStageAt(2).resources(false);
+        Resources stage2Resources =
+            vessel.decoupleStageAt(2).resources(false);
         Stream<Float> srbFuel =
             connection.addStream(stage2Resources, "amount", "SolidFuel");
 
@@ -127,7 +130,8 @@ public class LaunchIntoOrbit {
         double v2 = Math.sqrt(mu * ((2.0 / r) - (1.0 / a2)));
         double deltaV = v2 - v1;
         Node node = vessel.getControl().addNode(
-          ut.get() + vessel.getOrbit().getTimeToApoapsis(), (float)deltaV, 0, 0);
+          ut.get() + vessel.getOrbit().getTimeToApoapsis(),
+          (float)deltaV, 0, 0);
 
         // Calculate burn time (using rocket equation)
         double force = vessel.getAvailableThrust();
@@ -146,8 +150,8 @@ public class LaunchIntoOrbit {
 
         // Wait until burn
         System.out.println("Waiting until circularization burn");
-        double burnUt =
-          ut.get() + vessel.getOrbit().getTimeToApoapsis() - (burnTime / 2.0);
+        double burnUt = ut.get() + vessel.getOrbit().getTimeToApoapsis()
+          - (burnTime / 2.0);
         double leadTime = 5;
         spaceCenter.warpTo(burnUt - leadTime, 100000, 2);
 
@@ -169,8 +173,8 @@ public class LaunchIntoOrbit {
         System.out.println("Fine tuning");
         vessel.getControl().setThrottle(0.05f);
         {
-          Expression remainingBurn = e.call(
-            connection.getCall(node, "remainingBurnVector", node.getReferenceFrame()));
+          Expression remainingBurn = e.call(connection.getCall(
+            node, "remainingBurnVector", node.getReferenceFrame()));
           Expression expr = e.lessThanOrEqual(
             e.get(remainingBurn, e.constantInt(1)), e.constantDouble(0));
           Event event = connection.addEvent(expr);

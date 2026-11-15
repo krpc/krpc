@@ -29,7 +29,8 @@ on the same code, and pass both results as the noise floor:
 
 .. code-block:: bash
 
-   bazel run //tools/benchmarks:compare -- before.json after.json --noise a.json b.json
+   bazel run //tools/benchmarks:compare -- before.json after.json \
+     --noise a.json b.json
 
 The Targets
 -----------

@@ -11,11 +11,13 @@ class Program {
         // Compile the lambda once. Its remote procedure calls
         // are made again each time the function runs
         var fuelFraction = connection.Compile(
-            () => resources.Amount("LiquidFuel") / resources.Max("LiquidFuel"));
+            () => resources.Amount("LiquidFuel") /
+                  resources.Max("LiquidFuel"));
 
         // Run the compiled function as often as needed
         while (true) {
-            Console.WriteLine("Fuel: " + connection.Run<float>(fuelFraction));
+            Console.WriteLine(
+                "Fuel: " + connection.Run<float>(fuelFraction));
             Thread.Sleep(1000);
         }
     }

@@ -18,7 +18,7 @@ def decode_varint(data):
 
 
 def decode_string(data):
-    """Decode a string value: its length as a varint, then its UTF-8 bytes"""
+    """Decode a string: its length as a varint, then its UTF-8 bytes"""
     size, position = _DecodeVarint(data, 0)
     return data[position : position + size].decode("utf-8")
 
@@ -89,7 +89,8 @@ assert len(response.results) == 1
 if response.results[0].HasField("error"):
     raise RuntimeError("ERROR: " + str(response.results[0].error))
 
-# Decode the return value, a ServerStatus structure sent as a Tuple of its fields
+# Decode the return value, a ServerStatus structure sent as a Tuple of its
+# fields
 status = KRPC.Tuple.FromString(response.results[0].value)
 
 # Print out the server version, the first field

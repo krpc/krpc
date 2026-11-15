@@ -602,7 +602,8 @@ SDK, a JDK, Node.js or a copy of the game to build it.</p>
 <h2>Requirements<a class="headerlink" href="#requirements" title="Link to this heading">#</a></h2>
 <p>Install Bazel through <a class="reference external" href="https://github.com/bazelbuild/bazelisk">bazelisk</a>, which fetches the
 Bazel version the repository pins. On Ubuntu:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>wget<span class="w"> </span>https://github.com/bazelbuild/bazelisk/releases/latest/download/bazelisk-linux-amd64
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">BAZELISK</span><span class="o">=</span>https://github.com/bazelbuild/bazelisk/releases/latest/download
+wget<span class="w"> </span><span class="s2">"</span><span class="nv">$BAZELISK</span><span class="s2">/bazelisk-linux-amd64"</span>
 chmod<span class="w"> </span>+x<span class="w"> </span>bazelisk-linux-amd64
 sudo<span class="w"> </span>mv<span class="w"> </span>bazelisk-linux-amd64<span class="w"> </span>/usr/local/bin/bazel
 </pre></div>
@@ -622,8 +623,8 @@ check. A Windows machine needs these first.</p>
 <p><strong>Symlinks.</strong> Bazel runs with <code class="docutils literal notranslate"><span class="pre">--windows_enable_symlinks</span></code> and <code class="docutils literal notranslate"><span class="pre">--enable_runfiles</span></code>, and creating a
 symlink needs Developer Mode. Turn it on under Settings &gt; System &gt; For developers, or from an
 elevated prompt:</p>
-<div class="highlight-bat notranslate"><div class="highlight"><pre><span></span>reg add <span class="s2">"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock"</span> /t REG_DWORD /f <span class="se">^</span>
-<span class="se"> </span> /v AllowDevelopmentWithoutDevLicense /d 1
+<div class="highlight-bat notranslate"><div class="highlight"><pre><span></span>reg add <span class="s2">"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock"</span> <span class="se">^</span>
+<span class="se"> </span> /t REG_DWORD /f /v AllowDevelopmentWithoutDevLicense /d 1
 </pre></div>
 </div>
 <p><strong>Long paths.</strong> The virtual environment rules_python builds for its tools has paths over the
@@ -637,8 +638,9 @@ the limit from an elevated prompt:</p>
 again.</p>
 <p><strong>MSVC.</strong> The C and C++ clients build with Visual Studio Build Tools, with the C++ workload and the
 Windows SDK:</p>
-<div class="highlight-bat notranslate"><div class="highlight"><pre><span></span>winget install --id Microsoft.VisualStudio.2022.BuildTools <span class="se">^</span>
-<span class="se"> </span> --override <span class="s2">"--quiet --wait --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended"</span>
+<div class="highlight-bat notranslate"><div class="highlight"><pre><span></span><span class="k">set</span> <span class="nv">VCTOOLS</span><span class="p">=</span>Microsoft.VisualStudio.Workload.VCTools
+winget install --id Microsoft.VisualStudio.2022.BuildTools <span class="se">^</span>
+<span class="se"> </span> --override <span class="s2">"--quiet --wait --add </span><span class="nv">%VCTOOLS%</span><span class="s2"> --includeRecommended"</span>
 </pre></div>
 </div>
 <p>Bazel caches the compiler it finds. If Bazel ran before the install, set <code class="docutils literal notranslate"><span class="pre">BAZEL_VC</span></code> to

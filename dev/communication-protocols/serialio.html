@@ -681,7 +681,7 @@ a <code class="docutils literal notranslate"><span class="pre">disconnect</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">decode_string</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">"""Decode a string value: its length as a varint, then its UTF-8 bytes"""</span>
+<span class="w">    </span><span class="sd">"""Decode a string: its length as a varint, then its UTF-8 bytes"""</span>
     <span class="n">size</span><span class="p">,</span> <span class="n">position</span> <span class="o">=</span> <span class="n">_DecodeVarint</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">data</span><span class="p">[</span><span class="n">position</span> <span class="p">:</span> <span class="n">position</span> <span class="o">+</span> <span class="n">size</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">"utf-8"</span><span class="p">)</span>
 
@@ -752,7 +752,8 @@ a <code class="docutils literal notranslate"><span class="pre">disconnect</span>
 <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">HasField</span><span class="p">(</span><span class="s2">"error"</span><span class="p">):</span>
     <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"ERROR: "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">error</span><span class="p">))</span>
 
-<span class="c1"># Decode the return value, a ServerStatus structure sent as a Tuple of its fields</span>
+<span class="c1"># Decode the return value, a ServerStatus structure sent as a Tuple of its</span>
+<span class="c1"># fields</span>
 <span class="n">status</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">Tuple</span><span class="o">.</span><span class="n">FromString</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 
 <span class="c1"># Print out the server version, the first field</span>

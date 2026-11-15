@@ -13,6 +13,7 @@ int main() {
   auto alarm = kac.create_alarm(KerbalAlarmClock::AlarmType::raw,
                                 "My New Alarm", sc.ut() + 10);
 
-  alarm.set_notes("10 seconds have now passed since the alarm was created.");
+  alarm.set_notes(
+      "10 seconds have now passed since the alarm was created.");
   alarm.set_action(KerbalAlarmClock::AlarmAction::message_only);
 }

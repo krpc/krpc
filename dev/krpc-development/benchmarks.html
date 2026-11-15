@@ -613,7 +613,8 @@ result files side by side, and marks the changes large enough to matter:</p>
 </div>
 <p>The threshold for a change depends on the noise of the machine. To measure it, run the suite twice
 on the same code, and pass both results as the noise floor:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bazel<span class="w"> </span>run<span class="w"> </span>//tools/benchmarks:compare<span class="w"> </span>--<span class="w"> </span>before.json<span class="w"> </span>after.json<span class="w"> </span>--noise<span class="w"> </span>a.json<span class="w"> </span>b.json
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bazel<span class="w"> </span>run<span class="w"> </span>//tools/benchmarks:compare<span class="w"> </span>--<span class="w"> </span>before.json<span class="w"> </span>after.json<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--noise<span class="w"> </span>a.json<span class="w"> </span>b.json
 </pre></div>
 </div>
 </section>

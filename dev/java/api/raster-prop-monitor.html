@@ -1607,8 +1607,10 @@ whether SAS is on. The screen’s ENTER button toggles SAS, and its NAV button s
 
 <span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">RasterPropMonitorExample</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="s">"Raster Prop Monitor Example"</span><span class="p">);</span>
-<span class="w">        </span><span class="n">Vessel</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SpaceCenter</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">).</span><span class="na">getActiveVessel</span><span class="p">();</span>
+<span class="w">        </span><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span>
+<span class="w">            </span><span class="n">Connection</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="s">"Raster Prop Monitor Example"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Vessel</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span>
+<span class="w">            </span><span class="n">SpaceCenter</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">).</span><span class="na">getActiveVessel</span><span class="p">();</span>
 <span class="w">        </span><span class="n">Control</span><span class="w"> </span><span class="n">control</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="na">getControl</span><span class="p">();</span>
 <span class="w">        </span><span class="n">RasterPropMonitor</span><span class="w"> </span><span class="n">rpm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">RasterPropMonitor</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">);</span>
 
@@ -1616,7 +1618,8 @@ whether SAS is on. The screen’s ENTER button toggles SAS, and its NAV button s
 <span class="w">        </span><span class="n">Monitor</span><span class="w"> </span><span class="n">monitor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rpm</span><span class="p">.</span><span class="na">monitors</span><span class="p">(</span><span class="n">vessel</span><span class="p">).</span><span class="na">get</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 <span class="w">        </span><span class="n">Display</span><span class="w"> </span><span class="n">display</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">monitor</span><span class="p">.</span><span class="na">getDisplay</span><span class="p">();</span>
 
-<span class="w">        </span><span class="c1">// Raster Prop Monitor formats the SAS variable, and keeps it up to date</span>
+<span class="w">        </span><span class="c1">// Raster Prop Monitor formats the SAS variable,</span>
+<span class="w">        </span><span class="c1">// and keeps it up to date</span>
 <span class="w">        </span><span class="n">display</span><span class="p">.</span><span class="na">setText</span><span class="p">(</span><span class="s">"SAS: {0:ON;OFF;OFF} $&amp;$ SAS"</span><span class="p">);</span>
 
 <span class="w">        </span><span class="c1">// A press of the NAV button shows the page</span>

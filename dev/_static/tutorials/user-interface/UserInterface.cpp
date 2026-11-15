@@ -22,7 +22,8 @@ int main() {
   // Position the panel on the left of the screen
   auto rect = panel.rect_transform();
   rect.set_size(std::make_tuple(200, 120));
-  rect.set_position(std::make_tuple(110 - (std::get<0>(screen_size) / 2), 0));
+  rect.set_position(
+      std::make_tuple(110 - (std::get<0>(screen_size) / 2), 0));
 
   // Lay the contents of the panel out in a column
   auto layout = panel.add_vertical_layout();

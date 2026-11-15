@@ -8,8 +8,10 @@ import krpc.client.services.SpaceCenter.Vessel;
 
 public class InfernalRoboticsExample {
     public static void main(String[] args) throws InterruptedException {
-        Connection connection = Connection.newInstance("InfernalRobotics Example");
-        Vessel vessel = SpaceCenter.newInstance(connection).getActiveVessel();
+        Connection connection =
+            Connection.newInstance("InfernalRobotics Example");
+        Vessel vessel =
+            SpaceCenter.newInstance(connection).getActiveVessel();
         InfernalRobotics ir = InfernalRobotics.newInstance(connection);
 
         ServoGroup group = ir.servoGroupWithName(vessel, "MyGroup");

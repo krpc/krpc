@@ -12,7 +12,8 @@ public class EventScope {
       Flight flight = spaceCenter.getActiveVessel().flight(null);
       Expression.Bound e = Expression.bind(connection);
       Expression expr = e.greaterThan(
-          e.call(connection.getCall(flight, "getMeanAltitude")), e.constantDouble(1000));
+          e.call(connection.getCall(flight, "getMeanAltitude")),
+          e.constantDouble(1000));
       try (Event event = connection.addEvent(expr)) {
         synchronized (event.getCondition()) {
           event.waitFor();

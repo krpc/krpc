@@ -25,7 +25,8 @@ int main() {
   krpc_SpaceCenter_AutoPilot_t ap;
   krpc_SpaceCenter_Vessel_AutoPilot(conn, &ap, vessel);
 
-  krpc_SpaceCenter_AutoPilot_set_ReferenceFrame(conn, ap, vessel_srf_vel_ref);
+  krpc_SpaceCenter_AutoPilot_set_ReferenceFrame(conn, ap,
+                                                vessel_srf_vel_ref);
   krpc_tuple_double_double_double_t direction = {0, 1, 0};
   krpc_SpaceCenter_AutoPilot_set_TargetDirection(conn, ap, &direction);
   krpc_SpaceCenter_AutoPilot_set_Engaged(conn, ap, true);

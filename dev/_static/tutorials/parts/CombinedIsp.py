@@ -3,7 +3,9 @@ import krpc
 conn = krpc.connect()
 vessel = conn.space_center.active_vessel
 
-active_engines = [e for e in vessel.parts.engines if e.active and e.has_fuel]
+active_engines = [
+    e for e in vessel.parts.engines if e.active and e.has_fuel
+]
 
 print("Active engines:")
 for engine in active_engines:

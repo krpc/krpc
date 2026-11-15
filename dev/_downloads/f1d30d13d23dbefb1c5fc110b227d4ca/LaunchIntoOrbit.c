@@ -28,7 +28,8 @@ int main() {
   krpc_SpaceCenter_Stage_t stage_2;
   krpc_SpaceCenter_Vessel_DecoupleStageAt(conn, &stage_2, vessel, 2);
   krpc_SpaceCenter_Resources_t stage_2_resources;
-  krpc_SpaceCenter_Stage_Resources(conn, &stage_2_resources, stage_2, false);
+  krpc_SpaceCenter_Stage_Resources(conn, &stage_2_resources, stage_2,
+                                   false);
 
   krpc_SpaceCenter_Control_t control;
   krpc_SpaceCenter_Vessel_Control(conn, &control, vessel);
@@ -49,7 +50,8 @@ int main() {
 
   krpc_SpaceCenter_Control_ActivateNextStage(conn, NULL, control);
   krpc_SpaceCenter_AutoPilot_set_Engaged(conn, auto_pilot, true);
-  krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading(conn, auto_pilot, 90, 90);
+  krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading(conn, auto_pilot, 90,
+                                                   90);
 
   bool srbs_separated = false;
   double turn_angle = 0;
@@ -65,8 +67,8 @@ int main() {
       double new_turn_angle = frac * 90.0;
       if (fabs(new_turn_angle - turn_angle) > 0.5) {
         turn_angle = new_turn_angle;
-        krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading(conn, auto_pilot,
-                                                         90 - turn_angle, 90);
+        krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading(
+            conn, auto_pilot, 90 - turn_angle, 90);
       }
     }
 
@@ -121,8 +123,8 @@ int main() {
   double time_to_apoapsis;
   krpc_SpaceCenter_Orbit_TimeToApoapsis(conn, &time_to_apoapsis, orbit);
   krpc_SpaceCenter_Node_t node;
-  krpc_SpaceCenter_Control_AddNode(conn, &node, control, ut + time_to_apoapsis,
-                                   delta_v, 0, 0);
+  krpc_SpaceCenter_Control_AddNode(conn, &node, control,
+                                   ut + time_to_apoapsis, delta_v, 0, 0);
 
   float F;
   krpc_SpaceCenter_Vessel_AvailableThrust(conn, &F, vessel);

@@ -41,6 +41,9 @@ Each client's ``:test`` suite groups its tests by what they depend on:
 the documentation. It needs network access and is in no suite. Run it by name, as the release
 checks do.
 
+``//doc:lint`` checks the formatting of the documentation examples at 76 columns, the width of a
+rendered code block. The C# and Java examples are wrapped to that width by hand.
+
 Useful options for ``bazel test`` are:
 
 * ``--cache_test_results=false`` runs tests whose results are cached.
@@ -84,7 +87,8 @@ directory, or pass ``--game-dir``:
 
 .. code-block:: bash
 
-   export KSP_DIR="$HOME/.local/share/Steam/steamapps/common/Kerbal Space Program"
+   STEAM_APPS="$HOME/.local/share/Steam/steamapps/common"
+   export KSP_DIR="$STEAM_APPS/Kerbal Space Program"
    bazel run //tools/game:test-ksp
 
 The command builds and installs the mod and the mods the tests need, launches KSP and runs the
@@ -94,7 +98,8 @@ subset:
 
 .. code-block:: bash
 
-   bazel run //tools/game:test-ksp -- service/SpaceCenter/test/test_camera.py -v
+   bazel run //tools/game:test-ksp -- \
+     service/SpaceCenter/test/test_camera.py -v
    bazel run //tools/game:test-ksp -- -k test_camera_mode
 
 To keep the game running between test runs, start it in another terminal:
@@ -107,7 +112,8 @@ Then pass ``--no-launch`` to run the tests against that game:
 
 .. code-block:: bash
 
-   bazel run //tools/game:test-ksp -- --no-launch service/SpaceCenter/test/test_camera.py -v
+   bazel run //tools/game:test-ksp -- --no-launch \
+     service/SpaceCenter/test/test_camera.py -v
 
 The tests leave a game they did not start unchanged, so it must already have the mods they need.
 ``//tools/game:run-ksp`` installs the mods named by ``--mods``, and pipes the game log to the

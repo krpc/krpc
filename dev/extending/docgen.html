@@ -634,8 +634,8 @@ missing. Start with an empty file to get the full list.</p>
 <p><code class="docutils literal notranslate"><span class="pre">krpc-docgen</span></code> reads the service definitions, which <code class="docutils literal notranslate"><span class="pre">krpc-servicedefs</span></code> generates from the
 service’s assembly (see <a class="reference internal" href="clientgen.html#service-api-clientgen"><span class="std std-ref">Generating Service Code for Static Clients</span></a>). Then it writes a page for each
 <code class="docutils literal notranslate"><span class="pre">--page</span></code> template:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>krpc-servicedefs<span class="w"> </span>--reference-dir<span class="o">=</span>/path/to/ksp/KSP_Data/Managed<span class="w"> </span>-o<span class="w"> </span>LaunchControl.json<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>LaunchControl<span class="w"> </span>LaunchControl.dll
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>krpc-servicedefs<span class="w"> </span>--reference-dir<span class="o">=</span>/path/to/ksp/KSP_Data/Managed<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-o<span class="w"> </span>LaunchControl.json<span class="w"> </span>LaunchControl<span class="w"> </span>LaunchControl.dll
 krpc-docgen<span class="w"> </span>python<span class="w"> </span>order.txt<span class="w"> </span>LaunchControl.json<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--page<span class="w"> </span>launch-control.tmpl<span class="w"> </span>python/launch-control.rst
 </pre></div>

@@ -7,15 +7,16 @@
 int main() {
   krpc_connection_t conn;
   if (krpc_open_serial(&conn, "COM0") != KRPC_OK) return 1;
-  if (krpc_connect(conn, "Server side function example") != KRPC_OK) return 1;
+  if (krpc_connect(conn, "Server side function example") != KRPC_OK)
+    return 1;
 
   krpc_SpaceCenter_Vessel_t vessel;
   krpc_SpaceCenter_ActiveVessel(conn, &vessel);
   krpc_SpaceCenter_Flight_t flight;
   krpc_SpaceCenter_Vessel_Flight(conn, &flight, vessel, KRPC_NULL);
 
-  // Fill in the remote procedure calls as messages, so they can be passed to
-  // the server
+  // Fill in the remote procedure calls as messages, so they can be passed
+  // to the server
   krpc_schema_ProcedureCall calls[3];
   krpc_SpaceCenter_Flight_MeanAltitude_call(&calls[0], flight);
   krpc_SpaceCenter_Flight_Speed_call(&calls[1], flight);

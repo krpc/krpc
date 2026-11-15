@@ -7,7 +7,8 @@ local Expression = conn.krpc.Expression
 local above = Expression.variable('above', conn.krpc.Type.bool())
 local mean_altitude = conn:get_call(flight.get_mean_altitude, flight)
 local check = Expression.try_catch(
-  Expression.assign(above, Expression.greater_than(Expression.call(mean_altitude), Expression.constant_double(1000))),
+  Expression.assign(above, Expression.greater_than(
+    Expression.call(mean_altitude), Expression.constant_double(1000))),
   'KRPC', 'ObjectNotLoadedException', nil,
   Expression.assign(above, Expression.constant_bool(false))
 )

@@ -632,7 +632,7 @@ horizontal <code class="docutils literal notranslate"><span class="pre">up</span
 <span class="n">ap</span><span class="o">.</span><span class="n">engaged</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="n">ap</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
 
-<span class="c1"># ease over towards the eastern horizon; roll stays defined through the vertical</span>
+<span class="c1"># ease over to the eastern horizon; roll stays defined through vertical</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">91</span><span class="p">):</span>
     <span class="n">pitch</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="mi">90</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span>  <span class="c1"># 90° down to 0°</span>
     <span class="n">direction</span> <span class="o">=</span> <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">pitch</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">pitch</span><span class="p">))</span>

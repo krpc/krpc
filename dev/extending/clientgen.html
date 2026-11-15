@@ -608,42 +608,46 @@ installed using pip:</p>
 <p>You can then run the script from the command line:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>krpc-clientgen<span class="w"> </span>--help
 
-<span class="go">usage: krpc-clientgen [-h] [-v] [-o OUTPUT] [--reference-dir DIR] [--ksp KSP]</span>
-<span class="go">                      [--include SERVICE=PATH] [--client-module CLIENT_MODULE]</span>
+<span class="go">usage: krpc-clientgen [-h] [-v] [-o OUTPUT] [--reference-dir DIR]</span>
+<span class="go">                      [--ksp KSP] [--include SERVICE=PATH]</span>
+<span class="go">                      [--client-module CLIENT_MODULE]</span>
 <span class="go">                      [--output-defs OUTPUT_DEFS]</span>
 <span class="go">                      language service input [input ...]</span>
 
 <span class="go">Generate client source code for kRPC services.</span>
 
 <span class="go">positional arguments:</span>
-<span class="go">  language              Language to generate (cnano, cpp, csharp, java, js,</span>
-<span class="go">                        python) or path to generator</span>
+<span class="go">  language              Language to generate (cnano, cpp, csharp, java,</span>
+<span class="go">                        js, python) or path to generator</span>
 <span class="go">  service               Name of service to generate</span>
-<span class="go">  input                 Path to service definition JSON file(s) or assembly</span>
-<span class="go">                        DLL(s). JSON files can give the definitions of the</span>
-<span class="go">                        services whose types a DLL's service uses.</span>
+<span class="go">  input                 Path to service definition JSON file(s) or</span>
+<span class="go">                        assembly DLL(s). JSON files can give the</span>
+<span class="go">                        definitions of the services whose types a DLL's</span>
+<span class="go">                        service uses.</span>
 
 <span class="go">options:</span>
 <span class="go">  -h, --help            show this help message and exit</span>
 <span class="go">  -v, --version         show program's version number and exit</span>
-<span class="go">  -o, --output OUTPUT   Path to write source code to. If not specified, writes</span>
-<span class="go">                        source code to standard output.</span>
-<span class="go">  --reference-dir DIR   When reading from an assembly DLL, a directory to load</span>
-<span class="go">                        the assemblies the service references from, such as</span>
-<span class="go">                        the game's managed assemblies. Can be repeated.</span>
-<span class="go">  --ksp KSP             Deprecated: pass the KSP_Data/Managed directory of a</span>
-<span class="go">                        Kerbal Space Program install with --reference-dir.</span>
+<span class="go">  -o, --output OUTPUT   Path to write source code to. If not specified,</span>
+<span class="go">                        writes source code to standard output.</span>
+<span class="go">  --reference-dir DIR   When reading from an assembly DLL, a directory to</span>
+<span class="go">                        load the assemblies the service references from,</span>
+<span class="go">                        such as the game's managed assemblies. Can be</span>
+<span class="go">                        repeated.</span>
+<span class="go">  --ksp KSP             Deprecated: pass the KSP_Data/Managed directory of</span>
+<span class="go">                        a Kerbal Space Program install with</span>
+<span class="go">                        --reference-dir.</span>
 <span class="go">  --include SERVICE=PATH</span>
-<span class="go">                        Include the generated code of another service, whose</span>
-<span class="go">                        types the service uses, from the given path. Required</span>
-<span class="go">                        by the C++ and C nano generators for each such</span>
-<span class="go">                        service. For Python and JavaScript, the path is the</span>
-<span class="go">                        module of the service, which defaults to the module it</span>
-<span class="go">                        ships in.</span>
+<span class="go">                        Include the generated code of another service,</span>
+<span class="go">                        whose types the service uses, from the given path.</span>
+<span class="go">                        Required by the C++ and C nano generators for each</span>
+<span class="go">                        such service. For Python and JavaScript, the path</span>
+<span class="go">                        is the module of the service, which defaults to</span>
+<span class="go">                        the module it ships in.</span>
 <span class="go">  --client-module CLIENT_MODULE</span>
-<span class="go">                        For JavaScript, the module the generated code imports</span>
-<span class="go">                        the client's functions from. Defaults to the client's</span>
-<span class="go">                        package, @krpc-org/krpc.</span>
+<span class="go">                        For JavaScript, the module the generated code</span>
+<span class="go">                        imports the client's functions from. Defaults to</span>
+<span class="go">                        the client's package, @krpc-org/krpc.</span>
 <span class="go">  --output-defs OUTPUT_DEFS</span>
 <span class="go">                        When generating client code from a DLL, output the</span>
 <span class="go">                        service definitions to the given JSON file</span>
@@ -668,8 +672,8 @@ them with <code class="docutils literal notranslate"><span class="pre">--referen
 portable.</p>
 <p><code class="docutils literal notranslate"><span class="pre">krpc-servicedefs</span></code> generates the JSON file from the assemblies, and takes <code class="docutils literal notranslate"><span class="pre">--reference-dir</span></code> in
 the same way:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>krpc-servicedefs<span class="w"> </span>--reference-dir<span class="o">=</span>/path/to/ksp/KSP_Data/Managed<span class="w"> </span>-o<span class="w"> </span>LaunchControl.json<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>LaunchControl<span class="w"> </span>LaunchControl.dll
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>krpc-servicedefs<span class="w"> </span>--reference-dir<span class="o">=</span>/path/to/ksp/KSP_Data/Managed<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-o<span class="w"> </span>LaunchControl.json<span class="w"> </span>LaunchControl<span class="w"> </span>LaunchControl.dll
 </pre></div>
 </div>
 <section id="example">

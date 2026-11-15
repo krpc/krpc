@@ -15,8 +15,9 @@ class VesselVelocity
 
         while (true) {
             var velocity = vessel.Flight (refFrame).Velocity;
-            Console.WriteLine ("Surface velocity = ({0:F1}, {1:F1}, {2:F1})",
-                               velocity.Item1, velocity.Item2, velocity.Item3);
+            Console.WriteLine (
+                "Surface velocity = ({0:F1}, {1:F1}, {2:F1})",
+                velocity.Item1, velocity.Item2, velocity.Item3);
             System.Threading.Thread.Sleep (1000);
         }
     }

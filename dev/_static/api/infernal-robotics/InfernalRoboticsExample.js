@@ -3,7 +3,10 @@ import { connect } from "@krpc-org/krpc";
 const conn = await connect({ name: "InfernalRobotics Example" });
 const vessel = await conn.spaceCenter.getActiveVessel();
 
-const group = await conn.infernalRobotics.servoGroupWithName(vessel, "MyGroup");
+const group = await conn.infernalRobotics.servoGroupWithName(
+  vessel,
+  "MyGroup",
+);
 if (group === null) {
   throw new Error("Group not found");
 }

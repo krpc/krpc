@@ -8,7 +8,8 @@ class Program {
         var spaceCenter = connection.SpaceCenter();
         var vessel = spaceCenter.ActiveVessel;
         var refFrame = vessel.Orbit.Body.ReferenceFrame;
-        var posStream = connection.AddStream(() => vessel.Position(refFrame));
+        var posStream =
+            connection.AddStream(() => vessel.Position(refFrame));
         while (true)
             Console.WriteLine(posStream.Get());
     }

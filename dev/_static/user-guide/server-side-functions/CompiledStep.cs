@@ -12,7 +12,8 @@ class Program {
         var spaceCenter = connection.SpaceCenter ();
         var vessel = spaceCenter.ActiveVessel;
         // [docs]
-        var step = connection.Compile (() => vessel.Control.ToggleActionGroup (1));
+        var step = connection.Compile (
+            () => vessel.Control.ToggleActionGroup (1));
         while (true)
             connection.Run (step);
         // [/docs]

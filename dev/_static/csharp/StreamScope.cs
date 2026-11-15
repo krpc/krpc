@@ -7,7 +7,8 @@ class Program {
         var connection = new Connection();
         var spaceCenter = connection.SpaceCenter();
         var flight = spaceCenter.ActiveVessel.Flight();
-        using (var altitude = connection.AddStream(() => flight.MeanAltitude)) {
+        using (var altitude =
+                   connection.AddStream(() => flight.MeanAltitude)) {
             for (var i = 0; i < 10; i++)
                 Console.WriteLine(altitude.Get());
         }

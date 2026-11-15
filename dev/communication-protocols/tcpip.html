@@ -618,7 +618,7 @@ receive a message:</p>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">decode_string</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">"""Decode a string value: its length as a varint, then its UTF-8 bytes"""</span>
+<span class="w">    </span><span class="sd">"""Decode a string: its length as a varint, then its UTF-8 bytes"""</span>
     <span class="n">size</span><span class="p">,</span> <span class="n">position</span> <span class="o">=</span> <span class="n">_DecodeVarint</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">data</span><span class="p">[</span><span class="n">position</span> <span class="p">:</span> <span class="n">position</span> <span class="o">+</span> <span class="n">size</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">"utf-8"</span><span class="p">)</span>
 
@@ -690,7 +690,7 @@ prints the server version. It then ends the connection:</p>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">decode_string</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">"""Decode a string value: its length as a varint, then its UTF-8 bytes"""</span>
+<span class="w">    </span><span class="sd">"""Decode a string: its length as a varint, then its UTF-8 bytes"""</span>
     <span class="n">size</span><span class="p">,</span> <span class="n">position</span> <span class="o">=</span> <span class="n">_DecodeVarint</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">data</span><span class="p">[</span><span class="n">position</span> <span class="p">:</span> <span class="n">position</span> <span class="o">+</span> <span class="n">size</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">"utf-8"</span><span class="p">)</span>
 
@@ -764,7 +764,8 @@ prints the server version. It then ends the connection:</p>
 <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">HasField</span><span class="p">(</span><span class="s2">"error"</span><span class="p">):</span>
     <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"ERROR: "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">error</span><span class="p">))</span>
 
-<span class="c1"># Decode the return value, a ServerStatus structure sent as a Tuple of its fields</span>
+<span class="c1"># Decode the return value, a ServerStatus structure sent as a Tuple of its</span>
+<span class="c1"># fields</span>
 <span class="n">status</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">Tuple</span><span class="o">.</span><span class="n">FromString</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 
 <span class="c1"># Print out the server version, the first field</span>
@@ -775,7 +776,8 @@ prints the server version. It then ends the connection:</p>
 <span class="n">send_message</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">Message</span><span class="p">(</span><span class="n">disconnect</span><span class="o">=</span><span class="n">disconnect</span><span class="p">))</span>
 <span class="n">conn</span><span class="o">.</span><span class="n">shutdown</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">SHUT_WR</span><span class="p">)</span>
 
-<span class="c1"># Discard anything still arriving until the server closes its side, or a second passes with nothing</span>
+<span class="c1"># Discard anything still arriving until the server closes its side, or a</span>
+<span class="c1"># second passes with nothing</span>
 <span class="n">conn</span><span class="o">.</span><span class="n">settimeout</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 <span class="k">try</span><span class="p">:</span>
     <span class="k">while</span> <span class="n">conn</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">4096</span><span class="p">):</span>
@@ -868,8 +870,8 @@ prints the server version. It then ends the connection:</p>
 <span class="n">call</span><span class="o">.</span><span class="n">arguments</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">position</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">stream_call</span><span class="o">.</span><span class="n">SerializeToString</span><span class="p">())</span>
 <span class="n">send_message</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
 
-<span class="c1"># Receive the response, which carries the id of the request it answers. The stream's first</span>
-<span class="c1"># update follows it.</span>
+<span class="c1"># Receive the response, which carries the id of the request it answers. The</span>
+<span class="c1"># stream's first update follows it.</span>
 <span class="n">response</span> <span class="o">=</span> <span class="n">recv_message</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span><span class="o">.</span><span class="n">response</span>
 <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="mi">1</span>
 
@@ -890,9 +892,10 @@ prints the server version. It then ends the connection:</p>
     <span class="n">update</span> <span class="o">=</span> <span class="n">recv_message</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span><span class="o">.</span><span class="n">stream_update</span>
     <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">update</span><span class="o">.</span><span class="n">results</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
     <span class="k">assert</span> <span class="n">stream_id</span> <span class="o">==</span> <span class="n">update</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">id</span>
-    <span class="c1"># Decode the return value, a ServerStatus structure sent as a Tuple of its fields. Its</span>
-    <span class="c1"># fourth field is the server statistics, another structure, whose second field is the</span>
-    <span class="c1"># number of bytes the server has written.</span>
+    <span class="c1"># Decode the return value, a ServerStatus structure sent as a Tuple of</span>
+    <span class="c1"># its fields. Its fourth field is the server statistics, another</span>
+    <span class="c1"># structure, whose second field is the number of bytes the server has</span>
+    <span class="c1"># written.</span>
     <span class="n">status</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">Tuple</span><span class="o">.</span><span class="n">FromString</span><span class="p">(</span><span class="n">update</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
     <span class="n">statistics</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">Tuple</span><span class="o">.</span><span class="n">FromString</span><span class="p">(</span><span class="n">status</span><span class="o">.</span><span class="n">items</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">decode_varint</span><span class="p">(</span><span class="n">statistics</span><span class="o">.</span><span class="n">items</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>

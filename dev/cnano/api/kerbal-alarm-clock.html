@@ -1610,7 +1610,8 @@ set to trigger after 10 seconds have passed, and display a message.</p>
 <span class="w">                                    </span><span class="s">"My New Alarm"</span><span class="p">,</span><span class="w"> </span><span class="n">ut</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">10</span><span class="p">);</span>
 
 <span class="w">  </span><span class="n">krpc_KerbalAlarmClock_Alarm_set_Notes</span><span class="p">(</span>
-<span class="w">      </span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">alarm</span><span class="p">,</span><span class="w"> </span><span class="s">"10 seconds have now passed since the alarm was created."</span><span class="p">);</span>
+<span class="w">      </span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">alarm</span><span class="p">,</span>
+<span class="w">      </span><span class="s">"10 seconds have now passed since the alarm was created."</span><span class="p">);</span>
 <span class="w">  </span><span class="n">krpc_KerbalAlarmClock_Alarm_set_Action</span><span class="p">(</span>
 <span class="w">      </span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">alarm</span><span class="p">,</span><span class="w"> </span><span class="n">KRPC_KERBALALARMCLOCK_ALARMACTION_MESSAGEONLY</span><span class="p">);</span>
 <span class="p">}</span>

@@ -14,8 +14,8 @@ class UserInterface
         // Get the size of the game window in pixels
         var screenSize = canvas.RectTransform.Size;
 
-        // Add a panel to contain the UI elements. The user can drag it around
-        // the screen with the mouse.
+        // Add a panel to contain the UI elements. The user can drag it
+        // around the screen with the mouse.
         var panel = canvas.AddPanel ();
         panel.Draggable = true;
 

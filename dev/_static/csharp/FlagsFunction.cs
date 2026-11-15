@@ -7,9 +7,11 @@ class Program {
         var connection = new Connection();
         var spaceCenter = connection.SpaceCenter();
 
-        // Stream whether map mode shows both probes and ships, computed on the server
+        // Stream whether map mode shows both probes and ships, computed on
+        // the server
         var craft = MapFilterType.Probes | MapFilterType.Ships;
-        var showsCraft = connection.AddStream(() => spaceCenter.MapFilter.HasFlag(craft));
+        var showsCraft = connection.AddStream(
+            () => spaceCenter.MapFilter.HasFlag(craft));
         Console.WriteLine(showsCraft.Get());
     }
 }

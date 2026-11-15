@@ -47,14 +47,17 @@ int main() {
 
   while (true) {
     vector3 vessel_direction;
-    krpc_SpaceCenter_Vessel_Direction(conn, &vessel_direction, vessel, srf_ref);
+    krpc_SpaceCenter_Vessel_Direction(conn, &vessel_direction, vessel,
+                                      srf_ref);
 
     // Get the direction of the vessel in the horizon plane
-    vector3 horizon_direction = {0, vessel_direction.e1, vessel_direction.e2};
+    vector3 horizon_direction = {0, vessel_direction.e1,
+                                 vessel_direction.e2};
 
     // Compute the pitch - the angle between the vessels direction
     // and the direction in the horizon plane
-    double pitch = angle_between_vectors(vessel_direction, horizon_direction);
+    double pitch =
+        angle_between_vectors(vessel_direction, horizon_direction);
     if (vessel_direction.e0 < 0) pitch = -pitch;
 
     // Compute the heading - the angle between north
@@ -85,7 +88,8 @@ int main() {
     else
       roll -= 180;
 
-    printf("pitch = %.1f, heading = %.1f, roll = %.1f\n", pitch, heading, roll);
+    printf("pitch = %.1f, heading = %.1f, roll = %.1f\n", pitch, heading,
+           roll);
     sleep(1);
   }
 }

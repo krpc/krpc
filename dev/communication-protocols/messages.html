@@ -748,7 +748,8 @@ connection over TCP/IP:</p>
 <span class="n">send_message</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">Message</span><span class="p">(</span><span class="n">disconnect</span><span class="o">=</span><span class="n">disconnect</span><span class="p">))</span>
 <span class="n">conn</span><span class="o">.</span><span class="n">shutdown</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">SHUT_WR</span><span class="p">)</span>
 
-<span class="c1"># Discard anything still arriving until the server closes its side, or a second passes with nothing</span>
+<span class="c1"># Discard anything still arriving until the server closes its side, or a</span>
+<span class="c1"># second passes with nothing</span>
 <span class="n">conn</span><span class="o">.</span><span class="n">settimeout</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 <span class="k">try</span><span class="p">:</span>
     <span class="k">while</span> <span class="n">conn</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">4096</span><span class="p">):</span>
@@ -900,7 +901,8 @@ setting is on.</p></li>
 <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">HasField</span><span class="p">(</span><span class="s2">"error"</span><span class="p">):</span>
     <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"ERROR: "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">error</span><span class="p">))</span>
 
-<span class="c1"># Decode the return value, a ServerStatus structure sent as a Tuple of its fields</span>
+<span class="c1"># Decode the return value, a ServerStatus structure sent as a Tuple of its</span>
+<span class="c1"># fields</span>
 <span class="n">status</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">Tuple</span><span class="o">.</span><span class="n">FromString</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 
 <span class="c1"># Print out the server version, the first field</span>

@@ -7,7 +7,8 @@
 int main() {
   krpc_connection_t conn;
   if (krpc_open_serial(&conn, "COM0") != KRPC_OK) return 1;
-  if (krpc_connect(conn, "Kerbal Engineer Redux Example") != KRPC_OK) return 1;
+  if (krpc_connect(conn, "Kerbal Engineer Redux Example") != KRPC_OK)
+    return 1;
   krpc_SpaceCenter_Vessel_t vessel;
   krpc_SpaceCenter_ActiveVessel(conn, &vessel);
 
@@ -15,8 +16,8 @@ int main() {
   krpc_KerbalEngineerRedux_Stages(conn, &stages, vessel);
   for (size_t i = stages.size; i > 0; i--) {
     krpc_KerbalEngineerRedux_Stage_t* stage = &stages.items[i - 1];
-    printf("Stage %d: %.0f m/s, TWR %.2f\n", (int)stage->number, stage->delta_v,
-           stage->available_twr);
+    printf("Stage %d: %.0f m/s, TWR %.2f\n", (int)stage->number,
+           stage->delta_v, stage->available_twr);
   }
 
   krpc_KerbalEngineerRedux_BurnTime_t burn;

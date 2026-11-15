@@ -8,6 +8,9 @@ const [link] = await comms.getControlPath();
 const siteInfo = conn.getCall(() => link.getStart());
 // [docs]
 // The Name field of a structure a call returns
-const expr = await Expression.getField(await Expression.call(siteInfo), "Name");
+const expr = await Expression.getField(
+  await Expression.call(siteInfo),
+  "Name",
+);
 // [/docs]
 console.log(await conn.run(expr));

@@ -39,7 +39,8 @@ while vessel:flight().surface_altitude > 1000 do
 end
 vessel.control:activate_next_stage()
 
-while vessel:flight(vessel.orbit.body.reference_frame).vertical_speed < -0.1 do
+local body_frame = vessel.orbit.body.reference_frame
+while vessel:flight(body_frame).vertical_speed < -0.1 do
     print(string.format('Altitude = %.1f meters',
                         vessel:flight().surface_altitude))
     socket.sleep(1)

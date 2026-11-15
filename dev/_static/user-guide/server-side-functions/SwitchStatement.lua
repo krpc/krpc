@@ -18,8 +18,10 @@ local body = Expression.match(
   x,
   {{Expression.constant_int(1), Expression.constant_int(2)}, {}},
   {
-    Expression.assign(total, Expression.add(total, Expression.constant_int(10))),
-    Expression.assign(total, Expression.add(total, Expression.constant_int(1)))
+    Expression.assign(
+      total, Expression.add(total, Expression.constant_int(10))),
+    Expression.assign(
+      total, Expression.add(total, Expression.constant_int(1)))
   }
 )
 local program = Expression.block_with_variables(

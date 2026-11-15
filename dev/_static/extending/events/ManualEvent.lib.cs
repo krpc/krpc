@@ -10,7 +10,8 @@ namespace Extending
     public static class Timers {
         // [docs]
         [KRPCProcedure]
-        public static KRPC.Service.Messages.Event OnTimer(uint milliseconds) {
+        public static KRPC.Service.Messages.Event OnTimer(
+            uint milliseconds) {
             // Create the event
             var evnt = new KRPC.Service.Event ();
 

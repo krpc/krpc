@@ -23,7 +23,8 @@ class LaunchIntoOrbit
         var stage2Resources =
             vessel.DecoupleStageAt (stage: 2).Resources (cumulative: false);
 
-        var srbFuel = conn.AddStream(() => stage2Resources.Amount("SolidFuel"));
+        var srbFuel =
+            conn.AddStream(() => stage2Resources.Amount("SolidFuel"));
 
         // Pre-launch setup
         vessel.Control.SAS = false;
@@ -81,7 +82,8 @@ class LaunchIntoOrbit
         // Disable engines when target apoapsis is reached
         vessel.Control.Throttle = 0.25f;
         {
-            var evnt = conn.AddEvent (() => vessel.Orbit.ApoapsisAltitude >= targetAltitude);
+            var evnt = conn.AddEvent (
+                () => vessel.Orbit.ApoapsisAltitude >= targetAltitude);
             lock (evnt.Condition) {
                 evnt.Wait ();
             }
@@ -108,7 +110,8 @@ class LaunchIntoOrbit
         double v2 = Math.Sqrt (mu * ((2.0 / r) - (1.0 / a2)));
         double deltaV = v2 - v1;
         var node = vessel.Control.AddNode (
-            ut.Get () + vessel.Orbit.TimeToApoapsis, prograde: (float)deltaV);
+            ut.Get () + vessel.Orbit.TimeToApoapsis,
+            prograde: (float)deltaV);
 
         // Calculate burn time (using rocket equation)
         double F = vessel.AvailableThrust;
@@ -126,14 +129,16 @@ class LaunchIntoOrbit
 
         // Wait until burn
         Console.WriteLine ("Waiting until circularization burn");
-        double burnUT = ut.Get () + vessel.Orbit.TimeToApoapsis - (burnTime / 2.0);
+        double burnUT =
+            ut.Get () + vessel.Orbit.TimeToApoapsis - (burnTime / 2.0);
         double leadTime = 5;
         conn.SpaceCenter ().WarpTo (burnUT - leadTime);
 
         // Execute burn
         Console.WriteLine ("Ready to execute burn");
         {
-            var evnt = conn.AddEvent (() => vessel.Orbit.TimeToApoapsis <= burnTime / 2.0);
+            var evnt = conn.AddEvent (
+                () => vessel.Orbit.TimeToApoapsis <= burnTime / 2.0);
             lock (evnt.Condition) {
                 evnt.Wait ();
             }
@@ -144,8 +149,8 @@ class LaunchIntoOrbit
         Console.WriteLine ("Fine tuning");
         vessel.Control.Throttle = 0.05f;
         {
-            var evnt = conn.AddEvent (
-                () => node.RemainingBurnVector (node.ReferenceFrame).Item2 <= 0);
+            var evnt = conn.AddEvent (() =>
+                node.RemainingBurnVector (node.ReferenceFrame).Item2 <= 0);
             lock (evnt.Condition) {
                 evnt.Wait ();
             }

@@ -13,10 +13,14 @@ namespace Extending
     public static class Fleet {
         [KRPCProcedure]
         public static void Assign (
-            [KRPCNullable (Element)] IList<Vessel> crew, // the vessels may be null
-            [KRPCNullable (Value)] IDictionary<string, Vessel> byName, // the values may be null
-            [KRPCNullable (Item2)] Tuple<string, Vessel> named, // the second item may be null
-            [KRPCNullable (Element, Element)] IList<IList<Vessel>> byStage) // the vessels may be null
+            [KRPCNullable (Element)]
+            IList<Vessel> crew, // the vessels may be null
+            [KRPCNullable (Value)]
+            IDictionary<string, Vessel> byName, // the values may be null
+            [KRPCNullable (Item2)]
+            Tuple<string, Vessel> named, // the second item may be null
+            [KRPCNullable (Element, Element)]
+            IList<IList<Vessel>> byStage) // the vessels may be null
         {
             // ...
         }

@@ -7,8 +7,9 @@ namespace Extending
     public static class Lights {
         // [docs]
         /// <summary>
-        /// Whether the lights are on. Throws <see cref="InvalidOperationException"/> if set
-        /// while <see cref="Broken"/> is true.
+        /// Whether the lights are on. Throws
+        /// <see cref="InvalidOperationException"/> if set while
+        /// <see cref="Broken"/> is true.
         /// </summary>
         [KRPCProperty]
         public static bool Active

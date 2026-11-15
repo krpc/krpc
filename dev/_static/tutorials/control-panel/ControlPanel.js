@@ -24,7 +24,9 @@ let streams = [];
 
 /** @param {string} id */
 const element = (id) => document.getElementById(id);
-const throttleSlider = /** @type {HTMLInputElement} */ (element("throttle-slider"));
+const throttleSlider = /** @type {HTMLInputElement} */ (
+  element("throttle-slider")
+);
 /** @type {Map<SpaceCenter.SASMode, HTMLButtonElement>} */
 const modeButtons = new Map();
 
@@ -37,7 +39,9 @@ function log(message) {
 
 /** @param {number} meters */
 function distance(meters) {
-  return Math.abs(meters) < 10000 ? `${meters.toFixed(0)} m` : `${(meters / 1000).toFixed(1)} km`;
+  return Math.abs(meters) < 10000
+    ? `${meters.toFixed(0)} m`
+    : `${(meters / 1000).toFixed(1)} km`;
 }
 
 /** Runs an action on the vessel's controls, and logs an error it throws
@@ -69,59 +73,88 @@ async function showVessel(vessel) {
   await Promise.allSettled(streams.map((stream) => stream.remove()));
   streams = [];
   control = null;
-  element("vessel").textContent = vessel ? await vessel.getName() : "No active vessel";
+  element("vessel").textContent = vessel
+    ? await vessel.getName()
+    : "No active vessel";
   if (!vessel) return;
 
   const flight = await vessel.flight();
   const newControl = await vessel.getControl();
 
   await Promise.all([
-    watch(conn.addStream(() => flight.getMeanAltitude()), (altitude) => {
-      element("altitude").textContent = distance(altitude);
-    }),
-    watch(conn.addStream(() => flight.getTrueAirSpeed()), (speed) => {
-      element("airspeed").textContent = `${speed.toFixed(1)} m/s`;
-    }),
-    // The thrust to weight ratio, from the gravity at the vessel's distance from the body
+    watch(
+      conn.addStream(() => flight.getMeanAltitude()),
+      (altitude) => {
+        element("altitude").textContent = distance(altitude);
+      },
+    ),
+    watch(
+      conn.addStream(() => flight.getTrueAirSpeed()),
+      (speed) => {
+        element("airspeed").textContent = `${speed.toFixed(1)} m/s`;
+      },
+    ),
+    // The thrust to weight ratio, from the gravity at the vessel's distance
+    // from the body
     watch(
       conn.addStream(
         ({ vessel }) =>
           vessel.thrust /
-          ((vessel.mass * vessel.orbit.body.gravitationalParameter) / vessel.orbit.radius ** 2),
+          ((vessel.mass * vessel.orbit.body.gravitationalParameter) /
+            vessel.orbit.radius ** 2),
         { vessel },
       ),
       (twr) => {
         element("twr").textContent = twr.toFixed(2);
       },
     ),
-    watch(conn.addStream(() => newControl.getThrottle()), (throttle) => {
-      element("throttle").textContent = `${(throttle * 100).toFixed(0)} %`;
-      // Leave the slider alone while the user drags it
-      if (!throttleSlider.matches(":active")) {
-        throttleSlider.value = String(throttle * 100);
-      }
-    }),
-    watch(conn.addStream(() => newControl.getCurrentStage()), (stage) => {
-      element("stage-number").textContent = String(stage);
-    }),
-    watch(conn.addStream(() => newControl.getSAS()), (sas) => {
-      element("sas").classList.toggle("on", sas);
-    }),
-    watch(conn.addStream(() => newControl.getRCS()), (rcs) => {
-      element("rcs").classList.toggle("on", rcs);
-    }),
-    watch(conn.addStream(() => newControl.getSASMode()), (mode) => {
-      for (const [buttonMode, button] of modeButtons) {
-        button.classList.toggle("on", buttonMode === mode);
-      }
-    }),
+    watch(
+      conn.addStream(() => newControl.getThrottle()),
+      (throttle) => {
+        element("throttle").textContent =
+          `${(throttle * 100).toFixed(0)} %`;
+        // Leave the slider alone while the user drags it
+        if (!throttleSlider.matches(":active")) {
+          throttleSlider.value = String(throttle * 100);
+        }
+      },
+    ),
+    watch(
+      conn.addStream(() => newControl.getCurrentStage()),
+      (stage) => {
+        element("stage-number").textContent = String(stage);
+      },
+    ),
+    watch(
+      conn.addStream(() => newControl.getSAS()),
+      (sas) => {
+        element("sas").classList.toggle("on", sas);
+      },
+    ),
+    watch(
+      conn.addStream(() => newControl.getRCS()),
+      (rcs) => {
+        element("rcs").classList.toggle("on", rcs);
+      },
+    ),
+    watch(
+      conn.addStream(() => newControl.getSASMode()),
+      (mode) => {
+        for (const [buttonMode, button] of modeButtons) {
+          button.classList.toggle("on", buttonMode === mode);
+        }
+      },
+    ),
   ]);
   control = newControl;
 }
 
 async function connectToServer() {
-  const address = /** @type {HTMLInputElement} */ (element("address")).value;
-  const port = Number(/** @type {HTMLInputElement} */ (element("port")).value);
+  const address = /** @type {HTMLInputElement} */ (element("address"))
+    .value;
+  const port = Number(
+    /** @type {HTMLInputElement} */ (element("port")).value,
+  );
   try {
     conn = await connect({ name: "Control Panel", address, port });
   } catch (error) {
@@ -132,7 +165,9 @@ async function connectToServer() {
   element("connect").textContent = "Disconnect";
 
   // Follow the active vessel, which changes when the player switches vessel
-  const activeVessel = await conn.addStream(() => conn.spaceCenter.getActiveVessel());
+  const activeVessel = await conn.addStream(() =>
+    conn.spaceCenter.getActiveVessel(),
+  );
   await activeVessel.setRate(1);
   /** @type {SpaceCenter.Vessel} */
   let shown;
@@ -157,7 +192,9 @@ element("connect").addEventListener("click", () => {
   else connectToServer();
 });
 
-element("stage").addEventListener("click", () => act((control) => control.activateNextStage()));
+element("stage").addEventListener("click", () =>
+  act((control) => control.activateNextStage()),
+);
 
 element("sas").addEventListener("click", () =>
   act(async (control) => control.setSAS(!(await control.getSAS()))),

@@ -601,7 +601,8 @@ method, and joins the service that owns the type being extended:</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">TestFlightExtensions</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">/// &lt;summary&gt;The parts that have the named failure.&lt;/summary&gt;</span>
 <span class="w">    </span><span class="na">[KRPCMethod]</span>
-<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="n">IList</span><span class="o">&lt;</span><span class="n">Part</span><span class="o">&gt;</span><span class="w"> </span><span class="n">WithFailure</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="w"> </span><span class="n">Parts</span><span class="w"> </span><span class="n">parts</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">failure</span><span class="p">)</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="n">IList</span><span class="o">&lt;</span><span class="n">Part</span><span class="o">&gt;</span><span class="w"> </span><span class="n">WithFailure</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="k">this</span><span class="w"> </span><span class="n">Parts</span><span class="w"> </span><span class="n">parts</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">failure</span><span class="p">)</span>
 <span class="w">    </span><span class="p">{</span>
 <span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nf">NotImplementedException</span><span class="w"> </span><span class="p">();</span>
 <span class="w">    </span><span class="p">}</span>
@@ -653,7 +654,8 @@ string-keyed <code class="docutils literal notranslate"><span class="pre">SpaceC
 add a nullable extension property on <code class="docutils literal notranslate"><span class="pre">SpaceCenter.Part</span></code> that returns it. The wrapper names the
 module with a <code class="docutils literal notranslate"><span class="pre">KRPC.SpaceCenter.ModuleRef</span></code>, as <code class="docutils literal notranslate"><span class="pre">SpaceCenter.Module</span></code> does:</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="na">[KRPCClass (Service = "TestFlight")]</span>
-<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">FailureModule</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Equatable</span><span class="o">&lt;</span><span class="n">FailureModule</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">IGameObjectState</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">FailureModule</span>
+<span class="w">    </span><span class="p">:</span><span class="w"> </span><span class="n">Equatable</span><span class="o">&lt;</span><span class="n">FailureModule</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">IGameObjectState</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">// The part the module is on, and which of the part's modules it is</span>
 <span class="w">    </span><span class="k">readonly</span><span class="w"> </span><span class="n">Part</span><span class="w"> </span><span class="n">part</span><span class="p">;</span>
 <span class="w">    </span><span class="n">ModuleRef</span><span class="w"> </span><span class="n">reference</span><span class="p">;</span>
@@ -666,10 +668,15 @@ module with a <code class="docutils literal notranslate"><span class="pre">KRPC.
 
 <span class="w">    </span><span class="c1">// The module, which every member reaches the game through</span>
 <span class="w">    </span><span class="n">TestFlightFailure</span><span class="w"> </span><span class="n">InternalModule</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="k">get</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="n">TestFlightFailure</span><span class="p">)</span><span class="n">reference</span><span class="p">.</span><span class="n">Get</span><span class="w"> </span><span class="p">(</span><span class="n">part</span><span class="p">.</span><span class="n">InternalPart</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="w">        </span><span class="k">get</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="n">TestFlightFailure</span><span class="p">)</span><span class="n">reference</span><span class="p">.</span><span class="n">Get</span><span class="w"> </span><span class="p">(</span><span class="n">part</span><span class="p">.</span><span class="n">InternalPart</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
 
-<span class="w">    </span><span class="c1">/// &lt;summary&gt;The state of the module, which is its part's until the part is there to look in.&lt;/summary&gt;</span>
+<span class="w">    </span><span class="c1">/// &lt;summary&gt;</span>
+<span class="w">    </span><span class="c1">/// The state of the module, which is its part's until the part is</span>
+<span class="w">    </span><span class="c1">/// there to look in.</span>
+<span class="w">    </span><span class="c1">/// &lt;/summary&gt;</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">GameObjectState</span><span class="w"> </span><span class="n">GameObjectState</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="k">get</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">reference</span><span class="p">.</span><span class="n">StateOn</span><span class="w"> </span><span class="p">(</span><span class="n">part</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
@@ -677,7 +684,8 @@ module with a <code class="docutils literal notranslate"><span class="pre">KRPC.
 <span class="w">    </span><span class="c1">/// &lt;summary&gt;Returns true if the objects are equal.&lt;/summary&gt;</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">Equals</span><span class="w"> </span><span class="p">(</span><span class="n">FailureModule</span><span class="w"> </span><span class="n">other</span><span class="p">)</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="o">!</span><span class="n">ReferenceEquals</span><span class="w"> </span><span class="p">(</span><span class="n">other</span><span class="p">,</span><span class="w"> </span><span class="k">null</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">part</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">other</span><span class="p">.</span><span class="n">part</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">reference</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">other</span><span class="p">.</span><span class="n">reference</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="o">!</span><span class="n">ReferenceEquals</span><span class="w"> </span><span class="p">(</span><span class="n">other</span><span class="p">,</span><span class="w"> </span><span class="k">null</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">part</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">other</span><span class="p">.</span><span class="n">part</span><span class="w"> </span><span class="o">&amp;&amp;</span>
+<span class="w">            </span><span class="n">reference</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">other</span><span class="p">.</span><span class="n">reference</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
 
 <span class="w">    </span><span class="c1">/// &lt;summary&gt;Hash code for the object.&lt;/summary&gt;</span>
@@ -692,12 +700,17 @@ module with a <code class="docutils literal notranslate"><span class="pre">KRPC.
 <span class="p">}</span>
 
 <span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">TestFlightExtensions</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="c1">/// &lt;summary&gt;The failure module of the part, or &lt;c&gt;null&lt;/c&gt; if it does not have one.&lt;/summary&gt;</span>
+<span class="w">    </span><span class="c1">/// &lt;summary&gt;</span>
+<span class="w">    </span><span class="c1">/// The failure module of the part, or &lt;c&gt;null&lt;/c&gt; if it</span>
+<span class="w">    </span><span class="c1">/// does not have one.</span>
+<span class="w">    </span><span class="c1">/// &lt;/summary&gt;</span>
 <span class="w">    </span><span class="na">[KRPCProperty (Nullable = true)]</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="n">FailureModule</span><span class="w"> </span><span class="nf">GetFailureModule</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="w"> </span><span class="n">Part</span><span class="w"> </span><span class="n">part</span><span class="p">)</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">reference</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ModuleRef</span><span class="p">.</span><span class="n">ForType</span><span class="o">&lt;</span><span class="n">TestFlightFailure</span><span class="o">&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">part</span><span class="p">.</span><span class="n">InternalPart</span><span class="p">);</span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">reference</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ModuleRef</span><span class="p">.</span><span class="n">None</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">FailureModule</span><span class="w"> </span><span class="p">(</span><span class="n">part</span><span class="p">,</span><span class="w"> </span><span class="n">reference</span><span class="p">);</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">reference</span><span class="w"> </span><span class="o">=</span>
+<span class="w">            </span><span class="n">ModuleRef</span><span class="p">.</span><span class="n">ForType</span><span class="o">&lt;</span><span class="n">TestFlightFailure</span><span class="o">&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">part</span><span class="p">.</span><span class="n">InternalPart</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">reference</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ModuleRef</span><span class="p">.</span><span class="n">None</span>
+<span class="w">            </span><span class="o">?</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">FailureModule</span><span class="w"> </span><span class="p">(</span><span class="n">part</span><span class="p">,</span><span class="w"> </span><span class="n">reference</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
 </pre></div>

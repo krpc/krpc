@@ -48,8 +48,8 @@ int main() {
 
   {
     auto apoapsis_altitude = vessel.orbit().apoapsis_altitude_call();
-    auto expr =
-        e.greater_than(e.call(apoapsis_altitude), e.constant_double(100000));
+    auto expr = e.greater_than(e.call(apoapsis_altitude),
+                               e.constant_double(100000));
     auto event = krpc::add_event(expr);
     event.acquire();
     event.wait();
