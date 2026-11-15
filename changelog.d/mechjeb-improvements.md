@@ -10,3 +10,5 @@
   - Plan from the orbit after the vessel's last maneuver node (#1381)
   - Set `ErrorMessage` to the error it throws, and clear the message of an earlier call (#1381)
   - Remove the nodes it placed when it fails to place one (#1381)
+- Apply `AscentAutopilot.LimitAoA` on the classic ascent path without MechJeb's ascent window
+  (#1381)

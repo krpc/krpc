@@ -129,6 +129,7 @@ namespace KRPC.MechJeb
         /// <summary>
         /// Whether the coast has a fixed length.
         /// </summary>
+        /// <remarks>Requires a coast stage, set in MechJeb's PVG settings window.</remarks>
         [KRPCProperty]
         public bool FixedCoast {
             get { return fixedCoast.Get (Instance); }

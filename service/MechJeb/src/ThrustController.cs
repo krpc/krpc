@@ -169,6 +169,7 @@ namespace KRPC.MechJeb
         /// <summary>
         /// Whether the controller opens and closes the air intakes.
         /// </summary>
+        /// <remarks>Requires <see cref="LimitToPreventFlameout"/>.</remarks>
         [KRPCProperty]
         public bool ManageIntakes {
             get { return manageIntakes.Get (Instance); }

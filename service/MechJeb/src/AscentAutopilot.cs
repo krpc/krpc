@@ -41,6 +41,7 @@ namespace KRPC.MechJeb
         static Field<object, bool> skipCircularization;
         static Field<object, bool> autostage;
         static Field<object, bool> limitAoA;
+        static Field<object, bool> limitQaEnabled;
         static Field<object, double> maxAoA;
         static Field<object, double> aoaLimitFadeoutPressure;
         static Field<object, double> launchPhaseAngle;
@@ -75,6 +76,7 @@ namespace KRPC.MechJeb
             skipCircularization = settings.Field<object, bool> ("SkipCircularization");
             autostage = settings.Field<object, bool> ("Autostage");
             limitAoA = settings.Field<object, bool> ("LimitAoA");
+            limitQaEnabled = settings.Field<object, bool> ("LimitQaEnabled");
             maxAoA = Bindings.EditableDouble (settings, "MaxAoA");
             aoaLimitFadeoutPressure = Bindings.EditableDouble (settings, "AOALimitFadeoutPressure");
             launchPhaseAngle = Bindings.EditableDouble (settings, "LaunchPhaseAngle");
@@ -115,6 +117,9 @@ namespace KRPC.MechJeb
             get { return base.Enabled; }
             set {
                 if (value) {
+                    // Select the path's angle of attack limiter, as MechJeb's ascent window does
+                    var settings = Settings;
+                    limitQaEnabled.Set (settings, ascentType.Get (settings) == pvg);
                     base.Enabled = true;
                 } else {
                     // The path may have changed since the autopilot was enabled
@@ -146,7 +151,9 @@ namespace KRPC.MechJeb
             set {
                 if (value != 0 && value != 2)
                     throw new ArgumentOutOfRangeException (nameof (value), "The ascent path must be 0 (classic) or 2 (PVG)");
-                ascentType.Set (Settings, value == 2 ? pvg : classic);
+                var settings = Settings;
+                ascentType.Set (settings, value == 2 ? pvg : classic);
+                limitQaEnabled.Set (settings, value == 2);
                 // MechJeb disables the other path's autopilot without removing its users
                 SetEnabled (MechJeb.Module (value == 2 ? classicName : pvgName), false);
             }
@@ -194,7 +201,8 @@ namespace KRPC.MechJeb
         /// Whether the autopilot steers by the velocity vector rather than the position vector.
         /// </summary>
         /// <remarks>
-        /// It is more accurate, though large craft may do better without it.
+        /// It is more accurate, though large craft may do better without it. Applies on the
+        /// classic ascent path.
         /// </remarks>
         [KRPCProperty]
         public bool CorrectiveSteering {
@@ -205,7 +213,7 @@ namespace KRPC.MechJeb
         /// <summary>
         /// The gain of the corrective steering.
         /// </summary>
-        /// <remarks>Requires <see cref="CorrectiveSteering"/>.</remarks>
+        /// <remarks>Requires <see cref="CorrectiveSteering"/>, and applies on the classic ascent path.</remarks>
         [KRPCProperty]
         public double CorrectiveSteeringGain {
             get { return correctiveSteeringGain.Get (Settings); }
@@ -289,6 +297,7 @@ namespace KRPC.MechJeb
         /// <summary>
         /// Whether to limit the angle of attack.
         /// </summary>
+        /// <remarks>Applies on the classic ascent path.</remarks>
         [KRPCProperty]
         public bool LimitAoA {
             get { return limitAoA.Get (Settings); }
@@ -298,7 +307,7 @@ namespace KRPC.MechJeb
         /// <summary>
         /// The largest angle of attack, in degrees.
         /// </summary>
-        /// <remarks>Requires <see cref="LimitAoA"/>.</remarks>
+        /// <remarks>Requires <see cref="LimitAoA"/>, and applies on the classic ascent path.</remarks>
         [KRPCProperty]
         public double MaxAoA {
             get { return maxAoA.Get (Settings); }
@@ -308,7 +317,7 @@ namespace KRPC.MechJeb
         /// <summary>
         /// The dynamic pressure below which the angle of attack limit fades out, in pascals.
         /// </summary>
-        /// <remarks>Requires <see cref="LimitAoA"/>.</remarks>
+        /// <remarks>Requires <see cref="LimitAoA"/>, and applies on the classic ascent path.</remarks>
         [KRPCProperty]
         public double AoALimitFadeoutPressure {
             get { return aoaLimitFadeoutPressure.Get (Settings); }
