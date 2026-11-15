@@ -8,8 +8,8 @@ load("//:config.bzl", "version")
 load("//doc:changelog.bzl", "changeloggen")
 load("//doc:check_documented.bzl", "check_documented_test")
 load("//doc:macros.bzl", "api_toctree", "cc_binary_multiple", "csharp_library_multiple", "java_binary_multiple")
-load("//doc:mods.bzl", "mod_services_rst", "mods_rst", "supported_mods_rst")
-load("//service:registry.bzl", "MODS", "SERVICES")
+load("//doc:mods.bzl", "mod_services_rst", "mods_rst", "supported_mods_rst", "tested_mods_rst")
+load("//service:registry.bzl", "MODS", "SERVICES", "TESTED_MODS")
 load("//tools/build:cpp.bzl", "clang_format_test", "clang_tidy_test")
 load("//tools/build:image.bzl", "png_images")
 load("//tools/build:lua.bzl", "lua_luacheck_test")
@@ -72,6 +72,7 @@ stage_files(
         ":python-api",
         ":python-api-toctree",
         ":space-center-mods",
+        ":tested-mods",
         "//:media/logo-mark.svg",
         "//:media/logo-on-dark.svg",
         "//:media/logo-on-light.svg",
@@ -97,13 +98,19 @@ stage_files(
 write_file(
     name = "mods",
     out = "src/mods.inc",
-    content = [mods_rst(MODS, SERVICES)],
+    content = [mods_rst(MODS, SERVICES, TESTED_MODS)],
 )
 
 write_file(
     name = "space-center-mods",
     out = "src/space-center-mods.inc",
     content = [supported_mods_rst(MODS, SERVICES, "SpaceCenter")],
+)
+
+write_file(
+    name = "tested-mods",
+    out = "src/tested-mods.inc",
+    content = [tested_mods_rst(MODS, TESTED_MODS)],
 )
 
 write_file(

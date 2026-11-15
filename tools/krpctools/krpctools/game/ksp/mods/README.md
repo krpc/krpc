@@ -26,6 +26,10 @@ mod (overwriting on conflict).
 * `B9PartSwitch/B9PartSwitch/TestPart.cfg` — a ModuleManager patch adding `b9PartSwitchTest`, an FL-T400
   whose tank switches between three B9PartSwitch subtypes. The B9PartSwitch archive has no parts.
 
+* `Kopernicus/Kopernicus/KRPCTestSystem.cfg` - a ModuleManager patch renaming the Sun of
+  Kopernicus' stock system Kerbol, as a planet pack that replaces the star renames it. The patch
+  is skipped when Real Solar System is installed.
+
 * `ClickThroughBlocker/000_ClickThroughBlocker/Global.cfg` — the global focus-handling default. Its presence is
   what makes ClickThroughBlocker skip its first-run focus popup on a new/loaded save (the popup
   only shows when this file is absent); `PopUpShown.cfg` alone does not suppress it.

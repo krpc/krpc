@@ -6,8 +6,9 @@ it. The overlays for each mod's installs are in ``mods/<name>/``, one subdirecto
 folder.
 
 A service reports whether each mod it wraps is installed through its ``available`` property,
-and SpaceCenter each mod it supports through ``<mod>_available``. A mod that no service reports
-is a dependency of another. The SHA-256 of a mod's main assembly in GameData tells which
+and SpaceCenter each mod it supports through ``<mod>_available``. The presence of every other
+mod, a dependency or a mod kRPC is only tested with, comes from the GameData folders the game
+database holds files from. The SHA-256 of a mod's main assembly in GameData tells which
 version is installed.
 """
 
@@ -30,6 +31,7 @@ class RegistryMod(Mod):
         self.sha256 = sha256
         self.folders = tuple(version["folders"])
         self.files = tuple(version["files"])
+        self.generated = tuple(version["generated"])
         self.requires = tuple(version["requires"])
         self.overlays = _resource("mods", self.name)
         # The service that reports the mod and the name of its property, or None

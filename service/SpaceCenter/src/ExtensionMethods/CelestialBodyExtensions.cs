@@ -8,13 +8,11 @@ namespace KRPC.SpaceCenter.ExtensionMethods
                 // Body orbits something
                 return body.GetOrbit ().GetVel ();
             } else {
-                // Body does not orbit anything
-                // Get a body that orbits the sun
-                var orbitingBody = FlightGlobals.Bodies.Find (b => b.name != "Sun" && b.GetOrbit ().referenceBody == body);
-                var orbit = orbitingBody.GetOrbit ();
-                // Compute the velocity of the sun in world space from this body
-                // Can't be done for from the sun object as it has no orbit object
-                return orbit.GetVel () - orbit.GetRelativeVel ();
+                // The root body has no orbit, so we take its frame velocity relative to the
+                // active vessel's body, as Orbit.GetVel does
+                var activeVessel = FlightGlobals.ActiveVessel;
+                var frameVelocity = activeVessel != null ? activeVessel.orbitDriver.referenceBody.GetFrameVel () : Vector3d.zero;
+                return (body.GetFrameVel () - frameVelocity).xzy;
             }
         }
     }

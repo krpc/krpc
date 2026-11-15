@@ -28,6 +28,23 @@ namespace TestingTools
         }
 
         /// <summary>
+        /// The top-level GameData folders the game database holds files from. Used by the
+        /// test framework to tell which mods are installed, including those no service reports.
+        /// </summary>
+        [KRPCProperty]
+        public static IList<string> GameDataFolders {
+            get {
+                // The database is loaded once, at startup. A file's url starts with its folder.
+                if (gameDataFolders == null)
+                    gameDataFolders = GameDatabase.Instance.root.AllFiles
+                        .Select (file => file.url.Split ('/') [0]).Distinct ().ToList ();
+                return gameDataFolders;
+            }
+        }
+
+        static IList<string> gameDataFolders;
+
+        /// <summary>
         /// Whether a part with the given name is present in the loaded part catalog. Used by the
         /// test framework to detect mods that add parts but no dedicated kRPC service (e.g.
         /// RealChute, wrapped by the SpaceCenter Parachute class).

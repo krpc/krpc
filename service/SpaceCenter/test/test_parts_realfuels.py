@@ -14,7 +14,7 @@ class TestPartsRealFuels(TestCase):
     that feed them.
     """
 
-    mods = ["RealFuels"]
+    mods = ["RealFuels", "RealFuels-Stock"]
 
     @classmethod
     def setUpClass(cls):
@@ -103,7 +103,7 @@ class TestPartsRealFuelsEditor(TestCase):
     feed pressure properties stay flight-only.
     """
 
-    mods = ["RealFuels"]
+    mods = ["RealFuels", "RealFuels-Stock"]
 
     @classmethod
     def setUpClass(cls):
@@ -162,7 +162,7 @@ class TestPartsRealFuelsBoiloff(TestCase):
     tank still being fed by a launch clamp and skips its boiloff entirely.
     """
 
-    mods = ["RealFuels"]
+    mods = ["RealFuels", "RealFuels-Stock"]
 
     @classmethod
     def setUpClass(cls):

@@ -210,6 +210,7 @@ def mod(name, versions, title = None, repo = None, assembly = None):
                 files = v.files,
                 requires = v.requires,
                 assembly_sha256 = v.assembly_sha256,
+                generated = v.generated,
             )
             for v in versions
         ],
@@ -223,7 +224,8 @@ def version(
         folders = [],
         files = [],
         requires = [],
-        assembly_sha256 = None):
+        assembly_sha256 = None,
+        generated = []):
     """A version of a mod in MODS.
 
     Args:
@@ -236,6 +238,7 @@ def version(
       requires: The mods installed alongside it, as name or name==version.
       assembly_sha256: The SHA-256 of the mod's <assembly>.dll in this version's archive, which
         tells the installed version.
+      generated: The files the mod writes at the top of GameData while the game runs.
 
     Returns:
       The version.
@@ -249,9 +252,11 @@ def version(
         files = files,
         requires = requires,
         assembly_sha256 = assembly_sha256,
+        generated = generated,
     )
 
-# The third-party mods kRPC wraps or supports, which an in-game test can require by name.
+# The third-party mods an in-game test can require by name: the mods kRPC wraps, supports or
+# is tested with, and their dependencies.
 # Overlays for their installs are in tools/krpctools/krpctools/game/ksp/mods/<name>/.
 MODS = [
     # Dependencies, never requested on their own
@@ -335,18 +340,6 @@ MODS = [
             requires = ["Harmony"],
         )],
     ),
-    # RealFuels' engine configs for stock parts. Without them no stock engine becomes a
-    # ModuleEnginesRF. Frozen in CKAN.
-    mod(
-        name = "RealFuels-Stock",
-        repo = "ValentinBischof/RealFuels-Stock",
-        versions = [version(
-            "5.1.0",
-            source = "releases/download/v{version}/RealFuels-Stock-v{version}.zip",
-            sha256 = "5ad5dde73fa84dcd1681e03385d9a4f9c6e65ea62248329c29e1038102412fac",
-            folders = ["RealFuels-Stock"],
-        )],
-    ),
     # The base class of RealFuels' engine module
     mod(
         name = "SolverEngines",
@@ -401,6 +394,28 @@ MODS = [
             source = "releases/download/v{version}/CommunityResourcePack_{version}.zip",
             sha256 = "e6c264137c391bd96b2cdd996b163ec4d7f200eccee0b2555edaf8bae19db2ed",
             folders = ["CommunityResourcePack"],
+        )],
+    ),
+    # The RSS body textures, at the lowest of the four resolutions
+    mod(
+        name = "RSSTextures",
+        repo = "KSP-RO/RSS-Textures",
+        versions = [version(
+            "18.6.1",
+            source = "releases/download/v{version}/2048.zip",
+            sha256 = "96c789aeffa42ad685ee44fe694f9ad9b8e3f3cb2c738b5dbccff84aa660b2ef",
+            folders = ["RSS-Textures"],
+        )],
+    ),
+    # Keeps a vessel's joints rigid, which an RO rocket needs to hold together under thrust
+    mod(
+        name = "KerbalJointReinforcement",
+        repo = "KSP-RO/Kerbal-Joint-Reinforcement-Continued",
+        versions = [version(
+            "3.9.0.0",
+            source = "releases/download/v{version}/Kerbal-Joint-Reinforcement_v{version}.zip",
+            sha256 = "b5364dffbf116a1d13d9d2fdb961411dc3460b01873e4357f7d8beb239bd6709",
+            folders = ["KerbalJointReinforcement"],
         )],
     ),
 
@@ -597,6 +612,7 @@ MODS = [
             assembly_sha256 = "cd902484e9b9cdc5f09914968e6b66d966e25fa5a854e561e124a96b17f7f4b0",
             folders = ["FerramAerospaceResearch"],
             requires = ["ModularFlightIntegrator", "KSPBurst", "Harmony"],
+            generated = ["Custom_FARAeroData.cfg"],
         )],
     ),
     # Real propellants, limited ignitions, ullage and pressure feeding
@@ -611,11 +627,23 @@ MODS = [
             assembly_sha256 = "a994c36a8c20a59ef66c81a308ec2cd3c2d2d2b56ca3ad9721b76b25401d6556",
             folders = ["RealFuels"],
             requires = [
-                "RealFuels-Stock",
                 "SolverEngines",
                 "ROUtils",
                 "CommunityResourcePack",
             ],
+        )],
+    ),
+    # RealFuels' engine configs for stock parts. Without them no stock engine becomes a
+    # ModuleEnginesRF. Frozen in CKAN. Realism Overhaul brings its own configs in their place,
+    # so a test requests these alongside RealFuels.
+    mod(
+        name = "RealFuels-Stock",
+        repo = "ValentinBischof/RealFuels-Stock",
+        versions = [version(
+            "5.1.0",
+            source = "releases/download/v{version}/RealFuels-Stock-v{version}.zip",
+            sha256 = "5ad5dde73fa84dcd1681e03385d9a4f9c6e65ea62248329c29e1038102412fac",
+            folders = ["RealFuels-Stock"],
         )],
     ),
     # Replaces CommNet's range model with a link budget
@@ -759,4 +787,69 @@ MODS = [
             requires = ["Harmony"],
         )],
     ),
+
+    # The mods kRPC is tested with that no service wraps or supports
+
+    # Replaces the planetary system from configs
+    mod(
+        name = "Kopernicus",
+        repo = "Kopernicus/Kopernicus",
+        versions = [version(
+            "1.12.1-254",
+            source = "releases/download/release-254/Kopernicus-{version}.zip",
+            sha256 = "7a3adadede98a24c299429f91f887a7ed5221202e7490774056387b2c27fa80d",
+            folders = ["Kopernicus"],
+            requires = ["KSPTextureLoader", "ModularFlightIntegrator", "Harmony"],
+        )],
+    ),
+    # Real Solar System, the solar system at real scale, through Kopernicus
+    mod(
+        name = "RealSolarSystem",
+        title = "Real Solar System",
+        repo = "KSP-RO/RealSolarSystem",
+        versions = [version(
+            "20.2.0.0",
+            source = "releases/download/v{version}/RealSolarSystem_v{version}.zip",
+            sha256 = "a92bcb4fbd88e0cfb6d295e2927f8a23df22a69c4e50e7d74b5e8fd4a6b2d5a9",
+            folders = ["RealSolarSystem"],
+            requires = ["Kopernicus", "RSSTextures", "KSPCommunityFixes"],
+        )],
+    ),
+    # Realism Overhaul, with the dependencies that change what a script reads: engines,
+    # aerodynamics, parachutes and joints. Its effects and thermal dependencies are left out.
+    mod(
+        name = "RealismOverhaul",
+        title = "Realism Overhaul",
+        repo = "KSP-RO/RealismOverhaul",
+        versions = [version(
+            "18.0.0.0",
+            source = "releases/download/v{version}/RealismOverhaul-v{version}.zip",
+            sha256 = "11dea71f7c2dc463757ac3af3459b17ccb835d931cc1c6c5145c5fb62a0b7494",
+            folders = ["RealismOverhaul", "EngineGroupController"],
+            requires = [
+                "RealFuels",
+                "FAR",
+                "RealChute",
+                "KerbalJointReinforcement",
+                "ROUtils",
+                "KSPCommunityFixes",
+            ],
+        )],
+    ),
+    # Tanks, structural parts and boosters of any size
+    mod(
+        name = "ProceduralParts",
+        title = "Procedural Parts",
+        repo = "KSP-RO/ProceduralParts",
+        versions = [version(
+            "2.8.0.0",
+            source = "releases/download/v{version}/ProceduralParts-v{version}.zip",
+            sha256 = "2a306673f3094f431f855ce8ad738061b7cfd85183492938b905ff32ee12b45e",
+            folders = ["ProceduralParts"],
+            requires = ["ROUtils", "KSPCommunityFixes"],
+        )],
+    ),
 ]
+
+# The mods of MODS that no service wraps or supports, which the docs list as tested
+TESTED_MODS = ["Kopernicus", "RealSolarSystem", "RealismOverhaul", "ProceduralParts"]

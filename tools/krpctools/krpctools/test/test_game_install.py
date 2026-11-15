@@ -12,7 +12,7 @@ from unittest import mock
 
 from krpctools.game import game, install, launch, pytest_plugin
 from krpctools.game.ksp import KSP
-from krpctools.game.ksp.game import copy_file, copy_folder, source_digest
+from krpctools.game.ksp.game import Mod, copy_file, copy_folder, source_digest
 
 # A clean no-mod GameData: the stock game, kRPC, the ModuleManager assembly and its
 # runtime-generated cache files.
@@ -81,6 +81,21 @@ class TestValidateInstall(TempDirTestCase):
     def test_requested_mod_files_allowed(self):
         self._populate([*_CLEAN, "TweakScale", "999_Scale_Redist.dll", "000_Harmony"])
         self.ksp.validate_install(["TweakScaleRescaled", "Harmony"])
+
+    def test_requested_mod_generated_files_allowed(self):
+        self._populate([*_CLEAN, "FerramAerospaceResearch", "Custom_FARAeroData.cfg"])
+        self.ksp.validate_install(["FAR"])
+
+    def test_unrequested_mod_generated_files_raise(self):
+        self._populate([*_CLEAN, "Custom_FARAeroData.cfg"])
+        with self.assertRaises(RuntimeError) as cm:
+            self.ksp.validate_install([])
+        self.assertIn("Custom_FARAeroData.cfg", str(cm.exception))
+
+    def test_removing_a_mod_removes_its_generated_files(self):
+        self._populate([*_CLEAN, "Custom_FARAeroData.cfg"])
+        self.ksp.mod("FAR").remove(self.ksp)
+        self.ksp.validate_install([])
 
     def test_unrequested_mod_raises(self):
         self._populate([*_CLEAN, "RealChute"])
@@ -340,6 +355,28 @@ class TestLoadedMods(unittest.TestCase):
         the_game = self.game(mod)
         self.assertEqual(set(), launch.loaded_mods(the_game, None))
         self.assertEqual({"Mod==1"}, launch.loaded_mods(the_game, None, {"Mod==1"}))
+
+
+class TestModPresent(unittest.TestCase):
+    def setUp(self):
+        self.ksp = KSP()
+        self.conn = mock.Mock()
+        self.conn.testing_tools.game_data_folders = ["Squad", "kRPC", "Kopernicus"]
+
+    def test_loaded_folders(self):
+        self.assertTrue(self.ksp.mod("Kopernicus").present(self.ksp, self.conn))
+
+    def test_folder_not_loaded(self):
+        self.assertFalse(self.ksp.mod("RealSolarSystem").present(self.ksp, self.conn))
+
+    def test_some_folders_not_loaded(self):
+        self.conn.testing_tools.game_data_folders = ["RealismOverhaul"]
+        self.assertFalse(self.ksp.mod("RealismOverhaul").present(self.ksp, self.conn))
+
+    def test_mod_without_folders(self):
+        mod = Mod()
+        mod.files = ("Mod.dll",)
+        self.assertIsNone(self.ksp.mod_present(mod, self.conn))
 
 
 class TestCopyFile(TempDirTestCase):
