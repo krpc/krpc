@@ -50,12 +50,14 @@ through this object. The following connects to a server with the default setting
 ``127.0.0.1`` and port 50000, and prints its version:
 
 .. literalinclude:: /scripts/js/Connecting1.js
+   :language: javascript
 
 :func:`connect` also takes a name for the connection, and the address and port of the server.
 These match the address and port shown in the server window. The name appears in the server window
 in the game:
 
 .. literalinclude:: /scripts/js/Connecting2.js
+   :language: javascript
 
 WebSockets works over a network, so your program can run on a different machine from the game.
 
@@ -76,6 +78,7 @@ Closing the Connection
 :meth:`Connection.close` closes a connection:
 
 .. literalinclude:: /scripts/js/Connecting3.js
+   :language: javascript
 
 Calling Remote Procedures
 -------------------------
@@ -86,6 +89,7 @@ The following gets the active vessel, an object of the ``SpaceCenter.Vessel`` cl
 vessel's name, then prints its altitude:
 
 .. literalinclude:: /scripts/js/RemoteProcedures.js
+   :language: javascript
 
 Each service is a property of the connection, such as ``conn.spaceCenter``. A property is a pair
 of methods, such as ``vessel.getName()`` and ``vessel.setName(name)``.
@@ -95,6 +99,7 @@ flight at once, and each resolves with its own result. The following reads three
 waiting for each response before sending the next call:
 
 .. literalinclude:: /scripts/js/Concurrent.js
+   :language: javascript
 
 Default and Named Arguments
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -105,6 +110,7 @@ arguments by name. The following launches a vessel without recovering the vessel
 pad, and leaves the crew argument before it at its default:
 
 .. literalinclude:: /scripts/js/Arguments.js
+   :language: javascript
 
 Passing an argument both by position and by name, or naming an argument the procedure does not
 have, rejects with a ``TypeError``.
@@ -133,6 +139,7 @@ A flags enumeration, such as :class:`~SpaceCenter.MapFilterType`, holds any comb
 values. You combine values with ``union``, and test for one with ``contains``:
 
 .. literalinclude:: /scripts/js/Flags.js
+   :language: javascript
 
 ``intersection`` and ``difference`` give the other combinations of two values. Each combination is
 one object, so combinations compare with ``===``.
@@ -146,6 +153,7 @@ The package exports each service of a kRPC release, with its enumerations, struc
 exception classes. You can then use a value before you connect, such as in a default argument:
 
 .. literalinclude:: /scripts/js/Imports.js
+   :language: javascript
 
 When the server defines a type as the package does, the connection uses the package's type. Its
 values then compare with ``===``, and ``instanceof`` works with the package's classes. A connection
@@ -161,6 +169,7 @@ The following script shows the altitude of the active vessel in a page. A stream
 updates it each time it changes, at most 10 times a second:
 
 .. literalinclude:: /scripts/js/Dashboard.js
+   :language: javascript
 
 Bundle the script for the page as shown in :ref:`js-client-installing`.
 
@@ -178,6 +187,7 @@ A procedure that fails on the server rejects its ``Promise`` with an error. The 
 the error from loading a save that does not exist:
 
 .. literalinclude:: /scripts/js/Errors.js
+   :language: javascript
 
 The error you catch depends on the error on the server:
 
@@ -210,6 +220,7 @@ The object holds no copy of the game's state. It is just a reference to it. Each
 reads the game as it is now:
 
 .. literalinclude:: /scripts/js/RemoteObjects.js
+   :language: javascript
 
 A connection returns one JavaScript object for each object on the server, so two results for the
 same thing in the game compare equal with ``===``. An object works as a ``Map`` key or a ``Set``
@@ -229,6 +240,7 @@ sends a request and waits for its response each time. A *stream* is more efficie
 runs the call repeatedly, and sends your program the result each time it changes:
 
 .. literalinclude:: /scripts/js/Streaming.js
+   :language: javascript
 
 :meth:`Connection.addStream` takes a function that returns one call, such as
 ``() => flightInfo.getMeanAltitude()``, and returns a ``Promise`` of a :class:`Stream`. The client
@@ -249,6 +261,7 @@ An ``await using`` declaration removes a stream at the end of its block. It need
 recent browser, or TypeScript to compile it:
 
 .. literalinclude:: /scripts/js/StreamScope.js
+   :language: javascript
 
 By default, the server sends a stream's value each time it changes. :meth:`Stream.setRate` limits
 how many times a second the stream updates, as in the :ref:`web page example <js-client-web-page>`.
@@ -260,6 +273,7 @@ A callback is a function the client calls with each new value of a stream. The f
 callbacks to a stream of the abort button:
 
 .. literalinclude:: /scripts/js/Callbacks.js
+   :language: javascript
 
 A callback added to a stream that already has a value is called with that value before
 :meth:`Stream.addCallback` returns. It is then called with each new value, in order. The client
@@ -281,6 +295,7 @@ then throw the error that ended it. The following streams the temperature of a p
 is destroyed:
 
 .. literalinclude:: /scripts/js/StreamEnd.js
+   :language: javascript
 
 The error is the one the procedure threw, or one of the following:
 
@@ -298,6 +313,7 @@ value. The updates resume once the object or the scene is available.
 error:
 
 .. literalinclude:: /scripts/js/EndCallback.js
+   :language: javascript
 
 Events
 ------
@@ -330,6 +346,7 @@ and the server runs it there. The following reads the vessel's altitude and spee
 tick:
 
 .. literalinclude:: /scripts/js/CompiledFunction.js
+   :language: javascript
 
 The function is written as it runs on the server. A property is read as a property, as in
 ``flight.meanAltitude``, and a method returns its value. The :ref:`server side functions guide
@@ -346,6 +363,7 @@ minifier keeps the keys of the pattern, so a compiled function survives one. A n
 reads that is not captured is a :class:`CompilationError`:
 
 .. literalinclude:: /scripts/js/CompilationErrors.js
+   :language: javascript
 
 Each captured value is used as follows:
 
@@ -369,6 +387,7 @@ A compiled function is an arrow function, a function expression or a method. Its
 statements, collections and local functions, as in your program:
 
 .. literalinclude:: /scripts/js/CompiledStatements.js
+   :language: javascript
 
 The following compile to the server's operations:
 
@@ -439,6 +458,7 @@ property starts as it is when the function is compiled, and your program's objec
 value:
 
 .. literalinclude:: /scripts/user-guide/server-side-functions/FiringCounter.js
+   :language: javascript
    :start-after: [docs]
    :end-before: [/docs]
 
@@ -486,6 +506,7 @@ compiles it once, with a type for each of those parameters, and :meth:`Connectio
 arguments:
 
 .. literalinclude:: /scripts/js/CompiledParameters.js
+   :language: javascript
 
 The ``types`` values name the types: ``types.double``, ``types.float``, ``types.int32``,
 ``types.uint32``, ``types.int64``, ``types.uint64``, ``types.bool``, ``types.string`` and
@@ -500,6 +521,7 @@ Function Streams and Events
 :meth:`Connection.addStream` streams a function's value:
 
 .. literalinclude:: /scripts/js/FunctionEvent.js
+   :language: javascript
 
 The server computes the function on each stream update. A function of a stream or an event takes
 no parameters, and makes a call, as a function of constants has the same value on every update.
