@@ -87,6 +87,13 @@ SETUPS = {
         fresh=True,
         mods=("MechJeb",),
     ),
+    "mechjeb-tutorial": Setup(
+        craft="PT Series Munsplorer",
+        directory=STOCK,
+        placement=Pad(),
+        fresh=True,
+        mods=("MechJeb",),
+    ),
     "raster-prop-monitor": Setup(
         craft="RasterPropMonitor",
         directory="service/RasterPropMonitor/test/craft",
@@ -255,6 +262,13 @@ TUTORIALS = [
         "tutorials/user-interface/UserInterface",
         "tutorials/drawing/DrawingExample",
         run=Interactive(checks.keeps_calling, then=Loop(prints=False)),
+    ),
+    Example(
+        "tutorials/mechjeb/LaunchToMinmus",
+        "mechjeb-tutorial",
+        run=Exit(timeout=3600),
+        check=checks.landed_on("Minmus"),
+        slow=True,
     ),
     Example(
         "tutorials/raster-prop-monitor/ScreenMenu",

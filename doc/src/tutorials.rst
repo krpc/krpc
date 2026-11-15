@@ -31,10 +31,11 @@ Work with the parts of a vessel, and add your own user interface and drawings to
 Integrations
 ------------
 
-Control a vessel from a web browser, and drive the screens of another mod.
+Control a vessel from a web browser, drive the screens of another mod, and fly with MechJeb.
 
 .. toctree::
    :maxdepth: 1
 
    tutorials/control-panel
    tutorials/raster-prop-monitor
+   tutorials/mechjeb

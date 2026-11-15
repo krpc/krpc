@@ -36,8 +36,10 @@ Kosmo
 Landers
 LaserDist
 LaunchPad
+Minmus
 MoI
 ModuleEngines
+Munsplorer
 MyGroup
 NUnit
 NaN
@@ -87,6 +89,7 @@ cppcheck
 crossfeed
 deadband
 decoupler
+deorbit
 decouplers
 deployable
 destructor
