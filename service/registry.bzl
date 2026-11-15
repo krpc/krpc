@@ -335,18 +335,6 @@ MODS = [
             requires = ["Harmony"],
         )],
     ),
-    # RealFuels' engine configs for stock parts. Without them no stock engine becomes a
-    # ModuleEnginesRF. Frozen in CKAN.
-    mod(
-        name = "RealFuels-Stock",
-        repo = "ValentinBischof/RealFuels-Stock",
-        versions = [version(
-            "5.1.0",
-            source = "releases/download/v{version}/RealFuels-Stock-v{version}.zip",
-            sha256 = "5ad5dde73fa84dcd1681e03385d9a4f9c6e65ea62248329c29e1038102412fac",
-            folders = ["RealFuels-Stock"],
-        )],
-    ),
     # The base class of RealFuels' engine module
     mod(
         name = "SolverEngines",
@@ -611,11 +599,23 @@ MODS = [
             assembly_sha256 = "a994c36a8c20a59ef66c81a308ec2cd3c2d2d2b56ca3ad9721b76b25401d6556",
             folders = ["RealFuels"],
             requires = [
-                "RealFuels-Stock",
                 "SolverEngines",
                 "ROUtils",
                 "CommunityResourcePack",
             ],
+        )],
+    ),
+    # RealFuels' engine configs for stock parts. Without them no stock engine becomes a
+    # ModuleEnginesRF. Frozen in CKAN. Realism Overhaul brings its own configs in their place,
+    # so a test requests these alongside RealFuels.
+    mod(
+        name = "RealFuels-Stock",
+        repo = "ValentinBischof/RealFuels-Stock",
+        versions = [version(
+            "5.1.0",
+            source = "releases/download/v{version}/RealFuels-Stock-v{version}.zip",
+            sha256 = "5ad5dde73fa84dcd1681e03385d9a4f9c6e65ea62248329c29e1038102412fac",
+            folders = ["RealFuels-Stock"],
         )],
     ),
     # Replaces CommNet's range model with a link budget
