@@ -16,11 +16,7 @@ namespace KRPC.MechJeb
     [KRPCClass (Service = "MechJeb")]
     public sealed class TargetController : ComputerModule
     {
-        static Action<object, global::CelestialBody, double, double> setPositionTarget;
-        static Func<object, string> getPositionTargetString;
-        static Func<object, Vector3d> getPositionTargetPosition;
         static Action<object, string> setDirectionTarget;
-        static Action<object> pickPositionTargetOnMap;
         static Action<object, Vector3d> updateDirectionTarget;
         static Action<object> onFixedUpdate;
         static Func<object, bool> normalTargetExists;
@@ -38,11 +34,7 @@ namespace KRPC.MechJeb
         internal static new void Load ()
         {
             var type = Bindings.Type ("MuMech.MechJebModuleTargetController");
-            setPositionTarget = type.Method<Action<object, global::CelestialBody, double, double>> ("SetPositionTarget");
-            getPositionTargetString = type.Method<Func<object, string>> ("GetPositionTargetString");
-            getPositionTargetPosition = type.Method<Func<object, Vector3d>> ("GetPositionTargetPosition");
             setDirectionTarget = type.Method<Action<object, string>> ("SetDirectionTarget");
-            pickPositionTargetOnMap = type.Method<Action<object>> ("PickPositionTargetOnMap");
             updateDirectionTarget = type.Method<Action<object, Vector3d>> ("UpdateDirectionTarget");
             onFixedUpdate = type.Method<Action<object>> ("OnFixedUpdate");
             normalTargetExists = type.Getter<object, bool> ("NormalTargetExists");
@@ -98,38 +90,6 @@ namespace KRPC.MechJeb
         }
 
         /// <summary>
-        /// Set the target to a position on the surface of a body.
-        /// </summary>
-        /// <param name="body">The body.</param>
-        /// <param name="latitude">The latitude, in degrees.</param>
-        /// <param name="longitude">The longitude, in degrees.</param>
-        [KRPCMethod]
-        public void SetPositionTarget (SpaceCenter.Services.CelestialBody body, double latitude, double longitude)
-        {
-            if (ReferenceEquals (body, null))
-                throw new ArgumentNullException (nameof (body));
-            setPositionTarget (Instance, body.InternalBody, latitude, longitude);
-        }
-
-        /// <summary>
-        /// The position target as text.
-        /// </summary>
-        [KRPCMethod]
-        public string GetPositionTargetString ()
-        {
-            return getPositionTargetString (Instance);
-        }
-
-        /// <summary>
-        /// The world space position of the position target.
-        /// </summary>
-        [KRPCMethod]
-        public Tuple3 GetPositionTargetPosition ()
-        {
-            return getPositionTargetPosition (Instance).ToTuple ();
-        }
-
-        /// <summary>
         /// Set the target to a direction.
         /// </summary>
         /// <param name="name">The name of the target.</param>
@@ -138,15 +98,6 @@ namespace KRPC.MechJeb
         public void SetDirectionTarget (string name)
         {
             setDirectionTarget (Instance, name);
-        }
-
-        /// <summary>
-        /// Let the player pick the position target on the map.
-        /// </summary>
-        [KRPCMethod]
-        public void PickPositionTargetOnMap ()
-        {
-            pickPositionTargetOnMap (Instance);
         }
 
         /// <summary>

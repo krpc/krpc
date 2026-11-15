@@ -51,5 +51,15 @@ namespace KRPC.MechJeb
         public string Status {
             get { return status (Instance); }
         }
+
+        /// <summary>
+        /// Whether to warp time during the rendezvous.
+        /// </summary>
+        /// <remarks>The same setting as <see cref="ManeuverPlanner.Autowarp"/>.</remarks>
+        [KRPCProperty]
+        public bool Autowarp {
+            get { return NodeExecutor.Autowarp; }
+            set { NodeExecutor.Autowarp = value; }
+        }
     }
 }

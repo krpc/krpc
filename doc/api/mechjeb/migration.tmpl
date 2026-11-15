@@ -1,0 +1,242 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.highlight }}
+{{ domain.currentmodule('MechJeb') }}
+
+Migration from KRPC.MechJeb 0.7.1
+=================================
+
+kRPC 0.8 adds the MechJeb service, which Genhis' KRPC.MechJeb 0.7.1 provided before. The
+service follows MechJeb's windows, so some 0.7.1 members moved or were renamed. 0.7.1 names
+are given as in C#.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 35 30
+
+   * - 0.7.1
+     - 0.8
+     - Note
+   * - ``MechJeb.AscentAutopilot``
+     - {{ see('M:MechJeb.AscentGuidance') }}
+     -
+   * - ``MechJeb.AirplaneAutopilot``
+     - {{ see('M:MechJeb.AircraftAutopilot') }}
+     -
+   * - ``MechJeb.LandingAutopilot``
+     - {{ see('M:MechJeb.LandingGuidance') }}
+     -
+   * - ``MechJeb.ThrustController``
+     - {{ see('M:MechJeb.Utilities.Thrust') }}
+     -
+   * - ``MechJeb.StagingController``
+     - {{ see('M:MechJeb.Utilities.Staging') }}
+     -
+   * - ``MechJeb.SolarPanelController``
+     - {{ see('M:MechJeb.Utilities.SolarPanels') }}
+     -
+   * - ``MechJeb.AntennaController``
+     - {{ see('M:MechJeb.Utilities.Antennas') }}
+     -
+   * - ``MechJeb.NodeExecutor``
+     - {{ see('M:MechJeb.ManeuverPlanner') }}
+     - Its members move to the maneuver planner, below
+   * - ``MechJeb.RCSController``
+     - {{ see('M:MechJeb.SmartRCS') }}
+     - Its members move to Smart RCS, below
+   * - ``MechJeb.APIReady``
+     - {{ see('M:MechJeb.Available') }} and {{ see('M:MechJeb.Ready') }}
+     -
+   * - ``AscentAutopilot.Enabled``
+     - {{ see('M:MechJeb.AscentGuidance.Enabled') }}
+     -
+   * - ``AscentAutopilot.Status``
+     - {{ see('M:MechJeb.AscentGuidance.Status') }}
+     -
+   * - ``AscentAutopilot.DesiredOrbitAltitude``
+     - {{ see('M:MechJeb.AscentGuidance.DesiredOrbitAltitude') }}
+     -
+   * - ``AscentAutopilot.DesiredInclination``
+     - {{ see('M:MechJeb.AscentGuidance.DesiredInclination') }}
+     -
+   * - ``AscentAutopilot.LaunchPhaseAngle``
+     - {{ see('M:MechJeb.AscentGuidance.LaunchPhaseAngle') }}
+     -
+   * - ``AscentAutopilot.LaunchLANDifference``
+     - {{ see('M:MechJeb.AscentGuidance.LaunchLANDifference') }}
+     -
+   * - ``AscentAutopilot.WarpCountDown``
+     - {{ see('M:MechJeb.AscentGuidance.WarpCountDown') }}
+     -
+   * - ``AscentAutopilot.LaunchMode``
+     - {{ see('M:MechJeb.AscentGuidance.LaunchMode') }}
+     -
+   * - ``AscentAutopilot.AbortTimedLaunch``
+     - {{ see('M:MechJeb.AscentGuidance.AbortTimedLaunch') }}
+     -
+   * - ``AscentAutopilot.LaunchToRendezvous``
+     - {{ see('M:MechJeb.AscentGuidance.LaunchToRendezvous') }}
+     -
+   * - ``AscentAutopilot.LaunchToTargetPlane``
+     - {{ see('M:MechJeb.AscentGuidance.LaunchToTargetPlane') }}
+     -
+   * - ``AscentAutopilot.AscentPathIndex``
+     - {{ see('M:MechJeb.AscentGuidance.AscentType') }}
+     - 0 is {{ see('M:MechJeb.AscentType.Classic') }} and 2 is {{ see('M:MechJeb.AscentType.PVG') }}
+   * - ``AscentAutopilot.AscentPathClassic``
+     - {{ see('M:MechJeb.AscentGuidance.ClassicPath') }}
+     -
+   * - ``AscentAutopilot.AscentPathPVG``
+     - {{ see('M:MechJeb.AscentGuidance.PVGSettings') }}
+     -
+   * - ``AscentAutopilot.CorrectiveSteering``
+     - {{ see('M:MechJeb.AscentSettings.CorrectiveSteering') }}
+     - Through {{ see('M:MechJeb.AscentGuidance.Settings') }}
+   * - ``AscentAutopilot.CorrectiveSteeringGain``
+     - {{ see('M:MechJeb.AscentSettings.CorrectiveSteeringGain') }}
+     - Through {{ see('M:MechJeb.AscentGuidance.Settings') }}
+   * - ``AscentAutopilot.ForceRoll``
+     - {{ see('M:MechJeb.AscentSettings.ForceRoll') }}
+     - Through {{ see('M:MechJeb.AscentGuidance.Settings') }}
+   * - ``AscentAutopilot.VerticalRoll``
+     - {{ see('M:MechJeb.AscentSettings.VerticalRoll') }}
+     - Through {{ see('M:MechJeb.AscentGuidance.Settings') }}
+   * - ``AscentAutopilot.TurnRoll``
+     - {{ see('M:MechJeb.AscentSettings.TurnRoll') }}
+     - Through {{ see('M:MechJeb.AscentGuidance.Settings') }}
+   * - ``AscentAutopilot.AutodeploySolarPanels``
+     - {{ see('M:MechJeb.AscentSettings.AutodeploySolarPanels') }}
+     - Through {{ see('M:MechJeb.AscentGuidance.Settings') }}
+   * - ``AscentAutopilot.AutoDeployAntennas``
+     - {{ see('M:MechJeb.AscentSettings.AutoDeployAntennas') }}
+     - Through {{ see('M:MechJeb.AscentGuidance.Settings') }}
+   * - ``AscentAutopilot.SkipCircularization``
+     - {{ see('M:MechJeb.AscentSettings.SkipCircularization') }}
+     - Through {{ see('M:MechJeb.AscentGuidance.Settings') }}
+   * - ``AscentAutopilot.Autostage``
+     - {{ see('M:MechJeb.AscentSettings.Autostage') }}
+     - Through {{ see('M:MechJeb.AscentGuidance.Settings') }}
+   * - ``AscentAutopilot.LimitAoA``
+     - {{ see('M:MechJeb.AscentSettings.LimitAngleOfAttack') }}
+     - Through {{ see('M:MechJeb.AscentGuidance.Settings') }}
+   * - ``AscentAutopilot.MaxAoA``
+     - {{ see('M:MechJeb.AscentSettings.MaxAngleOfAttack') }}
+     - Through {{ see('M:MechJeb.AscentGuidance.Settings') }}
+   * - ``AscentAutopilot.AoALimitFadeoutPressure``
+     - {{ see('M:MechJeb.AscentSettings.AngleOfAttackLimitFadeoutPressure') }}
+     - Through {{ see('M:MechJeb.AscentGuidance.Settings') }}
+   * - ``AscentAutopilot.ThrustController``
+     - {{ see('M:MechJeb.AscentSettings.Thrust') }}
+     -
+   * - ``AscentAutopilot.StagingController``
+     - {{ see('M:MechJeb.AscentSettings.Staging') }}
+     -
+   * - ``AscentAutopilot.AscentPathGT``
+     - Removed
+     - MechJeb 2.15 has no gravity turn path
+   * - ``AscentClassic``
+     - {{ see('T:MechJeb.ClassicPath') }}
+     - Members keep their names
+   * - ``AscentPVG.DesiredApoapsis``
+     - {{ see('M:MechJeb.AscentGuidance.DesiredApoapsis') }}
+     -
+   * - ``AscentPVG.AttachAltFlag``
+     - {{ see('M:MechJeb.AscentGuidance.AttachAltFlag') }}
+     -
+   * - ``AscentPVG.DesiredAttachAlt``
+     - {{ see('M:MechJeb.AscentGuidance.DesiredAttachAlt') }}
+     -
+   * - ``AscentPVG``
+     - {{ see('T:MechJeb.PVGSettings') }}
+     - Its other members keep their names
+   * - ``AscentGT``
+     - Removed
+     - MechJeb 2.15 has no gravity turn path
+   * - ``ThrustController``
+     - {{ see('T:MechJeb.ThrustLimiter') }}
+     - Members keep their names
+   * - ``ThrustController.SmoothThrottle, ThrottleSmoothingTime``
+     - Removed
+     - MechJeb 2.15 removed them
+   * - ``StagingController``
+     - {{ see('T:MechJeb.Autostaging') }}
+     - Its other members keep their names
+   * - ``StagingController.AutostagingOnce``
+     - {{ see('M:MechJeb.Autostaging.AutostageOnce') }}
+     - {{ see('M:MechJeb.Autostaging.AutostagingOnce') }} is read-only
+   * - ``NodeExecutor.ExecuteOneNode``
+     - {{ see('M:MechJeb.ManeuverPlanner.ExecuteNextNode') }}
+     -
+   * - ``NodeExecutor.ExecuteAllNodes``
+     - {{ see('M:MechJeb.ManeuverPlanner.ExecuteAllNodes') }}
+     -
+   * - ``NodeExecutor.Abort``
+     - {{ see('M:MechJeb.ManeuverPlanner.AbortNodeExecution') }}
+     -
+   * - ``NodeExecutor.Enabled``
+     - {{ see('M:MechJeb.ManeuverPlanner.ExecutingNode') }}
+     -
+   * - ``NodeExecutor.Autowarp``
+     - {{ see('M:MechJeb.ManeuverPlanner.Autowarp') }}
+     -
+   * - ``NodeExecutor.LeadTime``
+     - {{ see('M:MechJeb.ManeuverPlanner.LeadTime') }}
+     -
+   * - ``NodeExecutor.Tolerance``
+     - Removed
+     - MechJeb 2.15 removed it
+   * - ``RCSController.RCSThrottle``
+     - {{ see('M:MechJeb.SmartRCS.RCSThrottle') }}
+     -
+   * - ``RCSController.RCSForRotation``
+     - {{ see('M:MechJeb.SmartRCS.RCSForRotation') }}
+     -
+   * - ``SmartRCS.RCSController``
+     - Removed
+     - Its members are on {{ see('T:MechJeb.SmartRCS') }}
+   * - ``LandingAutopilot``
+     - {{ see('T:MechJeb.LandingGuidance') }}
+     - Its other members keep their names
+   * - ``LandingAutopilot.RcsAdjustment``
+     - {{ see('M:MechJeb.LandingGuidance.RCSAdjustment') }}
+     -
+   * - ``LandingAutopilot.LandAtPositionTarget``
+     - {{ see('M:MechJeb.LandingGuidance.LandAtTarget') }}
+     -
+   * - ``LandingAutopilot.LandUntargeted``
+     - {{ see('M:MechJeb.LandingGuidance.LandSomewhere') }}
+     -
+   * - ``LandingAutopilot.StopLanding``
+     - {{ see('M:MechJeb.LandingGuidance.AbortAutoland') }}
+     -
+   * - ``TargetController.SetPositionTarget``
+     - {{ see('M:MechJeb.LandingGuidance.SetTarget') }}
+     -
+   * - ``TargetController.PickPositionTargetOnMap``
+     - {{ see('M:MechJeb.LandingGuidance.PickTargetOnMap') }}
+     -
+   * - ``TargetController.GetPositionTargetString``
+     - {{ see('M:MechJeb.LandingGuidance.GetTargetString') }}
+     -
+   * - ``TargetController.GetPositionTargetPosition``
+     - {{ see('M:MechJeb.LandingGuidance.GetTargetPosition') }}
+     -
+   * - ``AirplaneAutopilot``
+     - {{ see('T:MechJeb.AircraftAutopilot') }}
+     - Members keep their names
+   * - ``Operation.MakeNode``
+     - {{ see('M:MechJeb.OperationApoapsis.MakeNodes') }}
+     - On each operation. It returns every node
+   * - ``OperationCourseCorrection.CourseCorrectFinalPeA``
+     - {{ see('M:MechJeb.OperationCourseCorrection.FinalPeriapsisAltitude') }}
+     -
+   * - ``OperationTransfer.InterceptOnly``
+     - {{ see('M:MechJeb.OperationTransfer.Capture') }}
+     - The inverse
+   * - ``OperationTransfer.SimpleTransfer``
+     - {{ see('M:MechJeb.OperationTransfer.Coplanar') }}
+     -
+   * - ``OperationTransfer.PeriodOffset``
+     - {{ see('M:MechJeb.OperationTransfer.LagTime') }}
+     - A time in seconds, rather than a fraction of the target's period
+
+Members not listed keep their names and classes.

@@ -1,14 +1,12 @@
 using System;
-using KRPC.Service.Attributes;
 using KRPC.Utils;
 
 namespace KRPC.MechJeb
 {
     /// <summary>
-    /// The maneuver node executor.
+    /// MechJeb's maneuver node executor, which the maneuver planner's window controls.
     /// </summary>
-    [KRPCClass (Service = "MechJeb")]
-    public sealed class NodeExecutor : ComputerModule
+    sealed class NodeExecutor : ComputerModule
     {
         static Field<object, bool> autowarp;
         static Field<object, double> leadTime;
@@ -26,56 +24,44 @@ namespace KRPC.MechJeb
             abort = type.Method<Action<object>> ("Abort");
         }
 
-        internal NodeExecutor () : base ("MechJebModuleNodeExecutor")
+        static readonly NodeExecutor executor = new NodeExecutor ();
+
+        NodeExecutor () : base ("MechJebModuleNodeExecutor")
         {
         }
 
         /// <summary>
-        /// Whether the executor is running.
+        /// MechJeb's setting to warp time, which every autopilot reads.
         /// </summary>
-        [KRPCProperty]
-        public override bool Enabled {
-            get { return base.Enabled; }
+        internal static bool Autowarp {
+            get { return autowarp.Get (executor.Instance); }
+            set { autowarp.Set (executor.Instance, value); }
         }
 
-        /// <summary>
-        /// Whether the executor warps to the burn.
-        /// </summary>
-        [KRPCProperty]
-        public bool Autowarp {
-            get { return autowarp.Get (Instance); }
-            set { autowarp.Set (Instance, value); }
+        internal static double LeadTime {
+            get { return leadTime.Get (executor.Instance); }
+            set { leadTime.Set (executor.Instance, value); }
         }
 
-        /// <summary>
-        /// The time before the burn at which time warp stops, in seconds.
-        /// </summary>
-        [KRPCProperty]
-        public double LeadTime {
-            get { return leadTime.Get (Instance); }
-            set { leadTime.Set (Instance, value); }
+        internal static bool Executing {
+            get { return executor.ModuleEnabled; }
         }
 
-        /// <summary>
-        /// Execute the next maneuver node. Throws an exception if the vessel has no maneuver
-        /// node.
-        /// </summary>
-        [KRPCMethod]
-        public void ExecuteOneNode ()
+        internal static void ExecuteNextNode ()
         {
             CheckNodes ();
-            executeOneNode (Instance, this);
+            executeOneNode (executor.Instance, executor);
         }
 
-        /// <summary>
-        /// Execute all the maneuver nodes. Throws an exception if the vessel has no maneuver
-        /// node.
-        /// </summary>
-        [KRPCMethod]
-        public void ExecuteAllNodes ()
+        internal static void ExecuteAllNodes ()
         {
             CheckNodes ();
-            executeAllNodes (Instance, this);
+            executeAllNodes (executor.Instance, executor);
+        }
+
+        internal static void Abort ()
+        {
+            abort (executor.Instance);
         }
 
         // MechJeb enables the executor before it reads the first node
@@ -84,15 +70,6 @@ namespace KRPC.MechJeb
             var solver = FlightGlobals.ActiveVessel.patchedConicSolver;
             if (solver == null || solver.maneuverNodes.Count == 0)
                 throw new InvalidOperationException ("The vessel has no maneuver node");
-        }
-
-        /// <summary>
-        /// Stop executing the maneuver nodes.
-        /// </summary>
-        [KRPCMethod]
-        public void Abort ()
-        {
-            abort (Instance);
         }
     }
 }

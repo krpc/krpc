@@ -20,22 +20,17 @@ namespace KRPC.MechJeb
         static Func<global::Vessel, object> getMasterMechJeb;
         static Func<object, string, object> getComputerModule;
 
-        static readonly AirplaneAutopilot airplaneAutopilot = new AirplaneAutopilot ();
-        static readonly AscentAutopilot ascentAutopilot = new AscentAutopilot ();
+        static readonly AircraftAutopilot aircraftAutopilot = new AircraftAutopilot ();
+        static readonly AscentGuidance ascentGuidance = new AscentGuidance ();
         static readonly DockingAutopilot dockingAutopilot = new DockingAutopilot ();
-        static readonly LandingAutopilot landingAutopilot = new LandingAutopilot ();
+        static readonly LandingGuidance landingGuidance = new LandingGuidance ();
         static readonly RendezvousAutopilot rendezvousAutopilot = new RendezvousAutopilot ();
         static readonly ManeuverPlanner maneuverPlanner = new ManeuverPlanner ();
         static readonly SmartASS smartASS = new SmartASS ();
         static readonly SmartRCS smartRCS = new SmartRCS ();
         static readonly Translatron translatron = new Translatron ();
-        static readonly DeployableController antennaController = new DeployableController ("MechJebModuleDeployableAntennaController");
-        static readonly NodeExecutor nodeExecutor = new NodeExecutor ();
-        static readonly RCSController rcsController = new RCSController ();
-        static readonly StagingController stagingController = new StagingController ();
-        static readonly DeployableController solarPanelController = new DeployableController ("MechJebModuleSolarPanelController");
         static readonly TargetController targetController = new TargetController ();
-        static readonly ThrustController thrustController = new ThrustController ();
+        static readonly Utilities utilities = new Utilities ();
 
         internal static void Load ()
         {
@@ -46,22 +41,22 @@ namespace KRPC.MechJeb
             ComputerModule.Load ();
             AutopilotModule.Load ();
             VesselState.Load (core);
-            AirplaneAutopilot.Load ();
-            AscentAutopilot.Load ();
-            AscentClassic.Load ();
-            AscentPVG.Load ();
+            AircraftAutopilot.Load ();
+            AscentGuidance.Load ();
+            AscentSettings.Load ();
+            Autostaging.Load ();
+            ClassicPath.Load ();
             DeployableController.Load ();
             DockingAutopilot.Load ();
-            LandingAutopilot.Load ();
+            LandingGuidance.Load ();
             ManeuverPlanner.Load ();
             NodeExecutor.Load ();
-            RCSController.Load ();
+            PVGSettings.Load ();
             RendezvousAutopilot.Load ();
             SmartASS.Load ();
             SmartRCS.Load ();
-            StagingController.Load ();
             TargetController.Load ();
-            ThrustController.Load ();
+            ThrustLimiter.Load ();
             Translatron.Load ();
             Operation.Load ();
             TimeSelector.Load ();
@@ -117,23 +112,23 @@ namespace KRPC.MechJeb
         }
 
         /// <summary>
-        /// The airplane autopilot.
+        /// The Aircraft Autopilot window.
         /// </summary>
         [KRPCProperty]
-        public static AirplaneAutopilot AirplaneAutopilot {
-            get { return airplaneAutopilot; }
+        public static AircraftAutopilot AircraftAutopilot {
+            get { return aircraftAutopilot; }
         }
 
         /// <summary>
-        /// The ascent autopilot.
+        /// The Ascent Guidance window.
         /// </summary>
         [KRPCProperty]
-        public static AscentAutopilot AscentAutopilot {
-            get { return ascentAutopilot; }
+        public static AscentGuidance AscentGuidance {
+            get { return ascentGuidance; }
         }
 
         /// <summary>
-        /// The docking autopilot.
+        /// The Docking Autopilot window.
         /// </summary>
         [KRPCProperty]
         public static DockingAutopilot DockingAutopilot {
@@ -141,27 +136,27 @@ namespace KRPC.MechJeb
         }
 
         /// <summary>
-        /// The landing autopilot.
+        /// The Landing Guidance window.
         /// </summary>
         [KRPCProperty]
-        public static LandingAutopilot LandingAutopilot {
-            get { return landingAutopilot; }
+        public static LandingGuidance LandingGuidance {
+            get { return landingGuidance; }
         }
 
         /// <summary>
-        /// The rendezvous autopilot.
-        /// </summary>
-        [KRPCProperty]
-        public static RendezvousAutopilot RendezvousAutopilot {
-            get { return rendezvousAutopilot; }
-        }
-
-        /// <summary>
-        /// The maneuver planner.
+        /// The Maneuver Planner window.
         /// </summary>
         [KRPCProperty]
         public static ManeuverPlanner ManeuverPlanner {
             get { return maneuverPlanner; }
+        }
+
+        /// <summary>
+        /// The Rendezvous Autopilot window.
+        /// </summary>
+        [KRPCProperty]
+        public static RendezvousAutopilot RendezvousAutopilot {
+            get { return rendezvousAutopilot; }
         }
 
         /// <summary>
@@ -181,6 +176,14 @@ namespace KRPC.MechJeb
         }
 
         /// <summary>
+        /// The target controller, which holds MechJeb's target.
+        /// </summary>
+        [KRPCProperty]
+        public static TargetController TargetController {
+            get { return targetController; }
+        }
+
+        /// <summary>
         /// The Translatron window.
         /// </summary>
         [KRPCProperty]
@@ -189,59 +192,11 @@ namespace KRPC.MechJeb
         }
 
         /// <summary>
-        /// The controller of the deployable antennas.
+        /// The Utilities window.
         /// </summary>
         [KRPCProperty]
-        public static DeployableController AntennaController {
-            get { return antennaController; }
-        }
-
-        /// <summary>
-        /// The maneuver node executor.
-        /// </summary>
-        [KRPCProperty]
-        public static NodeExecutor NodeExecutor {
-            get { return nodeExecutor; }
-        }
-
-        /// <summary>
-        /// The RCS controller.
-        /// </summary>
-        [KRPCProperty]
-        public static RCSController RCSController {
-            get { return rcsController; }
-        }
-
-        /// <summary>
-        /// The staging controller.
-        /// </summary>
-        [KRPCProperty]
-        public static StagingController StagingController {
-            get { return stagingController; }
-        }
-
-        /// <summary>
-        /// The controller of the deployable solar panels.
-        /// </summary>
-        [KRPCProperty]
-        public static DeployableController SolarPanelController {
-            get { return solarPanelController; }
-        }
-
-        /// <summary>
-        /// The target controller.
-        /// </summary>
-        [KRPCProperty]
-        public static TargetController TargetController {
-            get { return targetController; }
-        }
-
-        /// <summary>
-        /// The thrust controller.
-        /// </summary>
-        [KRPCProperty]
-        public static ThrustController ThrustController {
-            get { return thrustController; }
+        public static Utilities Utilities {
+            get { return utilities; }
         }
     }
 

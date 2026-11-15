@@ -5,14 +5,14 @@ using KRPC.Utils;
 namespace KRPC.MechJeb
 {
     /// <summary>
-    /// The ascent autopilot.
+    /// The Ascent Guidance window, which flies the vessel to orbit.
     /// </summary>
     /// <remarks>
     /// See the <a href="https://github.com/MuMech/MechJeb2/wiki/Ascent-Guidance">MechJeb wiki</a>
     /// for how to set up this autopilot.
     /// </remarks>
     [KRPCClass (Service = "MechJeb")]
-    public sealed class AscentAutopilot : KRPCComputerModule
+    public sealed class AscentGuidance : KRPCComputerModule
     {
         const string settingsName = "MechJebModuleAscentSettings";
         const string classicName = "MechJebModuleAscentClassicAutopilot";
@@ -31,19 +31,12 @@ namespace KRPC.MechJeb
         static Field<object, int> ascentType;
         static Field<object, double> desiredOrbitAltitude;
         static Field<object, double> desiredInclination;
-        static Field<object, bool> correctiveSteering;
-        static Field<object, double> correctiveSteeringGain;
-        static Field<object, bool> forceRoll;
-        static Field<object, double> verticalRoll;
-        static Field<object, double> turnRoll;
-        static Field<object, bool> autodeploySolarPanels;
-        static Field<object, bool> autoDeployAntennas;
-        static Field<object, bool> skipCircularization;
-        static Field<object, bool> autostage;
-        static Field<object, bool> limitAoA;
+        static Field<object, double> desiredApoapsis;
+        static Field<object, bool> attachAltFlag;
+        static Field<object, double> desiredAttachAlt;
+        static Field<object, double> desiredAttachAltFixed;
+        static Func<object, int> optimizeStage;
         static Field<object, bool> limitQaEnabled;
-        static Field<object, double> maxAoA;
-        static Field<object, double> aoaLimitFadeoutPressure;
         static Field<object, double> launchPhaseAngle;
         static Field<object, double> launchLANDifference;
         static Field<object, int> warpCountDown;
@@ -66,19 +59,12 @@ namespace KRPC.MechJeb
             ascentType = settings.Field<object, int> ("AscentType");
             desiredOrbitAltitude = Bindings.EditableDouble (settings, "DesiredOrbitAltitude");
             desiredInclination = Bindings.EditableDouble (settings, "DesiredInclination");
-            correctiveSteering = settings.Field<object, bool> ("CorrectiveSteering");
-            correctiveSteeringGain = Bindings.EditableDouble (settings, "CorrectiveSteeringGain");
-            forceRoll = settings.Field<object, bool> ("ForceRoll");
-            verticalRoll = Bindings.EditableDouble (settings, "VerticalRoll");
-            turnRoll = Bindings.EditableDouble (settings, "TurnRoll");
-            autodeploySolarPanels = settings.Field<object, bool> ("AutodeploySolarPanels");
-            autoDeployAntennas = settings.Field<object, bool> ("AutoDeployAntennas");
-            skipCircularization = settings.Field<object, bool> ("SkipCircularization");
-            autostage = settings.Field<object, bool> ("Autostage");
-            limitAoA = settings.Field<object, bool> ("LimitAoA");
+            desiredApoapsis = Bindings.EditableDouble (settings, "DesiredApoapsis");
+            attachAltFlag = settings.Field<object, bool> ("AttachAltFlag");
+            desiredAttachAlt = Bindings.EditableDouble (settings, "DesiredAttachAlt");
+            desiredAttachAltFixed = Bindings.EditableDouble (settings, "DesiredAttachAltFixed");
+            optimizeStage = settings.Getter<object, int> ("OptimizeStage");
             limitQaEnabled = settings.Field<object, bool> ("LimitQaEnabled");
-            maxAoA = Bindings.EditableDouble (settings, "MaxAoA");
-            aoaLimitFadeoutPressure = Bindings.EditableDouble (settings, "AOALimitFadeoutPressure");
             launchPhaseAngle = Bindings.EditableDouble (settings, "LaunchPhaseAngle");
             launchLANDifference = Bindings.EditableDouble (settings, "LaunchLANDifference");
             warpCountDown = Bindings.EditableInt (settings, "WarpCountDown");
@@ -88,16 +74,17 @@ namespace KRPC.MechJeb
             launchingToLan = settings.Field<object, bool> ("LaunchingToLan");
         }
 
-        internal AscentAutopilot () : base (settingsName)
+        internal AscentGuidance () : base (settingsName)
         {
-            AscentPathClassic = new AscentClassic ();
-            AscentPathPVG = new AscentPVG ();
+            Settings = new AscentSettings ();
+            PVGSettings = new PVGSettings ();
+            ClassicPath = new ClassicPath ();
         }
 
         /// <summary>
-        /// The ascent settings, which hold the settings of every ascent path.
+        /// MechJeb's ascent settings, which hold the settings of every ascent path.
         /// </summary>
-        internal static object Settings {
+        internal static object SettingsModule {
             get { return MechJeb.Module (settingsName); }
         }
 
@@ -105,27 +92,24 @@ namespace KRPC.MechJeb
         /// The autopilot of the selected ascent path.
         /// </summary>
         internal override object Instance {
-            get { return autopilot (Settings); }
+            get { return autopilot (SettingsModule); }
         }
 
         /// <summary>
-        /// Whether the autopilot is enabled. Enabling it engages the autopilot of the selected
-        /// ascent path, and disabling it disengages the autopilots of both paths.
+        /// Engage the autopilot of the selected ascent path, or disengage the autopilots of
+        /// both paths.
         /// </summary>
-        [KRPCProperty]
-        public override bool Enabled {
-            get { return base.Enabled; }
-            set {
-                if (value) {
-                    // Select the path's angle of attack limiter, as MechJeb's ascent window does
-                    var settings = Settings;
-                    limitQaEnabled.Set (settings, ascentType.Get (settings) == pvg);
-                    base.Enabled = true;
-                } else {
-                    // The path may have changed since the autopilot was enabled
-                    SetEnabled (MechJeb.Module (classicName), false);
-                    SetEnabled (MechJeb.Module (pvgName), false);
-                }
+        internal override void SetEnabled (bool value)
+        {
+            if (value) {
+                // Select the path's angle of attack limiter, as MechJeb's ascent window does
+                var settings = SettingsModule;
+                limitQaEnabled.Set (settings, ascentType.Get (settings) == pvg);
+                SetEnabled (Instance, true);
+            } else {
+                // The path may have changed since the autopilot was enabled
+                SetEnabled (MechJeb.Module (classicName), false);
+                SetEnabled (MechJeb.Module (pvgName), false);
             }
         }
 
@@ -138,46 +122,47 @@ namespace KRPC.MechJeb
         }
 
         /// <summary>
-        /// The selected ascent path: 0 for <see cref="AscentClassic"/> or 2 for
-        /// <see cref="AscentPVG"/>.
+        /// The ascent path.
         /// </summary>
-        /// <remarks>
-        /// MechJeb 2.15 removed the stock-style gravity turn path, which was 1. Setting any other
-        /// value throws an exception.
-        /// </remarks>
         [KRPCProperty]
-        public int AscentPathIndex {
-            get { return ascentType.Get (Settings) == pvg ? 2 : 0; }
+        public AscentType AscentType {
+            get { return ascentType.Get (SettingsModule) == pvg ? AscentType.PVG : AscentType.Classic; }
             set {
-                if (value != 0 && value != 2)
-                    throw new ArgumentOutOfRangeException (nameof (value), "The ascent path must be 0 (classic) or 2 (PVG)");
-                var settings = Settings;
-                ascentType.Set (settings, value == 2 ? pvg : classic);
-                limitQaEnabled.Set (settings, value == 2);
+                var settings = SettingsModule;
+                var isPVG = value == AscentType.PVG;
+                ascentType.Set (settings, isPVG ? pvg : classic);
+                limitQaEnabled.Set (settings, isPVG);
                 // MechJeb disables the other path's autopilot without removing its users
-                SetEnabled (MechJeb.Module (value == 2 ? classicName : pvgName), false);
+                SetEnabled (MechJeb.Module (isPVG ? classicName : pvgName), false);
             }
         }
 
         /// <summary>
-        /// The settings of the classic ascent profile.
+        /// The Ascent Settings window.
         /// </summary>
         [KRPCProperty]
-        public AscentClassic AscentPathClassic { get; private set; }
+        public AscentSettings Settings { get; private set; }
 
         /// <summary>
-        /// The settings of the Primer Vector Guidance (RSS/RO) profile.
+        /// The PVG Settings window, with the settings of the <see cref="AscentType.PVG"/> path.
         /// </summary>
         [KRPCProperty]
-        public AscentPVG AscentPathPVG { get; private set; }
+        public PVGSettings PVGSettings { get; private set; }
+
+        /// <summary>
+        /// The Ascent Path Editor window, with the settings of the
+        /// <see cref="AscentType.Classic"/> path.
+        /// </summary>
+        [KRPCProperty]
+        public ClassicPath ClassicPath { get; private set; }
 
         /// <summary>
         /// The altitude of the final circular orbit, in meters.
         /// </summary>
         [KRPCProperty]
         public double DesiredOrbitAltitude {
-            get { return desiredOrbitAltitude.Get (Settings); }
-            set { desiredOrbitAltitude.Set (Settings, value); }
+            get { return desiredOrbitAltitude.Get (SettingsModule); }
+            set { desiredOrbitAltitude.Set (SettingsModule, value); }
         }
 
         /// <summary>
@@ -185,143 +170,50 @@ namespace KRPC.MechJeb
         /// </summary>
         [KRPCProperty]
         public double DesiredInclination {
-            get { return desiredInclination.Get (Settings); }
-            set { desiredInclination.Set (Settings, value); }
+            get { return desiredInclination.Get (SettingsModule); }
+            set { desiredInclination.Set (SettingsModule, value); }
         }
 
         /// <summary>
-        /// The thrust controller. The same as <see cref="MechJeb.ThrustController"/>.
+        /// The target apoapsis, in meters.
         /// </summary>
+        /// <remarks>Applies on the <see cref="AscentType.PVG"/> path.</remarks>
         [KRPCProperty]
-        public ThrustController ThrustController {
-            get { return MechJeb.ThrustController; }
+        public double DesiredApoapsis {
+            get { return desiredApoapsis.Get (SettingsModule); }
+            set { desiredApoapsis.Set (SettingsModule, value); }
         }
 
         /// <summary>
-        /// Whether the autopilot steers by the velocity vector rather than the position vector.
+        /// Whether the orbit is attached at <see cref="DesiredAttachAlt"/>.
         /// </summary>
         /// <remarks>
-        /// It is more accurate, though large craft may do better without it. Applies on the
-        /// classic ascent path.
+        /// Applies on the <see cref="AscentType.PVG"/> path. MechJeb reads this setting only
+        /// when its PVG settings window has an early shutoff stage. Without one, MechJeb always
+        /// attaches the orbit.
         /// </remarks>
         [KRPCProperty]
-        public bool CorrectiveSteering {
-            get { return correctiveSteering.Get (Settings); }
-            set { correctiveSteering.Set (Settings, value); }
+        public bool AttachAltFlag {
+            get { return attachAltFlag.Get (SettingsModule); }
+            set { attachAltFlag.Set (SettingsModule, value); }
         }
 
         /// <summary>
-        /// The gain of the corrective steering.
+        /// The altitude at which the orbit is attached, in meters.
         /// </summary>
-        /// <remarks>Requires <see cref="CorrectiveSteering"/>, and applies on the classic ascent path.</remarks>
+        /// <remarks>
+        /// Applies on the <see cref="AscentType.PVG"/> path. Requires <see cref="AttachAltFlag"/>,
+        /// unless MechJeb's PVG settings window has no early shutoff stage.
+        /// </remarks>
         [KRPCProperty]
-        public double CorrectiveSteeringGain {
-            get { return correctiveSteeringGain.Get (Settings); }
-            set { correctiveSteeringGain.Set (Settings, value); }
+        public double DesiredAttachAlt {
+            get { return AttachAltitude.Get (SettingsModule); }
+            set { AttachAltitude.Set (SettingsModule, value); }
         }
 
-        /// <summary>
-        /// Whether the autopilot controls the roll.
-        /// </summary>
-        [KRPCProperty]
-        public bool ForceRoll {
-            get { return forceRoll.Get (Settings); }
-            set { forceRoll.Set (Settings, value); }
-        }
-
-        /// <summary>
-        /// The roll during the vertical climb, in degrees.
-        /// </summary>
-        /// <remarks>Requires <see cref="ForceRoll"/>.</remarks>
-        [KRPCProperty]
-        public double VerticalRoll {
-            get { return verticalRoll.Get (Settings); }
-            set { verticalRoll.Set (Settings, value); }
-        }
-
-        /// <summary>
-        /// The roll during the turn, in degrees.
-        /// </summary>
-        /// <remarks>Requires <see cref="ForceRoll"/>.</remarks>
-        [KRPCProperty]
-        public double TurnRoll {
-            get { return turnRoll.Get (Settings); }
-            set { turnRoll.Set (Settings, value); }
-        }
-
-        /// <summary>
-        /// Whether to deploy the solar panels when the ascent finishes.
-        /// </summary>
-        [KRPCProperty]
-        public bool AutodeploySolarPanels {
-            get { return autodeploySolarPanels.Get (Settings); }
-            set { autodeploySolarPanels.Set (Settings, value); }
-        }
-
-        /// <summary>
-        /// Whether to deploy the antennas when the ascent finishes.
-        /// </summary>
-        [KRPCProperty]
-        public bool AutoDeployAntennas {
-            get { return autoDeployAntennas.Get (Settings); }
-            set { autoDeployAntennas.Set (Settings, value); }
-        }
-
-        /// <summary>
-        /// Whether to skip the circularization burn.
-        /// </summary>
-        [KRPCProperty]
-        public bool SkipCircularization {
-            get { return skipCircularization.Get (Settings); }
-            set { skipCircularization.Set (Settings, value); }
-        }
-
-        /// <summary>
-        /// Whether the autopilot stages when the current stage runs out of fuel.
-        /// </summary>
-        /// <remarks><see cref="StagingController"/> holds the staging settings.</remarks>
-        [KRPCProperty]
-        public bool Autostage {
-            get { return autostage.Get (Settings); }
-            set { autostage.Set (Settings, value); }
-        }
-
-        /// <summary>
-        /// The staging controller. The same as <see cref="MechJeb.StagingController"/>.
-        /// </summary>
-        [KRPCProperty]
-        public StagingController StagingController {
-            get { return MechJeb.StagingController; }
-        }
-
-        /// <summary>
-        /// Whether to limit the angle of attack.
-        /// </summary>
-        /// <remarks>Applies on the classic ascent path.</remarks>
-        [KRPCProperty]
-        public bool LimitAngleOfAttack {
-            get { return limitAoA.Get (Settings); }
-            set { limitAoA.Set (Settings, value); }
-        }
-
-        /// <summary>
-        /// The largest angle of attack, in degrees.
-        /// </summary>
-        /// <remarks>Requires <see cref="LimitAngleOfAttack"/>, and applies on the classic ascent path.</remarks>
-        [KRPCProperty]
-        public double MaxAngleOfAttack {
-            get { return maxAoA.Get (Settings); }
-            set { maxAoA.Set (Settings, value); }
-        }
-
-        /// <summary>
-        /// The dynamic pressure below which the angle of attack limit fades out, in pascals.
-        /// </summary>
-        /// <remarks>Requires <see cref="LimitAngleOfAttack"/>, and applies on the classic ascent path.</remarks>
-        [KRPCProperty]
-        public double AngleOfAttackLimitFadeoutPressure {
-            get { return aoaLimitFadeoutPressure.Get (Settings); }
-            set { aoaLimitFadeoutPressure.Set (Settings, value); }
+        // MechJeb keeps a separate attach altitude for an ascent with no early shutoff stage
+        static Field<object, double> AttachAltitude {
+            get { return optimizeStage (SettingsModule) < 0 ? desiredAttachAltFixed : desiredAttachAlt; }
         }
 
         /// <summary>
@@ -329,8 +221,8 @@ namespace KRPC.MechJeb
         /// </summary>
         [KRPCProperty]
         public double LaunchPhaseAngle {
-            get { return launchPhaseAngle.Get (Settings); }
-            set { launchPhaseAngle.Set (Settings, value); }
+            get { return launchPhaseAngle.Get (SettingsModule); }
+            set { launchPhaseAngle.Set (SettingsModule, value); }
         }
 
         /// <summary>
@@ -339,8 +231,8 @@ namespace KRPC.MechJeb
         /// </summary>
         [KRPCProperty]
         public double LaunchLANDifference {
-            get { return launchLANDifference.Get (Settings); }
-            set { launchLANDifference.Set (Settings, value); }
+            get { return launchLANDifference.Get (SettingsModule); }
+            set { launchLANDifference.Set (SettingsModule, value); }
         }
 
         /// <summary>
@@ -348,8 +240,8 @@ namespace KRPC.MechJeb
         /// </summary>
         [KRPCProperty]
         public int WarpCountDown {
-            get { return warpCountDown.Get (Settings); }
-            set { warpCountDown.Set (Settings, value); }
+            get { return warpCountDown.Get (SettingsModule); }
+            set { warpCountDown.Set (SettingsModule, value); }
         }
 
         /// <summary>
@@ -358,7 +250,7 @@ namespace KRPC.MechJeb
         [KRPCProperty]
         public AscentLaunchMode LaunchMode {
             get {
-                var settings = Settings;
+                var settings = SettingsModule;
                 if (!timedLaunch.Get (Instance))
                     return AscentLaunchMode.Normal;
                 if (launchingToRendezvous.Get (settings))
@@ -378,7 +270,7 @@ namespace KRPC.MechJeb
         {
             if (LaunchMode == AscentLaunchMode.Unknown)
                 throw new InvalidOperationException ("There is an unknown timed launch ongoing which can't be aborted");
-            var settings = Settings;
+            var settings = SettingsModule;
             launchingToPlane.Set (settings, false);
             launchingToRendezvous.Set (settings, false);
             launchingToMatchLan.Set (settings, false);
@@ -400,12 +292,12 @@ namespace KRPC.MechJeb
         {
             if (!MechJeb.TargetController.NormalTargetExists)
                 throw new InvalidOperationException ("Invalid target");
-            if (AscentPathIndex == 2)
+            if (AscentType == AscentType.PVG)
                 throw new InvalidOperationException ("This action can't be performed in PVG path mode");
 
             AbortTimedLaunch ();
             try {
-                launchingToRendezvous.Set (Settings, true);
+                launchingToRendezvous.Set (SettingsModule, true);
                 StartCountdown (timeToPhaseAngle (
                     LaunchPhaseAngle, FlightGlobals.ActiveVessel.mainBody, VesselState.Longitude,
                     MechJeb.TargetController.InternalTargetOrbit));
@@ -427,7 +319,7 @@ namespace KRPC.MechJeb
             AbortTimedLaunch ();
             try {
                 var target = MechJeb.TargetController.InternalTargetOrbit;
-                launchingToPlane.Set (Settings, true);
+                launchingToPlane.Set (SettingsModule, true);
                 // The sooner of the launches north and south into the plane
                 var lan = target.LAN - LaunchLANDifference;
                 var inclination = Math.Abs (target.inclination);
@@ -450,7 +342,7 @@ namespace KRPC.MechJeb
     }
 
     /// <summary>
-    /// The launch mode of the ascent autopilot. See <see cref="AscentAutopilot.LaunchMode"/>.
+    /// The launch mode of the ascent autopilot. See <see cref="AscentGuidance.LaunchMode"/>.
     /// </summary>
     [KRPCEnum (Service = "MechJeb")]
     public enum AscentLaunchMode
@@ -474,5 +366,22 @@ namespace KRPC.MechJeb
         /// A timed launch of another kind, started from MechJeb's window.
         /// </summary>
         Unknown = 99
+    }
+
+    /// <summary>
+    /// The ascent path. See <see cref="AscentGuidance.AscentType"/>.
+    /// </summary>
+    [KRPCEnum (Service = "MechJeb")]
+    public enum AscentType
+    {
+        /// <summary>
+        /// The classic ascent path. See <see cref="AscentGuidance.ClassicPath"/>.
+        /// </summary>
+        Classic,
+
+        /// <summary>
+        /// Primer Vector Guidance, for RSS/RO. See <see cref="AscentGuidance.PVGSettings"/>.
+        /// </summary>
+        PVG
     }
 }

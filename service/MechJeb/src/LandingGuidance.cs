@@ -1,14 +1,16 @@
 using System;
 using KRPC.Service.Attributes;
+using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
+using Tuple3 = System.Tuple<double, double, double>;
 
 namespace KRPC.MechJeb
 {
     /// <summary>
-    /// The landing autopilot, which lands at a target or wherever the vessel comes down.
+    /// The Landing Guidance window, which lands at a target or wherever the vessel comes down.
     /// </summary>
     [KRPCClass (Service = "MechJeb")]
-    public sealed class LandingAutopilot : AutopilotModule
+    public sealed class LandingGuidance : AutopilotModule
     {
         static Field<object, double> touchdownSpeed;
         static Field<object, bool> deployGears;
@@ -19,6 +21,10 @@ namespace KRPC.MechJeb
         static Action<object, object> landAtPositionTarget;
         static Action<object, object> landUntargeted;
         static Action<object> stopLanding;
+        static Action<object, global::CelestialBody, double, double> setPositionTarget;
+        static Func<object, string> getPositionTargetString;
+        static Func<object, Vector3d> getPositionTargetPosition;
+        static Action<object> pickPositionTargetOnMap;
 
         internal static new void Load ()
         {
@@ -32,9 +38,14 @@ namespace KRPC.MechJeb
             landAtPositionTarget = type.Method<Action<object, object>> ("LandAtPositionTarget");
             landUntargeted = type.Method<Action<object, object>> ("LandUntargeted");
             stopLanding = type.Method<Action<object>> ("StopLanding");
+            var target = Bindings.Type ("MuMech.MechJebModuleTargetController");
+            setPositionTarget = target.Method<Action<object, global::CelestialBody, double, double>> ("SetPositionTarget");
+            getPositionTargetString = target.Method<Func<object, string>> ("GetPositionTargetString");
+            getPositionTargetPosition = target.Method<Func<object, Vector3d>> ("GetPositionTargetPosition");
+            pickPositionTargetOnMap = target.Method<Action<object>> ("PickPositionTargetOnMap");
         }
 
-        internal LandingAutopilot () : base ("MechJebModuleLandingAutopilot")
+        internal LandingGuidance () : base ("MechJebModuleLandingAutopilot")
         {
         }
 
@@ -87,23 +98,76 @@ namespace KRPC.MechJeb
         /// Whether the autopilot corrects its course with RCS.
         /// </summary>
         [KRPCProperty]
-        public bool RcsAdjustment {
+        public bool RCSAdjustment {
             get { return rcsAdjustment.Get (Instance); }
             set { rcsAdjustment.Set (Instance, value); }
         }
 
         /// <summary>
-        /// Land at the position target. See <see cref="TargetController.SetPositionTarget"/>.
-        /// Throws an exception if there is no position target, or the vessel is landed or
-        /// splashed down.
+        /// Set the landing target to a position on the surface of a body.
+        /// </summary>
+        /// <param name="body">The body.</param>
+        /// <param name="latitude">The latitude, in degrees.</param>
+        /// <param name="longitude">The longitude, in degrees.</param>
+        [KRPCMethod]
+        public void SetTarget (SpaceCenter.Services.CelestialBody body, double latitude, double longitude)
+        {
+            if (ReferenceEquals (body, null))
+                throw new ArgumentNullException (nameof (body));
+            setPositionTarget (TargetModule, body.InternalBody, latitude, longitude);
+        }
+
+        /// <summary>
+        /// The landing target as text.
         /// </summary>
         [KRPCMethod]
-        public void LandAtPositionTarget ()
+        public string GetTargetString ()
         {
-            var targetController = MechJeb.TargetController;
-            targetController.Update ();
-            if (!targetController.PositionTargetExists)
-                throw new InvalidOperationException ("There is no position target");
+            return getPositionTargetString (TargetModule);
+        }
+
+        /// <summary>
+        /// The world space position of the landing target. Throws an exception if there is no
+        /// landing target.
+        /// </summary>
+        [KRPCMethod]
+        public Tuple3 GetTargetPosition ()
+        {
+            CheckTarget ();
+            return getPositionTargetPosition (TargetModule).ToTuple ();
+        }
+
+        /// <summary>
+        /// Let the player pick the landing target on the map.
+        /// </summary>
+        [KRPCMethod]
+        public void PickTargetOnMap ()
+        {
+            pickPositionTargetOnMap (TargetModule);
+        }
+
+        static object TargetModule {
+            get { return MechJeb.TargetController.Instance; }
+        }
+
+        /// <summary>
+        /// Whether to warp time during the landing.
+        /// </summary>
+        /// <remarks>The same setting as <see cref="ManeuverPlanner.Autowarp"/>.</remarks>
+        [KRPCProperty]
+        public bool Autowarp {
+            get { return NodeExecutor.Autowarp; }
+            set { NodeExecutor.Autowarp = value; }
+        }
+
+        /// <summary>
+        /// Land at the target. See <see cref="SetTarget"/>.
+        /// Throws an exception if there is no target, or the vessel is landed or splashed down.
+        /// </summary>
+        [KRPCMethod]
+        public void LandAtTarget ()
+        {
+            CheckTarget ();
             CheckNotLanded ();
             landAtPositionTarget (Instance, this);
         }
@@ -113,10 +177,18 @@ namespace KRPC.MechJeb
         /// splashed down.
         /// </summary>
         [KRPCMethod]
-        public void LandUntargeted ()
+        public void LandSomewhere ()
         {
             CheckNotLanded ();
             landUntargeted (Instance, this);
+        }
+
+        static void CheckTarget ()
+        {
+            var targetController = MechJeb.TargetController;
+            targetController.Update ();
+            if (!targetController.PositionTargetExists)
+                throw new InvalidOperationException ("There is no landing target");
         }
 
         static void CheckNotLanded ()
@@ -129,7 +201,7 @@ namespace KRPC.MechJeb
         /// Stop the landing.
         /// </summary>
         [KRPCMethod]
-        public void StopLanding ()
+        public void AbortAutoland ()
         {
             stopLanding (Instance);
         }

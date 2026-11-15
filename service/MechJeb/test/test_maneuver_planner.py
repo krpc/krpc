@@ -43,6 +43,8 @@ class TestManeuverPlanner(MechJebTestCase):
                 (planner.operation_transfer, "rendezvous", False),
                 (planner.operation_transfer, "lag_time", 12),
                 (planner.operation_transfer, "coplanar", True),
+                (planner, "autowarp", False),
+                (planner, "lead_time", 12),
                 (planner.operation_apoapsis.time_selector, "lead_time", 123),
                 (
                     planner.operation_apoapsis.time_selector,
@@ -51,6 +53,9 @@ class TestManeuverPlanner(MechJebTestCase):
                 ),
             ]
         )
+
+    def test_read_only(self):
+        self.assertFalse(self.mj.maneuver_planner.executing_node)
 
     def test_default_time_reference(self):
         self.assertEqual(
@@ -166,6 +171,45 @@ class TestManeuverPlannerInOrbit(MechJebInOrbitTestCase):
         orbit = nodes[0].orbit
         self.assertLess(orbit.eccentricity, 0.001)
         self.assertAlmostEqual(200000, orbit.periapsis_altitude, delta=1000)
+
+
+class TestNodeExecution(MechJebInOrbitTestCase):
+    def make_node(self, lead_time):
+        operation = self.planner.operation_apoapsis
+        operation.new_apoapsis = 120000
+        operation.time_selector.time_reference = self.mj.TimeReference.x_from_now
+        operation.time_selector.lead_time = lead_time
+        operation.make_nodes()
+
+    def test_execute_next_node(self):
+        self.make_node(30)
+        planner = self.planner
+        planner.execute_next_node()
+        self.assertTrue(planner.executing_node)
+        self.wait_while(lambda: planner.executing_node, timeout=300)
+        self.assertEqual(0, len(self.vessel.control.nodes))
+        self.assertAlmostEqual(120000, self.vessel.orbit.apoapsis_altitude, delta=2000)
+        self.set_circular_orbit("Kerbin", 100000)
+
+    def test_abort(self):
+        self.make_node(600)
+        planner = self.planner
+        planner.autowarp = False
+        try:
+            planner.execute_next_node()
+            self.assertTrue(planner.executing_node)
+            planner.abort_node_execution()
+            self.assertFalse(planner.executing_node)
+        finally:
+            planner.autowarp = True
+
+    def test_without_node(self):
+        planner = self.planner
+        for execute in (planner.execute_next_node, planner.execute_all_nodes):
+            with self.subTest(method=execute.__name__):
+                with self.assertRaisesRegex(RuntimeError, "no maneuver node"):
+                    execute()
+                self.assertFalse(planner.executing_node)
 
 
 class TestManeuverPlannerTransferToVessel(MechJebTestCase):

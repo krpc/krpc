@@ -5,7 +5,8 @@ using KRPC.Service.Attributes;
 namespace KRPC.MechJeb
 {
     /// <summary>
-    /// The maneuver planner, which makes maneuver nodes for its operations.
+    /// The Maneuver Planner window, which makes maneuver nodes for its operations, and
+    /// executes them.
     /// </summary>
     /// <remarks>
     /// MechJeb shares the operations, and most of their settings, between vessels.
@@ -188,6 +189,65 @@ namespace KRPC.MechJeb
         [KRPCProperty]
         public OperationTransfer OperationTransfer {
             get { return operationTransfer; }
+        }
+
+        /// <summary>
+        /// Execute the next maneuver node. Throws an exception if the vessel has no maneuver
+        /// node.
+        /// </summary>
+        [KRPCMethod]
+        public void ExecuteNextNode ()
+        {
+            NodeExecutor.ExecuteNextNode ();
+        }
+
+        /// <summary>
+        /// Execute all the maneuver nodes. Throws an exception if the vessel has no maneuver
+        /// node.
+        /// </summary>
+        [KRPCMethod]
+        public void ExecuteAllNodes ()
+        {
+            NodeExecutor.ExecuteAllNodes ();
+        }
+
+        /// <summary>
+        /// Stop executing the maneuver nodes.
+        /// </summary>
+        [KRPCMethod]
+        public void AbortNodeExecution ()
+        {
+            NodeExecutor.Abort ();
+        }
+
+        /// <summary>
+        /// Whether a maneuver node is being executed.
+        /// </summary>
+        [KRPCProperty]
+        public bool ExecutingNode {
+            get { return NodeExecutor.Executing; }
+        }
+
+        /// <summary>
+        /// Whether to warp time to the burn.
+        /// </summary>
+        /// <remarks>
+        /// The same setting as <see cref="AscentSettings.Autowarp"/>,
+        /// <see cref="LandingGuidance.Autowarp"/> and <see cref="RendezvousAutopilot.Autowarp"/>.
+        /// </remarks>
+        [KRPCProperty]
+        public bool Autowarp {
+            get { return NodeExecutor.Autowarp; }
+            set { NodeExecutor.Autowarp = value; }
+        }
+
+        /// <summary>
+        /// The time before the burn at which time warp stops, in seconds.
+        /// </summary>
+        [KRPCProperty]
+        public double LeadTime {
+            get { return NodeExecutor.LeadTime; }
+            set { NodeExecutor.LeadTime = value; }
         }
     }
 }

@@ -8,8 +8,6 @@
   `ThrustController.ThrottleSmoothingTime`, which MechJeb 2.15 removed (#1326)
 - **Breaking:** Remove `OperationTransfer.PeriodOffset`, which MechJeb 2.15 replaced with a lag
   time (#1326)
-- **Breaking:** Throw an exception on setting `AscentAutopilot.AscentPathIndex` to a value other
-  than 0 or 2 (#1326)
 - **Breaking:** Throw an exception on setting `SmartRCSMode.ZeroVelocity` or
   `TranslatronMode.KeepRelative`, as MechJeb 2.15 has no such mode (#1326)
 - **Breaking:** Remove `MechJeb.APIReady`, in place of `MechJeb.Available` and `MechJeb.Ready`

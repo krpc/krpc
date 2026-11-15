@@ -44,17 +44,13 @@ namespace KRPC.MechJeb
         /// <summary>
         /// Whether the module is enabled.
         /// </summary>
-        /// <remarks>
-        /// We enable a module by adding this wrapper to its users, as MechJeb's windows do. The
-        /// module stays enabled while any other user holds it.
-        /// </remarks>
-        public virtual bool Enabled {
+        internal bool ModuleEnabled {
             get { return enabled (Instance); }
-            set { SetEnabled (Instance, value); }
         }
 
         /// <summary>
-        /// Add this wrapper to, or remove it from, the users of a module.
+        /// Add this wrapper to, or remove it from, the users of a module. A module stays enabled
+        /// while any other user holds it, as with MechJeb's windows.
         /// </summary>
         internal void SetEnabled (object module, bool value)
         {
@@ -79,9 +75,18 @@ namespace KRPC.MechJeb
         /// Whether the module is enabled.
         /// </summary>
         [KRPCProperty]
-        public override bool Enabled {
-            get { return base.Enabled; }
-            set { base.Enabled = value; }
+        public bool Enabled {
+            get { return ModuleEnabled; }
+            set { SetEnabled (value); }
+        }
+
+        /// <summary>
+        /// Enable or disable the module. A subclass changes what this does, rather than override
+        /// <see cref="Enabled"/>.
+        /// </summary>
+        internal virtual void SetEnabled (bool value)
+        {
+            SetEnabled (Instance, value);
         }
     }
 

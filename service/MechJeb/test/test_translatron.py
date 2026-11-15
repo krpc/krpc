@@ -3,31 +3,19 @@ import unittest
 from service.MechJeb.test.mechjeb_test_case import MechJebTestCase
 
 
-class TestRCS(MechJebTestCase):
+class TestTranslatron(MechJebTestCase):
     def test_settings(self):
-        mj = self.mj
-        self.assert_settings(
-            [
-                (mj.smart_rcs, "auto_disable_smart_rcs", False),
-                (mj.translatron, "kill_horizontal_speed", True),
-                (mj.rcs_controller, "rcs_throttle", False),
-                (mj.rcs_controller, "rcs_for_rotation", False),
-            ]
-        )
+        self.assert_settings([(self.mj.translatron, "kill_horizontal_speed", True)])
 
     def test_read_only(self):
-        mj = self.mj
-        self.assertEqual(mj.TranslatronMode.off, mj.translatron.mode)
-        self.assertEqual(mj.SmartRCSMode.off, mj.smart_rcs.mode)
+        self.assertEqual(self.mj.TranslatronMode.off, self.mj.translatron.mode)
 
-    def test_invalid_modes(self):
+    def test_invalid_mode(self):
         mj = self.mj
-        with self.assertRaises(mj.MJServiceException):
-            mj.smart_rcs.mode = mj.SmartRCSMode.zero_velocity
         with self.assertRaises(mj.MJServiceException):
             mj.translatron.mode = mj.TranslatronMode.direct
 
-    def test_translatron(self):
+    def test_keep_vertical(self):
         translatron = self.mj.translatron
         translatron.mode = self.mj.TranslatronMode.keep_vertical
         try:

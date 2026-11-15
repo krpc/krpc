@@ -10,11 +10,11 @@ int main() {
   krpc::services::SpaceCenter sc(conn);
   krpc::services::MechJeb mj(conn);
   auto vessel = sc.active_vessel().value();
-  auto ascent = mj.ascent_autopilot();
+  auto ascent = mj.ascent_guidance();
 
   ascent.set_desired_orbit_altitude(100000);
   ascent.set_desired_inclination(6);
-  ascent.set_autostage(true);
+  ascent.settings().set_autostage(true);
   ascent.set_enabled(true);
 
   vessel.control().activate_next_stage();

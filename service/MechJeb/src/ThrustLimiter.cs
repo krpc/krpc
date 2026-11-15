@@ -5,10 +5,10 @@ using KRPC.Utils;
 namespace KRPC.MechJeb
 {
     /// <summary>
-    /// The thrust controller, which limits the throttle.
+    /// The throttle limiters, which the Utilities and Ascent Settings windows show.
     /// </summary>
     [KRPCClass (Service = "MechJeb")]
-    public sealed class ThrustController : ComputerModule
+    public sealed class ThrustLimiter : ComputerModule
     {
         static Field<object, bool> limitDynamicPressure;
         static Field<object, double> maxDynamicPressure;
@@ -58,7 +58,7 @@ namespace KRPC.MechJeb
             TransKillH = type.Field<object, bool> ("TransKillH");
         }
 
-        internal ThrustController () : base ("MechJebModuleThrustController")
+        internal ThrustLimiter () : base ("MechJebModuleThrustController")
         {
         }
 
@@ -225,7 +225,7 @@ namespace KRPC.MechJeb
 
     /// <summary>
     /// The result of the differential throttle. See
-    /// <see cref="ThrustController.DifferentialThrottleStatus"/>.
+    /// <see cref="ThrustLimiter.DifferentialThrottleStatus"/>.
     /// </summary>
     [KRPCEnum (Service = "MechJeb")]
     public enum DifferentialThrottleStatus

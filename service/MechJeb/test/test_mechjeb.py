@@ -8,11 +8,22 @@ class TestMechJeb(MechJebTestCase):
     def test_ready(self):
         self.assertTrue(self.mj.ready)
 
-    def test_same_object(self):
+    def test_autowarp(self):
         mj = self.mj
-        self.assertEqual(mj.thrust_controller, mj.ascent_autopilot.thrust_controller)
-        self.assertEqual(mj.staging_controller, mj.ascent_autopilot.staging_controller)
-        self.assertEqual(mj.rcs_controller, mj.smart_rcs.rcs_controller)
+        windows = [
+            mj.maneuver_planner,
+            mj.ascent_guidance.settings,
+            mj.landing_guidance,
+            mj.rendezvous_autopilot,
+        ]
+        old = mj.maneuver_planner.autowarp
+        try:
+            for window in windows:
+                window.autowarp = not old
+                self.assertEqual([not old] * 4, [w.autowarp for w in windows])
+                window.autowarp = old
+        finally:
+            mj.maneuver_planner.autowarp = old
 
 
 class TestMechJebNotInstalled(TestCase):

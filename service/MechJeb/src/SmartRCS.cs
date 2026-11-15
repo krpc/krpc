@@ -13,6 +13,8 @@ namespace KRPC.MechJeb
         static Field<object, int> target;
         static Field<object, bool> autoDisableSmartRCS;
         static Action<object> engage;
+        static Field<object, bool> rcsThrottle;
+        static Field<object, bool> rcsForRotation;
 
         internal static new void Load ()
         {
@@ -20,6 +22,9 @@ namespace KRPC.MechJeb
             target = type.Field<object, int> ("target");
             autoDisableSmartRCS = type.Field<object, bool> ("autoDisableSmartRCS");
             engage = type.Method<Action<object>> ("Engage");
+            var controller = Bindings.Type ("MuMech.MechJebModuleRCSController");
+            rcsThrottle = controller.Field<object, bool> ("rcsThrottle");
+            rcsForRotation = controller.Field<object, bool> ("rcsForRotation");
         }
 
         internal SmartRCS () : base ("MechJebModuleSmartRcs")
@@ -51,11 +56,25 @@ namespace KRPC.MechJeb
         }
 
         /// <summary>
-        /// The RCS controller. The same as <see cref="MechJeb.RCSController"/>.
+        /// Whether to throttle the RCS when the engines are off.
         /// </summary>
         [KRPCProperty]
-        public RCSController RCSController {
-            get { return MechJeb.RCSController; }
+        public bool RCSThrottle {
+            get { return rcsThrottle.Get (RCSModule); }
+            set { rcsThrottle.Set (RCSModule, value); }
+        }
+
+        /// <summary>
+        /// Whether to use the RCS for rotation.
+        /// </summary>
+        [KRPCProperty]
+        public bool RCSForRotation {
+            get { return rcsForRotation.Get (RCSModule); }
+            set { rcsForRotation.Set (RCSModule, value); }
+        }
+
+        static object RCSModule {
+            get { return MechJeb.Module ("MechJebModuleRCSController"); }
         }
     }
 

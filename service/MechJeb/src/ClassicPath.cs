@@ -15,10 +15,10 @@ namespace KRPC.MechJeb
     }
 
     /// <summary>
-    /// The classic ascent profile.
+    /// The Ascent Path Editor window, which holds the settings of the classic ascent path.
     /// </summary>
     [KRPCClass (Service = "MechJeb")]
-    public sealed class AscentClassic : AscentBase
+    public sealed class ClassicPath : AscentBase
     {
         static Field<object, double> turnStartAltitude;
         static Field<object, double> turnStartVelocity;

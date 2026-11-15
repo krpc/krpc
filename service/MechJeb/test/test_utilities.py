@@ -3,15 +3,17 @@ import unittest
 from service.MechJeb.test.mechjeb_test_case import MechJebTestCase
 
 
-class TestControllers(MechJebTestCase):
+class TestUtilities(MechJebTestCase):
     def test_settings(self):
         mj = self.mj
-        staging = mj.staging_controller
-        thrust = mj.thrust_controller
+        utilities = mj.utilities
+        staging = utilities.staging
+        thrust = utilities.thrust
         self.assert_settings(
             [
-                (mj.antenna_controller, "auto_deploy", True),
-                (mj.solar_panel_controller, "auto_deploy", True),
+                (utilities.antennas, "auto_deploy", True),
+                (utilities.solar_panels, "auto_deploy", True),
+                (staging, "enabled", True),
                 (staging, "autostage_pre_delay", 1.5),
                 (staging, "autostage_post_delay", 1.5),
                 (staging, "autostage_limit", 2),
@@ -21,7 +23,6 @@ class TestControllers(MechJebTestCase):
                 (staging, "fairing_max_aerothermal_flux", 1234),
                 (staging, "hot_staging", True),
                 (staging, "hot_staging_lead_time", 1.5),
-                (staging, "autostaging_once", True),
                 (thrust, "limit_dynamic_pressure", True),
                 (thrust, "max_dynamic_pressure", 12345),
                 (thrust, "limit_to_prevent_overheats", True),
@@ -41,14 +42,29 @@ class TestControllers(MechJebTestCase):
             ]
         )
 
+    def test_autostage_once(self):
+        staging = self.mj.utilities.staging
+        self.assertFalse(staging.enabled)
+        self.assertFalse(staging.autostaging_once)
+        staging.autostage_once()
+        try:
+            self.assertTrue(staging.enabled)
+            self.assertTrue(staging.autostaging_once)
+            with self.assertRaisesRegex(RuntimeError, "Autostaging is enabled"):
+                staging.autostage_once()
+        finally:
+            staging.enabled = False
+        self.assertFalse(staging.enabled)
+        self.assertFalse(staging.autostaging_once)
+
     def test_differential_throttle_status(self):
         self.assertIsInstance(
-            self.mj.thrust_controller.differential_throttle_status,
+            self.mj.utilities.thrust.differential_throttle_status,
             self.mj.DifferentialThrottleStatus,
         )
 
     def test_solar_panels(self):
-        controller = self.mj.solar_panel_controller
+        controller = self.mj.utilities.solar_panels
         self.assertTrue(controller.all_retracted())
         controller.extend_all()
         self.wait_until(lambda: not controller.all_retracted())
