@@ -168,6 +168,9 @@ SpaceCenter service
 * Fail the FAR and RealFuels members, and ``Part.Tag``, with the reason when the mod is missing or failed to load (:issue:`1342`)
 * Fix ``Vessel.Name``, ``EditorVessel.Name`` and ``EditorVessel.Description`` returning a localization tag for stock craft (:issue:`1343`)
 * Fix the auto-pilot limit-cycling on a vessel steered by slow engine gimbals, such as the KS-25 (:issue:`1348`, :issue:`1347`)
+* Fix velocities, orbits and orbital reference frames throwing an exception in a Kopernicus system whose star is not named ``Sun`` (:issue:`1359`)
+* Fix ``CelestialBody.SurfaceGravity`` differing from the gravity the game applies by about 0.03% (:issue:`1359`)
+* Test with Kopernicus, Real Solar System, Realism Overhaul and Procedural Parts, and list their tested versions in the documentation (:issue:`1359`)
 
 
 DockingCamera service

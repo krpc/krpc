@@ -80,4 +80,9 @@ These services cover other mods:
 
 .. include:: /mod-services.inc
 
+kRPC is also tested with these mods, which change the solar system and the parts that the
+SpaceCenter service reads:
+
+.. include:: /tested-mods.inc
+
 .. include:: /mods.inc

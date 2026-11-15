@@ -42,8 +42,10 @@ built into ``build/Heatshields.zip`` beside it:
    :language: python
 
 A mod names the folders it installs into GameData, and in ``files`` any files it puts at the top
-of GameData. ``present`` returns whether the running game loaded the mod, or ``None`` when the
-mod gives no way to tell. A mod that needs another mod names it in ``requires``.
+of GameData. ``generated`` names the files it writes at the top of GameData while the game runs.
+``present`` returns whether the running game has the mod. By default it checks that the game
+database holds files from each of the mod's folders, and returns ``None`` for a mod with no
+folders. A mod that needs another mod names it in ``requires``.
 
 Each test class names the mods it requires. Before its ``setUpClass`` runs, KSP is running with
 exactly those mods and the mods they require:
