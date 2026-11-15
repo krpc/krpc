@@ -251,7 +251,8 @@ def version(
         assembly_sha256 = assembly_sha256,
     )
 
-# The third-party mods kRPC wraps or supports, which an in-game test can require by name.
+# The third-party mods an in-game test can require by name: the mods kRPC wraps, supports or
+# is tested with, and their dependencies.
 # Overlays for their installs are in tools/krpctools/krpctools/game/ksp/mods/<name>/.
 MODS = [
     # Dependencies, never requested on their own
@@ -757,6 +758,21 @@ MODS = [
             folders = ["TweakScale"],
             files = ["999_Scale_Redist.dll"],
             requires = ["Harmony"],
+        )],
+    ),
+
+    # The mods kRPC is tested with that no service wraps or supports
+
+    # Replaces the planetary system from configs
+    mod(
+        name = "Kopernicus",
+        repo = "Kopernicus/Kopernicus",
+        versions = [version(
+            "1.12.1-254",
+            source = "releases/download/release-254/Kopernicus-{version}.zip",
+            sha256 = "7a3adadede98a24c299429f91f887a7ed5221202e7490774056387b2c27fa80d",
+            folders = ["Kopernicus"],
+            requires = ["KSPTextureLoader", "ModularFlightIntegrator", "Harmony"],
         )],
     ),
 ]

@@ -30,7 +30,7 @@ namespace KRPC.SpaceCenter.Services
         {
             InternalBody = body;
             bodyName = body.name;
-            if (bodyName != Planetarium.fetch.Sun.name)
+            if (body != body.referenceBody)
                 orbit = new Orbit (this);
         }
 
