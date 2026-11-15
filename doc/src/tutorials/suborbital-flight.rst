@@ -525,7 +525,7 @@ vertical speed reaches zero when it lands:
 
       .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.lua
          :language: lua
-         :start-at: while vessel:flight(vessel.orbit.body.reference_frame).vertical_speed < -0.1 do
+         :start-at: local body_frame = vessel.orbit.body.reference_frame
 
 This calls ``vessel.flight()`` again, now with a :class:`ReferenceFrame`. We want the vertical
 speed relative to the surface of Kerbin, so the flight object has to give values in a frame fixed

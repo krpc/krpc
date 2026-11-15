@@ -18,5 +18,8 @@ files["client/lua/krpc/compat.lua"] = {std = "max"}
 -- The conformance testee runs on the Lua the build supplies, 5.4
 files["client/lua/conformance"] = {std = "lua54"}
 
+-- The documentation examples fit the 76 columns of a rendered code block
+files["doc/src/scripts"] = {max_line_length = 76}
+
 -- LuaUnit runs the test cases a test file defines as globals
 files["client/lua/krpc/test"] = {allow_defined_top = true, ignore = {"131"}}

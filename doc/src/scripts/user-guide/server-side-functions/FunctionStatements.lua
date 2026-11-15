@@ -15,7 +15,8 @@ local program = Expression.block_with_variables(
   {total, x},
   {
     Expression.assign(total, Expression.constant_int(0)),
-    Expression.for_each(x, values, Expression.assign(total, Expression.add(total, x))),
+    Expression.for_each(
+      x, values, Expression.assign(total, Expression.add(total, x))),
     total
   }
 )

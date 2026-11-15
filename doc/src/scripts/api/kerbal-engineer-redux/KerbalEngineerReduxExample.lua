@@ -7,7 +7,8 @@ local ker = conn.kerbal_engineer_redux
 local stages = ker.stages(vessel)
 for i = #stages, 1, -1 do
   local stage = stages[i]
-  print(string.format('Stage %d: %.0f m/s, TWR %.2f', stage.number, stage.delta_v, stage.available_twr))
+  print(string.format('Stage %d: %.0f m/s, TWR %.2f',
+                      stage.number, stage.delta_v, stage.available_twr))
 end
 
 local burn = ker.burn_time(vessel, 500)

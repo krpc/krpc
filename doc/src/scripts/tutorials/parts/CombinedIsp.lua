@@ -18,7 +18,8 @@ local thrust = 0
 local fuel_consumption = 0
 for _,engine in ipairs(active_engines) do
     thrust = thrust + engine.thrust
-    fuel_consumption = fuel_consumption + engine.thrust / engine.specific_impulse
+    fuel_consumption =
+        fuel_consumption + engine.thrust / engine.specific_impulse
 end
 local isp = thrust / fuel_consumption
 
