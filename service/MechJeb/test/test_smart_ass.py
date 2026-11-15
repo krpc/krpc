@@ -1,7 +1,7 @@
 import math
 import unittest
 
-from krpctools.game.geometry import dot, norm
+from krpctools.game.geometry import angle_between, dot, norm
 from service.MechJeb.test.mechjeb_test_case import (
     MechJebInOrbitTestCase,
     MechJebTestCase,
@@ -17,6 +17,7 @@ class TestSmartASS(MechJebTestCase):
                 (smart_ass, "force_yaw", False),
                 (smart_ass, "force_pitch", False),
                 (smart_ass, "force_roll", True),
+                (smart_ass, "roll", 12),
                 (smart_ass, "surface_heading", 12),
                 (smart_ass, "surface_pitch", 12),
                 (smart_ass, "surface_roll", 12),
@@ -64,6 +65,29 @@ class TestSmartASSInOrbit(MechJebInOrbitTestCase):
             timeout=60,
         )
         self.assertAlmostEqual(1, norm(self.vessel.direction(frame)), places=3)
+
+    def test_roll(self):
+        smart_ass = self.mj.smart_ass
+        frame = self.vessel.orbital_reference_frame
+
+        def top():
+            return self.sc.transform_direction(
+                (0, 0, -1), self.vessel.reference_frame, frame
+            )
+
+        def settled():
+            aligned = angle_between(self.vessel.direction(frame), (0, 1, 0)) < 2
+            return aligned and norm(self.vessel.angular_velocity(frame)) < 0.01
+
+        smart_ass.autopilot_mode = self.mj.SmartASSAutopilotMode.prograde
+        smart_ass.force_roll = True
+        smart_ass.roll = 0
+        smart_ass.update(False)
+        self.wait_until(settled, timeout=60)
+        start = top()
+        smart_ass.roll = 90
+        smart_ass.update(False)
+        self.wait_until(lambda: abs(angle_between(start, top()) - 90) < 5, timeout=60)
 
     def test_surface_axes(self):
         smart_ass = self.mj.smart_ass

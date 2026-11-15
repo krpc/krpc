@@ -22,6 +22,7 @@ namespace KRPC.MechJeb
         static Field<object, bool> forceRol;
         static Field<object, bool> forcePitch;
         static Field<object, bool> forceYaw;
+        static Field<object, double> rol;
         static Field<object, double> srfHdg;
         static Field<object, double> srfPit;
         static Field<object, double> srfRol;
@@ -42,6 +43,7 @@ namespace KRPC.MechJeb
             forceRol = type.Field<object, bool> ("forceRol");
             forcePitch = type.Field<object, bool> ("forcePitch");
             forceYaw = type.Field<object, bool> ("forceYaw");
+            rol = Bindings.EditableDouble (type, "rol");
             srfHdg = Bindings.EditableDouble (type, "srfHdg");
             srfPit = Bindings.EditableDouble (type, "srfPit");
             srfRol = Bindings.EditableDouble (type, "srfRol");
@@ -119,6 +121,19 @@ namespace KRPC.MechJeb
         public bool ForceRoll {
             get { return forceRol.Get (Instance); }
             set { forceRol.Set (Instance, value); }
+        }
+
+        /// <summary>
+        /// The roll, in degrees. 0 is top side up.
+        /// </summary>
+        /// <remarks>
+        /// Requires <see cref="ForceRoll"/>, and applies in every mode but
+        /// <see cref="SmartASSAutopilotMode.KillRot"/> and the surface modes.
+        /// </remarks>
+        [KRPCProperty]
+        public double Roll {
+            get { return rol.Get (Instance); }
+            set { rol.Set (Instance, value); }
         }
 
         /// <summary>

@@ -2835,6 +2835,7 @@ MechJeb.SmartASS.Update
 MechJeb.SmartASS.ForceYaw
 MechJeb.SmartASS.ForcePitch
 MechJeb.SmartASS.ForceRoll
+MechJeb.SmartASS.Roll
 MechJeb.SmartASS.SurfaceHeading
 MechJeb.SmartASS.SurfacePitch
 MechJeb.SmartASS.SurfaceRoll

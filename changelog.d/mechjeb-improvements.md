@@ -23,3 +23,4 @@
 - Add `OperationTransfer.Capture`, `PlanCapture`, `Rendezvous`, `LagTime` and `Coplanar` (#1381)
 - **Breaking:** Remove `OperationTransfer.InterceptOnly` and `SimpleTransfer`, in place of
   `Capture` and `Coplanar` (#1381)
+- Add `SmartASS.Roll`, the roll of the modes that point in a direction (#1381)
