@@ -99,17 +99,6 @@ namespace KRPC.MechJeb.Maneuver
         }
 
         /// <summary>
-        /// Make the maneuver nodes of the operation, and return the first one.
-        /// </summary>
-        /// <returns>The first maneuver node.</returns>
-        [KRPCMethod]
-        [Obsolete ("Use <c>MakeNodes</c> instead.")]
-        public Node MakeNode ()
-        {
-            return MakeNodes () [0];
-        }
-
-        /// <summary>
         /// Make the maneuver nodes of the operation. Throws an <see cref="OperationException"/>
         /// if the operation cannot make them.
         /// </summary>
