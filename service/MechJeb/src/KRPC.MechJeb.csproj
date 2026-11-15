@@ -46,6 +46,7 @@
     <Compile Include="AircraftAutopilot.cs" />
     <Compile Include="AscentGuidance.cs" />
     <Compile Include="AscentSettings.cs" />
+    <Compile Include="AttitudeAdjustment.cs" />
     <Compile Include="ClassicPath.cs" />
     <Compile Include="PVGSettings.cs" />
     <Compile Include="ComputerModule.cs" />

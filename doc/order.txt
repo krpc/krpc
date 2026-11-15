@@ -2566,6 +2566,7 @@ MechJeb.Ready
 MechJeb.AircraftApproach
 MechJeb.AircraftAutopilot
 MechJeb.AscentGuidance
+MechJeb.AttitudeAdjustment
 MechJeb.DockingAutopilot
 MechJeb.LandingGuidance
 MechJeb.ManeuverPlanner
@@ -2671,6 +2672,15 @@ MechJeb.AscentSettings.SkipCircularization
 MechJeb.AscentType
 MechJeb.AscentType.Classic
 MechJeb.AscentType.PVG
+MechJeb.AttitudeAdjustment
+MechJeb.AttitudeAdjustment.RCSAuto
+MechJeb.AttitudeAdjustment.Controller
+MechJeb.AttitudeController
+MechJeb.AttitudeController.MJ
+MechJeb.AttitudeController.Kos
+MechJeb.AttitudeController.Hybrid
+MechJeb.AttitudeController.Better
+MechJeb.AttitudeController.LQR
 MechJeb.AttitudeReference
 MechJeb.AttitudeReference.Inertial
 MechJeb.AttitudeReference.Orbit

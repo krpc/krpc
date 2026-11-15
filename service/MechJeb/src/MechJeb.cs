@@ -23,6 +23,7 @@ namespace KRPC.MechJeb
         static readonly AircraftApproach aircraftApproach = new AircraftApproach ();
         static readonly AircraftAutopilot aircraftAutopilot = new AircraftAutopilot ();
         static readonly AscentGuidance ascentGuidance = new AscentGuidance ();
+        static readonly AttitudeAdjustment attitudeAdjustment = new AttitudeAdjustment ();
         static readonly DockingAutopilot dockingAutopilot = new DockingAutopilot ();
         static readonly LandingGuidance landingGuidance = new LandingGuidance ();
         static readonly RendezvousAutopilot rendezvousAutopilot = new RendezvousAutopilot ();
@@ -47,6 +48,7 @@ namespace KRPC.MechJeb
             AircraftAutopilot.Load ();
             AscentGuidance.Load ();
             AscentSettings.Load ();
+            AttitudeAdjustment.Load ();
             Autostaging.Load ();
             ClassicPath.Load ();
             DeployableController.Load ();
@@ -137,6 +139,14 @@ namespace KRPC.MechJeb
         [KRPCProperty]
         public static AscentGuidance AscentGuidance {
             get { return ascentGuidance; }
+        }
+
+        /// <summary>
+        /// The Attitude Adjustment window.
+        /// </summary>
+        [KRPCProperty]
+        public static AttitudeAdjustment AttitudeAdjustment {
+            get { return attitudeAdjustment; }
         }
 
         /// <summary>

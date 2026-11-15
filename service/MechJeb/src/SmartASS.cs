@@ -266,7 +266,7 @@ namespace KRPC.MechJeb
             var mode = (SmartASSAutopilotMode)target.Get (instance);
             if (mode == SmartASSAutopilotMode.Surface || mode == SmartASSAutopilotMode.SurfacePrograde ||
                 mode == SmartASSAutopilotMode.SurfaceRetrograde)
-                setAxisControl (MechJeb.Module ("MechJebModuleAttitudeController"),
+                setAxisControl (MechJeb.AttitudeAdjustment.Instance,
                     forcePitch.Get (instance), forceYaw.Get (instance), forceRol.Get (instance));
         }
     }
