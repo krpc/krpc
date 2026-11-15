@@ -16,6 +16,7 @@ namespace KRPC.MechJeb
     {
         static Func<Array> operations;
 
+        readonly OperationAdvancedTransfer operationAdvancedTransfer = new OperationAdvancedTransfer ();
         readonly OperationApoapsis operationApoapsis = new OperationApoapsis ();
         readonly OperationCircularize operationCircularize = new OperationCircularize ();
         readonly OperationCourseCorrection operationCourseCorrection = new OperationCourseCorrection ();
@@ -53,6 +54,15 @@ namespace KRPC.MechJeb
                     return operation;
             }
             throw new MJServiceException ("MechJeb operation " + name + " not found");
+        }
+
+        /// <summary>
+        /// The operation that transfers to another planet, at the departure that needs the
+        /// least delta-v.
+        /// </summary>
+        [KRPCProperty]
+        public OperationAdvancedTransfer OperationAdvancedTransfer {
+            get { return operationAdvancedTransfer; }
         }
 
         /// <summary>

@@ -2740,6 +2740,7 @@ MechJeb.LandingGuidance.PickTargetOnMap
 MechJeb.LandingGuidance.SetTarget
 MechJeb.LandingGuidance.Autowarp
 MechJeb.ManeuverPlanner
+MechJeb.ManeuverPlanner.OperationAdvancedTransfer
 MechJeb.ManeuverPlanner.OperationApoapsis
 MechJeb.ManeuverPlanner.OperationCircularize
 MechJeb.ManeuverPlanner.OperationCourseCorrection
@@ -2763,6 +2764,14 @@ MechJeb.ManeuverPlanner.ExecuteNextNode
 MechJeb.ManeuverPlanner.Autowarp
 MechJeb.ManeuverPlanner.ExecutingNode
 MechJeb.ManeuverPlanner.LeadTime
+MechJeb.OperationAdvancedTransfer
+MechJeb.OperationAdvancedTransfer.MaxArrivalTime
+MechJeb.OperationAdvancedTransfer.IncludeCaptureBurn
+MechJeb.OperationAdvancedTransfer.PeriapsisHeight
+MechJeb.OperationAdvancedTransfer.Searching
+MechJeb.OperationAdvancedTransfer.SearchProgress
+MechJeb.OperationAdvancedTransfer.ErrorMessage
+MechJeb.OperationAdvancedTransfer.MakeNodes
 MechJeb.OperationApoapsis
 MechJeb.OperationApoapsis.ErrorMessage
 MechJeb.OperationApoapsis.MakeNodes

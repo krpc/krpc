@@ -64,6 +64,13 @@ namespace KRPC.MechJeb
             onFixedUpdate (Instance);
         }
 
+        /// <summary>
+        /// MechJeb's target, or null if there is none.
+        /// </summary>
+        internal ITargetable Target {
+            get { return target (Instance) as ITargetable; }
+        }
+
         internal global::Orbit InternalTargetOrbit {
             get { return targetOrbit (Instance); }
         }

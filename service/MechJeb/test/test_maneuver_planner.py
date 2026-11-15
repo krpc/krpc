@@ -14,6 +14,9 @@ class TestManeuverPlanner(MechJebTestCase):
         planner = self.mj.maneuver_planner
         self.assert_settings(
             [
+                (planner.operation_advanced_transfer, "max_arrival_time", 1234567),
+                (planner.operation_advanced_transfer, "include_capture_burn", True),
+                (planner.operation_advanced_transfer, "periapsis_height", 123000),
                 (planner.operation_apoapsis, "new_apoapsis", 123000),
                 (
                     planner.operation_course_correction,
@@ -126,6 +129,33 @@ class TestManeuverPlannerInOrbit(MechJebInOrbitTestCase):
         finally:
             operation.capture = True
             self.sc.clear_target()
+
+    def test_advanced_transfer(self):
+        operation = self.planner.operation_advanced_transfer
+        self.sc.target_body = self.sc.bodies["Duna"]
+        try:
+            self.wait_until(lambda: self.mj.target_controller.normal_target_exists)
+            with self.assertRaisesRegex(
+                self.mj.OperationException, "Started computation"
+            ):
+                operation.make_nodes()
+            self.assertTrue(operation.searching)
+            # The defaults for Duna, whose atmosphere is 50 km deep
+            self.assertAlmostEqual(60000, operation.periapsis_height)
+            self.assertGreater(operation.max_arrival_time, 0)
+            self.wait_while(lambda: operation.searching, timeout=300)
+            self.assertEqual(100, operation.search_progress)
+            operation.periapsis_height = 123000
+            nodes = operation.make_nodes()
+            self.assertEqual(123000, operation.periapsis_height)
+            self.assertEqual(1, len(nodes))
+            self.assertEqual(self.sc.bodies["Sun"], nodes[0].orbit.next_orbit.body)
+        finally:
+            self.sc.clear_target()
+
+    def test_advanced_transfer_without_target(self):
+        with self.assertRaisesRegex(self.mj.OperationException, "celestial body"):
+            self.planner.operation_advanced_transfer.make_nodes()
 
     def test_inclination(self):
         operation = self.planner.operation_inclination

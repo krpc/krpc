@@ -53,3 +53,5 @@
 - Add `AscentSettings.RollAltitude`, `LimitingAngleOfAttack` and `CurrentMaxAngleOfAttack` (#1381)
 - Add the stage, coast, spin-up and Qα limit settings of the PVG Settings window to
   `PVGSettings` (#1381)
+- Add `ManeuverPlanner.OperationAdvancedTransfer`, a transfer to another planet at the departure
+  that needs the least delta-v (#1381)

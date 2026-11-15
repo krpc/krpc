@@ -62,6 +62,7 @@ namespace KRPC.MechJeb.Maneuver
             var parameters = Bindings.Type ("MuMech.ManeuverParameters");
             dV = parameters.Getter<object, Vector3d> ("dV");
             uT = parameters.Getter<object, double> ("UT");
+            OperationAdvancedTransfer.Load ();
             OperationApoapsis.Load ();
             OperationCircularize.Load ();
             OperationCourseCorrection.Load ();
@@ -119,21 +120,27 @@ namespace KRPC.MechJeb.Maneuver
             var targetController = MechJeb.TargetController;
             targetController.Update ();
             var vessel = FlightGlobals.ActiveVessel;
+            setErrorMessage (instance, string.Empty);
             // Plan from the orbit after the last node, as MechJeb's window does
             var orbit = vessel.orbit;
             var time = Planetarium.GetUniversalTime ();
-            var existing = getManeuverNodes (MechJeb.Module ("MechJebModuleManeuverPlanner"));
-            if (existing.Count > 0) {
-                var last = existing [existing.Count - 1];
-                orbit = last.nextPatch;
-                time = last.UT;
-                if (orbit == null)
-                    throw new OperationException ("The last maneuver node has no orbit after it");
-            }
-            setErrorMessage (instance, string.Empty);
             IEnumerable parameters;
             try {
+                if (vessel.patchedConicSolver == null)
+                    throw new OperationException ("Maneuver nodes are not available");
+                var existing = getManeuverNodes (MechJeb.Module ("MechJebModuleManeuverPlanner"));
+                if (existing.Count > 0) {
+                    var last = existing [existing.Count - 1];
+                    orbit = last.nextPatch;
+                    time = last.UT;
+                    if (orbit == null)
+                        throw new OperationException ("The last maneuver node has no orbit after it");
+                }
+                Prepare (instance, orbit, time);
                 parameters = makeNodesImpl (instance, orbit, time, targetController.Instance);
+            } catch (OperationException exn) {
+                setErrorMessage (instance, exn.Message);
+                throw;
             } catch (Exception exn) {
                 if (operationException == null || !operationException.IsInstanceOfType (exn))
                     throw new MJServiceException (exn.Message, exn);
@@ -153,6 +160,14 @@ namespace KRPC.MechJeb.Maneuver
                 throw new MJServiceException (exn.Message, exn);
             }
             return nodes.ConvertAll (node => new Node (vessel, node));
+        }
+
+        /// <summary>
+        /// Set up the operation for planning from the orbit, as MechJeb's window does while
+        /// it draws the operation.
+        /// </summary>
+        internal virtual void Prepare (object instance, global::Orbit orbit, double time)
+        {
         }
     }
 
