@@ -14,7 +14,8 @@ Bazel version the repository pins. On Ubuntu:
 
 .. code-block:: bash
 
-   wget https://github.com/bazelbuild/bazelisk/releases/latest/download/bazelisk-linux-amd64
+   BAZELISK=https://github.com/bazelbuild/bazelisk/releases/latest/download
+   wget "$BAZELISK/bazelisk-linux-amd64"
    chmod +x bazelisk-linux-amd64
    sudo mv bazelisk-linux-amd64 /usr/local/bin/bazel
 
@@ -41,8 +42,8 @@ elevated prompt:
 
 .. code-block:: bat
 
-   reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" /t REG_DWORD /f ^
-     /v AllowDevelopmentWithoutDevLicense /d 1
+   reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" ^
+     /t REG_DWORD /f /v AllowDevelopmentWithoutDevLicense /d 1
 
 **Long paths.** The virtual environment rules_python builds for its tools has paths over the
 default limit of 260 characters. A path over the limit fails with a symlink privilege error. Raise
@@ -61,8 +62,9 @@ Windows SDK:
 
 .. code-block:: bat
 
+   set VCTOOLS=Microsoft.VisualStudio.Workload.VCTools
    winget install --id Microsoft.VisualStudio.2022.BuildTools ^
-     --override "--quiet --wait --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended"
+     --override "--quiet --wait --add %VCTOOLS% --includeRecommended"
 
 Bazel caches the compiler it finds. If Bazel ran before the install, set ``BAZEL_VC`` to
 ``...\BuildTools\VC`` to make it search again.

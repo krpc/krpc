@@ -88,13 +88,13 @@ the test name marks a test the client fails only now and then, which may pass:
 
 .. code-block:: none
 
-   test_connection.py::test_lost[partway]@serialio @flaky  # Raises an encoding error, except now and then
+   test_connection.py::test_lost[partway]@serialio @flaky  # An encoding error
 
 An ``@skip`` after the test name marks a test that hangs the testee. The test is not run:
 
 .. code-block:: none
 
-   test_concurrency.py::test_wait_holding_another @skip  # The update is never announced
+   test_concurrency.py::test_wait_holding_another @skip  # Never announced
 
 Unsupported Tests
 -----------------

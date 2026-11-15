@@ -20,7 +20,8 @@ installs the client and `esbuild <https://esbuild.github.io>`_, then bundles the
 .. code-block:: bash
 
    npm install @krpc-org/krpc esbuild
-   npx esbuild ControlPanel.js --bundle --format=iife --outfile=control-panel.js
+   npx esbuild ControlPanel.js --bundle --format=iife \
+     --outfile=control-panel.js
 
 The ``iife`` format gives a classic script, which a browser runs from a page opened as a local
 file. Open ``control-panel.html`` in the browser.

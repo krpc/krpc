@@ -92,7 +92,8 @@ For a client installed with vcpkg, pass the vcpkg toolchain file when you config
 
 .. code-block:: bash
 
-   cmake -B build -DCMAKE_TOOLCHAIN_FILE=/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake
+   cmake -B build \
+     -DCMAKE_TOOLCHAIN_FILE=/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake
 
 For a client installed in a directory of your choice, pass that directory as
 ``CMAKE_PREFIX_PATH``, so that ``find_package`` finds the client there:
