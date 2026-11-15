@@ -18,3 +18,5 @@
   `LimitAngleOfAttack`, `MaxAngleOfAttack` and `AngleOfAttackLimitFadeoutPressure` (#1381)
 - **Breaking:** Rename `OperationCourseCorrection.CourseCorrectFinalPeA` to
   `FinalPeriapsisAltitude` (#1381)
+- Add `ManeuverPlanner.OperationEccentricity`, the operation that changes the eccentricity
+  (#1381)

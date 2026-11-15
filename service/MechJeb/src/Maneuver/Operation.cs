@@ -65,6 +65,7 @@ namespace KRPC.MechJeb.Maneuver
             OperationApoapsis.Load ();
             OperationCircularize.Load ();
             OperationCourseCorrection.Load ();
+            OperationEccentricity.Load ();
             OperationEllipticize.Load ();
             OperationInclination.Load ();
             OperationInterplanetaryTransfer.Load ();

@@ -19,6 +19,7 @@ class TestManeuverPlanner(MechJebTestCase):
                     123000,
                 ),
                 (planner.operation_course_correction, "intercept_distance", 123),
+                (planner.operation_eccentricity, "new_eccentricity", 0.5),
                 (planner.operation_ellipticize, "new_apoapsis", 123000),
                 (planner.operation_ellipticize, "new_periapsis", 98000),
                 (planner.operation_inclination, "new_inclination", 12),
@@ -91,6 +92,14 @@ class TestManeuverPlannerInOrbit(MechJebInOrbitTestCase):
         self.assertEqual(1, len(nodes))
         self.assertAlmostEqual(300000, nodes[0].orbit.apoapsis_altitude, delta=1000)
         self.assertAlmostEqual(90000, nodes[0].orbit.periapsis_altitude, delta=1000)
+
+    def test_eccentricity(self):
+        operation = self.planner.operation_eccentricity
+        operation.new_eccentricity = 0.1
+        operation.time_selector.time_reference = self.mj.TimeReference.x_from_now
+        nodes = operation.make_nodes()
+        self.assertEqual(1, len(nodes))
+        self.assertAlmostEqual(0.1, nodes[0].orbit.eccentricity, delta=0.001)
 
     def test_inclination(self):
         operation = self.planner.operation_inclination

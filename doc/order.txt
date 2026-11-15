@@ -2717,6 +2717,7 @@ MechJeb.LandingAutopilot.TouchdownSpeed
 MechJeb.ManeuverPlanner.OperationApoapsis
 MechJeb.ManeuverPlanner.OperationCircularize
 MechJeb.ManeuverPlanner.OperationCourseCorrection
+MechJeb.ManeuverPlanner.OperationEccentricity
 MechJeb.ManeuverPlanner.OperationEllipticize
 MechJeb.ManeuverPlanner.OperationInclination
 MechJeb.ManeuverPlanner.OperationInterplanetaryTransfer
@@ -2750,6 +2751,11 @@ MechJeb.OperationCourseCorrection.FinalPeriapsisAltitude
 MechJeb.OperationCourseCorrection.ErrorMessage
 MechJeb.OperationCourseCorrection.InterceptDistance
 MechJeb.OperationCourseCorrection.MakeNodes
+MechJeb.OperationEccentricity
+MechJeb.OperationEccentricity.ErrorMessage
+MechJeb.OperationEccentricity.MakeNodes
+MechJeb.OperationEccentricity.NewEccentricity
+MechJeb.OperationEccentricity.TimeSelector
 MechJeb.OperationEllipticize
 MechJeb.OperationEllipticize.ErrorMessage
 MechJeb.OperationEllipticize.MakeNodes

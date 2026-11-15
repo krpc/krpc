@@ -18,6 +18,7 @@ namespace KRPC.MechJeb
         readonly OperationApoapsis operationApoapsis = new OperationApoapsis ();
         readonly OperationCircularize operationCircularize = new OperationCircularize ();
         readonly OperationCourseCorrection operationCourseCorrection = new OperationCourseCorrection ();
+        readonly OperationEccentricity operationEccentricity = new OperationEccentricity ();
         readonly OperationEllipticize operationEllipticize = new OperationEllipticize ();
         readonly OperationInclination operationInclination = new OperationInclination ();
         readonly OperationInterplanetaryTransfer operationInterplanetaryTransfer = new OperationInterplanetaryTransfer ();
@@ -75,6 +76,14 @@ namespace KRPC.MechJeb
         [KRPCProperty]
         public OperationCourseCorrection OperationCourseCorrection {
             get { return operationCourseCorrection; }
+        }
+
+        /// <summary>
+        /// The operation that changes the eccentricity.
+        /// </summary>
+        [KRPCProperty]
+        public OperationEccentricity OperationEccentricity {
+            get { return operationEccentricity; }
         }
 
         /// <summary>

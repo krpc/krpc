@@ -67,6 +67,7 @@
     <Compile Include="Maneuver\OperationApoapsis.cs" />
     <Compile Include="Maneuver\OperationCircularize.cs" />
     <Compile Include="Maneuver\OperationCourseCorrection.cs" />
+    <Compile Include="Maneuver\OperationEccentricity.cs" />
     <Compile Include="Maneuver\OperationEllipticize.cs" />
     <Compile Include="Maneuver\OperationInclination.cs" />
     <Compile Include="Maneuver\OperationInterplanetaryTransfer.cs" />
