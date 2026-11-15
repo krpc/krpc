@@ -16,7 +16,18 @@ namespace KRPC.Test.Utils
         [Test]
         public void GetTypeByName ()
         {
-            Assert.AreEqual (typeof(ReflectionTest), Reflection.GetType ("KRPC.Test.Utils.ReflectionTest"));
+            var core = typeof (KRPCServiceAttribute).Assembly;
+            Assert.AreEqual (typeof(ReflectionTest), Reflection.GetType ("KRPC.Test.Utils.ReflectionTest", core));
+            Assert.AreEqual (typeof(TestService.TestClass), Reflection.GetType ("KRPC.Test.Service.TestService+TestClass", core));
+            Assert.AreEqual (typeof(TestService.TestClass), Reflection.GetType ("KRPC.Test.Service.TestService.TestClass", core));
+            Assert.IsNull (Reflection.GetType ("KRPC.Test.Utils.NotAType", core));
+        }
+
+        [Test]
+        public void GetTypeByNameSkipsUnrelatedAssemblies ()
+        {
+            Assert.IsNull (Reflection.GetType ("NUnit.Framework.TestAttribute", typeof (KRPCServiceAttribute).Assembly));
+            Assert.AreEqual (typeof(TestAttribute), Reflection.GetType ("NUnit.Framework.TestAttribute", typeof (TestAttribute).Assembly));
         }
 
         [Test]
