@@ -563,6 +563,7 @@ test_suite(
         ":luacheck",
         ":pyright",
         ":ruff",
+        ":ruff-scripts",
     ],
 )
 
@@ -591,10 +592,15 @@ lua_luacheck_test(
 py_ruff_test(
     name = "ruff",
     size = "small",
-    srcs = glob([
-        "*.py",
-        "src/scripts/**/*.py",
-    ]),
+    srcs = glob(["*.py"]),
+)
+
+py_ruff_test(
+    name = "ruff-scripts",
+    size = "small",
+    srcs = glob(["src/scripts/**/*.py"]),
+    config = "src/scripts/ruff.toml",
+    config_deps = ["//:ruff.toml"],
 )
 
 py_pyright_test(

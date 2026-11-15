@@ -6,7 +6,9 @@ types = conn.krpc.Type
 vessel = conn.space_center.active_vessel
 
 # A function taking an engine, returning true if it is out of fuel
-engine = expression.parameter("engine", types.class_type("SpaceCenter", "Engine"))
+engine = expression.parameter(
+    "engine", types.class_type("SpaceCenter", "Engine")
+)
 has_fuel = conn.space_center.Engine.has_fuel
 out_of_fuel = expression.lambda_(
     [engine],

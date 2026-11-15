@@ -491,7 +491,7 @@ vertical speed reaches zero when it lands:
 
       .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.py
          :language: python
-         :start-at: while vessel.flight(vessel.orbit.body.reference_frame).vertical_speed < -0.1:
+         :start-at: body_frame = vessel.orbit.body.reference_frame
 
    .. group-tab:: C#
 

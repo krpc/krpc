@@ -23,8 +23,8 @@ layout = panel.add_vertical_layout()
 layout.padding = conn.ui.Padding(10, 10, 10, 10)
 layout.spacing = 6
 
-# Add a button to set the throttle to maximum, with a tooltip shown while the
-# mouse rests on it
+# Add a button to set the throttle to maximum, with a tooltip shown while
+# the mouse rests on it
 button = panel.add_button("Full Throttle")
 button.tooltip = "Set the throttle to maximum"
 button.layout_element.preferred_size = (-1, 30)

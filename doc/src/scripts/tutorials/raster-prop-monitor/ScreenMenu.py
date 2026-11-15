@@ -32,7 +32,8 @@ def draw():
 presses = queue.Queue()
 buttons = monitor.buttons
 up, down, enter = (
-    buttons.index(name) for name in ("button_UP", "button_DOWN", "button_ENTER")
+    buttons.index(name)
+    for name in ("button_UP", "button_DOWN", "button_ENTER")
 )
 for button in (up, down, enter):
     event = display.button_pressed(button)

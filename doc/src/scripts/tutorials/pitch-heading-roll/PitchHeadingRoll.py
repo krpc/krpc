@@ -73,6 +73,9 @@ while True:
     else:
         roll -= 180
 
-    print("pitch = % 5.1f, heading = % 5.1f, roll = % 5.1f" % (pitch, heading, roll))
+    print(
+        "pitch = % 5.1f, heading = % 5.1f, roll = % 5.1f"
+        % (pitch, heading, roll)
+    )
 
     time.sleep(1)

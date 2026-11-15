@@ -1,0 +1,14 @@
+# Formatting and lint rules for the Python documentation examples. The
+# repository's rules, with the 76-column line length the rendered code blocks
+# fit.
+
+extend = "../../../ruff.toml"
+line-length = 76
+
+[lint]
+# Comments and strings, which the formatter leaves long, are held to the
+# line length too
+extend-select = ["E501"]
+# The examples pass lambdas to the client, which compiles them into server
+# side functions. Calling the wrapped method instead runs it on the client.
+extend-ignore = ["PLW0108"]
