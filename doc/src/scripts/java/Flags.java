@@ -9,7 +9,8 @@ public class Flags {
       SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
 
       // Show only probes and ships in map mode
-      spaceCenter.setMapFilter(MapFilterType.PROBES.or(MapFilterType.SHIPS));
+      spaceCenter.setMapFilter(
+          MapFilterType.PROBES.or(MapFilterType.SHIPS));
 
       // Check whether map mode shows debris
       MapFilterType filter = spaceCenter.getMapFilter();

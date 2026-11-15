@@ -12,10 +12,10 @@ public class AngleOfAttack {
         SpaceCenter.Vessel vessel = spaceCenter.getActiveVessel();
 
         while (true) {
-            Triplet<Double,Double,Double> d =
-                vessel.direction(vessel.getOrbit().getBody().getReferenceFrame());
-            Triplet<Double,Double,Double> v =
-                vessel.velocity(vessel.getOrbit().getBody().getReferenceFrame());
+            Triplet<Double,Double,Double> d = vessel.direction(
+                vessel.getOrbit().getBody().getReferenceFrame());
+            Triplet<Double,Double,Double> v = vessel.velocity(
+                vessel.getOrbit().getBody().getReferenceFrame());
 
             // Compute the dot product of d and v
             double dotProd =

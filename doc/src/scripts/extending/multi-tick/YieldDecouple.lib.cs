@@ -20,7 +20,8 @@ namespace Extending
         [KRPCMethod]
         public Vessel Decouple()
         {
-            var preVesselIds = FlightGlobals.Vessels.Select(v => v.id).ToList();
+            var preVesselIds =
+                FlightGlobals.Vessels.Select(v => v.id).ToList();
             decoupler.Decouple();
             return PostDecouple(preVesselIds);
         }
@@ -28,8 +29,11 @@ namespace Extending
         Vessel PostDecouple(IList<Guid> preVesselIds, int wait = 0)
         {
             if (wait < 10 || !Decoupled)
-                throw new YieldException<Func<Vessel>>(() => PostDecouple(preVesselIds, wait + 1));
-            return new Vessel(FlightGlobals.Vessels.Select(v => v.id).Except(preVesselIds).First());
+                throw new YieldException<Func<Vessel>>(
+                    () => PostDecouple(preVesselIds, wait + 1));
+            return new Vessel(
+                FlightGlobals.Vessels.Select(v => v.id)
+                    .Except(preVesselIds).First());
         }
         // [/docs]
     }

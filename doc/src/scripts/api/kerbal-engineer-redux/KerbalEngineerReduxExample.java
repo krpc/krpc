@@ -9,22 +9,27 @@ import java.util.List;
 
 public class KerbalEngineerReduxExample {
     public static void main(String[] args) {
-        Connection connection = Connection.newInstance("Kerbal Engineer Redux Example");
-        Vessel vessel = SpaceCenter.newInstance(connection).getActiveVessel();
-        KerbalEngineerRedux ker = KerbalEngineerRedux.newInstance(connection);
+        Connection connection =
+            Connection.newInstance("Kerbal Engineer Redux Example");
+        Vessel vessel =
+            SpaceCenter.newInstance(connection).getActiveVessel();
+        KerbalEngineerRedux ker =
+            KerbalEngineerRedux.newInstance(connection);
 
         List<Stage> stages = ker.stages(vessel);
         for (int i = stages.size() - 1; i >= 0; i--) {
             Stage stage = stages.get(i);
             System.out.printf("Stage %d: %.0f m/s, TWR %.2f\n",
-                stage.getNumber(), stage.getDeltaV(), stage.getAvailableTWR());
+                stage.getNumber(), stage.getDeltaV(),
+                stage.getAvailableTWR());
         }
 
         BurnTime burn = ker.burnTime(vessel, 500);
         if (burn == null) {
             System.out.println("Not enough delta-v for the burn");
         } else {
-            System.out.printf("A 500 m/s burn takes %.1f seconds\n", burn.getDuration());
+            System.out.printf("A 500 m/s burn takes %.1f seconds\n",
+                burn.getDuration());
         }
         connection.close();
     }

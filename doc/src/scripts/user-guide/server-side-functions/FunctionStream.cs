@@ -14,7 +14,8 @@ class Program {
         // Build a function that computes
         // the vessel's altitude in kilometers
         var expr = e.Divide(
-            e.Call(Connection.GetCall(() => flight.MeanAltitude)), e.ConstantDouble(1000));
+            e.Call(Connection.GetCall(() => flight.MeanAltitude)),
+            e.ConstantDouble(1000));
 
         // Stream the value of the function
         var stream = connection.AddStream<double>(expr);

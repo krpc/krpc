@@ -19,7 +19,8 @@ public class LandingSite {
         // Determine landing site reference frame
         // (orientation: x=zenith, y=north, z=east)
         SpaceCenter.ReferenceFrame landingReferenceFrame =
-          body.surfaceReferenceFrame(landingLatitude, landingLongitude, landingAltitude);
+          body.surfaceReferenceFrame(
+            landingLatitude, landingLongitude, landingAltitude);
 
         // Draw axes
         drawing.addAxes(landingReferenceFrame, 10, true);

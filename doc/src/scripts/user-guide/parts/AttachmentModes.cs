@@ -17,8 +17,10 @@ class AttachmentModes
                 var item = stack.Pop ();
                 Part part = item.Item1;
                 int depth = item.Item2;
-                string attachMode = (part.AxiallyAttached ? "axial" : "radial");
-                Console.WriteLine (new String (' ', depth) + part.Title + " - " + attachMode);
+                string attachMode =
+                    (part.AxiallyAttached ? "axial" : "radial");
+                Console.WriteLine (new String (' ', depth) + part.Title +
+                                   " - " + attachMode);
                 foreach (var child in part.Children)
                     stack.Push (new Tuple<Part,int> (child, depth + 1));
             }

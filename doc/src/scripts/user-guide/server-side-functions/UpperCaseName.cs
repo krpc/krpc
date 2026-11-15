@@ -12,7 +12,8 @@ class Program {
         var spaceCenter = connection.SpaceCenter ();
         var vessel = spaceCenter.ActiveVessel;
         // [docs]
-        var stream = connection.AddStream (() => vessel.Name.ToUpperInvariant ());
+        var stream = connection.AddStream (
+            () => vessel.Name.ToUpperInvariant ());
         // [/docs]
     }
 }

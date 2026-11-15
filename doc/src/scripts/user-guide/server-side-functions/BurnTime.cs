@@ -13,7 +13,8 @@ class Program {
         var vessel = spaceCenter.ActiveVessel;
         // [docs]
         var burnTime = connection.Compile ((double deltaV) =>
-            (vessel.Mass - vessel.Mass / Math.Exp (deltaV / (vessel.SpecificImpulse * 9.82)))
+            (vessel.Mass - vessel.Mass /
+                 Math.Exp (deltaV / (vessel.SpecificImpulse * 9.82)))
                 * vessel.SpecificImpulse * 9.82 / vessel.AvailableThrust);
         foreach (var deltaV in new [] { 100.0, 250.0, 400.0 })
             Console.WriteLine (connection.Run<double> (burnTime, deltaV));

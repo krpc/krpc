@@ -9,8 +9,10 @@ import krpc.client.services.SpaceCenter.Vessel;
 
 public class RasterPropMonitorExample {
     public static void main(String[] args) {
-        Connection connection = Connection.newInstance("Raster Prop Monitor Example");
-        Vessel vessel = SpaceCenter.newInstance(connection).getActiveVessel();
+        Connection connection =
+            Connection.newInstance("Raster Prop Monitor Example");
+        Vessel vessel =
+            SpaceCenter.newInstance(connection).getActiveVessel();
         Control control = vessel.getControl();
         RasterPropMonitor rpm = RasterPropMonitor.newInstance(connection);
 
@@ -18,7 +20,8 @@ public class RasterPropMonitorExample {
         Monitor monitor = rpm.monitors(vessel).get(0);
         Display display = monitor.getDisplay();
 
-        // Raster Prop Monitor formats the SAS variable, and keeps it up to date
+        // Raster Prop Monitor formats the SAS variable,
+        // and keeps it up to date
         display.setText("SAS: {0:ON;OFF;OFF} $&$ SAS");
 
         // A press of the NAV button shows the page

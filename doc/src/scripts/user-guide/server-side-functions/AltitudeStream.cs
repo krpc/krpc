@@ -14,7 +14,8 @@ class Program {
         var flight = vessel.Flight ();
         // [docs]
         // The vessel's altitude, in kilometers, computed on the server
-        var stream = connection.AddStream (() => flight.MeanAltitude / 1000);
+        var stream = connection.AddStream (
+            () => flight.MeanAltitude / 1000);
         Console.WriteLine ("Altitude: " + stream.Get () + " km");
         // [/docs]
     }

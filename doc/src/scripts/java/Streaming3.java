@@ -9,7 +9,8 @@ public class Streaming3 {
     try (Connection connection = Connection.newInstance()) {
       SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
       Flight flightInfo = spaceCenter.getActiveVessel().flight(null);
-      Stream<Double> altitude = connection.addStream(flightInfo, "getMeanAltitude");
+      Stream<Double> altitude =
+          connection.addStream(flightInfo, "getMeanAltitude");
       while (true) {
         System.out.println(altitude.get());
       }

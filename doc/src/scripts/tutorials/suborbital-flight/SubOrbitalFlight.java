@@ -3,6 +3,7 @@ import krpc.client.Event;
 import krpc.client.services.KRPC.Expression;
 import krpc.client.services.SpaceCenter;
 import krpc.client.services.SpaceCenter.Flight;
+import krpc.client.services.SpaceCenter.ReferenceFrame;
 import krpc.schema.KRPC.ProcedureCall;
 
 
@@ -23,8 +24,10 @@ public class SubOrbitalFlight {
 
     Expression.Bound e = Expression.bind(connection);
     {
-      ProcedureCall solidFuel = connection.getCall(vessel.getResources(), "amount", "SolidFuel");
-      Expression expr = e.lessThan(e.call(solidFuel), e.constantFloat(0.1f));
+      ProcedureCall solidFuel = connection.getCall(
+        vessel.getResources(), "amount", "SolidFuel");
+      Expression expr = e.lessThan(
+        e.call(solidFuel), e.constantFloat(0.1f));
       Event event = connection.addEvent(expr);
       synchronized (event.getCondition()) {
         event.waitFor();
@@ -35,8 +38,10 @@ public class SubOrbitalFlight {
 
     Flight flight = vessel.flight(null);
     {
-      ProcedureCall meanAltitude = connection.getCall(flight, "getMeanAltitude");
-      Expression expr = e.greaterThan(e.call(meanAltitude), e.constantDouble(10000));
+      ProcedureCall meanAltitude =
+        connection.getCall(flight, "getMeanAltitude");
+      Expression expr = e.greaterThan(
+        e.call(meanAltitude), e.constantDouble(10000));
       Event event = connection.addEvent(expr);
       synchronized (event.getCondition()) {
         event.waitFor();
@@ -49,7 +54,8 @@ public class SubOrbitalFlight {
     {
       ProcedureCall apoapsisAltitude = connection.getCall(
         vessel.getOrbit(), "getApoapsisAltitude");
-      Expression expr = e.greaterThan(e.call(apoapsisAltitude), e.constantDouble(100000));
+      Expression expr = e.greaterThan(
+        e.call(apoapsisAltitude), e.constantDouble(100000));
       Event event = connection.addEvent(expr);
       synchronized (event.getCondition()) {
         event.waitFor();
@@ -63,8 +69,10 @@ public class SubOrbitalFlight {
     vessel.getAutoPilot().setEngaged(false);
 
     {
-      ProcedureCall srfAltitude = connection.getCall(flight, "getSurfaceAltitude");
-      Expression expr = e.lessThan(e.call(srfAltitude), e.constantDouble(1000));
+      ProcedureCall srfAltitude =
+        connection.getCall(flight, "getSurfaceAltitude");
+      Expression expr = e.lessThan(
+        e.call(srfAltitude), e.constantDouble(1000));
       Event event = connection.addEvent(expr);
       synchronized (event.getCondition()) {
         event.waitFor();
@@ -73,8 +81,11 @@ public class SubOrbitalFlight {
 
     vessel.getControl().activateNextStage();
 
-    while (vessel.flight(vessel.getOrbit().getBody().getReferenceFrame()).getVerticalSpeed() < -0.1) {
-      System.out.printf("Altitude = %.1f meters\n", flight.getSurfaceAltitude());
+    ReferenceFrame bodyFrame =
+        vessel.getOrbit().getBody().getReferenceFrame();
+    while (vessel.flight(bodyFrame).getVerticalSpeed() < -0.1) {
+      System.out.printf(
+        "Altitude = %.1f meters\n", flight.getSurfaceAltitude());
       Thread.sleep(1000);
     }
     System.out.println("Landed!");

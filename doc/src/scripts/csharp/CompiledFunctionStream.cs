@@ -9,7 +9,8 @@ class Program {
         var spaceCenter = connection.SpaceCenter();
         var flight = spaceCenter.ActiveVessel.Flight();
 
-        // Stream the vessel's altitude in kilometers, computed on the server
+        // Stream the vessel's altitude in kilometers,
+        // computed on the server
         var stream = connection.AddStream(() => flight.MeanAltitude / 1000);
         while (true) {
             Console.WriteLine("Altitude: " + stream.Get() + " km");

@@ -19,7 +19,8 @@ public class ThrowException {
           vessel.getResources(), "amount", "LiquidFuel");
       Expression expr = e.ifThen(
           e.lessThan(e.call(amount), e.constantDouble(100)),
-          e.throw_("KRPC", "InvalidOperationException", e.constantString("not enough fuel")));
+          e.throw_("KRPC", "InvalidOperationException",
+              e.constantString("not enough fuel")));
       connection.run(expr);
       // [/docs]
     }

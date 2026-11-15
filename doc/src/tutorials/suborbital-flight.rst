@@ -497,7 +497,7 @@ vertical speed reaches zero when it lands:
 
       .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cs
          :language: csharp
-         :start-at: while (vessel.Flight (vessel.Orbit.Body.ReferenceFrame).VerticalSpeed < -0.1) {
+         :start-at: var bodyFrame = vessel.Orbit.Body.ReferenceFrame;
          :end-at: Console.WriteLine ("Landed!");
 
    .. group-tab:: C++
@@ -518,7 +518,7 @@ vertical speed reaches zero when it lands:
 
       .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.java
          :language: java
-         :start-at: while (vessel.flight(vessel.getOrbit().getBody().getReferenceFrame()).getVerticalSpeed() < -0.1) {
+         :start-at: ReferenceFrame bodyFrame =
          :end-at: System.out.println("Landed!");
 
    .. group-tab:: Lua

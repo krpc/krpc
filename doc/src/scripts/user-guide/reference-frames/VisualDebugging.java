@@ -19,7 +19,8 @@ public class VisualDebugging {
         // Draw the direction of the surface velocity, as a labeled arrow
         ReferenceFrame refFrame = vessel.getSurfaceVelocityReferenceFrame();
         Drawing.Line line = drawing.addDirectionFromCom(
-          new Triplet<Double, Double, Double>(0.0, 1.0, 0.0), refFrame, 10, true);
+          new Triplet<Double, Double, Double>(0.0, 1.0, 0.0),
+          refFrame, 10, true);
         line.setEndArrow(true);
         line.setLabel("Surface velocity");
         while (true) {

@@ -17,12 +17,14 @@ public class NotLoadedEvent {
 
       // above = meanAltitude > 1000, or false if the vessel is not loaded
       Expression above = e.variable("above", t.bool());
-      Expression altitude = e.call(connection.getCall(flight, "getMeanAltitude"));
+      Expression altitude =
+        e.call(connection.getCall(flight, "getMeanAltitude"));
       Expression above1000m = e.blockWithVariables(
         Arrays.asList(above),
         Arrays.asList(
           e.tryCatch(
-            e.assign(above, e.greaterThan(altitude, e.constantDouble(1000))),
+            e.assign(
+              above, e.greaterThan(altitude, e.constantDouble(1000))),
             "KRPC", "ObjectNotLoadedException", null,
             e.assign(above, e.constantBool(false))),
           above));

@@ -12,7 +12,8 @@ public class Streaming2 {
     try (Connection connection = Connection.newInstance()) {
       SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
       Vessel vessel = spaceCenter.getActiveVessel();
-      ReferenceFrame refframe = vessel.getOrbit().getBody().getReferenceFrame();
+      ReferenceFrame refframe =
+          vessel.getOrbit().getBody().getReferenceFrame();
       Stream<Triplet<Double, Double, Double>> position =
           connection.addStream(vessel, "position", refframe);
       while (true) {

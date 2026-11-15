@@ -6,7 +6,8 @@ class SurfacePrograde
 {
     public static void Main ()
     {
-        using (var connection = new Connection (name : "Surface prograde")) {
+        using (var connection =
+                   new Connection (name : "Surface prograde")) {
             var vessel = connection.SpaceCenter ().ActiveVessel;
             var ap = vessel.AutoPilot;
 

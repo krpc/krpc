@@ -16,9 +16,11 @@ public class NotLoadedStream {
       // [docs]
       Expression.Bound e = Expression.bind(connection);
       // altitude = meanAltitude / 1000, or 0 if the vessel is not loaded
-      Expression altitude = e.variable("altitude", Type.bind(connection).double_());
+      Expression altitude =
+          e.variable("altitude", Type.bind(connection).double_());
       Expression km = e.divide(
-          e.call(connection.getCall(flight, "getMeanAltitude")), e.constantDouble(1000));
+          e.call(connection.getCall(flight, "getMeanAltitude")),
+          e.constantDouble(1000));
       Expression altitudeKm = e.blockWithVariables(
           Arrays.asList(altitude),
           Arrays.asList(

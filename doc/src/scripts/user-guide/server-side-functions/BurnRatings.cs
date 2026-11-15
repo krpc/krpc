@@ -12,12 +12,14 @@ class Program {
         var spaceCenter = connection.SpaceCenter ();
         var vessel = spaceCenter.ActiveVessel;
         // [docs]
-        // A C# lambda holds a single expression, so LINQ operators replace the loop
+        // A C# lambda holds a single expression, so LINQ operators replace
+        // the loop
         var ratings = connection.Run (
             () => vessel.Parts.Engines
                 .Where (engine => engine.Active)
                 .Select (engine =>
-                    engine.Thrust > 0.9 * engine.AvailableThrust ? "full" : "partial")
+                    engine.Thrust > 0.9 * engine.AvailableThrust
+                        ? "full" : "partial")
                 .ToList ());
         Console.WriteLine (string.Join (", ", ratings));
         // [/docs]

@@ -14,7 +14,8 @@ class NavballDirections
             ap.ReferenceFrame = vessel.SurfaceReferenceFrame;
             ap.Engaged = true;
 
-            // Point the vessel north on the navball, with a pitch of 0 degrees
+            // Point the vessel north on the navball,
+            // with a pitch of 0 degrees
             ap.TargetDirection = Tuple.Create (0.0, 1.0, 0.0);
             ap.Wait();
 
@@ -22,7 +23,8 @@ class NavballDirections
             ap.TargetDirection = Tuple.Create (1.0, 0.0, 0.0);
             ap.Wait();
 
-            // Point the vessel west (heading of 270 degrees), with a pitch of 0 degrees
+            // Point the vessel west (heading of 270 degrees),
+            // with a pitch of 0 degrees
             ap.TargetDirection = Tuple.Create (0.0, 0.0, -1.0);
             ap.Wait();
 

@@ -10,7 +10,8 @@ public class StreamEnd {
     try (Connection connection = Connection.newInstance()) {
       SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
       Part part = spaceCenter.getActiveVessel().getParts().getRoot();
-      Stream<Double> temperature = connection.addStream(part, "getTemperature");
+      Stream<Double> temperature =
+          connection.addStream(part, "getTemperature");
       try {
         synchronized (temperature.getCondition()) {
           while (true) {

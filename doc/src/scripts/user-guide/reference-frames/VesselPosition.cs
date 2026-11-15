@@ -8,9 +8,11 @@ class VesselPosition
     {
         using (var connection = new Connection ()) {
             var vessel = connection.SpaceCenter ().ActiveVessel;
-            var position = vessel.Position (vessel.Orbit.Body.ReferenceFrame);
+            var position =
+                vessel.Position (vessel.Orbit.Body.ReferenceFrame);
             Console.WriteLine ("({0:F1}, {1:F1}, {2:F1})",
-                               position.Item1, position.Item2, position.Item3);
+                               position.Item1, position.Item2,
+                               position.Item3);
         }
     }
 }

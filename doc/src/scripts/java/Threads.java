@@ -8,7 +8,8 @@ public class Threads {
   public static void main(String[] args) throws InterruptedException {
     try (Connection connection = Connection.newInstance()) {
       Vessel vessel = SpaceCenter.newInstance(connection).getActiveVessel();
-      Flight flightInfo = vessel.flight(vessel.getOrbit().getBody().getReferenceFrame());
+      Flight flightInfo =
+          vessel.flight(vessel.getOrbit().getBody().getReferenceFrame());
 
       // Both threads make calls over the same connection
       Thread altitude = new Thread(() -> {

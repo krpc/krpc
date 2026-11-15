@@ -8,7 +8,8 @@ class Program {
         try {
             connection.SpaceCenter().Load("missing");
         } catch (ArgumentException exception) {
-            Console.WriteLine("Failed to load the save: " + exception.Message);
+            Console.WriteLine(
+                "Failed to load the save: " + exception.Message);
         }
     }
 }

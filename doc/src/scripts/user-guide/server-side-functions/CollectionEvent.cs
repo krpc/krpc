@@ -13,7 +13,8 @@ class Program {
         var vessel = connection.SpaceCenter().ActiveVessel;
 
         // A function taking an engine, returning true if it is out of fuel
-        var engine = e.Parameter("engine", t.ClassType("SpaceCenter", "Engine"));
+        var engine = e.Parameter(
+            "engine", t.ClassType("SpaceCenter", "Engine"));
         var hasFuel = Connection.GetCallTemplate((Engine x) => x.HasFuel);
         var outOfFuel = e.Lambda(new List<Expression> { engine },
             e.Not(e.CallWithArguments(hasFuel,

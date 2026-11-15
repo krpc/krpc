@@ -11,7 +11,7 @@ class CombinedIsp
             var vessel = connection.SpaceCenter ().ActiveVessel;
 
             var activeEngines = vessel.Parts.Engines
-                                .Where (e => e.Active && e.HasFuel).ToList ();
+                .Where (e => e.Active && e.HasFuel).ToList ();
 
             Console.WriteLine ("Active engines:");
             foreach (var engine in activeEngines)

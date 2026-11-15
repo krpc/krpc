@@ -41,15 +41,17 @@ class PitchHeadingRoll
         var vessel = conn.SpaceCenter ().ActiveVessel;
 
         while (true) {
-            var vesselDirection = vessel.Direction (vessel.SurfaceReferenceFrame);
+            var vesselDirection =
+                vessel.Direction (vessel.SurfaceReferenceFrame);
 
             // Get the direction of the vessel in the horizon plane
             var horizonDirection = new Vector3 (
                 0, vesselDirection.Item2, vesselDirection.Item3);
 
-            // Compute the pitch - the angle between the vessels direction and
-            // the direction in the horizon plane
-            double pitch = AngleBetweenVectors (vesselDirection, horizonDirection);
+            // Compute the pitch - the angle between the vessels direction
+            // and the direction in the horizon plane
+            double pitch =
+                AngleBetweenVectors (vesselDirection, horizonDirection);
             if (vesselDirection.Item1 < 0)
                 pitch = -pitch;
 
@@ -81,8 +83,9 @@ class PitchHeadingRoll
             else
                 roll -= 180;
 
-            Console.WriteLine ("pitch = {0:F1}, heading = {1:F1}, roll = {2:F1}",
-                               pitch, heading, roll);
+            Console.WriteLine (
+                "pitch = {0:F1}, heading = {1:F1}, roll = {2:F1}",
+                pitch, heading, roll);
 
             System.Threading.Thread.Sleep (1000);
         }

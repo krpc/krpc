@@ -17,8 +17,10 @@ namespace Extending
 
         protected override void Bind (ModBinder mod)
         {
-            Speed = mod.Type ("WindMod.API").Method<Func<Vessel, double>> ("GetSpeed");
-            manager = mod.Type ("WindMod.WindManager").StaticGetter<object> ("Instance");
+            Speed = mod.Type ("WindMod.API")
+                .Method<Func<Vessel, double>> ("GetSpeed");
+            manager = mod.Type ("WindMod.WindManager")
+                .StaticGetter<object> ("Instance");
         }
 
         protected override string NotReady ()

@@ -11,9 +11,11 @@ import java.util.Deque;
 public class TreeTraversal {
     public static void main(String[] args) {
         Connection connection = Connection.newInstance();
-        Vessel vessel = SpaceCenter.newInstance(connection).getActiveVessel();
+        Vessel vessel =
+            SpaceCenter.newInstance(connection).getActiveVessel();
         Part root = vessel.getParts().getRoot();
-        Deque<Pair<Part, Integer>> stack = new ArrayDeque<Pair<Part, Integer>>();
+        Deque<Pair<Part, Integer>> stack =
+            new ArrayDeque<Pair<Part, Integer>>();
         stack.push(new Pair<Part, Integer>(root, 0));
         while (stack.size() > 0) {
             Pair<Part, Integer> item = stack.pop();

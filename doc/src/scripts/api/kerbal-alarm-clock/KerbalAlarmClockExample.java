@@ -8,10 +8,14 @@ import krpc.client.services.SpaceCenter;
 
 public class KerbalAlarmClockExample {
     public static void main(String[] args) {
-        Connection connection = Connection.newInstance("Kerbal Alarm Clock Example");
+        Connection connection =
+            Connection.newInstance("Kerbal Alarm Clock Example");
         KerbalAlarmClock kac = KerbalAlarmClock.newInstance(connection);
-        Alarm alarm = kac.createAlarm(AlarmType.RAW, "My New Alarm", SpaceCenter.newInstance(connection).getUT() + 10);
-        alarm.setNotes("10 seconds have now passed since the alarm was created.");
+        Alarm alarm = kac.createAlarm(
+            AlarmType.RAW, "My New Alarm",
+            SpaceCenter.newInstance(connection).getUT() + 10);
+        alarm.setNotes(
+            "10 seconds have now passed since the alarm was created.");
         alarm.setAction(AlarmAction.MESSAGE_ONLY);
         connection.close();
     }

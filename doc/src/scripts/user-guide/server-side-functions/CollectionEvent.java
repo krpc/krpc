@@ -17,13 +17,17 @@ public class CollectionEvent {
       Type.Bound t = Type.bind(connection);
 
       // A function taking an engine, returning true if it is out of fuel
-      Expression engine = e.parameter("engine", t.classType("SpaceCenter", "Engine"));
-      ProcedureCall hasFuel = connection.getCallTemplate(SpaceCenter.Engine.class, "getHasFuel");
+      Expression engine =
+        e.parameter("engine", t.classType("SpaceCenter", "Engine"));
+      ProcedureCall hasFuel = connection.getCallTemplate(
+        SpaceCenter.Engine.class, "getHasFuel");
       Expression outOfFuel = e.lambda(Arrays.asList(engine),
-        e.not(e.callWithArguments(hasFuel, Collections.singletonMap(0, engine))));
+        e.not(e.callWithArguments(
+          hasFuel, Collections.singletonMap(0, engine))));
 
       // Whether any engine satisfies it
-      ProcedureCall engines = connection.getCall(vessel.getParts(), "getEngines");
+      ProcedureCall engines =
+        connection.getCall(vessel.getParts(), "getEngines");
       Expression expr = e.any(e.call(engines), outOfFuel);
 
       Event event = connection.addEvent(expr);

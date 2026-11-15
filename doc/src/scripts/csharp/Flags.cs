@@ -11,7 +11,8 @@ class Program {
         spaceCenter.MapFilter = MapFilterType.Probes | MapFilterType.Ships;
 
         // Check whether map mode shows debris
-        Console.WriteLine(spaceCenter.MapFilter.HasFlag(MapFilterType.Debris));
+        Console.WriteLine(
+            spaceCenter.MapFilter.HasFlag(MapFilterType.Debris));
 
         // Show debris as well
         spaceCenter.MapFilter |= MapFilterType.Debris;
