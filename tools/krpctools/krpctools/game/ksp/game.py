@@ -173,10 +173,10 @@ class Mod(game.Mod):
     """
 
     # The GameData folders the mod installs
-    folders = ()
+    folders: tuple[str, ...] = ()
 
     # The files the mod installs at the top of GameData
-    files = ()
+    files: tuple[str, ...] = ()
 
     # The directory of config overlays, one subdirectory per folder, or None
     overlays = None
@@ -426,6 +426,13 @@ class KSP(game.Game):
         return "krpc" in line.lower()
 
     # The running game
+
+    def mod_present(self, mod, conn) -> bool | None:
+        # A mod that installs only top-level files has no folder to look for
+        if not mod.folders:
+            return None
+        loaded = set(conn.testing_tools.game_data_folders)
+        return all(folder in loaded for folder in mod.folders)
 
     def mod_problems(self, conn):
         return dict(conn.testing_tools.mod_problems())

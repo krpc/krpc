@@ -12,7 +12,7 @@ from unittest import mock
 
 from krpctools.game import game, install, launch, pytest_plugin
 from krpctools.game.ksp import KSP
-from krpctools.game.ksp.game import copy_file, copy_folder, source_digest
+from krpctools.game.ksp.game import Mod, copy_file, copy_folder, source_digest
 
 # A clean no-mod GameData: the stock game, kRPC, the ModuleManager assembly and its
 # runtime-generated cache files.
@@ -340,6 +340,28 @@ class TestLoadedMods(unittest.TestCase):
         the_game = self.game(mod)
         self.assertEqual(set(), launch.loaded_mods(the_game, None))
         self.assertEqual({"Mod==1"}, launch.loaded_mods(the_game, None, {"Mod==1"}))
+
+
+class TestModPresent(unittest.TestCase):
+    def setUp(self):
+        self.ksp = KSP()
+        self.conn = mock.Mock()
+        self.conn.testing_tools.game_data_folders = ["Squad", "kRPC", "Kopernicus"]
+
+    def test_loaded_folders(self):
+        self.assertTrue(self.ksp.mod("Kopernicus").present(self.ksp, self.conn))
+
+    def test_folder_not_loaded(self):
+        self.assertFalse(self.ksp.mod("RealSolarSystem").present(self.ksp, self.conn))
+
+    def test_some_folders_not_loaded(self):
+        self.conn.testing_tools.game_data_folders = ["RealismOverhaul"]
+        self.assertFalse(self.ksp.mod("RealismOverhaul").present(self.ksp, self.conn))
+
+    def test_mod_without_folders(self):
+        mod = Mod()
+        mod.files = ("Mod.dll",)
+        self.assertIsNone(self.ksp.mod_present(mod, self.conn))
 
 
 class TestCopyFile(TempDirTestCase):

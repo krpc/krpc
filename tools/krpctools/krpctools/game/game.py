@@ -247,8 +247,9 @@ class Game:
 
     # The running game
 
-    def mod_present(self, mod, conn):
-        """Whether the running game has the mod loaded. The default for Mod.present."""
+    def mod_present(self, mod, conn) -> bool | None:
+        """Whether the running game has the mod loaded, or None when that cannot be told. The
+        default for Mod.present."""
         return None
 
     def mod_problems(self, conn):
