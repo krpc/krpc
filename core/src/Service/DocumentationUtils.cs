@@ -189,7 +189,20 @@ namespace KRPC.Service
                     string.Join (", ", candidates.Select (t => t.FullName).ToArray ()));
             if (candidates.Count == 1)
                 return candidates [0];
-            return Reflection.GetType (name);
+            return FindType (name);
+        }
+
+        /// <summary>
+        /// Returns the type with the given full name, from the assemblies that can declare kRPC
+        /// attributes and the system exceptions that kRPC exceptions map, or null.
+        /// </summary>
+        static Type FindType (string name)
+        {
+            var type = Reflection.GetType (name, typeof (KRPCServiceAttribute).Assembly);
+            if (type != null)
+                return type;
+            name = name.Replace ('+', '.');
+            return Scanner.Scanner.GetMappedExceptionTypes ().Keys.FirstOrDefault (x => x.FullName.Replace ('+', '.') == name);
         }
 
         static string ResolveTypeCref (string reference)
@@ -303,7 +316,7 @@ namespace KRPC.Service
 
         static Type GetType (string name)
         {
-            var type = Reflection.GetType (name);
+            var type = FindType (name);
             if (type == null)
                 throw new DocumentationException ("Type '" + name + "' not found");
             return type;

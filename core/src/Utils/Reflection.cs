@@ -7,41 +7,63 @@ namespace KRPC.Utils
 {
     static class Reflection
     {
-        static IEnumerable<Type> AllTypes (Func<Assembly, bool> include = null)
+        /// <summary>
+        /// The types of the assemblies that pass the filter. An assembly whose types fail to
+        /// load is skipped, as reading an attribute of one of its types can throw, and
+        /// GetUnloadableAssemblies reports it.
+        /// </summary>
+        static IEnumerable<Type> AllTypes (Func<Assembly, bool> include)
         {
             foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies()) {
-                // Get all types that can be loaded from the assembly
                 // Note: We skip Assembly-CSharp as it causes a crash when running nunit tests.
-                if (assembly.FullName.Contains ("Assembly-CSharp"))
-                    continue;
-                if (include != null && !include (assembly))
+                if (assembly.FullName.Contains ("Assembly-CSharp") || !include (assembly))
                     continue;
                 Type[] types;
                 try {
                     types = assembly.GetTypes ();
-                } catch (ReflectionTypeLoadException exn) {
-                    // An attribute search skips the assembly, as reading an attribute of one of
-                    // its types can throw, and GetUnloadableAssemblies reports it
-                    if (include != null)
-                        continue;
-                    types = exn.Types.Where (x => x != null).ToArray ();
+                } catch (ReflectionTypeLoadException) {
+                    continue;
                 }
                 foreach (var type in types)
                     yield return type;
             }
         }
 
+        static readonly Dictionary<Assembly, KeyValuePair<int, Dictionary<string, Type>>> typeIndexes =
+            new Dictionary<Assembly, KeyValuePair<int, Dictionary<string, Type>>> ();
+
         /// <summary>
-        /// Returns the type with the specified full name, from all assemblies, or null if no such type exists.
+        /// Returns the type with the specified full name, from the assemblies that can declare
+        /// an attribute of the given assembly, or null if no such type exists. A nested type's
+        /// name separates it from the declaring type with either '+' or '.'.
         /// </summary>
-        public static Type GetType (string name)
+        /// <remarks>
+        /// The index of the types by name is built on the first call, and rebuilt when an
+        /// assembly loads.
+        /// </remarks>
+        public static Type GetType (string name, Assembly referenced)
         {
-            name = name.Replace ('+', '.');
-            foreach (var type in AllTypes()) {
-                if (type.FullName.Replace ('+', '.') == name)
-                    return type;
+            Type result;
+            GetTypeIndex (referenced).TryGetValue (name.Replace ('+', '.'), out result);
+            return result;
+        }
+
+        static Dictionary<string, Type> GetTypeIndex (Assembly referenced)
+        {
+            var assemblyCount = AppDomain.CurrentDomain.GetAssemblies ().Length;
+            KeyValuePair<int, Dictionary<string, Type>> entry;
+            if (typeIndexes.TryGetValue (referenced, out entry) && entry.Key == assemblyCount)
+                return entry.Value;
+            var index = new Dictionary<string, Type> ();
+            foreach (var type in AllTypes (x => CanDeclare (x, referenced))) {
+                if (type.FullName == null)
+                    continue;
+                var name = type.FullName.Replace ('+', '.');
+                if (!index.ContainsKey (name))
+                    index [name] = type;
             }
-            return null;
+            typeIndexes [referenced] = new KeyValuePair<int, Dictionary<string, Type>> (assemblyCount, index);
+            return index;
         }
 
         /// <summary>
