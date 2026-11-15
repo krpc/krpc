@@ -30,6 +30,7 @@ namespace KRPC.MechJeb
         static Func<object, Vector3d> relativePosition;
         static Func<object, Vector3d> dockingAxis;
         static Field<object, double> targetLongitude;
+        static Func<object, double> targetLatitude;
 
         internal static new void Load ()
         {
@@ -49,6 +50,7 @@ namespace KRPC.MechJeb
             dockingAxis = type.Getter<object, Vector3d> ("DockingAxis");
             // An angle, which converts to its value in degrees
             targetLongitude = type.Field<object, double> ("targetLongitude");
+            targetLatitude = type.Getter<object, double> ("targetLatitude");
         }
 
         internal TargetController () : base ("MechJebModuleTargetController")
@@ -69,6 +71,13 @@ namespace KRPC.MechJeb
         /// </summary>
         internal ITargetable Target {
             get { return target (Instance) as ITargetable; }
+        }
+
+        /// <summary>
+        /// The latitude of the position target, in degrees.
+        /// </summary>
+        internal double TargetLatitude {
+            get { return targetLatitude (Instance); }
         }
 
         internal global::Orbit InternalTargetOrbit {

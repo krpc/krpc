@@ -57,6 +57,8 @@
     <Compile Include="NodeExecutor.cs" />
     <Compile Include="Bindings.cs" />
     <Compile Include="RendezvousAutopilot.cs" />
+    <Compile Include="RoverAutopilot.cs" />
+    <Compile Include="RoverWaypoint.cs" />
     <Compile Include="SmartASS.cs" />
     <Compile Include="SmartRCS.cs" />
     <Compile Include="Autostaging.cs" />

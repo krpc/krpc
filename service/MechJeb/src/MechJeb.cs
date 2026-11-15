@@ -26,6 +26,7 @@ namespace KRPC.MechJeb
         static readonly DockingAutopilot dockingAutopilot = new DockingAutopilot ();
         static readonly LandingGuidance landingGuidance = new LandingGuidance ();
         static readonly RendezvousAutopilot rendezvousAutopilot = new RendezvousAutopilot ();
+        static readonly RoverAutopilot roverAutopilot = new RoverAutopilot ();
         static readonly ManeuverPlanner maneuverPlanner = new ManeuverPlanner ();
         static readonly SmartASS smartASS = new SmartASS ();
         static readonly SmartRCS smartRCS = new SmartRCS ();
@@ -55,6 +56,7 @@ namespace KRPC.MechJeb
             NodeExecutor.Load ();
             PVGSettings.Load ();
             RendezvousAutopilot.Load ();
+            RoverAutopilot.Load ();
             SmartASS.Load ();
             SmartRCS.Load ();
             TargetController.Load ();
@@ -167,6 +169,14 @@ namespace KRPC.MechJeb
         [KRPCProperty]
         public static RendezvousAutopilot RendezvousAutopilot {
             get { return rendezvousAutopilot; }
+        }
+
+        /// <summary>
+        /// The Rover Autopilot window.
+        /// </summary>
+        [KRPCProperty]
+        public static RoverAutopilot RoverAutopilot {
+            get { return roverAutopilot; }
         }
 
         /// <summary>

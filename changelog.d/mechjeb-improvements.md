@@ -57,3 +57,4 @@
   that needs the least delta-v (#1381)
 - Add `AircraftApproach`, the Aircraft Approach & Autoland window, which lands a plane on a
   runway (#1381)
+- Add `RoverAutopilot`, the Rover Autopilot window, which drives a rover along waypoints (#1381)
