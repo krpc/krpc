@@ -14,7 +14,7 @@ Layout
 The folders mirror those at the root of the repository:
 
 * ``server/`` - the StarMap entry point, ``Addon.cs``, which holds all the StarMap and game
-  lifecycle code, with the server windows and the kRPC menu. ``server/grpc/`` is the gRPC
+  lifecycle code, with the server windows. ``server/grpc/`` is the gRPC
   server.
 * ``service/KSA/`` - the ``KSA`` service, its in-game tests, its service definitions and the
   client stubs.

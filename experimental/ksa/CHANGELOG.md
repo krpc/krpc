@@ -20,6 +20,7 @@
   - Fix serial servers failing to start on Linux and macOS, with the native serial port library
     not found
   - Support KSA v2026.11.10.5801
+  - Move the kRPC menu to a `kRPC` item in the game's Mods menu, which opens the server window
 
 - Crew and life support
   - Add life support: the supplies of a vehicle and its habitat zones, how long they last,
