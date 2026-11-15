@@ -2618,9 +2618,9 @@ MechJeb.AscentAutopilot.ThrustController
 MechJeb.AscentAutopilot.ForceRoll
 MechJeb.AscentAutopilot.TurnRoll
 MechJeb.AscentAutopilot.VerticalRoll
-MechJeb.AscentAutopilot.LimitAoA
-MechJeb.AscentAutopilot.MaxAoA
-MechJeb.AscentAutopilot.AoALimitFadeoutPressure
+MechJeb.AscentAutopilot.LimitAngleOfAttack
+MechJeb.AscentAutopilot.MaxAngleOfAttack
+MechJeb.AscentAutopilot.AngleOfAttackLimitFadeoutPressure
 MechJeb.AscentAutopilot.CorrectiveSteering
 MechJeb.AscentAutopilot.CorrectiveSteeringGain
 MechJeb.AscentAutopilot.Autostage
@@ -2746,7 +2746,7 @@ MechJeb.OperationCircularize.ErrorMessage
 MechJeb.OperationCircularize.MakeNodes
 MechJeb.OperationCircularize.TimeSelector
 MechJeb.OperationCourseCorrection
-MechJeb.OperationCourseCorrection.CourseCorrectFinalPeA
+MechJeb.OperationCourseCorrection.FinalPeriapsisAltitude
 MechJeb.OperationCourseCorrection.ErrorMessage
 MechJeb.OperationCourseCorrection.InterceptDistance
 MechJeb.OperationCourseCorrection.MakeNodes

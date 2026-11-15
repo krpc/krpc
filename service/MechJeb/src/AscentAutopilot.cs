@@ -299,7 +299,7 @@ namespace KRPC.MechJeb
         /// </summary>
         /// <remarks>Applies on the classic ascent path.</remarks>
         [KRPCProperty]
-        public bool LimitAoA {
+        public bool LimitAngleOfAttack {
             get { return limitAoA.Get (Settings); }
             set { limitAoA.Set (Settings, value); }
         }
@@ -307,9 +307,9 @@ namespace KRPC.MechJeb
         /// <summary>
         /// The largest angle of attack, in degrees.
         /// </summary>
-        /// <remarks>Requires <see cref="LimitAoA"/>, and applies on the classic ascent path.</remarks>
+        /// <remarks>Requires <see cref="LimitAngleOfAttack"/>, and applies on the classic ascent path.</remarks>
         [KRPCProperty]
-        public double MaxAoA {
+        public double MaxAngleOfAttack {
             get { return maxAoA.Get (Settings); }
             set { maxAoA.Set (Settings, value); }
         }
@@ -317,9 +317,9 @@ namespace KRPC.MechJeb
         /// <summary>
         /// The dynamic pressure below which the angle of attack limit fades out, in pascals.
         /// </summary>
-        /// <remarks>Requires <see cref="LimitAoA"/>, and applies on the classic ascent path.</remarks>
+        /// <remarks>Requires <see cref="LimitAngleOfAttack"/>, and applies on the classic ascent path.</remarks>
         [KRPCProperty]
-        public double AoALimitFadeoutPressure {
+        public double AngleOfAttackLimitFadeoutPressure {
             get { return aoaLimitFadeoutPressure.Get (Settings); }
             set { aoaLimitFadeoutPressure.Set (Settings, value); }
         }

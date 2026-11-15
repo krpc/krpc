@@ -15,7 +15,7 @@ class TestManeuverPlanner(MechJebTestCase):
                 (planner.operation_apoapsis, "new_apoapsis", 123000),
                 (
                     planner.operation_course_correction,
-                    "course_correct_final_pe_a",
+                    "final_periapsis_altitude",
                     123000,
                 ),
                 (planner.operation_course_correction, "intercept_distance", 123),
