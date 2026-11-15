@@ -42,6 +42,7 @@
     <Compile Include="$(bazel-bin)\service\MechJeb\ServiceInfo.cs">
       <Link>ServiceInfo.cs</Link>
     </Compile>
+    <Compile Include="AircraftApproach.cs" />
     <Compile Include="AircraftAutopilot.cs" />
     <Compile Include="AscentGuidance.cs" />
     <Compile Include="AscentSettings.cs" />

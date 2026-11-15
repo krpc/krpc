@@ -2563,6 +2563,7 @@ Trajectories.DescentProfileMode.Horizon
 MechJeb
 MechJeb.Available
 MechJeb.Ready
+MechJeb.AircraftApproach
 MechJeb.AircraftAutopilot
 MechJeb.AscentGuidance
 MechJeb.DockingAutopilot
@@ -2574,6 +2575,19 @@ MechJeb.SmartRCS
 MechJeb.TargetController
 MechJeb.Translatron
 MechJeb.Utilities
+MechJeb.AircraftApproach
+MechJeb.AircraftApproach.Runways
+MechJeb.AircraftApproach.Runway
+MechJeb.AircraftApproach.DistanceToRunway
+MechJeb.AircraftApproach.Autoland
+MechJeb.AircraftApproach.Abort
+MechJeb.AircraftApproach.Enabled
+MechJeb.AircraftApproach.State
+MechJeb.AircraftApproach.Glideslope
+MechJeb.AircraftApproach.ApproachSpeed
+MechJeb.AircraftApproach.TouchdownSpeed
+MechJeb.AircraftApproach.EngageReverseIfAvailable
+MechJeb.AircraftApproach.BrakeAsSoonAsLanded
 MechJeb.AircraftAutopilot
 MechJeb.AircraftAutopilot.Enabled
 MechJeb.AircraftAutopilot.AltitudeHoldEnabled

@@ -55,3 +55,5 @@
   `PVGSettings` (#1381)
 - Add `ManeuverPlanner.OperationAdvancedTransfer`, a transfer to another planet at the departure
   that needs the least delta-v (#1381)
+- Add `AircraftApproach`, the Aircraft Approach & Autoland window, which lands a plane on a
+  runway (#1381)
