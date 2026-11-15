@@ -41,6 +41,9 @@ Each client's ``:test`` suite groups its tests by what they depend on:
 the documentation. It needs network access and is in no suite. Run it by name, as the release
 checks do.
 
+``//doc:lint`` checks the formatting of the documentation examples at 76 columns, the width of a
+rendered code block. The C# and Java examples are wrapped to that width by hand.
+
 Useful options for ``bazel test`` are:
 
 * ``--cache_test_results=false`` runs tests whose results are cached.
