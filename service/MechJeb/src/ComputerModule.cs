@@ -106,7 +106,8 @@ namespace KRPC.MechJeb
         /// </summary>
         [KRPCProperty]
         public string Status {
-            get { return status (Instance); }
+            // Note: a step of an autopilot can have no status
+            get { return status (Instance) ?? string.Empty; }
         }
     }
 
