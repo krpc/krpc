@@ -24,9 +24,11 @@ py_console_script_binary(
 # Produces a :requirements.update run target that resolves requirements.in
 # into requirements_lock.txt, and a :requirements_test diff test that checks
 # the lock file is up to date. The lock file is resolved on Linux, as some
-# packages depend on others only on Windows.
+# packages depend on others only on Windows. The test resolves against PyPI,
+# and a slow index response can take it past the 60 s short timeout.
 compile_pip_requirements(
     name = "requirements",
+    timeout = "moderate",
     src = "requirements.in",
     requirements_txt = "requirements_lock.txt",
     tags = ["requires-network"],
