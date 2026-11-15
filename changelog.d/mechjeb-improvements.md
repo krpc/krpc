@@ -20,3 +20,6 @@
   `FinalPeriapsisAltitude` (#1381)
 - Add `ManeuverPlanner.OperationEccentricity`, the operation that changes the eccentricity
   (#1381)
+- Add `OperationTransfer.Capture`, `PlanCapture`, `Rendezvous`, `LagTime` and `Coplanar` (#1381)
+- **Breaking:** Remove `OperationTransfer.InterceptOnly` and `SimpleTransfer`, in place of
+  `Capture` and `Coplanar` (#1381)

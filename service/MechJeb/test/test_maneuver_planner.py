@@ -1,7 +1,9 @@
 import math
 import unittest
 
+from krpctools.game.geometry import norm
 from service.MechJeb.test.mechjeb_test_case import (
+    CRAFT,
     MechJebInOrbitTestCase,
     MechJebTestCase,
 )
@@ -36,8 +38,11 @@ class TestManeuverPlanner(MechJebTestCase):
                 (planner.operation_resonant_orbit, "resonance_numerator", 3),
                 (planner.operation_resonant_orbit, "resonance_denominator", 4),
                 (planner.operation_semi_major, "new_semi_major_axis", 1234000),
-                (planner.operation_transfer, "intercept_only", True),
-                (planner.operation_transfer, "simple_transfer", True),
+                (planner.operation_transfer, "capture", False),
+                (planner.operation_transfer, "plan_capture", False),
+                (planner.operation_transfer, "rendezvous", False),
+                (planner.operation_transfer, "lag_time", 12),
+                (planner.operation_transfer, "coplanar", True),
                 (planner.operation_apoapsis.time_selector, "lead_time", 123),
                 (
                     planner.operation_apoapsis.time_selector,
@@ -101,6 +106,22 @@ class TestManeuverPlannerInOrbit(MechJebInOrbitTestCase):
         self.assertEqual(1, len(nodes))
         self.assertAlmostEqual(0.1, nodes[0].orbit.eccentricity, delta=0.001)
 
+    def test_transfer_without_capture(self):
+        operation = self.planner.operation_transfer
+        mun = self.sc.bodies["Mun"]
+        self.sc.target_body = mun
+        try:
+            self.wait_until(lambda: self.mj.target_controller.normal_target_exists)
+            operation.time_selector.time_reference = self.mj.TimeReference.computed
+            operation.capture = False
+            nodes = operation.make_nodes()
+            self.assertEqual("", operation.error_message)
+            self.assertEqual(1, len(nodes))
+            self.assertEqual(mun, nodes[0].orbit.next_orbit.body)
+        finally:
+            operation.capture = True
+            self.sc.clear_target()
+
     def test_inclination(self):
         operation = self.planner.operation_inclination
         operation.new_inclination = 10
@@ -145,6 +166,52 @@ class TestManeuverPlannerInOrbit(MechJebInOrbitTestCase):
         orbit = nodes[0].orbit
         self.assertLess(orbit.eccentricity, 0.001)
         self.assertAlmostEqual(200000, orbit.periapsis_altitude, delta=1000)
+
+
+class TestManeuverPlannerTransferToVessel(MechJebTestCase):
+    """A vessel with MechJeb in a 100 km circular orbit of Kerbin, targeting a vessel in a
+    300 km circular orbit."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.launch("Basic", directory=CRAFT)
+        cls.set_circular_orbit("Kerbin", 300000)
+        cls.vessel = cls.launch(
+            "Basic", directory=CRAFT, save=None, keep_other_vessels=True
+        )
+        cls.set_circular_orbit("Kerbin", 100000)
+        cls.conn = cls.connect()
+        cls.mj = cls.conn.mech_jeb
+        cls.sc = cls.conn.space_center
+        cls.wait_until(lambda: cls.mj.ready)
+        cls.vessel.control.activate_next_stage()
+        cls.planner = cls.mj.maneuver_planner
+        cls.target = next(v for v in cls.sc.vessels if v != cls.vessel)
+        cls.sc.target_vessel = cls.target
+        cls.wait_until(lambda: cls.mj.target_controller.normal_target_exists)
+
+    def tearDown(self):
+        self.vessel.control.remove_nodes()
+
+    def test_transfer_with_capture(self):
+        operation = self.planner.operation_transfer
+        operation.time_selector.time_reference = self.mj.TimeReference.computed
+        self.assertTrue(operation.capture)
+        self.assertTrue(operation.rendezvous)
+        operation.plan_capture = True
+        nodes = operation.make_nodes()
+        self.assertEqual("", operation.error_message)
+        self.assertEqual(2, len(nodes))
+        self.assertGreater(nodes[1].ut, nodes[0].ut)
+        # The vessel meets the target at the capture node
+        frame = self.sc.bodies["Kerbin"].non_rotating_reference_frame
+        ut = nodes[1].ut
+        position = nodes[0].orbit.position_at(ut, frame)
+        target_position = self.target.orbit.position_at(ut, frame)
+        self.assertLess(norm([a - b for a, b in zip(position, target_position)]), 1000)
+        orbit = nodes[1].orbit
+        self.assertAlmostEqual(300000, orbit.periapsis_altitude, delta=5000)
+        self.assertAlmostEqual(300000, orbit.apoapsis_altitude, delta=5000)
 
 
 class TestManeuverPlannerEllipticalOrbit(MechJebTestCase):

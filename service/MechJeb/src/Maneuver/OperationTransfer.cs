@@ -17,6 +17,9 @@ namespace KRPC.MechJeb.Maneuver
     {
         static Func<object, object> timeSelector;
         static Field<object, bool> capture;
+        static Field<object, bool> planCapture;
+        static Field<object, bool> rendezvous;
+        static Field<object, double> lagTime;
         static Field<object, bool> coplanar;
 
         internal static new void Load ()
@@ -24,6 +27,9 @@ namespace KRPC.MechJeb.Maneuver
             var type = Bindings.Type ("MuMech.OperationGeneric");
             timeSelector = TimeSelectorField (type);
             capture = type.Field<object, bool> ("Capture");
+            planCapture = type.Field<object, bool> ("PlanCapture");
+            rendezvous = type.Field<object, bool> ("Rendezvous");
+            lagTime = Bindings.EditableDouble (type, "LagTime");
             coplanar = type.Field<object, bool> ("Coplanar");
         }
 
@@ -36,19 +42,49 @@ namespace KRPC.MechJeb.Maneuver
         }
 
         /// <summary>
-        /// Whether to plan only the intercept, with no capture burn, for an impact or a flyby.
+        /// Whether the transfer ends in the target's orbit. Without capture, it is an impact or
+        /// a flyby.
         /// </summary>
         [KRPCProperty]
-        public bool InterceptOnly {
-            get { return !capture.Get (Instance); }
-            set { capture.Set (Instance, !value); }
+        public bool Capture {
+            get { return capture.Get (Instance); }
+            set { capture.Set (Instance, value); }
         }
 
         /// <summary>
-        /// Whether the transfer is coplanar.
+        /// Whether to make a second node for the capture burn.
+        /// </summary>
+        /// <remarks>Requires <see cref="Capture"/>.</remarks>
+        [KRPCProperty]
+        public bool PlanCapture {
+            get { return planCapture.Get (Instance); }
+            set { planCapture.Set (Instance, value); }
+        }
+
+        /// <summary>
+        /// Whether to meet the target, rather than reach its orbit.
         /// </summary>
         [KRPCProperty]
-        public bool SimpleTransfer {
+        public bool Rendezvous {
+            get { return rendezvous.Get (Instance); }
+            set { rendezvous.Set (Instance, value); }
+        }
+
+        /// <summary>
+        /// The time by which the vessel arrives behind the target, in seconds.
+        /// </summary>
+        /// <remarks>Requires <see cref="Rendezvous"/>.</remarks>
+        [KRPCProperty]
+        public double LagTime {
+            get { return lagTime.Get (Instance); }
+            set { lagTime.Set (Instance, value); }
+        }
+
+        /// <summary>
+        /// Whether the transfer stays in the vessel's orbital plane.
+        /// </summary>
+        [KRPCProperty]
+        public bool Coplanar {
             get { return coplanar.Get (Instance); }
             set { coplanar.Set (Instance, value); }
         }

@@ -2817,8 +2817,11 @@ MechJeb.OperationSemiMajor.TimeSelector
 MechJeb.OperationTransfer
 MechJeb.OperationTransfer.ErrorMessage
 MechJeb.OperationTransfer.MakeNodes
-MechJeb.OperationTransfer.InterceptOnly
-MechJeb.OperationTransfer.SimpleTransfer
+MechJeb.OperationTransfer.Capture
+MechJeb.OperationTransfer.PlanCapture
+MechJeb.OperationTransfer.Rendezvous
+MechJeb.OperationTransfer.LagTime
+MechJeb.OperationTransfer.Coplanar
 MechJeb.OperationTransfer.TimeSelector
 MechJeb.RCSController.RCSForRotation
 MechJeb.RCSController.RCSThrottle
