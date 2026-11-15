@@ -43,6 +43,8 @@ namespace KRPC.MechJeb.Maneuver
     {
         static Type operationException;
         static Func<object, string> errorMessage;
+        static Action<object, string> setErrorMessage;
+        static Func<object, List<ManeuverNode>> getManeuverNodes;
         static Func<object, global::Orbit, double, object, IEnumerable> makeNodesImpl;
         static Func<global::Vessel, global::Orbit, Vector3d, double, ManeuverNode> placeManeuverNode;
         static Func<object, Vector3d> dV;
@@ -53,6 +55,8 @@ namespace KRPC.MechJeb.Maneuver
             operationException = Bindings.Type ("MuMech.OperationException").Type;
             var type = Bindings.Type ("MuMech.Operation");
             errorMessage = type.Method<Func<object, string>> ("GetErrorMessage");
+            setErrorMessage = type.Setter<object, string> ("ErrorMessage");
+            getManeuverNodes = Bindings.Type ("MuMech.MechJebModuleManeuverPlanner").Method<Func<object, List<ManeuverNode>>> ("GetManeuverNodes");
             makeNodesImpl = type.Method<Func<object, global::Orbit, double, object, IEnumerable>> ("MakeNodesImpl");
             placeManeuverNode = Bindings.Type ("MuMech.VesselExtensions").Method<Func<global::Vessel, global::Orbit, Vector3d, double, ManeuverNode>> ("PlaceManeuverNode");
             var parameters = Bindings.Type ("MuMech.ManeuverParameters");
@@ -91,7 +95,7 @@ namespace KRPC.MechJeb.Maneuver
         }
 
         /// <summary>
-        /// The warning from the last call to <c>MakeNodes</c>, or an empty string.
+        /// The warning or error from the last call to <c>MakeNodes</c>, or an empty string.
         /// </summary>
         [KRPCProperty]
         public string ErrorMessage {
@@ -104,7 +108,8 @@ namespace KRPC.MechJeb.Maneuver
         /// </summary>
         /// <returns>The maneuver nodes.</returns>
         /// <remarks>
-        /// A warning may be left in <c>ErrorMessage</c>.
+        /// The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+        /// left in <c>ErrorMessage</c>.
         /// </remarks>
         [KRPCMethod]
         public IList<Node> MakeNodes ()
@@ -113,18 +118,40 @@ namespace KRPC.MechJeb.Maneuver
             var targetController = MechJeb.TargetController;
             targetController.Update ();
             var vessel = FlightGlobals.ActiveVessel;
+            // Plan from the orbit after the last node, as MechJeb's window does
+            var orbit = vessel.orbit;
+            var time = Planetarium.GetUniversalTime ();
+            var existing = getManeuverNodes (MechJeb.Module ("MechJebModuleManeuverPlanner"));
+            if (existing.Count > 0) {
+                var last = existing [existing.Count - 1];
+                orbit = last.nextPatch;
+                time = last.UT;
+                if (orbit == null)
+                    throw new OperationException ("The last maneuver node has no orbit after it");
+            }
+            setErrorMessage (instance, string.Empty);
             IEnumerable parameters;
             try {
-                parameters = makeNodesImpl (instance, vessel.orbit, Planetarium.GetUniversalTime (), targetController.Instance);
+                parameters = makeNodesImpl (instance, orbit, time, targetController.Instance);
             } catch (Exception exn) {
-                if (operationException != null && operationException.IsInstanceOfType (exn))
-                    throw new OperationException (exn.Message);
+                if (operationException == null || !operationException.IsInstanceOfType (exn))
+                    throw new MJServiceException (exn.Message, exn);
+                // Keep the message, as MechJeb's MakeNodes does
+                setErrorMessage (instance, exn.Message);
+                throw new OperationException (exn.Message);
+            }
+            var nodes = new List<ManeuverNode> ();
+            if (parameters == null)
+                return new List<Node> ();
+            try {
+                foreach (var parameter in parameters)
+                    nodes.Add (placeManeuverNode (vessel, orbit, dV (parameter), uT (parameter)));
+            } catch (Exception exn) {
+                foreach (var node in nodes)
+                    node.RemoveSelf ();
                 throw new MJServiceException (exn.Message, exn);
             }
-            var nodes = new List<Node> ();
-            foreach (var parameter in parameters)
-                nodes.Add (new Node (vessel, placeManeuverNode (vessel, vessel.orbit, dV (parameter), uT (parameter))));
-            return nodes;
+            return nodes.ConvertAll (node => new Node (vessel, node));
         }
     }
 

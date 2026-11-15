@@ -6,3 +6,7 @@
   target, and from both landing methods when the vessel is landed (#1381)
 - Throw an exception from `NodeExecutor.ExecuteOneNode` and `ExecuteAllNodes` when the vessel
   has no maneuver node (#1381)
+- `Operation.MakeNodes`
+  - Plan from the orbit after the vessel's last maneuver node (#1381)
+  - Set `ErrorMessage` to the error it throws, and clear the message of an earlier call (#1381)
+  - Remove the nodes it placed when it fails to place one (#1381)

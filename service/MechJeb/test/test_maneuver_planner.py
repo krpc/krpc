@@ -103,9 +103,39 @@ class TestManeuverPlannerInOrbit(MechJebInOrbitTestCase):
         )
 
     def test_operation_exception(self):
-        with self.assertRaises(self.mj.OperationException):
-            self.planner.operation_kill_rel_vel.make_nodes()
+        operation = self.planner.operation_kill_rel_vel
+        with self.assertRaises(self.mj.OperationException) as context:
+            operation.make_nodes()
+        self.assertNotEqual("", operation.error_message)
+        self.assertIn(operation.error_message, str(context.exception))
         self.assertEqual(0, len(self.vessel.control.nodes))
+
+    def test_error_message_cleared(self):
+        operation = self.planner.operation_semi_major
+        operation.time_selector.time_reference = self.mj.TimeReference.x_from_now
+        # Larger than half of Kerbin's sphere of influence
+        operation.new_semi_major_axis = 45000000
+        operation.make_nodes()
+        self.assertNotEqual("", operation.error_message)
+        self.vessel.control.remove_nodes()
+        operation.new_semi_major_axis = 1000000
+        operation.make_nodes()
+        self.assertEqual("", operation.error_message)
+
+    def test_after_last_node(self):
+        apoapsis = self.planner.operation_apoapsis
+        apoapsis.new_apoapsis = 200000
+        apoapsis.time_selector.time_reference = self.mj.TimeReference.x_from_now
+        apoapsis.time_selector.lead_time = 60
+        first = apoapsis.make_nodes()[0]
+        circularize = self.planner.operation_circularize
+        circularize.time_selector.time_reference = self.mj.TimeReference.apoapsis
+        nodes = circularize.make_nodes()
+        self.assertEqual(1, len(nodes))
+        self.assertGreater(nodes[0].ut, first.ut + 60)
+        orbit = nodes[0].orbit
+        self.assertLess(orbit.eccentricity, 0.001)
+        self.assertAlmostEqual(200000, orbit.periapsis_altitude, delta=1000)
 
 
 class TestManeuverPlannerEllipticalOrbit(MechJebTestCase):
