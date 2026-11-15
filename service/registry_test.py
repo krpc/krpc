@@ -18,6 +18,7 @@ SERVICES = REGISTRY["services"]
 MODS = {mod["name"]: mod for mod in REGISTRY["mods"]}
 CORE_SERVICES = {"KRPC", "StdLib"}
 BY_NAME = {service["name"]: service for service in SERVICES}
+TESTED_MODS = REGISTRY["tested_mods"]
 
 # A KRPCService attribute and its Id argument
 SERVICE_ATTRIBUTE = re.compile(r"\[KRPCService\s*\(([^)]*)\)\]")
@@ -136,6 +137,18 @@ class TestMods(unittest.TestCase):
             for name in service["mods"] + service["supports"]
         ]
         self.assertEqual(len(names), len(set(names)))
+
+    def test_tested_mods(self):
+        reported = {
+            name
+            for service in SERVICES
+            for name in service["mods"] + service["supports"]
+        }
+        for name in TESTED_MODS:
+            with self.subTest(mod=name):
+                self.assertIn(name, MODS)
+                self.assertNotIn(name, reported)
+                self.assertTrue(MODS[name]["versions"])
 
     def test_requires_known(self):
         for mod in MODS.values():

@@ -16,21 +16,25 @@ def _documented(mods, services):
                 names.append(name)
     return [by_name[name] for name in names]
 
-def mods_rst(mods, services):
-    """A link target and a 'Tested with' substitution for each mod a service wraps or supports.
+def mods_rst(mods, services, tested):
+    """A link target for each documented or tested mod, and a 'Tested with' substitution for each documented one.
 
     Args:
       mods: MODS from the registry.
       services: SERVICES from the registry.
+      tested: TESTED_MODS from the registry.
 
     Returns:
       The rst, for a page to include.
     """
+    by_name = {m.name: m for m in mods}
     lines = [".. Generated from service/registry.bzl", ""]
     for m in _documented(mods, services):
         lines.append(".. _%s: https://github.com/%s" % (m.title, m.repo))
         if m.versions:
             lines.append(".. |%s tested| replace:: Tested with %s %s." % (m.title, m.title, _versions(m)))
+    for name in tested:
+        lines.append(".. _%s: https://github.com/%s" % (by_name[name].title, by_name[name].repo))
     return "\n".join(lines) + "\n"
 
 def _table(header, rows):
@@ -77,6 +81,22 @@ def mod_services_rst(mods, services):
         for n in s.mods
         if by_name[n].versions
     ]
+    lines = [".. Generated from service/registry.bzl", ""]
+    lines.extend(_table(["Mod", "Tested versions"], rows))
+    return "\n".join(lines) + "\n"
+
+def tested_mods_rst(mods, tested):
+    """A table of the tested versions of the mods no service wraps or supports.
+
+    Args:
+      mods: MODS from the registry.
+      tested: TESTED_MODS from the registry.
+
+    Returns:
+      The rst, for a page to include. It links each mod through the targets in mods_rst.
+    """
+    by_name = {m.name: m for m in mods}
+    rows = [["`%s`_" % by_name[n].title, _versions(by_name[n])] for n in tested]
     lines = [".. Generated from service/registry.bzl", ""]
     lines.extend(_table(["Mod", "Tested versions"], rows))
     return "\n".join(lines) + "\n"

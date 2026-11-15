@@ -850,3 +850,6 @@ MODS = [
         )],
     ),
 ]
+
+# The mods of MODS that no service wraps or supports, which the docs list as tested
+TESTED_MODS = ["Kopernicus", "RealSolarSystem", "RealismOverhaul", "ProceduralParts"]

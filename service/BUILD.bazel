@@ -2,7 +2,7 @@ load("@bazel_skylib//rules:write_file.bzl", "write_file")
 load("@rules_python//python:defs.bzl", "py_test")
 load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
 load(":build.bzl", "service_targets")
-load(":registry.bzl", "MODS", "SERVICES")
+load(":registry.bzl", "MODS", "SERVICES", "TESTED_MODS")
 
 # The registry, for the Python tools
 write_file(
@@ -11,6 +11,7 @@ write_file(
     content = [json.encode_indent({
         "mods": MODS,
         "services": SERVICES,
+        "tested_mods": TESTED_MODS,
     })],
     visibility = ["//visibility:public"],
 )
