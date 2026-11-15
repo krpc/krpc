@@ -259,5 +259,23 @@ namespace KRPC.MechJeb
             get { return NodeExecutor.LeadTime; }
             set { NodeExecutor.LeadTime = value; }
         }
+
+        /// <summary>
+        /// Whether to burn with the RCS thrusters in place of the engines.
+        /// </summary>
+        [KRPCProperty]
+        public bool RCSOnly {
+            get { return NodeExecutor.RCSOnly; }
+            set { NodeExecutor.RCSOnly = value; }
+        }
+
+        /// <summary>
+        /// Whether to stop the vessel's roll before the burn.
+        /// </summary>
+        [KRPCProperty]
+        public bool KillRollRotation {
+            get { return NodeExecutor.KillRollRotation; }
+            set { NodeExecutor.KillRollRotation = value; }
+        }
     }
 }

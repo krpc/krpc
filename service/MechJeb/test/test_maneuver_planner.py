@@ -48,6 +48,8 @@ class TestManeuverPlanner(MechJebTestCase):
                 (planner.operation_transfer, "coplanar", True),
                 (planner, "autowarp", False),
                 (planner, "lead_time", 12),
+                (planner, "rcs_only", True),
+                (planner, "kill_roll_rotation", False),
                 (planner.operation_apoapsis.time_selector, "lead_time", 123),
                 (
                     planner.operation_apoapsis.time_selector,

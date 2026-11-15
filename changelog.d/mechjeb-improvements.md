@@ -58,5 +58,9 @@
 - Add `AircraftApproach`, the Aircraft Approach & Autoland window, which lands a plane on a
   runway (#1381)
 - Add `RoverAutopilot`, the Rover Autopilot window, which drives a rover along waypoints (#1381)
+- Add `ManeuverPlanner.RCSOnly` and `KillRollRotation`, and `RendezvousAutopilot.MaxClosingSpeed`
+  (#1381)
+- Add `ThrustLimiter.LimitToPreventUnstableIgnition`, `AutoRCSUllaging`, and `Limiter`, the
+  limiter that limits the throttle (#1381)
 - Add `AttitudeAdjustment`, the Attitude Adjustment window, which selects the attitude
   controller (#1381)

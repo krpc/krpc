@@ -10,6 +10,7 @@ class TestRendezvousAutopilot(MechJebTestCase):
             [
                 (rendezvous, "desired_distance", 123),
                 (rendezvous, "max_phasing_orbits", 7),
+                (rendezvous, "max_closing_speed", 12),
                 (rendezvous, "autowarp", False),
             ]
         )

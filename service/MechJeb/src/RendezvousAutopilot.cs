@@ -12,6 +12,7 @@ namespace KRPC.MechJeb
     {
         static Field<object, double> desiredDistance;
         static Field<object, double> maxPhasingOrbits;
+        static Field<object, double> maxClosingSpeed;
         static Func<object, string> status;
 
         internal static new void Load ()
@@ -19,6 +20,7 @@ namespace KRPC.MechJeb
             var type = Bindings.Type ("MuMech.MechJebModuleRendezvousAutopilot");
             desiredDistance = Bindings.EditableDouble (type, "desiredDistance");
             maxPhasingOrbits = Bindings.EditableDouble (type, "maxPhasingOrbits");
+            maxClosingSpeed = Bindings.EditableDouble (type, "maxClosingSpeed");
             status = type.Getter<object, string> ("status");
         }
 
@@ -42,6 +44,15 @@ namespace KRPC.MechJeb
         public double MaxPhasingOrbits {
             get { return maxPhasingOrbits.Get (Instance); }
             set { maxPhasingOrbits.Set (Instance, value); }
+        }
+
+        /// <summary>
+        /// The largest speed at which to approach the target, in <unit>m/s</unit>.
+        /// </summary>
+        [KRPCProperty]
+        public double MaxClosingSpeed {
+            get { return maxClosingSpeed.Get (Instance); }
+            set { maxClosingSpeed.Set (Instance, value); }
         }
 
         /// <summary>

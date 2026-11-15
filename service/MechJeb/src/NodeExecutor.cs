@@ -10,6 +10,8 @@ namespace KRPC.MechJeb
     {
         static Field<object, bool> autowarp;
         static Field<object, double> leadTime;
+        static Field<object, bool> rcsOnly;
+        static Field<object, bool> killRollRotation;
         static Action<object, object> executeOneNode;
         static Action<object, object> executeAllNodes;
         static Action<object> abort;
@@ -19,6 +21,8 @@ namespace KRPC.MechJeb
             var type = Bindings.Type ("MuMech.MechJebModuleNodeExecutor");
             autowarp = type.Field<object, bool> ("Autowarp");
             leadTime = Bindings.EditableDouble (type, "LeadTime");
+            rcsOnly = type.Field<object, bool> ("RCSOnly");
+            killRollRotation = type.Field<object, bool> ("KillRollRotation");
             executeOneNode = type.Method<Action<object, object>> ("ExecuteOneNode");
             executeAllNodes = type.Method<Action<object, object>> ("ExecuteAllNodes");
             abort = type.Method<Action<object>> ("Abort");
@@ -41,6 +45,16 @@ namespace KRPC.MechJeb
         internal static double LeadTime {
             get { return leadTime.Get (executor.Instance); }
             set { leadTime.Set (executor.Instance, value); }
+        }
+
+        internal static bool RCSOnly {
+            get { return rcsOnly.Get (executor.Instance); }
+            set { rcsOnly.Set (executor.Instance, value); }
+        }
+
+        internal static bool KillRollRotation {
+            get { return killRollRotation.Get (executor.Instance); }
+            set { killRollRotation.Set (executor.Instance, value); }
         }
 
         internal static bool Executing {

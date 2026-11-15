@@ -39,6 +39,8 @@ class TestUtilities(MechJebTestCase):
                 (thrust, "electric_throttle", True),
                 (thrust, "electric_throttle_lo", 0.25),
                 (thrust, "electric_throttle_hi", 0.5),
+                (thrust, "limit_to_prevent_unstable_ignition", True),
+                (thrust, "auto_rcs_ullaging", False),
             ]
         )
 
@@ -62,6 +64,9 @@ class TestUtilities(MechJebTestCase):
             self.mj.utilities.thrust.differential_throttle_status,
             self.mj.DifferentialThrottleStatus,
         )
+
+    def test_limiter(self):
+        self.assertIsInstance(self.mj.utilities.thrust.limiter, self.mj.LimitMode)
 
     def test_solar_panels(self):
         controller = self.mj.utilities.solar_panels

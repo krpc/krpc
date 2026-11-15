@@ -2764,6 +2764,18 @@ MechJeb.LandingGuidance.GetTargetString
 MechJeb.LandingGuidance.PickTargetOnMap
 MechJeb.LandingGuidance.SetTarget
 MechJeb.LandingGuidance.Autowarp
+MechJeb.LimitMode
+MechJeb.LimitMode.None
+MechJeb.LimitMode.TerminalVelocity
+MechJeb.LimitMode.Temperature
+MechJeb.LimitMode.Flameout
+MechJeb.LimitMode.Acceleration
+MechJeb.LimitMode.Throttle
+MechJeb.LimitMode.DynamicPressure
+MechJeb.LimitMode.MinThrottle
+MechJeb.LimitMode.Electric
+MechJeb.LimitMode.UnstableIgnition
+MechJeb.LimitMode.AutoRCSUllage
 MechJeb.ManeuverPlanner
 MechJeb.ManeuverPlanner.OperationAdvancedTransfer
 MechJeb.ManeuverPlanner.OperationApoapsis
@@ -2789,6 +2801,8 @@ MechJeb.ManeuverPlanner.ExecuteNextNode
 MechJeb.ManeuverPlanner.Autowarp
 MechJeb.ManeuverPlanner.ExecutingNode
 MechJeb.ManeuverPlanner.LeadTime
+MechJeb.ManeuverPlanner.RCSOnly
+MechJeb.ManeuverPlanner.KillRollRotation
 MechJeb.OperationAdvancedTransfer
 MechJeb.OperationAdvancedTransfer.MaxArrivalTime
 MechJeb.OperationAdvancedTransfer.IncludeCaptureBurn
@@ -2911,6 +2925,7 @@ MechJeb.RendezvousAutopilot.Enabled
 MechJeb.RendezvousAutopilot.Status
 MechJeb.RendezvousAutopilot.DesiredDistance
 MechJeb.RendezvousAutopilot.MaxPhasingOrbits
+MechJeb.RendezvousAutopilot.MaxClosingSpeed
 MechJeb.RendezvousAutopilot.Autowarp
 MechJeb.RoverAutopilot
 MechJeb.RoverAutopilot.ControlHeading
@@ -3025,6 +3040,9 @@ MechJeb.ThrustLimiter.MaxAcceleration
 MechJeb.ThrustLimiter.MaxDynamicPressure
 MechJeb.ThrustLimiter.MaxThrottle
 MechJeb.ThrustLimiter.MinThrottle
+MechJeb.ThrustLimiter.LimitToPreventUnstableIgnition
+MechJeb.ThrustLimiter.AutoRCSUllaging
+MechJeb.ThrustLimiter.Limiter
 MechJeb.TimeReference
 MechJeb.TimeReference.Computed
 MechJeb.TimeReference.XFromNow
