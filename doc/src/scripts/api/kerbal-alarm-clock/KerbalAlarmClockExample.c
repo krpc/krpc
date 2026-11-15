@@ -15,7 +15,8 @@ int main() {
                                     "My New Alarm", ut + 10);
 
   krpc_KerbalAlarmClock_Alarm_set_Notes(
-      conn, alarm, "10 seconds have now passed since the alarm was created.");
+      conn, alarm,
+      "10 seconds have now passed since the alarm was created.");
   krpc_KerbalAlarmClock_Alarm_set_Action(
       conn, alarm, KRPC_KERBALALARMCLOCK_ALARMACTION_MESSAGEONLY);
 }

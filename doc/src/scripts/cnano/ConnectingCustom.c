@@ -12,7 +12,8 @@ typedef struct {
   FILE *out;
 } link_t;
 
-static krpc_error_t link_read(uintptr_t handle, uint8_t *buf, size_t count) {
+static krpc_error_t link_read(uintptr_t handle, uint8_t *buf,
+                              size_t count) {
   link_t *link = (link_t *)handle;
   if (fread(buf, 1, count, link->in) != count) {
     krpc_set_error_cause("End of the input");

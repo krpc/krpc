@@ -15,8 +15,9 @@ int main() {
   auto body = vessel.orbit().body();
   auto coverage =
       scansat.coverage(body, krpc::services::ScanSat::ScanType::altimetry);
-  std::cout << std::fixed << std::setprecision(1) << "Altimetry coverage of "
-            << body.name() << ": " << coverage * 100 << "%" << std::endl;
+  std::cout << std::fixed << std::setprecision(1)
+            << "Altimetry coverage of " << body.name() << ": "
+            << coverage * 100 << "%" << std::endl;
 
   auto flight = vessel.flight();
   auto elevation =
@@ -24,6 +25,7 @@ int main() {
   if (!elevation)
     std::cout << "The terrain below the vessel is not scanned" << std::endl;
   else
-    std::cout << std::setprecision(0) << "The terrain below the vessel is at "
-              << *elevation << " m" << std::endl;
+    std::cout << std::setprecision(0)
+              << "The terrain below the vessel is at " << *elevation << " m"
+              << std::endl;
 }

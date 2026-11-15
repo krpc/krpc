@@ -20,8 +20,8 @@ int main() {
     auto depth = stack.top().second;
     stack.pop();
     std::string attach_mode = part.axially_attached() ? "axial" : "radial";
-    std::cout << std::string(depth, ' ') << part.title() << " - " << attach_mode
-              << std::endl;
+    std::cout << std::string(depth, ' ') << part.title() << " - "
+              << attach_mode << std::endl;
     auto children = part.children();
     for (const auto& child : children) {
       stack.push(std::pair<SpaceCenter::Part, int>(child, depth + 1));

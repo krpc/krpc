@@ -9,6 +9,6 @@ int main() {
   auto vessel = spaceCenter.active_vessel().value();
   auto position = vessel.position(vessel.orbit().body().reference_frame());
   std::cout << std::fixed << std::setprecision(1);
-  std::cout << std::get<0>(position) << ", " << std::get<1>(position) << ", "
-            << std::get<2>(position) << std::endl;
+  std::cout << std::get<0>(position) << ", " << std::get<1>(position)
+            << ", " << std::get<2>(position) << std::endl;
 }

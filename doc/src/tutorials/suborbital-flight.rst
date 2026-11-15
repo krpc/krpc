@@ -160,7 +160,7 @@ take effect:
 
       .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.c
          :language: c
-         :start-at: krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading(conn, auto_pilot, 90, 90);
+         :start-at: krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading(conn, auto_pilot, 90,
          :end-at: sleep(1);
 
    .. group-tab:: Java
@@ -366,7 +366,7 @@ takes the new target:
       .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.c
          :language: c
          :start-at: printf("Gravity turn\n");
-         :end-at: krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading(conn, auto_pilot, 60, 90);
+         :end-at: 90);
 
    .. group-tab:: Java
 

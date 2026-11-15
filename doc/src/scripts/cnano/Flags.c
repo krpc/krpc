@@ -1,8 +1,8 @@
 #include <krpc_cnano.h>
 #include <krpc_cnano/services/space_center.h>
 
-// A C enumeration is an int, so combining its values is signed bitwise logic
-// NOLINTBEGIN(bugprone-signed-bitwise)
+// A C enumeration is an int, so combining its values is signed bitwise
+// logic NOLINTBEGIN(bugprone-signed-bitwise)
 int main() {
   krpc_connection_t conn;
   if (krpc_open_serial(&conn, "COM0") != KRPC_OK) return 1;

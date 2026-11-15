@@ -23,7 +23,8 @@ int main() {
   krpc_SpaceCenter_Control_t control;
   krpc_SpaceCenter_Vessel_Control(conn, &control, vessel);
 
-  krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading(conn, auto_pilot, 90, 90);
+  krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading(conn, auto_pilot, 90,
+                                                   90);
   krpc_SpaceCenter_AutoPilot_set_Engaged(conn, auto_pilot, true);
   krpc_SpaceCenter_Control_set_Throttle(conn, control, 1);
   sleep(1);
@@ -52,13 +53,15 @@ int main() {
   }
 
   printf("Gravity turn\n");
-  krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading(conn, auto_pilot, 60, 90);
+  krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading(conn, auto_pilot, 60,
+                                                   90);
 
   krpc_SpaceCenter_Orbit_t orbit;
   krpc_SpaceCenter_Vessel_Orbit(conn, &orbit, vessel);
   while (true) {
     double apoapsis_altitude;
-    krpc_SpaceCenter_Orbit_ApoapsisAltitude(conn, &apoapsis_altitude, orbit);
+    krpc_SpaceCenter_Orbit_ApoapsisAltitude(conn, &apoapsis_altitude,
+                                            orbit);
     if (apoapsis_altitude > 100000) break;
   }
 
@@ -79,13 +82,16 @@ int main() {
   krpc_SpaceCenter_CelestialBody_t body;
   krpc_SpaceCenter_Orbit_Body(conn, &body, orbit);
   krpc_SpaceCenter_ReferenceFrame_t body_ref_frame;
-  krpc_SpaceCenter_CelestialBody_ReferenceFrame(conn, &body_ref_frame, body);
+  krpc_SpaceCenter_CelestialBody_ReferenceFrame(conn, &body_ref_frame,
+                                                body);
   krpc_SpaceCenter_Flight_t body_flight;
-  krpc_SpaceCenter_Vessel_Flight(conn, &body_flight, vessel, body_ref_frame);
+  krpc_SpaceCenter_Vessel_Flight(conn, &body_flight, vessel,
+                                 body_ref_frame);
 
   while (true) {
     double vertical_speed;
-    krpc_SpaceCenter_Flight_VerticalSpeed(conn, &vertical_speed, body_flight);
+    krpc_SpaceCenter_Flight_VerticalSpeed(conn, &vertical_speed,
+                                          body_flight);
     if (vertical_speed > -0.1) break;
     double altitude;
     krpc_SpaceCenter_Flight_SurfaceAltitude(conn, &altitude, flight);

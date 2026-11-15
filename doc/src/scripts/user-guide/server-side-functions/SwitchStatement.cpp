@@ -22,12 +22,13 @@ int main() {
   auto x = e.variable("x", t.int_());
   auto values = e.create_list(std::vector<Expr>(
       {e.constant_int(1), e.constant_int(2), e.constant_int(3)}));
-  auto body = e.match(
-      x,
-      std::vector<std::vector<Expr>>(
-          {{e.constant_int(1), e.constant_int(2)}, {}}),
-      std::vector<Expr>({e.assign(total, e.add(total, e.constant_int(10))),
-                         e.assign(total, e.add(total, e.constant_int(1)))}));
+  auto body =
+      e.match(x,
+              std::vector<std::vector<Expr>>(
+                  {{e.constant_int(1), e.constant_int(2)}, {}}),
+              std::vector<Expr>(
+                  {e.assign(total, e.add(total, e.constant_int(10))),
+                   e.assign(total, e.add(total, e.constant_int(1)))}));
   auto program = e.block_with_variables(
       std::vector<Expr>({total, x}),
       std::vector<Expr>({e.assign(total, e.constant_int(0)),

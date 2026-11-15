@@ -31,8 +31,8 @@ int main() {
   // (orientation: x=zenith, y=north, z=east)
   krpc_SpaceCenter_ReferenceFrame_t landing_reference_frame;
   krpc_SpaceCenter_CelestialBody_SurfaceReferenceFrame(
-      conn, &landing_reference_frame, body, landing_latitude, landing_longitude,
-      landing_altitude);
+      conn, &landing_reference_frame, body, landing_latitude,
+      landing_longitude, landing_altitude);
 
   // Draw axes
   krpc_Drawing_AddAxes(conn, NULL, landing_reference_frame, 10, true);

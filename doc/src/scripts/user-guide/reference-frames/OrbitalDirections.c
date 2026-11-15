@@ -19,7 +19,8 @@ int main() {
   krpc_SpaceCenter_Vessel_t vessel;
   krpc_SpaceCenter_ActiveVessel(conn, &vessel);
   krpc_SpaceCenter_ReferenceFrame_t vessel_obt_ref;
-  krpc_SpaceCenter_Vessel_OrbitalReferenceFrame(conn, &vessel_obt_ref, vessel);
+  krpc_SpaceCenter_Vessel_OrbitalReferenceFrame(conn, &vessel_obt_ref,
+                                                vessel);
 
   krpc_SpaceCenter_AutoPilot_t ap;
   krpc_SpaceCenter_Vessel_AutoPilot(conn, &ap, vessel);

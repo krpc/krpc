@@ -20,7 +20,8 @@ int main() {
   vessel.control().activate_next_stage();
 
   auto e = krpc::services::KRPC::Expression::bind(conn);
-  auto expr = e.equal(e.call(ascent.enabled_call()), e.constant_bool(false));
+  auto expr =
+      e.equal(e.call(ascent.enabled_call()), e.constant_bool(false));
   auto event = krpc::add_event(expr);
   event.acquire();
   event.wait();

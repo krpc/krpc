@@ -21,7 +21,8 @@ int main() {
       std::vector<Expr>({total, x}),
       std::vector<Expr>(
           {e.assign(total, e.constant_int(0)),
-           e.for_each(x, values, e.assign(total, e.add(total, x))), total}));
+           e.for_each(x, values, e.assign(total, e.add(total, x))),
+           total}));
 
   std::cout << krpc::run<int32_t>(program) << std::endl;
 }

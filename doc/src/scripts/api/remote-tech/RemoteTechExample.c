@@ -24,7 +24,8 @@ int main() {
   krpc_SpaceCenter_Bodies(conn, &bodies);
   krpc_SpaceCenter_CelestialBody_t jool;
   for (size_t i = 0; i < bodies.size; i++)
-    if (!strcmp(bodies.entries[i].key, "Jool")) jool = bodies.entries[i].value;
+    if (!strcmp(bodies.entries[i].key, "Jool"))
+      jool = bodies.entries[i].value;
 
   krpc_RemoteTech_Antenna_set_TargetBody(conn, antenna, jool);
 
