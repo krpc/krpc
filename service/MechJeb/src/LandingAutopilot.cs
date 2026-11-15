@@ -94,20 +94,35 @@ namespace KRPC.MechJeb
 
         /// <summary>
         /// Land at the position target. See <see cref="TargetController.SetPositionTarget"/>.
+        /// Throws an exception if there is no position target, or the vessel is landed or
+        /// splashed down.
         /// </summary>
         [KRPCMethod]
         public void LandAtPositionTarget ()
         {
+            var targetController = MechJeb.TargetController;
+            targetController.Update ();
+            if (!targetController.PositionTargetExists)
+                throw new InvalidOperationException ("There is no position target");
+            CheckNotLanded ();
             landAtPositionTarget (Instance, this);
         }
 
         /// <summary>
-        /// Land wherever the vessel comes down.
+        /// Land wherever the vessel comes down. Throws an exception if the vessel is landed or
+        /// splashed down.
         /// </summary>
         [KRPCMethod]
         public void LandUntargeted ()
         {
+            CheckNotLanded ();
             landUntargeted (Instance, this);
+        }
+
+        static void CheckNotLanded ()
+        {
+            if (FlightGlobals.ActiveVessel.LandedOrSplashed)
+                throw new InvalidOperationException ("The vessel is landed");
         }
 
         /// <summary>

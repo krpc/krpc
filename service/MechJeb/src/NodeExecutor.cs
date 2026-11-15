@@ -57,21 +57,33 @@ namespace KRPC.MechJeb
         }
 
         /// <summary>
-        /// Execute the next maneuver node.
+        /// Execute the next maneuver node. Throws an exception if the vessel has no maneuver
+        /// node.
         /// </summary>
         [KRPCMethod]
         public void ExecuteOneNode ()
         {
+            CheckNodes ();
             executeOneNode (Instance, this);
         }
 
         /// <summary>
-        /// Execute all the maneuver nodes.
+        /// Execute all the maneuver nodes. Throws an exception if the vessel has no maneuver
+        /// node.
         /// </summary>
         [KRPCMethod]
         public void ExecuteAllNodes ()
         {
+            CheckNodes ();
             executeAllNodes (Instance, this);
+        }
+
+        // MechJeb enables the executor before it reads the first node
+        static void CheckNodes ()
+        {
+            var solver = FlightGlobals.ActiveVessel.patchedConicSolver;
+            if (solver == null || solver.maneuverNodes.Count == 0)
+                throw new InvalidOperationException ("The vessel has no maneuver node");
         }
 
         /// <summary>

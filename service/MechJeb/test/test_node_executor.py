@@ -50,6 +50,14 @@ class TestNodeExecutorInOrbit(MechJebInOrbitTestCase):
         finally:
             executor.autowarp = True
 
+    def test_without_node(self):
+        executor = self.mj.node_executor
+        for execute in (executor.execute_one_node, executor.execute_all_nodes):
+            with self.subTest(method=execute.__name__):
+                with self.assertRaisesRegex(RuntimeError, "no maneuver node"):
+                    execute()
+                self.assertFalse(executor.enabled)
+
 
 if __name__ == "__main__":
     unittest.main()

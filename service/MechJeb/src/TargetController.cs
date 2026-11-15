@@ -25,6 +25,7 @@ namespace KRPC.MechJeb
         static Action<object> onFixedUpdate;
         static Func<object, bool> normalTargetExists;
         static Func<object, bool> positionTargetExists;
+        static Func<object, object> target;
         static Func<object, bool> canAlign;
         static Func<object, global::Orbit> targetOrbit;
         static Func<object, Vector3d> position;
@@ -46,6 +47,7 @@ namespace KRPC.MechJeb
             onFixedUpdate = type.Method<Action<object>> ("OnFixedUpdate");
             normalTargetExists = type.Getter<object, bool> ("NormalTargetExists");
             positionTargetExists = type.Getter<object, bool> ("PositionTargetExists");
+            target = type.Getter<object, object> ("Target");
             canAlign = type.Getter<object, bool> ("CanAlign");
             targetOrbit = type.Getter<object, global::Orbit> ("TargetOrbit");
             position = type.Getter<object, Vector3d> ("Position");
@@ -72,6 +74,18 @@ namespace KRPC.MechJeb
 
         internal global::Orbit InternalTargetOrbit {
             get { return targetOrbit (Instance); }
+        }
+
+        /// <summary>
+        /// The target controller module. Throws an exception if there is no target.
+        /// </summary>
+        object Targeted {
+            get {
+                var instance = Instance;
+                if (target (instance) == null)
+                    throw new InvalidOperationException ("There is no target");
+                return instance;
+            }
         }
 
         /// <summary>
@@ -163,58 +177,68 @@ namespace KRPC.MechJeb
 
         /// <summary>
         /// Whether the vessel can align with the target, which it can with a docking port.
+        /// Throws an exception if there is no target.
         /// </summary>
         [KRPCProperty]
         public bool CanAlign {
-            get { return canAlign (Instance); }
+            get { return canAlign (Targeted); }
         }
 
         /// <summary>
-        /// The orbit of the target.
+        /// The orbit of the target. Throws an exception if there is no target, or the target
+        /// has no orbit.
         /// </summary>
         [KRPCProperty]
         public SpaceCenter.Services.Orbit TargetOrbit {
-            get { return new SpaceCenter.Services.Orbit (InternalTargetOrbit); }
+            get {
+                var orbit = targetOrbit (Targeted);
+                if (orbit == null)
+                    throw new InvalidOperationException ("The target has no orbit");
+                return new SpaceCenter.Services.Orbit (orbit);
+            }
         }
 
         /// <summary>
-        /// The world space position of the target.
+        /// The world space position of the target. Throws an exception if there is no target.
         /// </summary>
         [KRPCProperty]
         public Tuple3 Position {
-            get { return position (Instance).ToTuple (); }
+            get { return position (Targeted).ToTuple (); }
         }
 
         /// <summary>
-        /// The distance to the target, in meters.
+        /// The distance to the target, in meters. Throws an exception if there is no target.
         /// </summary>
         [KRPCProperty]
         public float Distance {
-            get { return distance (Instance); }
+            get { return distance (Targeted); }
         }
 
         /// <summary>
         /// The world space velocity of the vessel relative to the target, in <unit>m/s</unit>.
+        /// Throws an exception if there is no target.
         /// </summary>
         [KRPCProperty]
         public Tuple3 RelativeVelocity {
-            get { return relativeVelocity (Instance).ToTuple (); }
+            get { return relativeVelocity (Targeted).ToTuple (); }
         }
 
         /// <summary>
-        /// The world space position of the vessel relative to the target.
+        /// The world space position of the vessel relative to the target. Throws an exception
+        /// if there is no target.
         /// </summary>
         [KRPCProperty]
         public Tuple3 RelativePosition {
-            get { return relativePosition (Instance).ToTuple (); }
+            get { return relativePosition (Targeted).ToTuple (); }
         }
 
         /// <summary>
-        /// The world space docking axis of the target.
+        /// The world space docking axis of the target. Throws an exception if there is no
+        /// target.
         /// </summary>
         [KRPCProperty]
         public Tuple3 DockingAxis {
-            get { return dockingAxis (Instance).ToTuple (); }
+            get { return dockingAxis (Targeted).ToTuple (); }
         }
     }
 }
