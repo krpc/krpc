@@ -103,7 +103,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double SurfaceGravity {
-            get { return InternalBody.GeeASL * 9.81d; }
+            get { return InternalBody.gravParameter / (InternalBody.Radius * InternalBody.Radius); }
         }
 
         /// <summary>

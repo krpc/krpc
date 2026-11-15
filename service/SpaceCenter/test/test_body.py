@@ -31,7 +31,7 @@ class TestBody(TestCase):
         self.assertAlmostEqual(
             3.5316000e12, kerbin.gravitational_parameter, delta=0.0001e12
         )
-        self.assertAlmostEqual(9.81, kerbin.surface_gravity, places=2)
+        self.assertAlmostEqual(9.81, kerbin.surface_gravity, places=6)
         self.assertAlmostEqual(21549.425, kerbin.rotational_period, delta=0.1)
         self.assertAlmostEqual(
             (2 * math.pi) / 21549.425, kerbin.rotational_speed, places=8
@@ -91,7 +91,7 @@ class TestBody(TestCase):
         self.assertAlmostEqual(
             6.5138398e10, mun.gravitational_parameter, delta=0.0000001e10
         )
-        self.assertAlmostEqual(1.6290, mun.surface_gravity, places=4)
+        self.assertAlmostEqual(1.62846, mun.surface_gravity, places=5)
         self.assertAlmostEqual(1.3898e5, mun.rotational_period, delta=0.0001e5)
         self.assertAlmostEqual((2 * math.pi) / 1.3898e5, mun.rotational_speed, places=8)
         self.assertAlmostEqual(math.radians(230), mun.initial_rotation)
