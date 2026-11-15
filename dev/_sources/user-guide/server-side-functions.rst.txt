@@ -87,6 +87,7 @@ This event fires when the vessel's altitude exceeds 1000 meters:
    .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/AltitudeEvent.js
+         :language: javascript
          :start-after: [docs]
          :end-before: [/docs]
 
@@ -130,6 +131,7 @@ For example:
    .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/CapturedValue.js
+         :language: javascript
          :start-after: [docs]
          :end-before: [/docs]
 
@@ -163,6 +165,7 @@ computation on each stream update:
    .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/AltitudeStream.js
+         :language: javascript
          :start-after: [docs]
          :end-before: [/docs]
 
@@ -189,6 +192,7 @@ read in a single physics tick per update:
    .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/EngineThrusts.js
+         :language: javascript
          :start-after: [docs]
          :end-before: [/docs]
 
@@ -225,6 +229,7 @@ engines that staging reveals:
    .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/OutOfFuelEvent.js
+         :language: javascript
          :start-after: [docs]
          :end-before: [/docs]
 
@@ -255,6 +260,7 @@ case:
    .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/UpperCaseName.js
+         :language: javascript
          :start-after: [docs]
          :end-before: [/docs]
 
@@ -294,6 +300,7 @@ This one computes the fraction of liquid fuel left:
    .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/FuelFraction.js
+         :language: javascript
          :start-after: [docs]
          :end-before: [/docs]
 
@@ -334,6 +341,7 @@ This function collects a rating for each active engine:
    .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/BurnRatings.js
+         :language: javascript
          :start-after: [docs]
          :end-before: [/docs]
 
@@ -364,6 +372,7 @@ A variable keeps one type for the whole function. How it gets that type depends 
       A number is always a double, so a running total needs no type:
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/TotalThrust.js
+         :language: javascript
          :start-after: [docs]
          :end-before: [/docs]
 
@@ -398,6 +407,7 @@ once, with every step in the same physics tick:
    .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/RunOnce.js
+         :language: javascript
          :start-after: [docs]
          :end-before: [/docs]
 
@@ -446,6 +456,7 @@ serves many inputs. This computes how long a burn takes, for several changes in 
       The parameters follow the captures, and ``compile`` takes their types:
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/BurnTime.js
+         :language: javascript
          :start-after: [docs]
          :end-before: [/docs]
 
@@ -483,6 +494,7 @@ counts the stream updates in which the engines are firing:
       Assign a property of a captured object:
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/FiringCounter.js
+         :language: javascript
          :start-after: [docs]
          :end-before: [/docs]
 
@@ -523,6 +535,7 @@ throttles back as the vertical speed nears 100 m/s:
    .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/ThrottleLimit.js
+         :language: javascript
          :start-after: [docs]
          :end-before: [/docs]
 
@@ -558,6 +571,7 @@ on the stream or event evaluating the function:
    .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/CheckFuel.js
+         :language: javascript
          :start-after: [docs]
          :end-before: [/docs]
 
@@ -585,6 +599,7 @@ A function can also handle an exception, with the language's try statement:
    .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/SwitchModes.js
+         :language: javascript
          :start-after: [docs]
          :end-before: [/docs]
 
@@ -630,6 +645,7 @@ angle between the vessel's facing direction and its velocity relative to the sur
    .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/SurfaceAngle.js
+         :language: javascript
          :start-after: [docs]
          :end-before: [/docs]
 
@@ -676,6 +692,7 @@ game's log, ``KSP.log``. This logs the vessel's mass from the server:
    .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/PrintMass.js
+         :language: javascript
          :start-after: [docs]
          :end-before: [/docs]
 
@@ -721,6 +738,7 @@ run it with different values, give it parameters, as in :ref:`server-side-functi
    .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/CompiledStep.js
+         :language: javascript
          :start-after: [docs]
          :end-before: [/docs]
 
@@ -774,6 +792,7 @@ way through a load. To keep one running, catch the exception in the function:
    .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/NotLoadedEvent.js
+         :language: javascript
 
 The handler gives ``False``, so the event does not fire while the vessel loads.
 
@@ -826,6 +845,7 @@ other assignment to a variable or the other branch of a conditional:
    .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/HeaviestEngine.js
+         :language: javascript
          :start-after: [docs]
          :end-before: [/docs]
 
@@ -911,6 +931,7 @@ and a comparison:
    .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/CustomEvent.js
+         :language: javascript
 
 Two kinds of object appear here:
 
@@ -1026,7 +1047,7 @@ This truncates the altitude to a whole number of meters:
    .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/TruncateAltitude.js
-         :language: js
+         :language: javascript
          :start-after: [docs]
          :end-before: [/docs]
 
@@ -1084,6 +1105,7 @@ streamed too, and runs for its effects, as in :ref:`server-side-functions-contro
    .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/FunctionStream.js
+         :language: javascript
 
 Some clients take the type of the stream's values as a type argument, and others read the
 function's return type from the server. A function stream behaves like any other stream, and its
@@ -1127,6 +1149,7 @@ the ``Engine`` class, with no engine:
    .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/CollectionEvent.js
+         :language: javascript
 
 A function passed to a collection operation is built from two pieces:
 
@@ -1227,7 +1250,7 @@ and build one. :meth:`Expression.get_field` reads a field by name:
    .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/StructureField.js
-         :language: js
+         :language: javascript
          :start-after: [docs]
          :end-before: [/docs]
 
@@ -1275,6 +1298,7 @@ This builds and runs ``total = 0; for x in [1, 2, 3]: total += x``, which return
    .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/FunctionStatements.js
+         :language: javascript
 
 Statements are ordinary expression nodes. :meth:`Expression.block_with_variables` sequences
 statements and declares local variables, and its value is the value of its last statement.
@@ -1318,6 +1342,7 @@ This loop adds 10 to a total for the values 1 and 2, and 1 for any other value. 
    .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/SwitchStatement.js
+         :language: javascript
 
 :meth:`Expression.match` takes the value, the test values of each case and the body of each
 case. It runs the body of the first case with a test value equal to the value, as
@@ -1393,7 +1418,7 @@ particular vessel:
    .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/TargetEvent.js
-         :language: js
+         :language: javascript
          :start-after: [docs]
          :end-before: [/docs]
 
@@ -1460,7 +1485,7 @@ fuel check from :ref:`Exceptions <server-side-functions-exceptions>`:
    .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/server-side-functions/ThrowException.js
-         :language: js
+         :language: javascript
          :start-after: [docs]
          :end-before: [/docs]
 

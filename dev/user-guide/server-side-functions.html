@@ -631,9 +631,9 @@ server side function directly.</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-0-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">const</span> <span class="n">event</span> <span class="o">=</span> <span class="k">await</span> <span class="n">conn</span><span class="o">.</span><span class="n">addEvent</span><span class="p">(({</span> <span class="n">flight</span> <span class="p">})</span> <span class="o">=&gt;</span> <span class="n">flight</span><span class="o">.</span><span class="n">meanAltitude</span> <span class="o">&gt;</span> <span class="mi">1000</span><span class="p">,</span> <span class="p">{</span> <span class="n">flight</span> <span class="p">});</span>
-<span class="k">await</span> <span class="n">event</span><span class="o">.</span><span class="n">wait</span><span class="p">();</span>
-<span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">"Altitude reached 1000m"</span><span class="p">);</span>
+</div><div aria-labelledby="tab-0-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">addEvent</span><span class="p">(({</span><span class="w"> </span><span class="nx">flight</span><span class="w"> </span><span class="p">})</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">flight</span><span class="p">.</span><span class="nx">meanAltitude</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">1000</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">flight</span><span class="w"> </span><span class="p">});</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">event</span><span class="p">.</span><span class="nx">wait</span><span class="p">();</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Altitude reached 1000m"</span><span class="p">);</span>
 </pre></div>
 </div>
 </div></div>
@@ -664,10 +664,10 @@ on those values. The result becomes a constant.</p></li>
 <span class="w">    </span><span class="p">()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">Orbit</span><span class="p">.</span><span class="n">ApoapsisAltitude</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">threshold</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-1-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-1-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">const</span> <span class="n">threshold</span> <span class="o">=</span> <span class="mi">50000</span><span class="p">;</span>
-<span class="n">const</span> <span class="n">event</span> <span class="o">=</span> <span class="k">await</span> <span class="n">conn</span><span class="o">.</span><span class="n">addEvent</span><span class="p">(</span>
-  <span class="p">({</span> <span class="n">vessel</span><span class="p">,</span> <span class="n">threshold</span> <span class="p">})</span> <span class="o">=&gt;</span> <span class="n">vessel</span><span class="o">.</span><span class="n">orbit</span><span class="o">.</span><span class="n">apoapsisAltitude</span> <span class="o">&gt;</span> <span class="n">threshold</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span>
-  <span class="p">{</span> <span class="n">vessel</span><span class="p">,</span> <span class="n">threshold</span> <span class="p">},</span>
+</div><div aria-labelledby="tab-1-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-1-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">threshold</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">50000</span><span class="p">;</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">addEvent</span><span class="p">(</span>
+<span class="w">  </span><span class="p">({</span><span class="w"> </span><span class="nx">vessel</span><span class="p">,</span><span class="w"> </span><span class="nx">threshold</span><span class="w"> </span><span class="p">})</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">vessel</span><span class="p">.</span><span class="nx">orbit</span><span class="p">.</span><span class="nx">apoapsisAltitude</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="nx">threshold</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">2</span><span class="p">,</span>
+<span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nx">vessel</span><span class="p">,</span><span class="w"> </span><span class="nx">threshold</span><span class="w"> </span><span class="p">},</span>
 <span class="p">);</span>
 </pre></div>
 </div>
@@ -691,9 +691,9 @@ computation on each stream update:</p>
 <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="w"> </span><span class="p">(</span><span class="s">"Altitude: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">stream</span><span class="p">.</span><span class="n">Get</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">" km"</span><span class="p">);</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-2-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-2-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">The</span> <span class="n">vessel</span><span class="s1">'s altitude, in kilometers, computed on the server</span>
-<span class="n">const</span> <span class="n">stream</span> <span class="o">=</span> <span class="k">await</span> <span class="n">conn</span><span class="o">.</span><span class="n">addStream</span><span class="p">(({</span> <span class="n">flight</span> <span class="p">})</span> <span class="o">=&gt;</span> <span class="n">flight</span><span class="o">.</span><span class="n">meanAltitude</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">,</span> <span class="p">{</span> <span class="n">flight</span> <span class="p">});</span>
-<span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">"Altitude:"</span><span class="p">,</span> <span class="k">await</span> <span class="n">stream</span><span class="o">.</span><span class="n">get</span><span class="p">(),</span> <span class="s2">"km"</span><span class="p">);</span>
+</div><div aria-labelledby="tab-2-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-2-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// The vessel's altitude, in kilometers, computed on the server</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">addStream</span><span class="p">(({</span><span class="w"> </span><span class="nx">flight</span><span class="w"> </span><span class="p">})</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">flight</span><span class="p">.</span><span class="nx">meanAltitude</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">1000</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">flight</span><span class="w"> </span><span class="p">});</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Altitude:"</span><span class="p">,</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">stream</span><span class="p">.</span><span class="nx">get</span><span class="p">(),</span><span class="w"> </span><span class="s2">"km"</span><span class="p">);</span>
 </pre></div>
 </div>
 </div></div>
@@ -713,13 +713,13 @@ read in a single physics tick per update:</p>
 <span class="w">    </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="w"> </span><span class="p">(</span><span class="n">thrust</span><span class="p">);</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-3-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-3-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">const</span> <span class="n">engines</span> <span class="o">=</span> <span class="k">await</span> <span class="p">(</span><span class="k">await</span> <span class="n">vessel</span><span class="o">.</span><span class="n">getParts</span><span class="p">())</span><span class="o">.</span><span class="n">getEngines</span><span class="p">();</span>
-<span class="n">const</span> <span class="n">stream</span> <span class="o">=</span> <span class="k">await</span> <span class="n">conn</span><span class="o">.</span><span class="n">addStream</span><span class="p">(</span>
-  <span class="p">({</span> <span class="n">engines</span> <span class="p">})</span> <span class="o">=&gt;</span> <span class="n">engines</span><span class="o">.</span><span class="n">map</span><span class="p">((</span><span class="n">engine</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">engine</span><span class="o">.</span><span class="n">thrust</span><span class="p">),</span>
-  <span class="p">{</span> <span class="n">engines</span> <span class="p">},</span>
+</div><div aria-labelledby="tab-3-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-3-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">engines</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="p">(</span><span class="k">await</span><span class="w"> </span><span class="nx">vessel</span><span class="p">.</span><span class="nx">getParts</span><span class="p">()).</span><span class="nx">getEngines</span><span class="p">();</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">addStream</span><span class="p">(</span>
+<span class="w">  </span><span class="p">({</span><span class="w"> </span><span class="nx">engines</span><span class="w"> </span><span class="p">})</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">engines</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">engine</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">engine</span><span class="p">.</span><span class="nx">thrust</span><span class="p">),</span>
+<span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nx">engines</span><span class="w"> </span><span class="p">},</span>
 <span class="p">);</span>
-<span class="k">for</span> <span class="p">(</span><span class="n">const</span> <span class="n">thrust</span> <span class="n">of</span> <span class="k">await</span> <span class="n">stream</span><span class="o">.</span><span class="n">get</span><span class="p">())</span> <span class="p">{</span>
-  <span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">thrust</span><span class="p">);</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">const</span><span class="w"> </span><span class="nx">thrust</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">stream</span><span class="p">.</span><span class="nx">get</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">thrust</span><span class="p">);</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -752,12 +752,12 @@ engines that staging reveals:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-4-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-4-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>const event = await conn.addEvent(
-  ({ vessel }) =&gt; vessel.parts.engines.some((engine) =&gt; !engine.hasFuel),
-  { vessel },
-);
-await event.wait();
-console.log("An engine has run out of fuel");
+</div><div aria-labelledby="tab-4-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-4-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">addEvent</span><span class="p">(</span>
+<span class="w">  </span><span class="p">({</span><span class="w"> </span><span class="nx">vessel</span><span class="w"> </span><span class="p">})</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">vessel</span><span class="p">.</span><span class="nx">parts</span><span class="p">.</span><span class="nx">engines</span><span class="p">.</span><span class="nx">some</span><span class="p">((</span><span class="nx">engine</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="o">!</span><span class="nx">engine</span><span class="p">.</span><span class="nx">hasFuel</span><span class="p">),</span>
+<span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nx">vessel</span><span class="w"> </span><span class="p">},</span>
+<span class="p">);</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">event</span><span class="p">.</span><span class="nx">wait</span><span class="p">();</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"An engine has run out of fuel"</span><span class="p">);</span>
 </pre></div>
 </div>
 </div></div>
@@ -774,7 +774,7 @@ case:</p>
 </div><div aria-labelledby="tab-5-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-5-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="kt">var</span><span class="w"> </span><span class="n">stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">AddStream</span><span class="w"> </span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">Name</span><span class="p">.</span><span class="n">ToUpperInvariant</span><span class="w"> </span><span class="p">());</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-5-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-5-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">const</span> <span class="n">stream</span> <span class="o">=</span> <span class="k">await</span> <span class="n">conn</span><span class="o">.</span><span class="n">addStream</span><span class="p">(({</span> <span class="n">vessel</span> <span class="p">})</span> <span class="o">=&gt;</span> <span class="n">vessel</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">toUpperCase</span><span class="p">(),</span> <span class="p">{</span> <span class="n">vessel</span> <span class="p">});</span>
+</div><div aria-labelledby="tab-5-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-5-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">addStream</span><span class="p">(({</span><span class="w"> </span><span class="nx">vessel</span><span class="w"> </span><span class="p">})</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">vessel</span><span class="p">.</span><span class="nx">name</span><span class="p">.</span><span class="nx">toUpperCase</span><span class="p">(),</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">vessel</span><span class="w"> </span><span class="p">});</span>
 </pre></div>
 </div>
 </div></div>
@@ -809,14 +809,14 @@ This one computes the fraction of liquid fuel left:</p>
 <span class="w">    </span><span class="p">()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">Resources</span><span class="p">.</span><span class="n">Amount</span><span class="w"> </span><span class="p">(</span><span class="s">"LiquidFuel"</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">Resources</span><span class="p">.</span><span class="n">Max</span><span class="w"> </span><span class="p">(</span><span class="s">"LiquidFuel"</span><span class="p">));</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-6-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-6-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">const</span> <span class="n">stream</span> <span class="o">=</span> <span class="k">await</span> <span class="n">conn</span><span class="o">.</span><span class="n">addStream</span><span class="p">(</span>
-  <span class="p">({</span> <span class="n">vessel</span> <span class="p">})</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="n">const</span> <span class="n">resources</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">resources</span><span class="p">;</span>
-    <span class="n">const</span> <span class="n">amount</span> <span class="o">=</span> <span class="n">resources</span><span class="o">.</span><span class="n">amount</span><span class="p">(</span><span class="s2">"LiquidFuel"</span><span class="p">);</span>
-    <span class="n">const</span> <span class="n">capacity</span> <span class="o">=</span> <span class="n">resources</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="s2">"LiquidFuel"</span><span class="p">);</span>
-    <span class="k">return</span> <span class="n">amount</span> <span class="o">/</span> <span class="n">capacity</span><span class="p">;</span>
-  <span class="p">},</span>
-  <span class="p">{</span> <span class="n">vessel</span> <span class="p">},</span>
+</div><div aria-labelledby="tab-6-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-6-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">addStream</span><span class="p">(</span>
+<span class="w">  </span><span class="p">({</span><span class="w"> </span><span class="nx">vessel</span><span class="w"> </span><span class="p">})</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">resources</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">vessel</span><span class="p">.</span><span class="nx">resources</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">amount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">resources</span><span class="p">.</span><span class="nx">amount</span><span class="p">(</span><span class="s2">"LiquidFuel"</span><span class="p">);</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">capacity</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">resources</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="s2">"LiquidFuel"</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">amount</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nx">capacity</span><span class="p">;</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nx">vessel</span><span class="w"> </span><span class="p">},</span>
 <span class="p">);</span>
 </pre></div>
 </div>
@@ -861,24 +861,24 @@ leaves the game’s own collection unchanged.</p>
 <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="w"> </span><span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="n">Join</span><span class="w"> </span><span class="p">(</span><span class="s">", "</span><span class="p">,</span><span class="w"> </span><span class="n">ratings</span><span class="p">));</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-7-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-7-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>const ratings = await conn.run(
-  ({ vessel }) =&gt; {
-    const ratings = [];
-    for (const engine of vessel.parts.engines) {
-      if (!engine.active) {
-        continue;
-      }
-      if (engine.thrust &gt; 0.9 * engine.availableThrust) {
-        ratings.push("full");
-      } else {
-        ratings.push("partial");
-      }
-    }
-    return ratings;
-  },
-  { vessel },
-);
-console.log(ratings);
+</div><div aria-labelledby="tab-7-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-7-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">ratings</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span>
+<span class="w">  </span><span class="p">({</span><span class="w"> </span><span class="nx">vessel</span><span class="w"> </span><span class="p">})</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">ratings</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[];</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">const</span><span class="w"> </span><span class="nx">engine</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="nx">vessel</span><span class="p">.</span><span class="nx">parts</span><span class="p">.</span><span class="nx">engines</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">engine</span><span class="p">.</span><span class="nx">active</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">continue</span><span class="p">;</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">engine</span><span class="p">.</span><span class="nx">thrust</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0.9</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nx">engine</span><span class="p">.</span><span class="nx">availableThrust</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">ratings</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s2">"full"</span><span class="p">);</span>
+<span class="w">      </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">ratings</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s2">"partial"</span><span class="p">);</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">ratings</span><span class="p">;</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nx">vessel</span><span class="w"> </span><span class="p">},</span>
+<span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">ratings</span><span class="p">);</span>
 </pre></div>
 </div>
 </div></div>
@@ -901,17 +901,17 @@ above.</p>
 </div><div aria-labelledby="tab-8-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-8-QyM=" name="QyM=" role="tabpanel" tabindex="0"><p>A C# lambda holds a single expression, so it has no local variables. Each value has its C#
 type.</p>
 </div><div aria-labelledby="tab-8-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-8-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><p>A number is always a double, so a running total needs no type:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">const</span> <span class="n">total</span> <span class="o">=</span> <span class="k">await</span> <span class="n">conn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
-  <span class="p">({</span> <span class="n">vessel</span> <span class="p">})</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="n">let</span> <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">const</span> <span class="n">engine</span> <span class="n">of</span> <span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">engines</span><span class="p">)</span> <span class="p">{</span>
-      <span class="n">total</span> <span class="o">+=</span> <span class="n">engine</span><span class="o">.</span><span class="n">thrust</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">total</span><span class="p">;</span>
-  <span class="p">},</span>
-  <span class="p">{</span> <span class="n">vessel</span> <span class="p">},</span>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">total</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span>
+<span class="w">  </span><span class="p">({</span><span class="w"> </span><span class="nx">vessel</span><span class="w"> </span><span class="p">})</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="nx">total</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">const</span><span class="w"> </span><span class="nx">engine</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="nx">vessel</span><span class="p">.</span><span class="nx">parts</span><span class="p">.</span><span class="nx">engines</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">total</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="nx">engine</span><span class="p">.</span><span class="nx">thrust</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">total</span><span class="p">;</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nx">vessel</span><span class="w"> </span><span class="p">},</span>
 <span class="p">);</span>
-<span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">total</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">total</span><span class="p">);</span>
 </pre></div>
 </div>
 <p>An empty array, Set or Map takes its type from a later use, such as a <code class="docutils literal notranslate"><span class="pre">push</span></code>. With no
@@ -940,16 +940,16 @@ once, with every step in the same physics tick:</p>
 <span class="kt">var</span><span class="w"> </span><span class="n">altitude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">Run</span><span class="w"> </span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">flight</span><span class="p">.</span><span class="n">MeanAltitude</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1000</span><span class="p">);</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-9-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-9-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>await conn.run(
-  ({ vessel }) =&gt; {
-    for (const parachute of vessel.parts.parachutes) {
-      if (!parachute.deployed) {
-        parachute.deploy();
-      }
-    }
-  },
-  { vessel },
-);
+</div><div aria-labelledby="tab-9-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-9-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="k">await</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span>
+<span class="w">  </span><span class="p">({</span><span class="w"> </span><span class="nx">vessel</span><span class="w"> </span><span class="p">})</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">const</span><span class="w"> </span><span class="nx">parachute</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="nx">vessel</span><span class="p">.</span><span class="nx">parts</span><span class="p">.</span><span class="nx">parachutes</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">parachute</span><span class="p">.</span><span class="nx">deployed</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">parachute</span><span class="p">.</span><span class="nx">deploy</span><span class="p">();</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nx">vessel</span><span class="w"> </span><span class="p">},</span>
+<span class="p">);</span>
 </pre></div>
 </div>
 </div></div>
@@ -991,18 +991,18 @@ Python binds them, with defaults and keyword arguments:</p>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-10-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-10-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><p>The parameters follow the captures, and <code class="docutils literal notranslate"><span class="pre">compile</span></code> takes their types:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">const</span> <span class="n">burnTime</span> <span class="o">=</span> <span class="k">await</span> <span class="n">conn</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
-  <span class="p">({</span> <span class="n">vessel</span> <span class="p">},</span> <span class="n">deltaV</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="n">const</span> <span class="n">exhaustVelocity</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">specificImpulse</span> <span class="o">*</span> <span class="mf">9.82</span><span class="p">;</span>
-    <span class="n">const</span> <span class="n">finalMass</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">mass</span> <span class="o">/</span> <span class="n">Math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">deltaV</span> <span class="o">/</span> <span class="n">exhaustVelocity</span><span class="p">);</span>
-    <span class="k">return</span> <span class="p">((</span><span class="n">vessel</span><span class="o">.</span><span class="n">mass</span> <span class="o">-</span> <span class="n">finalMass</span><span class="p">)</span> <span class="o">*</span> <span class="n">exhaustVelocity</span><span class="p">)</span> <span class="o">/</span> <span class="n">vessel</span><span class="o">.</span><span class="n">availableThrust</span><span class="p">;</span>
-  <span class="p">},</span>
-  <span class="p">{</span> <span class="n">vessel</span> <span class="p">},</span>
-  <span class="p">[</span><span class="n">types</span><span class="o">.</span><span class="n">double</span><span class="p">],</span>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">burnTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">compile</span><span class="p">(</span>
+<span class="w">  </span><span class="p">({</span><span class="w"> </span><span class="nx">vessel</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nx">deltaV</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">exhaustVelocity</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">vessel</span><span class="p">.</span><span class="nx">specificImpulse</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">9.82</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">finalMass</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">vessel</span><span class="p">.</span><span class="nx">mass</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nb">Math</span><span class="p">.</span><span class="nx">exp</span><span class="p">(</span><span class="nx">deltaV</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nx">exhaustVelocity</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">((</span><span class="nx">vessel</span><span class="p">.</span><span class="nx">mass</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nx">finalMass</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nx">exhaustVelocity</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nx">vessel</span><span class="p">.</span><span class="nx">availableThrust</span><span class="p">;</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nx">vessel</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="p">[</span><span class="nx">types</span><span class="p">.</span><span class="kr">double</span><span class="p">],</span>
 <span class="p">);</span>
 
-<span class="k">for</span> <span class="p">(</span><span class="n">const</span> <span class="n">deltaV</span> <span class="n">of</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">250</span><span class="p">,</span> <span class="mi">400</span><span class="p">])</span> <span class="p">{</span>
-  <span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="k">await</span> <span class="n">conn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">burnTime</span><span class="p">,</span> <span class="n">deltaV</span><span class="p">));</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">const</span><span class="w"> </span><span class="nx">deltaV</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="p">[</span><span class="mf">100</span><span class="p">,</span><span class="w"> </span><span class="mf">250</span><span class="p">,</span><span class="w"> </span><span class="mf">400</span><span class="p">])</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">await</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="nx">burnTime</span><span class="p">,</span><span class="w"> </span><span class="nx">deltaV</span><span class="p">));</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -1038,15 +1038,15 @@ another type, such as a list that starts empty, start the function with a cast o
 with the <a class="reference internal" href="#server-side-functions-api"><span class="std std-ref">expression API</span></a>, and create the variable with
 <a class="reference internal" href="../python/api/krpc/expressions.html#KRPC.Expression.state_variable" title="KRPC.Expression.state_variable"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Expression.state_variable()</span></code></a>.</p>
 </div><div aria-labelledby="tab-11-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-11-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><p>Assign a property of a captured object:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">const</span> <span class="n">state</span> <span class="o">=</span> <span class="p">{</span> <span class="n">updates</span><span class="p">:</span> <span class="mi">0</span> <span class="p">};</span>
-<span class="n">const</span> <span class="n">stream</span> <span class="o">=</span> <span class="k">await</span> <span class="n">conn</span><span class="o">.</span><span class="n">addStream</span><span class="p">(</span>
-  <span class="p">({</span> <span class="n">vessel</span><span class="p">,</span> <span class="n">state</span> <span class="p">})</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">vessel</span><span class="o">.</span><span class="n">thrust</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-      <span class="n">state</span><span class="o">.</span><span class="n">updates</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">state</span><span class="o">.</span><span class="n">updates</span><span class="p">;</span>
-  <span class="p">},</span>
-  <span class="p">{</span> <span class="n">vessel</span><span class="p">,</span> <span class="n">state</span> <span class="p">},</span>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">updates</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="w"> </span><span class="p">};</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">addStream</span><span class="p">(</span>
+<span class="w">  </span><span class="p">({</span><span class="w"> </span><span class="nx">vessel</span><span class="p">,</span><span class="w"> </span><span class="nx">state</span><span class="w"> </span><span class="p">})</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">vessel</span><span class="p">.</span><span class="nx">thrust</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">state</span><span class="p">.</span><span class="nx">updates</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mf">1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">state</span><span class="p">.</span><span class="nx">updates</span><span class="p">;</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nx">vessel</span><span class="p">,</span><span class="w"> </span><span class="nx">state</span><span class="w"> </span><span class="p">},</span>
 <span class="p">);</span>
 </pre></div>
 </div>
@@ -1078,17 +1078,17 @@ throttles back as the vertical speed nears 100 m/s:</p>
 </div>
 </div><div aria-labelledby="tab-12-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-12-QyM=" name="QyM=" role="tabpanel" tabindex="0"><p>A C# lambda is an expression tree, which cannot assign to a property. Build the function
 with the <a class="reference internal" href="#server-side-functions-api"><span class="std std-ref">expression API</span></a>.</p>
-</div><div aria-labelledby="tab-12-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-12-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">const</span> <span class="n">limitThrottle</span> <span class="o">=</span> <span class="k">await</span> <span class="n">conn</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
-  <span class="p">({</span> <span class="n">control</span><span class="p">,</span> <span class="n">flight</span> <span class="p">})</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="o">//</span> <span class="n">Throttle</span> <span class="n">back</span> <span class="k">as</span> <span class="n">the</span> <span class="n">vertical</span> <span class="n">speed</span> <span class="n">nears</span> <span class="mi">100</span> <span class="n">m</span><span class="o">/</span><span class="n">s</span>
-    <span class="n">control</span><span class="o">.</span><span class="n">throttle</span> <span class="o">=</span> <span class="n">Math</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Math</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">100</span> <span class="o">-</span> <span class="n">flight</span><span class="o">.</span><span class="n">verticalSpeed</span><span class="p">)</span> <span class="o">/</span> <span class="mi">20</span><span class="p">));</span>
-  <span class="p">},</span>
-  <span class="p">{</span> <span class="n">control</span><span class="p">,</span> <span class="n">flight</span> <span class="p">},</span>
+</div><div aria-labelledby="tab-12-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-12-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">limitThrottle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">compile</span><span class="p">(</span>
+<span class="w">  </span><span class="p">({</span><span class="w"> </span><span class="nx">control</span><span class="p">,</span><span class="w"> </span><span class="nx">flight</span><span class="w"> </span><span class="p">})</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Throttle back as the vertical speed nears 100 m/s</span>
+<span class="w">    </span><span class="nx">control</span><span class="p">.</span><span class="nx">throttle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="mf">100</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nx">flight</span><span class="p">.</span><span class="nx">verticalSpeed</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">20</span><span class="p">));</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nx">control</span><span class="p">,</span><span class="w"> </span><span class="nx">flight</span><span class="w"> </span><span class="p">},</span>
 <span class="p">);</span>
 
-<span class="n">const</span> <span class="n">stream</span> <span class="o">=</span> <span class="k">await</span> <span class="n">conn</span><span class="o">.</span><span class="n">addStream</span><span class="p">(</span><span class="n">limitThrottle</span><span class="p">);</span>
-<span class="k">await</span> <span class="n">new</span> <span class="n">Promise</span><span class="p">((</span><span class="n">resolve</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">setTimeout</span><span class="p">(</span><span class="n">resolve</span><span class="p">,</span> <span class="mi">60000</span><span class="p">));</span>
-<span class="k">await</span> <span class="n">stream</span><span class="o">.</span><span class="n">remove</span><span class="p">();</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">addStream</span><span class="p">(</span><span class="nx">limitThrottle</span><span class="p">);</span>
+<span class="k">await</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Promise</span><span class="p">((</span><span class="nx">resolve</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">setTimeout</span><span class="p">(</span><span class="nx">resolve</span><span class="p">,</span><span class="w"> </span><span class="mf">60000</span><span class="p">));</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">stream</span><span class="p">.</span><span class="nx">remove</span><span class="p">();</span>
 </pre></div>
 </div>
 </div></div>
@@ -1115,13 +1115,13 @@ on the stream or event evaluating the function:</p>
 <span class="w">    </span><span class="n">e</span><span class="p">.</span><span class="n">Throw</span><span class="w"> </span><span class="p">(</span><span class="s">"KRPC"</span><span class="p">,</span><span class="w"> </span><span class="s">"InvalidOperationException"</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">ConstantString</span><span class="w"> </span><span class="p">(</span><span class="s">"not enough fuel"</span><span class="p">)));</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-13-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-13-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">const</span> <span class="n">checkFuel</span> <span class="o">=</span> <span class="k">await</span> <span class="n">conn</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
-  <span class="p">({</span> <span class="n">vessel</span> <span class="p">})</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">vessel</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">amount</span><span class="p">(</span><span class="s2">"LiquidFuel"</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">)</span> <span class="p">{</span>
-      <span class="n">throw</span> <span class="n">new</span> <span class="n">Error</span><span class="p">(</span><span class="s2">"not enough fuel"</span><span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">},</span>
-  <span class="p">{</span> <span class="n">vessel</span> <span class="p">},</span>
+</div><div aria-labelledby="tab-13-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-13-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">checkFuel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">compile</span><span class="p">(</span>
+<span class="w">  </span><span class="p">({</span><span class="w"> </span><span class="nx">vessel</span><span class="w"> </span><span class="p">})</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">vessel</span><span class="p">.</span><span class="nx">resources</span><span class="p">.</span><span class="nx">amount</span><span class="p">(</span><span class="s2">"LiquidFuel"</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mf">100</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span><span class="s2">"not enough fuel"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nx">vessel</span><span class="w"> </span><span class="p">},</span>
 <span class="p">);</span>
 </pre></div>
 </div>
@@ -1167,19 +1167,19 @@ on the stream or event evaluating the function:</p>
 <span class="w">    </span><span class="p">});</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-14-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-14-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>const switchModes = await conn.compile(
-  ({ vessel }) =&gt; {
-    try {
-      for (const engine of vessel.parts.engines) {
-        engine.toggleMode();
-      }
-      return "switched";
-    } catch (error) {
-      return `could not switch: ${/** @type {Error} */ (error).message}`;
-    }
-  },
-  { vessel },
-);
+</div><div aria-labelledby="tab-14-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-14-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">switchModes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">compile</span><span class="p">(</span>
+<span class="w">  </span><span class="p">({</span><span class="w"> </span><span class="nx">vessel</span><span class="w"> </span><span class="p">})</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">const</span><span class="w"> </span><span class="nx">engine</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="nx">vessel</span><span class="p">.</span><span class="nx">parts</span><span class="p">.</span><span class="nx">engines</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">engine</span><span class="p">.</span><span class="nx">toggleMode</span><span class="p">();</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="s2">"switched"</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="nx">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="sb">`could not switch: </span><span class="si">${</span><span class="cm">/** @type {Error} */</span><span class="w"> </span><span class="p">(</span><span class="nx">error</span><span class="p">).</span><span class="nx">message</span><span class="si">}</span><span class="sb">`</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nx">vessel</span><span class="w"> </span><span class="p">},</span>
+<span class="p">);</span>
 </pre></div>
 </div>
 </div></div>
@@ -1221,12 +1221,12 @@ angle between the vessel’s facing direction and its velocity relative to the s
 <span class="w">        </span><span class="n">vessel</span><span class="p">.</span><span class="n">Direction</span><span class="w"> </span><span class="p">(</span><span class="n">frame</span><span class="p">),</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">Velocity</span><span class="w"> </span><span class="p">(</span><span class="n">frame</span><span class="p">))));</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-15-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-15-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">const</span> <span class="n">orbit</span> <span class="o">=</span> <span class="k">await</span> <span class="n">vessel</span><span class="o">.</span><span class="n">getOrbit</span><span class="p">();</span>
-<span class="n">const</span> <span class="n">frame</span> <span class="o">=</span> <span class="k">await</span> <span class="p">(</span><span class="k">await</span> <span class="n">orbit</span><span class="o">.</span><span class="n">getBody</span><span class="p">())</span><span class="o">.</span><span class="n">getReferenceFrame</span><span class="p">();</span>
-<span class="n">const</span> <span class="n">stream</span> <span class="o">=</span> <span class="k">await</span> <span class="n">conn</span><span class="o">.</span><span class="n">addStream</span><span class="p">(</span>
-  <span class="p">({</span> <span class="n">stdLib</span><span class="p">,</span> <span class="n">vessel</span><span class="p">,</span> <span class="n">frame</span> <span class="p">})</span> <span class="o">=&gt;</span>
-    <span class="n">stdLib</span><span class="o">.</span><span class="n">radiansToDegrees</span><span class="p">(</span><span class="n">stdLib</span><span class="o">.</span><span class="n">vectorAngle</span><span class="p">(</span><span class="n">vessel</span><span class="o">.</span><span class="n">direction</span><span class="p">(</span><span class="n">frame</span><span class="p">),</span> <span class="n">vessel</span><span class="o">.</span><span class="n">velocity</span><span class="p">(</span><span class="n">frame</span><span class="p">))),</span>
-  <span class="p">{</span> <span class="n">stdLib</span><span class="p">:</span> <span class="n">conn</span><span class="o">.</span><span class="n">stdLib</span><span class="p">,</span> <span class="n">vessel</span><span class="p">,</span> <span class="n">frame</span> <span class="p">},</span>
+</div><div aria-labelledby="tab-15-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-15-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">orbit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">vessel</span><span class="p">.</span><span class="nx">getOrbit</span><span class="p">();</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">frame</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="p">(</span><span class="k">await</span><span class="w"> </span><span class="nx">orbit</span><span class="p">.</span><span class="nx">getBody</span><span class="p">()).</span><span class="nx">getReferenceFrame</span><span class="p">();</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">addStream</span><span class="p">(</span>
+<span class="w">  </span><span class="p">({</span><span class="w"> </span><span class="nx">stdLib</span><span class="p">,</span><span class="w"> </span><span class="nx">vessel</span><span class="p">,</span><span class="w"> </span><span class="nx">frame</span><span class="w"> </span><span class="p">})</span><span class="w"> </span><span class="p">=&gt;</span>
+<span class="w">    </span><span class="nx">stdLib</span><span class="p">.</span><span class="nx">radiansToDegrees</span><span class="p">(</span><span class="nx">stdLib</span><span class="p">.</span><span class="nx">vectorAngle</span><span class="p">(</span><span class="nx">vessel</span><span class="p">.</span><span class="nx">direction</span><span class="p">(</span><span class="nx">frame</span><span class="p">),</span><span class="w"> </span><span class="nx">vessel</span><span class="p">.</span><span class="nx">velocity</span><span class="p">(</span><span class="nx">frame</span><span class="p">))),</span>
+<span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nx">stdLib</span><span class="o">:</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">stdLib</span><span class="p">,</span><span class="w"> </span><span class="nx">vessel</span><span class="p">,</span><span class="w"> </span><span class="nx">frame</span><span class="w"> </span><span class="p">},</span>
 <span class="p">);</span>
 </pre></div>
 </div>
@@ -1260,7 +1260,7 @@ game’s log, <code class="docutils literal notranslate"><span class="pre">KSP.l
 <span class="w">    </span><span class="p">()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="w"> </span><span class="p">(</span><span class="n">FormattableString</span><span class="p">.</span><span class="n">Invariant</span><span class="w"> </span><span class="p">(</span><span class="s">$"Mass: {vessel.Mass} kg"</span><span class="p">)));</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-16-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-16-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">await</span> <span class="n">conn</span><span class="o">.</span><span class="n">run</span><span class="p">(({</span> <span class="n">vessel</span> <span class="p">})</span> <span class="o">=&gt;</span> <span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">"Mass:"</span><span class="p">,</span> <span class="n">vessel</span><span class="o">.</span><span class="n">mass</span><span class="p">,</span> <span class="s2">"kg"</span><span class="p">),</span> <span class="p">{</span> <span class="n">vessel</span> <span class="p">});</span>
+</div><div aria-labelledby="tab-16-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-16-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="k">await</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">run</span><span class="p">(({</span><span class="w"> </span><span class="nx">vessel</span><span class="w"> </span><span class="p">})</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Mass:"</span><span class="p">,</span><span class="w"> </span><span class="nx">vessel</span><span class="p">.</span><span class="nx">mass</span><span class="p">,</span><span class="w"> </span><span class="s2">"kg"</span><span class="p">),</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">vessel</span><span class="w"> </span><span class="p">});</span>
 </pre></div>
 </div>
 </div></div>
@@ -1290,9 +1290,9 @@ run it with different values, give it parameters, as in <a class="reference inte
 <span class="w">    </span><span class="n">connection</span><span class="p">.</span><span class="n">Run</span><span class="w"> </span><span class="p">(</span><span class="n">step</span><span class="p">);</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-17-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-17-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">const</span> <span class="n">step</span> <span class="o">=</span> <span class="k">await</span> <span class="n">conn</span><span class="o">.</span><span class="n">compile</span><span class="p">(({</span> <span class="n">vessel</span> <span class="p">})</span> <span class="o">=&gt;</span> <span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">toggleActionGroup</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="p">{</span> <span class="n">vessel</span> <span class="p">});</span>
-<span class="k">while</span> <span class="p">(</span><span class="n">true</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">await</span> <span class="n">conn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">step</span><span class="p">);</span>
+</div><div aria-labelledby="tab-17-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-17-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">step</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">compile</span><span class="p">(({</span><span class="w"> </span><span class="nx">vessel</span><span class="w"> </span><span class="p">})</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">vessel</span><span class="p">.</span><span class="nx">control</span><span class="p">.</span><span class="nx">toggleActionGroup</span><span class="p">(</span><span class="mf">1</span><span class="p">),</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">vessel</span><span class="w"> </span><span class="p">});</span>
+<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="nx">step</span><span class="p">);</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -1526,34 +1526,34 @@ way through a load. To keep one running, catch the exception in the function:</p
 <span class="n">end</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-18-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-18-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="p">{</span> <span class="n">connect</span> <span class="p">}</span> <span class="kn">from</span><span class="w"> </span><span class="s2">"@krpc-org/krpc"</span><span class="p">;</span>
+</div><div aria-labelledby="tab-18-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-18-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">connect</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">"@krpc-org/krpc"</span><span class="p">;</span>
 
-<span class="n">const</span> <span class="n">conn</span> <span class="o">=</span> <span class="k">await</span> <span class="n">connect</span><span class="p">();</span>
-<span class="n">const</span> <span class="n">vessel</span> <span class="o">=</span> <span class="k">await</span> <span class="n">conn</span><span class="o">.</span><span class="n">spaceCenter</span><span class="o">.</span><span class="n">getActiveVessel</span><span class="p">();</span>
-<span class="n">const</span> <span class="n">flight</span> <span class="o">=</span> <span class="k">await</span> <span class="n">vessel</span><span class="o">.</span><span class="n">flight</span><span class="p">();</span>
-<span class="n">const</span> <span class="p">{</span> <span class="n">Expression</span><span class="p">,</span> <span class="n">Type</span> <span class="p">}</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="p">;</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">connect</span><span class="p">();</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">spaceCenter</span><span class="p">.</span><span class="nx">getActiveVessel</span><span class="p">();</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">flight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">vessel</span><span class="p">.</span><span class="nx">flight</span><span class="p">();</span>
+<span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Expression</span><span class="p">,</span><span class="w"> </span><span class="nx">Type</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">krpc</span><span class="p">;</span>
 
-<span class="o">//</span> <span class="n">above</span> <span class="o">=</span> <span class="n">meanAltitude</span> <span class="o">&gt;</span> <span class="mi">1000</span><span class="p">,</span> <span class="ow">or</span> <span class="n">false</span> <span class="k">if</span> <span class="n">the</span> <span class="n">vessel</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">loaded</span>
-<span class="n">const</span> <span class="n">above</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">variable</span><span class="p">(</span><span class="s2">"above"</span><span class="p">,</span> <span class="k">await</span> <span class="n">Type</span><span class="o">.</span><span class="n">bool</span><span class="p">());</span>
-<span class="n">const</span> <span class="n">meanAltitude</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">getCall</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="n">flight</span><span class="o">.</span><span class="n">getMeanAltitude</span><span class="p">());</span>
-<span class="n">const</span> <span class="n">check</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">tryCatch</span><span class="p">(</span>
-  <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span>
-    <span class="n">above</span><span class="p">,</span>
-    <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">greaterThan</span><span class="p">(</span>
-      <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">meanAltitude</span><span class="p">),</span>
-      <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">constantDouble</span><span class="p">(</span><span class="mi">1000</span><span class="p">),</span>
-    <span class="p">),</span>
-  <span class="p">),</span>
-  <span class="s2">"KRPC"</span><span class="p">,</span>
-  <span class="s2">"ObjectNotLoadedException"</span><span class="p">,</span>
-  <span class="n">null</span><span class="p">,</span>
-  <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">above</span><span class="p">,</span> <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">constantBool</span><span class="p">(</span><span class="n">false</span><span class="p">)),</span>
+<span class="c1">// above = meanAltitude &gt; 1000, or false if the vessel is not loaded</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">above</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">variable</span><span class="p">(</span><span class="s2">"above"</span><span class="p">,</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">Type</span><span class="p">.</span><span class="nx">bool</span><span class="p">());</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">meanAltitude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">getCall</span><span class="p">(()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">flight</span><span class="p">.</span><span class="nx">getMeanAltitude</span><span class="p">());</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">check</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">tryCatch</span><span class="p">(</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">assign</span><span class="p">(</span>
+<span class="w">    </span><span class="nx">above</span><span class="p">,</span>
+<span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">greaterThan</span><span class="p">(</span>
+<span class="w">      </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">meanAltitude</span><span class="p">),</span>
+<span class="w">      </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">constantDouble</span><span class="p">(</span><span class="mf">1000</span><span class="p">),</span>
+<span class="w">    </span><span class="p">),</span>
+<span class="w">  </span><span class="p">),</span>
+<span class="w">  </span><span class="s2">"KRPC"</span><span class="p">,</span>
+<span class="w">  </span><span class="s2">"ObjectNotLoadedException"</span><span class="p">,</span>
+<span class="w">  </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">assign</span><span class="p">(</span><span class="nx">above</span><span class="p">,</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">constantBool</span><span class="p">(</span><span class="kc">false</span><span class="p">)),</span>
 <span class="p">);</span>
-<span class="n">const</span> <span class="n">above1000m</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">blockWithVariables</span><span class="p">([</span><span class="n">above</span><span class="p">],</span> <span class="p">[</span><span class="n">check</span><span class="p">,</span> <span class="n">above</span><span class="p">]);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">above1000m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">blockWithVariables</span><span class="p">([</span><span class="nx">above</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="nx">check</span><span class="p">,</span><span class="w"> </span><span class="nx">above</span><span class="p">]);</span>
 
-<span class="n">const</span> <span class="n">event</span> <span class="o">=</span> <span class="k">await</span> <span class="n">conn</span><span class="o">.</span><span class="n">addEvent</span><span class="p">(</span><span class="n">above1000m</span><span class="p">);</span>
-<span class="k">await</span> <span class="n">event</span><span class="o">.</span><span class="n">wait</span><span class="p">();</span>
-<span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">"Altitude reached 1000m"</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">addEvent</span><span class="p">(</span><span class="nx">above1000m</span><span class="p">);</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">event</span><span class="p">.</span><span class="nx">wait</span><span class="p">();</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Altitude reached 1000m"</span><span class="p">);</span>
 </pre></div>
 </div>
 </div></div>
@@ -1596,17 +1596,17 @@ other assignment to a variable or the other branch of a conditional:</p>
 <span class="w">        </span><span class="p">:</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">Parts</span><span class="p">.</span><span class="n">Engines</span><span class="p">.</span><span class="n">OrderBy</span><span class="w"> </span><span class="p">(</span><span class="n">engine</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">engine</span><span class="p">.</span><span class="n">Part</span><span class="p">.</span><span class="n">Mass</span><span class="p">).</span><span class="n">Last</span><span class="w"> </span><span class="p">());</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-19-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-19-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">const</span> <span class="n">heaviest</span> <span class="o">=</span> <span class="k">await</span> <span class="n">conn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
-  <span class="p">({</span> <span class="n">vessel</span> <span class="p">})</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="n">let</span> <span class="n">best</span> <span class="o">=</span> <span class="n">null</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">const</span> <span class="n">engine</span> <span class="n">of</span> <span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">engines</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">best</span> <span class="o">==</span> <span class="n">null</span> <span class="o">||</span> <span class="n">engine</span><span class="o">.</span><span class="n">part</span><span class="o">.</span><span class="n">mass</span> <span class="o">&gt;</span> <span class="n">best</span><span class="o">.</span><span class="n">part</span><span class="o">.</span><span class="n">mass</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">best</span> <span class="o">=</span> <span class="n">engine</span><span class="p">;</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">best</span><span class="p">;</span>
-  <span class="p">},</span>
-  <span class="p">{</span> <span class="n">vessel</span> <span class="p">},</span>
+</div><div aria-labelledby="tab-19-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-19-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">heaviest</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span>
+<span class="w">  </span><span class="p">({</span><span class="w"> </span><span class="nx">vessel</span><span class="w"> </span><span class="p">})</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="nx">best</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">const</span><span class="w"> </span><span class="nx">engine</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="nx">vessel</span><span class="p">.</span><span class="nx">parts</span><span class="p">.</span><span class="nx">engines</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">best</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nx">engine</span><span class="p">.</span><span class="nx">part</span><span class="p">.</span><span class="nx">mass</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="nx">best</span><span class="p">.</span><span class="nx">part</span><span class="p">.</span><span class="nx">mass</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">best</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">engine</span><span class="p">;</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">best</span><span class="p">;</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nx">vessel</span><span class="w"> </span><span class="p">},</span>
 <span class="p">);</span>
 </pre></div>
 </div>
@@ -1824,26 +1824,26 @@ and a comparison:</p>
 <span class="nb">print</span><span class="p">(</span><span class="s1">'Above 1000m: '</span> <span class="o">..</span> <span class="n">tostring</span><span class="p">(</span><span class="n">conn</span><span class="p">:</span><span class="n">run</span><span class="p">(</span><span class="n">expr</span><span class="p">)))</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-20-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-20-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="p">{</span> <span class="n">connect</span> <span class="p">}</span> <span class="kn">from</span><span class="w"> </span><span class="s2">"@krpc-org/krpc"</span><span class="p">;</span>
+</div><div aria-labelledby="tab-20-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-20-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">connect</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">"@krpc-org/krpc"</span><span class="p">;</span>
 
-<span class="n">const</span> <span class="n">conn</span> <span class="o">=</span> <span class="k">await</span> <span class="n">connect</span><span class="p">();</span>
-<span class="n">const</span> <span class="n">vessel</span> <span class="o">=</span> <span class="k">await</span> <span class="n">conn</span><span class="o">.</span><span class="n">spaceCenter</span><span class="o">.</span><span class="n">getActiveVessel</span><span class="p">();</span>
-<span class="n">const</span> <span class="n">flight</span> <span class="o">=</span> <span class="k">await</span> <span class="n">vessel</span><span class="o">.</span><span class="n">flight</span><span class="p">();</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">connect</span><span class="p">();</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">spaceCenter</span><span class="p">.</span><span class="nx">getActiveVessel</span><span class="p">();</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">flight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">vessel</span><span class="p">.</span><span class="nx">flight</span><span class="p">();</span>
 
-<span class="o">//</span> <span class="n">Get</span> <span class="n">the</span> <span class="n">remote</span> <span class="n">procedure</span> <span class="n">call</span> <span class="k">as</span> <span class="n">a</span> <span class="n">message</span><span class="p">,</span>
-<span class="o">//</span> <span class="n">so</span> <span class="n">it</span> <span class="n">can</span> <span class="n">be</span> <span class="n">passed</span> <span class="n">to</span> <span class="n">the</span> <span class="n">server</span>
-<span class="n">const</span> <span class="n">meanAltitude</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">getCall</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="n">flight</span><span class="o">.</span><span class="n">getMeanAltitude</span><span class="p">());</span>
+<span class="c1">// Get the remote procedure call as a message,</span>
+<span class="c1">// so it can be passed to the server</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">meanAltitude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">getCall</span><span class="p">(()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">flight</span><span class="p">.</span><span class="nx">getMeanAltitude</span><span class="p">());</span>
 
-<span class="o">//</span> <span class="n">Build</span> <span class="n">the</span> <span class="n">function</span> <span class="n">on</span> <span class="n">the</span> <span class="n">server</span>
-<span class="n">const</span> <span class="n">Expression</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">Expression</span><span class="p">;</span>
-<span class="n">const</span> <span class="n">expr</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">greaterThan</span><span class="p">(</span>
-  <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">meanAltitude</span><span class="p">),</span>
-  <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">constantDouble</span><span class="p">(</span><span class="mi">1000</span><span class="p">),</span>
+<span class="c1">// Build the function on the server</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">Expression</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">krpc</span><span class="p">.</span><span class="nx">Expression</span><span class="p">;</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">greaterThan</span><span class="p">(</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">meanAltitude</span><span class="p">),</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">constantDouble</span><span class="p">(</span><span class="mf">1000</span><span class="p">),</span>
 <span class="p">);</span>
 
-<span class="n">const</span> <span class="n">event</span> <span class="o">=</span> <span class="k">await</span> <span class="n">conn</span><span class="o">.</span><span class="n">addEvent</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
-<span class="k">await</span> <span class="n">event</span><span class="o">.</span><span class="n">wait</span><span class="p">();</span>
-<span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">"Altitude reached 1000m"</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">addEvent</span><span class="p">(</span><span class="nx">expr</span><span class="p">);</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">event</span><span class="p">.</span><span class="nx">wait</span><span class="p">();</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Altitude reached 1000m"</span><span class="p">);</span>
 </pre></div>
 </div>
 </div></div>
@@ -1921,7 +1921,7 @@ returns a <code class="docutils literal notranslate"><span class="pre">Promise</
 <span class="kd">local</span><span class="w"> </span><span class="nv">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">Expression</span><span class="p">.</span><span class="nf">cast</span><span class="p">(</span><span class="nv">Expression</span><span class="p">.</span><span class="nf">call</span><span class="p">(</span><span class="nv">mean_altitude</span><span class="p">),</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">krpc</span><span class="p">.</span><span class="py">Type</span><span class="p">.</span><span class="nf">int</span><span class="p">())</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-22-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-22-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-js notranslate"><div class="highlight"><pre><span></span><span class="c1">// Truncate the altitude to a whole number of meters</span>
+</div><div aria-labelledby="tab-22-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-22-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Truncate the altitude to a whole number of meters</span>
 <span class="kd">const</span><span class="w"> </span><span class="nx">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">cast</span><span class="p">(</span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">meanAltitude</span><span class="p">),</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">Type</span><span class="p">.</span><span class="kr">int</span><span class="p">());</span>
 </pre></div>
 </div>
@@ -2111,25 +2111,25 @@ streamed too, and runs for its effects, as in <a class="reference internal" href
 <span class="n">end</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-23-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-23-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>import { connect } from "@krpc-org/krpc";
+</div><div aria-labelledby="tab-23-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-23-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">connect</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">"@krpc-org/krpc"</span><span class="p">;</span>
 
-const conn = await connect();
-const vessel = await conn.spaceCenter.getActiveVessel();
-const flight = await vessel.flight();
+<span class="kd">const</span><span class="w"> </span><span class="nx">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">connect</span><span class="p">();</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">spaceCenter</span><span class="p">.</span><span class="nx">getActiveVessel</span><span class="p">();</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">flight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">vessel</span><span class="p">.</span><span class="nx">flight</span><span class="p">();</span>
 
-// Build a function that computes
-// the vessel's altitude in kilometers
-const Expression = conn.krpc.Expression;
-const meanAltitude = conn.getCall(() =&gt; flight.getMeanAltitude());
-const expr = await Expression.divide(
-  await Expression.call(meanAltitude),
-  await Expression.constantDouble(1000),
-);
+<span class="c1">// Build a function that computes</span>
+<span class="c1">// the vessel's altitude in kilometers</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">Expression</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">krpc</span><span class="p">.</span><span class="nx">Expression</span><span class="p">;</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">meanAltitude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">getCall</span><span class="p">(()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">flight</span><span class="p">.</span><span class="nx">getMeanAltitude</span><span class="p">());</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">divide</span><span class="p">(</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">meanAltitude</span><span class="p">),</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">constantDouble</span><span class="p">(</span><span class="mf">1000</span><span class="p">),</span>
+<span class="p">);</span>
 
-// Stream the value of the function
-/** @type {import("@krpc-org/krpc").Stream&lt;number&gt;} */
-const stream = await conn.addStream(expr);
-stream.addCallback((x) =&gt; console.log(`Altitude: ${x.toFixed(3)} km`));
+<span class="c1">// Stream the value of the function</span>
+<span class="cm">/** @type {import("@krpc-org/krpc").Stream&lt;number&gt;} */</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">addStream</span><span class="p">(</span><span class="nx">expr</span><span class="p">);</span>
+<span class="nx">stream</span><span class="p">.</span><span class="nx">addCallback</span><span class="p">((</span><span class="nx">x</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`Altitude: </span><span class="si">${</span><span class="nx">x</span><span class="p">.</span><span class="nx">toFixed</span><span class="p">(</span><span class="mf">3</span><span class="p">)</span><span class="si">}</span><span class="sb"> km`</span><span class="p">));</span>
 </pre></div>
 </div>
 </div></div>
@@ -2355,31 +2355,31 @@ the <code class="docutils literal notranslate"><span class="pre">Engine</span></
 <span class="nb">print</span><span class="p">(</span><span class="s1">'An engine is out of fuel: '</span> <span class="o">..</span> <span class="n">tostring</span><span class="p">(</span><span class="n">conn</span><span class="p">:</span><span class="n">run</span><span class="p">(</span><span class="n">expr</span><span class="p">)))</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-24-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-24-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="p">{</span> <span class="n">connect</span> <span class="p">}</span> <span class="kn">from</span><span class="w"> </span><span class="s2">"@krpc-org/krpc"</span><span class="p">;</span>
+</div><div aria-labelledby="tab-24-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-24-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">connect</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">"@krpc-org/krpc"</span><span class="p">;</span>
 
-<span class="n">const</span> <span class="n">conn</span> <span class="o">=</span> <span class="k">await</span> <span class="n">connect</span><span class="p">();</span>
-<span class="n">const</span> <span class="p">{</span> <span class="n">Expression</span><span class="p">,</span> <span class="n">Type</span> <span class="p">}</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="p">;</span>
-<span class="n">const</span> <span class="n">vessel</span> <span class="o">=</span> <span class="k">await</span> <span class="n">conn</span><span class="o">.</span><span class="n">spaceCenter</span><span class="o">.</span><span class="n">getActiveVessel</span><span class="p">();</span>
-<span class="n">const</span> <span class="n">parts</span> <span class="o">=</span> <span class="k">await</span> <span class="n">vessel</span><span class="o">.</span><span class="n">getParts</span><span class="p">();</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">connect</span><span class="p">();</span>
+<span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Expression</span><span class="p">,</span><span class="w"> </span><span class="nx">Type</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">krpc</span><span class="p">;</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">spaceCenter</span><span class="p">.</span><span class="nx">getActiveVessel</span><span class="p">();</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">parts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">vessel</span><span class="p">.</span><span class="nx">getParts</span><span class="p">();</span>
 
-<span class="o">//</span> <span class="n">A</span> <span class="n">function</span> <span class="n">taking</span> <span class="n">an</span> <span class="n">engine</span><span class="p">,</span> <span class="n">returning</span> <span class="n">true</span> <span class="k">if</span> <span class="n">it</span> <span class="ow">is</span> <span class="n">out</span> <span class="n">of</span> <span class="n">fuel</span>
-<span class="n">const</span> <span class="n">engine</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">parameter</span><span class="p">(</span>
-  <span class="s2">"engine"</span><span class="p">,</span>
-  <span class="k">await</span> <span class="n">Type</span><span class="o">.</span><span class="n">classType</span><span class="p">(</span><span class="s2">"SpaceCenter"</span><span class="p">,</span> <span class="s2">"Engine"</span><span class="p">),</span>
+<span class="c1">// A function taking an engine, returning true if it is out of fuel</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">engine</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">parameter</span><span class="p">(</span>
+<span class="w">  </span><span class="s2">"engine"</span><span class="p">,</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">Type</span><span class="p">.</span><span class="nx">classType</span><span class="p">(</span><span class="s2">"SpaceCenter"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Engine"</span><span class="p">),</span>
 <span class="p">);</span>
-<span class="n">const</span> <span class="n">hasFuel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">spaceCenter</span><span class="o">.</span><span class="n">Engine</span><span class="o">.</span><span class="n">prototype</span><span class="o">.</span><span class="n">getHasFuel</span><span class="p">;</span>
-<span class="n">const</span> <span class="n">outOfFuel</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="k">lambda</span><span class="p">(</span>
-  <span class="p">[</span><span class="n">engine</span><span class="p">],</span>
-  <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="ow">not</span><span class="p">(</span><span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">callWithArguments</span><span class="p">(</span><span class="n">hasFuel</span><span class="p">,</span> <span class="n">new</span> <span class="n">Map</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="n">engine</span><span class="p">]]))),</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">hasFuel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">spaceCenter</span><span class="p">.</span><span class="nx">Engine</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getHasFuel</span><span class="p">;</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">outOfFuel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">lambda</span><span class="p">(</span>
+<span class="w">  </span><span class="p">[</span><span class="nx">engine</span><span class="p">],</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">not</span><span class="p">(</span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">callWithArguments</span><span class="p">(</span><span class="nx">hasFuel</span><span class="p">,</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Map</span><span class="p">([[</span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="nx">engine</span><span class="p">]]))),</span>
 <span class="p">);</span>
 
-<span class="o">//</span> <span class="n">Whether</span> <span class="nb">any</span> <span class="n">engine</span> <span class="n">satisfies</span> <span class="n">it</span>
-<span class="n">const</span> <span class="n">engines</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">getCall</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="n">parts</span><span class="o">.</span><span class="n">getEngines</span><span class="p">());</span>
-<span class="n">const</span> <span class="n">expr</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">engines</span><span class="p">),</span> <span class="n">outOfFuel</span><span class="p">);</span>
+<span class="c1">// Whether any engine satisfies it</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">engines</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">getCall</span><span class="p">(()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">parts</span><span class="p">.</span><span class="nx">getEngines</span><span class="p">());</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">any</span><span class="p">(</span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">engines</span><span class="p">),</span><span class="w"> </span><span class="nx">outOfFuel</span><span class="p">);</span>
 
-<span class="n">const</span> <span class="n">event</span> <span class="o">=</span> <span class="k">await</span> <span class="n">conn</span><span class="o">.</span><span class="n">addEvent</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
-<span class="k">await</span> <span class="n">event</span><span class="o">.</span><span class="n">wait</span><span class="p">();</span>
-<span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">"An engine has run out of fuel"</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">addEvent</span><span class="p">(</span><span class="nx">expr</span><span class="p">);</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">event</span><span class="p">.</span><span class="nx">wait</span><span class="p">();</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"An engine has run out of fuel"</span><span class="p">);</span>
 </pre></div>
 </div>
 </div></div>
@@ -2454,7 +2454,7 @@ and build one. <a class="reference internal" href="../python/api/krpc/expression
 <span class="kd">local</span><span class="w"> </span><span class="nv">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">Expression</span><span class="p">.</span><span class="nf">get_field</span><span class="p">(</span><span class="nv">Expression</span><span class="p">.</span><span class="nf">call</span><span class="p">(</span><span class="nv">site_info</span><span class="p">),</span><span class="w"> </span><span class="s1">'Name'</span><span class="p">)</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-25-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-25-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-js notranslate"><div class="highlight"><pre><span></span><span class="c1">// The Name field of a structure a call returns</span>
+</div><div aria-labelledby="tab-25-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-25-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// The Name field of a structure a call returns</span>
 <span class="kd">const</span><span class="w"> </span><span class="nx">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">getField</span><span class="p">(</span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">siteInfo</span><span class="p">),</span><span class="w"> </span><span class="s2">"Name"</span><span class="p">);</span>
 </pre></div>
 </div>
@@ -2662,33 +2662,33 @@ to <a class="reference internal" href="../python/api/krpc/expressions.html#KRPC.
 <span class="nb">print</span><span class="p">(</span><span class="n">conn</span><span class="p">:</span><span class="n">run</span><span class="p">(</span><span class="n">program</span><span class="p">))</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-26-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-26-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="p">{</span> <span class="n">connect</span> <span class="p">}</span> <span class="kn">from</span><span class="w"> </span><span class="s2">"@krpc-org/krpc"</span><span class="p">;</span>
+</div><div aria-labelledby="tab-26-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-26-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">connect</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">"@krpc-org/krpc"</span><span class="p">;</span>
 
-<span class="n">const</span> <span class="n">conn</span> <span class="o">=</span> <span class="k">await</span> <span class="n">connect</span><span class="p">();</span>
-<span class="n">const</span> <span class="p">{</span> <span class="n">Expression</span><span class="p">,</span> <span class="n">Type</span> <span class="p">}</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="p">;</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">connect</span><span class="p">();</span>
+<span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Expression</span><span class="p">,</span><span class="w"> </span><span class="nx">Type</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">krpc</span><span class="p">;</span>
 
-<span class="o">//</span> <span class="n">let</span> <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="k">for</span> <span class="p">(</span><span class="n">const</span> <span class="n">x</span> <span class="n">of</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span> <span class="n">total</span> <span class="o">=</span> <span class="n">total</span> <span class="o">+</span> <span class="n">x</span><span class="p">;</span>
-<span class="n">const</span> <span class="n">total</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">variable</span><span class="p">(</span><span class="s2">"total"</span><span class="p">,</span> <span class="k">await</span> <span class="n">Type</span><span class="o">.</span><span class="n">int</span><span class="p">());</span>
-<span class="n">const</span> <span class="n">x</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">variable</span><span class="p">(</span><span class="s2">"x"</span><span class="p">,</span> <span class="k">await</span> <span class="n">Type</span><span class="o">.</span><span class="n">int</span><span class="p">());</span>
-<span class="n">const</span> <span class="n">values</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">createList</span><span class="p">([</span>
-  <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">constantInt</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
-  <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">constantInt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
-  <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">constantInt</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+<span class="c1">// let total = 0; for (const x of [1, 2, 3]) total = total + x;</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">total</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">variable</span><span class="p">(</span><span class="s2">"total"</span><span class="p">,</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">Type</span><span class="p">.</span><span class="kr">int</span><span class="p">());</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">variable</span><span class="p">(</span><span class="s2">"x"</span><span class="p">,</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">Type</span><span class="p">.</span><span class="kr">int</span><span class="p">());</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">values</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">createList</span><span class="p">([</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">constantInt</span><span class="p">(</span><span class="mf">1</span><span class="p">),</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">constantInt</span><span class="p">(</span><span class="mf">2</span><span class="p">),</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">constantInt</span><span class="p">(</span><span class="mf">3</span><span class="p">),</span>
 <span class="p">]);</span>
-<span class="n">const</span> <span class="n">program</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">blockWithVariables</span><span class="p">(</span>
-  <span class="p">[</span><span class="n">total</span><span class="p">,</span> <span class="n">x</span><span class="p">],</span>
-  <span class="p">[</span>
-    <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">total</span><span class="p">,</span> <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">constantInt</span><span class="p">(</span><span class="mi">0</span><span class="p">)),</span>
-    <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">forEach</span><span class="p">(</span>
-      <span class="n">x</span><span class="p">,</span>
-      <span class="n">values</span><span class="p">,</span>
-      <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">total</span><span class="p">,</span> <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">total</span><span class="p">,</span> <span class="n">x</span><span class="p">)),</span>
-    <span class="p">),</span>
-    <span class="n">total</span><span class="p">,</span>
-  <span class="p">],</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">program</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">blockWithVariables</span><span class="p">(</span>
+<span class="w">  </span><span class="p">[</span><span class="nx">total</span><span class="p">,</span><span class="w"> </span><span class="nx">x</span><span class="p">],</span>
+<span class="w">  </span><span class="p">[</span>
+<span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">assign</span><span class="p">(</span><span class="nx">total</span><span class="p">,</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">constantInt</span><span class="p">(</span><span class="mf">0</span><span class="p">)),</span>
+<span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span>
+<span class="w">      </span><span class="nx">x</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">values</span><span class="p">,</span>
+<span class="w">      </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">assign</span><span class="p">(</span><span class="nx">total</span><span class="p">,</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">total</span><span class="p">,</span><span class="w"> </span><span class="nx">x</span><span class="p">)),</span>
+<span class="w">    </span><span class="p">),</span>
+<span class="w">    </span><span class="nx">total</span><span class="p">,</span>
+<span class="w">  </span><span class="p">],</span>
 <span class="p">);</span>
 
-<span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="k">await</span> <span class="n">conn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">program</span><span class="p">));</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">await</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="nx">program</span><span class="p">));</span>
 </pre></div>
 </div>
 </div></div>
@@ -2971,48 +2971,48 @@ effects.</p>
 <span class="nb">print</span><span class="p">(</span><span class="n">conn</span><span class="p">:</span><span class="n">run</span><span class="p">(</span><span class="n">program</span><span class="p">))</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-27-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-27-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="p">{</span> <span class="n">connect</span> <span class="p">}</span> <span class="kn">from</span><span class="w"> </span><span class="s2">"@krpc-org/krpc"</span><span class="p">;</span>
+</div><div aria-labelledby="tab-27-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-27-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">connect</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">"@krpc-org/krpc"</span><span class="p">;</span>
 
-<span class="n">const</span> <span class="n">conn</span> <span class="o">=</span> <span class="k">await</span> <span class="n">connect</span><span class="p">();</span>
-<span class="n">const</span> <span class="p">{</span> <span class="n">Expression</span><span class="p">,</span> <span class="n">Type</span> <span class="p">}</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="p">;</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">connect</span><span class="p">();</span>
+<span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Expression</span><span class="p">,</span><span class="w"> </span><span class="nx">Type</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">krpc</span><span class="p">;</span>
 
-<span class="o">//</span> <span class="n">let</span> <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-<span class="o">//</span> <span class="k">for</span> <span class="p">(</span><span class="n">const</span> <span class="n">x</span> <span class="n">of</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
-<span class="o">//</span>   <span class="n">switch</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
-<span class="o">//</span>     <span class="n">case</span> <span class="mi">1</span><span class="p">:</span> <span class="n">case</span> <span class="mi">2</span><span class="p">:</span> <span class="n">total</span> <span class="o">=</span> <span class="n">total</span> <span class="o">+</span> <span class="mi">10</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span>
-<span class="o">//</span>     <span class="n">default</span><span class="p">:</span> <span class="n">total</span> <span class="o">=</span> <span class="n">total</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span>
-<span class="o">//</span>   <span class="p">}</span>
-<span class="n">const</span> <span class="n">total</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">variable</span><span class="p">(</span><span class="s2">"total"</span><span class="p">,</span> <span class="k">await</span> <span class="n">Type</span><span class="o">.</span><span class="n">int</span><span class="p">());</span>
-<span class="n">const</span> <span class="n">x</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">variable</span><span class="p">(</span><span class="s2">"x"</span><span class="p">,</span> <span class="k">await</span> <span class="n">Type</span><span class="o">.</span><span class="n">int</span><span class="p">());</span>
-<span class="n">const</span> <span class="n">values</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">createList</span><span class="p">([</span>
-  <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">constantInt</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
-  <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">constantInt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
-  <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">constantInt</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+<span class="c1">// let total = 0;</span>
+<span class="c1">// for (const x of [1, 2, 3])</span>
+<span class="c1">//   switch (x) {</span>
+<span class="c1">//     case 1: case 2: total = total + 10; break;</span>
+<span class="c1">//     default: total = total + 1; break;</span>
+<span class="c1">//   }</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">total</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">variable</span><span class="p">(</span><span class="s2">"total"</span><span class="p">,</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">Type</span><span class="p">.</span><span class="kr">int</span><span class="p">());</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">variable</span><span class="p">(</span><span class="s2">"x"</span><span class="p">,</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">Type</span><span class="p">.</span><span class="kr">int</span><span class="p">());</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">values</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">createList</span><span class="p">([</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">constantInt</span><span class="p">(</span><span class="mf">1</span><span class="p">),</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">constantInt</span><span class="p">(</span><span class="mf">2</span><span class="p">),</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">constantInt</span><span class="p">(</span><span class="mf">3</span><span class="p">),</span>
 <span class="p">]);</span>
-<span class="n">const</span> <span class="n">body</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">match</span><span class="p">(</span>
-  <span class="n">x</span><span class="p">,</span>
-  <span class="p">[[</span><span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">constantInt</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">constantInt</span><span class="p">(</span><span class="mi">2</span><span class="p">)],</span> <span class="p">[]],</span>
-  <span class="p">[</span>
-    <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span>
-      <span class="n">total</span><span class="p">,</span>
-      <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">total</span><span class="p">,</span> <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">constantInt</span><span class="p">(</span><span class="mi">10</span><span class="p">)),</span>
-    <span class="p">),</span>
-    <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span>
-      <span class="n">total</span><span class="p">,</span>
-      <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">total</span><span class="p">,</span> <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">constantInt</span><span class="p">(</span><span class="mi">1</span><span class="p">)),</span>
-    <span class="p">),</span>
-  <span class="p">],</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span>
+<span class="w">  </span><span class="nx">x</span><span class="p">,</span>
+<span class="w">  </span><span class="p">[[</span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">constantInt</span><span class="p">(</span><span class="mf">1</span><span class="p">),</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">constantInt</span><span class="p">(</span><span class="mf">2</span><span class="p">)],</span><span class="w"> </span><span class="p">[]],</span>
+<span class="w">  </span><span class="p">[</span>
+<span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">assign</span><span class="p">(</span>
+<span class="w">      </span><span class="nx">total</span><span class="p">,</span>
+<span class="w">      </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">total</span><span class="p">,</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">constantInt</span><span class="p">(</span><span class="mf">10</span><span class="p">)),</span>
+<span class="w">    </span><span class="p">),</span>
+<span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">assign</span><span class="p">(</span>
+<span class="w">      </span><span class="nx">total</span><span class="p">,</span>
+<span class="w">      </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">total</span><span class="p">,</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">constantInt</span><span class="p">(</span><span class="mf">1</span><span class="p">)),</span>
+<span class="w">    </span><span class="p">),</span>
+<span class="w">  </span><span class="p">],</span>
 <span class="p">);</span>
-<span class="n">const</span> <span class="n">program</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">blockWithVariables</span><span class="p">(</span>
-  <span class="p">[</span><span class="n">total</span><span class="p">,</span> <span class="n">x</span><span class="p">],</span>
-  <span class="p">[</span>
-    <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">total</span><span class="p">,</span> <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">constantInt</span><span class="p">(</span><span class="mi">0</span><span class="p">)),</span>
-    <span class="k">await</span> <span class="n">Expression</span><span class="o">.</span><span class="n">forEach</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">body</span><span class="p">),</span>
-    <span class="n">total</span><span class="p">,</span>
-  <span class="p">],</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">program</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">blockWithVariables</span><span class="p">(</span>
+<span class="w">  </span><span class="p">[</span><span class="nx">total</span><span class="p">,</span><span class="w"> </span><span class="nx">x</span><span class="p">],</span>
+<span class="w">  </span><span class="p">[</span>
+<span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">assign</span><span class="p">(</span><span class="nx">total</span><span class="p">,</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">constantInt</span><span class="p">(</span><span class="mf">0</span><span class="p">)),</span>
+<span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span><span class="w"> </span><span class="nx">values</span><span class="p">,</span><span class="w"> </span><span class="nx">body</span><span class="p">),</span>
+<span class="w">    </span><span class="nx">total</span><span class="p">,</span>
+<span class="w">  </span><span class="p">],</span>
 <span class="p">);</span>
 
-<span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="k">await</span> <span class="n">conn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">program</span><span class="p">));</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">await</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="nx">program</span><span class="p">));</span>
 </pre></div>
 </div>
 </div></div>
@@ -3090,7 +3090,7 @@ particular vessel:</p>
 <span class="kd">local</span><span class="w"> </span><span class="nv">is_target</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">conn</span><span class="p">:</span><span class="nf">run</span><span class="p">(</span><span class="nv">expr</span><span class="p">)</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-28-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-28-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-js notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">target</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">getCall</span><span class="p">(()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">spaceCenter</span><span class="p">.</span><span class="nx">getTargetVessel</span><span class="p">());</span>
+</div><div aria-labelledby="tab-28-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-28-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">target</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">getCall</span><span class="p">(()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">spaceCenter</span><span class="p">.</span><span class="nx">getTargetVessel</span><span class="p">());</span>
 <span class="kd">const</span><span class="w"> </span><span class="nx">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span>
 <span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">target</span><span class="p">),</span>
 <span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">constantObject</span><span class="p">(</span><span class="nx">getObjectId</span><span class="p">(</span><span class="nx">someVessel</span><span class="p">)),</span>
@@ -3169,7 +3169,7 @@ fuel check from <a class="reference internal" href="#server-side-functions-excep
 <span class="nv">conn</span><span class="p">:</span><span class="nf">run</span><span class="p">(</span><span class="nv">expr</span><span class="p">)</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-29-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-29-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-js notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">amount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">getCall</span><span class="p">(()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">resources</span><span class="p">.</span><span class="nx">amount</span><span class="p">(</span><span class="s2">"LiquidFuel"</span><span class="p">));</span>
+</div><div aria-labelledby="tab-29-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-29-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">amount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">getCall</span><span class="p">(()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">resources</span><span class="p">.</span><span class="nx">amount</span><span class="p">(</span><span class="s2">"LiquidFuel"</span><span class="p">));</span>
 <span class="kd">const</span><span class="w"> </span><span class="nx">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">ifThen</span><span class="p">(</span>
 <span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">lessThan</span><span class="p">(</span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">amount</span><span class="p">),</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="nx">constantDouble</span><span class="p">(</span><span class="mf">100</span><span class="p">)),</span>
 <span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">Expression</span><span class="p">.</span><span class="k">throw</span><span class="p">(</span>
