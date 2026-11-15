@@ -31,6 +31,7 @@ class RegistryMod(Mod):
         self.sha256 = sha256
         self.folders = tuple(version["folders"])
         self.files = tuple(version["files"])
+        self.generated = tuple(version["generated"])
         self.requires = tuple(version["requires"])
         self.overlays = _resource("mods", self.name)
         # The service that reports the mod and the name of its property, or None

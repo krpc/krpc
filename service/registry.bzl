@@ -210,6 +210,7 @@ def mod(name, versions, title = None, repo = None, assembly = None):
                 files = v.files,
                 requires = v.requires,
                 assembly_sha256 = v.assembly_sha256,
+                generated = v.generated,
             )
             for v in versions
         ],
@@ -223,7 +224,8 @@ def version(
         folders = [],
         files = [],
         requires = [],
-        assembly_sha256 = None):
+        assembly_sha256 = None,
+        generated = []):
     """A version of a mod in MODS.
 
     Args:
@@ -236,6 +238,7 @@ def version(
       requires: The mods installed alongside it, as name or name==version.
       assembly_sha256: The SHA-256 of the mod's <assembly>.dll in this version's archive, which
         tells the installed version.
+      generated: The files the mod writes at the top of GameData while the game runs.
 
     Returns:
       The version.
@@ -249,6 +252,7 @@ def version(
         files = files,
         requires = requires,
         assembly_sha256 = assembly_sha256,
+        generated = generated,
     )
 
 # The third-party mods an in-game test can require by name: the mods kRPC wraps, supports or
@@ -597,6 +601,7 @@ MODS = [
             assembly_sha256 = "cd902484e9b9cdc5f09914968e6b66d966e25fa5a854e561e124a96b17f7f4b0",
             folders = ["FerramAerospaceResearch"],
             requires = ["ModularFlightIntegrator", "KSPBurst", "Harmony"],
+            generated = ["Custom_FARAeroData.cfg"],
         )],
     ),
     # Real propellants, limited ignitions, ullage and pressure feeding

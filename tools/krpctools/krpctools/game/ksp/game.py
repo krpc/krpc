@@ -178,6 +178,9 @@ class Mod(game.Mod):
     # The files the mod installs at the top of GameData
     files: tuple[str, ...] = ()
 
+    # The files the mod writes at the top of GameData while the game runs
+    generated: tuple[str, ...] = ()
+
     # The directory of config overlays, one subdirectory per folder, or None
     overlays = None
 
@@ -299,7 +302,7 @@ class KSP(game.Game):
     def remove_mod(self, mod):
         for folder in mod.folders:
             shutil.rmtree(os.path.join(self.gamedata(), folder), ignore_errors=True)
-        for name in mod.files:
+        for name in mod.files + mod.generated:
             path = os.path.join(self.gamedata(), name)
             if os.path.exists(path):
                 os.remove(path)
@@ -321,6 +324,7 @@ class KSP(game.Game):
         for name in mods:
             allowed.update(self.mod(name).folders)
             allowed.update(self.mod(name).files)
+            allowed.update(self.mod(name).generated)
         gamedata = self.gamedata()
         unexpected = [
             entry

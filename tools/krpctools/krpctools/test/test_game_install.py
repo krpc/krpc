@@ -82,6 +82,21 @@ class TestValidateInstall(TempDirTestCase):
         self._populate([*_CLEAN, "TweakScale", "999_Scale_Redist.dll", "000_Harmony"])
         self.ksp.validate_install(["TweakScaleRescaled", "Harmony"])
 
+    def test_requested_mod_generated_files_allowed(self):
+        self._populate([*_CLEAN, "FerramAerospaceResearch", "Custom_FARAeroData.cfg"])
+        self.ksp.validate_install(["FAR"])
+
+    def test_unrequested_mod_generated_files_raise(self):
+        self._populate([*_CLEAN, "Custom_FARAeroData.cfg"])
+        with self.assertRaises(RuntimeError) as cm:
+            self.ksp.validate_install([])
+        self.assertIn("Custom_FARAeroData.cfg", str(cm.exception))
+
+    def test_removing_a_mod_removes_its_generated_files(self):
+        self._populate([*_CLEAN, "Custom_FARAeroData.cfg"])
+        self.ksp.mod("FAR").remove(self.ksp)
+        self.ksp.validate_install([])
+
     def test_unrequested_mod_raises(self):
         self._populate([*_CLEAN, "RealChute"])
         with self.assertRaises(RuntimeError) as cm:
