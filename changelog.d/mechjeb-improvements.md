@@ -12,3 +12,5 @@
   - Remove the nodes it placed when it fails to place one (#1381)
 - Apply `AscentAutopilot.LimitAoA` on the classic ascent path without MechJeb's ascent window
   (#1381)
+- Apply `SmartASS.ForcePitch`, `ForceYaw` and `ForceRoll` in the surface modes without the
+  Smart A.S.S. window (#1381)

@@ -31,6 +31,7 @@ namespace KRPC.MechJeb
         static Field<object, int> advReference;
         static Field<object, int> advDirection;
         static Action<object, bool> engage;
+        static Action<object, bool, bool, bool> setAxisControl;
         static int [] attitudeReferences;
 
         internal static new void Load ()
@@ -50,6 +51,7 @@ namespace KRPC.MechJeb
             advReference = type.Field<object, int> ("advReference");
             advDirection = type.Field<object, int> ("advDirection");
             engage = type.Method<Action<object, bool>> ("Engage");
+            setAxisControl = Bindings.Type ("MuMech.MechJebModuleAttitudeController").Method<Action<object, bool, bool, bool>> ("SetAxisControl");
             var reference = Bindings.Type ("MuMech.AttitudeReference").Type;
             attitudeReferences = reference == null ? null :
                 Array.ConvertAll (attitudeReferenceNames, name => (int)Enum.Parse (reference, name));
@@ -122,7 +124,10 @@ namespace KRPC.MechJeb
         /// <summary>
         /// The heading, in degrees.
         /// </summary>
-        /// <remarks>Applies in the <see cref="SmartASSAutopilotMode.Surface"/> mode.</remarks>
+        /// <remarks>
+        /// Requires <see cref="ForceYaw"/>, and applies in the <see cref="SmartASSAutopilotMode.Surface"/>
+        /// mode.
+        /// </remarks>
         [KRPCProperty]
         public double SurfaceHeading {
             get { return srfHdg.Get (Instance); }
@@ -132,7 +137,10 @@ namespace KRPC.MechJeb
         /// <summary>
         /// The pitch above the horizon, in degrees. 90 is straight up.
         /// </summary>
-        /// <remarks>Applies in the <see cref="SmartASSAutopilotMode.Surface"/> mode.</remarks>
+        /// <remarks>
+        /// Requires <see cref="ForcePitch"/>, and applies in the <see cref="SmartASSAutopilotMode.Surface"/>
+        /// mode.
+        /// </remarks>
         [KRPCProperty]
         public double SurfacePitch {
             get { return srfPit.Get (Instance); }
@@ -142,7 +150,10 @@ namespace KRPC.MechJeb
         /// <summary>
         /// The roll, in degrees. 0 is top side up.
         /// </summary>
-        /// <remarks>Applies in the <see cref="SmartASSAutopilotMode.Surface"/> mode.</remarks>
+        /// <remarks>
+        /// Requires <see cref="ForceRoll"/>, and applies in the <see cref="SmartASSAutopilotMode.Surface"/>
+        /// mode.
+        /// </remarks>
         [KRPCProperty]
         public double SurfaceRoll {
             get { return srfRol.Get (Instance); }
@@ -153,7 +164,8 @@ namespace KRPC.MechJeb
         /// The yaw from the surface velocity, in degrees.
         /// </summary>
         /// <remarks>
-        /// Applies in the <see cref="SmartASSAutopilotMode.SurfacePrograde"/> and
+        /// Requires <see cref="ForceYaw"/>, and applies in the
+        /// <see cref="SmartASSAutopilotMode.SurfacePrograde"/> and
         /// <see cref="SmartASSAutopilotMode.SurfaceRetrograde"/> modes.
         /// </remarks>
         [KRPCProperty]
@@ -166,7 +178,8 @@ namespace KRPC.MechJeb
         /// The pitch from the surface velocity, in degrees.
         /// </summary>
         /// <remarks>
-        /// Applies in the <see cref="SmartASSAutopilotMode.SurfacePrograde"/> and
+        /// Requires <see cref="ForcePitch"/>, and applies in the
+        /// <see cref="SmartASSAutopilotMode.SurfacePrograde"/> and
         /// <see cref="SmartASSAutopilotMode.SurfaceRetrograde"/> modes.
         /// </remarks>
         [KRPCProperty]
@@ -179,7 +192,8 @@ namespace KRPC.MechJeb
         /// The roll, in degrees. 0 is top side up.
         /// </summary>
         /// <remarks>
-        /// Applies in the <see cref="SmartASSAutopilotMode.SurfacePrograde"/> and
+        /// Requires <see cref="ForceRoll"/>, and applies in the
+        /// <see cref="SmartASSAutopilotMode.SurfacePrograde"/> and
         /// <see cref="SmartASSAutopilotMode.SurfaceRetrograde"/> modes.
         /// </remarks>
         [KRPCProperty]
@@ -230,7 +244,15 @@ namespace KRPC.MechJeb
         [KRPCMethod]
         public void Update (bool resetPID)
         {
-            engage (Instance, resetPID);
+            var instance = Instance;
+            engage (instance, resetPID);
+            // MechJeb's window sets the axes of the surface modes each frame it is drawn, and
+            // Engage controls all three
+            var mode = (SmartASSAutopilotMode)target.Get (instance);
+            if (mode == SmartASSAutopilotMode.Surface || mode == SmartASSAutopilotMode.SurfacePrograde ||
+                mode == SmartASSAutopilotMode.SurfaceRetrograde)
+                setAxisControl (MechJeb.Module ("MechJebModuleAttitudeController"),
+                    forcePitch.Get (instance), forceYaw.Get (instance), forceRol.Get (instance));
         }
     }
 

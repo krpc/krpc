@@ -65,6 +65,24 @@ class TestSmartASSInOrbit(MechJebInOrbitTestCase):
         )
         self.assertAlmostEqual(1, norm(self.vessel.direction(frame)), places=3)
 
+    def test_surface_axes(self):
+        smart_ass = self.mj.smart_ass
+        flight = self.vessel.flight(self.vessel.surface_reference_frame)
+        self.set_pitch_heading_roll(0, 90, 0)
+        smart_ass.autopilot_mode = self.mj.SmartASSAutopilotMode.surface
+        smart_ass.surface_heading = 90
+        smart_ass.surface_pitch = 60
+        smart_ass.surface_roll = 0
+        smart_ass.force_pitch = False
+        smart_ass.update(False)
+        # Pitch is left alone
+        ut = self.sc.ut
+        self.wait_until(lambda: self.sc.ut > ut + 10)
+        self.assertLess(abs(flight.pitch), 15)
+        smart_ass.force_pitch = True
+        smart_ass.update(False)
+        self.wait_until(lambda: flight.pitch > 55, timeout=60)
+
 
 if __name__ == "__main__":
     unittest.main()
