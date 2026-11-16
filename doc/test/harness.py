@@ -171,7 +171,7 @@ class ExampleTestCase(TestCase):
             example.prepare(self)
         command = languages.command(language, example_path(example.key, language))
         with tempfile.TemporaryDirectory(prefix="krpc-example-") as cwd:
-            result = self.run_command(example, command, cwd)
+            result = self.run_command(example, command, str(command.cwd or cwd))
         message = result.describe()
         run = example.run.then if isinstance(example.run, Interactive) else example.run
         if isinstance(run, Exit):

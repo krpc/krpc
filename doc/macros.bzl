@@ -2,7 +2,7 @@
 
 load("@bazel_skylib//rules:write_file.bzl", "write_file")
 load("@rules_cc//cc:defs.bzl", "cc_binary")
-load("@rules_dotnet//dotnet:defs.bzl", "csharp_library")
+load("@rules_dotnet//dotnet:defs.bzl", "csharp_binary", "csharp_library")
 load("@rules_java//java:java_binary.bzl", "java_binary")
 load("//service:registry.bzl", "SERVICES")
 load("//tools/build:lua.bzl", "lua_binary")
@@ -16,6 +16,22 @@ def csharp_library_multiple(name, srcs, target_framework, deps):
         csharp_library(
             name = subname,
             srcs = [src],
+            target_frameworks = [target_framework],
+            deps = deps,
+        )
+    native.filegroup(name = name, srcs = names)
+
+# buildifier: disable=function-docstring
+def csharp_binary_multiple(name, srcs, target_framework, deps):
+    names = []
+    for src in srcs:
+        subname = name + "/" + src
+        names.append(subname)
+        csharp_binary(
+            name = subname,
+            srcs = [src],
+            # The assembly is named for the file, as each binary is in a folder of its own
+            out = src.rpartition("/")[2].rpartition(".")[0],
             target_frameworks = [target_framework],
             deps = deps,
         )

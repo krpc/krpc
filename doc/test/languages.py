@@ -21,6 +21,8 @@ SCRIPTS = REPO / "doc" / "src" / "scripts"
 class Command:
     argv: list[str]
     env: dict[str, str]
+    # The working directory the program needs, or None to run it in an empty one
+    cwd: pathlib.Path | None = None
 
 
 @dataclass(frozen=True)
@@ -45,6 +47,14 @@ def _binary(path: pathlib.Path) -> Command:
     return Command([*prefix, str(path)], dict(os.environ))
 
 
+def _dotnet(path: pathlib.Path) -> Command:
+    # The launcher finds the .NET runtime through RUNFILES_DIR, and the runtime finds the
+    # assemblies by paths relative to the working directory
+    runfiles = path.with_name(path.name + ".runfiles")
+    env = dict(os.environ, RUNFILES_DIR=str(runfiles))
+    return Command([str(path)], env, runfiles)
+
+
 def _doc_target(prefix: str) -> Callable[[pathlib.PurePath], str]:
     return lambda path: "//doc:%s/src/scripts/%s" % (prefix, path.as_posix())
 
@@ -56,6 +66,7 @@ LANGUAGES = {
     "java": Language(_doc_target("compile-scripts-java"), _binary),
     "cnano": Language(_doc_target("run-scripts-cnano"), _binary),
     "lua": Language(_doc_target("run-scripts-lua"), _binary),
+    "csharp": Language(_doc_target("compile-scripts-csharp-exes"), _dotnet),
 }
 
 # The built example binaries, by target
