@@ -39,49 +39,8 @@ The following example prints the name of the active vessel:
 
 .. literalinclude:: /scripts/api/space-center/SpaceCenterExample.java
 
-Supported Mods
---------------
+Mods
+----
 
-The SpaceCenter service supports the following mods. None of them needs to be installed, but
-some functionality requires one of them, and the docs note where it does.
-A property gives whether each one is installed, such as :meth:`SpaceCenter.getFARAvailable()`.
-
-* `Ferram Aerospace Research`_: :type:`Flight` works with the stock
-  aerodynamics or with Ferram Aerospace Research, and reads from whichever is in use. Some
-  members require it, such as :meth:`Flight.getLiftCoefficient()`, and
-  :meth:`Part.lift(ReferenceFrame)` and :meth:`Part.drag(ReferenceFrame)` are not
-  available with it.
-* `Extended Action Groups`_ adds action groups 10 to 250 to :type:`Control`.
-* `RealFuels`_ adds ignitions, ullage and feed pressure to :type:`Engine`,
-  and tank pressure and boil-off to :type:`Part`.
-* :type:`Parachute` objects support `RealChute`_.
-* :type:`Fairing` objects support `ProceduralFairings`_.
-* :type:`SolarPanel` objects support the curved solar panels of
-  `Near Future Solar`_.
-* :type:`Experiment` objects support DMagic's
-  `DMModuleScienceAnimateGeneric`_.
-* :meth:`Engine.getThrustReversed()` supports the thrust reversers of
-  `Firespitter`_ and `KerbalActuators`_.
-* `KSPCommunityPartModules`_ 0.5 or later, or `kOS`_, provides the name tag in
-  :meth:`Part.getTag()`.
-* `B9PartSwitch`_ switches a part's subtype when its field is set through
-  :type:`PartField`.
-* `TweakScale Rescaled`_ parts report their scaled masses, resources, thrust, torque and cost.
-* `RealAntennas`_ adds the link budget and targeting to :type:`Antenna`,
-  and data rates to :type:`CommLink`.
-* The :doc:`RemoteTech service <remote-tech>` covers RemoteTech antennas.
-
-kRPC is tested with these versions:
-
-.. include:: /space-center-mods.inc
-
-These services cover other mods:
-
-.. include:: /mod-services.inc
-
-kRPC is also tested with these mods, which change the solar system and the parts that the
-SpaceCenter service reads:
-
-.. include:: /tested-mods.inc
-
-.. include:: /mods.inc
+The SpaceCenter service supports several mods, such as Ferram Aerospace Research. The
+:doc:`mods guide </user-guide/mods>` lists them, with the versions kRPC is tested with.
