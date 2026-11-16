@@ -14,50 +14,50 @@ vessel = conn.space_center.active_vessel
 ut = conn.add_stream(getattr, conn.space_center, "ut")
 altitude = conn.add_stream(getattr, vessel.flight(), "mean_altitude")
 apoapsis = conn.add_stream(getattr, vessel.orbit, "apoapsis_altitude")
-stage_2_resources = vessel.decouple_stage_at(stage=2).resources(
+stage_5_resources = vessel.decouple_stage_at(stage=5).resources(
     cumulative=False
 )
-srb_fuel = conn.add_stream(stage_2_resources.amount, "SolidFuel")
+stage_3_resources = vessel.decouple_stage_at(stage=3).resources(
+    cumulative=False
+)
+first_stage_fuel = conn.add_stream(stage_5_resources.amount, "SolidFuel")
+second_stage_fuel = conn.add_stream(stage_3_resources.amount, "LiquidFuel")
 
 # Pre-launch setup
 vessel.control.sas = False
 vessel.control.rcs = False
 vessel.control.throttle = 1.0
 
-# Countdown...
-print("3...")
-time.sleep(1)
-print("2...")
-time.sleep(1)
-print("1...")
-time.sleep(1)
-print("Launch!")
-
 # Activate the first stage
-vessel.control.activate_next_stage()
 vessel.auto_pilot.engaged = True
 vessel.auto_pilot.target_pitch_and_heading(90, 90)
+vessel.control.activate_next_stage()
 
 # Main ascent loop
-srbs_separated = False
-turn_angle = 0
+first_stage_separated = False
+second_stage_separated = False
 while True:
     # Gravity turn
     if altitude() > turn_start_altitude and altitude() < turn_end_altitude:
         frac = (altitude() - turn_start_altitude) / (
             turn_end_altitude - turn_start_altitude
         )
-        new_turn_angle = frac * 90
-        if abs(new_turn_angle - turn_angle) > 0.5:
-            turn_angle = new_turn_angle
-            vessel.auto_pilot.target_pitch_and_heading(90 - turn_angle, 90)
+        turn_angle = frac * 90
+        vessel.auto_pilot.target_pitch_and_heading(90 - turn_angle, 90)
 
-    # Separate SRBs when finished
-    if not srbs_separated:
-        if srb_fuel() < 0.1:
+    if not first_stage_separated:
+        if first_stage_fuel() < 0.1:
             vessel.control.activate_next_stage()
-            srbs_separated = True
-            print("SRBs separated")
+            vessel.control.activate_next_stage()
+            first_stage_separated = True
+            print("First stage separated")
+
+    elif not second_stage_separated:
+        if second_stage_fuel() < 0.1:
+            vessel.control.activate_next_stage()
+            vessel.control.activate_next_stage()
+            second_stage_separated = True
+            print("Second stage separated")
 
     # Decrease throttle when approaching target apoapsis
     if apoapsis() > target_altitude * 0.9:
@@ -101,10 +101,11 @@ m1 = m0 / math.exp(delta_v / Isp)
 flow_rate = F / Isp
 burn_time = (m0 - m1) / flow_rate
 
-# Orientate ship
+# Orientate ship along the burn
 print("Orientating ship for circularization burn")
-vessel.auto_pilot.reference_frame = node.reference_frame
-vessel.auto_pilot.target_direction = (0, 1, 0)
+frame = vessel.orbit.body.non_rotating_reference_frame
+vessel.auto_pilot.reference_frame = frame
+vessel.auto_pilot.target_direction = node.remaining_burn_vector(frame)
 vessel.auto_pilot.wait()
 
 # Wait until burn
@@ -121,15 +122,20 @@ event = conn.add_event(
 with event.condition:
     event.wait()
 print("Executing burn")
-vessel.control.throttle = 1.0
-time.sleep(burn_time - 0.1)
-print("Fine tuning")
-vessel.control.throttle = 0.05
-event = conn.add_event(
-    lambda: node.remaining_burn_vector(node.reference_frame)[1] <= 0
-)
-with event.condition:
-    event.wait()
+remaining_burn = conn.add_stream(node.remaining_burn_vector, frame)
+remaining_delta_v = conn.add_stream(getattr, node, "remaining_delta_v")
+lowest_delta_v = remaining_delta_v()
+while remaining_delta_v() > 0.1:
+    # Steer along the remaining burn, which turns as the vessel moves
+    # around its orbit
+    vessel.auto_pilot.target_direction = remaining_burn()
+    # Full throttle, then throttle down for the last few m/s
+    vessel.control.throttle = 1.0 if remaining_delta_v() > 5 else 0.05
+    # Stop if the burn overshoots, as the remaining delta-v then grows
+    if remaining_delta_v() > lowest_delta_v + 0.1:
+        break
+    lowest_delta_v = min(lowest_delta_v, remaining_delta_v())
+    time.sleep(0.05)
 vessel.control.throttle = 0.0
 node.remove()
 

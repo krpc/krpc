@@ -1,13 +1,6 @@
-#include <math.h>
-#ifdef _WIN32
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#define sleep(seconds) Sleep((seconds) * 1000)
-#else
-#include <unistd.h>
-#endif
 #include <krpc_cnano.h>
 #include <krpc_cnano/services/space_center.h>
+#include <math.h>
 
 int main() {
   krpc_connection_t conn;
@@ -25,10 +18,15 @@ int main() {
   krpc_SpaceCenter_Vessel_Flight(conn, &flight, vessel, KRPC_NULL);
   krpc_SpaceCenter_Orbit_t orbit;
   krpc_SpaceCenter_Vessel_Orbit(conn, &orbit, vessel);
-  krpc_SpaceCenter_Stage_t stage_2;
-  krpc_SpaceCenter_Vessel_DecoupleStageAt(conn, &stage_2, vessel, 2);
-  krpc_SpaceCenter_Resources_t stage_2_resources;
-  krpc_SpaceCenter_Stage_Resources(conn, &stage_2_resources, stage_2,
+  krpc_SpaceCenter_Stage_t stage_5;
+  krpc_SpaceCenter_Vessel_DecoupleStageAt(conn, &stage_5, vessel, 5);
+  krpc_SpaceCenter_Resources_t stage_5_resources;
+  krpc_SpaceCenter_Stage_Resources(conn, &stage_5_resources, stage_5,
+                                   false);
+  krpc_SpaceCenter_Stage_t stage_3;
+  krpc_SpaceCenter_Vessel_DecoupleStageAt(conn, &stage_3, vessel, 3);
+  krpc_SpaceCenter_Resources_t stage_3_resources;
+  krpc_SpaceCenter_Stage_Resources(conn, &stage_3_resources, stage_3,
                                    false);
 
   krpc_SpaceCenter_Control_t control;
@@ -40,21 +38,13 @@ int main() {
   krpc_SpaceCenter_Control_set_RCS(conn, control, false);
   krpc_SpaceCenter_Control_set_Throttle(conn, control, 1);
 
-  printf("3...\n");
-  sleep(1);
-  printf("2...\n");
-  sleep(1);
-  printf("1...\n");
-  sleep(1);
-  printf("Launch!\n");
-
-  krpc_SpaceCenter_Control_ActivateNextStage(conn, NULL, control);
   krpc_SpaceCenter_AutoPilot_set_Engaged(conn, auto_pilot, true);
   krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading(conn, auto_pilot, 90,
                                                    90);
+  krpc_SpaceCenter_Control_ActivateNextStage(conn, NULL, control);
 
-  bool srbs_separated = false;
-  double turn_angle = 0;
+  bool first_stage_separated = false;
+  bool second_stage_separated = false;
   while (true) {
     double altitude;
     krpc_SpaceCenter_Flight_MeanAltitude(conn, &altitude, flight);
@@ -64,22 +54,30 @@ int main() {
     if (altitude > turn_start_altitude && altitude < turn_end_altitude) {
       double frac = (altitude - turn_start_altitude) /
                     (turn_end_altitude - turn_start_altitude);
-      double new_turn_angle = frac * 90.0;
-      if (fabs(new_turn_angle - turn_angle) > 0.5) {
-        turn_angle = new_turn_angle;
-        krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading(
-            conn, auto_pilot, 90 - turn_angle, 90);
-      }
+      double turn_angle = frac * 90.0;
+      krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading(conn, auto_pilot,
+                                                       90 - turn_angle, 90);
     }
 
-    if (!srbs_separated) {
-      float srb_fuel;
-      krpc_SpaceCenter_Resources_Amount(conn, &srb_fuel, stage_2_resources,
+    if (!first_stage_separated) {
+      float fuel;
+      krpc_SpaceCenter_Resources_Amount(conn, &fuel, stage_5_resources,
                                         "SolidFuel");
-      if (srb_fuel < 0.1) {
+      if (fuel < 0.1) {
         krpc_SpaceCenter_Control_ActivateNextStage(conn, NULL, control);
-        srbs_separated = true;
-        printf("SRBs separated\n");
+        krpc_SpaceCenter_Control_ActivateNextStage(conn, NULL, control);
+        first_stage_separated = true;
+        printf("First stage separated\n");
+      }
+    } else if (!second_stage_separated) {
+      float fuel;
+      krpc_SpaceCenter_Resources_Amount(conn, &fuel, stage_3_resources,
+                                        "LiquidFuel");
+      if (fuel < 0.1) {
+        krpc_SpaceCenter_Control_ActivateNextStage(conn, NULL, control);
+        krpc_SpaceCenter_Control_ActivateNextStage(conn, NULL, control);
+        second_stage_separated = true;
+        printf("Second stage separated\n");
       }
     }
 
@@ -138,12 +136,15 @@ int main() {
   double burn_time = (m0 - m1) / flow_rate;
 
   printf("Orientating ship for circularization burn\n");
-  krpc_SpaceCenter_ReferenceFrame_t node_ref;
-  krpc_SpaceCenter_Node_ReferenceFrame(conn, &node_ref, node);
-  krpc_SpaceCenter_AutoPilot_set_ReferenceFrame(conn, auto_pilot, node_ref);
-  krpc_tuple_double_double_double_t burn_direction = {0, 1, 0};
+  krpc_SpaceCenter_ReferenceFrame_t frame;
+  krpc_SpaceCenter_CelestialBody_NonRotatingReferenceFrame(conn, &frame,
+                                                           body);
+  krpc_SpaceCenter_AutoPilot_set_ReferenceFrame(conn, auto_pilot, frame);
+  krpc_tuple_double_double_double_t remaining_burn;
+  krpc_SpaceCenter_Node_RemainingBurnVector(conn, &remaining_burn, node,
+                                            frame);
   krpc_SpaceCenter_AutoPilot_set_TargetDirection(conn, auto_pilot,
-                                                 &burn_direction);
+                                                 &remaining_burn);
   krpc_SpaceCenter_AutoPilot_Wait(conn, auto_pilot, -1);
 
   printf("Waiting until circularization burn\n");
@@ -155,20 +156,28 @@ int main() {
 
   printf("Ready to execute burn\n");
   while (true) {
-    krpc_SpaceCenter_UT(conn, &ut);
     krpc_SpaceCenter_Orbit_TimeToApoapsis(conn, &time_to_apoapsis, orbit);
     if (time_to_apoapsis - (burn_time / 2.0) <= 0) break;
   }
   printf("Executing burn\n");
-  krpc_SpaceCenter_Control_set_Throttle(conn, control, 1);
-  sleep((unsigned int)(burn_time - 0.1));
-  printf("Fine tuning\n");
-  krpc_SpaceCenter_Control_set_Throttle(conn, control, 0.05);
-  while (true) {
-    krpc_tuple_double_double_double_t remaining_burn;
+  double remaining_delta_v;
+  krpc_SpaceCenter_Node_RemainingDeltaV(conn, &remaining_delta_v, node);
+  double lowest_delta_v = remaining_delta_v;
+  while (remaining_delta_v > 0.1) {
+    // Steer along the remaining burn, which turns as the vessel moves
+    // around its orbit
     krpc_SpaceCenter_Node_RemainingBurnVector(conn, &remaining_burn, node,
-                                              node_ref);
-    if (remaining_burn.e1 <= 0) break;
+                                              frame);
+    krpc_SpaceCenter_AutoPilot_set_TargetDirection(conn, auto_pilot,
+                                                   &remaining_burn);
+    // Full throttle, then throttle down for the last few m/s
+    krpc_SpaceCenter_Control_set_Throttle(conn, control,
+                                          remaining_delta_v > 5 ? 1 : 0.05);
+    // Stop if the burn overshoots, as the remaining delta-v then grows
+    if (remaining_delta_v > lowest_delta_v + 0.1) break;
+    if (remaining_delta_v < lowest_delta_v)
+      lowest_delta_v = remaining_delta_v;
+    krpc_SpaceCenter_Node_RemainingDeltaV(conn, &remaining_delta_v, node);
   }
   krpc_SpaceCenter_Control_set_Throttle(conn, control, 0);
   krpc_SpaceCenter_Node_Remove(conn, node);

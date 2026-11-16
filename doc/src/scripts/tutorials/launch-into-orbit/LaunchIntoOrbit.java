@@ -33,54 +33,52 @@ public class LaunchIntoOrbit {
             connection.addStream(flight, "getMeanAltitude");
         Stream<Double> apoapsis =
             connection.addStream(vessel.getOrbit(), "getApoapsisAltitude");
-        Resources stage2Resources =
-            vessel.decoupleStageAt(2).resources(false);
-        Stream<Float> srbFuel =
-            connection.addStream(stage2Resources, "amount", "SolidFuel");
+        Resources stage5Resources =
+            vessel.decoupleStageAt(5).resources(false);
+        Resources stage3Resources =
+            vessel.decoupleStageAt(3).resources(false);
+        Stream<Float> firstStageFuel =
+            connection.addStream(stage5Resources, "amount", "SolidFuel");
+        Stream<Float> secondStageFuel =
+            connection.addStream(stage3Resources, "amount", "LiquidFuel");
 
         // Pre-launch setup
         vessel.getControl().setSAS(false);
         vessel.getControl().setRCS(false);
         vessel.getControl().setThrottle(1);
 
-        // Countdown...
-        System.out.println("3...");
-        Thread.sleep(1000);
-        System.out.println("2...");
-        Thread.sleep(1000);
-        System.out.println("1...");
-        Thread.sleep(1000);
-        System.out.println("Launch!");
-
         // Activate the first stage
-        vessel.getControl().activateNextStage();
         vessel.getAutoPilot().setEngaged(true);
         vessel.getAutoPilot().targetPitchAndHeading(90, 90);
+        vessel.getControl().activateNextStage();
 
         // Main ascent loop
-        boolean srbsSeparated = false;
-        double turnAngle = 0;
+        boolean firstStageSeparated = false;
+        boolean secondStageSeparated = false;
         while (true) {
-
             // Gravity turn
             if (altitude.get() > turnStartAltitude &&
                 altitude.get() < turnEndAltitude) {
                 double frac = (altitude.get() - turnStartAltitude)
                               / (turnEndAltitude - turnStartAltitude);
-                double newTurnAngle = frac * 90.0;
-                if (Math.abs(newTurnAngle - turnAngle) > 0.5) {
-                    turnAngle = newTurnAngle;
-                    vessel.getAutoPilot().targetPitchAndHeading(
-                        (float)(90 - turnAngle), 90);
-                }
+                double turnAngle = frac * 90.0;
+                vessel.getAutoPilot().targetPitchAndHeading(
+                    (float)(90 - turnAngle), 90);
             }
 
-            // Separate SRBs when finished
-            if (!srbsSeparated) {
-              if (srbFuel.get() < 0.1) {
+            if (!firstStageSeparated) {
+                if (firstStageFuel.get() < 0.1) {
                     vessel.getControl().activateNextStage();
-                    srbsSeparated = true;
-                    System.out.println("SRBs separated");
+                    vessel.getControl().activateNextStage();
+                    firstStageSeparated = true;
+                    System.out.println("First stage separated");
+                }
+            } else if (!secondStageSeparated) {
+                if (secondStageFuel.get() < 0.1) {
+                    vessel.getControl().activateNextStage();
+                    vessel.getControl().activateNextStage();
+                    secondStageSeparated = true;
+                    System.out.println("Second stage separated");
                 }
             }
 
@@ -141,11 +139,13 @@ public class LaunchIntoOrbit {
         double flowRate = force / isp;
         double burnTime = (m0 - m1) / flowRate;
 
-        // Orientate ship
+        // Orientate ship along the burn
         System.out.println("Orientating ship for circularization burn");
-        vessel.getAutoPilot().setReferenceFrame(node.getReferenceFrame());
+        ReferenceFrame frame =
+            vessel.getOrbit().getBody().getNonRotatingReferenceFrame();
+        vessel.getAutoPilot().setReferenceFrame(frame);
         vessel.getAutoPilot().setTargetDirection(
-          new Triplet<Double,Double,Double>(0.0, 1.0, 0.0));
+          node.remainingBurnVector(frame));
         vessel.getAutoPilot().wait_(-1);
 
         // Wait until burn
@@ -168,19 +168,25 @@ public class LaunchIntoOrbit {
           }
         }
         System.out.println("Executing burn");
-        vessel.getControl().setThrottle(1);
-        Thread.sleep((int)((burnTime - 0.1) * 1000));
-        System.out.println("Fine tuning");
-        vessel.getControl().setThrottle(0.05f);
-        {
-          Expression remainingBurn = e.call(connection.getCall(
-            node, "remainingBurnVector", node.getReferenceFrame()));
-          Expression expr = e.lessThanOrEqual(
-            e.get(remainingBurn, e.constantInt(1)), e.constantDouble(0));
-          Event event = connection.addEvent(expr);
-          synchronized (event.getCondition()) {
-            event.waitFor();
-          }
+        Stream<Triplet<Double, Double, Double>> remainingBurn =
+            connection.addStream(node, "remainingBurnVector", frame);
+        Stream<Double> remainingDeltaV =
+            connection.addStream(node, "getRemainingDeltaV");
+        double lowestDeltaV = remainingDeltaV.get();
+        while (remainingDeltaV.get() > 0.1) {
+            // Steer along the remaining burn, which turns as the vessel
+            // moves around its orbit
+            vessel.getAutoPilot().setTargetDirection(remainingBurn.get());
+            // Full throttle, then throttle down for the last few m/s
+            vessel.getControl().setThrottle(
+                remainingDeltaV.get() > 5 ? 1.0f : 0.05f);
+            // Stop if the burn overshoots, as the remaining delta-v then
+            // grows
+            if (remainingDeltaV.get() > lowestDeltaV + 0.1) {
+                break;
+            }
+            lowestDeltaV = Math.min(lowestDeltaV, remainingDeltaV.get());
+            Thread.sleep(50);
         }
         vessel.getControl().setThrottle(0);
         node.remove();
