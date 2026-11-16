@@ -120,8 +120,9 @@ The tests leave a game they did not start unchanged, so it must already have the
 terminal. Pass ``-- --help`` to list its other options, which load a save, switch vessel or launch
 a craft.
 
-The third-party mods the tests install are pinned in ``service/registry.bzl``. The API pages
-list the pinned versions as the versions kRPC is tested with.
+The third-party mods the tests install are pinned in ``service/registry.bzl``. The
+:doc:`mods guide </user-guide/mods>` lists the pinned versions as the versions kRPC is tested
+with.
 To test against a local build of one, pass ``--mod NAME PATH`` to either command.
 
 .. note::

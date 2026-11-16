@@ -71,12 +71,12 @@ def mod_services_rst(mods, services):
       services: SERVICES from the registry.
 
     Returns:
-      The rst, for a page in the same directory as the services' pages to include. A mod with
-      no tested version is left out.
+      The rst, for a page to include. It links each service's Python API page. A mod with no
+      tested version is left out.
     """
     by_name = {m.name: m for m in mods}
     rows = [
-        [":doc:`%s <%s>`" % (by_name[n].title, s.doc), _versions(by_name[n])]
+        [":doc:`%s </python/api/%s>`" % (by_name[n].title, s.doc), _versions(by_name[n])]
         for s in services
         for n in s.mods
         if by_name[n].versions
