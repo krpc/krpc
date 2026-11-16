@@ -1300,6 +1300,11 @@ SpaceCenter.Engine.Gimballed
 SpaceCenter.Engine.GimbalRange
 SpaceCenter.Engine.GimbalLocked
 SpaceCenter.Engine.GimbalLimit
+SpaceCenter.Engine.GimbalResponseSpeedEnabled
+SpaceCenter.Engine.GimbalResponseSpeed
+SpaceCenter.Engine.GimbalPitchEnabled
+SpaceCenter.Engine.GimbalYawEnabled
+SpaceCenter.Engine.GimbalRollEnabled
 SpaceCenter.Engine.GimbalOverride
 SpaceCenter.Engine.GimbalActuation
 SpaceCenter.Engine.AvailableTorque

@@ -287,6 +287,33 @@ class TestPartsRCS(RCSTestBase, TestCase):
                 setattr(self.control, name, 0)
             rcs.input_override = False
 
+    def test_override_respects_the_axis_toggles(self):
+        rcs = self.get_rcs("RCSBlock.v2")
+        demands = (
+            ("pitch", (1, 0, 0), (0, 0, 0)),
+            ("roll", (0, 1, 0), (0, 0, 0)),
+            ("yaw", (0, 0, 1), (0, 0, 0)),
+            ("right", (0, 0, 0), (1, 0, 0)),
+            ("up", (0, 0, 0), (0, 1, 0)),
+            ("forward", (0, 0, 0), (0, 0, 1)),
+        )
+        try:
+            for name, rotation, translation in demands:
+                self.override(rcs, rotation=rotation, translation=translation)
+                self.assertGreater(norm(rcs.force) + norm(rcs.torque), 0)
+                setattr(rcs, f"{name}_enabled", False)
+                self.wait(0.5)
+                self.assertAlmostEqual((0, 0, 0), rcs.force, delta=1)
+                self.assertAlmostEqual((0, 0, 0), rcs.torque, delta=1)
+                wrench = rcs.override_wrench(rotation, translation)
+                self.assertAlmostEqual((0, 0, 0), wrench.force, delta=1)
+                self.assertAlmostEqual((0, 0, 0), wrench.torque, delta=1)
+                setattr(rcs, f"{name}_enabled", True)
+        finally:
+            for name, _, _ in demands:
+                setattr(rcs, f"{name}_enabled", True)
+            rcs.input_override = False
+
     def test_force_and_torque(self):
         rcs = self.get_rcs("RCSBlock.v2")
         self.control.rcs = True

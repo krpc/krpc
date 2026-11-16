@@ -616,6 +616,87 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// Whether the gimbal moves toward its commanded deflection at
+        /// <see cref="GimbalResponseSpeed"/>. When <c>false</c>, the gimbal reaches its
+        /// commanded deflection in one physics tick.
+        /// Throws an exception if the engine is not gimballed.
+        /// </summary>
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
+        public bool GimbalResponseSpeedEnabled {
+            get {
+                CheckGimballed ();
+                return InternalGimbal.useGimbalResponseSpeed;
+            }
+        }
+
+        /// <summary>
+        /// The response speed of the gimbal, in <unit>s^{-1}</unit>.
+        /// Throws an exception if the engine is not gimballed.
+        /// </summary>
+        /// <remarks>
+        /// Each physics tick of length <math>\Delta t</math>, the gimbal moves a fraction
+        /// <math>v \Delta t</math> of the way from its deflection to the commanded deflection,
+        /// where <math>v</math> is the response speed. The fraction is at most 1, so at high
+        /// physics warp the gimbal can reach its commanded deflection in one tick. This lag
+        /// only applies when <see cref="GimbalResponseSpeedEnabled"/> is <c>true</c>.
+        /// </remarks>
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
+        public float GimbalResponseSpeed {
+            get {
+                CheckGimballed ();
+                return InternalGimbal.gimbalResponseSpeed;
+            }
+        }
+
+        /// <summary>
+        /// Whether the gimbal responds to pitch control input.
+        /// Throws an exception if the engine is not gimballed.
+        /// </summary>
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
+        public bool GimbalPitchEnabled {
+            get {
+                CheckGimballed ();
+                return InternalGimbal.enablePitch;
+            }
+            set {
+                CheckGimballed ();
+                InternalGimbal.enablePitch = value;
+            }
+        }
+
+        /// <summary>
+        /// Whether the gimbal responds to yaw control input.
+        /// Throws an exception if the engine is not gimballed.
+        /// </summary>
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
+        public bool GimbalYawEnabled {
+            get {
+                CheckGimballed ();
+                return InternalGimbal.enableYaw;
+            }
+            set {
+                CheckGimballed ();
+                InternalGimbal.enableYaw = value;
+            }
+        }
+
+        /// <summary>
+        /// Whether the gimbal responds to roll control input.
+        /// Throws an exception if the engine is not gimballed.
+        /// </summary>
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
+        public bool GimbalRollEnabled {
+            get {
+                CheckGimballed ();
+                return InternalGimbal.enableRoll;
+            }
+            set {
+                CheckGimballed ();
+                InternalGimbal.enableRoll = value;
+            }
+        }
+
+        /// <summary>
         /// Whether the gimbal is being controlled directly, bypassing the vessel's normal
         /// flight controls. When enabled, the gimbal deflection is set by
         /// <see cref="GimbalActuation"/> instead of the normal control inputs.
@@ -641,6 +722,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// and <see cref="GimbalLimit"/>. When the gimbal is not being overridden,
         /// returns the current actuation.
         /// </summary>
+        /// <remarks>
+        /// The gimbal ignores the component for an axis it is disabled for, such as pitch when
+        /// <see cref="GimbalPitchEnabled"/> is <c>false</c>.
+        /// </remarks>
         [KRPCProperty]
         public Tuple3 GimbalActuation {
             get {
@@ -659,6 +744,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// correspond to the coordinate axes of the <see cref="Vessel.ReferenceFrame"/>.
         /// Returns zero if the engine is inactive, or not gimballed.
         /// </summary>
+        /// <remarks>
+        /// The torque is zero about an axis the gimbal is disabled for, such as pitch when
+        /// <see cref="GimbalPitchEnabled"/> is <c>false</c>.
+        /// </remarks>
         [KRPCProperty]
         public AxisRange AvailableTorque {
             get { return new AxisRange (AvailableTorqueVectors); }
@@ -671,9 +760,13 @@ namespace KRPC.SpaceCenter.Services.Parts
                 // GetPotentialTorque already applies the gimbal limiter (via
                 // ModuleGimbal.GimbalRotation, which scales the deflection by
                 // gimbalLimiter * 0.01), so no further scaling is needed here.
-                var torque = InternalGimbal.GetPotentialTorque ();
+                var gimbal = InternalGimbal;
+                var torque = gimbal.GetPotentialTorque ();
+                // GetPotentialTorque ignores the pitch and yaw toggles
+                var axes = new Vector3d (
+                    gimbal.enablePitch ? 1 : 0, gimbal.enableRoll ? 1 : 0, gimbal.enableYaw ? 1 : 0);
                 // Note: GetPotentialTorque returns negative torques with incorrect sign
-                return new TupleV3 (torque.Item1, -torque.Item2);
+                return new TupleV3 (Vector3d.Scale (torque.Item1, axes), -Vector3d.Scale (torque.Item2, axes));
             }
         }
 

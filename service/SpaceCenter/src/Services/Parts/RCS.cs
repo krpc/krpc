@@ -128,7 +128,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Whether the RCS thruster will fire when pitch control input is given.
+        /// Whether the RCS thruster will fire when forward control input is given.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool ForwardEnabled {
@@ -137,7 +137,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Whether the RCS thruster will fire when yaw control input is given.
+        /// Whether the RCS thruster will fire when up control input is given.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool UpEnabled {
@@ -146,7 +146,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Whether the RCS thruster will fire when roll control input is given.
+        /// Whether the RCS thruster will fire when right control input is given.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool RightEnabled {
@@ -172,6 +172,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The rotation demand applied when <see cref="InputOverride"/> is enabled, in the pitch,
         /// roll and yaw axes. Each component is a normalized control input between -1 and 1.
         /// </summary>
+        /// <remarks>
+        /// The block ignores the component for an axis it is disabled for, such as pitch when
+        /// <see cref="PitchEnabled"/> is <c>false</c>.
+        /// </remarks>
         [KRPCProperty]
         public Tuple3 RotationOverride {
             get { return ActuatorControlAddon.GetRCSRotation (InternalRCS).ToTuple (); }
@@ -183,6 +187,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// right, up and forward axes. Each component is a normalized control input between -1
         /// and 1.
         /// </summary>
+        /// <remarks>
+        /// The block ignores the component for an axis it is disabled for, such as right when
+        /// <see cref="RightEnabled"/> is <c>false</c>.
+        /// </remarks>
         [KRPCProperty]
         public Tuple3 TranslationOverride {
             get { return ActuatorControlAddon.GetRCSTranslation (InternalRCS).ToTuple (); }
@@ -321,8 +329,8 @@ namespace KRPC.SpaceCenter.Services.Parts
             // clamp them
             Vector3 rotationInput = rotationDemand.ToVector ();
             Vector3 translationInput = translationDemand.ToVector ();
-            Vector3d rotation = ActuatorControlAddon.RCSRotationInput (rotationInput.Clamp (-1f, 1f));
-            Vector3d translation = ActuatorControlAddon.RCSTranslationInput (translationInput.Clamp (-1f, 1f));
+            Vector3d rotation = ActuatorControlAddon.RCSRotationInput (InternalRCS, rotationInput.Clamp (-1f, 1f));
+            Vector3d translation = ActuatorControlAddon.RCSTranslationInput (InternalRCS, translationInput.Clamp (-1f, 1f));
             var frame = Part.Vessel.ReferenceFrame;
             var thrust = AvailableThrust;
             var force = Vector3d.zero;
