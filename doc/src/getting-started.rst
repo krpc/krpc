@@ -51,7 +51,8 @@ Stop a server, then click its "Edit" button to change its settings. Click "Save"
 3. **Port**: The TCP port, 50000 by default for TCP/IP and 50001 for WebSockets. Change it only
    if another program uses that port.
 
-"Add server" adds another server, for example one over a local socket.
+"Add server" adds another server, for example one over a local socket. Its name is numbered when
+another server has the same name.
 
 "Show advanced settings" reveals these settings:
 

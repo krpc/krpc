@@ -421,7 +421,7 @@ namespace KRPC.UI
         void DrawAddServer ()
         {
             if (GUILayout.Button (addServerText, buttonStyle)) {
-                var server = new Configuration.Server ();
+                var server = config.Configuration.NewServer (Protocol.ProtocolBuffersOverTCP);
                 config.Configuration.Servers.Add (server);
                 config.Save ();
                 core.Add (server.Create ());

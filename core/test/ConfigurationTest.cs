@@ -37,6 +37,19 @@ namespace KRPC.Test
         }
 
         [Test]
+        public void NewServer ()
+        {
+            var config = new Configuration ();
+            foreach (var server in Configuration.DefaultServers ())
+                config.Servers.Add (server);
+            Assert.AreEqual ("TCP/IP Server 2", config.NewServer (Protocol.ProtocolBuffersOverTCP).Name);
+            config.Servers.Add (config.NewServer (Protocol.ProtocolBuffersOverTCP));
+            Assert.AreEqual ("TCP/IP Server 3", config.NewServer (Protocol.ProtocolBuffersOverTCP).Name);
+            config.Servers.Clear ();
+            Assert.AreEqual ("WebSockets Server", config.NewServer (Protocol.ProtocolBuffersOverWebsockets).Name);
+        }
+
+        [Test]
         public void ServerWithoutPortSetting ()
         {
             // A server whose settings have no port listens on its protocol's default port
