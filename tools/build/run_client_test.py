@@ -100,7 +100,7 @@ def run(config):
         else:
             name = "websockets_port" if websockets else "tcpip_port"
             port = setting(reader.output, name)
-            test_environment["KRPC_TEST_TCPIP_PORT"] = port
+            test_environment["KRPC_TEST_" + name.upper()] = port
             print("Server started, port = %s" % port)
 
         # Dump the server's output if the harness is killed, which is how the

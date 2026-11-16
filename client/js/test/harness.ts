@@ -13,7 +13,7 @@ export type Fn = (captures: any, ...parameters: any[]) => unknown;
 export function connectToServer(): Promise<DynamicConnection> {
   return connect({
     name: "js_client_test",
-    port: Number(process.env.KRPC_TEST_TCPIP_PORT ?? "50000"),
+    port: Number(process.env.KRPC_TEST_WEBSOCKETS_PORT ?? "50001"),
   }) as Promise<DynamicConnection>;
 }
 

@@ -280,8 +280,8 @@ def test_tcpip(client, server):
 
 @untested("The test server listens on a port of its own")
 def test_default_address():
-    """Over TCP/IP and websockets, the address defaults to ``127.0.0.1`` and the port to
-    ``50000``."""
+    """Over TCP/IP and websockets, the address defaults to ``127.0.0.1``. The port defaults to
+    ``50000`` over TCP/IP and ``50001`` over websockets."""
 
 
 @pytest.mark.parametrize("kind", ["port", "socket"])
