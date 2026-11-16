@@ -6,7 +6,8 @@ These guides describe how kRPC and the game behave, independent of the client la
 The Game
 --------
 
-How a vessel is built, how the game is organized into scenes and saves, and how time passes.
+How a vessel is built, how the game is organized into scenes and saves, how time passes, and
+which mods kRPC supports.
 
 .. toctree::
    :maxdepth: 1
@@ -14,6 +15,7 @@ How a vessel is built, how the game is organized into scenes and saves, and how 
    user-guide/parts
    user-guide/game-scenes-and-saves
    user-guide/time-warp
+   user-guide/mods
 
 Positions and Directions
 ------------------------
