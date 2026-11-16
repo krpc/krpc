@@ -6,8 +6,10 @@ service it can call. Clients and tools from the community are posted on the `for
 <https://forum.kerbalspaceprogram.com/topic/130742-1125-krpc-control-the-game-using-c-c-java-lua-python-ruby-haskell-c-arduino-v060/>`_
 and the `Discord server <https://discord.gg/bXuaTrj>`_.
 
+.. include:: client-cards.inc
+
 .. toctree::
-   :maxdepth: 1
+   :hidden:
 
    python
    csharp
