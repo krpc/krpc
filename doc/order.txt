@@ -424,6 +424,7 @@ SpaceCenter.Vessel.Recoverable
 SpaceCenter.Vessel.Recover
 SpaceCenter.Vessel.Terminate
 SpaceCenter.Vessel.MET
+SpaceCenter.Vessel.LaunchSite
 SpaceCenter.Vessel.Biome
 SpaceCenter.Vessel.Flight
 SpaceCenter.Vessel.Orbit
@@ -529,6 +530,9 @@ SpaceCenter.LaunchSite
 SpaceCenter.LaunchSite.Name
 SpaceCenter.LaunchSite.Body
 SpaceCenter.LaunchSite.EditorFacility
+SpaceCenter.LaunchSite.Latitude
+SpaceCenter.LaunchSite.Longitude
+SpaceCenter.LaunchSite.Altitude
 SpaceCenter.EditorFacility
 SpaceCenter.EditorFacility.VAB
 SpaceCenter.EditorFacility.SPH

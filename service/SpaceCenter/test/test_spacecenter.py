@@ -59,6 +59,15 @@ class TestSpaceCenter(TestCase):
         for site in sites.values():
             self.assertIsNotNone(site.body)
         self.assertEqual(self.kerbin, sites["LaunchPad"].body)
+        # The spawn points of the launch pad and runway, at the space center
+        pad = sites["LaunchPad"]
+        self.assertAlmostEqual(-0.0972, pad.latitude, delta=0.001)
+        self.assertAlmostEqual(-74.5577, pad.longitude, delta=0.001)
+        self.assertAlmostEqual(70, pad.altitude, delta=5)
+        runway = sites["Runway"]
+        self.assertAlmostEqual(-0.0486, runway.latitude, delta=0.001)
+        self.assertAlmostEqual(-74.7247, runway.longitude, delta=0.001)
+        self.assertAlmostEqual(70, runway.altitude, delta=5)
 
     def test_active_vessel(self):
         active = self.sc.active_vessel
