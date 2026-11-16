@@ -27,6 +27,7 @@ whole program in your chosen language:
 :download:`C#</scripts/tutorials/suborbital-flight/SubOrbitalFlight.cs>`,
 :download:`C++</scripts/tutorials/suborbital-flight/SubOrbitalFlight.cpp>`,
 :download:`Java</scripts/tutorials/suborbital-flight/SubOrbitalFlight.java>`,
+:download:`JavaScript</scripts/tutorials/suborbital-flight/SubOrbitalFlight.js>`,
 :download:`Lua</scripts/tutorials/suborbital-flight/SubOrbitalFlight.lua>`,
 :download:`Python</scripts/tutorials/suborbital-flight/SubOrbitalFlight.py>`
 
@@ -82,6 +83,13 @@ server window in the game:
          :language: lua
          :end-at: local conn = krpc.connect('Sub-orbital flight')
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.js
+         :language: javascript
+         :start-at: const conn = await connect({ name: "Sub-orbital flight" });
+         :end-at: const conn = await connect({ name: "Sub-orbital flight" });
+
 Next we get an object representing the active vessel. We send instructions to the rocket through
 this object:
 
@@ -128,6 +136,13 @@ this object:
          :language: lua
          :start-at: local vessel = conn.space_center.active_vessel
          :end-at: local vessel = conn.space_center.active_vessel
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.js
+         :language: javascript
+         :start-at: const vessel = await conn.spaceCenter.getActiveVessel();
+         :end-at: const control = await vessel.getControl();
 
 Then we prepare the rocket for launch. This sets the throttle to maximum, and has the autopilot
 hold a pitch and heading of 90°, pointing straight up. It then waits a second for the settings to
@@ -176,6 +191,13 @@ take effect:
          :language: lua
          :start-at: vessel.auto_pilot:target_pitch_and_heading(90, 90)
          :end-at: socket.sleep(1)
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.js
+         :language: javascript
+         :start-at: await autoPilot.targetPitchAndHeading(90, 90);
+         :end-at: await new Promise((resolve) => setTimeout(resolve, 1000));
 
 Part Two: Lift-off!
 -------------------
@@ -226,6 +248,13 @@ We launch by activating the first stage, which is the same as pressing the space
          :start-at: print('Launch!')
          :end-at: vessel.control:activate_next_stage()
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.js
+         :language: javascript
+         :start-at: console.log("Launch!");
+         :end-at: await control.activateNextStage();
+
 The solid fuel boosters soon run out, and the rocket has to jettison them. We wait for an event
 that fires when less than 0.1 units of solid fuel are left, then activate the next stage:
 
@@ -273,14 +302,22 @@ that fires when less than 0.1 units of solid fuel are left, then activate the ne
          :start-at: while vessel.resources:amount('SolidFuel') > 0.1 do
          :end-at: vessel.control:activate_next_stage()
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.js
+         :language: javascript
+         :start-at: const fuelEvent = await conn.addEvent(
+         :end-at: await control.activateNextStage();
+
 ``vessel.resources`` returns a :class:`Resources` object, which gives the amounts of the
 resources in the rocket. The event is a :ref:`server side function <server-side-functions>`
 that compares the amount of solid fuel with 0.1. The server checks it every physics tick, and
 the script sleeps until it fires.
 
-The Python and C# clients compile the lambda into the function. The C++ and Java clients build it
-from expression objects: an embedded call to ``amount``, a constant and a comparison. The C and
-Lua clients do not support events, so their scripts poll the amount in a loop.
+The Python, C# and JavaScript clients compile the lambda into the function. The C++ and Java
+clients build it from expression objects: an embedded call to ``amount``, a constant and a
+comparison. The C and Lua clients do not support events, so their scripts poll the amount in a
+loop.
 
 Part Three: Reaching Apoapsis
 -----------------------------
@@ -332,6 +369,13 @@ at an altitude of 10 km:
          :start-at: while vessel:flight().mean_altitude < 10000 do
          :end-before: print('Gravity turn')
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.js
+         :language: javascript
+         :start-at: const flight = await vessel.flight();
+         :end-before: console.log("Gravity turn");
+
 ``vessel.flight()`` returns a :class:`Flight` object, which gives information about the rocket in
 flight, such as its altitude, direction and velocity.
 
@@ -382,6 +426,13 @@ takes the new target:
          :start-at: print('Gravity turn')
          :end-at: vessel.auto_pilot:target_pitch_and_heading(60, 90)
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.js
+         :language: javascript
+         :start-at: console.log("Gravity turn");
+         :end-at: await autoPilot.targetPitchAndHeading(60, 90);
+
 Next we wait for an event that fires when the apoapsis reaches 100 km. Then we cut the throttle,
 jettison the launch stage and turn off the autopilot:
 
@@ -428,6 +479,13 @@ jettison the launch stage and turn off the autopilot:
          :language: lua
          :start-at: while vessel.orbit.apoapsis_altitude < 100000 do
          :end-at: vessel.auto_pilot.engaged = false
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.js
+         :language: javascript
+         :start-at: const apoapsisEvent = await conn.addEvent(
+         :end-at: await autoPilot.setEngaged(false);
 
 ``vessel.orbit`` returns an :class:`Orbit` object, which describes the orbit of the rocket.
 
@@ -482,6 +540,13 @@ skip ahead to just before this happens, and the script carries on working:
          :start-at: while vessel:flight().surface_altitude > 1000 do
          :end-at: vessel.control:activate_next_stage()
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.js
+         :language: javascript
+         :start-at: const surfaceEvent = await conn.addEvent(
+         :end-at: await control.activateNextStage();
+
 The parachutes are now deployed. This prints the altitude of the capsule once a second, until its
 vertical speed reaches zero when it lands:
 
@@ -526,6 +591,13 @@ vertical speed reaches zero when it lands:
       .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.lua
          :language: lua
          :start-at: local body_frame = vessel.orbit.body.reference_frame
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.js
+         :language: javascript
+         :start-at: const orbit = await vessel.getOrbit();
+         :end-before: await conn.close();
 
 This calls ``vessel.flight()`` again, now with a :class:`ReferenceFrame`. We want the vertical
 speed relative to the surface of Kerbin, so the flight object has to give values in a frame fixed

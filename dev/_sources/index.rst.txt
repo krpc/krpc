@@ -41,6 +41,11 @@ an altitude of 10 km:
       .. literalinclude:: /scripts/index/Launch.lua
          :language: lua
 
+   .. tab:: JavaScript
+
+      .. literalinclude:: /scripts/index/Launch.js
+         :language: javascript
+
 .. grid:: 1 2 3 3
    :gutter: 3
 

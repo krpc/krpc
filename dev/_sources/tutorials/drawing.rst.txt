@@ -38,6 +38,11 @@ The script updates the label on the arrow with the vessel's orbital speed.
       .. literalinclude:: /scripts/tutorials/drawing/DrawingExample.lua
          :language: lua
 
+   .. tab:: JavaScript
+
+      .. literalinclude:: /scripts/tutorials/drawing/DrawingExample.js
+         :language: javascript
+
 The arrow is drawn in the flight scene. Switch to the map view to see the target
 orbit and the flag. Drawn objects remain until the script disconnects, which is
 why the script ends in a loop.
