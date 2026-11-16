@@ -128,7 +128,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Whether the RCS thruster will fire when pitch control input is given.
+        /// Whether the RCS thruster will fire when forward control input is given.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool ForwardEnabled {
@@ -137,7 +137,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Whether the RCS thruster will fire when yaw control input is given.
+        /// Whether the RCS thruster will fire when up control input is given.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool UpEnabled {
@@ -146,7 +146,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Whether the RCS thruster will fire when roll control input is given.
+        /// Whether the RCS thruster will fire when right control input is given.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool RightEnabled {
