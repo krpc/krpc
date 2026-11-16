@@ -1110,6 +1110,36 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
          The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
 
 
+   .. member:: double latitude
+
+      The latitude of the point vessels launch from, in degrees, or ``NaN`` if the
+      site has no spawn point.
+
+      .. macro:: KRPC_FIELD_SPACECENTER_LAUNCHSITE_LATITUDE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
+   .. member:: double longitude
+
+      The longitude of the point vessels launch from, in degrees, or ``NaN`` if the
+      site has no spawn point.
+
+      .. macro:: KRPC_FIELD_SPACECENTER_LAUNCHSITE_LONGITUDE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
+   .. member:: double altitude
+
+      The altitude above sea level of the point vessels launch from, in meters, or
+      ``NaN`` if the site has no spawn point.
+
+      .. macro:: KRPC_FIELD_SPACECENTER_LAUNCHSITE_ALTITUDE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
 
 .. type:: krpc_SpaceCenter_EditorFacility_t
 

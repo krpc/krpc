@@ -861,6 +861,21 @@ Service
 
       Which editor is normally used for this launch site.
 
+   .. member:: double latitude
+
+      The latitude of the point vessels launch from, in degrees, or ``NaN`` if the
+      site has no spawn point.
+
+   .. member:: double longitude
+
+      The longitude of the point vessels launch from, in degrees, or ``NaN`` if the
+      site has no spawn point.
+
+   .. member:: double altitude
+
+      The altitude above sea level of the point vessels launch from, in meters, or
+      ``NaN`` if the site has no spawn point.
+
 
 .. namespace:: krpc::services::SpaceCenter
 .. enum-struct:: EditorFacility

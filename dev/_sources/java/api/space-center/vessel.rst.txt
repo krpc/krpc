@@ -142,6 +142,14 @@ Vessel
 
    
 
+   .. method:: LaunchSite getLaunchSite()
+
+
+      The launch site the vessel was launched from, or ``null`` if the vessel was
+      not launched from a known launch site, such as a vessel spawned by a contract.
+
+   
+
    .. method:: String getBiome()
 
 

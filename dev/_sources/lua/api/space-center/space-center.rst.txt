@@ -958,6 +958,24 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
       Which editor is normally used for this launch site.
 
 
+   .. attribute:: latitude: number
+
+      The latitude of the point vessels launch from, in degrees, or ``NaN`` if the
+      site has no spawn point.
+
+
+   .. attribute:: longitude: number
+
+      The longitude of the point vessels launch from, in degrees, or ``NaN`` if the
+      site has no spawn point.
+
+
+   .. attribute:: altitude: number
+
+      The altitude above sea level of the point vessels launch from, in meters, or
+      ``NaN`` if the site has no spawn point.
+
+
 
 .. class:: EditorFacility
 

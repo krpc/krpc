@@ -835,7 +835,7 @@ Service
    A place where craft can be launched from.
    More of these can be added with mods like Kerbal Konstructs.
 
-   .. function:: LaunchSite(string name, CelestialBody body, EditorFacility editorFacility)
+   .. function:: LaunchSite(string name, CelestialBody body, EditorFacility editorFacility, double latitude, double longitude, double altitude)
 
       Construct a LaunchSite from the values of its fields.
 
@@ -851,6 +851,21 @@ Service
    .. property:: EditorFacility EditorFacility { get; }
 
       Which editor is normally used for this launch site.
+
+   .. property:: double Latitude { get; }
+
+      The latitude of the point vessels launch from, in degrees, or ``NaN`` if the
+      site has no spawn point.
+
+   .. property:: double Longitude { get; }
+
+      The longitude of the point vessels launch from, in degrees, or ``NaN`` if the
+      site has no spawn point.
+
+   .. property:: double Altitude { get; }
+
+      The altitude above sea level of the point vessels launch from, in meters, or
+      ``NaN`` if the site has no spawn point.
 
 
 .. enum:: EditorFacility

@@ -128,6 +128,13 @@ Vessel
 
       :Attribute: Read-only, cannot be set
 
+   .. attribute:: launch_site: SpaceCenter.LaunchSite | nil
+
+      The launch site the vessel was launched from, or ``nil`` if the vessel was
+      not launched from a known launch site, such as a vessel spawned by a contract.
+
+      :Attribute: Read-only, cannot be set
+
    .. attribute:: biome: string
 
       The name of the biome the vessel is currently in.

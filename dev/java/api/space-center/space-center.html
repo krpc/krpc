@@ -2643,8 +2643,8 @@ Returned by <a class="reference internal" href="#krpc.client.services.SpaceCente
 <dd><p>A place where craft can be launched from.
 More of these can be added with mods like Kerbal Konstructs.</p>
 <dl class="java constructor">
-<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.LaunchSite.LaunchSite(String, CelestialBody, EditorFacility)">
-<span class="pre">public</span> <span class="sig-name descname"><span class="pre">LaunchSite</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">name</span></em>, <a class="reference internal" href="celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a><em> <span class="pre">body</span></em>, <a class="reference internal" href="#krpc.client.services.SpaceCenter.EditorFacility" title="krpc.client.services.SpaceCenter.EditorFacility"><span class="pre">EditorFacility</span></a><em> <span class="pre">editorFacility</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.LaunchSite.LaunchSite(String, CelestialBody, EditorFacility)" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.LaunchSite.LaunchSite(String, CelestialBody, EditorFacility, double, double, double)">
+<span class="pre">public</span> <span class="sig-name descname"><span class="pre">LaunchSite</span></span><span class="sig-paren">(</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">name</span></em>, <a class="reference internal" href="celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a><em> <span class="pre">body</span></em>, <a class="reference internal" href="#krpc.client.services.SpaceCenter.EditorFacility" title="krpc.client.services.SpaceCenter.EditorFacility"><span class="pre">EditorFacility</span></a><em> <span class="pre">editorFacility</span></em>, <span class="pre">double</span><em> <span class="pre">latitude</span></em>, <span class="pre">double</span><em> <span class="pre">longitude</span></em>, <span class="pre">double</span><em> <span class="pre">altitude</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.LaunchSite.LaunchSite(String, CelestialBody, EditorFacility, double, double, double)" title="Link to this definition">#</a></dt>
 <dd><p>Construct a LaunchSite from the values of its fields.</p>
 </dd></dl>
 
@@ -2664,6 +2664,27 @@ More of these can be added with mods like Kerbal Konstructs.</p>
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.LaunchSite.getEditorFacility()">
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.EditorFacility" title="krpc.client.services.SpaceCenter.EditorFacility"><span class="pre">EditorFacility</span></a> <span class="sig-name descname"><span class="pre">getEditorFacility</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.LaunchSite.getEditorFacility()" title="Link to this definition">#</a></dt>
 <dd><p>Which editor is normally used for this launch site.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.LaunchSite.getLatitude()">
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getLatitude</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.LaunchSite.getLatitude()" title="Link to this definition">#</a></dt>
+<dd><p>The latitude of the point vessels launch from, in degrees, or <code class="docutils literal notranslate"><span class="pre">NaN</span></code> if the
+site has no spawn point.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.LaunchSite.getLongitude()">
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getLongitude</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.LaunchSite.getLongitude()" title="Link to this definition">#</a></dt>
+<dd><p>The longitude of the point vessels launch from, in degrees, or <code class="docutils literal notranslate"><span class="pre">NaN</span></code> if the
+site has no spawn point.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.LaunchSite.getAltitude()">
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getAltitude</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.LaunchSite.getAltitude()" title="Link to this definition">#</a></dt>
+<dd><p>The altitude above sea level of the point vessels launch from, in meters, or
+<code class="docutils literal notranslate"><span class="pre">NaN</span></code> if the site has no spawn point.</p>
 </dd></dl>
 
 </dd></dl>

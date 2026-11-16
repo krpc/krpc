@@ -1086,7 +1086,7 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 
 
-.. class:: LaunchSite(name, body, editor_facility)
+.. class:: LaunchSite(name, body, editor_facility, latitude, longitude, altitude)
 
    A place where craft can be launched from.
    More of these can be added with mods like Kerbal Konstructs.
@@ -1109,6 +1109,27 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
       Which editor is normally used for this launch site.
 
       :rtype: :class:`EditorFacility`
+
+   .. attribute:: latitude
+
+      The latitude of the point vessels launch from, in degrees, or ``NaN`` if the
+      site has no spawn point.
+
+      :rtype: float
+
+   .. attribute:: longitude
+
+      The longitude of the point vessels launch from, in degrees, or ``NaN`` if the
+      site has no spawn point.
+
+      :rtype: float
+
+   .. attribute:: altitude
+
+      The altitude above sea level of the point vessels launch from, in meters, or
+      ``NaN`` if the site has no spawn point.
+
+      :rtype: float
 
 
 .. class:: EditorFacility

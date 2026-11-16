@@ -135,6 +135,13 @@ Vessel
 
       :Game Scenes: All
 
+   .. property:: LaunchSite? LaunchSite { get; }
+
+      The launch site the vessel was launched from, or ``null`` if the vessel was
+      not launched from a known launch site, such as a vessel spawned by a contract.
+
+      :Game Scenes: All
+
    .. property:: string Biome { get; }
 
       The name of the biome the vessel is currently in.

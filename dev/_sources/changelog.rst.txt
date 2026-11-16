@@ -178,6 +178,8 @@ SpaceCenter service
   * Fix ``Engine.AvailableTorque`` counting the pitch and yaw of a gimbal with those axes disabled (:issue:`1360`)
   * Apply the axis toggles of a gimbal or RCS block to ``Engine.GimbalActuation``, ``RCS.RotationOverride`` and ``RCS.TranslationOverride`` (:issue:`1360`)
 
+* Add ``Vessel.LaunchSite``, the launch site the vessel was launched from (:issue:`1363`)
+* Add ``LaunchSite.Latitude``, ``LaunchSite.Longitude`` and ``LaunchSite.Altitude``, the point vessels launch from (:issue:`1363`)
 
 
 DockingCamera service

@@ -136,6 +136,13 @@ Vessel
 
    
 
+   .. function:: std::optional<LaunchSite> launch_site()
+
+      The launch site the vessel was launched from, or ``NULL`` if the vessel was
+      not launched from a known launch site, such as a vessel spawned by a contract.
+
+   
+
    .. function:: std::string biome()
 
       The name of the biome the vessel is currently in.

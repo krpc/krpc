@@ -147,6 +147,15 @@ Vessel
       :rtype: float
    
 
+   .. attribute:: launch_site
+
+      The launch site the vessel was launched from, or ``None`` if the vessel was
+      not launched from a known launch site, such as a vessel spawned by a contract.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`LaunchSite` or None
+   
+
    .. attribute:: biome
 
       The name of the biome the vessel is currently in.

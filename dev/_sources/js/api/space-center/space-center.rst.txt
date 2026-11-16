@@ -1165,6 +1165,27 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
       :Type: :class:`SpaceCenter.EditorFacility`
 
+   .. attribute:: latitude
+
+      The latitude of the point vessels launch from, in degrees, or ``NaN`` if the
+      site has no spawn point.
+
+      :Type: ``number``
+
+   .. attribute:: longitude
+
+      The longitude of the point vessels launch from, in degrees, or ``NaN`` if the
+      site has no spawn point.
+
+      :Type: ``number``
+
+   .. attribute:: altitude
+
+      The altitude above sea level of the point vessels launch from, in meters, or
+      ``NaN`` if the site has no spawn point.
+
+      :Type: ``number``
+
 
 .. class:: EditorFacility
 
