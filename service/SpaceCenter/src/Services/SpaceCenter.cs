@@ -157,21 +157,8 @@ namespace KRPC.SpaceCenter.Services
         /// A list of available launch sites.
         /// </summary>
         [KRPCProperty]
-        public static IList<LaunchSite> LaunchSites
-        {
-            get {
-                var psystem = PSystemSetup.Instance;
-                var list = new List<LaunchSite>(psystem.LaunchSites.Count + psystem.SpaceCenterFacilities.Length);
-                foreach (var launchSite in psystem.LaunchSites) {
-                    list.Add(new LaunchSite(launchSite.name, new CelestialBody(launchSite.Body), launchSite.editorFacility));
-                }
-                foreach (var facility in psystem.SpaceCenterFacilities) {
-                    if (facility.IsLaunchFacility()) {
-                        list.Add(new LaunchSite(facility.facilityName, new CelestialBody(facility.hostBody), facility.editorFacility));
-                    }
-                }
-                return list;
-            }
+        public static IList<LaunchSite> LaunchSites {
+            get { return LaunchSite.All; }
         }
 
         /// <summary>

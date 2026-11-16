@@ -61,6 +61,11 @@ class TestVessel(TestCase):
         self.assertAlmostEqual(met + 1, self.vessel.met, delta=0.5)
         self.assertGreater(self.space_center.ut, self.vessel.met)
 
+    def test_launch_site(self):
+        site = self.vessel.launch_site
+        self.assertEqual("LaunchPad", site.name)
+        self.assertEqual(self.space_center.bodies["Kerbin"], site.body)
+
     def test_mass(self):
         # 260 l of monoprop at 4 kg/l
         # 180 l of LiquidFuel at 5 kg/l
@@ -512,6 +517,47 @@ class TestVesselStockName(TestCase):
     def test_name(self):
         # A stock craft stores its name as a localization tag
         self.assertEqual("Kerbal X", self.vessel.name)
+
+
+class LaunchSiteTestCase(TestCase):
+    """Vessels launched from a launch site report it, and stand on its spawn
+    point."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.launch("Basic")
+
+    def check_launch(self, editor, site_name):
+        sc = self.connect().space_center
+        sc.launch_vessel(editor, "Basic", site_name)
+        self.remove_other_vessels()
+        vessel = sc.active_vessel
+        site = vessel.launch_site
+        self.assertEqual(site_name, site.name)
+        self.assertEqual(vessel.orbit.body, site.body)
+        flight = vessel.flight()
+        self.assertAlmostEqual(site.latitude, flight.latitude, delta=0.001)
+        self.assertAlmostEqual(site.longitude, flight.longitude, delta=0.001)
+        self.assertAlmostEqual(site.altitude, flight.mean_altitude, delta=10)
+        self.assertEqual(site, next(x for x in sc.launch_sites if x.name == site_name))
+
+
+class TestVesselLaunchSite(LaunchSiteTestCase):
+    def test_launch_pad(self):
+        self.check_launch("VAB", "LaunchPad")
+
+    def test_runway(self):
+        self.check_launch("VAB", "Runway")
+
+
+class TestVesselLaunchSiteMakingHistory(LaunchSiteTestCase):
+    expansions = ["MakingHistory"]
+
+    def test_woomerang(self):
+        self.check_launch("VAB", "Woomerang_Launch_Site")
+
+    def test_desert(self):
+        self.check_launch("VAB", "Desert_Launch_Site")
 
 
 if __name__ == "__main__":

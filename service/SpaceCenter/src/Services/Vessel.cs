@@ -301,6 +301,15 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The launch site the vessel was launched from, or <c>null</c> if the vessel was
+        /// not launched from a known launch site, such as a vessel spawned by a contract.
+        /// </summary>
+        [KRPCProperty]
+        public LaunchSite? LaunchSite {
+            get { return Services.LaunchSite.Find (InternalVessel.launchedFrom); }
+        }
+
+        /// <summary>
         /// The name of the biome the vessel is currently in.
         /// </summary>
         [KRPCProperty]
