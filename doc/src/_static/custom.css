@@ -119,3 +119,17 @@ html[data-theme="light"] .coverage-partial {
 .coverage-untested {
     color: var(--pst-color-text-muted);
 }
+
+/* Language logos on the home page's client cards. The theme's dark mode puts
+   a white backdrop behind images and colors only the card body, so clear the
+   one and give the whole card the body's color. */
+.client-card {
+    background-color: var(--pst-color-on-background);
+}
+
+.client-card .sd-card-img-top {
+    width: auto;
+    height: 3rem;
+    margin: 1rem auto 0;
+    background-color: transparent !important;
+}

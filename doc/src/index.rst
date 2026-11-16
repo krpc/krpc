@@ -83,43 +83,7 @@ an altitude of 10 km:
 Clients
 -------
 
-.. grid:: 2 4 8 8
-   :gutter: 2
-
-   .. grid-item-card:: Python
-      :link: python
-      :link-type: doc
-      :text-align: center
-
-   .. grid-item-card:: C#
-      :link: csharp
-      :link-type: doc
-      :text-align: center
-
-   .. grid-item-card:: C++
-      :link: cpp
-      :link-type: doc
-      :text-align: center
-
-   .. grid-item-card:: C-nano
-      :link: cnano
-      :link-type: doc
-      :text-align: center
-
-   .. grid-item-card:: Java
-      :link: java
-      :link-type: doc
-      :text-align: center
-
-   .. grid-item-card:: Lua
-      :link: lua
-      :link-type: doc
-      :text-align: center
-
-   .. grid-item-card:: JavaScript
-      :link: js
-      :link-type: doc
-      :text-align: center
+.. include:: client-cards.inc
 
 .. toctree::
    :hidden:
