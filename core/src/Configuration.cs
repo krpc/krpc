@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Net;
 using KRPC.Server;
 using KRPC.Server.TCP;
@@ -76,16 +77,28 @@ namespace KRPC
             public IDictionary<string, string> Settings { get; set; }
 
             /// <summary>
-            /// Construct default settings for a server
+            /// Construct default settings for a TCP/IP server
             /// </summary>
-            public Server()
+            public Server() : this (Protocol.ProtocolBuffersOverTCP)
             {
+            }
+
+            /// <summary>
+            /// Construct default settings for a TCP/IP or WebSockets server, which listens on
+            /// the loopback address and the protocol's default port
+            /// </summary>
+            public Server(Protocol protocol)
+            {
+                if (protocol != Protocol.ProtocolBuffersOverTCP && protocol != Protocol.ProtocolBuffersOverWebsockets)
+                    throw new ArgumentException ("No default settings for " + protocol, nameof (protocol));
+                var websockets = protocol == Protocol.ProtocolBuffersOverWebsockets;
+                var prefix = websockets ? "ws_" : "tcpip_";
                 Id = Guid.NewGuid();
-                Name = "Default Server";
-                Protocol = Protocol.ProtocolBuffersOverTCP;
+                Name = websockets ? "WebSockets Server" : "TCP/IP Server";
+                Protocol = protocol;
                 Settings = new Dictionary<string, string>{
-                    {"tcpip_address", IPAddress.Loopback.ToString()},
-                    {"tcpip_port", "50000"}};
+                    {prefix + "address", IPAddress.Loopback.ToString()},
+                    {prefix + "port", DefaultPort (protocol).ToString (CultureInfo.InvariantCulture)}};
             }
 
             /// <summary>
@@ -102,7 +115,7 @@ namespace KRPC
                     var serverAddress = IPAddress.Loopback;
                     IPAddress.TryParse(Settings.GetValueOrDefault(prefix + "address", IPAddress.Loopback.ToString()), out serverAddress);
                     ushort port = 0;
-                    ushort.TryParse(Settings.GetValueOrDefault(prefix + "port", "50000"), out port);
+                    ushort.TryParse(Settings.GetValueOrDefault(prefix + "port", DefaultPort (serverProtocol).ToString (CultureInfo.InvariantCulture)), out port);
                     var tcpServer = new TCPServer (serverAddress, port);
                     if (serverProtocol == Protocol.ProtocolBuffersOverTCP)
                         messageServer = new KRPC.Server.ProtocolBuffers.Server (tcpServer);
@@ -128,6 +141,34 @@ namespace KRPC
                 }
                 return new KRPC.Server.Server (Id, serverProtocol, Name, messageServer);
             }
+        }
+
+        /// <summary>
+        /// The port a server of the protocol listens on by default: 50000 for TCP/IP and
+        /// 50001 for WebSockets. Zero for a protocol with no port.
+        /// </summary>
+        public static ushort DefaultPort (Protocol protocol)
+        {
+            switch (protocol) {
+            case Protocol.ProtocolBuffersOverTCP:
+                return 50000;
+            case Protocol.ProtocolBuffersOverWebsockets:
+                return 50001;
+            default:
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// The servers of a new configuration: a TCP/IP server and a WebSockets server, each
+        /// on the loopback address and its protocol's default port
+        /// </summary>
+        public static IList<Server> DefaultServers ()
+        {
+            return new List<Server> {
+                new Server (Protocol.ProtocolBuffersOverTCP),
+                new Server (Protocol.ProtocolBuffersOverWebsockets)
+            };
         }
 
         private readonly List<Server> servers = new List<Server> ();

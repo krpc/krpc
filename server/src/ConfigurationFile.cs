@@ -28,7 +28,7 @@ namespace KRPC
         public sealed class Server
         {
             [Persistent] string id = Guid.NewGuid ().ToString ();
-            [Persistent] string name = "Default Server";
+            [Persistent] string name = "TCP/IP Server";
             [Persistent] string protocol = Protocol.ProtocolBuffersOverTCP.ToString ();
             [Persistent] List<KeyValuePair> settings = new List<KeyValuePair> {
                 new KeyValuePair {key = "tcpip_address", value = "127.0.0.1"},
@@ -85,9 +85,11 @@ namespace KRPC
             // Start each setting at its default, so a setting missing from the file, or with a
             // value that does not parse, keeps it
             BeforeSave ();
-            // Without settings, as in a new install, start with one server
-            if (!Load ())
-                Configuration.Servers.Add (new Configuration.Server ());
+            // Without settings, as in a new install, start with the default servers
+            if (!Load ()) {
+                foreach (var server in Configuration.DefaultServers ())
+                    Configuration.Servers.Add (server);
+            }
             Save ();
         }
 

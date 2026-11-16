@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using KRPC.Server;
@@ -164,7 +165,7 @@ namespace KRPC.UI
                 GUILayout.BeginHorizontal();
                 DrawFieldLabel (portLabelText);
                 if (!settings.ContainsKey(portKey))
-                    settings[portKey] = "50000";
+                    settings[portKey] = Configuration.DefaultPort (protocol).ToString (CultureInfo.InvariantCulture);
                 settings[portKey] = GUILayoutExtensions.FilterDigits (
                     GUILayoutExtensions.ValidatedTextField (settings[portKey], portMaxLength, window.stretchyTextFieldStyle,
                         ValidPort (settings[portKey]), window.errorColor));

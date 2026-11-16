@@ -21,7 +21,7 @@ function receive(event) {
 }
 
 // Open a websockets connection to the server
-const conn = new WebSocket("ws://127.0.0.1:50000/");
+const conn = new WebSocket("ws://127.0.0.1:50001/");
 conn.binaryType = "arraybuffer";
 
 conn.onopen = () => {

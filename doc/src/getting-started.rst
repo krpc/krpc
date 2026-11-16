@@ -22,23 +22,25 @@ Installation
    Copy the ``GameData`` folder from the zip into your KSP folder. You can also install kRPC with
    `CKAN <https://github.com/KSP-CKAN/CKAN>`_.
 
-2. Start KSP and load a save. The server window appears, with one server with the default
-   settings. The server starts when the game loads, and the light next to it turns green:
+2. Start KSP and load a save. The server window appears, with two servers: "TCP/IP Server" on
+   port 50000, and "WebSockets Server" on port 50001 for the JavaScript client. The servers start
+   when the game loads, and the light next to each turns green:
 
    .. image:: /images/getting-started/server-window.png
 
-3. Click the server's name to show or hide its details: the protocol, the address and the
-   connected clients. "Stop server" and "Start server" stop and start it.
+3. Click a server's name to show or hide its details: the protocol, the address and the
+   connected clients. Its "Stop" and "Start" buttons stop and start it, and "Stop servers" and
+   "Start servers" stop and start them all.
 
 4. The close button in the top right hides the window. The kRPC button in the toolbar shows and
-   hides it again, and turns green while the server is running:
+   hides it again, and turns green while a server is running:
 
    .. image:: /images/getting-started/applauncher.png
 
 Configuration
 ^^^^^^^^^^^^^
 
-Stop the server, then click "Edit" to change its settings. Click "Save" to keep them:
+Stop a server, then click its "Edit" button to change its settings. Click "Save" to keep them:
 
 1. **Protocol**: How clients connect. The Python client connects over "Protobuf over TCP/IP",
    the default, or "Protobuf over local socket". Each client guide lists the protocols its client
@@ -46,10 +48,10 @@ Stop the server, then click "Edit" to change its settings. Click "Save" to keep 
 2. **Address**: The address the server listens on. "localhost", the default, accepts connections
    from the same machine only. To accept connections over a network, select one of the machine's
    addresses, "Any" for all of them, or "Manual" to type one in.
-3. **Port**: The TCP port, 50000 by default. Change it only if another program uses that port.
+3. **Port**: The TCP port, 50000 by default for TCP/IP and 50001 for WebSockets. Change it only
+   if another program uses that port.
 
-"Add server" adds another server, for example to accept clients over a second protocol. "Start
-server" starts every server in the window.
+"Add server" adds another server, for example one over a local socket.
 
 "Show advanced settings" reveals these settings:
 
