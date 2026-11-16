@@ -2698,6 +2698,51 @@ Engine
 
       :Attribute: Can be read or written
 
+   .. attribute:: gimbal_response_speed_enabled: boolean
+
+      Whether the gimbal moves toward its commanded deflection at
+      :attr:`SpaceCenter.Engine.gimbal_response_speed`. When ``False``, the gimbal reaches its
+      commanded deflection in one physics tick.
+      Throws an exception if the engine is not gimballed.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: gimbal_response_speed: number
+
+      The response speed of the gimbal, in :math:`\mathrm{s^{-1}}`.
+      Throws an exception if the engine is not gimballed.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         Each physics tick of length :math:`\Delta t`, the gimbal moves a fraction
+         :math:`v \Delta t` of the way from its deflection to the commanded deflection,
+         where :math:`v` is the response speed. The fraction is at most 1, so at high
+         physics warp the gimbal can reach its commanded deflection in one tick. This lag
+         only applies when :attr:`SpaceCenter.Engine.gimbal_response_speed_enabled` is ``True``.
+
+   .. attribute:: gimbal_pitch_enabled: boolean
+
+      Whether the gimbal responds to pitch control input.
+      Throws an exception if the engine is not gimballed.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: gimbal_yaw_enabled: boolean
+
+      Whether the gimbal responds to yaw control input.
+      Throws an exception if the engine is not gimballed.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: gimbal_roll_enabled: boolean
+
+      Whether the gimbal responds to roll control input.
+      Throws an exception if the engine is not gimballed.
+
+      :Attribute: Can be read or written
+
    .. attribute:: gimbal_override: boolean
 
       Whether the gimbal is being controlled directly, bypassing the vessel's normal
@@ -2718,6 +2763,11 @@ Engine
 
       :Attribute: Can be read or written
 
+      .. note::
+
+         The gimbal ignores the component for an axis it is disabled for, such as pitch when
+         :attr:`SpaceCenter.Engine.gimbal_pitch_enabled` is ``False``.
+
    .. attribute:: available_torque: SpaceCenter.AxisRange
 
       The available torque, in :math:`\mathrm{N \cdot m}`, that can be produced by this engine,
@@ -2726,6 +2776,11 @@ Engine
       Returns zero if the engine is inactive, or not gimballed.
 
       :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         The torque is zero about an axis the gimbal is disabled for, such as pitch when
+         :attr:`SpaceCenter.Engine.gimbal_pitch_enabled` is ``False``.
 
    .. attribute:: can_reverse_thrust: boolean
 
@@ -4234,19 +4289,19 @@ RCS
 
    .. attribute:: forward_enabled: boolean
 
-      Whether the RCS thruster will fire when pitch control input is given.
+      Whether the RCS thruster will fire when forward control input is given.
 
       :Attribute: Can be read or written
 
    .. attribute:: up_enabled: boolean
 
-      Whether the RCS thruster will fire when yaw control input is given.
+      Whether the RCS thruster will fire when up control input is given.
 
       :Attribute: Can be read or written
 
    .. attribute:: right_enabled: boolean
 
-      Whether the RCS thruster will fire when roll control input is given.
+      Whether the RCS thruster will fire when right control input is given.
 
       :Attribute: Can be read or written
 
@@ -4268,6 +4323,11 @@ RCS
 
       :Attribute: Can be read or written
 
+      .. note::
+
+         The block ignores the component for an axis it is disabled for, such as pitch when
+         :attr:`SpaceCenter.RCS.pitch_enabled` is ``False``.
+
    .. attribute:: translation_override: Tuple
 
       The translation demand applied when :attr:`SpaceCenter.RCS.input_override` is enabled, in the
@@ -4275,6 +4335,11 @@ RCS
       and 1.
 
       :Attribute: Can be read or written
+
+      .. note::
+
+         The block ignores the component for an axis it is disabled for, such as right when
+         :attr:`SpaceCenter.RCS.right_enabled` is ``False``.
 
    .. attribute:: available_torque: SpaceCenter.AxisRange
 

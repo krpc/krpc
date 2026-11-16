@@ -171,6 +171,13 @@ SpaceCenter service
 * Fix velocities, orbits and orbital reference frames throwing an exception in a Kopernicus system whose star is not named ``Sun`` (:issue:`1359`)
 * Fix ``CelestialBody.SurfaceGravity`` differing from the gravity the game applies by about 0.03% (:issue:`1359`)
 * Test with Kopernicus, Real Solar System, Realism Overhaul and Procedural Parts, and list their tested versions in the documentation (:issue:`1359`)
+* Engines and RCS
+
+  * Add ``Engine.GimbalResponseSpeed`` and ``Engine.GimbalResponseSpeedEnabled``, the gimbal's response lag (:issue:`1360`)
+  * Add ``Engine.GimbalPitchEnabled``, ``Engine.GimbalYawEnabled`` and ``Engine.GimbalRollEnabled`` (:issue:`1360`)
+  * Fix ``Engine.AvailableTorque`` counting the pitch and yaw of a gimbal with those axes disabled (:issue:`1360`)
+  * Apply the axis toggles of a gimbal or RCS block to ``Engine.GimbalActuation``, ``RCS.RotationOverride`` and ``RCS.TranslationOverride`` (:issue:`1360`)
+
 
 
 DockingCamera service

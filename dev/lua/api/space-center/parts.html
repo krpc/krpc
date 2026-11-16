@@ -5868,6 +5868,76 @@ Returns 0 if the gimbal is locked.</p>
 </dd></dl>
 
 <dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Engine.gimbal_response_speed_enabled">
+<span class="sig-name descname"><span class="pre">gimbal_response_speed_enabled</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.Engine.gimbal_response_speed_enabled" title="Link to this definition">#</a></dt>
+<dd><p>Whether the gimbal moves toward its commanded deflection at
+<a class="reference internal" href="#lua-SpaceCenter.Engine.gimbal_response_speed" title="SpaceCenter.Engine.gimbal_response_speed"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Engine.gimbal_response_speed</span></code></a>. When <code class="docutils literal notranslate"><span class="pre">False</span></code>, the gimbal reaches its
+commanded deflection in one physics tick.
+Throws an exception if the engine is not gimballed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Engine.gimbal_response_speed">
+<span class="sig-name descname"><span class="pre">gimbal_response_speed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Engine.gimbal_response_speed" title="Link to this definition">#</a></dt>
+<dd><p>The response speed of the gimbal, in <span class="math notranslate nohighlight">\(\mathrm{s^{-1}}\)</span>.
+Throws an exception if the engine is not gimballed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Each physics tick of length <span class="math notranslate nohighlight">\(\Delta t\)</span>, the gimbal moves a fraction
+<span class="math notranslate nohighlight">\(v \Delta t\)</span> of the way from its deflection to the commanded deflection,
+where <span class="math notranslate nohighlight">\(v\)</span> is the response speed. The fraction is at most 1, so at high
+physics warp the gimbal can reach its commanded deflection in one tick. This lag
+only applies when <a class="reference internal" href="#lua-SpaceCenter.Engine.gimbal_response_speed_enabled" title="SpaceCenter.Engine.gimbal_response_speed_enabled"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Engine.gimbal_response_speed_enabled</span></code></a> is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+</div>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Engine.gimbal_pitch_enabled">
+<span class="sig-name descname"><span class="pre">gimbal_pitch_enabled</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.Engine.gimbal_pitch_enabled" title="Link to this definition">#</a></dt>
+<dd><p>Whether the gimbal responds to pitch control input.
+Throws an exception if the engine is not gimballed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Engine.gimbal_yaw_enabled">
+<span class="sig-name descname"><span class="pre">gimbal_yaw_enabled</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.Engine.gimbal_yaw_enabled" title="Link to this definition">#</a></dt>
+<dd><p>Whether the gimbal responds to yaw control input.
+Throws an exception if the engine is not gimballed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Engine.gimbal_roll_enabled">
+<span class="sig-name descname"><span class="pre">gimbal_roll_enabled</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.Engine.gimbal_roll_enabled" title="Link to this definition">#</a></dt>
+<dd><p>Whether the gimbal responds to roll control input.
+Throws an exception if the engine is not gimballed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
 <dt class="sig sig-object lua" id="lua-SpaceCenter.Engine.gimbal_override">
 <span class="sig-name descname"><span class="pre">gimbal_override</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.Engine.gimbal_override" title="Link to this definition">#</a></dt>
 <dd><p>Whether the gimbal is being controlled directly, bypassing the vessel’s normal
@@ -5895,6 +5965,11 @@ returns the current actuation.</p>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The gimbal ignores the component for an axis it is disabled for, such as pitch when
+<a class="reference internal" href="#lua-SpaceCenter.Engine.gimbal_pitch_enabled" title="SpaceCenter.Engine.gimbal_pitch_enabled"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Engine.gimbal_pitch_enabled</span></code></a> is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</div>
 </dd></dl>
 
 <dl class="lua attribute">
@@ -5909,6 +5984,11 @@ Returns zero if the engine is inactive, or not gimballed.</p>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The torque is zero about an axis the gimbal is disabled for, such as pitch when
+<a class="reference internal" href="#lua-SpaceCenter.Engine.gimbal_pitch_enabled" title="SpaceCenter.Engine.gimbal_pitch_enabled"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Engine.gimbal_pitch_enabled</span></code></a> is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</div>
 </dd></dl>
 
 <dl class="lua attribute">
@@ -8237,7 +8317,7 @@ An RCS thruster is inactive if the RCS action group is disabled
 <dl class="lua attribute">
 <dt class="sig sig-object lua" id="lua-SpaceCenter.RCS.forward_enabled">
 <span class="sig-name descname"><span class="pre">forward_enabled</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.RCS.forward_enabled" title="Link to this definition">#</a></dt>
-<dd><p>Whether the RCS thruster will fire when pitch control input is given.</p>
+<dd><p>Whether the RCS thruster will fire when forward control input is given.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
@@ -8248,7 +8328,7 @@ An RCS thruster is inactive if the RCS action group is disabled
 <dl class="lua attribute">
 <dt class="sig sig-object lua" id="lua-SpaceCenter.RCS.up_enabled">
 <span class="sig-name descname"><span class="pre">up_enabled</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.RCS.up_enabled" title="Link to this definition">#</a></dt>
-<dd><p>Whether the RCS thruster will fire when yaw control input is given.</p>
+<dd><p>Whether the RCS thruster will fire when up control input is given.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
@@ -8259,7 +8339,7 @@ An RCS thruster is inactive if the RCS action group is disabled
 <dl class="lua attribute">
 <dt class="sig sig-object lua" id="lua-SpaceCenter.RCS.right_enabled">
 <span class="sig-name descname"><span class="pre">right_enabled</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.RCS.right_enabled" title="Link to this definition">#</a></dt>
-<dd><p>Whether the RCS thruster will fire when roll control input is given.</p>
+<dd><p>Whether the RCS thruster will fire when right control input is given.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
@@ -8293,6 +8373,11 @@ roll and yaw axes. Each component is a normalized control input between -1 and 1
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The block ignores the component for an axis it is disabled for, such as pitch when
+<a class="reference internal" href="#lua-SpaceCenter.RCS.pitch_enabled" title="SpaceCenter.RCS.pitch_enabled"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.RCS.pitch_enabled</span></code></a> is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</div>
 </dd></dl>
 
 <dl class="lua attribute">
@@ -8306,6 +8391,11 @@ and 1.</p>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The block ignores the component for an axis it is disabled for, such as right when
+<a class="reference internal" href="#lua-SpaceCenter.RCS.right_enabled" title="SpaceCenter.RCS.right_enabled"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.RCS.right_enabled</span></code></a> is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</div>
 </dd></dl>
 
 <dl class="lua attribute">

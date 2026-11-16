@@ -3085,6 +3085,60 @@ Engine
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
+   .. method:: boolean getGimbalResponseSpeedEnabled()
+
+
+      Whether the gimbal moves toward its commanded deflection at
+      :meth:`Engine.getGimbalResponseSpeed()`. When ``false``, the gimbal reaches its
+      commanded deflection in one physics tick.
+      Throws an exception if the engine is not gimballed.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. method:: float getGimbalResponseSpeed()
+
+
+      The response speed of the gimbal, in :math:`\mathrm{s^{-1}}`.
+      Throws an exception if the engine is not gimballed.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Each physics tick of length :math:`\Delta t`, the gimbal moves a fraction
+         :math:`v \Delta t` of the way from its deflection to the commanded deflection,
+         where :math:`v` is the response speed. The fraction is at most 1, so at high
+         physics warp the gimbal can reach its commanded deflection in one tick. This lag
+         only applies when :meth:`Engine.getGimbalResponseSpeedEnabled()` is ``true``.
+
+   .. method:: boolean getGimbalPitchEnabled()
+
+   .. method:: void setGimbalPitchEnabled(boolean value)
+
+      Whether the gimbal responds to pitch control input.
+      Throws an exception if the engine is not gimballed.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. method:: boolean getGimbalYawEnabled()
+
+   .. method:: void setGimbalYawEnabled(boolean value)
+
+      Whether the gimbal responds to yaw control input.
+      Throws an exception if the engine is not gimballed.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. method:: boolean getGimbalRollEnabled()
+
+   .. method:: void setGimbalRollEnabled(boolean value)
+
+      Whether the gimbal responds to roll control input.
+      Throws an exception if the engine is not gimballed.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
    .. method:: boolean getGimbalOverride()
 
    .. method:: void setGimbalOverride(boolean value)
@@ -3109,6 +3163,12 @@ Engine
 
       :Game Scenes: Flight
 
+
+      .. note::
+
+         The gimbal ignores the component for an axis it is disabled for, such as pitch when
+         :meth:`Engine.getGimbalPitchEnabled()` is ``false``.
+
    .. method:: AxisRange getAvailableTorque()
 
 
@@ -3118,6 +3178,12 @@ Engine
       Returns zero if the engine is inactive, or not gimballed.
 
       :Game Scenes: Flight
+
+
+      .. note::
+
+         The torque is zero about an axis the gimbal is disabled for, such as pitch when
+         :meth:`Engine.getGimbalPitchEnabled()` is ``false``.
 
    .. method:: boolean getCanReverseThrust()
 
@@ -4888,7 +4954,7 @@ RCS
 
    .. method:: void setForwardEnabled(boolean value)
 
-      Whether the RCS thruster will fire when pitch control input is given.
+      Whether the RCS thruster will fire when forward control input is given.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
@@ -4896,7 +4962,7 @@ RCS
 
    .. method:: void setUpEnabled(boolean value)
 
-      Whether the RCS thruster will fire when yaw control input is given.
+      Whether the RCS thruster will fire when up control input is given.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
@@ -4904,7 +4970,7 @@ RCS
 
    .. method:: void setRightEnabled(boolean value)
 
-      Whether the RCS thruster will fire when roll control input is given.
+      Whether the RCS thruster will fire when right control input is given.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
@@ -4930,6 +4996,12 @@ RCS
 
       :Game Scenes: Flight
 
+
+      .. note::
+
+         The block ignores the component for an axis it is disabled for, such as pitch when
+         :meth:`RCS.getPitchEnabled()` is ``false``.
+
    .. method:: org.javatuples.Triplet<Double,Double,Double> getTranslationOverride()
 
    .. method:: void setTranslationOverride(org.javatuples.Triplet<Double,Double,Double> value)
@@ -4939,6 +5011,12 @@ RCS
       and 1.
 
       :Game Scenes: Flight
+
+
+      .. note::
+
+         The block ignores the component for an axis it is disabled for, such as right when
+         :meth:`RCS.getRightEnabled()` is ``false``.
 
    .. method:: AxisRange getAvailableTorque()
 

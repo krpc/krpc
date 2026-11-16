@@ -3416,6 +3416,65 @@ Engine
       :rtype: ``number``
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
+   .. method:: getGimbalResponseSpeedEnabled()
+
+      Whether the gimbal moves toward its commanded deflection at
+      :meth:`SpaceCenter.Engine.getGimbalResponseSpeed`. When ``false``, the gimbal reaches its
+      commanded deflection in one physics tick.
+      Throws an exception if the engine is not gimballed.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. method:: getGimbalResponseSpeed()
+
+      The response speed of the gimbal, in :math:`\mathrm{s^{-1}}`.
+      Throws an exception if the engine is not gimballed.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Each physics tick of length :math:`\Delta t`, the gimbal moves a fraction
+         :math:`v \Delta t` of the way from its deflection to the commanded deflection,
+         where :math:`v` is the response speed. The fraction is at most 1, so at high
+         physics warp the gimbal can reach its commanded deflection in one tick. This lag
+         only applies when :meth:`SpaceCenter.Engine.getGimbalResponseSpeedEnabled` is ``true``.
+
+   .. method:: getGimbalPitchEnabled()
+               setGimbalPitchEnabled(value)
+
+      Whether the gimbal responds to pitch control input.
+      Throws an exception if the engine is not gimballed.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. method:: getGimbalYawEnabled()
+               setGimbalYawEnabled(value)
+
+      Whether the gimbal responds to yaw control input.
+      Throws an exception if the engine is not gimballed.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. method:: getGimbalRollEnabled()
+               setGimbalRollEnabled(value)
+
+      Whether the gimbal responds to roll control input.
+      Throws an exception if the engine is not gimballed.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
    .. method:: getGimbalOverride()
                setGimbalOverride(value)
 
@@ -3442,6 +3501,12 @@ Engine
       :rtype: ``[number, number, number]``
       :Game Scenes: Flight
 
+
+      .. note::
+
+         The gimbal ignores the component for an axis it is disabled for, such as pitch when
+         :meth:`SpaceCenter.Engine.getGimbalPitchEnabled` is ``false``.
+
    .. method:: getAvailableTorque()
 
       The available torque, in :math:`\mathrm{N \cdot m}`, that can be produced by this engine,
@@ -3452,6 +3517,12 @@ Engine
       :Property: Read-only, cannot be set
       :rtype: :class:`SpaceCenter.AxisRange`
       :Game Scenes: Flight
+
+
+      .. note::
+
+         The torque is zero about an axis the gimbal is disabled for, such as pitch when
+         :meth:`SpaceCenter.Engine.getGimbalPitchEnabled` is ``false``.
 
    .. method:: getCanReverseThrust()
 
@@ -5404,7 +5475,7 @@ RCS
    .. method:: getForwardEnabled()
                setForwardEnabled(value)
 
-      Whether the RCS thruster will fire when pitch control input is given.
+      Whether the RCS thruster will fire when forward control input is given.
 
       :Property: Can be read or written
       :rtype: ``boolean``
@@ -5413,7 +5484,7 @@ RCS
    .. method:: getUpEnabled()
                setUpEnabled(value)
 
-      Whether the RCS thruster will fire when yaw control input is given.
+      Whether the RCS thruster will fire when up control input is given.
 
       :Property: Can be read or written
       :rtype: ``boolean``
@@ -5422,7 +5493,7 @@ RCS
    .. method:: getRightEnabled()
                setRightEnabled(value)
 
-      Whether the RCS thruster will fire when roll control input is given.
+      Whether the RCS thruster will fire when right control input is given.
 
       :Property: Can be read or written
       :rtype: ``boolean``
@@ -5452,6 +5523,12 @@ RCS
       :rtype: ``[number, number, number]``
       :Game Scenes: Flight
 
+
+      .. note::
+
+         The block ignores the component for an axis it is disabled for, such as pitch when
+         :meth:`SpaceCenter.RCS.getPitchEnabled` is ``false``.
+
    .. method:: getTranslationOverride()
                setTranslationOverride(value)
 
@@ -5462,6 +5539,12 @@ RCS
       :Property: Can be read or written
       :rtype: ``[number, number, number]``
       :Game Scenes: Flight
+
+
+      .. note::
+
+         The block ignores the component for an axis it is disabled for, such as right when
+         :meth:`SpaceCenter.RCS.getRightEnabled` is ``false``.
 
    .. method:: getAvailableTorque()
 

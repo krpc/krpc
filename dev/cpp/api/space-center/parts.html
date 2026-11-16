@@ -5673,6 +5673,91 @@ Returns 0 if the gimbal is locked.</p>
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Engine29gimbal_response_speed_enabledEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter6Engine29gimbal_response_speed_enabledEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Engine29gimbal_response_speed_enabledEv"></span><span id="krpc::services::SpaceCenter::Engine::gimbal_response_speed_enabled"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">gimbal_response_speed_enabled</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Engine29gimbal_response_speed_enabledEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the gimbal moves toward its commanded deflection at
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Engine21gimbal_response_speedEv" title="krpc::services::SpaceCenter::Engine::gimbal_response_speed"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Engine::gimbal_response_speed()</span></code></a>. When <code class="docutils literal notranslate"><span class="pre">false</span></code>, the gimbal reaches its
+commanded deflection in one physics tick.
+Throws an exception if the engine is not gimballed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Engine21gimbal_response_speedEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter6Engine21gimbal_response_speedEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Engine21gimbal_response_speedEv"></span><span id="krpc::services::SpaceCenter::Engine::gimbal_response_speed"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">gimbal_response_speed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Engine21gimbal_response_speedEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The response speed of the gimbal, in <span class="math notranslate nohighlight">\(\mathrm{s^{-1}}\)</span>.
+Throws an exception if the engine is not gimballed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Each physics tick of length <span class="math notranslate nohighlight">\(\Delta t\)</span>, the gimbal moves a fraction
+<span class="math notranslate nohighlight">\(v \Delta t\)</span> of the way from its deflection to the commanded deflection,
+where <span class="math notranslate nohighlight">\(v\)</span> is the response speed. The fraction is at most 1, so at high
+physics warp the gimbal can reach its commanded deflection in one tick. This lag
+only applies when <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Engine29gimbal_response_speed_enabledEv" title="krpc::services::SpaceCenter::Engine::gimbal_response_speed_enabled"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Engine::gimbal_response_speed_enabled()</span></code></a> is <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Engine20gimbal_pitch_enabledEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter6Engine20gimbal_pitch_enabledEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Engine20gimbal_pitch_enabledEv"></span><span id="krpc::services::SpaceCenter::Engine::gimbal_pitch_enabled"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">gimbal_pitch_enabled</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Engine20gimbal_pitch_enabledEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Engine24set_gimbal_pitch_enabledEb">
+<span id="_CPPv3N4krpc8services11SpaceCenter6Engine24set_gimbal_pitch_enabledEb"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Engine24set_gimbal_pitch_enabledEb"></span><span id="krpc::services::SpaceCenter::Engine::set_gimbal_pitch_enabled__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_gimbal_pitch_enabled</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Engine24set_gimbal_pitch_enabledEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the gimbal responds to pitch control input.
+Throws an exception if the engine is not gimballed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Engine18gimbal_yaw_enabledEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter6Engine18gimbal_yaw_enabledEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Engine18gimbal_yaw_enabledEv"></span><span id="krpc::services::SpaceCenter::Engine::gimbal_yaw_enabled"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">gimbal_yaw_enabled</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Engine18gimbal_yaw_enabledEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Engine22set_gimbal_yaw_enabledEb">
+<span id="_CPPv3N4krpc8services11SpaceCenter6Engine22set_gimbal_yaw_enabledEb"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Engine22set_gimbal_yaw_enabledEb"></span><span id="krpc::services::SpaceCenter::Engine::set_gimbal_yaw_enabled__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_gimbal_yaw_enabled</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Engine22set_gimbal_yaw_enabledEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the gimbal responds to yaw control input.
+Throws an exception if the engine is not gimballed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Engine19gimbal_roll_enabledEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter6Engine19gimbal_roll_enabledEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Engine19gimbal_roll_enabledEv"></span><span id="krpc::services::SpaceCenter::Engine::gimbal_roll_enabled"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">gimbal_roll_enabled</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Engine19gimbal_roll_enabledEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Engine23set_gimbal_roll_enabledEb">
+<span id="_CPPv3N4krpc8services11SpaceCenter6Engine23set_gimbal_roll_enabledEb"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Engine23set_gimbal_roll_enabledEb"></span><span id="krpc::services::SpaceCenter::Engine::set_gimbal_roll_enabled__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_gimbal_roll_enabled</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Engine23set_gimbal_roll_enabledEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the gimbal responds to roll control input.
+Throws an exception if the engine is not gimballed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Engine15gimbal_overrideEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter6Engine15gimbal_overrideEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Engine15gimbal_overrideEv"></span><span id="krpc::services::SpaceCenter::Engine::gimbal_override"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">gimbal_override</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Engine15gimbal_overrideEv" title="Link to this definition">#</a><br /></dt>
 <dd></dd></dl>
@@ -5710,6 +5795,11 @@ returns the current actuation.</p>
 <dd class="field-odd"><p>Flight</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The gimbal ignores the component for an axis it is disabled for, such as pitch when
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Engine20gimbal_pitch_enabledEv" title="krpc::services::SpaceCenter::Engine::gimbal_pitch_enabled"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Engine::gimbal_pitch_enabled()</span></code></a> is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+</div>
 </dd></dl>
 
 <dl class="cpp function">
@@ -5724,6 +5814,11 @@ Returns zero if the engine is inactive, or not gimballed.</p>
 <dd class="field-odd"><p>Flight</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The torque is zero about an axis the gimbal is disabled for, such as pitch when
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Engine20gimbal_pitch_enabledEv" title="krpc::services::SpaceCenter::Engine::gimbal_pitch_enabled"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Engine::gimbal_pitch_enabled()</span></code></a> is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+</div>
 </dd></dl>
 
 <dl class="cpp function">
@@ -8472,7 +8567,7 @@ An RCS thruster is inactive if the RCS action group is disabled
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter3RCS19set_forward_enabledEb">
 <span id="_CPPv3N4krpc8services11SpaceCenter3RCS19set_forward_enabledEb"></span><span id="_CPPv2N4krpc8services11SpaceCenter3RCS19set_forward_enabledEb"></span><span id="krpc::services::SpaceCenter::RCS::set_forward_enabled__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_forward_enabled</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter3RCS19set_forward_enabledEb" title="Link to this definition">#</a><br /></dt>
-<dd><p>Whether the RCS thruster will fire when pitch control input is given.</p>
+<dd><p>Whether the RCS thruster will fire when forward control input is given.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
@@ -8488,7 +8583,7 @@ An RCS thruster is inactive if the RCS action group is disabled
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter3RCS14set_up_enabledEb">
 <span id="_CPPv3N4krpc8services11SpaceCenter3RCS14set_up_enabledEb"></span><span id="_CPPv2N4krpc8services11SpaceCenter3RCS14set_up_enabledEb"></span><span id="krpc::services::SpaceCenter::RCS::set_up_enabled__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_up_enabled</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter3RCS14set_up_enabledEb" title="Link to this definition">#</a><br /></dt>
-<dd><p>Whether the RCS thruster will fire when yaw control input is given.</p>
+<dd><p>Whether the RCS thruster will fire when up control input is given.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
@@ -8504,7 +8599,7 @@ An RCS thruster is inactive if the RCS action group is disabled
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter3RCS17set_right_enabledEb">
 <span id="_CPPv3N4krpc8services11SpaceCenter3RCS17set_right_enabledEb"></span><span id="_CPPv2N4krpc8services11SpaceCenter3RCS17set_right_enabledEb"></span><span id="krpc::services::SpaceCenter::RCS::set_right_enabled__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_right_enabled</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter3RCS17set_right_enabledEb" title="Link to this definition">#</a><br /></dt>
-<dd><p>Whether the RCS thruster will fire when roll control input is given.</p>
+<dd><p>Whether the RCS thruster will fire when right control input is given.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
@@ -8548,6 +8643,11 @@ roll and yaw axes. Each component is a normalized control input between -1 and 1
 <dd class="field-odd"><p>Flight</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The block ignores the component for an axis it is disabled for, such as pitch when
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter3RCS13pitch_enabledEv" title="krpc::services::SpaceCenter::RCS::pitch_enabled"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">RCS::pitch_enabled()</span></code></a> is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+</div>
 </dd></dl>
 
 <dl class="cpp function">
@@ -8566,6 +8666,11 @@ and 1.</p>
 <dd class="field-odd"><p>Flight</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The block ignores the component for an axis it is disabled for, such as right when
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter3RCS13right_enabledEv" title="krpc::services::SpaceCenter::RCS::right_enabled"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">RCS::right_enabled()</span></code></a> is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+</div>
 </dd></dl>
 
 <dl class="cpp function">

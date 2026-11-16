@@ -3329,6 +3329,62 @@ Engine
       :rtype: float
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
+   .. attribute:: gimbal_response_speed_enabled
+
+      Whether the gimbal moves toward its commanded deflection at
+      :attr:`Engine.gimbal_response_speed`. When ``False``, the gimbal reaches its
+      commanded deflection in one physics tick.
+      Throws an exception if the engine is not gimballed.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. attribute:: gimbal_response_speed
+
+      The response speed of the gimbal, in :math:`\mathrm{s^{-1}}`.
+      Throws an exception if the engine is not gimballed.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Each physics tick of length :math:`\Delta t`, the gimbal moves a fraction
+         :math:`v \Delta t` of the way from its deflection to the commanded deflection,
+         where :math:`v` is the response speed. The fraction is at most 1, so at high
+         physics warp the gimbal can reach its commanded deflection in one tick. This lag
+         only applies when :attr:`Engine.gimbal_response_speed_enabled` is ``True``.
+
+   .. attribute:: gimbal_pitch_enabled
+
+      Whether the gimbal responds to pitch control input.
+      Throws an exception if the engine is not gimballed.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. attribute:: gimbal_yaw_enabled
+
+      Whether the gimbal responds to yaw control input.
+      Throws an exception if the engine is not gimballed.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. attribute:: gimbal_roll_enabled
+
+      Whether the gimbal responds to roll control input.
+      Throws an exception if the engine is not gimballed.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
    .. attribute:: gimbal_override
 
       Whether the gimbal is being controlled directly, bypassing the vessel's normal
@@ -3353,6 +3409,12 @@ Engine
       :rtype: tuple(float, float, float)
       :Game Scenes: Flight
 
+
+      .. note::
+
+         The gimbal ignores the component for an axis it is disabled for, such as pitch when
+         :attr:`Engine.gimbal_pitch_enabled` is ``False``.
+
    .. attribute:: available_torque
 
       The available torque, in :math:`\mathrm{N \cdot m}`, that can be produced by this engine,
@@ -3363,6 +3425,12 @@ Engine
       :Attribute: Read-only, cannot be set
       :rtype: :class:`AxisRange`
       :Game Scenes: Flight
+
+
+      .. note::
+
+         The torque is zero about an axis the gimbal is disabled for, such as pitch when
+         :attr:`Engine.gimbal_pitch_enabled` is ``False``.
 
    .. attribute:: can_reverse_thrust
 
@@ -5243,7 +5311,7 @@ RCS
 
    .. attribute:: forward_enabled
 
-      Whether the RCS thruster will fire when pitch control input is given.
+      Whether the RCS thruster will fire when forward control input is given.
 
       :Attribute: Can be read or written
       :rtype: bool
@@ -5251,7 +5319,7 @@ RCS
 
    .. attribute:: up_enabled
 
-      Whether the RCS thruster will fire when yaw control input is given.
+      Whether the RCS thruster will fire when up control input is given.
 
       :Attribute: Can be read or written
       :rtype: bool
@@ -5259,7 +5327,7 @@ RCS
 
    .. attribute:: right_enabled
 
-      Whether the RCS thruster will fire when roll control input is given.
+      Whether the RCS thruster will fire when right control input is given.
 
       :Attribute: Can be read or written
       :rtype: bool
@@ -5287,6 +5355,12 @@ RCS
       :rtype: tuple(float, float, float)
       :Game Scenes: Flight
 
+
+      .. note::
+
+         The block ignores the component for an axis it is disabled for, such as pitch when
+         :attr:`RCS.pitch_enabled` is ``False``.
+
    .. attribute:: translation_override
 
       The translation demand applied when :attr:`RCS.input_override` is enabled, in the
@@ -5296,6 +5370,12 @@ RCS
       :Attribute: Can be read or written
       :rtype: tuple(float, float, float)
       :Game Scenes: Flight
+
+
+      .. note::
+
+         The block ignores the component for an axis it is disabled for, such as right when
+         :attr:`RCS.right_enabled` is ``False``.
 
    .. attribute:: available_torque
 

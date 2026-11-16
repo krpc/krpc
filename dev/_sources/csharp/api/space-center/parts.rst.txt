@@ -2933,6 +2933,52 @@ Engine
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
+   .. property:: bool GimbalResponseSpeedEnabled { get; }
+
+      Whether the gimbal moves toward its commanded deflection at
+      :prop:`Engine.GimbalResponseSpeed`. When ``false``, the gimbal reaches its
+      commanded deflection in one physics tick.
+      Throws an exception if the engine is not gimballed.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. property:: float GimbalResponseSpeed { get; }
+
+      The response speed of the gimbal, in :math:`\mathrm{s^{-1}}`.
+      Throws an exception if the engine is not gimballed.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Each physics tick of length :math:`\Delta t`, the gimbal moves a fraction
+         :math:`v \Delta t` of the way from its deflection to the commanded deflection,
+         where :math:`v` is the response speed. The fraction is at most 1, so at high
+         physics warp the gimbal can reach its commanded deflection in one tick. This lag
+         only applies when :prop:`Engine.GimbalResponseSpeedEnabled` is ``true``.
+
+   .. property:: bool GimbalPitchEnabled { get; set; }
+
+      Whether the gimbal responds to pitch control input.
+      Throws an exception if the engine is not gimballed.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. property:: bool GimbalYawEnabled { get; set; }
+
+      Whether the gimbal responds to yaw control input.
+      Throws an exception if the engine is not gimballed.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. property:: bool GimbalRollEnabled { get; set; }
+
+      Whether the gimbal responds to roll control input.
+      Throws an exception if the engine is not gimballed.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
    .. property:: bool GimbalOverride { get; set; }
 
       Whether the gimbal is being controlled directly, bypassing the vessel's normal
@@ -2953,6 +2999,12 @@ Engine
 
       :Game Scenes: Flight
 
+
+      .. note::
+
+         The gimbal ignores the component for an axis it is disabled for, such as pitch when
+         :prop:`Engine.GimbalPitchEnabled` is ``false``.
+
    .. property:: AxisRange AvailableTorque { get; }
 
       The available torque, in :math:`\mathrm{N \cdot m}`, that can be produced by this engine,
@@ -2961,6 +3013,12 @@ Engine
       Returns zero if the engine is inactive, or not gimballed.
 
       :Game Scenes: Flight
+
+
+      .. note::
+
+         The torque is zero about an axis the gimbal is disabled for, such as pitch when
+         :prop:`Engine.GimbalPitchEnabled` is ``false``.
 
    .. property:: bool CanReverseThrust { get; }
 
@@ -4599,19 +4657,19 @@ RCS
 
    .. property:: bool ForwardEnabled { get; set; }
 
-      Whether the RCS thruster will fire when pitch control input is given.
+      Whether the RCS thruster will fire when forward control input is given.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: bool UpEnabled { get; set; }
 
-      Whether the RCS thruster will fire when yaw control input is given.
+      Whether the RCS thruster will fire when up control input is given.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: bool RightEnabled { get; set; }
 
-      Whether the RCS thruster will fire when roll control input is given.
+      Whether the RCS thruster will fire when right control input is given.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
@@ -4633,6 +4691,12 @@ RCS
 
       :Game Scenes: Flight
 
+
+      .. note::
+
+         The block ignores the component for an axis it is disabled for, such as pitch when
+         :prop:`RCS.PitchEnabled` is ``false``.
+
    .. property:: System.Tuple<double,double,double> TranslationOverride { get; set; }
 
       The translation demand applied when :prop:`RCS.InputOverride` is enabled, in the
@@ -4640,6 +4704,12 @@ RCS
       and 1.
 
       :Game Scenes: Flight
+
+
+      .. note::
+
+         The block ignores the component for an axis it is disabled for, such as right when
+         :prop:`RCS.RightEnabled` is ``false``.
 
    .. property:: AxisRange AvailableTorque { get; }
 

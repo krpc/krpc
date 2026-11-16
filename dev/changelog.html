@@ -696,6 +696,14 @@
 <li><p>Fix velocities, orbits and orbital reference frames throwing an exception in a Kopernicus system whose star is not named <code class="docutils literal notranslate"><span class="pre">Sun</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1359">#1359</a>)</p></li>
 <li><p>Fix <code class="docutils literal notranslate"><span class="pre">CelestialBody.SurfaceGravity</span></code> differing from the gravity the game applies by about 0.03% (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1359">#1359</a>)</p></li>
 <li><p>Test with Kopernicus, Real Solar System, Realism Overhaul and Procedural Parts, and list their tested versions in the documentation (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1359">#1359</a>)</p></li>
+<li><p>Engines and RCS</p>
+<ul>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Engine.GimbalResponseSpeed</span></code> and <code class="docutils literal notranslate"><span class="pre">Engine.GimbalResponseSpeedEnabled</span></code>, the gimbal’s response lag (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1360">#1360</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Engine.GimbalPitchEnabled</span></code>, <code class="docutils literal notranslate"><span class="pre">Engine.GimbalYawEnabled</span></code> and <code class="docutils literal notranslate"><span class="pre">Engine.GimbalRollEnabled</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1360">#1360</a>)</p></li>
+<li><p>Fix <code class="docutils literal notranslate"><span class="pre">Engine.AvailableTorque</span></code> counting the pitch and yaw of a gimbal with those axes disabled (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1360">#1360</a>)</p></li>
+<li><p>Apply the axis toggles of a gimbal or RCS block to <code class="docutils literal notranslate"><span class="pre">Engine.GimbalActuation</span></code>, <code class="docutils literal notranslate"><span class="pre">RCS.RotationOverride</span></code> and <code class="docutils literal notranslate"><span class="pre">RCS.TranslationOverride</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1360">#1360</a>)</p></li>
+</ul>
+</li>
 </ul>
 </section>
 <section id="dockingcamera-service">
