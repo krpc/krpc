@@ -51,7 +51,12 @@ def _main_impl(ctx):
     # deep in the runfiles it sits. The rest are paths only a rule can ask for: location
     # expansion resolves a label to the files it builds, and neither the interpreter nor
     # a module tree is a single file.
-    depth = len(ctx.label.package.split("/")) if ctx.label.package else 0
+    path = ctx.outputs.out.short_path.split("/")
+    if path[0] == "..":
+        # A launcher in an external repository, which sits beside the main repository
+        runfiles = [".."] * (len(path) - 2) + [ctx.workspace_name]
+    else:
+        runfiles = [".."] * (len(path) - 1)
     ctx.actions.expand_template(
         output = ctx.outputs.out,
         template = ctx.file._template,
@@ -59,7 +64,7 @@ def _main_impl(ctx):
             "@ARGS@": " ".join(ctx.attr.script_args),
             "@INTERPRETER@": ctx.executable._interpreter.short_path,
             "@ROOTS@": " ".join([dep[LuaInfo].root for dep in ctx.attr.deps]),
-            "@RUNFILES@": "/".join([".."] * depth) or ".",
+            "@RUNFILES@": "/".join(runfiles) or ".",
             "@SCRIPT@": ctx.file.script.short_path,
         },
     )
