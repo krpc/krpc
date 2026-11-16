@@ -31,6 +31,7 @@ class EngineTestBase(Mixin):
         "liquidEngine2": {  # LV-T45 "Swivel" Liquid Fuel Engine
             "propellants": {"LiquidFuel": 9.0 / 11.0, "Oxidizer": 1.0},
             "gimballed": True,
+            "roll_torque": False,
             "gimbal_range": 3,
             "throttle_locked": False,
             "can_restart": True,
@@ -65,6 +66,7 @@ class EngineTestBase(Mixin):
         "omsEngine": {  # O-10 "Puff" MonoPropellant Fuel Engine
             "propellants": {"MonoPropellant": 1.0},
             "gimballed": True,
+            "roll_torque": True,
             "gimbal_range": 6,
             "throttle_locked": False,
             "can_restart": True,
@@ -99,6 +101,7 @@ class EngineTestBase(Mixin):
         "RAPIER": {  # CR-7 R.A.P.I.E.R. Engine
             "propellants": {"IntakeAir": 1.0, "LiquidFuel": 0.166666},
             "gimballed": True,
+            "roll_torque": True,
             "gimbal_range": 3,
             "throttle_locked": False,
             "can_restart": True,
@@ -203,8 +206,15 @@ class EngineTest(EngineTestBase):
         self.assertAlmostEqual(data["isp"], engine.specific_impulse, delta=5)
         self.assertTrue(engine.has_fuel)
         if data["gimballed"] and throttle > 0:
-            self.assertGreater(engine.available_torque[0], (100, 100, 100))
-            self.assertLess(engine.available_torque[1], (-100, -100, -100))
+            positive, negative = engine.available_torque
+            # The game credits some gimbals with no roll torque
+            for axis in range(3):
+                if axis != 1 or data["roll_torque"]:
+                    self.assertGreater(positive[axis], 100)
+                    self.assertLess(negative[axis], -100)
+                else:
+                    self.assertAlmostEqual(0, positive[axis], delta=1)
+                    self.assertAlmostEqual(0, negative[axis], delta=1)
         else:
             self.assertAlmostEqual((0, 0, 0), engine.available_torque[0])
             self.assertAlmostEqual((0, 0, 0), engine.available_torque[1])
