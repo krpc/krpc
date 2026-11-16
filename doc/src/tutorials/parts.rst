@@ -45,14 +45,30 @@ your Kerbals by deploying all the parachutes:
       .. literalinclude:: /scripts/tutorials/parts/DeployParachutes.lua
          :language: lua
 
-The script deploys the parachutes one call at a time, and the game can advance between the
-calls. In Python, a :ref:`server side function <server-side-functions>` deploys them all
-in the same physics tick, with a single call:
+   .. tab:: JavaScript
 
-.. literalinclude:: /scripts/tutorials/parts/DeployParachutesFunction.py
-   :language: python
-   :start-after: [docs]
-   :end-before: [/docs]
+      .. literalinclude:: /scripts/tutorials/parts/DeployParachutes.js
+         :language: javascript
+
+The script deploys the parachutes one call at a time, and the game can advance between the
+calls. A :ref:`server side function <server-side-functions>` deploys them all in the same
+physics tick, with a single call:
+
+.. tabs::
+
+   .. tab:: Python
+
+      .. literalinclude:: /scripts/tutorials/parts/DeployParachutesFunction.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
+
+   .. tab:: JavaScript
+
+      .. literalinclude:: /scripts/tutorials/parts/DeployParachutesFunction.js
+         :language: javascript
+         :start-after: [docs]
+         :end-before: [/docs]
 
 'Control From Here' for Docking Ports
 -------------------------------------
@@ -91,6 +107,11 @@ control the vessel from it:
 
       .. literalinclude:: /scripts/tutorials/parts/ControlFromHere.lua
          :language: lua
+
+   .. tab:: JavaScript
+
+      .. literalinclude:: /scripts/tutorials/parts/ControlFromHere.js
+         :language: javascript
 
 Combined Specific Impulse
 -------------------------
@@ -131,6 +152,11 @@ https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines
       .. literalinclude:: /scripts/tutorials/parts/CombinedIsp.lua
          :language: lua
 
+   .. tab:: JavaScript
+
+      .. literalinclude:: /scripts/tutorials/parts/CombinedIsp.js
+         :language: javascript
+
 The script reads the thrust and specific impulse of each engine with separate calls, which can
 land in different physics ticks. A :ref:`server side function <server-side-functions>`
 reads them all in the same tick, with a single call:
@@ -151,6 +177,13 @@ reads them all in the same tick, with a single call:
          :start-after: [docs]
          :end-before: [/docs]
          :dedent:
+
+   .. tab:: JavaScript
+
+      .. literalinclude:: /scripts/tutorials/parts/CombinedIspFunction.js
+         :language: javascript
+         :start-after: [docs]
+         :end-before: [/docs]
 
 .. seealso:: The combined specific impulse of each stage is also available
    directly from the staging API, as :attr:`Stage.specific_impulse` on the
