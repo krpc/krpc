@@ -3265,6 +3265,18 @@
 </li>
       <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.break_(Connection)">break_(Connection) (Java method)</a>
 </li>
+      <li><a href="lua/api/space-center/parts.html#lua-SpaceCenter.Part.breaking_force">breaking_force (attribute in SpaceCenter.Part)</a>
+
+      <ul>
+        <li><a href="python/api/space-center/parts.html#SpaceCenter.Part.breaking_force">(Part attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="lua/api/space-center/parts.html#lua-SpaceCenter.Part.breaking_torque">breaking_torque (attribute in SpaceCenter.Part)</a>
+
+      <ul>
+        <li><a href="python/api/space-center/parts.html#SpaceCenter.Part.breaking_torque">(Part attribute)</a>
+</li>
+      </ul></li>
       <li><a href="lua/api/ui/panel.html#lua-UI.Panel.bring_to_front">bring_to_front (method in UI.Panel)</a>
 </li>
       <li><a href="python/api/ui/panel.html#UI.Panel.bring_to_front">bring_to_front() (Panel method)</a>
@@ -8679,6 +8691,10 @@
 </li>
       <li><a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.Control.getBrakes()">getBrakes() (Java method)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Wheel.getBrakes()">[1]</a>
 </li>
+      <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.getBreakingForce()">getBreakingForce() (Java method)</a>
+</li>
+      <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.getBreakingTorque()">getBreakingTorque() (Java method)</a>
+</li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ReactionWheel.getBroken()">getBroken() (Java method)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Wheel.getBroken()">[1]</a>
 </li>
       <li><a href="java/api/infernal-robotics/servo-group.html#krpc.client.services.InfernalRobotics.ServoGroup.getBuildAid()">getBuildAid() (Java method)</a>
@@ -9593,6 +9609,18 @@
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Fairing.getJettisoned()">getJettisoned() (Java method)</a>
 </li>
+      <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.getJointAngularDamper()">getJointAngularDamper() (Java method)</a>
+</li>
+      <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.getJointAngularSpring()">getJointAngularSpring() (Java method)</a>
+</li>
+      <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.getJointBreakForce()">getJointBreakForce() (Java method)</a>
+</li>
+      <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.getJointBreakTorque()">getJointBreakTorque() (Java method)</a>
+</li>
+      <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.getJointDamper()">getJointDamper() (Java method)</a>
+</li>
+      <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.getJointSpring()">getJointSpring() (Java method)</a>
+</li>
       <li><a href="js/api/space-center/space-center.html#SpaceCenter.getKerbal">getKerbal() (built-in function)</a>
 </li>
       <li><a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.getKerbal(String)">getKerbal(String) (Java method)</a>
@@ -9703,6 +9731,8 @@
 </li>
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getLoaded()">getLoaded() (Java method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="java/api/ui/rect-transform.html#krpc.client.services.UI.RectTransform.getLocalPosition()">getLocalPosition() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticHinge.getLocked()">getLocked() (Java method)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticPiston.getLocked()">[1]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticRotation.getLocked()">[2]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticRotor.getLocked()">[3]</a>
@@ -9711,8 +9741,6 @@
 </li>
       <li><a href="java/api/space-center/orbit.html#krpc.client.services.SpaceCenter.Orbit.getLongitudeOfAscendingNode()">getLongitudeOfAscendingNode() (Java method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="java/api/trajectories/descent-profile.html#krpc.client.services.Trajectories.DescentProfile.getLowAltitude()">getLowAltitude() (Java method)</a>
 </li>
       <li><a href="java/api/ui/rect-transform.html#krpc.client.services.UI.RectTransform.getLowerLeft()">getLowerLeft() (Java method)</a>
@@ -12412,12 +12440,48 @@
         <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Fairing.jettison()">(Java method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/space-center/parts.html#lua-SpaceCenter.Fairing.jettisoned">jettisoned (attribute in SpaceCenter.Fairing)</a>
 
       <ul>
         <li><a href="python/api/space-center/parts.html#SpaceCenter.Fairing.jettisoned">(Fairing attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="lua/api/space-center/parts.html#lua-SpaceCenter.Part.joint_angular_damper">joint_angular_damper (attribute in SpaceCenter.Part)</a>
+
+      <ul>
+        <li><a href="python/api/space-center/parts.html#SpaceCenter.Part.joint_angular_damper">(Part attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="lua/api/space-center/parts.html#lua-SpaceCenter.Part.joint_angular_spring">joint_angular_spring (attribute in SpaceCenter.Part)</a>
+
+      <ul>
+        <li><a href="python/api/space-center/parts.html#SpaceCenter.Part.joint_angular_spring">(Part attribute)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="lua/api/space-center/parts.html#lua-SpaceCenter.Part.joint_break_force">joint_break_force (attribute in SpaceCenter.Part)</a>
+
+      <ul>
+        <li><a href="python/api/space-center/parts.html#SpaceCenter.Part.joint_break_force">(Part attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="lua/api/space-center/parts.html#lua-SpaceCenter.Part.joint_break_torque">joint_break_torque (attribute in SpaceCenter.Part)</a>
+
+      <ul>
+        <li><a href="python/api/space-center/parts.html#SpaceCenter.Part.joint_break_torque">(Part attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="lua/api/space-center/parts.html#lua-SpaceCenter.Part.joint_damper">joint_damper (attribute in SpaceCenter.Part)</a>
+
+      <ul>
+        <li><a href="python/api/space-center/parts.html#SpaceCenter.Part.joint_damper">(Part attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="lua/api/space-center/parts.html#lua-SpaceCenter.Part.joint_spring">joint_spring (attribute in SpaceCenter.Part)</a>
+
+      <ul>
+        <li><a href="python/api/space-center/parts.html#SpaceCenter.Part.joint_spring">(Part attribute)</a>
 </li>
       </ul></li>
       <li><a href="lua/api/stdlib.html#lua-StdLib.ImageFormat.jpeg">jpeg (data in StdLib.ImageFormat)</a>
@@ -17025,6 +17089,10 @@
 </li>
       <li><a href="csharp/api/space-center/parts.html#function-KRPC.Client.Services.SpaceCenter.Part.BoundingBox">KRPC.Client.Services.SpaceCenter.Part.BoundingBox (C# function)</a>
 </li>
+      <li><a href="csharp/api/space-center/parts.html#property-KRPC.Client.Services.SpaceCenter.Part.BreakingForce">KRPC.Client.Services.SpaceCenter.Part.BreakingForce (C# property)</a>
+</li>
+      <li><a href="csharp/api/space-center/parts.html#property-KRPC.Client.Services.SpaceCenter.Part.BreakingTorque">KRPC.Client.Services.SpaceCenter.Part.BreakingTorque (C# property)</a>
+</li>
       <li><a href="csharp/api/space-center/parts.html#property-KRPC.Client.Services.SpaceCenter.Part.BuoyancyMultiplier">KRPC.Client.Services.SpaceCenter.Part.BuoyancyMultiplier (C# property)</a>
 </li>
       <li><a href="csharp/api/space-center/parts.html#function-KRPC.Client.Services.SpaceCenter.Part.BuoyantForce">KRPC.Client.Services.SpaceCenter.Part.BuoyantForce (C# function)</a>
@@ -17108,6 +17176,18 @@
       <li><a href="csharp/api/space-center/parts.html#property-KRPC.Client.Services.SpaceCenter.Part.Intake">KRPC.Client.Services.SpaceCenter.Part.Intake (C# property)</a>
 </li>
       <li><a href="csharp/api/space-center/parts.html#property-KRPC.Client.Services.SpaceCenter.Part.IsFuelLine">KRPC.Client.Services.SpaceCenter.Part.IsFuelLine (C# property)</a>
+</li>
+      <li><a href="csharp/api/space-center/parts.html#property-KRPC.Client.Services.SpaceCenter.Part.JointAngularDamper">KRPC.Client.Services.SpaceCenter.Part.JointAngularDamper (C# property)</a>
+</li>
+      <li><a href="csharp/api/space-center/parts.html#property-KRPC.Client.Services.SpaceCenter.Part.JointAngularSpring">KRPC.Client.Services.SpaceCenter.Part.JointAngularSpring (C# property)</a>
+</li>
+      <li><a href="csharp/api/space-center/parts.html#property-KRPC.Client.Services.SpaceCenter.Part.JointBreakForce">KRPC.Client.Services.SpaceCenter.Part.JointBreakForce (C# property)</a>
+</li>
+      <li><a href="csharp/api/space-center/parts.html#property-KRPC.Client.Services.SpaceCenter.Part.JointBreakTorque">KRPC.Client.Services.SpaceCenter.Part.JointBreakTorque (C# property)</a>
+</li>
+      <li><a href="csharp/api/space-center/parts.html#property-KRPC.Client.Services.SpaceCenter.Part.JointDamper">KRPC.Client.Services.SpaceCenter.Part.JointDamper (C# property)</a>
+</li>
+      <li><a href="csharp/api/space-center/parts.html#property-KRPC.Client.Services.SpaceCenter.Part.JointSpring">KRPC.Client.Services.SpaceCenter.Part.JointSpring (C# property)</a>
 </li>
       <li><a href="csharp/api/space-center/parts.html#property-KRPC.Client.Services.SpaceCenter.Part.LaunchClamp">KRPC.Client.Services.SpaceCenter.Part.LaunchClamp (C# property)</a>
 </li>
@@ -24050,8 +24130,6 @@
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter6Engine16set_gimbal_limitEf">krpc::services::SpaceCenter::Engine::set_gimbal_limit (C++ function)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter6Engine17set_gimbal_lockedEb">krpc::services::SpaceCenter::Engine::set_gimbal_locked (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter6Engine19set_gimbal_overrideEb">krpc::services::SpaceCenter::Engine::set_gimbal_override (C++ function)</a>
@@ -24060,6 +24138,8 @@
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter6Engine23set_gimbal_roll_enabledEb">krpc::services::SpaceCenter::Engine::set_gimbal_roll_enabled (C++ function)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter6Engine22set_gimbal_yaw_enabledEb">krpc::services::SpaceCenter::Engine::set_gimbal_yaw_enabled (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter6Engine24set_independent_throttleEb">krpc::services::SpaceCenter::Engine::set_independent_throttle (C++ function)</a>
@@ -24740,6 +24820,10 @@
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter4Part12bounding_boxE14ReferenceFrame">krpc::services::SpaceCenter::Part::bounding_box (C++ function)</a>
 </li>
+      <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter4Part14breaking_forceEv">krpc::services::SpaceCenter::Part::breaking_force (C++ function)</a>
+</li>
+      <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter4Part15breaking_torqueEv">krpc::services::SpaceCenter::Part::breaking_torque (C++ function)</a>
+</li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter4Part19buoyancy_multiplierEv">krpc::services::SpaceCenter::Part::buoyancy_multiplier (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter4Part13buoyant_forceE14ReferenceFrame">krpc::services::SpaceCenter::Part::buoyant_force (C++ function)</a>
@@ -24821,6 +24905,18 @@
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter4Part6intakeEv">krpc::services::SpaceCenter::Part::intake (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter4Part12is_fuel_lineEv">krpc::services::SpaceCenter::Part::is_fuel_line (C++ function)</a>
+</li>
+      <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter4Part20joint_angular_damperEv">krpc::services::SpaceCenter::Part::joint_angular_damper (C++ function)</a>
+</li>
+      <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter4Part20joint_angular_springEv">krpc::services::SpaceCenter::Part::joint_angular_spring (C++ function)</a>
+</li>
+      <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter4Part17joint_break_forceEv">krpc::services::SpaceCenter::Part::joint_break_force (C++ function)</a>
+</li>
+      <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter4Part18joint_break_torqueEv">krpc::services::SpaceCenter::Part::joint_break_torque (C++ function)</a>
+</li>
+      <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter4Part12joint_damperEv">krpc::services::SpaceCenter::Part::joint_damper (C++ function)</a>
+</li>
+      <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter4Part12joint_springEv">krpc::services::SpaceCenter::Part::joint_spring (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter4Part12launch_clampEv">krpc::services::SpaceCenter::Part::launch_clamp (C++ function)</a>
 </li>
@@ -33096,6 +33192,10 @@
 </li>
       <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_BoundingBox">krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_BoundingBox (C function)</a>
 </li>
+      <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_BreakingForce">krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_BreakingForce (C function)</a>
+</li>
+      <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_BreakingTorque">krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_BreakingTorque (C function)</a>
+</li>
       <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_BuoyancyMultiplier">krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_BuoyancyMultiplier (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_BuoyantForce">krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_BuoyantForce (C function)</a>
@@ -33177,6 +33277,18 @@
       <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_Intake">krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_Intake (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_IsFuelLine">krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_IsFuelLine (C function)</a>
+</li>
+      <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_JointAngularDamper">krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_JointAngularDamper (C function)</a>
+</li>
+      <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_JointAngularSpring">krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_JointAngularSpring (C function)</a>
+</li>
+      <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_JointBreakForce">krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_JointBreakForce (C function)</a>
+</li>
+      <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_JointBreakTorque">krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_JointBreakTorque (C function)</a>
+</li>
+      <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_JointDamper">krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_JointDamper (C function)</a>
+</li>
+      <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_JointSpring">krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_JointSpring (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_LaunchClamp">krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_LaunchClamp (C function)</a>
 </li>

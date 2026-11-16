@@ -2550,12 +2550,156 @@ in the editor and at a body with no ocean.</p>
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Part.ImpactTolerance">
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">ImpactTolerance</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Part.ImpactTolerance" title="Link to this definition">#</a></dt>
-<dd><p>The impact tolerance of the part, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
+<dd><p>The crash tolerance of the part, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>All</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Part.BreakingForce">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">BreakingForce</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Part.BreakingForce" title="Link to this definition">#</a></dt>
+<dd><p>The breaking force of the part’s attachments, in <span class="math notranslate nohighlight">\(\mathrm{kN}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The joint to the parent part takes the lower breaking force of the two parts,
+scaled by the size of the attachment node. See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Part.JointBreakForce" title="property: KRPC.Client.Services.SpaceCenter.Part.JointBreakForce"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Part.JointBreakForce</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Part.BreakingTorque">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">BreakingTorque</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Part.BreakingTorque" title="Link to this definition">#</a></dt>
+<dd><p>The breaking torque of the part’s attachments, in <span class="math notranslate nohighlight">\(\mathrm{kN \cdot m}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The joint to the parent part takes the lower breaking torque of the two parts,
+scaled by the size of the attachment node. See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Part.JointBreakTorque" title="property: KRPC.Client.Services.SpaceCenter.Part.JointBreakTorque"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Part.JointBreakTorque</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Part.JointBreakForce">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">JointBreakForce</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Part.JointBreakForce" title="Link to this definition">#</a></dt>
+<dd><p>The force that breaks the joint to the parent part, in <span class="math notranslate nohighlight">\(\mathrm{kN}\)</span>.
+Throws an exception if the part has no joint to its parent part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The sum over the joint’s physics joints. It is infinite for a short time after
+the vessel loads, such as just after launch. The root part and a physicsless
+part have no joint to their parent.</p>
+</div>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Part.JointBreakTorque">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">JointBreakTorque</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Part.JointBreakTorque" title="Link to this definition">#</a></dt>
+<dd><p>The torque that breaks the joint to the parent part, in <span class="math notranslate nohighlight">\(\mathrm{kN \cdot m}\)</span>.
+Throws an exception if the part has no joint to its parent part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The sum over the joint’s physics joints. It is infinite for a short time after
+the vessel loads. On a stack node of size 2 or more, the physics joints sit apart
+around the node. A bending moment then breaks the joint when one physics joint’s
+force exceeds its share of <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Part.JointBreakForce" title="property: KRPC.Client.Services.SpaceCenter.Part.JointBreakForce"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Part.JointBreakForce</span></code></a>, usually at a much
+larger moment than this torque.</p>
+</div>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Part.JointSpring">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">JointSpring</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Part.JointSpring" title="Link to this definition">#</a></dt>
+<dd><p>The spring constant of the joint to the parent part against translation, in
+<span class="math notranslate nohighlight">\(\mathrm{kN/m}\)</span>.
+Throws an exception if the part has no joint to its parent part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The sum over the joint’s physics joints. A rigid attachment locks the joint, and
+this spring then has no effect.</p>
+</div>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Part.JointDamper">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">JointDamper</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Part.JointDamper" title="Link to this definition">#</a></dt>
+<dd><p>The damping constant of the joint to the parent part against translation, in
+<span class="math notranslate nohighlight">\(\mathrm{kN \cdot s/m}\)</span>.
+Throws an exception if the part has no joint to its parent part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The sum over the joint’s physics joints. The stock game sets it to zero, and
+mods such as Kerbal Joint Reinforcement change it.</p>
+</div>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Part.JointAngularSpring">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">JointAngularSpring</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Part.JointAngularSpring" title="Link to this definition">#</a></dt>
+<dd><p>The spring constant of the joint to the parent part against bending, in
+<span class="math notranslate nohighlight">\(\mathrm{kN \cdot m/rad}\)</span>.
+Throws an exception if the part has no joint to its parent part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The sum over the joint’s physics joints, about the two axes perpendicular to the
+joint axis. The joint is far stiffer against twisting about its axis. On a stack
+node of size 2 or more, the physics joints sit apart around the node, and the joint
+bends much less than this spring gives. A rigid attachment makes it infinite.</p>
+</div>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Part.JointAngularDamper">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">JointAngularDamper</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Part.JointAngularDamper" title="Link to this definition">#</a></dt>
+<dd><p>The damping constant of the joint to the parent part against bending, in
+<span class="math notranslate nohighlight">\(\mathrm{kN \cdot m \cdot s/rad}\)</span>.
+Throws an exception if the part has no joint to its parent part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The sum over the joint’s physics joints. The stock game sets it to zero, and
+mods such as Kerbal Joint Reinforcement change it.</p>
+</div>
 </dd></dl>
 
 <dl class="cs property">

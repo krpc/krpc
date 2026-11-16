@@ -2352,7 +2352,151 @@ in the editor and at a body with no ocean.</p>
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_ImpactTolerance">
 <a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Part_ImpactTolerance</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Part_t" title="krpc_SpaceCenter_Part_t"><span class="n"><span class="pre">krpc_SpaceCenter_Part_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_ImpactTolerance" title="Link to this definition">#</a><br /></dt>
-<dd><p>The impact tolerance of the part, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
+<dd><p>The crash tolerance of the part, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_BreakingForce">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Part_BreakingForce</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Part_t" title="krpc_SpaceCenter_Part_t"><span class="n"><span class="pre">krpc_SpaceCenter_Part_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_BreakingForce" title="Link to this definition">#</a><br /></dt>
+<dd><p>The breaking force of the part’s attachments, in <span class="math notranslate nohighlight">\(\mathrm{kN}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The joint to the parent part takes the lower breaking force of the two parts,
+scaled by the size of the attachment node. See <a class="reference internal" href="#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_JointBreakForce" title="krpc_SpaceCenter_Part_JointBreakForce"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_JointBreakForce()</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_BreakingTorque">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Part_BreakingTorque</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Part_t" title="krpc_SpaceCenter_Part_t"><span class="n"><span class="pre">krpc_SpaceCenter_Part_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_BreakingTorque" title="Link to this definition">#</a><br /></dt>
+<dd><p>The breaking torque of the part’s attachments, in <span class="math notranslate nohighlight">\(\mathrm{kN \cdot m}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The joint to the parent part takes the lower breaking torque of the two parts,
+scaled by the size of the attachment node. See <a class="reference internal" href="#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_JointBreakTorque" title="krpc_SpaceCenter_Part_JointBreakTorque"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_JointBreakTorque()</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_JointBreakForce">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Part_JointBreakForce</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Part_t" title="krpc_SpaceCenter_Part_t"><span class="n"><span class="pre">krpc_SpaceCenter_Part_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_JointBreakForce" title="Link to this definition">#</a><br /></dt>
+<dd><p>The force that breaks the joint to the parent part, in <span class="math notranslate nohighlight">\(\mathrm{kN}\)</span>.
+Throws an exception if the part has no joint to its parent part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The sum over the joint’s physics joints. It is infinite for a short time after
+the vessel loads, such as just after launch. The root part and a physicsless
+part have no joint to their parent.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_JointBreakTorque">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Part_JointBreakTorque</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Part_t" title="krpc_SpaceCenter_Part_t"><span class="n"><span class="pre">krpc_SpaceCenter_Part_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_JointBreakTorque" title="Link to this definition">#</a><br /></dt>
+<dd><p>The torque that breaks the joint to the parent part, in <span class="math notranslate nohighlight">\(\mathrm{kN \cdot m}\)</span>.
+Throws an exception if the part has no joint to its parent part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The sum over the joint’s physics joints. It is infinite for a short time after
+the vessel loads. On a stack node of size 2 or more, the physics joints sit apart
+around the node. A bending moment then breaks the joint when one physics joint’s
+force exceeds its share of <a class="reference internal" href="#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_JointBreakForce" title="krpc_SpaceCenter_Part_JointBreakForce"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_JointBreakForce()</span></code></a>, usually at a much
+larger moment than this torque.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_JointSpring">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Part_JointSpring</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Part_t" title="krpc_SpaceCenter_Part_t"><span class="n"><span class="pre">krpc_SpaceCenter_Part_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_JointSpring" title="Link to this definition">#</a><br /></dt>
+<dd><p>The spring constant of the joint to the parent part against translation, in
+<span class="math notranslate nohighlight">\(\mathrm{kN/m}\)</span>.
+Throws an exception if the part has no joint to its parent part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The sum over the joint’s physics joints. A rigid attachment locks the joint, and
+this spring then has no effect.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_JointDamper">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Part_JointDamper</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Part_t" title="krpc_SpaceCenter_Part_t"><span class="n"><span class="pre">krpc_SpaceCenter_Part_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_JointDamper" title="Link to this definition">#</a><br /></dt>
+<dd><p>The damping constant of the joint to the parent part against translation, in
+<span class="math notranslate nohighlight">\(\mathrm{kN \cdot s/m}\)</span>.
+Throws an exception if the part has no joint to its parent part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The sum over the joint’s physics joints. The stock game sets it to zero, and
+mods such as Kerbal Joint Reinforcement change it.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_JointAngularSpring">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Part_JointAngularSpring</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Part_t" title="krpc_SpaceCenter_Part_t"><span class="n"><span class="pre">krpc_SpaceCenter_Part_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_JointAngularSpring" title="Link to this definition">#</a><br /></dt>
+<dd><p>The spring constant of the joint to the parent part against bending, in
+<span class="math notranslate nohighlight">\(\mathrm{kN \cdot m/rad}\)</span>.
+Throws an exception if the part has no joint to its parent part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The sum over the joint’s physics joints, about the two axes perpendicular to the
+joint axis. The joint is far stiffer against twisting about its axis. On a stack
+node of size 2 or more, the physics joints sit apart around the node, and the joint
+bends much less than this spring gives. A rigid attachment makes it infinite.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_JointAngularDamper">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Part_JointAngularDamper</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Part_t" title="krpc_SpaceCenter_Part_t"><span class="n"><span class="pre">krpc_SpaceCenter_Part_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_JointAngularDamper" title="Link to this definition">#</a><br /></dt>
+<dd><p>The damping constant of the joint to the parent part against bending, in
+<span class="math notranslate nohighlight">\(\mathrm{kN \cdot m \cdot s/rad}\)</span>.
+Throws an exception if the part has no joint to its parent part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The sum over the joint’s physics joints. The stock game sets it to zero, and
+mods such as Kerbal Joint Reinforcement change it.</p>
+</div>
 </dd></dl>
 
 <dl class="c function">

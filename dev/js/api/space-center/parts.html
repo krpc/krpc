@@ -2809,7 +2809,7 @@ in the editor and at a body with no ocean.</p>
 <dl class="js method">
 <dt class="sig sig-object js" id="SpaceCenter.Part.getImpactTolerance">
 <span class="sig-prename descclassname"><span class="n"><span class="pre">Part</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getImpactTolerance</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Part.getImpactTolerance" title="Link to this definition">#</a></dt>
-<dd><p>The impact tolerance of the part, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
+<dd><p>The crash tolerance of the part, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Property<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
@@ -2818,6 +2818,198 @@ in the editor and at a body with no ocean.</p>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="SpaceCenter.Part.getBreakingForce">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Part</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getBreakingForce</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Part.getBreakingForce" title="Link to this definition">#</a></dt>
+<dd><p>The breaking force of the part’s attachments, in <span class="math notranslate nohighlight">\(\mathrm{kN}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The joint to the parent part takes the lower breaking force of the two parts,
+scaled by the size of the attachment node. See <a class="reference internal" href="#SpaceCenter.Part.getJointBreakForce" title="SpaceCenter.Part.getJointBreakForce"><code class="xref js js-meth docutils literal notranslate"><span class="pre">SpaceCenter.Part.getJointBreakForce()</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="SpaceCenter.Part.getBreakingTorque">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Part</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getBreakingTorque</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Part.getBreakingTorque" title="Link to this definition">#</a></dt>
+<dd><p>The breaking torque of the part’s attachments, in <span class="math notranslate nohighlight">\(\mathrm{kN \cdot m}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The joint to the parent part takes the lower breaking torque of the two parts,
+scaled by the size of the attachment node. See <a class="reference internal" href="#SpaceCenter.Part.getJointBreakTorque" title="SpaceCenter.Part.getJointBreakTorque"><code class="xref js js-meth docutils literal notranslate"><span class="pre">SpaceCenter.Part.getJointBreakTorque()</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="SpaceCenter.Part.getJointBreakForce">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Part</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getJointBreakForce</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Part.getJointBreakForce" title="Link to this definition">#</a></dt>
+<dd><p>The force that breaks the joint to the parent part, in <span class="math notranslate nohighlight">\(\mathrm{kN}\)</span>.
+Throws an exception if the part has no joint to its parent part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The sum over the joint’s physics joints. It is infinite for a short time after
+the vessel loads, such as just after launch. The root part and a physicsless
+part have no joint to their parent.</p>
+</div>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="SpaceCenter.Part.getJointBreakTorque">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Part</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getJointBreakTorque</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Part.getJointBreakTorque" title="Link to this definition">#</a></dt>
+<dd><p>The torque that breaks the joint to the parent part, in <span class="math notranslate nohighlight">\(\mathrm{kN \cdot m}\)</span>.
+Throws an exception if the part has no joint to its parent part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The sum over the joint’s physics joints. It is infinite for a short time after
+the vessel loads. On a stack node of size 2 or more, the physics joints sit apart
+around the node. A bending moment then breaks the joint when one physics joint’s
+force exceeds its share of <a class="reference internal" href="#SpaceCenter.Part.getJointBreakForce" title="SpaceCenter.Part.getJointBreakForce"><code class="xref js js-meth docutils literal notranslate"><span class="pre">SpaceCenter.Part.getJointBreakForce()</span></code></a>, usually at a much
+larger moment than this torque.</p>
+</div>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="SpaceCenter.Part.getJointSpring">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Part</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getJointSpring</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Part.getJointSpring" title="Link to this definition">#</a></dt>
+<dd><p>The spring constant of the joint to the parent part against translation, in
+<span class="math notranslate nohighlight">\(\mathrm{kN/m}\)</span>.
+Throws an exception if the part has no joint to its parent part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The sum over the joint’s physics joints. A rigid attachment locks the joint, and
+this spring then has no effect.</p>
+</div>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="SpaceCenter.Part.getJointDamper">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Part</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getJointDamper</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Part.getJointDamper" title="Link to this definition">#</a></dt>
+<dd><p>The damping constant of the joint to the parent part against translation, in
+<span class="math notranslate nohighlight">\(\mathrm{kN \cdot s/m}\)</span>.
+Throws an exception if the part has no joint to its parent part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The sum over the joint’s physics joints. The stock game sets it to zero, and
+mods such as Kerbal Joint Reinforcement change it.</p>
+</div>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="SpaceCenter.Part.getJointAngularSpring">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Part</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getJointAngularSpring</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Part.getJointAngularSpring" title="Link to this definition">#</a></dt>
+<dd><p>The spring constant of the joint to the parent part against bending, in
+<span class="math notranslate nohighlight">\(\mathrm{kN \cdot m/rad}\)</span>.
+Throws an exception if the part has no joint to its parent part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The sum over the joint’s physics joints, about the two axes perpendicular to the
+joint axis. The joint is far stiffer against twisting about its axis. On a stack
+node of size 2 or more, the physics joints sit apart around the node, and the joint
+bends much less than this spring gives. A rigid attachment makes it infinite.</p>
+</div>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="SpaceCenter.Part.getJointAngularDamper">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Part</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getJointAngularDamper</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Part.getJointAngularDamper" title="Link to this definition">#</a></dt>
+<dd><p>The damping constant of the joint to the parent part against bending, in
+<span class="math notranslate nohighlight">\(\mathrm{kN \cdot m \cdot s/rad}\)</span>.
+Throws an exception if the part has no joint to its parent part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The sum over the joint’s physics joints. The stock game sets it to zero, and
+mods such as Kerbal Joint Reinforcement change it.</p>
+</div>
 </dd></dl>
 
 <dl class="js method">

@@ -2340,7 +2340,151 @@ in the editor and at a body with no ocean.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter4Part16impact_toleranceEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter4Part16impact_toleranceEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter4Part16impact_toleranceEv"></span><span id="krpc::services::SpaceCenter::Part::impact_tolerance"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">impact_tolerance</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter4Part16impact_toleranceEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>The impact tolerance of the part, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
+<dd><p>The crash tolerance of the part, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter4Part14breaking_forceEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter4Part14breaking_forceEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter4Part14breaking_forceEv"></span><span id="krpc::services::SpaceCenter::Part::breaking_force"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">breaking_force</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter4Part14breaking_forceEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The breaking force of the part’s attachments, in <span class="math notranslate nohighlight">\(\mathrm{kN}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The joint to the parent part takes the lower breaking force of the two parts,
+scaled by the size of the attachment node. See <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter4Part17joint_break_forceEv" title="krpc::services::SpaceCenter::Part::joint_break_force"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Part::joint_break_force()</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter4Part15breaking_torqueEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter4Part15breaking_torqueEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter4Part15breaking_torqueEv"></span><span id="krpc::services::SpaceCenter::Part::breaking_torque"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">breaking_torque</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter4Part15breaking_torqueEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The breaking torque of the part’s attachments, in <span class="math notranslate nohighlight">\(\mathrm{kN \cdot m}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The joint to the parent part takes the lower breaking torque of the two parts,
+scaled by the size of the attachment node. See <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter4Part18joint_break_torqueEv" title="krpc::services::SpaceCenter::Part::joint_break_torque"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Part::joint_break_torque()</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter4Part17joint_break_forceEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter4Part17joint_break_forceEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter4Part17joint_break_forceEv"></span><span id="krpc::services::SpaceCenter::Part::joint_break_force"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">joint_break_force</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter4Part17joint_break_forceEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The force that breaks the joint to the parent part, in <span class="math notranslate nohighlight">\(\mathrm{kN}\)</span>.
+Throws an exception if the part has no joint to its parent part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The sum over the joint’s physics joints. It is infinite for a short time after
+the vessel loads, such as just after launch. The root part and a physicsless
+part have no joint to their parent.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter4Part18joint_break_torqueEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter4Part18joint_break_torqueEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter4Part18joint_break_torqueEv"></span><span id="krpc::services::SpaceCenter::Part::joint_break_torque"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">joint_break_torque</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter4Part18joint_break_torqueEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The torque that breaks the joint to the parent part, in <span class="math notranslate nohighlight">\(\mathrm{kN \cdot m}\)</span>.
+Throws an exception if the part has no joint to its parent part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The sum over the joint’s physics joints. It is infinite for a short time after
+the vessel loads. On a stack node of size 2 or more, the physics joints sit apart
+around the node. A bending moment then breaks the joint when one physics joint’s
+force exceeds its share of <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter4Part17joint_break_forceEv" title="krpc::services::SpaceCenter::Part::joint_break_force"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Part::joint_break_force()</span></code></a>, usually at a much
+larger moment than this torque.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter4Part12joint_springEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter4Part12joint_springEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter4Part12joint_springEv"></span><span id="krpc::services::SpaceCenter::Part::joint_spring"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">joint_spring</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter4Part12joint_springEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The spring constant of the joint to the parent part against translation, in
+<span class="math notranslate nohighlight">\(\mathrm{kN/m}\)</span>.
+Throws an exception if the part has no joint to its parent part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The sum over the joint’s physics joints. A rigid attachment locks the joint, and
+this spring then has no effect.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter4Part12joint_damperEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter4Part12joint_damperEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter4Part12joint_damperEv"></span><span id="krpc::services::SpaceCenter::Part::joint_damper"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">joint_damper</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter4Part12joint_damperEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The damping constant of the joint to the parent part against translation, in
+<span class="math notranslate nohighlight">\(\mathrm{kN \cdot s/m}\)</span>.
+Throws an exception if the part has no joint to its parent part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The sum over the joint’s physics joints. The stock game sets it to zero, and
+mods such as Kerbal Joint Reinforcement change it.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter4Part20joint_angular_springEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter4Part20joint_angular_springEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter4Part20joint_angular_springEv"></span><span id="krpc::services::SpaceCenter::Part::joint_angular_spring"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">joint_angular_spring</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter4Part20joint_angular_springEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The spring constant of the joint to the parent part against bending, in
+<span class="math notranslate nohighlight">\(\mathrm{kN \cdot m/rad}\)</span>.
+Throws an exception if the part has no joint to its parent part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The sum over the joint’s physics joints, about the two axes perpendicular to the
+joint axis. The joint is far stiffer against twisting about its axis. On a stack
+node of size 2 or more, the physics joints sit apart around the node, and the joint
+bends much less than this spring gives. A rigid attachment makes it infinite.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter4Part20joint_angular_damperEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter4Part20joint_angular_damperEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter4Part20joint_angular_damperEv"></span><span id="krpc::services::SpaceCenter::Part::joint_angular_damper"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">joint_angular_damper</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter4Part20joint_angular_damperEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The damping constant of the joint to the parent part against bending, in
+<span class="math notranslate nohighlight">\(\mathrm{kN \cdot m \cdot s/rad}\)</span>.
+Throws an exception if the part has no joint to its parent part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The sum over the joint’s physics joints. The stock game sets it to zero, and
+mods such as Kerbal Joint Reinforcement change it.</p>
+</div>
 </dd></dl>
 
 <dl class="cpp function">

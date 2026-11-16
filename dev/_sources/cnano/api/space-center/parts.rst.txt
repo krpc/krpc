@@ -592,9 +592,121 @@ Part
 
    .. function:: krpc_error_t krpc_SpaceCenter_Part_ImpactTolerance(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Part_t instance)
 
-      The impact tolerance of the part, in :math:`\mathrm{m/s}`.
+      The crash tolerance of the part, in :math:`\mathrm{m/s}`.
 
    
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_BreakingForce(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Part_t instance)
+
+      The breaking force of the part's attachments, in :math:`\mathrm{kN}`.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         The joint to the parent part takes the lower breaking force of the two parts,
+         scaled by the size of the attachment node. See :func:`krpc_SpaceCenter_Part_JointBreakForce`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_BreakingTorque(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Part_t instance)
+
+      The breaking torque of the part's attachments, in :math:`\mathrm{kN \cdot m}`.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         The joint to the parent part takes the lower breaking torque of the two parts,
+         scaled by the size of the attachment node. See :func:`krpc_SpaceCenter_Part_JointBreakTorque`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_JointBreakForce(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Part_t instance)
+
+      The force that breaks the joint to the parent part, in :math:`\mathrm{kN}`.
+      Throws an exception if the part has no joint to its parent part.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The sum over the joint's physics joints. It is infinite for a short time after
+         the vessel loads, such as just after launch. The root part and a physicsless
+         part have no joint to their parent.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_JointBreakTorque(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Part_t instance)
+
+      The torque that breaks the joint to the parent part, in :math:`\mathrm{kN \cdot m}`.
+      Throws an exception if the part has no joint to its parent part.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The sum over the joint's physics joints. It is infinite for a short time after
+         the vessel loads. On a stack node of size 2 or more, the physics joints sit apart
+         around the node. A bending moment then breaks the joint when one physics joint's
+         force exceeds its share of :func:`krpc_SpaceCenter_Part_JointBreakForce`, usually at a much
+         larger moment than this torque.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_JointSpring(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Part_t instance)
+
+      The spring constant of the joint to the parent part against translation, in
+      :math:`\mathrm{kN/m}`.
+      Throws an exception if the part has no joint to its parent part.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The sum over the joint's physics joints. A rigid attachment locks the joint, and
+         this spring then has no effect.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_JointDamper(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Part_t instance)
+
+      The damping constant of the joint to the parent part against translation, in
+      :math:`\mathrm{kN \cdot s/m}`.
+      Throws an exception if the part has no joint to its parent part.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The sum over the joint's physics joints. The stock game sets it to zero, and
+         mods such as Kerbal Joint Reinforcement change it.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_JointAngularSpring(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Part_t instance)
+
+      The spring constant of the joint to the parent part against bending, in
+      :math:`\mathrm{kN \cdot m/rad}`.
+      Throws an exception if the part has no joint to its parent part.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The sum over the joint's physics joints, about the two axes perpendicular to the
+         joint axis. The joint is far stiffer against twisting about its axis. On a stack
+         node of size 2 or more, the physics joints sit apart around the node, and the joint
+         bends much less than this spring gives. A rigid attachment makes it infinite.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_JointAngularDamper(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Part_t instance)
+
+      The damping constant of the joint to the parent part against bending, in
+      :math:`\mathrm{kN \cdot m \cdot s/rad}`.
+      Throws an exception if the part has no joint to its parent part.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The sum over the joint's physics joints. The stock game sets it to zero, and
+         mods such as Kerbal Joint Reinforcement change it.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Part_Temperature(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Part_t instance)
 

@@ -149,6 +149,8 @@ SpaceCenter service
 * Parts
 
   * :breaking:`Breaking` Rename ``ConfigNode.GetValues`` and ``ConfigNode.GetNodes`` to ``ConfigNode.FindValues`` and ``ConfigNode.FindNodes`` (:issue:`1261`)
+  * Add ``Part.JointBreakForce``, ``Part.JointBreakTorque``, ``Part.JointSpring``, ``Part.JointDamper``, ``Part.JointAngularSpring`` and ``Part.JointAngularDamper``, the strength and stiffness of the joint to the parent part (:issue:`1362`)
+  * Add ``Part.BreakingForce`` and ``Part.BreakingTorque`` (:issue:`1362`)
 
 * :breaking:`Breaking` Make ``MapFilterType`` a flags enumeration, and change ``MapFilterType.All`` from -1 to 32767 (:issue:`1311`)
 * Fix setting a ``PartField`` skipping the callbacks the right-click menu runs, which left changes such as a B9PartSwitch subtype switch without effect (:issue:`1314`)
