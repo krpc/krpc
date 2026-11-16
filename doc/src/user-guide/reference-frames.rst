@@ -98,6 +98,11 @@ reference frame:
       .. literalinclude:: /scripts/user-guide/reference-frames/VesselPosition.lua
          :language: lua
 
+   .. tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/reference-frames/VesselPosition.js
+         :language: javascript
+
 For a vessel sat on the launchpad, the magnitude of this position vector will be
 roughly 600,000 meters (equal to the radius of Kerbin). The position vector will
 also not change over time, because the vessel is sat on the surface of Kerbin
@@ -301,6 +306,27 @@ kRPC provides the following reference frames:
       * :lua:attr:`SpaceCenter.DockingPort.reference_frame`
       * :lua:attr:`SpaceCenter.Thruster.thrust_reference_frame`
 
+   .. tab:: JavaScript
+
+      * :js:meth:`SpaceCenter.Vessel.getReferenceFrame`
+      * :js:meth:`SpaceCenter.Vessel.getOrbitalReferenceFrame`
+      * :js:meth:`SpaceCenter.Vessel.getSurfaceReferenceFrame`
+      * :js:meth:`SpaceCenter.Vessel.getSurfaceVelocityReferenceFrame`
+      * :js:meth:`SpaceCenter.Vessel.getOrbitSpeedReferenceFrame`
+      * :js:meth:`SpaceCenter.Vessel.getSurfaceSpeedReferenceFrame`
+      * :js:meth:`SpaceCenter.Vessel.getTargetSpeedReferenceFrame`
+      * :js:meth:`SpaceCenter.CelestialBody.getReferenceFrame`
+      * :js:meth:`SpaceCenter.CelestialBody.getNonRotatingReferenceFrame`
+      * :js:meth:`SpaceCenter.CelestialBody.getOrbitalReferenceFrame`
+      * :js:meth:`SpaceCenter.Orbit.getReferenceFrame`
+      * :js:meth:`SpaceCenter.Orbit.getOrbitalReferenceFrame`
+      * :js:meth:`SpaceCenter.Node.getReferenceFrame`
+      * :js:meth:`SpaceCenter.Node.getOrbitalReferenceFrame`
+      * :js:meth:`SpaceCenter.Part.getReferenceFrame`
+      * :js:meth:`SpaceCenter.Part.getCenterOfMassReferenceFrame`
+      * :js:meth:`SpaceCenter.DockingPort.getReferenceFrame`
+      * :js:meth:`SpaceCenter.Thruster.getThrustReferenceFrame`
+
 Relative and hybrid reference frames can also be constructed from the above.
 
 Custom Reference Frames
@@ -391,6 +417,13 @@ velocities between the different reference frames:
       * :lua:meth:`SpaceCenter.transform_rotation`
       * :lua:meth:`SpaceCenter.transform_velocity`
 
+   .. tab:: JavaScript
+
+      * :js:func:`SpaceCenter.transformPosition`
+      * :js:func:`SpaceCenter.transformDirection`
+      * :js:func:`SpaceCenter.transformRotation`
+      * :js:func:`SpaceCenter.transformVelocity`
+
 Visual Debugging
 ----------------
 
@@ -435,6 +468,11 @@ labeled arrow in the direction of the vessel's velocity relative to the surface:
 
       .. literalinclude:: /scripts/user-guide/reference-frames/VisualDebugging.lua
          :language: lua
+
+   .. tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/reference-frames/VisualDebugging.js
+         :language: javascript
 
 .. note:: This example uses :attr:`Vessel.surface_velocity_reference_frame`, which is
    singular when the vessel's surface speed is zero (hovering, landed). Run it while the
@@ -485,6 +523,11 @@ the navball:
 
       .. literalinclude:: /scripts/user-guide/reference-frames/NavballDirections.lua
          :language: lua
+
+   .. tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/reference-frames/NavballDirections.js
+         :language: javascript
 
 The code uses the vessel's surface reference frame
 (:attr:`Vessel.surface_reference_frame`), pictured below:
@@ -543,6 +586,11 @@ directions, as seen on the navball when it is in 'orbit' mode. It uses
       .. literalinclude:: /scripts/user-guide/reference-frames/OrbitalDirections.lua
          :language: lua
 
+   .. tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/reference-frames/OrbitalDirections.js
+         :language: javascript
+
 This code uses the vessel's orbital reference frame, pictured below:
 
 .. image:: /images/reference-frames/vessel-orbital.png
@@ -586,6 +634,11 @@ velocity relative to the surface:
 
       .. literalinclude:: /scripts/user-guide/reference-frames/SurfacePrograde.lua
          :language: lua
+
+   .. tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/reference-frames/SurfacePrograde.js
+         :language: javascript
 
 .. note:: :attr:`Vessel.surface_velocity_reference_frame` is singular when the
    vessel's surface speed is zero (hovering, landed). Calling this when the
@@ -651,6 +704,11 @@ rotates with the body.
       .. literalinclude:: /scripts/user-guide/reference-frames/VesselSpeed.lua
          :language: lua
 
+   .. tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/reference-frames/VesselSpeed.js
+         :language: javascript
+
 .. seealso:: :attr:`Vessel.orbit_speed_reference_frame` and
    :attr:`Vessel.surface_speed_reference_frame` give the same two speeds
    directly, in frames centered on the vessel and oriented like the navball is in
@@ -705,6 +763,11 @@ the body.
 
       .. literalinclude:: /scripts/user-guide/reference-frames/VesselVelocity.lua
          :language: lua
+
+   .. tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/reference-frames/VesselVelocity.js
+         :language: javascript
 
 .. seealso:: :attr:`Vessel.surface_speed_reference_frame` gives the same velocity
    without constructing a frame, although in its own prograde/normal/radial axes
@@ -774,6 +837,11 @@ This example prints the speeds the navball shows in orbit and surface modes:
       .. literalinclude:: /scripts/user-guide/reference-frames/NavballSpeed.lua
          :language: lua
 
+   .. tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/reference-frames/NavballSpeed.js
+         :language: javascript
+
 .. note:: :attr:`Vessel.target_speed_reference_frame` requires a target to be
    set, and raises an error otherwise.
 
@@ -814,6 +882,11 @@ and the direction that the vessel is moving in (relative to the surface):
 
       .. literalinclude:: /scripts/user-guide/reference-frames/AngleOfAttack.lua
          :language: lua
+
+   .. tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/reference-frames/AngleOfAttack.js
+         :language: javascript
 
 Note that the orientation of the reference frame used to get the direction and
 velocity vectors does not matter, as the angle between two vectors is the same
@@ -867,3 +940,8 @@ at a given altitude, which could be used as the target for a landing auto pilot.
 
       .. literalinclude:: /scripts/user-guide/reference-frames/LandingSite.lua
          :language: lua
+
+   .. tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/reference-frames/LandingSite.js
+         :language: javascript

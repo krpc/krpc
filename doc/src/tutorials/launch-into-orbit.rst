@@ -13,6 +13,7 @@ The program is available in a variety of languages:
 :download:`C#</scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cs>`,
 :download:`C++</scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cpp>`,
 :download:`Java</scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.java>`,
+:download:`JavaScript</scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.js>`,
 :download:`Lua</scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.lua>`,
 :download:`Python</scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.py>`
 
@@ -56,6 +57,12 @@ bunch of streams to get flight telemetry then prepares the rocket for launch.
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.lua
          :language: lua
          :end-at: print('Launch!')
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.js
+         :language: javascript
+         :end-at: console.log("Launch!");
 
 The next part of the program launches the rocket. The main loop continuously
 updates the auto-pilot heading to gradually pitch the rocket towards the
@@ -107,12 +114,19 @@ close to the target apoapsis.
          :start-at: -- Activate the first stage
          :end-before: -- Disable engines when target apoapsis is reached
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.js
+         :language: javascript
+         :start-at: // Activate the first stage
+         :end-before: // Disable engines when target apoapsis is reached
+
 Next, the program fine tunes the apoapsis using 25% thrust, then waits until the rocket has
 left Kerbin's atmosphere. Each wait is an event, which the server checks every physics tick. See
 :ref:`server-side-functions` for how events work.
 
-The Python and C# clients compile the event's condition from a lambda, and the C++ and Java
-clients build it with the :ref:`expression API <server-side-functions-api>`. The C and Lua
+The Python, C# and JavaScript clients compile the event's condition from a lambda, and the C++
+and Java clients build it with the :ref:`expression API <server-side-functions-api>`. The C and Lua
 programs poll in a loop, as those clients have no events.
 
 .. tabs::
@@ -158,6 +172,13 @@ programs poll in a loop, as those clients have no events.
          :language: lua
          :start-at: -- Disable engines when target apoapsis is reached
          :end-before: ---- Plan circularization burn (using vis-viva equation)
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.js
+         :language: javascript
+         :start-at: // Disable engines when target apoapsis is reached
+         :end-before: // Plan circularization burn (using vis-viva equation)
 
 It is now time to plan the circularization burn. First, we calculate the delta-v
 required to circularize the orbit using the `vis-viva equation
@@ -216,6 +237,13 @@ time needed to achieve this delta-v, using the `Tsiolkovsky rocket equation
          :start-at: ---- Plan circularization burn (using vis-viva equation)
          :end-at: local burn_time = (m0 - m1) / flow_rate
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.js
+         :language: javascript
+         :start-at: // Plan circularization burn (using vis-viva equation)
+         :end-at: const burnTime = (m0 - m1) / flowRate;
+
 Next, we need to rotate the craft and wait until the circularization burn. We
 orientate the ship along the y-axis of the maneuver node's reference frame
 (i.e. in the direction of the burn) then time warp to 5 seconds before the burn.
@@ -264,6 +292,13 @@ orientate the ship along the y-axis of the maneuver node's reference frame
          :start-at: -- Orientate ship
          :end-at: conn.space_center.warp_to(burn_ut - lead_time)
 
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.js
+         :language: javascript
+         :start-at: // Orientate ship
+         :end-at: await spaceCenter.warpTo(burnUT - leadTime);
+
 Finally, the program waits for an event that fires half the burn time before apoapsis, then sets
 maximum throttle to start the burn.
 
@@ -308,5 +343,11 @@ executed:
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.lua
          :language: lua
          :start-at: -- Execute burn
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.js
+         :language: javascript
+         :start-at: // Execute burn
 
 The rocket should now be in a circular 150km orbit above Kerbin.

@@ -38,6 +38,11 @@ once per second.
       .. literalinclude:: /scripts/tutorials/pitch-heading-roll/PitchHeadingRoll.lua
          :language: lua
 
+   .. tab:: JavaScript
+
+      .. literalinclude:: /scripts/tutorials/pitch-heading-roll/PitchHeadingRoll.js
+         :language: javascript
+
 .. note:: Pitch, heading and roll are Euler angles, and are ill-defined when the vessel
    points near vertical (pitch approaching ±90°), where heading and roll become
    ambiguous. This applies both to the computation in this example (which prints

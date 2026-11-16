@@ -39,3 +39,8 @@ is shown while the mouse rests on the button.
 
       .. literalinclude:: /scripts/tutorials/user-interface/UserInterface.lua
          :language: lua
+
+   .. tab:: JavaScript
+
+      .. literalinclude:: /scripts/tutorials/user-interface/UserInterface.js
+         :language: javascript
