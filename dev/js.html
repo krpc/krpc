@@ -1600,12 +1600,13 @@ runs a script that imports the package without a bundler.</p>
 <h2>Connecting to the Server<a class="headerlink" href="#connecting-to-the-server" title="Link to this heading">#</a></h2>
 <p>The game must be running with the server started. <a class="reference internal" href="getting-started.html#getting-started-server"><span class="std std-ref">The Server Plugin</span></a> in the
 getting started guide shows how to install and start it.</p>
-<p>The client connects over WebSockets, the protocol a web browser can use. The default server uses
-TCP/IP, so add a server in the server window, and select “Protobuf over WebSockets” as its
-protocol.</p>
+<p>The client connects over WebSockets, the protocol a web browser can use. The game has a
+“Protobuf over WebSockets” server on port 50001 by default. Settings saved by a kRPC release
+before 0.8 have only the TCP/IP server, so add a server in the server window, with “Protobuf over
+WebSockets” as its protocol.</p>
 <p><a class="reference internal" href="#krpc-org-krpc.connect" title="&#64;krpc-org/krpc.connect"><code class="xref js js-func docutils literal notranslate"><span class="pre">connect()</span></code></a> connects to the server, and returns a <a class="reference internal" href="#krpc-org-krpc.Connection" title="&#64;krpc-org/krpc.Connection"><code class="xref js js-class docutils literal notranslate"><span class="pre">Connection</span></code></a>. You make every call
 through this object. The following connects to a server with the default settings, address
-<code class="docutils literal notranslate"><span class="pre">127.0.0.1</span></code> and port 50000, and prints its version:</p>
+<code class="docutils literal notranslate"><span class="pre">127.0.0.1</span></code> and port 50001, and prints its version:</p>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">connect</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">"@krpc-org/krpc"</span><span class="p">;</span>
 
 <span class="kd">const</span><span class="w"> </span><span class="nx">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">connect</span><span class="p">();</span>
@@ -2324,7 +2325,7 @@ types, and TypeScript reaches it through <a class="reference internal" href="#kr
 Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>.</p></li>
 <li><p><strong>options.address</strong> – The address of the server, as a host name or an IP address. Defaults
 to <code class="docutils literal notranslate"><span class="pre">&quot;127.0.0.1&quot;</span></code>.</p></li>
-<li><p><strong>options.port</strong> – The port of the server. Defaults to 50000.</p></li>
+<li><p><strong>options.port</strong> – The port of the server. Defaults to 50001.</p></li>
 <li><p><strong>options.handshakeTimeout</strong> – How many milliseconds to wait for the server to accept the
 connection. Defaults to 5000. <code class="docutils literal notranslate"><span class="pre">Infinity</span></code> waits indefinitely,
 such as for a server that asks the player to approve each

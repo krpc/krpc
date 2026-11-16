@@ -26,8 +26,8 @@ installs the client and `esbuild <https://esbuild.github.io>`_, then bundles the
 The ``iife`` format gives a classic script, which a browser runs from a page opened as a local
 file. Open ``control-panel.html`` in the browser.
 
-In the game, add a server in the server window, select "Protobuf over WebSockets" as its protocol,
-and start it. Then enter its address and port in the panel, and click "Connect".
+In the game, the server window has a "Protobuf over WebSockets" server on port 50001 by default.
+Enter its address and port in the panel, and click "Connect".
 
 The Page
 --------

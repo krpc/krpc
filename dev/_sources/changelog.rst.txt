@@ -129,6 +129,9 @@ Server
 * Widen the server window so the advanced settings fit (:issue:`1349`)
 * Line up the labels in the server window's advanced settings with their text fields (:issue:`1349`)
 * Give the kRPC windows an opaque background (:issue:`1349`)
+* Add a WebSockets server on port 50001 to a new install, beside the TCP/IP server on port 50000, and name each for its protocol (:issue:`1371`)
+* Default the port of a WebSockets server to 50001 in the server window (:issue:`1371`)
+* Number the name of a server added in the server window when another server has that name (:issue:`1371`)
 
 
 SpaceCenter service

@@ -608,10 +608,11 @@ in one binary websockets message. The websockets message may be split across fra
 </section>
 <section id="connecting">
 <h2>Connecting<a class="headerlink" href="#connecting" title="Link to this heading">#</a></h2>
-<p>To use this protocol, add a server in the server window and select <em>Protobuf over WebSockets</em> as
-its protocol. Its address and port default to <code class="docutils literal notranslate"><span class="pre">127.0.0.1</span></code> and <code class="docutils literal notranslate"><span class="pre">50000</span></code>.</p>
+<p>A new install has a server for this protocol in the server window, at address <code class="docutils literal notranslate"><span class="pre">127.0.0.1</span></code> and
+port <code class="docutils literal notranslate"><span class="pre">50001</span></code>. To add another, add a server and select <em>Protobuf over WebSockets</em> as its
+protocol.</p>
 <p>Open a websockets connection to the server with the path <code class="docutils literal notranslate"><span class="pre">/</span></code>, for example
-<code class="docutils literal notranslate"><span class="pre">ws://127.0.0.1:50000/</span></code>. The upgrade request names no subprotocol. Then send the
+<code class="docutils literal notranslate"><span class="pre">ws://127.0.0.1:50001/</span></code>. The upgrade request names no subprotocol. Then send the
 <a class="reference internal" href="messages.html#communication-protocol-handshake"><span class="std std-ref">connection handshake</span></a>. The upgrade and the
 <code class="docutils literal notranslate"><span class="pre">connection_request</span></code> together have 3 seconds to arrive, timed from the TCP connection.</p>
 <p>The connection carries the requests, the responses and the stream updates. To end it, send a
@@ -652,7 +653,7 @@ prints the server version. It then ends the connection:</p>
 <span class="p">}</span>
 
 <span class="c1">// Open a websockets connection to the server</span>
-<span class="kd">const</span><span class="w"> </span><span class="nx">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">WebSocket</span><span class="p">(</span><span class="s2">"ws://127.0.0.1:50000/"</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">WebSocket</span><span class="p">(</span><span class="s2">"ws://127.0.0.1:50001/"</span><span class="p">);</span>
 <span class="nx">conn</span><span class="p">.</span><span class="nx">binaryType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"arraybuffer"</span><span class="p">;</span>
 
 <span class="nx">conn</span><span class="p">.</span><span class="nx">onopen</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
@@ -725,7 +726,7 @@ prints the server version. It then ends the connection:</p>
 <span class="p">}</span>
 
 <span class="c1">// Open a websockets connection to the server</span>
-<span class="kd">const</span><span class="w"> </span><span class="nx">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">WebSocket</span><span class="p">(</span><span class="s2">"ws://127.0.0.1:50000/"</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">WebSocket</span><span class="p">(</span><span class="s2">"ws://127.0.0.1:50001/"</span><span class="p">);</span>
 <span class="nx">conn</span><span class="p">.</span><span class="nx">binaryType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"arraybuffer"</span><span class="p">;</span>
 
 <span class="nx">conn</span><span class="p">.</span><span class="nx">onopen</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>

@@ -41,13 +41,14 @@ Connecting to the Server
 The game must be running with the server started. :ref:`getting-started-server` in the
 getting started guide shows how to install and start it.
 
-The client connects over WebSockets, the protocol a web browser can use. The default server uses
-TCP/IP, so add a server in the server window, and select "Protobuf over WebSockets" as its
-protocol.
+The client connects over WebSockets, the protocol a web browser can use. The game has a
+"Protobuf over WebSockets" server on port 50001 by default. Settings saved by a kRPC release
+before 0.8 have only the TCP/IP server, so add a server in the server window, with "Protobuf over
+WebSockets" as its protocol.
 
 :func:`connect` connects to the server, and returns a :class:`Connection`. You make every call
 through this object. The following connects to a server with the default settings, address
-``127.0.0.1`` and port 50000, and prints its version:
+``127.0.0.1`` and port 50001, and prints its version:
 
 .. literalinclude:: /scripts/js/Connecting1.js
    :language: javascript
@@ -571,7 +572,7 @@ Client API Reference
                         Defaults to ``""``.
    :param options.address: The address of the server, as a host name or an IP address. Defaults
                            to ``"127.0.0.1"``.
-   :param options.port: The port of the server. Defaults to 50000.
+   :param options.port: The port of the server. Defaults to 50001.
    :param options.handshakeTimeout: How many milliseconds to wait for the server to accept the
                                     connection. Defaults to 5000. ``Infinity`` waits indefinitely,
                                     such as for a server that asks the player to approve each

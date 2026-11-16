@@ -562,8 +562,8 @@ npx<span class="w"> </span>esbuild<span class="w"> </span>ControlPanel.js<span c
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">iife</span></code> format gives a classic script, which a browser runs from a page opened as a local
 file. Open <code class="docutils literal notranslate"><span class="pre">control-panel.html</span></code> in the browser.</p>
-<p>In the game, add a server in the server window, select “Protobuf over WebSockets” as its protocol,
-and start it. Then enter its address and port in the panel, and click “Connect”.</p>
+<p>In the game, the server window has a “Protobuf over WebSockets” server on port 50001 by default.
+Enter its address and port in the panel, and click “Connect”.</p>
 </section>
 <section id="the-page">
 <h2>The Page<a class="headerlink" href="#the-page" title="Link to this heading">#</a></h2>
@@ -572,7 +572,7 @@ elements by their <code class="docutils literal notranslate"><span class="pre">i
 <div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
   <span class="p">&lt;</span><span class="nt">section</span><span class="p">&gt;</span>
     <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"address"</span> <span class="na">value</span><span class="o">=</span><span class="s">"127.0.0.1"</span> <span class="na">size</span><span class="o">=</span><span class="s">"12"</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"port"</span> <span class="na">value</span><span class="o">=</span><span class="s">"50000"</span> <span class="na">size</span><span class="o">=</span><span class="s">"5"</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"port"</span> <span class="na">value</span><span class="o">=</span><span class="s">"50001"</span> <span class="na">size</span><span class="o">=</span><span class="s">"5"</span><span class="p">&gt;</span>
     <span class="p">&lt;</span><span class="nt">button</span> <span class="na">id</span><span class="o">=</span><span class="s">"connect"</span><span class="p">&gt;</span>Connect<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
     <span class="p">&lt;</span><span class="nt">span</span> <span class="na">id</span><span class="o">=</span><span class="s">"vessel"</span><span class="p">&gt;&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
   <span class="p">&lt;/</span><span class="nt">section</span><span class="p">&gt;</span>
