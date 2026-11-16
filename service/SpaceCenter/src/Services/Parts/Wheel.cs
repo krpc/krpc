@@ -1,8 +1,10 @@
 using System;
 using System.Linq;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
+using Tuple3 = System.Tuple<double, double, double>;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
@@ -458,6 +460,77 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// The spring constant of the suspension, in <unit>kN/m</unit>, or <c>null</c> while
+        /// the wheel is not grounded.
+        /// Throws an exception if the wheel has no suspension.
+        /// </summary>
+        /// <remarks>
+        /// The game updates it while the wheel is grounded, from
+        /// <see cref="SuspensionSpringStrength"/>, the vessel's mass, the wheel's compression and
+        /// the local gravity.
+        /// </remarks>
+        [KRPCProperty (GameScene = GameScene.Flight)]
+        public float? SuspensionSpring {
+            get {
+                CheckSuspension();
+                return WheelPhysics.Spring (InternalWheel);
+            }
+        }
+
+        /// <summary>
+        /// The damping constant of the suspension, in <unit>kN.s/m</unit>, or <c>null</c>
+        /// while the wheel is not grounded.
+        /// Throws an exception if the wheel has no suspension.
+        /// </summary>
+        /// <remarks>
+        /// The game updates it while the wheel is grounded, from
+        /// <see cref="SuspensionDamperStrength"/> and <see cref="SuspensionSpring"/>.
+        /// </remarks>
+        [KRPCProperty (GameScene = GameScene.Flight)]
+        public float? SuspensionDamper {
+            get {
+                CheckSuspension();
+                return WheelPhysics.Damper (InternalWheel);
+            }
+        }
+
+        /// <summary>
+        /// The travel of the suspension, in meters.
+        /// </summary>
+        [KRPCProperty (GameScene = GameScene.Flight)]
+        public float SuspensionTravel {
+            get { return WheelPhysics.Collider (InternalWheel).suspensionDistance; }
+        }
+
+        /// <summary>
+        /// The force pressing the wheel into the ground, in <unit>kN</unit>.
+        /// </summary>
+        /// <remarks>
+        /// The game raises the load of a grounded wheel to at least 0.5 kN, or 10 kN for a wheel
+        /// with the old friction model. <see cref="ImpactTolerance"/> applies to the rise in
+        /// this value.
+        /// </remarks>
+        [KRPCProperty (GameScene = GameScene.Flight)]
+        public float Load {
+            get { return WheelPhysics.Load (InternalWheel); }
+        }
+
+        /// <summary>
+        /// The position of the bottom of the wheel, in the given reference frame. While the
+        /// wheel is grounded, this is where it touches the ground.
+        /// </summary>
+        /// <returns>The position as a vector.</returns>
+        /// <param name="referenceFrame">The reference frame that the returned
+        /// position vector is in.</param>
+        [KRPCMethod (GameScene = GameScene.Flight)]
+        public Tuple3 ContactPosition (ReferenceFrame referenceFrame)
+        {
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException (nameof (referenceFrame));
+            return referenceFrame.PositionFromWorldSpace (WheelPhysics.ContactPosition (InternalWheel)).ToTuple ();
+        }
+
+        /// <summary>
         /// Whether the wheel is broken.
         /// </summary>
         [KRPCProperty]
@@ -492,6 +565,36 @@ namespace KRPC.SpaceCenter.Services.Parts
             get {
                 CheckDamage();
                 return InternalDamage.stressTolerance;
+            }
+        }
+
+        /// <summary>
+        /// The rise in <see cref="Load"/> over one physics tick that breaks the wheel, in
+        /// <unit>kN</unit>.
+        /// Throws an exception if the wheel is not breakable.
+        /// </summary>
+        /// <remarks>
+        /// The game scales the rise by the local gravity divided by standard gravity before
+        /// comparing it with this tolerance.
+        /// </remarks>
+        [KRPCProperty]
+        public float ImpactTolerance {
+            get {
+                CheckDamage();
+                return InternalDamage.impactTolerance;
+            }
+        }
+
+        /// <summary>
+        /// The multiple of <see cref="ImpactTolerance"/> that destroys the wheel, in place of
+        /// breaking it.
+        /// Throws an exception if the wheel is not breakable.
+        /// </summary>
+        [KRPCProperty]
+        public float ExplodeMultiplier {
+            get {
+                CheckDamage();
+                return InternalDamage.explodeMultiplier;
             }
         }
 

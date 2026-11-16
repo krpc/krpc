@@ -4,9 +4,12 @@ from krpctools.game.ksp import TestCase
 
 
 class TestPartsWheel(TestCase):
+    """The craft stands on its legs. The wheels under test are mounted upside
+    down on top, and never touch the ground."""
+
     @classmethod
     def setUpClass(cls):
-        vessel = cls.launch("PartsWheel")
+        vessel = cls.launch("PartsWheelsLegs", editor="SPH")
         cls.parts = vessel.parts
         cls.wheels = cls.parts.wheels
         cls.deployable_wheel = cls.parts.with_name("GearMedium")[0].wheel
@@ -177,6 +180,16 @@ class TestPartsWheel(TestCase):
         self.assertTrue(wheel.has_suspension)
         self.assertAlmostEqual(1.20, wheel.suspension_spring_strength, places=2)
         self.assertAlmostEqual(0.85, wheel.suspension_damper_strength, places=2)
+        self.assertAlmostEqual(0.125, wheel.suspension_travel, places=3)
+        # Not grounded
+        self.assertIsNone(wheel.suspension_spring)
+        self.assertIsNone(wheel.suspension_damper)
+
+    def test_impact_tolerance(self):
+        wheel = self.deployable_wheel
+        self.assertAlmostEqual(4800, wheel.impact_tolerance)
+        self.assertAlmostEqual(1, wheel.explode_multiplier)
+        self.assertAlmostEqual(300, self.suspension_wheel.impact_tolerance)
 
     def test_no_suspension(self):
         # Every stock wheel part includes a suspension module, so the negative
@@ -208,18 +221,87 @@ class TestPartsWheel(TestCase):
 
 
 class TestPartsWheelGrounded(TestCase):
+    """With its legs retracted, the craft rests on its four RoveMax S2 wheels on
+    the runway."""
+
     @classmethod
     def setUpClass(cls):
-        vessel = cls.launch("PartsWheel")
-        cls.parts = vessel.parts
-        cls.wheel = cls.parts.with_name("GearMedium")[0].wheel
+        cls.vessel = cls.launch("PartsWheelsLegs", editor="SPH")
+        cls.body = cls.vessel.orbit.body
+        cls.wheels = cls.vessel.parts.wheels
+        cls.standing = [x.wheel for x in cls.vessel.parts.with_name("roverWheel2")]
+        control = cls.vessel.control
+        control.brakes = True
+        control.legs = False
+        while not all(wheel.grounded for wheel in cls.standing):
+            cls.wait()
+        cls.wait(5)
+
+    def total_load(self):
+        """The wheels' summed load, averaged over a second"""
+        samples = []
+        for _ in range(20):
+            samples.append(sum(wheel.load for wheel in self.standing))
+            self.wait(0.05)
+        return sum(samples) / len(samples)
 
     def test_grounded(self):
-        self.assertTrue(self.wheel.deployed)
-        self.assertFalse(self.wheel.grounded)
-        self.parts.launch_clamps[0].release()
-        self.wait(1)
-        self.assertTrue(self.wheel.grounded)
+        self.assertEqual(4, len(self.standing))
+        for wheel in self.wheels:
+            self.assertEqual(wheel in self.standing, wheel.grounded)
+        for leg in self.vessel.parts.legs:
+            self.assertFalse(leg.is_grounded)
+
+    def test_load(self):
+        # The wheels carry the weight, and a downward force at the center of
+        # mass, in kN. The force is small, as the rear wheels' suspension bottoms
+        # out at about 13 kN, and the wheel's body then carries the rest.
+        for wheel in self.wheels:
+            if wheel not in self.standing:
+                self.assertAlmostEqual(0, wheel.load)
+        weight = self.vessel.mass * self.body.surface_gravity / 1000
+        self.assertAlmostEqual(weight, self.total_load(), delta=weight * 0.03)
+        ref = self.vessel.surface_reference_frame
+        force = self.vessel.parts.root.add_force((-5000, 0, 0), (0, 0, 0), ref)
+        try:
+            self.wait(3)
+            self.assertAlmostEqual(
+                weight + 5, self.total_load(), delta=(weight + 5) * 0.03
+            )
+        finally:
+            force.remove()
+            self.wait(3)
+
+    def test_suspension(self):
+        # The game sets the suspension from the load the wheel carries
+        for wheel in self.wheels:
+            if not wheel.has_suspension:
+                continue
+            if wheel in self.standing:
+                suspension_spring = wheel.suspension_spring
+                assert suspension_spring is not None
+                self.assertGreater(suspension_spring, 0)
+                suspension_damper = wheel.suspension_damper
+                assert suspension_damper is not None
+                self.assertGreater(suspension_damper, 0)
+            else:
+                self.assertIsNone(wheel.suspension_spring)
+                self.assertIsNone(wheel.suspension_damper)
+
+    def test_contact_position(self):
+        # The standing wheels touch the flat runway at one altitude, below the
+        # other wheels
+        ref = self.body.reference_frame
+
+        def altitude(wheel):
+            return self.body.altitude_at_position(wheel.contact_position(ref), ref)
+
+        runway = altitude(self.standing[0])
+        for wheel in self.wheels:
+            if wheel in self.standing:
+                self.assertAlmostEqual(runway, altitude(wheel), delta=0.02)
+            else:
+                self.assertGreater(altitude(wheel), runway + 0.5)
 
 
 if __name__ == "__main__":
