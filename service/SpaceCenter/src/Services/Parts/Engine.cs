@@ -722,6 +722,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// and <see cref="GimbalLimit"/>. When the gimbal is not being overridden,
         /// returns the current actuation.
         /// </summary>
+        /// <remarks>
+        /// The gimbal ignores the component for an axis it is disabled for, such as pitch when
+        /// <see cref="GimbalPitchEnabled"/> is <c>false</c>.
+        /// </remarks>
         [KRPCProperty]
         public Tuple3 GimbalActuation {
             get {

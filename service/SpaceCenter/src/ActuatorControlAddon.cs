@@ -31,7 +31,8 @@ namespace KRPC.SpaceCenter
         /// Overrides a gimbal's actuation. ModuleGimbal calls this mid-FixedUpdate,
         /// after populating the pitch/roll/yaw actuation from the cooked control input
         /// and before running its own kinematics, so returning the stored command
-        /// overrides it cleanly.
+        /// overrides it cleanly. The module applies its axis toggles before this call,
+        /// so the command is masked by them here.
         /// </summary>
         sealed class GimbalAdjuster : AdjusterGimbalBase
         {
@@ -40,11 +41,12 @@ namespace KRPC.SpaceCenter
             public GimbalAdjuster () { }
             public GimbalAdjuster (Expansions.Missions.MENode node) : base (node) { }
 
+            public ModuleGimbal Module;
             public Vector3 Setting = Vector3.zero;
 
             public override Vector3 ApplyControlAdjustment (Vector3 control)
             {
-                return Setting;
+                return GimbalActuationInput (Module, Setting);
             }
         }
 
@@ -53,7 +55,8 @@ namespace KRPC.SpaceCenter
         /// these mid-Update, after rotating the cooked control input into world space
         /// and before it is used to allocate thrust across the thrusters. The command
         /// is stored in the vessel's control axes, so it is rotated into world space
-        /// here to match.
+        /// here to match. The module applies its axis toggles before this call, so the
+        /// command is masked by them here.
         /// </summary>
         sealed class RCSAdjuster : AdjusterRCSBase
         {
@@ -72,12 +75,12 @@ namespace KRPC.SpaceCenter
 
             public override Vector3 ApplyInputRotationAdjustment (Vector3 inputRotation)
             {
-                return ToWorld () * RCSRotationInput (Rotation);
+                return ToWorld () * RCSRotationInput (Module, Rotation);
             }
 
             public override Vector3 ApplyInputLinearAdjustment (Vector3 inputLinear)
             {
-                return ToWorld () * RCSTranslationInput (Linear);
+                return ToWorld () * RCSTranslationInput (Module, Linear);
             }
         }
 
@@ -178,7 +181,7 @@ namespace KRPC.SpaceCenter
         static GimbalEntry InstallGimbal (ModuleGimbal module)
         {
             var entry = new GimbalEntry {
-                Adjuster = new GimbalAdjuster (),
+                Adjuster = new GimbalAdjuster { Module = module },
                 SavedGimbalActive = module.gimbalActive
             };
             // ModuleGimbal.FixedUpdate (which runs the adjuster) returns early when
@@ -204,6 +207,19 @@ namespace KRPC.SpaceCenter
         internal static void SetGimbalOverride (ModuleGimbal module, bool enabled)
         {
             gimbals.Set (module, enabled);
+        }
+
+        /// <summary>
+        /// The actuation command as the module's own input, with each disabled axis zeroed.
+        /// </summary>
+        internal static Vector3 GimbalActuationInput (ModuleGimbal module, Vector3 actuation)
+        {
+            if (module == null)
+                return actuation;
+            return new Vector3 (
+                module.enablePitch ? actuation.x : 0f,
+                module.enableRoll ? actuation.y : 0f,
+                module.enableYaw ? actuation.z : 0f);
         }
 
         internal static Vector3 GetGimbalActuation (ModuleGimbal module)
@@ -254,24 +270,36 @@ namespace KRPC.SpaceCenter
         }
 
         /// <summary>
-        /// The rotation demand as the module's own rotation input. RCS.OverrideWrench predicts
-        /// through the same mapping, so the prediction follows the override.
+        /// The rotation demand as the module's own rotation input, with each disabled axis
+        /// zeroed. RCS.OverrideWrench predicts through the same mapping, so the prediction
+        /// follows the override.
         /// </summary>
-        internal static Vector3 RCSRotationInput (Vector3 rotation)
+        internal static Vector3 RCSRotationInput (ModuleRCS module, Vector3 rotation)
         {
-            return rotation;
+            if (module == null)
+                return rotation;
+            return new Vector3 (
+                module.enablePitch ? rotation.x : 0f,
+                module.enableRoll ? rotation.y : 0f,
+                module.enableYaw ? rotation.z : 0f);
         }
 
         /// <summary>
         /// The translation demand as the module's own linear input. ModuleRCS takes
         /// (-right, -forward, up) and thrusts along the negative of it, so the right, up and
-        /// forward demand is negated and reordered to match the cooked control input.
-        /// RCS.OverrideWrench predicts through the same mapping, so the prediction follows the
-        /// override.
+        /// forward demand is negated and reordered to match the cooked control input, and
+        /// each disabled axis is zeroed. RCS.OverrideWrench predicts through the same mapping,
+        /// so the prediction follows the override.
         /// </summary>
-        internal static Vector3 RCSTranslationInput (Vector3 translation)
+        internal static Vector3 RCSTranslationInput (ModuleRCS module, Vector3 translation)
         {
-            return new Vector3 (-translation.x, -translation.z, translation.y);
+            var input = new Vector3 (-translation.x, -translation.z, translation.y);
+            if (module == null)
+                return input;
+            return new Vector3 (
+                module.enableX ? input.x : 0f,
+                module.enableZ ? input.y : 0f,
+                module.enableY ? input.z : 0f);
         }
 
         internal static Vector3 GetRCSRotation (ModuleRCS module)

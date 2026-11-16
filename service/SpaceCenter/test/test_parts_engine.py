@@ -535,6 +535,32 @@ class TestPartsEngine(EngineTestBase, TestCase):
         self.wait()
         self.assertFalse(engine.gimbal_override)
 
+    def test_gimbal_override_respects_the_axis_toggles(self):
+        engine = self.get_engine("liquidEngine2")  # LV-T45 "Swivel"
+        thruster = engine.thrusters[0]
+        ref = self.vessel.reference_frame
+        neutral = thruster.initial_thrust_direction(ref)
+
+        def deflection(actuation):
+            engine.gimbal_actuation = actuation
+            self.wait(0.5)
+            return angle_between(thruster.thrust_direction(ref), neutral)
+
+        engine.gimbal_override = True
+        try:
+            engine.gimbal_pitch_enabled = False
+            self.assertLess(deflection((1, 0, 0)), 0.5)
+            self.assertGreater(deflection((0, 0, 1)), 2)
+            engine.gimbal_yaw_enabled = False
+            self.assertLess(deflection((0, 0, 1)), 0.5)
+            # The command reads back as set
+            self.assertAlmostEqual((0, 0, 1), engine.gimbal_actuation)
+        finally:
+            engine.gimbal_pitch_enabled = True
+            engine.gimbal_yaw_enabled = True
+            engine.gimbal_actuation = (0, 0, 0)
+            engine.gimbal_override = False
+
     def test_gimbal_override_not_gimballed(self):
         engine = self.get_engine("liquidEngine")  # LV-T30 "Reliant"
         self.assertFalse(engine.gimballed)
