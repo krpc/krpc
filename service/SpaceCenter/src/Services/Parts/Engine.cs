@@ -740,6 +740,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// correspond to the coordinate axes of the <see cref="Vessel.ReferenceFrame"/>.
         /// Returns zero if the engine is inactive, or not gimballed.
         /// </summary>
+        /// <remarks>
+        /// The torque is zero about an axis the gimbal is disabled for, such as pitch when
+        /// <see cref="GimbalPitchEnabled"/> is <c>false</c>.
+        /// </remarks>
         [KRPCProperty]
         public AxisRange AvailableTorque {
             get { return new AxisRange (AvailableTorqueVectors); }
@@ -752,9 +756,13 @@ namespace KRPC.SpaceCenter.Services.Parts
                 // GetPotentialTorque already applies the gimbal limiter (via
                 // ModuleGimbal.GimbalRotation, which scales the deflection by
                 // gimbalLimiter * 0.01), so no further scaling is needed here.
-                var torque = InternalGimbal.GetPotentialTorque ();
+                var gimbal = InternalGimbal;
+                var torque = gimbal.GetPotentialTorque ();
+                // GetPotentialTorque ignores the pitch and yaw toggles
+                var axes = new Vector3d (
+                    gimbal.enablePitch ? 1 : 0, gimbal.enableRoll ? 1 : 0, gimbal.enableYaw ? 1 : 0);
                 // Note: GetPotentialTorque returns negative torques with incorrect sign
-                return new TupleV3 (torque.Item1, -torque.Item2);
+                return new TupleV3 (Vector3d.Scale (torque.Item1, axes), -Vector3d.Scale (torque.Item2, axes));
             }
         }
 

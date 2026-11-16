@@ -466,6 +466,32 @@ class TestPartsEngine(EngineTestBase, TestCase):
         self.assertTrue(engine.gimbal_yaw_enabled)
         self.assertTrue(engine.gimbal_roll_enabled)
 
+    def test_gimbal_axes_available_torque(self):
+        # The engine sits off the roll axis, so it has torque on all three axes
+        engine = self.get_engine("omsEngine")  # O-10 "Puff"
+        self.set_throttle(engine, 1)
+        try:
+            full = engine.available_torque
+            for axis, name in enumerate(("pitch", "roll", "yaw")):
+                self.assertGreater(full[0][axis], 100)
+                self.assertLess(full[1][axis], -100)
+                setattr(engine, f"gimbal_{name}_enabled", False)
+                torque = engine.available_torque
+                setattr(engine, f"gimbal_{name}_enabled", True)
+                for direction in range(2):
+                    for i in range(3):
+                        expected = 0 if i == axis else full[direction][i]
+                        self.assertAlmostEqual(
+                            expected,
+                            torque[direction][i],
+                            delta=max(1, abs(full[direction][i]) * 0.01),
+                        )
+        finally:
+            engine.gimbal_pitch_enabled = True
+            engine.gimbal_roll_enabled = True
+            engine.gimbal_yaw_enabled = True
+            self.set_idle(engine)
+
     def test_gimbal_override(self):
         engine = self.get_engine("liquidEngine2")  # LV-T45 "Swivel"
         thruster = engine.thrusters[0]
