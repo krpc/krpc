@@ -616,6 +616,87 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// Whether the gimbal moves toward its commanded deflection at
+        /// <see cref="GimbalResponseSpeed"/>. When <c>false</c>, the gimbal reaches its
+        /// commanded deflection in one physics tick.
+        /// Throws an exception if the engine is not gimballed.
+        /// </summary>
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
+        public bool GimbalResponseSpeedEnabled {
+            get {
+                CheckGimballed ();
+                return InternalGimbal.useGimbalResponseSpeed;
+            }
+        }
+
+        /// <summary>
+        /// The response speed of the gimbal, in <unit>s^{-1}</unit>.
+        /// Throws an exception if the engine is not gimballed.
+        /// </summary>
+        /// <remarks>
+        /// Each physics tick of length <math>\Delta t</math>, the gimbal moves a fraction
+        /// <math>v \Delta t</math> of the way from its deflection to the commanded deflection,
+        /// where <math>v</math> is the response speed. The fraction is at most 1, so at high
+        /// physics warp the gimbal can reach its commanded deflection in one tick. This lag
+        /// only applies when <see cref="GimbalResponseSpeedEnabled"/> is <c>true</c>.
+        /// </remarks>
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
+        public float GimbalResponseSpeed {
+            get {
+                CheckGimballed ();
+                return InternalGimbal.gimbalResponseSpeed;
+            }
+        }
+
+        /// <summary>
+        /// Whether the gimbal responds to pitch control input.
+        /// Throws an exception if the engine is not gimballed.
+        /// </summary>
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
+        public bool GimbalPitchEnabled {
+            get {
+                CheckGimballed ();
+                return InternalGimbal.enablePitch;
+            }
+            set {
+                CheckGimballed ();
+                InternalGimbal.enablePitch = value;
+            }
+        }
+
+        /// <summary>
+        /// Whether the gimbal responds to yaw control input.
+        /// Throws an exception if the engine is not gimballed.
+        /// </summary>
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
+        public bool GimbalYawEnabled {
+            get {
+                CheckGimballed ();
+                return InternalGimbal.enableYaw;
+            }
+            set {
+                CheckGimballed ();
+                InternalGimbal.enableYaw = value;
+            }
+        }
+
+        /// <summary>
+        /// Whether the gimbal responds to roll control input.
+        /// Throws an exception if the engine is not gimballed.
+        /// </summary>
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
+        public bool GimbalRollEnabled {
+            get {
+                CheckGimballed ();
+                return InternalGimbal.enableRoll;
+            }
+            set {
+                CheckGimballed ();
+                InternalGimbal.enableRoll = value;
+            }
+        }
+
+        /// <summary>
         /// Whether the gimbal is being controlled directly, bypassing the vessel's normal
         /// flight controls. When enabled, the gimbal deflection is set by
         /// <see cref="GimbalActuation"/> instead of the normal control inputs.

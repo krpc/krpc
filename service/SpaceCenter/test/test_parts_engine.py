@@ -399,6 +399,73 @@ class TestPartsEngine(EngineTestBase, TestCase):
         self.set_idle(engine)
         engine.gimbal_limit = 1
 
+    def test_gimbal_response_speed(self):
+        # The Swivel moves instantly, the Puff and Terrier lag
+        swivel = self.get_engine("liquidEngine2")  # LV-T45 "Swivel"
+        self.assertFalse(swivel.gimbal_response_speed_enabled)
+        puff = self.get_engine("omsEngine")  # O-10 "Puff"
+        self.assertTrue(puff.gimbal_response_speed_enabled)
+        self.assertAlmostEqual(12, puff.gimbal_response_speed)
+        terrier = self.get_engine("liquidEngine3.v2")  # LV-909 "Terrier"
+        self.assertTrue(terrier.gimbal_response_speed_enabled)
+        self.assertAlmostEqual(30, terrier.gimbal_response_speed)
+
+    def test_gimbal_not_gimballed(self):
+        engine = self.get_engine("liquidEngine")  # LV-T30 "Reliant"
+        self.assertFalse(engine.gimballed)
+        for name in (
+            "gimbal_response_speed_enabled",
+            "gimbal_response_speed",
+            "gimbal_pitch_enabled",
+            "gimbal_yaw_enabled",
+            "gimbal_roll_enabled",
+        ):
+            self.assertRaises(RuntimeError, getattr, engine, name)
+        self.assertRaises(RuntimeError, setattr, engine, "gimbal_pitch_enabled", True)
+
+    def test_gimbal_axes(self):
+        engine = self.get_engine("liquidEngine2")  # LV-T45 "Swivel"
+        thruster = engine.thrusters[0]
+        ref = self.vessel.reference_frame
+        control = self.vessel.control
+        neutral = thruster.initial_thrust_direction(ref)
+
+        def deflection(axis):
+            setattr(control, axis, 1)
+            self.wait(0.5)
+            angle = angle_between(thruster.thrust_direction(ref), neutral)
+            setattr(control, axis, 0)
+            self.wait(0.5)
+            return angle
+
+        self.assertTrue(engine.gimbal_pitch_enabled)
+        self.assertTrue(engine.gimbal_yaw_enabled)
+        self.assertTrue(engine.gimbal_roll_enabled)
+        engine.active = True
+        try:
+            self.assertGreater(deflection("pitch"), 2)
+            self.assertGreater(deflection("yaw"), 2)
+
+            engine.gimbal_pitch_enabled = False
+            self.assertFalse(engine.gimbal_pitch_enabled)
+            self.assertLess(deflection("pitch"), 0.5)
+            self.assertGreater(deflection("yaw"), 2)
+
+            engine.gimbal_yaw_enabled = False
+            self.assertFalse(engine.gimbal_yaw_enabled)
+            self.assertLess(deflection("yaw"), 0.5)
+
+            engine.gimbal_roll_enabled = False
+            self.assertFalse(engine.gimbal_roll_enabled)
+        finally:
+            engine.gimbal_pitch_enabled = True
+            engine.gimbal_yaw_enabled = True
+            engine.gimbal_roll_enabled = True
+            engine.active = False
+        self.assertTrue(engine.gimbal_pitch_enabled)
+        self.assertTrue(engine.gimbal_yaw_enabled)
+        self.assertTrue(engine.gimbal_roll_enabled)
+
     def test_gimbal_override(self):
         engine = self.get_engine("liquidEngine2")  # LV-T45 "Swivel"
         thruster = engine.thrusters[0]
