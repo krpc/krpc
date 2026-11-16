@@ -11,6 +11,7 @@ from pathlib import Path
 import changelog
 import lib
 import maven
+import spacedock
 
 # Reported as a failure if missing, as it creates the release
 REQUIRED_GITHUB_SCOPES = ("repo",)
@@ -210,13 +211,13 @@ def check_credentials(report):
         else:
             report.fail(f"{key} is not set in {lib.CREDENTIALS_FILE}")
 
-    # GitHub, luarocks.org, AWS, the Central Portal and npm can all be asked
-    # whether a credential works without publishing anything, so a bad one is
-    # a failure. PyPI and nuget.org offer no such check: the only thing that
-    # exercises those keys is an upload, which cannot be undone. They get a
-    # check of the format the services issue, which catches a truncated or
-    # misplaced value but cannot tell whether the key is live, so a surprise
-    # there is a warning.
+    # GitHub, luarocks.org, AWS, the Central Portal, npm and SpaceDock can all
+    # be asked whether a credential works without publishing anything, so a
+    # bad one is a failure. PyPI and nuget.org offer no such check: the only
+    # thing that exercises those keys is an upload, which cannot be undone.
+    # They get a check of the format the services issue, which catches a
+    # truncated or misplaced value but cannot tell whether the key is live, so
+    # a surprise there is a warning.
     if credentials.get("GITHUB_TOKEN"):
         check_github(report, credentials["GITHUB_TOKEN"])
 
@@ -248,6 +249,21 @@ def check_credentials(report):
 
     if credentials.get("NPM_TOKEN"):
         check_npm(report, credentials["NPM_TOKEN"])
+
+    if credentials.get("SPACEDOCK_USERNAME") and credentials.get("SPACEDOCK_PASSWORD"):
+        check_spacedock(report, credentials)
+
+
+def check_spacedock(report, credentials):
+    session = spacedock.Session()
+    try:
+        session.login(
+            credentials["SPACEDOCK_USERNAME"], credentials["SPACEDOCK_PASSWORD"]
+        )
+    except lib.ReleaseError as exception:
+        report.fail(f"SPACEDOCK_*: {exception}")
+        return
+    report.ok("SpaceDock accepts the SPACEDOCK_* login")
 
 
 def check_npm(report, token):

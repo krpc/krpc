@@ -58,10 +58,10 @@ A release preparation pull request takes `main` from the version being released 
    changelog as release notes and the assets attached. Review the draft on GitHub and publish it
    from there.
 
-## 4. Release the clients and tools
+## 4. Release the mod, clients and tools
 
-Each of these publishes one package, and they can be run in any order. Each builds and re-tests
-the component first, and prompts before publishing.
+Each script releases one package, and they can be run in any order. The client and tool scripts
+build and re-test the component first. Each script prompts before publishing.
 
 11. `tools/release/60-release-python.py` - Python client to PyPI.
 12. `tools/release/61-release-krpctools.py` - krpctools to PyPI.
@@ -73,6 +73,14 @@ the component first, and prompts before publishing.
 18. `tools/release/67-release-vcpkg-cnano.py` - C-nano client port to `microsoft/vcpkg`.
 19. `tools/release/68-release-ckan.py` - confirms the mod reached CKAN.
 20. `tools/release/69-release-npm.py` - JavaScript client to npm.
+21. `tools/release/70-release-spacedock.py` - the mod to SpaceDock, emailing its followers.
+
+Two steps are done by hand:
+
+22. Upload `assets/krpc-x.x.x.zip` to
+    [CurseForge](https://www.curseforge.com/kerbal/ksp-mods/krpc-control-the-game-using-c-c-java-lua-python)
+    by hand, linking the changelog at `https://krpc.github.io/krpc/<version>/changelog.html`.
+23. Bump the version number on [KSP-AVC online](https://ksp-avc.cybutek.net/).
 
 The Maven Central step uploads the signed bundle to the Central Portal, which validates it without
 publishing. The step publishes it only once validation passes and you confirm. A version on Maven
@@ -92,11 +100,13 @@ The npm step publishes the package as `@krpc-org/krpc`, so the release account m
 the `@krpc-org` organization on npm. A version on npm cannot be published again, even after it is
 unpublished.
 
-## 5. Publish the mod and announce
+SpaceDock has no API keys, so its step logs in with the account's username and password. The email
+to followers cannot be recalled, and a version can only be deleted by hand on the site. The step
+links the changelog page of the docs, so it checks that the docs workflow of the tag has published
+that page.
 
-21. `tools/release/70-announcements.py` - prints the checklist of remaining manual steps:
-    * Upload `assets/krpc-x.x.x.zip` to CurseForge and SpaceDock, linking the changelog at
-      `https://krpc.github.io/krpc/<version>/changelog.html`.
-    * Bump the version number on [KSP-AVC online](https://ksp-avc.cybutek.net/).
+## 5. Announce the release
+
+24. `tools/release/71-announcements.py` - prints the checklist of announcements:
     * Update the forum release thread, and post an update notice to it.
     * Post on Discord and Reddit.
