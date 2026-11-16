@@ -8812,6 +8812,194 @@ Throws <a class="reference internal" href="../krpc/krpc.html#KRPC.InvalidOperati
 </dl>
 </dd></dl>
 
+<dl class="js method">
+<dt class="sig sig-object js" id="SpaceCenter.Leg.getLoad">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Leg</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getLoad</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Leg.getLoad" title="Link to this definition">#</a></dt>
+<dd><p>The force pressing the leg’s foot into the ground, in <span class="math notranslate nohighlight">\(\mathrm{kN}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game raises the load of a grounded leg to at least 10 kN.
+<a class="reference internal" href="#SpaceCenter.Leg.getImpactTolerance" title="SpaceCenter.Leg.getImpactTolerance"><code class="xref js js-meth docutils literal notranslate"><span class="pre">SpaceCenter.Leg.getImpactTolerance()</span></code></a> applies to the rise in this value.</p>
+</div>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="SpaceCenter.Leg.contactPosition">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Leg</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">contactPosition</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">referenceFrame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Leg.contactPosition" title="Link to this definition">#</a></dt>
+<dd><p>The position of the bottom of the leg’s foot, in the given reference frame. While
+the leg is grounded, this is where it touches the ground.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>referenceFrame</strong> (<a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref js js-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a>) – The reference frame that the returned position vector is in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The position as a vector.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">[number,</span> <span class="pre">number,</span> <span class="pre">number]</span></code></p>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="SpaceCenter.Leg.getSuspensionSpringStrength">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Leg</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getSuspensionSpringStrength</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Leg.getSuspensionSpringStrength" title="Link to this definition">#</a></dt>
+<dd><p>Suspension spring strength, as set in the editor.
+Throws an exception if the leg has no suspension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="SpaceCenter.Leg.getSuspensionDamperStrength">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Leg</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getSuspensionDamperStrength</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Leg.getSuspensionDamperStrength" title="Link to this definition">#</a></dt>
+<dd><p>Suspension damper strength, as set in the editor.
+Throws an exception if the leg has no suspension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="SpaceCenter.Leg.getSuspensionSpring">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Leg</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getSuspensionSpring</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Leg.getSuspensionSpring" title="Link to this definition">#</a></dt>
+<dd><p>The spring constant of the suspension, in <span class="math notranslate nohighlight">\(\mathrm{kN/m}\)</span>, or <code class="docutils literal notranslate"><span class="pre">null</span></code> while
+the leg is not grounded.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code> or <code class="docutils literal notranslate"><span class="pre">null</span></code></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game updates it while the leg is grounded, from
+<a class="reference internal" href="#SpaceCenter.Leg.getSuspensionSpringStrength" title="SpaceCenter.Leg.getSuspensionSpringStrength"><code class="xref js js-meth docutils literal notranslate"><span class="pre">SpaceCenter.Leg.getSuspensionSpringStrength()</span></code></a>, the vessel’s mass, the leg’s compression and
+the local gravity.</p>
+</div>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="SpaceCenter.Leg.getSuspensionDamper">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Leg</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getSuspensionDamper</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Leg.getSuspensionDamper" title="Link to this definition">#</a></dt>
+<dd><p>The damping constant of the suspension, in <span class="math notranslate nohighlight">\(\mathrm{kN \cdot s/m}\)</span>, or <code class="docutils literal notranslate"><span class="pre">null</span></code>
+while the leg is not grounded.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code> or <code class="docutils literal notranslate"><span class="pre">null</span></code></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game updates it while the leg is grounded, from
+<a class="reference internal" href="#SpaceCenter.Leg.getSuspensionDamperStrength" title="SpaceCenter.Leg.getSuspensionDamperStrength"><code class="xref js js-meth docutils literal notranslate"><span class="pre">SpaceCenter.Leg.getSuspensionDamperStrength()</span></code></a> and <a class="reference internal" href="#SpaceCenter.Leg.getSuspensionSpring" title="SpaceCenter.Leg.getSuspensionSpring"><code class="xref js js-meth docutils literal notranslate"><span class="pre">SpaceCenter.Leg.getSuspensionSpring()</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="SpaceCenter.Leg.getSuspensionTravel">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Leg</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getSuspensionTravel</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Leg.getSuspensionTravel" title="Link to this definition">#</a></dt>
+<dd><p>The travel of the suspension, in meters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="SpaceCenter.Leg.getImpactTolerance">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Leg</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getImpactTolerance</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Leg.getImpactTolerance" title="Link to this definition">#</a></dt>
+<dd><p>The rise in <a class="reference internal" href="#SpaceCenter.Leg.getLoad" title="SpaceCenter.Leg.getLoad"><code class="xref js js-meth docutils literal notranslate"><span class="pre">SpaceCenter.Leg.getLoad()</span></code></a> over one physics tick that breaks the leg, in
+<span class="math notranslate nohighlight">\(\mathrm{kN}\)</span>.
+Throws an exception if the leg is not breakable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game scales the rise by the local gravity divided by standard gravity before
+comparing it with this tolerance.</p>
+</div>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="SpaceCenter.Leg.getExplodeMultiplier">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Leg</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getExplodeMultiplier</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Leg.getExplodeMultiplier" title="Link to this definition">#</a></dt>
+<dd><p>The multiple of <a class="reference internal" href="#SpaceCenter.Leg.getImpactTolerance" title="SpaceCenter.Leg.getImpactTolerance"><code class="xref js js-meth docutils literal notranslate"><span class="pre">SpaceCenter.Leg.getImpactTolerance()</span></code></a> that destroys the leg, in place of
+breaking it.
+Throws an exception if the leg is not breakable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -12576,6 +12764,118 @@ reducing the maximum angle as the vessel moves faster. See also
 </dd></dl>
 
 <dl class="js method">
+<dt class="sig sig-object js" id="SpaceCenter.Wheel.getSuspensionSpring">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Wheel</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getSuspensionSpring</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Wheel.getSuspensionSpring" title="Link to this definition">#</a></dt>
+<dd><p>The spring constant of the suspension, in <span class="math notranslate nohighlight">\(\mathrm{kN/m}\)</span>, or <code class="docutils literal notranslate"><span class="pre">null</span></code> while
+the wheel is not grounded.
+Throws an exception if the wheel has no suspension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code> or <code class="docutils literal notranslate"><span class="pre">null</span></code></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game updates it while the wheel is grounded, from
+<a class="reference internal" href="#SpaceCenter.Wheel.getSuspensionSpringStrength" title="SpaceCenter.Wheel.getSuspensionSpringStrength"><code class="xref js js-meth docutils literal notranslate"><span class="pre">SpaceCenter.Wheel.getSuspensionSpringStrength()</span></code></a>, the vessel’s mass, the wheel’s compression and
+the local gravity.</p>
+</div>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="SpaceCenter.Wheel.getSuspensionDamper">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Wheel</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getSuspensionDamper</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Wheel.getSuspensionDamper" title="Link to this definition">#</a></dt>
+<dd><p>The damping constant of the suspension, in <span class="math notranslate nohighlight">\(\mathrm{kN \cdot s/m}\)</span>, or <code class="docutils literal notranslate"><span class="pre">null</span></code>
+while the wheel is not grounded.
+Throws an exception if the wheel has no suspension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code> or <code class="docutils literal notranslate"><span class="pre">null</span></code></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game updates it while the wheel is grounded, from
+<a class="reference internal" href="#SpaceCenter.Wheel.getSuspensionDamperStrength" title="SpaceCenter.Wheel.getSuspensionDamperStrength"><code class="xref js js-meth docutils literal notranslate"><span class="pre">SpaceCenter.Wheel.getSuspensionDamperStrength()</span></code></a> and <a class="reference internal" href="#SpaceCenter.Wheel.getSuspensionSpring" title="SpaceCenter.Wheel.getSuspensionSpring"><code class="xref js js-meth docutils literal notranslate"><span class="pre">SpaceCenter.Wheel.getSuspensionSpring()</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="SpaceCenter.Wheel.getSuspensionTravel">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Wheel</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getSuspensionTravel</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Wheel.getSuspensionTravel" title="Link to this definition">#</a></dt>
+<dd><p>The travel of the suspension, in meters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="SpaceCenter.Wheel.getLoad">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Wheel</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getLoad</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Wheel.getLoad" title="Link to this definition">#</a></dt>
+<dd><p>The force pressing the wheel into the ground, in <span class="math notranslate nohighlight">\(\mathrm{kN}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game raises the load of a grounded wheel to at least 0.5 kN, or 10 kN for a wheel
+with the old friction model. <a class="reference internal" href="#SpaceCenter.Wheel.getImpactTolerance" title="SpaceCenter.Wheel.getImpactTolerance"><code class="xref js js-meth docutils literal notranslate"><span class="pre">SpaceCenter.Wheel.getImpactTolerance()</span></code></a> applies to the rise in
+this value.</p>
+</div>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="SpaceCenter.Wheel.contactPosition">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Wheel</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">contactPosition</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">referenceFrame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Wheel.contactPosition" title="Link to this definition">#</a></dt>
+<dd><p>The position of the bottom of the wheel, in the given reference frame. While the
+wheel is grounded, this is where it touches the ground.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>referenceFrame</strong> (<a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref js js-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a>) – The reference frame that the returned position vector is in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The position as a vector.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">[number,</span> <span class="pre">number,</span> <span class="pre">number]</span></code></p>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
 <dt class="sig sig-object js" id="SpaceCenter.Wheel.getBroken">
 <span class="sig-prename descclassname"><span class="n"><span class="pre">Wheel</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getBroken</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Wheel.getBroken" title="Link to this definition">#</a></dt>
 <dd><p>Whether the wheel is broken.</p>
@@ -12621,6 +12921,43 @@ reducing the maximum angle as the vessel moves faster. See also
 <dt class="sig sig-object js" id="SpaceCenter.Wheel.getStressTolerance">
 <span class="sig-prename descclassname"><span class="n"><span class="pre">Wheel</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getStressTolerance</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Wheel.getStressTolerance" title="Link to this definition">#</a></dt>
 <dd><p>Stress tolerance of the wheel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="SpaceCenter.Wheel.getImpactTolerance">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Wheel</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getImpactTolerance</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Wheel.getImpactTolerance" title="Link to this definition">#</a></dt>
+<dd><p>The rise in <a class="reference internal" href="#SpaceCenter.Wheel.getLoad" title="SpaceCenter.Wheel.getLoad"><code class="xref js js-meth docutils literal notranslate"><span class="pre">SpaceCenter.Wheel.getLoad()</span></code></a> over one physics tick that breaks the wheel, in
+<span class="math notranslate nohighlight">\(\mathrm{kN}\)</span>.
+Throws an exception if the wheel is not breakable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game scales the rise by the local gravity divided by standard gravity before
+comparing it with this tolerance.</p>
+</div>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="SpaceCenter.Wheel.getExplodeMultiplier">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Wheel</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getExplodeMultiplier</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Wheel.getExplodeMultiplier" title="Link to this definition">#</a></dt>
+<dd><p>The multiple of <a class="reference internal" href="#SpaceCenter.Wheel.getImpactTolerance" title="SpaceCenter.Wheel.getImpactTolerance"><code class="xref js js-meth docutils literal notranslate"><span class="pre">SpaceCenter.Wheel.getImpactTolerance()</span></code></a> that destroys the wheel, in place of
+breaking it.
+Throws an exception if the wheel is not breakable.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Property<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>

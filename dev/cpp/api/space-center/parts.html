@@ -6725,6 +6725,143 @@ Throws <a class="reference internal" href="../krpc/krpc.html#_CPPv4N4krpc8servic
 </dl>
 </dd></dl>
 
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter3Leg4loadEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter3Leg4loadEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter3Leg4loadEv"></span><span id="krpc::services::SpaceCenter::Leg::load"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">load</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter3Leg4loadEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The force pressing the leg’s foot into the ground, in <span class="math notranslate nohighlight">\(\mathrm{kN}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game raises the load of a grounded leg to at least 10 kN.
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter3Leg16impact_toleranceEv" title="krpc::services::SpaceCenter::Leg::impact_tolerance"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Leg::impact_tolerance()</span></code></a> applies to the rise in this value.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter3Leg16contact_positionE14ReferenceFrame">
+<span id="_CPPv3N4krpc8services11SpaceCenter3Leg16contact_positionE14ReferenceFrame"></span><span id="_CPPv2N4krpc8services11SpaceCenter3Leg16contact_positionE14ReferenceFrame"></span><span id="krpc::services::SpaceCenter::Leg::contact_position__ReferenceFrame"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">contact_position</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reference_frame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter3Leg16contact_positionE14ReferenceFrame" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the bottom of the leg’s foot, in the given reference frame. While
+the leg is grounded, this is where it touches the ground.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reference_frame</strong> – The reference frame that the returned position vector is in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The position as a vector.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter3Leg26suspension_spring_strengthEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter3Leg26suspension_spring_strengthEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter3Leg26suspension_spring_strengthEv"></span><span id="krpc::services::SpaceCenter::Leg::suspension_spring_strength"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">suspension_spring_strength</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter3Leg26suspension_spring_strengthEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Suspension spring strength, as set in the editor.
+Throws an exception if the leg has no suspension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter3Leg26suspension_damper_strengthEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter3Leg26suspension_damper_strengthEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter3Leg26suspension_damper_strengthEv"></span><span id="krpc::services::SpaceCenter::Leg::suspension_damper_strength"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">suspension_damper_strength</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter3Leg26suspension_damper_strengthEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Suspension damper strength, as set in the editor.
+Throws an exception if the leg has no suspension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter3Leg17suspension_springEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter3Leg17suspension_springEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter3Leg17suspension_springEv"></span><span id="krpc::services::SpaceCenter::Leg::suspension_spring"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">optional</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">float</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">suspension_spring</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter3Leg17suspension_springEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The spring constant of the suspension, in <span class="math notranslate nohighlight">\(\mathrm{kN/m}\)</span>, or <code class="docutils literal notranslate"><span class="pre">NULL</span></code> while
+the leg is not grounded.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game updates it while the leg is grounded, from
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter3Leg26suspension_spring_strengthEv" title="krpc::services::SpaceCenter::Leg::suspension_spring_strength"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Leg::suspension_spring_strength()</span></code></a>, the vessel’s mass, the leg’s compression and
+the local gravity.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter3Leg17suspension_damperEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter3Leg17suspension_damperEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter3Leg17suspension_damperEv"></span><span id="krpc::services::SpaceCenter::Leg::suspension_damper"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">optional</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">float</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">suspension_damper</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter3Leg17suspension_damperEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The damping constant of the suspension, in <span class="math notranslate nohighlight">\(\mathrm{kN \cdot s/m}\)</span>, or <code class="docutils literal notranslate"><span class="pre">NULL</span></code>
+while the leg is not grounded.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game updates it while the leg is grounded, from
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter3Leg26suspension_damper_strengthEv" title="krpc::services::SpaceCenter::Leg::suspension_damper_strength"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Leg::suspension_damper_strength()</span></code></a> and <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter3Leg17suspension_springEv" title="krpc::services::SpaceCenter::Leg::suspension_spring"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Leg::suspension_spring()</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter3Leg17suspension_travelEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter3Leg17suspension_travelEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter3Leg17suspension_travelEv"></span><span id="krpc::services::SpaceCenter::Leg::suspension_travel"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">suspension_travel</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter3Leg17suspension_travelEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The travel of the suspension, in meters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter3Leg16impact_toleranceEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter3Leg16impact_toleranceEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter3Leg16impact_toleranceEv"></span><span id="krpc::services::SpaceCenter::Leg::impact_tolerance"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">impact_tolerance</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter3Leg16impact_toleranceEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The rise in <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter3Leg4loadEv" title="krpc::services::SpaceCenter::Leg::load"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Leg::load()</span></code></a> over one physics tick that breaks the leg, in
+<span class="math notranslate nohighlight">\(\mathrm{kN}\)</span>.
+Throws an exception if the leg is not breakable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game scales the rise by the local gravity divided by standard gravity before
+comparing it with this tolerance.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter3Leg18explode_multiplierEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter3Leg18explode_multiplierEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter3Leg18explode_multiplierEv"></span><span id="krpc::services::SpaceCenter::Leg::explode_multiplier"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">explode_multiplier</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter3Leg18explode_multiplierEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The multiple of <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter3Leg16impact_toleranceEv" title="krpc::services::SpaceCenter::Leg::impact_tolerance"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Leg::impact_tolerance()</span></code></a> that destroys the leg, in place of
+breaking it.
+Throws an exception if the leg is not breakable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -9626,6 +9763,91 @@ reducing the maximum angle as the vessel moves faster. See also
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Wheel17suspension_springEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Wheel17suspension_springEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Wheel17suspension_springEv"></span><span id="krpc::services::SpaceCenter::Wheel::suspension_spring"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">optional</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">float</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">suspension_spring</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Wheel17suspension_springEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The spring constant of the suspension, in <span class="math notranslate nohighlight">\(\mathrm{kN/m}\)</span>, or <code class="docutils literal notranslate"><span class="pre">NULL</span></code> while
+the wheel is not grounded.
+Throws an exception if the wheel has no suspension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game updates it while the wheel is grounded, from
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Wheel26suspension_spring_strengthEv" title="krpc::services::SpaceCenter::Wheel::suspension_spring_strength"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Wheel::suspension_spring_strength()</span></code></a>, the vessel’s mass, the wheel’s compression and
+the local gravity.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Wheel17suspension_damperEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Wheel17suspension_damperEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Wheel17suspension_damperEv"></span><span id="krpc::services::SpaceCenter::Wheel::suspension_damper"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">optional</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">float</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">suspension_damper</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Wheel17suspension_damperEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The damping constant of the suspension, in <span class="math notranslate nohighlight">\(\mathrm{kN \cdot s/m}\)</span>, or <code class="docutils literal notranslate"><span class="pre">NULL</span></code>
+while the wheel is not grounded.
+Throws an exception if the wheel has no suspension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game updates it while the wheel is grounded, from
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Wheel26suspension_damper_strengthEv" title="krpc::services::SpaceCenter::Wheel::suspension_damper_strength"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Wheel::suspension_damper_strength()</span></code></a> and <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Wheel17suspension_springEv" title="krpc::services::SpaceCenter::Wheel::suspension_spring"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Wheel::suspension_spring()</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Wheel17suspension_travelEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Wheel17suspension_travelEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Wheel17suspension_travelEv"></span><span id="krpc::services::SpaceCenter::Wheel::suspension_travel"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">suspension_travel</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Wheel17suspension_travelEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The travel of the suspension, in meters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Wheel4loadEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Wheel4loadEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Wheel4loadEv"></span><span id="krpc::services::SpaceCenter::Wheel::load"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">load</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Wheel4loadEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The force pressing the wheel into the ground, in <span class="math notranslate nohighlight">\(\mathrm{kN}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game raises the load of a grounded wheel to at least 0.5 kN, or 10 kN for a wheel
+with the old friction model. <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Wheel16impact_toleranceEv" title="krpc::services::SpaceCenter::Wheel::impact_tolerance"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Wheel::impact_tolerance()</span></code></a> applies to the rise in
+this value.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Wheel16contact_positionE14ReferenceFrame">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Wheel16contact_positionE14ReferenceFrame"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Wheel16contact_positionE14ReferenceFrame"></span><span id="krpc::services::SpaceCenter::Wheel::contact_position__ReferenceFrame"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">contact_position</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reference_frame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Wheel16contact_positionE14ReferenceFrame" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the bottom of the wheel, in the given reference frame. While the
+wheel is grounded, this is where it touches the ground.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reference_frame</strong> – The reference frame that the returned position vector is in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The position as a vector.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Wheel6brokenEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter5Wheel6brokenEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Wheel6brokenEv"></span><span id="krpc::services::SpaceCenter::Wheel::broken"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">broken</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Wheel6brokenEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Whether the wheel is broken.</p>
@@ -9647,6 +9869,27 @@ reducing the maximum angle as the vessel moves faster. See also
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Wheel16stress_toleranceEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter5Wheel16stress_toleranceEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Wheel16stress_toleranceEv"></span><span id="krpc::services::SpaceCenter::Wheel::stress_tolerance"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stress_tolerance</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Wheel16stress_toleranceEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Stress tolerance of the wheel.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Wheel16impact_toleranceEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Wheel16impact_toleranceEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Wheel16impact_toleranceEv"></span><span id="krpc::services::SpaceCenter::Wheel::impact_tolerance"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">impact_tolerance</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Wheel16impact_toleranceEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The rise in <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Wheel4loadEv" title="krpc::services::SpaceCenter::Wheel::load"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Wheel::load()</span></code></a> over one physics tick that breaks the wheel, in
+<span class="math notranslate nohighlight">\(\mathrm{kN}\)</span>.
+Throws an exception if the wheel is not breakable.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game scales the rise by the local gravity divided by standard gravity before
+comparing it with this tolerance.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Wheel18explode_multiplierEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Wheel18explode_multiplierEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Wheel18explode_multiplierEv"></span><span id="krpc::services::SpaceCenter::Wheel::explode_multiplier"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">explode_multiplier</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Wheel18explode_multiplierEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The multiple of <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Wheel16impact_toleranceEv" title="krpc::services::SpaceCenter::Wheel::impact_tolerance"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Wheel::impact_tolerance()</span></code></a> that destroys the wheel, in place of
+breaking it.
+Throws an exception if the wheel is not breakable.</p>
 </dd></dl>
 
 <dl class="cpp function">

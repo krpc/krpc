@@ -6737,6 +6737,143 @@ Throws <a class="reference internal" href="../krpc/krpc.html#krpc.client.service
 </dl>
 </dd></dl>
 
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Leg.getLoad()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getLoad</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Leg.getLoad()" title="Link to this definition">#</a></dt>
+<dd><p>The force pressing the leg’s foot into the ground, in <span class="math notranslate nohighlight">\(\mathrm{kN}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game raises the load of a grounded leg to at least 10 kN.
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.Leg.getImpactTolerance()" title="krpc.client.services.SpaceCenter.Leg.getImpactTolerance()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Leg.getImpactTolerance()</span></code></a> applies to the rise in this value.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Leg.contactPosition(ReferenceFrame)">
+<a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/package-summary.html" title="org.javatuples"><span class="pre">org.javatuples</span></a><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">contactPosition</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Leg.contactPosition(ReferenceFrame)" title="Link to this definition">#</a></dt>
+<dd><p>The position of the bottom of the leg’s foot, in the given reference frame. While
+the leg is grounded, this is where it touches the ground.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>referenceFrame</strong> (<span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><code class="xref java java-type docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a></span>) – The reference frame that the returned position vector is in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The position as a vector.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Leg.getSuspensionSpringStrength()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getSuspensionSpringStrength</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Leg.getSuspensionSpringStrength()" title="Link to this definition">#</a></dt>
+<dd><p>Suspension spring strength, as set in the editor.
+Throws an exception if the leg has no suspension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Leg.getSuspensionDamperStrength()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getSuspensionDamperStrength</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Leg.getSuspensionDamperStrength()" title="Link to this definition">#</a></dt>
+<dd><p>Suspension damper strength, as set in the editor.
+Throws an exception if the leg has no suspension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Leg.getSuspensionSpring()">
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Float.html" title="java.lang.Float"><span class="pre">Float</span></a> <span class="sig-name descname"><span class="pre">getSuspensionSpring</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Leg.getSuspensionSpring()" title="Link to this definition">#</a></dt>
+<dd><p>The spring constant of the suspension, in <span class="math notranslate nohighlight">\(\mathrm{kN/m}\)</span>, or <code class="docutils literal notranslate"><span class="pre">null</span></code> while
+the leg is not grounded.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game updates it while the leg is grounded, from
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.Leg.getSuspensionSpringStrength()" title="krpc.client.services.SpaceCenter.Leg.getSuspensionSpringStrength()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Leg.getSuspensionSpringStrength()</span></code></a>, the vessel’s mass, the leg’s compression and
+the local gravity.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Leg.getSuspensionDamper()">
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Float.html" title="java.lang.Float"><span class="pre">Float</span></a> <span class="sig-name descname"><span class="pre">getSuspensionDamper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Leg.getSuspensionDamper()" title="Link to this definition">#</a></dt>
+<dd><p>The damping constant of the suspension, in <span class="math notranslate nohighlight">\(\mathrm{kN \cdot s/m}\)</span>, or <code class="docutils literal notranslate"><span class="pre">null</span></code>
+while the leg is not grounded.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game updates it while the leg is grounded, from
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.Leg.getSuspensionDamperStrength()" title="krpc.client.services.SpaceCenter.Leg.getSuspensionDamperStrength()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Leg.getSuspensionDamperStrength()</span></code></a> and <a class="reference internal" href="#krpc.client.services.SpaceCenter.Leg.getSuspensionSpring()" title="krpc.client.services.SpaceCenter.Leg.getSuspensionSpring()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Leg.getSuspensionSpring()</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Leg.getSuspensionTravel()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getSuspensionTravel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Leg.getSuspensionTravel()" title="Link to this definition">#</a></dt>
+<dd><p>The travel of the suspension, in meters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Leg.getImpactTolerance()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getImpactTolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Leg.getImpactTolerance()" title="Link to this definition">#</a></dt>
+<dd><p>The rise in <a class="reference internal" href="#krpc.client.services.SpaceCenter.Leg.getLoad()" title="krpc.client.services.SpaceCenter.Leg.getLoad()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Leg.getLoad()</span></code></a> over one physics tick that breaks the leg, in
+<span class="math notranslate nohighlight">\(\mathrm{kN}\)</span>.
+Throws an exception if the leg is not breakable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game scales the rise by the local gravity divided by standard gravity before
+comparing it with this tolerance.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Leg.getExplodeMultiplier()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getExplodeMultiplier</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Leg.getExplodeMultiplier()" title="Link to this definition">#</a></dt>
+<dd><p>The multiple of <a class="reference internal" href="#krpc.client.services.SpaceCenter.Leg.getImpactTolerance()" title="krpc.client.services.SpaceCenter.Leg.getImpactTolerance()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Leg.getImpactTolerance()</span></code></a> that destroys the leg, in place of
+breaking it.
+Throws an exception if the leg is not breakable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -9654,6 +9791,91 @@ reducing the maximum angle as the vessel moves faster. See also
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Wheel.getSuspensionSpring()">
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Float.html" title="java.lang.Float"><span class="pre">Float</span></a> <span class="sig-name descname"><span class="pre">getSuspensionSpring</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Wheel.getSuspensionSpring()" title="Link to this definition">#</a></dt>
+<dd><p>The spring constant of the suspension, in <span class="math notranslate nohighlight">\(\mathrm{kN/m}\)</span>, or <code class="docutils literal notranslate"><span class="pre">null</span></code> while
+the wheel is not grounded.
+Throws an exception if the wheel has no suspension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game updates it while the wheel is grounded, from
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.Wheel.getSuspensionSpringStrength()" title="krpc.client.services.SpaceCenter.Wheel.getSuspensionSpringStrength()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Wheel.getSuspensionSpringStrength()</span></code></a>, the vessel’s mass, the wheel’s compression and
+the local gravity.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Wheel.getSuspensionDamper()">
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Float.html" title="java.lang.Float"><span class="pre">Float</span></a> <span class="sig-name descname"><span class="pre">getSuspensionDamper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Wheel.getSuspensionDamper()" title="Link to this definition">#</a></dt>
+<dd><p>The damping constant of the suspension, in <span class="math notranslate nohighlight">\(\mathrm{kN \cdot s/m}\)</span>, or <code class="docutils literal notranslate"><span class="pre">null</span></code>
+while the wheel is not grounded.
+Throws an exception if the wheel has no suspension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game updates it while the wheel is grounded, from
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.Wheel.getSuspensionDamperStrength()" title="krpc.client.services.SpaceCenter.Wheel.getSuspensionDamperStrength()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Wheel.getSuspensionDamperStrength()</span></code></a> and <a class="reference internal" href="#krpc.client.services.SpaceCenter.Wheel.getSuspensionSpring()" title="krpc.client.services.SpaceCenter.Wheel.getSuspensionSpring()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Wheel.getSuspensionSpring()</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Wheel.getSuspensionTravel()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getSuspensionTravel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Wheel.getSuspensionTravel()" title="Link to this definition">#</a></dt>
+<dd><p>The travel of the suspension, in meters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Wheel.getLoad()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getLoad</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Wheel.getLoad()" title="Link to this definition">#</a></dt>
+<dd><p>The force pressing the wheel into the ground, in <span class="math notranslate nohighlight">\(\mathrm{kN}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game raises the load of a grounded wheel to at least 0.5 kN, or 10 kN for a wheel
+with the old friction model. <a class="reference internal" href="#krpc.client.services.SpaceCenter.Wheel.getImpactTolerance()" title="krpc.client.services.SpaceCenter.Wheel.getImpactTolerance()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Wheel.getImpactTolerance()</span></code></a> applies to the rise in
+this value.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Wheel.contactPosition(ReferenceFrame)">
+<a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/package-summary.html" title="org.javatuples"><span class="pre">org.javatuples</span></a><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">contactPosition</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Wheel.contactPosition(ReferenceFrame)" title="Link to this definition">#</a></dt>
+<dd><p>The position of the bottom of the wheel, in the given reference frame. While the
+wheel is grounded, this is where it touches the ground.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>referenceFrame</strong> (<span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><code class="xref java java-type docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a></span>) – The reference frame that the returned position vector is in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The position as a vector.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Wheel.getBroken()">
 <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getBroken</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Wheel.getBroken()" title="Link to this definition">#</a></dt>
 <dd><p>Whether the wheel is broken.</p>
@@ -9675,6 +9897,27 @@ reducing the maximum angle as the vessel moves faster. See also
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Wheel.getStressTolerance()">
 <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getStressTolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Wheel.getStressTolerance()" title="Link to this definition">#</a></dt>
 <dd><p>Stress tolerance of the wheel.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Wheel.getImpactTolerance()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getImpactTolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Wheel.getImpactTolerance()" title="Link to this definition">#</a></dt>
+<dd><p>The rise in <a class="reference internal" href="#krpc.client.services.SpaceCenter.Wheel.getLoad()" title="krpc.client.services.SpaceCenter.Wheel.getLoad()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Wheel.getLoad()</span></code></a> over one physics tick that breaks the wheel, in
+<span class="math notranslate nohighlight">\(\mathrm{kN}\)</span>.
+Throws an exception if the wheel is not breakable.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game scales the rise by the local gravity divided by standard gravity before
+comparing it with this tolerance.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Wheel.getExplodeMultiplier()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getExplodeMultiplier</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Wheel.getExplodeMultiplier()" title="Link to this definition">#</a></dt>
+<dd><p>The multiple of <a class="reference internal" href="#krpc.client.services.SpaceCenter.Wheel.getImpactTolerance()" title="krpc.client.services.SpaceCenter.Wheel.getImpactTolerance()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Wheel.getImpactTolerance()</span></code></a> that destroys the wheel, in place of
+breaking it.
+Throws an exception if the wheel is not breakable.</p>
 </dd></dl>
 
 <dl class="java method">

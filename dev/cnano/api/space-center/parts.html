@@ -6952,6 +6952,143 @@ Throws <a class="reference internal" href="../krpc/krpc.html#c.KRPC_EXCEPTION_KR
 </dl>
 </dd></dl>
 
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Leg_t.krpc_SpaceCenter_Leg_Load">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Leg_Load</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Leg_t" title="krpc_SpaceCenter_Leg_t"><span class="n"><span class="pre">krpc_SpaceCenter_Leg_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Leg_t.krpc_SpaceCenter_Leg_Load" title="Link to this definition">#</a><br /></dt>
+<dd><p>The force pressing the leg’s foot into the ground, in <span class="math notranslate nohighlight">\(\mathrm{kN}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game raises the load of a grounded leg to at least 10 kN.
+<a class="reference internal" href="#c.krpc_SpaceCenter_Leg_t.krpc_SpaceCenter_Leg_ImpactTolerance" title="krpc_SpaceCenter_Leg_ImpactTolerance"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Leg_ImpactTolerance()</span></code></a> applies to the rise in this value.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Leg_t.krpc_SpaceCenter_Leg_ContactPosition">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Leg_ContactPosition</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Leg_t" title="krpc_SpaceCenter_Leg_t"><span class="n"><span class="pre">krpc_SpaceCenter_Leg_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Leg_t.krpc_SpaceCenter_Leg_ContactPosition" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the bottom of the leg’s foot, in the given reference frame. While
+the leg is grounded, this is where it touches the ground.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>referenceFrame</strong> – The reference frame that the returned position vector is in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The position as a vector.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Leg_t.krpc_SpaceCenter_Leg_SuspensionSpringStrength">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Leg_SuspensionSpringStrength</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Leg_t" title="krpc_SpaceCenter_Leg_t"><span class="n"><span class="pre">krpc_SpaceCenter_Leg_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Leg_t.krpc_SpaceCenter_Leg_SuspensionSpringStrength" title="Link to this definition">#</a><br /></dt>
+<dd><p>Suspension spring strength, as set in the editor.
+Throws an exception if the leg has no suspension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Leg_t.krpc_SpaceCenter_Leg_SuspensionDamperStrength">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Leg_SuspensionDamperStrength</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Leg_t" title="krpc_SpaceCenter_Leg_t"><span class="n"><span class="pre">krpc_SpaceCenter_Leg_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Leg_t.krpc_SpaceCenter_Leg_SuspensionDamperStrength" title="Link to this definition">#</a><br /></dt>
+<dd><p>Suspension damper strength, as set in the editor.
+Throws an exception if the leg has no suspension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Leg_t.krpc_SpaceCenter_Leg_SuspensionSpring">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Leg_SuspensionSpring</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValueIsNull</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Leg_t" title="krpc_SpaceCenter_Leg_t"><span class="n"><span class="pre">krpc_SpaceCenter_Leg_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Leg_t.krpc_SpaceCenter_Leg_SuspensionSpring" title="Link to this definition">#</a><br /></dt>
+<dd><p>The spring constant of the suspension, in <span class="math notranslate nohighlight">\(\mathrm{kN/m}\)</span>, or <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> while
+the leg is not grounded.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game updates it while the leg is grounded, from
+<a class="reference internal" href="#c.krpc_SpaceCenter_Leg_t.krpc_SpaceCenter_Leg_SuspensionSpringStrength" title="krpc_SpaceCenter_Leg_SuspensionSpringStrength"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Leg_SuspensionSpringStrength()</span></code></a>, the vessel’s mass, the leg’s compression and
+the local gravity.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Leg_t.krpc_SpaceCenter_Leg_SuspensionDamper">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Leg_SuspensionDamper</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValueIsNull</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Leg_t" title="krpc_SpaceCenter_Leg_t"><span class="n"><span class="pre">krpc_SpaceCenter_Leg_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Leg_t.krpc_SpaceCenter_Leg_SuspensionDamper" title="Link to this definition">#</a><br /></dt>
+<dd><p>The damping constant of the suspension, in <span class="math notranslate nohighlight">\(\mathrm{kN \cdot s/m}\)</span>, or <code class="docutils literal notranslate"><span class="pre">nullptr</span></code>
+while the leg is not grounded.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game updates it while the leg is grounded, from
+<a class="reference internal" href="#c.krpc_SpaceCenter_Leg_t.krpc_SpaceCenter_Leg_SuspensionDamperStrength" title="krpc_SpaceCenter_Leg_SuspensionDamperStrength"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Leg_SuspensionDamperStrength()</span></code></a> and <a class="reference internal" href="#c.krpc_SpaceCenter_Leg_t.krpc_SpaceCenter_Leg_SuspensionSpring" title="krpc_SpaceCenter_Leg_SuspensionSpring"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Leg_SuspensionSpring()</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Leg_t.krpc_SpaceCenter_Leg_SuspensionTravel">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Leg_SuspensionTravel</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Leg_t" title="krpc_SpaceCenter_Leg_t"><span class="n"><span class="pre">krpc_SpaceCenter_Leg_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Leg_t.krpc_SpaceCenter_Leg_SuspensionTravel" title="Link to this definition">#</a><br /></dt>
+<dd><p>The travel of the suspension, in meters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Leg_t.krpc_SpaceCenter_Leg_ImpactTolerance">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Leg_ImpactTolerance</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Leg_t" title="krpc_SpaceCenter_Leg_t"><span class="n"><span class="pre">krpc_SpaceCenter_Leg_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Leg_t.krpc_SpaceCenter_Leg_ImpactTolerance" title="Link to this definition">#</a><br /></dt>
+<dd><p>The rise in <a class="reference internal" href="#c.krpc_SpaceCenter_Leg_t.krpc_SpaceCenter_Leg_Load" title="krpc_SpaceCenter_Leg_Load"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Leg_Load()</span></code></a> over one physics tick that breaks the leg, in
+<span class="math notranslate nohighlight">\(\mathrm{kN}\)</span>.
+Throws an exception if the leg is not breakable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game scales the rise by the local gravity divided by standard gravity before
+comparing it with this tolerance.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Leg_t.krpc_SpaceCenter_Leg_ExplodeMultiplier">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Leg_ExplodeMultiplier</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Leg_t" title="krpc_SpaceCenter_Leg_t"><span class="n"><span class="pre">krpc_SpaceCenter_Leg_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Leg_t.krpc_SpaceCenter_Leg_ExplodeMultiplier" title="Link to this definition">#</a><br /></dt>
+<dd><p>The multiple of <a class="reference internal" href="#c.krpc_SpaceCenter_Leg_t.krpc_SpaceCenter_Leg_ImpactTolerance" title="krpc_SpaceCenter_Leg_ImpactTolerance"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Leg_ImpactTolerance()</span></code></a> that destroys the leg, in place of
+breaking it.
+Throws an exception if the leg is not breakable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -10002,6 +10139,91 @@ reducing the maximum angle as the vessel moves faster. See also
 </dd></dl>
 
 <dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Wheel_t.krpc_SpaceCenter_Wheel_SuspensionSpring">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Wheel_SuspensionSpring</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValueIsNull</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Wheel_t" title="krpc_SpaceCenter_Wheel_t"><span class="n"><span class="pre">krpc_SpaceCenter_Wheel_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Wheel_t.krpc_SpaceCenter_Wheel_SuspensionSpring" title="Link to this definition">#</a><br /></dt>
+<dd><p>The spring constant of the suspension, in <span class="math notranslate nohighlight">\(\mathrm{kN/m}\)</span>, or <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> while
+the wheel is not grounded.
+Throws an exception if the wheel has no suspension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game updates it while the wheel is grounded, from
+<a class="reference internal" href="#c.krpc_SpaceCenter_Wheel_t.krpc_SpaceCenter_Wheel_SuspensionSpringStrength" title="krpc_SpaceCenter_Wheel_SuspensionSpringStrength"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Wheel_SuspensionSpringStrength()</span></code></a>, the vessel’s mass, the wheel’s compression and
+the local gravity.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Wheel_t.krpc_SpaceCenter_Wheel_SuspensionDamper">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Wheel_SuspensionDamper</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValueIsNull</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Wheel_t" title="krpc_SpaceCenter_Wheel_t"><span class="n"><span class="pre">krpc_SpaceCenter_Wheel_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Wheel_t.krpc_SpaceCenter_Wheel_SuspensionDamper" title="Link to this definition">#</a><br /></dt>
+<dd><p>The damping constant of the suspension, in <span class="math notranslate nohighlight">\(\mathrm{kN \cdot s/m}\)</span>, or <code class="docutils literal notranslate"><span class="pre">nullptr</span></code>
+while the wheel is not grounded.
+Throws an exception if the wheel has no suspension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game updates it while the wheel is grounded, from
+<a class="reference internal" href="#c.krpc_SpaceCenter_Wheel_t.krpc_SpaceCenter_Wheel_SuspensionDamperStrength" title="krpc_SpaceCenter_Wheel_SuspensionDamperStrength"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Wheel_SuspensionDamperStrength()</span></code></a> and <a class="reference internal" href="#c.krpc_SpaceCenter_Wheel_t.krpc_SpaceCenter_Wheel_SuspensionSpring" title="krpc_SpaceCenter_Wheel_SuspensionSpring"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Wheel_SuspensionSpring()</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Wheel_t.krpc_SpaceCenter_Wheel_SuspensionTravel">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Wheel_SuspensionTravel</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Wheel_t" title="krpc_SpaceCenter_Wheel_t"><span class="n"><span class="pre">krpc_SpaceCenter_Wheel_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Wheel_t.krpc_SpaceCenter_Wheel_SuspensionTravel" title="Link to this definition">#</a><br /></dt>
+<dd><p>The travel of the suspension, in meters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Wheel_t.krpc_SpaceCenter_Wheel_Load">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Wheel_Load</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Wheel_t" title="krpc_SpaceCenter_Wheel_t"><span class="n"><span class="pre">krpc_SpaceCenter_Wheel_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Wheel_t.krpc_SpaceCenter_Wheel_Load" title="Link to this definition">#</a><br /></dt>
+<dd><p>The force pressing the wheel into the ground, in <span class="math notranslate nohighlight">\(\mathrm{kN}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game raises the load of a grounded wheel to at least 0.5 kN, or 10 kN for a wheel
+with the old friction model. <a class="reference internal" href="#c.krpc_SpaceCenter_Wheel_t.krpc_SpaceCenter_Wheel_ImpactTolerance" title="krpc_SpaceCenter_Wheel_ImpactTolerance"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Wheel_ImpactTolerance()</span></code></a> applies to the rise in
+this value.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Wheel_t.krpc_SpaceCenter_Wheel_ContactPosition">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Wheel_ContactPosition</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Wheel_t" title="krpc_SpaceCenter_Wheel_t"><span class="n"><span class="pre">krpc_SpaceCenter_Wheel_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Wheel_t.krpc_SpaceCenter_Wheel_ContactPosition" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the bottom of the wheel, in the given reference frame. While the
+wheel is grounded, this is where it touches the ground.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>referenceFrame</strong> – The reference frame that the returned position vector is in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The position as a vector.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Wheel_t.krpc_SpaceCenter_Wheel_Broken">
 <a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Wheel_Broken</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Wheel_t" title="krpc_SpaceCenter_Wheel_t"><span class="n"><span class="pre">krpc_SpaceCenter_Wheel_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Wheel_t.krpc_SpaceCenter_Wheel_Broken" title="Link to this definition">#</a><br /></dt>
 <dd><p>Whether the wheel is broken.</p>
@@ -10023,6 +10245,27 @@ reducing the maximum angle as the vessel moves faster. See also
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Wheel_t.krpc_SpaceCenter_Wheel_StressTolerance">
 <a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Wheel_StressTolerance</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Wheel_t" title="krpc_SpaceCenter_Wheel_t"><span class="n"><span class="pre">krpc_SpaceCenter_Wheel_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Wheel_t.krpc_SpaceCenter_Wheel_StressTolerance" title="Link to this definition">#</a><br /></dt>
 <dd><p>Stress tolerance of the wheel.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Wheel_t.krpc_SpaceCenter_Wheel_ImpactTolerance">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Wheel_ImpactTolerance</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Wheel_t" title="krpc_SpaceCenter_Wheel_t"><span class="n"><span class="pre">krpc_SpaceCenter_Wheel_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Wheel_t.krpc_SpaceCenter_Wheel_ImpactTolerance" title="Link to this definition">#</a><br /></dt>
+<dd><p>The rise in <a class="reference internal" href="#c.krpc_SpaceCenter_Wheel_t.krpc_SpaceCenter_Wheel_Load" title="krpc_SpaceCenter_Wheel_Load"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Wheel_Load()</span></code></a> over one physics tick that breaks the wheel, in
+<span class="math notranslate nohighlight">\(\mathrm{kN}\)</span>.
+Throws an exception if the wheel is not breakable.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game scales the rise by the local gravity divided by standard gravity before
+comparing it with this tolerance.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Wheel_t.krpc_SpaceCenter_Wheel_ExplodeMultiplier">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Wheel_ExplodeMultiplier</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Wheel_t" title="krpc_SpaceCenter_Wheel_t"><span class="n"><span class="pre">krpc_SpaceCenter_Wheel_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Wheel_t.krpc_SpaceCenter_Wheel_ExplodeMultiplier" title="Link to this definition">#</a><br /></dt>
+<dd><p>The multiple of <a class="reference internal" href="#c.krpc_SpaceCenter_Wheel_t.krpc_SpaceCenter_Wheel_ImpactTolerance" title="krpc_SpaceCenter_Wheel_ImpactTolerance"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Wheel_ImpactTolerance()</span></code></a> that destroys the wheel, in place of
+breaking it.
+Throws an exception if the wheel is not breakable.</p>
 </dd></dl>
 
 <dl class="c function">

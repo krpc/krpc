@@ -8656,6 +8656,192 @@ Throws <a class="reference internal" href="../krpc/krpc.html#KRPC.InvalidOperati
 </dl>
 </dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.Leg.load">
+<span class="sig-name descname"><span class="pre">load</span></span><a class="headerlink" href="#SpaceCenter.Leg.load" title="Link to this definition">#</a></dt>
+<dd><p>The force pressing the leg’s foot into the ground, in <span class="math notranslate nohighlight">\(\mathrm{kN}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game raises the load of a grounded leg to at least 10 kN.
+<a class="reference internal" href="#SpaceCenter.Leg.impact_tolerance" title="SpaceCenter.Leg.impact_tolerance"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Leg.impact_tolerance</span></code></a> applies to the rise in this value.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SpaceCenter.Leg.contact_position">
+<span class="sig-name descname"><span class="pre">contact_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reference_frame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Leg.contact_position" title="Link to this definition">#</a></dt>
+<dd><p>The position of the bottom of the leg’s foot, in the given reference frame. While
+the leg is grounded, this is where it touches the ground.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>reference_frame</strong> (<a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><em>ReferenceFrame</em></a>) – The reference frame that the returned position vector is in.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The position as a vector.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple(float, float, float)</p>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.Leg.suspension_spring_strength">
+<span class="sig-name descname"><span class="pre">suspension_spring_strength</span></span><a class="headerlink" href="#SpaceCenter.Leg.suspension_spring_strength" title="Link to this definition">#</a></dt>
+<dd><p>Suspension spring strength, as set in the editor.
+Throws an exception if the leg has no suspension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.Leg.suspension_damper_strength">
+<span class="sig-name descname"><span class="pre">suspension_damper_strength</span></span><a class="headerlink" href="#SpaceCenter.Leg.suspension_damper_strength" title="Link to this definition">#</a></dt>
+<dd><p>Suspension damper strength, as set in the editor.
+Throws an exception if the leg has no suspension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.Leg.suspension_spring">
+<span class="sig-name descname"><span class="pre">suspension_spring</span></span><a class="headerlink" href="#SpaceCenter.Leg.suspension_spring" title="Link to this definition">#</a></dt>
+<dd><p>The spring constant of the suspension, in <span class="math notranslate nohighlight">\(\mathrm{kN/m}\)</span>, or <code class="docutils literal notranslate"><span class="pre">None</span></code> while
+the leg is not grounded.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float or None</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game updates it while the leg is grounded, from
+<a class="reference internal" href="#SpaceCenter.Leg.suspension_spring_strength" title="SpaceCenter.Leg.suspension_spring_strength"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Leg.suspension_spring_strength</span></code></a>, the vessel’s mass, the leg’s compression and
+the local gravity.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.Leg.suspension_damper">
+<span class="sig-name descname"><span class="pre">suspension_damper</span></span><a class="headerlink" href="#SpaceCenter.Leg.suspension_damper" title="Link to this definition">#</a></dt>
+<dd><p>The damping constant of the suspension, in <span class="math notranslate nohighlight">\(\mathrm{kN \cdot s/m}\)</span>, or <code class="docutils literal notranslate"><span class="pre">None</span></code>
+while the leg is not grounded.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float or None</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game updates it while the leg is grounded, from
+<a class="reference internal" href="#SpaceCenter.Leg.suspension_damper_strength" title="SpaceCenter.Leg.suspension_damper_strength"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Leg.suspension_damper_strength</span></code></a> and <a class="reference internal" href="#SpaceCenter.Leg.suspension_spring" title="SpaceCenter.Leg.suspension_spring"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Leg.suspension_spring</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.Leg.suspension_travel">
+<span class="sig-name descname"><span class="pre">suspension_travel</span></span><a class="headerlink" href="#SpaceCenter.Leg.suspension_travel" title="Link to this definition">#</a></dt>
+<dd><p>The travel of the suspension, in meters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.Leg.impact_tolerance">
+<span class="sig-name descname"><span class="pre">impact_tolerance</span></span><a class="headerlink" href="#SpaceCenter.Leg.impact_tolerance" title="Link to this definition">#</a></dt>
+<dd><p>The rise in <a class="reference internal" href="#SpaceCenter.Leg.load" title="SpaceCenter.Leg.load"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Leg.load</span></code></a> over one physics tick that breaks the leg, in
+<span class="math notranslate nohighlight">\(\mathrm{kN}\)</span>.
+Throws an exception if the leg is not breakable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game scales the rise by the local gravity divided by standard gravity before
+comparing it with this tolerance.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.Leg.explode_multiplier">
+<span class="sig-name descname"><span class="pre">explode_multiplier</span></span><a class="headerlink" href="#SpaceCenter.Leg.explode_multiplier" title="Link to this definition">#</a></dt>
+<dd><p>The multiple of <a class="reference internal" href="#SpaceCenter.Leg.impact_tolerance" title="SpaceCenter.Leg.impact_tolerance"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Leg.impact_tolerance</span></code></a> that destroys the leg, in place of
+breaking it.
+Throws an exception if the leg is not breakable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -12248,6 +12434,116 @@ reducing the maximum angle as the vessel moves faster. See also
 </dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.Wheel.suspension_spring">
+<span class="sig-name descname"><span class="pre">suspension_spring</span></span><a class="headerlink" href="#SpaceCenter.Wheel.suspension_spring" title="Link to this definition">#</a></dt>
+<dd><p>The spring constant of the suspension, in <span class="math notranslate nohighlight">\(\mathrm{kN/m}\)</span>, or <code class="docutils literal notranslate"><span class="pre">None</span></code> while
+the wheel is not grounded.
+Throws an exception if the wheel has no suspension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float or None</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game updates it while the wheel is grounded, from
+<a class="reference internal" href="#SpaceCenter.Wheel.suspension_spring_strength" title="SpaceCenter.Wheel.suspension_spring_strength"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Wheel.suspension_spring_strength</span></code></a>, the vessel’s mass, the wheel’s compression and
+the local gravity.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.Wheel.suspension_damper">
+<span class="sig-name descname"><span class="pre">suspension_damper</span></span><a class="headerlink" href="#SpaceCenter.Wheel.suspension_damper" title="Link to this definition">#</a></dt>
+<dd><p>The damping constant of the suspension, in <span class="math notranslate nohighlight">\(\mathrm{kN \cdot s/m}\)</span>, or <code class="docutils literal notranslate"><span class="pre">None</span></code>
+while the wheel is not grounded.
+Throws an exception if the wheel has no suspension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float or None</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game updates it while the wheel is grounded, from
+<a class="reference internal" href="#SpaceCenter.Wheel.suspension_damper_strength" title="SpaceCenter.Wheel.suspension_damper_strength"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Wheel.suspension_damper_strength</span></code></a> and <a class="reference internal" href="#SpaceCenter.Wheel.suspension_spring" title="SpaceCenter.Wheel.suspension_spring"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Wheel.suspension_spring</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.Wheel.suspension_travel">
+<span class="sig-name descname"><span class="pre">suspension_travel</span></span><a class="headerlink" href="#SpaceCenter.Wheel.suspension_travel" title="Link to this definition">#</a></dt>
+<dd><p>The travel of the suspension, in meters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.Wheel.load">
+<span class="sig-name descname"><span class="pre">load</span></span><a class="headerlink" href="#SpaceCenter.Wheel.load" title="Link to this definition">#</a></dt>
+<dd><p>The force pressing the wheel into the ground, in <span class="math notranslate nohighlight">\(\mathrm{kN}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game raises the load of a grounded wheel to at least 0.5 kN, or 10 kN for a wheel
+with the old friction model. <a class="reference internal" href="#SpaceCenter.Wheel.impact_tolerance" title="SpaceCenter.Wheel.impact_tolerance"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Wheel.impact_tolerance</span></code></a> applies to the rise in
+this value.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SpaceCenter.Wheel.contact_position">
+<span class="sig-name descname"><span class="pre">contact_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reference_frame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Wheel.contact_position" title="Link to this definition">#</a></dt>
+<dd><p>The position of the bottom of the wheel, in the given reference frame. While the
+wheel is grounded, this is where it touches the ground.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>reference_frame</strong> (<a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><em>ReferenceFrame</em></a>) – The reference frame that the returned position vector is in.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The position as a vector.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple(float, float, float)</p>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.Wheel.broken">
 <span class="sig-name descname"><span class="pre">broken</span></span><a class="headerlink" href="#SpaceCenter.Wheel.broken" title="Link to this definition">#</a></dt>
 <dd><p>Whether the wheel is broken.</p>
@@ -12293,6 +12589,43 @@ reducing the maximum angle as the vessel moves faster. See also
 <dt class="sig sig-object py" id="SpaceCenter.Wheel.stress_tolerance">
 <span class="sig-name descname"><span class="pre">stress_tolerance</span></span><a class="headerlink" href="#SpaceCenter.Wheel.stress_tolerance" title="Link to this definition">#</a></dt>
 <dd><p>Stress tolerance of the wheel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.Wheel.impact_tolerance">
+<span class="sig-name descname"><span class="pre">impact_tolerance</span></span><a class="headerlink" href="#SpaceCenter.Wheel.impact_tolerance" title="Link to this definition">#</a></dt>
+<dd><p>The rise in <a class="reference internal" href="#SpaceCenter.Wheel.load" title="SpaceCenter.Wheel.load"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Wheel.load</span></code></a> over one physics tick that breaks the wheel, in
+<span class="math notranslate nohighlight">\(\mathrm{kN}\)</span>.
+Throws an exception if the wheel is not breakable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game scales the rise by the local gravity divided by standard gravity before
+comparing it with this tolerance.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.Wheel.explode_multiplier">
+<span class="sig-name descname"><span class="pre">explode_multiplier</span></span><a class="headerlink" href="#SpaceCenter.Wheel.explode_multiplier" title="Link to this definition">#</a></dt>
+<dd><p>The multiple of <a class="reference internal" href="#SpaceCenter.Wheel.impact_tolerance" title="SpaceCenter.Wheel.impact_tolerance"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Wheel.impact_tolerance</span></code></a> that destroys the wheel, in place of
+breaking it.
+Throws an exception if the wheel is not breakable.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>

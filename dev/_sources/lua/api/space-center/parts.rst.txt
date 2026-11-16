@@ -3367,6 +3367,91 @@ Leg
 
       :Attribute: Read-only, cannot be set
 
+   .. attribute:: load: number
+
+      The force pressing the leg's foot into the ground, in :math:`\mathrm{kN}`.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         The game raises the load of a grounded leg to at least 10 kN.
+         :attr:`SpaceCenter.Leg.impact_tolerance` applies to the rise in this value.
+
+   .. method:: contact_position(reference_frame: SpaceCenter.ReferenceFrame): Tuple
+
+      The position of the bottom of the leg's foot, in the given reference frame. While
+      the leg is grounded, this is where it touches the ground.
+
+      :param reference_frame: The reference frame that the returned position vector is in.
+      :returns: The position as a vector.
+
+   .. attribute:: suspension_spring_strength: number
+
+      Suspension spring strength, as set in the editor.
+      Throws an exception if the leg has no suspension.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: suspension_damper_strength: number
+
+      Suspension damper strength, as set in the editor.
+      Throws an exception if the leg has no suspension.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: suspension_spring: number | nil
+
+      The spring constant of the suspension, in :math:`\mathrm{kN/m}`, or ``nil`` while
+      the leg is not grounded.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         The game updates it while the leg is grounded, from
+         :attr:`SpaceCenter.Leg.suspension_spring_strength`, the vessel's mass, the leg's compression and
+         the local gravity.
+
+   .. attribute:: suspension_damper: number | nil
+
+      The damping constant of the suspension, in :math:`\mathrm{kN \cdot s/m}`, or ``nil``
+      while the leg is not grounded.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         The game updates it while the leg is grounded, from
+         :attr:`SpaceCenter.Leg.suspension_damper_strength` and :attr:`SpaceCenter.Leg.suspension_spring`.
+
+   .. attribute:: suspension_travel: number
+
+      The travel of the suspension, in meters.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: impact_tolerance: number
+
+      The rise in :attr:`SpaceCenter.Leg.load` over one physics tick that breaks the leg, in
+      :math:`\mathrm{kN}`.
+      Throws an exception if the leg is not breakable.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         The game scales the rise by the local gravity divided by standard gravity before
+         comparing it with this tolerance.
+
+   .. attribute:: explode_multiplier: number
+
+      The multiple of :attr:`SpaceCenter.Leg.impact_tolerance` that destroys the leg, in place of
+      breaking it.
+      Throws an exception if the leg is not breakable.
+
+      :Attribute: Read-only, cannot be set
+
 
 
 Launch Clamp
@@ -4954,6 +5039,59 @@ Wheel
 
       :Attribute: Read-only, cannot be set
 
+   .. attribute:: suspension_spring: number | nil
+
+      The spring constant of the suspension, in :math:`\mathrm{kN/m}`, or ``nil`` while
+      the wheel is not grounded.
+      Throws an exception if the wheel has no suspension.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         The game updates it while the wheel is grounded, from
+         :attr:`SpaceCenter.Wheel.suspension_spring_strength`, the vessel's mass, the wheel's compression and
+         the local gravity.
+
+   .. attribute:: suspension_damper: number | nil
+
+      The damping constant of the suspension, in :math:`\mathrm{kN \cdot s/m}`, or ``nil``
+      while the wheel is not grounded.
+      Throws an exception if the wheel has no suspension.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         The game updates it while the wheel is grounded, from
+         :attr:`SpaceCenter.Wheel.suspension_damper_strength` and :attr:`SpaceCenter.Wheel.suspension_spring`.
+
+   .. attribute:: suspension_travel: number
+
+      The travel of the suspension, in meters.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: load: number
+
+      The force pressing the wheel into the ground, in :math:`\mathrm{kN}`.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         The game raises the load of a grounded wheel to at least 0.5 kN, or 10 kN for a wheel
+         with the old friction model. :attr:`SpaceCenter.Wheel.impact_tolerance` applies to the rise in
+         this value.
+
+   .. method:: contact_position(reference_frame: SpaceCenter.ReferenceFrame): Tuple
+
+      The position of the bottom of the wheel, in the given reference frame. While the
+      wheel is grounded, this is where it touches the ground.
+
+      :param reference_frame: The reference frame that the returned position vector is in.
+      :returns: The position as a vector.
+
    .. attribute:: broken: boolean
 
       Whether the wheel is broken.
@@ -4975,6 +5113,27 @@ Wheel
    .. attribute:: stress_tolerance: number
 
       Stress tolerance of the wheel.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: impact_tolerance: number
+
+      The rise in :attr:`SpaceCenter.Wheel.load` over one physics tick that breaks the wheel, in
+      :math:`\mathrm{kN}`.
+      Throws an exception if the wheel is not breakable.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         The game scales the rise by the local gravity divided by standard gravity before
+         comparing it with this tolerance.
+
+   .. attribute:: explode_multiplier: number
+
+      The multiple of :attr:`SpaceCenter.Wheel.impact_tolerance` that destroys the wheel, in place of
+      breaking it.
+      Throws an exception if the wheel is not breakable.
 
       :Attribute: Read-only, cannot be set
 

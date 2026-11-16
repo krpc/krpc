@@ -6850,6 +6850,138 @@ Throws <a class="reference internal" href="../krpc/krpc.html#lua-KRPC.InvalidOpe
 </dl>
 </dd></dl>
 
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Leg.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Leg.load" title="Link to this definition">#</a></dt>
+<dd><p>The force pressing the leg’s foot into the ground, in <span class="math notranslate nohighlight">\(\mathrm{kN}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game raises the load of a grounded leg to at least 10 kN.
+<a class="reference internal" href="#lua-SpaceCenter.Leg.impact_tolerance" title="SpaceCenter.Leg.impact_tolerance"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Leg.impact_tolerance</span></code></a> applies to the rise in this value.</p>
+</div>
+</dd></dl>
+
+<dl class="lua method">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Leg.contact_position">
+<span class="sig-name descname"><span class="pre">contact_position</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-SpaceCenter.Leg.contact_position" title="Link to this definition">#</a></dt>
+<dd><p>The position of the bottom of the leg’s foot, in the given reference frame. While
+the leg is grounded, this is where it touches the ground.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>reference_frame</strong> – The reference frame that the returned position vector is in.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The position as a vector.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Leg.suspension_spring_strength">
+<span class="sig-name descname"><span class="pre">suspension_spring_strength</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Leg.suspension_spring_strength" title="Link to this definition">#</a></dt>
+<dd><p>Suspension spring strength, as set in the editor.
+Throws an exception if the leg has no suspension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Leg.suspension_damper_strength">
+<span class="sig-name descname"><span class="pre">suspension_damper_strength</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Leg.suspension_damper_strength" title="Link to this definition">#</a></dt>
+<dd><p>Suspension damper strength, as set in the editor.
+Throws an exception if the leg has no suspension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Leg.suspension_spring">
+<span class="sig-name descname"><span class="pre">suspension_spring</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">nil</span></code><a class="headerlink" href="#lua-SpaceCenter.Leg.suspension_spring" title="Link to this definition">#</a></dt>
+<dd><p>The spring constant of the suspension, in <span class="math notranslate nohighlight">\(\mathrm{kN/m}\)</span>, or <code class="docutils literal notranslate"><span class="pre">nil</span></code> while
+the leg is not grounded.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game updates it while the leg is grounded, from
+<a class="reference internal" href="#lua-SpaceCenter.Leg.suspension_spring_strength" title="SpaceCenter.Leg.suspension_spring_strength"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Leg.suspension_spring_strength</span></code></a>, the vessel’s mass, the leg’s compression and
+the local gravity.</p>
+</div>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Leg.suspension_damper">
+<span class="sig-name descname"><span class="pre">suspension_damper</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">nil</span></code><a class="headerlink" href="#lua-SpaceCenter.Leg.suspension_damper" title="Link to this definition">#</a></dt>
+<dd><p>The damping constant of the suspension, in <span class="math notranslate nohighlight">\(\mathrm{kN \cdot s/m}\)</span>, or <code class="docutils literal notranslate"><span class="pre">nil</span></code>
+while the leg is not grounded.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game updates it while the leg is grounded, from
+<a class="reference internal" href="#lua-SpaceCenter.Leg.suspension_damper_strength" title="SpaceCenter.Leg.suspension_damper_strength"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Leg.suspension_damper_strength</span></code></a> and <a class="reference internal" href="#lua-SpaceCenter.Leg.suspension_spring" title="SpaceCenter.Leg.suspension_spring"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Leg.suspension_spring</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Leg.suspension_travel">
+<span class="sig-name descname"><span class="pre">suspension_travel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Leg.suspension_travel" title="Link to this definition">#</a></dt>
+<dd><p>The travel of the suspension, in meters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Leg.impact_tolerance">
+<span class="sig-name descname"><span class="pre">impact_tolerance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Leg.impact_tolerance" title="Link to this definition">#</a></dt>
+<dd><p>The rise in <a class="reference internal" href="#lua-SpaceCenter.Leg.load" title="SpaceCenter.Leg.load"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Leg.load</span></code></a> over one physics tick that breaks the leg, in
+<span class="math notranslate nohighlight">\(\mathrm{kN}\)</span>.
+Throws an exception if the leg is not breakable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game scales the rise by the local gravity divided by standard gravity before
+comparing it with this tolerance.</p>
+</div>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Leg.explode_multiplier">
+<span class="sig-name descname"><span class="pre">explode_multiplier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Leg.explode_multiplier" title="Link to this definition">#</a></dt>
+<dd><p>The multiple of <a class="reference internal" href="#lua-SpaceCenter.Leg.impact_tolerance" title="SpaceCenter.Leg.impact_tolerance"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Leg.impact_tolerance</span></code></a> that destroys the leg, in place of
+breaking it.
+Throws an exception if the leg is not breakable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -9373,6 +9505,86 @@ reducing the maximum angle as the vessel moves faster. See also
 </dd></dl>
 
 <dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Wheel.suspension_spring">
+<span class="sig-name descname"><span class="pre">suspension_spring</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">nil</span></code><a class="headerlink" href="#lua-SpaceCenter.Wheel.suspension_spring" title="Link to this definition">#</a></dt>
+<dd><p>The spring constant of the suspension, in <span class="math notranslate nohighlight">\(\mathrm{kN/m}\)</span>, or <code class="docutils literal notranslate"><span class="pre">nil</span></code> while
+the wheel is not grounded.
+Throws an exception if the wheel has no suspension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game updates it while the wheel is grounded, from
+<a class="reference internal" href="#lua-SpaceCenter.Wheel.suspension_spring_strength" title="SpaceCenter.Wheel.suspension_spring_strength"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Wheel.suspension_spring_strength</span></code></a>, the vessel’s mass, the wheel’s compression and
+the local gravity.</p>
+</div>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Wheel.suspension_damper">
+<span class="sig-name descname"><span class="pre">suspension_damper</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">nil</span></code><a class="headerlink" href="#lua-SpaceCenter.Wheel.suspension_damper" title="Link to this definition">#</a></dt>
+<dd><p>The damping constant of the suspension, in <span class="math notranslate nohighlight">\(\mathrm{kN \cdot s/m}\)</span>, or <code class="docutils literal notranslate"><span class="pre">nil</span></code>
+while the wheel is not grounded.
+Throws an exception if the wheel has no suspension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game updates it while the wheel is grounded, from
+<a class="reference internal" href="#lua-SpaceCenter.Wheel.suspension_damper_strength" title="SpaceCenter.Wheel.suspension_damper_strength"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Wheel.suspension_damper_strength</span></code></a> and <a class="reference internal" href="#lua-SpaceCenter.Wheel.suspension_spring" title="SpaceCenter.Wheel.suspension_spring"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Wheel.suspension_spring</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Wheel.suspension_travel">
+<span class="sig-name descname"><span class="pre">suspension_travel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Wheel.suspension_travel" title="Link to this definition">#</a></dt>
+<dd><p>The travel of the suspension, in meters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Wheel.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Wheel.load" title="Link to this definition">#</a></dt>
+<dd><p>The force pressing the wheel into the ground, in <span class="math notranslate nohighlight">\(\mathrm{kN}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game raises the load of a grounded wheel to at least 0.5 kN, or 10 kN for a wheel
+with the old friction model. <a class="reference internal" href="#lua-SpaceCenter.Wheel.impact_tolerance" title="SpaceCenter.Wheel.impact_tolerance"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Wheel.impact_tolerance</span></code></a> applies to the rise in
+this value.</p>
+</div>
+</dd></dl>
+
+<dl class="lua method">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Wheel.contact_position">
+<span class="sig-name descname"><span class="pre">contact_position</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-SpaceCenter.Wheel.contact_position" title="Link to this definition">#</a></dt>
+<dd><p>The position of the bottom of the wheel, in the given reference frame. While the
+wheel is grounded, this is where it touches the ground.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>reference_frame</strong> – The reference frame that the returned position vector is in.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The position as a vector.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
 <dt class="sig sig-object lua" id="lua-SpaceCenter.Wheel.broken">
 <span class="sig-name descname"><span class="pre">broken</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.Wheel.broken" title="Link to this definition">#</a></dt>
 <dd><p>Whether the wheel is broken.</p>
@@ -9409,6 +9621,37 @@ reducing the maximum angle as the vessel moves faster. See also
 <dt class="sig sig-object lua" id="lua-SpaceCenter.Wheel.stress_tolerance">
 <span class="sig-name descname"><span class="pre">stress_tolerance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Wheel.stress_tolerance" title="Link to this definition">#</a></dt>
 <dd><p>Stress tolerance of the wheel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Wheel.impact_tolerance">
+<span class="sig-name descname"><span class="pre">impact_tolerance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Wheel.impact_tolerance" title="Link to this definition">#</a></dt>
+<dd><p>The rise in <a class="reference internal" href="#lua-SpaceCenter.Wheel.load" title="SpaceCenter.Wheel.load"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Wheel.load</span></code></a> over one physics tick that breaks the wheel, in
+<span class="math notranslate nohighlight">\(\mathrm{kN}\)</span>.
+Throws an exception if the wheel is not breakable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game scales the rise by the local gravity divided by standard gravity before
+comparing it with this tolerance.</p>
+</div>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.Wheel.explode_multiplier">
+<span class="sig-name descname"><span class="pre">explode_multiplier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.Wheel.explode_multiplier" title="Link to this definition">#</a></dt>
+<dd><p>The multiple of <a class="reference internal" href="#lua-SpaceCenter.Wheel.impact_tolerance" title="SpaceCenter.Wheel.impact_tolerance"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Wheel.impact_tolerance</span></code></a> that destroys the wheel, in place of
+breaking it.
+Throws an exception if the wheel is not breakable.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>

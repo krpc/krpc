@@ -4159,6 +4159,113 @@ Leg
       :rtype: bool
       :Game Scenes: Flight
 
+   .. attribute:: load
+
+      The force pressing the leg's foot into the ground, in :math:`\mathrm{kN}`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game raises the load of a grounded leg to at least 10 kN.
+         :attr:`Leg.impact_tolerance` applies to the rise in this value.
+
+   .. method:: contact_position(reference_frame)
+
+      The position of the bottom of the leg's foot, in the given reference frame. While
+      the leg is grounded, this is where it touches the ground.
+
+      :param ReferenceFrame reference_frame: The reference frame that the returned position vector is in.
+      :returns: The position as a vector.
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+   .. attribute:: suspension_spring_strength
+
+      Suspension spring strength, as set in the editor.
+      Throws an exception if the leg has no suspension.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. attribute:: suspension_damper_strength
+
+      Suspension damper strength, as set in the editor.
+      Throws an exception if the leg has no suspension.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. attribute:: suspension_spring
+
+      The spring constant of the suspension, in :math:`\mathrm{kN/m}`, or ``None`` while
+      the leg is not grounded.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float or None
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game updates it while the leg is grounded, from
+         :attr:`Leg.suspension_spring_strength`, the vessel's mass, the leg's compression and
+         the local gravity.
+
+   .. attribute:: suspension_damper
+
+      The damping constant of the suspension, in :math:`\mathrm{kN \cdot s/m}`, or ``None``
+      while the leg is not grounded.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float or None
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game updates it while the leg is grounded, from
+         :attr:`Leg.suspension_damper_strength` and :attr:`Leg.suspension_spring`.
+
+   .. attribute:: suspension_travel
+
+      The travel of the suspension, in meters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: impact_tolerance
+
+      The rise in :attr:`Leg.load` over one physics tick that breaks the leg, in
+      :math:`\mathrm{kN}`.
+      Throws an exception if the leg is not breakable.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         The game scales the rise by the local gravity divided by standard gravity before
+         comparing it with this tolerance.
+
+   .. attribute:: explode_multiplier
+
+      The multiple of :attr:`Leg.impact_tolerance` that destroys the leg, in place of
+      breaking it.
+      Throws an exception if the leg is not breakable.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
 
 
 Launch Clamp
@@ -6143,6 +6250,72 @@ Wheel
       :rtype: float
    
 
+   .. attribute:: suspension_spring
+
+      The spring constant of the suspension, in :math:`\mathrm{kN/m}`, or ``None`` while
+      the wheel is not grounded.
+      Throws an exception if the wheel has no suspension.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float or None
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game updates it while the wheel is grounded, from
+         :attr:`Wheel.suspension_spring_strength`, the vessel's mass, the wheel's compression and
+         the local gravity.
+
+   .. attribute:: suspension_damper
+
+      The damping constant of the suspension, in :math:`\mathrm{kN \cdot s/m}`, or ``None``
+      while the wheel is not grounded.
+      Throws an exception if the wheel has no suspension.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float or None
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game updates it while the wheel is grounded, from
+         :attr:`Wheel.suspension_damper_strength` and :attr:`Wheel.suspension_spring`.
+
+   .. attribute:: suspension_travel
+
+      The travel of the suspension, in meters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: load
+
+      The force pressing the wheel into the ground, in :math:`\mathrm{kN}`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game raises the load of a grounded wheel to at least 0.5 kN, or 10 kN for a wheel
+         with the old friction model. :attr:`Wheel.impact_tolerance` applies to the rise in
+         this value.
+
+   .. method:: contact_position(reference_frame)
+
+      The position of the bottom of the wheel, in the given reference frame. While the
+      wheel is grounded, this is where it touches the ground.
+
+      :param ReferenceFrame reference_frame: The reference frame that the returned position vector is in.
+      :returns: The position as a vector.
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
    .. attribute:: broken
 
       Whether the wheel is broken.
@@ -6170,6 +6343,31 @@ Wheel
    .. attribute:: stress_tolerance
 
       Stress tolerance of the wheel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: impact_tolerance
+
+      The rise in :attr:`Wheel.load` over one physics tick that breaks the wheel, in
+      :math:`\mathrm{kN}`.
+      Throws an exception if the wheel is not breakable.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+      .. note::
+
+         The game scales the rise by the local gravity divided by standard gravity before
+         comparing it with this tolerance.
+
+   .. attribute:: explode_multiplier
+
+      The multiple of :attr:`Wheel.impact_tolerance` that destroys the wheel, in place of
+      breaking it.
+      Throws an exception if the wheel is not breakable.
 
       :Attribute: Read-only, cannot be set
       :rtype: float

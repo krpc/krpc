@@ -4254,6 +4254,114 @@ Leg
       :rtype: ``boolean``
       :Game Scenes: Flight
 
+   .. method:: getLoad()
+
+      The force pressing the leg's foot into the ground, in :math:`\mathrm{kN}`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game raises the load of a grounded leg to at least 10 kN.
+         :meth:`SpaceCenter.Leg.getImpactTolerance` applies to the rise in this value.
+
+   .. method:: contactPosition(referenceFrame)
+
+      The position of the bottom of the leg's foot, in the given reference frame. While
+      the leg is grounded, this is where it touches the ground.
+
+      :param referenceFrame: The reference frame that the returned position vector is in.
+      :type referenceFrame: :class:`SpaceCenter.ReferenceFrame`
+      :returns: The position as a vector.
+      :rtype: ``[number, number, number]``
+      :Game Scenes: Flight
+
+   .. method:: getSuspensionSpringStrength()
+
+      Suspension spring strength, as set in the editor.
+      Throws an exception if the leg has no suspension.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. method:: getSuspensionDamperStrength()
+
+      Suspension damper strength, as set in the editor.
+      Throws an exception if the leg has no suspension.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. method:: getSuspensionSpring()
+
+      The spring constant of the suspension, in :math:`\mathrm{kN/m}`, or ``null`` while
+      the leg is not grounded.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number`` or ``null``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game updates it while the leg is grounded, from
+         :meth:`SpaceCenter.Leg.getSuspensionSpringStrength`, the vessel's mass, the leg's compression and
+         the local gravity.
+
+   .. method:: getSuspensionDamper()
+
+      The damping constant of the suspension, in :math:`\mathrm{kN \cdot s/m}`, or ``null``
+      while the leg is not grounded.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number`` or ``null``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game updates it while the leg is grounded, from
+         :meth:`SpaceCenter.Leg.getSuspensionDamperStrength` and :meth:`SpaceCenter.Leg.getSuspensionSpring`.
+
+   .. method:: getSuspensionTravel()
+
+      The travel of the suspension, in meters.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getImpactTolerance()
+
+      The rise in :meth:`SpaceCenter.Leg.getLoad` over one physics tick that breaks the leg, in
+      :math:`\mathrm{kN}`.
+      Throws an exception if the leg is not breakable.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         The game scales the rise by the local gravity divided by standard gravity before
+         comparing it with this tolerance.
+
+   .. method:: getExplodeMultiplier()
+
+      The multiple of :meth:`SpaceCenter.Leg.getImpactTolerance` that destroys the leg, in place of
+      breaking it.
+      Throws an exception if the leg is not breakable.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
 
 
 Launch Clamp
@@ -6336,6 +6444,73 @@ Wheel
       :rtype: ``number``
    
 
+   .. method:: getSuspensionSpring()
+
+      The spring constant of the suspension, in :math:`\mathrm{kN/m}`, or ``null`` while
+      the wheel is not grounded.
+      Throws an exception if the wheel has no suspension.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number`` or ``null``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game updates it while the wheel is grounded, from
+         :meth:`SpaceCenter.Wheel.getSuspensionSpringStrength`, the vessel's mass, the wheel's compression and
+         the local gravity.
+
+   .. method:: getSuspensionDamper()
+
+      The damping constant of the suspension, in :math:`\mathrm{kN \cdot s/m}`, or ``null``
+      while the wheel is not grounded.
+      Throws an exception if the wheel has no suspension.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number`` or ``null``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game updates it while the wheel is grounded, from
+         :meth:`SpaceCenter.Wheel.getSuspensionDamperStrength` and :meth:`SpaceCenter.Wheel.getSuspensionSpring`.
+
+   .. method:: getSuspensionTravel()
+
+      The travel of the suspension, in meters.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getLoad()
+
+      The force pressing the wheel into the ground, in :math:`\mathrm{kN}`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game raises the load of a grounded wheel to at least 0.5 kN, or 10 kN for a wheel
+         with the old friction model. :meth:`SpaceCenter.Wheel.getImpactTolerance` applies to the rise in
+         this value.
+
+   .. method:: contactPosition(referenceFrame)
+
+      The position of the bottom of the wheel, in the given reference frame. While the
+      wheel is grounded, this is where it touches the ground.
+
+      :param referenceFrame: The reference frame that the returned position vector is in.
+      :type referenceFrame: :class:`SpaceCenter.ReferenceFrame`
+      :returns: The position as a vector.
+      :rtype: ``[number, number, number]``
+      :Game Scenes: Flight
+
    .. method:: getBroken()
 
       Whether the wheel is broken.
@@ -6363,6 +6538,31 @@ Wheel
    .. method:: getStressTolerance()
 
       Stress tolerance of the wheel.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getImpactTolerance()
+
+      The rise in :meth:`SpaceCenter.Wheel.getLoad` over one physics tick that breaks the wheel, in
+      :math:`\mathrm{kN}`.
+      Throws an exception if the wheel is not breakable.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+      .. note::
+
+         The game scales the rise by the local gravity divided by standard gravity before
+         comparing it with this tolerance.
+
+   .. method:: getExplodeMultiplier()
+
+      The multiple of :meth:`SpaceCenter.Wheel.getImpactTolerance` that destroys the wheel, in place of
+      breaking it.
+      Throws an exception if the wheel is not breakable.
 
       :Property: Read-only, cannot be set
       :rtype: ``number``

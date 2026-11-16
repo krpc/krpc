@@ -3637,6 +3637,99 @@ Leg
 
       :Game Scenes: Flight
 
+   .. property:: float Load { get; }
+
+      The force pressing the leg's foot into the ground, in :math:`\mathrm{kN}`.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game raises the load of a grounded leg to at least 10 kN.
+         :prop:`Leg.ImpactTolerance` applies to the rise in this value.
+
+   .. function:: System.Tuple<double,double,double> ContactPosition(ReferenceFrame referenceFrame)
+
+      The position of the bottom of the leg's foot, in the given reference frame. While
+      the leg is grounded, this is where it touches the ground.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame that the returned position vector is in.
+
+      :returns: The position as a vector.
+      :Game Scenes: Flight
+
+   .. property:: float SuspensionSpringStrength { get; }
+
+      Suspension spring strength, as set in the editor.
+      Throws an exception if the leg has no suspension.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. property:: float SuspensionDamperStrength { get; }
+
+      Suspension damper strength, as set in the editor.
+      Throws an exception if the leg has no suspension.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. property:: float? SuspensionSpring { get; }
+
+      The spring constant of the suspension, in :math:`\mathrm{kN/m}`, or ``null`` while
+      the leg is not grounded.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game updates it while the leg is grounded, from
+         :prop:`Leg.SuspensionSpringStrength`, the vessel's mass, the leg's compression and
+         the local gravity.
+
+   .. property:: float? SuspensionDamper { get; }
+
+      The damping constant of the suspension, in :math:`\mathrm{kN \cdot s/m}`, or ``null``
+      while the leg is not grounded.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game updates it while the leg is grounded, from
+         :prop:`Leg.SuspensionDamperStrength` and :prop:`Leg.SuspensionSpring`.
+
+   .. property:: float SuspensionTravel { get; }
+
+      The travel of the suspension, in meters.
+
+      :Game Scenes: Flight
+
+   .. property:: float ImpactTolerance { get; }
+
+      The rise in :prop:`Leg.Load` over one physics tick that breaks the leg, in
+      :math:`\mathrm{kN}`.
+      Throws an exception if the leg is not breakable.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         The game scales the rise by the local gravity divided by standard gravity before
+         comparing it with this tolerance.
+
+   .. property:: float ExplodeMultiplier { get; }
+
+      The multiple of :prop:`Leg.ImpactTolerance` that destroys the leg, in place of
+      breaking it.
+      Throws an exception if the leg is not breakable.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
 
 
 Launch Clamp
@@ -5361,6 +5454,66 @@ Wheel
 
       :Game Scenes: All
 
+   .. property:: float? SuspensionSpring { get; }
+
+      The spring constant of the suspension, in :math:`\mathrm{kN/m}`, or ``null`` while
+      the wheel is not grounded.
+      Throws an exception if the wheel has no suspension.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game updates it while the wheel is grounded, from
+         :prop:`Wheel.SuspensionSpringStrength`, the vessel's mass, the wheel's compression and
+         the local gravity.
+
+   .. property:: float? SuspensionDamper { get; }
+
+      The damping constant of the suspension, in :math:`\mathrm{kN \cdot s/m}`, or ``null``
+      while the wheel is not grounded.
+      Throws an exception if the wheel has no suspension.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game updates it while the wheel is grounded, from
+         :prop:`Wheel.SuspensionDamperStrength` and :prop:`Wheel.SuspensionSpring`.
+
+   .. property:: float SuspensionTravel { get; }
+
+      The travel of the suspension, in meters.
+
+      :Game Scenes: Flight
+
+   .. property:: float Load { get; }
+
+      The force pressing the wheel into the ground, in :math:`\mathrm{kN}`.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game raises the load of a grounded wheel to at least 0.5 kN, or 10 kN for a wheel
+         with the old friction model. :prop:`Wheel.ImpactTolerance` applies to the rise in
+         this value.
+
+   .. function:: System.Tuple<double,double,double> ContactPosition(ReferenceFrame referenceFrame)
+
+      The position of the bottom of the wheel, in the given reference frame. While the
+      wheel is grounded, this is where it touches the ground.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame that the returned position vector is in.
+
+      :returns: The position as a vector.
+      :Game Scenes: Flight
+
    .. property:: bool Broken { get; }
 
       Whether the wheel is broken.
@@ -5382,6 +5535,28 @@ Wheel
    .. property:: float StressTolerance { get; }
 
       Stress tolerance of the wheel.
+
+      :Game Scenes: All
+
+   .. property:: float ImpactTolerance { get; }
+
+      The rise in :prop:`Wheel.Load` over one physics tick that breaks the wheel, in
+      :math:`\mathrm{kN}`.
+      Throws an exception if the wheel is not breakable.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The game scales the rise by the local gravity divided by standard gravity before
+         comparing it with this tolerance.
+
+   .. property:: float ExplodeMultiplier { get; }
+
+      The multiple of :prop:`Wheel.ImpactTolerance` that destroys the wheel, in place of
+      breaking it.
+      Throws an exception if the wheel is not breakable.
 
       :Game Scenes: All
 

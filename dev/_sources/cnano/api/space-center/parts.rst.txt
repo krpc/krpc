@@ -3819,6 +3819,99 @@ Leg
 
       :Game Scenes: Flight
 
+   .. function:: krpc_error_t krpc_SpaceCenter_Leg_Load(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Leg_t instance)
+
+      The force pressing the leg's foot into the ground, in :math:`\mathrm{kN}`.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game raises the load of a grounded leg to at least 10 kN.
+         :func:`krpc_SpaceCenter_Leg_ImpactTolerance` applies to the rise in this value.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Leg_ContactPosition(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Leg_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      The position of the bottom of the leg's foot, in the given reference frame. While
+      the leg is grounded, this is where it touches the ground.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame that the returned position vector is in.
+
+      :returns: The position as a vector.
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Leg_SuspensionSpringStrength(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Leg_t instance)
+
+      Suspension spring strength, as set in the editor.
+      Throws an exception if the leg has no suspension.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Leg_SuspensionDamperStrength(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Leg_t instance)
+
+      Suspension damper strength, as set in the editor.
+      Throws an exception if the leg has no suspension.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Leg_SuspensionSpring(krpc_connection_t connection, float * returnValue, bool * returnValueIsNull, krpc_SpaceCenter_Leg_t instance)
+
+      The spring constant of the suspension, in :math:`\mathrm{kN/m}`, or ``nullptr`` while
+      the leg is not grounded.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game updates it while the leg is grounded, from
+         :func:`krpc_SpaceCenter_Leg_SuspensionSpringStrength`, the vessel's mass, the leg's compression and
+         the local gravity.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Leg_SuspensionDamper(krpc_connection_t connection, float * returnValue, bool * returnValueIsNull, krpc_SpaceCenter_Leg_t instance)
+
+      The damping constant of the suspension, in :math:`\mathrm{kN \cdot s/m}`, or ``nullptr``
+      while the leg is not grounded.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game updates it while the leg is grounded, from
+         :func:`krpc_SpaceCenter_Leg_SuspensionDamperStrength` and :func:`krpc_SpaceCenter_Leg_SuspensionSpring`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Leg_SuspensionTravel(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Leg_t instance)
+
+      The travel of the suspension, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Leg_ImpactTolerance(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Leg_t instance)
+
+      The rise in :func:`krpc_SpaceCenter_Leg_Load` over one physics tick that breaks the leg, in
+      :math:`\mathrm{kN}`.
+      Throws an exception if the leg is not breakable.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         The game scales the rise by the local gravity divided by standard gravity before
+         comparing it with this tolerance.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Leg_ExplodeMultiplier(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Leg_t instance)
+
+      The multiple of :func:`krpc_SpaceCenter_Leg_ImpactTolerance` that destroys the leg, in place of
+      breaking it.
+      Throws an exception if the leg is not breakable.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
 
 
 Launch Clamp
@@ -5714,6 +5807,66 @@ Wheel
 
    
 
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_SuspensionSpring(krpc_connection_t connection, float * returnValue, bool * returnValueIsNull, krpc_SpaceCenter_Wheel_t instance)
+
+      The spring constant of the suspension, in :math:`\mathrm{kN/m}`, or ``nullptr`` while
+      the wheel is not grounded.
+      Throws an exception if the wheel has no suspension.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game updates it while the wheel is grounded, from
+         :func:`krpc_SpaceCenter_Wheel_SuspensionSpringStrength`, the vessel's mass, the wheel's compression and
+         the local gravity.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_SuspensionDamper(krpc_connection_t connection, float * returnValue, bool * returnValueIsNull, krpc_SpaceCenter_Wheel_t instance)
+
+      The damping constant of the suspension, in :math:`\mathrm{kN \cdot s/m}`, or ``nullptr``
+      while the wheel is not grounded.
+      Throws an exception if the wheel has no suspension.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game updates it while the wheel is grounded, from
+         :func:`krpc_SpaceCenter_Wheel_SuspensionDamperStrength` and :func:`krpc_SpaceCenter_Wheel_SuspensionSpring`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_SuspensionTravel(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Wheel_t instance)
+
+      The travel of the suspension, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_Load(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Wheel_t instance)
+
+      The force pressing the wheel into the ground, in :math:`\mathrm{kN}`.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game raises the load of a grounded wheel to at least 0.5 kN, or 10 kN for a wheel
+         with the old friction model. :func:`krpc_SpaceCenter_Wheel_ImpactTolerance` applies to the rise in
+         this value.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_ContactPosition(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Wheel_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      The position of the bottom of the wheel, in the given reference frame. While the
+      wheel is grounded, this is where it touches the ground.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame that the returned position vector is in.
+
+      :returns: The position as a vector.
+      :Game Scenes: Flight
+
    .. function:: krpc_error_t krpc_SpaceCenter_Wheel_Broken(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Wheel_t instance)
 
       Whether the wheel is broken.
@@ -5735,6 +5888,27 @@ Wheel
    .. function:: krpc_error_t krpc_SpaceCenter_Wheel_StressTolerance(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Wheel_t instance)
 
       Stress tolerance of the wheel.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_ImpactTolerance(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Wheel_t instance)
+
+      The rise in :func:`krpc_SpaceCenter_Wheel_Load` over one physics tick that breaks the wheel, in
+      :math:`\mathrm{kN}`.
+      Throws an exception if the wheel is not breakable.
+
+   
+
+      .. note::
+
+         The game scales the rise by the local gravity divided by standard gravity before
+         comparing it with this tolerance.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_ExplodeMultiplier(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Wheel_t instance)
+
+      The multiple of :func:`krpc_SpaceCenter_Wheel_ImpactTolerance` that destroys the wheel, in place of
+      breaking it.
+      Throws an exception if the wheel is not breakable.
 
    
 
