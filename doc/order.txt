@@ -1026,6 +1026,14 @@ SpaceCenter.Part.SubmergedDragMultiplier
 SpaceCenter.Part.SubmergedLiftMultiplier
 SpaceCenter.Part.WaterAngularDragMultiplier
 SpaceCenter.Part.ImpactTolerance
+SpaceCenter.Part.BreakingForce
+SpaceCenter.Part.BreakingTorque
+SpaceCenter.Part.JointBreakForce
+SpaceCenter.Part.JointBreakTorque
+SpaceCenter.Part.JointSpring
+SpaceCenter.Part.JointDamper
+SpaceCenter.Part.JointAngularSpring
+SpaceCenter.Part.JointAngularDamper
 SpaceCenter.Part.Temperature
 SpaceCenter.Part.SkinTemperature
 SpaceCenter.Part.MaxTemperature
