@@ -1,5 +1,5 @@
 local krpc = require 'krpc'
-local platform = require 'krpc.platform'
+local socket = require 'socket'
 
 local conn = krpc.connect('MechJeb Example')
 local vessel = conn.space_center.active_vessel
@@ -13,7 +13,7 @@ ascent.enabled = true
 vessel.control:activate_next_stage()
 
 while ascent.enabled do
-  platform.sleep(1)
+  socket.sleep(1)
 end
 
 print('Launch complete')
