@@ -1,7 +1,8 @@
+import math
 import unittest
 
 from krpc.services.stdlib import ColorRGB
-from krpctools.game.geometry import norm
+from krpctools.game.geometry import norm, quaternion_conjugate, quaternion_mult
 from krpctools.game.ksp import TestCase
 
 
@@ -112,6 +113,50 @@ class TestPartsPart(TestCase):
         self.assertAlmostEqual(0, part.thermal_radiation_flux, places=2)
         self.assertAlmostEqual(0, part.thermal_internal_flux, places=2)
         self.assertAlmostEqual(0, part.thermal_skin_to_internal_flux, places=2)
+
+    joint_properties = (
+        "joint_break_force",
+        "joint_break_torque",
+        "joint_spring",
+        "joint_damper",
+        "joint_angular_spring",
+        "joint_angular_damper",
+    )
+
+    def check_joint(self, part):
+        parent = part.parent
+        # The joint takes the weaker part's strength, scaled by the node size,
+        # by at least 1 for these nodes
+        self.assertGreaterEqual(
+            part.joint_break_force,
+            min(part.breaking_force, parent.breaking_force) * 0.999,
+        )
+        self.assertGreaterEqual(
+            part.joint_break_torque,
+            min(part.breaking_torque, parent.breaking_torque) * 0.999,
+        )
+        self.assertLess(part.joint_break_force, float("inf"))
+        self.assertLess(part.joint_break_torque, float("inf"))
+        self.assertGreater(part.joint_spring, 0)
+        self.assertGreater(part.joint_angular_spring, 0)
+        # The stock game sets no damping
+        self.assertEqual(0, part.joint_damper)
+        self.assertEqual(0, part.joint_angular_damper)
+
+    def test_joints(self):
+        root = self.parts.root
+        self.assertGreater(root.breaking_force, 0)
+        self.assertGreater(root.breaking_torque, 0)
+        for name in self.joint_properties:
+            self.assertRaises(RuntimeError, getattr, root, name)
+        # Stack attached to the root
+        self.check_joint(self.parts.with_name("Separator.2")[0])
+        # Surface attached to the root
+        self.check_joint(self.parts.with_name("landingLeg1")[0])
+        # A physicsless part has no joint of its own
+        antenna = self.parts.with_name("longAntenna")[0]
+        for name in self.joint_properties:
+            self.assertRaises(RuntimeError, getattr, antenna, name)
 
     def test_antenna(self):
         part = self.parts.with_name("longAntenna")[0]
@@ -910,6 +955,71 @@ class TestPartsPartForce(TestCase):
         self.assertEqual((1, 2, 3), force.force_vector)
         force.remove()
         self.part.instantaneous_force((1, 2, 3), (4, 5, 6), self.part.reference_frame)
+
+
+class TestPartsJointStiffness(TestCase):
+    """A pure moment on the joint between the fairing and the pod, in orbit,
+    bends the joint by the moment divided by its angular spring."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.vessel = cls.launch("Parts")
+        cls.set_circular_orbit("Kerbin", 200000)
+        cls.child = cls.vessel.parts.with_name("fairingSize1")[0]
+        cls.parent = cls.child.parent
+
+    def deflection(self, axis, moment):
+        """The joint's rotation, in radians, under a moment in kN.m about an axis
+        of the child part"""
+        child = self.child
+        parent = self.parent
+        ref = child.reference_frame
+        rest = parent.reference_frame
+        before = child.rotation(rest)
+
+        def vector(index, value):
+            v = [0.0, 0.0, 0.0]
+            v[index % 3] = value
+            return (v[0], v[1], v[2])
+
+        # A couple on the child, and the opposite couple on the parent, so the
+        # vessel stays still and only the joint carries the moment
+        force = vector(axis + 2, moment * 1000)
+        minus = vector(axis + 2, -moment * 1000)
+        p1 = vector(axis + 1, 0.5)
+        p2 = vector(axis + 1, -0.5)
+        forces = [
+            child.add_force(force, p1, ref),
+            child.add_force(minus, p2, ref),
+            parent.add_force(minus, p1, ref),
+            parent.add_force(force, p2, ref),
+        ]
+        try:
+            self.wait(2)
+            angles = []
+            for _ in range(10):
+                q = quaternion_mult(quaternion_conjugate(before), child.rotation(rest))
+                angles.append(2 * math.asin(min(1, norm(q[:3]))))
+                self.wait(0.05)
+        finally:
+            for x in forces:
+                x.remove()
+            self.wait(1)
+        return sum(angles) / len(angles)
+
+    def test_bending(self):
+        spring = self.child.joint_angular_spring
+        self.assertAlmostEqual(60000, spring)
+        moment = spring / 400
+        for axis in (0, 2):
+            self.assertAlmostEqual(
+                1 / 400, self.deflection(axis, moment), delta=0.1 / 400
+            )
+
+    def test_twist(self):
+        # Twisting about the joint axis is much stiffer than bending
+        spring = self.child.joint_angular_spring
+        self.assertLess(self.deflection(1, spring / 400), 0.1 / 400)
 
 
 if __name__ == "__main__":

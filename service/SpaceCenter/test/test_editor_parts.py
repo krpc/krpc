@@ -86,6 +86,8 @@ class TestEditorParts(TestCase):
         tensor = part.inertia_tensor
         self.assertEqual(9, len(tensor))
         self.assertGreater(part.impact_tolerance, 0)
+        self.assertGreater(part.breaking_force, 0)
+        self.assertGreater(part.breaking_torque, 0)
         self.assertGreater(part.max_temperature, 0)
         self.assertGreater(part.max_skin_temperature, 0)
         self.assertFalse(part.massless)
@@ -110,6 +112,8 @@ class TestEditorParts(TestCase):
             "thermal_mass",
             "dynamic_pressure",
             "shielded",
+            "joint_break_force",
+            "joint_angular_spring",
         ):
             self.assertRaises(RuntimeError, getattr, part, name)
         self.assertRaises(RuntimeError, getattr, self.parts, "controlling")

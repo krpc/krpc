@@ -478,11 +478,132 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The impact tolerance of the part, in <unit>m/s</unit>.
+        /// The crash tolerance of the part, in <unit>m/s</unit>.
         /// </summary>
         [KRPCProperty]
         public double ImpactTolerance {
             get { return InternalPart.crashTolerance; }
+        }
+
+        /// <summary>
+        /// The breaking force of the part's attachments, in <unit>kN</unit>.
+        /// </summary>
+        /// <remarks>
+        /// The joint to the parent part takes the lower breaking force of the two parts,
+        /// scaled by the size of the attachment node. See <see cref="JointBreakForce"/>.
+        /// </remarks>
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
+        public float BreakingForce {
+            get { return InternalPart.breakingForce; }
+        }
+
+        /// <summary>
+        /// The breaking torque of the part's attachments, in <unit>kN.m</unit>.
+        /// </summary>
+        /// <remarks>
+        /// The joint to the parent part takes the lower breaking torque of the two parts,
+        /// scaled by the size of the attachment node. See <see cref="JointBreakTorque"/>.
+        /// </remarks>
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
+        public float BreakingTorque {
+            get { return InternalPart.breakingTorque; }
+        }
+
+        IList<ConfigurableJoint> Joints {
+            get {
+                var joint = InternalPart.attachJoint;
+                if (joint == null || joint.joints == null || joint.joints.Count == 0)
+                    throw new InvalidOperationException ("Part has no joint to its parent");
+                return joint.joints;
+            }
+        }
+
+        /// <summary>
+        /// The force that breaks the joint to the parent part, in <unit>kN</unit>.
+        /// Throws an exception if the part has no joint to its parent part.
+        /// </summary>
+        /// <remarks>
+        /// The sum over the joint's physics joints. It is infinite for a short time after
+        /// the vessel loads, such as just after launch. The root part and a physicsless
+        /// part have no joint to their parent.
+        /// </remarks>
+        [KRPCProperty (GameScene = GameScene.Flight)]
+        public float JointBreakForce {
+            get { return Joints.Sum (x => x.breakForce); }
+        }
+
+        /// <summary>
+        /// The torque that breaks the joint to the parent part, in <unit>kN.m</unit>.
+        /// Throws an exception if the part has no joint to its parent part.
+        /// </summary>
+        /// <remarks>
+        /// The sum over the joint's physics joints. It is infinite for a short time after
+        /// the vessel loads. On a stack node of size 2 or more, the physics joints sit apart
+        /// around the node. A bending moment then breaks the joint when one physics joint's
+        /// force exceeds its share of <see cref="JointBreakForce"/>, usually at a much
+        /// larger moment than this torque.
+        /// </remarks>
+        [KRPCProperty (GameScene = GameScene.Flight)]
+        public float JointBreakTorque {
+            get { return Joints.Sum (x => x.breakTorque); }
+        }
+
+        /// <summary>
+        /// The spring constant of the joint to the parent part against translation, in
+        /// <unit>kN/m</unit>.
+        /// Throws an exception if the part has no joint to its parent part.
+        /// </summary>
+        /// <remarks>
+        /// The sum over the joint's physics joints. A rigid attachment locks the joint, and
+        /// this spring then has no effect.
+        /// </remarks>
+        [KRPCProperty (GameScene = GameScene.Flight)]
+        public float JointSpring {
+            get { return Joints.Sum (x => x.xDrive.positionSpring); }
+        }
+
+        /// <summary>
+        /// The damping constant of the joint to the parent part against translation, in
+        /// <unit>kN.s/m</unit>.
+        /// Throws an exception if the part has no joint to its parent part.
+        /// </summary>
+        /// <remarks>
+        /// The sum over the joint's physics joints. The stock game sets it to zero, and
+        /// mods such as Kerbal Joint Reinforcement change it.
+        /// </remarks>
+        [KRPCProperty (GameScene = GameScene.Flight)]
+        public float JointDamper {
+            get { return Joints.Sum (x => x.xDrive.positionDamper); }
+        }
+
+        /// <summary>
+        /// The spring constant of the joint to the parent part against bending, in
+        /// <unit>kN.m/rad</unit>.
+        /// Throws an exception if the part has no joint to its parent part.
+        /// </summary>
+        /// <remarks>
+        /// The sum over the joint's physics joints, about the two axes perpendicular to the
+        /// joint axis. The joint is far stiffer against twisting about its axis. On a stack
+        /// node of size 2 or more, the physics joints sit apart around the node, and the joint
+        /// bends much less than this spring gives. A rigid attachment makes it infinite.
+        /// </remarks>
+        [KRPCProperty (GameScene = GameScene.Flight)]
+        public float JointAngularSpring {
+            get { return Joints.Sum (x => x.angularYZDrive.positionSpring); }
+        }
+
+        /// <summary>
+        /// The damping constant of the joint to the parent part against bending, in
+        /// <unit>kN.m.s/rad</unit>.
+        /// Throws an exception if the part has no joint to its parent part.
+        /// </summary>
+        /// <remarks>
+        /// The sum over the joint's physics joints. The stock game sets it to zero, and
+        /// mods such as Kerbal Joint Reinforcement change it.
+        /// </remarks>
+        [KRPCProperty (GameScene = GameScene.Flight)]
+        public float JointAngularDamper {
+            get { return Joints.Sum (x => x.angularYZDrive.positionDamper); }
         }
 
         /// <summary>
