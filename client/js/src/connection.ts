@@ -49,7 +49,7 @@ export interface ConnectOptions {
   name?: string;
   /** The address of the server. Defaults to `127.0.0.1`. */
   address?: string;
-  /** The port of the server's WebSockets protocol. Defaults to 50000. */
+  /** The port of the server's WebSockets protocol. Defaults to 50001. */
   port?: number;
   /** The time to wait for the server to accept the connection, in milliseconds. Defaults to 5000.
    * `Infinity` waits for as long as it takes. */
@@ -218,7 +218,7 @@ export function contextOf(connection: Connection): Context {
 }
 
 const DEFAULT_ADDRESS = "127.0.0.1";
-const DEFAULT_PORT = 50000;
+const DEFAULT_PORT = 50001;
 const DEFAULT_HANDSHAKE_TIMEOUT = 5000;
 
 /** Connects to a kRPC server over WebSockets, and builds its services. Rejects with a

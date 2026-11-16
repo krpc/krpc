@@ -16,11 +16,12 @@ in one binary websockets message. The websockets message may be split across fra
 Connecting
 ----------
 
-To use this protocol, add a server in the server window and select *Protobuf over WebSockets* as
-its protocol. Its address and port default to ``127.0.0.1`` and ``50000``.
+A new install has a server for this protocol in the server window, at address ``127.0.0.1`` and
+port ``50001``. To add another, add a server and select *Protobuf over WebSockets* as its
+protocol.
 
 Open a websockets connection to the server with the path ``/``, for example
-``ws://127.0.0.1:50000/``. The upgrade request names no subprotocol. Then send the
+``ws://127.0.0.1:50001/``. The upgrade request names no subprotocol. Then send the
 :ref:`connection handshake <communication-protocol-handshake>`. The upgrade and the
 ``connection_request`` together have 3 seconds to arrive, timed from the TCP connection.
 
