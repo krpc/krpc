@@ -39,11 +39,63 @@ Setting ``KRPC.GameScene`` changes scene, or opens or closes a facility. It retu
 and the scene changes over the next few frames. This example goes to the space center, and waits
 until it is there:
 
-.. literalinclude:: /scripts/user-guide/game-scenes-and-saves/ChangeScene.py
-   :language: python
-   :start-after: [docs]
-   :end-before: [/docs]
-   :dedent:
+.. tabs::
+
+   .. group-tab:: Python
+
+      .. literalinclude:: /scripts/user-guide/game-scenes-and-saves/ChangeScene.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C#
+
+      .. literalinclude:: /scripts/user-guide/game-scenes-and-saves/ChangeScene.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C++
+
+      .. literalinclude:: /scripts/user-guide/game-scenes-and-saves/ChangeScene.cpp
+         :language: cpp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/user-guide/game-scenes-and-saves/ChangeScene.c
+         :language: c
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: Java
+
+      .. literalinclude:: /scripts/user-guide/game-scenes-and-saves/ChangeScene.java
+         :language: java
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: Lua
+
+      .. literalinclude:: /scripts/user-guide/game-scenes-and-saves/ChangeScene.lua
+         :language: lua
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/game-scenes-and-saves/ChangeScene.js
+         :language: javascript
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
 Setting the scene to ``Flight`` resumes the save's active vessel. Leaving flight saves the game
 first, unless the game cannot be saved. ``SpaceCenter.CanSave`` gives whether it can, and is false
@@ -76,11 +128,63 @@ Launching Vessels
 ``SpaceCenter.LaunchVesselFromSPH`` onto the runway. The call returns once the vessel has loaded
 and settled:
 
-.. literalinclude:: /scripts/user-guide/game-scenes-and-saves/LaunchVessel.py
-   :language: python
-   :start-after: [docs]
-   :end-before: [/docs]
-   :dedent:
+.. tabs::
+
+   .. group-tab:: Python
+
+      .. literalinclude:: /scripts/user-guide/game-scenes-and-saves/LaunchVessel.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C#
+
+      .. literalinclude:: /scripts/user-guide/game-scenes-and-saves/LaunchVessel.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C++
+
+      .. literalinclude:: /scripts/user-guide/game-scenes-and-saves/LaunchVessel.cpp
+         :language: cpp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/user-guide/game-scenes-and-saves/LaunchVessel.c
+         :language: c
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: Java
+
+      .. literalinclude:: /scripts/user-guide/game-scenes-and-saves/LaunchVessel.java
+         :language: java
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: Lua
+
+      .. literalinclude:: /scripts/user-guide/game-scenes-and-saves/LaunchVessel.lua
+         :language: lua
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/game-scenes-and-saves/LaunchVessel.js
+         :language: javascript
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
 ``SpaceCenter.LaunchVessel`` also takes the launch site, the crew and a flag. The launch runs the
 game's pre-flight checks, and raises an exception if they fail. By default it recovers a vessel
