@@ -1,3 +1,7 @@
 # The examples this harness cannot run, one per line, as "<language> <key>  # reason". The
 # language is * for every language that has the example.
 * tutorials/raster-prop-monitor/CameraVideo  # Shows a window, and needs Pillow
+* client/Connecting2  # Connects to a remote address
+cnano client/ConnectingCustom  # Talks to the server over its own standard input and output
+js client/Dashboard  # Runs in a web page
+js client/StreamScope  # await using needs Node.js 24, and the build runs Node.js 22

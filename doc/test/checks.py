@@ -14,6 +14,10 @@ if TYPE_CHECKING:
 # Hooks
 
 
+def toggle_abort(test: TestCase) -> None:
+    test.connect().space_center.active_vessel.control.abort = True
+
+
 def target_first_vessel(test: TestCase) -> None:
     """Targets the first vessel, which the examples name as some vessel, where it is not the
     active vessel."""
@@ -90,6 +94,12 @@ def screen_menu(test: TestCase) -> None:
         timeout=10,
         message="the menu to toggle the lights",
     )
+
+
+def replace_vessel(test: TestCase) -> None:
+    """Launches the craft again in the current save, which removes the old vessel and its
+    parts."""
+    test.relaunch()
 
 
 # Checks
@@ -331,3 +341,15 @@ def vessel_named(name: str) -> Callable[[TestCase], None]:
         test.assertEqual(name, test.connect().space_center.active_vessel.name)
 
     return check
+
+
+def vessels(count: int) -> Callable[[TestCase], None]:
+    def check(test: TestCase) -> None:
+        test.assertEqual(count, len(test.connect().space_center.vessels))
+
+    return check
+
+
+def map_filter_includes_debris(test: TestCase) -> None:
+    space_center = test.connect().space_center
+    test.assertIn(space_center.MapFilterType.debris, space_center.map_filter)

@@ -93,6 +93,9 @@ class Setup:
     scene: str = "flight"
     # A quicksave made once the vessel is placed
     quicksave: bool = False
+    # A quickload after the quicksave, which brings the save's record of its vessels up to
+    # date. Until then, the record holds the vessels the launch removed.
+    reload: bool = False
     # Relaunch before each example, for examples that stage, crash or change scene
     fresh: bool = False
     # The vessels in the game. Each after the first is the craft launched again from the
@@ -157,6 +160,9 @@ class Example:
     prepare: Callable[[Any], None] | None = None
     # Regular expressions the output must match
     expect_output: tuple[str, ...] = ()
+    # Regular expressions the error output must match, for an example that shows a failure.
+    # With none, the error output must be empty.
+    expect_errors: tuple[str, ...] = ()
     # Run against the game once the example has finished
     check: Callable[[Any], None] | None = None
     # The numbers the output must print

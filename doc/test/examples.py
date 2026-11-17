@@ -46,6 +46,9 @@ SETUPS = {
         quicksave=True,
         fresh=True,
     ),
+    # The examples launch without clearing the pad, so it must hold no vessel, including in
+    # the save's record of its vessels
+    "launch-my-rocket": Setup(fresh=True, reload=True, ships=(("My Rocket", "Basic"),)),
     "launch-kerbal-x": Setup(fresh=True, ships=(("Kerbal X", "Kerbal X"),)),
     "launch-into-orbit": Setup(
         craft="AeroEquus", directory=STOCK, placement=Pad(), fresh=True
@@ -451,4 +454,102 @@ USER_GUIDE = [
     ),
 ]
 
-EXAMPLES = [*TUTORIALS, *USER_GUIDE]
+CLIENT = [
+    *_exits(
+        "orbit",
+        "client/BoundStaticMethods",
+        "client/CompilationErrors",
+        "client/CompiledFunctionArguments",
+        "client/CompiledMatch",
+        "client/CompiledParameters",
+        "client/CompiledStatements",
+        "client/CompileDecorator",
+        "client/Concurrent",
+        "client/Connecting1",
+        "client/Connecting3",
+        "client/ConnectingLocal",
+        "client/ConnectingSerial",
+        "client/ConnectingTcp",
+        "client/FlagsFunction",
+        "client/Imports",
+        "client/NotLoadedStream",
+        "client/NullValues",
+        "client/RemoteObjects",
+        "client/RemoteProcedures",
+        "client/RunFunction",
+        "client/RunFunctionArguments",
+        "client/StateVariable",
+        "client/StaticMethods",
+        "client/StreamRate",
+        "client/StreamScope",
+        "client/Threads",
+    ),
+    # The C-nano client prints each error, including the one the example shows
+    Example(
+        "client/Errors",
+        "orbit",
+        per_language={"cnano": {"expect_errors": ("kRPC error",)}},
+    ),
+    *_exits(
+        "low-flight",
+        "client/CompiledEvent",
+        "client/CustomEvent",
+        "client/Event",
+        "client/EventScope",
+        "client/FunctionEvent",
+        run=Interactive(checks.climb_past(1000)),
+    ),
+    Example("client/Flags", "orbit", check=checks.map_filter_includes_debris),
+    *_loops(
+        "orbit",
+        "client/CompiledFunction",
+        "client/CompiledFunctionStream",
+        "client/FunctionStream",
+        "client/Streaming",
+        "client/Streaming1",
+        "client/Streaming2",
+        "client/Streaming3",
+        "client/Streaming4",
+    ),
+    Example(
+        "client/EventCallback",
+        "orbit",
+        run=Loop(),
+        expect_output=("Altitude reached 1000m",),
+    ),
+    Example(
+        "client/Callbacks",
+        "orbit",
+        run=Interactive(checks.toggle_abort, then=Loop()),
+        expect_output=(
+            "Abort 1 called with a value of",
+            "Abort 2 called with a value of",
+        ),
+    ),
+    Example(
+        "client/ConditionVariables",
+        "orbit",
+        run=Interactive(checks.toggle_abort),
+    ),
+    Example(
+        "client/EndCallback",
+        "orbit",
+        run=Interactive(checks.replace_vessel, then=Loop(), ready="Temperature"),
+        expect_output=("The stream ended",),
+    ),
+    Example(
+        "client/StreamEnd",
+        "orbit",
+        run=Interactive(checks.replace_vessel, ready="Temperature"),
+        expect_output=("The part was destroyed",),
+    ),
+    *_exits(
+        "launch-my-rocket",
+        "client/Arguments",
+        "client/OmittedArguments",
+        # The craft launched beside the setup's vessel, which it did not recover
+        check=checks.vessels(2),
+    ),
+]
+
+EXAMPLES = [*TUTORIALS, *USER_GUIDE, *CLIENT]

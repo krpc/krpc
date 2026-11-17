@@ -81,12 +81,31 @@ class ExampleTestCase(TestCase):
             )
         for name, craft in setup.ships:
             cls.stage_ship(name, craft)
-        if setup.quicksave:
+        if setup.quicksave or setup.reload:
             cls.connect().space_center.quicksave()
+        if setup.reload:
+            vessel = cls.quickload()
         if setup.scene == "space_center":
             cls._set_game_scene(cls.connect().krpc.GameScene.space_center)
         cls._vessel = vessel
         cls._part_count = len(vessel.parts.all)
+
+    @classmethod
+    def quickload(cls):
+        """Loads the quicksave, and returns the active vessel once the game has loaded it."""
+        conn = cls.connect()
+        loads = conn.krpc.game_state_loads
+        conn.space_center.quickload()
+        cls.wait_until(
+            lambda: (
+                conn.krpc.game_state_loads > loads
+                and conn.krpc.game_scene == conn.krpc.GameScene.flight
+                and conn.space_center.active_vessel is not None
+            ),
+            timeout=120,
+            message="the quicksave to load",
+        )
+        return conn.space_center.active_vessel
 
     @classmethod
     def place(cls, placement):
@@ -205,7 +224,13 @@ class ExampleTestCase(TestCase):
             self.assertFalse(result.exited, "Exited before being stopped. " + message)
             if run.prints:
                 self.assertTrue(result.stdout.strip(), "Printed nothing. " + message)
-        self.assertEqual("", result.stderr, message)
+        if not example.expect_errors:
+            self.assertEqual("", result.stderr, message)
+        for pattern in example.expect_errors:
+            self.assertTrue(
+                re.search(pattern, result.stderr),
+                "Error output does not match %r. %s" % (pattern, message),
+            )
         for pattern in example.expect_output:
             self.assertTrue(
                 re.search(pattern, result.stdout),
