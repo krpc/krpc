@@ -79,6 +79,7 @@ py_library(
         "chunking.py",
         "report.py",
         "runner.py",
+        "steps.py",
         "testserver.py",
     ],
     # The modules refer to each other as tools.benchmarks.<name>, which is also how the

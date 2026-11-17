@@ -34,6 +34,27 @@ namespace KRPC.Benchmarks
         }
 
         /// <summary>
+        /// Run one step of the server's path for a procedure call the given number of times,
+        /// and return what one step cost, as <see cref="Call"/> does.
+        /// </summary>
+        /// <param name="call">The procedure call. Any procedure of any service.</param>
+        /// <param name="step">The step, from <see cref="CallSteps"/>.</param>
+        /// <param name="iterations">Number of times to run the step.</param>
+        [KRPCProcedure]
+        public static IDictionary<string, double> CallStep (ProcedureCall call, string step, uint iterations)
+        {
+            return Steps.Measure (call, step, iterations);
+        }
+
+        /// <summary>
+        /// The steps that <see cref="CallStep"/> accepts.
+        /// </summary>
+        [KRPCProperty]
+        public static IList<string> CallSteps {
+            get { return Steps.Names; }
+        }
+
+        /// <summary>
         /// Update a stream of a procedure call the given number of times, and return what one
         /// update cost: nanoseconds, bytes allocated, and the number of garbage collections
         /// that happened while it ran.
@@ -149,6 +170,77 @@ namespace KRPC.Benchmarks
             return dictionary;
         }
 
+        /// <summary>
+        /// The sum of the arguments, for the scalar case of <see cref="CallStep"/>.
+        /// </summary>
+        /// <param name="x">A float.</param>
+        /// <param name="y">An integer.</param>
+        /// <param name="z">A long.</param>
+        [KRPCProcedure]
+        public static double Add (float x, int y, long z)
+        {
+            return x + y + z;
+        }
+
+        /// <summary>
+        /// The string passed.
+        /// </summary>
+        /// <param name="value">The string.</param>
+        [KRPCProcedure]
+        public static string EchoString (string value)
+        {
+            return value;
+        }
+
+        /// <summary>
+        /// The list passed.
+        /// </summary>
+        /// <param name="value">The list.</param>
+        [KRPCProcedure]
+        public static IList<int> EchoList (IList<int> value)
+        {
+            return value;
+        }
+
+        /// <summary>
+        /// The dictionary passed.
+        /// </summary>
+        /// <param name="value">The dictionary.</param>
+        [KRPCProcedure]
+        public static IDictionary<string, int> EchoDictionary (IDictionary<string, int> value)
+        {
+            return value;
+        }
+
+        /// <summary>
+        /// A new object.
+        /// </summary>
+        [KRPCProcedure]
+        public static BenchmarkObject NewObject ()
+        {
+            return new BenchmarkObject ();
+        }
+
+        /// <summary>
+        /// The object passed.
+        /// </summary>
+        /// <param name="value">The object.</param>
+        [KRPCProcedure]
+        public static BenchmarkObject EchoObject (BenchmarkObject value)
+        {
+            return value;
+        }
+
+        /// <summary>
+        /// The list of objects passed.
+        /// </summary>
+        /// <param name="value">The list.</param>
+        [KRPCProcedure]
+        public static IList<BenchmarkObject> EchoObjects (IList<BenchmarkObject> value)
+        {
+            return value;
+        }
+
         static bool descending;
 
         static bool NextIsDescending ()
@@ -156,5 +248,13 @@ namespace KRPC.Benchmarks
             descending = !descending;
             return descending;
         }
+    }
+
+    /// <summary>
+    /// An object for the object cases of <see cref="Benchmark.CallStep"/>.
+    /// </summary>
+    [KRPCClass (Service = "Benchmark")]
+    public sealed class BenchmarkObject
+    {
     }
 }

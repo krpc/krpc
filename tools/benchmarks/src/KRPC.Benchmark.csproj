@@ -31,6 +31,7 @@
     <Compile Include="Benchmark.cs" />
     <Compile Include="Dispatch.cs" />
     <Compile Include="GameLoop.cs" />
+    <Compile Include="Steps.cs" />
     <Compile Include="StreamUpdates.cs" />
     <Compile Include="Timer.cs" />
     <Compile Include="Waits.cs" />

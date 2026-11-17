@@ -38,7 +38,13 @@ The Targets
 
 ``:testserver`` measures the server's cost per remote procedure call: decoding the arguments,
 dispatch, the procedure and encoding the result. It runs against a ``TestServer``, so it measures a
-change to ``core/`` or ``server/`` without the game.
+change to ``core/`` or ``server/`` without the game. ``--steps`` times each step of a call on its
+own, per type of argument and result: parsing the request, decoding the arguments, the call,
+encoding the result and serializing the response:
+
+.. code-block:: bash
+
+   bazel run //tools/benchmarks:testserver -- --steps
 
 ``:update-loop`` measures the server's update loop: the calls a second that clients of different
 shapes get, and what the loop costs the frame. It runs a ``TestServer`` that models a game's frame
@@ -78,3 +84,6 @@ stream over a few hundred parts. It is a pytest suite, so arguments go to pytest
 
 ``test_update_loop.py`` runs the update loop shapes of ``:update-loop`` in the game, to check the
 model against it.
+
+``test_steps.py`` times the steps of ``--steps`` in the game, with calls on the reference craft
+added.
