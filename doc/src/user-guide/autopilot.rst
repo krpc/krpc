@@ -1226,6 +1226,11 @@ are untouched, and it falls below one only once the vessel is crossing faster th
 commands — handing the braking there back to the PI controller, which is well damped on its
 own.
 
+While a :ref:`smoothed <target-smoothing>` change is fed in, the effective target moves
+away at the slew rate :math:`\omega_s`, and the error grows at that rate. The braking terms
+add :math:`\omega_s` to the on-profile error rate, outside the tracking fraction, and
+:math:`\dot\theta` in the deadband term includes it.
+
 The setpoint is continuous but not smooth: :math:`\dot g` steps by a bounded amount at the
 seams where the profile switches branch (the velocity cap engaging, the quadratic and
 linear stopping terms swapping). To smear these few genuine transitions the feedforward is
