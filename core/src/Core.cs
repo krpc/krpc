@@ -1006,8 +1006,6 @@ namespace KRPC
                 response = continuation.Run ();
             } catch (YieldException) {
                 throw;
-            } catch (RPCException e) {
-                response = new Response { Id = continuation.Id, Error = Service.Services.Instance.HandleException (e) };
             } catch (System.Exception e) {
                 response = new Response { Id = continuation.Id, Error = Service.Services.Instance.HandleException (e) };
             } finally {
