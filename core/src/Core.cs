@@ -25,7 +25,7 @@ namespace KRPC
 
         IDictionary<Guid, IClient<IMessageStream>> clients = new Dictionary<Guid, IClient<IMessageStream>> ();
         // The connected clients, polled for requests in the order they connected
-        RoundRobinScheduler<IClient<IMessageStream>> clientScheduler = new RoundRobinScheduler<IClient<IMessageStream>> ();
+        List<IClient<IMessageStream>> clientOrder = new List<IClient<IMessageStream>> ();
         // The calls to execute in this update: new requests, and calls the previous update yielded or deferred
         List<RequestContinuation> rpcContinuations = new List<RequestContinuation> ();
         Dictionary<IClient<IMessageStream>, Dictionary<ulong, Service.Stream>> streams = new Dictionary<IClient<IMessageStream>, Dictionary<ulong, Service.Stream>> ();
@@ -116,7 +116,7 @@ namespace KRPC
         internal void ClientConnected (IClient<IMessageStream> client)
         {
             clients [client.Guid] = client;
-            clientScheduler.Add (client);
+            clientOrder.Add (client);
             streams [client] = new Dictionary<ulong, Service.Stream> ();
             cachedStreamUpdates [client] = new StreamUpdate ();
             EventHandlerExtensions.Invoke (OnClientConnected, this, new ClientConnectedEventArgs (client));
@@ -137,7 +137,7 @@ namespace KRPC
             // A client that goes away while holding the tick does not get to keep holding it.
             if (tickHoldClient != null && tickHoldClient.Guid == client.Guid)
                 ReleaseTickHold ();
-            clientScheduler.Remove (client);
+            clientOrder.Remove (client);
             EventHandlerExtensions.Invoke (OnClientDisconnected, this, new ClientDisconnectedEventArgs (client));
         }
 
@@ -964,16 +964,15 @@ namespace KRPC
         /// </summary>
         void PollRequests (IList<RequestContinuation> yieldedContinuations)
         {
-            if (clientScheduler.Empty)
+            if (clientOrder.Count == 0)
                 return;
             pollRequestsCurrentClients.Clear ();
             for (int i = 0; i < rpcContinuations.Count; i++)
                 pollRequestsCurrentClients.Add (rpcContinuations [i].Client);
             for (int i = 0; i < yieldedContinuations.Count; i++)
                 pollRequestsCurrentClients.Add (yieldedContinuations [i].Client);
-            var item = clientScheduler.Items.First;
-            while (item != null) {
-                var client = item.Value;
+            for (int i = 0; i < clientOrder.Count; i++) {
+                var client = clientOrder [i];
                 var stream = client.Stream;
                 try {
                     if (!pollRequestsCurrentClients.Contains (client) && stream.DataAvailable) {
@@ -988,7 +987,6 @@ namespace KRPC
                         Logger.WriteLine ("Failed to read a request from client " + client.Label () + ": " + e, Logger.Severity.Debug);
                     client.Stream.Disconnect (DisconnectReason.MalformedMessage, "Failed to read a request: " + e.Message);
                 }
-                item = item.Next;
             }
         }
 
