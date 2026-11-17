@@ -131,13 +131,7 @@ namespace TestingTools
         public static void LoadSave (string directory, string name)
         {
             HighLogic.SaveFolder = directory;
-            var game = GamePersistence.LoadGame (name, HighLogic.SaveFolder, true, false);
-            if (game == null || game.flightState == null || !game.compatible)
-                throw new ArgumentException ("Failed to load save '" + name + "'");
-            // Add the scenario modules of installed mods that the save lacks
-            GamePersistence.UpdateScenarioModules (game);
-            FlightDriver.StartAndFocusVessel (game, game.flightState.activeVesselIdx);
-            throw new YieldException<Action> (() => WaitForVesselSwitch(0));
+            KRPC.SpaceCenter.Services.SpaceCenter.Load (name);
         }
 
         /// <summary>
@@ -291,14 +285,6 @@ namespace TestingTools
                 KerbalRoster.SetExperienceLevel (crew, 5);
             }
             internalVessel.CrewListSetDirty ();
-        }
-
-        static void WaitForVesselSwitch (int tick)
-        {
-            if (FlightGlobals.ActiveVessel == null || FlightGlobals.ActiveVessel.packed)
-                throw new YieldException<Action> (() => WaitForVesselSwitch(0));
-            if (tick < 10)
-                throw new YieldException<Action> (() => WaitForVesselSwitch(tick + 1));
         }
     }
 }

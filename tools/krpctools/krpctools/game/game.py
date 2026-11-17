@@ -266,6 +266,11 @@ class Game:
         """A connection to the running game's server."""
         return launch.connect(self, use_cached)
 
+    def call(self, function, timeout, what):
+        """Return the result of function, which calls the game's server, failing after
+        timeout seconds. what names the call in the error, e.g. "loading the save"."""
+        return launch.call(self, function, timeout, what)
+
     def ensure(self, mods=()):
         """Ensure a game is running with exactly the given mods, launching one if needed."""
         launch.ensure(self, mods)

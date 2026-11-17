@@ -7,9 +7,10 @@ namespace KRPC.Utils
     /// <summary>
     /// Switches the game to a given scene, and tracks which space center
     /// facility UI is open. Setting KRPC.GameScene calls LoadScene via
-    /// the CallContext.LoadScene delegate.
+    /// the CallContext.LoadScene delegate. Services queue their own scene loads
+    /// with <see cref="QueueLoad" />.
     /// </summary>
-    static class GameSceneSwitcher
+    public static class GameSceneSwitcher
     {
         static Action pendingLoad;
 
@@ -85,14 +86,23 @@ namespace KRPC.Utils
         /// Queues a scene load for the next Update, where the game's own buttons load
         /// scenes. RPCs run in FixedUpdate. A load requested there is followed by
         /// FlightGlobals.FixedUpdate in the same physics step, which sets FlightGlobals.ready
-        /// again. The flag then stays set in the next scene with no active vessel.
-        /// Leaving flight saves the game first.
+        /// again. Out of flight, the flag then stays set in the next scene with no active
+        /// vessel. In flight, the next flight scene targets the destroyed vessel and stalls
+        /// on the loading screen.
+        /// </summary>
+        public static void QueueLoad (Action load)
+        {
+            pendingLoad = load;
+        }
+
+        /// <summary>
+        /// Queues a scene load, saving the game first when leaving flight.
         /// </summary>
         static void Defer (Action load)
         {
             if ((CallContext.GameScene & GameScene.Flight) != 0)
                 load = LeaveFlight (load);
-            pendingLoad = load;
+            QueueLoad (load);
         }
 
         /// <summary>

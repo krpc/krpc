@@ -103,13 +103,14 @@ namespace KRPC.SpaceCenter.Services
             set {
                 if (ReferenceEquals (value, null))
                     throw new ArgumentNullException ("ActiveVessel");
-                if (HighLogic.LoadedSceneIsFlight)
+                if (HighLogic.LoadedSceneIsFlight) {
                     FlightGlobals.ForceSetActiveVessel(value.InternalVessel);
-                else
-                {
-                    int vesselIndex = HighLogic.CurrentGame.flightState.protoVessels.FindIndex((ProtoVessel pv) => pv.vesselID == value.InternalVessel.id);
-                    if (vesselIndex == -1)
-                        throw new InvalidOperationException("No vessel found");
+                    throw new YieldException<Action> (() => WaitForVesselSwitch(0));
+                }
+                int vesselIndex = HighLogic.CurrentGame.flightState.protoVessels.FindIndex((ProtoVessel pv) => pv.vesselID == value.InternalVessel.id);
+                if (vesselIndex == -1)
+                    throw new InvalidOperationException("No vessel found");
+                LoadFlight (() => {
                     // Entering flight resumes from the in-memory game, which loads the
                     // scenario modules a second time. KSP's contract loader strips the
                     // type key out of each contract node as it reads it, so a second
@@ -117,10 +118,27 @@ namespace KRPC.SpaceCenter.Services
                     // from the live modules first, as saving does
                     HighLogic.CurrentGame.scenarios = ScenarioRunner.GetUpdatedProtoModules();
                     FlightDriver.StartAndFocusVessel(HighLogic.CurrentGame, vesselIndex);
-                }
-                
-                throw new YieldException<Action> (() => WaitForVesselSwitch(0));
+                });
             }
+        }
+
+        /// <summary>
+        /// Loads a flight scene from the next Update, and waits for its active vessel.
+        /// </summary>
+        static void LoadFlight (Action load)
+        {
+            var previous = FlightGlobals.ActiveVessel;
+            GameSceneSwitcher.QueueLoad (load);
+            throw new YieldException<Action> (() => WaitForLoad (previous));
+        }
+
+        // The vessel active before the load stays in FlightGlobals until the new scene
+        // replaces it
+        static void WaitForLoad (global::Vessel previous)
+        {
+            if (ReferenceEquals (FlightGlobals.ActiveVessel, previous))
+                throw new YieldException<Action> (() => WaitForLoad (previous));
+            WaitForVesselSwitch (0);
         }
 
         /// <summary>
@@ -458,8 +476,10 @@ namespace KRPC.SpaceCenter.Services
                 yield break;
             }
 
+            // A coroutine runs from Update, so it starts the launch itself
             try {
-                LaunchConfiguredVessel(config);
+                ClearLaunchSite(config);
+                StartLaunch(config);
             } catch (Exception e) {
                 result.Error = "launch failed: " + e.Message;
             }
@@ -475,13 +495,12 @@ namespace KRPC.SpaceCenter.Services
                 throw new InvalidOperationException(config.error);
             if (!config.preFlightChecksComplete)
                 throw new YieldException<Action>(() => WaitForVesselPreFlightChecks(config));
-            LaunchConfiguredVessel(config);
-            throw new YieldException<Action>(() => WaitForVesselSwitch(0));
+            ClearLaunchSite(config);
+            LoadFlight(() => StartLaunch(config));
         }
 
-        static void LaunchConfiguredVessel(LaunchConfig config)
+        static void ClearLaunchSite(LaunchConfig config)
         {
-            // Check launch site clear
             var vesselsToRecover = ShipConstruction.FindVesselsLandedAt(HighLogic.CurrentGame.flightState, config.LaunchSite);
             if (vesselsToRecover.Any()) {
                 // Recover existing vessels if the launch site is not clear
@@ -490,7 +509,10 @@ namespace KRPC.SpaceCenter.Services
                 foreach (var vessel in vesselsToRecover)
                     ShipConstruction.RecoverVesselFromFlight(vessel, HighLogic.CurrentGame.flightState, true);
             }
-            // Do the actual launch - passed pre-flight checks, and launch site is clear.
+        }
+
+        static void StartLaunch(LaunchConfig config)
+        {
             FlightDriver.StartWithNewLaunch(config.Path, config.FlagUrl, config.LaunchSite, config.manifest);
         }
 
@@ -553,8 +575,10 @@ namespace KRPC.SpaceCenter.Services
             var game = GamePersistence.LoadGame (name, HighLogic.SaveFolder, true, false);
             if (game == null || game.flightState == null || !game.compatible)
                 throw new ArgumentException ("Failed to load " + name);
-            FlightDriver.StartAndFocusVessel (game, game.flightState.activeVesselIdx);
-            throw new YieldException<Action> (() => WaitForVesselSwitch(0));
+            // Add the scenario modules of installed mods that the save lacks, as the
+            // game's own load dialogs do
+            GamePersistence.UpdateScenarioModules (game);
+            LoadFlight (() => FlightDriver.StartAndFocusVessel (game, game.flightState.activeVesselIdx));
         }
 
         /// <summary>
@@ -616,8 +640,7 @@ namespace KRPC.SpaceCenter.Services
             if (FlightDriver.CanRevert)
             {
                 CloseDialogs();
-                FlightDriver.RevertToLaunch();
-                throw new YieldException<Action> (() => WaitForVesselSwitch(0));
+                LoadFlight(FlightDriver.RevertToLaunch);
             }
         }
 

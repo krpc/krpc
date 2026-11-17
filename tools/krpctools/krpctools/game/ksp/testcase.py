@@ -28,6 +28,9 @@ class TestCase(testcase.TestCase):
     # present is skipped.
     expansions = []
 
+    # Seconds a save may take to load before the test fails
+    load_timeout = 600
+
     @classmethod
     def game(cls) -> "KSP":
         return cast("KSP", super().game())
@@ -82,7 +85,11 @@ class TestCase(testcase.TestCase):
 
         # Load a blank save with the given name
         cls.game().copy_blank_save(name)
-        conn.testing_tools.load_save(name, "persistent")
+        cls.game().call(
+            lambda: conn.testing_tools.load_save(name, "persistent"),
+            timeout=cls.load_timeout,
+            what="loading the save %s" % name,
+        )
 
     @classmethod
     def remove_other_vessels(cls):

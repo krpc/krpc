@@ -5,6 +5,7 @@ import os
 import pathlib
 import shutil
 import tempfile
+import threading
 import unittest
 import urllib.error
 import zipfile
@@ -206,6 +207,42 @@ class TestBindingProblems(unittest.TestCase):
         message = self.problems({KAC}, {"KerbalAlarmClock": "missing KACWrapper.Foo"})
         assert message is not None
         self.assertIn("KerbalAlarmClock: missing KACWrapper.Foo", message)
+
+
+class TestCall(unittest.TestCase):
+    def setUp(self):
+        self.game = KSP()
+        self.release = threading.Event()
+        self.addCleanup(self.release.set)
+
+    def test_returns_result(self):
+        self.assertEqual(42, launch.call(self.game, lambda: 42, 10, "answering"))
+
+    def test_raises_error(self):
+        def fail():
+            raise ValueError("bad")
+
+        with self.assertRaisesRegex(ValueError, "bad"):
+            launch.call(self.game, fail, 10, "answering")
+
+    def test_timeout_stops_launched_game(self):
+        process = mock.Mock()
+        with (
+            mock.patch.object(self.game, "process", process),
+            mock.patch.object(launch, "terminate") as terminate,
+        ):
+            with self.assertRaisesRegex(TimeoutError, "loading the save.*stopped it"):
+                launch.call(self.game, self.release.wait, 0.1, "loading the save")
+            self.assertIsNone(self.game.process)
+        terminate.assert_called_once_with(self.game, process)
+
+    def test_timeout_closes_connection_to_other_game(self):
+        connection = mock.Mock()
+        with mock.patch.object(self.game, "connection", connection):
+            with self.assertRaisesRegex(TimeoutError, "closed the connection"):
+                launch.call(self.game, self.release.wait, 0.1, "loading the save")
+            self.assertIsNone(self.game.connection)
+        connection.close.assert_called_once_with()
 
 
 class TestCopyFolder(TempDirTestCase):

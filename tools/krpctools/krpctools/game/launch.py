@@ -10,6 +10,7 @@ import logging
 import os
 import subprocess
 import sys
+import threading
 import time
 
 import krpc
@@ -121,6 +122,41 @@ def stop(game):
     game.connection = None
     log.info("stopping %s", game.title())
     terminate(game, process)
+
+
+def call(game, function, timeout, what):
+    """Return the result of function, which calls the game's server. Raise TimeoutError
+    when it has not returned after timeout seconds. A game this run launched is then
+    stopped, so the next test class launches a new one. The connection to a game started
+    elsewhere is closed."""
+    outcome = {}
+
+    def run():
+        try:
+            outcome["value"] = function()
+        except BaseException as error:
+            outcome["error"] = error
+
+    # The call blocks on the connection, so it runs in a thread we can stop waiting for
+    thread = threading.Thread(target=run, daemon=True)
+    thread.start()
+    thread.join(timeout)
+    if thread.is_alive():
+        if game.process is not None:
+            stop(game)
+            action = "stopped it"
+        else:
+            if game.connection is not None:
+                game.connection.close()
+                game.connection = None
+            action = "closed the connection"
+        raise TimeoutError(
+            "Timed out after %gs %s in %s, and %s. Check the game's log."
+            % (timeout, what, game.title(), action)
+        )
+    if "error" in outcome:
+        raise outcome["error"]
+    return outcome.get("value")
 
 
 def wait_for_server(game, timeout=300, interval=3):
