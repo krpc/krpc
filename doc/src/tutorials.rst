@@ -6,15 +6,15 @@ These tutorials walk through complete scripts that fly vessels and use the featu
 Flying a Mission
 ----------------
 
-Fly a mission from the launch pad: a sub-orbital hop, a launch into orbit, and guidance for
-docking with another vessel.
+Fly a mission from the launch pad: a sub-orbital hop, a launch into orbit, and docking with
+another vessel.
 
 .. toctree::
    :maxdepth: 1
 
    tutorials/suborbital-flight
    tutorials/launch-into-orbit
-   tutorials/docking-guidance
+   tutorials/docking
 
 Parts and Interfaces
 --------------------
