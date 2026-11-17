@@ -28,6 +28,23 @@ def keeps_calling(test: TestCase) -> None:
     )
 
 
+def screen_menu(test: TestCase) -> None:
+    """Waits for the menu on the first screen, then presses its enter button, which toggles
+    the lights."""
+    conn = test.connect()
+    vessel = conn.space_center.active_vessel
+    assert vessel is not None
+    monitor = conn.raster_prop_monitor.monitors(vessel)[0]
+    test.wait_until(lambda: "kRPC MENU" in monitor.text, timeout=10, message="the menu")
+    lights = vessel.control.lights
+    monitor.press_button(monitor.buttons.index("button_ENTER"))
+    test.wait_until(
+        lambda: vessel.control.lights != lights,
+        timeout=10,
+        message="the menu to toggle the lights",
+    )
+
+
 # Checks
 
 

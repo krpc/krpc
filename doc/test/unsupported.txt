@@ -1,2 +1,3 @@
 # The examples this harness cannot run, one per line, as "<language> <key>  # reason". The
 # language is * for every language that has the example.
+* tutorials/raster-prop-monitor/CameraVideo  # Shows a window, and needs Pillow

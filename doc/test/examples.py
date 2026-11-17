@@ -36,6 +36,13 @@ SETUPS = {
     ),
     # Two vessels joined port to port, which _place_docking_vessels undocks
     "docking": Setup(craft="PartsDockingPortInFlight", fresh=True),
+    # Mods
+    "raster-prop-monitor": Setup(
+        craft="RasterPropMonitor",
+        directory="service/RasterPropMonitor/test/craft",
+        placement=Pad(),
+        mods=("RasterPropMonitor",),
+    ),
 }
 
 
@@ -136,6 +143,11 @@ TUTORIALS = [
         "tutorials/user-interface/UserInterface",
         "tutorials/drawing/DrawingExample",
         run=Interactive(checks.keeps_calling, then=Loop(prints=False)),
+    ),
+    Example(
+        "tutorials/raster-prop-monitor/ScreenMenu",
+        "raster-prop-monitor",
+        run=Interactive(checks.screen_menu, then=Loop(prints=False)),
     ),
 ]
 
