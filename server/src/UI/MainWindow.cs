@@ -65,10 +65,13 @@ namespace KRPC.UI
         const string saveServerText = "Save";
         const string protocolText = "Protocol";
         const string addressText = "Address";
-        internal const string protobufOverTcpText = "Protobuf over TCP/IP";
-        internal const string protobufOverWebSocketsText = "Protobuf over WebSockets";
-        internal const string protobufOverSerialIOText = "Protobuf over SerialIO";
-        internal const string protobufOverLocalSocketText = "Protobuf over local socket";
+        // The name of each protocol, indexed by its Protocol value
+        internal static readonly string[] protocolNames = {
+            "Protobuf over TCP/IP",
+            "Protobuf over WebSockets",
+            "Protobuf over SerialIO",
+            "Protobuf over local socket"
+        };
         const string unknownClientNameText = "<unknown>";
         const string noClientsConnectedText = "No clients connected";
         const string serverNotRunningText = "Server not running";
@@ -96,6 +99,7 @@ namespace KRPC.UI
             Title = "kRPC v" + version.FileMajorPart + "." + version.FileMinorPart + "." + version.FileBuildPart;
 
             core.OnClientActivity += SawClientActivity;
+            core.OnClientDisconnected += ForgetClient;
 
             Style.fixedWidth = windowWidth;
 
@@ -160,6 +164,7 @@ namespace KRPC.UI
         void OnDestroy()
         {
             core.OnClientActivity -= SawClientActivity;
+            core.OnClientDisconnected -= ForgetClient;
         }
 
         protected override void Draw (bool needRescale)
@@ -285,16 +290,7 @@ namespace KRPC.UI
             if (editingServer) {
                 editServers [server.Id].Draw ();
             } else if (expanded) {
-                string protocol;
-                if (server.Protocol == Protocol.ProtocolBuffersOverTCP)
-                    protocol = protobufOverTcpText;
-                else if (server.Protocol == Protocol.ProtocolBuffersOverWebsockets)
-                    protocol = protobufOverWebSocketsText;
-                else if (server.Protocol == Protocol.ProtocolBuffersOverLocalSocket)
-                    protocol = protobufOverLocalSocketText;
-                else
-                    protocol = protobufOverSerialIOText;
-                DrawServerInfoRow (protocolText, protocol);
+                DrawServerInfoRow (protocolText, protocolNames [(int)server.Protocol]);
                 DrawServerInfoRow (addressText, server.Address);
                 DrawServerInfoLines (server.Info);
                 DrawClients (server);
@@ -620,6 +616,11 @@ namespace KRPC.UI
         void SawClientActivity (object sender, ClientActivityEventArgs e)
         {
             lastClientActivity [e.Client] = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+        }
+
+        void ForgetClient (object sender, ClientDisconnectedEventArgs e)
+        {
+            lastClientActivity.Remove (e.Client);
         }
 
         bool IsClientActive (IClient client)

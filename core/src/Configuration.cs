@@ -77,6 +77,23 @@ namespace KRPC
             public IDictionary<string, string> Settings { get; set; }
 
             /// <summary>
+            /// The serial port settings a server takes when its settings leave them out.
+            /// </summary>
+            public static readonly IReadOnlyDictionary<string, string> SerialDefaults =
+                new System.Collections.ObjectModel.ReadOnlyDictionary<string, string> (
+                    new Dictionary<string, string> {
+                        { "serialio_baud_rate", "9600" },
+                        { "serialio_data_bits", "8" },
+                        { "serialio_parity", "None" },
+                        { "serialio_stop_bits", "One" }
+                    });
+
+            string SerialSetting (string key)
+            {
+                return Settings.GetValueOrDefault (key, SerialDefaults [key]);
+            }
+
+            /// <summary>
             /// Construct default settings for a TCP/IP server
             /// </summary>
             public Server() : this (Protocol.ProtocolBuffersOverTCP)
@@ -130,10 +147,10 @@ namespace KRPC
                     ushort dataBits = 0;
                     SerialPorts.Parity parity;
                     SerialPorts.StopBits stopBits;
-                    uint.TryParse(Settings.GetValueOrDefault("serialio_baud_rate", "9600"), out baudRate);
-                    ushort.TryParse(Settings.GetValueOrDefault("serialio_data_bits", "8"), out dataBits);
-                    Enum.TryParse<SerialPorts.Parity>(Settings.GetValueOrDefault("serialio_parity", "None"), out parity);
-                    Enum.TryParse<SerialPorts.StopBits>(Settings.GetValueOrDefault("serialio_stop_bits", "One"), out stopBits);
+                    uint.TryParse (SerialSetting ("serialio_baud_rate"), out baudRate);
+                    ushort.TryParse (SerialSetting ("serialio_data_bits"), out dataBits);
+                    Enum.TryParse<SerialPorts.Parity> (SerialSetting ("serialio_parity"), out parity);
+                    Enum.TryParse<SerialPorts.StopBits> (SerialSetting ("serialio_stop_bits"), out stopBits);
                     var serialServer = new KRPC.Server.SerialIO.ByteServer(
                         Settings.GetValueOrDefault("serialio_port", string.Empty),
                         baudRate, dataBits, parity, stopBits);

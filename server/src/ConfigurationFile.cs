@@ -27,12 +27,16 @@ namespace KRPC
 
         public sealed class Server
         {
-            [Persistent] string id = Guid.NewGuid ().ToString ();
-            [Persistent] string name = "TCP/IP Server";
-            [Persistent] string protocol = Protocol.ProtocolBuffersOverTCP.ToString ();
-            [Persistent] List<KeyValuePair> settings = new List<KeyValuePair> {
-                new KeyValuePair {key = "tcpip_address", value = "127.0.0.1"},
-                new KeyValuePair {key = "tcpip_port", value = "50000"}};
+            [Persistent] string id;
+            [Persistent] string name;
+            [Persistent] string protocol;
+            [Persistent] List<KeyValuePair> settings;
+
+            // A field missing from the file keeps the default TCP/IP server's value
+            public Server ()
+            {
+                BeforeSave (new Configuration.Server ());
+            }
 
             public void BeforeSave (Configuration.Server server)
             {
