@@ -521,8 +521,13 @@ namespace KRPC.SpaceCenter.Services
 
         void WaitWithDeadline (DateTime deadline)
         {
+            // The angular velocity relative to the target, so a vessel turning with a moving target
+            // has stopped, or the vessel's own before the controller has run
+            var relative = Controller.RelativeAngularVelocity;
+            var angularVelocity = relative.HasValue
+                ? relative.Value.magnitude : InternalVessel.WorldAngularVelocity ().magnitude;
             if (Error > Controller.StoppingAngleThreshold ||
-                InternalVessel.WorldAngularVelocity ().magnitude > Controller.StoppingVelocityThreshold) {
+                angularVelocity > Controller.StoppingVelocityThreshold) {
                 if (DateTime.UtcNow > deadline)
                     throw new TimeoutException ("AutoPilot timed out waiting to reach target direction");
                 throw new YieldException<Action> (() => WaitWithDeadline (deadline));
@@ -541,7 +546,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The threshold angular velocity, in <unit>rad/s</unit>, below which the vessel's angular
-        /// velocity magnitude must fall for <see cref="Wait"/> to return.
+        /// velocity relative to the target must fall for <see cref="Wait"/> to return.
         /// Defaults to 0.05 <unit>rad/s</unit>.
         /// </summary>
         [KRPCProperty]

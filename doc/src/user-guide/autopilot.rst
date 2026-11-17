@@ -28,8 +28,9 @@ A minimal use case looks like this:
    :end-before: [/docs]
 
 ``wait()`` returns once the vessel has *settled* on the target: both the pointing error
-and the vessel's angular velocity must fall below a threshold, so it does not return while
-the nose is still swinging through the target. The two thresholds are the **stopping angle
+and the vessel's angular velocity relative to the target must fall below a threshold, so it
+does not return while the nose is still swinging through the target. A vessel turning with a
+moving target has settled. The two thresholds are the **stopping angle
 threshold** (default 1°) and the **stopping velocity threshold** (default 0.05 rad/s), and
 both can be adjusted. ``wait()`` also takes an optional ``timeout`` (in seconds), after
 which it raises rather than blocking indefinitely.
@@ -992,7 +993,9 @@ are both collinear with :math:`\boldsymbol{\omega}` and so collapse to a single 
 The acceleration :math:`\alpha`, the cap :math:`\omega_{max}` and the speed-cone
 bandwidth :math:`\text{bw}` are projected along :math:`\hat{\boldsymbol{\omega}}` for
 the prediction and along :math:`\hat{s}` for the speed profile. This makes the nose
-follow the shortest, great-circle path to the target.
+follow the shortest, great-circle path to the target. For a moving target,
+:math:`\boldsymbol{\omega}` is the angular velocity relative to the :ref:`target rate
+<moving-targets>` the autopilot follows.
 
 Tangential damping
 """"""""""""""""""
@@ -1014,6 +1017,32 @@ settling are unchanged; the off-axis behavior appears only in the nudge/orbit re
 The singularity guard is on :math:`\lvert\boldsymbol{e}_{stop}\rvert` rather than
 :math:`\theta`: only when both the error and the predicted drift vanish is there nothing
 to command.
+
+.. _moving-targets:
+
+Moving targets
+""""""""""""""
+
+A target that moves, such as the pitch of a gravity turn or the direction of a maneuver node
+during its burn, has its own rotation rate. The autopilot estimates it as the angular
+velocity minus the rate of change of the error, low-pass filtered with a 0.5 second time
+constant. A tick's estimate over 0.2 rad/s comes from a step in the target, and the filter
+takes it as zero.
+
+The estimated rate is added to the pitch and yaw target angular velocity, outside the profile
+and its deadband. The profile then acts on the angular velocity relative to the target, so
+at zero error the vessel turns with the target.
+
+Without this the vessel would follow the target only by trailing it, holding an error at the
+deadband's edge where the profile is steepest, and could oscillate as it follows.
+
+The estimate is only good while the vessel tracks the target. In a large slew the error's
+axis turns, and at the antipode it jumps, both of which read as target motion. So the target
+rate is followed in full up to 5° of pointing error, and fades out by 10°.
+
+A slow target rate is lost in the estimate's noise, and following it adds error. So the
+rate fades in from 0.001 rad/s, and is followed in full from 0.003 rad/s. A gravity turn or
+a burn in low orbit turns faster than that, and an aircraft holding a pitch turns slower.
 
 .. _antipodal-flip:
 
@@ -1219,7 +1248,8 @@ sustained oscillation about the target. To prevent this the whole feedforward is
    \min\!\left(1,\ \frac{\text{speed}}{\omega_{\parallel}}\right)
 
 where :math:`\omega_{\parallel}` is the measured angular rate along the command direction
-:math:`-\hat{s}`. It is one while the vessel is on the profile
+:math:`-\hat{s}`, relative to the followed :ref:`target rate <moving-targets>` on pitch and
+yaw. It is one while the vessel is on the profile
 (:math:`\omega_{\parallel} \approx \text{speed}`) or rotating away from the command
 (:math:`\omega_{\parallel} \le 0`), so ordinary slews, holds and the feedforward's normal role
 are untouched, and it falls below one only once the vessel is crossing faster than the profile
@@ -1229,7 +1259,11 @@ own.
 While a :ref:`smoothed <target-smoothing>` change is fed in, the effective target moves
 away at the slew rate :math:`\omega_s`, and the error grows at that rate. The braking terms
 add :math:`\omega_s` to the on-profile error rate, outside the tracking fraction, and
-:math:`\dot\theta` in the deadband term includes it.
+:math:`\dot\theta` in the deadband term includes it. On pitch and yaw the :ref:`followed
+target rate <moving-targets>` already carries part of the slew, so only
+:math:`(1 - w)\,\omega_s` is added, where :math:`w` is the weight, from 0 to 1, with which
+the autopilot follows the target rate. Roll follows no target rate, and takes the whole
+slew.
 
 The setpoint is continuous but not smooth: :math:`\dot g` steps by a bounded amount at the
 seams where the profile switches branch (the velocity cap engaging, the quadratic and
@@ -1634,9 +1668,9 @@ surfaces swing back. The :ref:`stopping-distance feedforward
    \theta_{ff} = \theta + \Delta\theta + T\,(\omega - \omega_t)
 
 The rate :math:`\omega_t` is the target's own rotation, as a surface tracking a steadily
-moving target never reverses. It is estimated as the angular velocity minus the rate of
-change of the error, low-pass filtered with a 0.5 second time constant. A change in the
-error faster than 0.2 rad/s is a step in the target, and the estimate ignores it.
+moving target never reverses. On roll it is the :ref:`estimated target rate
+<moving-targets>`. On pitch and yaw the profile's :math:`\omega` is already relative to the
+target rate it follows, so :math:`\omega_t` is zero there.
 
 Bandwidth back-off
 """"""""""""""""""
