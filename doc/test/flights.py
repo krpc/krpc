@@ -456,3 +456,140 @@ class LaunchIntoOrbit(Monitor):
 
 # The liquid fuel of the AeroEquus' upper stage, in its FL-T400 tank
 UPPER_STAGE_FUEL = 180
+
+
+class Docking(Monitor):
+    """The vessel turns to face the target port, lines up on its axis 5 m or more out,
+    closes in along the axis at up to 1 m/s, and docks."""
+
+    def streams(self) -> dict[str, Any]:
+        conn = self.test.connect()
+        space_center = conn.space_center
+        self.space_center = space_center
+        vessel = space_center.active_vessel
+        port = vessel.parts.controlling.docking_port
+        target = space_center.target_docking_port
+        self.port = port
+        self.monopropellant = sum(
+            v.resources.amount("MonoPropellant") for v in space_center.vessels
+        )
+        frame = target.reference_frame
+        add = conn.add_stream
+        # Streams of the ports' parts, which outlast the vessel merging into the other
+        return {
+            "ut": add(getattr, space_center, "ut"),
+            "state": add(getattr, port, "state"),
+            "target_state": add(getattr, target, "state"),
+            "position": add(port.position, frame),
+            "velocity": add(port.part.velocity, frame),
+            # The direction the port faces, which docks along -y of the target's frame
+            "facing": add(port.direction, frame),
+        }
+
+    def settle(self) -> None:
+        # The script ends as the ports start to pull together, which takes a few seconds
+        docked = self.space_center.DockingPortState.docked
+        self.test.wait_until(
+            lambda: bool(self.samples) and self.samples[-1].state == docked,
+            timeout=30,
+            message="the ports to dock",
+        )
+
+    def _facing_error(self, sample: Sample) -> float:
+        cosine = -sample.facing[1] / magnitude(sample.facing)
+        return math.degrees(math.acos(max(-1.0, min(1.0, cosine))))
+
+    def _off_axis(self, sample: Sample) -> float:
+        x, _, z = sample.position
+        return math.hypot(x, z)
+
+    def _phases(self) -> dict[str, int | None]:
+        states = self.space_center.DockingPortState
+        facing = self.first(lambda s: self._facing_error(s) < 2)
+        lined_up = contact = docked = None
+        if facing is not None:
+            lined_up = self.first(lambda s: self._off_axis(s) < 0.5, facing)
+        if lined_up is not None:
+            contact = self.first(
+                lambda s: s.state in (states.docking, states.docked), lined_up
+            )
+        if contact is not None:
+            docked = self.first(lambda s: s.state == states.docked, contact)
+        return {
+            "facing": facing,
+            "lined_up": lined_up,
+            "contact": contact,
+            "docked": docked,
+        }
+
+    def summary(self) -> dict[str, Any]:
+        samples = self.samples
+        if not samples:
+            return {"samples": 0}
+        phases = self._phases()
+        values: dict[str, Any] = {"samples": len(samples)}
+        start = samples[0].ut
+        for name, index in phases.items():
+            values[name + "_time"] = (
+                None if index is None else samples[index].ut - start
+            )
+        values["start_distance"] = magnitude(samples[0].position)
+        facing, contact = phases["facing"], phases["contact"]
+        if facing is not None and contact is not None:
+            approach = self.between(self.after(facing, 5), contact)
+            values["approach_facing_error"] = max(
+                (self._facing_error(s) for s in approach), default=None
+            )
+            values["approach_max_speed"] = max(
+                (magnitude(s.velocity) for s in approach), default=None
+            )
+            # Closing in along the axis, within 4 m of the target
+            close = [s for s in approach if s.position[1] < 4]
+            values["close_off_axis"] = max(
+                (self._off_axis(s) for s in close), default=None
+            )
+            at_contact = samples[contact - 1]
+            values["contact_off_axis"] = self._off_axis(at_contact)
+            values["contact_speed"] = magnitude(at_contact.velocity)
+            values["contact_facing_error"] = self._facing_error(at_contact)
+        space_center = self.space_center
+        values["vessels"] = len(space_center.vessels)
+        values["monopropellant_used"] = self.monopropellant - sum(
+            v.resources.amount("MonoPropellant") for v in space_center.vessels
+        )
+        values["final_state"] = samples[-1].state
+        return values
+
+    def check(self) -> None:
+        phases = self._phases()
+        missing = [name for name, index in phases.items() if index is None]
+        self.require(not missing, "The docking did not reach " + ", ".join(missing))
+        values = self.summary()
+        states = self.space_center.DockingPortState
+        self.require(
+            values["final_state"] == states.docked and values["vessels"] == 1,
+            "The vessels did not dock into one",
+        )
+        self.require(
+            values["approach_facing_error"] < 2,
+            "The vessel did not keep facing the target port",
+        )
+        # The approach from 42 m uses about 2.4 units
+        self.require(
+            values["monopropellant_used"] < 5,
+            "The approach used too much monopropellant",
+        )
+        self.require(
+            values["approach_max_speed"] < 1.2,
+            "The vessel approached faster than 1 m/s",
+        )
+        self.require(
+            values["close_off_axis"] < 0.6,
+            "The vessel closed in off the docking axis",
+        )
+        self.require(
+            values["contact_off_axis"] < 0.3
+            and values["contact_speed"] < 0.3
+            and values["contact_facing_error"] < 3,
+            "The ports met off axis, too fast or at an angle",
+        )
