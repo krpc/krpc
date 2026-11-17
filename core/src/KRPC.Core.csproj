@@ -64,8 +64,6 @@
     <Compile Include="Server\Protocol.cs" />
     <Compile Include="Server\ProtocolBuffers\Encoder.cs" />
     <Compile Include="Server\ProtocolBuffers\MessageExtensions.cs" />
-    <Compile Include="Server\ProtocolBuffers\Server.cs" />
-    <Compile Include="Server\ProtocolBuffers\Utils.cs" />
     <Compile Include="Server\ProtocolVersion.cs" />
     <Compile Include="Server\SerialIO\BufferedPort.cs" />
     <Compile Include="Server\SerialIO\ByteBuffer.cs" />
@@ -86,8 +84,9 @@
     <Compile Include="Server\LocalSocket\LocalSocketServer.cs" />
     <Compile Include="Server\LocalSocket\UnixEndPoint.cs" />
     <Compile Include="Server\LocalSocket\UnixSocket.cs" />
+    <Compile Include="Server\Delimited\Connection.cs" />
+    <Compile Include="Server\Delimited\Server.cs" />
     <Compile Include="Server\Message\Connection.cs" />
-    <Compile Include="Server\ProtocolBuffers\Connection.cs" />
     <Compile Include="Server\ProtocolBuffers\MessageEnvelope.cs" />
     <Compile Include="Server\ProtocolBuffers\StreamUpdateMessage.cs" />
     <Compile Include="Server\SerialIO\Connection.cs" />

@@ -1,4 +1,4 @@
-namespace KRPC.Server.ProtocolBuffers
+namespace KRPC.Server.Delimited
 {
     /// <summary>
     /// Server, for messages framed by a varint length prefix.

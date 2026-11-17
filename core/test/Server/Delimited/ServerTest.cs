@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading;
 using Google.Protobuf;
 using KRPC.Server;
-using KRPC.Server.ProtocolBuffers;
+using KRPC.Server.Delimited;
 using KRPC.Service.Messages;
 using KRPC.Utils;
 using NUnit.Framework;
@@ -14,14 +14,14 @@ using Reason = KRPC.Schema.KRPC.Disconnect.Types.Reason;
 using SchemaMessage = KRPC.Schema.KRPC.Message;
 using Status = KRPC.Schema.KRPC.ConnectionResponse.Types.Status;
 
-namespace KRPC.Test.Server.ProtocolBuffers
+namespace KRPC.Test.Server.Delimited
 {
     [TestFixture]
     public class ServerTest
     {
         static MessageHarness Harness ()
         {
-            return new MessageHarness (byteServer => new KRPC.Server.ProtocolBuffers.Server (byteServer));
+            return new MessageHarness (byteServer => new KRPC.Server.Delimited.Server (byteServer));
         }
 
         static void CheckRefused (MessageHarness harness, Status status, string message = null)

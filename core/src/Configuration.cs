@@ -118,13 +118,13 @@ namespace KRPC
                     ushort.TryParse(Settings.GetValueOrDefault(prefix + "port", DefaultPort (serverProtocol).ToString (CultureInfo.InvariantCulture)), out port);
                     var tcpServer = new TCPServer (serverAddress, port);
                     if (serverProtocol == Protocol.ProtocolBuffersOverTCP)
-                        messageServer = new KRPC.Server.ProtocolBuffers.Server (tcpServer);
+                        messageServer = new KRPC.Server.Delimited.Server (tcpServer);
                     else
                         messageServer = new KRPC.Server.WebSockets.Server (tcpServer);
                 } else if (serverProtocol == Protocol.ProtocolBuffersOverLocalSocket) {
                     var socketServer = new KRPC.Server.LocalSocket.LocalSocketServer (
                         Settings.GetValueOrDefault ("localsocket_path", KRPC.Server.LocalSocket.LocalSocketServer.DefaultPath ()));
-                    messageServer = new KRPC.Server.ProtocolBuffers.Server (socketServer);
+                    messageServer = new KRPC.Server.Delimited.Server (socketServer);
                 } else {
                     uint baudRate = 0;
                     ushort dataBits = 0;

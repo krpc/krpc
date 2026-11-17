@@ -167,7 +167,7 @@ namespace TestServer
                 Server server;
                 if (serverType == "protobuf") {
                     tcpServer = new TCPServer (bindAddress, tcpipPort);
-                    var messageServer = new KRPC.Server.ProtocolBuffers.Server (tcpServer);
+                    var messageServer = new KRPC.Server.Delimited.Server (tcpServer);
                     server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverTCP, "TestServer", messageServer);
                 } else if (serverType == "websockets") {
                     websocketsServer = new TCPServer (bindAddress, websocketsPort);
@@ -180,7 +180,7 @@ namespace TestServer
                     server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverSerialIO, "TestServer", messageServer);
                 } else if (serverType == "localsocket") {
                     socketServer = new KRPC.Server.LocalSocket.LocalSocketServer (localsocketPath);
-                    var messageServer = new KRPC.Server.ProtocolBuffers.Server (socketServer);
+                    var messageServer = new KRPC.Server.Delimited.Server (socketServer);
                     server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverLocalSocket, "TestServer", messageServer);
                 } else {
                     Logger.WriteLine ("Server type '" + serverType + "' not supported", Logger.Severity.Error);
