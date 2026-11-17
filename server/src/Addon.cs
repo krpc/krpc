@@ -414,12 +414,13 @@ namespace KRPC
             GameEvents.onGUIRnDComplexDespawn.Remove(OnRnDComplexDespawn);
             GameEvents.onGUIAdministrationFacilitySpawn.Remove(OnAdministrationFacilitySpawn);
             GameEvents.onGUIAdministrationFacilityDespawn.Remove(OnAdministrationFacilityDespawn);
-            core.OnServerStarted -= OnServerStarted;
-            core.OnServerStopped -= OnServerStopped;
-            core.OnClientRequestingConnection -= OnClientRequestingConnection;
 
             if (!ServicesChecker.OK)
                 return;
+
+            core.OnServerStarted -= OnServerStarted;
+            core.OnServerStopped -= OnServerStopped;
+            core.OnClientRequestingConnection -= OnClientRequestingConnection;
 
             // Destroy the UI
             if (applauncherButton != null)
@@ -438,6 +439,8 @@ namespace KRPC
         /// </summary>
         public void OnApplicationQuit ()
         {
+            if (!ServicesChecker.OK)
+                return;
             core.StopAll ();
         }
 
