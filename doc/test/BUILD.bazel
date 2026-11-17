@@ -1,3 +1,4 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
 load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
 
 # The in-game tests of the documentation examples. The game runs them with
@@ -28,4 +29,13 @@ py_pyright_test(
         "//client/python:krpc_lib",
         "//tools/krpctools:krpctools_lib",
     ],
+)
+
+# Opens the C-nano examples' serial connection over TCP/IP, for //doc:run-scripts-cnano
+cc_library(
+    name = "cnano_redirect",
+    testonly = True,
+    srcs = ["cnano_redirect.c"],
+    visibility = ["//doc:__pkg__"],
+    deps = ["//client/cnano:krpc_cnano_print_errors"],
 )

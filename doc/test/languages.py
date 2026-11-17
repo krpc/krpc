@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import os
 import pathlib
+import shutil
 import subprocess
 import sys
 from collections.abc import Callable, Iterable
@@ -37,7 +38,11 @@ def _python(path: pathlib.Path) -> Command:
 
 
 def _binary(path: pathlib.Path) -> Command:
-    return Command([str(path)], dict(os.environ))
+    # C's standard output to a file is flushed a block at a time, so a looping example stopped
+    # after a few seconds can appear to print nothing. stdbuf flushes it a line at a time.
+    stdbuf = shutil.which("stdbuf")
+    prefix = [stdbuf, "-oL"] if stdbuf else []
+    return Command([*prefix, str(path)], dict(os.environ))
 
 
 def _doc_target(prefix: str) -> Callable[[pathlib.PurePath], str]:
@@ -49,6 +54,8 @@ LANGUAGES = {
     "python": Language(None, _python),
     "cpp": Language(_doc_target("compile-scripts-cpp"), _binary),
     "java": Language(_doc_target("compile-scripts-java"), _binary),
+    "cnano": Language(_doc_target("run-scripts-cnano"), _binary),
+    "lua": Language(_doc_target("run-scripts-lua"), _binary),
 }
 
 # The built example binaries, by target
