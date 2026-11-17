@@ -39,7 +39,7 @@ namespace KRPC.Test.Server
         /// </summary>
         public bool PeerClosed { get; set; }
 
-        // As TCPClient, which sees a closed peer only once its unread bytes are read
+        // As SocketClient, which sees a closed peer only once its unread bytes are read
         public bool Connected {
             get { return !stream.Closed && !(PeerClosed && !stream.DataAvailable); }
         }

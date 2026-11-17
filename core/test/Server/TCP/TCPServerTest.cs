@@ -18,9 +18,6 @@ namespace KRPC.Test.Server.TCP
             var server = new TCPServer (IPAddress.Loopback, 0);
             server.OnStarted += (s, e) => serverStarted = true;
             server.OnStopped += (s, e) => serverStopped = true;
-            server.OnClientRequestingConnection += (s, e) => {
-                return;
-            };
             Assert.IsFalse (server.Running);
             server.Start ();
             Assert.IsTrue (server.Running);
@@ -44,9 +41,6 @@ namespace KRPC.Test.Server.TCP
             var server = new TCPServer (IPAddress.Loopback, 0);
             server.OnStarted += (s, e) => serverStarted++;
             server.OnStopped += (s, e) => serverStopped++;
-            server.OnClientRequestingConnection += (s, e) => {
-                return;
-            };
             Assert.IsFalse (server.Running);
             for (int i = 0; i < 5; i++) {
                 server.Start ();
@@ -65,13 +59,8 @@ namespace KRPC.Test.Server.TCP
         {
             var server = new TCPServer (IPAddress.Loopback, 0);
 
-            bool clientRequestingConnection = false;
             bool clientConnected = false;
             bool clientDisconnected = false;
-            server.OnClientRequestingConnection += (s, e) => {
-                e.Request.Allow ();
-                clientRequestingConnection = true;
-            };
             server.OnClientConnected += (s, e) => clientConnected = true;
             server.OnClientDisconnected += (s, e) => clientDisconnected = true;
 
@@ -93,34 +82,8 @@ namespace KRPC.Test.Server.TCP
             Assert.IsFalse (tcpClient.Connected);
             server.Stop ();
 
-            Assert.IsTrue (clientRequestingConnection);
             Assert.IsTrue (clientConnected);
             Assert.IsTrue (clientDisconnected);
-
-            Assert.AreEqual (0, server.BytesRead);
-            Assert.AreEqual (0, server.BytesWritten);
-        }
-
-        [Test]
-        public void StillPendingByDefault ()
-        {
-            var server = new TCPServer (IPAddress.Loopback, 0);
-
-            bool clientRequestingConnection = false;
-            server.OnClientRequestingConnection += (s, e) => clientRequestingConnection = true;
-            server.OnClientConnected += (s, e) => Assert.Fail ();
-            server.OnClientDisconnected += (s, e) => Assert.Fail ();
-
-            server.Start ();
-
-            var tcpClient = new TcpClient (server.ListenAddress.ToString (), server.ActualPort);
-            UpdateUntil (server, () => clientRequestingConnection);
-
-            Assert.IsTrue (clientRequestingConnection);
-            Assert.AreEqual (0, server.Clients.Count ());
-
-            server.Stop ();
-            tcpClient.Close ();
 
             Assert.AreEqual (0, server.BytesRead);
             Assert.AreEqual (0, server.BytesWritten);
@@ -133,7 +96,6 @@ namespace KRPC.Test.Server.TCP
 
             bool clientConnected = false;
             bool clientDisconnected = false;
-            server.OnClientRequestingConnection += (s, e) => e.Request.Allow ();
             server.OnClientConnected += (s, e) => clientConnected = true;
             server.OnClientDisconnected += (s, e) => clientDisconnected = true;
 
@@ -177,9 +139,6 @@ namespace KRPC.Test.Server.TCP
             var server = new TCPServer (IPAddress.Any, 0);
             server.OnStarted += (s, e) => serverStarted = true;
             server.OnStopped += (s, e) => serverStopped = true;
-            server.OnClientRequestingConnection += (s, e) => {
-                return;
-            };
             Assert.IsFalse (server.Running);
             server.Start ();
             Assert.IsTrue (server.Running);

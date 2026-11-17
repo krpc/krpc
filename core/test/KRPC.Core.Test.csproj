@@ -61,9 +61,9 @@
     <Compile Include="Server\LocalSocket\UnixEndPointTest.cs" />
     <Compile Include="Server\LocalSocket\UnixSocketTest.cs" />
     <Compile Include="Server\MessageHarness.cs" />
+    <Compile Include="Server\SocketClientTest.cs" />
     <Compile Include="Server\TCP\AssumptionsTest.cs" />
     <Compile Include="Server\TCP\NetworkInformationTest.cs" />
-    <Compile Include="Server\TCP\TCPClientTest.cs" />
     <Compile Include="Server\TCP\TCPServerTest.cs" />
     <Compile Include="Server\TestClient.cs" />
     <Compile Include="Server\TestStream.cs" />

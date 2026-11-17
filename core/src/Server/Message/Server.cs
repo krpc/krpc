@@ -11,7 +11,7 @@ namespace KRPC.Server.Message
     /// Abstract server for the connections of a byte server. Each connection carries one
     /// client's session at a time.
     /// </summary>
-    public abstract class Server : IServer<IMessageStream>
+    public abstract class Server : IMessageServer
     {
         /// <summary>
         /// Event handler for when the server starts.
@@ -54,8 +54,6 @@ namespace KRPC.Server.Message
             InnerServer = innerServer;
             InnerServer.OnStarted += (s, e) => EventHandlerExtensions.Invoke (OnStarted, this);
             InnerServer.OnStopped += (s, e) => EventHandlerExtensions.Invoke (OnStopped, this);
-            // Connections are approved once their handshake has been read
-            InnerServer.OnClientRequestingConnection += (s, e) => e.Request.Allow ();
             InnerServer.OnClientConnected += (s, e) => connections [e.Client] = CreateConnection (e.Client);
             InnerServer.OnClientDisconnected += HandleClientDisconnected;
         }

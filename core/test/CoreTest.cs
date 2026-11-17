@@ -15,7 +15,7 @@ namespace KRPC.Test
         // can be simulated without any network activity.
         sealed class TestServer
         {
-            readonly Mock<IServer<IMessageStream>> messageServer = new Mock<IServer<IMessageStream>> ();
+            readonly Mock<IMessageServer> messageServer = new Mock<IMessageServer> ();
             bool running;
 
             public TestServer (bool failsToStart = false)

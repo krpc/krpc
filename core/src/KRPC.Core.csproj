@@ -80,7 +80,9 @@
     <Compile Include="Server\ServerException.cs" />
     <Compile Include="Server\ServerStartedEventArgs.cs" />
     <Compile Include="Server\ServerStoppedEventArgs.cs" />
-    <Compile Include="Server\LocalSocket\LocalSocketClient.cs" />
+    <Compile Include="Server\SocketClient.cs" />
+    <Compile Include="Server\SocketServer.cs" />
+    <Compile Include="Server\SocketStream.cs" />
     <Compile Include="Server\LocalSocket\LocalSocketServer.cs" />
     <Compile Include="Server\LocalSocket\UnixEndPoint.cs" />
     <Compile Include="Server\LocalSocket\UnixSocket.cs" />
@@ -90,9 +92,7 @@
     <Compile Include="Server\ProtocolBuffers\StreamUpdateMessage.cs" />
     <Compile Include="Server\SerialIO\Connection.cs" />
     <Compile Include="Server\TCP\NetworkInformation.cs" />
-    <Compile Include="Server\TCP\TCPClient.cs" />
     <Compile Include="Server\TCP\TCPServer.cs" />
-    <Compile Include="Server\TCP\TCPStream.cs" />
     <Compile Include="Server\WebSockets\Connection.cs" />
     <Compile Include="Server\WebSockets\ConnectionRequest.cs" />
     <Compile Include="Server\WebSockets\Frame.cs" />

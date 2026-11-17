@@ -26,11 +26,6 @@ namespace KRPC.Server.SerialIO
         public event EventHandler OnStopped;
 
         /// <summary>
-        /// Event handler for when a new client requests a connection.
-        /// </summary>
-        public event EventHandler<ClientRequestingConnectionEventArgs<IByteStream>> OnClientRequestingConnection;
-
-        /// <summary>
         /// Event handler for when a new client has connected.
         /// </summary>
         public event EventHandler<ClientConnectedEventArgs<IByteStream>> OnClientConnected;
@@ -42,7 +37,6 @@ namespace KRPC.Server.SerialIO
 
         BufferedPort port;
         ByteClient client;
-        ByteClient pendingClient;
         ulong closedClientsBytesRead;
         ulong closedClientsBytesWritten;
 
@@ -66,8 +60,6 @@ namespace KRPC.Server.SerialIO
         /// </summary>
         public void Start ()
         {
-            if (OnClientRequestingConnection == null)
-                throw new ServerException ("Client request handler not set");
             if (Running) {
                 Logger.WriteLine ("SerialIO.Server: start requested, but server is already running", Logger.Severity.Warning);
                 return;
@@ -131,51 +123,26 @@ namespace KRPC.Server.SerialIO
                     Stop ();
                     return;
                 }
-                if (client == null && pendingClient == null && port.BytesAvailable > 0) {
+                if (client == null && port.BytesAvailable > 0) {
                     Logger.WriteLine (
-                        "SerialIO.Server[" + Address + "]: client requesting connection",
+                        "SerialIO.Server[" + Address + "]: client connected",
                         Logger.Severity.Debug);
-                    pendingClient = new ByteClient (port);
+                    client = new ByteClient (port);
+                    EventHandlerExtensions.Invoke (OnClientConnected, this, new ClientConnectedEventArgs<IByteStream> (client));
+                    return;
                 }
             } catch (IOException) {
                 Stop ();
+                return;
             } catch (TimeoutException) {
                 Stop ();
+                return;
             } catch (ObjectDisposedException) {
                 Stop ();
+                return;
             }
 
-            if (client == null && pendingClient != null) {
-                // Trigger OnClientRequestingConnection events to verify the connection
-                var args = new ClientRequestingConnectionEventArgs<IByteStream> (pendingClient);
-                EventHandlerExtensions.Invoke (OnClientRequestingConnection, this, args);
-
-                // Deny the connection
-                if (args.Request.ShouldDeny) {
-                    Logger.WriteLine (
-                        "SerialIO.Server[" + Address + "]: client connection denied",
-                        Logger.Severity.Debug);
-                    DisconnectClient (pendingClient, true);
-                    pendingClient = null;
-                }
-
-                // Allow the connection
-                else if (args.Request.ShouldAllow) {
-                    client = pendingClient;
-                    pendingClient = null;
-                    Logger.WriteLine (
-                        "SerialIO.Server[" + Address + "]: " +
-                        "client connection accepted", Logger.Severity.Debug);
-                    EventHandlerExtensions.Invoke (OnClientConnected, this, new ClientConnectedEventArgs<IByteStream> (client));
-                }
-
-                // Still pending, will either be denied or allowed on a subsequent called to Update
-                else {
-                    Logger.WriteLine (
-                        "SerialIO.Server[" + Address + "]: " +
-                        "client connection still pending", Logger.Severity.Debug);
-                }
-            } else if (client != null && !client.Connected) {
+            if (client != null && !client.Connected) {
                 DisconnectClient (client);
                 client = null;
             }

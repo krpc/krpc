@@ -2,14 +2,14 @@ using System;
 using System.IO;
 using System.Net.Sockets;
 
-namespace KRPC.Server.TCP
+namespace KRPC.Server
 {
-    sealed class TCPStream : IByteStream, IHalfClosableStream
+    sealed class SocketStream : IByteStream, IHalfClosableStream
     {
         readonly NetworkStream stream;
         readonly Socket socket;
 
-        public TCPStream (NetworkStream innerStream, Socket innerSocket)
+        public SocketStream (NetworkStream innerStream, Socket innerSocket)
         {
             stream = innerStream;
             socket = innerSocket;

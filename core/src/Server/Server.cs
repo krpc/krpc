@@ -26,7 +26,7 @@ namespace KRPC.Server
         /// </summary>
         public string Name { get; set; }
 
-        internal IServer<IMessageStream> InnerServer { get; private set; }
+        internal IMessageServer InnerServer { get; private set; }
 
         /// <summary>
         /// Event triggered when the server starts
@@ -56,7 +56,7 @@ namespace KRPC.Server
         /// <summary>
         /// Construct a server, from a message server instance.
         /// </summary>
-        public Server (Guid id, Protocol protocol, string name, IServer<IMessageStream> innerServer)
+        public Server (Guid id, Protocol protocol, string name, IMessageServer innerServer)
         {
             Id = id;
             Protocol = protocol;

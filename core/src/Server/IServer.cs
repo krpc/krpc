@@ -104,11 +104,6 @@ namespace KRPC.Server
         IEnumerable<IClient<TStream>> Clients { get; }
 
         /// <summary>
-        /// Handler to trigger when a new client requests a connection.
-        /// </summary>
-        event EventHandler<ClientRequestingConnectionEventArgs<TStream>> OnClientRequestingConnection;
-
-        /// <summary>
         /// Handler to trigger when a client has connected.
         /// </summary>
         event EventHandler<ClientConnectedEventArgs<TStream>> OnClientConnected;
@@ -117,5 +112,17 @@ namespace KRPC.Server
         /// Handler to trigger when a client has disconnected.
         /// </summary>
         event EventHandler<ClientDisconnectedEventArgs<TStream>> OnClientDisconnected;
+    }
+
+    /// <summary>
+    /// A server whose clients communicate in messages, and ask for their connection to be
+    /// approved.
+    /// </summary>
+    public interface IMessageServer : IServer<IMessageStream>
+    {
+        /// <summary>
+        /// Handler to trigger when a new client requests a connection.
+        /// </summary>
+        event EventHandler<ClientRequestingConnectionEventArgs<IMessageStream>> OnClientRequestingConnection;
     }
 }

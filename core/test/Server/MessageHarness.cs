@@ -36,9 +36,6 @@ namespace KRPC.Test.Server
             Server.OnClientConnected += (s, e) => Connected.Add (e.Client);
             Server.OnClientDisconnected += (s, e) => Disconnected.Add (e.Client);
             Server.Start ();
-            var args = new ClientRequestingConnectionEventArgs<IByteStream> (Client);
-            ByteServer.Raise (m => m.OnClientRequestingConnection += null, args);
-            Assert.IsTrue (args.Request.ShouldAllow);
             ByteServer.Raise (m => m.OnClientConnected += null, new ClientConnectedEventArgs<IByteStream> (Client));
         }
 
