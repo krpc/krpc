@@ -9,6 +9,7 @@ from doc.test.spec import (
     NUMBER,
     Example,
     Exit,
+    Flight,
     Interactive,
     Loop,
     Pad,
@@ -24,6 +25,7 @@ STOCK = ""
 # every example
 SETUPS = {
     "orbit": Setup(),
+    "flight": Setup(placement=Flight()),
     "parts-tree": Setup(craft="PartsTree", directory=DOC_CRAFT, placement=Pad()),
     "docking-ports": Setup(craft="PartsDockingPort", placement=Pad()),
     "orbit-fresh": Setup(fresh=True),
@@ -51,6 +53,10 @@ SETUPS = {
 
 def _exits(setup: str, *keys: str, **fields) -> list[Example]:
     return [Example(key, setup, **fields) for key in keys]
+
+
+def _loops(setup: str, *keys: str, **fields) -> list[Example]:
+    return [Example(key, setup, run=Loop(), **fields) for key in keys]
 
 
 def _place_docking_vessels(test) -> None:
@@ -83,6 +89,8 @@ def _place_docking_vessels(test) -> None:
 
 
 _warp_to = checks.WarpToApoapsis()
+_landing_site_calls = checks.CallCount(3)
+_visual_debugging_calls = checks.CallCount(3)
 
 # The combined specific impulse, as the parts tutorial prints it
 _ISP = Values(checks.specific_impulse, pattern=r"Isp = (%s)" % NUMBER)
@@ -212,6 +220,45 @@ USER_GUIDE = [
         "user-guide/vectors-and-rotations/Vector3",
         "orbit",
         values=Values(checks.prograde, relative=0, absolute=0.02),
+    ),
+    # Reference frames
+    *_exits(
+        "orbit",
+        "user-guide/reference-frames/VesselPosition",
+    ),
+    *_exits(
+        "orbit",
+        "user-guide/reference-frames/NavballDirections",
+        "user-guide/reference-frames/OrbitalDirections",
+        run=Exit(timeout=600),
+    ),
+    # Surface prograde is the direction of flight through the atmosphere
+    Example(
+        "user-guide/reference-frames/SurfacePrograde",
+        "flight",
+        run=Exit(timeout=600),
+    ),
+    *_loops(
+        "orbit",
+        "user-guide/reference-frames/AngleOfAttack",
+        "user-guide/reference-frames/NavballSpeed",
+        "user-guide/reference-frames/VesselSpeed",
+        "user-guide/reference-frames/VesselVelocity",
+    ),
+    # The examples draw, then wait
+    Example(
+        "user-guide/reference-frames/LandingSite",
+        "orbit",
+        prepare=_landing_site_calls.prepare,
+        run=Loop(prints=False),
+        check=_landing_site_calls.check,
+    ),
+    Example(
+        "user-guide/reference-frames/VisualDebugging",
+        "orbit",
+        prepare=_visual_debugging_calls.prepare,
+        run=Loop(prints=False),
+        check=_visual_debugging_calls.check,
     ),
 ]
 

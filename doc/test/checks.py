@@ -132,6 +132,25 @@ class WarpToApoapsis:
         test.assertLess(space_center.active_vessel.orbit.time_to_apoapsis, 20)
 
 
+class CallCount:
+    """Checks that the example made remote procedure calls, for an example that makes its
+    calls and then waits."""
+
+    # The calls the harness makes while the example runs, with the second read of the count
+    HARNESS = 2
+
+    def __init__(self, minimum: int) -> None:
+        self.minimum = minimum
+        self.start = 0
+
+    def prepare(self, test: TestCase) -> None:
+        self.start = _rpcs_executed(test)
+
+    def check(self, test: TestCase) -> None:
+        calls = _rpcs_executed(test) - self.start - self.HARNESS
+        test.assertGreaterEqual(calls, self.minimum, "The example made too few calls")
+
+
 # The values and lines the examples print
 
 
