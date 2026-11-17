@@ -37,6 +37,13 @@ SETUPS = {
     "parts-tree-fresh": Setup(
         craft="PartsTree", directory=DOC_CRAFT, placement=Pad(), fresh=True
     ),
+    "quicksave": Setup(
+        craft="PartsTree",
+        directory=DOC_CRAFT,
+        placement=Pad(),
+        quicksave=True,
+        fresh=True,
+    ),
     "launch-kerbal-x": Setup(fresh=True, ships=(("Kerbal X", "Kerbal X"),)),
     "launch-into-orbit": Setup(
         craft="AeroEquus", directory=STOCK, placement=Pad(), fresh=True
@@ -94,6 +101,7 @@ def _place_docking_vessels(test) -> None:
 
 
 _warp_to = checks.WarpToApoapsis()
+_quickload = checks.Quickload()
 _landing_site_calls = checks.CallCount(3)
 _visual_debugging_calls = checks.CallCount(3)
 
@@ -339,6 +347,14 @@ USER_GUIDE = [
         run=Interactive(checks.climb_past(10_000)),
     ),
     Example("user-guide/streams-and-events/StreamRate", "orbit", run=Loop()),
+    # Object lifetime
+    Example("user-guide/object-lifetime/DestroyedPart", "orbit"),
+    Example(
+        "user-guide/object-lifetime/Quickload",
+        "quicksave",
+        prepare=_quickload.prepare,
+        check=_quickload.check,
+    ),
 ]
 
 EXAMPLES = [*TUTORIALS, *USER_GUIDE]

@@ -169,6 +169,27 @@ def autopilot(**settings) -> Callable[[TestCase], None]:
     return check
 
 
+class Quickload:
+    """Records the game's loads before an example, and checks it loaded a save."""
+
+    def __init__(self) -> None:
+        self.loads = 0
+
+    def prepare(self, test: TestCase) -> None:
+        self.loads = test.connect().krpc.game_state_loads
+
+    def check(self, test: TestCase) -> None:
+        krpc = test.connect().krpc
+        test.wait_until(
+            lambda: (
+                krpc.game_state_loads > self.loads
+                and krpc.game_scene == krpc.GameScene.flight
+            ),
+            timeout=120,
+            message="the quicksave to load",
+        )
+
+
 class WarpToApoapsis:
     """Puts the vessel on an elliptic orbit with its apoapsis ahead, and checks the example
     warped to just before it."""
