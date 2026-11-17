@@ -17,3 +17,4 @@ flight.surface_reference_frame = (
 )
 torque = flight.buoyant_torque_at(body.ocean_density, body.surface_gravity)
 # [/docs]
+print("Torque = (%.0f, %.0f, %.0f) N m" % torque)

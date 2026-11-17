@@ -8,3 +8,6 @@ flight = vessel.flight()
 displacement = flight.displacement
 buoyancy = flight.buoyant_force_at(body.ocean_density, body.surface_gravity)
 # [/docs]
+print(
+    "Displacement = %.1f m^3, buoyancy = %.0f N" % (displacement, buoyancy)
+)

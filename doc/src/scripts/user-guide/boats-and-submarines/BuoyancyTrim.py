@@ -19,7 +19,7 @@ weight = vessel.mass * body.surface_gravity
 print("Displacement:  %.1f m^3" % flight.displacement)
 print("Buoyancy:      %.0f N fully submerged" % buoyancy)
 print("Weight:        %.0f N" % weight)
-print("Floats:        %s" % (buoyancy > weight))
+print("Floats:        %s" % str(buoyancy > weight).lower())
 print("Torque:        %.0f N m fully submerged" % math.hypot(*torque))
 
 # The trim, read in the surface reference frame. Its x axis points up, so

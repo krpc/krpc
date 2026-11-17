@@ -11,3 +11,5 @@ over_limit = conn.run(
     ]
 )
 # [/docs]
+for title in over_limit:
+    print(title)
