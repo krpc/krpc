@@ -34,13 +34,6 @@ namespace KRPC.Server.Message
         public event EventHandler<ClientConnectedEventArgs<Request,Response>> OnClientConnected;
 
         /// <summary>
-        /// Event handler when client activity occurs. Not triggered.
-        /// </summary>
-        #pragma warning disable 0067
-        public event EventHandler<ClientActivityEventArgs<Request,Response>> OnClientActivity;
-        #pragma warning restore 0067
-
-        /// <summary>
         /// Event handler when a client disconnects.
         /// </summary>
         public event EventHandler<ClientDisconnectedEventArgs<Request,Response>> OnClientDisconnected;

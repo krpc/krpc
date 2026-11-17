@@ -40,7 +40,7 @@ namespace KRPC.Service.KRPC
             var client = CallContext.Client as Server.Message.Client;
             return new ServerStatus {
                 Version = core.Version ?? "unknown",
-                ProtocolVersion = client != null ? client.ProtocolVersion : 0,
+                ProtocolVersion = client != null ? Server.ProtocolVersion.Current : 0,
                 Settings = new ServerSettings {
                     MaxTimePerUpdate = core.MaxTimePerUpdate,
                     AdaptiveRateControl = config.AdaptiveRateControl,

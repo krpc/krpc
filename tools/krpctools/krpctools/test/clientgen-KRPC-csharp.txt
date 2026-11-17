@@ -419,12 +419,11 @@ namespace KRPC.Client.Services.KRPC
         /// <summary>
         /// Construct a ClientInfo from the values of its fields.
         /// </summary>
-        public ClientInfo (byte[] id, string name, string address, uint protocolVersion) : this ()
+        public ClientInfo (byte[] id, string name, string address) : this ()
         {
             Id = id;
             Name = name;
             Address = address;
-            ProtocolVersion = protocolVersion;
         }
 
         /// <summary>
@@ -443,11 +442,6 @@ namespace KRPC.Client.Services.KRPC
         public string Address { get; private set; }
 
         /// <summary>
-        /// The protocol version of the client's connection.
-        /// </summary>
-        public uint ProtocolVersion { get; private set; }
-
-        /// <summary>
         /// Returns true if this ClientInfo is equal to the given object.
         /// </summary>
         public override bool Equals (object obj)
@@ -460,7 +454,7 @@ namespace KRPC.Client.Services.KRPC
         /// </summary>
         public bool Equals (ClientInfo other)
         {
-            return global::KRPC.Client.ValueUtils.Equal (Id, other.Id) && global::KRPC.Client.ValueUtils.Equal (Name, other.Name) && global::KRPC.Client.ValueUtils.Equal (Address, other.Address) && global::KRPC.Client.ValueUtils.Equal (ProtocolVersion, other.ProtocolVersion);
+            return global::KRPC.Client.ValueUtils.Equal (Id, other.Id) && global::KRPC.Client.ValueUtils.Equal (Name, other.Name) && global::KRPC.Client.ValueUtils.Equal (Address, other.Address);
         }
 
         /// <summary>
@@ -472,7 +466,6 @@ namespace KRPC.Client.Services.KRPC
             hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (Id);
             hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (Name);
             hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (Address);
-            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (ProtocolVersion);
             return hash;
         }
 
@@ -508,9 +501,6 @@ namespace KRPC.Client.Services.KRPC
             if (result != 0)
                 return result;
             result = global::System.Collections.Generic.Comparer<string>.Default.Compare (Address, other.Address);
-            if (result != 0)
-                return result;
-            result = global::System.Collections.Generic.Comparer<uint>.Default.Compare (ProtocolVersion, other.ProtocolVersion);
             if (result != 0)
                 return result;
             return 0;

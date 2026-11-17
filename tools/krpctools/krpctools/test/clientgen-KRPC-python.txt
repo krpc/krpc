@@ -122,10 +122,6 @@ class ClientInfo(NamedTuple):
     """
     The address of the client.
     """
-    protocol_version: int
-    """
-    The protocol version of the client's connection.
-    """
 
 
 class ServerSettings(NamedTuple):

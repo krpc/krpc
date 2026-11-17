@@ -549,13 +549,11 @@ public class KRPC extends RemoteService {
         private final byte[] id;
         private final String name;
         private final String address;
-        private final int protocolVersion;
 
-        public ClientInfo(byte[] id, String name, String address, int protocolVersion) {
+        public ClientInfo(byte[] id, String name, String address) {
             this.id = id;
             this.name = name;
             this.address = address;
-            this.protocolVersion = protocolVersion;
         }
 
         /**
@@ -579,19 +577,11 @@ public class KRPC extends RemoteService {
             return address;
         }
 
-        /**
-         * The protocol version of the client's connection.
-         */
-        public int getProtocolVersion() {
-            return protocolVersion;
-        }
-
         private static final java.util.List<krpc.schema.KRPC.Type> FIELD_TYPES =
             java.util.Collections.unmodifiableList(java.util.Arrays.asList(
                 krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BYTES),
                 krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING),
-                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING),
-                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32)
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)
             ));
 
         /** The types of the fields, in the order they are encoded in. */
@@ -605,8 +595,7 @@ public class KRPC extends RemoteService {
             return new ClientInfo(
                 (byte[]) values[0],
                 (String) values[1],
-                (String) values[2],
-                (int) values[3]
+                (String) values[2]
             );
         }
 
@@ -615,8 +604,7 @@ public class KRPC extends RemoteService {
             return new Object[] {
                 id,
                 name,
-                address,
-                protocolVersion
+                address
             };
         }
 
@@ -626,12 +614,12 @@ public class KRPC extends RemoteService {
                 return false;
             }
             ClientInfo other = (ClientInfo) obj;
-            return java.util.Objects.deepEquals(this.id, other.id)                && java.util.Objects.deepEquals(this.name, other.name)                && java.util.Objects.deepEquals(this.address, other.address)                && java.util.Objects.deepEquals(this.protocolVersion, other.protocolVersion);
+            return java.util.Objects.deepEquals(this.id, other.id)                && java.util.Objects.deepEquals(this.name, other.name)                && java.util.Objects.deepEquals(this.address, other.address);
         }
 
         @Override
         public int hashCode() {
-            return java.util.Arrays.deepHashCode(new Object[] {id, name, address, protocolVersion});
+            return java.util.Arrays.deepHashCode(new Object[] {id, name, address});
         }
 
         /**
@@ -650,10 +638,6 @@ public class KRPC extends RemoteService {
                 return result;
             }
             result = RemoteStruct.compareFields(address, other.address);
-            if (result != 0) {
-                return result;
-            }
-            result = RemoteStruct.compareFields(protocolVersion, other.protocolVersion);
             if (result != 0) {
                 return result;
             }

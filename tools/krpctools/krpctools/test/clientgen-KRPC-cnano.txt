@@ -166,7 +166,6 @@ struct krpc_KRPC_ClientInfo_s {
   krpc_bytes_t id;
   char * name;
   char * address;
-  uint32_t protocol_version;
 };
 
 static inline krpc_error_t krpc_encode_KRPC_ClientInfo(
@@ -428,7 +427,6 @@ typedef enum {
 #define KRPC_FIELD_KRPC_CLIENTINFO_ID 0
 #define KRPC_FIELD_KRPC_CLIENTINFO_NAME 1
 #define KRPC_FIELD_KRPC_CLIENTINFO_ADDRESS 2
-#define KRPC_FIELD_KRPC_CLIENTINFO_PROTOCOLVERSION 3
 #define KRPC_STRUCT_KRPC_SERVERSETTINGS 1u, 1855283781u
 #define KRPC_FIELD_KRPC_SERVERSETTINGS_MAXTIMEPERUPDATE 0
 #define KRPC_FIELD_KRPC_SERVERSETTINGS_ADAPTIVERATECONTROL 1
@@ -5231,15 +5229,6 @@ static inline bool krpc_encode_callback_items_KRPC_ClientInfo(
       KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
     KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_string(stream, value->address));
   }
-  {
-    if (!pb_encode_tag_for_field(stream, field))
-      KRPC_CALLBACK_RETURN_ERROR("encoding tag for tuple item");
-    size_t size;
-    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_uint32(&size, value->protocol_version));
-    if (!pb_encode_varint(stream, size))
-      KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
-    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_uint32(stream, value->protocol_version));
-  }
   return true;
 }
 
@@ -5288,9 +5277,6 @@ static inline bool krpc_decode_callback_item_KRPC_ClientInfo(
   case 2:
     KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_string(stream, &value->address));
     break;
-  case 3:
-    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_uint32(stream, &value->protocol_version));
-    break;
   default:
     // Fields are only ever appended to a structure, so a value from a newer server may
     // carry more items than this client knows about, and those are skipped
@@ -5310,7 +5296,7 @@ static inline krpc_error_t krpc_decode_KRPC_ClientInfo(
   State state = { 0, value };
   message.items.arg = &state;
   KRPC_RETURN_ON_ERROR(krpc_decode_message_Tuple(stream, &message));
-  if (state.pos < 4)
+  if (state.pos < 3)
     KRPC_FAIL(ENCODING, "Too few fields for a KRPC_ClientInfo");
   return KRPC_OK;
 }

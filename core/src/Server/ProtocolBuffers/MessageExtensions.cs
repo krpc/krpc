@@ -54,22 +54,6 @@ namespace KRPC.Server.ProtocolBuffers
             };
         }
 
-        public static Schema.KRPC.StreamUpdate ToProtobufMessage (this StreamUpdate streamUpdate)
-        {
-            var result = new Schema.KRPC.StreamUpdate ();
-            foreach (var r in streamUpdate.Results)
-                result.Results.Add (r.ToProtobufMessage ());
-            return result;
-        }
-
-        public static Schema.KRPC.StreamResult ToProtobufMessage (this StreamResult streamResult)
-        {
-            var result = new Schema.KRPC.StreamResult ();
-            result.Id = streamResult.Id;
-            result.Result = streamResult.Result.ToProtobufMessage ();
-            return result;
-        }
-
         public static Schema.KRPC.Services ToProtobufMessage (this Service.Messages.Services services)
         {
             var result = new Schema.KRPC.Services ();

@@ -1937,7 +1937,7 @@
 
       See :meth:`KRPC.getClients()`.
 
-   .. constructor:: public ClientInfo(byte[] id, String name, String address, int protocolVersion)
+   .. constructor:: public ClientInfo(byte[] id, String name, String address)
 
       Construct a ClientInfo from the values of its fields.
 
@@ -1953,10 +1953,6 @@
    .. method:: String getAddress()
 
       The address of the client.
-
-   .. method:: int getProtocolVersion()
-
-      The protocol version of the client's connection.
 
 
 .. type:: public class ServerSettings

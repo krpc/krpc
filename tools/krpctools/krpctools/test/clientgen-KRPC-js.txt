@@ -1606,7 +1606,7 @@ export interface Service extends RemoteService<"KRPC"> {
    * See {@link Service.getClients}.
    */
   readonly ClientInfo: {
-    new (fields: { readonly id: Uint8Array; readonly name: string; readonly address: string; readonly protocolVersion: number }): ClientInfo;
+    new (fields: { readonly id: Uint8Array; readonly name: string; readonly address: string }): ClientInfo;
     [Symbol.hasInstance](value: unknown): value is ClientInfo;
   };
   /**
@@ -1794,10 +1794,8 @@ export interface ClientInfo extends RemoteStruct<"KRPC.ClientInfo"> {
   readonly name: string;
   /** The address of the client. */
   readonly address: string;
-  /** The protocol version of the client's connection. */
-  readonly protocolVersion: number;
 }
-export const ClientInfo = declareStruct<Service["ClientInfo"]>("KRPC", "ClientInfo", [["id"], ["name"], ["address"], ["protocolVersion"]]);
+export const ClientInfo = declareStruct<Service["ClientInfo"]>("KRPC", "ClientInfo", [["id"], ["name"], ["address"]]);
 
 /**
  * The settings that control how the server executes calls.

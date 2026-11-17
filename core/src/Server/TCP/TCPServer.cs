@@ -34,12 +34,6 @@ namespace KRPC.Server.TCP
         public event EventHandler<ClientConnectedEventArgs<byte,byte>> OnClientConnected;
 
         /// <summary>
-        /// Event handler when client activity occurs.
-        /// </summary>
-        #pragma warning disable 0067
-        public event EventHandler<ClientActivityEventArgs<byte,byte>> OnClientActivity;
-
-        /// <summary>
         /// Event handler when a client disconnects.
         /// </summary>
         public event EventHandler<ClientDisconnectedEventArgs<byte,byte>> OnClientDisconnected;

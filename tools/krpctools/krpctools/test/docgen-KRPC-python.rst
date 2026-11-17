@@ -2127,7 +2127,7 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
 
 
-.. class:: ClientInfo(id, name, address, protocol_version)
+.. class:: ClientInfo(id, name, address)
 
    A client connected to the server.
 
@@ -2151,12 +2151,6 @@ Main kRPC service, used by clients to interact with basic server functionality.
       The address of the client.
 
       :rtype: str
-
-   .. attribute:: protocol_version
-
-      The protocol version of the client's connection.
-
-      :rtype: int
 
 
 .. class:: ServerSettings(max_time_per_update, adaptive_rate_control, blocking_recv, recv_timeout, tick_hold_timeout)

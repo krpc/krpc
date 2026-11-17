@@ -2380,10 +2380,6 @@
 
       The address of the client.
 
-   .. member:: uint32_t protocol_version
-
-      The protocol version of the client's connection.
-
 
 .. namespace:: krpc::services::KRPC
 .. struct:: ServerSettings

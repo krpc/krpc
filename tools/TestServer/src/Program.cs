@@ -17,7 +17,7 @@ namespace TestServer
     static class MainClass
     {
         static readonly Option<string> typeOption = new Option<string> ("--type") {
-            Description = "Type of server to run. Either protobuf, websockets, websockets-echo, serialio or localsocket, or several separated by commas, each of a different transport.",
+            Description = "Type of server to run. Either protobuf, websockets, serialio or localsocket, or several separated by commas, each of a different transport.",
             DefaultValueFactory = _ => "protobuf"
         };
         static readonly Option<string> bindOption = new Option<string> ("--bind") {
@@ -172,10 +172,6 @@ namespace TestServer
                 } else if (serverType == "websockets") {
                     websocketsServer = new TCPServer (bindAddress, websocketsPort);
                     var messageServer = new KRPC.Server.WebSockets.Server (websocketsServer);
-                    server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverWebsockets, "TestServer", messageServer);
-                } else if (serverType == "websockets-echo") {
-                    websocketsServer = new TCPServer (bindAddress, websocketsPort);
-                    var messageServer = new KRPC.Server.WebSockets.Server (websocketsServer, true);
                     server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverWebsockets, "TestServer", messageServer);
                 } else if (serverType == "serialio") {
                     serialServer = new KRPC.Server.SerialIO.ByteServer (

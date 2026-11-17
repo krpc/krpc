@@ -36,12 +36,6 @@ namespace KRPC.Server.SerialIO
         public event EventHandler<ClientConnectedEventArgs<byte,byte>> OnClientConnected;
 
         /// <summary>
-        /// Event handler when client activity occurs.
-        /// </summary>
-        #pragma warning disable 0067
-        public event EventHandler<ClientActivityEventArgs<byte,byte>> OnClientActivity;
-
-        /// <summary>
         /// Event handler when a client disconnects.
         /// </summary>
         public event EventHandler<ClientDisconnectedEventArgs<byte,byte>> OnClientDisconnected;
@@ -281,12 +275,9 @@ namespace KRPC.Server.SerialIO
         void DisconnectClient (IClient<byte, byte> _client, bool noEvent = false)
         {
             var label = _client.Label ();
-            try {
-                var stream = _client.Stream;
-                closedClientsBytesRead += stream.BytesRead;
-                closedClientsBytesWritten += stream.BytesWritten;
-            } catch (ClientDisconnectedException) {
-            }
+            var stream = _client.Stream;
+            closedClientsBytesRead += stream.BytesRead;
+            closedClientsBytesWritten += stream.BytesWritten;
             _client.Close ();
             if (!noEvent)
                 EventHandlerExtensions.Invoke (OnClientDisconnected, this, new ClientDisconnectedEventArgs<byte, byte> (_client));

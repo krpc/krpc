@@ -2440,15 +2440,6 @@ Main kRPC service, used by clients to interact with basic server functionality.
          The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
 
 
-   .. member:: uint32_t protocol_version
-
-      The protocol version of the client's connection.
-
-      .. macro:: KRPC_FIELD_KRPC_CLIENTINFO_PROTOCOLVERSION
-
-         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
-
-
 
 .. type:: krpc_KRPC_ServerSettings_t
 

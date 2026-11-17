@@ -2407,12 +2407,6 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
       :Type: ``string``
 
-   .. attribute:: protocolVersion
-
-      The protocol version of the client's connection.
-
-      :Type: ``number``
-
 
 .. class:: ServerSettings(fields)
 

@@ -1800,11 +1800,6 @@ Main kRPC service, used by clients to interact with basic server functionality.
       The address of the client.
 
 
-   .. attribute:: protocol_version: number
-
-      The protocol version of the client's connection.
-
-
 
 .. class:: ServerSettings
 

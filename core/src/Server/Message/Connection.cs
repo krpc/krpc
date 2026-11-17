@@ -375,7 +375,7 @@ namespace KRPC.Server.Message
                 Refuse (Status.WrongProtocolVersion, ProtocolVersion.UnsupportedMessage (request.ProtocolVersion));
                 return;
             }
-            session = new Client (request.ClientName, request.ProtocolVersion, this);
+            session = new Client (request.ClientName, this);
             state = State.Pending;
             if (Logger.ShouldLog (Logger.Severity.Debug))
                 Logger.WriteLine (

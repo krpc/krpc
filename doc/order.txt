@@ -24,7 +24,6 @@ KRPC.ClientInfo
 KRPC.ClientInfo.Id
 KRPC.ClientInfo.Name
 KRPC.ClientInfo.Address
-KRPC.ClientInfo.ProtocolVersion
 KRPC.ServerStatus
 KRPC.ServerStatus.Version
 KRPC.ServerStatus.ProtocolVersion

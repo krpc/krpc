@@ -15,12 +15,6 @@ namespace KRPC.Server.WebSockets
     sealed class Connection : Message.Connection
     {
         /// <summary>
-        /// Whether the connection should just echo messages back to the client.
-        /// Used for running the Autobahn tests.
-        /// </summary>
-        readonly bool shouldEcho;
-
-        /// <summary>
         /// Whether the HTTP upgrade has completed.
         /// </summary>
         bool upgraded;
@@ -56,21 +50,12 @@ namespace KRPC.Server.WebSockets
         /// </summary>
         int fragmentsVerifiedPosition;
 
-        public Connection (Message.Server server, IClient<byte,byte> client, bool echo) : base (server, client)
+        public Connection (Message.Server server, IClient<byte,byte> client) : base (server, client)
         {
-            shouldEcho = echo;
         }
 
         protected override bool PartialMessage {
             get { return fragmentsOpCode != OpCode.Close; }
-        }
-
-        protected override double StallTimeout {
-            get { return shouldEcho ? double.PositiveInfinity : base.StallTimeout; }
-        }
-
-        protected override bool TimesHandshake {
-            get { return !shouldEcho; }
         }
 
         protected override bool WriteClosed {
@@ -248,24 +233,18 @@ namespace KRPC.Server.WebSockets
                 // Handle the frame
                 if (opCode == OpCode.Binary) {
                     if (frame.Header.FinalFragment) {
-                        if (shouldEcho)
-                            Stream.Write (Frame.Binary (payload).ToBytes ());
-                        else {
-                            try {
-                                message = SchemaMessage.Parser.ParseFrom (payload);
-                            } catch (InvalidProtocolBufferException e) {
-                                throw new MalformedRequestException (e.Message, read);
-                            }
-                            return read;
+                        try {
+                            message = SchemaMessage.Parser.ParseFrom (payload);
+                        } catch (InvalidProtocolBufferException e) {
+                            throw new MalformedRequestException (e.Message, read);
                         }
+                        return read;
                     }
                 } else if (opCode == OpCode.Text) {
                     if (frame.Header.FinalFragment) {
                         if (!Text.IsValidUTF8 (payload, 0, payload.Length))
                             throw Fail (Frame.Close (1007, "Malformed UTF8 string"), "malformed UTF8 string");
-                        if (!shouldEcho)
-                            throw Fail (Frame.Close (1003, "Text frames are not permitted"), "text frames are not permitted");
-                        Stream.Write (new Frame (OpCode.Text, payload).ToBytes ());
+                        throw Fail (Frame.Close (1003, "Text frames are not permitted"), "text frames are not permitted");
                     } else if (fragmentsPayload.Length > 0) {
                         int truncatedCharLength = 0;
                         if (!Text.IsValidTruncatedUTF8 (fragmentsPayload.GetBuffer (), fragmentsVerifiedPosition, fragmentsPayload.Length - fragmentsVerifiedPosition, ref truncatedCharLength))

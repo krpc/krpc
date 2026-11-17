@@ -11,21 +11,15 @@ namespace KRPC.Server.Message
         readonly Connection connection;
         readonly Stream stream;
 
-        public Client (string name, uint protocolVersion, Connection innerConnection)
+        public Client (string name, Connection innerConnection)
         {
             Name = name;
-            ProtocolVersion = protocolVersion;
             Guid = Guid.NewGuid ();
             connection = innerConnection;
             stream = new Stream (this, connection);
         }
 
         public string Name { get; private set; }
-
-        /// <summary>
-        /// The protocol version sent by the client.
-        /// </summary>
-        public uint ProtocolVersion { get; private set; }
 
         public Guid Guid { get; private set; }
 

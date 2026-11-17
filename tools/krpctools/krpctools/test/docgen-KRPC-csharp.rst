@@ -2436,7 +2436,7 @@
 
       See :prop:`KRPC.Clients <KRPC.KRPC.Clients>`.
 
-   .. function:: ClientInfo(byte[] id, string name, string address, uint protocolVersion)
+   .. function:: ClientInfo(byte[] id, string name, string address)
 
       Construct a ClientInfo from the values of its fields.
 
@@ -2452,10 +2452,6 @@
    .. property:: string Address { get; }
 
       The address of the client.
-
-   .. property:: uint ProtocolVersion { get; }
-
-      The protocol version of the client's connection.
 
 
 .. struct:: ServerSettings

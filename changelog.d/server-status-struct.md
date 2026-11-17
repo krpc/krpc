@@ -6,7 +6,6 @@
   - **Breaking:** Rename the stream counters to `Streams`, `StreamEvaluations` and
     `StreamEvaluationRate` (#1244)
   - Add `TickHoldTimeout`, `DeferredCalls` and `StreamUpdatesSent` to the server status (#1244)
-  - Add `ClientInfo.ProtocolVersion`, the protocol version of each client (#1244)
 
 ## server
 

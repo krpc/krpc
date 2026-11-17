@@ -4229,18 +4229,14 @@ class KRPC : public ::krpc::RemoteService {
      * The address of the client.
      */
     std::string address;
-    /**
-     * The protocol version of the client's connection.
-     */
-    uint32_t protocol_version;
 
-    ClientInfo() : id(), name(), address(), protocol_version() {}
+    ClientInfo() : id(), name(), address() {}
 
-    ClientInfo(std::string id, std::string name, std::string address, uint32_t protocol_version) :
-id(id), name(name), address(address), protocol_version(protocol_version) {}
+    ClientInfo(std::string id, std::string name, std::string address) :
+id(id), name(name), address(address) {}
 
     bool operator==(const ClientInfo& other) const {
-      return this->id == other.id && this->name == other.name && this->address == other.address && this->protocol_version == other.protocol_version;
+      return this->id == other.id && this->name == other.name && this->address == other.address;
     }
 
     bool operator!=(const ClientInfo& other) const {
@@ -4258,10 +4254,6 @@ id(id), name(name), address(address), protocol_version(protocol_version) {}
       if (other.name < name)
         return false;
       if (address < other.address)
-        return true;
-      if (other.address < address)
-        return false;
-      if (protocol_version < other.protocol_version)
         return true;
       return false;
     }
@@ -4604,7 +4596,6 @@ namespace encoder {
     structMessage.add_items(encode_item(value.id));
     structMessage.add_items(encode_item(value.name));
     structMessage.add_items(encode_item(value.address));
-    structMessage.add_items(encode_item(value.protocol_version));
     return krpc::encoder::encode(structMessage);
   }
 
@@ -4680,12 +4671,11 @@ namespace decoder {
   inline void decode(services::KRPC::ClientInfo& value, const std::string& data, ::krpc::Connection* connection) {
     static thread_local krpc::schema::Tuple structMessage;
     if (!structMessage.ParseFromString(data)) throw EncodingError("Failed to decode message");
-    if (structMessage.items_size() < 4)
+    if (structMessage.items_size() < 3)
       throw EncodingError("Value for ClientInfo does not have all of its fields");
     decode_item(value.id, structMessage.items(0), connection);
     decode_item(value.name, structMessage.items(1), connection);
     decode_item(value.address, structMessage.items(2), connection);
-    decode_item(value.protocol_version, structMessage.items(3), connection);
   }
 
   // Fields are only ever appended to a structure, so a value from a newer server may carry
@@ -4746,7 +4736,6 @@ inline std::size_t hash_value(const services::KRPC::ClientInfo& value) {
   hash_combine(&seed, hash_value(value.id));
   hash_combine(&seed, hash_value(value.name));
   hash_combine(&seed, hash_value(value.address));
-  hash_combine(&seed, hash_value(value.protocol_version));
   return seed;
 }
 
