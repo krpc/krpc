@@ -42,7 +42,7 @@ def _make_autopilot_test_class(  # noqa: PLR0913
     path_deviation_limit=0.25,
     nudge_rate=0.3,
     recover_timeout=30,
-    rebound_limit=1,
+    rebound_limit: float = 1,
     roll_isolation_limit=2.7,
     control_spike_limit=3,
     saturation_limit=0.6,
@@ -1588,7 +1588,6 @@ TestAutoPilotAttitudeTVC = _make_autopilot_test_class(
     engine_thrust_limit=0.3,
     rwhl=True,
     rwhl_authority=0.1,
-    roll_control_limit=1,
     no_force_oscillation=True,
 )
 
@@ -1610,7 +1609,6 @@ TestAutoPilotAttitudeSlow = _make_autopilot_test_class(
     "AutoPilot",
     rwhl_authority=0.2,
     rcs_thrust_limit=0.2,
-    winding_limit=1.2,
 )
 
 # A heavy, semi-rigid craft with strong reaction wheels at one end. Without adaptive
@@ -1618,11 +1616,9 @@ TestAutoPilotAttitudeSlow = _make_autopilot_test_class(
 TestAutoPilotAttitudeChatter = _make_autopilot_test_class(
     "TestAutoPilotAttitudeChatter",
     "AutoPilotChatter",
-    saturation_limit=2,
-    slew_chatter_limit=0.75,
-    flip_plane_limit=0.15,
-    control_spike_limit=40,
-    rebound_limit=2,
+    slew_chatter_limit=0.7,
+    control_spike_limit=30,
+    rebound_limit=1.5,
     flexible=True,
 )
 
@@ -1632,7 +1628,7 @@ TestAutoPilotAttitudeFlexible = _make_autopilot_test_class(
     "AutoPilotFlexible",
     slew_chatter_limit=1.2,
     roll_control_limit=1,
-    control_spike_limit=60,
+    control_spike_limit=50,
     flexible=True,
 )
 
@@ -1770,14 +1766,13 @@ TestAutoPilotLaunchKerbalX = _make_autopilot_launch_test_class(
 TestAutoPilotLaunchMunsplorer = _make_autopilot_launch_test_class(
     "TestAutoPilotLaunchMunsplorer",
     "PT Series Munsplorer",
-    hold_attitude_error=1,
 )
 
 TestAutoPilotLaunchScienceJr = _make_autopilot_launch_test_class(
     "TestAutoPilotLaunchScienceJr",
     "Science Jr",
     hold_oscillation_amplitude=0.4,
-    hold_attitude_error=1.5,
+    hold_attitude_error=1.2,
 )
 
 TestAutoPilotLaunchSlimShuttle = _make_autopilot_launch_test_class(
@@ -1788,16 +1783,12 @@ TestAutoPilotLaunchSlimShuttle = _make_autopilot_launch_test_class(
 TestAutoPilotLaunchAriane5 = _make_autopilot_launch_test_class(
     "TestAutoPilotLaunchAriane5",
     "Ariane 5",
-    hold_attitude_error=1.5,
-    hold_oscillation_amplitude=0.5,
-    turn_attitude_error=1.5,
-    turn_oscillation_amplitude=0.5,
+    hold_attitude_error=1.2,
 )
 
 TestAutoPilotLaunchAeroEquus = _make_autopilot_launch_test_class(
     "TestAutoPilotLaunchAeroEquus",
     "AeroEquus",
-    turn_attitude_error=2,
 )
 
 TestAutoPilotLaunchComSatLx = _make_autopilot_launch_test_class(
@@ -1805,12 +1796,10 @@ TestAutoPilotLaunchComSatLx = _make_autopilot_launch_test_class(
     "ComSat Lx",
 )
 
-# The pitch command oscillates a little in a turn.
 TestAutoPilotLaunchLearstarA1 = _make_autopilot_launch_test_class(
     "TestAutoPilotLaunchLearstarA1",
     "Learstar A1",
     pre_launch_sequence=True,
-    turn_oscillation_amplitude=0.5,
 )
 
 # Shuttle-style craft, steered mostly by the slow gimbals of its two KS-25s. The craft starts
@@ -1832,10 +1821,7 @@ TestAutoPilotLaunchGimbal = _make_autopilot_launch_test_class(
 TestAutoPilotLaunchOrbiterOne = _make_autopilot_launch_test_class(
     "TestAutoPilotLaunchOrbiterOne",
     "Orbiter One",
-    hold_attitude_error=3,
-    turn_attitude_error=3,
-    hold_oscillation_amplitude=3,
-    turn_oscillation_amplitude=3,
+    hold_attitude_error=1.6,
 )
 
 TestAutoPilotLaunchZMAP = _make_autopilot_launch_test_class(
@@ -1845,12 +1831,11 @@ TestAutoPilotLaunchZMAP = _make_autopilot_launch_test_class(
 )
 
 # A flexible craft. The actuators at times limit-cycle through its 5 Hz bending mode without the
-# chatter detector latching, in a hold as well as a turn.
+# chatter detector latching, in a hold.
 TestAutoPilotLaunchGDLV3 = _make_autopilot_launch_test_class(
     "TestAutoPilotLaunchGDLV3",
     "GDLV3",
-    hold_oscillation_amplitude=1.5,
-    turn_oscillation_amplitude=1.5,
+    hold_oscillation_amplitude=0.9,
 )
 
 
@@ -2131,12 +2116,11 @@ TestAutoPilotFlightAeris4A = _make_autopilot_flight_test_class(
     speed=100,
 )
 
-# A small, slow stock light aircraft. Its pitch takes about 8 seconds to settle after a step.
+# A small, slow stock light aircraft
 TestAutoPilotFlightGull = _make_autopilot_flight_test_class(
     "TestAutoPilotFlightGull",
     "Gull",
     speed=35,
-    step_settle_time=10,
 )
 
 # A mid-size stock jet, whose elevators limit-cycled above about 150 m/s with the
