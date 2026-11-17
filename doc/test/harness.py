@@ -199,7 +199,11 @@ class ExampleTestCase(TestCase):
         # The clients connected before the example starts, by id. The last example's client
         # stays in the list until the server drops its connection.
         clients = {client.id for client in self.connect().krpc.clients}
-        process = runner.Process(command.argv, command.env, cwd)
+        # Whether the example runs to its end, for a runner that has to stop the program then
+        env = dict(
+            command.env, KRPC_EXAMPLE_MODE="exit" if isinstance(mode, Exit) else "loop"
+        )
+        process = runner.Process(command.argv, env, cwd)
         connected = True
         try:
             if isinstance(run, Interactive):

@@ -1,3 +1,4 @@
+load("@aspect_rules_js//js:defs.bzl", "js_binary")
 load("@rules_cc//cc:defs.bzl", "cc_library")
 load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
 
@@ -38,4 +39,17 @@ cc_library(
     srcs = ["cnano_redirect.c"],
     visibility = ["//doc:__pkg__"],
     deps = ["//client/cnano:krpc_cnano_print_errors"],
+)
+
+# Runs a JavaScript example against the game's WebSockets server
+js_binary(
+    name = "run-example-js",
+    testonly = True,
+    data = [
+        "example_hooks.mjs",
+        "//client/js:lib",
+        "//client/js:package_json",
+        "//doc:scripts-js",
+    ],
+    entry_point = "run_example.mjs",
 )
