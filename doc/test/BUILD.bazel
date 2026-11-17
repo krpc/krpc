@@ -1,5 +1,6 @@
 load("@aspect_rules_js//js:defs.bzl", "js_binary")
 load("@rules_cc//cc:defs.bzl", "cc_library")
+load("@rules_python//python:defs.bzl", "py_library", "py_test")
 load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
 
 # The in-game tests of the documentation examples. The game runs them with
@@ -8,10 +9,35 @@ load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
 test_suite(
     name = "test",
     tests = [
+        ":coverage",
         ":pyright",
         ":ruff",
     ],
     visibility = ["//doc:__pkg__"],
+)
+
+# What the coverage test reads: the manifest, its types and the listings
+py_library(
+    name = "manifest",
+    srcs = [
+        "checks.py",
+        "examples.py",
+        "flights.py",
+        "listing.py",
+        "monitor.py",
+        "spec.py",
+    ],
+    data = ["unsupported.txt"],
+    imports = ["../.."],
+)
+
+py_test(
+    name = "coverage",
+    size = "small",
+    srcs = ["coverage_test.py"],
+    data = ["//doc:scripts"],
+    main = "coverage_test.py",
+    deps = [":manifest"],
 )
 
 py_ruff_test(

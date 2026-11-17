@@ -352,6 +352,16 @@ js_library(
     visibility = ["//doc/test:__pkg__"],
 )
 
+# The example programs, which //doc/test checks are each run in game or listed
+filegroup(
+    name = "scripts",
+    srcs = glob(
+        ["src/scripts/**/*.%s" % ext for ext in ("c", "cpp", "cs", "java", "js", "lua", "py")],
+        exclude = ["src/scripts/**/*.lib.cs"],
+    ),
+    visibility = ["//doc/test:__pkg__"],
+)
+
 # Type-check the Python example scripts against the typed client generated from
 # this tree, so the examples cannot silently drift from the API. The C, C++, C#
 # and Java examples are compile-checked by :compile-scripts, :luacheck lints the

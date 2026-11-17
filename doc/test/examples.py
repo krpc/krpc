@@ -1,6 +1,7 @@
 """The manifest: how to run each documentation example, and what it must do.
 
-Each Example covers the files of every language that share its key."""
+Each Example covers the files of every language that share its key. coverage_test.py checks
+that every example file is either declared here or listed in unsupported.txt."""
 
 from __future__ import annotations
 

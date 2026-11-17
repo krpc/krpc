@@ -167,3 +167,4 @@ craft on the launch pad.
 
 ``doc/test/unsupported.txt`` lists the examples the tests cannot run. Each line names the
 language, or ``*`` for every language, and the example, with the reason as a comment.
+``//doc:test`` checks that every example is declared or listed, so a new example needs an entry.
