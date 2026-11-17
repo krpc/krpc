@@ -9,6 +9,8 @@ from doc.test.spec import (
     NUMBER,
     Example,
     Exit,
+    Interactive,
+    Loop,
     Pad,
     Setup,
     Values,
@@ -128,6 +130,11 @@ TUTORIALS = [
         "tutorials/parts/DeployParachutes",
         "tutorials/parts/DeployParachutesFunction",
         check=checks.parachutes_deployed,
+    ),
+    Example(
+        "tutorials/user-interface/UserInterface",
+        "orbit",
+        run=Interactive(checks.keeps_calling, then=Loop(prints=False)),
     ),
 ]
 

@@ -10,6 +10,24 @@ if TYPE_CHECKING:
     from doc.test.harness import ExampleTestCase as TestCase
 
 
+# Hooks
+
+
+def _rpcs_executed(test: TestCase) -> int:
+    return test.connect().krpc.get_status().statistics.rpcs_executed
+
+
+def keeps_calling(test: TestCase) -> None:
+    """Checks that the example's loop makes remote procedure calls."""
+    test.wait(1)
+    start = _rpcs_executed(test)
+    test.wait(2)
+    # One of the calls is the second read of the count
+    test.assertGreater(
+        _rpcs_executed(test) - start, 1, "The example's loop made no calls"
+    )
+
+
 # Checks
 
 
