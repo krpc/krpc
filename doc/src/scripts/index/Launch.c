@@ -1,3 +1,15 @@
+#ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#define sleep_ms(ms) Sleep(ms)
+#else
+#define _POSIX_C_SOURCE 200809L
+#include <time.h>
+static void sleep_ms(long ms) {
+  struct timespec duration = {ms / 1000, (ms % 1000) * 1000000};
+  nanosleep(&duration, NULL);
+}
+#endif
 #include <krpc_cnano.h>
 #include <krpc_cnano/services/space_center.h>
 #include <stdio.h>
@@ -27,8 +39,10 @@ int main() {
   printf("%s has launched\n", name);
 
   double mean_altitude = 0;
-  while (mean_altitude < 10000)
+  while (mean_altitude < 10000) {
     krpc_SpaceCenter_Flight_MeanAltitude(conn, &mean_altitude, flight);
+    sleep_ms(100);
+  }
 
   krpc_SpaceCenter_Control_set_Throttle(conn, control, 0);
   krpc_SpaceCenter_AutoPilot_set_Engaged(conn, auto_pilot, false);

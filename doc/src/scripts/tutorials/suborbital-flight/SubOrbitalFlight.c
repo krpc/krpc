@@ -1,9 +1,14 @@
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#define sleep(seconds) Sleep((seconds) * 1000)
+#define sleep_ms(ms) Sleep(ms)
 #else
-#include <unistd.h>
+#define _POSIX_C_SOURCE 200809L
+#include <time.h>
+static void sleep_ms(long ms) {
+  struct timespec duration = {ms / 1000, (ms % 1000) * 1000000};
+  nanosleep(&duration, NULL);
+}
 #endif
 #include <krpc_cnano.h>
 #include <krpc_cnano/services/krpc.h>
@@ -28,7 +33,7 @@ int main() {
                                                    90);
   krpc_SpaceCenter_AutoPilot_set_Engaged(conn, auto_pilot, true);
   krpc_SpaceCenter_Control_set_Throttle(conn, control, 0.5);
-  sleep(1);
+  sleep_ms(1000);
 
   printf("Launch!\n");
   krpc_SpaceCenter_Control_ActivateNextStage(conn, NULL, control);
@@ -39,6 +44,7 @@ int main() {
     double mean_altitude;
     krpc_SpaceCenter_Flight_MeanAltitude(conn, &mean_altitude, flight);
     if (mean_altitude > 500) break;
+    sleep_ms(100);
   }
 
   printf("Pitching over\n");
@@ -53,6 +59,7 @@ int main() {
     krpc_SpaceCenter_Resources_Amount(conn, &liquid_fuel, resources,
                                       "LiquidFuel");
     if (liquid_fuel < 0.1) break;
+    sleep_ms(100);
   }
 
   printf("Flame out\n");
@@ -79,6 +86,7 @@ int main() {
     krpc_SpaceCenter_Flight_VerticalSpeed(conn, &vertical_speed,
                                           body_flight);
     if (vertical_speed < 0) break;
+    sleep_ms(100);
   }
 
   printf("Apoapsis reached, separating\n");
@@ -94,6 +102,7 @@ int main() {
     krpc_SpaceCenter_Flight_SurfaceAltitude(conn, &surface_altitude,
                                             flight);
     if (surface_altitude < 2000) break;
+    sleep_ms(100);
   }
 
   printf("Deploying the parachute\n");
@@ -115,7 +124,7 @@ int main() {
     double altitude;
     krpc_SpaceCenter_Flight_SurfaceAltitude(conn, &altitude, flight);
     printf("Altitude = %.1f meters\n", altitude);
-    sleep(1);
+    sleep_ms(1000);
   }
   printf("Landed!\n");
 

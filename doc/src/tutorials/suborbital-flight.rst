@@ -36,7 +36,8 @@ Preparing for Launch
 --------------------
 
 First we open a connection to the server, passing a name for the script. The name appears in the
-server window in the game:
+server window in the game. The C program also defines ``sleep_ms``, which its polling loops pause
+with:
 
 .. tabs::
 
@@ -65,7 +66,6 @@ server window in the game:
 
       .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.c
          :language: c
-         :start-at: krpc_connection_t conn;
          :end-before: krpc_SpaceCenter_Vessel_t vessel;
 
    .. group-tab:: Java
@@ -174,7 +174,7 @@ effect:
       .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.c
          :language: c
          :start-at: krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading(conn, auto_pilot, 90,
-         :end-at: sleep(1);
+         :end-at: sleep_ms(1000);
 
    .. group-tab:: Java
 
@@ -319,7 +319,8 @@ with 500. The server checks it every physics tick, and the script sleeps until i
 
 The Python, C# and JavaScript clients compile the lambda into the function. The C++ and Java
 clients build it from expression objects: an embedded call to ``mean_altitude``, a constant and a
-comparison. The C and Lua clients do not support events, so their scripts poll in a loop.
+comparison. The C and Lua clients do not support events, so their scripts poll in a loop, with a
+short pause on each pass.
 
 Now we tilt the rocket 20° from vertical, to a pitch of 70°, and hold a heading of 90°, due east.
 A target smoothing time of 10 seconds turns the rocket over gradually, rather than all at once:

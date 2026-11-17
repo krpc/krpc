@@ -31,7 +31,8 @@ Finding the Ports
 -----------------
 
 First we connect to the server and find the two docking ports. Our port is the part the vessel is
-controlled from, and the target port is the one you set as the target:
+controlled from, and the target port is the one you set as the target. The C program also defines
+``sleep_ms``, which its loop pauses with:
 
 .. tabs::
 
@@ -60,7 +61,6 @@ controlled from, and the target port is the one you set as the target:
 
       .. literalinclude:: /scripts/tutorials/docking/Docking.c
          :language: c
-         :start-at: krpc_connection_t conn;
          :end-before: // Turn to face the target port
 
    .. group-tab:: Java
@@ -74,7 +74,6 @@ controlled from, and the target port is the one you set as the target:
 
       .. literalinclude:: /scripts/tutorials/docking/Docking.lua
          :language: lua
-         :start-at: local conn = krpc.connect('Docking')
          :end-before: -- Turn to face the target port
 
    .. group-tab:: JavaScript

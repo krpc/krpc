@@ -1,3 +1,15 @@
+#ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#define sleep_ms(ms) Sleep(ms)
+#else
+#define _POSIX_C_SOURCE 200809L
+#include <time.h>
+static void sleep_ms(long ms) {
+  struct timespec duration = {ms / 1000, (ms % 1000) * 1000000};
+  nanosleep(&duration, NULL);
+}
+#endif
 #include <krpc_cnano.h>
 #include <krpc_cnano/services/drawing.h>
 #include <krpc_cnano/services/space_center.h>
@@ -86,6 +98,7 @@ int main() {
                                          fmin(1, fmax(-1, t.e1)));
     krpc_SpaceCenter_Control_set_Up(conn, control,
                                     fmin(1, fmax(-1, -t.e2)));
+    sleep_ms(50);
   }
 
   // Stop the thrusters, and remove the drawing
