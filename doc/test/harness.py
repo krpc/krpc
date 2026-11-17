@@ -11,6 +11,7 @@ from typing import ClassVar
 
 from doc.test import languages, runner
 from doc.test.languages import REPO
+from doc.test.monitor import Monitor
 from doc.test.spec import (
     Example,
     Exit,
@@ -170,8 +171,19 @@ class ExampleTestCase(TestCase):
         if example.prepare:
             example.prepare(self)
         command = languages.command(language, example_path(example.key, language))
-        with tempfile.TemporaryDirectory(prefix="krpc-example-") as cwd:
-            result = self.run_command(example, command, str(command.cwd or cwd))
+        monitor = example.monitor(self) if example.monitor else None
+        if monitor:
+            monitor.start()
+        try:
+            with tempfile.TemporaryDirectory(prefix="krpc-example-") as cwd:
+                result = self.run_command(
+                    example, command, str(command.cwd or cwd), monitor
+                )
+            if monitor and result.exited and result.returncode == 0:
+                monitor.settle()
+        finally:
+            if monitor:
+                monitor.stop()
         message = result.describe()
         run = example.run.then if isinstance(example.run, Interactive) else example.run
         if isinstance(run, Exit):
@@ -190,9 +202,16 @@ class ExampleTestCase(TestCase):
             )
         if example.check:
             example.check(self)
+        if monitor:
+            print(monitor.describe())
+            monitor.check()
 
     def run_command(
-        self, example: Example, command: languages.Command, cwd: str
+        self,
+        example: Example,
+        command: languages.Command,
+        cwd: str,
+        monitor: Monitor | None = None,
     ) -> runner.Result:
         run = example.run
         mode = run.then if isinstance(run, Interactive) else run
@@ -226,7 +245,12 @@ class ExampleTestCase(TestCase):
                 if connected:
                     run.during(self)
             if connected:
-                process.wait(mode.timeout if isinstance(mode, Exit) else mode.seconds)
+                timeout = mode.timeout if isinstance(mode, Exit) else mode.seconds
+                if monitor:
+                    # Stop the example early when the monitor fails
+                    runner.wait_for(monitor.failed.is_set, process, timeout)
+                else:
+                    process.wait(timeout)
         finally:
             result = process.finish()
         if not connected:

@@ -142,6 +142,9 @@ class Example:
     expect_output: tuple[str, ...] = ()
     # Run against the game once the example has finished
     check: Callable[[Any], None] | None = None
+    # Records the game while the example runs, and checks the recording once it has
+    # finished: a doc.test.monitor.Monitor, made from the test case
+    monitor: Callable[[Any], Any] | None = None
     # A long flight, deselected with -m "not slow"
     slow: bool = False
     # Field overrides for one language, such as a language that polls where others wait
