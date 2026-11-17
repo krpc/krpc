@@ -340,6 +340,7 @@ test_suite(
         ":check-scripts-pyright",
         ":lint",
         ":spelling",
+        "//doc/test",
     ],
 )
 
