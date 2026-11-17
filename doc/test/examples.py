@@ -30,6 +30,7 @@ SETUPS = {
     "parts-tree-fresh": Setup(
         craft="PartsTree", directory=DOC_CRAFT, placement=Pad(), fresh=True
     ),
+    "launch-kerbal-x": Setup(fresh=True, ships=(("Kerbal X", "Kerbal X"),)),
     "launch-into-orbit": Setup(
         craft="AeroEquus", directory=STOCK, placement=Pad(), fresh=True
     ),
@@ -167,6 +168,17 @@ USER_GUIDE = [
         check=checks.all_of(
             checks.engines_at_half_thrust, checks.solar_panels_extended
         ),
+    ),
+    # Game scenes and saves
+    Example(
+        "user-guide/game-scenes-and-saves/ChangeScene",
+        "orbit-fresh",
+        check=checks.scene("space_center"),
+    ),
+    Example(
+        "user-guide/game-scenes-and-saves/LaunchVessel",
+        "launch-kerbal-x",
+        check=checks.vessel_named("Kerbal X"),
     ),
 ]
 

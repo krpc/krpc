@@ -108,3 +108,21 @@ def attachment_modes(test: TestCase) -> list[str]:
         part.title + " - " + ("axial" if part.axially_attached else "radial")
         for part in parts
     ]
+
+
+def scene(name: str) -> Callable[[TestCase], None]:
+    def check(test: TestCase) -> None:
+        conn = test.connect()
+        test.wait_until(
+            lambda: conn.krpc.game_scene == getattr(conn.krpc.GameScene, name),
+            message="the " + name + " scene",
+        )
+
+    return check
+
+
+def vessel_named(name: str) -> Callable[[TestCase], None]:
+    def check(test: TestCase) -> None:
+        test.assertEqual(name, test.connect().space_center.active_vessel.name)
+
+    return check
