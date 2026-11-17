@@ -22,22 +22,75 @@ rotation, as a direction for the nose, or as a direction together with an up vec
 
 A minimal use case looks like this:
 
-.. literalinclude:: /scripts/user-guide/autopilot/TargetPitchAndHeading.py
-   :language: python
-   :start-after: [docs]
-   :end-before: [/docs]
+.. tabs::
 
-``wait()`` returns once the vessel has *settled* on the target: both the pointing error
+   .. group-tab:: Python
+
+      .. literalinclude:: /scripts/user-guide/autopilot/TargetPitchAndHeading.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C#
+
+      .. literalinclude:: /scripts/user-guide/autopilot/TargetPitchAndHeading.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C++
+
+      .. literalinclude:: /scripts/user-guide/autopilot/TargetPitchAndHeading.cpp
+         :language: cpp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/user-guide/autopilot/TargetPitchAndHeading.c
+         :language: c
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: Java
+
+      .. literalinclude:: /scripts/user-guide/autopilot/TargetPitchAndHeading.java
+         :language: java
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: Lua
+
+      .. literalinclude:: /scripts/user-guide/autopilot/TargetPitchAndHeading.lua
+         :language: lua
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/autopilot/TargetPitchAndHeading.js
+         :language: javascript
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+**wait** returns once the vessel has *settled* on the target: both the pointing error
 and the vessel's angular velocity relative to the target must fall below a threshold, so it
 does not return while the nose is still swinging through the target. A vessel turning with a
 moving target has settled. The two thresholds are the **stopping angle
 threshold** (default 1°) and the **stopping velocity threshold** (default 0.05 rad/s), and
-both can be adjusted. ``wait()`` also takes an optional ``timeout`` (in seconds), after
-which it raises rather than blocking indefinitely.
+both can be adjusted. **wait** also takes a ``timeout`` in seconds, after which it fails with
+an error. A negative timeout, the default, waits indefinitely.
 
 While the autopilot is engaged it keeps SAS switched off, so that the two do not fight
 each other for control of the vessel. Attempting to enable SAS while the autopilot is
-engaged raises an ``InvalidOperationException``.
+engaged fails with an error.
 
 The autopilot handles structurally flexible craft automatically, detecting and
 suppressing any structural oscillation (wobble) with no tuning required (see
@@ -67,7 +120,7 @@ The three primary ways
   autopilot drives the roll rate to zero but does not hold any particular roll angle. This
   is the "point here, don't care which way is up" knob.
 
-* **set_direction_and_up(direction, up, roll=0)** — point the nose along ``direction`` and
+* **set direction and up** — point the nose along ``direction`` and
   roll so the vessel's roof aligns with the ``up`` vector (its component perpendicular to
   the nose), plus an optional ``roll`` offset in degrees. This is the way to **hold an
   orientation through a maneuver**. The ``up`` vector need not be perpendicular to
@@ -76,11 +129,11 @@ The three primary ways
   ``up`` — you can keep off the flight path.
 
 The **roll sign** follows standard aircraft bank: positive roll rolls the vessel to the
-right (right wing down) — clockwise seen from behind, looking along the nose. So
-``set_direction_and_up(horizon_dir, up, 30)`` banks 30° to the right of wings-level.
+right (right wing down) — clockwise seen from behind, looking along the nose. So a
+``roll`` of 30 banks 30° to the right of wings-level.
 
-``set_direction_and_up`` also stores ``up`` as a persistent **up reference**
-(``up_reference``, default the frame's up / zenith). The reference is what
+**Set direction and up** also stores ``up`` as a persistent **up reference**
+(default the frame's up / zenith). The reference is what
 :ref:`target roll <convenience-setters>` is measured against, and it persists across
 direction changes: set it once and every later roll is measured against the same vector.
 Setting the target rotation, the target direction, or the scalar pitch/heading leaves it
@@ -91,10 +144,63 @@ turn the nose sweeps from straight up to downrange — straight through the poin
 roll measured against the vertical plane is undefined. Anchoring the roll to a fixed
 horizontal ``up`` (say north) keeps it defined the whole way:
 
-.. literalinclude:: /scripts/user-guide/autopilot/DirectionAndUp.py
-   :language: python
-   :start-after: [docs]
-   :end-before: [/docs]
+.. tabs::
+
+   .. group-tab:: Python
+
+      .. literalinclude:: /scripts/user-guide/autopilot/DirectionAndUp.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C#
+
+      .. literalinclude:: /scripts/user-guide/autopilot/DirectionAndUp.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C++
+
+      .. literalinclude:: /scripts/user-guide/autopilot/DirectionAndUp.cpp
+         :language: cpp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/user-guide/autopilot/DirectionAndUp.c
+         :language: c
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: Java
+
+      .. literalinclude:: /scripts/user-guide/autopilot/DirectionAndUp.java
+         :language: java
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: Lua
+
+      .. literalinclude:: /scripts/user-guide/autopilot/DirectionAndUp.lua
+         :language: lua
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/autopilot/DirectionAndUp.js
+         :language: javascript
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
 .. _convenience-setters:
 
@@ -104,13 +210,13 @@ The convenience ways
 Two more ways aim the nose by angle. They are ergonomic but heading-singular near the
 vertical, so prefer the primary setters there.
 
-* **target pitch**, **target heading**, and **target_pitch_and_heading(pitch, heading)** —
+* **target pitch**, **target heading**, and **target pitch and heading** —
   aim the nose by pitch and heading angle.
 
   .. warning::
 
      Heading (and hence roll) is ill-defined when the nose is near vertical (pitch → ±90°),
-     so near the vertical prefer **target direction** or **set_direction_and_up**. Setting
+     so near the vertical prefer **target direction** or **set direction and up**. Setting
      pitch or heading preserves the current roll relative to the up reference, so a
      pitch/heading change no longer perturbs roll near the vertical.
 
@@ -119,7 +225,7 @@ vertical, so prefer the primary setters there.
   unset) holds roll without fixing an angle. With the default reference this reproduces the
   familiar roll away from the vertical, and is ill-defined only when the nose points along
   the reference (near straight up or down) — set the reference off the flight path (via
-  ``set_direction_and_up`` or ``up_reference``) to keep it defined through the vertical.
+  **set direction and up** or the **up reference**) to keep it defined through the vertical.
 
 Reading the state back
 """"""""""""""""""""""
@@ -129,7 +235,7 @@ Reading the state back
 
 * **Errors** — **error** is the total pointing error, and **pitch error**, **heading
   error** and **roll error** are the per-axis errors. All are singularity-free (they come
-  from one residual decomposition, exposed together as **attitude_error**), so they stay
+  from one residual decomposition, exposed together as **attitude error**), so they stay
   meaningful near the vertical — including the roll error, which is measured about the
   nose. These are the robust way to see how far off the vessel is.
 
@@ -156,16 +262,69 @@ it runs relative to the calls a program makes in that tick:
   target.
 
 * **manual** runs it only when **update** is called, so a program places it among its own
-  calls.
+  calls. **update** fails while the autopilot is disengaged, so engage it first.
 
 This matters most for a control loop that :ref:`holds a tick <holding-a-tick>`, putting a
 whole read, compute and write inside one tick. Manual mode then fixes the order: calls before
 **update** set what the loop flies the tick with, and calls after it read what the loop did.
 
-.. literalinclude:: /scripts/user-guide/autopilot/ManualUpdate.py
-   :language: python
-   :start-after: [docs]
-   :end-before: [/docs]
+.. tabs::
+
+   .. group-tab:: Python
+
+      .. literalinclude:: /scripts/user-guide/autopilot/ManualUpdate.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C#
+
+      .. literalinclude:: /scripts/user-guide/autopilot/ManualUpdate.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C++
+
+      .. literalinclude:: /scripts/user-guide/autopilot/ManualUpdate.cpp
+         :language: cpp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/user-guide/autopilot/ManualUpdate.c
+         :language: c
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: Java
+
+      .. literalinclude:: /scripts/user-guide/autopilot/ManualUpdate.java
+         :language: java
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: Lua
+
+      .. literalinclude:: /scripts/user-guide/autopilot/ManualUpdate.lua
+         :language: lua
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/autopilot/ManualUpdate.js
+         :language: javascript
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
 In manual mode the vessel is flown only on the ticks the loop runs on. On any other tick the
 vessel keeps the control output of the last run, and after a tenth of a second the autopilot
@@ -271,10 +430,63 @@ spread over that time, with no per-tick scripting on your part.
 
 For example, to pitch the nose over by 10° across 20 seconds:
 
-.. literalinclude:: /scripts/user-guide/autopilot/TargetSmoothing.py
-   :language: python
-   :start-after: [docs]
-   :end-before: [/docs]
+.. tabs::
+
+   .. group-tab:: Python
+
+      .. literalinclude:: /scripts/user-guide/autopilot/TargetSmoothing.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C#
+
+      .. literalinclude:: /scripts/user-guide/autopilot/TargetSmoothing.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C++
+
+      .. literalinclude:: /scripts/user-guide/autopilot/TargetSmoothing.cpp
+         :language: cpp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/user-guide/autopilot/TargetSmoothing.c
+         :language: c
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: Java
+
+      .. literalinclude:: /scripts/user-guide/autopilot/TargetSmoothing.java
+         :language: java
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: Lua
+
+      .. literalinclude:: /scripts/user-guide/autopilot/TargetSmoothing.lua
+         :language: lua
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/autopilot/TargetSmoothing.js
+         :language: javascript
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
 Properties related to the commanded and effective targets are accessible via the API:
 
@@ -363,10 +575,63 @@ the same properties also seed the automatic estimator before it acquires. The **
 notch Q** (default 2.5) sets how narrow the notch is — higher is narrower, with less
 in-band lag but less tolerance to the mode frequency drifting.
 
-.. literalinclude:: /scripts/user-guide/autopilot/RateFilter.py
-   :language: python
-   :start-after: [docs]
-   :end-before: [/docs]
+.. tabs::
+
+   .. group-tab:: Python
+
+      .. literalinclude:: /scripts/user-guide/autopilot/RateFilter.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C#
+
+      .. literalinclude:: /scripts/user-guide/autopilot/RateFilter.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C++
+
+      .. literalinclude:: /scripts/user-guide/autopilot/RateFilter.cpp
+         :language: cpp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/user-guide/autopilot/RateFilter.c
+         :language: c
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: Java
+
+      .. literalinclude:: /scripts/user-guide/autopilot/RateFilter.java
+         :language: java
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: Lua
+
+      .. literalinclude:: /scripts/user-guide/autopilot/RateFilter.lua
+         :language: lua
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/autopilot/RateFilter.js
+         :language: javascript
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
 .. _bandwidth-floor:
 
@@ -512,10 +777,63 @@ every physics tick, and uses them in four ways:
 The angular velocity limit is controlled by the **limit angular velocity** property. To
 limit the angular velocity by the **maximum angular velocity** alone:
 
-.. literalinclude:: /scripts/user-guide/autopilot/LimitAngularVelocity.py
-   :language: python
-   :start-after: [docs]
-   :end-before: [/docs]
+.. tabs::
+
+   .. group-tab:: Python
+
+      .. literalinclude:: /scripts/user-guide/autopilot/LimitAngularVelocity.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C#
+
+      .. literalinclude:: /scripts/user-guide/autopilot/LimitAngularVelocity.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C++
+
+      .. literalinclude:: /scripts/user-guide/autopilot/LimitAngularVelocity.cpp
+         :language: cpp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/user-guide/autopilot/LimitAngularVelocity.c
+         :language: c
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: Java
+
+      .. literalinclude:: /scripts/user-guide/autopilot/LimitAngularVelocity.java
+         :language: java
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: Lua
+
+      .. literalinclude:: /scripts/user-guide/autopilot/LimitAngularVelocity.lua
+         :language: lua
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/autopilot/LimitAngularVelocity.js
+         :language: javascript
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
 The :ref:`info window <info-window>` shows each of these per axis, in its AERODYNAMICS
 section. The mechanism is described under :ref:`Control surfaces <control-surfaces>`.
@@ -655,10 +973,63 @@ The info window
 For debugging, the autopilot can display an in-game window showing its live internal
 state. It is enabled per vessel, and hidden again when the game restarts:
 
-.. literalinclude:: /scripts/user-guide/autopilot/InfoUi.py
-   :language: python
-   :start-after: [docs]
-   :end-before: [/docs]
+.. tabs::
+
+   .. group-tab:: Python
+
+      .. literalinclude:: /scripts/user-guide/autopilot/InfoUi.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C#
+
+      .. literalinclude:: /scripts/user-guide/autopilot/InfoUi.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C++
+
+      .. literalinclude:: /scripts/user-guide/autopilot/InfoUi.cpp
+         :language: cpp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/user-guide/autopilot/InfoUi.c
+         :language: c
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: Java
+
+      .. literalinclude:: /scripts/user-guide/autopilot/InfoUi.java
+         :language: java
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: Lua
+
+      .. literalinclude:: /scripts/user-guide/autopilot/InfoUi.lua
+         :language: lua
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/autopilot/InfoUi.js
+         :language: javascript
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
 The window is laid out like a control panel of annunciator lamps and digital registers.
 Lamps are dim when nominal and light amber to flag something worth attention; the
