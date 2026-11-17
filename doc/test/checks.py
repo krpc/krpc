@@ -3,6 +3,7 @@ it has finished. Each takes the running test case."""
 
 from __future__ import annotations
 
+import math
 from collections.abc import Callable
 from typing import TYPE_CHECKING
 
@@ -90,11 +91,56 @@ def all_of(*checks: Callable[[TestCase], None]) -> Callable[[TestCase], None]:
     return check
 
 
+def rails_warp_factor(factor: int) -> Callable[[TestCase], None]:
+    """The factor, or the highest the game allows where the vessel is."""
+
+    def check(test: TestCase) -> None:
+        space_center = test.connect().space_center
+        expected = min(factor, space_center.maximum_rails_warp_factor)
+        test.wait_until(
+            lambda: space_center.rails_warp_factor == expected,
+            timeout=10,
+            message="rails warp factor %d" % expected,
+        )
+
+    return check
+
+
+class WarpToApoapsis:
+    """Puts the vessel on an elliptic orbit with its apoapsis ahead, and checks the example
+    warped to just before it."""
+
+    AHEAD = 300
+
+    def __init__(self) -> None:
+        self.start = 0.0
+
+    def prepare(self, test: TestCase) -> None:
+        space_center = test.connect().space_center
+        kerbin = space_center.bodies["Kerbin"]
+        # Periapsis at 100 km and apoapsis at 300 km
+        radius = kerbin.equatorial_radius
+        a = radius + 200_000
+        period = 2 * math.pi * math.sqrt(a**3 / kerbin.gravitational_parameter)
+        mean_anomaly = math.pi - 2 * math.pi * self.AHEAD / period
+        self.start = space_center.ut
+        test.set_orbit("Kerbin", a, 100_000 / a, 0, 0, 0, mean_anomaly, self.start)
+
+    def check(self, test: TestCase) -> None:
+        space_center = test.connect().space_center
+        test.assertGreater(space_center.ut - self.start, self.AHEAD - 60)
+        test.assertLess(space_center.active_vessel.orbit.time_to_apoapsis, 20)
+
+
 # The values and lines the examples print
 
 
 def specific_impulse(test: TestCase) -> list[float]:
     return [test.connect().space_center.active_vessel.specific_impulse]
+
+
+def maximum_rails_warp_factor(test: TestCase) -> list[float]:
+    return [test.connect().space_center.maximum_rails_warp_factor]
 
 
 def part_titles(test: TestCase) -> list[str]:

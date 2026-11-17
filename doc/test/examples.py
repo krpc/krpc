@@ -82,6 +82,8 @@ def _place_docking_vessels(test) -> None:
     )
 
 
+_warp_to = checks.WarpToApoapsis()
+
 # The combined specific impulse, as the parts tutorial prints it
 _ISP = Values(checks.specific_impulse, pattern=r"Isp = (%s)" % NUMBER)
 
@@ -179,6 +181,20 @@ USER_GUIDE = [
         "user-guide/game-scenes-and-saves/LaunchVessel",
         "launch-kerbal-x",
         check=checks.vessel_named("Kerbal X"),
+    ),
+    # Time warp
+    Example(
+        "user-guide/time-warp/WarpFactor",
+        "orbit",
+        values=Values(checks.maximum_rails_warp_factor),
+        check=checks.rails_warp_factor(3),
+    ),
+    Example(
+        "user-guide/time-warp/WarpTo",
+        "orbit",
+        prepare=_warp_to.prepare,
+        run=Exit(timeout=600),
+        check=_warp_to.check,
     ),
 ]
 
