@@ -222,3 +222,237 @@ def _prograde_error(sample: Sample) -> float:
     speed = magnitude(sample.velocity)
     cosine = sum(d * v for d, v in zip(sample.direction, sample.velocity)) / speed
     return math.degrees(math.acos(max(-1.0, min(1.0, cosine))))
+
+
+class LaunchIntoOrbit(Monitor):
+    """The AeroEquus flies a gravity turn from 250 m to 45 km, separates two stages as they
+    run dry, throttles down near a 150 km apoapsis, coasts out of the atmosphere, and
+    circularizes at apoapsis."""
+
+    TURN_START = 250
+    TURN_END = 45_000
+    TARGET = 150_000
+
+    def streams(self) -> dict[str, Any]:
+        conn = self.test.connect()
+        space_center = conn.space_center
+        self.space_center = space_center
+        self.vessel = vessel = space_center.active_vessel
+        body = vessel.orbit.body
+        frame = body.non_rotating_reference_frame
+        surface = vessel.flight()
+        add = conn.add_stream
+        self._warping = False
+        self._throttled_down = False
+        return {
+            "ut": add(getattr, space_center, "ut"),
+            "stage": add(getattr, vessel.control, "current_stage"),
+            "throttle": add(getattr, vessel.control, "throttle"),
+            "solid_fuel": add(vessel.resources.amount, "SolidFuel"),
+            "liquid_fuel": add(vessel.resources.amount, "LiquidFuel"),
+            "mass": add(getattr, vessel, "mass"),
+            "altitude": add(getattr, surface, "mean_altitude"),
+            "pitch": add(getattr, surface, "pitch"),
+            "heading": add(getattr, surface, "heading"),
+            "dynamic_pressure": add(getattr, surface, "dynamic_pressure"),
+            "apoapsis": add(getattr, vessel.orbit, "apoapsis_altitude"),
+            "periapsis": add(getattr, vessel.orbit, "periapsis_altitude"),
+            # In the non-rotating frame, for the angle to orbital prograde
+            "direction": add(vessel.direction, frame),
+            "velocity": add(getattr, vessel.flight(frame), "velocity"),
+            "angular_velocity": add(vessel.angular_velocity, frame),
+        }
+
+    # Time warp through the coast out of the atmosphere, after the engines cut out. The
+    # script warps to the circularization burn itself.
+
+    def act(self, sample: Sample) -> None:
+        if abs(sample.throttle - 0.25) < 0.01:
+            self._throttled_down = True
+        coasting = (
+            self._throttled_down
+            and sample.throttle == 0
+            and WARP_ALTITUDE < sample.altitude < 70_000
+        )
+        if coasting != self._warping:
+            self._warping = coasting
+            self.space_center.physics_warp_factor = COAST_WARP if coasting else 0
+
+    def finish(self) -> None:
+        if self._warping:
+            self.space_center.physics_warp_factor = 0
+
+    # The checks
+
+    def expected_pitch(self, altitude: float) -> float:
+        fraction = (altitude - self.TURN_START) / (self.TURN_END - self.TURN_START)
+        return 90 - 90 * min(1.0, max(0.0, fraction))
+
+    def _stagings(self) -> list[int]:
+        """The indices of the samples where staging started, with the stages activated
+        within a second of game time of each other taken as one."""
+        stagings: list[int] = []
+        for i in range(1, len(self.samples)):
+            if self.samples[i].stage == self.samples[i - 1].stage:
+                continue
+            if stagings and self.samples[i].ut - self.samples[stagings[-1]].ut < 1:
+                continue
+            stagings.append(i)
+        return stagings
+
+    def _phases(self) -> dict[str, int | None]:
+        stagings = self._stagings() + [None, None, None]
+        launch, first_separation, second_separation = stagings[:3]
+        throttle_down = cut_off = space = burn = burn_end = None
+        if launch is not None:
+            throttle_down = self.first(lambda s: abs(s.throttle - 0.25) < 0.01, launch)
+        if throttle_down is not None:
+            cut_off = self.first(lambda s: s.throttle == 0, throttle_down)
+        if cut_off is not None:
+            space = self.first(lambda s: s.altitude >= 70_000, cut_off)
+        if space is not None:
+            burn = self.first(lambda s: s.throttle > 0, space)
+        if burn is not None:
+            end = self.first(lambda s: s.throttle == 0, burn)
+            burn_end = len(self.samples) - 1 if end is None else end
+        return {
+            "launch": launch,
+            "first_separation": first_separation,
+            "second_separation": second_separation,
+            "throttle_down": throttle_down,
+            "cut_off": cut_off,
+            "space": space,
+            "burn": burn,
+            "burn_end": burn_end,
+        }
+
+    def summary(self) -> dict[str, Any]:
+        samples = self.samples
+        if not samples:
+            return {"samples": 0}
+        phases = self._phases()
+        values: dict[str, Any] = {"samples": len(samples)}
+        start = samples[0].ut
+        for name, index in phases.items():
+            values[name + "_time"] = (
+                None if index is None else samples[index].ut - start
+            )
+        values["stagings"] = len(self._stagings())
+        launch, cut_off = phases["launch"], phases["cut_off"]
+        if launch is not None and cut_off is not None:
+            ascent = self.between(launch, cut_off)
+            # The turn, once the auto-pilot has followed it from straight up
+            turn = [s for s in ascent if 2000 < s.altitude < self.TURN_END]
+            values["turn_pitch_error"] = max(
+                (abs(s.pitch - self.expected_pitch(s.altitude)) for s in turn),
+                default=None,
+            )
+            # The heading is undefined pointing straight up
+            values["ascent_heading_error"] = max(
+                (angle_difference(s.heading, 90) for s in ascent if s.pitch < 88),
+                default=None,
+            )
+            values["ascent_max_rate"] = max(
+                magnitude(s.angular_velocity) for s in ascent
+            )
+            values["max_dynamic_pressure"] = max(s.dynamic_pressure for s in ascent)
+            values["apoapsis_at_cut_off"] = samples[cut_off].apoapsis
+        # The fuel the stage had left in the last sample before it separated, and the fuel
+        # it burned in the sample before that. A stage that separates as it runs dry
+        # separates within a sample of burning its last.
+        for name, fuel, spare in (
+            ("first_separation", "solid_fuel", 0),
+            ("second_separation", "liquid_fuel", UPPER_STAGE_FUEL),
+        ):
+            index = phases[name]
+            if index is not None and index >= 2:
+                before, earlier = samples[index - 1], samples[index - 2]
+                values[name + "_fuel_left"] = getattr(before, fuel) - spare
+                values[name + "_fuel_burn"] = getattr(earlier, fuel) - getattr(
+                    before, fuel
+                )
+                values[name + "_altitude"] = before.altitude
+        burn, burn_end = phases["burn"], phases["burn_end"]
+        if burn is not None and burn_end is not None:
+            # Once the throttle is up and the vessel steady along the burn
+            steady = self.between(self.after(burn, 1), burn_end)
+            values["burn_samples"] = len(steady)
+            values["burn_prograde_error"] = max(
+                (_prograde_error(s) for s in steady), default=None
+            )
+            values["burn_max_rate"] = max(
+                (magnitude(s.angular_velocity) for s in steady), default=None
+            )
+        values["final_apoapsis"] = samples[-1].apoapsis
+        values["final_periapsis"] = samples[-1].periapsis
+        values["final_liquid_fuel"] = samples[-1].liquid_fuel
+        # The stock Mystery Goo title ends in a space in some games and not in others
+        values["parts"] = sorted(p.title.strip() for p in self.vessel.parts.all)
+        return values
+
+    def check(self) -> None:
+        phases = self._phases()
+        missing = [name for name, index in phases.items() if index is None]
+        self.require(not missing, "The flight did not reach " + ", ".join(missing))
+        values = self.summary()
+        self.require(
+            self.space_center.active_vessel == self.vessel,
+            "The vessel launched is not the active vessel",
+        )
+        self.require(values["stagings"] == 3, "The vessel did not stage three times")
+        for stage in ("first", "second"):
+            left = values[stage + "_separation_fuel_left"]
+            burn = values[stage + "_separation_fuel_burn"]
+            self.require(
+                left < max(0.1, 1.5 * burn),
+                "The %s stage separated with fuel left" % stage,
+            )
+        self.require(
+            values["turn_pitch_error"] < 3 and values["ascent_heading_error"] < 3,
+            "The auto-pilot did not follow the gravity turn east",
+        )
+        self.require(
+            values["ascent_max_rate"] < 0.15,
+            "The vessel turned or oscillated too fast on the ascent",
+        )
+        # The AeroEquus peaks at about 42 kPa
+        self.require(
+            values["max_dynamic_pressure"] < 55_000,
+            "The ascent was too steep, through too much dynamic pressure",
+        )
+        self.require(
+            self.TARGET <= values["apoapsis_at_cut_off"] < self.TARGET + 2000,
+            "The engines did not cut off at the target apoapsis",
+        )
+        # The burn holds the node's direction, which is prograde at apoapsis, so prograde
+        # turns away from it by about 3 degrees by either end of the burn
+        self.require(
+            values["burn_prograde_error"] < 8 and values["burn_max_rate"] < 0.15,
+            "The vessel did not hold its direction through the circularization burn",
+        )
+        apoapsis, periapsis = values["final_apoapsis"], values["final_periapsis"]
+        self.require(
+            abs(apoapsis - self.TARGET) < 1000
+            and abs(periapsis - self.TARGET) < 1000
+            and apoapsis - periapsis < 1000,
+            "The orbit is not circular at the target altitude",
+        )
+        self.require(values["final_liquid_fuel"] > 0, "The upper stage ran dry")
+        self.require(
+            values["parts"]
+            == [
+                "Communotron 16",
+                "FL-T400 Fuel Tank",
+                'LV-909 "Terrier" Liquid Fuel Engine',
+                "Mk1 Command Pod",
+                "Mk16 Parachute",
+                "Mystery Goo\u2122 Containment Unit",
+                "Mystery Goo\u2122 Containment Unit",
+                "TD-12 Decoupler",
+            ],
+            "The upper stage does not have the parts expected",
+        )
+
+
+# The liquid fuel of the AeroEquus' upper stage, in its FL-T400 tank
+UPPER_STAGE_FUEL = 180

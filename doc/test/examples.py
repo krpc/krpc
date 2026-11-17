@@ -13,6 +13,9 @@ STOCK = ""
 # In the order the test classes run: the shared setups first, then those that relaunch for
 # every example
 SETUPS = {
+    "launch-into-orbit": Setup(
+        craft="AeroEquus", directory=STOCK, placement=Pad(), fresh=True
+    ),
     "suborbital-flight": Setup(
         craft="Kerbal 2", directory=STOCK, placement=Pad(), fresh=True
     ),
@@ -25,6 +28,13 @@ TUTORIALS = [
         "suborbital-flight",
         run=Exit(timeout=1200),
         monitor=flights.SubOrbitalFlight,
+        slow=True,
+    ),
+    Example(
+        "tutorials/launch-into-orbit/LaunchIntoOrbit",
+        "launch-into-orbit",
+        run=Exit(timeout=1200),
+        monitor=flights.LaunchIntoOrbit,
         slow=True,
     ),
 ]
