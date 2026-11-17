@@ -196,6 +196,8 @@ SpaceCenter service
 * Make the auto-pilot turn with a moving target, such as a gravity turn's pitch (:issue:`1373`)
 * Make ``AutoPilot.Wait`` measure the angular velocity relative to the target (:issue:`1373`)
 * Fix the auto-pilot turning away from its target when ``AutoPilot.ReferenceFrame`` changes while ``AutoPilot.TargetSmoothingTime`` is set (:issue:`1373`)
+* Fix ``Load``, ``Quickload``, ``RevertToLaunch`` and the launch RPCs sometimes leaving the game on the loading screen (:issue:`1374`)
+* Add the scenario modules of newly installed mods to a save loaded with ``Load`` or ``Quickload`` (:issue:`1374`)
 
 
 DockingCamera service
