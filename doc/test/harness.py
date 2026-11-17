@@ -71,6 +71,14 @@ class ExampleTestCase(TestCase):
             setup.craft, directory=cls.craft_directory(), editor=setup.editor
         )
         cls.place(setup.placement)
+        for _ in range(setup.vessels - 1):
+            vessel = cls.launch(
+                setup.craft,
+                directory=cls.craft_directory(),
+                editor="SPH",
+                save=None,
+                keep_other_vessels=True,
+            )
         for name, craft in setup.ships:
             cls.stage_ship(name, craft)
         if setup.quicksave:
@@ -144,7 +152,7 @@ class ExampleTestCase(TestCase):
         vessel = space_center.active_vessel
         return (
             vessel != self._vessel
-            or len(space_center.vessels) != 1
+            or len(space_center.vessels) != self.setup.vessels
             or len(vessel.parts.all) != self._part_count
         )
 
@@ -154,6 +162,7 @@ class ExampleTestCase(TestCase):
             return
         conn = self.connect()
         space_center = conn.space_center
+        space_center.target_vessel = None
         space_center.rails_warp_factor = 0
         space_center.physics_warp_factor = 0
         vessel = space_center.active_vessel

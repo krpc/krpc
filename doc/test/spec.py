@@ -95,6 +95,9 @@ class Setup:
     quicksave: bool = False
     # Relaunch before each example, for examples that stage, crash or change scene
     fresh: bool = False
+    # The vessels in the game. Each after the first is the craft launched again from the
+    # runway, and the last is the active vessel.
+    vessels: int = 1
     mods: tuple[str, ...] = ()
     # Further craft the examples launch by name, as name to the craft staged under it
     ships: tuple[tuple[str, str], ...] = ()

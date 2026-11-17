@@ -29,6 +29,8 @@ SETUPS = {
     "flight": Setup(placement=Flight()),
     # Below the altitudes the event examples wait for
     "low-flight": Setup(placement=Flight(altitude=800, speed=100)),
+    "two-vessels": Setup(vessels=2),
+    "out-of-fuel": Setup(craft="PartsEngine", placement=Pad()),
     "parts-tree": Setup(craft="PartsTree", directory=DOC_CRAFT, placement=Pad()),
     "docking-ports": Setup(craft="PartsDockingPort", placement=Pad()),
     "splashed": Setup(craft="Buoyancy", placement=Splashed()),
@@ -107,6 +109,11 @@ _visual_debugging_calls = checks.CallCount(3)
 
 # The combined specific impulse, as the parts tutorial prints it
 _ISP = Values(checks.specific_impulse, pattern=r"Isp = (%s)" % NUMBER)
+
+
+def _activate_engines(test) -> None:
+    for engine in test.connect().space_center.active_vessel.parts.engines:
+        engine.active = True
 
 
 def _fire_engines(test) -> None:
@@ -354,6 +361,93 @@ USER_GUIDE = [
         "quicksave",
         prepare=_quickload.prepare,
         check=_quickload.check,
+    ),
+    # Server side functions
+    *_exits(
+        "orbit",
+        "user-guide/server-side-functions/AltitudeCheck",
+        "user-guide/server-side-functions/AltitudeStream",
+        "user-guide/server-side-functions/BurnRatings",
+        "user-guide/server-side-functions/CapturedValue",
+        "user-guide/server-side-functions/CheckFuel",
+        "user-guide/server-side-functions/Event",
+        "user-guide/server-side-functions/FiringCounter",
+        "user-guide/server-side-functions/FuelFraction",
+        "user-guide/server-side-functions/FunctionStatements",
+        "user-guide/server-side-functions/HeaviestEngine",
+        "user-guide/server-side-functions/NotLoadedCheck",
+        "user-guide/server-side-functions/PrintMass",
+        "user-guide/server-side-functions/RunOnce",
+        "user-guide/server-side-functions/StructureField",
+        "user-guide/server-side-functions/SurfaceAngle",
+        "user-guide/server-side-functions/SwitchModes",
+        "user-guide/server-side-functions/SwitchStatement",
+        "user-guide/server-side-functions/TruncateAltitude",
+        "user-guide/server-side-functions/UpperCaseName",
+    ),
+    # The examples that wait for the vessel to climb above 1000 m
+    *_exits(
+        "low-flight",
+        "user-guide/server-side-functions/AltitudeEvent",
+        "user-guide/server-side-functions/CustomEvent",
+        run=Interactive(checks.climb_past(1000)),
+    ),
+    Example(
+        "user-guide/server-side-functions/NotLoadedEvent",
+        "low-flight",
+        run=Interactive(checks.climb_past(1000)),
+        # The C-nano example checks once, as the client has no events
+        per_language={"cnano": {"run": Exit()}},
+    ),
+    Example(
+        "user-guide/server-side-functions/FunctionStream",
+        "orbit",
+        run=Loop(),
+    ),
+    Example(
+        "user-guide/server-side-functions/CompiledStep",
+        "orbit",
+        run=Interactive(checks.toggles_action_group, then=Loop(prints=False)),
+    ),
+    Example(
+        "user-guide/server-side-functions/BurnTime",
+        "orbit",
+        prepare=_activate_engines,
+        values=Values(checks.burn_times),
+    ),
+    Example(
+        "user-guide/server-side-functions/EngineThrusts",
+        "orbit",
+        prepare=_fire_engines,
+        values=Values(checks.engine_thrusts),
+    ),
+    Example(
+        "user-guide/server-side-functions/TotalThrust",
+        "orbit",
+        prepare=_fire_engines,
+        values=Values(checks.thrust),
+    ),
+    Example(
+        "user-guide/server-side-functions/ThrottleLimit",
+        "orbit",
+        run=Exit(timeout=120),
+    ),
+    # The examples watch for some vessel becoming the target, which must be one other than
+    # the active vessel
+    Example("user-guide/server-side-functions/TargetCheck", "two-vessels"),
+    Example(
+        "user-guide/server-side-functions/TargetEvent",
+        "two-vessels",
+        # Only the JavaScript example waits for the event
+        per_language={"js": {"run": Interactive(checks.target_first_vessel)}},
+    ),
+    # Needs more than 100 units of liquid fuel, or it throws
+    Example("user-guide/server-side-functions/ThrowException", "parts-tree"),
+    *_exits(
+        "out-of-fuel",
+        "user-guide/server-side-functions/CollectionEvent",
+        "user-guide/server-side-functions/OutOfFuelCheck",
+        "user-guide/server-side-functions/OutOfFuelEvent",
     ),
 ]
 

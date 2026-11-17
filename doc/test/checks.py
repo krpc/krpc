@@ -14,6 +14,13 @@ if TYPE_CHECKING:
 # Hooks
 
 
+def target_first_vessel(test: TestCase) -> None:
+    """Targets the first vessel, which the examples name as some vessel, where it is not the
+    active vessel."""
+    space_center = test.connect().space_center
+    space_center.target_vessel = space_center.vessels[0]
+
+
 def climb_past(altitude: int) -> Callable[[TestCase], None]:
     """Checks that the example is still waiting for the vessel to climb, then places the
     vessel in flight above the altitude."""
@@ -54,6 +61,18 @@ def keeps_calling(test: TestCase) -> None:
     test.assertGreater(
         _rpcs_executed(test) - start, 1, "The example's loop made no calls"
     )
+
+
+def toggles_action_group(test: TestCase) -> None:
+    """Waits to see action group 1 both on and off, as the example toggles it."""
+    control = test.connect().space_center.active_vessel.control
+    seen = set()
+
+    def both() -> bool:
+        seen.add(control.get_action_group(1))
+        return len(seen) == 2
+
+    test.wait_until(both, timeout=10, message="action group 1 to toggle")
 
 
 def screen_menu(test: TestCase) -> None:
@@ -244,6 +263,26 @@ def specific_impulse(test: TestCase) -> list[float]:
 
 def maximum_rails_warp_factor(test: TestCase) -> list[float]:
     return [test.connect().space_center.maximum_rails_warp_factor]
+
+
+def thrust(test: TestCase) -> list[float]:
+    return [test.connect().space_center.active_vessel.thrust]
+
+
+def engine_thrusts(test: TestCase) -> list[float]:
+    engines = test.connect().space_center.active_vessel.parts.engines
+    return [engine.thrust for engine in engines]
+
+
+def burn_times(test: TestCase) -> list[float]:
+    vessel = test.connect().space_center.active_vessel
+    exhaust_velocity = vessel.specific_impulse * 9.82
+    mass = vessel.mass
+    thrust = vessel.available_thrust
+    return [
+        (mass - mass / math.exp(delta_v / exhaust_velocity)) * exhaust_velocity / thrust
+        for delta_v in (100, 250, 400)
+    ]
 
 
 def angle_to_prograde(test: TestCase) -> list[float]:
