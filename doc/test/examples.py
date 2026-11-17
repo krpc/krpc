@@ -14,6 +14,7 @@ from doc.test.spec import (
     Loop,
     Pad,
     Setup,
+    Splashed,
     Values,
 )
 
@@ -28,6 +29,8 @@ SETUPS = {
     "flight": Setup(placement=Flight()),
     "parts-tree": Setup(craft="PartsTree", directory=DOC_CRAFT, placement=Pad()),
     "docking-ports": Setup(craft="PartsDockingPort", placement=Pad()),
+    "splashed": Setup(craft="Buoyancy", placement=Splashed()),
+    "editor": Setup(craft="Buoyancy", scene="editor"),
     "orbit-fresh": Setup(fresh=True),
     "parts-tree-fresh": Setup(
         craft="PartsTree", directory=DOC_CRAFT, placement=Pad(), fresh=True
@@ -316,6 +319,17 @@ USER_GUIDE = [
         "flight",
         run=Interactive(checks.pitches_up, then=Exit(timeout=120)),
     ),
+    # Boats and submarines
+    *_exits(
+        "splashed",
+        "user-guide/boats-and-submarines/BuoyancyTrim",
+        "user-guide/boats-and-submarines/BuoyantForce",
+        "user-guide/boats-and-submarines/BuoyantTorque",
+        "user-guide/boats-and-submarines/CenterOfBuoyancy",
+        "user-guide/boats-and-submarines/PressureLimits",
+        "user-guide/boats-and-submarines/PressureLimitsFunction",
+    ),
+    Example("user-guide/boats-and-submarines/EditorTorque", "editor"),
 ]
 
 EXAMPLES = [*TUTORIALS, *USER_GUIDE]
