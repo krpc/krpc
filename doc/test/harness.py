@@ -204,6 +204,12 @@ class ExampleTestCase(TestCase):
             )
         if example.values:
             self.check_values(example.values, result.stdout, message)
+        if example.lines:
+            expected = sorted(_normalize(line) for line in example.lines(self))
+            printed = sorted(
+                _normalize(line) for line in result.stdout.splitlines() if line.strip()
+            )
+            self.assertEqual(expected, printed, message)
         if example.check:
             example.check(self)
         if monitor:
@@ -274,3 +280,7 @@ class ExampleTestCase(TestCase):
         if not connected:
             self.fail("Not ready for the hook. " + result.describe())
         return result
+
+
+def _normalize(line: str) -> str:
+    return " ".join(line.split())

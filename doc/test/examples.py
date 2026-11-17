@@ -24,7 +24,9 @@ STOCK = ""
 # every example
 SETUPS = {
     "orbit": Setup(),
+    "parts-tree": Setup(craft="PartsTree", directory=DOC_CRAFT, placement=Pad()),
     "docking-ports": Setup(craft="PartsDockingPort", placement=Pad()),
+    "orbit-fresh": Setup(fresh=True),
     "parts-tree-fresh": Setup(
         craft="PartsTree", directory=DOC_CRAFT, placement=Pad(), fresh=True
     ),
@@ -151,4 +153,21 @@ TUTORIALS = [
     ),
 ]
 
-EXAMPLES = [*TUTORIALS]
+USER_GUIDE = [
+    # Parts
+    Example(
+        "user-guide/parts/AttachmentModes",
+        "parts-tree",
+        lines=checks.attachment_modes,
+    ),
+    Example("user-guide/parts/TreeTraversal", "parts-tree", lines=checks.part_titles),
+    Example(
+        "user-guide/parts/PartModules",
+        "orbit-fresh",
+        check=checks.all_of(
+            checks.engines_at_half_thrust, checks.solar_panels_extended
+        ),
+    ),
+]
+
+EXAMPLES = [*TUTORIALS, *USER_GUIDE]

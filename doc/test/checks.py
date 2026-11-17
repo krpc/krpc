@@ -63,8 +63,48 @@ def parachutes_deployed(test: TestCase) -> None:
         test.assertTrue(parachute.deployed)
 
 
+def engines_at_half_thrust(test: TestCase) -> None:
+    engines = test.connect().space_center.active_vessel.parts.engines
+    test.assertTrue(engines)
+    for engine in engines:
+        test.assertAlmostEqual(0.5, engine.thrust_limit, places=3)
+
+
+def solar_panels_extended(test: TestCase) -> None:
+    space_center = test.connect().space_center
+    panels = space_center.active_vessel.parts.solar_panels
+    test.assertTrue(panels)
+    states = (
+        space_center.DeployableState.deploying,
+        space_center.DeployableState.deployed,
+    )
+    for panel in panels:
+        test.assertIn(panel.state, states)
+
+
+def all_of(*checks: Callable[[TestCase], None]) -> Callable[[TestCase], None]:
+    def check(test: TestCase) -> None:
+        for each in checks:
+            each(test)
+
+    return check
+
+
 # The values and lines the examples print
 
 
 def specific_impulse(test: TestCase) -> list[float]:
     return [test.connect().space_center.active_vessel.specific_impulse]
+
+
+def part_titles(test: TestCase) -> list[str]:
+    parts = test.connect().space_center.active_vessel.parts.all
+    return [part.title for part in parts]
+
+
+def attachment_modes(test: TestCase) -> list[str]:
+    parts = test.connect().space_center.active_vessel.parts.all
+    return [
+        part.title + " - " + ("axial" if part.axially_attached else "radial")
+        for part in parts
+    ]

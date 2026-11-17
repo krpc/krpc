@@ -158,6 +158,9 @@ class Example:
     check: Callable[[Any], None] | None = None
     # The numbers the output must print
     values: Values | None = None
+    # The lines the output must print, in any order, as the game gives them once the example
+    # has finished. The whitespace around and within each line is not compared.
+    lines: Callable[[Any], Sequence[str]] | None = None
     # Records the game while the example runs, and checks the recording once it has
     # finished: a doc.test.monitor.Monitor, made from the test case
     monitor: Callable[[Any], Any] | None = None
