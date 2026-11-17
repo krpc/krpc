@@ -3,6 +3,7 @@ example and checks how it ended."""
 
 from __future__ import annotations
 
+import math
 import os
 import re
 import shutil
@@ -22,6 +23,7 @@ from doc.test.spec import (
     Pad,
     Setup,
     Splashed,
+    Values,
     example_path,
 )
 from krpctools.game.ksp import TestCase
@@ -200,11 +202,27 @@ class ExampleTestCase(TestCase):
                 re.search(pattern, result.stdout),
                 "Output does not match %r. %s" % (pattern, message),
             )
+        if example.values:
+            self.check_values(example.values, result.stdout, message)
         if example.check:
             example.check(self)
         if monitor:
             print(monitor.describe())
             monitor.check()
+
+    def check_values(self, values: Values, stdout: str, message: str) -> None:
+        printed = [float(match) for match in re.findall(values.pattern, stdout)]
+        expected = list(values.expected(self))
+        self.assertEqual(
+            len(expected), len(printed), "Printed %s. %s" % (printed, message)
+        )
+        for want, got in zip(expected, printed, strict=True):
+            self.assertTrue(
+                math.isclose(
+                    want, got, rel_tol=values.relative, abs_tol=values.absolute
+                ),
+                "Printed %s, the game gives %s. %s" % (got, want, message),
+            )
 
     def run_command(
         self,

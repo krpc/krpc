@@ -5,7 +5,7 @@ Nothing here imports krpc, so the coverage test reads the manifest without a gam
 from __future__ import annotations
 
 import pathlib
-from collections.abc import Callable
+from collections.abc import Callable, Sequence
 from dataclasses import dataclass, field, replace
 from typing import Any
 
@@ -130,6 +130,20 @@ class Interactive:
 
 Run = Exit | Loop | Interactive
 
+# A number as the clients print one
+NUMBER = r"[-+]?(?:\d+\.?\d*|\.\d+)(?:[eE][-+]?\d+)?"
+
+
+@dataclass(frozen=True)
+class Values:
+    """The numbers the output must print, as the game gives them once the example has
+    finished. Each match of the pattern's group is one number, in order."""
+
+    expected: Callable[[Any], Sequence[float]]
+    pattern: str = "(" + NUMBER + ")"
+    relative: float = 0.01
+    absolute: float = 0
+
 
 @dataclass(frozen=True)
 class Example:
@@ -142,6 +156,8 @@ class Example:
     expect_output: tuple[str, ...] = ()
     # Run against the game once the example has finished
     check: Callable[[Any], None] | None = None
+    # The numbers the output must print
+    values: Values | None = None
     # Records the game while the example runs, and checks the recording once it has
     # finished: a doc.test.monitor.Monitor, made from the test case
     monitor: Callable[[Any], Any] | None = None
