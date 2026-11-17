@@ -232,16 +232,16 @@ namespace KRPC
             return text.ToString ();
         }
 
-        void Configure (IServer server)
+        void Configure (Server.Server server)
         {
             server.OnStarted += (s, e) => {
-                Logger.WriteLine ("Server '" + ((Server.Server)s).Name + "' started on " + ((Server.Server)s).Address);
-                Logger.WriteLine ("Server '" + ((Server.Server)s).Name + "' settings: " + SettingsText ((Server.Server)s));
+                Logger.WriteLine ("Server '" + server.Name + "' started on " + server.Address);
+                Logger.WriteLine ("Server '" + server.Name + "' settings: " + SettingsText (server));
                 AnyRunning = true;
-                EventHandlerExtensions.Invoke (OnServerStarted, this, new ServerStartedEventArgs ((Server.Server)s));
+                EventHandlerExtensions.Invoke (OnServerStarted, this, new ServerStartedEventArgs (server));
             };
             server.OnStopped += (s, e) => {
-                Logger.WriteLine ("Server '" + ((Server.Server)s).Name + "' stopped");
+                Logger.WriteLine ("Server '" + server.Name + "' stopped");
                 AnyRunning = Servers.Any (x => x.Running);
                 // The object store and the expression constants are shared by every
                 // server, so they are only emptied once they have all stopped
@@ -249,7 +249,7 @@ namespace KRPC
                     ObjectStore.Clear ();
                     Service.KRPC.Expression.ClearConstants ();
                 }
-                EventHandlerExtensions.Invoke (OnServerStopped, this, new ServerStoppedEventArgs ((Server.Server)s));
+                EventHandlerExtensions.Invoke (OnServerStopped, this, new ServerStoppedEventArgs (server));
             };
             server.OnClientRequestingConnection += (s, e) => EventHandlerExtensions.Invoke (OnClientRequestingConnection, this, e);
         }

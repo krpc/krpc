@@ -4,9 +4,11 @@ using System.Collections.Generic;
 namespace KRPC.Server
 {
     /// <summary>
-    /// A non-generic server.
+    /// A server whose clients communicate over streams of the given type: of bytes, or of
+    /// messages.
     /// </summary>
-    public interface IBaseServer
+    public interface IServer<TStream>
+        where TStream : IStream
     {
         /// <summary>
         /// Start the server.
@@ -63,41 +65,7 @@ namespace KRPC.Server
         /// Handler to trigger when the server stops.
         /// </summary>
         event EventHandler OnStopped;
-    }
 
-    /// <summary>
-    /// A non-generic server.
-    /// </summary>
-    public interface IServer : IBaseServer
-    {
-        /// <summary>
-        /// Clients that are connected to the server.
-        /// </summary>
-        IEnumerable<IClient> Clients { get; }
-
-        /// <summary>
-        /// Handler to trigger when a new client requests a connection.
-        /// </summary>
-        event EventHandler<ClientRequestingConnectionEventArgs> OnClientRequestingConnection;
-
-        /// <summary>
-        /// Handler to trigger when a client has connected.
-        /// </summary>
-        event EventHandler<ClientConnectedEventArgs> OnClientConnected;
-
-        /// <summary>
-        /// Handler to trigger when a client has disconnected.
-        /// </summary>
-        event EventHandler<ClientDisconnectedEventArgs> OnClientDisconnected;
-    }
-
-    /// <summary>
-    /// A server whose clients communicate over streams of the given type: of bytes, or of
-    /// messages.
-    /// </summary>
-    public interface IServer<TStream> : IBaseServer
-        where TStream : IStream
-    {
         /// <summary>
         /// Clients that are connected to the server.
         /// </summary>

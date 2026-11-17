@@ -371,7 +371,7 @@ namespace KRPC.UI
             }
         }
 
-        void DrawClients (IServer server)
+        void DrawClients (KRPC.Server.Server server)
         {
             var clients = server.Clients.ToList ();
             IDictionary<IClient,string> clientDescriptions = new Dictionary<IClient,string> ();
