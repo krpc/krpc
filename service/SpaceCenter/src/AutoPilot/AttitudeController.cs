@@ -100,6 +100,9 @@ namespace KRPC.SpaceCenter.AutoPilot
         // shutdown while a reaction wheel remains) does not cause a one-tick gain spike that
         // jerks the gimbal.
         Vector3d smoothedTorque;
+        // The vessel's part count on the last tick, to tell when its structure changes, or -1
+        // before the first tick
+        int partCount = -1;
         // Roll gain and full-deflection roll torque of each control surface that rolls the vessel
         readonly List<double> rollGains = new List<double> ();
         readonly List<double> rollSurfaceTorques = new List<double> ();
@@ -128,9 +131,24 @@ namespace KRPC.SpaceCenter.AutoPilot
         const double ActuatorRecoveryRate = 0.1;
         const double ActuatorBackoffMin = 0.2;
         // The rate the target moves at, estimated from the error and the angular velocity, in the
-        // roll-invariant frame, and the error last tick. The reversal lag acts on the angular
-        // velocity relative to the target, as a surface tracking a moving target never reverses.
+        // roll-invariant frame, and the error last tick. The pitch and yaw profile acts on the
+        // angular velocity relative to the target, and the target's rate is added to its command.
         Vector3d targetRate;
+        // The angular velocity relative to the target last tick, in the roll-invariant frame, and
+        // whether it has been computed since the controller started
+        Vector3d relativeOmega;
+        bool relativeOmegaValid;
+        // The target rate the pitch and yaw profile followed last tick, and its weight in [0,1]
+        Vector3d logFollowedRate;
+        double logTrackingWeight;
+        // The pointing error, in degrees, up to which the target rate is followed in full, and
+        // from which it is not followed at all
+        const double TrackingErrorFull = 5.0;
+        const double TrackingErrorNone = 10.0;
+        // The pitch and yaw target rate, in rad/s, below which it is not followed, and from which
+        // it is followed in full. The estimate's noise is about the lower bound.
+        const double TrackingRateNone = 0.001;
+        const double TrackingRateFull = 0.003;
         Vector3d lastAngles;
         bool lastAnglesValid;
         // Time constant of the target rate estimate, in seconds
@@ -324,7 +342,22 @@ namespace KRPC.SpaceCenter.AutoPilot
             Reset ();
         }
 
-        public ReferenceFrame ReferenceFrame { get; set; }
+        // The commanded target is re-read in a new frame, but the effective target keeps its
+        // orientation in world space, so a smoothed slew to the new target starts from where the
+        // loop was pointing
+        public ReferenceFrame ReferenceFrame {
+            get { return referenceFrame; }
+            set {
+                if (referenceFrame != null && value != null && targetSmoothingTime > 0) {
+                    effectiveRotation = value.RotationFromWorldSpace (
+                        referenceFrame.RotationToWorldSpace (effectiveRotation));
+                    slewPending = true;
+                }
+                referenceFrame = value;
+            }
+        }
+
+        ReferenceFrame referenceFrame;
 
         // Convenience scalars, heading-singular near the vertical. The getters read the
         // surface-frame Euler decomposition. The setters re-aim the nose by pitch and heading while
@@ -651,6 +684,12 @@ namespace KRPC.SpaceCenter.AutoPilot
             get { return logTargetRi; }
         }
 
+        // Angular velocity relative to the moving target (roll-invariant frame, rad/s), which is
+        // zero for a vessel turning with its target, or null before the controller computes it
+        public Vector3d? RelativeAngularVelocity {
+            get { return relativeOmegaValid ? relativeOmega : (Vector3d?)null; }
+        }
+
         // Per-axis hold-gated mitigation weight in [0,1], suppressionRamp * holdFactor: the degree
         // to which the latched flexible-craft hold mitigation, the bandwidth floor and the
         // feedforward cut, is engaged. Per-tick gate and mitigation state for the in-game info
@@ -892,6 +931,21 @@ namespace KRPC.SpaceCenter.AutoPilot
             Start ();
         }
 
+        /// <summary>
+        /// Forget what the oscillation handling learned about the craft when its structure
+        /// changes. A latch and chatter level measured on the full stack say nothing about the
+        /// stage left after a separation, or about a docked pair. Only the detectors clear: the
+        /// mitigations ramp out as for any unlatched axis, and the control loops keep their state.
+        /// </summary>
+        void UpdatePartCount (int count)
+        {
+            if (partCount >= 0 && count != partCount) {
+                detectors.Reset ();
+                detectors.ResetChatterLevel ();
+            }
+            partCount = count;
+        }
+
         public void Start ()
         {
             engageFixedTime = Time.fixedTime;
@@ -908,6 +962,8 @@ namespace KRPC.SpaceCenter.AutoPilot
             actuatorLimitedFraction = Vector3d.zero;
             actuatorBackoff = new Vector3d (1, 1, 1);
             targetRate = Vector3d.zero;
+            relativeOmega = Vector3d.zero;
+            relativeOmegaValid = false;
             lastAnglesValid = false;
             aerodynamicRateLimit.Reset ();
             pointRotationValid = false;
@@ -996,6 +1052,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             var dt = Time.fixedDeltaTime;
             UpdateControlSurfaces (torque);
             UpdateGimbals (torque, dt);
+            UpdatePartCount (internalVessel.parts.Count);
 
             // While the vessel sits on the launch clamps (PRELAUNCH) the autopilot is engaged but
             // must not act. The craft is physically held and the engines are unlit, so available
@@ -1175,7 +1232,8 @@ namespace KRPC.SpaceCenter.AutoPilot
             var slewRateRad = slewActive ? GeometryExtensions.ToRadians (slewSpeed) : 0.0;
             FeedforwardDiagnostics ffDiag;
             var ffAnalyticRi = AnalyticFeedforwardRi (pySampleFull, rollSampleFull,
-                currentRi, torque, moi, slewRateRad, out ffDiag);
+                currentRi, logFollowedRate, logTrackingWeight, slewRateRad, torque, moi,
+                out ffDiag);
             if (!rollControlled)
                 ffAnalyticRi.y = 0;
 
@@ -1601,6 +1659,11 @@ namespace KRPC.SpaceCenter.AutoPilot
             }
             lastAngles = radians;
             lastAnglesValid = true;
+        }
+
+        static double Clamp01 (double value)
+        {
+            return Math.Min (1.0, Math.Max (0.0, value));
         }
 
         // The radius along a body direction, in the pitch and yaw plane, of the ellipse with
@@ -2167,6 +2230,24 @@ namespace KRPC.SpaceCenter.AutoPilot
             var currentOmegaRi = ToRollInvariant (currentOmega, cosPhi, sinPhi);
             // Update the target rate this tick, before the profiles below read it
             UpdateTargetRate (anglesRI, currentOmegaRi);
+            // The pitch and yaw profile acts on the rotation relative to the target, and the
+            // target's own rate is added to its command below. The estimate is only good while the
+            // vessel tracks the target: in a large slew the error's axis turns, and at the antipode
+            // it jumps, which reads as target motion. So the target rate fades out between
+            // TrackingErrorFull and TrackingErrorNone of pointing error, where it is small next to
+            // the slew anyway. A rate near the estimate's noise also fades out, as following it
+            // adds error. Roll's error is weighted by the pointing error, which makes its
+            // estimated target rate unreliable, so roll keeps the absolute rate.
+            var pointingError = Vector3d.Angle (currentDirection, targetDirection);
+            var pitchYawTargetRate = Math.Sqrt (targetRate.x * targetRate.x + targetRate.z * targetRate.z);
+            var trackingWeight = Clamp01 (
+                (TrackingErrorNone - pointingError) / (TrackingErrorNone - TrackingErrorFull)) *
+                Clamp01 ((pitchYawTargetRate - TrackingRateNone) / (TrackingRateFull - TrackingRateNone));
+            var followedRate = new Vector3d (
+                trackingWeight * targetRate.x, 0, trackingWeight * targetRate.z);
+            var relativeOmegaRi = currentOmegaRi - followedRate;
+            relativeOmega = relativeOmegaRi;
+            relativeOmegaValid = true;
 
             var result = Vector3d.zero;
 
@@ -2178,10 +2259,15 @@ namespace KRPC.SpaceCenter.AutoPilot
 
             // Pitch/yaw handled jointly so the nose follows a straight great-circle arc.
             double pitchVelocity, yawVelocity;
-            ComputePitchYawVelocity (anglesRI, currentOmegaRi, torque, moi,
+            ComputePitchYawVelocity (anglesRI, relativeOmegaRi, torque, moi,
                 out pitchVelocity, out yawVelocity, out pitchYawSample);
-            result.x = pitchVelocity;
-            result.z = yawVelocity;
+            // The target's rate is not error-chasing, so it bypasses the profile and its deadband.
+            // At zero error the vessel turns with the target, rather than being commanded to stop
+            // and dragged along at the deadband's edge.
+            result.x = pitchVelocity + followedRate.x;
+            result.z = yawVelocity + followedRate.z;
+            logFollowedRate = followedRate;
+            logTrackingWeight = trackingWeight;
 
             return result;
         }
@@ -2269,8 +2355,8 @@ namespace KRPC.SpaceCenter.AutoPilot
             }
 
             // The rotation relative to the target carries on while the control surfaces reverse
-            var eStopPitch = thetaPitch + coeff * omegaPitch + actuatorLag.x * (omegaPitch - targetRate.x);
-            var eStopYaw = thetaYaw + coeff * omegaYaw + actuatorLag.z * (omegaYaw - targetRate.z);
+            var eStopPitch = thetaPitch + (coeff + actuatorLag.x) * omegaPitch;
+            var eStopYaw = thetaYaw + (coeff + actuatorLag.z) * omegaYaw;
             var eStopMag = Math.Sqrt (eStopPitch * eStopPitch + eStopYaw * eStopYaw);
 
             // Singularity guard on |e_stop| (not theta): both the error and the predicted drift must
@@ -2602,15 +2688,20 @@ namespace KRPC.SpaceCenter.AutoPilot
         /// fractions) from the profile samples.
         /// </summary>
         Vector3d AnalyticFeedforwardRi (ProfileSample pySample, ProfileSample rollSample,
-            Vector3d omegaRi, Vector3d torque, Vector3d moi, double slewRateRad,
-            out FeedforwardDiagnostics diagnostics)
+            Vector3d omegaRi, Vector3d followedRateRi, double trackingWeight, double slewRateRad,
+            Vector3d torque, Vector3d moi, out FeedforwardDiagnostics diagnostics)
         {
             var alphaPitch = moi [0] > 0 ? torque [0] / moi [0] : 0.0;
             var alphaRoll = moi [1] > 0 ? torque [1] / moi [1] : 0.0;
             var alphaYaw = moi [2] > 0 ? torque [2] / moi [2] : 0.0;
             double ffPitch, ffYaw;
             diagnostics = default (FeedforwardDiagnostics);
-            PitchYawAnalyticFf (pySample, omegaRi, slewRateRad, alphaPitch, alphaYaw,
+            // The pitch and yaw profile acts on the rotation relative to the followed target rate.
+            // A slew of the target is part of that rate, so only the share of the slew that is not
+            // followed is added. Roll follows no target rate, and takes the whole slew.
+            var relativeOmegaRi = omegaRi - followedRateRi;
+            PitchYawAnalyticFf (pySample, relativeOmegaRi, slewRateRad * (1.0 - trackingWeight),
+                alphaPitch, alphaYaw,
                 out ffPitch, out ffYaw, out diagnostics.PitchYawTracking,
                 out diagnostics.PitchYawOvershoot, out diagnostics.PitchYawGDot);
             var ffRoll = RollAnalyticFf (rollSample, omegaRi.y, slewRateRad, alphaRoll,

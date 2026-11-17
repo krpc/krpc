@@ -42,7 +42,7 @@ def _make_autopilot_test_class(  # noqa: PLR0913
     path_deviation_limit=0.25,
     nudge_rate=0.3,
     recover_timeout=30,
-    rebound_limit=1,
+    rebound_limit: float = 1,
     roll_isolation_limit=2.7,
     control_spike_limit=3,
     saturation_limit=0.6,
@@ -1177,6 +1177,28 @@ def _make_autopilot_test_class(  # noqa: PLR0913
             self.assertLess(self.ap.current_error, self.ap.error)
             self.ap.engaged = False
 
+        def test_reference_frame_change_keeps_current_target(self):
+            # Changing the reference frame during a slow slew keeps the current
+            # target pointing the same way in space. The orbital frame's axes are a
+            # quarter turn from the surface frame's, so the current target read in
+            # the new frame's axes would point well away from the vessel.
+            space_center = self.connect().space_center
+            self.ap.target_smoothing_time = 60.0
+            self.cheat_orientation_to(0, 90)
+            self.set_rotation(0, 90)
+            self.ap.engaged = True
+            self.wait(0.5)
+            frame = self.vessel.orbital_reference_frame
+            direction = space_center.transform_direction(
+                self.ap.target_direction, self.ap.reference_frame, frame
+            )
+            self.ap.reference_frame = frame
+            self.ap.target_direction = direction
+            self.wait(0.5)
+            self.assertLess(self.ap.current_error, 5)
+            self.assertLess(self.ap.error, 5)
+            self.ap.engaged = False
+
         def test_torque_dropout_recovery(self):
             # Cut all torque (wheels + RCS) mid-slew, restore it, and confirm recovery
             # without an integral-windup kick (RunAxis clears the integral on a
@@ -1588,7 +1610,6 @@ TestAutoPilotAttitudeTVC = _make_autopilot_test_class(
     engine_thrust_limit=0.3,
     rwhl=True,
     rwhl_authority=0.1,
-    roll_control_limit=1,
     no_force_oscillation=True,
 )
 
@@ -1610,7 +1631,6 @@ TestAutoPilotAttitudeSlow = _make_autopilot_test_class(
     "AutoPilot",
     rwhl_authority=0.2,
     rcs_thrust_limit=0.2,
-    winding_limit=1.2,
 )
 
 # A heavy, semi-rigid craft with strong reaction wheels at one end. Without adaptive
@@ -1618,11 +1638,9 @@ TestAutoPilotAttitudeSlow = _make_autopilot_test_class(
 TestAutoPilotAttitudeChatter = _make_autopilot_test_class(
     "TestAutoPilotAttitudeChatter",
     "AutoPilotChatter",
-    saturation_limit=2,
-    slew_chatter_limit=0.75,
-    flip_plane_limit=0.15,
-    control_spike_limit=40,
-    rebound_limit=2,
+    slew_chatter_limit=0.7,
+    control_spike_limit=30,
+    rebound_limit=1.5,
     flexible=True,
 )
 
@@ -1632,7 +1650,7 @@ TestAutoPilotAttitudeFlexible = _make_autopilot_test_class(
     "AutoPilotFlexible",
     slew_chatter_limit=1.2,
     roll_control_limit=1,
-    control_spike_limit=60,
+    control_spike_limit=50,
     flexible=True,
 )
 
@@ -1770,14 +1788,13 @@ TestAutoPilotLaunchKerbalX = _make_autopilot_launch_test_class(
 TestAutoPilotLaunchMunsplorer = _make_autopilot_launch_test_class(
     "TestAutoPilotLaunchMunsplorer",
     "PT Series Munsplorer",
-    hold_attitude_error=1,
 )
 
 TestAutoPilotLaunchScienceJr = _make_autopilot_launch_test_class(
     "TestAutoPilotLaunchScienceJr",
     "Science Jr",
     hold_oscillation_amplitude=0.4,
-    hold_attitude_error=1.5,
+    hold_attitude_error=1.2,
 )
 
 TestAutoPilotLaunchSlimShuttle = _make_autopilot_launch_test_class(
@@ -1788,16 +1805,12 @@ TestAutoPilotLaunchSlimShuttle = _make_autopilot_launch_test_class(
 TestAutoPilotLaunchAriane5 = _make_autopilot_launch_test_class(
     "TestAutoPilotLaunchAriane5",
     "Ariane 5",
-    hold_attitude_error=1.5,
-    hold_oscillation_amplitude=0.5,
-    turn_attitude_error=1.5,
-    turn_oscillation_amplitude=0.5,
+    hold_attitude_error=1.2,
 )
 
 TestAutoPilotLaunchAeroEquus = _make_autopilot_launch_test_class(
     "TestAutoPilotLaunchAeroEquus",
     "AeroEquus",
-    turn_attitude_error=2,
 )
 
 TestAutoPilotLaunchComSatLx = _make_autopilot_launch_test_class(
@@ -1805,12 +1818,10 @@ TestAutoPilotLaunchComSatLx = _make_autopilot_launch_test_class(
     "ComSat Lx",
 )
 
-# The pitch command oscillates a little in a turn.
 TestAutoPilotLaunchLearstarA1 = _make_autopilot_launch_test_class(
     "TestAutoPilotLaunchLearstarA1",
     "Learstar A1",
     pre_launch_sequence=True,
-    turn_oscillation_amplitude=0.5,
 )
 
 # Shuttle-style craft, steered mostly by the slow gimbals of its two KS-25s. The craft starts
@@ -1832,10 +1843,7 @@ TestAutoPilotLaunchGimbal = _make_autopilot_launch_test_class(
 TestAutoPilotLaunchOrbiterOne = _make_autopilot_launch_test_class(
     "TestAutoPilotLaunchOrbiterOne",
     "Orbiter One",
-    hold_attitude_error=3,
-    turn_attitude_error=3,
-    hold_oscillation_amplitude=3,
-    turn_oscillation_amplitude=3,
+    hold_attitude_error=1.6,
 )
 
 TestAutoPilotLaunchZMAP = _make_autopilot_launch_test_class(
@@ -1845,13 +1853,104 @@ TestAutoPilotLaunchZMAP = _make_autopilot_launch_test_class(
 )
 
 # A flexible craft. The actuators at times limit-cycle through its 5 Hz bending mode without the
-# chatter detector latching, in a hold as well as a turn.
+# chatter detector latching, in a hold.
 TestAutoPilotLaunchGDLV3 = _make_autopilot_launch_test_class(
     "TestAutoPilotLaunchGDLV3",
     "GDLV3",
-    hold_oscillation_amplitude=1.5,
-    turn_oscillation_amplitude=1.5,
+    hold_oscillation_amplitude=0.9,
 )
+
+
+class TestAutoPilotLaunchStaging(TestCase):
+    """A gravity turn through staging, on the AeroEquus: its boosters burn out, separate and
+    the core ignites, while the target pitch follows the altitude."""
+
+    # The stage that separates the boosters
+    booster_decouple_stage = 5
+    # The gravity turn, from vertical to horizontal between these altitudes, in meters
+    turn_start_altitude = 250
+    turn_end_altitude = 45000
+    # The longest the boosters may burn, in seconds
+    booster_burn_timeout = 120
+
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
+
+    def setUp(self):
+        self.vessel = self.launch("AeroEquus", save=None)
+        self.ap = self.vessel.auto_pilot
+        self.ap.reset()
+        self.ap.show_info_ui = True
+        self.altitude = self.connect().add_stream(
+            getattr, self.vessel.flight(), "mean_altitude"
+        )
+
+    def tearDown(self):
+        self.ap.show_info_ui = False
+        self.altitude.remove()
+
+    def turn(self, seconds):
+        # Set the target pitch from the altitude every 0.1 seconds, so the target moves
+        # throughout, as a gravity turn script does
+        end = time.time() + seconds
+        while time.time() < end:
+            frac = (self.altitude() - self.turn_start_altitude) / (
+                self.turn_end_altitude - self.turn_start_altitude
+            )
+            pitch = 90 - 90 * min(1.0, max(0.0, frac))
+            self.ap.target_pitch_and_heading(pitch, 90)
+            self.wait(0.1)
+
+    def test_gravity_turn_through_staging(self):
+        control = self.vessel.control
+        control.sas = False
+        control.rcs = False
+        control.throttle = 1
+        self.ap.reference_frame = self.vessel.surface_reference_frame
+        self.ap.target_pitch_and_heading(90, 90)
+        self.ap.engaged = True
+        time.sleep(1)
+        control.activate_next_stage()
+
+        boosters = self.vessel.decouple_stage_at(self.booster_decouple_stage).resources(
+            cumulative=False
+        )
+        latched = False
+        deadline = time.time() + self.booster_burn_timeout
+        while boosters.amount("SolidFuel") > 0.1:
+            self.assertLess(time.time(), deadline, "the boosters did not burn out")
+            self.turn(0.5)
+            latched = latched or self.ap.pitch_yaw_oscillation_latched
+        self.assertTrue(latched, "the full stack never latched as flexible")
+
+        # Separate the boosters and ignite the core
+        control.activate_next_stage()
+        control.activate_next_stage()
+        self.wait(0.5)
+        self.assertFalse(
+            self.ap.pitch_yaw_oscillation_latched,
+            "kept the full stack's flexible-craft latch after separation",
+        )
+
+        # Hold the turn through the band where tracking a moving target used to limit-cycle,
+        # once the separation transient has settled
+        self.turn(5)
+        self.ap.diagnostic_logging = True
+        self.turn(50)
+        self.ap.diagnostic_logging = False
+        samples = diagnostics.parse_log(self.ap.diagnostic_log)
+        self.assertGreater(len(samples), 0)
+        self.assertLess(
+            diagnostics.control_oscillation_amplitude(samples),
+            0.15,
+            "actuators limit-cycled while following the turn",
+        )
+        self.assertLess(
+            max(sample.err for sample in samples),
+            0.5,
+            "trailed the moving target",
+        )
 
 
 # Flight tests for stock aircraft: place the craft in level atmospheric flight, confirm the
@@ -2039,12 +2138,11 @@ TestAutoPilotFlightAeris4A = _make_autopilot_flight_test_class(
     speed=100,
 )
 
-# A small, slow stock light aircraft. Its pitch takes about 8 seconds to settle after a step.
+# A small, slow stock light aircraft
 TestAutoPilotFlightGull = _make_autopilot_flight_test_class(
     "TestAutoPilotFlightGull",
     "Gull",
     speed=35,
-    step_settle_time=10,
 )
 
 # A mid-size stock jet, whose elevators limit-cycled above about 150 m/s with the
