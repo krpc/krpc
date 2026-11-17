@@ -59,12 +59,47 @@ SETUPS = {
     # Two vessels joined port to port, which _place_docking_vessels undocks
     "docking": Setup(craft="PartsDockingPortInFlight", fresh=True),
     # Mods
+    "docking-camera": Setup(
+        craft="DockingCamera",
+        directory="service/DockingCamera/test/craft",
+        mods=("DockingCamera",),
+    ),
+    "infernal-robotics": Setup(
+        craft="InfernalRobotics",
+        directory="service/InfernalRobotics/test/craft",
+        placement=Pad(),
+        mods=("InfernalRobotics",),
+    ),
+    "kerbal-alarm-clock": Setup(
+        craft="KerbalAlarmClock",
+        directory="service/KerbalAlarmClock/test/craft",
+        mods=("KerbalAlarmClock",),
+    ),
+    "kerbal-engineer-redux": Setup(
+        craft="Staging", placement=Pad(), mods=("KerbalEngineerRedux",)
+    ),
+    "mechjeb": Setup(
+        craft="Kerbal X",
+        directory=STOCK,
+        placement=Pad(),
+        fresh=True,
+        mods=("MechJeb",),
+    ),
     "raster-prop-monitor": Setup(
         craft="RasterPropMonitor",
         directory="service/RasterPropMonitor/test/craft",
         placement=Pad(),
         mods=("RasterPropMonitor",),
     ),
+    "remote-tech": Setup(
+        craft="RemoteTech",
+        directory="service/RemoteTech/test/craft",
+        mods=("RemoteTech",),
+    ),
+    "scansat": Setup(
+        craft="ScanSat", directory="service/ScanSat/test/craft", mods=("SCANsat",)
+    ),
+    "trajectories": Setup(mods=("Trajectories",)),
 }
 
 
@@ -126,6 +161,45 @@ def _fire_engines(test) -> None:
     vessel.control.throttle = 1
     # The thrust builds over a few frames, and a compiled example reads it at once
     test.wait_until(lambda: vessel.thrust > 0, message="the engines to fire")
+
+
+def _rename_servo_group(test) -> None:
+    # Infernal Robotics builds the groups again from the parts shortly after a launch,
+    # which undoes a rename made before then, so rename until the name holds
+    conn = test.connect()
+    ir = conn.infernal_robotics
+    vessel = conn.space_center.active_vessel
+    held = 0
+
+    def renamed() -> bool:
+        nonlocal held
+        group = ir.servo_group_with_name(vessel, "Group1")
+        if group is not None:
+            group.name = "MyGroup"
+            held = 0
+        elif ir.servo_group_with_name(vessel, "MyGroup") is not None:
+            held += 1
+        return held >= 20
+
+    test.wait_until(renamed, message="the servo group to stay renamed MyGroup")
+
+
+def _switch_on_camera(test) -> None:
+    conn = test.connect()
+    part = conn.space_center.active_vessel.parts.with_name("OnboardCamera")[0]
+    module = next(m for m in part.modules if m.name == "PartCameraModule")
+    enabled = next(f for f in module.field_list if f.name == "IsEnabled")
+    enabled.bool_value = True
+    camera = conn.docking_camera.camera(part)
+
+    def started() -> bool:
+        try:
+            camera.image()
+            return True
+        except RuntimeError:
+            return False
+
+    test.wait_until(started, message="the camera to switch on")
 
 
 TUTORIALS = [
@@ -552,4 +626,48 @@ CLIENT = [
     ),
 ]
 
-EXAMPLES = [*TUTORIALS, *USER_GUIDE, *CLIENT]
+API = [
+    Example("api/debug/DebugExample", "orbit", check=checks.infinite_propellant),
+    *_exits(
+        "orbit",
+        "api/drawing/DrawingExample",
+        "api/krpc/KRPCExample",
+        "api/lidar/RaycastExample",
+        "api/space-center/SpaceCenterExample",
+        "api/ui/UIExample",
+    ),
+    Example(
+        "api/docking-camera/DockingCameraExample",
+        "docking-camera",
+        prepare=_switch_on_camera,
+    ),
+    Example(
+        "api/infernal-robotics/InfernalRoboticsExample",
+        "infernal-robotics",
+        prepare=_rename_servo_group,
+    ),
+    Example("api/kerbal-alarm-clock/KerbalAlarmClockExample", "kerbal-alarm-clock"),
+    Example(
+        "api/kerbal-engineer-redux/KerbalEngineerReduxExample",
+        "kerbal-engineer-redux",
+    ),
+    Example(
+        "api/mechjeb/MechJebExample",
+        "mechjeb",
+        run=Exit(timeout=900),
+        check=checks.in_orbit,
+        slow=True,
+    ),
+    Example(
+        "api/raster-prop-monitor/RasterPropMonitorExample",
+        "raster-prop-monitor",
+        run=Loop(prints=False),
+        # These clients have no events, so their examples set up the page and stop
+        per_language={"cnano": {"run": Exit()}, "lua": {"run": Exit()}},
+    ),
+    Example("api/remote-tech/RemoteTechExample", "remote-tech"),
+    Example("api/scansat/ScanSatExample", "scansat"),
+    Example("api/trajectories/TrajectoriesExample", "trajectories"),
+]
+
+EXAMPLES = [*TUTORIALS, *USER_GUIDE, *CLIENT, *API]

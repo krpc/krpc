@@ -105,6 +105,13 @@ def replace_vessel(test: TestCase) -> None:
 # Checks
 
 
+def in_orbit(test: TestCase) -> None:
+    vessel = test.connect().space_center.active_vessel
+    orbit = vessel.orbit
+    atmosphere = orbit.body.atmosphere_depth
+    test.assertGreater(orbit.periapsis_altitude, atmosphere)
+
+
 def controlling(title: str) -> Callable[[TestCase], None]:
     def check(test: TestCase) -> None:
         parts = test.connect().space_center.active_vessel.parts
@@ -353,3 +360,11 @@ def vessels(count: int) -> Callable[[TestCase], None]:
 def map_filter_includes_debris(test: TestCase) -> None:
     space_center = test.connect().space_center
     test.assertIn(space_center.MapFilterType.debris, space_center.map_filter)
+
+
+def infinite_propellant(test: TestCase) -> None:
+    conn = test.connect()
+    try:
+        test.assertTrue(conn.debug.infinite_propellant)
+    finally:
+        conn.debug.infinite_propellant = False

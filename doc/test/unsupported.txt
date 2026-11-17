@@ -5,3 +5,4 @@
 cnano client/ConnectingCustom  # Talks to the server over its own standard input and output
 js client/Dashboard  # Runs in a web page
 js client/StreamScope  # await using needs Node.js 24, and the build runs Node.js 22
+js api/docking-camera/DockingCameraExample  # Runs in a web page
