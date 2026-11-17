@@ -196,6 +196,23 @@ USER_GUIDE = [
         run=Exit(timeout=600),
         check=_warp_to.check,
     ),
+    # Vectors and rotations
+    # The vessel turns slowly relative to the frames, between the print and the check
+    Example(
+        "user-guide/vectors-and-rotations/AngleToPrograde",
+        "orbit",
+        values=Values(checks.angle_to_prograde, relative=0, absolute=1),
+    ),
+    Example(
+        "user-guide/vectors-and-rotations/Quaternion",
+        "orbit",
+        values=Values(checks.rotation, relative=0, absolute=0.02),
+    ),
+    Example(
+        "user-guide/vectors-and-rotations/Vector3",
+        "orbit",
+        values=Values(checks.prograde, relative=0, absolute=0.02),
+    ),
 ]
 
 EXAMPLES = [*TUTORIALS, *USER_GUIDE]

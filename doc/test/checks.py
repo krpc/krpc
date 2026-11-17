@@ -143,6 +143,23 @@ def maximum_rails_warp_factor(test: TestCase) -> list[float]:
     return [test.connect().space_center.maximum_rails_warp_factor]
 
 
+def angle_to_prograde(test: TestCase) -> list[float]:
+    vessel = test.connect().space_center.active_vessel
+    frame = vessel.orbit.body.non_rotating_reference_frame
+    direction = vessel.direction(frame)
+    prograde = vessel.flight(frame).prograde
+    dot = sum(a * b for a, b in zip(direction, prograde, strict=True))
+    return [math.degrees(math.acos(max(-1, min(1, dot))))]
+
+
+def rotation(test: TestCase) -> list[float]:
+    return list(test.connect().space_center.active_vessel.flight().rotation)
+
+
+def prograde(test: TestCase) -> list[float]:
+    return list(test.connect().space_center.active_vessel.flight().prograde)
+
+
 def part_titles(test: TestCase) -> list[str]:
     parts = test.connect().space_center.active_vessel.parts.all
     return [part.title for part in parts]
