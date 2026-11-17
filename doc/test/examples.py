@@ -46,6 +46,7 @@ SETUPS = {
         quicksave=True,
         fresh=True,
     ),
+    "pad": Setup(placement=Pad(), fresh=True),
     # The examples launch without clearing the pad, so it must hold no vessel, including in
     # the save's record of its vessels
     "launch-my-rocket": Setup(fresh=True, reload=True, ships=(("My Rocket", "Basic"),)),
@@ -670,4 +671,9 @@ API = [
     Example("api/trajectories/TrajectoriesExample", "trajectories"),
 ]
 
-EXAMPLES = [*TUTORIALS, *USER_GUIDE, *CLIENT, *API]
+PAGES = [
+    Example("getting-started/HelloWorld", "orbit"),
+    Example("index/Launch", "pad", run=Exit(timeout=300), slow=True),
+]
+
+EXAMPLES = [*TUTORIALS, *USER_GUIDE, *CLIENT, *API, *PAGES]
