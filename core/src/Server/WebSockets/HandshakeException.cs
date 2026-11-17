@@ -1,13 +1,12 @@
 using System;
-using KRPC.Server.HTTP;
 
 namespace KRPC.Server.WebSockets
 {
     sealed class HandshakeException : ServerException
     {
-        public Response Response { get; private set; }
+        public HttpResponse Response { get; private set; }
 
-        public HandshakeException (Response response)
+        public HandshakeException (HttpResponse response)
         {
             Response = response;
         }

@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace KRPC.Server
+namespace KRPC.Server.Delimited
 {
     sealed class ByteOutputAdapterStream : Stream
     {

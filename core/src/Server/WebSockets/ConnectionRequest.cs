@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using KRPC.Server.HTTP;
 
 namespace KRPC.Server.WebSockets
 {
@@ -29,13 +28,13 @@ namespace KRPC.Server.WebSockets
         /// Parse and check a websockets connection request. Throws a HandshakeException holding
         /// the response to send if the request is invalid.
         /// </summary>
-        public static Request Read (byte[] data, int offset, int length)
+        public static HttpRequest Read (byte[] data, int offset, int length)
         {
-            Request request;
+            HttpRequest request;
             try {
-                request = Request.FromBytes (data, offset, length);
-            } catch (MalformedRequestException) {
-                throw new HandshakeException (Response.CreateBadRequest ());
+                request = HttpRequest.FromBytes (data, offset, length);
+            } catch (MalformedHttpRequestException) {
+                throw new HandshakeException (HttpResponse.CreateBadRequest ());
             }
             CheckValid (request);
             return request;
@@ -47,49 +46,49 @@ namespace KRPC.Server.WebSockets
         public static byte[] WriteResponse (string key)
         {
             var returnKey = Convert.ToBase64String (sha1.ComputeHash (Encoding.ASCII.GetBytes (key + WEB_SOCKETS_KEY)));
-            var response = new Response (101, "Switching Protocols");
+            var response = new HttpResponse (101, "Switching Protocols");
             response.AddHeaderField ("Upgrade", "websocket");
             response.AddHeaderField ("Connection", "Upgrade");
             response.AddHeaderField ("Sec-WebSocket-Accept", returnKey);
             return response.ToBytes ();
         }
 
-        static void CheckValid (Request request)
+        static void CheckValid (HttpRequest request)
         {
             // Check request line
             if (request.Protocol != "http/1.1")
-                throw new HandshakeException (Response.CreateHTTPVersionNotSupported ());
+                throw new HandshakeException (HttpResponse.CreateHTTPVersionNotSupported ());
             if (request.URI.AbsolutePath != "/")
-                throw new HandshakeException (Response.CreateNotFound ());
+                throw new HandshakeException (HttpResponse.CreateNotFound ());
             if (request.Method != "get")
-                throw new HandshakeException (Response.CreateMethodNotAllowed ("Expected a GET request."));
+                throw new HandshakeException (HttpResponse.CreateMethodNotAllowed ("Expected a GET request."));
 
             // Check host field
             if (!request.Headers.ContainsKey ("host"))
-                throw new HandshakeException (Response.CreateBadRequest ("Host field not set."));
+                throw new HandshakeException (HttpResponse.CreateBadRequest ("Host field not set."));
 
             // Check upgrade field
             if (!request.Headers.ContainsKey ("upgrade") || (SingleValue (request, "upgrade") ?? string.Empty).ToLowerInvariant () != "websocket")
-                throw new HandshakeException (Response.CreateBadRequest ("Upgrade field not set to websocket."));
+                throw new HandshakeException (HttpResponse.CreateBadRequest ("Upgrade field not set to websocket."));
 
             // Check connection field
             if (!request.Headers.ContainsKey ("connection") || !request.Headers ["connection"].Contains ("upgrade", StringComparer.CurrentCultureIgnoreCase))
-                throw new HandshakeException (Response.CreateBadRequest ("Connection field not set to Upgrade."));
+                throw new HandshakeException (HttpResponse.CreateBadRequest ("Connection field not set to Upgrade."));
 
             // Check key field
             if (!request.Headers.ContainsKey ("sec-websocket-key"))
-                throw new HandshakeException (Response.CreateBadRequest ("Sec-WebSocket-Key field not set."));
+                throw new HandshakeException (HttpResponse.CreateBadRequest ("Sec-WebSocket-Key field not set."));
             try {
                 var key = Convert.FromBase64String (SingleValue (request, "sec-websocket-key") ?? string.Empty);
                 if (key.Length != 16)
-                    throw new HandshakeException (Response.CreateBadRequest ("Failed to decode Sec-WebSocket-Key\nExpected 16 bytes, got " + key.Length + " bytes."));
+                    throw new HandshakeException (HttpResponse.CreateBadRequest ("Failed to decode Sec-WebSocket-Key\nExpected 16 bytes, got " + key.Length + " bytes."));
             } catch (FormatException) {
-                throw new HandshakeException (Response.CreateBadRequest ("Failed to decode Sec-WebSocket-Key\nNot a valid base64 string."));
+                throw new HandshakeException (HttpResponse.CreateBadRequest ("Failed to decode Sec-WebSocket-Key\nNot a valid base64 string."));
             }
 
             // Check version field
             if (!request.Headers.ContainsKey ("sec-websocket-version") || SingleValue (request, "sec-websocket-version") != "13") {
-                var response = Response.CreateUpgradeRequired ();
+                var response = HttpResponse.CreateUpgradeRequired ();
                 response.AddHeaderField ("Sec-WebSocket-Version", "13");
                 throw new HandshakeException (response);
             }
@@ -100,7 +99,7 @@ namespace KRPC.Server.WebSockets
         /// <summary>
         /// The value of a header field holding one value, or null if it holds several.
         /// </summary>
-        static string SingleValue (Request request, string key)
+        static string SingleValue (HttpRequest request, string key)
         {
             var values = request.Headers [key];
             return values.Count == 1 ? values [0] : null;
