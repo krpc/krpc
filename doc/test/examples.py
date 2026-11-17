@@ -131,9 +131,10 @@ TUTORIALS = [
         "tutorials/parts/DeployParachutesFunction",
         check=checks.parachutes_deployed,
     ),
-    Example(
-        "tutorials/user-interface/UserInterface",
+    *_exits(
         "orbit",
+        "tutorials/user-interface/UserInterface",
+        "tutorials/drawing/DrawingExample",
         run=Interactive(checks.keeps_calling, then=Loop(prints=False)),
     ),
 ]
