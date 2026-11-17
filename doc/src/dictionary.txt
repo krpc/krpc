@@ -117,6 +117,7 @@ hostname
 inkscape
 initializers
 integration
+integrations
 interactable
 internet
 intra

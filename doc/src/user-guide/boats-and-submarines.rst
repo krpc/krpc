@@ -8,7 +8,7 @@ A hull floats when the water it pushes aside weighs more than the hull does.
 fully submerged, and :meth:`Flight.buoyant_force_at` is the force that volume pushes back
 with:
 
-.. literalinclude:: /scripts/tutorials/boats-and-submarines/BuoyantForce.py
+.. literalinclude:: /scripts/user-guide/boats-and-submarines/BuoyantForce.py
    :language: python
    :start-after: [docs]
    :end-before: [/docs]
@@ -35,7 +35,7 @@ that rolls or pitches the hull. That offset is the trim.
 Read both in the vessel's surface reference frame. Its x axis points up, so the trim is
 what the other two axes carry:
 
-.. literalinclude:: /scripts/tutorials/boats-and-submarines/CenterOfBuoyancy.py
+.. literalinclude:: /scripts/user-guide/boats-and-submarines/CenterOfBuoyancy.py
    :language: python
    :start-after: [docs]
    :end-before: [/docs]
@@ -45,7 +45,7 @@ what the other two axes carry:
 The couple is also available as a torque about the center of mass. A hull trimmed level
 carries zero torque:
 
-.. literalinclude:: /scripts/tutorials/boats-and-submarines/BuoyantTorque.py
+.. literalinclude:: /scripts/user-guide/boats-and-submarines/BuoyantTorque.py
    :language: python
    :start-after: [docs]
    :end-before: [/docs]
@@ -62,7 +62,7 @@ A hull can be trimmed before it is launched. :meth:`EditorVessel.flight` returns
 :attr:`SimulatedFlight.surface_reference_frame` sets which way is up. Here a hull built
 nose-up in the vehicle assembly building is simulated floating on its bottom:
 
-.. literalinclude:: /scripts/tutorials/boats-and-submarines/EditorTorque.py
+.. literalinclude:: /scripts/user-guide/boats-and-submarines/EditorTorque.py
    :language: python
    :start-after: [docs]
    :end-before: [/docs]
@@ -85,7 +85,7 @@ Below the waterline, :attr:`Flight.static_pressure` and :attr:`Part.static_press
 include the weight of the water. With part pressure limits enabled in the difficulty
 settings, a part is destroyed when its pressure exceeds :attr:`Part.max_pressure`:
 
-.. literalinclude:: /scripts/tutorials/boats-and-submarines/PressureLimits.py
+.. literalinclude:: /scripts/user-guide/boats-and-submarines/PressureLimits.py
    :language: python
    :start-after: [docs]
    :end-before: [/docs]
@@ -94,7 +94,7 @@ The loop reads the parts with separate calls, which can land in different physic
 :ref:`server side function <server-side-functions>` reads every part in the same tick,
 with a single call:
 
-.. literalinclude:: /scripts/tutorials/boats-and-submarines/PressureLimitsFunction.py
+.. literalinclude:: /scripts/user-guide/boats-and-submarines/PressureLimitsFunction.py
    :language: python
    :start-after: [docs]
    :end-before: [/docs]
@@ -108,5 +108,5 @@ Example
 This script reports whether the active vessel floats, and how far its center of buoyancy
 sits from its center of mass:
 
-.. literalinclude:: /scripts/tutorials/boats-and-submarines/BuoyancyTrim.py
+.. literalinclude:: /scripts/user-guide/boats-and-submarines/BuoyancyTrim.py
    :language: python
