@@ -1,3 +1,4 @@
+#include <iomanip>
 #include <iostream>
 #include <krpc.hpp>
 #include <krpc/services/space_center.hpp>
@@ -8,6 +9,7 @@ int main() {
   krpc::services::SpaceCenter sc(conn);
   std::tuple<double, double, double> v =
       sc.active_vessel().value().flight().prograde();
-  std::cout << std::get<0>(v) << " " << std::get<1>(v) << " "
-            << std::get<2>(v) << std::endl;
+  std::cout << std::fixed << std::setprecision(2) << "(" << std::get<0>(v)
+            << ", " << std::get<1>(v) << ", " << std::get<2>(v) << ")"
+            << std::endl;
 }

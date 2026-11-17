@@ -127,15 +127,67 @@ standard library are in radians. The API reference gives the unit of each one.
 Computing on the Server
 -----------------------
 
-The standard library service does vector and quaternion arithmetic, so you do not need a maths
+The standard library service does vector and quaternion arithmetic, so you do not need a math
 library in your client. This example finds the angle between the direction of the active vessel
 and its prograde direction:
 
-.. literalinclude:: /scripts/user-guide/vectors-and-rotations/AngleToPrograde.py
-   :language: python
-   :start-after: [docs]
-   :end-before: [/docs]
-   :dedent:
+.. tabs::
+
+   .. group-tab:: Python
+
+      .. literalinclude:: /scripts/user-guide/vectors-and-rotations/AngleToPrograde.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C#
+
+      .. literalinclude:: /scripts/user-guide/vectors-and-rotations/AngleToPrograde.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C++
+
+      .. literalinclude:: /scripts/user-guide/vectors-and-rotations/AngleToPrograde.cpp
+         :language: cpp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/user-guide/vectors-and-rotations/AngleToPrograde.c
+         :language: c
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: Java
+
+      .. literalinclude:: /scripts/user-guide/vectors-and-rotations/AngleToPrograde.java
+         :language: java
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: Lua
+
+      .. literalinclude:: /scripts/user-guide/vectors-and-rotations/AngleToPrograde.lua
+         :language: lua
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/vectors-and-rotations/AngleToPrograde.js
+         :language: javascript
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
 The vector functions add, subtract, scale, normalize and interpolate vectors, and give their dot
 and cross products, lengths, distances and angles. The quaternion functions compose, invert and
