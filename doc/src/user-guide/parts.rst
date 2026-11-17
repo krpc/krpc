@@ -6,8 +6,8 @@ Parts
 A vessel is made of parts, connected to one another in a tree. This guide shows how to walk that
 tree, how fuel lines fit into it, and how the staging numbers of each part relate to the staging
 sequence. It then shows how to reach any part module, including those of mods with no kRPC
-service. The examples use the vessel below, whose craft file you can
-:download:`download here </crafts/PartsTree.craft>`.
+service. The tree, fuel line and staging examples use the vessel below, whose craft file you
+can :download:`download here </crafts/PartsTree.craft>`.
 
 .. container:: clearer
 
@@ -272,13 +272,66 @@ has three lists:
 * ``Module.ActionList``: the module's actions, the ones an action group can hold.
 
 This example reads the engine fields the right-click menu shows, limits the thrust of each engine,
-and extends the solar panels:
+and extends the solar panels. It covers engines with a ``ModuleEngines`` module, and skips those
+with ``ModuleEnginesFX``, such as the jet engines:
 
-.. literalinclude:: /scripts/user-guide/parts/PartModules.py
-   :language: python
-   :start-after: [docs]
-   :end-before: [/docs]
-   :dedent:
+.. tabs::
+
+   .. group-tab:: Python
+
+      .. literalinclude:: /scripts/user-guide/parts/PartModules.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C#
+
+      .. literalinclude:: /scripts/user-guide/parts/PartModules.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C++
+
+      .. literalinclude:: /scripts/user-guide/parts/PartModules.cpp
+         :language: cpp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/user-guide/parts/PartModules.c
+         :language: c
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: Java
+
+      .. literalinclude:: /scripts/user-guide/parts/PartModules.java
+         :language: java
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: Lua
+
+      .. literalinclude:: /scripts/user-guide/parts/PartModules.lua
+         :language: lua
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/parts/PartModules.js
+         :language: javascript
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
 ``PartField.Name``, ``PartEvent.Name`` and ``PartAction.Name`` are the identifiers in the module's
 code, which stay the same across game versions and languages. The names the menu shows are
