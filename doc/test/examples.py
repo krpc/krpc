@@ -27,6 +27,8 @@ STOCK = ""
 SETUPS = {
     "orbit": Setup(),
     "flight": Setup(placement=Flight()),
+    # Below the altitudes the event examples wait for
+    "low-flight": Setup(placement=Flight(altitude=800, speed=100)),
     "parts-tree": Setup(craft="PartsTree", directory=DOC_CRAFT, placement=Pad()),
     "docking-ports": Setup(craft="PartsDockingPort", placement=Pad()),
     "splashed": Setup(craft="Buoyancy", placement=Splashed()),
@@ -330,6 +332,13 @@ USER_GUIDE = [
         "user-guide/boats-and-submarines/PressureLimitsFunction",
     ),
     Example("user-guide/boats-and-submarines/EditorTorque", "editor"),
+    # Streams and events
+    Example(
+        "user-guide/streams-and-events/Event",
+        "low-flight",
+        run=Interactive(checks.climb_past(10_000)),
+    ),
+    Example("user-guide/streams-and-events/StreamRate", "orbit", run=Loop()),
 ]
 
 EXAMPLES = [*TUTORIALS, *USER_GUIDE]

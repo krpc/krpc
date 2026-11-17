@@ -14,6 +14,24 @@ if TYPE_CHECKING:
 # Hooks
 
 
+def climb_past(altitude: int) -> Callable[[TestCase], None]:
+    """Checks that the example is still waiting for the vessel to climb, then places the
+    vessel in flight above the altitude."""
+
+    def during(test: TestCase) -> None:
+        conn = test.connect()
+        clients = len(conn.krpc.clients)
+        test.wait(2)
+        test.assertEqual(
+            clients,
+            len(conn.krpc.clients),
+            "The example stopped waiting before the vessel climbed",
+        )
+        test.set_flight(altitude=altitude + 2000, speed=200)
+
+    return during
+
+
 def pitches_up(test: TestCase) -> None:
     """Waits for the example's control loop to pitch the level vessel up toward 45
     degrees."""
