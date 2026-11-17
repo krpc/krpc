@@ -32,11 +32,6 @@ namespace KRPC
         ClientConnectingDialog clientConnectingDialog;
         ClientDisconnectDialog clientDisconnectDialog;
 
-        /// <summary>
-        /// The instance of the addon
-        /// </summary>
-        public static Addon Instance { get; private set; }
-
         internal static void InitLogger ()
         {
             KRPC.Utils.Logger.Writer = (msg, severity) => {
@@ -85,7 +80,6 @@ namespace KRPC
                 return;
 
             Init ();
-            Instance = this;
 
             var gameScene = GameScenesExtensions.CurrentGameScene();
             Service.CallContext.GameScene = gameScene;
@@ -430,8 +424,6 @@ namespace KRPC
             Destroy (mainWindow);
             Destroy (clientConnectingDialog);
             GUILayoutExtensions.Destroy ();
-
-            Instance = null;
         }
 
         /// <summary>

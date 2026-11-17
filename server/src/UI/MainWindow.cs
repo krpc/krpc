@@ -43,10 +43,9 @@ namespace KRPC.UI
         string tickHoldTimeout;
         // Style settings
         internal readonly Color errorColor = Color.yellow;
-        internal GUIStyle labelStyle, stretchyLabelStyle, fixedLabelStyle, textFieldStyle, longTextFieldStyle, stretchyTextFieldStyle,
+        internal GUIStyle labelStyle, stretchyLabelStyle, fixedLabelStyle, longTextFieldStyle, stretchyTextFieldStyle,
             buttonStyle, toggleStyle, expandStyle, separatorStyle, lightStyle, errorLabelStyle, comboOptionsStyle, comboOptionStyle;
         const float windowWidth = 310f;
-        const float textFieldWidth = 45f;
         const float longTextFieldWidth = 80f;
         const float fixedLabelWidth = 160f;
         const float serverInfoLabelWidth = 110f;
@@ -56,7 +55,6 @@ namespace KRPC.UI
         const int recvTimeoutMaxLength = 20;
         const int tickHoldTimeoutMaxLength = 20;
         // Text strings
-        const string advancedModeText = "Show advanced settings";
         const string startAllServersText = "Start server";
         const string stopAllServersText = "Stop server";
         const string addServerText = "Add server";
@@ -65,8 +63,6 @@ namespace KRPC.UI
         const string stopServerText = "Stop";
         const string editServerText = "Edit";
         const string saveServerText = "Save";
-        const string serverOnlineText = "Server online";
-        const string serverOfflineText = "Server offline";
         const string protocolText = "Protocol";
         const string addressText = "Address";
         internal const string protobufOverTcpText = "Protobuf over TCP/IP";
@@ -115,9 +111,6 @@ namespace KRPC.UI
             // No vertical margin, as the text fields beside these labels have none
             fixedLabelStyle = new GUIStyle (skin.label);
             fixedLabelStyle.margin = new RectOffset (skin.label.margin.left, skin.label.margin.right, 0, 0);
-
-            textFieldStyle = new GUIStyle (skin.textField);
-            textFieldStyle.margin = new RectOffset (0, 0, 0, 0);
 
             longTextFieldStyle = new GUIStyle (skin.textField);
             longTextFieldStyle.margin = new RectOffset (0, 0, 0, 0);
@@ -180,8 +173,6 @@ namespace KRPC.UI
                 stretchyLabelStyle.fontSize = scaledFontSize;
                 fixedLabelStyle.fontSize = scaledFontSize;
                 fixedLabelStyle.fixedWidth = fixedLabelWidth * GameSettings.UI_SCALE;
-                textFieldStyle.fontSize = scaledFontSize;
-                textFieldStyle.fixedWidth = textFieldWidth * GameSettings.UI_SCALE;
                 longTextFieldStyle.fontSize = scaledFontSize;
                 longTextFieldStyle.fixedWidth = longTextFieldWidth * GameSettings.UI_SCALE;
                 stretchyTextFieldStyle.fontSize = scaledFontSize;
