@@ -315,10 +315,12 @@ reason — typically an aggressively-tuned loop driving slow gimbal or aerodynam
 (see :ref:`Limitations <autopilot-limitations>`).
 
 As soon as the autopilot sees a craft begin to wobble, it *latches* that craft as
-flexible and switches on up to four independent mitigations. The first — a :ref:`rate
-filter <rate-filter>` — removes the attitude oscillation from its rate measurements so the
-control loop does not chase it, and stays on whether the craft is holding or slewing. The
-other three — a :ref:`bandwidth floor <bandwidth-floor>`, a :ref:`feedforward cut
+flexible and switches on up to four independent mitigations. A change to the craft's
+parts, as when it separates a stage or docks, clears the latch and resets the detectors.
+The first — a :ref:`rate filter <rate-filter>` — removes the attitude oscillation from
+its rate measurements so the control loop does not chase it, and stays on whether the
+craft is holding or slewing.
+The other three — a :ref:`bandwidth floor <bandwidth-floor>`, a :ref:`feedforward cut
 <feedforward-cut>` and an :ref:`output filter <output-filter>` — stop the loop feeding
 energy back into the structure, and apply only while the craft is *holding* attitude, so
 that a
@@ -1486,8 +1488,8 @@ independent of the loop gains and of any commanded maneuver. It produces a level
 and 1 per axis — rising quickly when excitation appears, decaying slowly once it subsides —
 and once that level is high enough the axis is *latched* as flexible. The latch persists if
 the autopilot is briefly disengaged and re-engaged, so a craft known to be flexible stays
-damped. Pitch and yaw are treated together: a long vehicle's bending mode appears in both,
-so if one is found flexible the other is too.
+damped. A change to the craft's parts clears it. Pitch and yaw are treated together: a
+long vehicle's bending mode appears in both, so if one is found flexible the other is too.
 
 In parallel, a frequency estimator tracks the oscillation frequency from the intervals
 between sign changes of the high-passed rate. It is used only to route and tune the rate

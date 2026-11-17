@@ -100,6 +100,9 @@ namespace KRPC.SpaceCenter.AutoPilot
         // shutdown while a reaction wheel remains) does not cause a one-tick gain spike that
         // jerks the gimbal.
         Vector3d smoothedTorque;
+        // The vessel's part count on the last tick, to tell when its structure changes, or -1
+        // before the first tick
+        int partCount = -1;
         // Roll gain and full-deflection roll torque of each control surface that rolls the vessel
         readonly List<double> rollGains = new List<double> ();
         readonly List<double> rollSurfaceTorques = new List<double> ();
@@ -892,6 +895,21 @@ namespace KRPC.SpaceCenter.AutoPilot
             Start ();
         }
 
+        /// <summary>
+        /// Forget what the oscillation handling learned about the craft when its structure
+        /// changes. A latch and chatter level measured on the full stack say nothing about the
+        /// stage left after a separation, or about a docked pair. Only the detectors clear: the
+        /// mitigations ramp out as for any unlatched axis, and the control loops keep their state.
+        /// </summary>
+        void UpdatePartCount (int count)
+        {
+            if (partCount >= 0 && count != partCount) {
+                detectors.Reset ();
+                detectors.ResetChatterLevel ();
+            }
+            partCount = count;
+        }
+
         public void Start ()
         {
             engageFixedTime = Time.fixedTime;
@@ -996,6 +1014,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             var dt = Time.fixedDeltaTime;
             UpdateControlSurfaces (torque);
             UpdateGimbals (torque, dt);
+            UpdatePartCount (internalVessel.parts.Count);
 
             // While the vessel sits on the launch clamps (PRELAUNCH) the autopilot is engaged but
             // must not act. The craft is physically held and the engines are unlit, so available
