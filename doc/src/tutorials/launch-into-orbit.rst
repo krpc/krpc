@@ -22,6 +22,8 @@ Preparing for Launch
 
 The following code connects to the server, gets the active vessel, sets up a
 bunch of streams to get flight telemetry then prepares the rocket for launch.
+The C and Lua clients do not support streams, so their scripts read the
+telemetry with a call each time.
 
 .. tabs::
 
@@ -71,14 +73,20 @@ Ascent
 ------
 
 The next part of the program launches the rocket on its four solid boosters.
-On every pass, the main loop sets the auto-pilot's target pitch, which
-gradually turns the rocket towards the horizon.
+It then adds an event for each of the two lower stages, which fires when the
+stage runs out of fuel, and a callback that the event calls. The callback activates two stages:
+one drops the empty stage, and the next lights the engine above it. It also
+removes its event, as the stage it watched is gone.
 
-The loop also watches the fuel in the current stage. When the boosters run
-dry, it activates two stages: one drops the boosters, and the next lights the
-core's liquid fuel engine. When the core runs dry, it drops the core and
-lights the upper stage the same way. The loop exits when the rocket's apoapsis
-is close to the target apoapsis.
+The callbacks run alongside the main loop. On every pass between 250 m and
+45 km, the loop sets the auto-pilot's target pitch, which gradually turns the
+rocket towards the horizon. It pauses for 50 ms between passes, so it does not flood the server
+with calls. The JavaScript program waits for the next altitude update in place
+of the pause. The loop exits when the rocket's apoapsis is close to the target
+apoapsis.
+
+The C and Lua clients have no events, so their loops also watch the fuel in
+the current stage, and activate the stages the same way.
 
 .. tabs::
 
@@ -87,21 +95,21 @@ is close to the target apoapsis.
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.py
          :language: python
          :start-at: # Activate the first stage
-         :end-before: # Disable engines when target apoapsis is reached
+         :end-before: # Fine tune the apoapsis at 25% thrust
 
    .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cs
          :language: csharp
          :start-at: // Activate the first stage
-         :end-before: // Disable engines when target apoapsis is reached
+         :end-before: // Fine tune the apoapsis at 25% thrust
 
    .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cpp
          :language: cpp
          :start-at: // Activate the first stage
-         :end-before: // Disable engines when target apoapsis is reached
+         :end-before: // Fine tune the apoapsis at 25% thrust
 
    .. group-tab:: C
 
@@ -115,21 +123,21 @@ is close to the target apoapsis.
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.java
          :language: java
          :start-at: // Activate the first stage
-         :end-before: // Disable engines when target apoapsis is reached
+         :end-before: // Fine tune the apoapsis at 25% thrust
 
    .. group-tab:: Lua
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.lua
          :language: lua
          :start-at: -- Activate the first stage
-         :end-before: -- Disable engines when target apoapsis is reached
+         :end-before: -- Fine tune the apoapsis at 25% thrust
 
    .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.js
          :language: javascript
          :start-at: // Activate the first stage
-         :end-before: // Disable engines when target apoapsis is reached
+         :end-before: // Fine tune the apoapsis at 25% thrust
 
 Leaving the Atmosphere
 ----------------------
@@ -140,7 +148,7 @@ left Kerbin's atmosphere. Each wait is an event, which the server checks every p
 
 The Python, C# and JavaScript clients compile the event's condition from a lambda, and the C++
 and Java clients build it with the :ref:`expression API <server-side-functions-api>`. The C and Lua
-programs poll in a loop, as those clients have no events.
+programs poll in a loop with a short pause, as those clients have no events.
 
 .. tabs::
 
@@ -148,21 +156,21 @@ programs poll in a loop, as those clients have no events.
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.py
          :language: python
-         :start-at: # Disable engines when target apoapsis is reached
+         :start-at: # Fine tune the apoapsis at 25% thrust
          :end-before: # Plan circularization burn (using vis-viva equation)
 
    .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cs
          :language: csharp
-         :start-at: // Disable engines when target apoapsis is reached
+         :start-at: // Fine tune the apoapsis at 25% thrust
          :end-before: // Plan circularization burn (using vis-viva equation)
 
    .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cpp
          :language: cpp
-         :start-at: // Disable engines when target apoapsis is reached
+         :start-at: // Fine tune the apoapsis at 25% thrust
          :end-before: // Plan circularization burn (using vis-viva equation)
 
    .. group-tab:: C
@@ -176,21 +184,21 @@ programs poll in a loop, as those clients have no events.
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.java
          :language: java
-         :start-at: // Disable engines when target apoapsis is reached
+         :start-at: // Fine tune the apoapsis at 25% thrust
          :end-before: // Plan circularization burn (using vis-viva equation)
 
    .. group-tab:: Lua
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.lua
          :language: lua
-         :start-at: -- Disable engines when target apoapsis is reached
-         :end-before: ---- Plan circularization burn (using vis-viva equation)
+         :start-at: -- Fine tune the apoapsis at 25% thrust
+         :end-before: -- Plan circularization burn (using vis-viva equation)
 
    .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.js
          :language: javascript
-         :start-at: // Disable engines when target apoapsis is reached
+         :start-at: // Fine tune the apoapsis at 25% thrust
          :end-before: // Plan circularization burn (using vis-viva equation)
 
 Planning the Circularization Burn
@@ -250,7 +258,7 @@ time needed to achieve this delta-v, using the `Tsiolkovsky rocket equation
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.lua
          :language: lua
-         :start-at: ---- Plan circularization burn (using vis-viva equation)
+         :start-at: -- Plan circularization burn (using vis-viva equation)
          :end-at: local burn_time = (m0 - m1) / flow_rate
 
    .. group-tab:: JavaScript
@@ -321,7 +329,7 @@ non-rotating reference frame, then time warp to 5 seconds before the burn.
 Executing the Burn
 ------------------
 
-Finally, the program waits for an event that fires half the burn time before apoapsis, then
+Finally, the program waits until half the burn time before apoapsis, then
 starts the burn. A loop steers along the remaining burn vector, which turns as the vessel moves
 around its orbit. It burns at full throttle, then at 5% for the last 5 m/s.
 

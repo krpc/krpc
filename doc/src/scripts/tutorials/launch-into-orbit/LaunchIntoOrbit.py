@@ -20,8 +20,6 @@ stage_5_resources = vessel.decouple_stage_at(stage=5).resources(
 stage_3_resources = vessel.decouple_stage_at(stage=3).resources(
     cumulative=False
 )
-first_stage_fuel = conn.add_stream(stage_5_resources.amount, "SolidFuel")
-second_stage_fuel = conn.add_stream(stage_3_resources.amount, "LiquidFuel")
 
 # Pre-launch setup
 vessel.control.sas = False
@@ -33,9 +31,27 @@ vessel.auto_pilot.engaged = True
 vessel.auto_pilot.target_pitch_and_heading(90, 90)
 vessel.control.activate_next_stage()
 
+
+# Separate each stage when it runs out of fuel
+def separate(event, name):
+    event.remove()
+    vessel.control.activate_next_stage()
+    vessel.control.activate_next_stage()
+    print(name, "stage separated")
+
+
+first_stage_empty = conn.add_event(
+    lambda: stage_5_resources.amount("SolidFuel") < 0.1
+)
+first_stage_empty.add_callback(lambda: separate(first_stage_empty, "First"))
+second_stage_empty = conn.add_event(
+    lambda: stage_3_resources.amount("LiquidFuel") < 0.1
+)
+second_stage_empty.add_callback(
+    lambda: separate(second_stage_empty, "Second")
+)
+
 # Main ascent loop
-first_stage_separated = False
-second_stage_separated = False
 while True:
     # Gravity turn
     if altitude() > turn_start_altitude and altitude() < turn_end_altitude:
@@ -45,26 +61,14 @@ while True:
         turn_angle = frac * 90
         vessel.auto_pilot.target_pitch_and_heading(90 - turn_angle, 90)
 
-    if not first_stage_separated:
-        if first_stage_fuel() < 0.1:
-            vessel.control.activate_next_stage()
-            vessel.control.activate_next_stage()
-            first_stage_separated = True
-            print("First stage separated")
-
-    elif not second_stage_separated:
-        if second_stage_fuel() < 0.1:
-            vessel.control.activate_next_stage()
-            vessel.control.activate_next_stage()
-            second_stage_separated = True
-            print("Second stage separated")
-
-    # Decrease throttle when approaching target apoapsis
+    # Stop the ascent near the target apoapsis
     if apoapsis() > target_altitude * 0.9:
         print("Approaching target apoapsis")
         break
 
-# Disable engines when target apoapsis is reached
+    time.sleep(0.05)
+
+# Fine tune the apoapsis at 25% thrust
 vessel.control.throttle = 0.25
 event = conn.add_event(
     lambda: vessel.orbit.apoapsis_altitude >= target_altitude

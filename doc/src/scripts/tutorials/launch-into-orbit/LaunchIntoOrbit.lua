@@ -1,6 +1,5 @@
 local krpc = require 'krpc'
 local socket = require 'socket'
-local math = require 'math'
 
 local turn_start_altitude = 250
 local turn_end_altitude = 45000
@@ -52,16 +51,19 @@ while true do
         end
     end
 
-    -- Decrease throttle when approaching target apoapsis
+    -- Stop the ascent near the target apoapsis
     if vessel.orbit.apoapsis_altitude > target_altitude*0.9 then
         print('Approaching target apoapsis')
         break
     end
+
+    socket.sleep(0.05)
 end
 
--- Disable engines when target apoapsis is reached
+-- Fine tune the apoapsis at 25% thrust
 vessel.control.throttle = 0.25
 while vessel.orbit.apoapsis_altitude < target_altitude do
+    socket.sleep(0.05)
 end
 print('Target apoapsis reached')
 vessel.control.throttle = 0
@@ -69,9 +71,10 @@ vessel.control.throttle = 0
 -- Wait until out of atmosphere
 print('Coasting out of atmosphere')
 while flight.mean_altitude < 70500 do
+    socket.sleep(0.05)
 end
 
----- Plan circularization burn (using vis-viva equation)
+-- Plan circularization burn (using vis-viva equation)
 print('Planning circularization burn')
 local mu = vessel.orbit.body.gravitational_parameter
 local r = vessel.orbit.apoapsis
@@ -83,7 +86,7 @@ local delta_v = v2 - v1
 local node = vessel.control:add_node(
     conn.space_center.ut + vessel.orbit.time_to_apoapsis, delta_v, 0, 0)
 
----- Calculate burn time (using rocket equation)
+-- Calculate burn time (using rocket equation)
 local F = vessel.available_thrust
 local Isp = vessel.specific_impulse * 9.82
 local m0 = vessel.mass
@@ -108,6 +111,7 @@ conn.space_center.warp_to(burn_ut - lead_time)
 -- Execute burn
 print('Ready to execute burn')
 while vessel.orbit.time_to_apoapsis - (burn_time/2.) > 0 do
+    socket.sleep(0.05)
 end
 print('Executing burn')
 local lowest_delta_v = node.remaining_delta_v

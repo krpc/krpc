@@ -11,8 +11,6 @@ import krpc.schema.KRPC.ProcedureCall;
 
 import org.javatuples.Triplet;
 
-import java.lang.Math;
-
 public class LaunchIntoOrbit {
     public static void main(String[] args) throws InterruptedException {
         Connection connection = Connection.newInstance("Launch into orbit");
@@ -24,11 +22,9 @@ public class LaunchIntoOrbit {
         float targetAltitude = 150000;
 
         // Set up streams for telemetry
-        spaceCenter.getUT();
         Stream<Double> ut =
             connection.addStream(SpaceCenter.class, "getUT");
-        ReferenceFrame refFrame = vessel.getSurfaceReferenceFrame();
-        Flight flight = vessel.flight(refFrame);
+        Flight flight = vessel.flight(null);
         Stream<Double> altitude =
             connection.addStream(flight, "getMeanAltitude");
         Stream<Double> apoapsis =
@@ -37,10 +33,6 @@ public class LaunchIntoOrbit {
             vessel.decoupleStageAt(5).resources(false);
         Resources stage3Resources =
             vessel.decoupleStageAt(3).resources(false);
-        Stream<Float> firstStageFuel =
-            connection.addStream(stage5Resources, "amount", "SolidFuel");
-        Stream<Float> secondStageFuel =
-            connection.addStream(stage3Resources, "amount", "LiquidFuel");
 
         // Pre-launch setup
         vessel.getControl().setSAS(false);
@@ -52,9 +44,26 @@ public class LaunchIntoOrbit {
         vessel.getAutoPilot().targetPitchAndHeading(90, 90);
         vessel.getControl().activateNextStage();
 
+        // Separate each stage when it runs out of fuel
+        Expression.Bound e = Expression.bind(connection);
+        Resources[] stages = {stage5Resources, stage3Resources};
+        String[] fuels = {"SolidFuel", "LiquidFuel"};
+        String[] names = {"First", "Second"};
+        for (int i = 0; i < stages.length; i++) {
+            String name = names[i];
+            ProcedureCall amount =
+                connection.getCall(stages[i], "amount", fuels[i]);
+            Event event = connection.addEvent(
+                e.lessThan(e.call(amount), e.constantFloat(0.1f)));
+            event.addCallback(() -> {
+                event.remove();
+                vessel.getControl().activateNextStage();
+                vessel.getControl().activateNextStage();
+                System.out.println(name + " stage separated");
+            });
+        }
+
         // Main ascent loop
-        boolean firstStageSeparated = false;
-        boolean secondStageSeparated = false;
         while (true) {
             // Gravity turn
             if (altitude.get() > turnStartAltitude &&
@@ -66,41 +75,26 @@ public class LaunchIntoOrbit {
                     (float)(90 - turnAngle), 90);
             }
 
-            if (!firstStageSeparated) {
-                if (firstStageFuel.get() < 0.1) {
-                    vessel.getControl().activateNextStage();
-                    vessel.getControl().activateNextStage();
-                    firstStageSeparated = true;
-                    System.out.println("First stage separated");
-                }
-            } else if (!secondStageSeparated) {
-                if (secondStageFuel.get() < 0.1) {
-                    vessel.getControl().activateNextStage();
-                    vessel.getControl().activateNextStage();
-                    secondStageSeparated = true;
-                    System.out.println("Second stage separated");
-                }
-            }
-
-            // Decrease throttle when approaching target apoapsis
+            // Stop the ascent near the target apoapsis
             if (apoapsis.get() > targetAltitude * 0.9) {
                 System.out.println("Approaching target apoapsis");
                 break;
             }
+
+            Thread.sleep(50);
         }
 
-        // Disable engines when target apoapsis is reached
+        // Fine tune the apoapsis at 25% thrust
         vessel.getControl().setThrottle(0.25f);
-        Expression.Bound e = Expression.bind(connection);
         {
-          ProcedureCall apoapsisAltitude =
-            connection.getCall(vessel.getOrbit(), "getApoapsisAltitude");
-          Expression expr = e.greaterThanOrEqual(
-            e.call(apoapsisAltitude), e.constantDouble(targetAltitude));
-          Event event = connection.addEvent(expr);
-          synchronized (event.getCondition()) {
-            event.waitFor();
-          }
+            ProcedureCall apoapsisAltitude = connection.getCall(
+                vessel.getOrbit(), "getApoapsisAltitude");
+            Expression expr = e.greaterThanOrEqual(
+                e.call(apoapsisAltitude), e.constantDouble(targetAltitude));
+            Event event = connection.addEvent(expr);
+            synchronized (event.getCondition()) {
+                event.waitFor();
+            }
         }
         System.out.println("Target apoapsis reached");
         vessel.getControl().setThrottle(0);
@@ -108,14 +102,14 @@ public class LaunchIntoOrbit {
         // Wait until out of atmosphere
         System.out.println("Coasting out of atmosphere");
         {
-          ProcedureCall meanAltitude =
-            connection.getCall(vessel.flight(null), "getMeanAltitude");
-          Expression expr = e.greaterThanOrEqual(
-            e.call(meanAltitude), e.constantDouble(70500));
-          Event event = connection.addEvent(expr);
-          synchronized (event.getCondition()) {
-            event.waitFor();
-          }
+            ProcedureCall meanAltitude =
+                connection.getCall(vessel.flight(null), "getMeanAltitude");
+            Expression expr = e.greaterThanOrEqual(
+                e.call(meanAltitude), e.constantDouble(70500));
+            Event event = connection.addEvent(expr);
+            synchronized (event.getCondition()) {
+                event.waitFor();
+            }
         }
 
         // Plan circularization burn (using vis-viva equation)
@@ -158,14 +152,14 @@ public class LaunchIntoOrbit {
         // Execute burn
         System.out.println("Ready to execute burn");
         {
-          ProcedureCall timeToApoapsis =
-            connection.getCall(vessel.getOrbit(), "getTimeToApoapsis");
-          Expression expr = e.lessThanOrEqual(
-            e.call(timeToApoapsis), e.constantDouble(burnTime / 2.0));
-          Event event = connection.addEvent(expr);
-          synchronized (event.getCondition()) {
-            event.waitFor();
-          }
+            ProcedureCall timeToApoapsis =
+                connection.getCall(vessel.getOrbit(), "getTimeToApoapsis");
+            Expression expr = e.lessThanOrEqual(
+                e.call(timeToApoapsis), e.constantDouble(burnTime / 2.0));
+            Event event = connection.addEvent(expr);
+            synchronized (event.getCondition()) {
+                event.waitFor();
+            }
         }
         System.out.println("Executing burn");
         Stream<Triplet<Double, Double, Double>> remainingBurn =

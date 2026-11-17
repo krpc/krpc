@@ -1,6 +1,19 @@
+#ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#define sleep_ms(ms) Sleep(ms)
+#else
+#define _POSIX_C_SOURCE 200809L
+#include <time.h>
+static void sleep_ms(long ms) {
+  struct timespec duration = {ms / 1000, (ms % 1000) * 1000000};
+  nanosleep(&duration, NULL);
+}
+#endif
 #include <krpc_cnano.h>
 #include <krpc_cnano/services/space_center.h>
 #include <math.h>
+#include <stdio.h>
 
 int main() {
   krpc_connection_t conn;
@@ -85,6 +98,7 @@ int main() {
       printf("Approaching target apoapsis\n");
       break;
     }
+    sleep_ms(50);
   }
 
   krpc_SpaceCenter_Control_set_Throttle(conn, control, 0.25);
@@ -92,6 +106,7 @@ int main() {
     double apoapsis;
     krpc_SpaceCenter_Orbit_ApoapsisAltitude(conn, &apoapsis, orbit);
     if (apoapsis >= target_altitude) break;
+    sleep_ms(50);
   }
   printf("Target apoapsis reached\n");
   krpc_SpaceCenter_Control_set_Throttle(conn, control, 0);
@@ -101,6 +116,7 @@ int main() {
     double altitude;
     krpc_SpaceCenter_Flight_MeanAltitude(conn, &altitude, flight);
     if (altitude >= 70500) break;
+    sleep_ms(50);
   }
 
   printf("Planning circularization burn\n");
@@ -158,6 +174,7 @@ int main() {
   while (true) {
     krpc_SpaceCenter_Orbit_TimeToApoapsis(conn, &time_to_apoapsis, orbit);
     if (time_to_apoapsis - (burn_time / 2.0) <= 0) break;
+    sleep_ms(50);
   }
   printf("Executing burn\n");
   double remaining_delta_v;
@@ -178,9 +195,12 @@ int main() {
     if (remaining_delta_v < lowest_delta_v)
       lowest_delta_v = remaining_delta_v;
     krpc_SpaceCenter_Node_RemainingDeltaV(conn, &remaining_delta_v, node);
+    sleep_ms(50);
   }
   krpc_SpaceCenter_Control_set_Throttle(conn, control, 0);
   krpc_SpaceCenter_Node_Remove(conn, node);
 
   printf("Launch complete\n");
+
+  krpc_disconnect(conn);
 }

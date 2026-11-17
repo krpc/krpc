@@ -22,12 +22,6 @@ const stage5Resources = await (await vessel.decoupleStageAt(5)).resources({
 const stage3Resources = await (await vessel.decoupleStageAt(3)).resources({
   cumulative: false,
 });
-const firstStageFuel = await conn.addStream(() =>
-  stage5Resources.amount("SolidFuel"),
-);
-const secondStageFuel = await conn.addStream(() =>
-  stage3Resources.amount("LiquidFuel"),
-);
 
 // Pre-launch setup
 await control.setSAS(false);
@@ -39,9 +33,29 @@ await autoPilot.setEngaged(true);
 await autoPilot.targetPitchAndHeading(90, 90);
 await control.activateNextStage();
 
+// Separate each stage when it runs out of fuel
+const firstStageEmpty = await conn.addEvent(
+  ({ resources }) => resources.amount("SolidFuel") < 0.1,
+  { resources: stage5Resources },
+);
+const secondStageEmpty = await conn.addEvent(
+  ({ resources }) => resources.amount("LiquidFuel") < 0.1,
+  { resources: stage3Resources },
+);
+/**
+ * @param {typeof firstStageEmpty} event
+ * @param {string} name
+ */
+async function separate(event, name) {
+  await event.remove();
+  await control.activateNextStage();
+  await control.activateNextStage();
+  console.log(`${name} stage separated`);
+}
+firstStageEmpty.addCallback(() => separate(firstStageEmpty, "First"));
+secondStageEmpty.addCallback(() => separate(secondStageEmpty, "Second"));
+
 // Main ascent loop
-let firstStageSeparated = false;
-let secondStageSeparated = false;
 while (true) {
   // Wait for the next altitude update
   await altitude.wait();
@@ -55,30 +69,14 @@ while (true) {
     await autoPilot.targetPitchAndHeading(90 - turnAngle, 90);
   }
 
-  if (!firstStageSeparated) {
-    if ((await firstStageFuel.get()) < 0.1) {
-      await control.activateNextStage();
-      await control.activateNextStage();
-      firstStageSeparated = true;
-      console.log("First stage separated");
-    }
-  } else if (!secondStageSeparated) {
-    if ((await secondStageFuel.get()) < 0.1) {
-      await control.activateNextStage();
-      await control.activateNextStage();
-      secondStageSeparated = true;
-      console.log("Second stage separated");
-    }
-  }
-
-  // Decrease throttle when approaching target apoapsis
+  // Stop the ascent near the target apoapsis
   if ((await apoapsis.get()) > targetAltitude * 0.9) {
     console.log("Approaching target apoapsis");
     break;
   }
 }
 
-// Disable engines when target apoapsis is reached
+// Fine tune the apoapsis at 25% thrust
 await control.setThrottle(0.25);
 const apoapsisEvent = await conn.addEvent(
   ({ orbit, targetAltitude }) => orbit.apoapsisAltitude >= targetAltitude,

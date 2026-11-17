@@ -6,6 +6,7 @@
 #include <krpc/function_stream.hpp>
 #include <krpc/services/krpc.hpp>
 #include <krpc/services/space_center.hpp>
+#include <string>
 #include <thread>
 
 int main() {
@@ -23,8 +24,6 @@ int main() {
   auto apoapsis = vessel.orbit().apoapsis_altitude_stream();
   auto stage_5_resources = vessel.decouple_stage_at(5).resources(false);
   auto stage_3_resources = vessel.decouple_stage_at(3).resources(false);
-  auto first_stage_fuel = stage_5_resources.amount_stream("SolidFuel");
-  auto second_stage_fuel = stage_3_resources.amount_stream("LiquidFuel");
 
   // Pre-launch setup
   vessel.control().set_sas(false);
@@ -36,9 +35,24 @@ int main() {
   vessel.auto_pilot().target_pitch_and_heading(90, 90);
   vessel.control().activate_next_stage();
 
+  // Separate each stage when it runs out of fuel
+  auto e = krpc::services::KRPC::Expression::bind(conn);
+  auto separate_when_empty =
+      [&](krpc::services::SpaceCenter::Resources resources,
+          const std::string& fuel, const std::string& name) {
+        auto event = krpc::add_event(e.less_than(
+            e.call(resources.amount_call(fuel)), e.constant_float(0.1)));
+        event.add_callback([event, vessel, name]() mutable {
+          event.remove();
+          vessel.control().activate_next_stage();
+          vessel.control().activate_next_stage();
+          std::cout << name << " stage separated" << std::endl;
+        });
+      };
+  separate_when_empty(stage_5_resources, "SolidFuel", "First");
+  separate_when_empty(stage_3_resources, "LiquidFuel", "Second");
+
   // Main ascent loop
-  bool first_stage_separated = false;
-  bool second_stage_separated = false;
   while (true) {
     // Gravity turn
     if (altitude() > turn_start_altitude &&
@@ -49,32 +63,17 @@ int main() {
       vessel.auto_pilot().target_pitch_and_heading(90.0 - turn_angle, 90.0);
     }
 
-    if (!first_stage_separated) {
-      if (first_stage_fuel() < 0.1) {
-        vessel.control().activate_next_stage();
-        vessel.control().activate_next_stage();
-        first_stage_separated = true;
-        std::cout << "First stage separated" << std::endl;
-      }
-    } else if (!second_stage_separated) {
-      if (second_stage_fuel() < 0.1) {
-        vessel.control().activate_next_stage();
-        vessel.control().activate_next_stage();
-        second_stage_separated = true;
-        std::cout << "Second stage separated" << std::endl;
-      }
-    }
-
-    // Decrease throttle when approaching target apoapsis
+    // Stop the ascent near the target apoapsis
     if (apoapsis() > target_altitude * 0.9) {
       std::cout << "Approaching target apoapsis" << std::endl;
       break;
     }
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(50));
   }
 
-  // Disable engines when target apoapsis is reached
+  // Fine tune the apoapsis at 25% thrust
   vessel.control().set_throttle(0.25);
-  auto e = krpc::services::KRPC::Expression::bind(conn);
   {
     auto expr = e.greater_than_or_equal(
         e.call(vessel.orbit().apoapsis_altitude_call()),

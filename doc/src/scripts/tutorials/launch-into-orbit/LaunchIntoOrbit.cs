@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Net;
 using KRPC.Client;
 using KRPC.Client.Services.SpaceCenter;
 
@@ -24,10 +22,6 @@ class LaunchIntoOrbit
             vessel.DecoupleStageAt (stage: 5).Resources (cumulative: false);
         var stage3Resources =
             vessel.DecoupleStageAt (stage: 3).Resources (cumulative: false);
-        var firstStageFuel =
-            conn.AddStream (() => stage5Resources.Amount ("SolidFuel"));
-        var secondStageFuel =
-            conn.AddStream (() => stage3Resources.Amount ("LiquidFuel"));
 
         // Pre-launch setup
         vessel.Control.SAS = false;
@@ -39,9 +33,22 @@ class LaunchIntoOrbit
         vessel.AutoPilot.TargetPitchAndHeading (90, 90);
         vessel.Control.ActivateNextStage ();
 
+        // Separate each stage when it runs out of fuel
+        void SeparateWhenEmpty (
+            Resources resources, string fuel, string name)
+        {
+            var evnt = conn.AddEvent (() => resources.Amount (fuel) < 0.1f);
+            evnt.AddCallback (() => {
+                evnt.Remove ();
+                vessel.Control.ActivateNextStage ();
+                vessel.Control.ActivateNextStage ();
+                Console.WriteLine (name + " stage separated");
+            });
+        }
+        SeparateWhenEmpty (stage5Resources, "SolidFuel", "First");
+        SeparateWhenEmpty (stage3Resources, "LiquidFuel", "Second");
+
         // Main ascent loop
-        bool firstStageSeparated = false;
-        bool secondStageSeparated = false;
         while (true) {
             // Gravity turn
             if (altitude.Get () > turnStartAltitude &&
@@ -53,30 +60,16 @@ class LaunchIntoOrbit
                     (float)(90 - turnAngle), 90);
             }
 
-            if (!firstStageSeparated) {
-                if (firstStageFuel.Get () < 0.1) {
-                    vessel.Control.ActivateNextStage ();
-                    vessel.Control.ActivateNextStage ();
-                    firstStageSeparated = true;
-                    Console.WriteLine ("First stage separated");
-                }
-            } else if (!secondStageSeparated) {
-                if (secondStageFuel.Get () < 0.1) {
-                    vessel.Control.ActivateNextStage ();
-                    vessel.Control.ActivateNextStage ();
-                    secondStageSeparated = true;
-                    Console.WriteLine ("Second stage separated");
-                }
-            }
-
-            // Decrease throttle when approaching target apoapsis
+            // Stop the ascent near the target apoapsis
             if (apoapsis.Get () > targetAltitude * 0.9) {
                 Console.WriteLine ("Approaching target apoapsis");
                 break;
             }
+
+            System.Threading.Thread.Sleep (50);
         }
 
-        // Disable engines when target apoapsis is reached
+        // Fine tune the apoapsis at 25% thrust
         vessel.Control.Throttle = 0.25f;
         {
             var evnt = conn.AddEvent (
