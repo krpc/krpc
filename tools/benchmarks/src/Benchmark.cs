@@ -47,6 +47,58 @@ namespace KRPC.Benchmarks
         }
 
         /// <summary>
+        /// Running totals of the frames the host has run and the time the server has spent in
+        /// its updates, for the update loop benchmarks. Times are in seconds, apart from
+        /// <c>max_time_per_update</c>, the server's current limit, in microseconds.
+        /// </summary>
+        /// <remarks>
+        /// <c>max_frame_seconds</c> is the longest frame since the previous call.
+        /// </remarks>
+        [KRPCProcedure]
+        public static IDictionary<string, double> LoopCounters ()
+        {
+            return GameLoop.Counters ();
+        }
+
+        /// <summary>
+        /// Wait in one of the ways the server could wait for a call, the given number of times,
+        /// and return the minimum, median, 99th percentile and maximum of the times taken, in
+        /// microseconds.
+        /// </summary>
+        /// <param name="kind">The way to wait, from <see cref="WaitKinds"/>.</param>
+        /// <param name="iterations">Number of times to wait.</param>
+        [KRPCProcedure]
+        public static IDictionary<string, double> Wait (string kind, uint iterations)
+        {
+            return Waits.Measure (kind, iterations);
+        }
+
+        /// <summary>
+        /// The ways of waiting that <see cref="Wait"/> accepts.
+        /// </summary>
+        [KRPCProperty]
+        public static IList<string> WaitKinds {
+            get { return Waits.Names; }
+        }
+
+        /// <summary>
+        /// A string of the given number of characters, different on every call, for a stream
+        /// that sends an update on every tick.
+        /// </summary>
+        /// <param name="size">The number of characters.</param>
+        [KRPCProcedure]
+        public static string Payload (uint size)
+        {
+            payloads++;
+            var prefix = payloads.ToString (System.Globalization.CultureInfo.InvariantCulture) + " ";
+            if (prefix.Length >= size)
+                return prefix.Substring (0, (int)size);
+            return prefix + new string ('x', (int)size - prefix.Length);
+        }
+
+        static ulong payloads;
+
+        /// <summary>
         /// A new list of the given number of strings, the same on every call.
         /// </summary>
         /// <param name="size">The number of elements.</param>

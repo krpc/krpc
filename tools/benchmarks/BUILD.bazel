@@ -115,6 +115,18 @@ py_binary(
     deps = [":benchmarks_lib"],
 )
 
+# The update loop benchmarks: `bazel run //tools/benchmarks:update-loop`. Starts a TestServer
+# that models a game's frame loop, and measures what clients of different shapes get from it.
+py_binary(
+    name = "update-loop",
+    srcs = ["run_update_loop.py"],
+    args = ["--server=$(rootpath //tools/TestServer)"],
+    data = ["//tools/TestServer"],
+    main = "run_update_loop.py",
+    visibility = ["//visibility:public"],
+    deps = [":benchmarks_lib"],
+)
+
 # The python client benchmarks: `bazel run //tools/benchmarks:python`.
 py_binary(
     name = "python",

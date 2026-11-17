@@ -437,11 +437,20 @@ namespace KRPC
 
         Stopwatch updateTimer = Stopwatch.StartNew ();
 
+        // Running totals for the benchmarks: the number of updates, and the stopwatch ticks
+        // spent in them, in polling for calls, in executing calls and in updating streams
+        internal ulong Updates;
+        internal long UpdateTicks;
+        internal long PollTicks;
+        internal long ExecTicks;
+        internal long StreamTicks;
+
         /// <summary>
         /// Update the server
         /// </summary>
         public void Update ()
         {
+            long updateStart = Stopwatch.GetTimestamp ();
             ulong startRPCsExecuted = RPCsExecuted;
             ulong startStreamEvaluations = StreamEvaluations;
             ulong startBytesRead = BytesRead;
@@ -454,6 +463,8 @@ namespace KRPC
             UpdateRPCs ();
             EventHandlerExtensions.Invoke (OnAfterCalls, this);
             UpdateStreams ();
+            Updates++;
+            UpdateTicks += Stopwatch.GetTimestamp () - updateStart;
 
             var timeElapsed = updateTimer.ElapsedSeconds ();
             var ticksElapsed = updateTimer.ElapsedTicks;
@@ -651,6 +662,8 @@ namespace KRPC
             rpcYieldedContinuations = tmp;
 
             rpcTimer.Stop ();
+            PollTicks += rpcPollTimer.ElapsedTicks;
+            ExecTicks += rpcExecTimer.ElapsedTicks;
 
             RPCsExecuted += rpcsExecuted;
             DeferredCalls = (uint)rpcContinuations.Count;
@@ -733,6 +746,7 @@ namespace KRPC
             }
 
             streamTimer.Stop ();
+            StreamTicks += streamTimer.ElapsedTicks;
             StreamEvaluations += evaluations;
             TimePerStreamUpdate = (float)streamTimer.ElapsedSeconds ();
         }

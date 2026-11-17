@@ -7,6 +7,7 @@ clients:
 .. code-block:: bash
 
    bazel run //tools/benchmarks:testserver  # the server, without the game
+   bazel run //tools/benchmarks:update-loop # the update loop, without the game
    bazel run //tools/benchmarks:python      # one client, against a TestServer
    bazel run //tools/benchmarks:clients     # every client, in one table
    bazel run //tools/benchmarks:server      # the server, in the game
@@ -39,6 +40,20 @@ The Targets
 dispatch, the procedure and encoding the result. It runs against a ``TestServer``, so it measures a
 change to ``core/`` or ``server/`` without the game.
 
+``:update-loop`` measures the server's update loop: the calls a second that clients of different
+shapes get, and what the loop costs the frame. It runs a ``TestServer`` that models a game's frame
+loop, with fixed steps at 50 a second, simulated work in each step and each frame, and a frame
+limit of 60 frames a second. ``--game`` picks a light or a heavy game, and ``--shape`` the client
+shapes:
+
+.. code-block:: bash
+
+   bazel run //tools/benchmarks:update-loop -- --game light --shape synchronous
+
+Each client runs in its own process, and counts its own calls. The report has one block per game
+and shape, with a row per point and a column per figure. It also reports how long the ways of
+waiting take on the server's runtime.
+
 The client targets measure a client's cost: the round trip for a call, and calls carrying
 collections. Each client is timed from inside itself, so each target is a program in its own
 language. The report has one block per transport, TCP/IP and local socket.
@@ -60,3 +75,6 @@ stream over a few hundred parts. It is a pytest suite, so arguments go to pytest
 .. code-block:: bash
 
    bazel run //tools/benchmarks:server -- -k stream
+
+``test_update_loop.py`` runs the update loop shapes of ``:update-loop`` in the game, to check the
+model against it.

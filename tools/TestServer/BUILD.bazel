@@ -29,6 +29,7 @@ srcs = [
 # the server sends at connect
 exe_srcs = srcs + [
     "//tools/CommandLine:ToolCommandLine.cs",
+    "src/GameLoop.cs",
     "src/Program.cs",
     "src/TestService2.cs",
     "src/TestServiceExtensions.cs",
