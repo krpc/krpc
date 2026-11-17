@@ -184,7 +184,7 @@ namespace KRPC.Test.Server.LocalSocket
             client.Send (new byte [] { 1, 2, 3 });
             UpdateUntil (server, () => serverClient.Stream.DataAvailable);
             var buffer = new byte [3];
-            Assert.AreEqual (3, serverClient.Stream.Read (buffer, 0));
+            Assert.AreEqual (3, serverClient.Stream.Read (buffer, 0, buffer.Length));
             CollectionAssert.AreEqual (new byte [] { 1, 2, 3 }, buffer);
 
             serverClient.Stream.Write (new byte [] { 4, 5 });
@@ -345,7 +345,7 @@ namespace KRPC.Test.Server.LocalSocket
 
         // Calls server.Update repeatedly every 50 ms, until predicate is true
         // or up to a maximum number of iterations, after which point the test fails
-        static void UpdateUntil (KRPC.Server.IServer<byte, byte> server, Func<bool> predicate, int iterations = 10)
+        static void UpdateUntil (KRPC.Server.IServer<KRPC.Server.IByteStream> server, Func<bool> predicate, int iterations = 10)
         {
             for (int i = 0; i < iterations; i++) {
                 server.Update ();

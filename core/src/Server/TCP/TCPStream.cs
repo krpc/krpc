@@ -4,7 +4,7 @@ using System.Net.Sockets;
 
 namespace KRPC.Server.TCP
 {
-    sealed class TCPStream : IStream<byte,byte>, IHalfClosableStream
+    sealed class TCPStream : IByteStream, IHalfClosableStream
     {
         readonly NetworkStream stream;
         readonly Socket socket;
@@ -29,24 +29,6 @@ namespace KRPC.Server.TCP
             }
         }
 
-        public byte Read ()
-        {
-            throw new NotSupportedException ();
-        }
-
-        public int Read (byte[] buffer, int offset)
-        {
-            try {
-                var size = stream.Read (buffer, offset, buffer.Length - offset);
-                BytesRead += (ulong)size;
-                return size;
-            } catch (IOException e) {
-                throw new ServerException (e.Message);
-            } catch (ObjectDisposedException) {
-                throw new ClientDisconnectedException ();
-            }
-        }
-
         public int Read (byte[] buffer, int offset, int size)
         {
             try {
@@ -58,11 +40,6 @@ namespace KRPC.Server.TCP
             } catch (ObjectDisposedException) {
                 throw new ClientDisconnectedException ();
             }
-        }
-
-        public void Write (byte value)
-        {
-            throw new NotSupportedException ();
         }
 
         public void Write (byte[] buffer)

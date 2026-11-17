@@ -23,16 +23,16 @@ namespace KRPC
         /// </summary>
         public IList<Server.Server> Servers { get; private set; }
 
-        IDictionary<Guid, IClient<Request, Response>> clients = new Dictionary<Guid, IClient<Request, Response>> ();
+        IDictionary<Guid, IClient<IMessageStream>> clients = new Dictionary<Guid, IClient<IMessageStream>> ();
         // The connected clients, polled for requests in the order they connected
-        RoundRobinScheduler<IClient<Request,Response>> clientScheduler = new RoundRobinScheduler<IClient<Request, Response>> ();
+        RoundRobinScheduler<IClient<IMessageStream>> clientScheduler = new RoundRobinScheduler<IClient<IMessageStream>> ();
         // The calls to execute in this update: new requests, and calls the previous update yielded or deferred
         List<RequestContinuation> rpcContinuations = new List<RequestContinuation> ();
-        Dictionary<IClient<Request,Response>, Dictionary<ulong, Service.Stream>> streams = new Dictionary<IClient<Request,Response>, Dictionary<ulong, Service.Stream>> ();
+        Dictionary<IClient<IMessageStream>, Dictionary<ulong, Service.Stream>> streams = new Dictionary<IClient<IMessageStream>, Dictionary<ulong, Service.Stream>> ();
         // Each client's stream update message, reused on every update
-        Dictionary<IClient<Request,Response>, StreamUpdate> cachedStreamUpdates = new Dictionary<IClient<Request,Response>, StreamUpdate> ();
+        Dictionary<IClient<IMessageStream>, StreamUpdate> cachedStreamUpdates = new Dictionary<IClient<IMessageStream>, StreamUpdate> ();
         // The streams to remove, with their client, removed outside the loop over the streams
-        Dictionary<ulong, IClient<Request,Response>> removeStreams = new Dictionary<ulong, IClient<Request,Response>> ();
+        Dictionary<ulong, IClient<IMessageStream>> removeStreams = new Dictionary<ulong, IClient<IMessageStream>> ();
         // The id of the next stream. Ids are shared by every client and never reused, so an id at or
         // above this one was never issued
         ulong nextStreamId = 0;
@@ -42,7 +42,7 @@ namespace KRPC
         /// out at. One client at a time: what a hold offers is that nothing else happens,
         /// which two clients cannot both be given.
         /// </summary>
-        IClient<Request,Response> tickHoldClient;
+        IClient<IMessageStream> tickHoldClient;
         long tickHoldDeadline;
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace KRPC
         /// </summary>
         public event EventHandler OnAfterCalls;
 
-        internal void ClientConnected (IClient<Request,Response> client)
+        internal void ClientConnected (IClient<IMessageStream> client)
         {
             clients [client.Guid] = client;
             clientScheduler.Add (client);
@@ -122,7 +122,7 @@ namespace KRPC
             EventHandlerExtensions.Invoke (OnClientConnected, this, new ClientConnectedEventArgs (client));
         }
 
-        internal void ClientDisconnected (IClient<Request,Response> client)
+        internal void ClientDisconnected (IClient<IMessageStream> client)
         {
             Dictionary<ulong, Service.Stream> clientStreams;
             if (streams.TryGetValue (client, out clientStreams)) {
@@ -727,11 +727,8 @@ namespace KRPC
                                 }
                             }
                         }
-                        var messageStream = client.Stream as IMessageStream;
-                        if (messageStream != null) {
-                            messageStream.Write (streamUpdate);
-                            StreamUpdatesSent++;
-                        }
+                        client.Stream.Write (streamUpdate);
+                        StreamUpdatesSent++;
                         foreach (var stream in clientStreams)
                             if (stream.Changed)
                                 stream.Sent ();
@@ -755,7 +752,7 @@ namespace KRPC
         /// Log the end of a stream whose last update carries an error. An event that has
         /// finished is the normal end, so only its description is given.
         /// </summary>
-        static void LogStreamEnded (IClient<Request,Response> client, ulong id, Error error)
+        static void LogStreamEnded (IClient<IMessageStream> client, ulong id, Error error)
         {
             var finished = error.Service == "KRPC" && error.Exception == "StreamRemovedException";
             var text = new StringBuilder ("Removed stream " + id + " for client " + client.Label () + ": ");
@@ -782,7 +779,7 @@ namespace KRPC
                 throw new InvalidOperationException (
                     "The tick can only be held by a client making a call, " +
                     "not by a stream or an event");
-            IClient<Request,Response> client;
+            IClient<IMessageStream> client;
             if (!clients.TryGetValue (caller.Guid, out client))
                 throw new InvalidOperationException (
                     "No client is connected with this identifier");
@@ -868,7 +865,7 @@ namespace KRPC
         /// prevents, so waiting the hold out would leave the client and the game waiting for
         /// each other until the timeout.
         /// </summary>
-        void ReleaseTickToYield (IClient<Request,Response> client)
+        void ReleaseTickToYield (IClient<IMessageStream> client)
         {
             if (tickHoldClient == null || tickHoldClient.Guid != client.Guid)
                 return;
@@ -890,7 +887,7 @@ namespace KRPC
         /// </summary>
         internal ulong AddStream (IClient caller, Service.Stream stream)
         {
-            IClient<Request,Response> client;
+            IClient<IMessageStream> client;
             if (!clients.TryGetValue (caller.Guid, out client))
                 throw new InvalidOperationException ("No client is connected with this identifier");
 
@@ -935,7 +932,7 @@ namespace KRPC
         /// </summary>
         Service.Stream GetStream (IClient caller, ulong streamId)
         {
-            IClient<Request,Response> client;
+            IClient<IMessageStream> client;
             if (!clients.TryGetValue (caller.Guid, out client))
                 throw new InvalidOperationException ("No client is connected with this identifier");
             if (streamId >= nextStreamId)
@@ -948,19 +945,17 @@ namespace KRPC
         /// <summary>
         /// Remove a client's stream. Returns false if the client has no stream with the id.
         /// </summary>
-        bool RemoveStreamInternal (IClient<Request,Response> client, ulong id)
+        bool RemoveStreamInternal (IClient<IMessageStream> client, ulong id)
         {
             if (!streams.ContainsKey (client) || !streams [client].ContainsKey (id))
                 return false;
             streams [client].Remove (id);
-            var stream = client.Stream as IMessageStream;
-            if (stream != null)
-                stream.StreamRemoved (id);
+            client.Stream.StreamRemoved (id);
             Streams--;
             return true;
         }
 
-        HashSet<IClient<Request,Response>> pollRequestsCurrentClients = new HashSet<IClient<Request, Response>> ();
+        HashSet<IClient<IMessageStream>> pollRequestsCurrentClients = new HashSet<IClient<IMessageStream>> ();
 
         /// <summary>
         /// Poll connected clients for new requests.
@@ -991,13 +986,7 @@ namespace KRPC
                     // connection logs the end of the session
                     if (Logger.ShouldLog (Logger.Severity.Debug))
                         Logger.WriteLine ("Failed to read a request from client " + client.Label () + ": " + e, Logger.Severity.Debug);
-                    var messageStream = client.Stream as IMessageStream;
-                    if (messageStream != null) {
-                        messageStream.Disconnect (DisconnectReason.MalformedMessage, "Failed to read a request: " + e.Message);
-                    } else {
-                        Logger.WriteLine ("Failed to read a request from client " + client.Label () + ": " + e.Message, Logger.Severity.Warning);
-                        client.Stream.Close ();
-                    }
+                    client.Stream.Disconnect (DisconnectReason.MalformedMessage, "Failed to read a request: " + e.Message);
                 }
                 item = item.Next;
             }

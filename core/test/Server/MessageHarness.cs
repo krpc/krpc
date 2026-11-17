@@ -24,10 +24,10 @@ namespace KRPC.Test.Server
         readonly MemoryStream output = new MemoryStream ();
         int outputRead;
 
-        public MessageHarness (Func<IServer<byte,byte>, KRPC.Server.Message.Server> create, bool useWebSockets = false)
+        public MessageHarness (Func<IServer<IByteStream>, KRPC.Server.Message.Server> create, bool useWebSockets = false)
         {
             webSockets = useWebSockets;
-            ByteServer = new Mock<IServer<byte,byte>> ();
+            ByteServer = new Mock<IServer<IByteStream>> ();
             Stream = new TestStream (input, output);
             Client = new TestClient (Stream);
             Server = create (ByteServer.Object);
@@ -36,13 +36,13 @@ namespace KRPC.Test.Server
             Server.OnClientConnected += (s, e) => Connected.Add (e.Client);
             Server.OnClientDisconnected += (s, e) => Disconnected.Add (e.Client);
             Server.Start ();
-            var args = new ClientRequestingConnectionEventArgs<byte,byte> (Client);
+            var args = new ClientRequestingConnectionEventArgs<IByteStream> (Client);
             ByteServer.Raise (m => m.OnClientRequestingConnection += null, args);
             Assert.IsTrue (args.Request.ShouldAllow);
-            ByteServer.Raise (m => m.OnClientConnected += null, new ClientConnectedEventArgs<byte,byte> (Client));
+            ByteServer.Raise (m => m.OnClientConnected += null, new ClientConnectedEventArgs<IByteStream> (Client));
         }
 
-        public Mock<IServer<byte,byte>> ByteServer { get; private set; }
+        public Mock<IServer<IByteStream>> ByteServer { get; private set; }
 
         public TestStream Stream { get; private set; }
 
@@ -53,11 +53,11 @@ namespace KRPC.Test.Server
         /// <summary>
         /// How the server's handler answers a connection request.
         /// </summary>
-        public Action<ClientRequestingConnectionEventArgs<Request,Response>> Approve { get; set; }
+        public Action<ClientRequestingConnectionEventArgs<IMessageStream>> Approve { get; set; }
 
-        public List<IClient<Request,Response>> Connected { get; } = new List<IClient<Request,Response>> ();
+        public List<IClient<IMessageStream>> Connected { get; } = new List<IClient<IMessageStream>> ();
 
-        public List<IClient<Request,Response>> Disconnected { get; } = new List<IClient<Request,Response>> ();
+        public List<IClient<IMessageStream>> Disconnected { get; } = new List<IClient<IMessageStream>> ();
 
         /// <summary>
         /// Whether the server wrote a websockets close frame.
@@ -162,7 +162,7 @@ namespace KRPC.Test.Server
         /// <summary>
         /// Complete the handshake, and return the client of the session it starts.
         /// </summary>
-        public IClient<Request,Response> Handshake (string name = "Test Client")
+        public IClient<IMessageStream> Handshake (string name = "Test Client")
         {
             Send (ConnectionRequest (2, name));
             Server.Update ();
@@ -177,7 +177,7 @@ namespace KRPC.Test.Server
         public void DisconnectByteClient ()
         {
             Client.PeerClosed = true;
-            ByteServer.Raise (m => m.OnClientDisconnected += null, new ClientDisconnectedEventArgs<byte,byte> (Client));
+            ByteServer.Raise (m => m.OnClientDisconnected += null, new ClientDisconnectedEventArgs<IByteStream> (Client));
         }
 
         public static SchemaMessage ConnectionRequest (uint protocolVersion, string name = "Test Client")

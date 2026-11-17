@@ -49,7 +49,7 @@ namespace KRPC.Server.Message
         bool sessionStarted;
         Request bufferedRequest;
 
-        protected Connection (Server messageServer, IClient<byte,byte> client)
+        protected Connection (Server messageServer, IClient<IByteStream> client)
         {
             server = messageServer;
             Client = client;
@@ -58,7 +58,7 @@ namespace KRPC.Server.Message
         /// <summary>
         /// The byte client the connection is carried on.
         /// </summary>
-        public IClient<byte,byte> Client { get; private set; }
+        public IClient<IByteStream> Client { get; private set; }
 
         /// <summary>
         /// The client in log lines: the session's client once a connection request has named
@@ -68,7 +68,7 @@ namespace KRPC.Server.Message
             get { return session != null ? session.Label () : Client.Label (); }
         }
 
-        protected IStream<byte,byte> Stream {
+        protected IByteStream Stream {
             get { return Client.Stream; }
         }
 
@@ -405,7 +405,7 @@ namespace KRPC.Server.Message
 
         void RequestApproval ()
         {
-            var args = new ClientRequestingConnectionEventArgs<Request,Response> (session);
+            var args = new ClientRequestingConnectionEventArgs<IMessageStream> (session);
             server.RequestingConnection (args);
             if (args.Request.ShouldAllow) {
                 var response = new ConnectionResponse ();

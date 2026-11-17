@@ -8,11 +8,11 @@ namespace KRPC.Server.SerialIO
         /// <summary>
         /// Construct a server from a byte server
         /// </summary>
-        public Server (IServer<byte,byte> innerServer) : base(innerServer)
+        public Server (IServer<IByteStream> innerServer) : base(innerServer)
         {
         }
 
-        internal override Message.Connection CreateConnection (IClient<byte,byte> client)
+        internal override Message.Connection CreateConnection (IClient<IByteStream> client)
         {
             return new Connection (this, client);
         }

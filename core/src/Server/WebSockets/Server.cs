@@ -8,7 +8,7 @@ namespace KRPC.Server.WebSockets
         /// <summary>
         /// Create a websockets server.
         /// </summary>
-        public Server (IServer<byte,byte> server) : base (server)
+        public Server (IServer<IByteStream> server) : base (server)
         {
         }
 
@@ -19,7 +19,7 @@ namespace KRPC.Server.WebSockets
             get { return "ws://" + base.Address; }
         }
 
-        internal override Message.Connection CreateConnection (IClient<byte,byte> client)
+        internal override Message.Connection CreateConnection (IClient<IByteStream> client)
         {
             return new Connection (this, client);
         }

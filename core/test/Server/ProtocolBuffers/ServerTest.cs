@@ -216,7 +216,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
         public void ByteClientDisconnectsWhilePending ()
         {
             var harness = Harness ();
-            var requests = new List<ClientRequestingConnectionEventArgs<Request,Response>> ();
+            var requests = new List<ClientRequestingConnectionEventArgs<IMessageStream>> ();
             harness.Approve = requests.Add;
             harness.Send (MessageHarness.ConnectionRequest (2));
             harness.Server.Update ();
@@ -234,7 +234,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
         public void ByteClientClosesWhilePendingWithUnreadBytes ()
         {
             var harness = Harness ();
-            var requests = new List<ClientRequestingConnectionEventArgs<Request,Response>> ();
+            var requests = new List<ClientRequestingConnectionEventArgs<IMessageStream>> ();
             harness.Approve = requests.Add;
             harness.Send (MessageHarness.ConnectionRequest (2));
             harness.Server.Update ();

@@ -29,29 +29,9 @@ namespace KRPC.Server.Message
             return connection.TakeRequest (client);
         }
 
-        public int Read (Request[] buffer, int offset)
-        {
-            throw new NotSupportedException ();
-        }
-
-        public int Read (Request[] buffer, int offset, int size)
-        {
-            throw new NotSupportedException ();
-        }
-
         public void Write (Response value)
         {
             connection.Write (client, value);
-        }
-
-        public void Write (Response[] buffer)
-        {
-            throw new NotSupportedException ();
-        }
-
-        public void Write (Response[] buffer, int offset, int size)
-        {
-            throw new NotSupportedException ();
         }
 
         public void Write (StreamUpdate value)
@@ -67,19 +47,6 @@ namespace KRPC.Server.Message
         public void Disconnect (DisconnectReason reason, string message)
         {
             connection.Disconnect (client, reason, message);
-        }
-
-        public ulong BytesRead {
-            get { return connection.Client.Stream.BytesRead; }
-        }
-
-        public ulong BytesWritten {
-            get { return connection.Client.Stream.BytesWritten; }
-        }
-
-        public void ClearStats ()
-        {
-            connection.Client.Stream.ClearStats ();
         }
 
         /// <summary>

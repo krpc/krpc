@@ -92,29 +92,30 @@ namespace KRPC.Server
     }
 
     /// <summary>
-    /// A generic server, that receives values of type TIn from clients and
-    /// sends values of type TOut to them.
+    /// A server whose clients communicate over streams of the given type: of bytes, or of
+    /// messages.
     /// </summary>
-    public interface IServer<TIn,TOut> : IBaseServer
+    public interface IServer<TStream> : IBaseServer
+        where TStream : IStream
     {
         /// <summary>
         /// Clients that are connected to the server.
         /// </summary>
-        IEnumerable<IClient<TIn,TOut>> Clients { get; }
+        IEnumerable<IClient<TStream>> Clients { get; }
 
         /// <summary>
         /// Handler to trigger when a new client requests a connection.
         /// </summary>
-        event EventHandler<ClientRequestingConnectionEventArgs<TIn,TOut>> OnClientRequestingConnection;
+        event EventHandler<ClientRequestingConnectionEventArgs<TStream>> OnClientRequestingConnection;
 
         /// <summary>
         /// Handler to trigger when a client has connected.
         /// </summary>
-        event EventHandler<ClientConnectedEventArgs<TIn,TOut>> OnClientConnected;
+        event EventHandler<ClientConnectedEventArgs<TStream>> OnClientConnected;
 
         /// <summary>
         /// Handler to trigger when a client has disconnected.
         /// </summary>
-        event EventHandler<ClientDisconnectedEventArgs<TIn,TOut>> OnClientDisconnected;
+        event EventHandler<ClientDisconnectedEventArgs<TStream>> OnClientDisconnected;
     }
 }

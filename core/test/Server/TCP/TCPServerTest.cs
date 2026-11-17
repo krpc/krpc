@@ -158,7 +158,7 @@ namespace KRPC.Test.Server.TCP
 
         // Calls server.Update repeatedly every 50 ms, until predicate is true
         // or up to a maximum number of iterations, after which point the test fails
-        static void UpdateUntil (KRPC.Server.IServer<byte, byte> server, Func<bool> predicate, int iterations = 10)
+        static void UpdateUntil (KRPC.Server.IServer<KRPC.Server.IByteStream> server, Func<bool> predicate, int iterations = 10)
         {
             for (int i = 0; i < iterations; i++) {
                 server.Update ();

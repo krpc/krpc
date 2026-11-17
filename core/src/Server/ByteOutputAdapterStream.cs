@@ -5,9 +5,9 @@ namespace KRPC.Server
 {
     sealed class ByteOutputAdapterStream : Stream
     {
-        readonly IStream<byte,byte> innerStream;
+        readonly IByteStream innerStream;
 
-        public ByteOutputAdapterStream (IStream<byte,byte> stream)
+        public ByteOutputAdapterStream (IByteStream stream)
         {
             innerStream = stream;
         }

@@ -4,7 +4,7 @@ using KRPC.Server.TCP;
 
 namespace KRPC.Server.LocalSocket
 {
-    sealed class LocalSocketClient : IClient<byte,byte>
+    sealed class LocalSocketClient : IClient<IByteStream>
     {
         readonly Guid guid;
         readonly Socket socket;
@@ -34,7 +34,7 @@ namespace KRPC.Server.LocalSocket
             get { return address; }
         }
 
-        public IStream<byte,byte> Stream {
+        public IByteStream Stream {
             get {
                 if (stream == null)
                     stream = new TCPStream (new NetworkStream (socket), socket);
@@ -72,7 +72,7 @@ namespace KRPC.Server.LocalSocket
             return obj != null && Equals (obj as LocalSocketClient);
         }
 
-        public bool Equals (IClient<byte,byte> other)
+        public bool Equals (IClient<IByteStream> other)
         {
             if (other == null)
                 return false;

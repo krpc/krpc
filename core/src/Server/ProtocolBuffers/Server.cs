@@ -8,11 +8,11 @@ namespace KRPC.Server.ProtocolBuffers
         /// <summary>
         /// Construct a server from a byte server.
         /// </summary>
-        public Server (IServer<byte,byte> server) : base (server)
+        public Server (IServer<IByteStream> server) : base (server)
         {
         }
 
-        internal override Message.Connection CreateConnection (IClient<byte,byte> client)
+        internal override Message.Connection CreateConnection (IClient<IByteStream> client)
         {
             return new Connection (this, client);
         }

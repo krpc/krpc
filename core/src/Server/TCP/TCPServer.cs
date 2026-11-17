@@ -11,7 +11,7 @@ namespace KRPC.Server.TCP
     /// <summary>
     /// A raw TCP server.
     /// </summary>
-    public sealed class TCPServer : IServer<byte,byte>
+    public sealed class TCPServer : IServer<IByteStream>
     {
         /// <summary>
         /// Event handler for when the server starts.
@@ -26,17 +26,17 @@ namespace KRPC.Server.TCP
         /// <summary>
         /// Event handler for when a new client requests a connection.
         /// </summary>
-        public event EventHandler<ClientRequestingConnectionEventArgs<byte,byte>> OnClientRequestingConnection;
+        public event EventHandler<ClientRequestingConnectionEventArgs<IByteStream>> OnClientRequestingConnection;
 
         /// <summary>
         /// Event handler for when a new client has connected.
         /// </summary>
-        public event EventHandler<ClientConnectedEventArgs<byte,byte>> OnClientConnected;
+        public event EventHandler<ClientConnectedEventArgs<IByteStream>> OnClientConnected;
 
         /// <summary>
         /// Event handler when a client disconnects.
         /// </summary>
-        public event EventHandler<ClientDisconnectedEventArgs<byte,byte>> OnClientDisconnected;
+        public event EventHandler<ClientDisconnectedEventArgs<IByteStream>> OnClientDisconnected;
 
         /// <summary>
         /// The actual local port number of the server. Will be identical to
@@ -178,7 +178,7 @@ namespace KRPC.Server.TCP
                     var stillPendingClients = new List<TCPClient> ();
                     foreach (var client in pendingClients) {
                         // Trigger OnClientRequestingConnection events to verify the connection
-                        var args = new ClientRequestingConnectionEventArgs<byte,byte> (client);
+                        var args = new ClientRequestingConnectionEventArgs<IByteStream> (client);
                         EventHandlerExtensions.Invoke (OnClientRequestingConnection, this, args);
 
                         // Deny the connection
@@ -191,7 +191,7 @@ namespace KRPC.Server.TCP
                         else if (args.Request.ShouldAllow) {
                             Logger.WriteLine ("TCPServer: connection from " + client.Label () + " accepted", Logger.Severity.Debug);
                             clients.Add (client);
-                            EventHandlerExtensions.Invoke (OnClientConnected, this, new ClientConnectedEventArgs<byte,byte> (client));
+                            EventHandlerExtensions.Invoke (OnClientConnected, this, new ClientConnectedEventArgs<IByteStream> (client));
                         }
 
                         // Still pending, will either be denied or allowed on a subsequent called to Update
@@ -247,7 +247,7 @@ namespace KRPC.Server.TCP
         /// <summary>
         /// Clients conneted to the server.
         /// </summary>
-        public IEnumerable<IClient<byte,byte>> Clients {
+        public IEnumerable<IClient<IByteStream>> Clients {
             get {
                 foreach (var client in clients)
                     yield return client;
@@ -340,7 +340,7 @@ namespace KRPC.Server.TCP
             }
         }
 
-        void DisconnectClient (IClient<byte,byte> client, bool noEvent = false)
+        void DisconnectClient (IClient<IByteStream> client, bool noEvent = false)
         {
             var label = client.Label ();
             try {
@@ -351,7 +351,7 @@ namespace KRPC.Server.TCP
             }
             client.Close ();
             if (!noEvent)
-                EventHandlerExtensions.Invoke (OnClientDisconnected, this, new ClientDisconnectedEventArgs<byte,byte> (client));
+                EventHandlerExtensions.Invoke (OnClientDisconnected, this, new ClientDisconnectedEventArgs<IByteStream> (client));
             Logger.WriteLine ("TCPServer: connection from " + label + " closed", Logger.Severity.Debug);
         }
     }

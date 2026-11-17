@@ -50,7 +50,7 @@ namespace KRPC.Server.WebSockets
         /// </summary>
         int fragmentsVerifiedPosition;
 
-        public Connection (Message.Server server, IClient<byte,byte> client) : base (server, client)
+        public Connection (Message.Server server, IClient<IByteStream> client) : base (server, client)
         {
         }
 

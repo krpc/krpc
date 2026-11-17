@@ -11,7 +11,7 @@ namespace KRPC.Server.ProtocolBuffers
     {
         readonly CodedOutputStream codedOutputStream;
 
-        public Connection (Message.Server server, IClient<byte,byte> client) : base (server, client)
+        public Connection (Message.Server server, IClient<IByteStream> client) : base (server, client)
         {
             codedOutputStream = new CodedOutputStream (new ByteOutputAdapterStream (client.Stream), true);
         }

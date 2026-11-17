@@ -6,7 +6,7 @@ namespace KRPC.Server.Message
     /// <summary>
     /// A client's session on a connection. A reconnect on the same connection is a new client.
     /// </summary>
-    sealed class Client : IClient<Request,Response>
+    sealed class Client : IClient<IMessageStream>
     {
         readonly Connection connection;
         readonly Stream stream;
@@ -27,7 +27,7 @@ namespace KRPC.Server.Message
             get { return connection.Client.Address; }
         }
 
-        public IStream<Request,Response> Stream {
+        public IMessageStream Stream {
             get { return stream; }
         }
 
@@ -51,7 +51,7 @@ namespace KRPC.Server.Message
             return ReferenceEquals (this, obj);
         }
 
-        public bool Equals (IClient<Request,Response> other)
+        public bool Equals (IClient<IMessageStream> other)
         {
             return ReferenceEquals (this, other);
         }

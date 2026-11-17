@@ -7,7 +7,7 @@ namespace KRPC.Server.SerialIO
     /// </summary>
     sealed class Connection : ProtocolBuffers.Connection
     {
-        public Connection (Message.Server server, IClient<byte,byte> client) : base (server, client)
+        public Connection (Message.Server server, IClient<IByteStream> client) : base (server, client)
         {
         }
 

@@ -4,7 +4,7 @@ using System.Net.Sockets;
 
 namespace KRPC.Server.TCP
 {
-    sealed class TCPClient : IClient<byte,byte>
+    sealed class TCPClient : IClient<IByteStream>
     {
         readonly Guid guid;
         readonly TcpClient client;
@@ -36,7 +36,7 @@ namespace KRPC.Server.TCP
 
         public string Address { get; private set; }
 
-        public IStream<byte,byte> Stream {
+        public IByteStream Stream {
             get {
                 if (stream == null)
                     stream = new TCPStream (client.GetStream (), client.Client);
@@ -74,7 +74,7 @@ namespace KRPC.Server.TCP
             return obj != null && Equals (obj as TCPClient);
         }
 
-        public bool Equals (IClient<byte,byte> other)
+        public bool Equals (IClient<IByteStream> other)
         {
             if (other == null)
                 return false;
