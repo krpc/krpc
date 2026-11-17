@@ -674,6 +674,12 @@ API = [
 PAGES = [
     Example("getting-started/HelloWorld", "orbit"),
     Example("index/Launch", "pad", run=Exit(timeout=300), slow=True),
+    *_exits(
+        "orbit",
+        "communication-protocols/localsocket/RPC",
+        "communication-protocols/tcpip/RPC",
+    ),
+    Example("communication-protocols/tcpip/Stream", "orbit", run=Loop()),
 ]
 
 EXAMPLES = [*TUTORIALS, *USER_GUIDE, *CLIENT, *API, *PAGES]
