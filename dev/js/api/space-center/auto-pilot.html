@@ -1773,7 +1773,9 @@ reference frame.</p>
 <p>The target and the <a class="reference internal" href="#SpaceCenter.AutoPilot.getUpReference" title="SpaceCenter.AutoPilot.getUpReference"><code class="xref js js-meth docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.getUpReference()</span></code></a> are held as vectors in this frame, so
 changing it re-interprets them in the new frame rather than converting them: the
 orientation the vessel is held in, and what a given <a class="reference internal" href="#SpaceCenter.AutoPilot.getTargetRoll" title="SpaceCenter.AutoPilot.getTargetRoll"><code class="xref js js-meth docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.getTargetRoll()</span></code></a> means,
-both change. Set the frame first, then the target.</p>
+both change. Set the frame first, then the target. With a
+<a class="reference internal" href="#SpaceCenter.AutoPilot.getTargetSmoothingTime" title="SpaceCenter.AutoPilot.getTargetSmoothingTime"><code class="xref js js-meth docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.getTargetSmoothingTime()</span></code></a>, the vessel turns smoothly to the new target from the
+orientation it was holding.</p>
 </div>
 </dd></dl>
 
@@ -2143,7 +2145,7 @@ the target roll (if set). Throws an exception if the auto-pilot has not been eng
 <dt class="sig sig-object js" id="SpaceCenter.AutoPilot.setStoppingVelocityThreshold">
 <span class="sig-prename descclassname"><span class="n"><span class="pre">AutoPilot</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">setStoppingVelocityThreshold</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.AutoPilot.setStoppingVelocityThreshold" title="Link to this definition">#</a></dt>
 <dd><p>The threshold angular velocity, in <span class="math notranslate nohighlight">\(\mathrm{rad/s}\)</span>, below which the vessel’s angular
-velocity magnitude must fall for <a class="reference internal" href="#SpaceCenter.AutoPilot.wait" title="SpaceCenter.AutoPilot.wait"><code class="xref js js-meth docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.wait()</span></code></a> to return.
+velocity relative to the target must fall for <a class="reference internal" href="#SpaceCenter.AutoPilot.wait" title="SpaceCenter.AutoPilot.wait"><code class="xref js js-meth docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.wait()</span></code></a> to return.
 Defaults to 0.05 <span class="math notranslate nohighlight">\(\mathrm{rad/s}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Property<span class="colon">:</span></dt>

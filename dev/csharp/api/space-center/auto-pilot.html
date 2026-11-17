@@ -1725,7 +1725,9 @@ reference frame.</p>
 <p>The target and the <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.UpReference" title="property: KRPC.Client.Services.SpaceCenter.AutoPilot.UpReference"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">AutoPilot.UpReference</span></code></a> are held as vectors in this frame, so
 changing it re-interprets them in the new frame rather than converting them: the
 orientation the vessel is held in, and what a given <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetRoll" title="property: KRPC.Client.Services.SpaceCenter.AutoPilot.TargetRoll"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">AutoPilot.TargetRoll</span></code></a> means,
-both change. Set the frame first, then the target.</p>
+both change. Set the frame first, then the target. With a
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetSmoothingTime" title="property: KRPC.Client.Services.SpaceCenter.AutoPilot.TargetSmoothingTime"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">AutoPilot.TargetSmoothingTime</span></code></a>, the vessel turns smoothly to the new target from the
+orientation it was holding.</p>
 </div>
 </dd></dl>
 
@@ -2007,7 +2009,7 @@ the target roll (if set). Throws an exception if the auto-pilot has not been eng
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.StoppingVelocityThreshold">
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">StoppingVelocityThreshold</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.StoppingVelocityThreshold" title="Link to this definition">#</a></dt>
 <dd><p>The threshold angular velocity, in <span class="math notranslate nohighlight">\(\mathrm{rad/s}\)</span>, below which the vessel’s angular
-velocity magnitude must fall for <a class="reference internal" href="#function-KRPC.Client.Services.SpaceCenter.AutoPilot.Wait" title="function: KRPC.Client.Services.SpaceCenter.AutoPilot.Wait"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">AutoPilot.Wait</span></code></a> to return.
+velocity relative to the target must fall for <a class="reference internal" href="#function-KRPC.Client.Services.SpaceCenter.AutoPilot.Wait" title="function: KRPC.Client.Services.SpaceCenter.AutoPilot.Wait"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">AutoPilot.Wait</span></code></a> to return.
 Defaults to 0.05 <span class="math notranslate nohighlight">\(\mathrm{rad/s}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>

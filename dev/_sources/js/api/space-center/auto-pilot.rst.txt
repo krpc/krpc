@@ -135,7 +135,9 @@ AutoPilot
          The target and the :meth:`SpaceCenter.AutoPilot.getUpReference` are held as vectors in this frame, so
          changing it re-interprets them in the new frame rather than converting them: the
          orientation the vessel is held in, and what a given :meth:`SpaceCenter.AutoPilot.getTargetRoll` means,
-         both change. Set the frame first, then the target.
+         both change. Set the frame first, then the target. With a
+         :meth:`SpaceCenter.AutoPilot.getTargetSmoothingTime`, the vessel turns smoothly to the new target from the
+         orientation it was holding.
 
    .. method:: getTargetPitch()
                setTargetPitch(value)
@@ -373,7 +375,7 @@ AutoPilot
                setStoppingVelocityThreshold(value)
 
       The threshold angular velocity, in :math:`\mathrm{rad/s}`, below which the vessel's angular
-      velocity magnitude must fall for :meth:`SpaceCenter.AutoPilot.wait` to return.
+      velocity relative to the target must fall for :meth:`SpaceCenter.AutoPilot.wait` to return.
       Defaults to 0.05 :math:`\mathrm{rad/s}`.
 
       :Property: Can be read or written

@@ -575,8 +575,9 @@ rotation, as a direction for the nose, or as a direction together with an up vec
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">wait()</span></code> returns once the vessel has <em>settled</em> on the target: both the pointing error
-and the vessel’s angular velocity must fall below a threshold, so it does not return while
-the nose is still swinging through the target. The two thresholds are the <strong>stopping angle
+and the vessel’s angular velocity relative to the target must fall below a threshold, so it
+does not return while the nose is still swinging through the target. A vessel turning with a
+moving target has settled. The two thresholds are the <strong>stopping angle
 threshold</strong> (default 1°) and the <strong>stopping velocity threshold</strong> (default 0.05 rad/s), and
 both can be adjusted. <code class="docutils literal notranslate"><span class="pre">wait()</span></code> also takes an optional <code class="docutils literal notranslate"><span class="pre">timeout</span></code> (in seconds), after
 which it raises rather than blocking indefinitely.</p>
@@ -823,6 +824,8 @@ rotation</strong>, and <strong>current error</strong>, <strong>current pitch err
 <strong>effective</strong> target and the error to it. These stay small while a smoothed change is
 being fed in, since the vessel is tracking the effective target closely.</p></li>
 </ul>
+<p>A change to the reference frame keeps the effective target pointing the same way in space.
+The vessel then turns smoothly from the attitude it held to the target set in the new frame.</p>
 <p>When the target smoothing time is zero (the default), the effective target always equals
 the commanded target and both sets of properties read the same.</p>
 </section>
@@ -844,10 +847,12 @@ bandwidth reduction directly, catching a craft that limit-cycles for a non-struc
 reason — typically an aggressively-tuned loop driving slow gimbal or aerodynamic actuators
 (see <a class="reference internal" href="#autopilot-limitations"><span class="std std-ref">Limitations</span></a>).</p>
 <p>As soon as the autopilot sees a craft begin to wobble, it <em>latches</em> that craft as
-flexible and switches on up to four independent mitigations. The first — a <a class="reference internal" href="#rate-filter"><span class="std std-ref">rate
-filter</span></a> — removes the attitude oscillation from its rate measurements so the
-control loop does not chase it, and stays on whether the craft is holding or slewing. The
-other three — a <a class="reference internal" href="#bandwidth-floor"><span class="std std-ref">bandwidth floor</span></a>, a <a class="reference internal" href="#feedforward-cut"><span class="std std-ref">feedforward cut</span></a> and an <a class="reference internal" href="#output-filter"><span class="std std-ref">output filter</span></a> — stop the loop feeding
+flexible and switches on up to four independent mitigations. A change to the craft’s
+parts, as when it separates a stage or docks, clears the latch and resets the detectors.
+The first — a <a class="reference internal" href="#rate-filter"><span class="std std-ref">rate filter</span></a> — removes the attitude oscillation from
+its rate measurements so the control loop does not chase it, and stays on whether the
+craft is holding or slewing.
+The other three — a <a class="reference internal" href="#bandwidth-floor"><span class="std std-ref">bandwidth floor</span></a>, a <a class="reference internal" href="#feedforward-cut"><span class="std std-ref">feedforward cut</span></a> and an <a class="reference internal" href="#output-filter"><span class="std std-ref">output filter</span></a> — stop the loop feeding
 energy back into the structure, and apply only while the craft is <em>holding</em> attitude, so
 that a
 commanded maneuver stays responsive. If a maneuver sets the wobble going again, the
@@ -1406,7 +1411,8 @@ are both collinear with <span class="math notranslate nohighlight">\(\boldsymbol
 The acceleration <span class="math notranslate nohighlight">\(\alpha\)</span>, the cap <span class="math notranslate nohighlight">\(\omega_{max}\)</span> and the speed-cone
 bandwidth <span class="math notranslate nohighlight">\(\text{bw}\)</span> are projected along <span class="math notranslate nohighlight">\(\hat{\boldsymbol{\omega}}\)</span> for
 the prediction and along <span class="math notranslate nohighlight">\(\hat{s}\)</span> for the speed profile. This makes the nose
-follow the shortest, great-circle path to the target.</p>
+follow the shortest, great-circle path to the target. For a moving target,
+<span class="math notranslate nohighlight">\(\boldsymbol{\omega}\)</span> is the angular velocity relative to the <a class="reference internal" href="#moving-targets"><span class="std std-ref">target rate</span></a> the autopilot follows.</p>
 </section>
 <section id="tangential-damping">
 <h4>Tangential damping<a class="headerlink" href="#tangential-damping" title="Link to this heading">#</a></h4>
@@ -1426,6 +1432,25 @@ settling are unchanged; the off-axis behavior appears only in the nudge/orbit re
 The singularity guard is on <span class="math notranslate nohighlight">\(\lvert\boldsymbol{e}_{stop}\rvert\)</span> rather than
 <span class="math notranslate nohighlight">\(\theta\)</span>: only when both the error and the predicted drift vanish is there nothing
 to command.</p>
+</section>
+<section id="moving-targets">
+<span id="id11"></span><h4>Moving targets<a class="headerlink" href="#moving-targets" title="Link to this heading">#</a></h4>
+<p>A target that moves, such as the pitch of a gravity turn or the direction of a maneuver node
+during its burn, has its own rotation rate. The autopilot estimates it as the angular
+velocity minus the rate of change of the error, low-pass filtered with a 0.5 second time
+constant. A tick’s estimate over 0.2 rad/s comes from a step in the target, and the filter
+takes it as zero.</p>
+<p>The estimated rate is added to the pitch and yaw target angular velocity, outside the profile
+and its deadband. The profile then acts on the angular velocity relative to the target, so
+at zero error the vessel turns with the target.</p>
+<p>Without this the vessel would follow the target only by trailing it, holding an error at the
+deadband’s edge where the profile is steepest, and could oscillate as it follows.</p>
+<p>The estimate is only good while the vessel tracks the target. In a large slew the error’s
+axis turns, and at the antipode it jumps, both of which read as target motion. So the target
+rate is followed in full up to 5° of pointing error, and fades out by 10°.</p>
+<p>A slow target rate is lost in the estimate’s noise, and following it adds error. So the
+rate fades in from 0.001 rad/s, and is followed in full from 0.003 rad/s. A gravity turn or
+a burn in low orbit turns faster than that, and an aircraft holding a pitch turns slower.</p>
 </section>
 <section id="flipping-to-the-antipode">
 <span id="antipodal-flip"></span><h4>Flipping to the antipode<a class="headerlink" href="#flipping-to-the-antipode" title="Link to this heading">#</a></h4>
@@ -1526,7 +1551,7 @@ autopilot damps roll rotation without holding a specific angle.</p>
 <span class="math notranslate nohighlight">\([-1, 1]\)</span>: an <em>acceleration feedforward</em> derived from the velocity setpoint, and a
 <em>gyroscopic feedforward</em> that cancels the rigid-body cross-coupling between the axes.</p>
 <section id="acceleration-feedforward">
-<span id="id11"></span><h4>Acceleration feedforward<a class="headerlink" href="#acceleration-feedforward" title="Link to this heading">#</a></h4>
+<span id="id12"></span><h4>Acceleration feedforward<a class="headerlink" href="#acceleration-feedforward" title="Link to this heading">#</a></h4>
 <p>The velocity setpoint <span class="math notranslate nohighlight">\(\omega_{ref}\)</span> changes from tick to tick as the vessel
 rotates and the bang-bang profile is re-evaluated. Its time derivative is the angular
 acceleration the vessel must produce to stay on the trajectory:</p>
@@ -1595,12 +1620,21 @@ sustained oscillation about the target. To prevent this the whole feedforward is
 <div class="math notranslate nohighlight">
 \[\min\!\left(1,\ \frac{\text{speed}}{\omega_{\parallel}}\right)\]</div>
 <p>where <span class="math notranslate nohighlight">\(\omega_{\parallel}\)</span> is the measured angular rate along the command direction
-<span class="math notranslate nohighlight">\(-\hat{s}\)</span>. It is one while the vessel is on the profile
+<span class="math notranslate nohighlight">\(-\hat{s}\)</span>, relative to the followed <a class="reference internal" href="#moving-targets"><span class="std std-ref">target rate</span></a> on pitch and
+yaw. It is one while the vessel is on the profile
 (<span class="math notranslate nohighlight">\(\omega_{\parallel} \approx \text{speed}\)</span>) or rotating away from the command
 (<span class="math notranslate nohighlight">\(\omega_{\parallel} \le 0\)</span>), so ordinary slews, holds and the feedforward’s normal role
 are untouched, and it falls below one only once the vessel is crossing faster than the profile
 commands — handing the braking there back to the PI controller, which is well damped on its
 own.</p>
+<p>While a <a class="reference internal" href="#target-smoothing"><span class="std std-ref">smoothed</span></a> change is fed in, the effective target moves
+away at the slew rate <span class="math notranslate nohighlight">\(\omega_s\)</span>, and the error grows at that rate. The braking terms
+add <span class="math notranslate nohighlight">\(\omega_s\)</span> to the on-profile error rate, outside the tracking fraction, and
+<span class="math notranslate nohighlight">\(\dot\theta\)</span> in the deadband term includes it. On pitch and yaw the <a class="reference internal" href="#moving-targets"><span class="std std-ref">followed
+target rate</span></a> already carries part of the slew, so only
+<span class="math notranslate nohighlight">\((1 - w)\,\omega_s\)</span> is added, where <span class="math notranslate nohighlight">\(w\)</span> is the weight, from 0 to 1, with which
+the autopilot follows the target rate. Roll follows no target rate, and takes the whole
+slew.</p>
 <p>The setpoint is continuous but not smooth: <span class="math notranslate nohighlight">\(\dot g\)</span> steps by a bounded amount at the
 seams where the profile switches branch (the velocity cap engaging, the quadratic and
 linear stopping terms swapping). To smear these few genuine transitions the feedforward is
@@ -1614,7 +1648,7 @@ the inner-loop bandwidth has been floored (see <a class="reference internal" hre
 on a rigid craft.</p>
 </section>
 <section id="gyroscopic-feedforward">
-<span id="id12"></span><h4>Gyroscopic feedforward<a class="headerlink" href="#gyroscopic-feedforward" title="Link to this heading">#</a></h4>
+<span id="id13"></span><h4>Gyroscopic feedforward<a class="headerlink" href="#gyroscopic-feedforward" title="Link to this heading">#</a></h4>
 <p>The <a class="reference internal" href="#tuning-the-controllers"><span class="std std-ref">controller gain tuning</span></a> models each axis as an independent
 plant <span class="math notranslate nohighlight">\(\tau = I\dot\omega\)</span>. The true rigid-body equation of motion, however,
 couples the axes through a gyroscopic term:</p>
@@ -1784,10 +1818,10 @@ on its own without disturbing the others (see <a class="reference internal" href
 the manual controls).</p>
 <p>In outline, the signals flow from the two measured inputs, through the observation and
 gating layers, to the four mitigations that tap into the control loop:</p>
-<figure class="align-center" id="id15">
+<figure class="align-center" id="id16">
 <img alt="../_images/autopilot-oscillation.png" src="../_images/autopilot-oscillation.png" />
 <figcaption>
-<p><span class="caption-text">Oscillation observation, gating and mitigation pipeline.</span><a class="headerlink" href="#id15" title="Link to this image">#</a></p>
+<p><span class="caption-text">Oscillation observation, gating and mitigation pipeline.</span><a class="headerlink" href="#id16" title="Link to this image">#</a></p>
 </figcaption>
 </figure>
 <p>The observation layer never acts on the craft; it only sets the latch, frequency and
@@ -1803,8 +1837,8 @@ independent of the loop gains and of any commanded maneuver. It produces a level
 and 1 per axis — rising quickly when excitation appears, decaying slowly once it subsides —
 and once that level is high enough the axis is <em>latched</em> as flexible. The latch persists if
 the autopilot is briefly disengaged and re-engaged, so a craft known to be flexible stays
-damped. Pitch and yaw are treated together: a long vehicle’s bending mode appears in both,
-so if one is found flexible the other is too.</p>
+damped. A change to the craft’s parts clears it. Pitch and yaw are treated together: a
+long vehicle’s bending mode appears in both, so if one is found flexible the other is too.</p>
 <p>In parallel, a frequency estimator tracks the oscillation frequency from the intervals
 between sign changes of the high-passed rate. It is used only to route and tune the rate
 filter, not to carry the suppression, and stays not-a-number until several half-periods
@@ -1880,7 +1914,7 @@ is safe to leave always on.</p>
 </section>
 </section>
 <section id="control-surfaces">
-<span id="id13"></span><h3>Control surfaces<a class="headerlink" href="#control-surfaces" title="Link to this heading">#</a></h3>
+<span id="id14"></span><h3>Control surfaces<a class="headerlink" href="#control-surfaces" title="Link to this heading">#</a></h3>
 <p>A control surface’s torque scales with dynamic pressure, and the surface moves to a new
 deflection at a fixed actuator speed. The autopilot models the surfaces through the share
 <span class="math notranslate nohighlight">\(s\)</span> of each axis’s available torque they provide. An axis with no surfaces has
@@ -1919,9 +1953,8 @@ surfaces swing back. The <a class="reference internal" href="#stopping-distance-
 <div class="math notranslate nohighlight">
 \[\theta_{ff} = \theta + \Delta\theta + T\,(\omega - \omega_t)\]</div>
 <p>The rate <span class="math notranslate nohighlight">\(\omega_t\)</span> is the target’s own rotation, as a surface tracking a steadily
-moving target never reverses. It is estimated as the angular velocity minus the rate of
-change of the error, low-pass filtered with a 0.5 second time constant. A change in the
-error faster than 0.2 rad/s is a step in the target, and the estimate ignores it.</p>
+moving target never reverses. On roll it is the <a class="reference internal" href="#moving-targets"><span class="std std-ref">estimated target rate</span></a>. On pitch and yaw the profile’s <span class="math notranslate nohighlight">\(\omega\)</span> is already relative to the
+target rate it follows, so <span class="math notranslate nohighlight">\(\omega_t\)</span> is zero there.</p>
 </section>
 <section id="bandwidth-back-off">
 <h4>Bandwidth back-off<a class="headerlink" href="#bandwidth-back-off" title="Link to this heading">#</a></h4>
@@ -1939,7 +1972,7 @@ so <span class="math notranslate nohighlight">\(K_P\)</span> scales with <span c
 is kept.</p>
 </section>
 <section id="aerodynamic-rate-limit">
-<span id="id14"></span><h4>Aerodynamic rate limit<a class="headerlink" href="#aerodynamic-rate-limit" title="Link to this heading">#</a></h4>
+<span id="id15"></span><h4>Aerodynamic rate limit<a class="headerlink" href="#aerodynamic-rate-limit" title="Link to this heading">#</a></h4>
 <p>The steady rate a vessel holds on an axis is set by the spare control torque: the
 available torque less the trim, the slowly varying average of the command over 3 seconds.
 Every 0.5 seconds the autopilot evaluates the vessel’s aerodynamics at a range of
@@ -2062,6 +2095,7 @@ atmosphere.</p>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#stopping-distance-feedforward">Stopping-distance feedforward</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pitch-and-yaw-together">Pitch and yaw together</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tangential-damping">Tangential damping</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#moving-targets">Moving targets</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#flipping-to-the-antipode">Flipping to the antipode</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#roll">Roll</a></li>
 </ul>

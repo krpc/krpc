@@ -192,6 +192,10 @@ SpaceCenter service
 
 * Add ``Vessel.LaunchSite``, the launch site the vessel was launched from (:issue:`1363`)
 * Add ``LaunchSite.Latitude``, ``LaunchSite.Longitude`` and ``LaunchSite.Altitude``, the point vessels launch from (:issue:`1363`)
+* Fix the auto-pilot keeping its flexible-craft mitigations after separating a stage or docking (:issue:`1373`)
+* Make the auto-pilot turn with a moving target, such as a gravity turn's pitch (:issue:`1373`)
+* Make ``AutoPilot.Wait`` measure the angular velocity relative to the target (:issue:`1373`)
+* Fix the auto-pilot turning away from its target when ``AutoPilot.ReferenceFrame`` changes while ``AutoPilot.TargetSmoothingTime`` is set (:issue:`1373`)
 
 
 DockingCamera service

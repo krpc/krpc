@@ -719,6 +719,10 @@
 </li>
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">Vessel.LaunchSite</span></code>, the launch site the vessel was launched from (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1363">#1363</a>)</p></li>
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">LaunchSite.Latitude</span></code>, <code class="docutils literal notranslate"><span class="pre">LaunchSite.Longitude</span></code> and <code class="docutils literal notranslate"><span class="pre">LaunchSite.Altitude</span></code>, the point vessels launch from (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1363">#1363</a>)</p></li>
+<li><p>Fix the auto-pilot keeping its flexible-craft mitigations after separating a stage or docking (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1373">#1373</a>)</p></li>
+<li><p>Make the auto-pilot turn with a moving target, such as a gravity turn’s pitch (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1373">#1373</a>)</p></li>
+<li><p>Make <code class="docutils literal notranslate"><span class="pre">AutoPilot.Wait</span></code> measure the angular velocity relative to the target (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1373">#1373</a>)</p></li>
+<li><p>Fix the auto-pilot turning away from its target when <code class="docutils literal notranslate"><span class="pre">AutoPilot.ReferenceFrame</span></code> changes while <code class="docutils literal notranslate"><span class="pre">AutoPilot.TargetSmoothingTime</span></code> is set (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1373">#1373</a>)</p></li>
 </ul>
 </section>
 <section id="dockingcamera-service">

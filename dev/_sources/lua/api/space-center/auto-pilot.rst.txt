@@ -108,7 +108,9 @@ AutoPilot
          The target and the :attr:`SpaceCenter.AutoPilot.up_reference` are held as vectors in this frame, so
          changing it re-interprets them in the new frame rather than converting them: the
          orientation the vessel is held in, and what a given :attr:`SpaceCenter.AutoPilot.target_roll` means,
-         both change. Set the frame first, then the target.
+         both change. Set the frame first, then the target. With a
+         :attr:`SpaceCenter.AutoPilot.target_smoothing_time`, the vessel turns smoothly to the new target from the
+         orientation it was holding.
 
    .. attribute:: target_pitch: number
 
@@ -298,7 +300,7 @@ AutoPilot
    .. attribute:: stopping_velocity_threshold: number
 
       The threshold angular velocity, in :math:`\mathrm{rad/s}`, below which the vessel's angular
-      velocity magnitude must fall for :meth:`SpaceCenter.AutoPilot.wait` to return.
+      velocity relative to the target must fall for :meth:`SpaceCenter.AutoPilot.wait` to return.
       Defaults to 0.05 :math:`\mathrm{rad/s}`.
 
       :Attribute: Can be read or written
