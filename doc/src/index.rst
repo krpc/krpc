@@ -11,37 +11,37 @@ an altitude of 10 km:
 
 .. tabs::
 
-   .. tab:: Python
+   .. group-tab:: Python
 
       .. literalinclude:: /scripts/index/Launch.py
          :language: python
 
-   .. tab:: C#
+   .. group-tab:: C#
 
       .. literalinclude:: /scripts/index/Launch.cs
          :language: csharp
 
-   .. tab:: C++
+   .. group-tab:: C++
 
       .. literalinclude:: /scripts/index/Launch.cpp
          :language: cpp
 
-   .. tab:: C
+   .. group-tab:: C
 
       .. literalinclude:: /scripts/index/Launch.c
          :language: c
 
-   .. tab:: Java
+   .. group-tab:: Java
 
       .. literalinclude:: /scripts/index/Launch.java
          :language: java
 
-   .. tab:: Lua
+   .. group-tab:: Lua
 
       .. literalinclude:: /scripts/index/Launch.lua
          :language: lua
 
-   .. tab:: JavaScript
+   .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/index/Launch.js
          :language: javascript

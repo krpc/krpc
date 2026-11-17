@@ -43,37 +43,37 @@ This example walks the tree depth first, and prints each part indented by its de
 
 .. tabs::
 
-   .. tab:: Python
+   .. group-tab:: Python
 
       .. literalinclude:: /scripts/user-guide/parts/TreeTraversal.py
          :language: python
 
-   .. tab:: C#
+   .. group-tab:: C#
 
       .. literalinclude:: /scripts/user-guide/parts/TreeTraversal.cs
          :language: csharp
 
-   .. tab:: C++
+   .. group-tab:: C++
 
       .. literalinclude:: /scripts/user-guide/parts/TreeTraversal.cpp
          :language: cpp
 
-   .. tab:: C
+   .. group-tab:: C
 
       .. literalinclude:: /scripts/user-guide/parts/TreeTraversal.c
          :language: c
 
-   .. tab:: Java
+   .. group-tab:: Java
 
       .. literalinclude:: /scripts/user-guide/parts/TreeTraversal.java
          :language: java
 
-   .. tab:: Lua
+   .. group-tab:: Lua
 
       .. literalinclude:: /scripts/user-guide/parts/TreeTraversal.lua
          :language: lua
 
-   .. tab:: JavaScript
+   .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/parts/TreeTraversal.js
          :language: javascript
@@ -120,37 +120,37 @@ as before, and prints each part's attachment mode:
 
 .. tabs::
 
-   .. tab:: Python
+   .. group-tab:: Python
 
       .. literalinclude:: /scripts/user-guide/parts/AttachmentModes.py
          :language: python
 
-   .. tab:: C#
+   .. group-tab:: C#
 
       .. literalinclude:: /scripts/user-guide/parts/AttachmentModes.cs
          :language: csharp
 
-   .. tab:: C++
+   .. group-tab:: C++
 
       .. literalinclude:: /scripts/user-guide/parts/AttachmentModes.cpp
          :language: cpp
 
-   .. tab:: C
+   .. group-tab:: C
 
       .. literalinclude:: /scripts/user-guide/parts/AttachmentModes.c
          :language: c
 
-   .. tab:: Java
+   .. group-tab:: Java
 
       .. literalinclude:: /scripts/user-guide/parts/AttachmentModes.java
          :language: java
 
-   .. tab:: Lua
+   .. group-tab:: Lua
 
       .. literalinclude:: /scripts/user-guide/parts/AttachmentModes.lua
          :language: lua
 
-   .. tab:: JavaScript
+   .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/parts/AttachmentModes.js
          :language: javascript

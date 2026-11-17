@@ -15,37 +15,37 @@ your Kerbals by deploying all the parachutes:
 
 .. tabs::
 
-   .. tab:: Python
+   .. group-tab:: Python
 
       .. literalinclude:: /scripts/tutorials/parts/DeployParachutes.py
          :language: python
 
-   .. tab:: C#
+   .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/parts/DeployParachutes.cs
          :language: csharp
 
-   .. tab:: C++
+   .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/parts/DeployParachutes.cpp
          :language: cpp
 
-   .. tab:: C
+   .. group-tab:: C
 
       .. literalinclude:: /scripts/tutorials/parts/DeployParachutes.c
          :language: c
 
-   .. tab:: Java
+   .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/parts/DeployParachutes.java
          :language: java
 
-   .. tab:: Lua
+   .. group-tab:: Lua
 
       .. literalinclude:: /scripts/tutorials/parts/DeployParachutes.lua
          :language: lua
 
-   .. tab:: JavaScript
+   .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/tutorials/parts/DeployParachutes.js
          :language: javascript
@@ -58,14 +58,14 @@ lambda holds no loop, so C# and the other clients build the loop with the
 
 .. tabs::
 
-   .. tab:: Python
+   .. group-tab:: Python
 
       .. literalinclude:: /scripts/tutorials/parts/DeployParachutesFunction.py
          :language: python
          :start-after: [docs]
          :end-before: [/docs]
 
-   .. tab:: C#
+   .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/parts/DeployParachutesFunction.cs
          :language: csharp
@@ -73,7 +73,7 @@ lambda holds no loop, so C# and the other clients build the loop with the
          :end-before: [/docs]
          :dedent:
 
-   .. tab:: C++
+   .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/parts/DeployParachutesFunction.cpp
          :language: cpp
@@ -81,7 +81,7 @@ lambda holds no loop, so C# and the other clients build the loop with the
          :end-before: [/docs]
          :dedent:
 
-   .. tab:: C
+   .. group-tab:: C
 
       .. literalinclude:: /scripts/tutorials/parts/DeployParachutesFunction.c
          :language: c
@@ -89,7 +89,7 @@ lambda holds no loop, so C# and the other clients build the loop with the
          :end-before: [/docs]
          :dedent:
 
-   .. tab:: Java
+   .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/parts/DeployParachutesFunction.java
          :language: java
@@ -97,14 +97,14 @@ lambda holds no loop, so C# and the other clients build the loop with the
          :end-before: [/docs]
          :dedent:
 
-   .. tab:: Lua
+   .. group-tab:: Lua
 
       .. literalinclude:: /scripts/tutorials/parts/DeployParachutesFunction.lua
          :language: lua
          :start-after: [docs]
          :end-before: [/docs]
 
-   .. tab:: JavaScript
+   .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/tutorials/parts/DeployParachutesFunction.js
          :language: javascript
@@ -119,37 +119,37 @@ control the vessel from it:
 
 .. tabs::
 
-   .. tab:: Python
+   .. group-tab:: Python
 
       .. literalinclude:: /scripts/tutorials/parts/ControlFromHere.py
          :language: python
 
-   .. tab:: C#
+   .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/parts/ControlFromHere.cs
          :language: csharp
 
-   .. tab:: C++
+   .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/parts/ControlFromHere.cpp
          :language: cpp
 
-   .. tab:: C
+   .. group-tab:: C
 
       .. literalinclude:: /scripts/tutorials/parts/ControlFromHere.c
          :language: c
 
-   .. tab:: Java
+   .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/parts/ControlFromHere.java
          :language: java
 
-   .. tab:: Lua
+   .. group-tab:: Lua
 
       .. literalinclude:: /scripts/tutorials/parts/ControlFromHere.lua
          :language: lua
 
-   .. tab:: JavaScript
+   .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/tutorials/parts/ControlFromHere.js
          :language: javascript
@@ -163,37 +163,37 @@ https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines
 
 .. tabs::
 
-   .. tab:: Python
+   .. group-tab:: Python
 
       .. literalinclude:: /scripts/tutorials/parts/CombinedIsp.py
          :language: python
 
-   .. tab:: C#
+   .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/parts/CombinedIsp.cs
          :language: csharp
 
-   .. tab:: C++
+   .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/parts/CombinedIsp.cpp
          :language: cpp
 
-   .. tab:: C
+   .. group-tab:: C
 
       .. literalinclude:: /scripts/tutorials/parts/CombinedIsp.c
          :language: c
 
-   .. tab:: Java
+   .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/parts/CombinedIsp.java
          :language: java
 
-   .. tab:: Lua
+   .. group-tab:: Lua
 
       .. literalinclude:: /scripts/tutorials/parts/CombinedIsp.lua
          :language: lua
 
-   .. tab:: JavaScript
+   .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/tutorials/parts/CombinedIsp.js
          :language: javascript
@@ -206,14 +206,14 @@ function, and the other clients build it with the
 
 .. tabs::
 
-   .. tab:: Python
+   .. group-tab:: Python
 
       .. literalinclude:: /scripts/tutorials/parts/CombinedIspFunction.py
          :language: python
          :start-after: [docs]
          :end-before: [/docs]
 
-   .. tab:: C#
+   .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/parts/CombinedIspFunction.cs
          :language: csharp
@@ -221,7 +221,7 @@ function, and the other clients build it with the
          :end-before: [/docs]
          :dedent:
 
-   .. tab:: C++
+   .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/parts/CombinedIspFunction.cpp
          :language: cpp
@@ -229,7 +229,7 @@ function, and the other clients build it with the
          :end-before: [/docs]
          :dedent:
 
-   .. tab:: C
+   .. group-tab:: C
 
       .. literalinclude:: /scripts/tutorials/parts/CombinedIspFunction.c
          :language: c
@@ -242,7 +242,7 @@ function, and the other clients build it with the
          :end-before: [/docs]
          :dedent:
 
-   .. tab:: Java
+   .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/parts/CombinedIspFunction.java
          :language: java
@@ -250,14 +250,14 @@ function, and the other clients build it with the
          :end-before: [/docs]
          :dedent:
 
-   .. tab:: Lua
+   .. group-tab:: Lua
 
       .. literalinclude:: /scripts/tutorials/parts/CombinedIspFunction.lua
          :language: lua
          :start-after: [docs]
          :end-before: [/docs]
 
-   .. tab:: JavaScript
+   .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/tutorials/parts/CombinedIspFunction.js
          :language: javascript

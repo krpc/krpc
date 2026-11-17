@@ -15,37 +15,37 @@ vessel:
 
 .. tabs::
 
-   .. tab:: Python
+   .. group-tab:: Python
 
       .. literalinclude:: /scripts/user-guide/vectors-and-rotations/Vector3.py
          :language: python
 
-   .. tab:: C#
+   .. group-tab:: C#
 
       .. literalinclude:: /scripts/user-guide/vectors-and-rotations/Vector3.cs
          :language: csharp
 
-   .. tab:: C++
+   .. group-tab:: C++
 
       .. literalinclude:: /scripts/user-guide/vectors-and-rotations/Vector3.cpp
          :language: cpp
 
-   .. tab:: C
+   .. group-tab:: C
 
       .. literalinclude:: /scripts/user-guide/vectors-and-rotations/Vector3.c
          :language: c
 
-   .. tab:: Java
+   .. group-tab:: Java
 
       .. literalinclude:: /scripts/user-guide/vectors-and-rotations/Vector3.java
          :language: java
 
-   .. tab:: Lua
+   .. group-tab:: Lua
 
       .. literalinclude:: /scripts/user-guide/vectors-and-rotations/Vector3.lua
          :language: lua
 
-   .. tab:: JavaScript
+   .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/vectors-and-rotations/Vector3.js
          :language: javascript
@@ -77,37 +77,37 @@ A rotation is a unit quaternion, a 4-tuple ``(x, y, z, w)``. The rotation that d
 
 .. tabs::
 
-   .. tab:: Python
+   .. group-tab:: Python
 
       .. literalinclude:: /scripts/user-guide/vectors-and-rotations/Quaternion.py
          :language: python
 
-   .. tab:: C#
+   .. group-tab:: C#
 
       .. literalinclude:: /scripts/user-guide/vectors-and-rotations/Quaternion.cs
          :language: csharp
 
-   .. tab:: C++
+   .. group-tab:: C++
 
       .. literalinclude:: /scripts/user-guide/vectors-and-rotations/Quaternion.cpp
          :language: cpp
 
-   .. tab:: C
+   .. group-tab:: C
 
       .. literalinclude:: /scripts/user-guide/vectors-and-rotations/Quaternion.c
          :language: c
 
-   .. tab:: Java
+   .. group-tab:: Java
 
       .. literalinclude:: /scripts/user-guide/vectors-and-rotations/Quaternion.java
          :language: java
 
-   .. tab:: Lua
+   .. group-tab:: Lua
 
       .. literalinclude:: /scripts/user-guide/vectors-and-rotations/Quaternion.lua
          :language: lua
 
-   .. tab:: JavaScript
+   .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/vectors-and-rotations/Quaternion.js
          :language: javascript

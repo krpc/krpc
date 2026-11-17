@@ -68,37 +68,37 @@ reference frame:
 
 .. tabs::
 
-   .. tab:: Python
+   .. group-tab:: Python
 
       .. literalinclude:: /scripts/user-guide/reference-frames/VesselPosition.py
          :language: python
 
-   .. tab:: C#
+   .. group-tab:: C#
 
       .. literalinclude:: /scripts/user-guide/reference-frames/VesselPosition.cs
          :language: csharp
 
-   .. tab:: C++
+   .. group-tab:: C++
 
       .. literalinclude:: /scripts/user-guide/reference-frames/VesselPosition.cpp
          :language: cpp
 
-   .. tab:: C
+   .. group-tab:: C
 
       .. literalinclude:: /scripts/user-guide/reference-frames/VesselPosition.c
          :language: c
 
-   .. tab:: Java
+   .. group-tab:: Java
 
       .. literalinclude:: /scripts/user-guide/reference-frames/VesselPosition.java
          :language: java
 
-   .. tab:: Lua
+   .. group-tab:: Lua
 
       .. literalinclude:: /scripts/user-guide/reference-frames/VesselPosition.lua
          :language: lua
 
-   .. tab:: JavaScript
+   .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/reference-frames/VesselPosition.js
          :language: javascript
@@ -180,7 +180,7 @@ kRPC provides the following reference frames:
 
 .. tabs::
 
-   .. tab:: Python
+   .. group-tab:: Python
 
       * :py:attr:`Vessel.reference_frame`
       * :py:attr:`Vessel.orbital_reference_frame`
@@ -201,7 +201,7 @@ kRPC provides the following reference frames:
       * :py:attr:`DockingPort.reference_frame`
       * :py:attr:`Thruster.thrust_reference_frame`
 
-   .. tab:: C#
+   .. group-tab:: C#
 
       * :cs:prop:`Vessel.ReferenceFrame`
       * :cs:prop:`Vessel.OrbitalReferenceFrame`
@@ -222,7 +222,7 @@ kRPC provides the following reference frames:
       * :cs:prop:`DockingPort.ReferenceFrame`
       * :cs:prop:`Thruster.ThrustReferenceFrame`
 
-   .. tab:: C++
+   .. group-tab:: C++
 
       * :cpp:func:`Vessel::reference_frame`
       * :cpp:func:`Vessel::orbital_reference_frame`
@@ -243,7 +243,7 @@ kRPC provides the following reference frames:
       * :cpp:func:`DockingPort::reference_frame`
       * :cpp:func:`Thruster::thrust_reference_frame`
 
-   .. tab:: C
+   .. group-tab:: C
 
       * :c:func:`krpc_SpaceCenter_Vessel_ReferenceFrame`
       * :c:func:`krpc_SpaceCenter_Vessel_OrbitalReferenceFrame`
@@ -264,7 +264,7 @@ kRPC provides the following reference frames:
       * :c:func:`krpc_SpaceCenter_DockingPort_ReferenceFrame`
       * :c:func:`krpc_SpaceCenter_Thruster_ThrustReferenceFrame`
 
-   .. tab:: Java
+   .. group-tab:: Java
 
       * :java:meth:`Vessel.getReferenceFrame`
       * :java:meth:`Vessel.getOrbitalReferenceFrame`
@@ -285,7 +285,7 @@ kRPC provides the following reference frames:
       * :java:meth:`DockingPort.getReferenceFrame`
       * :java:meth:`Thruster.getThrustReferenceFrame`
 
-   .. tab:: Lua
+   .. group-tab:: Lua
 
       * :lua:attr:`SpaceCenter.Vessel.reference_frame`
       * :lua:attr:`SpaceCenter.Vessel.orbital_reference_frame`
@@ -306,7 +306,7 @@ kRPC provides the following reference frames:
       * :lua:attr:`SpaceCenter.DockingPort.reference_frame`
       * :lua:attr:`SpaceCenter.Thruster.thrust_reference_frame`
 
-   .. tab:: JavaScript
+   .. group-tab:: JavaScript
 
       * :js:meth:`SpaceCenter.Vessel.getReferenceFrame`
       * :js:meth:`SpaceCenter.Vessel.getOrbitalReferenceFrame`
@@ -375,49 +375,49 @@ velocities between the different reference frames:
 
 .. tabs::
 
-   .. tab:: Python
+   .. group-tab:: Python
 
       * :py:meth:`SpaceCenter.transform_position`
       * :py:meth:`SpaceCenter.transform_direction`
       * :py:meth:`SpaceCenter.transform_rotation`
       * :py:meth:`SpaceCenter.transform_velocity`
 
-   .. tab:: C#
+   .. group-tab:: C#
 
       * :cs:meth:`SpaceCenter.TransformPosition`
       * :cs:meth:`SpaceCenter.TransformDirection`
       * :cs:meth:`SpaceCenter.TransformRotation`
       * :cs:meth:`SpaceCenter.TransformVelocity`
 
-   .. tab:: C++
+   .. group-tab:: C++
 
       * :cpp:func:`SpaceCenter::transform_position`
       * :cpp:func:`SpaceCenter::transform_direction`
       * :cpp:func:`SpaceCenter::transform_rotation`
       * :cpp:func:`SpaceCenter::transform_velocity`
 
-   .. tab:: C
+   .. group-tab:: C
 
       * :c:func:`krpc_SpaceCenter_TransformPosition`
       * :c:func:`krpc_SpaceCenter_TransformDirection`
       * :c:func:`krpc_SpaceCenter_TransformRotation`
       * :c:func:`krpc_SpaceCenter_TransformVelocity`
 
-   .. tab:: Java
+   .. group-tab:: Java
 
       * :java:meth:`SpaceCenter.transformPosition`
       * :java:meth:`SpaceCenter.transformDirection`
       * :java:meth:`SpaceCenter.transformRotation`
       * :java:meth:`SpaceCenter.transformVelocity`
 
-   .. tab:: Lua
+   .. group-tab:: Lua
 
       * :lua:meth:`SpaceCenter.transform_position`
       * :lua:meth:`SpaceCenter.transform_direction`
       * :lua:meth:`SpaceCenter.transform_rotation`
       * :lua:meth:`SpaceCenter.transform_velocity`
 
-   .. tab:: JavaScript
+   .. group-tab:: JavaScript
 
       * :js:func:`SpaceCenter.transformPosition`
       * :js:func:`SpaceCenter.transformDirection`
@@ -439,37 +439,37 @@ labeled arrow in the direction of the vessel's velocity relative to the surface:
 
 .. tabs::
 
-   .. tab:: Python
+   .. group-tab:: Python
 
       .. literalinclude:: /scripts/user-guide/reference-frames/VisualDebugging.py
          :language: python
 
-   .. tab:: C#
+   .. group-tab:: C#
 
       .. literalinclude:: /scripts/user-guide/reference-frames/VisualDebugging.cs
          :language: csharp
 
-   .. tab:: C++
+   .. group-tab:: C++
 
       .. literalinclude:: /scripts/user-guide/reference-frames/VisualDebugging.cpp
          :language: cpp
 
-   .. tab:: C
+   .. group-tab:: C
 
       .. literalinclude:: /scripts/user-guide/reference-frames/VisualDebugging.c
          :language: c
 
-   .. tab:: Java
+   .. group-tab:: Java
 
       .. literalinclude:: /scripts/user-guide/reference-frames/VisualDebugging.java
          :language: java
 
-   .. tab:: Lua
+   .. group-tab:: Lua
 
       .. literalinclude:: /scripts/user-guide/reference-frames/VisualDebugging.lua
          :language: lua
 
-   .. tab:: JavaScript
+   .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/reference-frames/VisualDebugging.js
          :language: javascript
@@ -494,37 +494,37 @@ the navball:
 
 .. tabs::
 
-   .. tab:: Python
+   .. group-tab:: Python
 
       .. literalinclude:: /scripts/user-guide/reference-frames/NavballDirections.py
          :language: python
 
-   .. tab:: C#
+   .. group-tab:: C#
 
       .. literalinclude:: /scripts/user-guide/reference-frames/NavballDirections.cs
          :language: csharp
 
-   .. tab:: C++
+   .. group-tab:: C++
 
       .. literalinclude:: /scripts/user-guide/reference-frames/NavballDirections.cpp
          :language: cpp
 
-   .. tab:: C
+   .. group-tab:: C
 
       .. literalinclude:: /scripts/user-guide/reference-frames/NavballDirections.c
          :language: c
 
-   .. tab:: Java
+   .. group-tab:: Java
 
       .. literalinclude:: /scripts/user-guide/reference-frames/NavballDirections.java
          :language: java
 
-   .. tab:: Lua
+   .. group-tab:: Lua
 
       .. literalinclude:: /scripts/user-guide/reference-frames/NavballDirections.lua
          :language: lua
 
-   .. tab:: JavaScript
+   .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/reference-frames/NavballDirections.js
          :language: javascript
@@ -556,37 +556,37 @@ directions, as seen on the navball when it is in 'orbit' mode. It uses
 
 .. tabs::
 
-   .. tab:: Python
+   .. group-tab:: Python
 
       .. literalinclude:: /scripts/user-guide/reference-frames/OrbitalDirections.py
          :language: python
 
-   .. tab:: C#
+   .. group-tab:: C#
 
       .. literalinclude:: /scripts/user-guide/reference-frames/OrbitalDirections.cs
          :language: csharp
 
-   .. tab:: C++
+   .. group-tab:: C++
 
       .. literalinclude:: /scripts/user-guide/reference-frames/OrbitalDirections.cpp
          :language: cpp
 
-   .. tab:: C
+   .. group-tab:: C
 
       .. literalinclude:: /scripts/user-guide/reference-frames/OrbitalDirections.c
          :language: c
 
-   .. tab:: Java
+   .. group-tab:: Java
 
       .. literalinclude:: /scripts/user-guide/reference-frames/OrbitalDirections.java
          :language: java
 
-   .. tab:: Lua
+   .. group-tab:: Lua
 
       .. literalinclude:: /scripts/user-guide/reference-frames/OrbitalDirections.lua
          :language: lua
 
-   .. tab:: JavaScript
+   .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/reference-frames/OrbitalDirections.js
          :language: javascript
@@ -605,37 +605,37 @@ velocity relative to the surface:
 
 .. tabs::
 
-   .. tab:: Python
+   .. group-tab:: Python
 
       .. literalinclude:: /scripts/user-guide/reference-frames/SurfacePrograde.py
          :language: python
 
-   .. tab:: C#
+   .. group-tab:: C#
 
       .. literalinclude:: /scripts/user-guide/reference-frames/SurfacePrograde.cs
          :language: csharp
 
-   .. tab:: C++
+   .. group-tab:: C++
 
       .. literalinclude:: /scripts/user-guide/reference-frames/SurfacePrograde.cpp
          :language: cpp
 
-   .. tab:: C
+   .. group-tab:: C
 
       .. literalinclude:: /scripts/user-guide/reference-frames/SurfacePrograde.c
          :language: c
 
-   .. tab:: Java
+   .. group-tab:: Java
 
       .. literalinclude:: /scripts/user-guide/reference-frames/SurfacePrograde.java
          :language: java
 
-   .. tab:: Lua
+   .. group-tab:: Lua
 
       .. literalinclude:: /scripts/user-guide/reference-frames/SurfacePrograde.lua
          :language: lua
 
-   .. tab:: JavaScript
+   .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/reference-frames/SurfacePrograde.js
          :language: javascript
@@ -674,37 +674,37 @@ rotates with the body.
 
 .. tabs::
 
-   .. tab:: Python
+   .. group-tab:: Python
 
       .. literalinclude:: /scripts/user-guide/reference-frames/VesselSpeed.py
          :language: python
 
-   .. tab:: C#
+   .. group-tab:: C#
 
       .. literalinclude:: /scripts/user-guide/reference-frames/VesselSpeed.cs
          :language: csharp
 
-   .. tab:: C++
+   .. group-tab:: C++
 
       .. literalinclude:: /scripts/user-guide/reference-frames/VesselSpeed.cpp
          :language: cpp
 
-   .. tab:: C
+   .. group-tab:: C
 
       .. literalinclude:: /scripts/user-guide/reference-frames/VesselSpeed.c
          :language: c
 
-   .. tab:: Java
+   .. group-tab:: Java
 
       .. literalinclude:: /scripts/user-guide/reference-frames/VesselSpeed.java
          :language: java
 
-   .. tab:: Lua
+   .. group-tab:: Lua
 
       .. literalinclude:: /scripts/user-guide/reference-frames/VesselSpeed.lua
          :language: lua
 
-   .. tab:: JavaScript
+   .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/reference-frames/VesselSpeed.js
          :language: javascript
@@ -734,37 +734,37 @@ the body.
 
 .. tabs::
 
-   .. tab:: Python
+   .. group-tab:: Python
 
       .. literalinclude:: /scripts/user-guide/reference-frames/VesselVelocity.py
          :language: python
 
-   .. tab:: C#
+   .. group-tab:: C#
 
       .. literalinclude:: /scripts/user-guide/reference-frames/VesselVelocity.cs
          :language: csharp
 
-   .. tab:: C++
+   .. group-tab:: C++
 
       .. literalinclude:: /scripts/user-guide/reference-frames/VesselVelocity.cpp
          :language: cpp
 
-   .. tab:: C
+   .. group-tab:: C
 
       .. literalinclude:: /scripts/user-guide/reference-frames/VesselVelocity.c
          :language: c
 
-   .. tab:: Java
+   .. group-tab:: Java
 
       .. literalinclude:: /scripts/user-guide/reference-frames/VesselVelocity.java
          :language: java
 
-   .. tab:: Lua
+   .. group-tab:: Lua
 
       .. literalinclude:: /scripts/user-guide/reference-frames/VesselVelocity.lua
          :language: lua
 
-   .. tab:: JavaScript
+   .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/reference-frames/VesselVelocity.js
          :language: javascript
@@ -807,37 +807,37 @@ This example prints the speeds the navball shows in orbit and surface modes:
 
 .. tabs::
 
-   .. tab:: Python
+   .. group-tab:: Python
 
       .. literalinclude:: /scripts/user-guide/reference-frames/NavballSpeed.py
          :language: python
 
-   .. tab:: C#
+   .. group-tab:: C#
 
       .. literalinclude:: /scripts/user-guide/reference-frames/NavballSpeed.cs
          :language: csharp
 
-   .. tab:: C++
+   .. group-tab:: C++
 
       .. literalinclude:: /scripts/user-guide/reference-frames/NavballSpeed.cpp
          :language: cpp
 
-   .. tab:: C
+   .. group-tab:: C
 
       .. literalinclude:: /scripts/user-guide/reference-frames/NavballSpeed.c
          :language: c
 
-   .. tab:: Java
+   .. group-tab:: Java
 
       .. literalinclude:: /scripts/user-guide/reference-frames/NavballSpeed.java
          :language: java
 
-   .. tab:: Lua
+   .. group-tab:: Lua
 
       .. literalinclude:: /scripts/user-guide/reference-frames/NavballSpeed.lua
          :language: lua
 
-   .. tab:: JavaScript
+   .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/reference-frames/NavballSpeed.js
          :language: javascript
@@ -853,37 +853,37 @@ and the direction that the vessel is moving in (relative to the surface):
 
 .. tabs::
 
-   .. tab:: Python
+   .. group-tab:: Python
 
       .. literalinclude:: /scripts/user-guide/reference-frames/AngleOfAttack.py
          :language: python
 
-   .. tab:: C#
+   .. group-tab:: C#
 
       .. literalinclude:: /scripts/user-guide/reference-frames/AngleOfAttack.cs
          :language: csharp
 
-   .. tab:: C++
+   .. group-tab:: C++
 
       .. literalinclude:: /scripts/user-guide/reference-frames/AngleOfAttack.cpp
          :language: cpp
 
-   .. tab:: C
+   .. group-tab:: C
 
       .. literalinclude:: /scripts/user-guide/reference-frames/AngleOfAttack.c
          :language: c
 
-   .. tab:: Java
+   .. group-tab:: Java
 
       .. literalinclude:: /scripts/user-guide/reference-frames/AngleOfAttack.java
          :language: java
 
-   .. tab:: Lua
+   .. group-tab:: Lua
 
       .. literalinclude:: /scripts/user-guide/reference-frames/AngleOfAttack.lua
          :language: lua
 
-   .. tab:: JavaScript
+   .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/reference-frames/AngleOfAttack.js
          :language: javascript
@@ -911,37 +911,37 @@ at a given altitude, which could be used as the target for a landing auto pilot.
 
 .. tabs::
 
-   .. tab:: Python
+   .. group-tab:: Python
 
       .. literalinclude:: /scripts/user-guide/reference-frames/LandingSite.py
          :language: python
 
-   .. tab:: C#
+   .. group-tab:: C#
 
       .. literalinclude:: /scripts/user-guide/reference-frames/LandingSite.cs
          :language: csharp
 
-   .. tab:: C++
+   .. group-tab:: C++
 
       .. literalinclude:: /scripts/user-guide/reference-frames/LandingSite.cpp
          :language: cpp
 
-   .. tab:: C
+   .. group-tab:: C
 
       .. literalinclude:: /scripts/user-guide/reference-frames/LandingSite.c
          :language: c
 
-   .. tab:: Java
+   .. group-tab:: Java
 
       .. literalinclude:: /scripts/user-guide/reference-frames/LandingSite.java
          :language: java
 
-   .. tab:: Lua
+   .. group-tab:: Lua
 
       .. literalinclude:: /scripts/user-guide/reference-frames/LandingSite.lua
          :language: lua
 
-   .. tab:: JavaScript
+   .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/reference-frames/LandingSite.js
          :language: javascript
