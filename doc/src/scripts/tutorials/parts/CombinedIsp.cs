@@ -18,11 +18,12 @@ class CombinedIsp
                 Console.WriteLine ("   " + engine.Part.Title +
                                    " in stage " + engine.Part.Stage);
 
-            double thrust = activeEngines.Sum (e => e.Thrust);
+            double thrust = activeEngines.Sum (e => e.AvailableThrust);
             double fuel_consumption =
-                activeEngines.Sum (e => e.Thrust / e.SpecificImpulse);
+                activeEngines.Sum (
+                    e => e.AvailableThrust / e.SpecificImpulse);
             double isp = thrust / fuel_consumption;
-            Console.WriteLine ("Combined vacuum Isp = {0:F0} seconds", isp);
+            Console.WriteLine ("Combined Isp = {0:F0} seconds", isp);
         }
     }
 }

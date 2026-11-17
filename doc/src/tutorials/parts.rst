@@ -52,7 +52,9 @@ your Kerbals by deploying all the parachutes:
 
 The script deploys the parachutes one call at a time, and the game can advance between the
 calls. A :ref:`server side function <server-side-functions>` deploys them all in the same
-physics tick, with a single call:
+physics tick, with a single call. Python and JavaScript compile it from a function. A C#
+lambda holds no loop, so C# and the other clients build the loop with the
+:ref:`expression API <server-side-functions-api>`:
 
 .. tabs::
 
@@ -60,6 +62,45 @@ physics tick, with a single call:
 
       .. literalinclude:: /scripts/tutorials/parts/DeployParachutesFunction.py
          :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
+
+   .. tab:: C#
+
+      .. literalinclude:: /scripts/tutorials/parts/DeployParachutesFunction.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. tab:: C++
+
+      .. literalinclude:: /scripts/tutorials/parts/DeployParachutesFunction.cpp
+         :language: cpp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. tab:: C
+
+      .. literalinclude:: /scripts/tutorials/parts/DeployParachutesFunction.c
+         :language: c
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. tab:: Java
+
+      .. literalinclude:: /scripts/tutorials/parts/DeployParachutesFunction.java
+         :language: java
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/tutorials/parts/DeployParachutesFunction.lua
+         :language: lua
          :start-after: [docs]
          :end-before: [/docs]
 
@@ -159,7 +200,9 @@ https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines
 
 The script reads the thrust and specific impulse of each engine with separate calls, which can
 land in different physics ticks. A :ref:`server side function <server-side-functions>`
-reads them all in the same tick, with a single call:
+reads them all in the same tick, with a single call. Python, C# and JavaScript compile it from a
+function, and the other clients build it with the
+:ref:`expression API <server-side-functions-api>`:
 
 .. tabs::
 
@@ -177,6 +220,42 @@ reads them all in the same tick, with a single call:
          :start-after: [docs]
          :end-before: [/docs]
          :dedent:
+
+   .. tab:: C++
+
+      .. literalinclude:: /scripts/tutorials/parts/CombinedIspFunction.cpp
+         :language: cpp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. tab:: C
+
+      .. literalinclude:: /scripts/tutorials/parts/CombinedIspFunction.c
+         :language: c
+         :start-after: [helpers]
+         :end-before: [/helpers]
+
+      .. literalinclude:: /scripts/tutorials/parts/CombinedIspFunction.c
+         :language: c
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. tab:: Java
+
+      .. literalinclude:: /scripts/tutorials/parts/CombinedIspFunction.java
+         :language: java
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/tutorials/parts/CombinedIspFunction.lua
+         :language: lua
+         :start-after: [docs]
+         :end-before: [/docs]
 
    .. tab:: JavaScript
 

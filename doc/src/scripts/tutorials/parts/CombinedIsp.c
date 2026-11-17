@@ -1,10 +1,12 @@
 #include <krpc_cnano.h>
 #include <krpc_cnano/services/space_center.h>
+#include <stdint.h>
+#include <stdio.h>
 
 int main() {
   krpc_connection_t conn;
   if (krpc_open_serial(&conn, "COM0") != KRPC_OK) return 1;
-  if (krpc_connect(conn, "CombinedISP") != KRPC_OK) return 1;
+  if (krpc_connect(conn, "Combined Isp") != KRPC_OK) return 1;
 
   krpc_SpaceCenter_Vessel_t vessel;
   krpc_SpaceCenter_ActiveVessel(conn, &vessel);
@@ -37,10 +39,11 @@ int main() {
     krpc_SpaceCenter_Part_t part;
     krpc_SpaceCenter_Engine_Part(conn, &part, engine);
     char* title = NULL;
-    int stage;
+    int32_t stage;
     krpc_SpaceCenter_Part_Title(conn, &title, part);
     krpc_SpaceCenter_Part_Stage(conn, &stage, part);
-    printf("   %s in stage %d\n", title, stage);
+    printf("   %s in stage %ld\n", title, (long)stage);
+    krpc_free(title);
   }
 
   double thrust = 0;
@@ -49,14 +52,16 @@ int main() {
     krpc_SpaceCenter_Engine_t engine = active_engines.items[i];
     float engine_thrust;
     float engine_isp;
-    krpc_SpaceCenter_Engine_Thrust(conn, &engine_thrust, engine);
+    krpc_SpaceCenter_Engine_AvailableThrust(conn, &engine_thrust, engine);
     krpc_SpaceCenter_Engine_SpecificImpulse(conn, &engine_isp, engine);
     thrust += engine_thrust;
     fuel_consumption += engine_thrust / engine_isp;
   }
   double isp = thrust / fuel_consumption;
-  printf("Combined vacuum Isp = %.2f seconds\n", isp);
+  printf("Combined Isp = %.0f seconds\n", isp);
 
   KRPC_FREE_LIST(engines);
   KRPC_FREE_LIST(active_engines);
+
+  krpc_disconnect(conn);
 }
