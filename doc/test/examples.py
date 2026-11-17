@@ -303,6 +303,19 @@ USER_GUIDE = [
         check=checks.pointing(80, 90),
     ),
     Example("user-guide/autopilot/ManualUpdate", "flight", run=Loop()),
+    # Control loops
+    *_exits(
+        "flight",
+        "user-guide/control-loops/CompiledStep",
+        "user-guide/control-loops/HoldTick",
+        "user-guide/control-loops/NextTick",
+        run=Interactive(checks.pitches_up, then=Loop(prints=False)),
+    ),
+    Example(
+        "user-guide/control-loops/PitchHold",
+        "flight",
+        run=Interactive(checks.pitches_up, then=Exit(timeout=120)),
+    ),
 ]
 
 EXAMPLES = [*TUTORIALS, *USER_GUIDE]

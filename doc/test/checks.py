@@ -14,6 +14,15 @@ if TYPE_CHECKING:
 # Hooks
 
 
+def pitches_up(test: TestCase) -> None:
+    """Waits for the example's control loop to pitch the level vessel up toward 45
+    degrees."""
+    control = test.connect().space_center.active_vessel.control
+    test.wait_until(
+        lambda: control.pitch > 0.5, timeout=10, message="the example to pitch up"
+    )
+
+
 def _rpcs_executed(test: TestCase) -> int:
     return test.connect().krpc.get_status().statistics.rpcs_executed
 
