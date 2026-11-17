@@ -4,13 +4,13 @@ example and checks how it ended."""
 from __future__ import annotations
 
 import os
-import pathlib
 import re
 import shutil
 import tempfile
 from typing import ClassVar
 
 from doc.test import languages, runner
+from doc.test.languages import REPO
 from doc.test.spec import (
     Example,
     Exit,
@@ -24,8 +24,6 @@ from doc.test.spec import (
     example_path,
 )
 from krpctools.game.ksp import TestCase
-
-REPO = pathlib.Path(__file__).resolve().parent.parent.parent
 
 # Points east of the space center, the first with deep water used for a splashed vessel
 OCEAN = [(0, -60), (0, -40), (0, -20), (10, -50)]

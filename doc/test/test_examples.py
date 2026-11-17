@@ -30,6 +30,9 @@ def _test(example: Example, language: str) -> Callable[[ExampleTestCase], None]:
     def test(self: ExampleTestCase) -> None:
         self.run_example(example, language)
 
+    # The language and path, from which conftest.py builds the example before the run
+    test.example = (language, example_path(example.key, language))  # pyright: ignore[reportFunctionMemberAccess]
+
     marks = [pytest.mark.example, getattr(pytest.mark, language)]
     if example.slow:
         marks.append(pytest.mark.slow)
