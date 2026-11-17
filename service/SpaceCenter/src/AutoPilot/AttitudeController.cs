@@ -342,7 +342,22 @@ namespace KRPC.SpaceCenter.AutoPilot
             Reset ();
         }
 
-        public ReferenceFrame ReferenceFrame { get; set; }
+        // The commanded target is re-read in a new frame, but the effective target keeps its
+        // orientation in world space, so a smoothed slew to the new target starts from where the
+        // loop was pointing
+        public ReferenceFrame ReferenceFrame {
+            get { return referenceFrame; }
+            set {
+                if (referenceFrame != null && value != null && targetSmoothingTime > 0) {
+                    effectiveRotation = value.RotationFromWorldSpace (
+                        referenceFrame.RotationToWorldSpace (effectiveRotation));
+                    slewPending = true;
+                }
+                referenceFrame = value;
+            }
+        }
+
+        ReferenceFrame referenceFrame;
 
         // Convenience scalars, heading-singular near the vertical. The getters read the
         // surface-frame Euler decomposition. The setters re-aim the nose by pitch and heading while

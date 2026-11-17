@@ -1177,6 +1177,28 @@ def _make_autopilot_test_class(  # noqa: PLR0913
             self.assertLess(self.ap.current_error, self.ap.error)
             self.ap.engaged = False
 
+        def test_reference_frame_change_keeps_current_target(self):
+            # Changing the reference frame during a slow slew keeps the current
+            # target pointing the same way in space. The orbital frame's axes are a
+            # quarter turn from the surface frame's, so the current target read in
+            # the new frame's axes would point well away from the vessel.
+            space_center = self.connect().space_center
+            self.ap.target_smoothing_time = 60.0
+            self.cheat_orientation_to(0, 90)
+            self.set_rotation(0, 90)
+            self.ap.engaged = True
+            self.wait(0.5)
+            frame = self.vessel.orbital_reference_frame
+            direction = space_center.transform_direction(
+                self.ap.target_direction, self.ap.reference_frame, frame
+            )
+            self.ap.reference_frame = frame
+            self.ap.target_direction = direction
+            self.wait(0.5)
+            self.assertLess(self.ap.current_error, 5)
+            self.assertLess(self.ap.error, 5)
+            self.ap.engaged = False
+
         def test_torque_dropout_recovery(self):
             # Cut all torque (wheels + RCS) mid-slew, restore it, and confirm recovery
             # without an integral-windup kick (RunAxis clears the integral on a

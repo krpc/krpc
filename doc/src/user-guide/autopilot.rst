@@ -290,6 +290,9 @@ Properties related to the commanded and effective targets are accessible via the
   **effective** target and the error to it. These stay small while a smoothed change is
   being fed in, since the vessel is tracking the effective target closely.
 
+A change to the reference frame keeps the effective target pointing the same way in space.
+The vessel then turns smoothly from the attitude it held to the target set in the new frame.
+
 When the target smoothing time is zero (the default), the effective target always equals
 the commanded target and both sets of properties read the same.
 

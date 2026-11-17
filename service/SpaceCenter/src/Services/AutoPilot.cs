@@ -270,7 +270,9 @@ namespace KRPC.SpaceCenter.Services
         /// The target and the <see cref="UpReference"/> are held as vectors in this frame, so
         /// changing it re-interprets them in the new frame rather than converting them: the
         /// orientation the vessel is held in, and what a given <see cref="TargetRoll"/> means,
-        /// both change. Set the frame first, then the target.
+        /// both change. Set the frame first, then the target. With a
+        /// <see cref="TargetSmoothingTime"/>, the vessel turns smoothly to the new target from the
+        /// orientation it was holding.
         /// </remarks>
         [KRPCProperty]
         public ReferenceFrame ReferenceFrame {
