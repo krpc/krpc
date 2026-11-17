@@ -260,6 +260,49 @@ USER_GUIDE = [
         run=Loop(prints=False),
         check=_visual_debugging_calls.check,
     ),
+    # Auto-pilot
+    Example(
+        "user-guide/autopilot/InfoUi",
+        "orbit",
+        check=checks.autopilot(show_info_ui=True),
+    ),
+    Example(
+        "user-guide/autopilot/LimitAngularVelocity",
+        "orbit",
+        check=checks.autopilot(
+            limit_angular_velocity=False, max_angular_velocity=(0.3, 0.5, 0.3)
+        ),
+    ),
+    Example(
+        "user-guide/autopilot/RateFilter",
+        "orbit",
+        check=checks.autopilot(
+            pitch_yaw_rate_filter_mode=lambda conn: (
+                conn.space_center.RateFilterMode.notch
+            ),
+            pitch_yaw_oscillation_frequency=1.4,
+        ),
+    ),
+    # Each ends on its last target, pitch and heading in the surface frame
+    Example(
+        "user-guide/autopilot/DirectionAndUp",
+        "orbit",
+        run=Exit(timeout=600),
+        check=checks.pointing(0, 90),
+    ),
+    Example(
+        "user-guide/autopilot/TargetPitchAndHeading",
+        "orbit",
+        run=Exit(timeout=600),
+        check=checks.pointing(80, 90),
+    ),
+    Example(
+        "user-guide/autopilot/TargetSmoothing",
+        "orbit",
+        run=Exit(timeout=600),
+        check=checks.pointing(80, 90),
+    ),
+    Example("user-guide/autopilot/ManualUpdate", "flight", run=Loop()),
 ]
 
 EXAMPLES = [*TUTORIALS, *USER_GUIDE]

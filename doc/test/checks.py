@@ -106,6 +106,42 @@ def rails_warp_factor(factor: int) -> Callable[[TestCase], None]:
     return check
 
 
+def pointing(
+    pitch: float, heading: float | None = None, tolerance: float = 5
+) -> Callable[[TestCase], None]:
+    """The vessel's pitch and heading in its surface reference frame, in degrees."""
+
+    def check(test: TestCase) -> None:
+        flight = test.connect().space_center.active_vessel.flight()
+        test.assertAlmostEqual(pitch, flight.pitch, delta=tolerance)
+        if heading is not None:
+            error = (flight.heading - heading + 180) % 360 - 180
+            test.assertAlmostEqual(0, error, delta=tolerance)
+
+    return check
+
+
+def autopilot(**settings) -> Callable[[TestCase], None]:
+    """The auto-pilot's settings, by property name. A tuple compares element by element."""
+
+    def check(test: TestCase) -> None:
+        conn = test.connect()
+        ap = conn.space_center.active_vessel.auto_pilot
+        for name, expected in settings.items():
+            if callable(expected):
+                expected = expected(conn)
+            value = getattr(ap, name)
+            if isinstance(expected, tuple):
+                for e, v in zip(expected, value, strict=True):
+                    test.assertAlmostEqual(e, v, places=3, msg=name)
+            elif isinstance(expected, float):
+                test.assertAlmostEqual(expected, value, places=3, msg=name)
+            else:
+                test.assertEqual(expected, value, name)
+
+    return check
+
+
 class WarpToApoapsis:
     """Puts the vessel on an elliptic orbit with its apoapsis ahead, and checks the example
     warped to just before it."""
