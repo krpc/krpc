@@ -621,7 +621,9 @@ one, which F# units of measure add, still count as a single call.</p></li>
 <li><p>Conversions of a <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> service call run on the client, as a function cannot call that service.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">FunctionCompiler</span></code> translates any other lambda into a server side function, one call per node.</p></li>
 </ul>
-<p>A C# type cannot say that a reference-typed position inside a collection is nullable. <code class="docutils literal notranslate"><span class="pre">GetCall</span></code>
+<p>A C# type cannot say that a reference-typed parameter, or a reference-typed position inside a
+collection, is nullable. The stubs name each in a <code class="docutils literal notranslate"><span class="pre">TypeSpec</span></code>, and the encoder throws
+<code class="docutils literal notranslate"><span class="pre">ArgumentNullException</span></code> for a null where the spec says the position cannot hold one. <code class="docutils literal notranslate"><span class="pre">GetCall</span></code>
 reads the spec from <code class="docutils literal notranslate"><span class="pre">RPCAttribute.Types</span></code>, the service’s generated <code class="docutils literal notranslate"><span class="pre">TypeSpecs</span></code> class. A compiled
 lambda holding a reference inside a collection or tuple asks the server for its return type.</p>
 <p>Connections carried by the lambda’s objects, its services, a static method’s argument and a

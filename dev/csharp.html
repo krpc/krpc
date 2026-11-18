@@ -1817,7 +1817,8 @@ reads the game as it is now:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Two objects for the same thing in the game compare equal, and can be used as dictionary keys.</p>
+<p>Two objects for the same thing in the game compare equal, and can be used as dictionary keys.
+Objects are also ordered, so they can be sorted or used as <code class="docutils literal notranslate"><span class="pre">SortedDictionary</span></code> keys.</p>
 <p>Once the thing an object identifies is destroyed, such as a part that explodes, each call through
 it throws <a class="reference internal" href="csharp/api/krpc/krpc.html#class-KRPC.Client.Services.KRPC.ObjectDestroyedException" title="class: KRPC.Client.Services.KRPC.ObjectDestroyedException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">ObjectDestroyedException</span></code></a>.</p>
 <p>An object for a vessel or a part keeps working when you load a save, quickload or revert, and
@@ -2866,7 +2867,7 @@ property has no setter that is a remote procedure.
 <dt class="sig sig-object cs" id="class-KRPC.Client.RemoteObject">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">RemoteObject</span></span><a class="headerlink" href="#class-KRPC.Client.RemoteObject" title="Link to this definition">#</a></dt>
 <dd><p>The base class of remote objects. Two objects with the same identifier are equal, and hash
-equal.</p>
+equal. <code class="docutils literal notranslate"><span class="pre">CompareTo</span></code> and the comparison operators order objects by their identifiers.</p>
 <dl class="cs function">
 <dt class="sig sig-object cs" id="function-KRPC.Client.RemoteObject.GetObjectId">
 <span id="function-KRPC.Client.RemoteObject.GetObjectId(RemoteObject)"></span><span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt64" title="type: msdn ~&gt; System.UInt64"><span class="pre">ulong</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">GetObjectId</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference internal" href="#class-KRPC.Client.RemoteObject" title="class: KRPC.Client.RemoteObject"><span class="pre">RemoteObject</span></a><span class="w"> </span><span class="n"><span class="pre">obj</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.RemoteObject.GetObjectId" title="Link to this definition">#</a></dt>

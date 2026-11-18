@@ -1795,7 +1795,8 @@ reads the game as it is now:</p>
 <span class="nb">print</span><span class="p">(</span><span class="nv">vessel</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">space_center</span><span class="p">.</span><span class="py">active_vessel</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Two objects for the same thing in the game compare equal with <code class="docutils literal notranslate"><span class="pre">==</span></code>.</p>
+<p>Two objects for the same thing in the game compare equal with <code class="docutils literal notranslate"><span class="pre">==</span></code>. Objects are also ordered
+with <code class="docutils literal notranslate"><span class="pre">&lt;</span></code>, so a list of them can be sorted.</p>
 <p>Once the thing an object identifies is destroyed, such as a part that explodes, each call through
 it raises an error naming <a class="reference internal" href="lua/api/krpc/krpc.html#lua-KRPC.ObjectDestroyedException" title="KRPC.ObjectDestroyedException"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KRPC.ObjectDestroyedException</span></code></a>.</p>
 <p>An object for a vessel or a part keeps working when you load a save, quickload or revert, and

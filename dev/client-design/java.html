@@ -714,7 +714,8 @@ current Java libraries</p></td>
 class, as <code class="docutils literal notranslate"><span class="pre">java.util.concurrent.TimeoutException</span></code> is checked</p></td>
 </tr>
 <tr class="row-even"><td><p>Nullable value</p></td>
-<td><p>The boxed or reference type, with <code class="docutils literal notranslate"><span class="pre">null</span></code></p></td>
+<td><p>The boxed or reference type, with <code class="docutils literal notranslate"><span class="pre">null</span></code>. A stub names a nullable parameter’s type with
+<code class="docutils literal notranslate"><span class="pre">Types.nullable</span></code>, and the encoder throws <code class="docutils literal notranslate"><span class="pre">IllegalArgumentException</span></code> for a null elsewhere</p></td>
 </tr>
 <tr class="row-odd"><td><p>Unsigned integer</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">int</span></code> or <code class="docutils literal notranslate"><span class="pre">long</span></code>, bit for bit</p></td>

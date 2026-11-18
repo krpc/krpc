@@ -781,7 +781,8 @@ object as “(error object is not a string)”</p></td>
 <td><p>The function’s own type, read from the server</p></td>
 </tr>
 <tr class="row-even"><td><p>Enumeration value</p></td>
-<td><p>An instance of the connection’s class, with the number in <code class="docutils literal notranslate"><span class="pre">.value</span></code></p></td>
+<td><p>An instance of the connection’s class, with the number in <code class="docutils literal notranslate"><span class="pre">.value</span></code>. The decoder makes
+a new instance for each value, so <code class="docutils literal notranslate"><span class="pre">__eq</span></code> compares the class and the number</p></td>
 </tr>
 <tr class="row-odd"><td><p>Flags enumeration value</p></td>
 <td><p>An instance of a <code class="docutils literal notranslate"><span class="pre">Types.RemoteFlags</span></code> class, combined with its methods, as Lua 5.1 has no bitwise operators to overload</p></td>

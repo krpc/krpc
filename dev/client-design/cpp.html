@@ -642,8 +642,10 @@ streams and events end. A second <code class="docutils literal notranslate"><spa
 <h3>Connection Handles<a class="headerlink" href="#connection-handles" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Moves are the defaults. A moved-from connection is empty, and its holders are unaffected.</p></li>
-<li><p>An empty connection is not connected, and its calls throw <code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code>. A
-default-constructed object holds an empty connection.</p></li>
+<li><p>An empty connection is not connected, and its calls throw <code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code>.</p></li>
+<li><p>A default-constructed object identifies nothing. Encoding one throws <code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>,
+so a call through it or with it as an argument fails before it is sent. An object the server
+returns with id 0 is a valid object.</p></li>
 <li><p>Service and object constructors take <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">Connection&amp;</span></code>, as they copy the connection. Stream
 and event constructors and static methods take <code class="docutils literal notranslate"><span class="pre">Connection&amp;</span></code>, as they call through it. Decoders
 take <code class="docutils literal notranslate"><span class="pre">Connection*</span></code>, where null means no connection.</p></li>
@@ -725,8 +727,7 @@ server’s message tells apart the exceptions that share a type</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">std::optional</span></code>, checked by the compiler where a parameter is not nullable</p></td>
 </tr>
 <tr class="row-odd"><td><p>Null object</p></td>
-<td><p>An empty <code class="docutils literal notranslate"><span class="pre">std::optional</span></code>. A default-constructed object has id 0, which the server rejects
-as an argument</p></td>
+<td><p>An empty <code class="docutils literal notranslate"><span class="pre">std::optional</span></code>. A default-constructed object is refused as an argument</p></td>
 </tr>
 <tr class="row-even"><td><p>Interrupting a blocked thread</p></td>
 <td><p>Unsupported, as a C++ thread cannot be interrupted</p></td>

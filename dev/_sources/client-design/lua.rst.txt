@@ -175,6 +175,7 @@ Mapping the Spec to Lua
    * - Value type of a server side function
      - The function's own type, read from the server
    * - Enumeration value
-     - An instance of the connection's class, with the number in ``.value``
+     - An instance of the connection's class, with the number in ``.value``. The decoder makes
+       a new instance for each value, so ``__eq`` compares the class and the number
    * - Flags enumeration value
      - An instance of a ``Types.RemoteFlags`` class, combined with its methods, as Lua 5.1 has no bitwise operators to overload

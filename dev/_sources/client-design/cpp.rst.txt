@@ -59,8 +59,10 @@ Connection Handles
 ^^^^^^^^^^^^^^^^^^
 
 * Moves are the defaults. A moved-from connection is empty, and its holders are unaffected.
-* An empty connection is not connected, and its calls throw ``ConnectionError``. A
-  default-constructed object holds an empty connection.
+* An empty connection is not connected, and its calls throw ``ConnectionError``.
+* A default-constructed object identifies nothing. Encoding one throws ``std::invalid_argument``,
+  so a call through it or with it as an argument fails before it is sent. An object the server
+  returns with id 0 is a valid object.
 * Service and object constructors take ``const Connection&``, as they copy the connection. Stream
   and event constructors and static methods take ``Connection&``, as they call through it. Decoders
   take ``Connection*``, where null means no connection.
@@ -129,8 +131,7 @@ Mapping the Spec to C++
    * - Nullable value
      - ``std::optional``, checked by the compiler where a parameter is not nullable
    * - Null object
-     - An empty ``std::optional``. A default-constructed object has id 0, which the server rejects
-       as an argument
+     - An empty ``std::optional``. A default-constructed object is refused as an argument
    * - Interrupting a blocked thread
      - Unsupported, as a C++ thread cannot be interrupted
    * - Scoped stream or event

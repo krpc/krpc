@@ -162,6 +162,7 @@ reads the game as it is now:
 .. literalinclude:: /scripts/csharp/RemoteObjects.cs
 
 Two objects for the same thing in the game compare equal, and can be used as dictionary keys.
+Objects are also ordered, so they can be sorted or used as ``SortedDictionary`` keys.
 
 Once the thing an object identifies is destroyed, such as a part that explodes, each call through
 it throws :type:`~KRPC.Client.Services.KRPC.ObjectDestroyedException`.
@@ -849,7 +850,7 @@ Client API Reference
 .. class:: RemoteObject
 
    The base class of remote objects. Two objects with the same identifier are equal, and hash
-   equal.
+   equal. ``CompareTo`` and the comparison operators order objects by their identifiers.
 
    .. function:: static ulong GetObjectId(RemoteObject obj)
 

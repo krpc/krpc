@@ -2638,7 +2638,9 @@ returned.</p>
 <span id="_CPPv3I0EN4krpc12RemoteObjectE"></span><span id="_CPPv2I0EN4krpc12RemoteObjectE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RemoteObject</span></span></span><a class="headerlink" href="#_CPPv4I0EN4krpc12RemoteObjectE" title="Link to this definition">#</a><br /></dt>
 <dd><p>The base class of remote objects. Two objects compare equal with <code class="docutils literal notranslate"><span class="pre">==</span></code> when they identify
 the same thing in the game. <code class="docutils literal notranslate"><span class="pre">&lt;</span></code> and the other comparisons order objects by their
-identifiers, and <code class="docutils literal notranslate"><span class="pre">&lt;&lt;</span></code> writes an object’s class name and identifier to a stream.</p>
+identifiers, and <code class="docutils literal notranslate"><span class="pre">&lt;&lt;</span></code> writes an object’s class name and identifier to a stream. A
+default-constructed object identifies nothing. A call through it, or with it as an argument,
+throws <code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>.</p>
 </dd></dl>
 
 <dl class="cpp function">
@@ -2646,7 +2648,7 @@ identifiers, and <code class="docutils literal notranslate"><span class="pre">&l
 <span id="_CPPv3I0EN4krpc13get_object_idERK12RemoteObjectI1TE"></span><span id="_CPPv2I0EN4krpc13get_object_idERK12RemoteObjectI1TE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_object_id</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0EN4krpc12RemoteObjectE" title="krpc::RemoteObject"><span class="n"><span class="pre">RemoteObject</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0EN4krpc13get_object_idE8uint64_tRK12RemoteObjectI1TE" title="krpc::get_object_id::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">object</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN4krpc13get_object_idE8uint64_tRK12RemoteObjectI1TE" title="Link to this definition">#</a><br /></dt>
 <dd><p>The identifier of a remote object on the server, e.g. to pass to
 <a class="reference internal" href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression15constant_objectERN4krpc10ConnectionE8uint64_t" title="krpc::services::KRPC::Expression::constant_object"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">constant_object()</span></code></a>. Throws <code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code> for
-a default-constructed object, whose identifier is 0.</p>
+a default-constructed object.</p>
 </dd></dl>
 
 <dl class="cpp class">

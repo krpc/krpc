@@ -380,6 +380,9 @@ C# client
   * :breaking:`Breaking` Throw ``EncodingException`` for every value that fails to decode, and for a null stream value of a type that cannot hold one (:issue:`1333`)
 
 * Add ``Connection.GetCallTemplate`` and ``Connection.GetSetCallTemplate``, which build a call with no instance or arguments, for ``Expression.CallWithArguments`` (:issue:`1352`)
+* Order remote objects by id, with ``CompareTo`` and the comparison operators (:issue:`1377`)
+* Throw ``EncodingException`` for an enumeration result the enumeration does not declare (:issue:`1377`)
+* Throw ``ArgumentNullException`` for a null passed for a parameter that cannot be null, before the call is sent (:issue:`1377`)
 
 
 C++ client
@@ -442,6 +445,7 @@ C++ client
 
 * :breaking:`Breaking` Convert names with ``UInt``, ``ULong``, ``SInt``, ``FoV``, a plural acronym or digits next to an acronym as written, e.g. ``Type::uint``, ``Camera::fov`` and ``MapFilterType::evas`` in place of ``u_int``, ``fo_v`` and ``ev_as`` (:issue:`1339`)
 * Add a static ``_call_template`` function for each member, which builds a call with no instance or arguments, for ``Expression::call_with_arguments`` (:issue:`1352`)
+* Throw ``std::invalid_argument`` for a default-constructed object passed as an argument or called through, before the call is sent (:issue:`1377`)
 
 
 Java client
@@ -499,6 +503,9 @@ Java client
 * :breaking:`Breaking` Name enumeration constants in upper snake case, e.g. ``AltimeterMode.AGL``, ``AlarmType.SOI_CHANGE`` and ``TypeCode.UINT32`` in place of ``A_GL``, ``S_OI_CHANGE`` and ``U_INT32`` (:issue:`1339`)
 * :breaking:`Breaking` Lower case a leading acronym in method and field names, e.g. ``CelestialBody.mslPosition`` and ``Type.uint`` in place of ``mSLPosition`` and ``uInt`` (:issue:`1339`)
 * Add ``Connection.getCallTemplate``, which builds a call with no instance or arguments, for ``Expression.callWithArguments`` (:issue:`1352`)
+* Fix remote objects with an id past 63 bits ordering first (:issue:`1377`)
+* Throw ``EncodingException`` for an enumeration result the enumeration does not declare, in place of returning null (:issue:`1377`)
+* Throw ``IllegalArgumentException`` for a null passed for a parameter that cannot be null, before the call is sent (:issue:`1377`)
 
 
 JavaScript client
@@ -543,6 +550,9 @@ Lua client
 * :breaking:`Breaking` Convert names with ``UInt``, ``ULong``, ``SInt``, ``FoV``, a plural acronym or digits next to an acronym as written, e.g. ``Type.uint``, ``Camera.fov`` and ``MapFilterType.evas`` in place of ``u_int``, ``fo_v`` and ``ev_as`` (:issue:`1339`)
 * Add ``Connection:get_call_template``, which builds a call with no instance or arguments, for ``Expression.call_with_arguments`` (:issue:`1352`)
 * Take a procedure, such as ``Engine.get_has_fuel``, as its call template where a call is expected (:issue:`1352`)
+* Order remote objects by id with ``<`` (:issue:`1377`)
+* Fix a returned enumeration value comparing unequal to the same named value (:issue:`1377`)
+* Raise an error for a handshake timeout that is not positive (:issue:`1377`)
 
 
 Python client
@@ -625,6 +635,10 @@ Python client
 * :breaking:`Breaking` Convert names with ``UInt``, ``ULong``, ``SInt``, ``FoV``, a plural acronym or digits next to an acronym as written, e.g. ``Type.uint``, ``Camera.fov`` and ``MapFilterType.evas`` in place of ``u_int``, ``fo_v`` and ``ev_as`` (:issue:`1339`)
 * Add ``Connection.get_call_template``, which builds a call with no instance or arguments, for ``Expression.call_with_arguments`` (:issue:`1352`)
 * Take a member, such as ``Engine.has_fuel``, as its call template where a call is expected (:issue:`1352`)
+* Raise ``StreamError`` for a stream of a procedure that returns an event (:issue:`1377`)
+* Raise an error for a number outside the range of its parameter's type, in place of sending a wrong value (:issue:`1377`)
+* Raise ``TypeError`` for ``None`` passed for a parameter that cannot be null, before the call is sent (:issue:`1377`)
+* Raise an error for a string, bytes or a dictionary passed for a list, a tuple or a structure (:issue:`1377`)
 
 
 krpctools
