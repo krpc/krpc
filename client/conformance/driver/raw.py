@@ -32,6 +32,22 @@ def procedure_call(
     )
 
 
+# The serialized service definitions of each server, by where it listens
+_services: dict[tuple[str, str, int, str], bytes] = {}
+
+
+def services(endpoint: Endpoint) -> KRPC.Services:
+    """The service definitions of a server, fetched once per server. Each fetch is a
+    connection of its own, and on Windows the closed connections of a run use up the local
+    ports, so a connect fails with WSAEADDRINUSE."""
+    key = (endpoint.protocol, endpoint.address, endpoint.control_port, endpoint.path)
+    if key not in _services:
+        result = call(endpoint, "KRPC", "GetServices")
+        assert not result.HasField("error"), result.error
+        _services[key] = result.value
+    return KRPC.Services.FromString(_services[key])
+
+
 def call(
     endpoint: Endpoint, service: str, procedure: str, *arguments: bytes
 ) -> KRPC.ProcedureResult:
