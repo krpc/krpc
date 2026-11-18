@@ -4,15 +4,6 @@ test_streams.py::test_members[extension-member]  # The testee dispatch covers KR
 test_streams.py::test_procedure_exception[first-CustomException]  # A stream added before any call through its service raises an error without the service's exception type
 test_connection.py::test_handshake_timeout_values[zero]  # A zero timeout waits indefinitely, as a Java socket timeout does
 test_connection.py::test_stall_timeout_values[zero]  # As test_handshake_timeout_values[zero]
-test_values.py::test_null_for_non_nullable[bytes]  # A null argument is sent
-test_values.py::test_null_for_non_nullable[dictionary]  # As test_null_for_non_nullable[bytes]
-test_values.py::test_null_for_non_nullable[enum]  # As test_null_for_non_nullable[bytes]
-test_values.py::test_null_for_non_nullable[list]  # As test_null_for_non_nullable[bytes]
-test_values.py::test_null_for_non_nullable[object]  # As test_null_for_non_nullable[bytes]
-test_values.py::test_null_for_non_nullable[set]  # As test_null_for_non_nullable[bytes]
-test_values.py::test_null_for_non_nullable[string]  # As test_null_for_non_nullable[bytes]
-test_values.py::test_null_for_non_nullable[struct]  # As test_null_for_non_nullable[bytes]
-test_values.py::test_null_for_non_nullable[tuple]  # As test_null_for_non_nullable[bytes]
 test_streams.py::test_update_callback  # A connection has no stream update callback
 test_concurrency.py::test_wait_for_update  # A connection has no stream update condition
 test_concurrency.py::test_close_while_holding[updates]  # As test_wait_for_update

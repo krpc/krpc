@@ -127,7 +127,8 @@ Mapping the Spec to Java
      - ``ServerException`` or a generated subclass. ``KRPC.TimeoutException`` has a generated
        class, as ``java.util.concurrent.TimeoutException`` is checked
    * - Nullable value
-     - The boxed or reference type, with ``null``
+     - The boxed or reference type, with ``null``. A stub names a nullable parameter's type with
+       ``Types.nullable``, and the encoder throws ``IllegalArgumentException`` for a null elsewhere
    * - Unsigned integer
      - ``int`` or ``long``, bit for bit
    * - Tuple
