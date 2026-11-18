@@ -32,10 +32,13 @@ namespace KRPC
             [Persistent] string protocol;
             [Persistent] List<KeyValuePair> settings;
 
-            // A field missing from the file keeps the default TCP/IP server's value
+            // A field missing from the file keeps the default TCP/IP server's value. The
+            // settings start empty, as loading an empty settings node keeps the list as it is.
+            // A missing setting takes its default when the server is created.
             public Server ()
             {
                 BeforeSave (new Configuration.Server ());
+                settings = new List<KeyValuePair> ();
             }
 
             public void BeforeSave (Configuration.Server server)
