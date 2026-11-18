@@ -31,7 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/lua.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=6a604523" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=ba67256c" />
   
   <!-- So that users can add custom icons -->
@@ -43,7 +43,7 @@
     <script src="../_static/documentation_options.js?v=3ce10a4d"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../_static/design-tabs.js?v=fcb327ea"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'krpc-development/building';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.24.0';
@@ -689,19 +689,37 @@ protobuf code for each language.</p></li>
 <p><code class="docutils literal notranslate"><span class="pre">bazel</span> <span class="pre">fetch</span> <span class="pre">//...</span></code> downloads every dependency up front, for working offline. <code class="docutils literal notranslate"><span class="pre">bazel</span> <span class="pre">clean</span></code>
 deletes the build outputs, and <code class="docutils literal notranslate"><span class="pre">bazel</span> <span class="pre">clean</span> <span class="pre">--expunge</span></code> also deletes the downloaded dependencies.</p>
 </section>
-<section id="nuget-packages">
-<h2>NuGet Packages<a class="headerlink" href="#nuget-packages" title="Link to this heading">#</a></h2>
-<p>The NuGet packages used by the C# targets are listed in <code class="docutils literal notranslate"><span class="pre">tools/build/dotnet/paket.dependencies</span></code>.
-After editing that file, regenerate the lock file and the package lists with:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bazel<span class="w"> </span>run<span class="w"> </span>//tools/build/dotnet:update
+<section id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">tools/deps/deps.toml</span></code> lists each third-party dependency once, with every file that pins its
+version. <code class="docutils literal notranslate"><span class="pre">tools/deps/deps.py</span></code> reads it. To list the dependencies with newer releases:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>tools/deps/deps.py<span class="w"> </span>outdated
 </pre></div>
 </div>
-<p>A target depends on a package through its lowercase name, such as <code class="docutils literal notranslate"><span class="pre">&#64;paket.main//google.protobuf</span></code>.
-The target framework of the target selects the package’s assets and dependencies.</p>
-<p>A few versions are written by hand, and an update must change them too. Google.Protobuf’s
-version appears in a repository name in <code class="docutils literal notranslate"><span class="pre">MODULE.bazel</span></code>, in the <code class="docutils literal notranslate"><span class="pre">Google.Protobuf.netstandard2.0</span></code>
-import in <code class="docutils literal notranslate"><span class="pre">tools/build/dotnet/BUILD.bazel</span></code>, and in the dependencies of the <code class="docutils literal notranslate"><span class="pre">KRPC.Client</span></code>
-NuGet package. <code class="docutils literal notranslate"><span class="pre">//tools/build/dotnet:versions-test</span></code> checks each of them against the lock file.</p>
+<p>To update them all, or a few by name:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>tools/deps/deps.py<span class="w"> </span>update<span class="w"> </span>--all
+python3<span class="w"> </span>tools/deps/deps.py<span class="w"> </span>update<span class="w"> </span>protobuf<span class="w"> </span>ruff
+</pre></div>
+</div>
+<p>An update rewrites each pin and the hash of each downloaded archive. It then regenerates the
+lock files the updated dependencies use, with the commands below. <code class="docutils literal notranslate"><span class="pre">update</span> <span class="pre">--all</span></code> regenerates
+every lock file and moves its transitive pins to their newest releases. It skips the entries that
+give a reason to hold, such as the Google.Protobuf version KSP’s Unity needs.</p>
+<p><code class="docutils literal notranslate"><span class="pre">//tools/deps:test</span></code> checks that every pin agrees with <code class="docutils literal notranslate"><span class="pre">deps.toml</span></code>. It also scans the build
+files, project files, package metadata and workflows for pins that <code class="docutils literal notranslate"><span class="pre">deps.toml</span></code> does not list,
+so a new dependency, or a new pin of one, needs an entry. <code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">tools/deps/deps.py</span> <span class="pre">mods</span></code>
+lists the KSP mods in <code class="docutils literal notranslate"><span class="pre">service/registry.bzl</span></code> with newer GitHub releases. A mod update needs the
+in-game tests, so it stays a hand edit.</p>
+<p>The lock files regenerate with these commands, after a hand edit of the file named:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">tools/build/python/requirements.in</span></code>: <code class="docutils literal notranslate"><span class="pre">bazel</span> <span class="pre">run</span> <span class="pre">//tools/build/python:requirements.update</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tools/build/dotnet/paket.dependencies</span></code>: <code class="docutils literal notranslate"><span class="pre">bazel</span> <span class="pre">run</span> <span class="pre">//tools/build/dotnet:update</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">maven.install</span></code> in <code class="docutils literal notranslate"><span class="pre">MODULE.bazel</span></code>: <code class="docutils literal notranslate"><span class="pre">RULES_JVM_EXTERNAL_REPIN=1</span> <span class="pre">bazel</span> <span class="pre">run</span> <span class="pre">&#64;unpinned_maven//:pin</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">client/js/package.json</span></code>: <code class="docutils literal notranslate"><span class="pre">bazel</span> <span class="pre">run</span> <span class="pre">--</span> <span class="pre">&#64;pnpm</span> <span class="pre">--dir</span> <span class="pre">$PWD/client/js</span> <span class="pre">install</span> <span class="pre">--lockfile-only</span></code></p></li>
+</ul>
+<p>A C# target depends on a NuGet package through its lowercase name, such as
+<code class="docutils literal notranslate"><span class="pre">&#64;paket.main//google.protobuf</span></code>. The target framework of the target selects the package’s assets
+and dependencies.</p>
 </section>
 <section id="c-ides">
 <h2>C# IDEs<a class="headerlink" href="#c-ides" title="Link to this heading">#</a></h2>
@@ -784,7 +802,7 @@ bazel<span class="w"> </span><span class="nb">test</span><span class="w"> </span
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building">Building</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#nuget-packages">NuGet Packages</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dependencies">Dependencies</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#c-ides">C# IDEs</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#docker">Docker</a></li>
 </ul>
