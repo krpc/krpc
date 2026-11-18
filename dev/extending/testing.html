@@ -672,7 +672,8 @@ The craft takes its default crew, or the Kerbals named in <code class="docutils 
 <code class="docutils literal notranslate"><span class="pre">save=None</span></code> launches in the current save, and <code class="docutils literal notranslate"><span class="pre">keep_other_vessels=True</span></code> keeps the vessels
 already there.
 The <code class="docutils literal notranslate"><span class="pre">TestCase</span></code> also places a vessel in orbit, on the ground or in flight, and has assertions
-with a tolerance. <code class="docutils literal notranslate"><span class="pre">krpctools.game.images</span></code> checks the PNG and JPEG images an RPC returns.</p>
+with a tolerance. <code class="docutils literal notranslate"><span class="pre">wait_game_time</span></code> waits for game time to pass, which takes longer than real
+time in a slow game. <code class="docutils literal notranslate"><span class="pre">krpctools.game.images</span></code> checks the PNG and JPEG images an RPC returns.</p>
 <p>Run the suite with the plugin loaded:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pytest<span class="w"> </span>-p<span class="w"> </span>krpctools.game.pytest_plugin
 </pre></div>
