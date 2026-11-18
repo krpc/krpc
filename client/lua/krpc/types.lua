@@ -350,6 +350,15 @@ function Types.RemoteEnum:_init(value)
   self.value = value
 end
 
+-- The decoder makes a new instance for each value, so values compare by enumeration and number.
+-- Either operand may be a value of another kind, as for a structure.
+function Types.RemoteEnum:__eq(other)
+  if not (Types.RemoteEnum:class_of(self) and Types.RemoteEnum:class_of(other)) then
+    return false
+  end
+  return getmetatable(self) == getmetatable(other) and self.value == other.value
+end
+
 --- A value of a flags enumeration: a combination of the values the enumeration declares.
 Types.RemoteFlags = class(Types.RemoteEnum)
 

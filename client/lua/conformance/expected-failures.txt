@@ -1,6 +1,4 @@
 # The conformance tests the Lua client fails, one per line, with the reason as a comment
-test_values.py::test_enum_equality  # == compares enumeration values by identity
-test_values.py::test_structure_equality  # As test_enum_equality
 test_values.py::test_undeclared_enum_value  # An enum type takes any number
 test_values.py::test_undeclared_enum_result  # As test_undeclared_enum_value
 test_values.py::test_undeclared_flags_value  # As test_undeclared_enum_value

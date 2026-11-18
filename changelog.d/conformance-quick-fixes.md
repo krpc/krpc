@@ -17,3 +17,5 @@
 ## client/lua
 
 - Order remote objects by id with `<`
+- Fix a returned enumeration value comparing unequal to the same named value
+- Raise an error for a handshake timeout that is not positive
