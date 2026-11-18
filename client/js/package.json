@@ -28,6 +28,6 @@
     "@biomejs/biome": "2.6.8",
     "@bufbuild/protoc-gen-es": "2.17.0",
     "@types/node": "22.20.5",
-    "typescript": "5.9.3"
+    "typescript": "7.0.2"
   }
 }

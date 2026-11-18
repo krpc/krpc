@@ -513,7 +513,7 @@ at = ['client/js/package.json: "@types/node": "{version}"']
 
 [[dep]]
 name = "typescript"
-version = "5.9.3"
+version = "7.0.2"
 source = "npm:typescript"
 regen = ["pnpm"]
 at = ['client/js/package.json: "typescript": "{version}"']
