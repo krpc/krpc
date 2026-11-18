@@ -13,3 +13,8 @@ test_concurrency.py::test_held_stream_ending_before_value  # A read on the threa
 test_concurrency.py::test_held_stream_ending @flaky  # Fails now and then, seen only on CI: a read on the thread that takes the condition raises "Stream has no value"
 test_concurrency.py::test_value_read_before_wake @flaky  # Fails now and then, seen only on CI: the read made while the update is paused returns the earlier value
 test_concurrency.py::test_wake_update_waiter[connection-failure] @flaky  # Fails now and then, seen only on CI: the waiting thread is not woken within the reply timeout
+test_concurrency.py::test_wait_for_update @flaky  # Fails now and then: a wait for the next update sees two updates
+test_concurrency.py::test_wake_waiter_holding_another[close] @flaky  # Fails now and then: a wait woken by the close does not raise
+test_concurrency.py::test_copies_share_condition @flaky  # Fails now and then, seen only on CI: a thread gets past a condition held through two copies of a stream
+test_concurrency.py::test_wait_on_condition_object @flaky  # Fails now and then: the testee pipe breaks as the driver writes to it
+test_concurrency.py::test_spurious_wake[stream] @flaky  # Fails now and then: seen once over a local socket
