@@ -44,3 +44,8 @@ is shown while the mouse rests on the button.
 
       .. literalinclude:: /scripts/tutorials/user-interface/UserInterface.js
          :language: javascript
+
+.. seealso::
+
+   :class:`UI` for the other elements you can add, including text input fields,
+   toggles, drop-down lists, scroll views and images.
