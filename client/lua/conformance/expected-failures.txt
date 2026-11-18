@@ -30,4 +30,3 @@ test_calls.py::test_undefined_type[wrong-kind]  # As above
 test_calls.py::test_undefined_type[enumeration-default]  # As test_undefined_type[class]
 test_functions.py::test_run_argument_errors[out-of-range]  # As test_values.py::test_out_of_range[sint32-above]
 test_functions.py::test_run_argument_errors[out-of-range-list-item]  # As test_values.py::test_out_of_range[sint32-above]
-test_calls.py::test_malformed_definitions[structure-twice]  # The client does not check for a structure defined twice, so the connect succeeds

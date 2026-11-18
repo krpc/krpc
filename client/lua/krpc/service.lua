@@ -311,7 +311,12 @@ function service.register_definitions(types, svc)
       types:warn_deprecated(message)
     end)
   end
+  local structs = {}
   for _,struct in ipairs(svc.structs) do
+    if structs[struct.name] then
+      error('The structure ' .. svc.name .. '.' .. struct.name .. ' is defined twice', 0)
+    end
+    structs[struct.name] = true
     -- A structure whose fields cannot all be resolved is left without any, so that whatever
     -- names it is skipped and the service still builds
     local known = true
