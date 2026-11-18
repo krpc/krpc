@@ -101,6 +101,17 @@ struct tuple_int32 {
   }
 };
 
+/** An object for the codec, where the id 0 is KRPC_NULL, the null object */
+struct ObjectId {
+  using type = krpc_object_t;
+  static type arg(const Value& value) {
+    auto id = arg_object(not_null(value));
+    if (id == KRPC_NULL) throw Unsupported("An object is its id, and the id 0 is KRPC_NULL");
+    return id;
+  }
+  static Value result(const type& id) { return Object::result(id); }
+};
+
 inline const CodecEntry& codec(const std::string& type) {
   using NullableObject = Nullable<krpc_nullable_object_t, Object>;
   using ListOfNullableObjects = List<krpc_list_nullable_object_t, NullableObject>;
@@ -116,7 +127,7 @@ inline const CodecEntry& codec(const std::string& type) {
       {"bytes", codec_entry<Bytes>(KRPC_CONFORMANCE_BY_VALUE(bytes))},
       {"TestEnum", codec_entry<Enum<krpc_enum_t>>(KRPC_CONFORMANCE_BY_VALUE(enum))},
       {"TestFlags", codec_entry<Enum<krpc_enum_t>>(KRPC_CONFORMANCE_BY_VALUE(enum))},
-      {"TestClass", codec_entry<Object>(KRPC_CONFORMANCE_BY_VALUE(object))},
+      {"TestClass", codec_entry<ObjectId>(KRPC_CONFORMANCE_BY_VALUE(object))},
       {"list(sint32)",
        codec_entry<List<krpc_list_int32_t, Sint32>>(KRPC_CONFORMANCE_BY_POINTER(list_int32))},
       {"set(sint32)",

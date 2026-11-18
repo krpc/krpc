@@ -138,6 +138,8 @@ struct String {
   static type arg(const Value& value) {
     if (is_null(value)) return nullptr;
     const std::string& x = value.string();
+    if (x.find('\0') != std::string::npos)
+      throw Unsupported("A C string ends at its first NUL character");
     auto* result = static_cast<char*>(krpc_malloc(x.size() + 1));
     std::memcpy(result, x.c_str(), x.size() + 1);
     return result;
@@ -295,7 +297,8 @@ struct Dictionary {
 };
 
 /** A value at a position that cannot hold null. A string is passed as NULL, which the client
-    refuses, and any other C type cannot refuse null. */
+    refuses, and any other C type cannot refuse null. An object is its id, and a null object is
+    KRPC_NULL, the id 0. */
 template <typename Tag>
 struct NotNull {
   using type = typename Tag::type;

@@ -806,12 +806,17 @@ class CnanoDispatchGenerator(DispatchGenerator, CnanoGenerator):
         return "krpc_%s_%s_t" % (service, name)
 
     def convert(self, typ):
+        tag = self._tag(typ, False)
         element = self._tag(typ, True)
         if typ.nullable:
             # A position that can hold null holds the value beside a has_value flag
             ctype = self.parse_type_at_position(typ)["ctype"]
             element = "Nullable<%s, %s>" % (ctype, element)
-        return {"tag": self._tag(typ, False), "element": element}
+        elif isinstance(typ, ClassType):
+            # A null object is KRPC_NULL, which a position that is not nullable cannot refuse
+            tag = "NotNull<%s>" % tag
+            element = "NotNull<%s>" % element
+        return {"tag": tag, "element": element}
 
     def _tag(self, typ, in_collection):
         if isinstance(typ, StructType):
