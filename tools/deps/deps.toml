@@ -652,14 +652,14 @@ at = ["tools/build/python/requirements.in: basedpyright=={version}"]
 
 [[dep]]
 name = "cogapp"
-version = "3.6.0"
+version = "3.6.1"
 source = "pypi:cogapp"
 regen = ["pip"]
 at = ["tools/build/python/requirements.in: cogapp=={version}"]
 
 [[dep]]
 name = "ruff"
-version = "0.17.3"
+version = "0.17.5"
 source = "pypi:ruff"
 regen = ["pip"]
 at = ["tools/build/python/requirements.in: ruff=={version}"]
@@ -708,7 +708,7 @@ at = ["tools/build/python/requirements.in: sphinx-csharp=={version}"]
 
 [[dep]]
 name = "sphinx-design"
-version = "0.7.0"
+version = "0.8.0"
 source = "pypi:sphinx-design"
 regen = ["pip"]
 at = ["tools/build/python/requirements.in: sphinx-design=={version}"]
