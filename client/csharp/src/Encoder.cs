@@ -20,15 +20,18 @@ namespace KRPC.Client
         /// </summary>
         /// <remarks>
         /// A slot carries its null beside the encoded bytes, in the is_null flag of the message
-        /// around it, so a null encodes to nothing and the nullability of the spec is not read
-        /// here. A value inside another value carries a presence bool instead.
+        /// around it, so a null encodes to nothing. A null for a spec that is not nullable
+        /// throws. A value inside another value carries a presence bool instead.
         /// </remarks>
         public static ByteString Encode (object value, TypeSpec spec)
         {
             if (ReferenceEquals (spec, null))
                 throw new ArgumentNullException (nameof (spec));
-            if (value == null)
+            if (value == null) {
+                if (!spec.Nullable)
+                    throw new ArgumentNullException (nameof (value), "A null for a " + spec.Type + " that cannot be null");
                 return null;
+            }
             if (!spec.Type.IsInstanceOfType (value))
                 throw new ArgumentException (
                     "Value of type " + value.GetType () +

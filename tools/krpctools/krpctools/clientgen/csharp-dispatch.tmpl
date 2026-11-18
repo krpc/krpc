@@ -118,7 +118,8 @@ namespace KRPC.Client.Conformance
 
         internal static {{ struct.class }} Arg_{{ service_name }}_{{ struct.name }} (Value value)
         {
-            var fields = value.Struct.Fields;
+            // A structure is a value type, which cannot hold null
+            var fields = Arg.NotNull (value).Struct.Fields;
             return new {{ struct.class }} (
                 {% for field in struct.fields %}
                 {{ field.arg }} (fields [{{ loop.index0 }}]){% if not loop.last %},{% endif %}

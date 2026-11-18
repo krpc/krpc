@@ -52,21 +52,28 @@ namespace KRPC.Client.Services.KRPC
         internal static readonly global::KRPC.Client.TypeSpec Spec14 = global::KRPC.Client.TypeSpec.For (typeof(genericCollectionsAlias::ISet<global::KRPC.Client.Services.KRPC.Expression>));
         internal static readonly global::KRPC.Client.TypeSpec Spec15 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IDictionary<string,global::KRPC.Client.Services.KRPC.Expression>));
         internal static readonly global::KRPC.Client.TypeSpec Spec16 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.Expression>>));
-        internal static readonly global::KRPC.Client.TypeSpec Spec17 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.Type>));
-        internal static readonly global::KRPC.Client.TypeSpec Spec18 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.KRPC.GameScene));
-        internal static readonly global::KRPC.Client.TypeSpec Spec19 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Schema.KRPC.Services));
-        internal static readonly global::KRPC.Client.TypeSpec Spec20 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.KRPC.ServerStatus));
-        internal static readonly global::KRPC.Client.TypeSpec Spec21 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.ClientInfo>));
-        internal static readonly global::KRPC.Client.TypeSpec Spec22 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.KRPC.TypeCode));
+        internal static readonly global::KRPC.Client.TypeSpec Spec17 = global::KRPC.Client.TypeSpec.Null (typeof(global::KRPC.Client.Services.KRPC.Expression));
+        internal static readonly global::KRPC.Client.TypeSpec Spec18 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.Type>));
+        internal static readonly global::KRPC.Client.TypeSpec Spec19 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.KRPC.GameScene));
+        internal static readonly global::KRPC.Client.TypeSpec Spec20 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Schema.KRPC.Services));
+        internal static readonly global::KRPC.Client.TypeSpec Spec21 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.KRPC.ServerStatus));
+        internal static readonly global::KRPC.Client.TypeSpec Spec22 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.ClientInfo>));
+        internal static readonly global::KRPC.Client.TypeSpec Spec23 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.KRPC.TypeCode));
 
         // The procedures whose values a C# type cannot describe on its own, which a call
         // built from an expression looks up by name
         static readonly global::System.Collections.Generic.Dictionary<string, global::KRPC.Client.TypeSpec> returnSpecs =
             new global::System.Collections.Generic.Dictionary<string, global::KRPC.Client.TypeSpec> {
+                { "Expression_static_TryCatch", TypeSpecs.Spec0 },
+                { "Expression_static_TryCatchAll", TypeSpecs.Spec0 },
+                { "Expression_static_TryCatchById", TypeSpecs.Spec0 },
             };
 
         static readonly global::System.Collections.Generic.Dictionary<string, global::KRPC.Client.TypeSpec[]> parameterSpecs =
             new global::System.Collections.Generic.Dictionary<string, global::KRPC.Client.TypeSpec[]> {
+                { "Expression_static_TryCatch", new global::KRPC.Client.TypeSpec[] { TypeSpecs.Spec0, TypeSpecs.Spec8, TypeSpecs.Spec8, TypeSpecs.Spec17, TypeSpecs.Spec0 } },
+                { "Expression_static_TryCatchAll", new global::KRPC.Client.TypeSpec[] { TypeSpecs.Spec0, TypeSpecs.Spec17, TypeSpecs.Spec0 } },
+                { "Expression_static_TryCatchById", new global::KRPC.Client.TypeSpec[] { TypeSpecs.Spec0, TypeSpecs.Spec10, TypeSpecs.Spec10, TypeSpecs.Spec17, TypeSpecs.Spec0 } },
             };
 
         public static global::KRPC.Client.TypeSpec ReturnSpec (string procedure)
@@ -141,7 +148,7 @@ namespace KRPC.Client.Services.KRPC
         public global::KRPC.Schema.KRPC.Services GetServices ()
         {
             var _result = connection.Invoke ("KRPC", "GetServices");
-            return (global::KRPC.Schema.KRPC.Services)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec19, connection);
+            return (global::KRPC.Schema.KRPC.Services)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec20, connection);
         }
 
         /// <summary>
@@ -151,7 +158,7 @@ namespace KRPC.Client.Services.KRPC
         public global::KRPC.Client.Services.KRPC.ServerStatus GetStatus ()
         {
             var _result = connection.Invoke ("KRPC", "GetStatus");
-            return (global::KRPC.Client.Services.KRPC.ServerStatus)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec20, connection);
+            return (global::KRPC.Client.Services.KRPC.ServerStatus)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec21, connection);
         }
 
         /// <summary>
@@ -218,7 +225,7 @@ namespace KRPC.Client.Services.KRPC
         public global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.ClientInfo> Clients {
             get {
                 var _result = connection.Invoke ("KRPC", "get_Clients");
-                return (global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.ClientInfo>)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec21, connection);
+                return (global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.ClientInfo>)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec22, connection);
             }
         }
 
@@ -239,11 +246,11 @@ namespace KRPC.Client.Services.KRPC
         public global::KRPC.Client.Services.KRPC.GameScene GameScene {
             get {
                 var _result = connection.Invoke ("KRPC", "get_GameScene");
-                return (global::KRPC.Client.Services.KRPC.GameScene)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec18, connection);
+                return (global::KRPC.Client.Services.KRPC.GameScene)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec19, connection);
             }
             set {
                 var _args = new ByteString[] {
-                    global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec18)
+                    global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec19)
                 };
                 connection.Invoke ("KRPC", "set_GameScene", _args);
             }
@@ -3865,7 +3872,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (body, TypeSpecs.Spec0),
                 global::KRPC.Client.Encoder.Encode (service, TypeSpecs.Spec8),
                 global::KRPC.Client.Encoder.Encode (name, TypeSpecs.Spec8),
-                global::KRPC.Client.Encoder.Encode (message, TypeSpecs.Spec0),
+                global::KRPC.Client.Encoder.Encode (message, TypeSpecs.Spec17),
                 global::KRPC.Client.Encoder.Encode (handler, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_TryCatch", _args);
@@ -3886,7 +3893,7 @@ namespace KRPC.Client.Services.KRPC
                 throw new ArgumentNullException (nameof (connection));
             var _args = new ByteString[] {
                 global::KRPC.Client.Encoder.Encode (body, TypeSpecs.Spec0),
-                global::KRPC.Client.Encoder.Encode (message, TypeSpecs.Spec0),
+                global::KRPC.Client.Encoder.Encode (message, TypeSpecs.Spec17),
                 global::KRPC.Client.Encoder.Encode (handler, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_TryCatchAll", _args);
@@ -3915,7 +3922,7 @@ namespace KRPC.Client.Services.KRPC
                 global::KRPC.Client.Encoder.Encode (body, TypeSpecs.Spec0),
                 global::KRPC.Client.Encoder.Encode (serviceId, TypeSpecs.Spec10),
                 global::KRPC.Client.Encoder.Encode (exceptionId, TypeSpecs.Spec10),
-                global::KRPC.Client.Encoder.Encode (message, TypeSpecs.Spec0),
+                global::KRPC.Client.Encoder.Encode (message, TypeSpecs.Spec17),
                 global::KRPC.Client.Encoder.Encode (handler, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("KRPC", "Expression_static_TryCatchById", _args);
@@ -5859,7 +5866,7 @@ namespace KRPC.Client.Services.KRPC
                     global::KRPC.Client.Encoder.Encode (this, TypeSpecs.Spec0)
                 };
                 var _result = connection.Invoke ("KRPC", "Expression_get_ParameterTypes", _args);
-                return (global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.Type>)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec17, connection);
+                return (global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.Type>)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec18, connection);
             }
         }
 
@@ -6183,7 +6190,7 @@ namespace KRPC.Client.Services.KRPC
             if (connection == null)
                 throw new ArgumentNullException (nameof (connection));
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (valueTypes, TypeSpecs.Spec17)
+                global::KRPC.Client.Encoder.Encode (valueTypes, TypeSpecs.Spec18)
             };
             var _result = connection.Invoke ("KRPC", "Type_static_TupleType", _args);
             return (global::KRPC.Client.Services.KRPC.Type)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec4, connection);
@@ -6449,7 +6456,7 @@ namespace KRPC.Client.Services.KRPC
                     global::KRPC.Client.Encoder.Encode (this, TypeSpecs.Spec4)
                 };
                 var _result = connection.Invoke ("KRPC", "Type_get_Code", _args);
-                return (global::KRPC.Client.Services.KRPC.TypeCode)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec22, connection);
+                return (global::KRPC.Client.Services.KRPC.TypeCode)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec23, connection);
             }
         }
 
@@ -6513,7 +6520,7 @@ namespace KRPC.Client.Services.KRPC
                     global::KRPC.Client.Encoder.Encode (this, TypeSpecs.Spec4)
                 };
                 var _result = connection.Invoke ("KRPC", "Type_get_Types", _args);
-                return (global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.Type>)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec17, connection);
+                return (global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.Type>)global::KRPC.Client.Decoder.Decode (_result.Value, TypeSpecs.Spec18, connection);
             }
         }
     }

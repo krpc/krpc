@@ -15,6 +15,8 @@
 
 - Order remote objects by id, with `CompareTo` and the comparison operators
 - Throw `EncodingException` for an enumeration result the enumeration does not declare
+- Throw `ArgumentNullException` for a null passed for a parameter that cannot be null, before the
+  call is sent
 
 ## client/java
 

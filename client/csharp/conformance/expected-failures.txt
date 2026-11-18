@@ -3,14 +3,6 @@ test_calls.py::test_class_extension_members  # The testee dispatch covers KRPC a
 test_streams.py::test_members[extension-member]  # The testee dispatch covers KRPC and TestService only
 test_calls.py::test_abandoned_id  # An interrupt does not reach a call that is reading the socket for its own response
 test_connection.py::test_unknown_host  # The constructor takes an IPAddress, so the program resolves a host name
-test_values.py::test_null_for_non_nullable[bytes]  # A null argument is sent
-test_values.py::test_null_for_non_nullable[dictionary]  # As test_null_for_non_nullable[bytes]
-test_values.py::test_null_for_non_nullable[list]  # As test_null_for_non_nullable[bytes]
-test_values.py::test_null_for_non_nullable[object]  # As test_null_for_non_nullable[bytes]
-test_values.py::test_null_for_non_nullable[set]  # As test_null_for_non_nullable[bytes]
-test_values.py::test_null_for_non_nullable[string]  # As test_null_for_non_nullable[bytes]
-test_values.py::test_null_for_non_nullable[struct]  # As test_null_for_non_nullable[bytes]
-test_values.py::test_null_for_non_nullable[tuple]  # As test_null_for_non_nullable[bytes]
 test_streams.py::test_update_callback  # A connection has no stream update callback
 test_concurrency.py::test_wait_for_update  # A connection has no stream update condition
 test_streams.py::test_procedure_returning_an_event  # The testee cannot stream a procedure that returns an event

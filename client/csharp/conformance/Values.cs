@@ -62,7 +62,7 @@ namespace KRPC.Client.Conformance
         /// <summary>
         /// The value, which must not be null, as the client's type for it cannot hold null.
         /// </summary>
-        static Value NotNull (Value value)
+        internal static Value NotNull (Value value)
         {
             if (IsNull (value))
                 throw new UnsupportedException ("The client's type cannot hold null");
