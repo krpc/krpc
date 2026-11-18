@@ -203,7 +203,12 @@ public class Decoder {
       int value = decodeSint32(data);
       Class<?> enumType = Class.forName(
           "krpc.client.services." + type.getService() + "$" + type.getName());
-      return (T) enumType.getMethod("fromValue", int.class).invoke(null, value);
+      // fromValue gives null for a number the enumeration does not declare
+      Object result = enumType.getMethod("fromValue", int.class).invoke(null, value);
+      if (result == null) {
+        throw new EncodingException(value + " is not a value of " + type.getName());
+      }
+      return (T) result;
     } catch (IOException exn) {
       throw new EncodingException("Failed to decode object: " + exn.getMessage(), exn);
     } catch (ClassNotFoundException exn) {

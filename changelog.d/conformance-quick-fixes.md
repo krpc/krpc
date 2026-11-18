@@ -6,10 +6,13 @@
 ## client/csharp
 
 - Order remote objects by id, with `CompareTo` and the comparison operators
+- Throw `EncodingException` for an enumeration result the enumeration does not declare
 
 ## client/java
 
 - Fix remote objects with an id past 63 bits ordering first
+- Throw `EncodingException` for an enumeration result the enumeration does not declare, in place
+  of returning null
 
 ## client/lua
 
