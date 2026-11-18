@@ -14,7 +14,7 @@ from krpc.declarations import DeclaredClass, connection_lookup, declaration_erro
 from krpc.decoder import Decoder
 from krpc.definitions import register_all
 from krpc.encoder import Encoder
-from krpc.error import ConnectionError, ServerError
+from krpc.error import ConnectionError, EncodingError, ServerError, StreamError
 from krpc.event import Event
 from krpc.functioncompiler import (
     NO_VALUE,
@@ -243,9 +243,14 @@ class Connection:
         compiled with compile on every call. A call or function with no value
         runs on each update for its effects, and the stream's value is None.
         Raises ValueError for arguments to a function, and for a compiled
-        function that takes parameters. Raises TypeError for any other value."""
+        function that takes parameters. Raises StreamError for a procedure that
+        returns an event. Raises TypeError for any other value."""
         if self._is_remote_procedure(func):
             return_type = self._get_return_type(func, *args, **kwargs)
+            if isinstance(return_type, EventType):
+                raise StreamError(
+                    "A procedure that returns an event cannot be streamed"
+                )
             call = self.get_call(func, *args, **kwargs)
             return krpc.stream.Stream.from_call(self, return_type, call)
         self._check_function(func, "a remote procedure, ")
@@ -624,7 +629,18 @@ class Connection:
             raise self._build_error(result.error)
 
         # Decode the response and return the (optional) result
-        if return_type is None or result.is_null:
+        if return_type is None:
+            return None
+        if result.is_null:
+            if result.value:
+                raise EncodingError(
+                    "%s.%s returned null with a value" % (service, procedure)
+                )
+            if not return_type.nullable:
+                raise EncodingError(
+                    "%s.%s returned null, for a result that cannot be null"
+                    % (service, procedure)
+                )
             return None
         return Decoder.decode(self, result.value, return_type)
 
@@ -660,6 +676,10 @@ class Connection:
             if isinstance(value, DefaultArgument):
                 continue
             if value is None:
+                if not typ.nullable:
+                    raise TypeError(
+                        "%s.%s() argument %d cannot be None" % (service, procedure, i)
+                    )
                 # A null argument is signaled out-of-band; the value field is left unset
                 arguments.add(position=i, is_null=True)
                 continue

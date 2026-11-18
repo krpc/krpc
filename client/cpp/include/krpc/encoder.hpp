@@ -4,6 +4,7 @@
 #include <map>
 #include <optional>
 #include <set>
+#include <stdexcept>
 #include <string>
 #include <tuple>
 #include <utility>
@@ -59,6 +60,7 @@ void encode_message_with_size(const google::protobuf::MessageLite& message, std:
 
 template <typename T>
 inline std::string encode(const RemoteObject<T>& object) {
+  if (object._default) throw std::invalid_argument("The object is default-constructed");
   return encode(object._id);
 }
 

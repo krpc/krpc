@@ -44,9 +44,8 @@ DRAIN_TIMEOUT = 1
 def definitions(server: Endpoint, *names: str) -> bytes:
     """The serialized definitions of the named services, from a server, for a scripted server
     to answer GetServices with."""
-    services = KRPC.Services.FromString(raw.call(server, "KRPC", "GetServices").value)
     result = KRPC.Services()
-    result.services.extend(x for x in services.services if x.name in names)
+    result.services.extend(x for x in raw.services(server).services if x.name in names)
     return result.SerializeToString()
 
 

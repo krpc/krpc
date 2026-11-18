@@ -91,6 +91,9 @@ local function connect_using(transport, name, handshake_timeout)
     handshake_timeout = DEFAULT_HANDSHAKE_TIMEOUT
   elseif handshake_timeout == false then
     handshake_timeout = nil
+  elseif type(handshake_timeout) ~= 'number' or not (handshake_timeout > 0) then -- luacheck: ignore 581
+    -- NaN compares false with every number, so it is refused too
+    error('The handshake timeout must be a positive number of seconds, or false', 0)
   end
 
   local opened, failure = pcall(transport.connect, transport)

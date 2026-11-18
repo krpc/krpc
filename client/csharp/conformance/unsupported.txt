@@ -24,3 +24,4 @@ test_streams.py::test_end_callback_fatal_error_on_remove  # As test_streams.py::
 test_streams.py::test_end_callback_fatal_error_on_close  # As test_streams.py::test_callback_fatal_error
 test_streams.py::test_late_end_callback_fatal_error  # As test_streams.py::test_callback_fatal_error
 test_objects.py::test_static_method_through_an_object_connection  # A static method is called through its class
+test_values.py::test_null_for_non_nullable[struct]  # The client's type cannot hold null

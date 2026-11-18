@@ -29,3 +29,18 @@ test_calls.py::test_deprecated_exception  # An exception has no C type
 test_calls.py::test_deprecated_service  # A service has no C type
 test_calls.py::test_deprecated_service_member[exception]  # As test_deprecated_exception
 test_calls.py::test_not_deprecated[exception]  # As test_deprecated_exception
+test_values.py::test_string[nul]  # A C string ends at its first NUL character
+test_codec.py::test_string[nul]  # As test_values.py::test_string[nul]
+test_values.py::test_null_for_non_nullable[object]  # An object is its id, and a null object is KRPC_NULL, the id 0
+test_values.py::test_null_in_non_nullable_slot[object-element]  # As test_null_for_non_nullable[object]
+test_codec.py::test_object  # As test_values.py::test_null_for_non_nullable[object]
+test_objects.py::test_get_object_id  # As test_values.py::test_null_for_non_nullable[object]
+test_codec.py::test_collections[tuple(uint32)]  # No service uses the type, so the generated headers have no C type for it
+test_codec.py::test_collections[tuple(uint32,string,bool)]  # As test_collections[tuple(uint32)]
+test_codec.py::test_nullable[dictionary(string,nullable sint32)]  # As test_collections[tuple(uint32)]
+test_codec.py::test_nullable[list(nullable TestStruct)]  # As test_collections[tuple(uint32)]
+test_codec.py::test_nullable[list(nullable list(uint32))]  # As test_collections[tuple(uint32)]
+test_codec.py::test_nullable[tuple(sint32,nullable string)]  # As test_collections[tuple(uint32)]
+test_codec.py::test_nullable[list(nullable bool)]  # As test_collections[tuple(uint32)]
+test_codec.py::test_nullable[list(nullable bytes)]  # As test_collections[tuple(uint32)]
+test_codec.py::test_dictionary_value_left_out  # As test_collections[tuple(uint32)], for dictionary(string,list(uint32))

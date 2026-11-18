@@ -314,6 +314,8 @@ class Testee {
       }
       case Command::kObjectId:
         // An object is its id, so there is no helper to get it
+        if (is_null(command.object_id().a()))
+          throw Unsupported("An object is its id, and a null object is KRPC_NULL, the id 0");
         reply->mutable_value()->set_uint64(arg_object(command.object_id().a()));
         break;
       case Command::kOrder:

@@ -113,17 +113,19 @@ class CsharpGenerator(Generator[CsharpLanguage]):
 
     def parse_type_specification(self, typ):
         """The expression a generated stub names in place of the type of a slot. A slot
-        carries a null out of band, so its type is named without its nullability.
+        carries a null out of band, and its spec says whether it can hold one, so the
+        encoder refuses a null for a slot that cannot.
 
         Each spec is built once and held in a static field, as building one on every call
         would allocate where naming a type does not."""
         if typ is None:
             return "null"
-        expression = (
-            self._named_specification(typ)
-            if self._names_a_position(typ)
-            else self._plain_specification(typ)
-        )
+        if typ.nullable:
+            expression = self._named_specification(typ, nullable=True)
+        elif self._names_a_position(typ):
+            expression = self._named_specification(typ)
+        else:
+            expression = self._plain_specification(typ)
         if expression not in self._type_specs:
             self._type_specs[expression] = "TypeSpecs.Spec%d" % len(self._type_specs)
         return self._type_specs[expression]
@@ -185,7 +187,8 @@ class CsharpGenerator(Generator[CsharpLanguage]):
     def _procedure_specs(self):
         """The specs of the procedures whose values a call built from an expression cannot
         read off the C# types it has. Such a call names a nullable reference-typed position
-        inside a value nowhere else, so the stub's spec is looked up by procedure name.
+        inside a value, or a nullable reference-typed parameter, nowhere else, so the stub's
+        spec is looked up by procedure name.
         """
         specs = []
         for name, procedure in self._get_defs("procedures"):
@@ -194,7 +197,10 @@ class CsharpGenerator(Generator[CsharpLanguage]):
                 as_type(self.types, x["type"]) for x in procedure["parameters"]
             ]
             types = parameter_types + ([] if return_type is None else [return_type])
-            if not any(self._names_a_position(typ) for typ in types):
+            if not any(self._names_a_position(typ) for typ in types) and not any(
+                typ.nullable and not self.language.takes_the_nullable_form(typ)
+                for typ in parameter_types
+            ):
                 continue
             specs.append(
                 {

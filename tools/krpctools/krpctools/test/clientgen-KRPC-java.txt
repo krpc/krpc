@@ -3576,7 +3576,7 @@ public class KRPC extends RemoteService {
                 Encoder.encode(body, krpc.client.Types.createClass("KRPC", "Expression")),
                 Encoder.encode(service, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)),
                 Encoder.encode(name, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)),
-                Encoder.encode(message, krpc.client.Types.createClass("KRPC", "Expression")),
+                Encoder.encode(message, krpc.client.Types.nullable(krpc.client.Types.createClass("KRPC", "Expression"))),
                 Encoder.encode(handler, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_TryCatch", _args);
@@ -3595,7 +3595,7 @@ public class KRPC extends RemoteService {
         {
             ByteString[] _args = new ByteString[] {
                 Encoder.encode(body, krpc.client.Types.createClass("KRPC", "Expression")),
-                Encoder.encode(message, krpc.client.Types.createClass("KRPC", "Expression")),
+                Encoder.encode(message, krpc.client.Types.nullable(krpc.client.Types.createClass("KRPC", "Expression"))),
                 Encoder.encode(handler, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_TryCatchAll", _args);
@@ -3621,7 +3621,7 @@ public class KRPC extends RemoteService {
                 Encoder.encode(body, krpc.client.Types.createClass("KRPC", "Expression")),
                 Encoder.encode(serviceId, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32)),
                 Encoder.encode(exceptionId, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32)),
-                Encoder.encode(message, krpc.client.Types.createClass("KRPC", "Expression")),
+                Encoder.encode(message, krpc.client.Types.nullable(krpc.client.Types.createClass("KRPC", "Expression"))),
                 Encoder.encode(handler, krpc.client.Types.createClass("KRPC", "Expression"))
             };
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("KRPC", "Expression_static_TryCatchById", _args);
@@ -6337,11 +6337,11 @@ public class KRPC extends RemoteService {
             RETURN_TYPES.put("Expression_static_ToSet", krpc.client.Types.createClass("KRPC", "Expression"));
             PARAMETER_TYPES.put("Expression_static_ToSet", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression") });
             RETURN_TYPES.put("Expression_static_TryCatch", krpc.client.Types.createClass("KRPC", "Expression"));
-            PARAMETER_TYPES.put("Expression_static_TryCatch", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createClass("KRPC", "Expression") });
+            PARAMETER_TYPES.put("Expression_static_TryCatch", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.nullable(krpc.client.Types.createClass("KRPC", "Expression")), krpc.client.Types.createClass("KRPC", "Expression") });
             RETURN_TYPES.put("Expression_static_TryCatchAll", krpc.client.Types.createClass("KRPC", "Expression"));
-            PARAMETER_TYPES.put("Expression_static_TryCatchAll", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createClass("KRPC", "Expression") });
+            PARAMETER_TYPES.put("Expression_static_TryCatchAll", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.nullable(krpc.client.Types.createClass("KRPC", "Expression")), krpc.client.Types.createClass("KRPC", "Expression") });
             RETURN_TYPES.put("Expression_static_TryCatchById", krpc.client.Types.createClass("KRPC", "Expression"));
-            PARAMETER_TYPES.put("Expression_static_TryCatchById", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32), krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createClass("KRPC", "Expression") });
+            PARAMETER_TYPES.put("Expression_static_TryCatchById", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32), krpc.client.Types.nullable(krpc.client.Types.createClass("KRPC", "Expression")), krpc.client.Types.createClass("KRPC", "Expression") });
             RETURN_TYPES.put("Expression_static_TryFinally", krpc.client.Types.createClass("KRPC", "Expression"));
             PARAMETER_TYPES.put("Expression_static_TryFinally", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression"), krpc.client.Types.createClass("KRPC", "Expression") });
             RETURN_TYPES.put("Expression_static_Union", krpc.client.Types.createClass("KRPC", "Expression"));

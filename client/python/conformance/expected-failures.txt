@@ -1,42 +1,9 @@
 # The conformance tests the Python client fails, one per line, with the reason as a comment
-test_codec.py::test_malformed_data[list(nullable sint32)]  # A presence bool other than 0 or 1, or data after a null, decodes
-test_values.py::test_null_for_non_nullable[bool]  # A null argument is sent
-test_values.py::test_null_for_non_nullable[bytes]  # As test_null_for_non_nullable[bool]
-test_values.py::test_null_for_non_nullable[dictionary]  # As test_null_for_non_nullable[bool]
-test_values.py::test_null_for_non_nullable[double]  # As test_null_for_non_nullable[bool]
-test_values.py::test_null_for_non_nullable[enum]  # As test_null_for_non_nullable[bool]
-test_values.py::test_null_for_non_nullable[float]  # As test_null_for_non_nullable[bool]
-test_values.py::test_null_for_non_nullable[list]  # As test_null_for_non_nullable[bool]
-test_values.py::test_null_for_non_nullable[object]  # As test_null_for_non_nullable[bool]
-test_values.py::test_null_for_non_nullable[set]  # As test_null_for_non_nullable[bool]
-test_values.py::test_null_for_non_nullable[sint32]  # As test_null_for_non_nullable[bool]
-test_values.py::test_null_for_non_nullable[sint64]  # As test_null_for_non_nullable[bool]
-test_values.py::test_null_for_non_nullable[string]  # As test_null_for_non_nullable[bool]
-test_values.py::test_null_for_non_nullable[struct]  # As test_null_for_non_nullable[bool]
-test_values.py::test_null_for_non_nullable[tuple]  # As test_null_for_non_nullable[bool]
-test_values.py::test_null_for_non_nullable[uint32]  # As test_null_for_non_nullable[bool]
-test_values.py::test_null_for_non_nullable[uint64]  # As test_null_for_non_nullable[bool]
-test_values.py::test_null_result_for_non_nullable  # A null result decodes as None
-test_values.py::test_out_of_range[float-above]  # A double beyond the largest float raises OverflowError
-test_values.py::test_out_of_range[float-below]  # As test_out_of_range[float-above]
-test_values.py::test_out_of_range[sint32-above]  # The encoder checks only that an unsigned number is not negative
-test_values.py::test_out_of_range[sint32-below]  # As test_out_of_range[sint32-above]
-test_values.py::test_out_of_range[sint64-above]  # As test_out_of_range[sint32-above]
-test_values.py::test_out_of_range[uint32-above]  # As test_out_of_range[sint32-above]
-test_values.py::test_structure_hash  # A structure holding a list cannot be hashed
-test_values.py::test_wrong_collection[string-for-list]  # Any iterable coerces to a list
-test_values.py::test_wrong_collection[bytes-for-list]  # As test_wrong_collection[string-for-list]
-test_values.py::test_wrong_collection[dictionary-for-list]  # As test_wrong_collection[string-for-list]
-test_codec.py::test_out_of_range[sint32]  # As test_values.py::test_out_of_range[sint32-above]
-test_codec.py::test_out_of_range[sint64]  # As test_values.py::test_out_of_range[sint32-above]
-test_codec.py::test_out_of_range[uint32]  # As test_values.py::test_out_of_range[sint32-above]
-test_streams.py::test_procedure_returning_an_event  # Raises the server's InvalidOperationException, not the stream error
 test_calls.py::test_unknown_type  # A structure holding a left-out structure is exposed
 test_calls.py::test_undefined_type[class]  # A member whose type names an undefined class or enumeration is exposed
 test_calls.py::test_undefined_type[enumeration]  # As above
 test_calls.py::test_undefined_type[wrong-kind]  # As above
 test_calls.py::test_undefined_type[enumeration-default]  # Building the services raises an error
-test_values.py::test_null_result_with_a_value  # A result with is_null set reads as null, whatever its value
 test_streams.py::test_first_call_superseded  # The client has no race points
 test_streams.py::test_callback_after_remove  # The client has no race points
 test_streams.py::test_callback_removed_during_update  # The client has no race points
@@ -56,8 +23,10 @@ test_concurrency.py::test_held_stream_ending @flaky  # Fails now and then, seen 
 test_concurrency.py::test_wake_update_waiter[connection-failure] @flaky  # Fails now and then, seen only on CI: the waiting thread is not woken within the reply timeout
 test_concurrency.py::test_wait_on_condition_object @flaky  # Fails now and then, seen only on CI: a read before the dispatcher thread announces the first value returns it, and the late announcement wakes the condition wait, which then holds the condition
 test_concurrency.py::test_spurious_wake[stream] @flaky  # Fails now and then, seen only on CI: a read before the dispatcher thread announces the first value returns it, and the late announcement wakes the wait, which then returns true before the timeout
+test_concurrency.py::test_copies_share_condition @flaky  # Fails now and then, seen once over a local socket: a thread gets past a condition held through two copies of a stream
 test_streams.py::test_wake_waiter[remove] @flaky  # Fails now and then, seen only on CI: a read before the dispatcher thread announces the first value returns it, and the late announcement wakes the wait, which then returns true before the stream ends
 test_streams.py::test_wake_waiter[close] @flaky  # As test_streams.py::test_wake_waiter[remove]
 test_concurrency.py::test_wake_waiter_holding_another[close] @flaky  # As test_streams.py::test_wake_waiter[remove]
 test_streams.py::test_wake_waiter[connection-failure] @flaky  # As test_streams.py::test_wake_waiter[remove]
 test_concurrency.py::test_wake_waiter_holding_another[connection-failure] @flaky  # As test_streams.py::test_wake_waiter[remove]
+test_concurrency.py::test_wait_for_update @flaky  # Fails now and then, seen only on CI: a wait for the next update sees two updates

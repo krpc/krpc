@@ -63,6 +63,14 @@ void decode_item(T& value, const std::string& data, Connection* connection);
 
 uint32_t decode_size(const std::string& data);
 
+/** Decode the result of a call. Only a std::optional takes a null result, and a null result for
+    any other type throws EncodingError. */
+template <typename T>
+void decode_result(std::optional<T>& value, const schema::ProcedureResult& result,
+                   Connection* connection);
+template <typename T>
+void decode_result(T& value, const schema::ProcedureResult& result, Connection* connection);
+
 /** Read the size prefix a message is preceded by out of a buffer. Returns false if the buffer
     does not hold a complete prefix yet, leaving size and prefix_length untouched. */
 bool decode_size_prefix(const char* data, size_t length, uint32_t* size, size_t* prefix_length);
@@ -73,6 +81,7 @@ inline void decode(RemoteObject<T>& object, const std::string& data, Connection*
   decode(id, data, connection);
   object._connection = connection != nullptr ? *connection : Connection();
   object._id = id;
+  object._default = false;
 }
 
 template <typename... Ts>
@@ -80,8 +89,9 @@ inline void decode(std::tuple<Ts...>& tuple, const std::string& data, Connection
   // See the note on the list below for why the message this arrives in is kept between calls.
   static thread_local krpc::schema::Tuple tupleMessage;
   if (!tupleMessage.ParseFromString(data)) throw EncodingError("Failed to decode message");
-  if (tupleMessage.items_size() != static_cast<int>(sizeof...(Ts)))
-    throw EncodingError("Tuple has the wrong number of items");
+  // Items past the size of the tuple type are ignored
+  if (tupleMessage.items_size() < static_cast<int>(sizeof...(Ts)))
+    throw EncodingError("Tuple has too few items");
   int index = 0;
   std::apply(
       [&](Ts&... args) { (decode_item(args, tupleMessage.items(index++), connection), ...); },
@@ -97,17 +107,35 @@ inline void decode(std::optional<T>& value, const std::string& data, Connection*
   value = inner;
 }
 
+template <typename T>
+inline void decode_result(std::optional<T>& value, const schema::ProcedureResult& result,
+                          Connection* connection) {
+  if (result.is_null()) {
+    value.reset();
+    return;
+  }
+  decode(value, result.value(), connection);
+}
+
+template <typename T>
+inline void decode_result(T& value, const schema::ProcedureResult& result, Connection* connection) {
+  if (result.is_null()) throw EncodingError("A null result for a value that cannot be null");
+  decode(value, result.value(), connection);
+}
+
 // Decode one of the values a collection or a structure holds, where a nullable position is
 // a std::optional.
 template <typename T>
 inline void decode_item(std::optional<T>& value, const std::string& data, Connection* connection) {
   // The presence bool is one byte, as a bool value always is, and is read from it directly
   // rather than through a copy of it
-  if (data.empty()) throw EncodingError("Failed to decode message");
+  if (data.empty()) throw EncodingError("A nullable value carries no presence bool");
   if (data[0] == 0) {
+    if (data.size() > 1) throw EncodingError("A null value carries data");
     value.reset();
     return;
   }
+  if (data[0] != 1) throw EncodingError("A presence bool is neither 0 nor 1");
   T inner;
   decode(inner, data.substr(1), connection);
   value = inner;

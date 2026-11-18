@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Globalization;
 using Google.Protobuf;
 
 namespace KRPC.Client
@@ -83,9 +85,42 @@ namespace KRPC.Client
                 if (data.Length == 0)
                     throw new ArgumentException ("A nullable value carries no presence bool");
                 // The presence bool is one byte, as a bool value always is
-                if (data [0] == 0)
+                if (data [0] == 0) {
+                    if (data.Length > 1)
+                        throw new ArgumentException ("A null value carries data");
                     return null;
+                }
+                if (data [0] != 1)
+                    throw new ArgumentException ("A presence bool is neither 0 nor 1");
                 return decode (ByteString.CopyFrom (data.Span.Slice (1)), client);
+            };
+        }
+
+        /// <summary>
+        /// A function that reads a value of an enumeration. A number the enumeration does not
+        /// declare, or for flags a bit outside its values, is refused.
+        /// </summary>
+        /// <remarks>
+        /// The declared values are boxed once, so reading one allocates nothing.
+        /// </remarks>
+        static Func<ByteString, IConnection, object> BuildEnumDecoder (Type type)
+        {
+            var flags = type.IsDefined (typeof (FlagsAttribute), false);
+            var declared = new Dictionary<int, object> ();
+            int bits = 0;
+            foreach (var x in Enum.GetValues (type)) {
+                var number = Convert.ToInt32 (x, CultureInfo.InvariantCulture);
+                declared [number] = x;
+                bits |= number;
+            }
+            return (value, client) => {
+                var number = DecodeZigZag32 (ReadVarint (value));
+                object result;
+                if (declared.TryGetValue (number, out result))
+                    return result;
+                if (!flags || (number & ~bits) != 0)
+                    throw new ArgumentException (number.ToString (CultureInfo.InvariantCulture) + " is not a value of " + type.Name);
+                return Enum.ToObject (type, number);
             };
         }
 
@@ -103,7 +138,7 @@ namespace KRPC.Client
             // An enumeration decodes to a value of the enumeration, so it unboxes to a Nullable
             // of it as well
             if (type.IsEnum)
-                return (value, client) => Enum.ToObject (type, DecodeZigZag32 (ReadVarint (value)));
+                return BuildEnumDecoder (type);
             switch (Type.GetTypeCode (type)) {
             case TypeCode.Double:
                 return (value, client) => BitConverter.Int64BitsToDouble ((long)ReadFixed64 (value));

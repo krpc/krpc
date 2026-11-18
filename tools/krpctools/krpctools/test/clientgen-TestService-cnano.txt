@@ -3442,9 +3442,17 @@ static inline krpc_error_t krpc_decode_nullable_object(
   pb_istream_t * stream, krpc_nullable_object_t * value) {
   // An absent value is left zeroed, so the member is defined whatever the caller passed in
   memset(&value->value, 0, sizeof(value->value));
-  KRPC_RETURN_ON_ERROR(krpc_decode_bool(stream, &value->has_value));
-  if (value->has_value)
+  uint32_t present;
+  if (!pb_decode_varint32(stream, &present))
+    KRPC_FAIL_STREAM(ENCODING, "A nullable value carries no presence bool", stream);
+  if (present > 1)
+    KRPC_FAIL(ENCODING, "A presence bool is neither 0 nor 1");
+  value->has_value = present == 1;
+  if (value->has_value) {
     KRPC_RETURN_ON_ERROR(krpc_decode_object(stream, &value->value));
+  } else if (stream->bytes_left > 0) {
+    KRPC_FAIL(ENCODING, "A null value carries data");
+  }
   return KRPC_OK;
 }
 
@@ -3973,9 +3981,17 @@ static inline krpc_error_t krpc_decode_nullable_int32(
   pb_istream_t * stream, krpc_nullable_int32_t * value) {
   // An absent value is left zeroed, so the member is defined whatever the caller passed in
   memset(&value->value, 0, sizeof(value->value));
-  KRPC_RETURN_ON_ERROR(krpc_decode_bool(stream, &value->has_value));
-  if (value->has_value)
+  uint32_t present;
+  if (!pb_decode_varint32(stream, &present))
+    KRPC_FAIL_STREAM(ENCODING, "A nullable value carries no presence bool", stream);
+  if (present > 1)
+    KRPC_FAIL(ENCODING, "A presence bool is neither 0 nor 1");
+  value->has_value = present == 1;
+  if (value->has_value) {
     KRPC_RETURN_ON_ERROR(krpc_decode_int32(stream, &value->value));
+  } else if (stream->bytes_left > 0) {
+    KRPC_FAIL(ENCODING, "A null value carries data");
+  }
   return KRPC_OK;
 }
 
@@ -4021,9 +4037,17 @@ static inline krpc_error_t krpc_decode_nullable_enum(
   pb_istream_t * stream, krpc_nullable_enum_t * value) {
   // An absent value is left zeroed, so the member is defined whatever the caller passed in
   memset(&value->value, 0, sizeof(value->value));
-  KRPC_RETURN_ON_ERROR(krpc_decode_bool(stream, &value->has_value));
-  if (value->has_value)
+  uint32_t present;
+  if (!pb_decode_varint32(stream, &present))
+    KRPC_FAIL_STREAM(ENCODING, "A nullable value carries no presence bool", stream);
+  if (present > 1)
+    KRPC_FAIL(ENCODING, "A presence bool is neither 0 nor 1");
+  value->has_value = present == 1;
+  if (value->has_value) {
     KRPC_RETURN_ON_ERROR(krpc_decode_enum(stream, &value->value));
+  } else if (stream->bytes_left > 0) {
+    KRPC_FAIL(ENCODING, "A null value carries data");
+  }
   return KRPC_OK;
 }
 
@@ -4069,9 +4093,17 @@ static inline krpc_error_t krpc_decode_nullable_string(
   pb_istream_t * stream, krpc_nullable_string_t * value) {
   // An absent value is left zeroed, so the member is defined whatever the caller passed in
   memset(&value->value, 0, sizeof(value->value));
-  KRPC_RETURN_ON_ERROR(krpc_decode_bool(stream, &value->has_value));
-  if (value->has_value)
+  uint32_t present;
+  if (!pb_decode_varint32(stream, &present))
+    KRPC_FAIL_STREAM(ENCODING, "A nullable value carries no presence bool", stream);
+  if (present > 1)
+    KRPC_FAIL(ENCODING, "A presence bool is neither 0 nor 1");
+  value->has_value = present == 1;
+  if (value->has_value) {
     KRPC_RETURN_ON_ERROR(krpc_decode_string(stream, &value->value));
+  } else if (stream->bytes_left > 0) {
+    KRPC_FAIL(ENCODING, "A null value carries data");
+  }
   return KRPC_OK;
 }
 
@@ -6072,7 +6104,10 @@ static inline bool krpc_decode_callback_item_tuple_int32_bool(
     KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_bool(stream, &value->e1));
     break;
   default:
-    KRPC_CALLBACK_RETURN_ERROR("unexpected tuple item");
+    // Items past the size of the tuple type are skipped
+    if (!pb_read(stream, NULL, stream->bytes_left))
+      KRPC_CALLBACK_RETURN_ERROR("skipping an extra tuple item");
+    break;
   }
   state->pos++;
   return true;
@@ -6086,6 +6121,8 @@ static inline krpc_error_t krpc_decode_tuple_int32_bool(
   State state = { 0, value };
   message.items.arg = &state;
   KRPC_RETURN_ON_ERROR(krpc_decode_message_Tuple(stream, &message));
+  if (state.pos < 2)
+    KRPC_FAIL(ENCODING, "Too few items for a tuple_int32_bool");
   return KRPC_OK;
 }
 
@@ -6161,7 +6198,10 @@ static inline bool krpc_decode_callback_item_tuple_int32_int64(
     KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_int64(stream, &value->e1));
     break;
   default:
-    KRPC_CALLBACK_RETURN_ERROR("unexpected tuple item");
+    // Items past the size of the tuple type are skipped
+    if (!pb_read(stream, NULL, stream->bytes_left))
+      KRPC_CALLBACK_RETURN_ERROR("skipping an extra tuple item");
+    break;
   }
   state->pos++;
   return true;
@@ -6175,6 +6215,8 @@ static inline krpc_error_t krpc_decode_tuple_int32_int64(
   State state = { 0, value };
   message.items.arg = &state;
   KRPC_RETURN_ON_ERROR(krpc_decode_message_Tuple(stream, &message));
+  if (state.pos < 2)
+    KRPC_FAIL(ENCODING, "Too few items for a tuple_int32_int64");
   return KRPC_OK;
 }
 
@@ -6250,7 +6292,10 @@ static inline bool krpc_decode_callback_item_tuple_int32_nullable_object(
     KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_nullable_object(stream, &value->e1));
     break;
   default:
-    KRPC_CALLBACK_RETURN_ERROR("unexpected tuple item");
+    // Items past the size of the tuple type are skipped
+    if (!pb_read(stream, NULL, stream->bytes_left))
+      KRPC_CALLBACK_RETURN_ERROR("skipping an extra tuple item");
+    break;
   }
   state->pos++;
   return true;
@@ -6264,6 +6309,8 @@ static inline krpc_error_t krpc_decode_tuple_int32_nullable_object(
   State state = { 0, value };
   message.items.arg = &state;
   KRPC_RETURN_ON_ERROR(krpc_decode_message_Tuple(stream, &message));
+  if (state.pos < 2)
+    KRPC_FAIL(ENCODING, "Too few items for a tuple_int32_nullable_object");
   return KRPC_OK;
 }
 
@@ -6339,7 +6386,10 @@ static inline bool krpc_decode_callback_item_tuple_object_object(
     KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_object(stream, &value->e1));
     break;
   default:
-    KRPC_CALLBACK_RETURN_ERROR("unexpected tuple item");
+    // Items past the size of the tuple type are skipped
+    if (!pb_read(stream, NULL, stream->bytes_left))
+      KRPC_CALLBACK_RETURN_ERROR("skipping an extra tuple item");
+    break;
   }
   state->pos++;
   return true;
@@ -6353,6 +6403,8 @@ static inline krpc_error_t krpc_decode_tuple_object_object(
   State state = { 0, value };
   message.items.arg = &state;
   KRPC_RETURN_ON_ERROR(krpc_decode_message_Tuple(stream, &message));
+  if (state.pos < 2)
+    KRPC_FAIL(ENCODING, "Too few items for a tuple_object_object");
   return KRPC_OK;
 }
 

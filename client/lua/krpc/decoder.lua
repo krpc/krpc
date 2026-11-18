@@ -9,13 +9,20 @@ local errors = require 'krpc.error'
 
 local decoder = {}
 
--- Returns nil for data with no bytes, which we read as the zero value, as a protobuf field left
--- out reads. Raises an error for data cut short.
+-- Returns nil for data with no bytes. Raises an error for data cut short.
 local _unpack = protobuf.unpack
 local _decode_message = protobuf.decode_inside_call
 
 -- Without an integer type, the encoder writes math.huge as 2^63 - 1, which reads back as it
 local _huge = not compat.native_integers and math.huge or nil
+
+-- A number, a bool, a string and bytes each encode to at least one byte
+local function _present(value)
+  if value == nil then
+    error('No data for a value', 0)
+  end
+  return value
+end
 
 local function _decode_varint(data)
   -- A varint that fits in one byte is most of the values a call carries, and reading it needs
@@ -27,23 +34,31 @@ local function _decode_varint(data)
   if _huge and data == '\255\255\255\255\255\255\255\255\127' then
     return _huge
   end
-  return _unpack(data, 'v') or 0
+  return _present(_unpack(data, 'v'))
 end
 
 local function _decode_float(data)
-  return _unpack(data, 'f') or 0.0
+  return _present(_unpack(data, 'f'))
 end
 
 local function _decode_double(data)
-  return _unpack(data, 'F') or 0.0
+  return _present(_unpack(data, 'F'))
 end
 
 local function _decode_string(data)
-  return _unpack(data, 's') or ''
+  return _present(_unpack(data, 's'))
+end
+
+local function _decode_text(data)
+  local value = _decode_string(data)
+  if not compat.valid_utf8(value) then
+    error('A string is not valid UTF-8', 0)
+  end
+  return value
 end
 
 local function _decode_signed(data)
-  return _unpack(data, 'j') or 0
+  return _present(_unpack(data, 'j'))
 end
 
 -- Decode a uint64. Without an integer type, the decoder reads a value above 2^63 - 1 as a
@@ -62,11 +77,11 @@ local _value_decoders = {
   [Types.DOUBLE] = _decode_double,
   [Types.FLOAT] = _decode_float,
   [Types.SINT32] = _decode_signed,
-  [Types.SINT64] = function(data) return _unpack(data, 'J') or 0 end,
+  [Types.SINT64] = function(data) return _present(_unpack(data, 'J')) end,
   [Types.UINT32] = _decode_varint,
   [Types.UINT64] = _decode_uint64,
   [Types.BOOL] = function(data) return _decode_varint(data) ~= 0 end,
-  [Types.STRING] = _decode_string,
+  [Types.STRING] = _decode_text,
   [Types.BYTES] = _decode_string,
   [Types.ENUMERATION] = function(data, typ)
     return typ.lua_type(_decode_signed(data))
@@ -149,8 +164,14 @@ local function _decode_item(data, typ)
   if data:len() == 0 then
     error('A nullable value carries no presence bool', 0)
   end
-  if not _value_decoders[Types.BOOL](data:sub(1, 1)) then
+  local present = data:byte(1)
+  if present == 0 then
+    if data:len() > 1 then
+      error('A null value carries data', 0)
+    end
     return Types.none
+  elseif present ~= 1 then
+    error('A presence bool is neither 0 nor 1', 0)
   end
   return _decode(data:sub(2), typ)
 end
@@ -191,10 +212,14 @@ function _decode(data, typ)
     end
     return result
   elseif code == Types.TUPLE then
+    -- Items past the size of the tuple type are ignored
     local items, count = _decode_items(data, _ITEMS)
     local value_types = typ.value_types
+    if count < #value_types then
+      error('A tuple has too few items', 0)
+    end
     local result = List{}
-    for i = 1, count do
+    for i = 1, #value_types do
       result[i] = _decode_item(items[i], value_types[i])
     end
     return result

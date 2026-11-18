@@ -2148,8 +2148,7 @@ inline std::string TestService::add_multiple_values(float x, int32_t y, int64_t 
   _args.push_back(encoder::encode_arg(z));
   auto _data = this->_connection.invoke("TestService", "AddMultipleValues", _args, ::krpc::Connection::Returns::value);
   std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2160,8 +2159,7 @@ inline std::map<std::string, TestService::TestClass> TestService::add_to_object_
   _args.push_back(encoder::encode_arg(key));
   auto _data = this->_connection.invoke("TestService", "AddToObjectDictionary", _args, ::krpc::Connection::Returns::value);
   std::map<std::string, TestService::TestClass> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2172,8 +2170,7 @@ inline std::vector<TestService::TestClass> TestService::add_to_object_list(std::
   _args.push_back(encoder::encode_arg(value));
   auto _data = this->_connection.invoke("TestService", "AddToObjectList", _args, ::krpc::Connection::Returns::value);
   std::vector<TestService::TestClass> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2184,8 +2181,7 @@ inline std::set<TestService::TestClass> TestService::add_to_object_set(std::set<
   _args.push_back(encoder::encode_arg(value));
   auto _data = this->_connection.invoke("TestService", "AddToObjectSet", _args, ::krpc::Connection::Returns::value);
   std::set<TestService::TestClass> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2196,8 +2192,7 @@ inline int32_t TestService::blocking_procedure(int32_t n, int32_t sum = 0) {
   _args.push_back(encoder::encode_arg(sum));
   auto _data = this->_connection.invoke("TestService", "BlockingProcedure", _args, ::krpc::Connection::Returns::value);
   int32_t _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2207,8 +2202,7 @@ inline std::string TestService::bool_to_string(bool value) {
   _args.push_back(encoder::encode_arg(value));
   auto _data = this->_connection.invoke("TestService", "BoolToString", _args, ::krpc::Connection::Returns::value);
   std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2218,8 +2212,7 @@ inline std::string TestService::bytes_default(std::string x = std::string("\xca\
   _args.push_back(encoder::encode_arg(x));
   auto _data = this->_connection.invoke("TestService", "BytesDefault", _args, ::krpc::Connection::Returns::value);
   std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2229,8 +2222,7 @@ inline std::string TestService::bytes_to_hex_string(std::string value) {
   _args.push_back(encoder::encode_arg(value));
   auto _data = this->_connection.invoke("TestService", "BytesToHexString", _args, ::krpc::Connection::Returns::value);
   std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2241,8 +2233,7 @@ inline int32_t TestService::counter(std::string id = "", int32_t divisor = 1) {
   _args.push_back(encoder::encode_arg(divisor));
   auto _data = this->_connection.invoke("TestService", "Counter", _args, ::krpc::Connection::Returns::value);
   int32_t _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2252,16 +2243,14 @@ inline TestService::TestStruct TestService::counter_struct(std::string id = "") 
   _args.push_back(encoder::encode_arg(id));
   auto _data = this->_connection.invoke("TestService", "CounterStruct", _args, ::krpc::Connection::Returns::value);
   TestService::TestStruct _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
 inline TestService::DeprecatedClass TestService::create_deprecated_class() {
   auto _data = this->_connection.invoke("TestService", "CreateDeprecatedClass", {}, ::krpc::Connection::Returns::value);
   TestService::DeprecatedClass _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2271,8 +2260,7 @@ inline TestService::TestClass TestService::create_test_object(std::string value)
   _args.push_back(encoder::encode_arg(value));
   auto _data = this->_connection.invoke("TestService", "CreateTestObject", _args, ::krpc::Connection::Returns::value);
   TestService::TestClass _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2282,8 +2270,7 @@ inline std::string TestService::deprecated_procedure(float value) {
   _args.push_back(encoder::encode_arg(value));
   auto _data = this->_connection.invoke("TestService", "DeprecatedProcedure", _args, ::krpc::Connection::Returns::value);
   std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2293,16 +2280,14 @@ inline std::string TestService::deprecated_procedure_no_message(float value) {
   _args.push_back(encoder::encode_arg(value));
   auto _data = this->_connection.invoke("TestService", "DeprecatedProcedureNoMessage", _args, ::krpc::Connection::Returns::value);
   std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
 inline TestService::DeprecatedStruct TestService::deprecated_struct_procedure() {
   auto _data = this->_connection.invoke("TestService", "DeprecatedStructProcedure", {}, ::krpc::Connection::Returns::value);
   TestService::DeprecatedStruct _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2312,8 +2297,7 @@ inline std::map<int32_t, bool> TestService::dictionary_default(std::map<int32_t,
   _args.push_back(encoder::encode_arg(x));
   auto _data = this->_connection.invoke("TestService", "DictionaryDefault", _args, ::krpc::Connection::Returns::value);
   std::map<int32_t, bool> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2327,8 +2311,7 @@ inline std::vector<double> TestService::double_special_defaults(double nan = std
   _args.push_back(encoder::encode_arg(lowest));
   auto _data = this->_connection.invoke("TestService", "DoubleSpecialDefaults", _args, ::krpc::Connection::Returns::value);
   std::vector<double> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2338,8 +2321,7 @@ inline std::string TestService::double_to_string(double value) {
   _args.push_back(encoder::encode_arg(value));
   auto _data = this->_connection.invoke("TestService", "DoubleToString", _args, ::krpc::Connection::Returns::value);
   std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2349,8 +2331,7 @@ inline std::string TestService::dump_expression_tree(KRPC::Expression expression
   _args.push_back(encoder::encode_arg(expression));
   auto _data = this->_connection.invoke("TestService", "DumpExpressionTree", _args, ::krpc::Connection::Returns::value);
   std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2360,8 +2341,7 @@ inline std::map<std::string, std::optional<TestService::TestClass> > TestService
   _args.push_back(encoder::encode_arg(d));
   auto _data = this->_connection.invoke("TestService", "EchoDictionaryOfNullableObjects", _args, ::krpc::Connection::Returns::value);
   std::map<std::string, std::optional<TestService::TestClass> > _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2371,8 +2351,7 @@ inline std::vector<std::optional<int32_t> > TestService::echo_list_of_nullable_i
   _args.push_back(encoder::encode_arg(l));
   auto _data = this->_connection.invoke("TestService", "EchoListOfNullableInts", _args, ::krpc::Connection::Returns::value);
   std::vector<std::optional<int32_t> > _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2382,8 +2361,7 @@ inline std::vector<std::optional<TestService::TestClass> > TestService::echo_lis
   _args.push_back(encoder::encode_arg(l));
   auto _data = this->_connection.invoke("TestService", "EchoListOfNullableObjects", _args, ::krpc::Connection::Returns::value);
   std::vector<std::optional<TestService::TestClass> > _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2393,8 +2371,7 @@ inline std::vector<std::vector<std::optional<TestService::TestClass>> > TestServ
   _args.push_back(encoder::encode_arg(l));
   auto _data = this->_connection.invoke("TestService", "EchoNestedListOfNullableObjects", _args, ::krpc::Connection::Returns::value);
   std::vector<std::vector<std::optional<TestService::TestClass>> > _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2404,8 +2381,7 @@ inline TestService::TestNestedNullableStruct TestService::echo_nested_nullable_s
   _args.push_back(encoder::encode_arg(value));
   auto _data = this->_connection.invoke("TestService", "EchoNestedNullableStruct", _args, ::krpc::Connection::Returns::value);
   TestService::TestNestedNullableStruct _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2415,8 +2391,7 @@ inline std::optional<bool> TestService::echo_nullable_bool(std::optional<bool> v
   _args.push_back(encoder::encode_arg(value));
   auto _data = this->_connection.invoke("TestService", "EchoNullableBool", _args, ::krpc::Connection::Returns::value);
   std::optional<bool> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2426,8 +2401,7 @@ inline std::optional<std::string> TestService::echo_nullable_bytes(std::optional
   _args.push_back(encoder::encode_arg(value));
   auto _data = this->_connection.invoke("TestService", "EchoNullableBytes", _args, ::krpc::Connection::Returns::value);
   std::optional<std::string> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2437,8 +2411,7 @@ inline std::optional<std::map<std::string, int32_t> > TestService::echo_nullable
   _args.push_back(encoder::encode_arg(d));
   auto _data = this->_connection.invoke("TestService", "EchoNullableDictionary", _args, ::krpc::Connection::Returns::value);
   std::optional<std::map<std::string, int32_t> > _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2448,8 +2421,7 @@ inline std::optional<double> TestService::echo_nullable_double(std::optional<dou
   _args.push_back(encoder::encode_arg(value));
   auto _data = this->_connection.invoke("TestService", "EchoNullableDouble", _args, ::krpc::Connection::Returns::value);
   std::optional<double> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2459,8 +2431,7 @@ inline std::optional<TestService::TestEnum> TestService::echo_nullable_enum(std:
   _args.push_back(encoder::encode_arg(x));
   auto _data = this->_connection.invoke("TestService", "EchoNullableEnum", _args, ::krpc::Connection::Returns::value);
   std::optional<TestService::TestEnum> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2470,8 +2441,7 @@ inline std::optional<TestService::TestFlags> TestService::echo_nullable_flags(st
   _args.push_back(encoder::encode_arg(x));
   auto _data = this->_connection.invoke("TestService", "EchoNullableFlags", _args, ::krpc::Connection::Returns::value);
   std::optional<TestService::TestFlags> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2481,8 +2451,7 @@ inline std::optional<float> TestService::echo_nullable_float(std::optional<float
   _args.push_back(encoder::encode_arg(value));
   auto _data = this->_connection.invoke("TestService", "EchoNullableFloat", _args, ::krpc::Connection::Returns::value);
   std::optional<float> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2492,8 +2461,7 @@ inline std::optional<int32_t> TestService::echo_nullable_int(std::optional<int32
   _args.push_back(encoder::encode_arg(value));
   auto _data = this->_connection.invoke("TestService", "EchoNullableInt", _args, ::krpc::Connection::Returns::value);
   std::optional<int32_t> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2503,8 +2471,7 @@ inline std::optional<std::vector<int32_t> > TestService::echo_nullable_list(std:
   _args.push_back(encoder::encode_arg(l));
   auto _data = this->_connection.invoke("TestService", "EchoNullableList", _args, ::krpc::Connection::Returns::value);
   std::optional<std::vector<int32_t> > _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2514,8 +2481,7 @@ inline std::optional<int64_t> TestService::echo_nullable_long(std::optional<int6
   _args.push_back(encoder::encode_arg(value));
   auto _data = this->_connection.invoke("TestService", "EchoNullableLong", _args, ::krpc::Connection::Returns::value);
   std::optional<int64_t> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2525,8 +2491,7 @@ inline std::optional<std::set<int32_t> > TestService::echo_nullable_set(std::opt
   _args.push_back(encoder::encode_arg(h));
   auto _data = this->_connection.invoke("TestService", "EchoNullableSet", _args, ::krpc::Connection::Returns::value);
   std::optional<std::set<int32_t> > _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2536,8 +2501,7 @@ inline std::optional<std::string> TestService::echo_nullable_string(std::optiona
   _args.push_back(encoder::encode_arg(value));
   auto _data = this->_connection.invoke("TestService", "EchoNullableString", _args, ::krpc::Connection::Returns::value);
   std::optional<std::string> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2547,8 +2511,7 @@ inline std::optional<std::tuple<int32_t, int64_t> > TestService::echo_nullable_t
   _args.push_back(encoder::encode_arg(t));
   auto _data = this->_connection.invoke("TestService", "EchoNullableTuple", _args, ::krpc::Connection::Returns::value);
   std::optional<std::tuple<int32_t, int64_t> > _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2558,8 +2521,7 @@ inline std::optional<uint32_t> TestService::echo_nullable_uint(std::optional<uin
   _args.push_back(encoder::encode_arg(value));
   auto _data = this->_connection.invoke("TestService", "EchoNullableUInt", _args, ::krpc::Connection::Returns::value);
   std::optional<uint32_t> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2569,8 +2531,7 @@ inline std::optional<uint64_t> TestService::echo_nullable_ulong(std::optional<ui
   _args.push_back(encoder::encode_arg(value));
   auto _data = this->_connection.invoke("TestService", "EchoNullableULong", _args, ::krpc::Connection::Returns::value);
   std::optional<uint64_t> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2580,8 +2541,7 @@ inline std::set<std::string> TestService::echo_string_set(std::set<std::string> 
   _args.push_back(encoder::encode_arg(h));
   auto _data = this->_connection.invoke("TestService", "EchoStringSet", _args, ::krpc::Connection::Returns::value);
   std::set<std::string> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2591,8 +2551,7 @@ inline std::optional<TestService::TestClass> TestService::echo_test_object(std::
   _args.push_back(encoder::encode_arg(value));
   auto _data = this->_connection.invoke("TestService", "EchoTestObject", _args, ::krpc::Connection::Returns::value);
   std::optional<TestService::TestClass> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2602,8 +2561,7 @@ inline std::tuple<int32_t, std::optional<TestService::TestClass> > TestService::
   _args.push_back(encoder::encode_arg(t));
   auto _data = this->_connection.invoke("TestService", "EchoTupleWithANullableObject", _args, ::krpc::Connection::Returns::value);
   std::tuple<int32_t, std::optional<TestService::TestClass> > _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2613,8 +2571,7 @@ inline std::vector<std::string> TestService::empty_list_default(std::vector<std:
   _args.push_back(encoder::encode_arg(x));
   auto _data = this->_connection.invoke("TestService", "EmptyListDefault", _args, ::krpc::Connection::Returns::value);
   std::vector<std::string> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2624,8 +2581,7 @@ inline TestService::TestEnum TestService::enum_default(TestService::TestEnum x =
   _args.push_back(encoder::encode_arg(x));
   auto _data = this->_connection.invoke("TestService", "EnumDefault", _args, ::krpc::Connection::Returns::value);
   TestService::TestEnum _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2635,8 +2591,7 @@ inline TestService::TestEnum TestService::enum_echo(TestService::TestEnum x) {
   _args.push_back(encoder::encode_arg(x));
   auto _data = this->_connection.invoke("TestService", "EnumEcho", _args, ::krpc::Connection::Returns::value);
   TestService::TestEnum _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2646,8 +2601,7 @@ inline std::vector<TestService::TestEnum> TestService::enum_list_default(std::ve
   _args.push_back(encoder::encode_arg(x));
   auto _data = this->_connection.invoke("TestService", "EnumListDefault", _args, ::krpc::Connection::Returns::value);
   std::vector<TestService::TestEnum> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2657,8 +2611,7 @@ inline std::string TestService::enum_to_string(TestService::TestEnum x) {
   _args.push_back(encoder::encode_arg(x));
   auto _data = this->_connection.invoke("TestService", "EnumToString", _args, ::krpc::Connection::Returns::value);
   std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2668,8 +2621,7 @@ inline TestService::TestFlags TestService::flags_default(TestService::TestFlags 
   _args.push_back(encoder::encode_arg(x));
   auto _data = this->_connection.invoke("TestService", "FlagsDefault", _args, ::krpc::Connection::Returns::value);
   TestService::TestFlags _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2679,8 +2631,7 @@ inline TestService::TestFlags TestService::flags_echo(TestService::TestFlags x) 
   _args.push_back(encoder::encode_arg(x));
   auto _data = this->_connection.invoke("TestService", "FlagsEcho", _args, ::krpc::Connection::Returns::value);
   TestService::TestFlags _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2690,8 +2641,7 @@ inline std::vector<TestService::TestFlags> TestService::flags_list_echo(std::vec
   _args.push_back(encoder::encode_arg(x));
   auto _data = this->_connection.invoke("TestService", "FlagsListEcho", _args, ::krpc::Connection::Returns::value);
   std::vector<TestService::TestFlags> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2701,8 +2651,7 @@ inline TestService::TestFlagsStruct TestService::flags_struct_echo(TestService::
   _args.push_back(encoder::encode_arg(x));
   auto _data = this->_connection.invoke("TestService", "FlagsStructEcho", _args, ::krpc::Connection::Returns::value);
   TestService::TestFlagsStruct _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2712,8 +2661,7 @@ inline int32_t TestService::flags_to_int(TestService::TestFlags x) {
   _args.push_back(encoder::encode_arg(x));
   auto _data = this->_connection.invoke("TestService", "FlagsToInt", _args, ::krpc::Connection::Returns::value);
   int32_t _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2728,8 +2676,7 @@ inline std::vector<float> TestService::float_special_defaults(float nan = std::n
   _args.push_back(encoder::encode_arg(fraction));
   auto _data = this->_connection.invoke("TestService", "FloatSpecialDefaults", _args, ::krpc::Connection::Returns::value);
   std::vector<float> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2739,8 +2686,7 @@ inline std::string TestService::float_to_string(float value) {
   _args.push_back(encoder::encode_arg(value));
   auto _data = this->_connection.invoke("TestService", "FloatToString", _args, ::krpc::Connection::Returns::value);
   std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2750,8 +2696,7 @@ inline std::string TestService::hex_string_to_bytes(std::string value) {
   _args.push_back(encoder::encode_arg(value));
   auto _data = this->_connection.invoke("TestService", "HexStringToBytes", _args, ::krpc::Connection::Returns::value);
   std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2761,8 +2706,7 @@ inline std::map<std::string, int32_t> TestService::increment_dictionary(std::map
   _args.push_back(encoder::encode_arg(d));
   auto _data = this->_connection.invoke("TestService", "IncrementDictionary", _args, ::krpc::Connection::Returns::value);
   std::map<std::string, int32_t> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2772,8 +2716,7 @@ inline std::vector<int32_t> TestService::increment_list(std::vector<int32_t> l) 
   _args.push_back(encoder::encode_arg(l));
   auto _data = this->_connection.invoke("TestService", "IncrementList", _args, ::krpc::Connection::Returns::value);
   std::vector<int32_t> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2783,8 +2726,7 @@ inline std::vector<TestService::TestStruct> TestService::increment_list_of_struc
   _args.push_back(encoder::encode_arg(l));
   auto _data = this->_connection.invoke("TestService", "IncrementListOfStructs", _args, ::krpc::Connection::Returns::value);
   std::vector<TestService::TestStruct> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2794,8 +2736,7 @@ inline std::map<std::string, std::vector<int32_t> > TestService::increment_neste
   _args.push_back(encoder::encode_arg(d));
   auto _data = this->_connection.invoke("TestService", "IncrementNestedCollection", _args, ::krpc::Connection::Returns::value);
   std::map<std::string, std::vector<int32_t> > _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2805,8 +2746,7 @@ inline std::set<int32_t> TestService::increment_set(std::set<int32_t> h) {
   _args.push_back(encoder::encode_arg(h));
   auto _data = this->_connection.invoke("TestService", "IncrementSet", _args, ::krpc::Connection::Returns::value);
   std::set<int32_t> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2816,8 +2756,7 @@ inline std::tuple<int32_t, int64_t> TestService::increment_tuple(std::tuple<int3
   _args.push_back(encoder::encode_arg(t));
   auto _data = this->_connection.invoke("TestService", "IncrementTuple", _args, ::krpc::Connection::Returns::value);
   std::tuple<int32_t, int64_t> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2828,8 +2767,7 @@ inline std::vector<int32_t> TestService::int32_special_defaults(int32_t maximum 
   _args.push_back(encoder::encode_arg(minimum));
   auto _data = this->_connection.invoke("TestService", "Int32SpecialDefaults", _args, ::krpc::Connection::Returns::value);
   std::vector<int32_t> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2839,8 +2777,7 @@ inline std::string TestService::int32_to_string(int32_t value) {
   _args.push_back(encoder::encode_arg(value));
   auto _data = this->_connection.invoke("TestService", "Int32ToString", _args, ::krpc::Connection::Returns::value);
   std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2851,8 +2788,7 @@ inline std::vector<int64_t> TestService::int64_special_defaults(int64_t maximum 
   _args.push_back(encoder::encode_arg(minimum));
   auto _data = this->_connection.invoke("TestService", "Int64SpecialDefaults", _args, ::krpc::Connection::Returns::value);
   std::vector<int64_t> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2862,8 +2798,7 @@ inline std::string TestService::int64_to_string(int64_t value) {
   _args.push_back(encoder::encode_arg(value));
   auto _data = this->_connection.invoke("TestService", "Int64ToString", _args, ::krpc::Connection::Returns::value);
   std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2873,8 +2808,7 @@ inline TestService::TestFlags TestService::int_to_flags(int32_t x) {
   _args.push_back(encoder::encode_arg(x));
   auto _data = this->_connection.invoke("TestService", "IntToFlags", _args, ::krpc::Connection::Returns::value);
   TestService::TestFlags _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2885,8 +2819,7 @@ inline std::string TestService::join_with_at_sign(std::string first_value, std::
   _args.push_back(encoder::encode_arg(from));
   auto _data = this->_connection.invoke("TestService", "JoinWithAtSign", _args, ::krpc::Connection::Returns::value);
   std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2896,8 +2829,7 @@ inline std::vector<int32_t> TestService::list_default(std::vector<int32_t> x = s
   _args.push_back(encoder::encode_arg(x));
   auto _data = this->_connection.invoke("TestService", "ListDefault", _args, ::krpc::Connection::Returns::value);
   std::vector<int32_t> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2907,8 +2839,7 @@ inline TestService::TestNestedStruct TestService::nested_struct_echo(TestService
   _args.push_back(encoder::encode_arg(x));
   auto _data = this->_connection.invoke("TestService", "NestedStructEcho", _args, ::krpc::Connection::Returns::value);
   TestService::TestNestedStruct _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2918,8 +2849,7 @@ inline TestService::TestClass TestService::not_nullable_object(TestService::Test
   _args.push_back(encoder::encode_arg(value));
   auto _data = this->_connection.invoke("TestService", "NotNullableObject", _args, ::krpc::Connection::Returns::value);
   TestService::TestClass _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2929,8 +2859,7 @@ inline std::string TestService::null_default(std::optional<TestService::TestClas
   _args.push_back(encoder::encode_arg(obj));
   auto _data = this->_connection.invoke("TestService", "NullDefault", _args, ::krpc::Connection::Returns::value);
   std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2940,8 +2869,7 @@ inline TestService::TestNullableStruct TestService::nullable_struct_echo(TestSer
   _args.push_back(encoder::encode_arg(x));
   auto _data = this->_connection.invoke("TestService", "NullableStructEcho", _args, ::krpc::Connection::Returns::value);
   TestService::TestNullableStruct _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2952,8 +2880,7 @@ inline ::krpc::Event TestService::on_timer(uint32_t milliseconds, uint32_t repea
   _args.push_back(encoder::encode_arg(repeats));
   auto _data = this->_connection.invoke("TestService", "OnTimer", _args, ::krpc::Connection::Returns::stream);
   ::krpc::Event _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2966,16 +2893,14 @@ inline std::string TestService::optional_arguments(std::string x, std::string y 
   _args.push_back(encoder::encode_arg(obj));
   auto _data = this->_connection.invoke("TestService", "OptionalArguments", _args, ::krpc::Connection::Returns::value);
   std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
 inline TestService::PartlyDeprecatedStruct TestService::partly_deprecated_struct_procedure() {
   auto _data = this->_connection.invoke("TestService", "PartlyDeprecatedStructProcedure", {}, ::krpc::Connection::Returns::value);
   TestService::PartlyDeprecatedStruct _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -2985,8 +2910,7 @@ inline ::krpc::Event TestService::remove_event_after(uint32_t milliseconds) {
   _args.push_back(encoder::encode_arg(milliseconds));
   auto _data = this->_connection.invoke("TestService", "RemoveEventAfter", _args, ::krpc::Connection::Returns::stream);
   ::krpc::Event _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -3008,8 +2932,7 @@ inline void TestService::reset_invalid_operation_exception_later() {
 inline TestService::TestClass TestService::return_null_when_not_allowed() {
   auto _data = this->_connection.invoke("TestService", "ReturnNullWhenNotAllowed", {}, ::krpc::Connection::Returns::value);
   TestService::TestClass _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -3019,8 +2942,7 @@ inline int32_t TestService::scalar_default(int32_t x = 42) {
   _args.push_back(encoder::encode_arg(x));
   auto _data = this->_connection.invoke("TestService", "ScalarDefault", _args, ::krpc::Connection::Returns::value);
   int32_t _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -3030,8 +2952,7 @@ inline std::set<int32_t> TestService::set_default(std::set<int32_t> x = std::set
   _args.push_back(encoder::encode_arg(x));
   auto _data = this->_connection.invoke("TestService", "SetDefault", _args, ::krpc::Connection::Returns::value);
   std::set<int32_t> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -3041,8 +2962,7 @@ inline std::string TestService::string_default(std::string x = "foo") {
   _args.push_back(encoder::encode_arg(x));
   auto _data = this->_connection.invoke("TestService", "StringDefault", _args, ::krpc::Connection::Returns::value);
   std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -3052,8 +2972,7 @@ inline bool TestService::string_to_bool(std::string value) {
   _args.push_back(encoder::encode_arg(value));
   auto _data = this->_connection.invoke("TestService", "StringToBool", _args, ::krpc::Connection::Returns::value);
   bool _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -3063,8 +2982,7 @@ inline double TestService::string_to_double(std::string value) {
   _args.push_back(encoder::encode_arg(value));
   auto _data = this->_connection.invoke("TestService", "StringToDouble", _args, ::krpc::Connection::Returns::value);
   double _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -3074,8 +2992,7 @@ inline TestService::TestEnum TestService::string_to_enum(std::string value) {
   _args.push_back(encoder::encode_arg(value));
   auto _data = this->_connection.invoke("TestService", "StringToEnum", _args, ::krpc::Connection::Returns::value);
   TestService::TestEnum _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -3085,8 +3002,7 @@ inline float TestService::string_to_float(std::string value) {
   _args.push_back(encoder::encode_arg(value));
   auto _data = this->_connection.invoke("TestService", "StringToFloat", _args, ::krpc::Connection::Returns::value);
   float _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -3096,8 +3012,7 @@ inline int32_t TestService::string_to_int32(std::string value) {
   _args.push_back(encoder::encode_arg(value));
   auto _data = this->_connection.invoke("TestService", "StringToInt32", _args, ::krpc::Connection::Returns::value);
   int32_t _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -3107,8 +3022,7 @@ inline int64_t TestService::string_to_int64(std::string value) {
   _args.push_back(encoder::encode_arg(value));
   auto _data = this->_connection.invoke("TestService", "StringToInt64", _args, ::krpc::Connection::Returns::value);
   int64_t _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -3118,8 +3032,7 @@ inline uint32_t TestService::string_to_uint32(std::string value) {
   _args.push_back(encoder::encode_arg(value));
   auto _data = this->_connection.invoke("TestService", "StringToUInt32", _args, ::krpc::Connection::Returns::value);
   uint32_t _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -3129,8 +3042,7 @@ inline uint64_t TestService::string_to_uint64(std::string value) {
   _args.push_back(encoder::encode_arg(value));
   auto _data = this->_connection.invoke("TestService", "StringToUInt64", _args, ::krpc::Connection::Returns::value);
   uint64_t _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -3140,8 +3052,7 @@ inline TestService::TestStruct TestService::struct_default(TestService::TestStru
   _args.push_back(encoder::encode_arg(x));
   auto _data = this->_connection.invoke("TestService", "StructDefault", _args, ::krpc::Connection::Returns::value);
   TestService::TestStruct _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -3151,8 +3062,7 @@ inline TestService::TestStruct TestService::struct_echo(TestService::TestStruct 
   _args.push_back(encoder::encode_arg(x));
   auto _data = this->_connection.invoke("TestService", "StructEcho", _args, ::krpc::Connection::Returns::value);
   TestService::TestStruct _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -3162,8 +3072,7 @@ inline std::optional<TestService::TestStruct> TestService::struct_echo_nullable(
   _args.push_back(encoder::encode_arg(x));
   auto _data = this->_connection.invoke("TestService", "StructEchoNullable", _args, ::krpc::Connection::Returns::value);
   std::optional<TestService::TestStruct> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -3173,16 +3082,14 @@ inline std::tuple<TestService::TestClass, TestService::TestClass> TestService::s
   _args.push_back(encoder::encode_arg(t));
   auto _data = this->_connection.invoke("TestService", "SwapObjectTuple", _args, ::krpc::Connection::Returns::value);
   std::tuple<TestService::TestClass, TestService::TestClass> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
 inline int32_t TestService::throw_argument_exception() {
   auto _data = this->_connection.invoke("TestService", "ThrowArgumentException", {}, ::krpc::Connection::Returns::value);
   int32_t _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -3192,8 +3099,7 @@ inline int32_t TestService::throw_argument_null_exception(std::string foo) {
   _args.push_back(encoder::encode_arg(foo));
   auto _data = this->_connection.invoke("TestService", "ThrowArgumentNullException", _args, ::krpc::Connection::Returns::value);
   int32_t _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -3203,40 +3109,35 @@ inline int32_t TestService::throw_argument_out_of_range_exception(int32_t foo) {
   _args.push_back(encoder::encode_arg(foo));
   auto _data = this->_connection.invoke("TestService", "ThrowArgumentOutOfRangeException", _args, ::krpc::Connection::Returns::value);
   int32_t _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
 inline int32_t TestService::throw_custom_exception() {
   auto _data = this->_connection.invoke("TestService", "ThrowCustomException", {}, ::krpc::Connection::Returns::value);
   int32_t _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
 inline int32_t TestService::throw_custom_exception_later() {
   auto _data = this->_connection.invoke("TestService", "ThrowCustomExceptionLater", {}, ::krpc::Connection::Returns::value);
   int32_t _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
 inline int32_t TestService::throw_invalid_operation_exception() {
   auto _data = this->_connection.invoke("TestService", "ThrowInvalidOperationException", {}, ::krpc::Connection::Returns::value);
   int32_t _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
 inline int32_t TestService::throw_invalid_operation_exception_later() {
   auto _data = this->_connection.invoke("TestService", "ThrowInvalidOperationExceptionLater", {}, ::krpc::Connection::Returns::value);
   int32_t _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -3246,8 +3147,7 @@ inline int32_t TestService::throw_mapped_exception(std::string name) {
   _args.push_back(encoder::encode_arg(name));
   auto _data = this->_connection.invoke("TestService", "ThrowMappedException", _args, ::krpc::Connection::Returns::value);
   int32_t _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -3257,8 +3157,7 @@ inline std::tuple<int32_t, bool> TestService::tuple_default(std::tuple<int32_t, 
   _args.push_back(encoder::encode_arg(x));
   auto _data = this->_connection.invoke("TestService", "TupleDefault", _args, ::krpc::Connection::Returns::value);
   std::tuple<int32_t, bool> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -3268,8 +3167,7 @@ inline std::vector<uint32_t> TestService::uint32_special_defaults(uint32_t maxim
   _args.push_back(encoder::encode_arg(maximum));
   auto _data = this->_connection.invoke("TestService", "Uint32SpecialDefaults", _args, ::krpc::Connection::Returns::value);
   std::vector<uint32_t> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -3279,8 +3177,7 @@ inline std::string TestService::uint32_to_string(uint32_t value) {
   _args.push_back(encoder::encode_arg(value));
   auto _data = this->_connection.invoke("TestService", "UInt32ToString", _args, ::krpc::Connection::Returns::value);
   std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -3290,8 +3187,7 @@ inline std::vector<uint64_t> TestService::uint64_special_defaults(uint64_t maxim
   _args.push_back(encoder::encode_arg(maximum));
   auto _data = this->_connection.invoke("TestService", "Uint64SpecialDefaults", _args, ::krpc::Connection::Returns::value);
   std::vector<uint64_t> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -3301,16 +3197,14 @@ inline std::string TestService::uint64_to_string(uint64_t value) {
   _args.push_back(encoder::encode_arg(value));
   auto _data = this->_connection.invoke("TestService", "UInt64ToString", _args, ::krpc::Connection::Returns::value);
   std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
 inline std::string TestService::deprecated_property() {
   auto _data = this->_connection.invoke("TestService", "get_DeprecatedProperty", {}, ::krpc::Connection::Returns::value);
   std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -3324,8 +3218,7 @@ inline void TestService::set_deprecated_property(std::string value) {
 inline std::optional<TestService::TestClass> TestService::nullable_object() {
   auto _data = this->_connection.invoke("TestService", "get_NullableObject", {}, ::krpc::Connection::Returns::value);
   std::optional<TestService::TestClass> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -3339,8 +3232,7 @@ inline void TestService::set_nullable_object(std::optional<TestService::TestClas
 inline std::optional<TestService::TestClass> TestService::object_property() {
   auto _data = this->_connection.invoke("TestService", "get_ObjectProperty", {}, ::krpc::Connection::Returns::value);
   std::optional<TestService::TestClass> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -3354,8 +3246,7 @@ inline void TestService::set_object_property(std::optional<TestService::TestClas
 inline std::string TestService::string_property() {
   auto _data = this->_connection.invoke("TestService", "get_StringProperty", {}, ::krpc::Connection::Returns::value);
   std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -3376,8 +3267,7 @@ inline void TestService::set_string_property_private_get(std::string value) {
 inline std::string TestService::string_property_private_set() {
   auto _data = this->_connection.invoke("TestService", "get_StringPropertyPrivateSet", {}, ::krpc::Connection::Returns::value);
   std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -5432,8 +5322,7 @@ inline std::string TestService::DeprecatedClass::deprecated_method() {
   _args.push_back(encoder::encode_arg(*this));
   auto _data = this->_connection.invoke("TestService", "DeprecatedClass_DeprecatedMethod", _args, ::krpc::Connection::Returns::value);
   std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -5443,8 +5332,7 @@ inline std::string TestService::DeprecatedClass::inherited_method() {
   _args.push_back(encoder::encode_arg(*this));
   auto _data = this->_connection.invoke("TestService", "DeprecatedClass_InheritedMethod", _args, ::krpc::Connection::Returns::value);
   std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -5454,8 +5342,7 @@ inline std::string TestService::DeprecatedClass::inherited_property() {
   _args.push_back(encoder::encode_arg(*this));
   auto _data = this->_connection.invoke("TestService", "DeprecatedClass_get_InheritedProperty", _args, ::krpc::Connection::Returns::value);
   std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -5470,8 +5357,7 @@ inline void TestService::DeprecatedClass::set_inherited_property(std::string val
 inline std::string TestService::DeprecatedClass::inherited_static_method(::krpc::Connection& _connection) {
   auto _data = _connection.invoke("TestService", "DeprecatedClass_static_InheritedStaticMethod", {}, ::krpc::Connection::Returns::value);
     std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5577,8 +5463,7 @@ inline std::optional<TestService::TestClass> TestService::TestClass::echo_nullab
   _args.push_back(encoder::encode_arg(value));
   auto _data = this->_connection.invoke("TestService", "TestClass_EchoNullableObject", _args, ::krpc::Connection::Returns::value);
   std::optional<TestService::TestClass> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -5589,8 +5474,7 @@ inline std::string TestService::TestClass::float_to_string(float x) {
   _args.push_back(encoder::encode_arg(x));
   auto _data = this->_connection.invoke("TestService", "TestClass_FloatToString", _args, ::krpc::Connection::Returns::value);
   std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -5600,8 +5484,7 @@ inline std::string TestService::TestClass::get_value() {
   _args.push_back(encoder::encode_arg(*this));
   auto _data = this->_connection.invoke("TestService", "TestClass_GetValue", _args, ::krpc::Connection::Returns::value);
   std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -5612,8 +5495,7 @@ inline std::string TestService::TestClass::object_to_string(std::optional<TestSe
   _args.push_back(encoder::encode_arg(other));
   auto _data = this->_connection.invoke("TestService", "TestClass_ObjectToString", _args, ::krpc::Connection::Returns::value);
   std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -5627,8 +5509,7 @@ inline std::string TestService::TestClass::optional_arguments(std::string x, std
   _args.push_back(encoder::encode_arg(obj));
   auto _data = this->_connection.invoke("TestService", "TestClass_OptionalArguments", _args, ::krpc::Connection::Returns::value);
   std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -5638,8 +5519,7 @@ inline int32_t TestService::TestClass::int_property() {
   _args.push_back(encoder::encode_arg(*this));
   auto _data = this->_connection.invoke("TestService", "TestClass_get_IntProperty", _args, ::krpc::Connection::Returns::value);
   int32_t _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -5657,8 +5537,7 @@ inline std::optional<TestService::TestClass> TestService::TestClass::object_prop
   _args.push_back(encoder::encode_arg(*this));
   auto _data = this->_connection.invoke("TestService", "TestClass_get_ObjectProperty", _args, ::krpc::Connection::Returns::value);
   std::optional<TestService::TestClass> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -5684,8 +5563,7 @@ inline std::string TestService::TestClass::string_property_private_set() {
   _args.push_back(encoder::encode_arg(*this));
   auto _data = this->_connection.invoke("TestService", "TestClass_get_StringPropertyPrivateSet", _args, ::krpc::Connection::Returns::value);
   std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -5696,8 +5574,7 @@ inline std::string TestService::TestClass::static_method(::krpc::Connection& _co
   _args.push_back(encoder::encode_arg(b));
   auto _data = _connection.invoke("TestService", "TestClass_static_StaticMethod", _args, ::krpc::Connection::Returns::value);
     std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5707,8 +5584,7 @@ inline std::optional<TestService::TestClass> TestService::TestClass::static_null
   _args.push_back(encoder::encode_arg(value));
   auto _data = _connection.invoke("TestService", "TestClass_static_StaticNullableObject", _args, ::krpc::Connection::Returns::value);
     std::optional<TestService::TestClass> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5721,8 +5597,7 @@ inline std::string TestService::TestClass::static_optional_arguments(::krpc::Con
   _args.push_back(encoder::encode_arg(obj));
   auto _data = _connection.invoke("TestService", "TestClass_static_StaticOptionalArguments", _args, ::krpc::Connection::Returns::value);
     std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 

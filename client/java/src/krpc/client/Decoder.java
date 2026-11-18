@@ -40,7 +40,13 @@ public class Decoder {
     // The presence bool is one byte, as a bool value always is, and is read from the data
     // directly
     if (data.byteAt(0) == 0) {
+      if (data.size() > 1) {
+        throw new EncodingException("A null value carries data");
+      }
       return null;
+    }
+    if (data.byteAt(0) != 1) {
+      throw new EncodingException("A presence bool is neither 0 nor 1");
     }
     return decode(data.substring(1), type, connection);
   }
@@ -160,7 +166,7 @@ public class Decoder {
 
   static String decodeString(ByteString data) throws IOException {
     CodedInputStream stream = CodedInputStream.newInstance(data.toByteArray());
-    return stream.readString();
+    return stream.readStringRequireUtf8();
   }
 
   static byte[] decodeBytes(ByteString data) throws IOException {
@@ -197,7 +203,12 @@ public class Decoder {
       int value = decodeSint32(data);
       Class<?> enumType = Class.forName(
           "krpc.client.services." + type.getService() + "$" + type.getName());
-      return (T) enumType.getMethod("fromValue", int.class).invoke(null, value);
+      // fromValue gives null for a number the enumeration does not declare
+      Object result = enumType.getMethod("fromValue", int.class).invoke(null, value);
+      if (result == null) {
+        throw new EncodingException(value + " is not a value of " + type.getName());
+      }
+      return (T) result;
     } catch (IOException exn) {
       throw new EncodingException("Failed to decode object: " + exn.getMessage(), exn);
     } catch (ClassNotFoundException exn) {

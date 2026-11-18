@@ -23,6 +23,9 @@ public class Encoder {
   public static ByteString encode(Object value, KRPC.Type type) {
     // A null value is signaled out-of-band by is_null; return null to indicate this.
     if (value == null) {
+      if (!type.getNullable()) {
+        throw new IllegalArgumentException("A null for a type that cannot be null");
+      }
       return null;
     }
     return encodeValue(value, type);

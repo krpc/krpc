@@ -869,9 +869,12 @@ namespace KRPC.Client
             var response = session.Call (request, addsStream);
             if (response.Error != null)
                 throw GetException(response.Error);
-            if (response.Results[0].Error != null)
-                throw GetException (response.Results [0].Error);
-            return response.Results[0];
+            var result = response.Results [0];
+            if (result.Error != null)
+                throw GetException (result.Error);
+            if (result.IsNull && !result.Value.IsEmpty)
+                throw new EncodingException ("A null result has a value");
+            return result;
         }
 
         internal static ProcedureCall GetCall (string service, string procedure, IList<ByteString> arguments = null)

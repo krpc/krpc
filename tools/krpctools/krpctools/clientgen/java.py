@@ -90,8 +90,8 @@ class JavaGenerator(Generator[JavaLanguage]):
         raise RuntimeError("Unknown type " + typ)
 
     def _at_position(self, typ):
-        """The specification of a type at a position inside a value, named as the nullable
-        form where that position can hold null"""
+        """The specification of a type at a parameter, or at a position inside a value,
+        named as the nullable form where that position can hold null"""
         spec = self.parse_type_specification(typ)
         return "krpc.client.Types.nullable(%s)" % spec if typ.nullable else spec
 
@@ -223,7 +223,7 @@ class JavaGenerator(Generator[JavaLanguage]):
                 )
                 pinfo["type"] = {
                     "name": pinfo["type"],
-                    "spec": self.parse_type_specification(param_type),
+                    "spec": self._at_position(param_type),
                 }
                 pos += 1
 
@@ -240,7 +240,7 @@ class JavaGenerator(Generator[JavaLanguage]):
                     )
                     pinfo["type"] = {
                         "name": pinfo["type"],
-                        "spec": self.parse_type_specification(param_type),
+                        "spec": self._at_position(param_type),
                     }
                     pos += 1
 

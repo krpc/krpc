@@ -432,8 +432,7 @@ def test_combined_enum_value(client, server, scripted_server):
 def test_flags_definitions(server):
     """The service definitions mark a flags enumeration, and leave other enumerations
     unmarked."""
-    services = KRPC.Services.FromString(raw.call(server, "KRPC", "GetServices").value)
-    service = next(x for x in services.services if x.name == "TestService")
+    service = next(x for x in raw.services(server).services if x.name == "TestService")
     enumerations = {x.name: x for x in service.enumerations}
     assert enumerations["TestFlags"].flags
     assert not enumerations["TestEnum"].flags
@@ -639,7 +638,7 @@ def test_message_result(connected, server):
     """A procedure that returns a kRPC protocol message, such as ``KRPC.GetServices``,
     returns the decoded message."""
     services = KRPC.Services.FromString(connected.invoke("KRPC", "GetServices"))
-    expected = KRPC.Services.FromString(raw.call(server, "KRPC", "GetServices").value)
+    expected = raw.services(server)
     assert [s.name for s in services.services] == [s.name for s in expected.services]
     assert "KRPC" in [s.name for s in services.services]
 

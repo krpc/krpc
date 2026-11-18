@@ -350,6 +350,15 @@ function Types.RemoteEnum:_init(value)
   self.value = value
 end
 
+-- The decoder makes a new instance for each value, so values compare by enumeration and number.
+-- Either operand may be a value of another kind, as for a structure.
+function Types.RemoteEnum:__eq(other)
+  if not (Types.RemoteEnum:class_of(self) and Types.RemoteEnum:class_of(other)) then
+    return false
+  end
+  return getmetatable(self) == getmetatable(other) and self.value == other.value
+end
+
 --- A value of a flags enumeration: a combination of the values the enumeration declares.
 Types.RemoteFlags = class(Types.RemoteEnum)
 
@@ -788,6 +797,17 @@ function Types.RemoteObject:__eq(other)
     return false
   end
   return self._object_id == other._object_id
+end
+
+-- Ordered by id, compared as unsigned, as an id past 2^63 - 1 is a negative Lua integer
+local _unsigned_less = compat.ult
+
+function Types.RemoteObject:__lt(other)
+  return _unsigned_less(self._object_id, other._object_id)
+end
+
+function Types.RemoteObject:__le(other)
+  return not _unsigned_less(other._object_id, self._object_id)
 end
 
 function Types.RemoteObject:__tostring()

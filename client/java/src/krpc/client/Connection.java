@@ -546,7 +546,11 @@ public class Connection implements AutoCloseable {
     if (error != null) {
       throwException(error);
     }
-    return getResultFromResponse(response);
+    KRPC.ProcedureResult result = getResultFromResponse(response);
+    if (result.getIsNull() && !result.getValue().isEmpty()) {
+      throw new EncodingException("A null result has a value");
+    }
+    return result;
   }
 
   KRPC.Response invokeInternal(KRPC.ProcedureCall call) {

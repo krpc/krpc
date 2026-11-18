@@ -35,7 +35,14 @@ krpc_error_t krpc_free_result(krpc_result_t *result) {
     krpc_free(result->buffer);
     result->buffer = NULL;
   }
+  // A result used again holds no value until the next one is decoded
+  result->size = 0;
   return KRPC_OK;
+}
+
+bool krpc_result_has_value(const krpc_schema_ProcedureResult *message) {
+  if (message->value.funcs.decode != &krpc_return_value_decoder) return false;
+  return ((const krpc_result_t *)message->value.arg)->size > 0;
 }
 
 krpc_error_t krpc_get_return_value(krpc_result_t *result, pb_istream_t *stream) {

@@ -5628,9 +5628,17 @@ static inline krpc_error_t krpc_decode_nullable_bytes(
   pb_istream_t * stream, krpc_nullable_bytes_t * value) {
   // An absent value is left zeroed, so the member is defined whatever the caller passed in
   memset(&value->value, 0, sizeof(value->value));
-  KRPC_RETURN_ON_ERROR(krpc_decode_bool(stream, &value->has_value));
-  if (value->has_value)
+  uint32_t present;
+  if (!pb_decode_varint32(stream, &present))
+    KRPC_FAIL_STREAM(ENCODING, "A nullable value carries no presence bool", stream);
+  if (present > 1)
+    KRPC_FAIL(ENCODING, "A presence bool is neither 0 nor 1");
+  value->has_value = present == 1;
+  if (value->has_value) {
     KRPC_RETURN_ON_ERROR(krpc_decode_bytes(stream, &value->value));
+  } else if (stream->bytes_left > 0) {
+    KRPC_FAIL(ENCODING, "A null value carries data");
+  }
   return KRPC_OK;
 }
 

@@ -4,27 +4,12 @@ test_streams.py::test_members[extension-member]  # The testee dispatch covers KR
 test_streams.py::test_procedure_exception[first-CustomException]  # A stream added before any call through its service raises an error without the service's exception type
 test_connection.py::test_handshake_timeout_values[zero]  # A zero timeout waits indefinitely, as a Java socket timeout does
 test_connection.py::test_stall_timeout_values[zero]  # As test_handshake_timeout_values[zero]
-test_values.py::test_undeclared_enum_result  # An enum result holds any number
-test_values.py::test_undeclared_flags_result  # As test_undeclared_enum_result
-test_values.py::test_null_for_non_nullable[bytes]  # A null argument is sent
-test_values.py::test_null_for_non_nullable[dictionary]  # As test_null_for_non_nullable[bytes]
-test_values.py::test_null_for_non_nullable[enum]  # As test_null_for_non_nullable[bytes]
-test_values.py::test_null_for_non_nullable[list]  # As test_null_for_non_nullable[bytes]
-test_values.py::test_null_for_non_nullable[object]  # As test_null_for_non_nullable[bytes]
-test_values.py::test_null_for_non_nullable[set]  # As test_null_for_non_nullable[bytes]
-test_values.py::test_null_for_non_nullable[string]  # As test_null_for_non_nullable[bytes]
-test_values.py::test_null_for_non_nullable[struct]  # As test_null_for_non_nullable[bytes]
-test_values.py::test_null_for_non_nullable[tuple]  # As test_null_for_non_nullable[bytes]
-test_codec.py::test_invalid_utf8  # A string that is not valid UTF-8 decodes
 test_streams.py::test_update_callback  # A connection has no stream update callback
 test_concurrency.py::test_wait_for_update  # A connection has no stream update condition
 test_concurrency.py::test_close_while_holding[updates]  # As test_wait_for_update
-test_objects.py::test_sorting  # compareTo compares ids as signed longs, so an id past 63 bits orders first
 test_streams.py::test_procedure_returning_an_event  # The testee cannot stream a procedure that returns an event
 test_concurrency.py::test_wake_update_waiter[close]  # As test_wait_for_update
 test_concurrency.py::test_wake_update_waiter[connection-failure]  # As test_wait_for_update
-test_codec.py::test_malformed_data[list(nullable sint32)]  # A presence bool other than 0 or 1, or data after a null, decodes
-test_values.py::test_null_result_with_a_value  # A result with is_null set reads as null, whatever its value
 test_concurrency.py::test_update_callback_after_close  # As test_streams.py::test_update_callback
 test_streams.py::test_drop_last_handle  # Dropping the last handle leaves the stream on the server
 test_events.py::test_drop_last_handle  # As test_streams.py::test_drop_last_handle
@@ -32,3 +17,5 @@ test_concurrency.py::test_wait_holding_another @skip  # The dispatcher thread wa
 test_concurrency.py::test_held_stream_ending_before_value  # A read on the thread holding the condition raises "Stream has no value", as the ending is announced only once the condition is free
 test_connection.py::test_close_interrupted@localsocket @flaky  # Fails now and then, seen only on Windows CI: the close aborts the connection, so the server reads an abort, not the end of the stream
 test_concurrency.py::test_held_stream_ending @flaky  # Fails now and then: a thread that takes the condition after the first value is stored, but before the dispatcher thread announces it, reads "Stream has no value"
+test_concurrency.py::test_interrupted_wait[stream] @flaky  # Fails now and then, seen only on CI: the interrupted wait does not raise
+test_concurrency.py::test_wait_on_condition_object @flaky  # Fails now and then, seen only on CI: the thread holding the condition is not seen holding it

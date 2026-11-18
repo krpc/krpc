@@ -353,24 +353,21 @@ inline DeprecatedService::DeprecatedService(const ::krpc::Connection& connection
 inline std::string DeprecatedService::procedure() {
   auto _data = this->_connection.invoke("DeprecatedService", "Procedure", {}, ::krpc::Connection::Returns::value);
   std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
 inline DeprecatedService::ServiceStruct DeprecatedService::struct_procedure() {
   auto _data = this->_connection.invoke("DeprecatedService", "StructProcedure", {}, ::krpc::Connection::Returns::value);
   DeprecatedService::ServiceStruct _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
 inline std::string DeprecatedService::property() {
   auto _data = this->_connection.invoke("DeprecatedService", "get_Property", {}, ::krpc::Connection::Returns::value);
   std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -437,8 +434,7 @@ inline DeprecatedService::ReasonedClass::ReasonedClass(const ::krpc::Connection&
 inline std::string DeprecatedService::ReasonedClass::static_method(::krpc::Connection& _connection) {
   auto _data = _connection.invoke("DeprecatedService", "ReasonedClass_static_StaticMethod", {}, ::krpc::Connection::Returns::value);
     std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -477,16 +473,14 @@ inline std::string DeprecatedService::ServiceClass::method() {
   _args.push_back(encoder::encode_arg(*this));
   auto _data = this->_connection.invoke("DeprecatedService", "ServiceClass_Method", _args, ::krpc::Connection::Returns::value);
   std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
 inline std::string DeprecatedService::ServiceClass::static_method(::krpc::Connection& _connection) {
   auto _data = _connection.invoke("DeprecatedService", "ServiceClass_static_StaticMethod", {}, ::krpc::Connection::Returns::value);
     std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 

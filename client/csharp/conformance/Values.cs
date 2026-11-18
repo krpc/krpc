@@ -62,7 +62,7 @@ namespace KRPC.Client.Conformance
         /// <summary>
         /// The value, which must not be null, as the client's type for it cannot hold null.
         /// </summary>
-        static Value NotNull (Value value)
+        internal static Value NotNull (Value value)
         {
             if (IsNull (value))
                 throw new UnsupportedException ("The client's type cannot hold null");
@@ -164,6 +164,8 @@ namespace KRPC.Client.Conformance
             case KRPC.Conformance.Value.ValueOneofCase.Null:
                 return null;
             case KRPC.Conformance.Value.ValueOneofCase.Object:
+                if (value.Object.Handle == 0)
+                    return Object<global::KRPC.Client.Services.TestService.TestClass> (value);
                 return Handles.Get (value.Object.Handle);
             case KRPC.Conformance.Value.ValueOneofCase.Enum:
                 return Enum<global::KRPC.Client.Services.TestService.TestEnum> (value);
