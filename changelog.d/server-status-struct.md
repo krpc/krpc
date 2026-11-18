@@ -9,9 +9,8 @@
 
 ## server
 
-- Show the tick hold timeout, deferred calls and stream updates in the info window, and name
-  the stream counters as evaluations (#1244)
-- Fix the two "Time per update" rows in the info window showing each other's value (#1244)
+- Show deferred calls and stream updates in the info window, and name the stream counters as
+  evaluations (#1244)
 
 ## client/cnano
 
