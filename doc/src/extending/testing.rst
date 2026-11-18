@@ -63,7 +63,8 @@ The craft takes its default crew, or the Kerbals named in ``crew``, and its crew
 ``save=None`` launches in the current save, and ``keep_other_vessels=True`` keeps the vessels
 already there.
 The ``TestCase`` also places a vessel in orbit, on the ground or in flight, and has assertions
-with a tolerance. ``krpctools.game.images`` checks the PNG and JPEG images an RPC returns.
+with a tolerance. ``wait_game_time`` waits for game time to pass, which takes longer than real
+time in a slow game. ``krpctools.game.images`` checks the PNG and JPEG images an RPC returns.
 
 Run the suite with the plugin loaded:
 

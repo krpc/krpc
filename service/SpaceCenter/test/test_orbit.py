@@ -870,28 +870,34 @@ class TestCreateFromOrbitalElements(TestCase):
     def test_round_trip_from_vessel(self):
         """An orbit built from a vessel's own elements is that vessel's orbit.
 
-        Every element is read off the one orbit, so unlike building from a
-        position and velocity there is no physics frame separating the inputs and
-        the tolerances can be tight."""
+        The game refits the orbit of a vessel under physics every tick, which
+        moves its epoch and mean anomaly at epoch. The elements are read inside
+        one held tick, so they all come from the same fit and the tolerances can
+        be tight."""
         expected = self.vessel.orbit
-        orbit = self.space_center.Orbit.create_from_orbital_elements(
-            self.kerbin,
-            expected.semi_major_axis,
-            expected.eccentricity,
-            expected.inclination,
-            expected.longitude_of_ascending_node,
-            expected.argument_of_periapsis,
-            expected.mean_anomaly_at_epoch,
-            expected.epoch,
-        )
-        for offset in (0, 600, 2400):
-            at = self.space_center.ut + offset
-            self.assertAlmostEqual(
-                expected.position_at(at, self.frame),
-                orbit.position_at(at, self.frame),
-                delta=1,
+        krpc = self.connect().krpc
+        krpc.hold_tick()
+        try:
+            orbit = self.space_center.Orbit.create_from_orbital_elements(
+                self.kerbin,
+                expected.semi_major_axis,
+                expected.eccentricity,
+                expected.inclination,
+                expected.longitude_of_ascending_node,
+                expected.argument_of_periapsis,
+                expected.mean_anomaly_at_epoch,
+                expected.epoch,
             )
-        self.assertAlmostEqual(expected.period, orbit.period, delta=0.1)
+            for offset in (0, 600, 2400):
+                at = self.space_center.ut + offset
+                self.assertAlmostEqual(
+                    expected.position_at(at, self.frame),
+                    orbit.position_at(at, self.frame),
+                    delta=1,
+                )
+            self.assertAlmostEqual(expected.period, orbit.period, delta=0.1)
+        finally:
+            krpc.release_tick()
 
     def test_mean_anomaly_is_measured_at_the_epoch(self):
         """The mean anomaly is the one given at the epoch, and advances at the

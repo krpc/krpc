@@ -89,7 +89,7 @@ class TestPartsLegLanded(TestCase):
         cls.body = cls.vessel.orbit.body
         cls.legs = cls.vessel.parts.legs
         cls.standing = [x.leg for x in cls.vessel.parts.with_name("landingLeg1-2")]
-        cls.wait(5)
+        cls.wait_game_time(5)
 
     def total_load(self):
         """The legs' summed load, averaged over a second"""
@@ -119,10 +119,11 @@ class TestPartsLegLanded(TestCase):
         weight = self.vessel.mass * self.body.surface_gravity / 1000
         ref = self.vessel.surface_reference_frame
         root = self.vessel.parts.root
+        debug = self.connect().debug
         for push in (45, 90):
-            force = root.add_force((-push * 1000, 0, 0), (0, 0, 0), ref)
+            force = debug.add_force(root, (-push * 1000, 0, 0), (0, 0, 0), ref)
             try:
-                self.wait(3)
+                self.wait_game_time(3)
                 for leg in self.standing:
                     self.assertGreater(leg.load, 10)
                 self.assertAlmostEqual(
@@ -130,7 +131,7 @@ class TestPartsLegLanded(TestCase):
                 )
             finally:
                 force.remove()
-                self.wait(3)
+                self.wait_game_time(3)
 
     def test_suspension(self):
         # The game only sets the spring and damper while the leg is grounded
@@ -148,23 +149,31 @@ class TestPartsLegLanded(TestCase):
 
     def test_contact_position(self):
         # The standing legs' feet are the lowest points of the craft, on the flat
-        # runway. The other legs' feet are above them.
+        # runway. The other legs' feet are above them. The positions are read in
+        # one held tick, as the craft moves on its suspension.
         ref = self.body.reference_frame
 
         def altitude(leg):
             return self.body.altitude_at_position(leg.contact_position(ref), ref)
 
         surface = self.vessel.surface_reference_frame
-        bottom = (
-            self.vessel.flight().mean_altitude + self.vessel.bounding_box(surface)[0][0]
-        )
-        runway = altitude(self.standing[0])
+        krpc = self.connect().krpc
+        krpc.hold_tick()
+        try:
+            bottom = (
+                self.vessel.flight().mean_altitude
+                + self.vessel.bounding_box(surface)[0][0]
+            )
+            runway = altitude(self.standing[0])
+            altitudes = {leg: altitude(leg) for leg in self.legs}
+        finally:
+            krpc.release_tick()
         self.assertAlmostEqual(bottom, runway, delta=0.15)
         for leg in self.legs:
             if leg in self.standing:
-                self.assertAlmostEqual(runway, altitude(leg), delta=0.02)
+                self.assertAlmostEqual(runway, altitudes[leg], delta=0.02)
             else:
-                self.assertGreater(altitude(leg), runway + 0.5)
+                self.assertGreater(altitudes[leg], runway + 0.5)
 
 
 if __name__ == "__main__":

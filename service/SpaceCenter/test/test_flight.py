@@ -386,11 +386,10 @@ class TestFlightAero(TestCase):
         # The public wrench is ordered force then torque. At zero rate its force
         # agrees with the legacy force API, and its torque backs the existing
         # torque API (SimulateAerodynamicTorqueAt delegates to the wrench). The
-        # endpoints share one implementation, but each RPC samples a different
-        # physics frame of the unpaused game: the craft shifts slightly on its
-        # launchpad suspension between calls, and the legacy endpoints evaluate
-        # the atmosphere at their own call-time UT. Torque is more sensitive to
-        # that drift than force (lever arms), so it gets its own tolerance.
+        # craft shifts on its launchpad suspension, and the legacy endpoints
+        # evaluate the atmosphere at their own call-time UT, so the compared calls
+        # run in one held tick. Torque is more sensitive than force to what drift
+        # remains (lever arms), so it gets its own tolerance.
         body = self.vessel.orbit.body
         ref = body.reference_frame
         flight = self.vessel.flight(ref)
@@ -411,16 +410,21 @@ class TestFlightAero(TestCase):
         # Recapture UT after the warm-up: the first wrench call can spend game
         # time rendering drag cubes, and the legacy endpoints always evaluate
         # the atmosphere at their own call-time UT.
-        ut = self.space_center.ut
-        force, torque = flight.simulate_aerodynamic_wrench_at(
-            body, position, velocity, rotation, zero, ut
-        )
-        legacy_torque = flight.simulate_aerodynamic_torque_at(
-            body, position, velocity, rotation, zero
-        )
-        legacy_force = flight.simulate_aerodynamic_force_at(
-            body, position, velocity, rotation
-        )
+        krpc = self.connect().krpc
+        krpc.hold_tick()
+        try:
+            ut = self.space_center.ut
+            force, torque = flight.simulate_aerodynamic_wrench_at(
+                body, position, velocity, rotation, zero, ut
+            )
+            legacy_torque = flight.simulate_aerodynamic_torque_at(
+                body, position, velocity, rotation, zero
+            )
+            legacy_force = flight.simulate_aerodynamic_force_at(
+                body, position, velocity, rotation
+            )
+        finally:
+            krpc.release_tick()
 
         self.assertEqual(3, len(force))
         self.assertEqual(3, len(torque))
