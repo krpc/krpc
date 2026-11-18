@@ -2,7 +2,6 @@
 #include <krpc.hpp>
 #include <krpc/services/drawing.hpp>
 #include <krpc/services/space_center.hpp>
-#include <krpc/services/ui.hpp>
 #include <thread>
 
 int main() {

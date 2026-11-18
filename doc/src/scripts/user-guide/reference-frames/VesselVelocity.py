@@ -2,7 +2,7 @@ import time
 
 import krpc
 
-conn = krpc.connect(name="Orbital speed")
+conn = krpc.connect(name="Vessel velocity")
 vessel = conn.space_center.active_vessel
 ref_frame = conn.space_center.ReferenceFrame.create_hybrid(
     position=vessel.orbit.body.reference_frame,

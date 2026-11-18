@@ -17,18 +17,16 @@ class AngleOfAttack
             var dotProd =
                 d.Item1 * v.Item1 + d.Item2 * v.Item2 + d.Item3 * v.Item3;
 
-            // Compute the magnitude of v
+            // Compute the magnitude of v, as d is a unit vector
             var vMag = Math.Sqrt (
                 v.Item1 * v.Item1 + v.Item2 * v.Item2 + v.Item3 * v.Item3);
-            // Note: don't need to magnitude of d as it is a unit vector
 
             // Compute the angle between the vectors
             double angle = 0;
             if (vMag > 0)
                 angle = Math.Acos (dotProd / vMag) * (180.0 / Math.PI);
 
-            Console.WriteLine (
-                "Angle of attack = " + Math.Round (angle, 2) + " degrees");
+            Console.WriteLine ("Angle of attack = {0:F1} degrees", angle);
 
             System.Threading.Thread.Sleep (1000);
         }

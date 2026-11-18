@@ -1,4 +1,5 @@
 local krpc = require 'krpc'
+local socket = require 'socket'
 local List = require 'pl.List'
 local conn = krpc.connect('Visual Debugging')
 local vessel = conn.space_center.active_vessel
@@ -12,4 +13,5 @@ local line = conn.drawing.add_direction_from_com(List{0, 1, 0}, ref_frame)
 line.end_arrow = true
 line.label = 'Surface velocity'
 while true do
+  socket.sleep(1)
 end

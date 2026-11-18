@@ -1,3 +1,4 @@
+#include <chrono>
 #include <iomanip>
 #include <iostream>
 #include <krpc.hpp>
@@ -16,8 +17,8 @@ int main() {
   while (true) {
     auto velocity = vessel.flight(ref_frame).velocity();
     std::cout << std::fixed << std::setprecision(1)
-              << "Surface velocity = (" << std::get<0>(velocity) << ","
-              << std::get<1>(velocity) << "," << std::get<2>(velocity)
+              << "Surface velocity = (" << std::get<0>(velocity) << ", "
+              << std::get<1>(velocity) << ", " << std::get<2>(velocity)
               << ")" << std::endl;
     std::this_thread::sleep_for(std::chrono::seconds(1));
   }

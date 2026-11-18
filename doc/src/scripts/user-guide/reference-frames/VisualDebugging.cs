@@ -19,7 +19,7 @@ class VisualDebugging
             new Tuple<double, double, double>(0, 1, 0), refFrame);
         line.EndArrow = true;
         line.Label = "Surface velocity";
-        while (true) {
-        }
+        while (true)
+            System.Threading.Thread.Sleep (1000);
     }
 }

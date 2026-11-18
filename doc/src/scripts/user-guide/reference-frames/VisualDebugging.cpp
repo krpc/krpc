@@ -1,7 +1,8 @@
+#include <chrono>
 #include <krpc.hpp>
 #include <krpc/services/drawing.hpp>
 #include <krpc/services/space_center.hpp>
-#include <krpc/services/ui.hpp>
+#include <thread>
 
 int main() {
   krpc::Connection conn = krpc::connect("Visual Debugging");
@@ -18,6 +19,5 @@ int main() {
       drawing.add_direction_from_com(std::make_tuple(0, 1, 0), ref_frame);
   line.set_end_arrow(true);
   line.set_label("Surface velocity");
-  while (true) {
-  }
+  while (true) std::this_thread::sleep_for(std::chrono::seconds(1));
 }

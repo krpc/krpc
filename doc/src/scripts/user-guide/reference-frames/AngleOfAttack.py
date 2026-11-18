@@ -13,9 +13,8 @@ while True:
     # Compute the dot product of d and v
     dotprod = d[0] * v[0] + d[1] * v[1] + d[2] * v[2]
 
-    # Compute the magnitude of v
+    # Compute the magnitude of v, as d is a unit vector
     vmag = math.sqrt(v[0] ** 2 + v[1] ** 2 + v[2] ** 2)
-    # Note: don't need to magnitude of d as it is a unit vector
 
     # Compute the angle between the vectors
     angle = 0.0

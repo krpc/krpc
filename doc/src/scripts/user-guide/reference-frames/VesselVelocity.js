@@ -1,6 +1,6 @@
 import { connect } from "@krpc-org/krpc";
 
-const conn = await connect({ name: "Orbital speed" });
+const conn = await connect({ name: "Vessel velocity" });
 const vessel = await conn.spaceCenter.getActiveVessel();
 const body = await (await vessel.getOrbit()).getBody();
 const refFrame = await conn.spaceCenter.ReferenceFrame.createHybrid(
