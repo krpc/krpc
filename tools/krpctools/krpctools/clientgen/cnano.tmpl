@@ -526,9 +526,17 @@ static inline krpc_error_t krpc_decode_{{ typ.name }}(
 {% if typ.kind == 'nullable' %}
   // An absent value is left zeroed, so the member is defined whatever the caller passed in
   memset(&value->value, 0, sizeof(value->value));
-  KRPC_RETURN_ON_ERROR(krpc_decode_bool(stream, &value->has_value));
-  if (value->has_value)
+  uint32_t present;
+  if (!pb_decode_varint32(stream, &present))
+    KRPC_FAIL_STREAM(ENCODING, "A nullable value carries no presence bool", stream);
+  if (present > 1)
+    KRPC_FAIL(ENCODING, "A presence bool is neither 0 nor 1");
+  value->has_value = present == 1;
+  if (value->has_value) {
     KRPC_RETURN_ON_ERROR(krpc_decode_{{ typ.value_type.name }}(stream, {{ typ.value_type.structgetptr }}value->value));
+  } else if (stream->bytes_left > 0) {
+    KRPC_FAIL(ENCODING, "A null value carries data");
+  }
 {% elif typ.kind in ('tuple', 'struct') %}
   krpc_schema_Tuple message = krpc_schema_Tuple_init_default;
   message.items.funcs.decode = &krpc_decode_callback_item_{{ typ.name }};

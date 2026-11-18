@@ -128,11 +128,13 @@ template <typename T>
 inline void decode_item(std::optional<T>& value, const std::string& data, Connection* connection) {
   // The presence bool is one byte, as a bool value always is, and is read from it directly
   // rather than through a copy of it
-  if (data.empty()) throw EncodingError("Failed to decode message");
+  if (data.empty()) throw EncodingError("A nullable value carries no presence bool");
   if (data[0] == 0) {
+    if (data.size() > 1) throw EncodingError("A null value carries data");
     value.reset();
     return;
   }
+  if (data[0] != 1) throw EncodingError("A presence bool is neither 0 nor 1");
   T inner;
   decode(inner, data.substr(1), connection);
   value = inner;

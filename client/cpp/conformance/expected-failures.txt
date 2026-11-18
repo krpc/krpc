@@ -9,7 +9,6 @@ test_values.py::test_undeclared_flags_result  # As test_undeclared_enum_result
 test_codec.py::test_extra_items[tuple]  # A tuple with extra items fails to decode
 test_codec.py::test_invalid_utf8  # A string that is not valid UTF-8 decodes
 test_streams.py::test_procedure_returning_an_event  # The testee cannot stream a procedure that returns an event
-test_codec.py::test_malformed_data[list(nullable sint32)]  # A presence bool other than 0 or 1, or data after a null, decodes
 test_concurrency.py::test_wait_holding_another @skip  # The dispatcher thread waits for the condition held, so the update of the stream waited on is never announced
 test_concurrency.py::test_held_stream_ending_before_value  # A read on the thread holding the condition raises "Stream has no value", as the ending is announced only once the condition is free
 test_concurrency.py::test_held_stream_ending @flaky  # Fails now and then, seen only on CI: a read on the thread that takes the condition raises "Stream has no value"

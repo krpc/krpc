@@ -83,8 +83,13 @@ namespace KRPC.Client
                 if (data.Length == 0)
                     throw new ArgumentException ("A nullable value carries no presence bool");
                 // The presence bool is one byte, as a bool value always is
-                if (data [0] == 0)
+                if (data [0] == 0) {
+                    if (data.Length > 1)
+                        throw new ArgumentException ("A null value carries data");
                     return null;
+                }
+                if (data [0] != 1)
+                    throw new ArgumentException ("A presence bool is neither 0 nor 1");
                 return decode (ByteString.CopyFrom (data.Span.Slice (1)), client);
             };
         }

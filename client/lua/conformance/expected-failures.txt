@@ -10,7 +10,6 @@ test_values.py::test_combined_enum_value  # As test_undeclared_enum_value
 test_calls.py::test_too_many_arguments[procedure]  # Arguments past the last parameter are dropped
 test_calls.py::test_too_many_arguments[method]  # As test_too_many_arguments[procedure]
 test_codec.py::test_too_few_items[tuple]  # A short wire tuple decodes short
-test_codec.py::test_malformed_data[list(nullable sint32)]  # A presence bool with no value, a presence bool other than 0 or 1, or data after a null, decodes
 test_codec.py::test_extra_items[tuple]  # A tuple with extra items fails to decode
 test_codec.py::test_invalid_utf8  # A string that is not valid UTF-8 decodes
 test_connection.py::test_stall  # No stall timeout
@@ -34,7 +33,6 @@ test_codec.py::test_out_of_range[uint64]  # As test_values.py::test_out_of_range
 test_codec.py::test_out_of_range[sint32]  # As test_values.py::test_out_of_range[sint32-above]
 test_codec.py::test_out_of_range[sint64]  # As test_values.py::test_out_of_range[sint64-above]
 test_codec.py::test_extra_items[struct]  # A structure with an extra field encodes without an error
-test_codec.py::test_empty_data  # Data with no bytes reads as the zero value, as a protobuf field left out does
 test_calls.py::test_unknown_type  # A structure holding a left-out structure is exposed
 test_calls.py::test_undefined_type[class]  # A member whose type names an undefined class or enumeration is exposed
 test_calls.py::test_undefined_type[enumeration]  # As above

@@ -1,5 +1,4 @@
 # The conformance tests the Python client fails, one per line, with the reason as a comment
-test_codec.py::test_malformed_data[list(nullable sint32)]  # A presence bool other than 0 or 1, or data after a null, decodes
 test_values.py::test_null_for_non_nullable[bool]  # A null argument is sent
 test_values.py::test_null_for_non_nullable[bytes]  # As test_null_for_non_nullable[bool]
 test_values.py::test_null_for_non_nullable[dictionary]  # As test_null_for_non_nullable[bool]

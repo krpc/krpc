@@ -231,7 +231,13 @@ class Decoder:
         def decode_nullable(data: bytes) -> object:
             if not data:
                 raise EncodingError("A nullable value carries no presence bool")
-            return decode(data[1:]) if data[0] else None
+            if data[0] == 1:
+                return decode(data[1:])
+            if data[0] != 0:
+                raise EncodingError("A presence bool is neither 0 nor 1")
+            if len(data) > 1:
+                raise EncodingError("A null value carries data")
+            return None
 
         return decode_nullable
 
