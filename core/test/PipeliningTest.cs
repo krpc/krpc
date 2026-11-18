@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 using Google.Protobuf;
 using KRPC.Server;
 using KRPC.Server.ProtocolBuffers;
@@ -190,6 +192,12 @@ namespace KRPC.Test
             for (int i = 0; i < 5; i++)
                 core.Update ();
             socket.Close ();
+            // The reader thread reads the end of the stream some time after the close
+            var timer = Stopwatch.StartNew ();
+            while (server.Clients.Any (x => x.Connected)) {
+                Assert.Less (timer.ElapsedMilliseconds, 10000, "Timed out waiting for the disconnect");
+                Thread.Sleep (1);
+            }
             for (int i = 0; i < 50; i++)
                 core.Update ();
             Assert.AreEqual (0, executed);
