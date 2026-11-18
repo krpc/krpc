@@ -53,6 +53,24 @@ class TestCase(testcase.TestCase):
                 )
 
     @classmethod
+    def wait_game_time(cls, seconds, timeout=None):
+        """Wait for seconds of game time, which a loaded game takes longer than real time to
+        pass. Fails the test after timeout seconds of real time, by default ten times
+        seconds plus 30, such as when the game is paused."""
+        if timeout is None:
+            timeout = 10 * seconds + 30
+        space_center = cls.connect().space_center
+        end = space_center.ut + seconds
+        deadline = time.time() + timeout
+        while space_center.ut < end:
+            if time.time() > deadline:
+                raise cls.failureException(
+                    "Timed out after %gs waiting for %gs of game time"
+                    % (timeout, seconds)
+                )
+            time.sleep(0.01)
+
+    @classmethod
     def new_save(cls, name="krpctest", always_load=False):
         conn = cls.connect()
 
