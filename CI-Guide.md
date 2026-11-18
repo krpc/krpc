@@ -255,3 +255,5 @@ Runs share one concurrency group and never cancel each other, as a release moves
   `flaky-tests` cannot be tested by the pull request that changes them. Test them after merge.
 - The push run's cache jobs and `copy-artifacts` also run only after merge.
 - `//tools/ci:test` tests the CI scripts, and runs in `test-build-scripts`.
+- `//tools/deps:test` checks the dependency pins against `tools/deps/deps.toml`, and runs in
+  `test-build-scripts`.

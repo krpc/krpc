@@ -180,6 +180,7 @@ periapsis
 physicsless
 plugin
 pluggable
+pnpm
 polyline
 pre
 prebuilt

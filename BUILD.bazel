@@ -216,6 +216,7 @@ test_suite(
         "//tools/benchmarks:test",
         "//tools/build:test",
         "//tools/ci:test",
+        "//tools/deps:test",
         "//tools/game:test",
         "//tools/krpctools:test",
     ] + service_targets("test"),
