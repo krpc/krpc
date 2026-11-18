@@ -88,13 +88,15 @@ therefore be a tick or more older than the other streams.
 The Cost of a Stream
 --------------------
 
-A stream runs its call on every tick it is due. The maximum time per update limits the time the
-server spends on calls, but nothing limits the time it spends on streams. Many streams of expensive
-calls slow every physics tick, and so the game. Adaptive rate control then gives calls less time
-per tick.
+A stream runs its call on every tick it is due. The server's budget of time per frame limits its
+calls, but not its streams. Their time counts toward the budget, so many streams of expensive
+calls leave less time for calls. Past the budget, they slow every physics tick, and so the game.
 
 Remove a stream once you no longer need it, or give it a rate. The :ref:`server performance guide
 <server-performance>` describes the settings.
+
+The server ends the connection of a client that falls too far behind in reading its updates, as
+:ref:`the protocol describes <communication-protocol-unread-limit>`.
 
 Events
 ------

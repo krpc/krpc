@@ -1859,17 +1859,6 @@ administration facility is open within the space center scene.</p>
 </dl>
 </dd></dl>
 
-<dl class="js attribute">
-<dt class="sig sig-object js" id="KRPC.ClientInfo.protocolVersion">
-<span class="sig-prename descclassname"><span class="n"><span class="pre">ClientInfo</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">protocolVersion</span></span></span><a class="headerlink" href="#KRPC.ClientInfo.protocolVersion" title="Link to this definition">#</a></dt>
-<dd><p>The protocol version of the client’s connection.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
-</dd>
-</dl>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="js class">
@@ -1935,9 +1924,21 @@ administration facility is open within the space center scene.</p>
 <p>See <a class="reference internal" href="#KRPC.ServerStatus.settings" title="KRPC.ServerStatus.settings"><code class="xref js js-attr docutils literal notranslate"><span class="pre">KRPC.ServerStatus.settings</span></code></a>.</p>
 </div>
 <dl class="js attribute">
-<dt class="sig sig-object js" id="KRPC.ServerSettings.maxTimePerUpdate">
-<span class="sig-prename descclassname"><span class="n"><span class="pre">ServerSettings</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">maxTimePerUpdate</span></span></span><a class="headerlink" href="#KRPC.ServerSettings.maxTimePerUpdate" title="Link to this definition">#</a></dt>
-<dd><p>The current maximum time spent executing calls per update, in microseconds.</p>
+<dt class="sig sig-object js" id="KRPC.ServerSettings.adaptiveRateControl">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">ServerSettings</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">adaptiveRateControl</span></span></span><a class="headerlink" href="#KRPC.ServerSettings.adaptiveRateControl" title="Link to this definition">#</a></dt>
+<dd><p>Whether the server adapts its time per frame to hold the frame rate at
+<a class="reference internal" href="#KRPC.ServerSettings.targetFrameRate" title="KRPC.ServerSettings.targetFrameRate"><code class="xref js js-attr docutils literal notranslate"><span class="pre">KRPC.ServerSettings.targetFrameRate</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">boolean</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js attribute">
+<dt class="sig sig-object js" id="KRPC.ServerSettings.targetFrameRate">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">ServerSettings</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">targetFrameRate</span></span></span><a class="headerlink" href="#KRPC.ServerSettings.targetFrameRate" title="Link to this definition">#</a></dt>
+<dd><p>The lowest frame rate the server’s work pushes the game to, in frames per second.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
@@ -1946,31 +1947,20 @@ administration facility is open within the space center scene.</p>
 </dd></dl>
 
 <dl class="js attribute">
-<dt class="sig sig-object js" id="KRPC.ServerSettings.adaptiveRateControl">
-<span class="sig-prename descclassname"><span class="n"><span class="pre">ServerSettings</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">adaptiveRateControl</span></span></span><a class="headerlink" href="#KRPC.ServerSettings.adaptiveRateControl" title="Link to this definition">#</a></dt>
-<dd><p>Whether the server adjusts <a class="reference internal" href="#KRPC.ServerSettings.maxTimePerUpdate" title="KRPC.ServerSettings.maxTimePerUpdate"><code class="xref js js-attr docutils literal notranslate"><span class="pre">KRPC.ServerSettings.maxTimePerUpdate</span></code></a> to hold the frame rate.</p>
+<dt class="sig sig-object js" id="KRPC.ServerSettings.maxTimePerFrame">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">ServerSettings</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">maxTimePerFrame</span></span></span><a class="headerlink" href="#KRPC.ServerSettings.maxTimePerFrame" title="Link to this definition">#</a></dt>
+<dd><p>The server’s budget per frame, or its ceiling with adaptive rate control, in microseconds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">boolean</span></code></p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="js attribute">
-<dt class="sig sig-object js" id="KRPC.ServerSettings.blockingRecv">
-<span class="sig-prename descclassname"><span class="n"><span class="pre">ServerSettings</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">blockingRecv</span></span></span><a class="headerlink" href="#KRPC.ServerSettings.blockingRecv" title="Link to this definition">#</a></dt>
-<dd><p>Whether the server waits for the next call in an update.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">boolean</span></code></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="js attribute">
-<dt class="sig sig-object js" id="KRPC.ServerSettings.recvTimeout">
-<span class="sig-prename descclassname"><span class="n"><span class="pre">ServerSettings</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">recvTimeout</span></span></span><a class="headerlink" href="#KRPC.ServerSettings.recvTimeout" title="Link to this definition">#</a></dt>
-<dd><p>The time the server waits for the next call, in microseconds.</p>
+<dt class="sig sig-object js" id="KRPC.ServerSettings.maxCallWait">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">ServerSettings</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">maxCallWait</span></span></span><a class="headerlink" href="#KRPC.ServerSettings.maxCallWait" title="Link to this definition">#</a></dt>
+<dd><p>The longest the server waits for a client’s next call, in microseconds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
@@ -2066,9 +2056,9 @@ administration facility is open within the space center scene.</p>
 </dd></dl>
 
 <dl class="js attribute">
-<dt class="sig sig-object js" id="KRPC.ServerStatistics.timePerRpcUpdate">
-<span class="sig-prename descclassname"><span class="n"><span class="pre">ServerStatistics</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">timePerRpcUpdate</span></span></span><a class="headerlink" href="#KRPC.ServerStatistics.timePerRpcUpdate" title="Link to this definition">#</a></dt>
-<dd><p>The time spent receiving and executing calls per update, in seconds.</p>
+<dt class="sig sig-object js" id="KRPC.ServerStatistics.frameRate">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">ServerStatistics</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">frameRate</span></span></span><a class="headerlink" href="#KRPC.ServerStatistics.frameRate" title="Link to this definition">#</a></dt>
+<dd><p>The game’s frame rate, in frames per second.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
@@ -2077,9 +2067,10 @@ administration facility is open within the space center scene.</p>
 </dd></dl>
 
 <dl class="js attribute">
-<dt class="sig sig-object js" id="KRPC.ServerStatistics.pollTimePerRpcUpdate">
-<span class="sig-prename descclassname"><span class="n"><span class="pre">ServerStatistics</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">pollTimePerRpcUpdate</span></span></span><a class="headerlink" href="#KRPC.ServerStatistics.pollTimePerRpcUpdate" title="Link to this definition">#</a></dt>
-<dd><p>The time spent receiving calls per update, in seconds.</p>
+<dt class="sig sig-object js" id="KRPC.ServerStatistics.timePerFrame">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">ServerStatistics</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">timePerFrame</span></span></span><a class="headerlink" href="#KRPC.ServerStatistics.timePerFrame" title="Link to this definition">#</a></dt>
+<dd><p>The server’s time per frame, in seconds: executing calls, waiting for them and
+updating streams.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
@@ -2088,9 +2079,54 @@ administration facility is open within the space center scene.</p>
 </dd></dl>
 
 <dl class="js attribute">
-<dt class="sig sig-object js" id="KRPC.ServerStatistics.execTimePerRpcUpdate">
-<span class="sig-prename descclassname"><span class="n"><span class="pre">ServerStatistics</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">execTimePerRpcUpdate</span></span></span><a class="headerlink" href="#KRPC.ServerStatistics.execTimePerRpcUpdate" title="Link to this definition">#</a></dt>
-<dd><p>The time spent executing calls per update, in seconds.</p>
+<dt class="sig sig-object js" id="KRPC.ServerStatistics.execTimePerFrame">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">ServerStatistics</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">execTimePerFrame</span></span></span><a class="headerlink" href="#KRPC.ServerStatistics.execTimePerFrame" title="Link to this definition">#</a></dt>
+<dd><p>The time spent executing calls per frame, in seconds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js attribute">
+<dt class="sig sig-object js" id="KRPC.ServerStatistics.waitTimePerFrame">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">ServerStatistics</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">waitTimePerFrame</span></span></span><a class="headerlink" href="#KRPC.ServerStatistics.waitTimePerFrame" title="Link to this definition">#</a></dt>
+<dd><p>The time spent waiting for calls per frame, in seconds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js attribute">
+<dt class="sig sig-object js" id="KRPC.ServerStatistics.streamTimePerFrame">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">ServerStatistics</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">streamTimePerFrame</span></span></span><a class="headerlink" href="#KRPC.ServerStatistics.streamTimePerFrame" title="Link to this definition">#</a></dt>
+<dd><p>The time spent updating streams per frame, in seconds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js attribute">
+<dt class="sig sig-object js" id="KRPC.ServerStatistics.budgetPerFrame">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">ServerStatistics</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">budgetPerFrame</span></span></span><a class="headerlink" href="#KRPC.ServerStatistics.budgetPerFrame" title="Link to this definition">#</a></dt>
+<dd><p>The time the server may spend per frame, in seconds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js attribute">
+<dt class="sig sig-object js" id="KRPC.ServerStatistics.medianTurnaround">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">ServerStatistics</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">medianTurnaround</span></span></span><a class="headerlink" href="#KRPC.ServerStatistics.medianTurnaround" title="Link to this definition">#</a></dt>
+<dd><p>The median time between a response and the client’s next call, over the
+clients’ recent calls, in seconds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
@@ -2150,17 +2186,6 @@ or the call yielded.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">bigint</span></code></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="js attribute">
-<dt class="sig sig-object js" id="KRPC.ServerStatistics.timePerStreamUpdate">
-<span class="sig-prename descclassname"><span class="n"><span class="pre">ServerStatistics</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">timePerStreamUpdate</span></span></span><a class="headerlink" href="#KRPC.ServerStatistics.timePerStreamUpdate" title="Link to this definition">#</a></dt>
-<dd><p>The time spent updating streams per update, in seconds.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
 </dd>
 </dl>
 </dd></dl>

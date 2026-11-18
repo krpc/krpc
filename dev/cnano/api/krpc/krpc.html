@@ -1824,18 +1824,6 @@ administration facility is open within the space center scene.</p>
 
 </dd></dl>
 
-<dl class="c member">
-<dt class="sig sig-object c" id="c.krpc_KRPC_ClientInfo_t.protocol_version">
-<span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">protocol_version</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ClientInfo_t.protocol_version" title="Link to this definition">#</a><br /></dt>
-<dd><p>The protocol version of the client’s connection.</p>
-<dl class="c macro">
-<dt class="sig sig-object c" id="c.krpc_KRPC_ClientInfo_t.protocol_version.KRPC_FIELD_KRPC_CLIENTINFO_PROTOCOLVERSION">
-<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KRPC_CLIENTINFO_PROTOCOLVERSION</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ClientInfo_t.protocol_version.KRPC_FIELD_KRPC_CLIENTINFO_PROTOCOLVERSION" title="Link to this definition">#</a><br /></dt>
-<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
-</dd></dl>
-
-</dd></dl>
-
 </dd></dl>
 
 <dl class="c type">
@@ -1907,21 +1895,10 @@ administration facility is open within the space center scene.</p>
 <p>The service and structure ids of the structure, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_StructTypeById()</span></code>.</p>
 </div>
 <dl class="c member">
-<dt class="sig sig-object c" id="c.krpc_KRPC_ServerSettings_t.max_time_per_update">
-<span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">max_time_per_update</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerSettings_t.max_time_per_update" title="Link to this definition">#</a><br /></dt>
-<dd><p>The current maximum time spent executing calls per update, in microseconds.</p>
-<dl class="c macro">
-<dt class="sig sig-object c" id="c.krpc_KRPC_ServerSettings_t.max_time_per_update.KRPC_FIELD_KRPC_SERVERSETTINGS_MAXTIMEPERUPDATE">
-<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KRPC_SERVERSETTINGS_MAXTIMEPERUPDATE</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerSettings_t.max_time_per_update.KRPC_FIELD_KRPC_SERVERSETTINGS_MAXTIMEPERUPDATE" title="Link to this definition">#</a><br /></dt>
-<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_KRPC_ServerSettings_t.adaptive_rate_control">
 <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">adaptive_rate_control</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerSettings_t.adaptive_rate_control" title="Link to this definition">#</a><br /></dt>
-<dd><p>Whether the server adjusts <a class="reference internal" href="#c.krpc_KRPC_ServerSettings_t.max_time_per_update" title="krpc_KRPC_ServerSettings_t.max_time_per_update"><code class="xref c c-member docutils literal notranslate"><span class="pre">krpc_KRPC_ServerSettings_t.max_time_per_update</span></code></a> to hold the frame rate.</p>
+<dd><p>Whether the server adapts its time per frame to hold the frame rate at
+<a class="reference internal" href="#c.krpc_KRPC_ServerSettings_t.target_frame_rate" title="krpc_KRPC_ServerSettings_t.target_frame_rate"><code class="xref c c-member docutils literal notranslate"><span class="pre">krpc_KRPC_ServerSettings_t.target_frame_rate</span></code></a>.</p>
 <dl class="c macro">
 <dt class="sig sig-object c" id="c.krpc_KRPC_ServerSettings_t.adaptive_rate_control.KRPC_FIELD_KRPC_SERVERSETTINGS_ADAPTIVERATECONTROL">
 <span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KRPC_SERVERSETTINGS_ADAPTIVERATECONTROL</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerSettings_t.adaptive_rate_control.KRPC_FIELD_KRPC_SERVERSETTINGS_ADAPTIVERATECONTROL" title="Link to this definition">#</a><br /></dt>
@@ -1931,24 +1908,36 @@ administration facility is open within the space center scene.</p>
 </dd></dl>
 
 <dl class="c member">
-<dt class="sig sig-object c" id="c.krpc_KRPC_ServerSettings_t.blocking_recv">
-<span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">blocking_recv</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerSettings_t.blocking_recv" title="Link to this definition">#</a><br /></dt>
-<dd><p>Whether the server waits for the next call in an update.</p>
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerSettings_t.target_frame_rate">
+<span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">target_frame_rate</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerSettings_t.target_frame_rate" title="Link to this definition">#</a><br /></dt>
+<dd><p>The lowest frame rate the server’s work pushes the game to, in frames per second.</p>
 <dl class="c macro">
-<dt class="sig sig-object c" id="c.krpc_KRPC_ServerSettings_t.blocking_recv.KRPC_FIELD_KRPC_SERVERSETTINGS_BLOCKINGRECV">
-<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KRPC_SERVERSETTINGS_BLOCKINGRECV</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerSettings_t.blocking_recv.KRPC_FIELD_KRPC_SERVERSETTINGS_BLOCKINGRECV" title="Link to this definition">#</a><br /></dt>
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerSettings_t.target_frame_rate.KRPC_FIELD_KRPC_SERVERSETTINGS_TARGETFRAMERATE">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KRPC_SERVERSETTINGS_TARGETFRAMERATE</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerSettings_t.target_frame_rate.KRPC_FIELD_KRPC_SERVERSETTINGS_TARGETFRAMERATE" title="Link to this definition">#</a><br /></dt>
 <dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="c member">
-<dt class="sig sig-object c" id="c.krpc_KRPC_ServerSettings_t.recv_timeout">
-<span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">recv_timeout</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerSettings_t.recv_timeout" title="Link to this definition">#</a><br /></dt>
-<dd><p>The time the server waits for the next call, in microseconds.</p>
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerSettings_t.max_time_per_frame">
+<span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">max_time_per_frame</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerSettings_t.max_time_per_frame" title="Link to this definition">#</a><br /></dt>
+<dd><p>The server’s budget per frame, or its ceiling with adaptive rate control, in microseconds.</p>
 <dl class="c macro">
-<dt class="sig sig-object c" id="c.krpc_KRPC_ServerSettings_t.recv_timeout.KRPC_FIELD_KRPC_SERVERSETTINGS_RECVTIMEOUT">
-<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KRPC_SERVERSETTINGS_RECVTIMEOUT</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerSettings_t.recv_timeout.KRPC_FIELD_KRPC_SERVERSETTINGS_RECVTIMEOUT" title="Link to this definition">#</a><br /></dt>
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerSettings_t.max_time_per_frame.KRPC_FIELD_KRPC_SERVERSETTINGS_MAXTIMEPERFRAME">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KRPC_SERVERSETTINGS_MAXTIMEPERFRAME</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerSettings_t.max_time_per_frame.KRPC_FIELD_KRPC_SERVERSETTINGS_MAXTIMEPERFRAME" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerSettings_t.max_call_wait">
+<span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">max_call_wait</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerSettings_t.max_call_wait" title="Link to this definition">#</a><br /></dt>
+<dd><p>The longest the server waits for a client’s next call, in microseconds.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerSettings_t.max_call_wait.KRPC_FIELD_KRPC_SERVERSETTINGS_MAXCALLWAIT">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KRPC_SERVERSETTINGS_MAXCALLWAIT</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerSettings_t.max_call_wait.KRPC_FIELD_KRPC_SERVERSETTINGS_MAXCALLWAIT" title="Link to this definition">#</a><br /></dt>
 <dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
 </dd></dl>
 
@@ -2050,36 +2039,86 @@ administration facility is open within the space center scene.</p>
 </dd></dl>
 
 <dl class="c member">
-<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatistics_t.time_per_rpc_update">
-<span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">time_per_rpc_update</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatistics_t.time_per_rpc_update" title="Link to this definition">#</a><br /></dt>
-<dd><p>The time spent receiving and executing calls per update, in seconds.</p>
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatistics_t.frame_rate">
+<span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">frame_rate</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatistics_t.frame_rate" title="Link to this definition">#</a><br /></dt>
+<dd><p>The game’s frame rate, in frames per second.</p>
 <dl class="c macro">
-<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatistics_t.time_per_rpc_update.KRPC_FIELD_KRPC_SERVERSTATISTICS_TIMEPERRPCUPDATE">
-<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KRPC_SERVERSTATISTICS_TIMEPERRPCUPDATE</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatistics_t.time_per_rpc_update.KRPC_FIELD_KRPC_SERVERSTATISTICS_TIMEPERRPCUPDATE" title="Link to this definition">#</a><br /></dt>
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatistics_t.frame_rate.KRPC_FIELD_KRPC_SERVERSTATISTICS_FRAMERATE">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KRPC_SERVERSTATISTICS_FRAMERATE</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatistics_t.frame_rate.KRPC_FIELD_KRPC_SERVERSTATISTICS_FRAMERATE" title="Link to this definition">#</a><br /></dt>
 <dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="c member">
-<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatistics_t.poll_time_per_rpc_update">
-<span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">poll_time_per_rpc_update</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatistics_t.poll_time_per_rpc_update" title="Link to this definition">#</a><br /></dt>
-<dd><p>The time spent receiving calls per update, in seconds.</p>
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatistics_t.time_per_frame">
+<span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">time_per_frame</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatistics_t.time_per_frame" title="Link to this definition">#</a><br /></dt>
+<dd><p>The server’s time per frame, in seconds: executing calls, waiting for them and
+updating streams.</p>
 <dl class="c macro">
-<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatistics_t.poll_time_per_rpc_update.KRPC_FIELD_KRPC_SERVERSTATISTICS_POLLTIMEPERRPCUPDATE">
-<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KRPC_SERVERSTATISTICS_POLLTIMEPERRPCUPDATE</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatistics_t.poll_time_per_rpc_update.KRPC_FIELD_KRPC_SERVERSTATISTICS_POLLTIMEPERRPCUPDATE" title="Link to this definition">#</a><br /></dt>
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatistics_t.time_per_frame.KRPC_FIELD_KRPC_SERVERSTATISTICS_TIMEPERFRAME">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KRPC_SERVERSTATISTICS_TIMEPERFRAME</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatistics_t.time_per_frame.KRPC_FIELD_KRPC_SERVERSTATISTICS_TIMEPERFRAME" title="Link to this definition">#</a><br /></dt>
 <dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="c member">
-<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatistics_t.exec_time_per_rpc_update">
-<span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">exec_time_per_rpc_update</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatistics_t.exec_time_per_rpc_update" title="Link to this definition">#</a><br /></dt>
-<dd><p>The time spent executing calls per update, in seconds.</p>
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatistics_t.exec_time_per_frame">
+<span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">exec_time_per_frame</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatistics_t.exec_time_per_frame" title="Link to this definition">#</a><br /></dt>
+<dd><p>The time spent executing calls per frame, in seconds.</p>
 <dl class="c macro">
-<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatistics_t.exec_time_per_rpc_update.KRPC_FIELD_KRPC_SERVERSTATISTICS_EXECTIMEPERRPCUPDATE">
-<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KRPC_SERVERSTATISTICS_EXECTIMEPERRPCUPDATE</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatistics_t.exec_time_per_rpc_update.KRPC_FIELD_KRPC_SERVERSTATISTICS_EXECTIMEPERRPCUPDATE" title="Link to this definition">#</a><br /></dt>
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatistics_t.exec_time_per_frame.KRPC_FIELD_KRPC_SERVERSTATISTICS_EXECTIMEPERFRAME">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KRPC_SERVERSTATISTICS_EXECTIMEPERFRAME</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatistics_t.exec_time_per_frame.KRPC_FIELD_KRPC_SERVERSTATISTICS_EXECTIMEPERFRAME" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatistics_t.wait_time_per_frame">
+<span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wait_time_per_frame</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatistics_t.wait_time_per_frame" title="Link to this definition">#</a><br /></dt>
+<dd><p>The time spent waiting for calls per frame, in seconds.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatistics_t.wait_time_per_frame.KRPC_FIELD_KRPC_SERVERSTATISTICS_WAITTIMEPERFRAME">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KRPC_SERVERSTATISTICS_WAITTIMEPERFRAME</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatistics_t.wait_time_per_frame.KRPC_FIELD_KRPC_SERVERSTATISTICS_WAITTIMEPERFRAME" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatistics_t.stream_time_per_frame">
+<span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stream_time_per_frame</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatistics_t.stream_time_per_frame" title="Link to this definition">#</a><br /></dt>
+<dd><p>The time spent updating streams per frame, in seconds.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatistics_t.stream_time_per_frame.KRPC_FIELD_KRPC_SERVERSTATISTICS_STREAMTIMEPERFRAME">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KRPC_SERVERSTATISTICS_STREAMTIMEPERFRAME</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatistics_t.stream_time_per_frame.KRPC_FIELD_KRPC_SERVERSTATISTICS_STREAMTIMEPERFRAME" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatistics_t.budget_per_frame">
+<span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">budget_per_frame</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatistics_t.budget_per_frame" title="Link to this definition">#</a><br /></dt>
+<dd><p>The time the server may spend per frame, in seconds.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatistics_t.budget_per_frame.KRPC_FIELD_KRPC_SERVERSTATISTICS_BUDGETPERFRAME">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KRPC_SERVERSTATISTICS_BUDGETPERFRAME</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatistics_t.budget_per_frame.KRPC_FIELD_KRPC_SERVERSTATISTICS_BUDGETPERFRAME" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatistics_t.median_turnaround">
+<span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">median_turnaround</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatistics_t.median_turnaround" title="Link to this definition">#</a><br /></dt>
+<dd><p>The median time between a response and the client’s next call, over the
+clients’ recent calls, in seconds.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatistics_t.median_turnaround.KRPC_FIELD_KRPC_SERVERSTATISTICS_MEDIANTURNAROUND">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KRPC_SERVERSTATISTICS_MEDIANTURNAROUND</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatistics_t.median_turnaround.KRPC_FIELD_KRPC_SERVERSTATISTICS_MEDIANTURNAROUND" title="Link to this definition">#</a><br /></dt>
 <dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
 </dd></dl>
 
@@ -2141,18 +2180,6 @@ or the call yielded.</p>
 <dl class="c macro">
 <dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatistics_t.stream_updates_sent.KRPC_FIELD_KRPC_SERVERSTATISTICS_STREAMUPDATESSENT">
 <span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KRPC_SERVERSTATISTICS_STREAMUPDATESSENT</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatistics_t.stream_updates_sent.KRPC_FIELD_KRPC_SERVERSTATISTICS_STREAMUPDATESSENT" title="Link to this definition">#</a><br /></dt>
-<dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="c member">
-<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatistics_t.time_per_stream_update">
-<span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">time_per_stream_update</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatistics_t.time_per_stream_update" title="Link to this definition">#</a><br /></dt>
-<dd><p>The time spent updating streams per update, in seconds.</p>
-<dl class="c macro">
-<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatistics_t.time_per_stream_update.KRPC_FIELD_KRPC_SERVERSTATISTICS_TIMEPERSTREAMUPDATE">
-<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FIELD_KRPC_SERVERSTATISTICS_TIMEPERSTREAMUPDATE</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatistics_t.time_per_stream_update.KRPC_FIELD_KRPC_SERVERSTATISTICS_TIMEPERSTREAMUPDATE" title="Link to this definition">#</a><br /></dt>
 <dd><p>The position of the field, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_GetFieldByIndex()</span></code>.</p>
 </dd></dl>
 

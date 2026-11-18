@@ -597,6 +597,7 @@
 <p>The benchmark suite in <code class="docutils literal notranslate"><span class="pre">tools/benchmarks/</span></code> measures the performance of the server and the
 clients:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bazel<span class="w"> </span>run<span class="w"> </span>//tools/benchmarks:testserver<span class="w">  </span><span class="c1"># the server, without the game</span>
+bazel<span class="w"> </span>run<span class="w"> </span>//tools/benchmarks:update-loop<span class="w"> </span><span class="c1"># the update loop, without the game</span>
 bazel<span class="w"> </span>run<span class="w"> </span>//tools/benchmarks:python<span class="w">      </span><span class="c1"># one client, against a TestServer</span>
 bazel<span class="w"> </span>run<span class="w"> </span>//tools/benchmarks:clients<span class="w">     </span><span class="c1"># every client, in one table</span>
 bazel<span class="w"> </span>run<span class="w"> </span>//tools/benchmarks:server<span class="w">      </span><span class="c1"># the server, in the game</span>
@@ -622,15 +623,31 @@ on the same code, and pass both results as the noise floor:</p>
 <h2>The Targets<a class="headerlink" href="#the-targets" title="Link to this heading">#</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">:testserver</span></code> measures the server’s cost per remote procedure call: decoding the arguments,
 dispatch, the procedure and encoding the result. It runs against a <code class="docutils literal notranslate"><span class="pre">TestServer</span></code>, so it measures a
-change to <code class="docutils literal notranslate"><span class="pre">core/</span></code> or <code class="docutils literal notranslate"><span class="pre">server/</span></code> without the game.</p>
+change to <code class="docutils literal notranslate"><span class="pre">core/</span></code> or <code class="docutils literal notranslate"><span class="pre">server/</span></code> without the game. <code class="docutils literal notranslate"><span class="pre">--steps</span></code> times each step of a call on its
+own, per type of argument and result: parsing the request, decoding the arguments, the call,
+encoding the result and serializing the response:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bazel<span class="w"> </span>run<span class="w"> </span>//tools/benchmarks:testserver<span class="w"> </span>--<span class="w"> </span>--steps
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">:update-loop</span></code> measures the server’s update loop: the calls a second that clients of different
+shapes get, and what the loop costs the frame. It runs a <code class="docutils literal notranslate"><span class="pre">TestServer</span></code> that models a game’s frame
+loop, with fixed steps at 50 a second, simulated work in each step and each frame, and a frame
+limit of 60 frames a second. <code class="docutils literal notranslate"><span class="pre">--game</span></code> picks a light or a heavy game, <code class="docutils literal notranslate"><span class="pre">--shape</span></code> the client
+shapes, and <code class="docutils literal notranslate"><span class="pre">--preset</span></code> the server’s rate settings, Balanced by default:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bazel<span class="w"> </span>run<span class="w"> </span>//tools/benchmarks:update-loop<span class="w"> </span>--<span class="w"> </span>--game<span class="w"> </span>light<span class="w"> </span>--shape<span class="w"> </span>synchronous
+</pre></div>
+</div>
+<p>Each client runs in its own process, and counts its own calls. The report has one block per game
+and shape, with a row per point and a column per figure. It also reports how long the ways of
+waiting take on the server’s runtime.</p>
 <p>The client targets measure a client’s cost: the round trip for a call, and calls carrying
 collections. Each client is timed from inside itself, so each target is a program in its own
 language. The report has one block per transport, TCP/IP and local socket.</p>
-<p>The C-nano target uses a socket, not a serial port. The server polls a serial port at an interval
-longer than every measured case, so a serial port would measure the poll.</p>
+<p>The C-nano target uses a socket, as the other clients do, so that its results compare with
+theirs.</p>
 <p>The client targets run the server with <code class="docutils literal notranslate"><span class="pre">--no-frame-pacing</span></code>, so its update loop runs as fast as
 it can. A paced server adds the rest of each update to a round trip. It also serves a client that
-is slower than its receive timeout once per update, which measures 16.7 ms and not the client.</p>
+is slower than its max call wait once per update, which measures 16.7 ms and not the client.</p>
 <p><code class="docutils literal notranslate"><span class="pre">:clients</span></code> runs every client in turn, each with its own server, and reports one column per
 language. Its JSON file holds every client’s results, and <code class="docutils literal notranslate"><span class="pre">:compare</span></code> shows it as one block per
 client.</p>
@@ -639,6 +656,10 @@ stream over a few hundred parts. It is a pytest suite, so arguments go to pytest
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bazel<span class="w"> </span>run<span class="w"> </span>//tools/benchmarks:server<span class="w"> </span>--<span class="w"> </span>-k<span class="w"> </span>stream
 </pre></div>
 </div>
+<p><code class="docutils literal notranslate"><span class="pre">test_update_loop.py</span></code> runs the update loop shapes of <code class="docutils literal notranslate"><span class="pre">:update-loop</span></code> in the game, to check the
+model against it.</p>
+<p><code class="docutils literal notranslate"><span class="pre">test_steps.py</span></code> times the steps of <code class="docutils literal notranslate"><span class="pre">--steps</span></code> in the game, with calls on the reference craft
+added.</p>
 </section>
 </section>
 

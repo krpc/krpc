@@ -44,6 +44,7 @@
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'user-guide/server-performance';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.24.0';
@@ -552,54 +553,124 @@
                   
   <section id="server-performance">
 <span id="id1"></span><h1>Server Performance<a class="headerlink" href="#server-performance" title="Link to this heading">#</a></h1>
-<section id="settings">
-<span id="server-performance-settings"></span><h2>Settings<a class="headerlink" href="#settings" title="Link to this heading">#</a></h2>
+<p>The server executes calls on the game’s main thread, inside its physics update. Each call takes
+time from the game’s frame, so the server trades calls a second against the frame rate. Its
+settings choose where it sits on that trade.</p>
+<section id="how-calls-are-scheduled">
+<h2>How Calls Are Scheduled<a class="headerlink" href="#how-calls-are-scheduled" title="Link to this heading">#</a></h2>
+<p>The game runs its physics in fixed steps, 50 a second, and renders frames in between. In each
+physics step the server:</p>
+<ol class="arabic simple">
+<li><p>Executes the calls that have arrived, taking one from each client in turn.</p></li>
+<li><p>Waits for a client’s next call, when it expects one soon.</p></li>
+<li><p>Updates the streams.</p></li>
+</ol>
+<p>The server keeps to a <strong>budget</strong> of time per frame. Each physics step may use what is left of the
+frame’s budget, and at least 1 ms or the max time per frame if lower, so calls progress on every
+step. A call left when the budget
+runs out is executed in the next step. Streams always update, and their time counts toward the
+budget.</p>
+<p>A program that makes a call, works with the result, then makes the next call gets one call per
+physics step, unless the server waits for it. The server measures each client’s time between
+calls, and waits while a wait is worth its cost in frame time. A call that arrives after the
+wait is executed in the next step.</p>
+</section>
+<section id="choosing-a-preset">
+<span id="server-performance-settings"></span><h2>Choosing a Preset<a class="headerlink" href="#choosing-a-preset" title="Link to this heading">#</a></h2>
 <figure class="align-right" id="id2">
 <img alt="../_images/server-window-advanced.png" src="../_images/server-window-advanced.png" />
 <figcaption>
 <p><span class="caption-text">Server window showing the advanced settings.</span><a class="headerlink" href="#id2" title="Link to this image">#</a></p>
 </figcaption>
 </figure>
-<p>kRPC processes its queue of remote procedures when its FixedUpdate method is
-invoked. This is called every fixed framerate frame, typically about 60 times a
-second. If kRPC were to only execute one RPC per FixedUpdate, it would only be
-able to execute at most 60 RPCs per second. In order to achieve a higher RPC
-throughput, it can execute multiple RPCs per FixedUpdate. However, if it is
-allowed to process too many RPCs per FixedUpdate, the game’s framerate would be
-adversely affected. The following settings control this behavior, and the
-resulting tradeoff between RPC throughput and game FPS:</p>
-<ol class="arabic simple">
-<li><p><strong>Maximum time per update</strong>. This setting controls the maximum amount of
-time (in microseconds) that kRPC will spend executing RPCs per FixedUpdate.
-Setting this to a high value, for example 20000 us, will allow the server to
-process many RPCs at the expense of the game’s framerate. A low value, for example 1000 us, won’t allow the
-server to execute many RPCs per update, but will allow the game to run at a
-much higher framerate.</p></li>
-<li><p><strong>Adaptive rate control</strong>. When enabled, kRPC will automatically adjust the
-maximum time per update parameter, so that the game has a minimum framerate
-of 60 FPS. Enabling this setting provides a good tradeoff between RPC
-throughput and the game framerate.</p></li>
-</ol>
-<p>A program that must act once per physics tick holds the tick, as described
-under <a class="reference internal" href="#server-performance-tick-hold"><span class="std std-ref">Holding a Tick</span></a> below.</p>
-<p>Another consideration is the responsiveness of the server. Clients must execute
-RPCs in sequence, one after another, and there is usually a (short) delay
-between them. This means that when the server finishes executing an RPC, if it
-were to immediately check for a new RPC it will not find any and will return
-from the FixedUpdate. This means that any new RPCs will have to wait until the
-next FixedUpdate, and results in the server only executing a single RPC per
-FixedUpdate regardless of the maximum time per update setting.</p>
-<p>Instead, higher RPC throughput can be obtained if the server waits briefly after
-finishing an RPC to see if any new RPCs are received. This is done in such a way
-that the maximum time per update setting (above) is still observed.</p>
-<p>This behavior is enabled by the <strong>blocking receives</strong> option. <strong>Receive
-timeout</strong> sets the maximum amount of time the server will wait for a new RPC
-from a client.</p>
-<p>The receive timeout bounds the work a client may do between calls. A client
-that takes longer than the timeout to send its next call has that call executed
-in the following FixedUpdate. It is then served one RPC per update, however many
-it makes. The default timeout is one millisecond, which a program written in
-Python or Lua exceeds easily.</p>
+<p>The advanced settings in the server window include a preset. Choosing a preset sets the
+<a class="reference internal" href="#server-performance-settings-list"><span class="std std-ref">settings</span></a> below, and editing a setting shows “Custom”.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Preset</p></th>
+<th class="head"><p>For</p></th>
+<th class="head"><p>Settings</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Game first</p></td>
+<td><p>Playing while a script watches: dashboards, telemetry, recording</p></td>
+<td><p>1 ms per frame, waits of up to 1 ms</p></td>
+</tr>
+<tr class="row-odd"><td><p>Balanced, the default</p></td>
+<td><p>Most scripts</p></td>
+<td><p>Adaptive rate control at 60 fps, up to 10 ms per frame, waits of up to 5 ms</p></td>
+</tr>
+<tr class="row-even"><td><p>Calls first</p></td>
+<td><p>Calls over the frame rate: data collection, training, batch jobs</p></td>
+<td><p>20 ms per frame, waits of up to 20 ms</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Calls first gives a busy program up to 20 ms of every frame, whatever the game’s frame rate. A
+light game limited to 60 fps then runs at about 45 fps, and a heavy one at about 25 fps. An idle
+program costs nothing. For more calls, raise the max time per frame toward 1 s. The game slows
+game time once a frame takes longer than 0.04 s.</p>
+<p>A program that makes one call at a time gets roughly:</p>
+<div class="math notranslate nohighlight">
+\[\text{calls per second} \approx \frac{B}{B + G} \cdot \frac{1}{t_c + t_s}\]</div>
+<p><span class="math notranslate nohighlight">\(B\)</span> is the server’s time per frame, <span class="math notranslate nohighlight">\(G\)</span> the game’s own time per frame, <span class="math notranslate nohighlight">\(t_c\)</span>
+the program’s time between calls and <span class="math notranslate nohighlight">\(t_s\)</span> the server’s time per call.</p>
+</section>
+<section id="settings">
+<span id="server-performance-settings-list"></span><h2>Settings<a class="headerlink" href="#settings" title="Link to this heading">#</a></h2>
+<p><strong>Adaptive rate control</strong>: On by default. The server adjusts its budget to hold the frame rate
+at the target. Frames slower than the target cut the budget to the server’s average time per
+frame, less the frames’ excess. While frames meet the target and the budget is what stops the
+server, the budget grows, up to the max time per frame.</p>
+<p><strong>Target frame rate</strong>: 60 fps by default, from 1 to 1000 fps. The lowest frame rate the
+server’s work pushes the game to, with adaptive rate control. A game slower than the target on
+its own gets 1 ms of calls per physics step.</p>
+<p><strong>Max. time per frame</strong>: 10000 us by default, from 100 us to 1 s. The budget without adaptive
+rate control, and its ceiling with it.</p>
+<p><strong>Max. call wait</strong>: 5000 us by default. The most frame time the server spends waiting to gain a
+call in the current physics step, and the longest it waits for a program that calls without
+pause. A program slower than this between calls gets one call per step. A value of 0 turns the
+waits off.</p>
+<p><strong>Tick hold timeout</strong>: How long a client may hold a tick, as <a class="reference internal" href="#server-performance-tick-hold"><span class="std std-ref">below</span></a>.</p>
+</section>
+<section id="reading-the-statistics">
+<h2>Reading the Statistics<a class="headerlink" href="#reading-the-statistics" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">KRPC.GetStatus</span></code> returns the server’s settings and statistics. The statistics are averages
+over the last few frames:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">stats</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">get_status</span><span class="p">()</span><span class="o">.</span><span class="n">statistics</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Frame rate: </span><span class="si">%.0f</span><span class="s2"> fps"</span> <span class="o">%</span> <span class="n">stats</span><span class="o">.</span><span class="n">frame_rate</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Calls: </span><span class="si">%.0f</span><span class="s2"> a second"</span> <span class="o">%</span> <span class="n">stats</span><span class="o">.</span><span class="n">rpc_rate</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span>
+    <span class="s2">"Server per frame: </span><span class="si">%.1f</span><span class="s2"> of </span><span class="si">%.1f</span><span class="s2"> ms"</span>
+    <span class="o">%</span> <span class="p">(</span><span class="n">stats</span><span class="o">.</span><span class="n">time_per_frame</span> <span class="o">*</span> <span class="mf">1e3</span><span class="p">,</span> <span class="n">stats</span><span class="o">.</span><span class="n">budget_per_frame</span> <span class="o">*</span> <span class="mf">1e3</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Waiting per frame: </span><span class="si">%.1f</span><span class="s2"> ms"</span> <span class="o">%</span> <span class="p">(</span><span class="n">stats</span><span class="o">.</span><span class="n">wait_time_per_frame</span> <span class="o">*</span> <span class="mf">1e3</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Median turnaround: </span><span class="si">%.1f</span><span class="s2"> ms"</span> <span class="o">%</span> <span class="p">(</span><span class="n">stats</span><span class="o">.</span><span class="n">median_turnaround</span> <span class="o">*</span> <span class="mf">1e3</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>“Show info” in the server window shows the same values. Its “Limited by” row names the cause
+of a low call rate:</p>
+<ul class="simple">
+<li><p><strong>Budget.</strong> The budget stops the server in most frames. Raise the max time per
+frame, or choose Calls first.</p></li>
+<li><p><strong>Max. call wait.</strong> The program’s median turnaround is above the max call wait, so the
+server does not wait for its calls. Raise the max call wait, or make fewer calls.</p></li>
+<li><p><strong>Slow game.</strong> The frame rate is below the target with adaptive rate control, and the
+budget is at 1 ms.</p></li>
+<li><p><strong>Client.</strong> The server waits for each call, so the program’s own speed sets the rate.</p></li>
+</ul>
+</section>
+<section id="getting-more-calls-per-tick">
+<h2>Getting More Calls per Tick<a class="headerlink" href="#getting-more-calls-per-tick" title="Link to this heading">#</a></h2>
+<p>A call the program does not make costs nothing:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="streams-and-events.html#user-guide-streams-and-events"><span class="std std-ref">Streams</span></a> send a value on every physics step, with no call.</p></li>
+<li><p><a class="reference internal" href="server-side-functions.html#server-side-functions"><span class="std std-ref">Server side functions</span></a> compute on the server, in one call for
+many.</p></li>
+<li><p><a class="reference internal" href="control-loops.html#holding-a-tick"><span class="std std-ref">Holding a tick</span></a> executes every call of a loop iteration in one step.</p></li>
+</ul>
 </section>
 <section id="holding-a-tick">
 <span id="server-performance-tick-hold"></span><h2>Holding a Tick<a class="headerlink" href="#holding-a-tick" title="Link to this heading">#</a></h2>
@@ -613,10 +684,9 @@ loops guide</span></a> for how a program uses it.</p>
 default. It bounds how long the game can be made to appear frozen, and the
 server owns it rather than the client. A hold also ends when the client
 disconnects.</p></li>
-<li><p>The maximum time per update setting does not apply while a tick is held.
-Adaptive rate control skips an update that held one, which would otherwise
-count the client’s own work as time the server spent on RPCs and wind the
-limit down for every client.</p></li>
+<li><p>The budget does not apply while a tick is held. Adaptive rate control skips a
+frame that held one, which would otherwise count the client’s own work as time
+the server spent and cut the budget for every client.</p></li>
 <li><p>The game renders no frame, takes no input and runs no physics while a tick is
 held. Physics runs on a fixed time step, so a game whose ticks are held runs
 slower than real time and simulates every tick in turn.</p></li>
@@ -674,7 +744,11 @@ servers are polled between updates.</p></li>
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-calls-are-scheduled">How Calls Are Scheduled</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#choosing-a-preset">Choosing a Preset</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#settings">Settings</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reading-the-statistics">Reading the Statistics</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-more-calls-per-tick">Getting More Calls per Tick</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#holding-a-tick">Holding a Tick</a></li>
 </ul>
   </nav></div>

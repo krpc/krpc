@@ -773,6 +773,13 @@ has a <a class="reference internal" href="#communication-protocol-procedure-name
 calls in a request run in order, and the results in the response are in the same order as the calls.
 The client specification states how a client numbers and matches requests. See
 <a class="reference internal" href="../client-spec/calls.html"><span class="doc">Calls</span></a>.</p>
+<p>A client may send requests without waiting for the responses to earlier ones. The server runs a
+client’s requests one at a time, in the order they were sent, so their responses arrive in that
+order too. A call that waits on the game holds up the requests behind it. The server reads up to
+16 requests ahead, and leaves the rest to the transport’s flow control, which holds the client’s
+writes until the server catches up.</p>
+<p id="communication-protocol-unread-limit">A client must also read what the server sends. The server ends the connection of a client that
+leaves more than 16 MB of responses and stream updates unread.</p>
 <section id="anatomy-of-a-request">
 <span id="communication-protocol-anatomy-of-a-request"></span><h3>Anatomy of a Request<a class="headerlink" href="#anatomy-of-a-request" title="Link to this heading">#</a></h3>
 <p>A request is a <code class="docutils literal notranslate"><span class="pre">Request</span></code> message:</p>

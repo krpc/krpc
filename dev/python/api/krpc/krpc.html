@@ -1816,7 +1816,7 @@ administration facility is open within the space center scene.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="KRPC.ClientInfo">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ClientInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">address</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">protocol_version</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#KRPC.ClientInfo" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ClientInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">address</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#KRPC.ClientInfo" title="Link to this definition">#</a></dt>
 <dd><p>A client connected to the server.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -1851,17 +1851,6 @@ administration facility is open within the space center scene.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="KRPC.ClientInfo.protocol_version">
-<span class="sig-name descname"><span class="pre">protocol_version</span></span><a class="headerlink" href="#KRPC.ClientInfo.protocol_version" title="Link to this definition">#</a></dt>
-<dd><p>The protocol version of the client’s connection.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1924,16 +1913,28 @@ administration facility is open within the space center scene.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="KRPC.ServerSettings">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ServerSettings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_time_per_update</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adaptive_rate_control</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blocking_recv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recv_timeout</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tick_hold_timeout</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#KRPC.ServerSettings" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ServerSettings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adaptive_rate_control</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_frame_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_time_per_frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_call_wait</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tick_hold_timeout</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#KRPC.ServerSettings" title="Link to this definition">#</a></dt>
 <dd><p>The settings that control how the server executes calls.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>See <a class="reference internal" href="#KRPC.ServerStatus.settings" title="KRPC.ServerStatus.settings"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ServerStatus.settings</span></code></a>.</p>
 </div>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="KRPC.ServerSettings.max_time_per_update">
-<span class="sig-name descname"><span class="pre">max_time_per_update</span></span><a class="headerlink" href="#KRPC.ServerSettings.max_time_per_update" title="Link to this definition">#</a></dt>
-<dd><p>The current maximum time spent executing calls per update, in microseconds.</p>
+<dt class="sig sig-object py" id="KRPC.ServerSettings.adaptive_rate_control">
+<span class="sig-name descname"><span class="pre">adaptive_rate_control</span></span><a class="headerlink" href="#KRPC.ServerSettings.adaptive_rate_control" title="Link to this definition">#</a></dt>
+<dd><p>Whether the server adapts its time per frame to hold the frame rate at
+<a class="reference internal" href="#KRPC.ServerSettings.target_frame_rate" title="KRPC.ServerSettings.target_frame_rate"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ServerSettings.target_frame_rate</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="KRPC.ServerSettings.target_frame_rate">
+<span class="sig-name descname"><span class="pre">target_frame_rate</span></span><a class="headerlink" href="#KRPC.ServerSettings.target_frame_rate" title="Link to this definition">#</a></dt>
+<dd><p>The lowest frame rate the server’s work pushes the game to, in frames per second.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
@@ -1942,31 +1943,20 @@ administration facility is open within the space center scene.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="KRPC.ServerSettings.adaptive_rate_control">
-<span class="sig-name descname"><span class="pre">adaptive_rate_control</span></span><a class="headerlink" href="#KRPC.ServerSettings.adaptive_rate_control" title="Link to this definition">#</a></dt>
-<dd><p>Whether the server adjusts <a class="reference internal" href="#KRPC.ServerSettings.max_time_per_update" title="KRPC.ServerSettings.max_time_per_update"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ServerSettings.max_time_per_update</span></code></a> to hold the frame rate.</p>
+<dt class="sig sig-object py" id="KRPC.ServerSettings.max_time_per_frame">
+<span class="sig-name descname"><span class="pre">max_time_per_frame</span></span><a class="headerlink" href="#KRPC.ServerSettings.max_time_per_frame" title="Link to this definition">#</a></dt>
+<dd><p>The server’s budget per frame, or its ceiling with adaptive rate control, in microseconds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>bool</p>
+<dd class="field-odd"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="KRPC.ServerSettings.blocking_recv">
-<span class="sig-name descname"><span class="pre">blocking_recv</span></span><a class="headerlink" href="#KRPC.ServerSettings.blocking_recv" title="Link to this definition">#</a></dt>
-<dd><p>Whether the server waits for the next call in an update.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>bool</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="KRPC.ServerSettings.recv_timeout">
-<span class="sig-name descname"><span class="pre">recv_timeout</span></span><a class="headerlink" href="#KRPC.ServerSettings.recv_timeout" title="Link to this definition">#</a></dt>
-<dd><p>The time the server waits for the next call, in microseconds.</p>
+<dt class="sig sig-object py" id="KRPC.ServerSettings.max_call_wait">
+<span class="sig-name descname"><span class="pre">max_call_wait</span></span><a class="headerlink" href="#KRPC.ServerSettings.max_call_wait" title="Link to this definition">#</a></dt>
+<dd><p>The longest the server waits for a client’s next call, in microseconds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
@@ -1989,7 +1979,7 @@ administration facility is open within the space center scene.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="KRPC.ServerStatistics">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ServerStatistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bytes_read</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bytes_written</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bytes_read_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bytes_written_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rpcs_executed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rpc_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_per_rpc_update</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poll_time_per_rpc_update</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exec_time_per_rpc_update</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deferred_calls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">streams</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stream_evaluations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stream_evaluation_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stream_updates_sent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_per_stream_update</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#KRPC.ServerStatistics" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ServerStatistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bytes_read</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bytes_written</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bytes_read_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bytes_written_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rpcs_executed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rpc_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_per_frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exec_time_per_frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wait_time_per_frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stream_time_per_frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget_per_frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">median_turnaround</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deferred_calls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">streams</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stream_evaluations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stream_evaluation_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stream_updates_sent</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#KRPC.ServerStatistics" title="Link to this definition">#</a></dt>
 <dd><p>The performance statistics of the server.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -2062,9 +2052,9 @@ administration facility is open within the space center scene.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="KRPC.ServerStatistics.time_per_rpc_update">
-<span class="sig-name descname"><span class="pre">time_per_rpc_update</span></span><a class="headerlink" href="#KRPC.ServerStatistics.time_per_rpc_update" title="Link to this definition">#</a></dt>
-<dd><p>The time spent receiving and executing calls per update, in seconds.</p>
+<dt class="sig sig-object py" id="KRPC.ServerStatistics.frame_rate">
+<span class="sig-name descname"><span class="pre">frame_rate</span></span><a class="headerlink" href="#KRPC.ServerStatistics.frame_rate" title="Link to this definition">#</a></dt>
+<dd><p>The game’s frame rate, in frames per second.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
@@ -2073,9 +2063,10 @@ administration facility is open within the space center scene.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="KRPC.ServerStatistics.poll_time_per_rpc_update">
-<span class="sig-name descname"><span class="pre">poll_time_per_rpc_update</span></span><a class="headerlink" href="#KRPC.ServerStatistics.poll_time_per_rpc_update" title="Link to this definition">#</a></dt>
-<dd><p>The time spent receiving calls per update, in seconds.</p>
+<dt class="sig sig-object py" id="KRPC.ServerStatistics.time_per_frame">
+<span class="sig-name descname"><span class="pre">time_per_frame</span></span><a class="headerlink" href="#KRPC.ServerStatistics.time_per_frame" title="Link to this definition">#</a></dt>
+<dd><p>The server’s time per frame, in seconds: executing calls, waiting for them and
+updating streams.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
@@ -2084,9 +2075,54 @@ administration facility is open within the space center scene.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="KRPC.ServerStatistics.exec_time_per_rpc_update">
-<span class="sig-name descname"><span class="pre">exec_time_per_rpc_update</span></span><a class="headerlink" href="#KRPC.ServerStatistics.exec_time_per_rpc_update" title="Link to this definition">#</a></dt>
-<dd><p>The time spent executing calls per update, in seconds.</p>
+<dt class="sig sig-object py" id="KRPC.ServerStatistics.exec_time_per_frame">
+<span class="sig-name descname"><span class="pre">exec_time_per_frame</span></span><a class="headerlink" href="#KRPC.ServerStatistics.exec_time_per_frame" title="Link to this definition">#</a></dt>
+<dd><p>The time spent executing calls per frame, in seconds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="KRPC.ServerStatistics.wait_time_per_frame">
+<span class="sig-name descname"><span class="pre">wait_time_per_frame</span></span><a class="headerlink" href="#KRPC.ServerStatistics.wait_time_per_frame" title="Link to this definition">#</a></dt>
+<dd><p>The time spent waiting for calls per frame, in seconds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="KRPC.ServerStatistics.stream_time_per_frame">
+<span class="sig-name descname"><span class="pre">stream_time_per_frame</span></span><a class="headerlink" href="#KRPC.ServerStatistics.stream_time_per_frame" title="Link to this definition">#</a></dt>
+<dd><p>The time spent updating streams per frame, in seconds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="KRPC.ServerStatistics.budget_per_frame">
+<span class="sig-name descname"><span class="pre">budget_per_frame</span></span><a class="headerlink" href="#KRPC.ServerStatistics.budget_per_frame" title="Link to this definition">#</a></dt>
+<dd><p>The time the server may spend per frame, in seconds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="KRPC.ServerStatistics.median_turnaround">
+<span class="sig-name descname"><span class="pre">median_turnaround</span></span><a class="headerlink" href="#KRPC.ServerStatistics.median_turnaround" title="Link to this definition">#</a></dt>
+<dd><p>The median time between a response and the client’s next call, over the
+clients’ recent calls, in seconds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
@@ -2146,17 +2182,6 @@ or the call yielded.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="KRPC.ServerStatistics.time_per_stream_update">
-<span class="sig-name descname"><span class="pre">time_per_stream_update</span></span><a class="headerlink" href="#KRPC.ServerStatistics.time_per_stream_update" title="Link to this definition">#</a></dt>
-<dd><p>The time spent updating streams per update, in seconds.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>

@@ -1786,8 +1786,8 @@ administration facility is open within the space center scene.</p>
 <p>See <a class="reference internal" href="#krpc.client.services.KRPC.KRPC.getClients()" title="krpc.client.services.KRPC.KRPC.getClients()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">KRPC.getClients()</span></code></a>.</p>
 </div>
 <dl class="java constructor">
-<dt class="sig sig-object java" id="krpc.client.services.KRPC.ClientInfo.ClientInfo(byte[], String, String, int)">
-<span class="pre">public</span> <span class="sig-name descname"><span class="pre">ClientInfo</span></span><span class="sig-paren">(</span><span class="pre">byte</span><span class="pre">[]</span><em> <span class="pre">id</span></em>, <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">name</span></em>, <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">address</span></em>, <span class="pre">int</span><em> <span class="pre">protocolVersion</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KRPC.ClientInfo.ClientInfo(byte[], String, String, int)" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object java" id="krpc.client.services.KRPC.ClientInfo.ClientInfo(byte[], String, String)">
+<span class="pre">public</span> <span class="sig-name descname"><span class="pre">ClientInfo</span></span><span class="sig-paren">(</span><span class="pre">byte</span><span class="pre">[]</span><em> <span class="pre">id</span></em>, <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">name</span></em>, <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">address</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KRPC.ClientInfo.ClientInfo(byte[], String, String)" title="Link to this definition">#</a></dt>
 <dd><p>Construct a ClientInfo from the values of its fields.</p>
 </dd></dl>
 
@@ -1807,12 +1807,6 @@ administration facility is open within the space center scene.</p>
 <dt class="sig sig-object java" id="krpc.client.services.KRPC.ClientInfo.getAddress()">
 <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getAddress</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KRPC.ClientInfo.getAddress()" title="Link to this definition">#</a></dt>
 <dd><p>The address of the client.</p>
-</dd></dl>
-
-<dl class="java method">
-<dt class="sig sig-object java" id="krpc.client.services.KRPC.ClientInfo.getProtocolVersion()">
-<span class="pre">int</span> <span class="sig-name descname"><span class="pre">getProtocolVersion</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KRPC.ClientInfo.getProtocolVersion()" title="Link to this definition">#</a></dt>
-<dd><p>The protocol version of the client’s connection.</p>
 </dd></dl>
 
 </dd></dl>
@@ -1866,33 +1860,34 @@ administration facility is open within the space center scene.</p>
 <p>See <a class="reference internal" href="#krpc.client.services.KRPC.ServerStatus.getSettings()" title="krpc.client.services.KRPC.ServerStatus.getSettings()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">ServerStatus.getSettings()</span></code></a>.</p>
 </div>
 <dl class="java constructor">
-<dt class="sig sig-object java" id="krpc.client.services.KRPC.ServerSettings.ServerSettings(int, boolean, boolean, int, int)">
-<span class="pre">public</span> <span class="sig-name descname"><span class="pre">ServerSettings</span></span><span class="sig-paren">(</span><span class="pre">int</span><em> <span class="pre">maxTimePerUpdate</span></em>, <span class="pre">boolean</span><em> <span class="pre">adaptiveRateControl</span></em>, <span class="pre">boolean</span><em> <span class="pre">blockingRecv</span></em>, <span class="pre">int</span><em> <span class="pre">recvTimeout</span></em>, <span class="pre">int</span><em> <span class="pre">tickHoldTimeout</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KRPC.ServerSettings.ServerSettings(int, boolean, boolean, int, int)" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object java" id="krpc.client.services.KRPC.ServerSettings.ServerSettings(boolean, int, int, int, int)">
+<span class="pre">public</span> <span class="sig-name descname"><span class="pre">ServerSettings</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">adaptiveRateControl</span></em>, <span class="pre">int</span><em> <span class="pre">targetFrameRate</span></em>, <span class="pre">int</span><em> <span class="pre">maxTimePerFrame</span></em>, <span class="pre">int</span><em> <span class="pre">maxCallWait</span></em>, <span class="pre">int</span><em> <span class="pre">tickHoldTimeout</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KRPC.ServerSettings.ServerSettings(boolean, int, int, int, int)" title="Link to this definition">#</a></dt>
 <dd><p>Construct a ServerSettings from the values of its fields.</p>
-</dd></dl>
-
-<dl class="java method">
-<dt class="sig sig-object java" id="krpc.client.services.KRPC.ServerSettings.getMaxTimePerUpdate()">
-<span class="pre">int</span> <span class="sig-name descname"><span class="pre">getMaxTimePerUpdate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KRPC.ServerSettings.getMaxTimePerUpdate()" title="Link to this definition">#</a></dt>
-<dd><p>The current maximum time spent executing calls per update, in microseconds.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KRPC.ServerSettings.getAdaptiveRateControl()">
 <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getAdaptiveRateControl</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KRPC.ServerSettings.getAdaptiveRateControl()" title="Link to this definition">#</a></dt>
-<dd><p>Whether the server adjusts <a class="reference internal" href="#krpc.client.services.KRPC.ServerSettings.getMaxTimePerUpdate()" title="krpc.client.services.KRPC.ServerSettings.getMaxTimePerUpdate()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">ServerSettings.getMaxTimePerUpdate()</span></code></a> to hold the frame rate.</p>
+<dd><p>Whether the server adapts its time per frame to hold the frame rate at
+<a class="reference internal" href="#krpc.client.services.KRPC.ServerSettings.getTargetFrameRate()" title="krpc.client.services.KRPC.ServerSettings.getTargetFrameRate()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">ServerSettings.getTargetFrameRate()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="java method">
-<dt class="sig sig-object java" id="krpc.client.services.KRPC.ServerSettings.getBlockingRecv()">
-<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getBlockingRecv</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KRPC.ServerSettings.getBlockingRecv()" title="Link to this definition">#</a></dt>
-<dd><p>Whether the server waits for the next call in an update.</p>
+<dt class="sig sig-object java" id="krpc.client.services.KRPC.ServerSettings.getTargetFrameRate()">
+<span class="pre">int</span> <span class="sig-name descname"><span class="pre">getTargetFrameRate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KRPC.ServerSettings.getTargetFrameRate()" title="Link to this definition">#</a></dt>
+<dd><p>The lowest frame rate the server’s work pushes the game to, in frames per second.</p>
 </dd></dl>
 
 <dl class="java method">
-<dt class="sig sig-object java" id="krpc.client.services.KRPC.ServerSettings.getRecvTimeout()">
-<span class="pre">int</span> <span class="sig-name descname"><span class="pre">getRecvTimeout</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KRPC.ServerSettings.getRecvTimeout()" title="Link to this definition">#</a></dt>
-<dd><p>The time the server waits for the next call, in microseconds.</p>
+<dt class="sig sig-object java" id="krpc.client.services.KRPC.ServerSettings.getMaxTimePerFrame()">
+<span class="pre">int</span> <span class="sig-name descname"><span class="pre">getMaxTimePerFrame</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KRPC.ServerSettings.getMaxTimePerFrame()" title="Link to this definition">#</a></dt>
+<dd><p>The server’s budget per frame, or its ceiling with adaptive rate control, in microseconds.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KRPC.ServerSettings.getMaxCallWait()">
+<span class="pre">int</span> <span class="sig-name descname"><span class="pre">getMaxCallWait</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KRPC.ServerSettings.getMaxCallWait()" title="Link to this definition">#</a></dt>
+<dd><p>The longest the server waits for a client’s next call, in microseconds.</p>
 </dd></dl>
 
 <dl class="java method">
@@ -1912,8 +1907,8 @@ administration facility is open within the space center scene.</p>
 <p>See <a class="reference internal" href="#krpc.client.services.KRPC.ServerStatus.getStatistics()" title="krpc.client.services.KRPC.ServerStatus.getStatistics()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">ServerStatus.getStatistics()</span></code></a>.</p>
 </div>
 <dl class="java constructor">
-<dt class="sig sig-object java" id="krpc.client.services.KRPC.ServerStatistics.ServerStatistics(long, long, float, float, long, float, float, float, float, int, int, long, float, long, float)">
-<span class="pre">public</span> <span class="sig-name descname"><span class="pre">ServerStatistics</span></span><span class="sig-paren">(</span><span class="pre">long</span><em> <span class="pre">bytesRead</span></em>, <span class="pre">long</span><em> <span class="pre">bytesWritten</span></em>, <span class="pre">float</span><em> <span class="pre">bytesReadRate</span></em>, <span class="pre">float</span><em> <span class="pre">bytesWrittenRate</span></em>, <span class="pre">long</span><em> <span class="pre">rpcsExecuted</span></em>, <span class="pre">float</span><em> <span class="pre">rpcRate</span></em>, <span class="pre">float</span><em> <span class="pre">timePerRpcUpdate</span></em>, <span class="pre">float</span><em> <span class="pre">pollTimePerRpcUpdate</span></em>, <span class="pre">float</span><em> <span class="pre">execTimePerRpcUpdate</span></em>, <span class="pre">int</span><em> <span class="pre">deferredCalls</span></em>, <span class="pre">int</span><em> <span class="pre">streams</span></em>, <span class="pre">long</span><em> <span class="pre">streamEvaluations</span></em>, <span class="pre">float</span><em> <span class="pre">streamEvaluationRate</span></em>, <span class="pre">long</span><em> <span class="pre">streamUpdatesSent</span></em>, <span class="pre">float</span><em> <span class="pre">timePerStreamUpdate</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KRPC.ServerStatistics.ServerStatistics(long, long, float, float, long, float, float, float, float, int, int, long, float, long, float)" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object java" id="krpc.client.services.KRPC.ServerStatistics.ServerStatistics(long, long, float, float, long, float, float, float, float, float, float, float, float, int, int, long, float, long)">
+<span class="pre">public</span> <span class="sig-name descname"><span class="pre">ServerStatistics</span></span><span class="sig-paren">(</span><span class="pre">long</span><em> <span class="pre">bytesRead</span></em>, <span class="pre">long</span><em> <span class="pre">bytesWritten</span></em>, <span class="pre">float</span><em> <span class="pre">bytesReadRate</span></em>, <span class="pre">float</span><em> <span class="pre">bytesWrittenRate</span></em>, <span class="pre">long</span><em> <span class="pre">rpcsExecuted</span></em>, <span class="pre">float</span><em> <span class="pre">rpcRate</span></em>, <span class="pre">float</span><em> <span class="pre">frameRate</span></em>, <span class="pre">float</span><em> <span class="pre">timePerFrame</span></em>, <span class="pre">float</span><em> <span class="pre">execTimePerFrame</span></em>, <span class="pre">float</span><em> <span class="pre">waitTimePerFrame</span></em>, <span class="pre">float</span><em> <span class="pre">streamTimePerFrame</span></em>, <span class="pre">float</span><em> <span class="pre">budgetPerFrame</span></em>, <span class="pre">float</span><em> <span class="pre">medianTurnaround</span></em>, <span class="pre">int</span><em> <span class="pre">deferredCalls</span></em>, <span class="pre">int</span><em> <span class="pre">streams</span></em>, <span class="pre">long</span><em> <span class="pre">streamEvaluations</span></em>, <span class="pre">float</span><em> <span class="pre">streamEvaluationRate</span></em>, <span class="pre">long</span><em> <span class="pre">streamUpdatesSent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KRPC.ServerStatistics.ServerStatistics(long, long, float, float, long, float, float, float, float, float, float, float, float, int, int, long, float, long)" title="Link to this definition">#</a></dt>
 <dd><p>Construct a ServerStatistics from the values of its fields.</p>
 </dd></dl>
 
@@ -1954,21 +1949,47 @@ administration facility is open within the space center scene.</p>
 </dd></dl>
 
 <dl class="java method">
-<dt class="sig sig-object java" id="krpc.client.services.KRPC.ServerStatistics.getTimePerRpcUpdate()">
-<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getTimePerRpcUpdate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KRPC.ServerStatistics.getTimePerRpcUpdate()" title="Link to this definition">#</a></dt>
-<dd><p>The time spent receiving and executing calls per update, in seconds.</p>
+<dt class="sig sig-object java" id="krpc.client.services.KRPC.ServerStatistics.getFrameRate()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getFrameRate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KRPC.ServerStatistics.getFrameRate()" title="Link to this definition">#</a></dt>
+<dd><p>The game’s frame rate, in frames per second.</p>
 </dd></dl>
 
 <dl class="java method">
-<dt class="sig sig-object java" id="krpc.client.services.KRPC.ServerStatistics.getPollTimePerRpcUpdate()">
-<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getPollTimePerRpcUpdate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KRPC.ServerStatistics.getPollTimePerRpcUpdate()" title="Link to this definition">#</a></dt>
-<dd><p>The time spent receiving calls per update, in seconds.</p>
+<dt class="sig sig-object java" id="krpc.client.services.KRPC.ServerStatistics.getTimePerFrame()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getTimePerFrame</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KRPC.ServerStatistics.getTimePerFrame()" title="Link to this definition">#</a></dt>
+<dd><p>The server’s time per frame, in seconds: executing calls, waiting for them and
+updating streams.</p>
 </dd></dl>
 
 <dl class="java method">
-<dt class="sig sig-object java" id="krpc.client.services.KRPC.ServerStatistics.getExecTimePerRpcUpdate()">
-<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getExecTimePerRpcUpdate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KRPC.ServerStatistics.getExecTimePerRpcUpdate()" title="Link to this definition">#</a></dt>
-<dd><p>The time spent executing calls per update, in seconds.</p>
+<dt class="sig sig-object java" id="krpc.client.services.KRPC.ServerStatistics.getExecTimePerFrame()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getExecTimePerFrame</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KRPC.ServerStatistics.getExecTimePerFrame()" title="Link to this definition">#</a></dt>
+<dd><p>The time spent executing calls per frame, in seconds.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KRPC.ServerStatistics.getWaitTimePerFrame()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getWaitTimePerFrame</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KRPC.ServerStatistics.getWaitTimePerFrame()" title="Link to this definition">#</a></dt>
+<dd><p>The time spent waiting for calls per frame, in seconds.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KRPC.ServerStatistics.getStreamTimePerFrame()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getStreamTimePerFrame</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KRPC.ServerStatistics.getStreamTimePerFrame()" title="Link to this definition">#</a></dt>
+<dd><p>The time spent updating streams per frame, in seconds.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KRPC.ServerStatistics.getBudgetPerFrame()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getBudgetPerFrame</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KRPC.ServerStatistics.getBudgetPerFrame()" title="Link to this definition">#</a></dt>
+<dd><p>The time the server may spend per frame, in seconds.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KRPC.ServerStatistics.getMedianTurnaround()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMedianTurnaround</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KRPC.ServerStatistics.getMedianTurnaround()" title="Link to this definition">#</a></dt>
+<dd><p>The median time between a response and the client’s next call, over the
+clients’ recent calls, in seconds.</p>
 </dd></dl>
 
 <dl class="java method">
@@ -2000,12 +2021,6 @@ or the call yielded.</p>
 <dt class="sig sig-object java" id="krpc.client.services.KRPC.ServerStatistics.getStreamUpdatesSent()">
 <span class="pre">long</span> <span class="sig-name descname"><span class="pre">getStreamUpdatesSent</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KRPC.ServerStatistics.getStreamUpdatesSent()" title="Link to this definition">#</a></dt>
 <dd><p>The number of stream updates sent to clients.</p>
-</dd></dl>
-
-<dl class="java method">
-<dt class="sig sig-object java" id="krpc.client.services.KRPC.ServerStatistics.getTimePerStreamUpdate()">
-<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getTimePerStreamUpdate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KRPC.ServerStatistics.getTimePerStreamUpdate()" title="Link to this definition">#</a></dt>
-<dd><p>The time spent updating streams per update, in seconds.</p>
 </dd></dl>
 
 </dd></dl>

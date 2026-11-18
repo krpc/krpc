@@ -46,13 +46,13 @@ Core
 * Resolve documentation references to the procedures and properties of a service with a custom name (:issue:`1188`)
 * Fix RPCs stopping on .NET after a client disconnects during a yielding call (:issue:`1189`)
 * Run a stream of a call or server side function with no value on each update, for its effects (:issue:`1198`)
-* Fix adaptive rate control overwriting the configured "Max. time per update" setting (:issue:`1236`)
 * Server status
 
   * :breaking:`Breaking` Return ``KRPC.GetStatus`` as the struct ``KRPC.ServerStatus``, with the settings and statistics in nested structs, and remove the ``Status`` message (:issue:`1244`)
   * :breaking:`Breaking` Rename the stream counters to ``Streams``, ``StreamEvaluations`` and ``StreamEvaluationRate`` (:issue:`1244`)
   * Add ``TickHoldTimeout``, ``DeferredCalls`` and ``StreamUpdatesSent`` to the server status (:issue:`1244`)
-  * Add ``ClientInfo.ProtocolVersion``, the protocol version of each client (:issue:`1244`)
+  * :breaking:`Breaking` Replace ``MaxTimePerUpdate``, ``BlockingRecv`` and ``RecvTimeout`` in the settings with ``TargetFrameRate``, ``MaxTimePerFrame`` and ``MaxCallWait`` (:issue:`1376`)
+  * :breaking:`Breaking` Replace the statistics per update with statistics per frame, and add ``FrameRate``, ``BudgetPerFrame`` and ``MedianTurnaround`` (:issue:`1376`)
 
 * Procedure ids
 
@@ -101,6 +101,11 @@ Core
 * :breaking:`Breaking` ``KRPC.Expression.CallWithArguments`` takes a call template, and throws an exception for a call that carries arguments (:issue:`1352`)
 * Fail when a server side function is built, in place of when it runs, for a null constant passed to a parameter that cannot be null (:issue:`1352`)
 * Load the services faster in games with many mods (:issue:`1353`)
+* Wait for a client's next call by its measured time between calls, so a client that pauses for a few milliseconds between calls gets several calls per update (:issue:`1376`)
+* Read and write each client's connection on threads of its own, so a client that stops reading cannot freeze the game (:issue:`1376`)
+* End the connection of a client that leaves more than 16 MB of messages unread (:issue:`1376`)
+* Read up to 16 requests ahead of the one running, and hold a client that sends faster than the server runs its calls (:issue:`1376`)
+* Read from a serial port as bytes arrive, so a client over serial gets several calls per update (:issue:`1376`)
 
 
 Server
@@ -114,8 +119,7 @@ Server
 * Log auto-starting the servers only when one is stopped (:issue:`1235`)
 * Fix the game scene in log lines reading ``Inherit, Flight`` (:issue:`1235`)
 * Fix the server window keeping its height after clients disconnect (:issue:`1186`)
-* Show the tick hold timeout, deferred calls and stream updates in the info window, and name the stream counters as evaluations (:issue:`1244`)
-* Fix the two "Time per update" rows in the info window showing each other's value (:issue:`1244`)
+* Show deferred calls and stream updates in the info window, and name the stream counters as evaluations (:issue:`1244`)
 * Load a mod's API when some of its methods are missing, and fail only the calls that use them (:issue:`1341`)
 * Disable only the integration of a mod that fails to load, and give the reason in the errors of its RPCs (:issue:`1341`)
 * Load each supported mod whatever its version (:issue:`1341`)
@@ -132,6 +136,13 @@ Server
 * Add a WebSockets server on port 50001 to a new install, beside the TCP/IP server on port 50000, and name each for its protocol (:issue:`1371`)
 * Default the port of a WebSockets server to 50001 in the server window (:issue:`1371`)
 * Number the name of a server added in the server window when another server has that name (:issue:`1371`)
+* :breaking:`Breaking` Replace "Max. time per update" with "Max. time per frame", 10 ms by default, and "Blocking receives" and "Receive timeout" with "Max. call wait", 5 ms by default (:issue:`1376`)
+* Hold the frame rate at the new "Target frame rate" setting with adaptive rate control, 60 fps by default (:issue:`1376`)
+* Add presets to the advanced settings: "Game first", "Balanced" and "Calls first" (:issue:`1376`)
+* Reorganize the server info window around the frame, and add a "Limited by" row naming what holds down the call rate (:issue:`1376`)
+* Fix "Clear statistics" leaving the data read and written (:issue:`1376`)
+* Hide the server windows while the game hides its UI, such as on a loading screen (:issue:`1376`)
+* Fix errors logged on every scene change, and on quitting, when the server fails its startup checks (:issue:`1376`)
 
 
 SpaceCenter service
@@ -666,6 +677,8 @@ krpctools
 * Generate the C-nano ``KRPC_CLASS_``, ``KRPC_ENUMERATION_``, ``KRPC_STRUCT_`` and ``KRPC_FIELD_`` macros (:issue:`1336`)
 * Generate a TypeScript module of a service for the JavaScript client, with ``krpc-clientgen js`` (:issue:`1346`)
 * Generate the JavaScript client's API documentation, with ``krpc-docgen js`` (:issue:`1346`)
+* Add ``--frame-limit``, ``--fixed-rate``, ``--tick-work-us`` and ``--frame-work-us`` to ``krpc-testserver``, which model a game's frame loop (:issue:`1376`)
+* Add ``--preset`` to ``krpc-testserver``, for its rate settings (:issue:`1376`)
 
 
 v0.7.0

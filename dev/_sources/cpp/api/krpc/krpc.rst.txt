@@ -220,10 +220,6 @@ Service
 
       The address of the client.
 
-   .. member:: uint32_t protocol_version
-
-      The protocol version of the client's connection.
-
 
 .. namespace:: krpc::services::KRPC
 .. struct:: ServerStatus
@@ -258,21 +254,22 @@ Service
    .. note::
 
       See :member:`ServerStatus::settings`.
-   .. member:: uint32_t max_time_per_update
-
-      The current maximum time spent executing calls per update, in microseconds.
-
    .. member:: bool adaptive_rate_control
 
-      Whether the server adjusts :member:`ServerSettings::max_time_per_update` to hold the frame rate.
+      Whether the server adapts its time per frame to hold the frame rate at
+      :member:`ServerSettings::target_frame_rate`.
 
-   .. member:: bool blocking_recv
+   .. member:: uint32_t target_frame_rate
 
-      Whether the server waits for the next call in an update.
+      The lowest frame rate the server's work pushes the game to, in frames per second.
 
-   .. member:: uint32_t recv_timeout
+   .. member:: uint32_t max_time_per_frame
 
-      The time the server waits for the next call, in microseconds.
+      The server's budget per frame, or its ceiling with adaptive rate control, in microseconds.
+
+   .. member:: uint32_t max_call_wait
+
+      The longest the server waits for a client's next call, in microseconds.
 
    .. member:: uint32_t tick_hold_timeout
 
@@ -311,17 +308,35 @@ Service
 
       The number of calls executed per second.
 
-   .. member:: float time_per_rpc_update
+   .. member:: float frame_rate
 
-      The time spent receiving and executing calls per update, in seconds.
+      The game's frame rate, in frames per second.
 
-   .. member:: float poll_time_per_rpc_update
+   .. member:: float time_per_frame
 
-      The time spent receiving calls per update, in seconds.
+      The server's time per frame, in seconds: executing calls, waiting for them and
+      updating streams.
 
-   .. member:: float exec_time_per_rpc_update
+   .. member:: float exec_time_per_frame
 
-      The time spent executing calls per update, in seconds.
+      The time spent executing calls per frame, in seconds.
+
+   .. member:: float wait_time_per_frame
+
+      The time spent waiting for calls per frame, in seconds.
+
+   .. member:: float stream_time_per_frame
+
+      The time spent updating streams per frame, in seconds.
+
+   .. member:: float budget_per_frame
+
+      The time the server may spend per frame, in seconds.
+
+   .. member:: float median_turnaround
+
+      The median time between a response and the client's next call, over the
+      clients' recent calls, in seconds.
 
    .. member:: uint32_t deferred_calls
 
@@ -343,10 +358,6 @@ Service
    .. member:: uint64_t stream_updates_sent
 
       The number of stream updates sent to clients.
-
-   .. member:: float time_per_stream_update
-
-      The time spent updating streams per update, in seconds.
 
 
 .. namespace:: krpc::services::KRPC

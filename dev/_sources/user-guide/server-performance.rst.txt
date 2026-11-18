@@ -3,61 +3,130 @@
 Server Performance
 ==================
 
+The server executes calls on the game's main thread, inside its physics update. Each call takes
+time from the game's frame, so the server trades calls a second against the frame rate. Its
+settings choose where it sits on that trade.
+
+How Calls Are Scheduled
+-----------------------
+
+The game runs its physics in fixed steps, 50 a second, and renders frames in between. In each
+physics step the server:
+
+1. Executes the calls that have arrived, taking one from each client in turn.
+2. Waits for a client's next call, when it expects one soon.
+3. Updates the streams.
+
+The server keeps to a **budget** of time per frame. Each physics step may use what is left of the
+frame's budget, and at least 1 ms or the max time per frame if lower, so calls progress on every
+step. A call left when the budget
+runs out is executed in the next step. Streams always update, and their time counts toward the
+budget.
+
+A program that makes a call, works with the result, then makes the next call gets one call per
+physics step, unless the server waits for it. The server measures each client's time between
+calls, and waits while a wait is worth its cost in frame time. A call that arrives after the
+wait is executed in the next step.
+
 .. _server-performance-settings:
 
-Settings
---------
+Choosing a Preset
+-----------------
 
 .. figure:: /images/getting-started/server-window-advanced.png
    :align: right
 
    Server window showing the advanced settings.
 
-kRPC processes its queue of remote procedures when its FixedUpdate method is
-invoked. This is called every fixed framerate frame, typically about 60 times a
-second. If kRPC were to only execute one RPC per FixedUpdate, it would only be
-able to execute at most 60 RPCs per second. In order to achieve a higher RPC
-throughput, it can execute multiple RPCs per FixedUpdate. However, if it is
-allowed to process too many RPCs per FixedUpdate, the game's framerate would be
-adversely affected. The following settings control this behavior, and the
-resulting tradeoff between RPC throughput and game FPS:
+The advanced settings in the server window include a preset. Choosing a preset sets the
+:ref:`settings <server-performance-settings-list>` below, and editing a setting shows "Custom".
 
-1. **Maximum time per update**. This setting controls the maximum amount of
-   time (in microseconds) that kRPC will spend executing RPCs per FixedUpdate.
-   Setting this to a high value, for example 20000 us, will allow the server to
-   process many RPCs at the expense of the game's framerate. A low value, for example 1000 us, won't allow the
-   server to execute many RPCs per update, but will allow the game to run at a
-   much higher framerate.
+.. list-table::
+   :header-rows: 1
 
-2. **Adaptive rate control**. When enabled, kRPC will automatically adjust the
-   maximum time per update parameter, so that the game has a minimum framerate
-   of 60 FPS. Enabling this setting provides a good tradeoff between RPC
-   throughput and the game framerate.
+   * - Preset
+     - For
+     - Settings
+   * - Game first
+     - Playing while a script watches: dashboards, telemetry, recording
+     - 1 ms per frame, waits of up to 1 ms
+   * - Balanced, the default
+     - Most scripts
+     - Adaptive rate control at 60 fps, up to 10 ms per frame, waits of up to 5 ms
+   * - Calls first
+     - Calls over the frame rate: data collection, training, batch jobs
+     - 20 ms per frame, waits of up to 20 ms
 
-A program that must act once per physics tick holds the tick, as described
-under :ref:`server-performance-tick-hold` below.
+Calls first gives a busy program up to 20 ms of every frame, whatever the game's frame rate. A
+light game limited to 60 fps then runs at about 45 fps, and a heavy one at about 25 fps. An idle
+program costs nothing. For more calls, raise the max time per frame toward 1 s. The game slows
+game time once a frame takes longer than 0.04 s.
 
-Another consideration is the responsiveness of the server. Clients must execute
-RPCs in sequence, one after another, and there is usually a (short) delay
-between them. This means that when the server finishes executing an RPC, if it
-were to immediately check for a new RPC it will not find any and will return
-from the FixedUpdate. This means that any new RPCs will have to wait until the
-next FixedUpdate, and results in the server only executing a single RPC per
-FixedUpdate regardless of the maximum time per update setting.
+A program that makes one call at a time gets roughly:
 
-Instead, higher RPC throughput can be obtained if the server waits briefly after
-finishing an RPC to see if any new RPCs are received. This is done in such a way
-that the maximum time per update setting (above) is still observed.
+.. math::
+   \text{calls per second} \approx \frac{B}{B + G} \cdot \frac{1}{t_c + t_s}
 
-This behavior is enabled by the **blocking receives** option. **Receive
-timeout** sets the maximum amount of time the server will wait for a new RPC
-from a client.
+:math:`B` is the server's time per frame, :math:`G` the game's own time per frame, :math:`t_c`
+the program's time between calls and :math:`t_s` the server's time per call.
 
-The receive timeout bounds the work a client may do between calls. A client
-that takes longer than the timeout to send its next call has that call executed
-in the following FixedUpdate. It is then served one RPC per update, however many
-it makes. The default timeout is one millisecond, which a program written in
-Python or Lua exceeds easily.
+.. _server-performance-settings-list:
+
+Settings
+--------
+
+**Adaptive rate control**: On by default. The server adjusts its budget to hold the frame rate
+at the target. Frames slower than the target cut the budget to the server's average time per
+frame, less the frames' excess. While frames meet the target and the budget is what stops the
+server, the budget grows, up to the max time per frame.
+
+**Target frame rate**: 60 fps by default, from 1 to 1000 fps. The lowest frame rate the
+server's work pushes the game to, with adaptive rate control. A game slower than the target on
+its own gets 1 ms of calls per physics step.
+
+**Max. time per frame**: 10000 us by default, from 100 us to 1 s. The budget without adaptive
+rate control, and its ceiling with it.
+
+**Max. call wait**: 5000 us by default. The most frame time the server spends waiting to gain a
+call in the current physics step, and the longest it waits for a program that calls without
+pause. A program slower than this between calls gets one call per step. A value of 0 turns the
+waits off.
+
+**Tick hold timeout**: How long a client may hold a tick, as :ref:`below
+<server-performance-tick-hold>`.
+
+Reading the Statistics
+----------------------
+
+``KRPC.GetStatus`` returns the server's settings and statistics. The statistics are averages
+over the last few frames:
+
+.. literalinclude:: /scripts/user-guide/server-performance/Statistics.py
+   :language: python
+   :start-after: [docs]
+   :end-before: [/docs]
+   :dedent:
+
+"Show info" in the server window shows the same values. Its "Limited by" row names the cause
+of a low call rate:
+
+* **Budget.** The budget stops the server in most frames. Raise the max time per
+  frame, or choose Calls first.
+* **Max. call wait.** The program's median turnaround is above the max call wait, so the
+  server does not wait for its calls. Raise the max call wait, or make fewer calls.
+* **Slow game.** The frame rate is below the target with adaptive rate control, and the
+  budget is at 1 ms.
+* **Client.** The server waits for each call, so the program's own speed sets the rate.
+
+Getting More Calls per Tick
+---------------------------
+
+A call the program does not make costs nothing:
+
+* :ref:`Streams <user-guide-streams-and-events>` send a value on every physics step, with no call.
+* :ref:`Server side functions <server-side-functions>` compute on the server, in one call for
+  many.
+* :ref:`Holding a tick <holding-a-tick>` executes every call of a loop iteration in one step.
 
 .. _server-performance-tick-hold:
 
@@ -75,10 +144,9 @@ What a hold means for the server:
   default. It bounds how long the game can be made to appear frozen, and the
   server owns it rather than the client. A hold also ends when the client
   disconnects.
-* The maximum time per update setting does not apply while a tick is held.
-  Adaptive rate control skips an update that held one, which would otherwise
-  count the client's own work as time the server spent on RPCs and wind the
-  limit down for every client.
+* The budget does not apply while a tick is held. Adaptive rate control skips a
+  frame that held one, which would otherwise count the client's own work as time
+  the server spent and cut the budget for every client.
 * The game renders no frame, takes no input and runs no physics while a tick is
   held. Physics runs on a fixed time step, so a game whose ticks are held runs
   slower than real time and simulates every tick in turn.

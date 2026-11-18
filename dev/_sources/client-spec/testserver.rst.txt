@@ -59,4 +59,4 @@ with documentation.
    * - ``DeprecatedService``
      - A deprecated service, for testing how a client signals the use of its members.
    * - ``Benchmark``
-     - Procedures for measuring the cost of a call.
+     - Procedures for measuring the cost of a call and of the server's update loop.

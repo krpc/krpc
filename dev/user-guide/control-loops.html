@@ -557,18 +557,18 @@
 <p>A control loop reads the game state, computes something from it and writes the result back,
 over and over. The game runs its physics on a fixed step, 50 times a second. A loop that flies
 a vessel needs to read and write once per step, acting on the state it read.</p>
-<section id="the-receive-timeout">
-<h2>The Receive Timeout<a class="headerlink" href="#the-receive-timeout" title="Link to this heading">#</a></h2>
-<p>The server executes calls inside the game’s physics update, and waits a short while between
-them for a client’s next call. That wait is the <strong>receive timeout</strong>, one millisecond by
-default.</p>
+<section id="the-call-wait">
+<h2>The Call Wait<a class="headerlink" href="#the-call-wait" title="Link to this heading">#</a></h2>
+<p>The server executes calls inside the game’s physics update. It measures each client’s time
+between calls, and waits for a client whose next call it expects soon. The <strong>max call wait</strong>
+bounds that wait, 5 milliseconds by default.</p>
 <p>A control loop spends its time between the calls: it reads, then computes, then writes.
-Computing for longer than a millisecond is easy in Python or Lua, and each call then lands in
-a different physics tick.</p>
+Computing for longer than the max call wait is easy in Python or Lua, and each call then lands
+in a different physics tick.</p>
 <p>An iteration of five calls therefore costs five ticks, and the state the last write was
 computed from is five ticks old.</p>
-<p>The receive timeout is a server-wide setting, and the server spends it on every idle update
-for every client.</p>
+<p>The max call wait is a server-wide setting. A client that calls once a tick, or is idle, costs
+the server no wait.</p>
 </section>
 <section id="holding-a-tick">
 <span id="id2"></span><h2>Holding a Tick<a class="headerlink" href="#holding-a-tick" title="Link to this heading">#</a></h2>
@@ -662,7 +662,7 @@ stays on the held tick until the hold is released or times out.</p>
 <h2>Consecutive Ticks<a class="headerlink" href="#consecutive-ticks" title="Link to this heading">#</a></h2>
 <p>That loop gets whole ticks, but not consecutive ones. The <a class="reference internal" href="../python/api/krpc/krpc.html#KRPC.hold_tick" title="KRPC.hold_tick"><code class="xref py py-meth docutils literal notranslate"><span class="pre">KRPC.hold_tick()</span></code></a> opening an
 iteration is itself a call the server has to be waiting for. A program that spends longer than
-the receive timeout between releasing one tick and holding the next skips ticks, and cannot tell
+the max call wait between releasing one tick and holding the next skips ticks, and cannot tell
 which ones.</p>
 <p><a class="reference internal" href="../python/api/krpc/krpc.html#KRPC.next_tick" title="KRPC.next_tick"><code class="xref py py-meth docutils literal notranslate"><span class="pre">KRPC.next_tick()</span></code></a> closes that gap. It releases the tick being held and holds the one
 immediately after it, in a single call. The game then runs no tick the loop has not held:</p>
@@ -1196,7 +1196,7 @@ the pause menu for as long as it lasts.</p></li>
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-receive-timeout">The Receive Timeout</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-call-wait">The Call Wait</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#holding-a-tick">Holding a Tick</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#consecutive-ticks">Consecutive Ticks</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-worked-example">A Worked Example</a></li>

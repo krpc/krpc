@@ -7,22 +7,22 @@ A control loop reads the game state, computes something from it and writes the r
 over and over. The game runs its physics on a fixed step, 50 times a second. A loop that flies
 a vessel needs to read and write once per step, acting on the state it read.
 
-The Receive Timeout
--------------------
+The Call Wait
+-------------
 
-The server executes calls inside the game's physics update, and waits a short while between
-them for a client's next call. That wait is the **receive timeout**, one millisecond by
-default.
+The server executes calls inside the game's physics update. It measures each client's time
+between calls, and waits for a client whose next call it expects soon. The **max call wait**
+bounds that wait, 5 milliseconds by default.
 
 A control loop spends its time between the calls: it reads, then computes, then writes.
-Computing for longer than a millisecond is easy in Python or Lua, and each call then lands in
-a different physics tick.
+Computing for longer than the max call wait is easy in Python or Lua, and each call then lands
+in a different physics tick.
 
 An iteration of five calls therefore costs five ticks, and the state the last write was
 computed from is five ticks old.
 
-The receive timeout is a server-wide setting, and the server spends it on every idle update
-for every client.
+The max call wait is a server-wide setting. A client that calls once a tick, or is idle, costs
+the server no wait.
 
 .. _holding-a-tick:
 
@@ -96,7 +96,7 @@ Consecutive Ticks
 
 That loop gets whole ticks, but not consecutive ones. The :meth:`KRPC.hold_tick` opening an
 iteration is itself a call the server has to be waiting for. A program that spends longer than
-the receive timeout between releasing one tick and holding the next skips ticks, and cannot tell
+the max call wait between releasing one tick and holding the next skips ticks, and cannot tell
 which ones.
 
 :meth:`KRPC.next_tick` closes that gap. It releases the tick being held and holds the one

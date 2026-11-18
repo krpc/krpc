@@ -625,11 +625,12 @@ therefore be a tick or more older than the other streams.</p>
 </section>
 <section id="the-cost-of-a-stream">
 <h2>The Cost of a Stream<a class="headerlink" href="#the-cost-of-a-stream" title="Link to this heading">#</a></h2>
-<p>A stream runs its call on every tick it is due. The maximum time per update limits the time the
-server spends on calls, but nothing limits the time it spends on streams. Many streams of expensive
-calls slow every physics tick, and so the game. Adaptive rate control then gives calls less time
-per tick.</p>
+<p>A stream runs its call on every tick it is due. The server’s budget of time per frame limits its
+calls, but not its streams. Their time counts toward the budget, so many streams of expensive
+calls leave less time for calls. Past the budget, they slow every physics tick, and so the game.</p>
 <p>Remove a stream once you no longer need it, or give it a rate. The <a class="reference internal" href="server-performance.html#server-performance"><span class="std std-ref">server performance guide</span></a> describes the settings.</p>
+<p>The server ends the connection of a client that falls too far behind in reading its updates, as
+<a class="reference internal" href="../communication-protocols/messages.html#communication-protocol-unread-limit"><span class="std std-ref">the protocol describes</span></a>.</p>
 </section>
 <section id="events">
 <h2>Events<a class="headerlink" href="#events" title="Link to this heading">#</a></h2>
