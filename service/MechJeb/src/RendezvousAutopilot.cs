@@ -12,6 +12,7 @@ namespace KRPC.MechJeb
     {
         static Field<object, double> desiredDistance;
         static Field<object, double> maxPhasingOrbits;
+        static Field<object, double> maxClosingSpeed;
         static Func<object, string> status;
 
         internal static new void Load ()
@@ -19,6 +20,7 @@ namespace KRPC.MechJeb
             var type = Bindings.Type ("MuMech.MechJebModuleRendezvousAutopilot");
             desiredDistance = Bindings.EditableDouble (type, "desiredDistance");
             maxPhasingOrbits = Bindings.EditableDouble (type, "maxPhasingOrbits");
+            maxClosingSpeed = Bindings.EditableDouble (type, "maxClosingSpeed");
             status = type.Getter<object, string> ("status");
         }
 
@@ -45,11 +47,30 @@ namespace KRPC.MechJeb
         }
 
         /// <summary>
+        /// The largest speed at which to approach the target, in <unit>m/s</unit>.
+        /// </summary>
+        [KRPCProperty]
+        public double MaxClosingSpeed {
+            get { return maxClosingSpeed.Get (Instance); }
+            set { maxClosingSpeed.Set (Instance, value); }
+        }
+
+        /// <summary>
         /// The status of the autopilot.
         /// </summary>
         [KRPCProperty]
         public string Status {
             get { return status (Instance); }
+        }
+
+        /// <summary>
+        /// Whether to warp time during the rendezvous.
+        /// </summary>
+        /// <remarks>The same setting as <see cref="ManeuverPlanner.Autowarp"/>.</remarks>
+        [KRPCProperty]
+        public bool Autowarp {
+            get { return NodeExecutor.Autowarp; }
+            set { NodeExecutor.Autowarp = value; }
         }
     }
 }

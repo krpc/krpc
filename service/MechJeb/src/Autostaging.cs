@@ -1,13 +1,14 @@
+using System;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 
 namespace KRPC.MechJeb
 {
     /// <summary>
-    /// The staging controller, which stages when a stage runs out of fuel.
+    /// The autostaging settings, which the Utilities and Ascent Settings windows show.
     /// </summary>
     [KRPCClass (Service = "MechJeb")]
-    public sealed class StagingController : KRPCComputerModule
+    public sealed class Autostaging : KRPCComputerModule
     {
         static Field<object, double> autostagePreDelay;
         static Field<object, double> autostagePostDelay;
@@ -19,6 +20,7 @@ namespace KRPC.MechJeb
         static Field<object, bool> hotStaging;
         static Field<object, double> hotStagingLeadTime;
         static Field<object, bool> autostagingOnce;
+        static Action<object, object> autostageOnce;
 
         internal static new void Load ()
         {
@@ -33,9 +35,10 @@ namespace KRPC.MechJeb
             hotStaging = type.Field<object, bool> ("HotStaging");
             hotStagingLeadTime = Bindings.EditableDouble (type, "HotStagingLeadTime");
             autostagingOnce = type.Field<object, bool> ("AutostagingOnce");
+            autostageOnce = type.Method<Action<object, object>> ("AutostageOnce");
         }
 
-        internal StagingController () : base ("MechJebModuleStagingController")
+        internal Autostaging () : base ("MechJebModuleStagingController")
         {
         }
 
@@ -123,13 +126,24 @@ namespace KRPC.MechJeb
         }
 
         /// <summary>
-        /// Whether the controller disables itself after one staging.
+        /// Whether the controller disables itself after the next staging.
         /// </summary>
-        /// <remarks>Requires the controller to be enabled.</remarks>
+        /// <remarks>See <see cref="AutostageOnce"/>.</remarks>
         [KRPCProperty]
         public bool AutostagingOnce {
             get { return autostagingOnce.Get (Instance); }
-            set { autostagingOnce.Set (Instance, value); }
+        }
+
+        /// <summary>
+        /// Enable the controller until the next staging. Throws an exception if the controller is
+        /// enabled.
+        /// </summary>
+        [KRPCMethod]
+        public void AutostageOnce ()
+        {
+            if (Enabled)
+                throw new InvalidOperationException ("Autostaging is enabled");
+            autostageOnce (Instance, this);
         }
     }
 }

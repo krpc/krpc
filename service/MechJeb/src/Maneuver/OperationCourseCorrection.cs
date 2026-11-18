@@ -27,7 +27,7 @@ namespace KRPC.MechJeb.Maneuver
         /// The periapsis altitude at a target body, in meters.
         /// </summary>
         [KRPCProperty]
-        public double CourseCorrectFinalPeA {
+        public double FinalPeriapsisAltitude {
             get { return courseCorrectFinalPeA.Get (Instance); }
             set { courseCorrectFinalPeA.Set (Instance, value); }
         }

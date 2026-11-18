@@ -2,7 +2,7 @@ import krpc.client.Connection;
 import krpc.client.Event;
 import krpc.client.services.KRPC.Expression;
 import krpc.client.services.MechJeb;
-import krpc.client.services.MechJeb.AscentAutopilot;
+import krpc.client.services.MechJeb.AscentGuidance;
 import krpc.client.services.SpaceCenter;
 import krpc.client.services.SpaceCenter.Vessel;
 import krpc.schema.KRPC.ProcedureCall;
@@ -12,12 +12,12 @@ public class MechJebExample {
         Connection connection = Connection.newInstance("MechJeb Example");
         Vessel vessel =
             SpaceCenter.newInstance(connection).getActiveVessel();
-        AscentAutopilot ascent =
-            MechJeb.newInstance(connection).getAscentAutopilot();
+        AscentGuidance ascent =
+            MechJeb.newInstance(connection).getAscentGuidance();
 
         ascent.setDesiredOrbitAltitude(100000);
         ascent.setDesiredInclination(6);
-        ascent.setAutostage(true);
+        ascent.getSettings().setAutostage(true);
         ascent.setEnabled(true);
 
         vessel.getControl().activateNextStage();

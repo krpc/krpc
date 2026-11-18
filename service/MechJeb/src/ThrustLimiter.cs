@@ -5,10 +5,10 @@ using KRPC.Utils;
 namespace KRPC.MechJeb
 {
     /// <summary>
-    /// The thrust controller, which limits the throttle.
+    /// The throttle limiters, which the Utilities and Ascent Settings windows show.
     /// </summary>
     [KRPCClass (Service = "MechJeb")]
-    public sealed class ThrustController : ComputerModule
+    public sealed class ThrustLimiter : ComputerModule
     {
         static Field<object, bool> limitDynamicPressure;
         static Field<object, double> maxDynamicPressure;
@@ -27,6 +27,9 @@ namespace KRPC.MechJeb
         static Field<object, bool> electricThrottle;
         static Field<object, double> electricThrottleLo;
         static Field<object, double> electricThrottleHi;
+        static Field<object, bool> limitToPreventUnstableIgnition;
+        static Field<object, bool> autoRCSUllaging;
+        static Func<object, int> limiter;
 
         // The Translatron settings, which MechJeb holds in the thrust controller
         internal static Func<object, int> TMode { get; private set; }
@@ -53,12 +56,15 @@ namespace KRPC.MechJeb
             electricThrottle = type.Field<object, bool> ("ElectricThrottle");
             electricThrottleLo = Bindings.EditableDouble (type, "ElectricThrottleLo");
             electricThrottleHi = Bindings.EditableDouble (type, "ElectricThrottleHi");
+            limitToPreventUnstableIgnition = type.Field<object, bool> ("LimitToPreventUnstableIgnition");
+            autoRCSUllaging = type.Field<object, bool> ("AutoRCSUllaging");
+            limiter = type.Getter<object, int> ("Limiter");
             TMode = type.Getter<object, int> ("Tmode");
             TransSpdAct = type.Field<object, float> ("TransSpdAct");
             TransKillH = type.Field<object, bool> ("TransKillH");
         }
 
-        internal ThrustController () : base ("MechJebModuleThrustController")
+        internal ThrustLimiter () : base ("MechJebModuleThrustController")
         {
         }
 
@@ -169,6 +175,7 @@ namespace KRPC.MechJeb
         /// <summary>
         /// Whether the controller opens and closes the air intakes.
         /// </summary>
+        /// <remarks>Requires <see cref="LimitToPreventFlameout"/>.</remarks>
         [KRPCProperty]
         public bool ManageIntakes {
             get { return manageIntakes.Get (Instance); }
@@ -220,11 +227,103 @@ namespace KRPC.MechJeb
             get { return electricThrottleHi.Get (Instance); }
             set { electricThrottleHi.Set (Instance, value); }
         }
+
+        /// <summary>
+        /// Whether to hold the throttle at zero while the engines' fuel is unstable.
+        /// </summary>
+        /// <remarks>MechJeb shows this setting only with Real Fuels, as stock engines have
+        /// stable fuel.</remarks>
+        [KRPCProperty]
+        public bool LimitToPreventUnstableIgnition {
+            get { return limitToPreventUnstableIgnition.Get (Instance); }
+            set { limitToPreventUnstableIgnition.Set (Instance, value); }
+        }
+
+        /// <summary>
+        /// Whether to fire the RCS forward to settle the fuel before the engines ignite.
+        /// </summary>
+        /// <remarks>MechJeb shows this setting only with Real Fuels, as stock engines have
+        /// stable fuel.</remarks>
+        [KRPCProperty]
+        public bool AutoRCSUllaging {
+            get { return autoRCSUllaging.Get (Instance); }
+            set { autoRCSUllaging.Set (Instance, value); }
+        }
+
+        /// <summary>
+        /// The limiter that limits the throttle now.
+        /// </summary>
+        [KRPCProperty]
+        public LimitMode Limiter {
+            get { return (LimitMode)limiter (Instance); }
+        }
+    }
+
+    /// <summary>
+    /// A throttle limiter. See <see cref="ThrustLimiter.Limiter"/>.
+    /// </summary>
+    [KRPCEnum (Service = "MechJeb")]
+    public enum LimitMode
+    {
+        /// <summary>
+        /// No limiter limits the throttle.
+        /// </summary>
+        None,
+
+        /// <summary>
+        /// The terminal velocity limit.
+        /// </summary>
+        TerminalVelocity,
+
+        /// <summary>
+        /// <see cref="ThrustLimiter.LimitToPreventOverheats"/>.
+        /// </summary>
+        Temperature,
+
+        /// <summary>
+        /// <see cref="ThrustLimiter.LimitToPreventFlameout"/>.
+        /// </summary>
+        Flameout,
+
+        /// <summary>
+        /// <see cref="ThrustLimiter.LimitAcceleration"/>.
+        /// </summary>
+        Acceleration,
+
+        /// <summary>
+        /// <see cref="ThrustLimiter.LimitThrottle"/>.
+        /// </summary>
+        Throttle,
+
+        /// <summary>
+        /// <see cref="ThrustLimiter.LimitDynamicPressure"/>.
+        /// </summary>
+        DynamicPressure,
+
+        /// <summary>
+        /// <see cref="ThrustLimiter.LimiterMinThrottle"/>.
+        /// </summary>
+        MinThrottle,
+
+        /// <summary>
+        /// <see cref="ThrustLimiter.ElectricThrottle"/>.
+        /// </summary>
+        Electric,
+
+        /// <summary>
+        /// <see cref="ThrustLimiter.LimitToPreventUnstableIgnition"/>.
+        /// </summary>
+        UnstableIgnition,
+
+        /// <summary>
+        /// <see cref="ThrustLimiter.AutoRCSUllaging"/>.
+        /// </summary>
+        AutoRCSUllage
     }
 
     /// <summary>
     /// The result of the differential throttle. See
-    /// <see cref="ThrustController.DifferentialThrottleStatus"/>.
+    /// <see cref="ThrustLimiter.DifferentialThrottleStatus"/>.
     /// </summary>
     [KRPCEnum (Service = "MechJeb")]
     public enum DifferentialThrottleStatus

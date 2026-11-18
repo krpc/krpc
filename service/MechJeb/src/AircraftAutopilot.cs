@@ -4,10 +4,10 @@ using KRPC.Utils;
 namespace KRPC.MechJeb
 {
     /// <summary>
-    /// The airplane autopilot, which holds a heading, altitude, vertical speed, roll and speed.
+    /// The Aircraft Autopilot window, which holds a heading, altitude, vertical speed, roll and speed.
     /// </summary>
     [KRPCClass (Service = "MechJeb")]
-    public sealed class AirplaneAutopilot : KRPCComputerModule
+    public sealed class AircraftAutopilot : KRPCComputerModule
     {
         static Field<object, bool> headingHoldEnabled;
         static Field<object, bool> altitudeHoldEnabled;
@@ -69,7 +69,7 @@ namespace KRPC.MechJeb
             pitchDownLimit = Bindings.EditableDouble (type, "PitchDownLimit");
         }
 
-        internal AirplaneAutopilot () : base ("MechJebModuleAirplaneAutopilot")
+        internal AircraftAutopilot () : base ("MechJebModuleAirplaneAutopilot")
         {
         }
 

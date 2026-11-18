@@ -16,15 +16,12 @@ namespace KRPC.MechJeb
     [KRPCClass (Service = "MechJeb")]
     public sealed class TargetController : ComputerModule
     {
-        static Action<object, global::CelestialBody, double, double> setPositionTarget;
-        static Func<object, string> getPositionTargetString;
-        static Func<object, Vector3d> getPositionTargetPosition;
         static Action<object, string> setDirectionTarget;
-        static Action<object> pickPositionTargetOnMap;
         static Action<object, Vector3d> updateDirectionTarget;
         static Action<object> onFixedUpdate;
         static Func<object, bool> normalTargetExists;
         static Func<object, bool> positionTargetExists;
+        static Func<object, object> target;
         static Func<object, bool> canAlign;
         static Func<object, global::Orbit> targetOrbit;
         static Func<object, Vector3d> position;
@@ -33,19 +30,17 @@ namespace KRPC.MechJeb
         static Func<object, Vector3d> relativePosition;
         static Func<object, Vector3d> dockingAxis;
         static Field<object, double> targetLongitude;
+        static Func<object, double> targetLatitude;
 
         internal static new void Load ()
         {
             var type = Bindings.Type ("MuMech.MechJebModuleTargetController");
-            setPositionTarget = type.Method<Action<object, global::CelestialBody, double, double>> ("SetPositionTarget");
-            getPositionTargetString = type.Method<Func<object, string>> ("GetPositionTargetString");
-            getPositionTargetPosition = type.Method<Func<object, Vector3d>> ("GetPositionTargetPosition");
             setDirectionTarget = type.Method<Action<object, string>> ("SetDirectionTarget");
-            pickPositionTargetOnMap = type.Method<Action<object>> ("PickPositionTargetOnMap");
             updateDirectionTarget = type.Method<Action<object, Vector3d>> ("UpdateDirectionTarget");
             onFixedUpdate = type.Method<Action<object>> ("OnFixedUpdate");
             normalTargetExists = type.Getter<object, bool> ("NormalTargetExists");
             positionTargetExists = type.Getter<object, bool> ("PositionTargetExists");
+            target = type.Getter<object, object> ("Target");
             canAlign = type.Getter<object, bool> ("CanAlign");
             targetOrbit = type.Getter<object, global::Orbit> ("TargetOrbit");
             position = type.Getter<object, Vector3d> ("Position");
@@ -55,6 +50,7 @@ namespace KRPC.MechJeb
             dockingAxis = type.Getter<object, Vector3d> ("DockingAxis");
             // An angle, which converts to its value in degrees
             targetLongitude = type.Field<object, double> ("targetLongitude");
+            targetLatitude = type.Getter<object, double> ("targetLatitude");
         }
 
         internal TargetController () : base ("MechJebModuleTargetController")
@@ -70,8 +66,34 @@ namespace KRPC.MechJeb
             onFixedUpdate (Instance);
         }
 
+        /// <summary>
+        /// MechJeb's target, or null if there is none.
+        /// </summary>
+        internal ITargetable Target {
+            get { return target (Instance) as ITargetable; }
+        }
+
+        /// <summary>
+        /// The latitude of the position target, in degrees.
+        /// </summary>
+        internal double TargetLatitude {
+            get { return targetLatitude (Instance); }
+        }
+
         internal global::Orbit InternalTargetOrbit {
             get { return targetOrbit (Instance); }
+        }
+
+        /// <summary>
+        /// The target controller module. Throws an exception if there is no target.
+        /// </summary>
+        object Targeted {
+            get {
+                var instance = Instance;
+                if (target (instance) == null)
+                    throw new InvalidOperationException ("There is no target");
+                return instance;
+            }
         }
 
         /// <summary>
@@ -84,38 +106,6 @@ namespace KRPC.MechJeb
         }
 
         /// <summary>
-        /// Set the target to a position on the surface of a body.
-        /// </summary>
-        /// <param name="body">The body.</param>
-        /// <param name="latitude">The latitude, in degrees.</param>
-        /// <param name="longitude">The longitude, in degrees.</param>
-        [KRPCMethod]
-        public void SetPositionTarget (SpaceCenter.Services.CelestialBody body, double latitude, double longitude)
-        {
-            if (ReferenceEquals (body, null))
-                throw new ArgumentNullException (nameof (body));
-            setPositionTarget (Instance, body.InternalBody, latitude, longitude);
-        }
-
-        /// <summary>
-        /// The position target as text.
-        /// </summary>
-        [KRPCMethod]
-        public string GetPositionTargetString ()
-        {
-            return getPositionTargetString (Instance);
-        }
-
-        /// <summary>
-        /// The world space position of the position target.
-        /// </summary>
-        [KRPCMethod]
-        public Tuple3 GetPositionTargetPosition ()
-        {
-            return getPositionTargetPosition (Instance).ToTuple ();
-        }
-
-        /// <summary>
         /// Set the target to a direction.
         /// </summary>
         /// <param name="name">The name of the target.</param>
@@ -124,15 +114,6 @@ namespace KRPC.MechJeb
         public void SetDirectionTarget (string name)
         {
             setDirectionTarget (Instance, name);
-        }
-
-        /// <summary>
-        /// Let the player pick the position target on the map.
-        /// </summary>
-        [KRPCMethod]
-        public void PickPositionTargetOnMap ()
-        {
-            pickPositionTargetOnMap (Instance);
         }
 
         /// <summary>
@@ -163,58 +144,68 @@ namespace KRPC.MechJeb
 
         /// <summary>
         /// Whether the vessel can align with the target, which it can with a docking port.
+        /// Throws an exception if there is no target.
         /// </summary>
         [KRPCProperty]
         public bool CanAlign {
-            get { return canAlign (Instance); }
+            get { return canAlign (Targeted); }
         }
 
         /// <summary>
-        /// The orbit of the target.
+        /// The orbit of the target. Throws an exception if there is no target, or the target
+        /// has no orbit.
         /// </summary>
         [KRPCProperty]
         public SpaceCenter.Services.Orbit TargetOrbit {
-            get { return new SpaceCenter.Services.Orbit (InternalTargetOrbit); }
+            get {
+                var orbit = targetOrbit (Targeted);
+                if (orbit == null)
+                    throw new InvalidOperationException ("The target has no orbit");
+                return new SpaceCenter.Services.Orbit (orbit);
+            }
         }
 
         /// <summary>
-        /// The world space position of the target.
+        /// The world space position of the target. Throws an exception if there is no target.
         /// </summary>
         [KRPCProperty]
         public Tuple3 Position {
-            get { return position (Instance).ToTuple (); }
+            get { return position (Targeted).ToTuple (); }
         }
 
         /// <summary>
-        /// The distance to the target, in meters.
+        /// The distance to the target, in meters. Throws an exception if there is no target.
         /// </summary>
         [KRPCProperty]
         public float Distance {
-            get { return distance (Instance); }
+            get { return distance (Targeted); }
         }
 
         /// <summary>
         /// The world space velocity of the vessel relative to the target, in <unit>m/s</unit>.
+        /// Throws an exception if there is no target.
         /// </summary>
         [KRPCProperty]
         public Tuple3 RelativeVelocity {
-            get { return relativeVelocity (Instance).ToTuple (); }
+            get { return relativeVelocity (Targeted).ToTuple (); }
         }
 
         /// <summary>
-        /// The world space position of the vessel relative to the target.
+        /// The world space position of the vessel relative to the target. Throws an exception
+        /// if there is no target.
         /// </summary>
         [KRPCProperty]
         public Tuple3 RelativePosition {
-            get { return relativePosition (Instance).ToTuple (); }
+            get { return relativePosition (Targeted).ToTuple (); }
         }
 
         /// <summary>
-        /// The world space docking axis of the target.
+        /// The world space docking axis of the target. Throws an exception if there is no
+        /// target.
         /// </summary>
         [KRPCProperty]
         public Tuple3 DockingAxis {
-            get { return dockingAxis (Instance).ToTuple (); }
+            get { return dockingAxis (Targeted).ToTuple (); }
         }
     }
 }

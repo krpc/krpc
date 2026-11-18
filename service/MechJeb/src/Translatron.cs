@@ -30,7 +30,7 @@ namespace KRPC.MechJeb
         }
 
         static object Thrust {
-            get { return MechJeb.ThrustController.Instance; }
+            get { return MechJeb.Utilities.Thrust.Instance; }
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace KRPC.MechJeb
             get { return transSpd.Get (Instance); }
             set {
                 transSpd.Set (Instance, value);
-                ThrustController.TransSpdAct.Set (Thrust, (float)value);
+                ThrustLimiter.TransSpdAct.Set (Thrust, (float)value);
             }
         }
 
@@ -50,8 +50,8 @@ namespace KRPC.MechJeb
         /// </summary>
         [KRPCProperty]
         public bool KillHorizontalSpeed {
-            get { return ThrustController.TransKillH.Get (Thrust); }
-            set { ThrustController.TransKillH.Set (Thrust, value); }
+            get { return ThrustLimiter.TransKillH.Get (Thrust); }
+            set { ThrustLimiter.TransKillH.Set (Thrust, value); }
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace KRPC.MechJeb
         [KRPCProperty]
         public TranslatronMode Mode {
             get {
-                var mode = ThrustController.TMode (Thrust);
+                var mode = ThrustLimiter.TMode (Thrust);
                 return mode == direct ? TranslatronMode.Direct : (TranslatronMode)mode;
             }
             set {

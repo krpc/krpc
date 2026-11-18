@@ -22,6 +22,7 @@ namespace KRPC.MechJeb
         static Field<object, bool> forceRol;
         static Field<object, bool> forcePitch;
         static Field<object, bool> forceYaw;
+        static Field<object, double> rol;
         static Field<object, double> srfHdg;
         static Field<object, double> srfPit;
         static Field<object, double> srfRol;
@@ -31,6 +32,7 @@ namespace KRPC.MechJeb
         static Field<object, int> advReference;
         static Field<object, int> advDirection;
         static Action<object, bool> engage;
+        static Action<object, bool, bool, bool> setAxisControl;
         static int [] attitudeReferences;
 
         internal static new void Load ()
@@ -41,6 +43,7 @@ namespace KRPC.MechJeb
             forceRol = type.Field<object, bool> ("forceRol");
             forcePitch = type.Field<object, bool> ("forcePitch");
             forceYaw = type.Field<object, bool> ("forceYaw");
+            rol = Bindings.EditableDouble (type, "rol");
             srfHdg = Bindings.EditableDouble (type, "srfHdg");
             srfPit = Bindings.EditableDouble (type, "srfPit");
             srfRol = Bindings.EditableDouble (type, "srfRol");
@@ -50,6 +53,7 @@ namespace KRPC.MechJeb
             advReference = type.Field<object, int> ("advReference");
             advDirection = type.Field<object, int> ("advDirection");
             engage = type.Method<Action<object, bool>> ("Engage");
+            setAxisControl = Bindings.Type ("MuMech.MechJebModuleAttitudeController").Method<Action<object, bool, bool, bool>> ("SetAxisControl");
             var reference = Bindings.Type ("MuMech.AttitudeReference").Type;
             attitudeReferences = reference == null ? null :
                 Array.ConvertAll (attitudeReferenceNames, name => (int)Enum.Parse (reference, name));
@@ -120,9 +124,25 @@ namespace KRPC.MechJeb
         }
 
         /// <summary>
+        /// The roll, in degrees. 0 is top side up.
+        /// </summary>
+        /// <remarks>
+        /// Requires <see cref="ForceRoll"/>, and applies in every mode but
+        /// <see cref="SmartASSAutopilotMode.KillRot"/> and the surface modes.
+        /// </remarks>
+        [KRPCProperty]
+        public double Roll {
+            get { return rol.Get (Instance); }
+            set { rol.Set (Instance, value); }
+        }
+
+        /// <summary>
         /// The heading, in degrees.
         /// </summary>
-        /// <remarks>Applies in the <see cref="SmartASSAutopilotMode.Surface"/> mode.</remarks>
+        /// <remarks>
+        /// Requires <see cref="ForceYaw"/>, and applies in the <see cref="SmartASSAutopilotMode.Surface"/>
+        /// mode.
+        /// </remarks>
         [KRPCProperty]
         public double SurfaceHeading {
             get { return srfHdg.Get (Instance); }
@@ -132,7 +152,10 @@ namespace KRPC.MechJeb
         /// <summary>
         /// The pitch above the horizon, in degrees. 90 is straight up.
         /// </summary>
-        /// <remarks>Applies in the <see cref="SmartASSAutopilotMode.Surface"/> mode.</remarks>
+        /// <remarks>
+        /// Requires <see cref="ForcePitch"/>, and applies in the <see cref="SmartASSAutopilotMode.Surface"/>
+        /// mode.
+        /// </remarks>
         [KRPCProperty]
         public double SurfacePitch {
             get { return srfPit.Get (Instance); }
@@ -142,7 +165,10 @@ namespace KRPC.MechJeb
         /// <summary>
         /// The roll, in degrees. 0 is top side up.
         /// </summary>
-        /// <remarks>Applies in the <see cref="SmartASSAutopilotMode.Surface"/> mode.</remarks>
+        /// <remarks>
+        /// Requires <see cref="ForceRoll"/>, and applies in the <see cref="SmartASSAutopilotMode.Surface"/>
+        /// mode.
+        /// </remarks>
         [KRPCProperty]
         public double SurfaceRoll {
             get { return srfRol.Get (Instance); }
@@ -153,7 +179,8 @@ namespace KRPC.MechJeb
         /// The yaw from the surface velocity, in degrees.
         /// </summary>
         /// <remarks>
-        /// Applies in the <see cref="SmartASSAutopilotMode.SurfacePrograde"/> and
+        /// Requires <see cref="ForceYaw"/>, and applies in the
+        /// <see cref="SmartASSAutopilotMode.SurfacePrograde"/> and
         /// <see cref="SmartASSAutopilotMode.SurfaceRetrograde"/> modes.
         /// </remarks>
         [KRPCProperty]
@@ -166,7 +193,8 @@ namespace KRPC.MechJeb
         /// The pitch from the surface velocity, in degrees.
         /// </summary>
         /// <remarks>
-        /// Applies in the <see cref="SmartASSAutopilotMode.SurfacePrograde"/> and
+        /// Requires <see cref="ForcePitch"/>, and applies in the
+        /// <see cref="SmartASSAutopilotMode.SurfacePrograde"/> and
         /// <see cref="SmartASSAutopilotMode.SurfaceRetrograde"/> modes.
         /// </remarks>
         [KRPCProperty]
@@ -179,7 +207,8 @@ namespace KRPC.MechJeb
         /// The roll, in degrees. 0 is top side up.
         /// </summary>
         /// <remarks>
-        /// Applies in the <see cref="SmartASSAutopilotMode.SurfacePrograde"/> and
+        /// Requires <see cref="ForceRoll"/>, and applies in the
+        /// <see cref="SmartASSAutopilotMode.SurfacePrograde"/> and
         /// <see cref="SmartASSAutopilotMode.SurfaceRetrograde"/> modes.
         /// </remarks>
         [KRPCProperty]
@@ -230,7 +259,15 @@ namespace KRPC.MechJeb
         [KRPCMethod]
         public void Update (bool resetPID)
         {
-            engage (Instance, resetPID);
+            var instance = Instance;
+            engage (instance, resetPID);
+            // MechJeb's window sets the axes of the surface modes each frame it is drawn, and
+            // Engage controls all three
+            var mode = (SmartASSAutopilotMode)target.Get (instance);
+            if (mode == SmartASSAutopilotMode.Surface || mode == SmartASSAutopilotMode.SurfacePrograde ||
+                mode == SmartASSAutopilotMode.SurfaceRetrograde)
+                setAxisControl (MechJeb.AttitudeAdjustment.Instance,
+                    forcePitch.Get (instance), forceYaw.Get (instance), forceRol.Get (instance));
         }
     }
 

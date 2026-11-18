@@ -2,11 +2,11 @@ import krpc
 
 conn = krpc.connect(name="MechJeb Example")
 vessel = conn.space_center.active_vessel
-ascent = conn.mech_jeb.ascent_autopilot
+ascent = conn.mech_jeb.ascent_guidance
 
 ascent.desired_orbit_altitude = 100000
 ascent.desired_inclination = 6
-ascent.autostage = True
+ascent.settings.autostage = True
 ascent.enabled = True
 
 vessel.control.activate_next_stage()

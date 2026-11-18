@@ -19,6 +19,7 @@ GameData
 Genhis
 Goliath
 Gradle
+glideslope
 grayscale
 Heatshields
 Hohmann
@@ -35,8 +36,10 @@ Kosmo
 Landers
 LaserDist
 LaunchPad
+Minmus
 MoI
 ModuleEngines
+Munsplorer
 MyGroup
 NUnit
 NaN
@@ -59,6 +62,8 @@ apoapsis
 arg
 async
 atm
+autoland
+autostaging
 autotune
 autotuned
 badass
@@ -84,6 +89,7 @@ cppcheck
 crossfeed
 deadband
 decoupler
+deorbit
 decouplers
 deployable
 destructor

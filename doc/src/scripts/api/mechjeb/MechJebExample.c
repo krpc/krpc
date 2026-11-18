@@ -23,14 +23,16 @@ int main() {
 
   krpc_SpaceCenter_Vessel_t vessel;
   krpc_SpaceCenter_ActiveVessel(conn, &vessel);
-  krpc_MechJeb_AscentAutopilot_t ascent;
-  krpc_MechJeb_AscentAutopilot(conn, &ascent);
+  krpc_MechJeb_AscentGuidance_t ascent;
+  krpc_MechJeb_AscentGuidance(conn, &ascent);
+  krpc_MechJeb_AscentSettings_t settings;
+  krpc_MechJeb_AscentGuidance_Settings(conn, &settings, ascent);
 
-  krpc_MechJeb_AscentAutopilot_set_DesiredOrbitAltitude(conn, ascent,
-                                                        100000);
-  krpc_MechJeb_AscentAutopilot_set_DesiredInclination(conn, ascent, 6);
-  krpc_MechJeb_AscentAutopilot_set_Autostage(conn, ascent, true);
-  krpc_MechJeb_AscentAutopilot_set_Enabled(conn, ascent, true);
+  krpc_MechJeb_AscentGuidance_set_DesiredOrbitAltitude(conn, ascent,
+                                                       100000);
+  krpc_MechJeb_AscentGuidance_set_DesiredInclination(conn, ascent, 6);
+  krpc_MechJeb_AscentSettings_set_Autostage(conn, settings, true);
+  krpc_MechJeb_AscentGuidance_set_Enabled(conn, ascent, true);
 
   krpc_SpaceCenter_Control_t control;
   krpc_SpaceCenter_Vessel_Control(conn, &control, vessel);
@@ -38,7 +40,7 @@ int main() {
 
   bool enabled = true;
   while (enabled) {
-    krpc_MechJeb_AscentAutopilot_Enabled(conn, &enabled, ascent);
+    krpc_MechJeb_AscentGuidance_Enabled(conn, &enabled, ascent);
     sleep_ms(1000);
   }
 

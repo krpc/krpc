@@ -112,6 +112,16 @@ def in_orbit(test: TestCase) -> None:
     test.assertGreater(orbit.periapsis_altitude, atmosphere)
 
 
+def landed_on(body: str) -> Callable[[TestCase], None]:
+    def check(test: TestCase) -> None:
+        sc = test.connect().space_center
+        vessel = sc.active_vessel
+        test.assertEqual(body, vessel.orbit.body.name)
+        test.assertEqual(sc.VesselSituation.landed, vessel.situation)
+
+    return check
+
+
 def controlling(title: str) -> Callable[[TestCase], None]:
     def check(test: TestCase) -> None:
         parts = test.connect().space_center.active_vessel.parts

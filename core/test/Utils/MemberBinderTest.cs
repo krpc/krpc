@@ -82,6 +82,16 @@ namespace KRPC.Test.Utils
         }
 
         [Test]
+        public void ReadOnlyFieldWritten ()
+        {
+            var field = new MemberBinder ("Mod", typeof (Base)).ReadOnlyField<Base, int> ("limit");
+            var obj = new Base ();
+            field.Set (obj, 5);
+            Assert.AreEqual (5, field.Get (obj));
+            Assert.AreEqual (0, warnings.Count);
+        }
+
+        [Test]
         public void RequiredReadOnlyField ()
         {
             var bind = new MemberBinder ("Mod", typeof (Base)).Require;
