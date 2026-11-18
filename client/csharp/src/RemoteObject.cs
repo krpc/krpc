@@ -5,7 +5,7 @@ namespace KRPC.Client
     /// <summary>
     /// Base class for remote objects.
     /// </summary>
-    public class RemoteObject : IEquatable<RemoteObject>
+    public class RemoteObject : IEquatable<RemoteObject>, IComparable<RemoteObject>, IComparable
     {
         /// <summary>
         /// A connection to the server where the object is stored.
@@ -87,6 +87,70 @@ namespace KRPC.Client
             if (ReferenceEquals (lhs, rhs))
                 return false;
             return !(lhs.Equals (rhs));
+        }
+
+        /// <summary>
+        /// The order of this object and another, by identifier.
+        /// </summary>
+        /// <remarks>
+        /// A null object orders first.
+        /// </remarks>
+        public int CompareTo (RemoteObject other)
+        {
+            return ReferenceEquals (other, null) ? 1 : id.CompareTo (other.id);
+        }
+
+        /// <summary>
+        /// The order of this object and another, by identifier. Throws an exception if the
+        /// object is not a remote object.
+        /// </summary>
+        public int CompareTo (object obj)
+        {
+            if (ReferenceEquals (obj, null))
+                return 1;
+            var typedObj = obj as RemoteObject;
+            if (typedObj == null)
+                throw new ArgumentException ("The object is not a remote object", nameof (obj));
+            return CompareTo (typedObj);
+        }
+
+        static int Compare (RemoteObject lhs, RemoteObject rhs)
+        {
+            if (ReferenceEquals (lhs, null))
+                return ReferenceEquals (rhs, null) ? 0 : -1;
+            return lhs.CompareTo (rhs);
+        }
+
+        /// <summary>
+        /// Check if a remote object orders before another.
+        /// </summary>
+        public static bool operator < (RemoteObject lhs, RemoteObject rhs)
+        {
+            return Compare (lhs, rhs) < 0;
+        }
+
+        /// <summary>
+        /// Check if a remote object orders after another.
+        /// </summary>
+        public static bool operator > (RemoteObject lhs, RemoteObject rhs)
+        {
+            return Compare (lhs, rhs) > 0;
+        }
+
+        /// <summary>
+        /// Check if a remote object orders before or equal to another.
+        /// </summary>
+        public static bool operator <= (RemoteObject lhs, RemoteObject rhs)
+        {
+            return Compare (lhs, rhs) <= 0;
+        }
+
+        /// <summary>
+        /// Check if a remote object orders after or equal to another.
+        /// </summary>
+        public static bool operator >= (RemoteObject lhs, RemoteObject rhs)
+        {
+            return Compare (lhs, rhs) >= 0;
         }
     }
 }

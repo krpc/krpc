@@ -54,6 +54,6 @@ public abstract class RemoteObject implements Serializable, Comparable<RemoteObj
 
   @Override
     public int compareTo(final RemoteObject obj) {
-    return Long.valueOf(this.id).compareTo(Long.valueOf(obj.id));
+    return Long.compareUnsigned(this.id, obj.id);
   }
 }

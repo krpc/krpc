@@ -30,7 +30,6 @@ test_concurrency.py::test_update_callback_after_close  # The client has no race 
 test_streams.py::test_drop_last_handle  # Dropping the last handle leaves the stream on the server
 test_events.py::test_drop_last_handle  # As test_streams.py::test_drop_last_handle
 test_streams.py::test_remove_during_server_ending  # The client has no race points
-test_objects.py::test_sorting  # A remote object has no ordering
 test_concurrency.py::test_value_read_before_wake  # The client has no race points
 test_streams.py::test_value_as_first_call_ends  # The client has no race points
 test_concurrency.py::test_wait_holding_another @skip  # The dispatcher thread waits for the condition held, so the update of the stream waited on is never announced

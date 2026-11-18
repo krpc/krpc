@@ -164,6 +164,8 @@ namespace KRPC.Client.Conformance
             case KRPC.Conformance.Value.ValueOneofCase.Null:
                 return null;
             case KRPC.Conformance.Value.ValueOneofCase.Object:
+                if (value.Object.Handle == 0)
+                    return Object<global::KRPC.Client.Services.TestService.TestClass> (value);
                 return Handles.Get (value.Object.Handle);
             case KRPC.Conformance.Value.ValueOneofCase.Enum:
                 return Enum<global::KRPC.Client.Services.TestService.TestEnum> (value);

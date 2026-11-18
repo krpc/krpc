@@ -56,4 +56,8 @@ function compat.bandnot(a, b)
   return _bitwise(a, b, function(x, y) return x == 1 and y == 0 end)
 end
 
+-- Whether a is less than b, both compared as unsigned integers. Without an integer type, a
+-- number is never negative, so this is the plain comparison.
+compat.ult = math.ult or function(a, b) return a < b end
+
 return compat

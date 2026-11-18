@@ -19,7 +19,6 @@ test_codec.py::test_invalid_utf8  # A string that is not valid UTF-8 decodes
 test_streams.py::test_update_callback  # A connection has no stream update callback
 test_concurrency.py::test_wait_for_update  # A connection has no stream update condition
 test_concurrency.py::test_close_while_holding[updates]  # As test_wait_for_update
-test_objects.py::test_sorting  # compareTo compares ids as signed longs, so an id past 63 bits orders first
 test_streams.py::test_procedure_returning_an_event  # The testee cannot stream a procedure that returns an event
 test_concurrency.py::test_wake_update_waiter[close]  # As test_wait_for_update
 test_concurrency.py::test_wake_update_waiter[connection-failure]  # As test_wait_for_update

@@ -232,6 +232,9 @@ final class Values {
       case NULL:
         return null;
       case OBJECT:
+        if (value.getObject().getHandle() == 0) {
+          return argObject(krpc.client.services.TestService.TestClass.class).apply(value);
+        }
         return getHandle(value.getObject().getHandle());
       case ENUM:
         return argEnum(krpc.client.services.TestService.TestEnum::fromValue).apply(value);

@@ -183,7 +183,8 @@ reads the game as it is now:
 
 .. literalinclude:: /scripts/lua/RemoteObjects.lua
 
-Two objects for the same thing in the game compare equal with ``==``.
+Two objects for the same thing in the game compare equal with ``==``. Objects are also ordered
+with ``<``, so a list of them can be sorted.
 
 Once the thing an object identifies is destroyed, such as a part that explodes, each call through
 it raises an error naming :class:`KRPC.ObjectDestroyedException`.

@@ -790,6 +790,17 @@ function Types.RemoteObject:__eq(other)
   return self._object_id == other._object_id
 end
 
+-- Ordered by id, compared as unsigned, as an id past 2^63 - 1 is a negative Lua integer
+local _unsigned_less = compat.ult
+
+function Types.RemoteObject:__lt(other)
+  return _unsigned_less(self._object_id, other._object_id)
+end
+
+function Types.RemoteObject:__le(other)
+  return not _unsigned_less(other._object_id, self._object_id)
+end
+
 function Types.RemoteObject:__tostring()
   return string.format('<%s.%s remote object #%d>', self._service_name, self._class_name, self._object_id)
 end
