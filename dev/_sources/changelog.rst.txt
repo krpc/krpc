@@ -308,6 +308,7 @@ C-nano client
 * Add a ``KRPC_CLASS_``, ``KRPC_ENUMERATION_`` or ``KRPC_STRUCT_`` macro for each type of a service, with its ids for server side functions (:issue:`1336`)
 * Add a ``KRPC_FIELD_`` macro for each field of a structure, with its position for ``krpc_KRPC_Expression_GetFieldByIndex`` (:issue:`1336`)
 * Add a ``_call_template`` function for each member, which fills in a call with no instance or arguments, for ``krpc_KRPC_Expression_CallWithArguments`` (:issue:`1352`)
+* Fix the clang-tidy warning from ``KRPC_FREE_LIST`` and ``KRPC_FREE_SET`` on a list or set of strings (:issue:`1375`)
 
 
 C# client

@@ -8,7 +8,7 @@ import org.javatuples.Triplet;
 
 public class VesselVelocity {
     public static void main(String[] args) throws InterruptedException {
-      Connection connection = Connection.newInstance("Vessel velocity");
+        Connection connection = Connection.newInstance("Vessel velocity");
         SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
         Vessel vessel = spaceCenter.getActiveVessel();
         ReferenceFrame refFrame = ReferenceFrame.createHybrid(

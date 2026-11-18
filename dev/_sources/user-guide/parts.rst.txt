@@ -6,8 +6,8 @@ Parts
 A vessel is made of parts, connected to one another in a tree. This guide shows how to walk that
 tree, how fuel lines fit into it, and how the staging numbers of each part relate to the staging
 sequence. It then shows how to reach any part module, including those of mods with no kRPC
-service. The examples use the vessel below, whose craft file you can
-:download:`download here </crafts/PartsTree.craft>`.
+service. The tree, fuel line and staging examples use the vessel below, whose craft file you
+can :download:`download here </crafts/PartsTree.craft>`.
 
 .. container:: clearer
 
@@ -43,37 +43,37 @@ This example walks the tree depth first, and prints each part indented by its de
 
 .. tabs::
 
-   .. tab:: Python
+   .. group-tab:: Python
 
       .. literalinclude:: /scripts/user-guide/parts/TreeTraversal.py
          :language: python
 
-   .. tab:: C#
+   .. group-tab:: C#
 
       .. literalinclude:: /scripts/user-guide/parts/TreeTraversal.cs
          :language: csharp
 
-   .. tab:: C++
+   .. group-tab:: C++
 
       .. literalinclude:: /scripts/user-guide/parts/TreeTraversal.cpp
          :language: cpp
 
-   .. tab:: C
+   .. group-tab:: C
 
       .. literalinclude:: /scripts/user-guide/parts/TreeTraversal.c
          :language: c
 
-   .. tab:: Java
+   .. group-tab:: Java
 
       .. literalinclude:: /scripts/user-guide/parts/TreeTraversal.java
          :language: java
 
-   .. tab:: Lua
+   .. group-tab:: Lua
 
       .. literalinclude:: /scripts/user-guide/parts/TreeTraversal.lua
          :language: lua
 
-   .. tab:: JavaScript
+   .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/parts/TreeTraversal.js
          :language: javascript
@@ -120,37 +120,37 @@ as before, and prints each part's attachment mode:
 
 .. tabs::
 
-   .. tab:: Python
+   .. group-tab:: Python
 
       .. literalinclude:: /scripts/user-guide/parts/AttachmentModes.py
          :language: python
 
-   .. tab:: C#
+   .. group-tab:: C#
 
       .. literalinclude:: /scripts/user-guide/parts/AttachmentModes.cs
          :language: csharp
 
-   .. tab:: C++
+   .. group-tab:: C++
 
       .. literalinclude:: /scripts/user-guide/parts/AttachmentModes.cpp
          :language: cpp
 
-   .. tab:: C
+   .. group-tab:: C
 
       .. literalinclude:: /scripts/user-guide/parts/AttachmentModes.c
          :language: c
 
-   .. tab:: Java
+   .. group-tab:: Java
 
       .. literalinclude:: /scripts/user-guide/parts/AttachmentModes.java
          :language: java
 
-   .. tab:: Lua
+   .. group-tab:: Lua
 
       .. literalinclude:: /scripts/user-guide/parts/AttachmentModes.lua
          :language: lua
 
-   .. tab:: JavaScript
+   .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/parts/AttachmentModes.js
          :language: javascript
@@ -272,13 +272,66 @@ has three lists:
 * ``Module.ActionList``: the module's actions, the ones an action group can hold.
 
 This example reads the engine fields the right-click menu shows, limits the thrust of each engine,
-and extends the solar panels:
+and extends the solar panels. It covers engines with a ``ModuleEngines`` module, and skips those
+with ``ModuleEnginesFX``, such as the jet engines:
 
-.. literalinclude:: /scripts/user-guide/parts/PartModules.py
-   :language: python
-   :start-after: [docs]
-   :end-before: [/docs]
-   :dedent:
+.. tabs::
+
+   .. group-tab:: Python
+
+      .. literalinclude:: /scripts/user-guide/parts/PartModules.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C#
+
+      .. literalinclude:: /scripts/user-guide/parts/PartModules.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C++
+
+      .. literalinclude:: /scripts/user-guide/parts/PartModules.cpp
+         :language: cpp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/user-guide/parts/PartModules.c
+         :language: c
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: Java
+
+      .. literalinclude:: /scripts/user-guide/parts/PartModules.java
+         :language: java
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: Lua
+
+      .. literalinclude:: /scripts/user-guide/parts/PartModules.lua
+         :language: lua
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/parts/PartModules.js
+         :language: javascript
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
 ``PartField.Name``, ``PartEvent.Name`` and ``PartAction.Name`` are the identifiers in the module's
 code, which stay the same across game versions and languages. The names the menu shows are

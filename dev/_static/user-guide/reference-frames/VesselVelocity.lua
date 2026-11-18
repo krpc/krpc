@@ -1,6 +1,6 @@
 local krpc = require 'krpc'
 local socket = require 'socket'
-local conn = krpc.connect('Orbital speed')
+local conn = krpc.connect('Vessel velocity')
 local vessel = conn.space_center.active_vessel
 local ref_frame = conn.space_center.ReferenceFrame.create_hybrid(
   vessel.orbit.body.reference_frame,

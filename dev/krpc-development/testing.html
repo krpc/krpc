@@ -701,6 +701,37 @@ To test against a local build of one, pass <code class="docutils literal notrans
 <code class="docutils literal notranslate"><span class="pre">pkill</span> <span class="pre">-f</span> <span class="pre">KSP.x86_64</span></code>, or <code class="docutils literal notranslate"><span class="pre">taskkill</span> <span class="pre">/f</span> <span class="pre">/im</span> <span class="pre">KSP_x64.exe</span></code> on Windows.</p>
 </div>
 </section>
+<section id="documentation-examples-in-the-game">
+<h2>Documentation Examples in the Game<a class="headerlink" href="#documentation-examples-in-the-game" title="Link to this heading">#</a></h2>
+<p>The tests in <code class="docutils literal notranslate"><span class="pre">doc/test/</span></code> run the example programs in <code class="docutils literal notranslate"><span class="pre">doc/src/scripts/</span></code> against the game. Each
+test is marked <code class="docutils literal notranslate"><span class="pre">example</span></code> and its language, and the long flights <code class="docutils literal notranslate"><span class="pre">slow</span></code>. Select them with
+<code class="docutils literal notranslate"><span class="pre">-m</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bazel<span class="w"> </span>run<span class="w"> </span>//tools/game:test-ksp<span class="w"> </span>--<span class="w"> </span>doc/test<span class="w"> </span>-m<span class="w"> </span><span class="s2">"python and not slow"</span>
+</pre></div>
+</div>
+<p>A run with no path runs them too, slow flights included, which takes several hours. Pass
+<code class="docutils literal notranslate"><span class="pre">-m</span> <span class="pre">&quot;not</span> <span class="pre">example&quot;</span></code> to run only the tests in <code class="docutils literal notranslate"><span class="pre">service/*/test/</span></code>. The examples run on Linux
+only, and are skipped on Windows.</p>
+<p>An example passes when it exits with code 0, or for an example that runs until stopped, when it
+is still running and printing after a few seconds. It must write nothing to its error output.
+Some examples also check the game afterward, such as a launch reaching orbit.</p>
+<p><code class="docutils literal notranslate"><span class="pre">doc/test/examples.py</span></code> declares how each example runs. An entry names the example by its path
+under <code class="docutils literal notranslate"><span class="pre">doc/src/scripts/</span></code> without the extension, and covers every language that has it. The
+client guide folders share the <code class="docutils literal notranslate"><span class="pre">client/</span></code> prefix:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Example</span><span class="p">(</span><span class="s2">"client/Streaming1"</span><span class="p">,</span> <span class="s2">"orbit"</span><span class="p">,</span> <span class="n">run</span><span class="o">=</span><span class="n">Loop</span><span class="p">())</span>
+<span class="n">Example</span><span class="p">(</span>
+    <span class="s2">"tutorials/parts/DeployParachutes"</span><span class="p">,</span>
+    <span class="s2">"parts-tree-fresh"</span><span class="p">,</span>
+    <span class="n">check</span><span class="o">=</span><span class="n">checks</span><span class="o">.</span><span class="n">parachutes_deployed</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>The second argument names one of the game setups in <code class="docutils literal notranslate"><span class="pre">SETUPS</span></code>, such as a vessel in orbit, or a
+craft on the launch pad.</p>
+<p><code class="docutils literal notranslate"><span class="pre">doc/test/unsupported.txt</span></code> lists the examples the tests cannot run. Each line names the
+language, or <code class="docutils literal notranslate"><span class="pre">*</span></code> for every language, and the example, with the reason as a comment.
+<code class="docutils literal notranslate"><span class="pre">//doc:test</span></code> checks that every example is declared or listed, so a new example needs an entry.</p>
+</section>
 </section>
 
 
@@ -753,6 +784,7 @@ To test against a local build of one, pass <code class="docutils literal notrans
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tests-without-the-game">Tests without the Game</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conformance-tests">Conformance Tests</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tests-in-the-game">Tests in the Game</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-examples-in-the-game">Documentation Examples in the Game</a></li>
 </ul>
   </nav></div>
 

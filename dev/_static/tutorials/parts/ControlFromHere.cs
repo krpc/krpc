@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using KRPC.Client;
 using KRPC.Client.Services.SpaceCenter;
 

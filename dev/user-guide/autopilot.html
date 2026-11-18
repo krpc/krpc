@@ -32,6 +32,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/lua.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=a5c4661c" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=ba67256c" />
   
   <!-- So that users can add custom icons -->
@@ -45,6 +46,7 @@
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="../_static/tabs.js?v=3030b3cb"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'user-guide/autopilot';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.24.0';
@@ -484,6 +486,7 @@
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#">AutoPilot</a></li>
 <li class="toctree-l1"><a class="reference internal" href="control-loops.html">Control Loops</a></li>
+<li class="toctree-l1"><a class="reference internal" href="boats-and-submarines.html">Boats and Submarines</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="streams-and-events.html">Streams and Events</a></li>
@@ -566,24 +569,85 @@ defining where zero rotation is, and a <strong>target attitude</strong> in that 
 rotation, as a direction for the nose, or as a direction together with an up vector (see
 <a class="reference internal" href="#setting-target-attitude"><span class="std std-ref">Setting the target attitude</span></a> below for the full menu).</p>
 <p>A minimal use case looks like this:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ap</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-0-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-0-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-0-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-0-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-0-Qw==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-Qw==" name="Qw==" role="tab" tabindex="-1">C</button><button aria-controls="panel-0-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-0-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-THVh" name="THVh" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-0-SmF2YVNjcmlwdA==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tab" tabindex="-1">JavaScript</button></div><div aria-labelledby="tab-0-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-0-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ap</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span>
 <span class="n">ap</span><span class="o">.</span><span class="n">reference_frame</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">surface_reference_frame</span>
-<span class="n">ap</span><span class="o">.</span><span class="n">target_pitch_and_heading</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">)</span>  <span class="c1"># point straight up, facing east</span>
+<span class="c1"># 80 degrees above the horizon, facing east</span>
+<span class="n">ap</span><span class="o">.</span><span class="n">target_pitch_and_heading</span><span class="p">(</span><span class="mi">80</span><span class="p">,</span> <span class="mi">90</span><span class="p">)</span>
 <span class="n">ap</span><span class="o">.</span><span class="n">engaged</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="n">ap</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>  <span class="c1"># blocks until the vessel has settled on the target</span>
 <span class="n">ap</span><span class="o">.</span><span class="n">engaged</span> <span class="o">=</span> <span class="kc">False</span>
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">wait()</span></code> returns once the vessel has <em>settled</em> on the target: both the pointing error
+</div><div aria-labelledby="tab-0-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="kt">var</span><span class="w"> </span><span class="n">ap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">AutoPilot</span><span class="p">;</span>
+<span class="n">ap</span><span class="p">.</span><span class="n">ReferenceFrame</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">SurfaceReferenceFrame</span><span class="p">;</span>
+<span class="c1">// 80 degrees above the horizon, facing east</span>
+<span class="n">ap</span><span class="p">.</span><span class="n">TargetPitchAndHeading</span><span class="w"> </span><span class="p">(</span><span class="mi">80</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">);</span>
+<span class="n">ap</span><span class="p">.</span><span class="n">Engaged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span>
+<span class="n">ap</span><span class="p">.</span><span class="n">Wait</span><span class="w"> </span><span class="p">();</span><span class="w"> </span><span class="c1">// blocks until the vessel has settled on the target</span>
+<span class="n">ap</span><span class="p">.</span><span class="n">Engaged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">;</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">ap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">auto_pilot</span><span class="p">();</span>
+<span class="n">ap</span><span class="p">.</span><span class="n">set_reference_frame</span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="n">surface_reference_frame</span><span class="p">());</span>
+<span class="c1">// 80 degrees above the horizon, facing east</span>
+<span class="n">ap</span><span class="p">.</span><span class="n">target_pitch_and_heading</span><span class="p">(</span><span class="mi">80</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">);</span>
+<span class="n">ap</span><span class="p">.</span><span class="n">set_engaged</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
+<span class="n">ap</span><span class="p">.</span><span class="n">wait</span><span class="p">();</span><span class="w">  </span><span class="c1">// blocks until the vessel has settled on the target</span>
+<span class="n">ap</span><span class="p">.</span><span class="n">set_engaged</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-Qw==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">krpc_SpaceCenter_AutoPilot_t</span><span class="w"> </span><span class="n">ap</span><span class="p">;</span>
+<span class="n">krpc_SpaceCenter_Vessel_AutoPilot</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ap</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
+<span class="n">krpc_SpaceCenter_ReferenceFrame_t</span><span class="w"> </span><span class="n">frame</span><span class="p">;</span>
+<span class="n">krpc_SpaceCenter_Vessel_SurfaceReferenceFrame</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">frame</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
+<span class="n">krpc_SpaceCenter_AutoPilot_set_ReferenceFrame</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">ap</span><span class="p">,</span><span class="w"> </span><span class="n">frame</span><span class="p">);</span>
+<span class="c1">// 80 degrees above the horizon, facing east</span>
+<span class="n">krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">ap</span><span class="p">,</span><span class="w"> </span><span class="mi">80</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">);</span>
+<span class="n">krpc_SpaceCenter_AutoPilot_set_Engaged</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">ap</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
+<span class="c1">// blocks until the vessel has settled on the target</span>
+<span class="n">krpc_SpaceCenter_AutoPilot_Wait</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">ap</span><span class="p">,</span><span class="w"> </span><span class="mi">-1</span><span class="p">);</span>
+<span class="n">krpc_SpaceCenter_AutoPilot_set_Engaged</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">ap</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">);</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">AutoPilot</span><span class="w"> </span><span class="n">ap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="na">getAutoPilot</span><span class="p">();</span>
+<span class="n">ap</span><span class="p">.</span><span class="na">setReferenceFrame</span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="na">getSurfaceReferenceFrame</span><span class="p">());</span>
+<span class="c1">// 80 degrees above the horizon, facing east</span>
+<span class="n">ap</span><span class="p">.</span><span class="na">targetPitchAndHeading</span><span class="p">(</span><span class="mi">80</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">);</span>
+<span class="n">ap</span><span class="p">.</span><span class="na">setEngaged</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+<span class="n">ap</span><span class="p">.</span><span class="na">wait_</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="c1">// blocks until the vessel has settled on the target</span>
+<span class="n">ap</span><span class="p">.</span><span class="na">setEngaged</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-THVh" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-THVh" name="THVh" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">ap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">vessel</span><span class="p">.</span><span class="py">auto_pilot</span>
+<span class="nv">ap</span><span class="p">.</span><span class="py">reference_frame</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">vessel</span><span class="p">.</span><span class="py">surface_reference_frame</span>
+<span class="c1">-- 80 degrees above the horizon, facing east</span>
+<span class="nv">ap</span><span class="p">:</span><span class="nf">target_pitch_and_heading</span><span class="p">(</span><span class="mi">80</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">)</span>
+<span class="nv">ap</span><span class="p">.</span><span class="py">engaged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="nv">ap</span><span class="p">:</span><span class="nf">wait</span><span class="p">()</span><span class="w"> </span><span class="c1">-- blocks until the vessel has settled on the target</span>
+<span class="nv">ap</span><span class="p">.</span><span class="py">engaged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">ap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">vessel</span><span class="p">.</span><span class="nx">getAutoPilot</span><span class="p">();</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">ap</span><span class="p">.</span><span class="nx">setReferenceFrame</span><span class="p">(</span><span class="k">await</span><span class="w"> </span><span class="nx">vessel</span><span class="p">.</span><span class="nx">getSurfaceReferenceFrame</span><span class="p">());</span>
+<span class="c1">// 80 degrees above the horizon, facing east</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">ap</span><span class="p">.</span><span class="nx">targetPitchAndHeading</span><span class="p">(</span><span class="mf">80</span><span class="p">,</span><span class="w"> </span><span class="mf">90</span><span class="p">);</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">ap</span><span class="p">.</span><span class="nx">setEngaged</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">ap</span><span class="p">.</span><span class="nx">wait</span><span class="p">();</span><span class="w"> </span><span class="c1">// blocks until the vessel has settled on the target</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">ap</span><span class="p">.</span><span class="nx">setEngaged</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></div>
+<p><strong>wait</strong> returns once the vessel has <em>settled</em> on the target: both the pointing error
 and the vessel’s angular velocity relative to the target must fall below a threshold, so it
 does not return while the nose is still swinging through the target. A vessel turning with a
 moving target has settled. The two thresholds are the <strong>stopping angle
 threshold</strong> (default 1°) and the <strong>stopping velocity threshold</strong> (default 0.05 rad/s), and
-both can be adjusted. <code class="docutils literal notranslate"><span class="pre">wait()</span></code> also takes an optional <code class="docutils literal notranslate"><span class="pre">timeout</span></code> (in seconds), after
-which it raises rather than blocking indefinitely.</p>
+both can be adjusted. <strong>wait</strong> also takes a <code class="docutils literal notranslate"><span class="pre">timeout</span></code> in seconds, after which it fails with
+an error. A negative timeout, the default, waits indefinitely.</p>
 <p>While the autopilot is engaged it keeps SAS switched off, so that the two do not fight
 each other for control of the vessel. Attempting to enable SAS while the autopilot is
-engaged raises an <code class="docutils literal notranslate"><span class="pre">InvalidOperationException</span></code>.</p>
+engaged fails with an error.</p>
 <p>The autopilot handles structurally flexible craft automatically, detecting and
 suppressing any structural oscillation (wobble) with no tuning required (see
 <a class="reference internal" href="#flexible-craft"><span class="std std-ref">Flexible craft</span></a>). It models the authority and speed of aircraft
@@ -604,7 +668,7 @@ have a rotation to hand — copied from another vessel, or a saved orientation.<
 <li><p><strong>target direction</strong> — a vector for the nose to point along. <strong>Roll is not held</strong>: the
 autopilot drives the roll rate to zero but does not hold any particular roll angle. This
 is the “point here, don’t care which way is up” knob.</p></li>
-<li><p><strong>set_direction_and_up(direction, up, roll=0)</strong> — point the nose along <code class="docutils literal notranslate"><span class="pre">direction</span></code> and
+<li><p><strong>set direction and up</strong> — point the nose along <code class="docutils literal notranslate"><span class="pre">direction</span></code> and
 roll so the vessel’s roof aligns with the <code class="docutils literal notranslate"><span class="pre">up</span></code> vector (its component perpendicular to
 the nose), plus an optional <code class="docutils literal notranslate"><span class="pre">roll</span></code> offset in degrees. This is the way to <strong>hold an
 orientation through a maneuver</strong>. The <code class="docutils literal notranslate"><span class="pre">up</span></code> vector need not be perpendicular to
@@ -613,10 +677,10 @@ orientation through a maneuver</strong>. The <code class="docutils literal notra
 <code class="docutils literal notranslate"><span class="pre">up</span></code> — you can keep off the flight path.</p></li>
 </ul>
 <p>The <strong>roll sign</strong> follows standard aircraft bank: positive roll rolls the vessel to the
-right (right wing down) — clockwise seen from behind, looking along the nose. So
-<code class="docutils literal notranslate"><span class="pre">set_direction_and_up(horizon_dir,</span> <span class="pre">up,</span> <span class="pre">30)</span></code> banks 30° to the right of wings-level.</p>
-<p><code class="docutils literal notranslate"><span class="pre">set_direction_and_up</span></code> also stores <code class="docutils literal notranslate"><span class="pre">up</span></code> as a persistent <strong>up reference</strong>
-(<code class="docutils literal notranslate"><span class="pre">up_reference</span></code>, default the frame’s up / zenith). The reference is what
+right (right wing down) — clockwise seen from behind, looking along the nose. So a
+<code class="docutils literal notranslate"><span class="pre">roll</span></code> of 30 banks 30° to the right of wings-level.</p>
+<p><strong>Set direction and up</strong> also stores <code class="docutils literal notranslate"><span class="pre">up</span></code> as a persistent <strong>up reference</strong>
+(default the frame’s up / zenith). The reference is what
 <a class="reference internal" href="#convenience-setters"><span class="std std-ref">target roll</span></a> is measured against, and it persists across
 direction changes: set it once and every later roll is measured against the same vector.
 Setting the target rotation, the target direction, or the scalar pitch/heading leaves it
@@ -625,35 +689,157 @@ unchanged.</p>
 turn the nose sweeps from straight up to downrange — straight through the point where a
 roll measured against the vertical plane is undefined. Anchoring the roll to a fixed
 horizontal <code class="docutils literal notranslate"><span class="pre">up</span></code> (say north) keeps it defined the whole way:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ap</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-1-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-1-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-1-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-1-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-1-Qw==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-Qw==" name="Qw==" role="tab" tabindex="-1">C</button><button aria-controls="panel-1-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-1-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-THVh" name="THVh" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-1-SmF2YVNjcmlwdA==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tab" tabindex="-1">JavaScript</button></div><div aria-labelledby="tab-1-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-1-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ap</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span>
 <span class="n">ap</span><span class="o">.</span><span class="n">reference_frame</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">surface_reference_frame</span>
 <span class="n">up</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># north, in the surface frame, off the flight path</span>
 
-<span class="c1"># straight up at the pad, wings aligned to north</span>
+<span class="c1"># straight up at the pad, roof toward north</span>
 <span class="n">ap</span><span class="o">.</span><span class="n">set_direction_and_up</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">up</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 <span class="n">ap</span><span class="o">.</span><span class="n">engaged</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="n">ap</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
 
 <span class="c1"># ease over to the eastern horizon; roll stays defined through vertical</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">91</span><span class="p">):</span>
-    <span class="n">pitch</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="mi">90</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span>  <span class="c1"># 90° down to 0°</span>
+    <span class="n">pitch</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="mi">90</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span>  <span class="c1"># 89 down to 0 degrees</span>
     <span class="n">direction</span> <span class="o">=</span> <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">pitch</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">pitch</span><span class="p">))</span>
     <span class="n">ap</span><span class="o">.</span><span class="n">set_direction_and_up</span><span class="p">(</span><span class="n">direction</span><span class="p">,</span> <span class="n">up</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
     <span class="n">ap</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
 </pre></div>
 </div>
+</div><div aria-labelledby="tab-1-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-1-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="kt">var</span><span class="w"> </span><span class="n">ap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">AutoPilot</span><span class="p">;</span>
+<span class="n">ap</span><span class="p">.</span><span class="n">ReferenceFrame</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">SurfaceReferenceFrame</span><span class="p">;</span>
+<span class="c1">// north, in the surface frame, off the flight path</span>
+<span class="kt">var</span><span class="w"> </span><span class="n">up</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Tuple</span><span class="p">.</span><span class="n">Create</span><span class="w"> </span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">);</span>
+
+<span class="c1">// straight up at the pad, roof toward north</span>
+<span class="n">ap</span><span class="p">.</span><span class="n">SetDirectionAndUp</span><span class="w"> </span><span class="p">(</span><span class="n">Tuple</span><span class="p">.</span><span class="n">Create</span><span class="w"> </span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">),</span><span class="w"> </span><span class="n">up</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="n">ap</span><span class="p">.</span><span class="n">Engaged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span>
+<span class="n">ap</span><span class="p">.</span><span class="n">Wait</span><span class="w"> </span><span class="p">();</span>
+
+<span class="c1">// ease over to the eastern horizon; roll stays defined through vertical</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">90</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">var</span><span class="w"> </span><span class="n">pitch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">90</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">Math</span><span class="p">.</span><span class="n">PI</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">180</span><span class="p">;</span><span class="w"> </span><span class="c1">// 89 down to 0 degrees</span>
+<span class="w">    </span><span class="kt">var</span><span class="w"> </span><span class="n">direction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Tuple</span><span class="p">.</span><span class="n">Create</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="n">Math</span><span class="p">.</span><span class="n">Sin</span><span class="w"> </span><span class="p">(</span><span class="n">pitch</span><span class="p">),</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="n">Math</span><span class="p">.</span><span class="n">Cos</span><span class="w"> </span><span class="p">(</span><span class="n">pitch</span><span class="p">));</span>
+<span class="w">    </span><span class="n">ap</span><span class="p">.</span><span class="n">SetDirectionAndUp</span><span class="w"> </span><span class="p">(</span><span class="n">direction</span><span class="p">,</span><span class="w"> </span><span class="n">up</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="n">ap</span><span class="p">.</span><span class="n">Wait</span><span class="w"> </span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-1-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-1-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">ap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">auto_pilot</span><span class="p">();</span>
+<span class="n">ap</span><span class="p">.</span><span class="n">set_reference_frame</span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="n">surface_reference_frame</span><span class="p">());</span>
+<span class="c1">// north, in the surface frame, off the flight path</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">up</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_tuple</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">);</span>
+
+<span class="c1">// straight up at the pad, roof toward north</span>
+<span class="n">ap</span><span class="p">.</span><span class="n">set_direction_and_up</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_tuple</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">),</span><span class="w"> </span><span class="n">up</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="n">ap</span><span class="p">.</span><span class="n">set_engaged</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
+<span class="n">ap</span><span class="p">.</span><span class="n">wait</span><span class="p">();</span>
+
+<span class="c1">// ease over to the eastern horizon; roll stays defined through vertical</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">90</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">pitch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">90</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">pi</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">180</span><span class="p">;</span><span class="w">  </span><span class="c1">// 89 down to 0 degrees</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">direction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_tuple</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">sin</span><span class="p">(</span><span class="n">pitch</span><span class="p">),</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">cos</span><span class="p">(</span><span class="n">pitch</span><span class="p">));</span>
+<span class="w">  </span><span class="n">ap</span><span class="p">.</span><span class="n">set_direction_and_up</span><span class="p">(</span><span class="n">direction</span><span class="p">,</span><span class="w"> </span><span class="n">up</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">  </span><span class="n">ap</span><span class="p">.</span><span class="n">wait</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-1-Qw==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-1-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">krpc_SpaceCenter_AutoPilot_t</span><span class="w"> </span><span class="n">ap</span><span class="p">;</span>
+<span class="n">krpc_SpaceCenter_Vessel_AutoPilot</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ap</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
+<span class="n">krpc_SpaceCenter_ReferenceFrame_t</span><span class="w"> </span><span class="n">frame</span><span class="p">;</span>
+<span class="n">krpc_SpaceCenter_Vessel_SurfaceReferenceFrame</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">frame</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
+<span class="n">krpc_SpaceCenter_AutoPilot_set_ReferenceFrame</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">ap</span><span class="p">,</span><span class="w"> </span><span class="n">frame</span><span class="p">);</span>
+<span class="c1">// north, in the surface frame, off the flight path</span>
+<span class="n">krpc_tuple_double_double_double_t</span><span class="w"> </span><span class="n">up</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">};</span>
+
+<span class="c1">// straight up at the pad, roof toward north</span>
+<span class="n">krpc_tuple_double_double_double_t</span><span class="w"> </span><span class="n">vertical</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">};</span>
+<span class="n">krpc_SpaceCenter_AutoPilot_SetDirectionAndUp</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">ap</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">vertical</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">up</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="n">krpc_SpaceCenter_AutoPilot_set_Engaged</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">ap</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
+<span class="n">krpc_SpaceCenter_AutoPilot_Wait</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">ap</span><span class="p">,</span><span class="w"> </span><span class="mi">-1</span><span class="p">);</span>
+
+<span class="c1">// ease over to the eastern horizon; roll stays defined through vertical</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">90</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">pitch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">90</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">pi</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">180</span><span class="p">;</span><span class="w">  </span><span class="c1">// 89 down to 0 degrees</span>
+<span class="w">  </span><span class="n">krpc_tuple_double_double_double_t</span><span class="w"> </span><span class="n">direction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">sin</span><span class="p">(</span><span class="n">pitch</span><span class="p">),</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">                                                 </span><span class="n">cos</span><span class="p">(</span><span class="n">pitch</span><span class="p">)};</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_AutoPilot_SetDirectionAndUp</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">ap</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">direction</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">up</span><span class="p">,</span>
+<span class="w">                                               </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_AutoPilot_Wait</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">ap</span><span class="p">,</span><span class="w"> </span><span class="mi">-1</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-1-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-1-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">AutoPilot</span><span class="w"> </span><span class="n">ap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="na">getAutoPilot</span><span class="p">();</span>
+<span class="n">ap</span><span class="p">.</span><span class="na">setReferenceFrame</span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="na">getSurfaceReferenceFrame</span><span class="p">());</span>
+<span class="c1">// north, in the surface frame, off the flight path</span>
+<span class="n">Triplet</span><span class="o">&lt;</span><span class="n">Double</span><span class="p">,</span><span class="w"> </span><span class="n">Double</span><span class="p">,</span><span class="w"> </span><span class="n">Double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">up</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Triplet</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">);</span>
+
+<span class="c1">// straight up at the pad, roof toward north</span>
+<span class="n">ap</span><span class="p">.</span><span class="na">setDirectionAndUp</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">Triplet</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">),</span><span class="w"> </span><span class="n">up</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="n">ap</span><span class="p">.</span><span class="na">setEngaged</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+<span class="n">ap</span><span class="p">.</span><span class="na">wait_</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+
+<span class="c1">// ease over to the eastern horizon; roll stays defined through vertical</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">90</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">pitch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Math</span><span class="p">.</span><span class="na">toRadians</span><span class="p">(</span><span class="mi">90</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">i</span><span class="p">);</span><span class="w"> </span><span class="c1">// 89 down to 0 degrees</span>
+<span class="w">  </span><span class="n">Triplet</span><span class="o">&lt;</span><span class="n">Double</span><span class="p">,</span><span class="w"> </span><span class="n">Double</span><span class="p">,</span><span class="w"> </span><span class="n">Double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">direction</span><span class="w"> </span><span class="o">=</span>
+<span class="w">      </span><span class="k">new</span><span class="w"> </span><span class="n">Triplet</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="n">Math</span><span class="p">.</span><span class="na">sin</span><span class="p">(</span><span class="n">pitch</span><span class="p">),</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="n">Math</span><span class="p">.</span><span class="na">cos</span><span class="p">(</span><span class="n">pitch</span><span class="p">));</span>
+<span class="w">  </span><span class="n">ap</span><span class="p">.</span><span class="na">setDirectionAndUp</span><span class="p">(</span><span class="n">direction</span><span class="p">,</span><span class="w"> </span><span class="n">up</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">  </span><span class="n">ap</span><span class="p">.</span><span class="na">wait_</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-1-THVh" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-1-THVh" name="THVh" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">ap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">vessel</span><span class="p">.</span><span class="py">auto_pilot</span>
+<span class="nv">ap</span><span class="p">.</span><span class="py">reference_frame</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">vessel</span><span class="p">.</span><span class="py">surface_reference_frame</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">up</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">List</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">}</span><span class="w"> </span><span class="c1">-- north, in the surface frame, off the flight path</span>
+
+<span class="c1">-- straight up at the pad, roof toward north</span>
+<span class="nv">ap</span><span class="p">:</span><span class="nf">set_direction_and_up</span><span class="p">(</span><span class="nv">List</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">},</span><span class="w"> </span><span class="nv">up</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="nv">ap</span><span class="p">.</span><span class="py">engaged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="nv">ap</span><span class="p">:</span><span class="nf">wait</span><span class="p">()</span>
+
+<span class="c1">-- ease over to the eastern horizon; roll stays defined through vertical</span>
+<span class="kr">for</span><span class="w"> </span><span class="nv">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="w"> </span><span class="kr">do</span>
+<span class="w">  </span><span class="kd">local</span><span class="w"> </span><span class="nv">pitch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">math.rad</span><span class="p">(</span><span class="mi">90</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nv">i</span><span class="p">)</span><span class="w"> </span><span class="c1">-- 89 down to 0 degrees</span>
+<span class="w">  </span><span class="kd">local</span><span class="w"> </span><span class="nv">direction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">List</span><span class="p">{</span><span class="nb">math.sin</span><span class="p">(</span><span class="nv">pitch</span><span class="p">),</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nb">math.cos</span><span class="p">(</span><span class="nv">pitch</span><span class="p">)}</span>
+<span class="w">  </span><span class="nv">ap</span><span class="p">:</span><span class="nf">set_direction_and_up</span><span class="p">(</span><span class="nv">direction</span><span class="p">,</span><span class="w"> </span><span class="nv">up</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">  </span><span class="nv">ap</span><span class="p">:</span><span class="nf">wait</span><span class="p">()</span>
+<span class="kr">end</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-1-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-1-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">ap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">vessel</span><span class="p">.</span><span class="nx">getAutoPilot</span><span class="p">();</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">ap</span><span class="p">.</span><span class="nx">setReferenceFrame</span><span class="p">(</span><span class="k">await</span><span class="w"> </span><span class="nx">vessel</span><span class="p">.</span><span class="nx">getSurfaceReferenceFrame</span><span class="p">());</span>
+<span class="cm">/** @type {[number, number, number]} */</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">up</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">0</span><span class="p">];</span><span class="w"> </span><span class="c1">// north, in the surface frame, off the flight path</span>
+
+<span class="c1">// straight up at the pad, roof toward north</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">ap</span><span class="p">.</span><span class="nx">setDirectionAndUp</span><span class="p">([</span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="mf">0</span><span class="p">],</span><span class="w"> </span><span class="nx">up</span><span class="p">,</span><span class="w"> </span><span class="mf">0</span><span class="p">);</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">ap</span><span class="p">.</span><span class="nx">setEngaged</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">ap</span><span class="p">.</span><span class="nx">wait</span><span class="p">();</span>
+
+<span class="c1">// ease over to the eastern horizon; roll stays defined through vertical</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">let</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mf">90</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">pitch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">((</span><span class="mf">90</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nx">i</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">180</span><span class="p">;</span><span class="w"> </span><span class="c1">// 89 down to 0 degrees</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">ap</span><span class="p">.</span><span class="nx">setDirectionAndUp</span><span class="p">([</span><span class="nb">Math</span><span class="p">.</span><span class="nx">sin</span><span class="p">(</span><span class="nx">pitch</span><span class="p">),</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="nb">Math</span><span class="p">.</span><span class="nx">cos</span><span class="p">(</span><span class="nx">pitch</span><span class="p">)],</span><span class="w"> </span><span class="nx">up</span><span class="p">,</span><span class="w"> </span><span class="mf">0</span><span class="p">);</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">ap</span><span class="p">.</span><span class="nx">wait</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></div>
 </section>
 <section id="the-convenience-ways">
 <span id="convenience-setters"></span><h4>The convenience ways<a class="headerlink" href="#the-convenience-ways" title="Link to this heading">#</a></h4>
 <p>Two more ways aim the nose by angle. They are ergonomic but heading-singular near the
 vertical, so prefer the primary setters there.</p>
 <ul>
-<li><p><strong>target pitch</strong>, <strong>target heading</strong>, and <strong>target_pitch_and_heading(pitch, heading)</strong> —
+<li><p><strong>target pitch</strong>, <strong>target heading</strong>, and <strong>target pitch and heading</strong> —
 aim the nose by pitch and heading angle.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Heading (and hence roll) is ill-defined when the nose is near vertical (pitch → ±90°),
-so near the vertical prefer <strong>target direction</strong> or <strong>set_direction_and_up</strong>. Setting
+so near the vertical prefer <strong>target direction</strong> or <strong>set direction and up</strong>. Setting
 pitch or heading preserves the current roll relative to the up reference, so a
 pitch/heading change no longer perturbs roll near the vertical.</p>
 </div>
@@ -663,7 +849,7 @@ pitch/heading change no longer perturbs roll near the vertical.</p>
 unset) holds roll without fixing an angle. With the default reference this reproduces the
 familiar roll away from the vertical, and is ill-defined only when the nose points along
 the reference (near straight up or down) — set the reference off the flight path (via
-<code class="docutils literal notranslate"><span class="pre">set_direction_and_up</span></code> or <code class="docutils literal notranslate"><span class="pre">up_reference</span></code>) to keep it defined through the vertical.</p></li>
+<strong>set direction and up</strong> or the <strong>up reference</strong>) to keep it defined through the vertical.</p></li>
 </ul>
 </section>
 <section id="reading-the-state-back">
@@ -673,7 +859,7 @@ the reference (near straight up or down) — set the reference off the flight pa
 <strong>target direction</strong> are always well-defined; prefer these for reading orientation back.</p></li>
 <li><p><strong>Errors</strong> — <strong>error</strong> is the total pointing error, and <strong>pitch error</strong>, <strong>heading
 error</strong> and <strong>roll error</strong> are the per-axis errors. All are singularity-free (they come
-from one residual decomposition, exposed together as <strong>attitude_error</strong>), so they stay
+from one residual decomposition, exposed together as <strong>attitude error</strong>), so they stay
 meaningful near the vertical — including the roll error, which is measured about the
 nose. These are the robust way to see how far off the vessel is.</p>
 <div class="admonition warning">
@@ -698,12 +884,13 @@ target set during a tick is flown on that tick.</p></li>
 control output read during a tick are the ones computed for that tick, one tick behind the
 target.</p></li>
 <li><p><strong>manual</strong> runs it only when <strong>update</strong> is called, so a program places it among its own
-calls.</p></li>
+calls. <strong>update</strong> fails while the autopilot is disengaged, so engage it first.</p></li>
 </ul>
 <p>This matters most for a control loop that <a class="reference internal" href="control-loops.html#holding-a-tick"><span class="std std-ref">holds a tick</span></a>, putting a
 whole read, compute and write inside one tick. Manual mode then fixes the order: calls before
 <strong>update</strong> set what the loop flies the tick with, and calls after it read what the loop did.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ap</span><span class="o">.</span><span class="n">update_mode</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">AutoPilotUpdateMode</span><span class="o">.</span><span class="n">manual</span>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-2-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-2-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-2-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-2-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-2-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-2-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-2-Qw==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-2-Qw==" name="Qw==" role="tab" tabindex="-1">C</button><button aria-controls="panel-2-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-2-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-2-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-2-THVh" name="THVh" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-2-SmF2YVNjcmlwdA==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-2-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tab" tabindex="-1">JavaScript</button></div><div aria-labelledby="tab-2-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-2-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ap</span><span class="o">.</span><span class="n">update_mode</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">AutoPilotUpdateMode</span><span class="o">.</span><span class="n">manual</span>
 <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
     <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">hold_tick</span><span class="p">()</span>
     <span class="k">try</span><span class="p">:</span>
@@ -714,6 +901,105 @@ whole read, compute and write inside one tick. Manual mode then fixes the order:
         <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">release_tick</span><span class="p">()</span>
 </pre></div>
 </div>
+</div><div aria-labelledby="tab-2-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-2-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="n">ap</span><span class="p">.</span><span class="n">UpdateMode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">AutoPilotUpdateMode</span><span class="p">.</span><span class="n">Manual</span><span class="p">;</span>
+<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="k">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">krpc</span><span class="p">.</span><span class="n">HoldTick</span><span class="w"> </span><span class="p">();</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">ap</span><span class="p">.</span><span class="n">TargetPitchAndHeading</span><span class="w"> </span><span class="p">(</span>
+<span class="w">            </span><span class="n">ControlLaw</span><span class="w"> </span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="n">Flight</span><span class="w"> </span><span class="p">().</span><span class="n">Pitch</span><span class="p">),</span><span class="w"> </span><span class="mi">90</span><span class="p">);</span>
+<span class="w">        </span><span class="n">ap</span><span class="p">.</span><span class="n">Update</span><span class="w"> </span><span class="p">();</span>
+<span class="w">        </span><span class="n">Record</span><span class="w"> </span><span class="p">(</span><span class="n">ap</span><span class="p">.</span><span class="n">Error</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">Control</span><span class="p">.</span><span class="n">Pitch</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">krpc</span><span class="p">.</span><span class="n">ReleaseTick</span><span class="w"> </span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-2-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-2-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">ap</span><span class="p">.</span><span class="n">set_update_mode</span><span class="p">(</span>
+<span class="w">    </span><span class="n">krpc</span><span class="o">::</span><span class="n">services</span><span class="o">::</span><span class="n">SpaceCenter</span><span class="o">::</span><span class="n">AutoPilotUpdateMode</span><span class="o">::</span><span class="n">manual</span><span class="p">);</span>
+<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">krpc</span><span class="p">.</span><span class="n">hold_tick</span><span class="p">();</span>
+<span class="w">  </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">ap</span><span class="p">.</span><span class="n">target_pitch_and_heading</span><span class="p">(</span><span class="n">control_law</span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="n">flight</span><span class="p">().</span><span class="n">pitch</span><span class="p">()),</span><span class="w"> </span><span class="mi">90</span><span class="p">);</span>
+<span class="w">    </span><span class="n">ap</span><span class="p">.</span><span class="n">update</span><span class="p">();</span>
+<span class="w">    </span><span class="n">record</span><span class="p">(</span><span class="n">ap</span><span class="p">.</span><span class="n">error</span><span class="p">(),</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">control</span><span class="p">().</span><span class="n">pitch</span><span class="p">());</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(...)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">krpc</span><span class="p">.</span><span class="n">release_tick</span><span class="p">();</span>
+<span class="w">    </span><span class="k">throw</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="n">krpc</span><span class="p">.</span><span class="n">release_tick</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-2-Qw==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-2-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">krpc_SpaceCenter_Control_t</span><span class="w"> </span><span class="n">control</span><span class="p">;</span>
+<span class="n">krpc_SpaceCenter_Vessel_Control</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
+<span class="n">krpc_SpaceCenter_AutoPilot_set_UpdateMode</span><span class="p">(</span>
+<span class="w">    </span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">ap</span><span class="p">,</span><span class="w"> </span><span class="n">KRPC_SPACECENTER_AUTOPILOTUPDATEMODE_MANUAL</span><span class="p">);</span>
+<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_KRPC_HoldTick</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span><span class="w"> </span><span class="k">break</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Flight_t</span><span class="w"> </span><span class="n">flight</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="n">pitch</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="p">,</span><span class="w"> </span><span class="n">control_pitch</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="n">ok</span><span class="w"> </span><span class="o">=</span>
+<span class="w">      </span><span class="n">krpc_SpaceCenter_Vessel_Flight</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">flight</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">,</span><span class="w"> </span><span class="n">KRPC_NULL</span><span class="p">)</span><span class="w"> </span><span class="o">==</span>
+<span class="w">          </span><span class="n">KRPC_OK</span><span class="w"> </span><span class="o">&amp;&amp;</span>
+<span class="w">      </span><span class="n">krpc_SpaceCenter_Flight_Pitch</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">pitch</span><span class="p">,</span><span class="w"> </span><span class="n">flight</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="w"> </span><span class="o">&amp;&amp;</span>
+<span class="w">      </span><span class="n">krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading</span><span class="p">(</span>
+<span class="w">          </span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">ap</span><span class="p">,</span><span class="w"> </span><span class="n">control_law</span><span class="p">(</span><span class="n">pitch</span><span class="p">),</span><span class="w"> </span><span class="mi">90</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="w"> </span><span class="o">&amp;&amp;</span>
+<span class="w">      </span><span class="n">krpc_SpaceCenter_AutoPilot_Update</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">ap</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="w"> </span><span class="o">&amp;&amp;</span>
+<span class="w">      </span><span class="n">krpc_SpaceCenter_AutoPilot_Error</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">error</span><span class="p">,</span><span class="w"> </span><span class="n">ap</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="w"> </span><span class="o">&amp;&amp;</span>
+<span class="w">      </span><span class="n">krpc_SpaceCenter_Control_Pitch</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control_pitch</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">)</span><span class="w"> </span><span class="o">==</span>
+<span class="w">          </span><span class="n">KRPC_OK</span><span class="p">;</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ok</span><span class="p">)</span><span class="w"> </span><span class="n">record</span><span class="p">(</span><span class="n">error</span><span class="p">,</span><span class="w"> </span><span class="n">control_pitch</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_KRPC_ReleaseTick</span><span class="p">(</span><span class="n">conn</span><span class="p">);</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">ok</span><span class="p">)</span><span class="w"> </span><span class="k">break</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-2-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-2-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">ap</span><span class="p">.</span><span class="na">setUpdateMode</span><span class="p">(</span><span class="n">AutoPilotUpdateMode</span><span class="p">.</span><span class="na">MANUAL</span><span class="p">);</span>
+<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">krpc</span><span class="p">.</span><span class="na">holdTick</span><span class="p">();</span>
+<span class="w">  </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">ap</span><span class="p">.</span><span class="na">targetPitchAndHeading</span><span class="p">(</span>
+<span class="w">        </span><span class="n">controlLaw</span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="na">flight</span><span class="p">(</span><span class="kc">null</span><span class="p">).</span><span class="na">getPitch</span><span class="p">()),</span><span class="w"> </span><span class="mi">90</span><span class="p">);</span>
+<span class="w">    </span><span class="n">ap</span><span class="p">.</span><span class="na">update</span><span class="p">();</span>
+<span class="w">    </span><span class="n">log</span><span class="p">(</span><span class="n">ap</span><span class="p">.</span><span class="na">getError</span><span class="p">(),</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="na">getControl</span><span class="p">().</span><span class="na">getPitch</span><span class="p">());</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">krpc</span><span class="p">.</span><span class="na">releaseTick</span><span class="p">();</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-2-THVh" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-2-THVh" name="THVh" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="nv">ap</span><span class="p">.</span><span class="py">update_mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">space_center</span><span class="p">.</span><span class="py">AutoPilotUpdateMode</span><span class="p">.</span><span class="py">manual</span>
+<span class="kr">while</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="kr">do</span>
+<span class="w">  </span><span class="nv">conn</span><span class="p">.</span><span class="py">krpc</span><span class="p">.</span><span class="nf">hold_tick</span><span class="p">()</span>
+<span class="w">  </span><span class="kd">local</span><span class="w"> </span><span class="nv">ok</span><span class="p">,</span><span class="w"> </span><span class="nv">err</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">pcall</span><span class="p">(</span><span class="kr">function</span><span class="p">()</span>
+<span class="w">    </span><span class="nv">ap</span><span class="p">:</span><span class="nf">target_pitch_and_heading</span><span class="p">(</span><span class="nf">control_law</span><span class="p">(</span><span class="nv">vessel</span><span class="p">:</span><span class="nf">flight</span><span class="p">().</span><span class="nv">pitch</span><span class="p">),</span><span class="w"> </span><span class="mi">90</span><span class="p">)</span>
+<span class="w">    </span><span class="nv">ap</span><span class="p">:</span><span class="nf">update</span><span class="p">()</span>
+<span class="w">    </span><span class="nf">record</span><span class="p">(</span><span class="nv">ap</span><span class="p">.</span><span class="py">error</span><span class="p">,</span><span class="w"> </span><span class="nv">vessel</span><span class="p">.</span><span class="py">control</span><span class="p">.</span><span class="py">pitch</span><span class="p">)</span>
+<span class="w">  </span><span class="kr">end</span><span class="p">)</span>
+<span class="w">  </span><span class="nv">conn</span><span class="p">.</span><span class="py">krpc</span><span class="p">.</span><span class="nf">release_tick</span><span class="p">()</span>
+<span class="w">  </span><span class="kr">if</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="nv">ok</span><span class="w"> </span><span class="kr">then</span><span class="w"> </span><span class="nb">error</span><span class="p">(</span><span class="nv">err</span><span class="p">)</span><span class="w"> </span><span class="kr">end</span>
+<span class="kr">end</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-2-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-2-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="k">await</span><span class="w"> </span><span class="nx">ap</span><span class="p">.</span><span class="nx">setUpdateMode</span><span class="p">(</span><span class="nx">conn</span><span class="p">.</span><span class="nx">spaceCenter</span><span class="p">.</span><span class="nx">AutoPilotUpdateMode</span><span class="p">.</span><span class="nx">manual</span><span class="p">);</span>
+<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">krpc</span><span class="p">.</span><span class="nx">holdTick</span><span class="p">();</span>
+<span class="w">  </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">pitch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="p">(</span><span class="k">await</span><span class="w"> </span><span class="nx">vessel</span><span class="p">.</span><span class="nx">flight</span><span class="p">()).</span><span class="nx">getPitch</span><span class="p">();</span>
+<span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="nx">ap</span><span class="p">.</span><span class="nx">targetPitchAndHeading</span><span class="p">(</span><span class="nx">controlLaw</span><span class="p">(</span><span class="nx">pitch</span><span class="p">),</span><span class="w"> </span><span class="mf">90</span><span class="p">);</span>
+<span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="nx">ap</span><span class="p">.</span><span class="nx">update</span><span class="p">();</span>
+<span class="w">    </span><span class="nx">record</span><span class="p">(</span>
+<span class="w">      </span><span class="k">await</span><span class="w"> </span><span class="nx">ap</span><span class="p">.</span><span class="nx">getError</span><span class="p">(),</span>
+<span class="w">      </span><span class="k">await</span><span class="w"> </span><span class="p">(</span><span class="k">await</span><span class="w"> </span><span class="nx">vessel</span><span class="p">.</span><span class="nx">getControl</span><span class="p">()).</span><span class="nx">getPitch</span><span class="p">(),</span>
+<span class="w">    </span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">krpc</span><span class="p">.</span><span class="nx">releaseTick</span><span class="p">();</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></div>
 <p>In manual mode the vessel is flown only on the ticks the loop runs on. On any other tick the
 vessel keeps the control output of the last run, and after a tenth of a second the autopilot
 stops contributing control input. A program that stops calling <strong>update</strong> therefore leaves the
@@ -799,18 +1085,97 @@ towards the commanded one at a constant angular rate, reaching it in exactly the
 smoothing time. A single change to the target therefore produces a smooth reorientation
 spread over that time, with no per-tick scripting on your part.</p>
 <p>For example, to pitch the nose over by 10° across 20 seconds:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ap</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-3-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-3-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-3-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-3-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-3-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-3-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-3-Qw==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-3-Qw==" name="Qw==" role="tab" tabindex="-1">C</button><button aria-controls="panel-3-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-3-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-3-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-3-THVh" name="THVh" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-3-SmF2YVNjcmlwdA==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-3-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tab" tabindex="-1">JavaScript</button></div><div aria-labelledby="tab-3-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-3-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ap</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span>
 <span class="n">ap</span><span class="o">.</span><span class="n">reference_frame</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">surface_reference_frame</span>
 <span class="n">ap</span><span class="o">.</span><span class="n">target_pitch_and_heading</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">)</span>  <span class="c1"># start pointing straight up</span>
 <span class="n">ap</span><span class="o">.</span><span class="n">engaged</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="n">ap</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
 
-<span class="c1"># ease a 10° pitch-over (90° to 80°) in over 20 seconds</span>
+<span class="c1"># ease a 10 degree pitch-over, 90 to 80, in over 20 seconds</span>
 <span class="n">ap</span><span class="o">.</span><span class="n">target_smoothing_time</span> <span class="o">=</span> <span class="mi">20</span>
 <span class="n">ap</span><span class="o">.</span><span class="n">target_pitch_and_heading</span><span class="p">(</span><span class="mi">80</span><span class="p">,</span> <span class="mi">90</span><span class="p">)</span>
-<span class="n">ap</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>  <span class="c1"># returns once the 80° target is reached</span>
+<span class="n">ap</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>  <span class="c1"># returns once the 80 degree target is reached</span>
 </pre></div>
 </div>
+</div><div aria-labelledby="tab-3-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-3-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="kt">var</span><span class="w"> </span><span class="n">ap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">AutoPilot</span><span class="p">;</span>
+<span class="n">ap</span><span class="p">.</span><span class="n">ReferenceFrame</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">SurfaceReferenceFrame</span><span class="p">;</span>
+<span class="n">ap</span><span class="p">.</span><span class="n">TargetPitchAndHeading</span><span class="w"> </span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">);</span><span class="w"> </span><span class="c1">// start pointing straight up</span>
+<span class="n">ap</span><span class="p">.</span><span class="n">Engaged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span>
+<span class="n">ap</span><span class="p">.</span><span class="n">Wait</span><span class="w"> </span><span class="p">();</span>
+
+<span class="c1">// ease a 10 degree pitch-over, 90 to 80, in over 20 seconds</span>
+<span class="n">ap</span><span class="p">.</span><span class="n">TargetSmoothingTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">20</span><span class="p">;</span>
+<span class="n">ap</span><span class="p">.</span><span class="n">TargetPitchAndHeading</span><span class="w"> </span><span class="p">(</span><span class="mi">80</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">);</span>
+<span class="n">ap</span><span class="p">.</span><span class="n">Wait</span><span class="w"> </span><span class="p">();</span><span class="w"> </span><span class="c1">// returns once the 80 degree target is reached</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-3-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-3-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">ap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">auto_pilot</span><span class="p">();</span>
+<span class="n">ap</span><span class="p">.</span><span class="n">set_reference_frame</span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="n">surface_reference_frame</span><span class="p">());</span>
+<span class="n">ap</span><span class="p">.</span><span class="n">target_pitch_and_heading</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">);</span><span class="w">  </span><span class="c1">// start pointing straight up</span>
+<span class="n">ap</span><span class="p">.</span><span class="n">set_engaged</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
+<span class="n">ap</span><span class="p">.</span><span class="n">wait</span><span class="p">();</span>
+
+<span class="c1">// ease a 10 degree pitch-over, 90 to 80, in over 20 seconds</span>
+<span class="n">ap</span><span class="p">.</span><span class="n">set_target_smoothing_time</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span>
+<span class="n">ap</span><span class="p">.</span><span class="n">target_pitch_and_heading</span><span class="p">(</span><span class="mi">80</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">);</span>
+<span class="n">ap</span><span class="p">.</span><span class="n">wait</span><span class="p">();</span><span class="w">  </span><span class="c1">// returns once the 80 degree target is reached</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-3-Qw==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-3-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">krpc_SpaceCenter_AutoPilot_t</span><span class="w"> </span><span class="n">ap</span><span class="p">;</span>
+<span class="n">krpc_SpaceCenter_Vessel_AutoPilot</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ap</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
+<span class="n">krpc_SpaceCenter_ReferenceFrame_t</span><span class="w"> </span><span class="n">frame</span><span class="p">;</span>
+<span class="n">krpc_SpaceCenter_Vessel_SurfaceReferenceFrame</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">frame</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
+<span class="n">krpc_SpaceCenter_AutoPilot_set_ReferenceFrame</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">ap</span><span class="p">,</span><span class="w"> </span><span class="n">frame</span><span class="p">);</span>
+<span class="c1">// start pointing straight up</span>
+<span class="n">krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">ap</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">);</span>
+<span class="n">krpc_SpaceCenter_AutoPilot_set_Engaged</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">ap</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
+<span class="n">krpc_SpaceCenter_AutoPilot_Wait</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">ap</span><span class="p">,</span><span class="w"> </span><span class="mi">-1</span><span class="p">);</span>
+
+<span class="c1">// ease a 10 degree pitch-over, 90 to 80, in over 20 seconds</span>
+<span class="n">krpc_SpaceCenter_AutoPilot_set_TargetSmoothingTime</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">ap</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">);</span>
+<span class="n">krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">ap</span><span class="p">,</span><span class="w"> </span><span class="mi">80</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">);</span>
+<span class="c1">// returns once the 80 degree target is reached</span>
+<span class="n">krpc_SpaceCenter_AutoPilot_Wait</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">ap</span><span class="p">,</span><span class="w"> </span><span class="mi">-1</span><span class="p">);</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-3-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-3-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">AutoPilot</span><span class="w"> </span><span class="n">ap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="na">getAutoPilot</span><span class="p">();</span>
+<span class="n">ap</span><span class="p">.</span><span class="na">setReferenceFrame</span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="na">getSurfaceReferenceFrame</span><span class="p">());</span>
+<span class="n">ap</span><span class="p">.</span><span class="na">targetPitchAndHeading</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">);</span><span class="w"> </span><span class="c1">// start pointing straight up</span>
+<span class="n">ap</span><span class="p">.</span><span class="na">setEngaged</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+<span class="n">ap</span><span class="p">.</span><span class="na">wait_</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+
+<span class="c1">// ease a 10 degree pitch-over, 90 to 80, in over 20 seconds</span>
+<span class="n">ap</span><span class="p">.</span><span class="na">setTargetSmoothingTime</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span>
+<span class="n">ap</span><span class="p">.</span><span class="na">targetPitchAndHeading</span><span class="p">(</span><span class="mi">80</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">);</span>
+<span class="n">ap</span><span class="p">.</span><span class="na">wait_</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="c1">// returns once the 80 degree target is reached</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-3-THVh" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-3-THVh" name="THVh" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">ap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">vessel</span><span class="p">.</span><span class="py">auto_pilot</span>
+<span class="nv">ap</span><span class="p">.</span><span class="py">reference_frame</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">vessel</span><span class="p">.</span><span class="py">surface_reference_frame</span>
+<span class="nv">ap</span><span class="p">:</span><span class="nf">target_pitch_and_heading</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">)</span><span class="w"> </span><span class="c1">-- start pointing straight up</span>
+<span class="nv">ap</span><span class="p">.</span><span class="py">engaged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="nv">ap</span><span class="p">:</span><span class="nf">wait</span><span class="p">()</span>
+
+<span class="c1">-- ease a 10 degree pitch-over, 90 to 80, in over 20 seconds</span>
+<span class="nv">ap</span><span class="p">.</span><span class="py">target_smoothing_time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">20</span>
+<span class="nv">ap</span><span class="p">:</span><span class="nf">target_pitch_and_heading</span><span class="p">(</span><span class="mi">80</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">)</span>
+<span class="nv">ap</span><span class="p">:</span><span class="nf">wait</span><span class="p">()</span><span class="w"> </span><span class="c1">-- returns once the 80 degree target is reached</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-3-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-3-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">ap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">vessel</span><span class="p">.</span><span class="nx">getAutoPilot</span><span class="p">();</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">ap</span><span class="p">.</span><span class="nx">setReferenceFrame</span><span class="p">(</span><span class="k">await</span><span class="w"> </span><span class="nx">vessel</span><span class="p">.</span><span class="nx">getSurfaceReferenceFrame</span><span class="p">());</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">ap</span><span class="p">.</span><span class="nx">targetPitchAndHeading</span><span class="p">(</span><span class="mf">90</span><span class="p">,</span><span class="w"> </span><span class="mf">90</span><span class="p">);</span><span class="w"> </span><span class="c1">// start pointing straight up</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">ap</span><span class="p">.</span><span class="nx">setEngaged</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">ap</span><span class="p">.</span><span class="nx">wait</span><span class="p">();</span>
+
+<span class="c1">// ease a 10 degree pitch-over, 90 to 80, in over 20 seconds</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">ap</span><span class="p">.</span><span class="nx">setTargetSmoothingTime</span><span class="p">(</span><span class="mf">20</span><span class="p">);</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">ap</span><span class="p">.</span><span class="nx">targetPitchAndHeading</span><span class="p">(</span><span class="mf">80</span><span class="p">,</span><span class="w"> </span><span class="mf">90</span><span class="p">);</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">ap</span><span class="p">.</span><span class="nx">wait</span><span class="p">();</span><span class="w"> </span><span class="c1">// returns once the 80 degree target is reached</span>
+</pre></div>
+</div>
+</div></div>
 <p>Properties related to the commanded and effective targets are accessible via the API:</p>
 <ul class="simple">
 <li><p>The target properties (<strong>target pitch</strong>, <strong>target heading</strong>, <strong>target roll</strong>,
@@ -884,12 +1249,55 @@ oscillation frequency</strong> or <strong>roll oscillation frequency</strong> pr
 the same properties also seed the automatic estimator before it acquires. The <strong>oscillation
 notch Q</strong> (default 2.5) sets how narrow the notch is — higher is narrower, with less
 in-band lag but less tolerance to the mode frequency drifting.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ap</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span>
-<span class="c1"># treat the craft as flexible from the start, notching a 1.4 Hz bending mode</span>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-4-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-4-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-4-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-4-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-4-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-4-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-4-Qw==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-4-Qw==" name="Qw==" role="tab" tabindex="-1">C</button><button aria-controls="panel-4-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-4-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-4-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-4-THVh" name="THVh" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-4-SmF2YVNjcmlwdA==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-4-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tab" tabindex="-1">JavaScript</button></div><div aria-labelledby="tab-4-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-4-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ap</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span>
+<span class="c1"># notch a known 1.4 Hz pitch and yaw bending mode from the start</span>
 <span class="n">ap</span><span class="o">.</span><span class="n">pitch_yaw_rate_filter_mode</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">RateFilterMode</span><span class="o">.</span><span class="n">notch</span>
 <span class="n">ap</span><span class="o">.</span><span class="n">pitch_yaw_oscillation_frequency</span> <span class="o">=</span> <span class="mf">1.4</span>
 </pre></div>
 </div>
+</div><div aria-labelledby="tab-4-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-4-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="kt">var</span><span class="w"> </span><span class="n">ap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">AutoPilot</span><span class="p">;</span>
+<span class="c1">// notch a known 1.4 Hz pitch and yaw bending mode from the</span>
+<span class="c1">// start</span>
+<span class="n">ap</span><span class="p">.</span><span class="n">PitchYawRateFilterMode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">RateFilterMode</span><span class="p">.</span><span class="n">Notch</span><span class="p">;</span>
+<span class="n">ap</span><span class="p">.</span><span class="n">PitchYawOscillationFrequency</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.4</span><span class="p">;</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-4-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-4-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">ap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">auto_pilot</span><span class="p">();</span>
+<span class="c1">// notch a known 1.4 Hz pitch and yaw bending mode from the start</span>
+<span class="n">ap</span><span class="p">.</span><span class="n">set_pitch_yaw_rate_filter_mode</span><span class="p">(</span>
+<span class="w">    </span><span class="n">krpc</span><span class="o">::</span><span class="n">services</span><span class="o">::</span><span class="n">SpaceCenter</span><span class="o">::</span><span class="n">RateFilterMode</span><span class="o">::</span><span class="n">notch</span><span class="p">);</span>
+<span class="n">ap</span><span class="p">.</span><span class="n">set_pitch_yaw_oscillation_frequency</span><span class="p">(</span><span class="mf">1.4</span><span class="p">);</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-4-Qw==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-4-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">krpc_SpaceCenter_AutoPilot_t</span><span class="w"> </span><span class="n">ap</span><span class="p">;</span>
+<span class="n">krpc_SpaceCenter_Vessel_AutoPilot</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ap</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
+<span class="c1">// notch a known 1.4 Hz pitch and yaw bending mode from the start</span>
+<span class="n">krpc_SpaceCenter_AutoPilot_set_PitchYawRateFilterMode</span><span class="p">(</span>
+<span class="w">    </span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">ap</span><span class="p">,</span><span class="w"> </span><span class="n">KRPC_SPACECENTER_RATEFILTERMODE_NOTCH</span><span class="p">);</span>
+<span class="n">krpc_SpaceCenter_AutoPilot_set_PitchYawOscillationFrequency</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">ap</span><span class="p">,</span>
+<span class="w">                                                            </span><span class="mf">1.4</span><span class="p">);</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-4-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-4-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">AutoPilot</span><span class="w"> </span><span class="n">ap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="na">getAutoPilot</span><span class="p">();</span>
+<span class="c1">// notch a known 1.4 Hz pitch and yaw bending mode from the start</span>
+<span class="n">ap</span><span class="p">.</span><span class="na">setPitchYawRateFilterMode</span><span class="p">(</span><span class="n">RateFilterMode</span><span class="p">.</span><span class="na">NOTCH</span><span class="p">);</span>
+<span class="n">ap</span><span class="p">.</span><span class="na">setPitchYawOscillationFrequency</span><span class="p">(</span><span class="mf">1.4</span><span class="p">);</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-4-THVh" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-4-THVh" name="THVh" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">ap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">vessel</span><span class="p">.</span><span class="py">auto_pilot</span>
+<span class="c1">-- notch a known 1.4 Hz pitch and yaw bending mode from the start</span>
+<span class="nv">ap</span><span class="p">.</span><span class="py">pitch_yaw_rate_filter_mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">space_center</span><span class="p">.</span><span class="py">RateFilterMode</span><span class="p">.</span><span class="py">notch</span>
+<span class="nv">ap</span><span class="p">.</span><span class="py">pitch_yaw_oscillation_frequency</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.4</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-4-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-4-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">ap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">vessel</span><span class="p">.</span><span class="nx">getAutoPilot</span><span class="p">();</span>
+<span class="c1">// notch a known 1.4 Hz pitch and yaw bending mode from the start</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">ap</span><span class="p">.</span><span class="nx">setPitchYawRateFilterMode</span><span class="p">(</span><span class="nx">conn</span><span class="p">.</span><span class="nx">spaceCenter</span><span class="p">.</span><span class="nx">RateFilterMode</span><span class="p">.</span><span class="nx">notch</span><span class="p">);</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">ap</span><span class="p">.</span><span class="nx">setPitchYawOscillationFrequency</span><span class="p">(</span><span class="mf">1.4</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></div>
 </section>
 <section id="bandwidth-floor">
 <span id="id4"></span><h4>Bandwidth floor<a class="headerlink" href="#bandwidth-floor" title="Link to this heading">#</a></h4>
@@ -1012,12 +1420,52 @@ input. The autopilot inverts this, so its roll command is linear in roll torque.
 </ul>
 <p>The angular velocity limit is controlled by the <strong>limit angular velocity</strong> property. To
 limit the angular velocity by the <strong>maximum angular velocity</strong> alone:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ap</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-5-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-5-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-5-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-5-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-5-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-5-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-5-Qw==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-5-Qw==" name="Qw==" role="tab" tabindex="-1">C</button><button aria-controls="panel-5-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-5-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-5-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-5-THVh" name="THVh" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-5-SmF2YVNjcmlwdA==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-5-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tab" tabindex="-1">JavaScript</button></div><div aria-labelledby="tab-5-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-5-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ap</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span>
 <span class="c1"># limit the angular velocity by max_angular_velocity only</span>
 <span class="n">ap</span><span class="o">.</span><span class="n">limit_angular_velocity</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="n">ap</span><span class="o">.</span><span class="n">max_angular_velocity</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">)</span>
 </pre></div>
 </div>
+</div><div aria-labelledby="tab-5-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-5-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="kt">var</span><span class="w"> </span><span class="n">ap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">AutoPilot</span><span class="p">;</span>
+<span class="c1">// limit the angular velocity by MaxAngularVelocity only</span>
+<span class="n">ap</span><span class="p">.</span><span class="n">LimitAngularVelocity</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">;</span>
+<span class="n">ap</span><span class="p">.</span><span class="n">MaxAngularVelocity</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Tuple</span><span class="p">.</span><span class="n">Create</span><span class="w"> </span><span class="p">(</span><span class="mf">0.3</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">0.3</span><span class="p">);</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-5-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-5-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">ap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">auto_pilot</span><span class="p">();</span>
+<span class="c1">// limit the angular velocity by max_angular_velocity only</span>
+<span class="n">ap</span><span class="p">.</span><span class="n">set_limit_angular_velocity</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+<span class="n">ap</span><span class="p">.</span><span class="n">set_max_angular_velocity</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_tuple</span><span class="p">(</span><span class="mf">0.3</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">0.3</span><span class="p">));</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-5-Qw==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-5-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">krpc_SpaceCenter_AutoPilot_t</span><span class="w"> </span><span class="n">ap</span><span class="p">;</span>
+<span class="n">krpc_SpaceCenter_Vessel_AutoPilot</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ap</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
+<span class="c1">// limit the angular velocity by MaxAngularVelocity only</span>
+<span class="n">krpc_SpaceCenter_AutoPilot_set_LimitAngularVelocity</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">ap</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">);</span>
+<span class="n">krpc_tuple_double_double_double_t</span><span class="w"> </span><span class="n">max</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mf">0.3</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">0.3</span><span class="p">};</span>
+<span class="n">krpc_SpaceCenter_AutoPilot_set_MaxAngularVelocity</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">ap</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">max</span><span class="p">);</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-5-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-5-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">AutoPilot</span><span class="w"> </span><span class="n">ap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="na">getAutoPilot</span><span class="p">();</span>
+<span class="c1">// limit the angular velocity by maxAngularVelocity only</span>
+<span class="n">ap</span><span class="p">.</span><span class="na">setLimitAngularVelocity</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+<span class="n">ap</span><span class="p">.</span><span class="na">setMaxAngularVelocity</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">Triplet</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="mf">0.3</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">0.3</span><span class="p">));</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-5-THVh" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-5-THVh" name="THVh" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">ap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">vessel</span><span class="p">.</span><span class="py">auto_pilot</span>
+<span class="c1">-- limit the angular velocity by max_angular_velocity only</span>
+<span class="nv">ap</span><span class="p">.</span><span class="py">limit_angular_velocity</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span>
+<span class="nv">ap</span><span class="p">.</span><span class="py">max_angular_velocity</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">List</span><span class="p">{</span><span class="mf">0.3</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">0.3</span><span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-5-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-5-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">ap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">vessel</span><span class="p">.</span><span class="nx">getAutoPilot</span><span class="p">();</span>
+<span class="c1">// limit the angular velocity by maxAngularVelocity only</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">ap</span><span class="p">.</span><span class="nx">setLimitAngularVelocity</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">ap</span><span class="p">.</span><span class="nx">setMaxAngularVelocity</span><span class="p">([</span><span class="mf">0.3</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">0.3</span><span class="p">]);</span>
+</pre></div>
+</div>
+</div></div>
 <p>The <a class="reference internal" href="#info-window"><span class="std std-ref">info window</span></a> shows each of these per axis, in its AERODYNAMICS
 section. The mechanism is described under <a class="reference internal" href="#control-surfaces"><span class="std std-ref">Control surfaces</span></a>.</p>
 <div class="admonition note">
@@ -1133,9 +1581,31 @@ instead of a banked turn. For a large heading change, bank the aircraft from you
 <span id="info-window"></span><h3>The info window<a class="headerlink" href="#the-info-window" title="Link to this heading">#</a></h3>
 <p>For debugging, the autopilot can display an in-game window showing its live internal
 state. It is enabled per vessel, and hidden again when the game restarts:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span><span class="o">.</span><span class="n">show_info_ui</span> <span class="o">=</span> <span class="kc">True</span>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-6-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-6-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-6-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-6-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-6-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-6-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-6-Qw==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-6-Qw==" name="Qw==" role="tab" tabindex="-1">C</button><button aria-controls="panel-6-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-6-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-6-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-6-THVh" name="THVh" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-6-SmF2YVNjcmlwdA==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-6-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tab" tabindex="-1">JavaScript</button></div><div aria-labelledby="tab-6-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-6-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span><span class="o">.</span><span class="n">show_info_ui</span> <span class="o">=</span> <span class="kc">True</span>
 </pre></div>
 </div>
+</div><div aria-labelledby="tab-6-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-6-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="n">vessel</span><span class="p">.</span><span class="n">AutoPilot</span><span class="p">.</span><span class="n">ShowInfoUI</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-6-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-6-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">vessel</span><span class="p">.</span><span class="n">auto_pilot</span><span class="p">().</span><span class="n">set_show_info_ui</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-6-Qw==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-6-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">krpc_SpaceCenter_AutoPilot_t</span><span class="w"> </span><span class="n">ap</span><span class="p">;</span>
+<span class="n">krpc_SpaceCenter_Vessel_AutoPilot</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ap</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
+<span class="n">krpc_SpaceCenter_AutoPilot_set_ShowInfoUI</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">ap</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-6-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-6-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">vessel</span><span class="p">.</span><span class="na">getAutoPilot</span><span class="p">().</span><span class="na">setShowInfoUI</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-6-THVh" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-6-THVh" name="THVh" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="nv">vessel</span><span class="p">.</span><span class="py">auto_pilot</span><span class="p">.</span><span class="py">show_info_ui</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-6-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-6-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="k">await</span><span class="w"> </span><span class="p">(</span><span class="k">await</span><span class="w"> </span><span class="nx">vessel</span><span class="p">.</span><span class="nx">getAutoPilot</span><span class="p">()).</span><span class="nx">setShowInfoUI</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></div>
 <p>The window is laid out like a control panel of annunciator lamps and digital registers.
 Lamps are dim when nominal and light amber to flag something worth attention; the
 <strong>ENGAGED</strong> lamp reads green (amber <strong>HELD</strong> while the craft is held on the launch

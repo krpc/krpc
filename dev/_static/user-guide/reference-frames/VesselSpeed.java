@@ -3,9 +3,6 @@ import krpc.client.services.SpaceCenter;
 import krpc.client.services.SpaceCenter.ReferenceFrame;
 import krpc.client.services.SpaceCenter.Vessel;
 
-import org.javatuples.Triplet;
-
-
 public class VesselSpeed {
     public static void main(String[] args) throws InterruptedException {
         Connection connection = Connection.newInstance("Vessel speed");

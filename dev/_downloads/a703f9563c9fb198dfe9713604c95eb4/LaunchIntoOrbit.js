@@ -16,37 +16,46 @@ const flight = await vessel.flight();
 const ut = await conn.addStream(() => spaceCenter.getUT());
 const altitude = await conn.addStream(() => flight.getMeanAltitude());
 const apoapsis = await conn.addStream(() => orbit.getApoapsisAltitude());
-const stage2Resources = await (await vessel.decoupleStageAt(2)).resources({
+const stage5Resources = await (await vessel.decoupleStageAt(5)).resources({
   cumulative: false,
 });
-const srbFuel = await conn.addStream(() =>
-  stage2Resources.amount("SolidFuel"),
-);
+const stage3Resources = await (await vessel.decoupleStageAt(3)).resources({
+  cumulative: false,
+});
 
 // Pre-launch setup
 await control.setSAS(false);
 await control.setRCS(false);
 await control.setThrottle(1);
 
-// Countdown...
-const sleep = (/** @type {number} */ ms) =>
-  new Promise((resolve) => setTimeout(resolve, ms));
-console.log("3...");
-await sleep(1000);
-console.log("2...");
-await sleep(1000);
-console.log("1...");
-await sleep(1000);
-console.log("Launch!");
-
 // Activate the first stage
-await control.activateNextStage();
 await autoPilot.setEngaged(true);
 await autoPilot.targetPitchAndHeading(90, 90);
+await control.activateNextStage();
+
+// Separate each stage when it runs out of fuel
+const firstStageEmpty = await conn.addEvent(
+  ({ resources }) => resources.amount("SolidFuel") < 0.1,
+  { resources: stage5Resources },
+);
+const secondStageEmpty = await conn.addEvent(
+  ({ resources }) => resources.amount("LiquidFuel") < 0.1,
+  { resources: stage3Resources },
+);
+/**
+ * @param {typeof firstStageEmpty} event
+ * @param {string} name
+ */
+async function separate(event, name) {
+  await event.remove();
+  await control.activateNextStage();
+  await control.activateNextStage();
+  console.log(`${name} stage separated`);
+}
+firstStageEmpty.addCallback(() => separate(firstStageEmpty, "First"));
+secondStageEmpty.addCallback(() => separate(secondStageEmpty, "Second"));
 
 // Main ascent loop
-let srbsSeparated = false;
-let turnAngle = 0;
 while (true) {
   // Wait for the next altitude update
   await altitude.wait();
@@ -56,30 +65,18 @@ while (true) {
   if (alt > turnStartAltitude && alt < turnEndAltitude) {
     const frac =
       (alt - turnStartAltitude) / (turnEndAltitude - turnStartAltitude);
-    const newTurnAngle = frac * 90;
-    if (Math.abs(newTurnAngle - turnAngle) > 0.5) {
-      turnAngle = newTurnAngle;
-      await autoPilot.targetPitchAndHeading(90 - turnAngle, 90);
-    }
+    const turnAngle = frac * 90;
+    await autoPilot.targetPitchAndHeading(90 - turnAngle, 90);
   }
 
-  // Separate SRBs when finished
-  if (!srbsSeparated) {
-    if ((await srbFuel.get()) < 0.1) {
-      await control.activateNextStage();
-      srbsSeparated = true;
-      console.log("SRBs separated");
-    }
-  }
-
-  // Decrease throttle when approaching target apoapsis
+  // Stop the ascent near the target apoapsis
   if ((await apoapsis.get()) > targetAltitude * 0.9) {
     console.log("Approaching target apoapsis");
     break;
   }
 }
 
-// Disable engines when target apoapsis is reached
+// Fine tune the apoapsis at 25% thrust
 await control.setThrottle(0.25);
 const apoapsisEvent = await conn.addEvent(
   ({ orbit, targetAltitude }) => orbit.apoapsisAltitude >= targetAltitude,
@@ -99,7 +96,8 @@ await atmosphereEvent.wait();
 
 // Plan circularization burn (using vis-viva equation)
 console.log("Planning circularization burn");
-const mu = await (await orbit.getBody()).getGravitationalParameter();
+const body = await orbit.getBody();
+const mu = await body.getGravitationalParameter();
 const r = await orbit.getApoapsis();
 const a1 = await orbit.getSemiMajorAxis();
 const a2 = r;
@@ -119,10 +117,11 @@ const m1 = m0 / Math.exp(deltaV / Isp);
 const flowRate = F / Isp;
 const burnTime = (m0 - m1) / flowRate;
 
-// Orientate ship
+// Orientate ship along the burn
 console.log("Orientating ship for circularization burn");
-await autoPilot.setReferenceFrame(await node.getReferenceFrame());
-await autoPilot.setTargetDirection([0, 1, 0]);
+const frame = await body.getNonRotatingReferenceFrame();
+await autoPilot.setReferenceFrame(frame);
+await autoPilot.setTargetDirection(await node.remainingBurnVector(frame));
 await autoPilot.wait();
 
 // Wait until burn
@@ -140,15 +139,28 @@ const burnEvent = await conn.addEvent(
 );
 await burnEvent.wait();
 console.log("Executing burn");
-await control.setThrottle(1);
-await sleep((burnTime - 0.1) * 1000);
-console.log("Fine tuning");
-await control.setThrottle(0.05);
-const executedEvent = await conn.addEvent(
-  ({ node }) => node.remainingBurnVector(node.referenceFrame)[1] <= 0,
-  { node },
+const remainingBurn = await conn.addStream(() =>
+  node.remainingBurnVector(frame),
 );
-await executedEvent.wait();
+const remainingDeltaV = await conn.addStream(() =>
+  node.getRemainingDeltaV(),
+);
+const sleep = (/** @type {number} */ ms) =>
+  new Promise((resolve) => setTimeout(resolve, ms));
+let lowestDeltaV = await remainingDeltaV.get();
+while ((await remainingDeltaV.get()) > 0.1) {
+  // Steer along the remaining burn, which turns as the vessel moves
+  // around its orbit
+  await autoPilot.setTargetDirection(await remainingBurn.get());
+  // Full throttle, then throttle down for the last few m/s
+  await control.setThrottle((await remainingDeltaV.get()) > 5 ? 1 : 0.05);
+  // Stop if the burn overshoots, as the remaining delta-v then grows
+  if ((await remainingDeltaV.get()) > lowestDeltaV + 0.1) {
+    break;
+  }
+  lowestDeltaV = Math.min(lowestDeltaV, await remainingDeltaV.get());
+  await sleep(50);
+}
 await control.setThrottle(0);
 await node.remove();
 

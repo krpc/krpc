@@ -32,6 +32,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/lua.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=a5c4661c" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=ba67256c" />
   
   <!-- So that users can add custom icons -->
@@ -44,6 +45,7 @@
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/tabs.js?v=3030b3cb"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'user-guide/time-warp';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.24.0';
@@ -483,6 +485,7 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="autopilot.html">AutoPilot</a></li>
 <li class="toctree-l1"><a class="reference internal" href="control-loops.html">Control Loops</a></li>
+<li class="toctree-l1"><a class="reference internal" href="boats-and-submarines.html">Boats and Submarines</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="streams-and-events.html">Streams and Events</a></li>
@@ -559,10 +562,44 @@ to use both from a script.</p>
 <h2>Warping to a Time<a class="headerlink" href="#warping-to-a-time" title="Link to this heading">#</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">SpaceCenter.WarpTo</span></code> warps until a universal time, then stops. This example warps to ten seconds
 before the vessel reaches apoapsis:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">apoapsis_ut</span> <span class="o">=</span> <span class="n">space_center</span><span class="o">.</span><span class="n">ut</span> <span class="o">+</span> <span class="n">vessel</span><span class="o">.</span><span class="n">orbit</span><span class="o">.</span><span class="n">time_to_apoapsis</span>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-0-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-0-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-0-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-0-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-0-Qw==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-Qw==" name="Qw==" role="tab" tabindex="-1">C</button><button aria-controls="panel-0-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-0-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-THVh" name="THVh" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-0-SmF2YVNjcmlwdA==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tab" tabindex="-1">JavaScript</button></div><div aria-labelledby="tab-0-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-0-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">apoapsis_ut</span> <span class="o">=</span> <span class="n">space_center</span><span class="o">.</span><span class="n">ut</span> <span class="o">+</span> <span class="n">vessel</span><span class="o">.</span><span class="n">orbit</span><span class="o">.</span><span class="n">time_to_apoapsis</span>
 <span class="n">space_center</span><span class="o">.</span><span class="n">warp_to</span><span class="p">(</span><span class="n">apoapsis_ut</span> <span class="o">-</span> <span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
+</div><div aria-labelledby="tab-0-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="kt">var</span><span class="w"> </span><span class="n">apoapsisUT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="n">UT</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">Orbit</span><span class="p">.</span><span class="n">TimeToApoapsis</span><span class="p">;</span>
+<span class="n">spaceCenter</span><span class="p">.</span><span class="n">WarpTo</span><span class="w"> </span><span class="p">(</span><span class="n">apoapsisUT</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">10</span><span class="p">);</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">apoapsis_ut</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">space_center</span><span class="p">.</span><span class="n">ut</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">orbit</span><span class="p">().</span><span class="n">time_to_apoapsis</span><span class="p">();</span>
+<span class="n">space_center</span><span class="p">.</span><span class="n">warp_to</span><span class="p">(</span><span class="n">apoapsis_ut</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">10</span><span class="p">);</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-Qw==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">double</span><span class="w"> </span><span class="n">ut</span><span class="p">,</span><span class="w"> </span><span class="n">time_to_apoapsis</span><span class="p">;</span>
+<span class="n">krpc_SpaceCenter_Orbit_t</span><span class="w"> </span><span class="n">orbit</span><span class="p">;</span>
+<span class="n">krpc_SpaceCenter_UT</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ut</span><span class="p">);</span>
+<span class="n">krpc_SpaceCenter_Vessel_Orbit</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">orbit</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
+<span class="n">krpc_SpaceCenter_Orbit_TimeToApoapsis</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">time_to_apoapsis</span><span class="p">,</span><span class="w"> </span><span class="n">orbit</span><span class="p">);</span>
+<span class="kt">double</span><span class="w"> </span><span class="n">apoapsis_ut</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ut</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time_to_apoapsis</span><span class="p">;</span>
+<span class="n">krpc_SpaceCenter_WarpTo</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">apoapsis_ut</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">100000</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kt">double</span><span class="w"> </span><span class="n">apoapsisUT</span><span class="w"> </span><span class="o">=</span>
+<span class="w">    </span><span class="n">spaceCenter</span><span class="p">.</span><span class="na">getUT</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="na">getOrbit</span><span class="p">().</span><span class="na">getTimeToApoapsis</span><span class="p">();</span>
+<span class="n">spaceCenter</span><span class="p">.</span><span class="na">warpTo</span><span class="p">(</span><span class="n">apoapsisUT</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">100000</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-THVh" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-THVh" name="THVh" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">apoapsis_ut</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">space_center</span><span class="p">.</span><span class="py">ut</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nv">vessel</span><span class="p">.</span><span class="py">orbit</span><span class="p">.</span><span class="py">time_to_apoapsis</span>
+<span class="nv">space_center</span><span class="p">.</span><span class="nf">warp_to</span><span class="p">(</span><span class="nv">apoapsis_ut</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">orbit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">vessel</span><span class="p">.</span><span class="nx">getOrbit</span><span class="p">();</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">apoapsisUT</span><span class="w"> </span><span class="o">=</span>
+<span class="w">  </span><span class="p">(</span><span class="k">await</span><span class="w"> </span><span class="nx">spaceCenter</span><span class="p">.</span><span class="nx">getUT</span><span class="p">())</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="k">await</span><span class="w"> </span><span class="nx">orbit</span><span class="p">.</span><span class="nx">getTimeToApoapsis</span><span class="p">());</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">spaceCenter</span><span class="p">.</span><span class="nx">warpTo</span><span class="p">(</span><span class="nx">apoapsisUT</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">10</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></div>
 <p>The call returns once the time is reached. It uses rails warp when the game allows it, and physics
 warp otherwise, such as in an atmosphere. It slows the warp as the time approaches, and arrives close
 to it rather than exactly on it. Warp to a few seconds before an event you need to act on, such as
@@ -576,11 +613,40 @@ changes during the warp. A <a class="reference internal" href="server-side-funct
 <h2>Warp Factors<a class="headerlink" href="#warp-factors" title="Link to this heading">#</a></h2>
 <p>A warp factor is the position of the warp rate on the game’s warp control, not the rate itself.
 <code class="docutils literal notranslate"><span class="pre">SpaceCenter.RailsWarpFactor</span></code> sets rails warp, from 0 to 7, and
-<code class="docutils literal notranslate"><span class="pre">SpaceCenter.PhysicsWarpFactor</span></code> sets physics warp, from 0 to 3. Zero stops warping:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">space_center</span><span class="o">.</span><span class="n">maximum_rails_warp_factor</span><span class="p">)</span>
+<code class="docutils literal notranslate"><span class="pre">SpaceCenter.PhysicsWarpFactor</span></code> sets physics warp, from 0 to 3. Zero stops warping. This
+example prints the highest rails warp factor the game allows now, then sets rails warp to 3:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-1-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-1-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-1-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-1-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-1-Qw==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-Qw==" name="Qw==" role="tab" tabindex="-1">C</button><button aria-controls="panel-1-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-1-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-THVh" name="THVh" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-1-SmF2YVNjcmlwdA==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tab" tabindex="-1">JavaScript</button></div><div aria-labelledby="tab-1-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-1-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">space_center</span><span class="o">.</span><span class="n">maximum_rails_warp_factor</span><span class="p">)</span>
 <span class="n">space_center</span><span class="o">.</span><span class="n">rails_warp_factor</span> <span class="o">=</span> <span class="mi">3</span>
 </pre></div>
 </div>
+</div><div aria-labelledby="tab-1-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-1-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="w"> </span><span class="p">(</span><span class="n">spaceCenter</span><span class="p">.</span><span class="n">MaximumRailsWarpFactor</span><span class="p">);</span>
+<span class="n">spaceCenter</span><span class="p">.</span><span class="n">RailsWarpFactor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-1-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-1-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">space_center</span><span class="p">.</span><span class="n">maximum_rails_warp_factor</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="n">space_center</span><span class="p">.</span><span class="n">set_rails_warp_factor</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-1-Qw==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-1-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int32_t</span><span class="w"> </span><span class="n">maximum</span><span class="p">;</span>
+<span class="n">krpc_SpaceCenter_MaximumRailsWarpFactor</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">maximum</span><span class="p">);</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">maximum</span><span class="p">);</span>
+<span class="n">krpc_SpaceCenter_set_RailsWarpFactor</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">);</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-1-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-1-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">spaceCenter</span><span class="p">.</span><span class="na">getMaximumRailsWarpFactor</span><span class="p">());</span>
+<span class="n">spaceCenter</span><span class="p">.</span><span class="na">setRailsWarpFactor</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-1-THVh" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-1-THVh" name="THVh" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nv">space_center</span><span class="p">.</span><span class="py">maximum_rails_warp_factor</span><span class="p">)</span>
+<span class="nv">space_center</span><span class="p">.</span><span class="py">rails_warp_factor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-1-SmF2YVNjcmlwdA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-1-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">await</span><span class="w"> </span><span class="nx">spaceCenter</span><span class="p">.</span><span class="nx">getMaximumRailsWarpFactor</span><span class="p">());</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">spaceCenter</span><span class="p">.</span><span class="nx">setRailsWarpFactor</span><span class="p">(</span><span class="mf">3</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></div>
 <p>Setting one kind of warp stops the other. A factor above the highest the game allows is lowered to
 it, with no exception. <code class="docutils literal notranslate"><span class="pre">SpaceCenter.WarpMode</span></code> gives the kind of warp in use, and
 <code class="docutils literal notranslate"><span class="pre">SpaceCenter.WarpRate</span></code> the rate, which is 1 when time passes normally. The game eases the rate

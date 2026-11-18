@@ -3,10 +3,11 @@ import krpc
 conn = krpc.connect()
 vessel = conn.space_center.active_vessel
 ap = vessel.auto_pilot
+ap.engaged = True
 
 
 def control_law(pitch: float) -> float:
-    return 0.05 * (45 - pitch)
+    return pitch + 0.05 * (45 - pitch)
 
 
 def record(error: float, pitch: float) -> None:

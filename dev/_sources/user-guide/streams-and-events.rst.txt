@@ -6,7 +6,7 @@ Streams and Events
 A script that follows the game reads the same values over and over. A *stream* has the server run
 a call on every physics tick and send you the result when it changes. An *event* has the server
 check a condition on every physics tick and tell you when it becomes true. Each client guide shows
-the syntax, for example :ref:`streams <python-client-stream-endings>` in Python. This guide
+the syntax, for example :ref:`streams <python-client-streams>` in Python. This guide
 describes what the server does, which is the same for every client.
 
 How Streams Update
@@ -32,11 +32,55 @@ Limiting the Rate
 A stream's rate limits how many times a second the server updates it. The default, zero, updates
 it on every tick. This example updates a stream ten times a second:
 
-.. literalinclude:: /scripts/user-guide/streams-and-events/StreamRate.py
-   :language: python
-   :start-after: [docs]
-   :end-before: [/docs]
-   :dedent:
+.. tabs::
+
+   .. group-tab:: Python
+
+      .. literalinclude:: /scripts/user-guide/streams-and-events/StreamRate.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C#
+
+      .. literalinclude:: /scripts/user-guide/streams-and-events/StreamRate.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C++
+
+      .. literalinclude:: /scripts/user-guide/streams-and-events/StreamRate.cpp
+         :language: cpp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C
+
+      The C-nano client does not support streams.
+
+   .. group-tab:: Java
+
+      .. literalinclude:: /scripts/user-guide/streams-and-events/StreamRate.java
+         :language: java
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: Lua
+
+      The Lua client does not support streams.
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/streams-and-events/StreamRate.js
+         :language: javascript
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
 The rate is a maximum, counted in real time rather than game time. A stream with a rate can
 therefore be a tick or more older than the other streams.
@@ -60,11 +104,55 @@ boolean. The server checks it on every physics tick, so the event catches a cond
 for a moment only, which a loop of calls can miss. This example waits for the vessel to climb above
 10 km:
 
-.. literalinclude:: /scripts/user-guide/streams-and-events/Event.py
-   :language: python
-   :start-after: [docs]
-   :end-before: [/docs]
-   :dedent:
+.. tabs::
+
+   .. group-tab:: Python
+
+      .. literalinclude:: /scripts/user-guide/streams-and-events/Event.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C#
+
+      .. literalinclude:: /scripts/user-guide/streams-and-events/Event.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C++
+
+      .. literalinclude:: /scripts/user-guide/streams-and-events/Event.cpp
+         :language: cpp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C
+
+      The C-nano client does not support events.
+
+   .. group-tab:: Java
+
+      .. literalinclude:: /scripts/user-guide/streams-and-events/Event.java
+         :language: java
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: Lua
+
+      The Lua client does not support events.
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/streams-and-events/Event.js
+         :language: javascript
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
 An event fires when its condition becomes true. It fires again each time the condition becomes
 true after being false, so a condition that stays true fires once. On the server, an event is a

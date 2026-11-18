@@ -1,3 +1,5 @@
+import time
+
 import krpc
 
 conn = krpc.connect(name="Visual Debugging")
@@ -12,4 +14,4 @@ line = conn.drawing.add_direction_from_com((0, 1, 0), ref_frame)
 line.end_arrow = True
 line.label = "Surface velocity"
 while True:
-    pass
+    time.sleep(1)

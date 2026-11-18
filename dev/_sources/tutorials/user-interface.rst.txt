@@ -10,37 +10,42 @@ is shown while the mouse rests on the button.
 
 .. tabs::
 
-   .. tab:: Python
+   .. group-tab:: Python
 
       .. literalinclude:: /scripts/tutorials/user-interface/UserInterface.py
          :language: python
 
-   .. tab:: C#
+   .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/user-interface/UserInterface.cs
          :language: csharp
 
-   .. tab:: C++
+   .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/user-interface/UserInterface.cpp
          :language: cpp
 
-   .. tab:: C
+   .. group-tab:: C
 
       .. literalinclude:: /scripts/tutorials/user-interface/UserInterface.c
          :language: c
 
-   .. tab:: Java
+   .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/user-interface/UserInterface.java
          :language: java
 
-   .. tab:: Lua
+   .. group-tab:: Lua
 
       .. literalinclude:: /scripts/tutorials/user-interface/UserInterface.lua
          :language: lua
 
-   .. tab:: JavaScript
+   .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/tutorials/user-interface/UserInterface.js
          :language: javascript
+
+.. seealso::
+
+   :class:`UI` for the other elements you can add, including text input fields,
+   toggles, drop-down lists, scroll views and images.

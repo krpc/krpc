@@ -3,9 +3,10 @@ import krpc.client.Event;
 import krpc.client.services.KRPC.Expression;
 import krpc.client.services.SpaceCenter;
 import krpc.client.services.SpaceCenter.Flight;
-import krpc.client.services.SpaceCenter.ReferenceFrame;
+import krpc.client.services.SpaceCenter.VesselSituation;
 import krpc.schema.KRPC.ProcedureCall;
 
+import org.javatuples.Triplet;
 
 public class SubOrbitalFlight {
   public static void main(String[] args) throws InterruptedException {
@@ -16,74 +17,85 @@ public class SubOrbitalFlight {
 
     vessel.getAutoPilot().targetPitchAndHeading(90, 90);
     vessel.getAutoPilot().setEngaged(true);
-    vessel.getControl().setThrottle(1);
+    vessel.getControl().setThrottle(0.5f);
     Thread.sleep(1000);
 
     System.out.println("Launch!");
     vessel.getControl().activateNextStage();
 
     Expression.Bound e = Expression.bind(connection);
-    {
-      ProcedureCall solidFuel = connection.getCall(
-        vessel.getResources(), "amount", "SolidFuel");
-      Expression expr = e.lessThan(
-        e.call(solidFuel), e.constantFloat(0.1f));
-      Event event = connection.addEvent(expr);
-      synchronized (event.getCondition()) {
-        event.waitFor();
-      }
-    }
-    System.out.println("Booster separation");
-    vessel.getControl().activateNextStage();
 
     Flight flight = vessel.flight(null);
     {
       ProcedureCall meanAltitude =
         connection.getCall(flight, "getMeanAltitude");
       Expression expr = e.greaterThan(
-        e.call(meanAltitude), e.constantDouble(10000));
+        e.call(meanAltitude), e.constantDouble(500));
       Event event = connection.addEvent(expr);
       synchronized (event.getCondition()) {
         event.waitFor();
       }
     }
 
-    System.out.println("Gravity turn");
-    vessel.getAutoPilot().targetPitchAndHeading(60, 90);
+    System.out.println("Pitching over");
+    vessel.getAutoPilot().setTargetSmoothingTime(10);
+    vessel.getAutoPilot().targetPitchAndHeading(70, 90);
 
     {
-      ProcedureCall apoapsisAltitude = connection.getCall(
-        vessel.getOrbit(), "getApoapsisAltitude");
-      Expression expr = e.greaterThan(
-        e.call(apoapsisAltitude), e.constantDouble(100000));
+      ProcedureCall liquidFuel = connection.getCall(
+        vessel.getResources(), "amount", "LiquidFuel");
+      Expression expr = e.lessThan(
+        e.call(liquidFuel), e.constantFloat(0.1f));
       Event event = connection.addEvent(expr);
       synchronized (event.getCondition()) {
         event.waitFor();
       }
     }
 
-    System.out.println("Launch stage separation");
+    System.out.println("Flame out");
     vessel.getControl().setThrottle(0);
-    Thread.sleep(1000);
+    vessel.getAutoPilot().setReferenceFrame(
+      vessel.getSurfaceVelocityReferenceFrame());
+    vessel.getAutoPilot().setTargetDirection(
+      new Triplet<Double, Double, Double>(0.0, 1.0, 0.0));
+
+    Flight bodyFlight =
+      vessel.flight(vessel.getOrbit().getBody().getReferenceFrame());
+    {
+      ProcedureCall verticalSpeed =
+        connection.getCall(bodyFlight, "getVerticalSpeed");
+      Expression expr = e.lessThan(
+        e.call(verticalSpeed), e.constantDouble(0));
+      Event event = connection.addEvent(expr);
+      synchronized (event.getCondition()) {
+        event.waitFor();
+      }
+    }
+
+    System.out.println("Apoapsis reached, separating");
     vessel.getControl().activateNextStage();
+    vessel.getAutoPilot().setTargetDirection(
+      new Triplet<Double, Double, Double>(0.0, -1.0, 0.0));
+    vessel.getAutoPilot().wait_(-1);
     vessel.getAutoPilot().setEngaged(false);
 
     {
       ProcedureCall srfAltitude =
         connection.getCall(flight, "getSurfaceAltitude");
       Expression expr = e.lessThan(
-        e.call(srfAltitude), e.constantDouble(1000));
+        e.call(srfAltitude), e.constantDouble(2000));
       Event event = connection.addEvent(expr);
       synchronized (event.getCondition()) {
         event.waitFor();
       }
     }
 
+    System.out.println("Deploying the parachute");
+    vessel.getParts().getParachutes().get(0).setDeployAltitude(550);
     vessel.getControl().activateNextStage();
 
-    ReferenceFrame bodyFrame =
-        vessel.getOrbit().getBody().getReferenceFrame();
-    while (vessel.flight(bodyFrame).getVerticalSpeed() < -0.1) {
+    while (vessel.getSituation() != VesselSituation.LANDED &&
+           vessel.getSituation() != VesselSituation.SPLASHED) {
       System.out.printf(
         "Altitude = %.1f meters\n", flight.getSurfaceAltitude());
       Thread.sleep(1000);

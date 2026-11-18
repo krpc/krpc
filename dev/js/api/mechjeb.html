@@ -1604,8 +1604,8 @@ The service acts on the MechJeb of the active vessel, which needs a part with Me
 </div>
 <section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Link to this heading">#</a></h2>
-<p>The following example launches the active vessel into a 100 km orbit with the ascent
-autopilot, and waits for the ascent to finish:</p>
+<p>The following example launches the active vessel into a 100 km orbit, inclined at 6 degrees, with
+the ascent autopilot, and waits for the ascent to finish:</p>
 <div class="highlight-js notranslate"><div class="highlight"><pre><span></span><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">connect</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">"@krpc-org/krpc"</span><span class="p">;</span>
 
 <span class="kd">const</span><span class="w"> </span><span class="nx">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">connect</span><span class="p">({</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s2">"MechJeb Example"</span><span class="w"> </span><span class="p">});</span>
@@ -1625,6 +1625,7 @@ autopilot, and waits for the ascent to finish:</p>
 <span class="k">await</span><span class="w"> </span><span class="nx">event</span><span class="p">.</span><span class="nx">wait</span><span class="p">();</span>
 
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Launch complete"</span><span class="p">);</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
 </pre></div>
 </div>
 </section>
