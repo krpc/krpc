@@ -13,7 +13,6 @@ static void sleep_ms(long ms) {
 #include <krpc_cnano.h>
 #include <krpc_cnano/services/space_center.h>
 #include <stdio.h>
-#include <stdlib.h>
 
 int main() {
   krpc_connection_t conn;
@@ -47,5 +46,7 @@ int main() {
   krpc_SpaceCenter_Control_set_Throttle(conn, control, 0);
   krpc_SpaceCenter_AutoPilot_set_Engaged(conn, auto_pilot, false);
   printf("%s reached 10 km\n", name);
-  free(name);
+  krpc_free(name);
+
+  krpc_disconnect(conn);
 }
