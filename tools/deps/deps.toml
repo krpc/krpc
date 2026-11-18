@@ -41,7 +41,7 @@
 
 [[dep]]
 name = "bazel"
-version = "9.3.1"
+version = "9.3.2"
 source = "github-release:bazelbuild/bazel"
 below = "10"
 at = [".bazelversion: {version}"]
@@ -60,7 +60,7 @@ at = ['MODULE.bazel: bazel_dep(name = "bazel_skylib", version = "{version}")']
 
 [[dep]]
 name = "rules_cc"
-version = "0.2.27"
+version = "0.2.28"
 source = "bcr:rules_cc"
 at = ['MODULE.bazel: bazel_dep(name = "rules_cc", version = "{version}")']
 
@@ -72,7 +72,7 @@ at = ['MODULE.bazel: bazel_dep(name = "rules_pkg", version = "{version}")']
 
 [[dep]]
 name = "rules_python"
-version = "2.4.6"
+version = "2.5.1"
 source = "bcr:rules_python"
 at = ['MODULE.bazel: bazel_dep(name = "rules_python", version = "{version}")']
 
@@ -84,7 +84,7 @@ at = ['MODULE.bazel: bazel_dep(name = "rules_java", version = "{version}")']
 
 [[dep]]
 name = "buildifier_prebuilt"
-version = "10.1.0"
+version = "10.2.0"
 source = "bcr:buildifier_prebuilt"
 at = ['MODULE.bazel: bazel_dep(name = "buildifier_prebuilt", version = "{version}"']
 
@@ -103,7 +103,7 @@ at = ['MODULE.bazel: bazel_dep(name = "rules_dotnet", version = "{version}")']
 
 [[dep]]
 name = "toolchains_llvm"
-version = "1.12.0"
+version = "1.13.0"
 source = "bcr:toolchains_llvm"
 at = ['MODULE.bazel: bazel_dep(name = "toolchains_llvm", version = "{version}")']
 
@@ -122,7 +122,7 @@ at = ['MODULE.bazel: bazel_dep(name = "rules_nodejs", version = "{version}")']
 
 [[dep]]
 name = "aspect_rules_js"
-version = "3.5.2"
+version = "3.6.1"
 source = "bcr:aspect_rules_js"
 at = ['MODULE.bazel: bazel_dep(name = "aspect_rules_js", version = "{version}")']
 

@@ -3,6 +3,9 @@
 # every invocation having to pass --config.
 common --enable_platform_specific_config
 
+# Turn off the usage reports the Aspect rulesets send while fetching
+common --repo_env=ASPECT_TOOLS_TELEMETRY=-all
+
 # C++17 for every C++ compile, spelled for the active compiler: clang/gcc take
 # -std=c++17, MSVC takes /std:c++17.
 build:linux --cxxopt=-std=c++17 --host_cxxopt=-std=c++17

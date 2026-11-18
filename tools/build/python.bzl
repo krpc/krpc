@@ -77,7 +77,7 @@ def py_test(name, src, tests = [], deps = [], **kwargs):
             runner_template,
         ],
         outs = [name + "_main.py"],
-        cmd = 'sed -e "s|@WHEEL@|$(rootpath %s)|" -e "s|@TESTS@|%s|" $(location %s) > $@' % (src, " ".join(tests), runner_template),
+        cmd = 'sed -e "s|@WHEEL@|$(rootpath %s)|" -e "s|@TESTS@|%s|" $(execpath %s) > $@' % (src, " ".join(tests), runner_template),
     )
     _native_py_test(
         name = name,
