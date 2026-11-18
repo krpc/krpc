@@ -73,6 +73,7 @@ inline void decode(RemoteObject<T>& object, const std::string& data, Connection*
   decode(id, data, connection);
   object._connection = connection != nullptr ? *connection : Connection();
   object._id = id;
+  object._default = false;
 }
 
 template <typename... Ts>

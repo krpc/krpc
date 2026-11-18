@@ -8,6 +8,7 @@
 #include <future>
 #include <memory>
 #include <optional>
+#include <stdexcept>
 #include <string>
 #include <thread>
 #include <type_traits>
@@ -83,7 +84,7 @@ TEST_F(test_connection, test_an_object_from_a_connection_in_a_vector_that_grows)
 
 TEST_F(test_connection, test_a_default_constructed_object_throws) {
   krpc::services::TestService::TestClass object;
-  ASSERT_THROW(object.get_value(), krpc::ConnectionError);
+  ASSERT_THROW(object.get_value(), std::invalid_argument);
 }
 
 TEST_F(test_connection, test_a_service_constructed_from_a_temporary_connection_holds_it) {

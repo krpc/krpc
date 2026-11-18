@@ -25,6 +25,8 @@ class RemoteObject {
   // a handle, which a const object calls through.
   mutable Connection _connection;
   uint64_t _id;
+  // Whether the object was default-constructed, and so identifies nothing
+  bool _default;
 
  private:
   std::string _name;
@@ -36,21 +38,22 @@ template <typename T>
 std::ostream& operator<<(std::ostream& stream, const RemoteObject<T>& object);
 
 // The identifier of a remote object on the server, e.g. to pass to
-// Expression::constant_object. Throws std::invalid_argument for a null object, whose id is 0.
+// Expression::constant_object. Throws std::invalid_argument for a default-constructed object.
 template <typename T>
 uint64_t get_object_id(const RemoteObject<T>& object);
 
 template <typename T>
-inline RemoteObject<T>::RemoteObject(const std::string& name) : _id(0), _name(name) {}
+inline RemoteObject<T>::RemoteObject(const std::string& name)
+    : _id(0), _default(true), _name(name) {}
 
 template <typename T>
 inline RemoteObject<T>::RemoteObject(const Connection& connection, const std::string& name,
                                      uint64_t id)
-    : _connection(connection), _id(id), _name(name) {}
+    : _connection(connection), _id(id), _default(false), _name(name) {}
 
 template <typename T>
 inline uint64_t get_object_id(const RemoteObject<T>& object) {
-  if (object._id == 0) throw std::invalid_argument("The object is null");
+  if (object._default) throw std::invalid_argument("The object is default-constructed");
   return object._id;
 }
 
