@@ -521,18 +521,20 @@ jobs:
           cc=$(cc --version 2>/dev/null | head -n1 || echo unknown-cc)
           # The packages the system scenarios build against, by their vcpkg ABI hashes
           abis=$(sha256sum "$RUNNER_TEMP"/vcpkg-deps/*/share/*/vcpkg_abi_info.txt | cut -d' ' -f1 | sort -u)
-          info=$(printf '%s\n' ccache cnano "$cc" "$tmpl" "$abis")
+          info=$(printf '%s\n' "$cc" "$tmpl" "$abis")
           echo 'cache key inputs:'
           printf '%s\n' "$info" | sed 's/^/  /'
           hash=$(printf '%s' "$info" | sha256sum | cut -d' ' -f1)
-          echo "cache key: ccache-$hash"
+          echo "cache key: ccache-cnano-$hash"
           echo "hash=$hash" >> "$GITHUB_OUTPUT"
       - name: ccache-restore
         id: ccache
         uses: actions/cache@v6
         with:
           path: ${{ env.CCACHE_DIR }}
-          key: ccache-${{ steps.cache-key.outputs.hash }}
+          key: ccache-cnano-${{ steps.cache-key.outputs.hash }}
+          # ccache checks each entry, so an older cache is safe to start from
+          restore-keys: ccache-cnano-
           lookup-only: ${{ github.event_name == 'push' }}
       # On a push, fill a missing cache from the merge queue run's archive
       - name: merge-group-run
@@ -710,18 +712,20 @@ jobs:
           tmpl=$(sha256sum client/cpp/CMakeLists.txt.tmpl | cut -d' ' -f1)
           cc=$(cc --version 2>/dev/null | head -n1 || echo unknown-cc)
           abis=$(sha256sum "$RUNNER_TEMP"/vcpkg-deps/*/share/*/vcpkg_abi_info.txt | cut -d' ' -f1 | sort -u)
-          info=$(printf '%s\n' ccache cpp "$cc" "$tmpl" "$abis")
+          info=$(printf '%s\n' "$cc" "$tmpl" "$abis")
           echo 'cache key inputs:'
           printf '%s\n' "$info" | sed 's/^/  /'
           hash=$(printf '%s' "$info" | sha256sum | cut -d' ' -f1)
-          echo "cache key: ccache-$hash"
+          echo "cache key: ccache-cpp-$hash"
           echo "hash=$hash" >> "$GITHUB_OUTPUT"
       - name: ccache-restore
         id: ccache
         uses: actions/cache@v6
         with:
           path: ${{ env.CCACHE_DIR }}
-          key: ccache-${{ steps.cache-key.outputs.hash }}
+          key: ccache-cpp-${{ steps.cache-key.outputs.hash }}
+          # ccache checks each entry, so an older cache is safe to start from
+          restore-keys: ccache-cpp-
           lookup-only: ${{ github.event_name == 'push' }}
       # On a push, fill a missing cache from the merge queue run's archive
       - name: merge-group-run
