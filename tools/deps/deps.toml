@@ -813,14 +813,14 @@ at = [".github/**/*.yml: actions/upload-artifact@v{version}"]
 
 [[dep]]
 name = "actions/setup-dotnet"
-version = "5"
+version = "6"
 source = "github-release:actions/setup-dotnet"
 tag = 'v(\d+)\.\d+\.\d+'
 at = [".github/**/*.yml: actions/setup-dotnet@v{version}"]
 
 [[dep]]
 name = "actions/setup-python"
-version = "6"
+version = "7"
 source = "github-release:actions/setup-python"
 tag = 'v(\d+)\.\d+\.\d+'
 at = [".github/**/*.yml: actions/setup-python@v{version}"]

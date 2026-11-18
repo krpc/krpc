@@ -340,11 +340,11 @@ jobs:
           path: artifacts
           pattern: "{client-python,krpctools}"
       - name: setup-python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: "3.14"
       - name: setup-dotnet
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: 10.0.x
       - name: install
@@ -405,7 +405,7 @@ jobs:
           unzip krpc-genfiles-*.zip -d ./
           rm krpc-genfiles-*.zip
       - name: setup-dotnet
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         env:
           DOTNET_INSTALL_DIR: ${{ runner.temp }}/dotnet
         with:
