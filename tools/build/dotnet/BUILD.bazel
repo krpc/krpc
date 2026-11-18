@@ -1,5 +1,5 @@
 load("@rules_dotnet//dotnet:defs.bzl", "import_library")
-load("@rules_python//python:defs.bzl", "py_binary", "py_test")
+load("@rules_python//python:defs.bzl", "py_binary")
 load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
 
 package(default_visibility = ["//visibility:public"])
@@ -41,43 +41,16 @@ py_binary(
     deps = ["@rules_python//python/runfiles"],
 )
 
-# Checks the NuGet versions written by hand against paket.lock, as a stale version in an
-# import_library or a nuget_package still builds
-py_test(
-    name = "versions-test",
-    size = "small",
-    srcs = ["check_versions.py"],
-    args = [
-        "$(rootpath paket.main.bzl)",
-        "$(rootpath BUILD.bazel)",
-        "$(rootpath //:MODULE.bazel)",
-        "$(rootpath //client/csharp:BUILD.bazel)",
-    ],
-    data = [
-        "BUILD.bazel",
-        "paket.main.bzl",
-        "//:MODULE.bazel",
-        "//client/csharp:BUILD.bazel",
-    ],
-    main = "check_versions.py",
-)
-
 py_ruff_test(
     name = "ruff",
     size = "small",
-    srcs = [
-        "check_versions.py",
-        "update.py",
-    ],
+    srcs = ["update.py"],
 )
 
 py_pyright_test(
     name = "pyright",
     size = "medium",
-    srcs = [
-        "check_versions.py",
-        "update.py",
-    ],
+    srcs = ["update.py"],
     python_version = "3.12",
     deps = ["@rules_python//python/runfiles"],
 )

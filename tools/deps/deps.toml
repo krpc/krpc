@@ -1,0 +1,855 @@
+# The third-party dependencies of the repository, and every place that pins each one.
+#
+#   python3 tools/deps/deps.py check      # each pin agrees with this file (//tools/deps:test)
+#   python3 tools/deps/deps.py outdated   # newer releases upstream
+#   python3 tools/deps/deps.py update --all
+#
+# Each [[dep]] starts with name then version, which update rewrites in place.
+#
+#   version  The pinned version. Every location renders from it.
+#   source   Where releases are listed, as kind:id. Kinds: bcr, pypi, npm, nuget, maven,
+#            github-release, github-tag, node, dotnet-sdk, lua, docker, and regex:URL,
+#            which takes every match of tag in the page at URL. {dep:NAME} in a source
+#            is the version of another entry.
+#   tag      For github, docker and regex sources, a regex whose first group is the
+#            version. _ and - in the group become dots.
+#   below    Releases at or above this version are not taken, such as a new major.
+#   verify   Other sources that must list a release before it is taken, as
+#            { source, version }, the version a template.
+#   hold     Why update --all skips the entry. Naming it on the command line updates it.
+#   note     Printed on update, for a step the tool does not do.
+#   regen    The lock files to regenerate after an update: pip, nuget, maven, pnpm.
+#   at       The locations, each "file: text", or a table with file and text and optionally
+#            sha256 = true (the text is a URL, whose download hash replaces the sha256 of
+#            the Bazel rule or CMake FetchContent_Declare holding it), strict = false
+#            (see below) or generated = true (a regenerator writes the file, so update
+#            leaves it to that). A file with a * is a glob.
+#
+# A text is a template. {version} is the version, {version:_} joins its parts with _, and
+# {major}, {minor}, {patch} and {major_minor} are its leading parts. check tests that each
+# location holds its text, and, unless strict = false, that every occurrence of the text
+# before its first placeholder continues with the rendered text. That catches a pin that
+# drifted in one of several places. A placeholder at either end of a text matches a whole
+# version, so 1.2 does not match 1.2.3. A text with no placeholder pins a fixed download,
+# such as a commit, which update leaves alone.
+#
+# check also scans the repository for pins that no location covers, in the forms listed in
+# PIN_FORMS in deps.py, and for a download hash with no sha256 location. Every dependency
+# needs an entry here.
+
+# ----------------------- Bazel ----------------------------------------------------------
+
+[[dep]]
+name = "bazel"
+version = "9.3.2"
+source = "github-release:bazelbuild/bazel"
+below = "10"
+at = [".bazelversion: {version}"]
+
+[[dep]]
+name = "platforms"
+version = "1.1.0"
+source = "bcr:platforms"
+at = ['MODULE.bazel: bazel_dep(name = "platforms", version = "{version}")']
+
+[[dep]]
+name = "bazel_skylib"
+version = "1.9.2"
+source = "bcr:bazel_skylib"
+at = ['MODULE.bazel: bazel_dep(name = "bazel_skylib", version = "{version}")']
+
+[[dep]]
+name = "rules_cc"
+version = "0.2.28"
+source = "bcr:rules_cc"
+at = ['MODULE.bazel: bazel_dep(name = "rules_cc", version = "{version}")']
+
+[[dep]]
+name = "rules_pkg"
+version = "1.3.0"
+source = "bcr:rules_pkg"
+at = ['MODULE.bazel: bazel_dep(name = "rules_pkg", version = "{version}")']
+
+[[dep]]
+name = "rules_python"
+version = "2.5.1"
+source = "bcr:rules_python"
+at = ['MODULE.bazel: bazel_dep(name = "rules_python", version = "{version}")']
+
+[[dep]]
+name = "rules_java"
+version = "9.9.0"
+source = "bcr:rules_java"
+at = ['MODULE.bazel: bazel_dep(name = "rules_java", version = "{version}")']
+
+[[dep]]
+name = "buildifier_prebuilt"
+version = "10.2.0"
+source = "bcr:buildifier_prebuilt"
+at = ['MODULE.bazel: bazel_dep(name = "buildifier_prebuilt", version = "{version}"']
+
+[[dep]]
+name = "abseil-cpp"
+version = "20260817.0"
+source = "bcr:abseil-cpp"
+at = ['MODULE.bazel: bazel_dep(name = "abseil-cpp", version = "{version}")']
+
+[[dep]]
+name = "rules_dotnet"
+version = "0.22.2"
+source = "bcr:rules_dotnet"
+note = "rebase tools/build/dotnet/patches/rules_dotnet-native-placeholder.patch if it no longer applies"
+at = ['MODULE.bazel: bazel_dep(name = "rules_dotnet", version = "{version}")']
+
+[[dep]]
+name = "toolchains_llvm"
+version = "1.13.0"
+source = "bcr:toolchains_llvm"
+at = ['MODULE.bazel: bazel_dep(name = "toolchains_llvm", version = "{version}")']
+
+[[dep]]
+name = "rules_jvm_external"
+version = "7.2"
+source = "bcr:rules_jvm_external"
+regen = ["maven"]
+at = ['MODULE.bazel: bazel_dep(name = "rules_jvm_external", version = "{version}")']
+
+[[dep]]
+name = "rules_nodejs"
+version = "6.7.7"
+source = "bcr:rules_nodejs"
+at = ['MODULE.bazel: bazel_dep(name = "rules_nodejs", version = "{version}")']
+
+[[dep]]
+name = "aspect_rules_js"
+version = "3.6.1"
+source = "bcr:aspect_rules_js"
+at = ['MODULE.bazel: bazel_dep(name = "aspect_rules_js", version = "{version}")']
+
+[[dep]]
+name = "aspect_rules_ts"
+version = "3.10.1"
+source = "bcr:aspect_rules_ts"
+at = ['MODULE.bazel: bazel_dep(name = "aspect_rules_ts", version = "{version}")']
+
+# ----------------------- Toolchains -----------------------------------------------------
+
+# rules_dotnet lists the SDKs it can download
+[[dep]]
+name = "dotnet-sdk"
+version = "10.0.400"
+source = "dotnet-sdk:10.0"
+verify = [{ source = "regex:https://raw.githubusercontent.com/bazel-contrib/rules_dotnet/v{dep:rules_dotnet}/dotnet/private/sdk/versions.bzl", version = "{version}", tag = '"(\d+\.\d+\.\d+)": \{' }]
+at = ['MODULE.bazel: dotnet.toolchain(dotnet_version = "{version}")']
+
+[[dep]]
+name = "node"
+version = "22.23.5"
+source = "node"
+below = "23"
+at = ['MODULE.bazel: node.toolchain(node_version = "{version}")']
+
+# The oldest Node.js the JavaScript client supports
+[[dep]]
+name = "node-floor"
+version = "22"
+hold = "the oldest supported Node.js"
+at = ['client/js/package.json: "node": ">={version}"']
+
+# The minor version, here and in the hermetic toolchain. A new major is a new buildenv
+# image, as its apt packages carry the major.
+[[dep]]
+name = "llvm"
+version = "23.1.5"
+source = "github-release:llvm/llvm-project"
+tag = 'llvmorg-(\d+\.\d+\.\d+)'
+below = "24"
+verify = [{ source = "pypi:clang-format", version = "{version}" }]
+at = [
+  'MODULE.bazel: llvm_version = "{version}"',
+  { file = "MODULE.bazel", text = "https://files.pythonhosted.org/packages/py2.py3/c/clang-format/clang_format-{version}-py2.py3-none-win_amd64.whl", sha256 = true },
+  'MODULE.bazel: path = "/usr/lib/llvm-{major}"',
+  "tools/build/llvm/clang-format-system.sh: /usr/lib/llvm-{major}/",
+  "tools/build/llvm/clang-tidy-system.sh: /usr/lib/llvm-{major}/",
+  "tools/buildenv/Dockerfile: llvm-toolchain-noble-{major} main",
+  { file = "tools/buildenv/Dockerfile", text = "clang-{major} clangd-{major} clang-tidy-{major} clang-format-{major} lld-{major} llvm-{major} ", strict = false },
+]
+
+# The Bazel toolchain. rules_python sets the patch release. The pypi sources skip the
+# releases that need a later Python.
+[[dep]]
+name = "python"
+version = "3.12"
+hold = "a new toolchain is a change of its own"
+at = [
+  'MODULE.bazel: python_version = "{version}"',
+  'BUILD.bazel: python_version = "{version}"',
+  'doc/BUILD.bazel: python_version = "{version}"',
+  'tools/build/BUILD.bazel: python_version = "{version}"',
+  'tools/build/dotnet/BUILD.bazel: python_version = "{version}"',
+  'tools/build/protobuf/BUILD.bazel: python_version = "{version}"',
+  'tools/build/python/BUILD.bazel: python_version = "{version}"',
+  'tools/ci/BUILD.bazel: python_version = "{version}"',
+  'tools/deps/BUILD.bazel: python_version = "{version}"',
+]
+
+# The oldest Python the packages support
+[[dep]]
+name = "python-floor"
+version = "3.10"
+hold = "the oldest supported Python"
+at = [
+  'client/python/pyproject.toml: requires-python = ">={version}"',
+  'tools/krpctools/pyproject.toml: requires-python = ">={version}"',
+  'ruff.toml: target-version = "py{version:}"',
+  'pyrightconfig.json: "pythonVersion": "{version}"',
+]
+
+[[dep]]
+name = "java-language"
+version = "17"
+hold = "the Java version the client supports"
+at = [
+  ".bazelrc: build --java_language_version={version}",
+  ".bazelrc: build --tool_java_language_version={version}",
+]
+
+[[dep]]
+name = "remotejdk"
+version = "25"
+hold = "rules_java lists the JDKs"
+at = [".bazelrc: java_runtime_version=remotejdk_{version}"]
+
+# ----------------------- Protobuf -------------------------------------------------------
+
+# protoc and the runtime of each language, whose versions share the minor and patch
+[[dep]]
+name = "protobuf"
+version = "36.2"
+source = "github-release:protocolbuffers/protobuf"
+verify = [
+  { source = "bcr:protobuf", version = "{version}" },
+  { source = "maven:com.google.protobuf:protobuf-java", version = "4.{version}" },
+  { source = "pypi:protobuf", version = "7.{version}" },
+  { source = "nuget:Google.Protobuf", version = "3.{version}" },
+]
+note = "System.Memory and System.Runtime.CompilerServices.Unsafe follow Google.Protobuf; check names their new versions"
+regen = ["pip", "maven", "nuget"]
+at = [
+  'MODULE.bazel: bazel_dep(name = "protobuf", version = "{version}")',
+  { file = "MODULE.bazel", text = "https://github.com/protocolbuffers/protobuf/releases/download/v{version}/protoc-{version}-linux-x86_32.zip", sha256 = true, strict = false },
+  { file = "MODULE.bazel", text = "https://github.com/protocolbuffers/protobuf/releases/download/v{version}/protoc-{version}-linux-x86_64.zip", sha256 = true, strict = false },
+  { file = "MODULE.bazel", text = "https://github.com/protocolbuffers/protobuf/releases/download/v{version}/protoc-{version}-osx-x86_64.zip", sha256 = true, strict = false },
+  { file = "MODULE.bazel", text = "https://github.com/protocolbuffers/protobuf/releases/download/v{version}/protoc-{version}-win32.zip", sha256 = true, strict = false },
+  "MODULE.bazel: com.google.protobuf:protobuf-java:4.{version}",
+  "MODULE.bazel: com.google.protobuf:protobuf-java-util:4.{version}",
+  "tools/build/python/requirements.in: protobuf==7.{version}",
+  'client/python/pyproject.toml: "protobuf >= 7.{version}"',
+  "tools/build/dotnet/paket.dependencies: nuget Google.Protobuf 3.{version}",
+  { file = "tools/build/dotnet/paket.main.bzl", text = '{"name": "Google.Protobuf", "id": "Google.Protobuf", "version": "3.{version}"', generated = true },
+  'MODULE.bazel: "nuget.google.protobuf.v3.{version}"',
+  "tools/build/dotnet/BUILD.bazel: @nuget.google.protobuf.v3.{version}//",
+  'tools/build/dotnet/BUILD.bazel:     version = "3.{version}"',
+  'client/csharp/BUILD.bazel: "Google.Protobuf": "3.{version}"',
+  'client/csharp/src/KRPC.Client.csproj: <PackageReference Include="Google.Protobuf" Version="3.{version}"',
+  'client/csharp/test/KRPC.Client.Test.csproj: <PackageReference Include="Google.Protobuf" Version="3.{version}"',
+  'core/src/KRPC.Core.csproj: <PackageReference Include="Google.Protobuf" Version="3.{version}"',
+  "client/*/CMakeLists.txt.tmpl: GIT_TAG        v{version}",
+]
+
+# The last Google.Protobuf that runs on KSP's Unity, and the matching protoc
+[[dep]]
+name = "protobuf-unity"
+version = "3.10.1"
+source = "nuget:Google.Protobuf"
+hold = "KSP's Unity lacks ReadOnlySpan, which later versions need"
+at = [
+  { file = "MODULE.bazel", text = "https://github.com/protocolbuffers/protobuf/releases/download/v{version}/protoc-{version}-linux-x86_32.zip", sha256 = true, strict = false },
+  { file = "MODULE.bazel", text = "https://github.com/protocolbuffers/protobuf/releases/download/v{version}/protoc-{version}-linux-x86_64.zip", sha256 = true, strict = false },
+  { file = "MODULE.bazel", text = "https://github.com/protocolbuffers/protobuf/releases/download/v{version}/protoc-{version}-osx-x86_64.zip", sha256 = true, strict = false },
+  { file = "MODULE.bazel", text = "https://github.com/protocolbuffers/protobuf/releases/download/v{version}/protoc-{version}-win32.zip", sha256 = true, strict = false },
+  { file = "MODULE.bazel", text = "https://www.nuget.org/api/v2/package/Google.Protobuf/{version}", sha256 = true },
+]
+
+[[dep]]
+name = "nanopb"
+version = "0.4.9.2"
+source = "github-release:nanopb/nanopb"
+tag = 'nanopb-(\d+(?:\.\d+)*)'
+at = [
+  { file = "MODULE.bazel", text = "https://github.com/nanopb/nanopb/releases/download/nanopb-{version}/nanopb-{version}-linux-x86.tar.gz", sha256 = true },
+  'MODULE.bazel: strip_prefix = "nanopb-{version}-linux-x86"',
+  { file = "client/cnano/CMakeLists.txt.tmpl", text = "GIT_TAG        {version}", strict = false },
+]
+
+# ----------------------- C and C++ ------------------------------------------------------
+
+[[dep]]
+name = "asio"
+version = "1.39.0"
+source = "github-tag:chriskohlhoff/asio"
+tag = 'asio-(\d+-\d+-\d+)'
+at = [
+  { file = "MODULE.bazel", text = "https://github.com/chriskohlhoff/asio/archive/refs/tags/asio-{version:-}.tar.gz", sha256 = true },
+  'MODULE.bazel: strip_prefix = "asio-asio-{version:-}"',
+  { file = "client/cpp/CMakeLists.txt.tmpl", text = "https://github.com/chriskohlhoff/asio/archive/refs/tags/asio-{version:-}.tar.gz", sha256 = true },
+]
+
+# The oldest ASIO the C++ client builds with outside Bazel, the first with Unix domain
+# sockets on Windows
+[[dep]]
+name = "asio-floor"
+version = "1.20.0"
+hold = "the oldest supported ASIO"
+at = [
+  'client/cpp/vcpkg-port/vcpkg.json: { "name": "asio", "version>=": "{version}" }',
+  "client/cpp/CMakeLists.txt.tmpl: find_package(Asio {version})",
+  { file = "client/cpp/CMakeLists.txt.tmpl", text = '"ASIO {version} or later', strict = false },
+]
+
+[[dep]]
+name = "googletest"
+version = "1.18.0"
+source = "github-release:google/googletest"
+at = [
+  { file = "MODULE.bazel", text = "https://github.com/google/googletest/archive/refs/tags/v{version}.tar.gz", sha256 = true },
+  'MODULE.bazel: strip_prefix = "googletest-{version}"',
+]
+
+[[dep]]
+name = "doxygen"
+version = "1.18.0"
+source = "github-release:doxygen/doxygen"
+tag = 'Release_(\d+_\d+_\d+)'
+at = [
+  { file = "MODULE.bazel", text = "https://github.com/doxygen/doxygen/releases/download/Release_{version:_}/doxygen-{version}.linux.bin.tar.gz", sha256 = true, strict = false },
+  { file = "MODULE.bazel", text = "https://github.com/doxygen/doxygen/releases/download/Release_{version:_}/doxygen-{version}.windows.x64.bin.zip", sha256 = true, strict = false },
+  'MODULE.bazel: strip_prefix = "doxygen-{version}"',
+]
+
+# The en_US Hunspell dictionary of the docs' spelling check, from SCOWL 2020.12.07
+[[dep]]
+name = "hunspell-en-us"
+version = "2020.12.07"
+at = [
+  { file = "MODULE.bazel", text = "https://raw.githubusercontent.com/LibreOffice/dictionaries/4fa94195b8136364dd40bf2b0366a0fe32058899/en/en_US.aff", sha256 = true },
+  { file = "MODULE.bazel", text = "https://raw.githubusercontent.com/LibreOffice/dictionaries/4fa94195b8136364dd40bf2b0366a0fe32058899/en/en_US.dic", sha256 = true },
+]
+
+# ----------------------- C# -------------------------------------------------------------
+
+[[dep]]
+name = "Paket"
+version = "12.0.0"
+source = "nuget:Paket"
+regen = ["nuget"]
+at = [
+  "tools/build/dotnet/paket.dependencies: nuget Paket {version}",
+  { file = "tools/build/dotnet/paket.tools.bzl", text = '{"name": "Paket", "id": "Paket", "version": "{version}"', generated = true },
+]
+
+[[dep]]
+name = "KRPC.IO.Ports"
+version = "1.0.0"
+source = "github-release:krpc/krpc-io-ports"
+at = [
+  { file = "MODULE.bazel", text = "https://github.com/krpc/krpc-io-ports/releases/download/v{version}/KRPC.IO.Ports.dll", sha256 = true },
+  { file = "MODULE.bazel", text = "https://raw.githubusercontent.com/krpc/krpc-io-ports/master/LICENSE", sha256 = true },
+]
+
+[[dep]]
+name = "NetAnalyzers"
+version = "10.0.404"
+source = "nuget:Microsoft.CodeAnalysis.NetAnalyzers"
+below = "11"
+regen = ["nuget"]
+at = [
+  "tools/build/dotnet/paket.dependencies: nuget Microsoft.CodeAnalysis.NetAnalyzers {version}",
+  { file = "tools/build/dotnet/paket.main.bzl", text = '{"name": "Microsoft.CodeAnalysis.NetAnalyzers", "id": "Microsoft.CodeAnalysis.NetAnalyzers", "version": "{version}"', generated = true },
+]
+
+[[dep]]
+name = "Moq"
+version = "4.21.0"
+source = "nuget:Moq"
+regen = ["nuget"]
+at = [
+  "tools/build/dotnet/paket.dependencies: nuget Moq {version}",
+  { file = "tools/build/dotnet/paket.main.bzl", text = '{"name": "Moq", "id": "Moq", "version": "{version}"', generated = true },
+  'core/test/KRPC.Core.Test.csproj: <PackageReference Include="Moq" Version="{version}"',
+]
+
+[[dep]]
+name = "System.CommandLine"
+version = "3.0.0"
+source = "nuget:System.CommandLine"
+regen = ["nuget"]
+at = [
+  "tools/build/dotnet/paket.dependencies: nuget System.CommandLine {version}",
+  { file = "tools/build/dotnet/paket.main.bzl", text = '{"name": "System.CommandLine", "id": "System.CommandLine", "version": "{version}"', generated = true },
+  'tools/ServiceDefinitions/src/ServiceDefinitions.csproj: <PackageReference Include="System.CommandLine" Version="{version}"',
+  'tools/TestServer/src/TestServer.csproj: <PackageReference Include="System.CommandLine" Version="{version}"',
+]
+
+[[dep]]
+name = "System.IO.Ports"
+version = "10.0.15"
+source = "nuget:System.IO.Ports"
+below = "11"
+regen = ["nuget"]
+at = [
+  "tools/build/dotnet/paket.dependencies: nuget System.IO.Ports {version}",
+  { file = "tools/build/dotnet/paket.main.bzl", text = '{"name": "System.IO.Ports", "id": "System.IO.Ports", "version": "{version}"', generated = true },
+  'core/src/KRPC.Core.csproj: <PackageReference Include="System.IO.Ports" Version="{version}"',
+]
+
+# Dependencies of Google.Protobuf, whose versions it sets
+[[dep]]
+name = "System.Memory"
+version = "4.5.3"
+at = [
+  { file = "tools/build/dotnet/paket.main.bzl", text = '{"name": "System.Memory", "id": "System.Memory", "version": "{version}"', generated = true },
+  'MODULE.bazel: "nuget.system.memory.v{version}"',
+  "tools/build/dotnet/BUILD.bazel: @nuget.system.memory.v{version}//",
+]
+
+[[dep]]
+name = "System.Runtime.CompilerServices.Unsafe"
+version = "4.5.2"
+at = [
+  { file = "tools/build/dotnet/paket.main.bzl", text = '{"name": "System.Runtime.CompilerServices.Unsafe", "id": "System.Runtime.CompilerServices.Unsafe", "version": "{version}"', generated = true },
+  'MODULE.bazel: "nuget.system.runtime.compilerservices.unsafe.v{version}"',
+  "tools/build/dotnet/BUILD.bazel: @nuget.system.runtime.compilerservices.unsafe.v{version}//",
+]
+
+# The IDE solution's NUnit. The Bazel tests use the one rules_dotnet bundles.
+[[dep]]
+name = "NUnit"
+version = "3.14.0"
+source = "nuget:NUnit"
+hold = "matches the NUnit that rules_dotnet bundles"
+at = [
+  'client/csharp/test/KRPC.Client.Test.csproj: <PackageReference Include="NUnit" Version="{version}"',
+  'core/test/KRPC.Core.Test.csproj: <PackageReference Include="NUnit" Version="{version}"',
+]
+
+[[dep]]
+name = "ReferenceAssemblies"
+version = "1.0.3"
+source = "nuget:Microsoft.NETFramework.ReferenceAssemblies"
+at = [
+  'core/src/KRPC.Core.csproj: <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="{version}"',
+  'server/src/KRPC.csproj: <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="{version}"',
+  'service/*/src/*.csproj: <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="{version}"',
+  'tools/TestingTools/src/TestingTools.csproj: <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="{version}"',
+  'tools/benchmarks/src/KRPC.Benchmark.csproj: <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="{version}"',
+]
+
+# ----------------------- Java -----------------------------------------------------------
+
+[[dep]]
+name = "checkstyle"
+version = "14.4.0"
+source = "maven:com.puppycrawl.tools:checkstyle"
+regen = ["maven"]
+at = ["MODULE.bazel: com.puppycrawl.tools:checkstyle:{version}"]
+
+[[dep]]
+name = "junit"
+version = "4.13.2"
+source = "maven:junit:junit"
+below = "5"
+regen = ["maven"]
+at = ["MODULE.bazel: junit:junit:{version}"]
+
+[[dep]]
+name = "hamcrest"
+version = "3.0"
+source = "maven:org.hamcrest:hamcrest"
+regen = ["maven"]
+at = ["MODULE.bazel: org.hamcrest:hamcrest:{version}"]
+
+[[dep]]
+name = "javatuples"
+version = "1.2"
+source = "maven:org.javatuples:javatuples"
+regen = ["maven"]
+at = ["MODULE.bazel: org.javatuples:javatuples:{version}"]
+
+# ----------------------- JavaScript -----------------------------------------------------
+
+[[dep]]
+name = "bufbuild-protobuf"
+version = "2.17.0"
+source = "npm:@bufbuild/protobuf"
+verify = [{ source = "npm:@bufbuild/protoc-gen-es", version = "{version}" }]
+regen = ["pnpm"]
+at = [
+  'client/js/package.json: "@bufbuild/protobuf": "^{version}"',
+  'client/js/package.json: "@bufbuild/protoc-gen-es": "{version}"',
+]
+
+[[dep]]
+name = "acorn"
+version = "8.19.0"
+source = "npm:acorn"
+regen = ["pnpm"]
+at = ['client/js/package.json: "acorn": "^{version}"']
+
+[[dep]]
+name = "biome"
+version = "2.6.8"
+source = "npm:@biomejs/biome"
+regen = ["pnpm"]
+at = ['client/js/package.json: "@biomejs/biome": "{version}"']
+
+[[dep]]
+name = "types-node"
+version = "22.20.5"
+source = "npm:@types/node"
+below = "23"
+regen = ["pnpm"]
+at = ['client/js/package.json: "@types/node": "{version}"']
+
+[[dep]]
+name = "typescript"
+version = "7.0.2"
+source = "npm:typescript"
+regen = ["pnpm"]
+at = ['client/js/package.json: "typescript": "{version}"']
+
+# ----------------------- Lua ------------------------------------------------------------
+
+[[dep]]
+name = "lua"
+version = "5.4.9"
+source = "lua"
+below = "5.5"
+at = [
+  { file = "MODULE.bazel", text = "https://www.lua.org/ftp/lua-{version}.tar.gz", sha256 = true },
+  { file = "MODULE.bazel", text = 'strip_prefix = "lua-{version}"', strict = false },
+]
+
+[[dep]]
+name = "lua-protobuf"
+version = "0.6.0"
+source = "github-tag:starwing/lua-protobuf"
+at = [
+  { file = "MODULE.bazel", text = "https://github.com/starwing/lua-protobuf/archive/refs/tags/{version}.tar.gz", sha256 = true },
+  'MODULE.bazel: strip_prefix = "lua-protobuf-{version}"',
+]
+
+# Pinned to a commit after this release
+[[dep]]
+name = "luasocket"
+version = "3.1.0"
+source = "github-tag:lunarmodules/luasocket"
+hold = "pinned to the head of lunarmodules/luasocket#469 until a release includes it"
+at = [{ file = "MODULE.bazel", text = "https://github.com/lunarmodules/luasocket/archive/078012420563926b089c15b5cee118a50205d5c6.tar.gz", sha256 = true }]
+
+# The versions the Lua client's rockspec accepts
+[[dep]]
+name = "lua-floor"
+version = "5.1"
+hold = "the oldest supported Lua"
+at = ['client/lua/rockspec.tmpl: "lua >= {version}, < 5.5"']
+
+[[dep]]
+name = "luasocket-floor"
+version = "3.0"
+hold = "the oldest supported luasocket"
+at = ['client/lua/rockspec.tmpl: "luasocket >= {version}"']
+
+[[dep]]
+name = "lua-protobuf-floor"
+version = "0.5.3"
+hold = "the oldest supported lua-protobuf"
+at = ['client/lua/rockspec.tmpl: "lua-protobuf >= {version}"']
+
+[[dep]]
+name = "luafilesystem"
+version = "1.9.0"
+source = "github-tag:lunarmodules/luafilesystem"
+tag = 'v(\d+_\d+_\d+)'
+at = [
+  { file = "MODULE.bazel", text = "https://github.com/lunarmodules/luafilesystem/archive/refs/tags/v{version:_}.tar.gz", sha256 = true },
+  'MODULE.bazel: strip_prefix = "luafilesystem-{version:_}"',
+]
+
+[[dep]]
+name = "penlight"
+version = "1.15.0"
+source = "github-tag:lunarmodules/Penlight"
+at = [
+  { file = "MODULE.bazel", text = "https://github.com/lunarmodules/Penlight/archive/refs/tags/{version}.tar.gz", sha256 = true },
+  'MODULE.bazel: strip_prefix = "Penlight-{version}"',
+]
+
+[[dep]]
+name = "luaunit"
+version = "3.5"
+source = "github-tag:bluebird75/luaunit"
+tag = 'LUAUNIT_V(\d+_\d+(?:_\d+)?)'
+at = [
+  { file = "MODULE.bazel", text = "https://github.com/bluebird75/luaunit/archive/refs/tags/LUAUNIT_V{version:_}.tar.gz", sha256 = true },
+  'MODULE.bazel: strip_prefix = "luaunit-LUAUNIT_V{version:_}"',
+]
+
+[[dep]]
+name = "luacheck"
+version = "1.2.0"
+source = "github-tag:lunarmodules/luacheck"
+at = [
+  { file = "MODULE.bazel", text = "https://github.com/lunarmodules/luacheck/archive/refs/tags/v{version}.tar.gz", sha256 = true },
+  'MODULE.bazel: strip_prefix = "luacheck-{version}"',
+]
+
+[[dep]]
+name = "argparse"
+version = "0.7.2"
+source = "github-tag:luarocks/argparse"
+at = [
+  { file = "MODULE.bazel", text = "https://github.com/luarocks/argparse/archive/refs/tags/{version}.tar.gz", sha256 = true },
+  'MODULE.bazel: strip_prefix = "argparse-{version}"',
+]
+
+# ----------------------- Python ---------------------------------------------------------
+
+[[dep]]
+name = "jinja2"
+version = "3.1.6"
+source = "pypi:jinja2"
+regen = ["pip"]
+at = ["tools/build/python/requirements.in: jinja2=={version}"]
+
+[[dep]]
+name = "pyserial"
+version = "3.5"
+source = "pypi:pyserial"
+regen = ["pip"]
+at = ["tools/build/python/requirements.in: pyserial=={version}"]
+
+[[dep]]
+name = "requests"
+version = "2.34.2"
+source = "pypi:requests"
+regen = ["pip"]
+at = ["tools/build/python/requirements.in: requests=={version}"]
+
+[[dep]]
+name = "websocket-client"
+version = "1.9.2"
+source = "pypi:websocket-client"
+regen = ["pip"]
+at = ["tools/build/python/requirements.in: websocket-client=={version}"]
+
+[[dep]]
+name = "basedpyright"
+version = "1.40.2"
+source = "pypi:basedpyright"
+regen = ["pip"]
+at = ["tools/build/python/requirements.in: basedpyright=={version}"]
+
+[[dep]]
+name = "cogapp"
+version = "3.6.1"
+source = "pypi:cogapp"
+regen = ["pip"]
+at = ["tools/build/python/requirements.in: cogapp=={version}"]
+
+[[dep]]
+name = "ruff"
+version = "0.17.5"
+source = "pypi:ruff"
+regen = ["pip"]
+at = ["tools/build/python/requirements.in: ruff=={version}"]
+
+[[dep]]
+name = "pyvips"
+version = "3.2.0"
+source = "pypi:pyvips"
+regen = ["pip"]
+at = ["tools/build/python/requirements.in: pyvips=={version}"]
+
+[[dep]]
+name = "pyvips-binary"
+version = "8.18.7"
+source = "pypi:pyvips-binary"
+regen = ["pip"]
+at = ["tools/build/python/requirements.in: pyvips-binary=={version}"]
+
+[[dep]]
+name = "pydata-sphinx-theme"
+version = "0.24.0"
+source = "pypi:pydata-sphinx-theme"
+regen = ["pip"]
+at = ["tools/build/python/requirements.in: pydata-sphinx-theme=={version}"]
+
+[[dep]]
+name = "pyenchant"
+version = "3.3.0"
+source = "pypi:pyenchant"
+regen = ["pip"]
+at = ["tools/build/python/requirements.in: pyenchant=={version}"]
+
+[[dep]]
+name = "sphinx"
+version = "9.1.1"
+source = "pypi:sphinx"
+regen = ["pip"]
+at = ["tools/build/python/requirements.in: sphinx=={version}"]
+
+[[dep]]
+name = "sphinx-csharp"
+version = "1.0.0"
+source = "pypi:sphinx-csharp"
+regen = ["pip"]
+at = ["tools/build/python/requirements.in: sphinx-csharp=={version}"]
+
+[[dep]]
+name = "sphinx-design"
+version = "0.8.0"
+source = "pypi:sphinx-design"
+regen = ["pip"]
+at = ["tools/build/python/requirements.in: sphinx-design=={version}"]
+
+[[dep]]
+name = "sphinx-java"
+version = "1.0.0"
+source = "pypi:sphinx-java"
+regen = ["pip"]
+at = ["tools/build/python/requirements.in: sphinx-java=={version}"]
+
+[[dep]]
+name = "sphinx-lua-ls"
+version = "3.12.1"
+source = "pypi:sphinx-lua-ls"
+regen = ["pip"]
+at = ["tools/build/python/requirements.in: sphinx-lua-ls=={version}"]
+
+[[dep]]
+name = "sphinx-tabs"
+version = "3.5.0"
+source = "pypi:sphinx-tabs"
+regen = ["pip"]
+at = ["tools/build/python/requirements.in: sphinx-tabs=={version}"]
+
+[[dep]]
+name = "sphinxcontrib-spelling"
+version = "8.0.2"
+source = "pypi:sphinxcontrib-spelling"
+regen = ["pip"]
+at = ["tools/build/python/requirements.in: sphinxcontrib-spelling=={version}"]
+
+[[dep]]
+name = "spylls"
+version = "0.1.7"
+source = "pypi:spylls"
+regen = ["pip"]
+at = ["tools/build/python/requirements.in: spylls=={version}"]
+
+# The oldest pytest krpctools supports
+[[dep]]
+name = "pytest-floor"
+version = "9"
+hold = "the oldest supported pytest"
+at = ['tools/krpctools/pyproject.toml: "pytest >= {version}"']
+
+# ----------------------- KSP ------------------------------------------------------------
+
+# The stub assemblies the mod compiles against
+[[dep]]
+name = "ksp"
+version = "1.12.5"
+hold = "the KSP release the mod supports"
+at = [
+  { file = "MODULE.bazel", text = "https://github.com/krpc/ksp-lib/raw/main/ksp/ksp-{version}.zip", sha256 = true },
+  'config.bzl: ksp_version_max = "{version}.',
+  'config.bzl: ksp_version_min = "{version}.',
+]
+
+[[dep]]
+name = "ModuleManager"
+version = "4.2.3"
+source = "github-release:sarbian/ModuleManager"
+at = [
+  { file = "MODULE.bazel", text = "https://github.com/sarbian/ModuleManager/releases/download/v{version}/ModuleManager.{version}.dll", sha256 = true },
+  'MODULE.bazel: downloaded_file_path = "ModuleManager.{version}.dll"',
+]
+
+# ----------------------- GitHub Actions -------------------------------------------------
+
+[[dep]]
+name = "actions/checkout"
+version = "7"
+source = "github-release:actions/checkout"
+tag = 'v(\d+)\.\d+\.\d+'
+at = [".github/**/*.yml: actions/checkout@v{version}"]
+
+[[dep]]
+name = "actions/cache"
+version = "6"
+source = "github-release:actions/cache"
+tag = 'v(\d+)\.\d+\.\d+'
+at = [
+  ".github/**/*.yml: actions/cache@v{version}",
+  ".github/**/*.yml: actions/cache/restore@v{version}",
+  ".github/**/*.yml: actions/cache/save@v{version}",
+]
+
+[[dep]]
+name = "actions/download-artifact"
+version = "8"
+source = "github-release:actions/download-artifact"
+tag = 'v(\d+)\.\d+\.\d+'
+at = [".github/**/*.yml: actions/download-artifact@v{version}"]
+
+[[dep]]
+name = "actions/upload-artifact"
+version = "7"
+source = "github-release:actions/upload-artifact"
+tag = 'v(\d+)\.\d+\.\d+'
+at = [".github/**/*.yml: actions/upload-artifact@v{version}"]
+
+[[dep]]
+name = "actions/setup-dotnet"
+version = "6"
+source = "github-release:actions/setup-dotnet"
+tag = 'v(\d+)\.\d+\.\d+'
+at = [".github/**/*.yml: actions/setup-dotnet@v{version}"]
+
+[[dep]]
+name = "actions/setup-python"
+version = "7"
+source = "github-release:actions/setup-python"
+tag = 'v(\d+)\.\d+\.\d+'
+at = [".github/**/*.yml: actions/setup-python@v{version}"]
+
+# ----------------------- Build environment image ----------------------------------------
+#
+# A change to the Dockerfile needs a new image. Build and push it (tools/buildenv/Makefile),
+# then point CI at it with: deps.py update buildenv --to <version>
+
+[[dep]]
+name = "bazelisk"
+version = "1.30.0"
+source = "github-release:bazelbuild/bazelisk"
+hold = "needs a new buildenv image"
+at = ["tools/buildenv/Dockerfile: bazelisk/releases/download/v{version}/"]
+
+[[dep]]
+name = "ubuntu"
+version = "24.04"
+source = "docker:library/ubuntu"
+tag = '(\d+\.04)'
+hold = "needs a new buildenv image"
+at = ["tools/buildenv/Dockerfile: FROM ubuntu:{version}"]
+
+[[dep]]
+name = "buildenv"
+version = "3.16.0"
+hold = "set after pushing a new image"
+at = [
+  "tools/buildenv/VERSION.txt: {version}",
+  ".github/**/*.yml: ghcr.io/krpc/buildenv:{version}",
+]

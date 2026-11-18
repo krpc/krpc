@@ -15,10 +15,10 @@ websocket-client==1.9.2
 
 # Build and test tooling
 basedpyright==1.40.2
-cogapp==3.6.0
+cogapp==3.6.1
 hatchling
 pytest
-ruff==0.17.3
+ruff==0.17.5
 
 # Rasterizing the SVG icons and diagrams. pyvips-binary carries libvips and the
 # librsvg that renders them, as wheels for every platform the build runs on, so
@@ -31,7 +31,7 @@ pydata-sphinx-theme==0.24.0
 pyenchant==3.3.0
 sphinx==9.1.1
 sphinx-csharp==1.0.0
-sphinx-design==0.7.0
+sphinx-design==0.8.0
 sphinx-java==1.0.0
 sphinx-lua-ls==3.12.1
 sphinx-tabs==3.5.0

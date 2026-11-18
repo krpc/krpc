@@ -120,23 +120,44 @@ Useful options for ``bazel build`` and ``bazel test`` are:
 ``bazel fetch //...`` downloads every dependency up front, for working offline. ``bazel clean``
 deletes the build outputs, and ``bazel clean --expunge`` also deletes the downloaded dependencies.
 
-NuGet Packages
---------------
+Dependencies
+------------
 
-The NuGet packages used by the C# targets are listed in ``tools/build/dotnet/paket.dependencies``.
-After editing that file, regenerate the lock file and the package lists with:
+``tools/deps/deps.toml`` lists each third-party dependency once, with every file that pins its
+version. ``tools/deps/deps.py`` reads it. To list the dependencies with newer releases:
 
 .. code-block:: bash
 
-   bazel run //tools/build/dotnet:update
+   python3 tools/deps/deps.py outdated
 
-A target depends on a package through its lowercase name, such as ``@paket.main//google.protobuf``.
-The target framework of the target selects the package's assets and dependencies.
+To update them all, or a few by name:
 
-A few versions are written by hand, and an update must change them too. Google.Protobuf's
-version appears in a repository name in ``MODULE.bazel``, in the ``Google.Protobuf.netstandard2.0``
-import in ``tools/build/dotnet/BUILD.bazel``, and in the dependencies of the ``KRPC.Client``
-NuGet package. ``//tools/build/dotnet:versions-test`` checks each of them against the lock file.
+.. code-block:: bash
+
+   python3 tools/deps/deps.py update --all
+   python3 tools/deps/deps.py update protobuf ruff
+
+An update rewrites each pin and the hash of each downloaded archive. It then regenerates the
+lock files the updated dependencies use, with the commands below. ``update --all`` regenerates
+every lock file and moves its transitive pins to their newest releases. It skips the entries that
+give a reason to hold, such as the Google.Protobuf version KSP's Unity needs.
+
+``//tools/deps:test`` checks that every pin agrees with ``deps.toml``. It also scans the build
+files, project files, package metadata and workflows for pins that ``deps.toml`` does not list,
+so a new dependency, or a new pin of one, needs an entry. ``python3 tools/deps/deps.py mods``
+lists the KSP mods in ``service/registry.bzl`` with newer GitHub releases. A mod update needs the
+in-game tests, so it stays a hand edit.
+
+The lock files regenerate with these commands, after a hand edit of the file named:
+
+* ``tools/build/python/requirements.in``: ``bazel run //tools/build/python:requirements.update``
+* ``tools/build/dotnet/paket.dependencies``: ``bazel run //tools/build/dotnet:update``
+* ``maven.install`` in ``MODULE.bazel``: ``RULES_JVM_EXTERNAL_REPIN=1 bazel run @unpinned_maven//:pin``
+* ``client/js/package.json``: ``bazel run -- @pnpm --dir $PWD/client/js install --lockfile-only``
+
+A C# target depends on a NuGet package through its lowercase name, such as
+``@paket.main//google.protobuf``. The target framework of the target selects the package's assets
+and dependencies.
 
 C# IDEs
 -------

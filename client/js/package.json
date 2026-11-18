@@ -21,13 +21,13 @@
     "node": ">=22"
   },
   "dependencies": {
-    "@bufbuild/protobuf": "^2.16.0",
+    "@bufbuild/protobuf": "^2.17.0",
     "acorn": "^8.19.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.6.5",
-    "@bufbuild/protoc-gen-es": "2.16.0",
+    "@biomejs/biome": "2.6.8",
+    "@bufbuild/protoc-gen-es": "2.17.0",
     "@types/node": "22.20.5",
-    "typescript": "5.9.3"
+    "typescript": "7.0.2"
   }
 }

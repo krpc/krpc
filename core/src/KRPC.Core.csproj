@@ -24,7 +24,7 @@
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
     <PackageReference Include="Google.Protobuf" Version="3.36.2" />
-    <PackageReference Include="System.IO.Ports" Version="10.0.14" />
+    <PackageReference Include="System.IO.Ports" Version="10.0.15" />
     <Compile Include="$(bazel-bin)/protobuf/KRPC.cs">
       <Link>KRPC.cs</Link>
     </Compile>

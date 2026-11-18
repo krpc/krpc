@@ -70,7 +70,6 @@ test_suite(
         ":ruff",
         "//tools/build/dotnet:pyright",
         "//tools/build/dotnet:ruff",
-        "//tools/build/dotnet:versions-test",
         "//tools/build/protobuf:pyright",
         "//tools/build/protobuf:ruff",
         "//tools/build/python:pyright",
