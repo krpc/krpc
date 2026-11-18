@@ -216,6 +216,15 @@ class Testee:
             call = conn.get_call(func, *args)
         return conn.krpc.Expression.call_with_arguments(call, arguments)
 
+    @staticmethod
+    def _hash(value: object) -> int:
+        try:
+            return hash(value) % 2**64
+        except TypeError:
+            raise Unsupported(
+                "A structure is a tuple, which cannot be hashed while it holds a list"
+            ) from None
+
     def _dispatch(self, command: pb.Command, reply: pb.Reply) -> None:
         case = command.WhichOneof("command")
         if case == "connect":
@@ -247,7 +256,7 @@ class Testee:
         elif case == "run_function":
             reply.value.CopyFrom(self._run_function(command.run_function))
         elif case == "hash":
-            reply.value.uint64 = hash(self._from_value(command.hash.a)) % 2**64
+            reply.value.uint64 = self._hash(self._from_value(command.hash.a))
         elif case == "hash_handle":
             reply.value.uint64 = hash(self._stream(command.hash_handle.stream)) % 2**64
         elif case == "object_id":

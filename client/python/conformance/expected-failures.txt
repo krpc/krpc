@@ -21,7 +21,6 @@ test_values.py::test_out_of_range[sint32-above]  # The encoder checks only that 
 test_values.py::test_out_of_range[sint32-below]  # As test_out_of_range[sint32-above]
 test_values.py::test_out_of_range[sint64-above]  # As test_out_of_range[sint32-above]
 test_values.py::test_out_of_range[uint32-above]  # As test_out_of_range[sint32-above]
-test_values.py::test_structure_hash  # A structure holding a list cannot be hashed
 test_values.py::test_wrong_collection[string-for-list]  # Any iterable coerces to a list
 test_values.py::test_wrong_collection[bytes-for-list]  # As test_wrong_collection[string-for-list]
 test_values.py::test_wrong_collection[dictionary-for-list]  # As test_wrong_collection[string-for-list]
