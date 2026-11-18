@@ -9,9 +9,6 @@ test_values.py::test_combined_enum_value  # As test_undeclared_enum_value
 test_calls.py::test_too_many_arguments[procedure]  # Arguments past the last parameter are dropped
 test_calls.py::test_too_many_arguments[method]  # As test_too_many_arguments[procedure]
 test_connection.py::test_stall  # No stall timeout
-test_connection.py::test_handshake_timeout_values[zero]  # A zero, negative or NaN timeout raises no argument error
-test_connection.py::test_handshake_timeout_values[negative]  # As test_handshake_timeout_values[zero]
-test_connection.py::test_handshake_timeout_values[nan]  # As test_handshake_timeout_values[zero]
 test_connection.py::test_stall_timeout_values[zero]  # No stall timeout
 test_connection.py::test_stall_timeout_values[negative]  # As test_stall_timeout_values[zero]
 test_connection.py::test_stall_timeout_values[nan]  # As test_stall_timeout_values[zero]
