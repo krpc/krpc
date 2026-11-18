@@ -614,6 +614,10 @@ async function connectCommand(command: Connect, name: string): Promise<void> {
   if (command.protocol !== "websockets") {
     throw new Unsupported(`No protocol ${command.protocol}`);
   }
+  // The client takes no stall timeout, so it has no invalid one to refuse
+  if (command.stallTimeout !== undefined && !(command.stallTimeout > 0)) {
+    throw new Unsupported("No stall timeout, as a WebSocket message arrives whole");
+  }
   const conn = await connect({
     name: command.name,
     address: command.address || undefined,

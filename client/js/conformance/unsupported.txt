@@ -20,3 +20,6 @@ test_functions.py::test_stream_null_for_non_nullable_type[double]  # As test_nul
 test_functions.py::test_stream_null_for_non_nullable_type[TestClass]  # As test_null_for_non_nullable_type[double]
 test_functions.py::test_null_in_callback[double]  # As test_null_for_non_nullable_type[double]
 test_functions.py::test_null_in_callback[TestClass]  # As test_null_for_non_nullable_type[double]
+test_connection.py::test_stall_timeout_values[zero]  # The client has no stall timeout, as a WebSocket message arrives whole
+test_connection.py::test_stall_timeout_values[negative]  # As test_stall_timeout_values[zero]
+test_connection.py::test_stall_timeout_values[nan]  # As test_stall_timeout_values[zero]

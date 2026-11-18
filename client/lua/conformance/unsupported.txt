@@ -11,3 +11,9 @@ test_calls.py::test_not_deprecated[struct-field]  # As test_deprecated_struct_fi
 test_calls.py::test_deprecated_exception  # The client has no exception types
 test_calls.py::test_deprecated_service_member[exception]  # As test_deprecated_exception
 test_calls.py::test_not_deprecated[exception]  # As test_deprecated_exception
+test_calls.py::test_default_values[uint64-extremes]  # A Lua integer is signed, so a uint64 above the sint64 range reads as negative
+test_values.py::test_integers[uint64]  # As test_calls.py::test_default_values[uint64-extremes]
+test_codec.py::test_integers[uint64]  # As test_calls.py::test_default_values[uint64-extremes]
+test_values.py::test_integer_to_float[double-uint64]  # As test_calls.py::test_default_values[uint64-extremes]
+test_values.py::test_integer_to_float[float-uint64]  # As test_calls.py::test_default_values[uint64-extremes]
+test_functions.py::test_argument_types[uint64-max]  # As test_calls.py::test_default_values[uint64-extremes]

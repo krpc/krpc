@@ -53,6 +53,14 @@ local function service_type(value)
   return conn[to_snake_case(value.service)][value.name]
 end
 
+-- A failure the driver reports as a test the language cannot carry out
+local function unsupported(message)
+  error({ unsupported = message }, 0)
+end
+
+-- A Lua integer is a signed 64-bit integer, so a uint64 above the sint64 range reads as negative
+local UINT64_LIMIT = 'A Lua integer is signed, so a uint64 above the sint64 range reads as negative'
+
 local function from_value(value)
   local case = value.value
   if case == nil or case == 'null' then
@@ -92,6 +100,8 @@ local function from_value(value)
       fields[i] = from_value(x)
     end
     return service_type(value.struct)(table.unpack(fields, 1, #(value.struct.fields or {})))
+  elseif case == 'uint64' and value.uint64 < 0 then
+    unsupported(UINT64_LIMIT)
   end
   return value[case]
 end
@@ -332,11 +342,6 @@ local function invoke(command)
   return func(table.unpack(args, 1, count))
 end
 
--- A failure the driver reports as a test the language cannot carry out
-local function unsupported(message)
-  error({ unsupported = message }, 0)
-end
-
 -- Use a member of a service: a call of a procedure or the building of its call, or a read of the
 -- service, a type or an enumeration value
 local function use_member(command)
@@ -430,21 +435,48 @@ local function connected()
   return conn
 end
 
--- The krpc.schema message a procedure returns, or nil for a procedure that returns another type
-local function result_message_type(command)
+-- The return type of the procedure an invoke command calls, or nil
+local function result_type(command)
   for _, service in ipairs(conn.krpc:get_services().services) do
     if service.name == command.service then
       for _, procedure in ipairs(service.procedures) do
         if procedure.name == command.procedure and procedure.return_type ~= nil then
-          local typ = conn._types:as_type(procedure.return_type)
-          if typ:is_a(Types.MessageType) then
-            return typ.message_type
-          end
+          return conn._types:as_type(procedure.return_type)
         end
       end
     end
   end
   return nil
+end
+
+-- Whether a value is a negative integer, or a list holding one
+local function holds_negative_integer(value)
+  if math.type(value) == 'integer' then
+    return value < 0
+  end
+  if List:class_of(value) then
+    for _, x in ipairs(value) do
+      if holds_negative_integer(x) then
+        return true
+      end
+    end
+  end
+  return false
+end
+
+-- Whether a value of a type holds a uint64 that reads as negative, directly or as a list item
+local function negative_uint64(value, typ)
+  if typ.protobuf_type.code == Types.UINT64 then
+    return math.type(value) == 'integer' and value < 0
+  end
+  if typ:is_a(Types.ListType) and type(value) == 'table' then
+    for _, x in ipairs(value) do
+      if negative_uint64(x, typ.value_type) then
+        return true
+      end
+    end
+  end
+  return false
 end
 
 local function dispatch(command)
@@ -479,9 +511,16 @@ local function dispatch(command)
     end
     -- A decoded message is a table with no class
     if type(result) == 'table' and getmetatable(result) == nil then
-      local message_type = result_message_type(command.invoke)
-      if message_type ~= nil then
-        return { message = protobuf.encode(message_type, result) }
+      local typ = result_type(command.invoke)
+      if typ ~= nil and typ:is_a(Types.MessageType) then
+        return { message = protobuf.encode(typ.message_type, result) }
+      end
+    end
+    -- The types are looked up, at the cost of a call, only for a result that may need them
+    if holds_negative_integer(result) then
+      local typ = result_type(command.invoke)
+      if typ ~= nil and negative_uint64(result, typ) then
+        unsupported(UINT64_LIMIT)
       end
     end
     return to_value(result)
