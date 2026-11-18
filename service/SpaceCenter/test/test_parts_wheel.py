@@ -262,7 +262,9 @@ class TestPartsWheelGrounded(TestCase):
         weight = self.vessel.mass * self.body.surface_gravity / 1000
         self.assertAlmostEqual(weight, self.total_load(), delta=weight * 0.03)
         ref = self.vessel.surface_reference_frame
-        force = self.vessel.parts.root.add_force((-5000, 0, 0), (0, 0, 0), ref)
+        force = self.connect().debug.add_force(
+            self.vessel.parts.root, (-5000, 0, 0), (0, 0, 0), ref
+        )
         try:
             self.wait(3)
             self.assertAlmostEqual(

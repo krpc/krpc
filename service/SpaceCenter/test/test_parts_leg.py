@@ -119,8 +119,9 @@ class TestPartsLegLanded(TestCase):
         weight = self.vessel.mass * self.body.surface_gravity / 1000
         ref = self.vessel.surface_reference_frame
         root = self.vessel.parts.root
+        debug = self.connect().debug
         for push in (45, 90):
-            force = root.add_force((-push * 1000, 0, 0), (0, 0, 0), ref)
+            force = debug.add_force(root, (-push * 1000, 0, 0), (0, 0, 0), ref)
             try:
                 self.wait_game_time(3)
                 for leg in self.standing:

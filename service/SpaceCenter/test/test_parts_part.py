@@ -942,21 +942,6 @@ class TestPartsPartDecoupleStage(TestCase):
         self.assertEqual(expected_stage_numbering, stage_numbering)
 
 
-class TestPartsPartForce(TestCase):
-    @classmethod
-    def setUpClass(cls):
-        cls.vessel = cls.launch("Basic")
-        cls.part = cls.vessel.parts.root
-
-    def test_the_deprecated_force_members(self):
-        """add_force and instantaneous_force still apply a force, as
-        Debug.add_force and Debug.instantaneous_force do."""
-        force = self.part.add_force((1, 2, 3), (4, 5, 6), self.part.reference_frame)
-        self.assertEqual((1, 2, 3), force.force_vector)
-        force.remove()
-        self.part.instantaneous_force((1, 2, 3), (4, 5, 6), self.part.reference_frame)
-
-
 class TestPartsJointStiffness(TestCase):
     """A pure moment on the joint between the fairing and the pod, in orbit,
     bends the joint by the moment divided by its angular spring."""
@@ -966,7 +951,9 @@ class TestPartsJointStiffness(TestCase):
         cls.vessel = cls.launch("Parts")
         cls.set_circular_orbit("Kerbin", 200000)
         cls.child = cls.vessel.parts.with_name("fairingSize1")[0]
-        cls.parent = cls.child.parent
+        parent = cls.child.parent
+        assert parent is not None
+        cls.parent = parent
 
     def deflection(self, axis, moment):
         """The joint's rotation, in radians, under a moment in kN.m about an axis
@@ -988,11 +975,12 @@ class TestPartsJointStiffness(TestCase):
         minus = vector(axis + 2, -moment * 1000)
         p1 = vector(axis + 1, 0.5)
         p2 = vector(axis + 1, -0.5)
+        debug = self.connect().debug
         forces = [
-            child.add_force(force, p1, ref),
-            child.add_force(minus, p2, ref),
-            parent.add_force(minus, p1, ref),
-            parent.add_force(force, p2, ref),
+            debug.add_force(child, force, p1, ref),
+            debug.add_force(child, minus, p2, ref),
+            debug.add_force(parent, minus, p1, ref),
+            debug.add_force(parent, force, p2, ref),
         ]
         try:
             self.wait(2)
