@@ -48,22 +48,51 @@ namespace KRPC.Service.KRPC
         public float RpcRate { get; set; }
 
         /// <summary>
-        /// The time spent receiving and executing calls per update, in seconds.
+        /// The game's frame rate, in frames per second.
         /// </summary>
         [KRPCProperty]
-        public float TimePerRpcUpdate { get; set; }
+        public float FrameRate { get; set; }
 
         /// <summary>
-        /// The time spent receiving calls per update, in seconds.
+        /// The server's time per frame, in seconds: executing calls, waiting for them and
+        /// updating streams.
         /// </summary>
         [KRPCProperty]
-        public float PollTimePerRpcUpdate { get; set; }
+        public float TimePerFrame { get; set; }
 
         /// <summary>
-        /// The time spent executing calls per update, in seconds.
+        /// The time spent executing calls per frame, in seconds.
         /// </summary>
         [KRPCProperty]
-        public float ExecTimePerRpcUpdate { get; set; }
+        public float ExecTimePerFrame { get; set; }
+
+        /// <summary>
+        /// The time spent waiting for calls per frame, in seconds.
+        /// </summary>
+        [KRPCProperty]
+        public float WaitTimePerFrame { get; set; }
+
+        /// <summary>
+        /// The time spent updating streams per frame, in seconds.
+        /// </summary>
+        [KRPCProperty]
+        public float StreamTimePerFrame { get; set; }
+
+        /// <summary>
+        /// The time the server may spend per frame, in seconds.
+        /// </summary>
+        /// <remarks>
+        /// Adaptive rate control adjusts it, up to <see cref="ServerSettings.MaxTimePerFrame"/>.
+        /// </remarks>
+        [KRPCProperty]
+        public float BudgetPerFrame { get; set; }
+
+        /// <summary>
+        /// The median time between a response and the client's next call, over the
+        /// clients' recent calls, in seconds.
+        /// </summary>
+        [KRPCProperty]
+        public float MedianTurnaround { get; set; }
 
         /// <summary>
         /// The number of calls left for the next update, because the update ran out of time
@@ -95,11 +124,5 @@ namespace KRPC.Service.KRPC
         /// </summary>
         [KRPCProperty]
         public ulong StreamUpdatesSent { get; set; }
-
-        /// <summary>
-        /// The time spent updating streams per update, in seconds.
-        /// </summary>
-        [KRPCProperty]
-        public float TimePerStreamUpdate { get; set; }
     }
 }

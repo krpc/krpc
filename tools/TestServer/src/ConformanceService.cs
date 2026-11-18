@@ -169,10 +169,7 @@ namespace TestServer
             if (clients.Count == 0)
                 throw new ArgumentException ("No client is named " + name);
             foreach (var client in clients) {
-                var stream = ((IClient<KRPC.Service.Messages.Request, KRPC.Service.Messages.Response>)client).Stream as IMessageStream;
-                if (stream == null)
-                    throw new InvalidOperationException ("The client has no message stream");
-                stream.Disconnect (disconnectReason, message);
+                ((IClient<IMessageStream>)client).Stream.Disconnect (disconnectReason, message);
             }
         }
 

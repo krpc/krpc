@@ -150,6 +150,45 @@ namespace KRPC.Test.Server.WebSockets
         }
 
         [Test]
+        public void ResponsesToRequestsReadAheadGoOutInOneWrite ()
+        {
+            var harness = Harness ();
+            harness.Upgrade ();
+            var client = harness.Handshake ();
+            harness.Send (MessageHarness.Request (1));
+            harness.Send (MessageHarness.Request (2));
+            harness.Server.Update ();
+            var writes = harness.Stream.Writes;
+            Assert.AreEqual (1, client.Stream.Read ().Id);
+            client.Stream.Write (new KRPC.Service.Messages.Response { Id = 1 });
+            // Held back, as the client has another request queued
+            Assert.AreEqual (writes, harness.Stream.Writes);
+            Assert.AreEqual (2, client.Stream.Read ().Id);
+            client.Stream.Write (new KRPC.Service.Messages.Response { Id = 2 });
+            Assert.AreEqual (writes + 1, harness.Stream.Writes);
+            var messages = harness.Receive ();
+            Assert.AreEqual (2, messages.Count);
+            Assert.AreEqual (1, messages [0].Response.Id);
+            Assert.AreEqual (2, messages [1].Response.Id);
+        }
+
+        [Test]
+        public void FlushSendsAResponseHeldBack ()
+        {
+            var harness = Harness ();
+            harness.Upgrade ();
+            var client = harness.Handshake ();
+            harness.Send (MessageHarness.Request (1));
+            harness.Send (MessageHarness.Request (2));
+            harness.Server.Update ();
+            Assert.AreEqual (1, client.Stream.Read ().Id);
+            client.Stream.Write (new KRPC.Service.Messages.Response { Id = 1 });
+            Assert.AreEqual (0, harness.Receive ().Count);
+            harness.Server.Flush ();
+            Assert.AreEqual (1, harness.ReceiveOne ().Response.Id);
+        }
+
+        [Test]
         public void ReadRequestAndWriteResponse ()
         {
             var harness = Harness ();
@@ -158,7 +197,9 @@ namespace KRPC.Test.Server.WebSockets
             harness.Send (MessageHarness.Request (3));
             Assert.IsTrue (client.Stream.DataAvailable);
             Assert.AreEqual (3, client.Stream.Read ().Id);
+            var writes = harness.Stream.Writes;
             client.Stream.Write (new KRPC.Service.Messages.Response { Id = 3 });
+            Assert.AreEqual (writes + 1, harness.Stream.Writes);
             var message = harness.ReceiveOne ();
             Assert.AreEqual (ContentCase.Response, message.ContentCase);
             Assert.AreEqual (3, message.Response.Id);

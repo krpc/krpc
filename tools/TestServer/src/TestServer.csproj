@@ -34,6 +34,7 @@
     </Compile>
     <Compile Include="ConformanceService.cs" />
     <Compile Include="DeprecatedService.cs" />
+    <Compile Include="GameLoop.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="TestService.cs" />
     <Compile Include="TestService2.cs" />

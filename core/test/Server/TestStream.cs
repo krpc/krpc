@@ -4,7 +4,7 @@ using KRPC.Server;
 
 namespace KRPC.Test.Server
 {
-    sealed class TestStream : IStream<byte,byte>, IHalfClosableStream, IDisposable
+    sealed class TestStream : IByteStream, IHalfClosableStream, IDisposable
     {
         MemoryStream outputStream;
         MemoryStream inputStream;
@@ -47,24 +47,6 @@ namespace KRPC.Test.Server
             get { return !Closed && inputStream.Position < inputStream.Length; }
         }
 
-        public byte Read ()
-        {
-            CheckDisposed ();
-            if (Closed)
-                throw new InvalidOperationException ();
-            return (byte)inputStream.ReadByte ();
-        }
-
-        public int Read (byte[] buffer, int offset)
-        {
-            CheckDisposed ();
-            if (Closed)
-                throw new InvalidOperationException ();
-            var size = inputStream.Read (buffer, offset, buffer.Length - offset);
-            BytesRead += (ulong)size;
-            return size;
-        }
-
         public int Read (byte[] buffer, int offset, int size)
         {
             CheckDisposed ();
@@ -73,12 +55,6 @@ namespace KRPC.Test.Server
             size = inputStream.Read (buffer, offset, size);
             BytesRead += (ulong)size;
             return size;
-        }
-
-        public void Write (byte value)
-        {
-            CheckDisposed ();
-            throw new NotSupportedException ();
         }
 
         public void Write (byte[] buffer)
@@ -96,6 +72,16 @@ namespace KRPC.Test.Server
                 throw new InvalidOperationException ();
             outputStream.Write (buffer, offset, size);
             BytesWritten += (ulong)size;
+            Writes++;
+        }
+
+        /// <summary>
+        /// The number of writes made to the stream.
+        /// </summary>
+        public int Writes { get; private set; }
+
+        public long LastArrival {
+            get { return 0; }
         }
 
         public ulong BytesRead { get; private set; }

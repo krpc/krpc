@@ -120,17 +120,17 @@ class BenchmarkTestCase(TestCase):
         RESULTS.append(result)
         return result
 
-    # The settling time for the stream update reading before it is sampled, the number of
-    # samples to take, and the gap between them. time_per_stream_update is an exponential
-    # moving average, so it takes a few updates to reach the value for the streams that were
+    # The settling time for the stream time reading before it is sampled, the number of
+    # samples to take, and the gap between them. stream_time_per_frame is an exponential
+    # moving average, so it takes a few frames to reach the value for the streams that were
     # just added.
     stream_settle_seconds = 2
     stream_samples = 10
     stream_sample_interval = 0.1
 
     def measure_stream_update(self, parts, attribute="mass"):
-        """Measure how long the server spends updating one stream per part, from its own
-        timing rather than a round trip. This is the workload the accessors exist for: every
+        """Measure how long the server spends per frame updating one stream per part, from its
+        own timing rather than a round trip. This is the workload the accessors exist for: every
         stream is re-evaluated every fixed update, so its cost is frame time in game.
 
         Unlike the other cases this needs the simulation running, and it measures whatever
@@ -148,14 +148,14 @@ class BenchmarkTestCase(TestCase):
             samples = []
             for _ in range(self.stream_samples):
                 samples.append(
-                    conn.krpc.get_status().statistics.time_per_stream_update * 1e3
+                    conn.krpc.get_status().statistics.stream_time_per_frame * 1e3
                 )
                 self.wait(self.stream_sample_interval)
         finally:
             for stream in streams:
                 stream.remove()
         return self.record(
-            "stream update",
+            "streams per frame",
             samples,
             "ms",
             note="%d streams over part.%s" % (len(streams), attribute),

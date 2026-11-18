@@ -11,7 +11,7 @@ namespace KRPC.Server.Message
     /// Abstract server for the connections of a byte server. Each connection carries one
     /// client's session at a time.
     /// </summary>
-    public abstract class Server : IServer<Request,Response>
+    public abstract class Server : IMessageServer
     {
         /// <summary>
         /// Event handler for when the server starts.
@@ -26,43 +26,34 @@ namespace KRPC.Server.Message
         /// <summary>
         /// Event handler for when a new client requests a connection.
         /// </summary>
-        public event EventHandler<ClientRequestingConnectionEventArgs<Request,Response>> OnClientRequestingConnection;
+        public event EventHandler<ClientRequestingConnectionEventArgs<IMessageStream>> OnClientRequestingConnection;
 
         /// <summary>
         /// Event handler for when a new client has connected.
         /// </summary>
-        public event EventHandler<ClientConnectedEventArgs<Request,Response>> OnClientConnected;
-
-        /// <summary>
-        /// Event handler when client activity occurs. Not triggered.
-        /// </summary>
-        #pragma warning disable 0067
-        public event EventHandler<ClientActivityEventArgs<Request,Response>> OnClientActivity;
-        #pragma warning restore 0067
+        public event EventHandler<ClientConnectedEventArgs<IMessageStream>> OnClientConnected;
 
         /// <summary>
         /// Event handler when a client disconnects.
         /// </summary>
-        public event EventHandler<ClientDisconnectedEventArgs<Request,Response>> OnClientDisconnected;
+        public event EventHandler<ClientDisconnectedEventArgs<IMessageStream>> OnClientDisconnected;
 
         const double STOP_DRAIN_TIMEOUT = 1;
 
-        internal IServer<byte,byte> InnerServer { get; private set; }
+        internal IServer<IByteStream> InnerServer { get; private set; }
 
-        readonly Dictionary<IClient<byte,byte>,Connection> connections = new Dictionary<IClient<byte,byte>,Connection> ();
+        readonly Dictionary<IClient<IByteStream>,Connection> connections = new Dictionary<IClient<IByteStream>,Connection> ();
         readonly List<Connection> updating = new List<Connection> ();
         readonly List<Client> endedSessions = new List<Client> ();
 
         /// <summary>
         /// Construct a server from a raw byte server.
         /// </summary>
-        protected Server (IServer<byte,byte> innerServer)
+        protected Server (IServer<IByteStream> innerServer)
         {
             InnerServer = innerServer;
             InnerServer.OnStarted += (s, e) => EventHandlerExtensions.Invoke (OnStarted, this);
             InnerServer.OnStopped += (s, e) => EventHandlerExtensions.Invoke (OnStopped, this);
-            // Connections are approved once their handshake has been read
-            InnerServer.OnClientRequestingConnection += (s, e) => e.Request.Allow ();
             InnerServer.OnClientConnected += (s, e) => connections [e.Client] = CreateConnection (e.Client);
             InnerServer.OnClientDisconnected += HandleClientDisconnected;
         }
@@ -70,7 +61,7 @@ namespace KRPC.Server.Message
         /// <summary>
         /// Create the connection for a byte client.
         /// </summary>
-        internal abstract Connection CreateConnection (IClient<byte,byte> client);
+        internal abstract Connection CreateConnection (IClient<IByteStream> client);
 
         /// <summary>
         /// Seconds a partial message may go without a new byte before its connection ends, on
@@ -128,6 +119,15 @@ namespace KRPC.Server.Message
         }
 
         /// <summary>
+        /// Send the responses held back while their clients had more requests queued.
+        /// </summary>
+        public void Flush ()
+        {
+            foreach (var connection in connections.Values)
+                connection.Flush ();
+        }
+
+        /// <summary>
         /// Address the server is listening on. Format depends on the server protocol.
         /// </summary>
         public virtual string Address {
@@ -151,7 +151,7 @@ namespace KRPC.Server.Message
         /// <summary>
         /// Clients connected to the server.
         /// </summary>
-        public IEnumerable<IClient<Request,Response>> Clients {
+        public IEnumerable<IClient<IMessageStream>> Clients {
             get {
                 foreach (var connection in connections.Values) {
                     var session = connection.Session;
@@ -186,7 +186,7 @@ namespace KRPC.Server.Message
         /// <summary>
         /// Ask the handlers whether to allow a connection. Allowed if there are none.
         /// </summary>
-        internal void RequestingConnection (ClientRequestingConnectionEventArgs<Request,Response> args)
+        internal void RequestingConnection (ClientRequestingConnectionEventArgs<IMessageStream> args)
         {
             var handler = OnClientRequestingConnection;
             if (handler == null)
@@ -197,7 +197,7 @@ namespace KRPC.Server.Message
 
         internal void SessionStarted (Client client)
         {
-            EventHandlerExtensions.Invoke (OnClientConnected, this, new ClientConnectedEventArgs<Request,Response> (client));
+            EventHandlerExtensions.Invoke (OnClientConnected, this, new ClientConnectedEventArgs<IMessageStream> (client));
         }
 
         /// <summary>
@@ -216,10 +216,10 @@ namespace KRPC.Server.Message
             var ended = endedSessions.ToArray ();
             endedSessions.Clear ();
             foreach (var client in ended)
-                EventHandlerExtensions.Invoke (OnClientDisconnected, this, new ClientDisconnectedEventArgs<Request,Response> (client));
+                EventHandlerExtensions.Invoke (OnClientDisconnected, this, new ClientDisconnectedEventArgs<IMessageStream> (client));
         }
 
-        void HandleClientDisconnected (object sender, ClientEventArgs<byte,byte> args)
+        void HandleClientDisconnected (object sender, ClientEventArgs<IByteStream> args)
         {
             Connection connection;
             if (!connections.TryGetValue (args.Client, out connection))

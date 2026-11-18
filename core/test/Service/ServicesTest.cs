@@ -730,7 +730,13 @@ namespace KRPC.Test.Service
             request.Calls.Add (call);
             request.Calls.Add (valid);
             var response = new RequestContinuation (null, request.ToMessage ()).Run ();
-            mock.Verify (x => x.ProcedureNoArgsReturns (), Times.Exactly (2));
+            // Decoded off the game thread, the call fails the same way
+            var offGameThread = request.ToMessageOffGameThread ();
+            offGameThread.DecodeRemaining ();
+            var otherResponse = new RequestContinuation (null, offGameThread).Run ();
+            Assert.AreEqual (response.Results [1].Error.Exception, otherResponse.Results [1].Error.Exception);
+            Assert.AreEqual (response.Results [1].Error.Description, otherResponse.Results [1].Error.Description);
+            mock.Verify (x => x.ProcedureNoArgsReturns (), Times.Exactly (4));
             Assert.AreEqual (7, response.Id);
             Assert.IsFalse (response.HasError);
             Assert.AreEqual (3, response.Results.Count);

@@ -6,15 +6,14 @@ namespace KRPC.Server.Message
     /// <summary>
     /// A client's session on a connection. A reconnect on the same connection is a new client.
     /// </summary>
-    sealed class Client : IClient<Request,Response>
+    sealed class Client : IClient<IMessageStream>
     {
         readonly Connection connection;
         readonly Stream stream;
 
-        public Client (string name, uint protocolVersion, Connection innerConnection)
+        public Client (string name, Connection innerConnection)
         {
             Name = name;
-            ProtocolVersion = protocolVersion;
             Guid = Guid.NewGuid ();
             connection = innerConnection;
             stream = new Stream (this, connection);
@@ -22,18 +21,13 @@ namespace KRPC.Server.Message
 
         public string Name { get; private set; }
 
-        /// <summary>
-        /// The protocol version sent by the client.
-        /// </summary>
-        public uint ProtocolVersion { get; private set; }
-
         public Guid Guid { get; private set; }
 
         public string Address {
             get { return connection.Client.Address; }
         }
 
-        public IStream<Request,Response> Stream {
+        public IMessageStream Stream {
             get { return stream; }
         }
 
@@ -57,7 +51,7 @@ namespace KRPC.Server.Message
             return ReferenceEquals (this, obj);
         }
 
-        public bool Equals (IClient<Request,Response> other)
+        public bool Equals (IClient<IMessageStream> other)
         {
             return ReferenceEquals (this, other);
         }

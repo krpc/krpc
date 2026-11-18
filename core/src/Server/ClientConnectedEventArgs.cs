@@ -13,9 +13,10 @@ namespace KRPC.Server
     /// <summary>
     /// Arguments passed to a client connected event
     /// </summary>
-    public sealed class ClientConnectedEventArgs<TIn,TOut> : ClientEventArgs<TIn,TOut>
+    public sealed class ClientConnectedEventArgs<TStream> : ClientEventArgs<TStream>
+        where TStream : IStream
     {
-        internal ClientConnectedEventArgs (IClient<TIn,TOut> client) : base (client)
+        internal ClientConnectedEventArgs (IClient<TStream> client) : base (client)
         {
         }
     }

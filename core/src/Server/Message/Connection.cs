@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.IO;
 using Google.Protobuf;
 using KRPC.Server.ProtocolBuffers;
 using KRPC.Service.Messages;
@@ -32,6 +34,16 @@ namespace KRPC.Server.Message
         }
 
         const int BUFFER_INITIAL_SIZE = 64 * 1024;
+
+        /// <summary>
+        /// The most requests read ahead of the one executing. Past them, the connection reads
+        /// no more, and the transport's flow control holds the client's sends.
+        /// </summary>
+        internal const int InboxDepth = 16;
+
+        // The most bytes read ahead into the buffer, as one message larger than this is read
+        // only once the requests before it have run
+        const int ReadAheadBytes = BUFFER_INITIAL_SIZE;
         const int BUFFER_INCREASE_SIZE = 1024 * 1024;
         const double HANDSHAKE_TIMEOUT = 3;
         const double CLOSING_TIMEOUT = 1;
@@ -47,18 +59,41 @@ namespace KRPC.Server.Message
         readonly StreamUpdateMessage streamUpdate = new StreamUpdateMessage ();
         Client session;
         bool sessionStarted;
-        Request bufferedRequest;
+        // The session's requests read ahead, in order. The game thread takes them with no lock.
+        readonly ConcurrentQueue<Request> inbox = new ConcurrentQueue<Request> ();
+        // A message other than a request read ahead, a malformed message, or a failure of the
+        // transport, held until the requests before it have run
+        SchemaMessage heldMessage;
+        MalformedRequestException heldError;
+        ServerException heldFailure;
+        // Held by the stream's reader thread while it reads ahead, and by the game thread
+        // whenever it reads or changes the state the reader uses: the buffer, the held
+        // messages and the connection's state
+        readonly object receiveLock = new object ();
+        // When the bytes last read into the buffer arrived
+        long lastArrival;
+        // Bytes written and not yet sent, so that the responses to requests read ahead go out
+        // in one send
+        readonly MemoryStream unsent = new MemoryStream ();
+        readonly object outputLock = new object ();
 
-        protected Connection (Server messageServer, IClient<byte,byte> client)
+        // The most bytes held back before they are sent
+        const int MaxHeldBackBytes = 64 * 1024;
+
+        protected Connection (Server messageServer, IClient<IByteStream> client)
         {
             server = messageServer;
             Client = client;
+            Output = new OutputStream (this);
+            var stream = client.Stream as IReaderThreadStream;
+            if (stream != null)
+                stream.Received = ReadAheadOnReader;
         }
 
         /// <summary>
         /// The byte client the connection is carried on.
         /// </summary>
-        public IClient<byte,byte> Client { get; private set; }
+        public IClient<IByteStream> Client { get; private set; }
 
         /// <summary>
         /// The client in log lines: the session's client once a connection request has named
@@ -68,8 +103,95 @@ namespace KRPC.Server.Message
             get { return session != null ? session.Label () : Client.Label (); }
         }
 
-        protected IStream<byte,byte> Stream {
+        protected IByteStream Stream {
             get { return Client.Stream; }
+        }
+
+        /// <summary>
+        /// Where a subclass writes the bytes of a message. They are sent once the message is
+        /// written, or with the responses after it when the client has more requests queued.
+        /// </summary>
+        protected System.IO.Stream Output { get; private set; }
+
+        /// <summary>
+        /// Held while writing to <see cref="Output"/>, and while sending what it holds. A
+        /// subclass holds it too while it writes from the stream's reader thread.
+        /// </summary>
+        protected object OutputLock {
+            get { return outputLock; }
+        }
+
+        /// <summary>
+        /// Send the bytes written to <see cref="Output"/>. Throws a ServerException if the
+        /// write fails.
+        /// </summary>
+        protected void SendOutput ()
+        {
+            lock (outputLock) {
+                if (unsent.Length == 0)
+                    return;
+                try {
+                    Stream.Write (unsent.GetBuffer (), 0, (int)unsent.Length);
+                } finally {
+                    unsent.SetLength (0);
+                }
+            }
+        }
+
+        sealed class OutputStream : System.IO.Stream
+        {
+            readonly Connection connection;
+
+            public OutputStream (Connection outputConnection)
+            {
+                connection = outputConnection;
+            }
+
+            public override void Write (byte[] buffer, int offset, int count)
+            {
+                lock (connection.outputLock)
+                    connection.unsent.Write (buffer, offset, count);
+            }
+
+            public override void Flush ()
+            {
+            }
+
+            public override bool CanRead {
+                get { return false; }
+            }
+
+            public override bool CanSeek {
+                get { return false; }
+            }
+
+            public override bool CanWrite {
+                get { return true; }
+            }
+
+            public override long Length {
+                get { throw new NotSupportedException (); }
+            }
+
+            public override long Position {
+                get { throw new NotSupportedException (); }
+                set { throw new NotSupportedException (); }
+            }
+
+            public override int Read (byte[] buffer, int offset, int count)
+            {
+                throw new NotSupportedException ();
+            }
+
+            public override long Seek (long offset, System.IO.SeekOrigin origin)
+            {
+                throw new NotSupportedException ();
+            }
+
+            public override void SetLength (long value)
+            {
+                throw new NotSupportedException ();
+            }
         }
 
         /// <summary>
@@ -160,14 +282,16 @@ namespace KRPC.Server.Message
         /// </summary>
         public void Update ()
         {
-            if (state == State.Handshake)
-                ReceiveHandshake ();
-            if (state == State.Pending || state == State.Session)
-                ReadAhead ();
-            if (state == State.Pending)
-                RequestApproval ();
-            if (state == State.Closing)
-                Drain ();
+            lock (receiveLock) {
+                if (state == State.Handshake)
+                    ReceiveHandshake ();
+                if (state == State.Pending || state == State.Session)
+                    ReadAhead ();
+                if (state == State.Pending)
+                    RequestApproval ();
+                if (state == State.Closing)
+                    Drain ();
+            }
         }
 
         /// <summary>
@@ -182,8 +306,10 @@ namespace KRPC.Server.Message
         /// </summary>
         public void EndDrain ()
         {
-            if (state == State.Closing)
-                CloseNow ();
+            lock (receiveLock) {
+                if (state == State.Closing)
+                    CloseNow ();
+            }
         }
 
         /// <summary>
@@ -192,15 +318,17 @@ namespace KRPC.Server.Message
         /// </summary>
         public void Disconnected ()
         {
-            if (state == State.Session) {
-                var disconnect = BufferedDisconnect ();
-                if (disconnect != null)
-                    LogDisconnect (disconnect);
-                else
-                    Logger.WriteLine ("Client " + session.Label () + " disconnected with no disconnect message", Logger.Severity.Warning);
+            lock (receiveLock) {
+                if (state == State.Session) {
+                    var disconnect = BufferedDisconnect ();
+                    if (disconnect != null)
+                        LogDisconnect (disconnect);
+                    else
+                        Logger.WriteLine ("Client " + session.Label () + " disconnected with no disconnect message", Logger.Severity.Warning);
+                }
+                EndSession ();
+                state = State.Closed;
             }
-            EndSession ();
-            state = State.Closed;
         }
 
         /// <summary>
@@ -209,11 +337,13 @@ namespace KRPC.Server.Message
         /// </summary>
         public void Stop ()
         {
-            if (state == State.Closing || state == State.Closed)
-                return;
-            EndWith (DisconnectMessage (Reason.ServerStopped, "The server stopped"));
-            if (!EndsByClosing)
-                state = State.Closed;
+            lock (receiveLock) {
+                if (state == State.Closing || state == State.Closed)
+                    return;
+                EndWith (DisconnectMessage (Reason.ServerStopped, "The server stopped"));
+                if (!EndsByClosing)
+                    state = State.Closed;
+            }
         }
 
         /// <summary>
@@ -225,60 +355,95 @@ namespace KRPC.Server.Message
         {
             if (state != State.Session || client != session)
                 return false;
-            if (bufferedRequest != null)
+            if (!inbox.IsEmpty)
                 return true;
-            while (true) {
-                SchemaMessage message;
-                bool stalled;
-                try {
-                    message = Receive (out stalled);
-                } catch (MalformedRequestException e) {
-                    End (Reason.MalformedMessage, "Failed to parse a message: " + e.Message);
-                    return false;
-                } catch (ServerException e) {
-                    Logger.WriteLine ("Client " + client.Label () + " disconnected: " + e.Message, Logger.Severity.Warning);
-                    if (WriteClosed)
-                        EndWith (null);
-                    else
-                        CloseNow ();
-                    return false;
-                }
-                if (message == null) {
-                    if (stalled)
-                        End (Reason.Timeout, "A message stalled for more than " + StallTimeout + " seconds");
-                    return false;
-                }
-                switch (message.ContentCase) {
-                case ContentCase.Request:
-                    bufferedRequest = message.Request.ToMessage ();
+            lock (receiveLock) {
+                if (!inbox.IsEmpty)
                     return true;
-                case ContentCase.Disconnect:
-                    ReceivedDisconnect (message.Disconnect);
-                    return false;
-                case ContentCase.ConnectionRequest:
-                    Logger.WriteLine ("Client " + client.Label () + " reconnected");
-                    EndSession ();
-                    HandleConnectionMessage (message);
-                    return false;
-                case ContentCase.None:
-                    Logger.WriteLine ("Skipped a message of an unknown kind from client " + client.Label (), Logger.Severity.Debug);
-                    continue;
-                default:
-                    End (Reason.ProtocolError, "Unexpected " + message.ContentCase + " message from the client");
-                    return false;
+                while (true) {
+                    SchemaMessage message;
+                    if (heldFailure != null) {
+                        var failure = heldFailure;
+                        heldFailure = null;
+                        Logger.WriteLine ("Client " + client.Label () + " disconnected: " + failure.Message, Logger.Severity.Warning);
+                        if (WriteClosed)
+                            EndWith (null);
+                        else
+                            CloseNow ();
+                        return false;
+                    }
+                    if (heldError != null) {
+                        var error = heldError;
+                        heldError = null;
+                        End (Reason.MalformedMessage, "Failed to parse a message: " + error.Message);
+                        return false;
+                    }
+                    if (heldMessage != null) {
+                        message = heldMessage;
+                        heldMessage = null;
+                    } else {
+                        bool stalled;
+                        try {
+                            message = Receive (out stalled);
+                        } catch (MalformedRequestException e) {
+                            End (Reason.MalformedMessage, "Failed to parse a message: " + e.Message);
+                            return false;
+                        } catch (ServerException e) {
+                            Logger.WriteLine ("Client " + client.Label () + " disconnected: " + e.Message, Logger.Severity.Warning);
+                            if (WriteClosed)
+                                EndWith (null);
+                            else
+                                CloseNow ();
+                            return false;
+                        }
+                        if (message == null) {
+                            if (stalled)
+                                End (Reason.Timeout, "A message stalled for more than " + StallTimeout + " seconds");
+                            return false;
+                        }
+                    }
+                    switch (message.ContentCase) {
+                    case ContentCase.Request:
+                        Enqueue (message);
+                        return true;
+                    case ContentCase.Disconnect:
+                        ReceivedDisconnect (message.Disconnect);
+                        return false;
+                    case ContentCase.ConnectionRequest:
+                        Logger.WriteLine ("Client " + client.Label () + " reconnected");
+                        EndSession ();
+                        HandleConnectionMessage (message);
+                        return false;
+                    case ContentCase.None:
+                        Logger.WriteLine ("Skipped a message of an unknown kind from client " + client.Label (), Logger.Severity.Debug);
+                        continue;
+                    default:
+                        End (Reason.ProtocolError, "Unexpected " + message.ContentCase + " message from the client");
+                        return false;
+                    }
                 }
             }
         }
 
+        void Enqueue (SchemaMessage message)
+        {
+            var request = message.Request.ToMessageOffGameThread ();
+            request.Arrived = lastArrival;
+            inbox.Enqueue (request);
+        }
+
         /// <summary>
-        /// Take the request found by Poll.
+        /// Take the next request, in the order the client sent them.
         /// </summary>
         public Request TakeRequest (Client client)
         {
             if (!Poll (client))
                 throw new NoRequestException ();
-            var request = bufferedRequest;
-            bufferedRequest = null;
+            Request request;
+            inbox.TryDequeue (out request);
+            // An object the request passes resolves as the request is taken to run, after
+            // the calls before it have run
+            request.DecodeRemaining ();
             return request;
         }
 
@@ -289,7 +454,9 @@ namespace KRPC.Server.Message
         {
             if (state != State.Session || client != session)
                 return;
-            TryWrite (envelope.Set (SchemaMessage.ResponseFieldNumber, response.ToProtobufMessage ()));
+            // Held back while the client has more requests queued, to go out with their
+            // responses in one send
+            TryWrite (envelope.Set (SchemaMessage.ResponseFieldNumber, response.ToProtobufMessage ()), !inbox.IsEmpty);
         }
 
         /// <summary>
@@ -316,9 +483,11 @@ namespace KRPC.Server.Message
         /// </summary>
         public void Disconnect (Client client, DisconnectReason reason, string message)
         {
-            if (state != State.Session || client != session)
-                return;
-            End ((Reason)reason, message);
+            lock (receiveLock) {
+                if (state != State.Session || client != session)
+                    return;
+                End ((Reason)reason, message);
+            }
         }
 
         /// <summary>
@@ -326,9 +495,11 @@ namespace KRPC.Server.Message
         /// </summary>
         public void Close (Client client)
         {
-            if (client != session)
-                return;
-            CloseNow ();
+            lock (receiveLock) {
+                if (client != session)
+                    return;
+                CloseNow ();
+            }
         }
 
         void ReceiveHandshake ()
@@ -375,7 +546,7 @@ namespace KRPC.Server.Message
                 Refuse (Status.WrongProtocolVersion, ProtocolVersion.UnsupportedMessage (request.ProtocolVersion));
                 return;
             }
-            session = new Client (request.ClientName, request.ProtocolVersion, this);
+            session = new Client (request.ClientName, this);
             state = State.Pending;
             if (Logger.ShouldLog (Logger.Severity.Debug))
                 Logger.WriteLine (
@@ -384,14 +555,19 @@ namespace KRPC.Server.Message
         }
 
         /// <summary>
-        /// Read the bytes that have arrived, and keep them for the session. The byte client
-        /// reports a closed peer only once the bytes before the close have been read, which
-        /// the core does not poll for while a call is pending or yielding.
+        /// Read the bytes that have arrived, and the session's requests among them, up to the
+        /// inbox's depth. The byte client reports a closed peer only once the bytes before the
+        /// close have been read, which the core does not poll for while a call is pending or
+        /// yielding.
         /// </summary>
         void ReadAhead ()
         {
+            if (inbox.Count >= InboxDepth || heldMessage != null || heldError != null || heldFailure != null)
+                return;
             try {
-                ReadAvailable ();
+                ReadAvailable (ReadAheadBytes);
+                if (state == State.Session)
+                    ParseAhead ();
             } catch (MalformedRequestException e) {
                 if (state == State.Session)
                     End (Reason.MalformedMessage, "Failed to parse a message: " + e.Message);
@@ -403,9 +579,60 @@ namespace KRPC.Server.Message
             }
         }
 
+        /// <summary>
+        /// Read ahead on the stream's reader thread as bytes arrive, so that the game thread
+        /// finds the session's requests parsed, with the values they pass decoded. A failure
+        /// is held for the game thread, behind the requests before it.
+        /// </summary>
+        void ReadAheadOnReader ()
+        {
+            lock (receiveLock) {
+                if (state != State.Session || inbox.Count >= InboxDepth ||
+                    heldMessage != null || heldError != null || heldFailure != null)
+                    return;
+                try {
+                    ReadAvailable (ReadAheadBytes);
+                    ParseAhead ();
+                } catch (MalformedRequestException e) {
+                    heldError = e;
+                } catch (ServerException e) {
+                    heldFailure = e;
+                } catch (System.Exception e) {
+                    // Caught here, as an exception that ends the reader thread ends the process
+                    heldFailure = new ServerException (e.Message);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Parse the session's requests from the buffer into the inbox, up to its depth. Stops
+        /// at a message of another kind, or a malformed one, and holds it until the requests
+        /// before it have run.
+        /// </summary>
+        void ParseAhead ()
+        {
+            while (inbox.Count < InboxDepth) {
+                SchemaMessage message;
+                try {
+                    message = Decode ();
+                } catch (MalformedRequestException e) {
+                    heldError = e;
+                    return;
+                }
+                if (message == null)
+                    return;
+                if (message.ContentCase == ContentCase.Request)
+                    Enqueue (message);
+                else if (message.ContentCase != ContentCase.None) {
+                    heldMessage = message;
+                    return;
+                }
+            }
+        }
+
         void RequestApproval ()
         {
-            var args = new ClientRequestingConnectionEventArgs<Request,Response> (session);
+            var args = new ClientRequestingConnectionEventArgs<IMessageStream> (session);
             server.RequestingConnection (args);
             if (args.Request.ShouldAllow) {
                 var response = new ConnectionResponse ();
@@ -493,6 +720,8 @@ namespace KRPC.Server.Message
         /// </summary>
         Disconnect BufferedDisconnect ()
         {
+            if (heldMessage != null && heldMessage.ContentCase == ContentCase.Disconnect)
+                return heldMessage.Disconnect;
             try {
                 SchemaMessage message;
                 while ((message = Decode ()) != null) {
@@ -510,12 +739,19 @@ namespace KRPC.Server.Message
                 server.SessionEnded (session);
             session = null;
             sessionStarted = false;
-            bufferedRequest = null;
+            Request request;
+            while (inbox.TryDequeue (out request)) {
+            }
+            heldMessage = null;
+            heldError = null;
+            heldFailure = null;
             streamUpdate.Clear ();
         }
 
         void CloseNow ()
         {
+            lock (outputLock)
+                unsent.SetLength (0);
             EndSession ();
             Client.Close ();
             state = State.Closed;
@@ -542,14 +778,39 @@ namespace KRPC.Server.Message
                 CloseNow ();
         }
 
-        bool TryWrite (IMessage message)
+        /// <summary>
+        /// Send the responses held back while the client had more requests queued.
+        /// </summary>
+        public void Flush ()
+        {
+            if (unsent.Length > 0)
+                TrySend ();
+        }
+
+        bool TryWrite (IMessage message, bool holdBack = false)
         {
             try {
                 Write (message);
+            } catch (ServerException e) {
+                Logger.WriteLine ("Failed to write to " + Label + ": " + e.Message, Logger.Severity.Warning);
+                lock (receiveLock)
+                    CloseNow ();
+                return false;
+            }
+            if (holdBack && unsent.Length < MaxHeldBackBytes)
+                return true;
+            return TrySend ();
+        }
+
+        bool TrySend ()
+        {
+            try {
+                SendOutput ();
                 return true;
             } catch (ServerException e) {
                 Logger.WriteLine ("Failed to write to " + Label + ": " + e.Message, Logger.Severity.Warning);
-                CloseNow ();
+                lock (receiveLock)
+                    CloseNow ();
                 return false;
             }
         }
@@ -587,10 +848,10 @@ namespace KRPC.Server.Message
         /// Read the bytes that have arrived into the buffer, restarting the stall clock if there
         /// were any. Returns whether any arrived.
         /// </summary>
-        bool ReadAvailable ()
+        bool ReadAvailable (int limit = 0)
         {
             var received = false;
-            while (Stream.DataAvailable) {
+            while (Stream.DataAvailable && (limit == 0 || bufferSize < limit)) {
                 if (bufferSize == buffer.Length) {
                     if (buffer.Length > int.MaxValue - BUFFER_INCREASE_SIZE) {
                         bufferSize = 0;
@@ -600,13 +861,17 @@ namespace KRPC.Server.Message
                     Array.Copy (buffer, newBuffer, bufferSize);
                     buffer = newBuffer;
                 }
-                var read = Stream.Read (buffer, bufferSize, buffer.Length - bufferSize);
+                var space = buffer.Length - bufferSize;
+                if (limit > 0)
+                    space = Math.Min (space, limit - bufferSize);
+                var read = Stream.Read (buffer, bufferSize, space);
                 if (read == 0)
                     break;
                 bufferSize += read;
                 received = true;
             }
             if (received) {
+                lastArrival = Stream.LastArrival;
                 stallTimer.Reset ();
                 stallTimer.Start ();
             }

@@ -185,6 +185,28 @@ namespace KRPC.Test.Server.SerialIO
             }
         }
 
+        [Test]
+        public void ReceivedRunsOnTheReadThread ()
+        {
+            var testPort = new TestPort ();
+            var port = new BufferedPort (testPort);
+            var thread = 0;
+            var available = 0;
+            port.Received = () => {
+                available = port.BytesAvailable;
+                Volatile.Write (ref thread, Thread.CurrentThread.ManagedThreadId);
+            };
+            port.Open ();
+            try {
+                testPort.QueueRead (new byte[] { 1, 2, 3 });
+                WaitFor (() => Volatile.Read (ref thread) != 0);
+                Assert.AreNotEqual (Thread.CurrentThread.ManagedThreadId, thread);
+                Assert.AreEqual (3, available);
+            } finally {
+                port.Close ();
+            }
+        }
+
         /// <summary>
         /// Whatever the port received before the server opened it is left over from something
         /// else, and must not be taken for the start of a client's first message.

@@ -9,7 +9,7 @@ namespace KRPC.Server
     /// <summary>
     /// A kRPC server.
     /// </summary>
-    public sealed class Server : IServer
+    public sealed class Server
     {
         /// <summary>
         /// Identifier of the server.
@@ -26,7 +26,7 @@ namespace KRPC.Server
         /// </summary>
         public string Name { get; set; }
 
-        internal IServer<Request,Response> InnerServer { get; private set; }
+        internal IMessageServer InnerServer { get; private set; }
 
         /// <summary>
         /// Event triggered when the server starts
@@ -44,19 +44,9 @@ namespace KRPC.Server
         public event EventHandler<ClientRequestingConnectionEventArgs> OnClientRequestingConnection;
 
         /// <summary>
-        /// Event triggered when a client has connected
-        /// </summary>
-        public event EventHandler<ClientConnectedEventArgs> OnClientConnected;
-
-        /// <summary>
-        /// Event triggered when a client has disconnected
-        /// </summary>
-        public event EventHandler<ClientDisconnectedEventArgs> OnClientDisconnected;
-
-        /// <summary>
         /// Construct a server, from a message server instance.
         /// </summary>
-        public Server (Guid id, Protocol protocol, string name, IServer<Request,Response> innerServer)
+        public Server (Guid id, Protocol protocol, string name, IMessageServer innerServer)
         {
             Id = id;
             Protocol = protocol;
@@ -67,8 +57,6 @@ namespace KRPC.Server
             InnerServer.OnStarted += (s, e) => EventHandlerExtensions.Invoke (OnStarted, this);
             InnerServer.OnStopped += (s, e) => EventHandlerExtensions.Invoke (OnStopped, this);
             InnerServer.OnClientRequestingConnection += (s, e) => EventHandlerExtensions.Invoke (OnClientRequestingConnection, s, e);
-            InnerServer.OnClientConnected += (s, e) => EventHandlerExtensions.Invoke (OnClientConnected, s, new ClientConnectedEventArgs (e.Client));
-            InnerServer.OnClientDisconnected += (s, e) => EventHandlerExtensions.Invoke (OnClientDisconnected, s, new ClientDisconnectedEventArgs (e.Client));
 
             // Add/remove clients from the scheduler
             InnerServer.OnClientConnected += (s, e) => Core.Instance.ClientConnected (e.Client);
@@ -90,14 +78,6 @@ namespace KRPC.Server
         public void Stop ()
         {
             InnerServer.Stop ();
-        }
-
-        /// <summary>
-        /// Update the server.
-        /// </summary>
-        public void Update ()
-        {
-            InnerServer.Update ();
         }
 
         /// <summary>

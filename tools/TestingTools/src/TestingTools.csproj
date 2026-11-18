@@ -46,6 +46,7 @@
     <Compile Include="AutoSwitchVessel.cs" />
     <Compile Include="Benchmark.cs" />
     <Compile Include="Fatal.cs" />
+    <Compile Include="FrameCounter.cs" />
     <Compile Include="TestingTools.cs" />
     <Compile Include="TestingToolsOptions.cs" />
   </ItemGroup>

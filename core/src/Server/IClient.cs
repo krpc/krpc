@@ -36,13 +36,14 @@ namespace KRPC.Server
     }
 
     /// <summary>
-    /// Generic client interface.
+    /// A client, and the stream it communicates over: of bytes, or of messages.
     /// </summary>
-    public interface IClient<TIn,TOut> : IEquatable<IClient<TIn,TOut>>, IClient
+    public interface IClient<TStream> : IEquatable<IClient<TStream>>, IClient
+        where TStream : IStream
     {
         /// <summary>
         /// A stream for communicating with the client.
         /// </summary>
-        IStream<TIn,TOut> Stream { get; }
+        TStream Stream { get; }
     }
 }

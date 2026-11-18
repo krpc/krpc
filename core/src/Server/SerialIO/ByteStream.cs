@@ -3,7 +3,7 @@ using System.IO;
 
 namespace KRPC.Server.SerialIO
 {
-    sealed class ByteStream : IStream<byte,byte>
+    sealed class ByteStream : IByteStream, IReaderThreadStream
     {
         BufferedPort port;
 
@@ -26,26 +26,15 @@ namespace KRPC.Server.SerialIO
             }
         }
 
-        public byte Read ()
-        {
-            throw new NotSupportedException ();
+        public Action Received {
+            set {
+                if (port != null)
+                    port.Received = value;
+            }
         }
 
-        public int Read (byte[] buffer, int offset)
-        {
-            if (port == null)
-                throw new ClientDisconnectedException ();
-            try {
-                var size = port.Read (buffer, offset, buffer.Length - offset);
-                BytesRead += (ulong)size;
-                return size;
-            } catch (IOException e) {
-                throw new ServerException (e.Message);
-            } catch (TimeoutException e) {
-                throw new ServerException (e.Message);
-            } catch (ObjectDisposedException) {
-                throw new ClientDisconnectedException ();
-            }
+        public long LastArrival {
+            get { return port != null ? port.LastArrival : 0; }
         }
 
         public int Read (byte[] buffer, int offset, int size)
@@ -63,11 +52,6 @@ namespace KRPC.Server.SerialIO
             } catch (ObjectDisposedException) {
                 throw new ClientDisconnectedException ();
             }
-        }
-
-        public void Write (byte value)
-        {
-            throw new NotSupportedException ();
         }
 
         public void Write (byte[] buffer)
@@ -103,6 +87,9 @@ namespace KRPC.Server.SerialIO
 
         public void Close ()
         {
+            // The port outlives the stream, and carries the next client's stream
+            if (port != null)
+                port.Received = null;
             port = null;
         }
     }

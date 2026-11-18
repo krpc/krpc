@@ -34,6 +34,27 @@ namespace KRPC.Benchmarks
         }
 
         /// <summary>
+        /// Run one step of the server's path for a procedure call the given number of times,
+        /// and return what one step cost, as <see cref="Call"/> does.
+        /// </summary>
+        /// <param name="call">The procedure call. Any procedure of any service.</param>
+        /// <param name="step">The step, from <see cref="CallSteps"/>.</param>
+        /// <param name="iterations">Number of times to run the step.</param>
+        [KRPCProcedure]
+        public static IDictionary<string, double> CallStep (ProcedureCall call, string step, uint iterations)
+        {
+            return Steps.Measure (call, step, iterations);
+        }
+
+        /// <summary>
+        /// The steps that <see cref="CallStep"/> accepts.
+        /// </summary>
+        [KRPCProperty]
+        public static IList<string> CallSteps {
+            get { return Steps.Names; }
+        }
+
+        /// <summary>
         /// Update a stream of a procedure call the given number of times, and return what one
         /// update cost: nanoseconds, bytes allocated, and the number of garbage collections
         /// that happened while it ran.
@@ -45,6 +66,58 @@ namespace KRPC.Benchmarks
         {
             return StreamUpdates.Measure (call, iterations);
         }
+
+        /// <summary>
+        /// Running totals of the frames the host has run and the time the server has spent in
+        /// its updates, for the update loop benchmarks. Times are in seconds, apart from
+        /// <c>budget_per_frame</c>, the server's current budget, in microseconds.
+        /// </summary>
+        /// <remarks>
+        /// <c>max_frame_seconds</c> is the longest frame since the previous call.
+        /// </remarks>
+        [KRPCProcedure]
+        public static IDictionary<string, double> LoopCounters ()
+        {
+            return GameLoop.Counters ();
+        }
+
+        /// <summary>
+        /// Wait in one of the ways the server could wait for a call, the given number of times,
+        /// and return the minimum, median, 99th percentile and maximum of the times taken, in
+        /// microseconds.
+        /// </summary>
+        /// <param name="kind">The way to wait, from <see cref="WaitKinds"/>.</param>
+        /// <param name="iterations">Number of times to wait.</param>
+        [KRPCProcedure]
+        public static IDictionary<string, double> Wait (string kind, uint iterations)
+        {
+            return Waits.Measure (kind, iterations);
+        }
+
+        /// <summary>
+        /// The ways of waiting that <see cref="Wait"/> accepts.
+        /// </summary>
+        [KRPCProperty]
+        public static IList<string> WaitKinds {
+            get { return Waits.Names; }
+        }
+
+        /// <summary>
+        /// A string of the given number of characters, different on every call, for a stream
+        /// that sends an update on every tick.
+        /// </summary>
+        /// <param name="size">The number of characters.</param>
+        [KRPCProcedure]
+        public static string Payload (uint size)
+        {
+            payloads++;
+            var prefix = payloads.ToString (System.Globalization.CultureInfo.InvariantCulture) + " ";
+            if (prefix.Length >= size)
+                return prefix.Substring (0, (int)size);
+            return prefix + new string ('x', (int)size - prefix.Length);
+        }
+
+        static ulong payloads;
 
         /// <summary>
         /// A new list of the given number of strings, the same on every call.
@@ -97,6 +170,77 @@ namespace KRPC.Benchmarks
             return dictionary;
         }
 
+        /// <summary>
+        /// The sum of the arguments, for the scalar case of <see cref="CallStep"/>.
+        /// </summary>
+        /// <param name="x">A float.</param>
+        /// <param name="y">An integer.</param>
+        /// <param name="z">A long.</param>
+        [KRPCProcedure]
+        public static double Add (float x, int y, long z)
+        {
+            return x + y + z;
+        }
+
+        /// <summary>
+        /// The string passed.
+        /// </summary>
+        /// <param name="value">The string.</param>
+        [KRPCProcedure]
+        public static string EchoString (string value)
+        {
+            return value;
+        }
+
+        /// <summary>
+        /// The list passed.
+        /// </summary>
+        /// <param name="value">The list.</param>
+        [KRPCProcedure]
+        public static IList<int> EchoList (IList<int> value)
+        {
+            return value;
+        }
+
+        /// <summary>
+        /// The dictionary passed.
+        /// </summary>
+        /// <param name="value">The dictionary.</param>
+        [KRPCProcedure]
+        public static IDictionary<string, int> EchoDictionary (IDictionary<string, int> value)
+        {
+            return value;
+        }
+
+        /// <summary>
+        /// A new object.
+        /// </summary>
+        [KRPCProcedure]
+        public static BenchmarkObject NewObject ()
+        {
+            return new BenchmarkObject ();
+        }
+
+        /// <summary>
+        /// The object passed.
+        /// </summary>
+        /// <param name="value">The object.</param>
+        [KRPCProcedure]
+        public static BenchmarkObject EchoObject (BenchmarkObject value)
+        {
+            return value;
+        }
+
+        /// <summary>
+        /// The list of objects passed.
+        /// </summary>
+        /// <param name="value">The list.</param>
+        [KRPCProcedure]
+        public static IList<BenchmarkObject> EchoObjects (IList<BenchmarkObject> value)
+        {
+            return value;
+        }
+
         static bool descending;
 
         static bool NextIsDescending ()
@@ -104,5 +248,13 @@ namespace KRPC.Benchmarks
             descending = !descending;
             return descending;
         }
+    }
+
+    /// <summary>
+    /// An object for the object cases of <see cref="Benchmark.CallStep"/>.
+    /// </summary>
+    [KRPCClass (Service = "Benchmark")]
+    public sealed class BenchmarkObject
+    {
     }
 }

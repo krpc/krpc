@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using KRPC.Server.ProtocolBuffers;
 using KRPC.Service;
+using KRPC.Test.Service;
 using KRPC.Service.Messages;
 using NUnit.Framework;
 using WireGameScene = KRPC.Schema.KRPC.Procedure.Types.GameScene;
@@ -148,6 +150,60 @@ namespace KRPC.Test.Server.ProtocolBuffers
             argument.IsNull = true;
             var message = argument.ToMessage (TypeSpec.Create (typeof(string)));
             Assert.IsNull (message.Value);
+        }
+
+        static Schema.KRPC.Request Request (string procedure, params object[] values)
+        {
+            var services = global::KRPC.Service.Services.Instance;
+            var signature = services.GetProcedureSignature (new ProcedureCall ("TestService", procedure));
+            var call = new Schema.KRPC.ProcedureCall { Service = "TestService", Procedure = procedure };
+            for (int i = 0; i < values.Length; i++)
+                call.Arguments.Add (new Schema.KRPC.Argument {
+                    Position = (uint)i,
+                    Value = Encoder.Encode (values [i], signature.Parameters [i].Spec)
+                });
+            var request = new Schema.KRPC.Request { Id = 3 };
+            request.Calls.Add (call);
+            return request;
+        }
+
+        [Test]
+        public void DecodeValuesOffTheGameThread ()
+        {
+            var list = new List<string> { "a", "b", "c" };
+            var request = Request ("EchoList", list).ToMessageOffGameThread ();
+            Assert.AreEqual (3, request.Id);
+            var argument = request.Calls [0].Arguments [0];
+            Assert.IsNull (argument.Encoded);
+            CollectionAssert.AreEqual (list, (IList<string>)argument.Value);
+            Assert.IsNull (request.Calls [0].Encoded);
+        }
+
+        [Test]
+        public void LeaveObjectsForTheGameThread ()
+        {
+            var obj = new TestService.TestClass ("foo");
+            var request = Request ("EchoTestObject", obj).ToMessageOffGameThread ();
+            var argument = request.Calls [0].Arguments [0];
+            Assert.IsNotNull (argument.Encoded);
+            Assert.IsNull (argument.Value);
+            request.DecodeRemaining ();
+            Assert.AreSame (obj, request.Calls [0].Arguments [0].Value);
+            Assert.IsNull (request.Calls [0].Encoded);
+        }
+
+        [Test]
+        public void DecodeAFailedCallAgainOnTheGameThread ()
+        {
+            var request = Request ("BlockingProcedureNoReturn", 1);
+            request.Calls [0].Arguments [0].Value = Google.Protobuf.ByteString.CopyFrom (0xff);
+            var decoded = request.ToMessageOffGameThread ();
+            Assert.IsTrue (decoded.Calls [0].DecodeFailed);
+            decoded.DecodeRemaining ();
+            Assert.IsNotNull (decoded.Calls [0].DecodeException);
+            Assert.AreEqual (
+                request.ToMessage ().Calls [0].DecodeException.Message,
+                decoded.Calls [0].DecodeException.Message);
         }
     }
 }

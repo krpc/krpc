@@ -1,30 +1,30 @@
 using System;
 using System.Text;
 
-namespace KRPC.Server.HTTP
+namespace KRPC.Server.WebSockets
 {
-    sealed class Response
+    sealed class HttpResponse
     {
         const string PROTOCOL = "HTTP/1.1";
 
-        public static Response CreateBadRequest (string message = null) {
-            return new Response (400, "Bad Request", message);
+        public static HttpResponse CreateBadRequest (string message = null) {
+            return new HttpResponse (400, "Bad Request", message);
         }
 
-        public static Response CreateNotFound (string message = null) {
-            return new Response (404, "Not Found", message);
+        public static HttpResponse CreateNotFound (string message = null) {
+            return new HttpResponse (404, "Not Found", message);
         }
 
-        public static Response CreateMethodNotAllowed (string message = null) {
-            return new Response (405, "Method Not Allowed", message);
+        public static HttpResponse CreateMethodNotAllowed (string message = null) {
+            return new HttpResponse (405, "Method Not Allowed", message);
         }
 
-        public static Response CreateUpgradeRequired (string message = null) {
-            return new Response (426, "Upgrade Required", message);
+        public static HttpResponse CreateUpgradeRequired (string message = null) {
+            return new HttpResponse (426, "Upgrade Required", message);
         }
 
-        public static Response CreateHTTPVersionNotSupported (string message = null) {
-            return new Response (505, "HTTP Version Not Supported", message);
+        public static HttpResponse CreateHTTPVersionNotSupported (string message = null) {
+            return new HttpResponse (505, "HTTP Version Not Supported", message);
         }
 
         const string NEWLINE = "\r\n";
@@ -32,7 +32,7 @@ namespace KRPC.Server.HTTP
 
         public string Body { get; set; }
 
-        public Response (uint status, string reason, string body = null)
+        public HttpResponse (uint status, string reason, string body = null)
         {
             if (body == null)
                 body = string.Empty;

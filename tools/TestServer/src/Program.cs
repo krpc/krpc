@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.CommandLine;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
-using System.Threading;
 using System.Reflection;
 using KRPC;
 using KRPC.Server;
@@ -19,7 +17,7 @@ namespace TestServer
     static class MainClass
     {
         static readonly Option<string> typeOption = new Option<string> ("--type") {
-            Description = "Type of server to run. Either protobuf, websockets, websockets-echo, serialio or localsocket, or several separated by commas, each of a different transport.",
+            Description = "Type of server to run. Either protobuf, websockets, serialio or localsocket, or several separated by commas, each of a different transport.",
             DefaultValueFactory = _ => "protobuf"
         };
         static readonly Option<string> bindOption = new Option<string> ("--bind") {
@@ -66,7 +64,23 @@ namespace TestServer
             Description = "Output debug information about the server"
         };
         static readonly Option<bool> noFramePacingOption = new Option<bool> ("--no-frame-pacing") {
-            Description = "Run the update loop as fast as it will go, rather than pacing it to 60 updates a second, and turn adaptive rate control off with it. For timing a client: paced, a call whose client takes longer than the receive timeout to send the next one is served once per update, so the round trip measures the update rate rather than the client."
+            Description = "Run the update loop as fast as it will go, rather than pacing it to the frame limit, and turn adaptive rate control off with it. For timing a client: paced, a call whose client takes longer than the max call wait to send the next one is served once per update, so the round trip measures the update rate rather than the client. Overrides --frame-limit."
+        };
+        static readonly Option<double> frameLimitOption = new Option<double> ("--frame-limit") {
+            Description = "The most frames to run a second, as a game's frame limiter does.",
+            DefaultValueFactory = _ => 60
+        };
+        static readonly Option<double> fixedRateOption = new Option<double> ("--fixed-rate") {
+            Description = "Run the server's updates as a game's fixed steps, at this many a second, zero or more in each frame. If unspecified, the server updates once a frame."
+        };
+        static readonly Option<uint> tickWorkOption = new Option<uint> ("--tick-work-us") {
+            Description = "Microseconds of the game's own work to simulate in each update, such as physics."
+        };
+        static readonly Option<uint> frameWorkOption = new Option<uint> ("--frame-work-us") {
+            Description = "Microseconds of the game's own work to simulate in each frame, such as rendering."
+        };
+        static readonly Option<string> presetOption = new Option<string> ("--preset") {
+            Description = "The preset of the server's rate settings: game-first, balanced or calls-first. Balanced by default."
         };
 
         public static int Main (string[] args)
@@ -85,7 +99,12 @@ namespace TestServer
                 debugOption,
                 quietOption,
                 serverDebugOption,
-                noFramePacingOption
+                noFramePacingOption,
+                frameLimitOption,
+                fixedRateOption,
+                tickWorkOption,
+                frameWorkOption,
+                presetOption
             };
             root.SetAction (Run);
             return ToolCommandLine.Invoke (root, args);
@@ -102,6 +121,11 @@ namespace TestServer
                 Logger.Level = Logger.Severity.Warning;
             bool serverDebug = result.GetValue (serverDebugOption);
             bool framePacing = !result.GetValue (noFramePacingOption);
+            var loop = new GameLoop (
+                framePacing ? result.GetValue (frameLimitOption) : 0,
+                result.GetValue (fixedRateOption),
+                result.GetValue (tickWorkOption),
+                result.GetValue (frameWorkOption));
             string type = result.GetValue (typeOption);
             string bind = result.GetValue (bindOption);
             ushort tcpipPort = result.GetValue (tcpipPortOption);
@@ -121,9 +145,19 @@ namespace TestServer
                 "Loaded " + typeof (KRPC.Benchmarks.Benchmark).Assembly.GetName ().Name);
 
             var core = Core.Instance;
-            // Adaptive rate control keys off how long an update took against a target update
-            // rate. Unpaced there is no such rate, so all it does is wander MaxTimePerUpdate
-            // around, which is run to run variation in a measurement for nothing.
+            var presetName = result.GetValue (presetOption);
+            if (presetName != null) {
+                var preset = Configuration.Presets.FirstOrDefault (
+                    x => x.Name.ToLowerInvariant ().Replace (' ', '-') == presetName);
+                if (preset == null) {
+                    Logger.WriteLine ("Preset '" + presetName + "' not known", Logger.Severity.Error);
+                    return;
+                }
+                preset.Apply (Configuration.Instance);
+            }
+            // Adaptive rate control keys off how long a frame took against a target frame
+            // rate. Unpaced there is no such rate, so all it does is wander the budget around,
+            // which is run to run variation in a measurement for nothing.
             if (!framePacing)
                 Configuration.Instance.AdaptiveRateControl = false;
             var serverVersion = Assembly.GetEntryAssembly ().GetName ().Version;
@@ -147,15 +181,11 @@ namespace TestServer
                 Server server;
                 if (serverType == "protobuf") {
                     tcpServer = new TCPServer (bindAddress, tcpipPort);
-                    var messageServer = new KRPC.Server.ProtocolBuffers.Server (tcpServer);
+                    var messageServer = new KRPC.Server.Delimited.Server (tcpServer);
                     server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverTCP, "TestServer", messageServer);
                 } else if (serverType == "websockets") {
                     websocketsServer = new TCPServer (bindAddress, websocketsPort);
                     var messageServer = new KRPC.Server.WebSockets.Server (websocketsServer);
-                    server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverWebsockets, "TestServer", messageServer);
-                } else if (serverType == "websockets-echo") {
-                    websocketsServer = new TCPServer (bindAddress, websocketsPort);
-                    var messageServer = new KRPC.Server.WebSockets.Server (websocketsServer, true);
                     server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverWebsockets, "TestServer", messageServer);
                 } else if (serverType == "serialio") {
                     serialServer = new KRPC.Server.SerialIO.ByteServer (
@@ -164,7 +194,7 @@ namespace TestServer
                     server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverSerialIO, "TestServer", messageServer);
                 } else if (serverType == "localsocket") {
                     socketServer = new KRPC.Server.LocalSocket.LocalSocketServer (localsocketPath);
-                    var messageServer = new KRPC.Server.ProtocolBuffers.Server (socketServer);
+                    var messageServer = new KRPC.Server.Delimited.Server (socketServer);
                     server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverLocalSocket, "TestServer", messageServer);
                 } else {
                     Logger.WriteLine ("Server type '" + serverType + "' not supported", Logger.Severity.Error);
@@ -177,7 +207,7 @@ namespace TestServer
             Logger.WriteLine ("Starting server...");
             core.StartAll ();
             Logger.WriteLine ("type = " + type);
-            Logger.WriteLine ("frame pacing = " + (framePacing ? "60 updates/s" : "off"));
+            Logger.WriteLine ("frame pacing = " + loop.Description);
             if (tcpServer != null || websocketsServer != null)
                 Logger.WriteLine ("bind = " + bindAddress);
             if (tcpServer != null)
@@ -191,42 +221,16 @@ namespace TestServer
                 Logger.WriteLine ("localsocket_path = " + socketServer.Address);
             Logger.WriteLine ("Server started successfully");
 
-            const long targetFPS = 60;
-            long update = 0;
-            long ticksPerUpdate = Stopwatch.Frequency / targetFPS;
-            var timer = new Stopwatch ();
+            long frame = 0;
             while (servers.Any (x => x.Running)) {
-                timer.Reset ();
-                timer.Start ();
-
-                core.Update ();
-
-                if (serverDebug && update % targetFPS == 0) {
-                    // Output details about whether server.Update() took too little or too long to execute
-                    var elapsed = timer.ElapsedTicks;
-                    var diffTicks = Math.Abs (ticksPerUpdate - elapsed);
-                    var diffTime = Math.Round (diffTicks / (double)Stopwatch.Frequency * 1000d, 2);
-                    if (elapsed > ticksPerUpdate)
-                        Console.WriteLine ("Slow by " + diffTime + " ms (" + diffTicks + " ticks)");
-                    else
-                        Console.WriteLine ("Fast by " + diffTime + " ms (" + diffTicks + " ticks)");
+                var elapsed = loop.RunFrame (core);
+                if (serverDebug && frame % 60 == 0 && loop.FrameLimit > 0) {
+                    // Whether the frame's work took longer than the frame limit allows
+                    var target = 1000d / loop.FrameLimit;
+                    var diff = Math.Round (Math.Abs (elapsed - target), 2);
+                    Console.WriteLine ((elapsed > target ? "Slow by " : "Fast by ") + diff + " ms");
                 }
-
-                // Wait, to force 60 FPS. Sleep most of the remaining time, so the process
-                // does not burn a core during profiling and benchmarks. Unpaced, the next
-                // update follows immediately, which costs a core and makes a round trip
-                // measure the client and not the update it landed in.
-                if (framePacing) {
-                    var remainingTicks = ticksPerUpdate - timer.ElapsedTicks;
-                    if (remainingTicks > Stopwatch.Frequency / 1000) {
-                        var sleepMs = (int)(remainingTicks * 1000L / Stopwatch.Frequency) - 1;
-                        if (sleepMs > 0)
-                            Thread.Sleep (sleepMs);
-                    }
-                    while (timer.ElapsedTicks < ticksPerUpdate) {
-                    }
-                }
-                update++;
+                frame++;
             }
         }
     }

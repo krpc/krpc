@@ -4,9 +4,11 @@ using System.Collections.Generic;
 namespace KRPC.Server
 {
     /// <summary>
-    /// A non-generic server.
+    /// A server whose clients communicate over streams of the given type: of bytes, or of
+    /// messages.
     /// </summary>
-    public interface IBaseServer
+    public interface IServer<TStream>
+        where TStream : IStream
     {
         /// <summary>
         /// Start the server.
@@ -63,58 +65,37 @@ namespace KRPC.Server
         /// Handler to trigger when the server stops.
         /// </summary>
         event EventHandler OnStopped;
-    }
 
-    /// <summary>
-    /// A non-generic server.
-    /// </summary>
-    public interface IServer : IBaseServer
-    {
         /// <summary>
         /// Clients that are connected to the server.
         /// </summary>
-        IEnumerable<IClient> Clients { get; }
-
-        /// <summary>
-        /// Handler to trigger when a new client requests a connection.
-        /// </summary>
-        event EventHandler<ClientRequestingConnectionEventArgs> OnClientRequestingConnection;
+        IEnumerable<IClient<TStream>> Clients { get; }
 
         /// <summary>
         /// Handler to trigger when a client has connected.
         /// </summary>
-        event EventHandler<ClientConnectedEventArgs> OnClientConnected;
+        event EventHandler<ClientConnectedEventArgs<TStream>> OnClientConnected;
 
         /// <summary>
         /// Handler to trigger when a client has disconnected.
         /// </summary>
-        event EventHandler<ClientDisconnectedEventArgs> OnClientDisconnected;
+        event EventHandler<ClientDisconnectedEventArgs<TStream>> OnClientDisconnected;
     }
 
     /// <summary>
-    /// A generic server, that receives values of type TIn from clients and
-    /// sends values of type TOut to them.
+    /// A server whose clients communicate in messages, and ask for their connection to be
+    /// approved.
     /// </summary>
-    public interface IServer<TIn,TOut> : IBaseServer
+    public interface IMessageServer : IServer<IMessageStream>
     {
-        /// <summary>
-        /// Clients that are connected to the server.
-        /// </summary>
-        IEnumerable<IClient<TIn,TOut>> Clients { get; }
-
         /// <summary>
         /// Handler to trigger when a new client requests a connection.
         /// </summary>
-        event EventHandler<ClientRequestingConnectionEventArgs<TIn,TOut>> OnClientRequestingConnection;
+        event EventHandler<ClientRequestingConnectionEventArgs<IMessageStream>> OnClientRequestingConnection;
 
         /// <summary>
-        /// Handler to trigger when a client has connected.
+        /// Send the responses held back while their clients had more requests queued.
         /// </summary>
-        event EventHandler<ClientConnectedEventArgs<TIn,TOut>> OnClientConnected;
-
-        /// <summary>
-        /// Handler to trigger when a client has disconnected.
-        /// </summary>
-        event EventHandler<ClientDisconnectedEventArgs<TIn,TOut>> OnClientDisconnected;
+        void Flush ();
     }
 }

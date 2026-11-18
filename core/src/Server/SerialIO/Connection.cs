@@ -5,9 +5,9 @@ namespace KRPC.Server.SerialIO
     /// session that ends leaves the connection waiting for a new connection request. A stalled
     /// message is dropped after 3 seconds, so that a client that resets can get back in.
     /// </summary>
-    sealed class Connection : ProtocolBuffers.Connection
+    sealed class Connection : Delimited.Connection
     {
-        public Connection (Message.Server server, IClient<byte,byte> client) : base (server, client)
+        public Connection (Message.Server server, IClient<IByteStream> client) : base (server, client)
         {
         }
 

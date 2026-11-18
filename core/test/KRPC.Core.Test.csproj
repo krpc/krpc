@@ -23,9 +23,13 @@
     <Compile Include="$(bazel-bin)\core\TestAssemblyInfo.cs">
       <Link>TestAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="CallWaitTest.cs" />
+    <Compile Include="CallWaitUpdateTest.cs" />
     <Compile Include="ConfigurationTest.cs" />
     <Compile Include="CoreTest.cs" />
+    <Compile Include="FrameBudgetTest.cs" />
     <Compile Include="PinnedUpdateTime.cs" />
+    <Compile Include="PipeliningTest.cs" />
     <Compile Include="ScriptedClient.cs" />
     <Compile Include="Service\FunctionStreamTest.cs" />
     <Compile Include="Service\KRPC\ExpressionTest.Collections.cs" />
@@ -46,29 +50,31 @@
     <Compile Include="TickHoldTest.cs" />
     <Compile Include="UpdateEventsTest.cs" />
     <Compile Include="Server\ClientRequestingConnectionArgsTest.cs" />
-    <Compile Include="Server\HTTP\RequestTest.cs" />
-    <Compile Include="Server\HTTP\ResponseTest.cs" />
+    <Compile Include="Server\Delimited\ServerTest.cs" />
     <Compile Include="Server\ProtocolBuffers\EncoderTest.cs" />
     <Compile Include="Server\ProtocolBuffers\MessageExtensionsTest.cs" />
-    <Compile Include="Server\ProtocolBuffers\ServerTest.cs" />
     <Compile Include="Server\ProtocolBuffers\SchemaTest.cs" />
     <Compile Include="Server\SerialIO\BufferedPortTest.cs" />
     <Compile Include="Server\SerialIO\ByteBufferTest.cs" />
     <Compile Include="Server\SerialIO\ByteClientTest.cs" />
+    <Compile Include="Server\SerialIO\SerialPortTest.cs" />
     <Compile Include="Server\SerialIO\ServerTest.cs" />
     <Compile Include="Server\LocalSocket\AssumptionsTest.cs" />
     <Compile Include="Server\LocalSocket\LocalSocketServerTest.cs" />
     <Compile Include="Server\LocalSocket\UnixEndPointTest.cs" />
     <Compile Include="Server\LocalSocket\UnixSocketTest.cs" />
     <Compile Include="Server\MessageHarness.cs" />
+    <Compile Include="Server\SocketClientTest.cs" />
+    <Compile Include="Server\SocketStreamTest.cs" />
     <Compile Include="Server\TCP\AssumptionsTest.cs" />
     <Compile Include="Server\TCP\NetworkInformationTest.cs" />
-    <Compile Include="Server\TCP\TCPClientTest.cs" />
     <Compile Include="Server\TCP\TCPServerTest.cs" />
     <Compile Include="Server\TestClient.cs" />
     <Compile Include="Server\TestStream.cs" />
     <Compile Include="Server\WebSockets\FrameTest.cs" />
     <Compile Include="Server\WebSockets\HeaderTest.cs" />
+    <Compile Include="Server\WebSockets\HttpRequestTest.cs" />
+    <Compile Include="Server\WebSockets\HttpResponseTest.cs" />
     <Compile Include="Server\WebSockets\ServerTest.cs" />
     <Compile Include="Service\BrokenProceduresTest.cs" />
     <Compile Include="Service\ClassMethodHandlerTest.cs" />
@@ -114,7 +120,6 @@
     <Compile Include="Utils\ModAPITest.cs" />
     <Compile Include="Utils\NamingTest.cs" />
     <Compile Include="Utils\ReflectionTest.cs" />
-    <Compile Include="Utils\RoundRobinSchedulerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Service\KRPC\" />

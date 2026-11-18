@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using KRPC.Server;
 using KRPC.UI;
@@ -31,11 +32,6 @@ namespace KRPC
         ProblemsWindow problemsWindow;
         ClientConnectingDialog clientConnectingDialog;
         ClientDisconnectDialog clientDisconnectDialog;
-
-        /// <summary>
-        /// The instance of the addon
-        /// </summary>
-        public static Addon Instance { get; private set; }
 
         internal static void InitLogger ()
         {
@@ -85,7 +81,6 @@ namespace KRPC
                 return;
 
             Init ();
-            Instance = this;
 
             var gameScene = GameScenesExtensions.CurrentGameScene();
             Service.CallContext.GameScene = gameScene;
@@ -145,12 +140,34 @@ namespace KRPC
 
             // Add button to the applauncher
             mainWindow.Closable = true;
-            textureOnline = GameDatabase.Instance.GetTexture ("kRPC/icons/applauncher-online", false);
-            textureOffline = GameDatabase.Instance.GetTexture ("kRPC/icons/applauncher-offline", false);
+            if (textureOnline == null) {
+                textureOnline = GameDatabase.Instance.GetTexture ("kRPC/icons/applauncher-online", false);
+                textureOffline = GameDatabase.Instance.GetTexture ("kRPC/icons/applauncher-offline", false);
+            }
             GameEvents.onGUIApplicationLauncherReady.Add (OnGUIApplicationLauncherReady);
             GameEvents.onGUIApplicationLauncherDestroyed.Add (OnGUIApplicationLauncherDestroyed);
             core.OnServerStarted += OnServerStarted;
             core.OnServerStopped += OnServerStopped;
+        }
+
+        /// <summary>
+        /// Save a window's visibility and position to the configuration as they change.
+        /// </summary>
+        void PersistWindow (Window window, Action<bool> setVisible, Action<Tuple<float,float,float,float>> setPosition)
+        {
+            window.OnHide += (s, e) => {
+                config.Load ();
+                setVisible (false);
+                config.Save ();
+            };
+            window.OnShow += (s, e) => {
+                config.Load ();
+                setVisible (true);
+                config.Save ();
+            };
+            window.OnStartMoving += (s, e) => config.Load ();
+            window.OnMoved += (s, e) => setPosition (e.Position.ToTuple ());
+            window.OnFinishMoving += (s, e) => config.Save ();
         }
 
         void InitEvents ()
@@ -168,48 +185,12 @@ namespace KRPC
                 e.Server.Stop ();
                 clientConnectingDialog.Close ();
             };
-            mainWindow.OnHide += (s, e) => {
-                config.Load ();
-                config.Configuration.MainWindowVisible = false;
-                config.Save ();
-            };
-            mainWindow.OnShow += (s, e) => {
-                config.Load ();
-                config.Configuration.MainWindowVisible = true;
-                config.Save ();
-            };
-            mainWindow.OnStartMoving += (s, e) => {
-                config.Load();
-            };
-            mainWindow.OnMoved += (s, e) => {
-                var window = s as MainWindow;
-                config.Configuration.MainWindowPosition = window.Position.ToTuple ();
-            };
-            mainWindow.OnFinishMoving += (s, e) => {
-                config.Save();
-            };
-
-            // Info window events
-            infoWindow.OnHide += (s, e) => {
-                config.Load ();
-                config.Configuration.InfoWindowVisible = false;
-                config.Save ();
-            };
-            infoWindow.OnShow += (s, e) => {
-                config.Load ();
-                config.Configuration.InfoWindowVisible = true;
-                config.Save ();
-            };
-            infoWindow.OnStartMoving += (s, e) => {
-                config.Load();
-            };
-            infoWindow.OnMoved += (s, e) => {
-                var window = s as InfoWindow;
-                config.Configuration.InfoWindowPosition = window.Position.ToTuple ();
-            };
-            infoWindow.OnFinishMoving += (s, e) => {
-                config.Save();
-            };
+            PersistWindow (mainWindow,
+                visible => config.Configuration.MainWindowVisible = visible,
+                position => config.Configuration.MainWindowPosition = position);
+            PersistWindow (infoWindow,
+                visible => config.Configuration.InfoWindowVisible = visible,
+                position => config.Configuration.InfoWindowPosition = position);
 
             // Server events
             core.OnClientRequestingConnection += OnClientRequestingConnection;
@@ -414,12 +395,13 @@ namespace KRPC
             GameEvents.onGUIRnDComplexDespawn.Remove(OnRnDComplexDespawn);
             GameEvents.onGUIAdministrationFacilitySpawn.Remove(OnAdministrationFacilitySpawn);
             GameEvents.onGUIAdministrationFacilityDespawn.Remove(OnAdministrationFacilityDespawn);
-            core.OnServerStarted -= OnServerStarted;
-            core.OnServerStopped -= OnServerStopped;
-            core.OnClientRequestingConnection -= OnClientRequestingConnection;
 
             if (!ServicesChecker.OK)
                 return;
+
+            core.OnServerStarted -= OnServerStarted;
+            core.OnServerStopped -= OnServerStopped;
+            core.OnClientRequestingConnection -= OnClientRequestingConnection;
 
             // Destroy the UI
             if (applauncherButton != null)
@@ -429,8 +411,6 @@ namespace KRPC
             Destroy (mainWindow);
             Destroy (clientConnectingDialog);
             GUILayoutExtensions.Destroy ();
-
-            Instance = null;
         }
 
         /// <summary>
@@ -438,6 +418,8 @@ namespace KRPC
         /// </summary>
         public void OnApplicationQuit ()
         {
+            if (!ServicesChecker.OK)
+                return;
             core.StopAll ();
         }
 
@@ -556,6 +538,12 @@ namespace KRPC
         /// </summary>
         public void Update()
         {
+            // The game runs a frame's fixed updates before its Update, and their work, the
+            // server's included, moves the time Update runs at. So the frame's length is the
+            // game's own. It is the previous frame's, one frame behind the server's time, which
+            // the budget's averages over its window of frames absorb
+            if (core != null)
+                core.EndFrame (Time.unscaledDeltaTime);
             GameSceneSwitcher.Update ();
             if (IsPaused && !config.Configuration.PauseServerWithGame)
                 FixedUpdate();

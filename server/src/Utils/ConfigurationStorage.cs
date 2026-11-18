@@ -19,10 +19,6 @@ namespace KRPC.Utils
             nodeName = name;
         }
 
-        ConfigurationStorage ()
-        {
-        }
-
         /// <summary>
         /// Load settings from the underlying storage. Returns whether the storage held settings.
         /// </summary>

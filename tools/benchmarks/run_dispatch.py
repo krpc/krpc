@@ -15,13 +15,22 @@ do.
 import sys
 
 from tools.benchmarks import chunking, runner, testserver
+from tools.benchmarks import steps as steps_lib
 
 SUITE = "server, game-less"
 
 
 def main():
     assert __doc__ is not None
-    args = runner.arguments(__doc__.splitlines()[0])
+    options = runner.parser(__doc__.splitlines()[0])
+    options.add_argument(
+        "--steps",
+        action="store_true",
+        help="time each step of a call on its own, per type kind, in place of the calls",
+    )
+    args = options.parse_args()
+    if args.steps:
+        return main_steps(args)
     # Paced, as the game is. These cases time a loop the server runs inside one call, so the
     # update the call landed in is amortized away and the pacing does not reach the numbers.
     with testserver.connection("benchmark_dispatch", args.server) as (conn, _):
@@ -70,6 +79,30 @@ def cases(conn):
             "the store on both sides of the call: one lookup in, one dedup out",
         ),
     ]
+
+
+def main_steps(args):
+    with testserver.connection("benchmark_dispatch", args.server) as (conn, _):
+        testserver.warm_up(conn)
+        environment = testserver.environment(conn)
+        steps = conn.benchmark.call_steps
+        results = [
+            measure_step(conn, step, name, call)
+            for name, call in steps_lib.cases(conn)
+            for step in steps
+        ]
+    runner.report(results, SUITE, environment, args.json)
+    return 0
+
+
+def measure_step(conn, step, name, call):
+    """Run one step of a call in a loop server side and record what it cost."""
+    return chunking.result(
+        SUITE,
+        step,
+        name,
+        chunking.chunks(lambda count: conn.benchmark.call_step(call, step, count)),
+    )
 
 
 def stream_cases(conn):

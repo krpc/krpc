@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using KRPC.Utils;
 using UnityEngine;
 
 namespace KRPC.UI
@@ -17,11 +15,6 @@ namespace KRPC.UI
         protected string Title { get; set; }
 
         protected string Message { get; set; }
-
-        protected UISkinDef Skin { get; set; }
-
-        public event EventHandler OnOpen;
-        public event EventHandler OnClose;
 
         public bool Visible { get; private set; }
 
@@ -40,12 +33,9 @@ namespace KRPC.UI
                 hasInit = true;
             }
             if (!Visible) {
-                if (Skin == null)
-                    Skin = HighLogic.UISkin;
                 Visible = true;
                 Opened ();
-                EventHandlerExtensions.Invoke (OnOpen, this);
-                dialog = new MultiOptionDialog (Name, Message, Title, Skin, Options.ToArray ());
+                dialog = new MultiOptionDialog (Name, Message, Title, HighLogic.UISkin, Options.ToArray ());
                 popup = PopupDialog.SpawnPopupDialog (new Vector2 (0.5f, 0.5f), new Vector2 (0.5f, 0.5f), dialog, false, HighLogic.UISkin);
             }
         }
@@ -61,7 +51,6 @@ namespace KRPC.UI
                 dialog = null;
                 popup = null;
                 Closed ();
-                EventHandlerExtensions.Invoke (OnClose, this);
             }
         }
     }

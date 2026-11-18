@@ -13,9 +13,10 @@ namespace KRPC.Server
     /// <summary>
     /// Arguments passed to a client disconnected event
     /// </summary>
-    public sealed class ClientDisconnectedEventArgs<TIn,TOut> : ClientEventArgs<TIn,TOut>
+    public sealed class ClientDisconnectedEventArgs<TStream> : ClientEventArgs<TStream>
+        where TStream : IStream
     {
-        internal ClientDisconnectedEventArgs (IClient<TIn,TOut> client) : base (client)
+        internal ClientDisconnectedEventArgs (IClient<TStream> client) : base (client)
         {
         }
     }

@@ -2,7 +2,7 @@ using System;
 
 namespace KRPC.Server.SerialIO
 {
-    sealed class ByteClient : IClient<byte,byte>
+    sealed class ByteClient : IClient<IByteStream>
     {
         readonly Guid guid;
         BufferedPort port;
@@ -28,7 +28,7 @@ namespace KRPC.Server.SerialIO
 
         public string Address { get; private set; }
 
-        public IStream<byte,byte> Stream {
+        public IByteStream Stream {
             get { return stream; }
         }
 
@@ -47,7 +47,7 @@ namespace KRPC.Server.SerialIO
             return obj != null && Equals (obj as ByteClient);
         }
 
-        public bool Equals (IClient<byte,byte> other)
+        public bool Equals (IClient<IByteStream> other)
         {
             if (other == null)
                 return false;

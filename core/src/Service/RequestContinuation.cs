@@ -10,7 +10,7 @@ namespace KRPC.Service
     /// </summary>
     sealed class RequestContinuation
     {
-        public IClient<Request,Response> Client { get; private set; }
+        public IClient<IMessageStream> Client { get; private set; }
 
         /// <summary>
         /// The id of the request, copied onto its response.
@@ -21,7 +21,7 @@ namespace KRPC.Service
         readonly ProcedureCallContinuation[] calls;
         readonly ProcedureResult[] results;
 
-        public RequestContinuation (IClient<Request,Response> client, Request request)
+        public RequestContinuation (IClient<IMessageStream> client, Request request)
         {
             Client = client;
             Id = request.Id;

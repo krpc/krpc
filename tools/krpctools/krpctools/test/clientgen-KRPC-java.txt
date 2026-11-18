@@ -549,13 +549,11 @@ public class KRPC extends RemoteService {
         private final byte[] id;
         private final String name;
         private final String address;
-        private final int protocolVersion;
 
-        public ClientInfo(byte[] id, String name, String address, int protocolVersion) {
+        public ClientInfo(byte[] id, String name, String address) {
             this.id = id;
             this.name = name;
             this.address = address;
-            this.protocolVersion = protocolVersion;
         }
 
         /**
@@ -579,19 +577,11 @@ public class KRPC extends RemoteService {
             return address;
         }
 
-        /**
-         * The protocol version of the client's connection.
-         */
-        public int getProtocolVersion() {
-            return protocolVersion;
-        }
-
         private static final java.util.List<krpc.schema.KRPC.Type> FIELD_TYPES =
             java.util.Collections.unmodifiableList(java.util.Arrays.asList(
                 krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BYTES),
                 krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING),
-                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING),
-                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32)
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)
             ));
 
         /** The types of the fields, in the order they are encoded in. */
@@ -605,8 +595,7 @@ public class KRPC extends RemoteService {
             return new ClientInfo(
                 (byte[]) values[0],
                 (String) values[1],
-                (String) values[2],
-                (int) values[3]
+                (String) values[2]
             );
         }
 
@@ -615,8 +604,7 @@ public class KRPC extends RemoteService {
             return new Object[] {
                 id,
                 name,
-                address,
-                protocolVersion
+                address
             };
         }
 
@@ -626,12 +614,12 @@ public class KRPC extends RemoteService {
                 return false;
             }
             ClientInfo other = (ClientInfo) obj;
-            return java.util.Objects.deepEquals(this.id, other.id)                && java.util.Objects.deepEquals(this.name, other.name)                && java.util.Objects.deepEquals(this.address, other.address)                && java.util.Objects.deepEquals(this.protocolVersion, other.protocolVersion);
+            return java.util.Objects.deepEquals(this.id, other.id)                && java.util.Objects.deepEquals(this.name, other.name)                && java.util.Objects.deepEquals(this.address, other.address);
         }
 
         @Override
         public int hashCode() {
-            return java.util.Arrays.deepHashCode(new Object[] {id, name, address, protocolVersion});
+            return java.util.Arrays.deepHashCode(new Object[] {id, name, address});
         }
 
         /**
@@ -653,10 +641,6 @@ public class KRPC extends RemoteService {
             if (result != 0) {
                 return result;
             }
-            result = RemoteStruct.compareFields(protocolVersion, other.protocolVersion);
-            if (result != 0) {
-                return result;
-            }
             return 0;
         }
     }
@@ -667,46 +651,47 @@ public class KRPC extends RemoteService {
      * See {@link KRPC.ServerStatus#getSettings()}.
      */
     public static class ServerSettings implements RemoteStruct, Comparable<ServerSettings> {
-        private final int maxTimePerUpdate;
         private final boolean adaptiveRateControl;
-        private final boolean blockingRecv;
-        private final int recvTimeout;
+        private final int targetFrameRate;
+        private final int maxTimePerFrame;
+        private final int maxCallWait;
         private final int tickHoldTimeout;
 
-        public ServerSettings(int maxTimePerUpdate, boolean adaptiveRateControl, boolean blockingRecv, int recvTimeout, int tickHoldTimeout) {
-            this.maxTimePerUpdate = maxTimePerUpdate;
+        public ServerSettings(boolean adaptiveRateControl, int targetFrameRate, int maxTimePerFrame, int maxCallWait, int tickHoldTimeout) {
             this.adaptiveRateControl = adaptiveRateControl;
-            this.blockingRecv = blockingRecv;
-            this.recvTimeout = recvTimeout;
+            this.targetFrameRate = targetFrameRate;
+            this.maxTimePerFrame = maxTimePerFrame;
+            this.maxCallWait = maxCallWait;
             this.tickHoldTimeout = tickHoldTimeout;
         }
 
         /**
-         * The current maximum time spent executing calls per update, in microseconds.
-         */
-        public int getMaxTimePerUpdate() {
-            return maxTimePerUpdate;
-        }
-
-        /**
-         * Whether the server adjusts {@link KRPC.ServerSettings#getMaxTimePerUpdate()} to hold the frame rate.
+         * Whether the server adapts its time per frame to hold the frame rate at
+         * {@link KRPC.ServerSettings#getTargetFrameRate()}.
          */
         public boolean getAdaptiveRateControl() {
             return adaptiveRateControl;
         }
 
         /**
-         * Whether the server waits for the next call in an update.
+         * The lowest frame rate the server's work pushes the game to, in frames per second.
          */
-        public boolean getBlockingRecv() {
-            return blockingRecv;
+        public int getTargetFrameRate() {
+            return targetFrameRate;
         }
 
         /**
-         * The time the server waits for the next call, in microseconds.
+         * The server's budget per frame, or its ceiling with adaptive rate control, in microseconds.
          */
-        public int getRecvTimeout() {
-            return recvTimeout;
+        public int getMaxTimePerFrame() {
+            return maxTimePerFrame;
+        }
+
+        /**
+         * The longest the server waits for a client's next call, in microseconds.
+         */
+        public int getMaxCallWait() {
+            return maxCallWait;
         }
 
         /**
@@ -720,9 +705,9 @@ public class KRPC extends RemoteService {
 
         private static final java.util.List<krpc.schema.KRPC.Type> FIELD_TYPES =
             java.util.Collections.unmodifiableList(java.util.Arrays.asList(
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL),
                 krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32),
-                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL),
-                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL),
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32),
                 krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32),
                 krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32)
             ));
@@ -736,9 +721,9 @@ public class KRPC extends RemoteService {
         @SuppressWarnings("unchecked")
         public static ServerSettings fromFieldValues(Object[] values) {
             return new ServerSettings(
-                (int) values[0],
-                (boolean) values[1],
-                (boolean) values[2],
+                (boolean) values[0],
+                (int) values[1],
+                (int) values[2],
                 (int) values[3],
                 (int) values[4]
             );
@@ -747,10 +732,10 @@ public class KRPC extends RemoteService {
         @Override
         public Object[] fieldValues() {
             return new Object[] {
-                maxTimePerUpdate,
                 adaptiveRateControl,
-                blockingRecv,
-                recvTimeout,
+                targetFrameRate,
+                maxTimePerFrame,
+                maxCallWait,
                 tickHoldTimeout
             };
         }
@@ -761,12 +746,12 @@ public class KRPC extends RemoteService {
                 return false;
             }
             ServerSettings other = (ServerSettings) obj;
-            return java.util.Objects.deepEquals(this.maxTimePerUpdate, other.maxTimePerUpdate)                && java.util.Objects.deepEquals(this.adaptiveRateControl, other.adaptiveRateControl)                && java.util.Objects.deepEquals(this.blockingRecv, other.blockingRecv)                && java.util.Objects.deepEquals(this.recvTimeout, other.recvTimeout)                && java.util.Objects.deepEquals(this.tickHoldTimeout, other.tickHoldTimeout);
+            return java.util.Objects.deepEquals(this.adaptiveRateControl, other.adaptiveRateControl)                && java.util.Objects.deepEquals(this.targetFrameRate, other.targetFrameRate)                && java.util.Objects.deepEquals(this.maxTimePerFrame, other.maxTimePerFrame)                && java.util.Objects.deepEquals(this.maxCallWait, other.maxCallWait)                && java.util.Objects.deepEquals(this.tickHoldTimeout, other.tickHoldTimeout);
         }
 
         @Override
         public int hashCode() {
-            return java.util.Arrays.deepHashCode(new Object[] {maxTimePerUpdate, adaptiveRateControl, blockingRecv, recvTimeout, tickHoldTimeout});
+            return java.util.Arrays.deepHashCode(new Object[] {adaptiveRateControl, targetFrameRate, maxTimePerFrame, maxCallWait, tickHoldTimeout});
         }
 
         /**
@@ -776,19 +761,19 @@ public class KRPC extends RemoteService {
         @Override
         public int compareTo(ServerSettings other) {
             int result;
-            result = RemoteStruct.compareFields(maxTimePerUpdate, other.maxTimePerUpdate);
-            if (result != 0) {
-                return result;
-            }
             result = RemoteStruct.compareFields(adaptiveRateControl, other.adaptiveRateControl);
             if (result != 0) {
                 return result;
             }
-            result = RemoteStruct.compareFields(blockingRecv, other.blockingRecv);
+            result = RemoteStruct.compareFields(targetFrameRate, other.targetFrameRate);
             if (result != 0) {
                 return result;
             }
-            result = RemoteStruct.compareFields(recvTimeout, other.recvTimeout);
+            result = RemoteStruct.compareFields(maxTimePerFrame, other.maxTimePerFrame);
+            if (result != 0) {
+                return result;
+            }
+            result = RemoteStruct.compareFields(maxCallWait, other.maxCallWait);
             if (result != 0) {
                 return result;
             }
@@ -812,32 +797,38 @@ public class KRPC extends RemoteService {
         private final float bytesWrittenRate;
         private final long rpcsExecuted;
         private final float rpcRate;
-        private final float timePerRpcUpdate;
-        private final float pollTimePerRpcUpdate;
-        private final float execTimePerRpcUpdate;
+        private final float frameRate;
+        private final float timePerFrame;
+        private final float execTimePerFrame;
+        private final float waitTimePerFrame;
+        private final float streamTimePerFrame;
+        private final float budgetPerFrame;
+        private final float medianTurnaround;
         private final int deferredCalls;
         private final int streams;
         private final long streamEvaluations;
         private final float streamEvaluationRate;
         private final long streamUpdatesSent;
-        private final float timePerStreamUpdate;
 
-        public ServerStatistics(long bytesRead, long bytesWritten, float bytesReadRate, float bytesWrittenRate, long rpcsExecuted, float rpcRate, float timePerRpcUpdate, float pollTimePerRpcUpdate, float execTimePerRpcUpdate, int deferredCalls, int streams, long streamEvaluations, float streamEvaluationRate, long streamUpdatesSent, float timePerStreamUpdate) {
+        public ServerStatistics(long bytesRead, long bytesWritten, float bytesReadRate, float bytesWrittenRate, long rpcsExecuted, float rpcRate, float frameRate, float timePerFrame, float execTimePerFrame, float waitTimePerFrame, float streamTimePerFrame, float budgetPerFrame, float medianTurnaround, int deferredCalls, int streams, long streamEvaluations, float streamEvaluationRate, long streamUpdatesSent) {
             this.bytesRead = bytesRead;
             this.bytesWritten = bytesWritten;
             this.bytesReadRate = bytesReadRate;
             this.bytesWrittenRate = bytesWrittenRate;
             this.rpcsExecuted = rpcsExecuted;
             this.rpcRate = rpcRate;
-            this.timePerRpcUpdate = timePerRpcUpdate;
-            this.pollTimePerRpcUpdate = pollTimePerRpcUpdate;
-            this.execTimePerRpcUpdate = execTimePerRpcUpdate;
+            this.frameRate = frameRate;
+            this.timePerFrame = timePerFrame;
+            this.execTimePerFrame = execTimePerFrame;
+            this.waitTimePerFrame = waitTimePerFrame;
+            this.streamTimePerFrame = streamTimePerFrame;
+            this.budgetPerFrame = budgetPerFrame;
+            this.medianTurnaround = medianTurnaround;
             this.deferredCalls = deferredCalls;
             this.streams = streams;
             this.streamEvaluations = streamEvaluations;
             this.streamEvaluationRate = streamEvaluationRate;
             this.streamUpdatesSent = streamUpdatesSent;
-            this.timePerStreamUpdate = timePerStreamUpdate;
         }
 
         /**
@@ -883,24 +874,56 @@ public class KRPC extends RemoteService {
         }
 
         /**
-         * The time spent receiving and executing calls per update, in seconds.
+         * The game's frame rate, in frames per second.
          */
-        public float getTimePerRpcUpdate() {
-            return timePerRpcUpdate;
+        public float getFrameRate() {
+            return frameRate;
         }
 
         /**
-         * The time spent receiving calls per update, in seconds.
+         * The server's time per frame, in seconds: executing calls, waiting for them and
+         * updating streams.
          */
-        public float getPollTimePerRpcUpdate() {
-            return pollTimePerRpcUpdate;
+        public float getTimePerFrame() {
+            return timePerFrame;
         }
 
         /**
-         * The time spent executing calls per update, in seconds.
+         * The time spent executing calls per frame, in seconds.
          */
-        public float getExecTimePerRpcUpdate() {
-            return execTimePerRpcUpdate;
+        public float getExecTimePerFrame() {
+            return execTimePerFrame;
+        }
+
+        /**
+         * The time spent waiting for calls per frame, in seconds.
+         */
+        public float getWaitTimePerFrame() {
+            return waitTimePerFrame;
+        }
+
+        /**
+         * The time spent updating streams per frame, in seconds.
+         */
+        public float getStreamTimePerFrame() {
+            return streamTimePerFrame;
+        }
+
+        /**
+         * The time the server may spend per frame, in seconds.
+         *
+         * Adaptive rate control adjusts it, up to {@link KRPC.ServerSettings#getMaxTimePerFrame()}.
+         */
+        public float getBudgetPerFrame() {
+            return budgetPerFrame;
+        }
+
+        /**
+         * The median time between a response and the client's next call, over the
+         * clients' recent calls, in seconds.
+         */
+        public float getMedianTurnaround() {
+            return medianTurnaround;
         }
 
         /**
@@ -939,13 +962,6 @@ public class KRPC extends RemoteService {
             return streamUpdatesSent;
         }
 
-        /**
-         * The time spent updating streams per update, in seconds.
-         */
-        public float getTimePerStreamUpdate() {
-            return timePerStreamUpdate;
-        }
-
         private static final java.util.List<krpc.schema.KRPC.Type> FIELD_TYPES =
             java.util.Collections.unmodifiableList(java.util.Arrays.asList(
                 krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT64),
@@ -957,12 +973,15 @@ public class KRPC extends RemoteService {
                 krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT),
                 krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT),
                 krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT),
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT),
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT),
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT),
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT),
                 krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32),
                 krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32),
                 krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT64),
                 krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT),
-                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT64),
-                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT)
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT64)
             ));
 
         /** The types of the fields, in the order they are encoded in. */
@@ -983,12 +1002,15 @@ public class KRPC extends RemoteService {
                 (float) values[6],
                 (float) values[7],
                 (float) values[8],
-                (int) values[9],
-                (int) values[10],
-                (long) values[11],
+                (float) values[9],
+                (float) values[10],
+                (float) values[11],
                 (float) values[12],
-                (long) values[13],
-                (float) values[14]
+                (int) values[13],
+                (int) values[14],
+                (long) values[15],
+                (float) values[16],
+                (long) values[17]
             );
         }
 
@@ -1001,15 +1023,18 @@ public class KRPC extends RemoteService {
                 bytesWrittenRate,
                 rpcsExecuted,
                 rpcRate,
-                timePerRpcUpdate,
-                pollTimePerRpcUpdate,
-                execTimePerRpcUpdate,
+                frameRate,
+                timePerFrame,
+                execTimePerFrame,
+                waitTimePerFrame,
+                streamTimePerFrame,
+                budgetPerFrame,
+                medianTurnaround,
                 deferredCalls,
                 streams,
                 streamEvaluations,
                 streamEvaluationRate,
-                streamUpdatesSent,
-                timePerStreamUpdate
+                streamUpdatesSent
             };
         }
 
@@ -1019,12 +1044,12 @@ public class KRPC extends RemoteService {
                 return false;
             }
             ServerStatistics other = (ServerStatistics) obj;
-            return java.util.Objects.deepEquals(this.bytesRead, other.bytesRead)                && java.util.Objects.deepEquals(this.bytesWritten, other.bytesWritten)                && java.util.Objects.deepEquals(this.bytesReadRate, other.bytesReadRate)                && java.util.Objects.deepEquals(this.bytesWrittenRate, other.bytesWrittenRate)                && java.util.Objects.deepEquals(this.rpcsExecuted, other.rpcsExecuted)                && java.util.Objects.deepEquals(this.rpcRate, other.rpcRate)                && java.util.Objects.deepEquals(this.timePerRpcUpdate, other.timePerRpcUpdate)                && java.util.Objects.deepEquals(this.pollTimePerRpcUpdate, other.pollTimePerRpcUpdate)                && java.util.Objects.deepEquals(this.execTimePerRpcUpdate, other.execTimePerRpcUpdate)                && java.util.Objects.deepEquals(this.deferredCalls, other.deferredCalls)                && java.util.Objects.deepEquals(this.streams, other.streams)                && java.util.Objects.deepEquals(this.streamEvaluations, other.streamEvaluations)                && java.util.Objects.deepEquals(this.streamEvaluationRate, other.streamEvaluationRate)                && java.util.Objects.deepEquals(this.streamUpdatesSent, other.streamUpdatesSent)                && java.util.Objects.deepEquals(this.timePerStreamUpdate, other.timePerStreamUpdate);
+            return java.util.Objects.deepEquals(this.bytesRead, other.bytesRead)                && java.util.Objects.deepEquals(this.bytesWritten, other.bytesWritten)                && java.util.Objects.deepEquals(this.bytesReadRate, other.bytesReadRate)                && java.util.Objects.deepEquals(this.bytesWrittenRate, other.bytesWrittenRate)                && java.util.Objects.deepEquals(this.rpcsExecuted, other.rpcsExecuted)                && java.util.Objects.deepEquals(this.rpcRate, other.rpcRate)                && java.util.Objects.deepEquals(this.frameRate, other.frameRate)                && java.util.Objects.deepEquals(this.timePerFrame, other.timePerFrame)                && java.util.Objects.deepEquals(this.execTimePerFrame, other.execTimePerFrame)                && java.util.Objects.deepEquals(this.waitTimePerFrame, other.waitTimePerFrame)                && java.util.Objects.deepEquals(this.streamTimePerFrame, other.streamTimePerFrame)                && java.util.Objects.deepEquals(this.budgetPerFrame, other.budgetPerFrame)                && java.util.Objects.deepEquals(this.medianTurnaround, other.medianTurnaround)                && java.util.Objects.deepEquals(this.deferredCalls, other.deferredCalls)                && java.util.Objects.deepEquals(this.streams, other.streams)                && java.util.Objects.deepEquals(this.streamEvaluations, other.streamEvaluations)                && java.util.Objects.deepEquals(this.streamEvaluationRate, other.streamEvaluationRate)                && java.util.Objects.deepEquals(this.streamUpdatesSent, other.streamUpdatesSent);
         }
 
         @Override
         public int hashCode() {
-            return java.util.Arrays.deepHashCode(new Object[] {bytesRead, bytesWritten, bytesReadRate, bytesWrittenRate, rpcsExecuted, rpcRate, timePerRpcUpdate, pollTimePerRpcUpdate, execTimePerRpcUpdate, deferredCalls, streams, streamEvaluations, streamEvaluationRate, streamUpdatesSent, timePerStreamUpdate});
+            return java.util.Arrays.deepHashCode(new Object[] {bytesRead, bytesWritten, bytesReadRate, bytesWrittenRate, rpcsExecuted, rpcRate, frameRate, timePerFrame, execTimePerFrame, waitTimePerFrame, streamTimePerFrame, budgetPerFrame, medianTurnaround, deferredCalls, streams, streamEvaluations, streamEvaluationRate, streamUpdatesSent});
         }
 
         /**
@@ -1058,15 +1083,31 @@ public class KRPC extends RemoteService {
             if (result != 0) {
                 return result;
             }
-            result = RemoteStruct.compareFields(timePerRpcUpdate, other.timePerRpcUpdate);
+            result = RemoteStruct.compareFields(frameRate, other.frameRate);
             if (result != 0) {
                 return result;
             }
-            result = RemoteStruct.compareFields(pollTimePerRpcUpdate, other.pollTimePerRpcUpdate);
+            result = RemoteStruct.compareFields(timePerFrame, other.timePerFrame);
             if (result != 0) {
                 return result;
             }
-            result = RemoteStruct.compareFields(execTimePerRpcUpdate, other.execTimePerRpcUpdate);
+            result = RemoteStruct.compareFields(execTimePerFrame, other.execTimePerFrame);
+            if (result != 0) {
+                return result;
+            }
+            result = RemoteStruct.compareFields(waitTimePerFrame, other.waitTimePerFrame);
+            if (result != 0) {
+                return result;
+            }
+            result = RemoteStruct.compareFields(streamTimePerFrame, other.streamTimePerFrame);
+            if (result != 0) {
+                return result;
+            }
+            result = RemoteStruct.compareFields(budgetPerFrame, other.budgetPerFrame);
+            if (result != 0) {
+                return result;
+            }
+            result = RemoteStruct.compareFields(medianTurnaround, other.medianTurnaround);
             if (result != 0) {
                 return result;
             }
@@ -1087,10 +1128,6 @@ public class KRPC extends RemoteService {
                 return result;
             }
             result = RemoteStruct.compareFields(streamUpdatesSent, other.streamUpdatesSent);
-            if (result != 0) {
-                return result;
-            }
-            result = RemoteStruct.compareFields(timePerStreamUpdate, other.timePerStreamUpdate);
             if (result != 0) {
                 return result;
             }

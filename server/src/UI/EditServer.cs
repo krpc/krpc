@@ -41,12 +41,6 @@ namespace KRPC.UI
         static readonly string invalidPathText =
             "Socket path must not be empty, and must take at most " +
             LocalSocketServer.MaximumPathLength + " bytes";
-        string[] availableProtocols = {
-            MainWindow.protobufOverTcpText,
-            MainWindow.protobufOverWebSocketsText,
-            MainWindow.protobufOverSerialIOText,
-            MainWindow.protobufOverLocalSocketText
-        };
         string[] parityOptions = {
             "None", "Odd", "Even", "Mark", "Space"
         };
@@ -118,7 +112,7 @@ namespace KRPC.UI
         {
             GUILayout.BeginHorizontal ();
             DrawFieldLabel (protocolLabelText);
-            protocol = (Protocol)GUILayoutExtensions.ComboBox (protocolComboId, (int)protocol, availableProtocols, window.buttonStyle, window.comboOptionsStyle, window.comboOptionStyle);
+            protocol = (Protocol)GUILayoutExtensions.ComboBox (protocolComboId, (int)protocol, MainWindow.protocolNames, window.buttonStyle, window.comboOptionsStyle, window.comboOptionStyle);
             GUILayout.EndHorizontal ();
 
             if (protocol == Protocol.ProtocolBuffersOverTCP ||
@@ -181,10 +175,9 @@ namespace KRPC.UI
                     ValidPath (settings["localsocket_path"]), window.errorColor);
                 GUILayout.EndHorizontal();
             } else {
-                if (!settings.ContainsKey("serialio_baud_rate"))
-                    settings["serialio_baud_rate"] = "9600";
-                if (!settings.ContainsKey("serialio_data_bits"))
-                    settings["serialio_data_bits"] = "8";
+                foreach (var setting in Configuration.Server.SerialDefaults)
+                    if (!settings.ContainsKey (setting.Key))
+                        settings [setting.Key] = setting.Value;
 
                 GUILayout.BeginHorizontal();
                 DrawFieldLabel (portLabelText);
@@ -198,8 +191,6 @@ namespace KRPC.UI
 
                 GUILayout.BeginHorizontal();
                 DrawFieldLabel (baudRateLabelText);
-                if (!settings.ContainsKey("serialio_baud_rate"))
-                    settings["serialio_baud_rate"] = "9600";
                 settings["serialio_baud_rate"] = GUILayoutExtensions.FilterDigits (
                     GUILayoutExtensions.ValidatedTextField (settings["serialio_baud_rate"], baudRateMaxLength, window.stretchyTextFieldStyle,
                         ValidBaudRate (settings["serialio_baud_rate"]), window.errorColor));
@@ -207,8 +198,6 @@ namespace KRPC.UI
 
                 GUILayout.BeginHorizontal();
                 DrawFieldLabel (dataBitsLabelText);
-                if (!settings.ContainsKey("serialio_data_bits"))
-                    settings["serialio_data_bits"] = "8";
                 settings["serialio_data_bits"] = GUILayoutExtensions.FilterDigits (
                     GUILayoutExtensions.ValidatedTextField (settings["serialio_data_bits"], dataBitsMaxLength, window.stretchyTextFieldStyle,
                         ValidDataBits (settings["serialio_data_bits"]), window.errorColor));
@@ -216,8 +205,6 @@ namespace KRPC.UI
 
                 GUILayout.BeginHorizontal();
                 DrawFieldLabel (parityLabelText);
-                if (!settings.ContainsKey("serialio_parity"))
-                    settings["serialio_parity"] = "None";
                 settings["serialio_parity"] = parityOptions [GUILayoutExtensions.ComboBox (
                         parityComboId, parityOptions.IndexOf(settings["serialio_parity"]), parityOptions,
                         window.buttonStyle, window.comboOptionsStyle, window.comboOptionStyle)];
@@ -225,8 +212,6 @@ namespace KRPC.UI
 
                 GUILayout.BeginHorizontal();
                 DrawFieldLabel (stopBitsLabelText);
-                if (!settings.ContainsKey("serialio_stop_bits"))
-                    settings["serialio_stop_bits"] = "One";
                 settings["serialio_stop_bits"] = stopBitsOptions [GUILayoutExtensions.ComboBox (
                         stopBitsComboId, stopBitsOptions.IndexOf(settings["serialio_stop_bits"]), stopBitsOptions,
                         window.buttonStyle, window.comboOptionsStyle, window.comboOptionStyle)];

@@ -23,16 +23,18 @@ namespace KRPC
         /// </summary>
         public IList<Server.Server> Servers { get; private set; }
 
-        IDictionary<Guid, IClient<Request, Response>> clients = new Dictionary<Guid, IClient<Request, Response>> ();
+        IDictionary<Guid, IClient<IMessageStream>> clients = new Dictionary<Guid, IClient<IMessageStream>> ();
         // The connected clients, polled for requests in the order they connected
-        RoundRobinScheduler<IClient<Request,Response>> clientScheduler = new RoundRobinScheduler<IClient<Request, Response>> ();
+        List<IClient<IMessageStream>> clientOrder = new List<IClient<IMessageStream>> ();
+        // Each client's wait policy, by client identifier
+        Dictionary<Guid, CallWait> callWaits = new Dictionary<Guid, CallWait> ();
         // The calls to execute in this update: new requests, and calls the previous update yielded or deferred
         List<RequestContinuation> rpcContinuations = new List<RequestContinuation> ();
-        Dictionary<IClient<Request,Response>, Dictionary<ulong, Service.Stream>> streams = new Dictionary<IClient<Request,Response>, Dictionary<ulong, Service.Stream>> ();
+        Dictionary<IClient<IMessageStream>, Dictionary<ulong, Service.Stream>> streams = new Dictionary<IClient<IMessageStream>, Dictionary<ulong, Service.Stream>> ();
         // Each client's stream update message, reused on every update
-        Dictionary<IClient<Request,Response>, StreamUpdate> cachedStreamUpdates = new Dictionary<IClient<Request,Response>, StreamUpdate> ();
+        Dictionary<IClient<IMessageStream>, StreamUpdate> cachedStreamUpdates = new Dictionary<IClient<IMessageStream>, StreamUpdate> ();
         // The streams to remove, with their client, removed outside the loop over the streams
-        Dictionary<ulong, IClient<Request,Response>> removeStreams = new Dictionary<ulong, IClient<Request,Response>> ();
+        Dictionary<ulong, IClient<IMessageStream>> removeStreams = new Dictionary<ulong, IClient<IMessageStream>> ();
         // The id of the next stream. Ids are shared by every client and never reused, so an id at or
         // above this one was never issued
         ulong nextStreamId = 0;
@@ -42,7 +44,7 @@ namespace KRPC
         /// out at. One client at a time: what a hold offers is that nothing else happens,
         /// which two clients cannot both be given.
         /// </summary>
-        IClient<Request,Response> tickHoldClient;
+        IClient<IMessageStream> tickHoldClient;
         long tickHoldDeadline;
 
         /// <summary>
@@ -113,16 +115,17 @@ namespace KRPC
         /// </summary>
         public event EventHandler OnAfterCalls;
 
-        internal void ClientConnected (IClient<Request,Response> client)
+        internal void ClientConnected (IClient<IMessageStream> client)
         {
             clients [client.Guid] = client;
-            clientScheduler.Add (client);
+            clientOrder.Add (client);
+            callWaits [client.Guid] = new CallWait ();
             streams [client] = new Dictionary<ulong, Service.Stream> ();
             cachedStreamUpdates [client] = new StreamUpdate ();
             EventHandlerExtensions.Invoke (OnClientConnected, this, new ClientConnectedEventArgs (client));
         }
 
-        internal void ClientDisconnected (IClient<Request,Response> client)
+        internal void ClientDisconnected (IClient<IMessageStream> client)
         {
             Dictionary<ulong, Service.Stream> clientStreams;
             if (streams.TryGetValue (client, out clientStreams)) {
@@ -137,7 +140,8 @@ namespace KRPC
             // A client that goes away while holding the tick does not get to keep holding it.
             if (tickHoldClient != null && tickHoldClient.Guid == client.Guid)
                 ReleaseTickHold ();
-            clientScheduler.Remove (client);
+            clientOrder.Remove (client);
+            callWaits.Remove (client.Guid);
             EventHandlerExtensions.Invoke (OnClientDisconnected, this, new ClientDisconnectedEventArgs (client));
         }
 
@@ -224,24 +228,24 @@ namespace KRPC
             text.Append (", autoAcceptConnections = ").Append (config.AutoAcceptConnections);
             text.Append (", pauseServerWithGame = ").Append (config.PauseServerWithGame);
             text.Append (", verboseErrors = ").Append (config.VerboseErrors);
-            text.Append (", maxTimePerUpdate = ").Append (config.MaxTimePerUpdate.ToString (CultureInfo.InvariantCulture));
             text.Append (", adaptiveRateControl = ").Append (config.AdaptiveRateControl);
-            text.Append (", blockingRecv = ").Append (config.BlockingRecv);
-            text.Append (", recvTimeout = ").Append (config.RecvTimeout.ToString (CultureInfo.InvariantCulture));
+            text.Append (", targetFrameRate = ").Append (config.TargetFrameRate.ToString (CultureInfo.InvariantCulture));
+            text.Append (", maxTimePerFrame = ").Append (config.MaxTimePerFrame.ToString (CultureInfo.InvariantCulture));
+            text.Append (", maxCallWait = ").Append (config.MaxCallWait.ToString (CultureInfo.InvariantCulture));
             text.Append (", tickHoldTimeout = ").Append (config.TickHoldTimeout.ToString (CultureInfo.InvariantCulture));
             return text.ToString ();
         }
 
-        void Configure (IServer server)
+        void Configure (Server.Server server)
         {
             server.OnStarted += (s, e) => {
-                Logger.WriteLine ("Server '" + ((Server.Server)s).Name + "' started on " + ((Server.Server)s).Address);
-                Logger.WriteLine ("Server '" + ((Server.Server)s).Name + "' settings: " + SettingsText ((Server.Server)s));
+                Logger.WriteLine ("Server '" + server.Name + "' started on " + server.Address);
+                Logger.WriteLine ("Server '" + server.Name + "' settings: " + SettingsText (server));
                 AnyRunning = true;
-                EventHandlerExtensions.Invoke (OnServerStarted, this, new ServerStartedEventArgs ((Server.Server)s));
+                EventHandlerExtensions.Invoke (OnServerStarted, this, new ServerStartedEventArgs (server));
             };
             server.OnStopped += (s, e) => {
-                Logger.WriteLine ("Server '" + ((Server.Server)s).Name + "' stopped");
+                Logger.WriteLine ("Server '" + server.Name + "' stopped");
                 AnyRunning = Servers.Any (x => x.Running);
                 // The object store and the expression constants are shared by every
                 // server, so they are only emptied once they have all stopped
@@ -249,7 +253,7 @@ namespace KRPC
                     ObjectStore.Clear ();
                     Service.KRPC.Expression.ClearConstants ();
                 }
-                EventHandlerExtensions.Invoke (OnServerStopped, this, new ServerStoppedEventArgs ((Server.Server)s));
+                EventHandlerExtensions.Invoke (OnServerStopped, this, new ServerStoppedEventArgs (server));
             };
             server.OnClientRequestingConnection += (s, e) => EventHandlerExtensions.Invoke (OnClientRequestingConnection, this, e);
         }
@@ -328,7 +332,7 @@ namespace KRPC
         /// </summary>
         public float BytesReadRate {
             get { return bytesReadRate.Value; }
-            set { bytesReadRate.Update (value); }
+            private set { bytesReadRate.Update (value); }
         }
 
         /// <summary>
@@ -336,15 +340,17 @@ namespace KRPC
         /// </summary>
         public float BytesWrittenRate {
             get { return bytesWrittenRate.Value; }
-            set { bytesWrittenRate.Update (value); }
+            private set { bytesWrittenRate.Update (value); }
         }
 
         ExponentialMovingAverage rpcRate = new ExponentialMovingAverage (0.25);
-        ExponentialMovingAverage timePerRPCUpdate = new ExponentialMovingAverage (0.25);
-        ExponentialMovingAverage pollTimePerRPCUpdate = new ExponentialMovingAverage (0.25);
-        ExponentialMovingAverage execTimePerRPCUpdate = new ExponentialMovingAverage (0.25);
         ExponentialMovingAverage streamEvaluationRate = new ExponentialMovingAverage (0.25);
-        ExponentialMovingAverage timePerStreamUpdate = new ExponentialMovingAverage (0.25);
+        ExponentialMovingAverage frameRate = new ExponentialMovingAverage (0.25);
+        ExponentialMovingAverage timePerFrame = new ExponentialMovingAverage (0.25);
+        ExponentialMovingAverage execTimePerFrame = new ExponentialMovingAverage (0.25);
+        ExponentialMovingAverage waitTimePerFrame = new ExponentialMovingAverage (0.25);
+        ExponentialMovingAverage streamTimePerFrame = new ExponentialMovingAverage (0.25);
+        ExponentialMovingAverage budgetBoundShare = new ExponentialMovingAverage (0.25);
 
         /// <summary>
         /// Total number of RPCs executed.
@@ -356,32 +362,69 @@ namespace KRPC
         /// </summary>
         public float RPCRate {
             get { return rpcRate.Value; }
-            set { rpcRate.Update (value); }
+            private set { rpcRate.Update (value); }
         }
 
         /// <summary>
-        /// Time taken by the update loop per update, in seconds.
+        /// Frames per second.
         /// </summary>
-        public float TimePerRPCUpdate {
-            get { return timePerRPCUpdate.Value; }
-            set { timePerRPCUpdate.Update (value); }
+        public float FrameRate {
+            get { return frameRate.Value; }
         }
 
         /// <summary>
-        /// Time taken polling for new RPCs per update, in seconds.
+        /// The server's time per frame, in seconds: executing calls, waiting for them and
+        /// updating streams.
         /// </summary>
-        public float PollTimePerRPCUpdate {
-            get { return pollTimePerRPCUpdate.Value; }
-            set { pollTimePerRPCUpdate.Update (value); }
+        public float TimePerFrame {
+            get { return timePerFrame.Value; }
         }
 
         /// <summary>
-        /// Time taken polling executing RPCs per update, in seconds.
+        /// Time spent executing calls per frame, in seconds.
         /// </summary>
-        public float ExecTimePerRPCUpdate {
-            get { return execTimePerRPCUpdate.Value; }
-            set { execTimePerRPCUpdate.Update (value); }
+        public float ExecTimePerFrame {
+            get { return execTimePerFrame.Value; }
         }
+
+        /// <summary>
+        /// Time spent waiting for calls per frame, in seconds.
+        /// </summary>
+        public float WaitTimePerFrame {
+            get { return waitTimePerFrame.Value; }
+        }
+
+        /// <summary>
+        /// Time spent updating streams per frame, in seconds.
+        /// </summary>
+        public float StreamTimePerFrame {
+            get { return streamTimePerFrame.Value; }
+        }
+
+        /// <summary>
+        /// The share of recent frames in which the budget stopped the server, from 0 to 1.
+        /// </summary>
+        public float BudgetBoundShare {
+            get { return budgetBoundShare.Value; }
+        }
+
+        /// <summary>
+        /// The median of the clients' recent turnarounds, the time from a response being sent
+        /// to the client's next request arriving, in seconds. Zero with none measured.
+        /// </summary>
+        public float MedianTurnaround {
+            get {
+                turnarounds.Clear ();
+                foreach (var callWait in callWaits.Values)
+                    callWait.CopyTurnarounds (turnarounds);
+                if (turnarounds.Count == 0)
+                    return 0;
+                turnarounds.Sort ();
+                return (float)turnarounds [turnarounds.Count / 2] / Stopwatch.Frequency;
+            }
+        }
+
+        readonly List<long> turnarounds = new List<long> ();
 
         /// <summary>
         /// Number of calls left for the next update, because the update ran out of time or
@@ -409,39 +452,43 @@ namespace KRPC
         /// </summary>
         public float StreamEvaluationRate {
             get { return streamEvaluationRate.Value; }
-            set { streamEvaluationRate.Update (value); }
+            private set { streamEvaluationRate.Update (value); }
         }
 
         /// <summary>
-        /// Time taken by the stream update loop, in seconds.
-        /// </summary>
-        public float TimePerStreamUpdate {
-            get { return timePerStreamUpdate.Value; }
-            set { timePerStreamUpdate.Update (value); }
-        }
-
-        /// <summary>
-        /// Clear the server statistics.
+        /// Clear the server statistics: the totals, the averages and each server's bytes read
+        /// and written.
         /// </summary>
         public void ClearStats ()
         {
             RPCsExecuted = 0;
-            RPCRate = 0;
-            TimePerRPCUpdate = 0;
-            ExecTimePerRPCUpdate = 0;
-            PollTimePerRPCUpdate = 0;
             StreamEvaluations = 0;
             StreamUpdatesSent = 0;
-            TimePerStreamUpdate = 0;
+            foreach (var average in new [] {
+                bytesReadRate, bytesWrittenRate, rpcRate, streamEvaluationRate, frameRate,
+                timePerFrame, execTimePerFrame, waitTimePerFrame, streamTimePerFrame,
+                budgetBoundShare })
+                average.Reset ();
+            for (int i = 0; i < Servers.Count; i++)
+                Servers [i].ClearStats ();
         }
 
         Stopwatch updateTimer = Stopwatch.StartNew ();
+
+        // Running totals for the benchmarks: the number of updates, and the stopwatch ticks
+        // spent in them, in polling for calls, in executing calls and in updating streams
+        internal ulong Updates;
+        internal long UpdateTicks;
+        internal long PollTicks;
+        internal long ExecTicks;
+        internal long StreamTicks;
 
         /// <summary>
         /// Update the server
         /// </summary>
         public void Update ()
         {
+            long updateStart = Stopwatch.GetTimestamp ();
             ulong startRPCsExecuted = RPCsExecuted;
             ulong startStreamEvaluations = StreamEvaluations;
             ulong startBytesRead = BytesRead;
@@ -450,13 +497,15 @@ namespace KRPC
             // Bracket the call phase, so that the events are raised once per update however
             // many times the poll loop runs. OnAfterCalls is raised before the stream update,
             // so that streams observe what the handlers did.
+            ConfigureBudget ();
             EventHandlerExtensions.Invoke (OnBeforeCalls, this);
-            UpdateRPCs ();
+            UpdateRPCs (frameBudget.Allowance (frameSpent));
             EventHandlerExtensions.Invoke (OnAfterCalls, this);
             UpdateStreams ();
+            Updates++;
+            UpdateTicks += Stopwatch.GetTimestamp () - updateStart;
 
             var timeElapsed = updateTimer.ElapsedSeconds ();
-            var ticksElapsed = updateTimer.ElapsedTicks;
             updateTimer.Reset ();
             updateTimer.Start ();
 
@@ -465,58 +514,104 @@ namespace KRPC
             BytesReadRate = (float)((BytesRead - startBytesRead) / timeElapsed);
             BytesWrittenRate = (float)((BytesWritten - startBytesWritten) / timeElapsed);
 
-            // Adjust MaxTimePerUpdate to get a target FixedUpdate rate of 59 FPS. This is slightly smaller
-            // than 60 FPS, so that it pushes against the target 60 FPS for FixedUpdate.
-            // The minimum MaxTimePerUpdate that will be set is 1ms, and the maximum is 25ms.
-            // If very little time is being spent executing RPCs (<1ms), MaxTimePerUpdate is set to 10ms.
-            // This prevents MaxTimePerUpdate from being set to a high value when the server is idle, which would
-            // cause a drop in framerate if a large burst of RPCs are received.
-            // An update that held the tick ran for as long as the client asked. Adapting to it
-            // would wind the limit down to its floor for every other client.
-            SyncMaxTimePerUpdate ();
-            if (Configuration.Instance.AdaptiveRateControl && !heldTick) {
-                var targetTicks = Stopwatch.Frequency / 59;
-                if (ticksElapsed > targetTicks) {
-                    if (maxTimePerUpdate > 1000)
-                        maxTimePerUpdate -= 100;
-                } else {
-                    if (ExecTimePerRPCUpdate < 0.001) {
-                        maxTimePerUpdate = 10000;
-                    } else {
-                        if (maxTimePerUpdate < 25000)
-                            maxTimePerUpdate += 100;
-                    }
-                }
-            }
+            frameSpent += Stopwatch.GetTimestamp () - updateStart;
+            if (heldTick)
+                frameHeld = true;
+            if (!hostEndsFrames)
+                FrameEnded (Stopwatch.GetTimestamp (), 0);
         }
 
-        uint maxTimePerUpdate;
-        uint configuredMaxTimePerUpdate;
-        bool configuredAdaptiveRateControl;
+        readonly FrameBudget frameBudget = new FrameBudget ();
+
+        // When the current frame began, or zero before the first frame; the server's time in
+        // it, in all and executing, waiting and updating streams; whether the budget stopped
+        // the server in it; and whether a client held a tick
+        long frameStart;
+        long frameSpent;
+        long frameExec;
+        long frameWait;
+        long frameStreams;
+        bool frameBound;
+        bool frameHeld;
+
+        // Whether the host marks the end of each frame. Until it does, each update is a frame
+        bool hostEndsFrames;
 
         /// <summary>
-        /// The time limit on executing calls in an update, in microseconds. Adaptive rate
-        /// control adjusts it, starting from <see cref="Configuration.MaxTimePerUpdate"/>.
+        /// Mark the end of a frame. Called by the host once a frame, on the game thread. A host
+        /// that never calls it has each update taken as a frame.
         /// </summary>
-        public uint MaxTimePerUpdate {
-            get {
-                SyncMaxTimePerUpdate ();
-                return maxTimePerUpdate;
-            }
+        public void EndFrame ()
+        {
+            hostEndsFrames = true;
+            FrameEnded (Stopwatch.GetTimestamp (), 0);
         }
 
         /// <summary>
-        /// Restart the working limit from the configured one when either rate setting changes.
+        /// Mark the end of a frame, given its length in seconds as the game measured it.
+        /// Called by the host once a frame, on the game thread.
         /// </summary>
-        void SyncMaxTimePerUpdate ()
+        /// <remarks>
+        /// For a host whose calls come at a point in the frame that moves, such as after the
+        /// frame's fixed updates, whose work varies.
+        /// </remarks>
+        public void EndFrame (double period)
+        {
+            hostEndsFrames = true;
+            FrameEnded (Stopwatch.GetTimestamp (), (long)(period * Stopwatch.Frequency));
+        }
+
+        void FrameEnded (long now, long period)
+        {
+            if (period <= 0 && frameStart != 0)
+                period = now - frameStart;
+            if (frameStart != 0 && period > 0) {
+                frameBudget.FrameEnded (period, frameSpent, frameBound, frameHeld);
+                double frequency = Stopwatch.Frequency;
+                frameRate.Update ((float)(frequency / period));
+                timePerFrame.Update ((float)(frameSpent / frequency));
+                execTimePerFrame.Update ((float)(frameExec / frequency));
+                waitTimePerFrame.Update ((float)(frameWait / frequency));
+                streamTimePerFrame.Update ((float)(frameStreams / frequency));
+                budgetBoundShare.Update (frameBound ? 1f : 0f);
+            }
+            frameStart = now;
+            frameSpent = 0;
+            frameExec = 0;
+            frameWait = 0;
+            frameStreams = 0;
+            frameBound = false;
+            frameHeld = false;
+        }
+
+        /// <summary>
+        /// Apply the rate settings to the budget, which a change restarts from the maximum.
+        /// </summary>
+        void ConfigureBudget ()
         {
             var config = Configuration.Instance;
-            if (config.MaxTimePerUpdate == configuredMaxTimePerUpdate &&
-                config.AdaptiveRateControl == configuredAdaptiveRateControl)
-                return;
-            configuredMaxTimePerUpdate = config.MaxTimePerUpdate;
-            configuredAdaptiveRateControl = config.AdaptiveRateControl;
-            maxTimePerUpdate = configuredMaxTimePerUpdate;
+            frameBudget.Configure (config.AdaptiveRateControl, config.TargetFrameRate, config.MaxTimePerFrame);
+        }
+
+        /// <summary>
+        /// The time the server may spend per frame, in microseconds. Adaptive rate control
+        /// adjusts it, up to <see cref="Configuration.MaxTimePerFrame"/>.
+        /// </summary>
+        public uint BudgetPerFrame {
+            get {
+                ConfigureBudget ();
+                return (uint)(frameBudget.Budget * 1000000 / Stopwatch.Frequency);
+            }
+        }
+
+        /// <summary>
+        /// Whether the budget per frame is at its floor, 1 ms or the max time per frame if lower.
+        /// </summary>
+        public bool BudgetAtFloor {
+            get {
+                ConfigureBudget ();
+                return frameBudget.AtFloor;
+            }
         }
 
         /// <summary>
@@ -528,34 +623,31 @@ namespace KRPC
         bool heldTick;
 
         Stopwatch rpcTimer = new Stopwatch ();
-        Stopwatch rpcPollTimeout = new Stopwatch ();
         Stopwatch rpcPollTimer = new Stopwatch ();
         Stopwatch rpcExecTimer = new Stopwatch ();
         List<RequestContinuation> rpcYieldedContinuations = new List<RequestContinuation> ();
 
         /// <summary>
         /// Update the servers, called once every FixedUpdate.
-        /// This method receives and executes RPCs, for up to MaxTimePerUpdate microseconds.
-        /// RPCs are delayed to the next update if this time expires. If AdaptiveRateControl
-        /// is true, MaxTimePerUpdate will be automatically adjusted to achieve a target framerate.
-        /// If NonBlockingUpdate is false, this call will block waiting for new RPCs for up to
-        /// MaxPollTimePerUpdate microseconds. If NonBlockingUpdate is true, a single non-blocking call
-        /// will be made to check for new RPCs.
+        /// This method receives and executes RPCs, for up to <paramref name="allowance"/>
+        /// stopwatch ticks, its share of the frame's budget. RPCs are delayed to the next
+        /// update if this time expires.
+        /// With no request waiting, it waits for a client's next call as <see cref="CallWait"/>
+        /// decides, up to <see cref="Configuration.MaxCallWait"/>.
         /// While a client holds the tick, none of those limits apply: its RPCs are waited for and
         /// executed until it releases the tick or its hold runs out of time, so that a program can
         /// read the game state, compute with it and write the result back within one tick.
         /// </summary>
-        void UpdateRPCs ()
+        void UpdateRPCs (long allowance)
         {
             rpcTimer.Reset ();
             rpcTimer.Start ();
-            rpcPollTimeout.Reset ();
+            long rpcStart = Stopwatch.GetTimestamp ();
             rpcPollTimer.Reset ();
             rpcExecTimer.Reset ();
             heldTick = false;
             var config = Configuration.Instance;
-            long maxTimePerUpdateTicks = StopwatchExtensions.MicrosecondsToTicks (MaxTimePerUpdate);
-            long recvTimeoutTicks = StopwatchExtensions.MicrosecondsToTicks (config.RecvTimeout);
+            long maxCallWaitTicks = StopwatchExtensions.MicrosecondsToTicks (config.MaxCallWait);
             ulong rpcsExecuted = 0;
 
             rpcYieldedContinuations.Clear ();
@@ -564,26 +656,26 @@ namespace KRPC
 
             while (true) {
 
-                // Poll for RPCs
+                // Poll for RPCs, waiting for bytes to arrive between polls
                 rpcPollTimer.Start ();
-                rpcPollTimeout.Reset ();
-                rpcPollTimeout.Start ();
                 while (true) {
+                    // Cleared before the poll, so that bytes arriving during it end the wait
+                    Arrivals.Reset ();
                     PollRequests (rpcYieldedContinuations);
                     if (rpcContinuations.Count > 0)
                         break;
                     // Wait for the client to release the tick, so that a call it makes after
-                    // seeing an earlier result is executed in this update
+                    // seeing an earlier result is executed in this update. The client's
+                    // disconnect also sets the signal.
                     if (TickHeld) {
                         heldTick = true;
+                        Arrivals.WaitUntil (tickHoldDeadline);
                         continue;
                     }
-                    if (!config.BlockingRecv)
+                    var waitDeadline = CallWaitDeadline (rpcStart + allowance, maxCallWaitTicks);
+                    if (waitDeadline == 0)
                         break;
-                    if (rpcPollTimeout.ElapsedTicks > recvTimeoutTicks)
-                        break;
-                    if (rpcTimer.ElapsedTicks > maxTimePerUpdateTicks)
-                        break;
+                    Arrivals.WaitUntil (waitDeadline);
                 }
                 rpcPollTimer.Stop ();
 
@@ -602,7 +694,7 @@ namespace KRPC
 
                     // Max exec time exceeded, delay to next update. An update holding a tick
                     // runs for as long as the hold lasts instead.
-                    if (!TickHeld && rpcTimer.ElapsedTicks > maxTimePerUpdateTicks) {
+                    if (!TickHeld && rpcTimer.ElapsedTicks > allowance) {
                         rpcYieldedContinuations.Add (continuation);
                         continue;
                     }
@@ -610,6 +702,9 @@ namespace KRPC
                     // Execute the continuation
                     try {
                         ExecuteContinuation (continuation);
+                        CallWait callWait;
+                        if (callWaits.TryGetValue (continuation.Client.Guid, out callWait))
+                            callWait.ResponseSent (Stopwatch.GetTimestamp ());
                     } catch (YieldException<RequestContinuation> e) {
                         rpcYieldedContinuations.Add (e.Value);
                         ReleaseTickToYield (e.Value.Client);
@@ -631,7 +726,7 @@ namespace KRPC
                     break;
 
                 // Exit if max exec time exceeded
-                if (rpcTimer.ElapsedTicks > maxTimePerUpdateTicks)
+                if (rpcTimer.ElapsedTicks > allowance)
                     break;
             }
 
@@ -645,18 +740,52 @@ namespace KRPC
                 ReleaseTickHold ();
             }
 
+            // Send the responses held back for clients with more requests queued, as a
+            // request left for the next update holds back the responses before it
+            for (int i = 0; i < Servers.Count; i++)
+                Servers [i].InnerServer.Flush ();
+
             // Run yielded continuations on the next update
             var tmp = rpcContinuations;
             rpcContinuations = rpcYieldedContinuations;
             rpcYieldedContinuations = tmp;
 
             rpcTimer.Stop ();
+            if (rpcTimer.ElapsedTicks >= allowance)
+                frameBound = true;
+            PollTicks += rpcPollTimer.ElapsedTicks;
+            ExecTicks += rpcExecTimer.ElapsedTicks;
 
             RPCsExecuted += rpcsExecuted;
             DeferredCalls = (uint)rpcContinuations.Count;
-            TimePerRPCUpdate = (float)rpcTimer.ElapsedSeconds ();
-            PollTimePerRPCUpdate = (float)rpcPollTimer.ElapsedSeconds ();
-            ExecTimePerRPCUpdate = (float)rpcExecTimer.ElapsedSeconds ();
+            frameExec += rpcExecTimer.ElapsedTicks;
+            frameWait += rpcPollTimer.ElapsedTicks;
+        }
+
+        /// <summary>
+        /// The earliest timestamp, before the end of the update's budget, to wait until for a
+        /// client's next call, or zero to wait for none.
+        /// </summary>
+        long CallWaitDeadline (long budgetEnd, long maxCallWait)
+        {
+            long now = Stopwatch.GetTimestamp ();
+            if (now >= budgetEnd)
+                return 0;
+            long earliest = 0;
+            for (int i = 0; i < clientOrder.Count; i++) {
+                CallWait callWait;
+                if (!callWaits.TryGetValue (clientOrder [i].Guid, out callWait))
+                    continue;
+                bool budgetLimited;
+                var deadline = callWait.Deadline (now, budgetEnd - now, maxCallWait, out budgetLimited);
+                if (budgetLimited)
+                    frameBound = true;
+                if (deadline != 0 && (earliest == 0 || deadline < earliest))
+                    earliest = deadline;
+            }
+            if (earliest > budgetEnd)
+                frameBound = true;
+            return earliest == 0 ? 0 : Math.Min (earliest, budgetEnd);
         }
 
         Stopwatch streamTimer = new Stopwatch ();
@@ -714,11 +843,8 @@ namespace KRPC
                                 }
                             }
                         }
-                        var messageStream = client.Stream as IMessageStream;
-                        if (messageStream != null) {
-                            messageStream.Write (streamUpdate);
-                            StreamUpdatesSent++;
-                        }
+                        client.Stream.Write (streamUpdate);
+                        StreamUpdatesSent++;
                         foreach (var stream in clientStreams)
                             if (stream.Changed)
                                 stream.Sent ();
@@ -733,15 +859,16 @@ namespace KRPC
             }
 
             streamTimer.Stop ();
+            StreamTicks += streamTimer.ElapsedTicks;
             StreamEvaluations += evaluations;
-            TimePerStreamUpdate = (float)streamTimer.ElapsedSeconds ();
+            frameStreams += streamTimer.ElapsedTicks;
         }
 
         /// <summary>
         /// Log the end of a stream whose last update carries an error. An event that has
         /// finished is the normal end, so only its description is given.
         /// </summary>
-        static void LogStreamEnded (IClient<Request,Response> client, ulong id, Error error)
+        static void LogStreamEnded (IClient<IMessageStream> client, ulong id, Error error)
         {
             var finished = error.Service == "KRPC" && error.Exception == "StreamRemovedException";
             var text = new StringBuilder ("Removed stream " + id + " for client " + client.Label () + ": ");
@@ -768,7 +895,7 @@ namespace KRPC
                 throw new InvalidOperationException (
                     "The tick can only be held by a client making a call, " +
                     "not by a stream or an event");
-            IClient<Request,Response> client;
+            IClient<IMessageStream> client;
             if (!clients.TryGetValue (caller.Guid, out client))
                 throw new InvalidOperationException (
                     "No client is connected with this identifier");
@@ -854,7 +981,7 @@ namespace KRPC
         /// prevents, so waiting the hold out would leave the client and the game waiting for
         /// each other until the timeout.
         /// </summary>
-        void ReleaseTickToYield (IClient<Request,Response> client)
+        void ReleaseTickToYield (IClient<IMessageStream> client)
         {
             if (tickHoldClient == null || tickHoldClient.Guid != client.Guid)
                 return;
@@ -876,7 +1003,7 @@ namespace KRPC
         /// </summary>
         internal ulong AddStream (IClient caller, Service.Stream stream)
         {
-            IClient<Request,Response> client;
+            IClient<IMessageStream> client;
             if (!clients.TryGetValue (caller.Guid, out client))
                 throw new InvalidOperationException ("No client is connected with this identifier");
 
@@ -921,7 +1048,7 @@ namespace KRPC
         /// </summary>
         Service.Stream GetStream (IClient caller, ulong streamId)
         {
-            IClient<Request,Response> client;
+            IClient<IMessageStream> client;
             if (!clients.TryGetValue (caller.Guid, out client))
                 throw new InvalidOperationException ("No client is connected with this identifier");
             if (streamId >= nextStreamId)
@@ -934,19 +1061,17 @@ namespace KRPC
         /// <summary>
         /// Remove a client's stream. Returns false if the client has no stream with the id.
         /// </summary>
-        bool RemoveStreamInternal (IClient<Request,Response> client, ulong id)
+        bool RemoveStreamInternal (IClient<IMessageStream> client, ulong id)
         {
             if (!streams.ContainsKey (client) || !streams [client].ContainsKey (id))
                 return false;
             streams [client].Remove (id);
-            var stream = client.Stream as IMessageStream;
-            if (stream != null)
-                stream.StreamRemoved (id);
+            client.Stream.StreamRemoved (id);
             Streams--;
             return true;
         }
 
-        HashSet<IClient<Request,Response>> pollRequestsCurrentClients = new HashSet<IClient<Request, Response>> ();
+        HashSet<IClient<IMessageStream>> pollRequestsCurrentClients = new HashSet<IClient<IMessageStream>> ();
 
         /// <summary>
         /// Poll connected clients for new requests.
@@ -955,20 +1080,22 @@ namespace KRPC
         /// </summary>
         void PollRequests (IList<RequestContinuation> yieldedContinuations)
         {
-            if (clientScheduler.Empty)
+            if (clientOrder.Count == 0)
                 return;
             pollRequestsCurrentClients.Clear ();
             for (int i = 0; i < rpcContinuations.Count; i++)
                 pollRequestsCurrentClients.Add (rpcContinuations [i].Client);
             for (int i = 0; i < yieldedContinuations.Count; i++)
                 pollRequestsCurrentClients.Add (yieldedContinuations [i].Client);
-            var item = clientScheduler.Items.First;
-            while (item != null) {
-                var client = item.Value;
+            for (int i = 0; i < clientOrder.Count; i++) {
+                var client = clientOrder [i];
                 var stream = client.Stream;
                 try {
                     if (!pollRequestsCurrentClients.Contains (client) && stream.DataAvailable) {
                         Request request = stream.Read ();
+                        CallWait callWait;
+                        if (callWaits.TryGetValue (client.Guid, out callWait))
+                            callWait.RequestArrived (request.Arrived != 0 ? request.Arrived : Stopwatch.GetTimestamp ());
                         EventHandlerExtensions.Invoke (OnClientActivity, this, new ClientActivityEventArgs (client));
                         rpcContinuations.Add (new RequestContinuation (client, request));
                     }
@@ -977,15 +1104,8 @@ namespace KRPC
                     // connection logs the end of the session
                     if (Logger.ShouldLog (Logger.Severity.Debug))
                         Logger.WriteLine ("Failed to read a request from client " + client.Label () + ": " + e, Logger.Severity.Debug);
-                    var messageStream = client.Stream as IMessageStream;
-                    if (messageStream != null) {
-                        messageStream.Disconnect (DisconnectReason.MalformedMessage, "Failed to read a request: " + e.Message);
-                    } else {
-                        Logger.WriteLine ("Failed to read a request from client " + client.Label () + ": " + e.Message, Logger.Severity.Warning);
-                        client.Stream.Close ();
-                    }
+                    client.Stream.Disconnect (DisconnectReason.MalformedMessage, "Failed to read a request: " + e.Message);
                 }
-                item = item.Next;
             }
         }
 
@@ -1005,8 +1125,6 @@ namespace KRPC
                 response = continuation.Run ();
             } catch (YieldException) {
                 throw;
-            } catch (RPCException e) {
-                response = new Response { Id = continuation.Id, Error = Service.Services.Instance.HandleException (e) };
             } catch (System.Exception e) {
                 response = new Response { Id = continuation.Id, Error = Service.Services.Instance.HandleException (e) };
             } finally {

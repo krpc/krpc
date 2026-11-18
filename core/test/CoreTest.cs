@@ -15,7 +15,7 @@ namespace KRPC.Test
         // can be simulated without any network activity.
         sealed class TestServer
         {
-            readonly Mock<IServer<Request,Response>> messageServer = new Mock<IServer<Request,Response>> ();
+            readonly Mock<IMessageServer> messageServer = new Mock<IMessageServer> ();
             bool running;
 
             public TestServer (bool failsToStart = false)
@@ -95,11 +95,11 @@ namespace KRPC.Test
         {
             var core = Core.Instance;
             var config = Configuration.Instance;
-            var blockingRecv = config.BlockingRecv;
+            var maxCallWait = config.MaxCallWait;
             var enabled = Logger.Enabled;
             var level = Logger.Level;
             var writer = Logger.Writer;
-            config.BlockingRecv = false;
+            config.MaxCallWait = 0;
             Logger.Enabled = true;
             Logger.Level = Logger.Severity.Debug;
             Logger.Writer = (message, severity) => { };
@@ -114,7 +114,7 @@ namespace KRPC.Test
             } finally {
                 core.ClientDisconnected (client);
                 updateTime.Restore ();
-                config.BlockingRecv = blockingRecv;
+                config.MaxCallWait = maxCallWait;
                 Logger.Enabled = enabled;
                 Logger.Level = level;
                 Logger.Writer = writer;
@@ -122,35 +122,35 @@ namespace KRPC.Test
         }
 
         [Test]
-        public void AdaptiveRateControlKeepsTheConfiguredMaxTimePerUpdate ()
+        public void AdaptiveRateControlKeepsTheConfiguredMaxTimePerFrame ()
         {
             var core = Core.Instance;
             var config = Configuration.Instance;
-            var blockingRecv = config.BlockingRecv;
-            var maxTimePerUpdate = config.MaxTimePerUpdate;
+            var maxCallWait = config.MaxCallWait;
+            var maxTimePerFrame = config.MaxTimePerFrame;
             var adaptiveRateControl = config.AdaptiveRateControl;
-            config.BlockingRecv = false;
+            config.MaxCallWait = 0;
             config.AdaptiveRateControl = true;
-            config.MaxTimePerUpdate = 5000;
+            config.MaxTimePerFrame = 5000;
             try {
-                Assert.AreEqual (5000, core.MaxTimePerUpdate);
-                // An idle update moves the working limit off the configured one, in either direction
+                Assert.AreEqual (5000, core.BudgetPerFrame);
                 core.Update ();
-                Assert.AreEqual (5000, config.MaxTimePerUpdate);
-                Assert.AreNotEqual (5000, core.MaxTimePerUpdate);
+                Assert.AreEqual (5000, config.MaxTimePerFrame);
 
-                config.MaxTimePerUpdate = 2000;
-                Assert.AreEqual (2000, core.MaxTimePerUpdate);
-
-                core.Update ();
-                Assert.AreNotEqual (2000, core.MaxTimePerUpdate);
+                // A change to the settings restarts the budget from the maximum
+                config.MaxTimePerFrame = 2000;
+                Assert.AreEqual (2000, core.BudgetPerFrame);
                 config.AdaptiveRateControl = false;
-                Assert.AreEqual (2000, core.MaxTimePerUpdate);
+                Assert.AreEqual (2000, core.BudgetPerFrame);
                 core.Update ();
-                Assert.AreEqual (2000, core.MaxTimePerUpdate);
+                Assert.AreEqual (2000, core.BudgetPerFrame);
+
+                // At most one second
+                config.MaxTimePerFrame = 5000000;
+                Assert.AreEqual (1000000, core.BudgetPerFrame);
             } finally {
-                config.BlockingRecv = blockingRecv;
-                config.MaxTimePerUpdate = maxTimePerUpdate;
+                config.MaxCallWait = maxCallWait;
+                config.MaxTimePerFrame = maxTimePerFrame;
                 config.AdaptiveRateControl = adaptiveRateControl;
             }
         }

@@ -27,12 +27,19 @@ namespace KRPC
 
         public sealed class Server
         {
-            [Persistent] string id = Guid.NewGuid ().ToString ();
-            [Persistent] string name = "TCP/IP Server";
-            [Persistent] string protocol = Protocol.ProtocolBuffersOverTCP.ToString ();
-            [Persistent] List<KeyValuePair> settings = new List<KeyValuePair> {
-                new KeyValuePair {key = "tcpip_address", value = "127.0.0.1"},
-                new KeyValuePair {key = "tcpip_port", value = "50000"}};
+            [Persistent] string id;
+            [Persistent] string name;
+            [Persistent] string protocol;
+            [Persistent] List<KeyValuePair> settings;
+
+            // A field missing from the file keeps the default TCP/IP server's value. The
+            // settings start empty, as loading an empty settings node keeps the list as it is.
+            // A missing setting takes its default when the server is created.
+            public Server ()
+            {
+                BeforeSave (new Configuration.Server ());
+                settings = new List<KeyValuePair> ();
+            }
 
             public void BeforeSave (Configuration.Server server)
             {
@@ -73,10 +80,10 @@ namespace KRPC
         [Persistent] bool pauseServerWithGame;
         [Persistent] string logLevel = Logger.Severity.Info.ToString ();
         [Persistent] bool verboseErrors;
-        [Persistent] uint maxTimePerUpdate;
         [Persistent] bool adaptiveRateControl;
-        [Persistent] bool blockingRecv;
-        [Persistent] uint recvTimeout;
+        [Persistent] uint targetFrameRate;
+        [Persistent] uint maxTimePerFrame;
+        [Persistent] uint maxCallWait;
         [Persistent] uint tickHoldTimeout;
 
         public ConfigurationFile (string filePath, Configuration configuration) : base (filePath, "KRPCConfiguration")
@@ -113,10 +120,10 @@ namespace KRPC
             pauseServerWithGame = Configuration.PauseServerWithGame;
             logLevel = Logger.Level.ToString ();
             verboseErrors = Configuration.VerboseErrors;
-            maxTimePerUpdate = Configuration.MaxTimePerUpdate;
             adaptiveRateControl = Configuration.AdaptiveRateControl;
-            blockingRecv = Configuration.BlockingRecv;
-            recvTimeout = Configuration.RecvTimeout;
+            targetFrameRate = Configuration.TargetFrameRate;
+            maxTimePerFrame = Configuration.MaxTimePerFrame;
+            maxCallWait = Configuration.MaxCallWait;
             tickHoldTimeout = Configuration.TickHoldTimeout;
 
         }
@@ -147,10 +154,12 @@ namespace KRPC
                 Logger.Level = Logger.Severity.Info;
             }
             Configuration.VerboseErrors = verboseErrors;
-            Configuration.MaxTimePerUpdate = maxTimePerUpdate;
             Configuration.AdaptiveRateControl = adaptiveRateControl;
-            Configuration.BlockingRecv = blockingRecv;
-            Configuration.RecvTimeout = recvTimeout;
+            Configuration.TargetFrameRate = Math.Max (
+                KRPC.Configuration.TargetFrameRateMin, Math.Min (KRPC.Configuration.TargetFrameRateMax, targetFrameRate));
+            Configuration.MaxTimePerFrame = Math.Max (
+                KRPC.Configuration.MaxTimePerFrameMin, Math.Min (KRPC.Configuration.MaxTimePerFrameMax, maxTimePerFrame));
+            Configuration.MaxCallWait = maxCallWait;
             Configuration.TickHoldTimeout = tickHoldTimeout;
             Logger.WriteLine ("Loaded configuration", Logger.Severity.Debug);
         }

@@ -100,15 +100,6 @@ namespace KRPC.Utils
         }
 
         /// <summary>
-        /// Remove all objects matching the predicate, without invoking the release
-        /// action.
-        /// </summary>
-        public void RemoveAll (Predicate<T> predicate)
-        {
-            LetGo (entries.RemoveAll (x => predicate (x.Object)));
-        }
-
-        /// <summary>
         /// Remove the objects that stand for something the game has destroyed, without
         /// invoking the release action: what they held is already gone, so there is
         /// nothing left to tear down. An object that does not say what the game holds for

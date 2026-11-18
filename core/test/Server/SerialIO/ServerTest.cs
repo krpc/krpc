@@ -1,6 +1,11 @@
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading;
+using Google.Protobuf;
+using KRPC.Server;
 using KRPC.Server.SerialIO;
+using Moq;
 using NUnit.Framework;
 using ContentCase = KRPC.Schema.KRPC.Message.ContentOneofCase;
 using Reason = KRPC.Schema.KRPC.Disconnect.Types.Reason;
@@ -14,6 +19,53 @@ namespace KRPC.Test.Server.SerialIO
         static MessageHarness Harness ()
         {
             return new MessageHarness (byteServer => new KRPC.Server.SerialIO.Server (byteServer));
+        }
+
+        static byte[] Delimited (Schema.KRPC.Message message)
+        {
+            using (var stream = new MemoryStream ()) {
+                message.WriteDelimitedTo (stream);
+                return stream.ToArray ();
+            }
+        }
+
+        static void WaitFor (System.Func<bool> condition)
+        {
+            var timer = Stopwatch.StartNew ();
+            while (!condition ()) {
+                if (timer.ElapsedMilliseconds > 5000)
+                    Assert.Fail ("Timed out waiting for the port");
+                Thread.Sleep (1);
+            }
+        }
+
+        [Test]
+        public void RequestsAreReadOnThePortsReadThread ()
+        {
+            var testPort = new TestPort ();
+            var port = new BufferedPort (testPort);
+            port.Open ();
+            try {
+                var byteServer = new Mock<IServer<IByteStream>> ();
+                var server = new KRPC.Server.SerialIO.Server (byteServer.Object);
+                server.Start ();
+                var byteClient = new ByteClient (port);
+                byteServer.Raise (m => m.OnClientConnected += null, new ClientConnectedEventArgs<IByteStream> (byteClient));
+                testPort.QueueRead (Delimited (MessageHarness.ConnectionRequest (2)));
+                WaitFor (() => {
+                    server.Update ();
+                    return server.Clients.Any ();
+                });
+                var client = server.Clients.Single ();
+                var request = Delimited (MessageHarness.Request (5));
+                var expected = byteClient.Stream.BytesRead + (ulong)request.Length;
+                testPort.QueueRead (request);
+                // Nothing on this thread reads from the port
+                WaitFor (() => byteClient.Stream.BytesRead == expected);
+                Assert.AreEqual (5, client.Stream.Read ().Id);
+            } finally {
+                port.Close ();
+            }
         }
 
         [Test]

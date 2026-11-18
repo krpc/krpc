@@ -2127,7 +2127,7 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
 
 
-.. class:: ClientInfo(id, name, address, protocol_version)
+.. class:: ClientInfo(id, name, address)
 
    A client connected to the server.
 
@@ -2152,41 +2152,36 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
       :rtype: str
 
-   .. attribute:: protocol_version
 
-      The protocol version of the client's connection.
-
-      :rtype: int
-
-
-.. class:: ServerSettings(max_time_per_update, adaptive_rate_control, blocking_recv, recv_timeout, tick_hold_timeout)
+.. class:: ServerSettings(adaptive_rate_control, target_frame_rate, max_time_per_frame, max_call_wait, tick_hold_timeout)
 
    The settings that control how the server executes calls.
 
    .. note::
 
       See :attr:`ServerStatus.settings`.
-   .. attribute:: max_time_per_update
+   .. attribute:: adaptive_rate_control
 
-      The current maximum time spent executing calls per update, in microseconds.
+      Whether the server adapts its time per frame to hold the frame rate at
+      :attr:`ServerSettings.target_frame_rate`.
+
+      :rtype: bool
+
+   .. attribute:: target_frame_rate
+
+      The lowest frame rate the server's work pushes the game to, in frames per second.
 
       :rtype: int
 
-   .. attribute:: adaptive_rate_control
+   .. attribute:: max_time_per_frame
 
-      Whether the server adjusts :attr:`ServerSettings.max_time_per_update` to hold the frame rate.
+      The server's budget per frame, or its ceiling with adaptive rate control, in microseconds.
 
-      :rtype: bool
+      :rtype: int
 
-   .. attribute:: blocking_recv
+   .. attribute:: max_call_wait
 
-      Whether the server waits for the next call in an update.
-
-      :rtype: bool
-
-   .. attribute:: recv_timeout
-
-      The time the server waits for the next call, in microseconds.
+      The longest the server waits for a client's next call, in microseconds.
 
       :rtype: int
 
@@ -2197,7 +2192,7 @@ Main kRPC service, used by clients to interact with basic server functionality.
       :rtype: int
 
 
-.. class:: ServerStatistics(bytes_read, bytes_written, bytes_read_rate, bytes_written_rate, rpcs_executed, rpc_rate, time_per_rpc_update, poll_time_per_rpc_update, exec_time_per_rpc_update, deferred_calls, streams, stream_evaluations, stream_evaluation_rate, stream_updates_sent, time_per_stream_update)
+.. class:: ServerStatistics(bytes_read, bytes_written, bytes_read_rate, bytes_written_rate, rpcs_executed, rpc_rate, frame_rate, time_per_frame, exec_time_per_frame, wait_time_per_frame, stream_time_per_frame, budget_per_frame, median_turnaround, deferred_calls, streams, stream_evaluations, stream_evaluation_rate, stream_updates_sent)
 
    The performance statistics of the server.
 
@@ -2240,21 +2235,47 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
       :rtype: float
 
-   .. attribute:: time_per_rpc_update
+   .. attribute:: frame_rate
 
-      The time spent receiving and executing calls per update, in seconds.
-
-      :rtype: float
-
-   .. attribute:: poll_time_per_rpc_update
-
-      The time spent receiving calls per update, in seconds.
+      The game's frame rate, in frames per second.
 
       :rtype: float
 
-   .. attribute:: exec_time_per_rpc_update
+   .. attribute:: time_per_frame
 
-      The time spent executing calls per update, in seconds.
+      The server's time per frame, in seconds: executing calls, waiting for them and
+      updating streams.
+
+      :rtype: float
+
+   .. attribute:: exec_time_per_frame
+
+      The time spent executing calls per frame, in seconds.
+
+      :rtype: float
+
+   .. attribute:: wait_time_per_frame
+
+      The time spent waiting for calls per frame, in seconds.
+
+      :rtype: float
+
+   .. attribute:: stream_time_per_frame
+
+      The time spent updating streams per frame, in seconds.
+
+      :rtype: float
+
+   .. attribute:: budget_per_frame
+
+      The time the server may spend per frame, in seconds.
+
+      :rtype: float
+
+   .. attribute:: median_turnaround
+
+      The median time between a response and the client's next call, over the
+      clients' recent calls, in seconds.
 
       :rtype: float
 
@@ -2288,12 +2309,6 @@ Main kRPC service, used by clients to interact with basic server functionality.
       The number of stream updates sent to clients.
 
       :rtype: int
-
-   .. attribute:: time_per_stream_update
-
-      The time spent updating streams per update, in seconds.
-
-      :rtype: float
 
 
 .. class:: ServerStatus(version, protocol_version, settings, statistics)

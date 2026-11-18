@@ -44,9 +44,6 @@ namespace KRPC.Test.Server.LocalSocket
             var server = new LocalSocketServer (path);
             server.OnStarted += (s, e) => serverStarted = true;
             server.OnStopped += (s, e) => serverStopped = true;
-            server.OnClientRequestingConnection += (s, e) => {
-                return;
-            };
             Assert.IsFalse (server.Running);
             server.Start ();
             Assert.IsTrue (server.Running);
@@ -70,9 +67,6 @@ namespace KRPC.Test.Server.LocalSocket
             var server = new LocalSocketServer (path);
             server.OnStarted += (s, e) => serverStarted++;
             server.OnStopped += (s, e) => serverStopped++;
-            server.OnClientRequestingConnection += (s, e) => {
-                return;
-            };
             Assert.IsFalse (server.Running);
             for (int i = 0; i < 5; i++) {
                 server.Start ();
@@ -89,13 +83,8 @@ namespace KRPC.Test.Server.LocalSocket
         {
             var server = new LocalSocketServer (path);
 
-            bool clientRequestingConnection = false;
             bool clientConnected = false;
             bool clientDisconnected = false;
-            server.OnClientRequestingConnection += (s, e) => {
-                e.Request.Allow ();
-                clientRequestingConnection = true;
-            };
             server.OnClientConnected += (s, e) => clientConnected = true;
             server.OnClientDisconnected += (s, e) => clientDisconnected = true;
 
@@ -114,31 +103,8 @@ namespace KRPC.Test.Server.LocalSocket
 
             server.Stop ();
 
-            Assert.IsTrue (clientRequestingConnection);
             Assert.IsTrue (clientConnected);
             Assert.IsTrue (clientDisconnected);
-        }
-
-        [Test]
-        public void StillPendingByDefault ()
-        {
-            var server = new LocalSocketServer (path);
-
-            bool clientRequestingConnection = false;
-            server.OnClientRequestingConnection += (s, e) => clientRequestingConnection = true;
-            server.OnClientConnected += (s, e) => Assert.Fail ();
-            server.OnClientDisconnected += (s, e) => Assert.Fail ();
-
-            server.Start ();
-
-            var client = Connect ();
-            UpdateUntil (server, () => clientRequestingConnection);
-
-            Assert.IsTrue (clientRequestingConnection);
-            Assert.AreEqual (0, server.Clients.Count ());
-
-            server.Stop ();
-            client.Close ();
         }
 
         [Test]
@@ -148,7 +114,6 @@ namespace KRPC.Test.Server.LocalSocket
 
             bool clientConnected = false;
             bool clientDisconnected = false;
-            server.OnClientRequestingConnection += (s, e) => e.Request.Allow ();
             server.OnClientConnected += (s, e) => clientConnected = true;
             server.OnClientDisconnected += (s, e) => clientDisconnected = true;
 
@@ -173,7 +138,6 @@ namespace KRPC.Test.Server.LocalSocket
         {
             var server = new LocalSocketServer (path);
             bool clientConnected = false;
-            server.OnClientRequestingConnection += (s, e) => e.Request.Allow ();
             server.OnClientConnected += (s, e) => clientConnected = true;
             server.Start ();
 
@@ -184,7 +148,7 @@ namespace KRPC.Test.Server.LocalSocket
             client.Send (new byte [] { 1, 2, 3 });
             UpdateUntil (server, () => serverClient.Stream.DataAvailable);
             var buffer = new byte [3];
-            Assert.AreEqual (3, serverClient.Stream.Read (buffer, 0));
+            Assert.AreEqual (3, serverClient.Stream.Read (buffer, 0, buffer.Length));
             CollectionAssert.AreEqual (new byte [] { 1, 2, 3 }, buffer);
 
             serverClient.Stream.Write (new byte [] { 4, 5 });
@@ -207,9 +171,6 @@ namespace KRPC.Test.Server.LocalSocket
             File.WriteAllText (path, string.Empty);
             Assert.IsTrue (File.Exists (path));
             var server = new LocalSocketServer (path);
-            server.OnClientRequestingConnection += (s, e) => {
-                return;
-            };
             server.Start ();
             Assert.IsTrue (server.Running);
             server.Stop ();
@@ -221,14 +182,8 @@ namespace KRPC.Test.Server.LocalSocket
             // The socket file alone does not say whether the server that made it is still
             // there, and taking the path from a running server would leave it unreachable
             var running = new LocalSocketServer (path);
-            running.OnClientRequestingConnection += (s, e) => {
-                return;
-            };
             running.Start ();
             var second = new LocalSocketServer (path);
-            second.OnClientRequestingConnection += (s, e) => {
-                return;
-            };
             Assert.Throws<ServerException> (() => second.Start ());
             Assert.IsFalse (second.Running);
             Assert.IsTrue (running.Running);
@@ -245,9 +200,6 @@ namespace KRPC.Test.Server.LocalSocket
             // the server does not remove it
             File.WriteAllText (path, "not a socket");
             var server = new LocalSocketServer (path);
-            server.OnClientRequestingConnection += (s, e) => {
-                return;
-            };
             Assert.Throws<ServerException> (() => server.Start ());
             Assert.IsFalse (server.Running);
             Assert.AreEqual ("not a socket", File.ReadAllText (path));
@@ -258,9 +210,6 @@ namespace KRPC.Test.Server.LocalSocket
         {
             Directory.CreateDirectory (path);
             var server = new LocalSocketServer (path);
-            server.OnClientRequestingConnection += (s, e) => {
-                return;
-            };
             Assert.Throws<ServerException> (() => server.Start ());
             Assert.IsFalse (server.Running);
             Assert.IsTrue (Directory.Exists (path));
@@ -274,9 +223,6 @@ namespace KRPC.Test.Server.LocalSocket
             // so whether a server is there stays unknown
             Link ("/nowhere-at-all", path);
             var server = new LocalSocketServer (path);
-            server.OnClientRequestingConnection += (s, e) => {
-                return;
-            };
             var exn = Assert.Throws<ServerException> (() => server.Start ());
             Assert.That (exn.Message, Does.Contain ("Could not find out"));
             Assert.IsFalse (server.Running);
@@ -292,9 +238,6 @@ namespace KRPC.Test.Server.LocalSocket
             try {
                 Link (target, path);
                 var server = new LocalSocketServer (path);
-                server.OnClientRequestingConnection += (s, e) => {
-                    return;
-                };
                 Assert.Throws<ServerException> (() => server.Start ());
                 Assert.AreEqual ("precious", File.ReadAllText (target));
             } finally {
@@ -312,20 +255,10 @@ namespace KRPC.Test.Server.LocalSocket
         public void StopRemovesTheSocketFile ()
         {
             var server = new LocalSocketServer (path);
-            server.OnClientRequestingConnection += (s, e) => {
-                return;
-            };
             server.Start ();
             Assert.IsTrue (File.Exists (path));
             server.Stop ();
             Assert.IsFalse (File.Exists (path));
-        }
-
-        [Test]
-        public void StartWithNoRequestHandlerFails ()
-        {
-            var server = new LocalSocketServer (path);
-            Assert.Throws<KRPC.Server.ServerException> (() => server.Start ());
         }
 
         [Test]
@@ -338,14 +271,13 @@ namespace KRPC.Test.Server.LocalSocket
             Assert.IsTrue (longPath.Length <= LocalSocketServer.MaximumPathLength);
             Assert.IsTrue (LocalSocketServer.PathLength (longPath) > LocalSocketServer.MaximumPathLength);
             var server = new LocalSocketServer (longPath);
-            server.OnClientRequestingConnection += (s, e) => e.Request.Allow ();
             var exn = Assert.Throws<KRPC.Server.ServerException> (() => server.Start ());
             StringAssert.Contains ("longer than the", exn.Message);
         }
 
         // Calls server.Update repeatedly every 50 ms, until predicate is true
         // or up to a maximum number of iterations, after which point the test fails
-        static void UpdateUntil (KRPC.Server.IServer<byte, byte> server, Func<bool> predicate, int iterations = 10)
+        static void UpdateUntil (KRPC.Server.IServer<KRPC.Server.IByteStream> server, Func<bool> predicate, int iterations = 10)
         {
             for (int i = 0; i < iterations; i++) {
                 server.Update ();

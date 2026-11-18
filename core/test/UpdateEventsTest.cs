@@ -8,7 +8,7 @@ namespace KRPC.Test
     public class UpdateEventsTest
     {
         Core core;
-        bool blockingRecv;
+        uint maxCallWait;
         uint tickHoldTimeout;
         PinnedUpdateTime updateTime;
         readonly List<ScriptedClient> clients = new List<ScriptedClient> ();
@@ -20,9 +20,9 @@ namespace KRPC.Test
         {
             core = Core.Instance;
             var config = Configuration.Instance;
-            blockingRecv = config.BlockingRecv;
+            maxCallWait = config.MaxCallWait;
             tickHoldTimeout = config.TickHoldTimeout;
-            config.BlockingRecv = false;
+            config.MaxCallWait = 0;
             updateTime = new PinnedUpdateTime ();
             beforeCalls = 0;
             afterCalls = 0;
@@ -39,7 +39,7 @@ namespace KRPC.Test
                 core.ClientDisconnected (client);
             clients.Clear ();
             var config = Configuration.Instance;
-            config.BlockingRecv = blockingRecv;
+            config.MaxCallWait = maxCallWait;
             config.TickHoldTimeout = tickHoldTimeout;
             updateTime.Restore ();
         }

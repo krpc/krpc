@@ -7,9 +7,8 @@ using NUnit.Framework;
 namespace KRPC.Test.Server.LocalSocket
 {
     /// <summary>
-    /// The local socket transport reuses TCPStream and the connectedness check from
-    /// TCPClient, both of which rely on how a socket reports that data is waiting and
-    /// that the peer has gone. These tests pin that behavior down for a unix domain
+    /// The local socket transport shares SocketStream and SocketClient with TCP/IP, which
+    /// rely on how a socket reports that data is waiting and that the peer has gone. These tests pin that behavior down for a unix domain
     /// socket, so a runtime where it differs fails here rather than somewhere obscure.
     /// </summary>
     [TestFixture]

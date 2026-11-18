@@ -6,7 +6,7 @@ namespace KRPC.Test.Server
     // A concrete client stand-in: framework-generated mocks do not implement the
     // equality comparisons the server code under test relies on, so tests that
     // compare clients use this class instead.
-    sealed class TestClient : IClient<byte,byte>
+    sealed class TestClient : IClient<IByteStream>
     {
         readonly Guid guid;
 
@@ -30,7 +30,7 @@ namespace KRPC.Test.Server
             get { return "TestClientAddress"; }
         }
 
-        public IStream<byte,byte> Stream {
+        public IByteStream Stream {
             get { return stream; }
         }
 
@@ -39,7 +39,7 @@ namespace KRPC.Test.Server
         /// </summary>
         public bool PeerClosed { get; set; }
 
-        // As TCPClient, which sees a closed peer only once its unread bytes are read
+        // As SocketClient, which sees a closed peer only once its unread bytes are read
         public bool Connected {
             get { return !stream.Closed && !(PeerClosed && !stream.DataAvailable); }
         }
@@ -54,7 +54,7 @@ namespace KRPC.Test.Server
             return obj != null && Equals (obj as TestClient);
         }
 
-        public bool Equals (IClient<byte,byte> other)
+        public bool Equals (IClient<IByteStream> other)
         {
             if (other == null)
                 return false;

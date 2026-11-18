@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using KRPC.Utils;
@@ -17,13 +18,8 @@ namespace KRPC.Server.SerialIO
     /// </summary>
     sealed class BufferedPort
     {
-        // Interval at which the read thread checks the port for received data. Reads are
-        // only issued for data the port already holds, so that they return without engaging
-        // the port's timeout handling, which can lose data that arrives as a read gives up
-        const int pollInterval = 10;
-        // Time a read is allowed to take before it fails with TimeoutException. This guards
-        // against a port that misreports how much data it holds, which would leave the read
-        // thread stuck in a read that never returns
+        // Time the read thread waits in a read for data before it gives up and checks whether
+        // the port is closing
         const int readTimeout = 100;
         // Time Close waits for each background thread to finish before abandoning it.
         const int shutdownTimeout = 500;
@@ -47,6 +43,8 @@ namespace KRPC.Server.SerialIO
         bool opened;
         volatile bool closing;
         volatile bool failed;
+        long lastArrival;
+        volatile Action receivedHandler;
 
         public BufferedPort (IPort innerPort)
         {
@@ -65,6 +63,20 @@ namespace KRPC.Server.SerialIO
         /// </summary>
         public bool IsOpen {
             get { return !failed && port.IsOpen; }
+        }
+
+        /// <summary>
+        /// The <see cref="Stopwatch.GetTimestamp"/> at which bytes last arrived.
+        /// </summary>
+        public long LastArrival {
+            get { return Interlocked.Read (ref lastArrival); }
+        }
+
+        /// <summary>
+        /// Run on the read thread each time bytes arrive, before the server's wake event is set.
+        /// </summary>
+        public Action Received {
+            set { receivedHandler = value; }
         }
 
         /// <summary>
@@ -110,8 +122,14 @@ namespace KRPC.Server.SerialIO
                 Monitor.PulseAll (sendingLock);
             // Wait for the write thread first, so that it can send what is left in the send
             // buffer. A thread that does not finish in time fails its transfer when the port
-            // is closed under it
+            // is closed under it.
             JoinThread (writeThread);
+            // A read that waits with a timeout ends at it. The port closes only after that, as
+            // a read still waiting on a closed port could take the bytes of another file that
+            // reuses its descriptor. Closing the port ends a read that waits with no timeout.
+            if (readThread != null)
+                readThread.Join (2 * readTimeout);
+            port.Close ();
             JoinThread (readThread);
             writeThread = null;
             readThread = null;
@@ -119,7 +137,6 @@ namespace KRPC.Server.SerialIO
                 received.Clear ();
             lock (sendingLock)
                 sending.Clear ();
-            port.Close ();
         }
 
         /// <summary>
@@ -189,26 +206,29 @@ namespace KRPC.Server.SerialIO
                     return;
                 int size;
                 try {
-                    if (port.BytesToRead == 0) {
-                        Thread.Sleep (pollInterval);
-                        continue;
-                    }
                     size = port.Read (buffer, 0, buffer.Length);
                 } catch (TimeoutException) {
-                    // The port did not hand over the data it reported holding
+                    // Nothing arrived
                     continue;
                 } catch (System.Exception exn) {
-                    Fail (exn);
+                    // A read ended by closing the port is not a failure
+                    if (!closing)
+                        Fail (exn);
                     return;
                 }
                 if (size <= 0) {
-                    // The port reports itself readable but has nothing to give, so the other
-                    // end has gone. Wait before polling again
+                    // A read that returns nothing means the other end has gone. Wait before
+                    // reading again
                     Thread.Sleep (readTimeout);
                     continue;
                 }
+                Interlocked.Exchange (ref lastArrival, Stopwatch.GetTimestamp ());
                 lock (receivedLock)
                     received.Append (buffer, 0, size);
+                var handler = receivedHandler;
+                if (handler != null)
+                    handler ();
+                Arrivals.Set ();
             }
         }
 

@@ -8,7 +8,7 @@ namespace KRPC.Test
     // A client whose requests are handed over one at a time, and only once the server has
     // polled for them often enough. Polling stands in for the time a real client spends
     // between calls, so the measurement is how many updates the calls are spread over
-    sealed class ScriptedClient : IClient<Request,Response>
+    sealed class ScriptedClient : IClient<IMessageStream>
     {
         sealed class ScriptedStream : IMessageStream
         {
@@ -32,8 +32,10 @@ namespace KRPC.Test
             public bool DataAvailable {
                 get {
                     // Counted here, since the server polls for a request while it waits
-                    // for one
+                    // for one. Each poll signals an arrival, as if the request's bytes were
+                    // still coming in, so that the server polls again rather than waiting.
                     polls++;
+                    Arrivals.Set ();
                     if (pollsBeforeGone > 0 && polls > pollsBeforeGone)
                         onPollsBeforeGone ();
                     if (pending.Count == 0)
@@ -75,37 +77,10 @@ namespace KRPC.Test
                 DisconnectedWith = reason;
             }
 
-            public ulong BytesRead { get { return 0; } }
-
-            public ulong BytesWritten { get { return 0; } }
-
-            public void ClearStats ()
-            {
-            }
-
             public void Close ()
             {
             }
 
-            public int Read (Request[] buffer, int offset)
-            {
-                throw new NotSupportedException ();
-            }
-
-            public int Read (Request[] buffer, int offset, int size)
-            {
-                throw new NotSupportedException ();
-            }
-
-            public void Write (Response[] buffer)
-            {
-                throw new NotSupportedException ();
-            }
-
-            public void Write (Response[] buffer, int offset, int size)
-            {
-                throw new NotSupportedException ();
-            }
         }
 
         readonly ScriptedStream stream;
@@ -180,7 +155,7 @@ namespace KRPC.Test
 
         public bool Connected { get; set; }
 
-        public IStream<Request,Response> Stream { get { return stream; } }
+        public IMessageStream Stream { get { return stream; } }
 
         public void Close ()
         {
@@ -189,14 +164,14 @@ namespace KRPC.Test
 
         // The round robin scheduler and the set of clients already being served both
         // compare clients, so identity has to come from the identifier.
-        public bool Equals (IClient<Request,Response> other)
+        public bool Equals (IClient<IMessageStream> other)
         {
             return other != null && Guid == other.Guid;
         }
 
         public override bool Equals (object obj)
         {
-            return Equals (obj as IClient<Request,Response>);
+            return Equals (obj as IClient<IMessageStream>);
         }
 
         public override int GetHashCode ()

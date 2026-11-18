@@ -64,8 +64,29 @@ namespace KRPC.UI
 
         protected abstract void Draw (bool needRescale);
 
+        // The game's loading screen, shown from a scene change's request until some frames
+        // after the new scene has loaded
+        static readonly Func<LoadingBufferMask> loadingScreen =
+            Accessor.StaticGetter<LoadingBufferMask> (typeof (LoadingBufferMask), "Instance");
+
+        /// <summary>
+        /// Whether the game is hiding its own UI: while its loading screen shows, or once the
+        /// player has hidden the UI.
+        /// </summary>
+        static bool GameUIHidden {
+            get {
+                var mask = loadingScreen == null ? null : loadingScreen ();
+                if (mask != null && mask.loadingObject != null && mask.loadingObject.activeSelf)
+                    return true;
+                var ui = KSP.UI.UIMasterController.Instance;
+                return ui != null && !ui.IsUIShowing;
+            }
+        }
+
         public void OnGUI ()
         {
+            if (GameUIHidden)
+                return;
             if (!hasInit) {
                 var skin = Skin.DefaultSkin;
                 Style = new GUIStyle (skin.window);

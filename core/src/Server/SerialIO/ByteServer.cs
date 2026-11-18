@@ -13,7 +13,7 @@ namespace KRPC.Server.SerialIO
     /// <summary>
     /// Byte server implementation over serial I/O.
     /// </summary>
-    public sealed class ByteServer : IServer<byte,byte>
+    public sealed class ByteServer : IServer<IByteStream>
     {
         /// <summary>
         /// Event handler for when the server starts.
@@ -26,29 +26,17 @@ namespace KRPC.Server.SerialIO
         public event EventHandler OnStopped;
 
         /// <summary>
-        /// Event handler for when a new client requests a connection.
-        /// </summary>
-        public event EventHandler<ClientRequestingConnectionEventArgs<byte,byte>> OnClientRequestingConnection;
-
-        /// <summary>
         /// Event handler for when a new client has connected.
         /// </summary>
-        public event EventHandler<ClientConnectedEventArgs<byte,byte>> OnClientConnected;
-
-        /// <summary>
-        /// Event handler when client activity occurs.
-        /// </summary>
-        #pragma warning disable 0067
-        public event EventHandler<ClientActivityEventArgs<byte,byte>> OnClientActivity;
+        public event EventHandler<ClientConnectedEventArgs<IByteStream>> OnClientConnected;
 
         /// <summary>
         /// Event handler when a client disconnects.
         /// </summary>
-        public event EventHandler<ClientDisconnectedEventArgs<byte,byte>> OnClientDisconnected;
+        public event EventHandler<ClientDisconnectedEventArgs<IByteStream>> OnClientDisconnected;
 
         BufferedPort port;
         ByteClient client;
-        ByteClient pendingClient;
         ulong closedClientsBytesRead;
         ulong closedClientsBytesWritten;
 
@@ -72,8 +60,6 @@ namespace KRPC.Server.SerialIO
         /// </summary>
         public void Start ()
         {
-            if (OnClientRequestingConnection == null)
-                throw new ServerException ("Client request handler not set");
             if (Running) {
                 Logger.WriteLine ("SerialIO.Server: start requested, but server is already running", Logger.Severity.Warning);
                 return;
@@ -137,51 +123,26 @@ namespace KRPC.Server.SerialIO
                     Stop ();
                     return;
                 }
-                if (client == null && pendingClient == null && port.BytesAvailable > 0) {
+                if (client == null && port.BytesAvailable > 0) {
                     Logger.WriteLine (
-                        "SerialIO.Server[" + Address + "]: client requesting connection",
+                        "SerialIO.Server[" + Address + "]: client connected",
                         Logger.Severity.Debug);
-                    pendingClient = new ByteClient (port);
+                    client = new ByteClient (port);
+                    EventHandlerExtensions.Invoke (OnClientConnected, this, new ClientConnectedEventArgs<IByteStream> (client));
+                    return;
                 }
             } catch (IOException) {
                 Stop ();
+                return;
             } catch (TimeoutException) {
                 Stop ();
+                return;
             } catch (ObjectDisposedException) {
                 Stop ();
+                return;
             }
 
-            if (client == null && pendingClient != null) {
-                // Trigger OnClientRequestingConnection events to verify the connection
-                var args = new ClientRequestingConnectionEventArgs<byte,byte> (pendingClient);
-                EventHandlerExtensions.Invoke (OnClientRequestingConnection, this, args);
-
-                // Deny the connection
-                if (args.Request.ShouldDeny) {
-                    Logger.WriteLine (
-                        "SerialIO.Server[" + Address + "]: client connection denied",
-                        Logger.Severity.Debug);
-                    DisconnectClient (pendingClient, true);
-                    pendingClient = null;
-                }
-
-                // Allow the connection
-                else if (args.Request.ShouldAllow) {
-                    client = pendingClient;
-                    pendingClient = null;
-                    Logger.WriteLine (
-                        "SerialIO.Server[" + Address + "]: " +
-                        "client connection accepted", Logger.Severity.Debug);
-                    EventHandlerExtensions.Invoke (OnClientConnected, this, new ClientConnectedEventArgs<byte,byte> (client));
-                }
-
-                // Still pending, will either be denied or allowed on a subsequent called to Update
-                else {
-                    Logger.WriteLine (
-                        "SerialIO.Server[" + Address + "]: " +
-                        "client connection still pending", Logger.Severity.Debug);
-                }
-            } else if (client != null && !client.Connected) {
+            if (client != null && !client.Connected) {
                 DisconnectClient (client);
                 client = null;
             }
@@ -236,7 +197,7 @@ namespace KRPC.Server.SerialIO
         /// <summary>
         /// Clients conneted to the server.
         /// </summary>
-        public IEnumerable<IClient<byte,byte>> Clients {
+        public IEnumerable<IClient<IByteStream>> Clients {
             get {
                 if (client != null)
                     yield return client;
@@ -278,18 +239,15 @@ namespace KRPC.Server.SerialIO
                 client.Stream.ClearStats ();
         }
 
-        void DisconnectClient (IClient<byte, byte> _client, bool noEvent = false)
+        void DisconnectClient (IClient<IByteStream> _client, bool noEvent = false)
         {
             var label = _client.Label ();
-            try {
-                var stream = _client.Stream;
-                closedClientsBytesRead += stream.BytesRead;
-                closedClientsBytesWritten += stream.BytesWritten;
-            } catch (ClientDisconnectedException) {
-            }
+            var stream = _client.Stream;
+            closedClientsBytesRead += stream.BytesRead;
+            closedClientsBytesWritten += stream.BytesWritten;
             _client.Close ();
             if (!noEvent)
-                EventHandlerExtensions.Invoke (OnClientDisconnected, this, new ClientDisconnectedEventArgs<byte, byte> (_client));
+                EventHandlerExtensions.Invoke (OnClientDisconnected, this, new ClientDisconnectedEventArgs<IByteStream> (_client));
             Logger.WriteLine ("SerialIO.Server: connection from " + label + " closed", Logger.Severity.Debug);
         }
     }

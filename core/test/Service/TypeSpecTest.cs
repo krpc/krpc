@@ -229,5 +229,32 @@ namespace KRPC.Test.Service
             Assert.AreEqual (0, TypeSpec.Create (typeof(string)).Types.Count);
             Assert.AreEqual (0, TypeSpec.Create (typeof(byte[])).Types.Count);
         }
+
+        [TestCase (typeof(int))]
+        [TestCase (typeof(double?))]
+        [TestCase (typeof(string))]
+        [TestCase (typeof(byte[]))]
+        [TestCase (typeof(TestService.TestEnum))]
+        [TestCase (typeof(IList<int>))]
+        [TestCase (typeof(HashSet<string>))]
+        [TestCase (typeof(IDictionary<string, IList<double>>))]
+        [TestCase (typeof(Tuple<int, string>))]
+        [TestCase (typeof(TestStructWithAnId3))]
+        public void HoldsOnlyValues (Type type)
+        {
+            Assert.IsTrue (TypeSpec.Create (type).HoldsOnlyValues);
+        }
+
+        [TestCase (typeof(TestService.TestClass))]
+        [TestCase (typeof(IList<TestService.TestClass>))]
+        [TestCase (typeof(IDictionary<string, TestService.TestClass>))]
+        [TestCase (typeof(Tuple<int, TestService.TestClass>))]
+        [TestCase (typeof(TestService.TestStruct))]
+        [TestCase (typeof(TestService.TestNestedStruct))]
+        [TestCase (typeof(global::KRPC.Service.Messages.ProcedureCall))]
+        public void HoldsAnObject (Type type)
+        {
+            Assert.IsFalse (TypeSpec.Create (type).HoldsOnlyValues);
+        }
     }
 }

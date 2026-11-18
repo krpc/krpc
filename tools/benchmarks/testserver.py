@@ -72,6 +72,7 @@ class Endpoint:
     def __init__(self, transport, address):
         self.transport = transport
         self.address = address
+        self.process: subprocess.Popen | None = None
 
     def open(self, name):
         """Open a python client on this endpoint."""
@@ -143,12 +144,14 @@ def connect(name, endpoint):
 
 
 @contextlib.contextmanager
-def running(executable, frame_pacing=True, transport=TCP):
-    """Start TestServer for one transport and yield the endpoint it is listening on.
+def running(executable, frame_pacing=True, transport=TCP, extra=()):
+    """Start TestServer for one transport and yield the endpoint it is listening on, with the
+    server's process as its ``process``.
 
     Unpaced, the server runs its update loop as fast as it will go instead of 60 times a
     second, which is what a round trip has to be measured against to be the client's cost
     rather than the rate of the loop it landed in. ``run_client.py`` has the long version.
+    ``extra`` holds more options for the server, such as the game loop it models.
     """
     with _log() as (sink, log):
         with _sockets(transport) as directory:
@@ -162,6 +165,7 @@ def running(executable, frame_pacing=True, transport=TCP):
                 )
             if not frame_pacing:
                 command.append("--no-frame-pacing")
+            command.extend(extra)
             process = subprocess.Popen(
                 command,
                 stdout=sink,
@@ -169,7 +173,9 @@ def running(executable, frame_pacing=True, transport=TCP):
                 env=_environment(),
             )
             try:
-                yield _wait_for_endpoint(process, log, transport)
+                endpoint = _wait_for_endpoint(process, log, transport)
+                endpoint.process = process
+                yield endpoint
             finally:
                 process.terminate()
                 process.wait()
@@ -288,9 +294,9 @@ def environment(conn):
     return {
         "server": status.version,
         "adaptive rate control": str(status.settings.adaptive_rate_control),
-        "max time per update": "%d us" % status.settings.max_time_per_update,
-        "blocking recv": str(status.settings.blocking_recv),
-        "recv timeout": "%d us" % status.settings.recv_timeout,
+        "target frame rate": "%d frames/s" % status.settings.target_frame_rate,
+        "max time per frame": "%d us" % status.settings.max_time_per_frame,
+        "max call wait": "%d us" % status.settings.max_call_wait,
     }
 
 
@@ -299,15 +305,19 @@ def settings(conn, frame_pacing):
 
     Frame pacing is not a server setting and cannot be asked for over the protocol: the game
     paces its updates itself and kRPC cannot opt out there, so it is TestServer's own switch
-    and only whoever started it knows which way it went. ``None`` says nobody here did.
+    and only whoever started it knows which way it went. ``None`` says nobody here did, and
+    a string describes a loop other than the default.
     """
     status = conn.krpc.get_status()
-    pacing = {True: "60 updates/s", False: "off", None: "not known"}[frame_pacing]
+    pacing = frame_pacing
+    if not isinstance(pacing, str):
+        pacing = {True: "60 updates/s", False: "off", None: "not known"}[frame_pacing]
     return ", ".join(
         [
             "frame pacing %s" % pacing,
             "adaptive rate control %s" % status.settings.adaptive_rate_control,
-            "max time per update %d us" % status.settings.max_time_per_update,
-            "recv timeout %d us" % status.settings.recv_timeout,
+            "target frame rate %d frames/s" % status.settings.target_frame_rate,
+            "max time per frame %d us" % status.settings.max_time_per_frame,
+            "max call wait %d us" % status.settings.max_call_wait,
         ]
     )

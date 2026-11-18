@@ -528,6 +528,7 @@ USER_GUIDE = [
         "user-guide/server-side-functions/OutOfFuelCheck",
         "user-guide/server-side-functions/OutOfFuelEvent",
     ),
+    Example("user-guide/server-performance/Statistics", "orbit"),
 ]
 
 CLIENT = [

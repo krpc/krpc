@@ -36,9 +36,11 @@
     <Compile Include="..\InternalsVisibleTo.cs">
       <Link>InternalsVisibleTo.cs</Link>
     </Compile>
+    <Compile Include="CallWait.cs" />
     <Compile Include="Configuration.cs" />
+    <Compile Include="FrameBudget.cs" />
     <Compile Include="Core.cs" />
-    <Compile Include="Server\ByteOutputAdapterStream.cs" />
+    <Compile Include="Server\Arrivals.cs" />
     <Compile Include="Server\ClientActivityEventArgs.cs" />
     <Compile Include="Server\ClientConnectedEventArgs.cs" />
     <Compile Include="Server\ClientConnectionRequest.cs" />
@@ -48,11 +50,9 @@
     <Compile Include="Server\ClientLabel.cs" />
     <Compile Include="Server\ClientRequestingConnectionEventArgs.cs" />
     <Compile Include="Server\DisconnectReason.cs" />
-    <Compile Include="Server\HTTP\MalformedRequestException.cs" />
-    <Compile Include="Server\HTTP\Request.cs" />
-    <Compile Include="Server\HTTP\Response.cs" />
     <Compile Include="Server\IClient.cs" />
     <Compile Include="Server\IHalfClosableStream.cs" />
+    <Compile Include="Server\IReaderThreadStream.cs" />
     <Compile Include="Server\IMessageStream.cs" />
     <Compile Include="Server\IServer.cs" />
     <Compile Include="Server\IStream.cs" />
@@ -64,8 +64,6 @@
     <Compile Include="Server\Protocol.cs" />
     <Compile Include="Server\ProtocolBuffers\Encoder.cs" />
     <Compile Include="Server\ProtocolBuffers\MessageExtensions.cs" />
-    <Compile Include="Server\ProtocolBuffers\Server.cs" />
-    <Compile Include="Server\ProtocolBuffers\Utils.cs" />
     <Compile Include="Server\ProtocolVersion.cs" />
     <Compile Include="Server\SerialIO\BufferedPort.cs" />
     <Compile Include="Server\SerialIO\ByteBuffer.cs" />
@@ -80,25 +78,29 @@
     <Compile Include="Server\ServerException.cs" />
     <Compile Include="Server\ServerStartedEventArgs.cs" />
     <Compile Include="Server\ServerStoppedEventArgs.cs" />
-    <Compile Include="Server\LocalSocket\LocalSocketClient.cs" />
+    <Compile Include="Server\SocketClient.cs" />
+    <Compile Include="Server\SocketServer.cs" />
+    <Compile Include="Server\SocketStream.cs" />
     <Compile Include="Server\LocalSocket\LocalSocketServer.cs" />
     <Compile Include="Server\LocalSocket\UnixEndPoint.cs" />
     <Compile Include="Server\LocalSocket\UnixSocket.cs" />
+    <Compile Include="Server\Delimited\Connection.cs" />
+    <Compile Include="Server\Delimited\Server.cs" />
     <Compile Include="Server\Message\Connection.cs" />
-    <Compile Include="Server\ProtocolBuffers\Connection.cs" />
     <Compile Include="Server\ProtocolBuffers\MessageEnvelope.cs" />
     <Compile Include="Server\ProtocolBuffers\StreamUpdateMessage.cs" />
     <Compile Include="Server\SerialIO\Connection.cs" />
     <Compile Include="Server\TCP\NetworkInformation.cs" />
-    <Compile Include="Server\TCP\TCPClient.cs" />
     <Compile Include="Server\TCP\TCPServer.cs" />
-    <Compile Include="Server\TCP\TCPStream.cs" />
     <Compile Include="Server\WebSockets\Connection.cs" />
     <Compile Include="Server\WebSockets\ConnectionRequest.cs" />
     <Compile Include="Server\WebSockets\Frame.cs" />
     <Compile Include="Server\WebSockets\FramingException.cs" />
     <Compile Include="Server\WebSockets\HandshakeException.cs" />
     <Compile Include="Server\WebSockets\Header.cs" />
+    <Compile Include="Server\WebSockets\HttpRequest.cs" />
+    <Compile Include="Server\WebSockets\HttpResponse.cs" />
+    <Compile Include="Server\WebSockets\MalformedHttpRequestException.cs" />
     <Compile Include="Server\WebSockets\OpCode.cs" />
     <Compile Include="Server\WebSockets\Server.cs" />
     <Compile Include="Service\Attributes\KRPCClassAttribute.cs" />
@@ -224,7 +226,6 @@
     <Compile Include="Utils\Hash.cs" />
     <Compile Include="Utils\IGameObjectState.cs" />
     <Compile Include="Utils\IModAssemblies.cs" />
-    <Compile Include="Utils\IScheduler.cs" />
     <Compile Include="Utils\Logger.cs" />
     <Compile Include="Utils\MemberBinder.cs" />
     <Compile Include="Utils\ModAPI.cs" />
@@ -234,7 +235,6 @@
     <Compile Include="Utils\ModTypeMissingException.cs" />
     <Compile Include="Utils\Naming.cs" />
     <Compile Include="Utils\Reflection.cs" />
-    <Compile Include="Utils\RoundRobinScheduler.cs" />
     <Compile Include="Utils\StopwatchExtensions.cs" />
     <Compile Include="Utils\Text.cs" />
   </ItemGroup>

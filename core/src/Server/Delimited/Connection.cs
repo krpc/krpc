@@ -1,8 +1,9 @@
+using System;
 using Google.Protobuf;
 using KRPC.Server.Message;
 using SchemaMessage = KRPC.Schema.KRPC.Message;
 
-namespace KRPC.Server.ProtocolBuffers
+namespace KRPC.Server.Delimited
 {
     /// <summary>
     /// A connection whose messages are each prefixed by their length, as a varint.
@@ -11,9 +12,9 @@ namespace KRPC.Server.ProtocolBuffers
     {
         readonly CodedOutputStream codedOutputStream;
 
-        public Connection (Message.Server server, IClient<byte,byte> client) : base (server, client)
+        public Connection (Message.Server server, IClient<IByteStream> client) : base (server, client)
         {
-            codedOutputStream = new CodedOutputStream (new ByteOutputAdapterStream (client.Stream), true);
+            codedOutputStream = new CodedOutputStream (Output, true);
         }
 
         protected override int Read (ref SchemaMessage message, byte[] data, int offset, int length)
@@ -21,7 +22,7 @@ namespace KRPC.Server.ProtocolBuffers
             int prefixLength;
             int size;
             try {
-                size = Utils.DecodeMessageLength (data, offset, length, out prefixLength);
+                size = DecodeMessageLength (data, offset, length, out prefixLength);
             } catch (System.InvalidOperationException e) {
                 throw new MalformedRequestException (e.Message, System.Math.Min (length, 5));
             }
@@ -50,6 +51,33 @@ namespace KRPC.Server.ProtocolBuffers
             var stream = Stream as IHalfClosableStream;
             if (stream != null)
                 stream.HalfClose ();
+        }
+
+        /// <summary>
+        /// Decode the varint length prefix at the start of the data, and set
+        /// <paramref name="prefixLength"/> to the bytes it takes. Sets it to zero if the data
+        /// holds only part of the prefix.
+        /// </summary>
+        static int DecodeMessageLength (byte[] data, int offset, int length, out int prefixLength)
+        {
+            var result = 0;
+            // A varint encoding a 32-bit value is at most five bytes long.
+            for (var i = 0; i < 5; i++) {
+                if (i >= length) {
+                    prefixLength = 0;
+                    return 0;
+                }
+                int b = data [offset + i];
+                // The fifth byte holds bits 28 to 34, of which only 28 to 30 fit a positive int
+                if (i == 4 && b > 0x07)
+                    throw new InvalidOperationException ("Message length prefix is out of range");
+                result |= (b & 0x7f) << (7 * i);
+                if ((b & 0x80) == 0) {
+                    prefixLength = i + 1;
+                    return result;
+                }
+            }
+            throw new InvalidOperationException ("Message length prefix is not a valid varint");
         }
     }
 }

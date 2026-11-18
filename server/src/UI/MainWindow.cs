@@ -38,25 +38,26 @@ namespace KRPC.UI
         int previousRows;
 
         bool showAdvancedServerOptions;
-        string maxTimePerUpdate;
-        string recvTimeout;
+        readonly object presetComboId = new object ();
+        // The presets' names, then the entry for settings that match none
+        static readonly string[] presetNames =
+            Configuration.Presets.Select (x => x.Name).Concat (new [] { "Custom" }).ToArray ();
+        string targetFrameRate;
+        string maxTimePerFrame;
+        string maxCallWait;
         string tickHoldTimeout;
         // Style settings
         internal readonly Color errorColor = Color.yellow;
-        internal GUIStyle labelStyle, stretchyLabelStyle, fixedLabelStyle, textFieldStyle, longTextFieldStyle, stretchyTextFieldStyle,
+        internal GUIStyle labelStyle, stretchyLabelStyle, fixedLabelStyle, longTextFieldStyle, stretchyTextFieldStyle,
             buttonStyle, toggleStyle, expandStyle, separatorStyle, lightStyle, errorLabelStyle, comboOptionsStyle, comboOptionStyle;
         const float windowWidth = 310f;
-        const float textFieldWidth = 45f;
         const float longTextFieldWidth = 80f;
         const float fixedLabelWidth = 160f;
         const float serverInfoLabelWidth = 110f;
         const float indentWidth = 15f;
         float scaledIndentWidth;
-        const int maxTimePerUpdateMaxLength = 20;
-        const int recvTimeoutMaxLength = 20;
-        const int tickHoldTimeoutMaxLength = 20;
+        const int numberMaxLength = 20;
         // Text strings
-        const string advancedModeText = "Show advanced settings";
         const string startAllServersText = "Start server";
         const string stopAllServersText = "Stop server";
         const string addServerText = "Add server";
@@ -65,14 +66,15 @@ namespace KRPC.UI
         const string stopServerText = "Stop";
         const string editServerText = "Edit";
         const string saveServerText = "Save";
-        const string serverOnlineText = "Server online";
-        const string serverOfflineText = "Server offline";
         const string protocolText = "Protocol";
         const string addressText = "Address";
-        internal const string protobufOverTcpText = "Protobuf over TCP/IP";
-        internal const string protobufOverWebSocketsText = "Protobuf over WebSockets";
-        internal const string protobufOverSerialIOText = "Protobuf over SerialIO";
-        internal const string protobufOverLocalSocketText = "Protobuf over local socket";
+        // The name of each protocol, indexed by its Protocol value
+        internal static readonly string[] protocolNames = {
+            "Protobuf over TCP/IP",
+            "Protobuf over WebSockets",
+            "Protobuf over SerialIO",
+            "Protobuf over local socket"
+        };
         const string unknownClientNameText = "<unknown>";
         const string noClientsConnectedText = "No clients connected";
         const string serverNotRunningText = "Server not running";
@@ -81,12 +83,14 @@ namespace KRPC.UI
         const string autoAcceptConnectionsText = "Auto-accept new clients";
         const string confirmRemoveClientText = "Confirm disconnecting a client";
         const string pauseServerWithGameText = "Pause the server when the game pauses";
-        const string maxTimePerUpdateText = "Max. time per update";
+        const string presetText = "Preset";
         const string adaptiveRateControlText = "Adaptive rate control";
-        const string blockingRecvText = "Blocking receives";
-        const string recvTimeoutText = "Receive timeout";
+        const string targetFrameRateText = "Target frame rate";
+        const string maxTimePerFrameText = "Max. time per frame";
+        const string maxCallWaitText = "Max. call wait";
         const string tickHoldTimeoutText = "Tick hold timeout";
         const string microsecondsUnitText = "us";
+        const string framesPerSecondUnitText = "fps";
         const string debugLoggingText = "Debug logging";
         const string showInfoWindowText = "Show info";
         const string showProblemsWindowText = "Show problems";
@@ -100,6 +104,7 @@ namespace KRPC.UI
             Title = "kRPC v" + version.FileMajorPart + "." + version.FileMinorPart + "." + version.FileBuildPart;
 
             core.OnClientActivity += SawClientActivity;
+            core.OnClientDisconnected += ForgetClient;
 
             Style.fixedWidth = windowWidth;
 
@@ -115,9 +120,6 @@ namespace KRPC.UI
             // No vertical margin, as the text fields beside these labels have none
             fixedLabelStyle = new GUIStyle (skin.label);
             fixedLabelStyle.margin = new RectOffset (skin.label.margin.left, skin.label.margin.right, 0, 0);
-
-            textFieldStyle = new GUIStyle (skin.textField);
-            textFieldStyle.margin = new RectOffset (0, 0, 0, 0);
 
             longTextFieldStyle = new GUIStyle (skin.textField);
             longTextFieldStyle.margin = new RectOffset (0, 0, 0, 0);
@@ -156,8 +158,7 @@ namespace KRPC.UI
             comboOptionStyle = GUILayoutExtensions.ComboOptionStyle ();
 
             Errors = new List<string> ();
-            maxTimePerUpdate = config.Configuration.MaxTimePerUpdate.ToString (CultureInfo.CurrentCulture);
-            recvTimeout = config.Configuration.RecvTimeout.ToString (CultureInfo.CurrentCulture);
+            ShowRateSettings ();
             tickHoldTimeout = config.Configuration.TickHoldTimeout.ToString (CultureInfo.CurrentCulture);
 
             if (core.Servers.Count == 1)
@@ -167,6 +168,7 @@ namespace KRPC.UI
         void OnDestroy()
         {
             core.OnClientActivity -= SawClientActivity;
+            core.OnClientDisconnected -= ForgetClient;
         }
 
         protected override void Draw (bool needRescale)
@@ -180,8 +182,6 @@ namespace KRPC.UI
                 stretchyLabelStyle.fontSize = scaledFontSize;
                 fixedLabelStyle.fontSize = scaledFontSize;
                 fixedLabelStyle.fixedWidth = fixedLabelWidth * GameSettings.UI_SCALE;
-                textFieldStyle.fontSize = scaledFontSize;
-                textFieldStyle.fixedWidth = textFieldWidth * GameSettings.UI_SCALE;
                 longTextFieldStyle.fontSize = scaledFontSize;
                 longTextFieldStyle.fixedWidth = longTextFieldWidth * GameSettings.UI_SCALE;
                 stretchyTextFieldStyle.fontSize = scaledFontSize;
@@ -294,16 +294,7 @@ namespace KRPC.UI
             if (editingServer) {
                 editServers [server.Id].Draw ();
             } else if (expanded) {
-                string protocol;
-                if (server.Protocol == Protocol.ProtocolBuffersOverTCP)
-                    protocol = protobufOverTcpText;
-                else if (server.Protocol == Protocol.ProtocolBuffersOverWebsockets)
-                    protocol = protobufOverWebSocketsText;
-                else if (server.Protocol == Protocol.ProtocolBuffersOverLocalSocket)
-                    protocol = protobufOverLocalSocketText;
-                else
-                    protocol = protobufOverSerialIOText;
-                DrawServerInfoRow (protocolText, protocol);
+                DrawServerInfoRow (protocolText, protocolNames [(int)server.Protocol]);
                 DrawServerInfoRow (addressText, server.Address);
                 DrawServerInfoLines (server.Info);
                 DrawClients (server);
@@ -380,7 +371,7 @@ namespace KRPC.UI
             }
         }
 
-        void DrawClients (IServer server)
+        void DrawClients (KRPC.Server.Server server)
         {
             var clients = server.Clients.ToList ();
             IDictionary<IClient,string> clientDescriptions = new Dictionary<IClient,string> ();
@@ -455,9 +446,22 @@ namespace KRPC.UI
                 DrawPauseServerWithGameToggle ();
                 GUILayout.EndHorizontal ();
 
+                var settings = config.Configuration;
                 GUILayout.BeginHorizontal ();
                 GUILayout.Space (scaledIndentWidth);
-                DrawMaxTimePerUpdate ();
+                DrawDebugLogging ();
+                GUILayout.EndHorizontal ();
+
+                GUILayout.BeginHorizontal ();
+                GUILayout.Space (scaledIndentWidth);
+                tickHoldTimeout = DrawNumberField (tickHoldTimeoutText, tickHoldTimeout, microsecondsUnitText,
+                                                   0, uint.MaxValue, x => settings.TickHoldTimeout = x);
+                GUILayout.EndHorizontal ();
+
+                // The rows below the preset are the settings a preset sets
+                GUILayout.BeginHorizontal ();
+                GUILayout.Space (scaledIndentWidth);
+                DrawPreset ();
                 GUILayout.EndHorizontal ();
 
                 GUILayout.BeginHorizontal ();
@@ -465,24 +469,27 @@ namespace KRPC.UI
                 DrawAdaptiveRateControlToggle ();
                 GUILayout.EndHorizontal ();
 
+                // The target applies only with adaptive rate control
                 GUILayout.BeginHorizontal ();
                 GUILayout.Space (scaledIndentWidth);
-                DrawBlockingRecvToggle ();
+                GUI.enabled = settings.AdaptiveRateControl;
+                targetFrameRate = DrawNumberField (targetFrameRateText, targetFrameRate, framesPerSecondUnitText,
+                                                   Configuration.TargetFrameRateMin, Configuration.TargetFrameRateMax,
+                                                   x => settings.TargetFrameRate = x);
+                GUI.enabled = true;
                 GUILayout.EndHorizontal ();
 
                 GUILayout.BeginHorizontal ();
                 GUILayout.Space (scaledIndentWidth);
-                DrawRecvTimeout ();
+                maxTimePerFrame = DrawNumberField (maxTimePerFrameText, maxTimePerFrame, microsecondsUnitText,
+                                                   Configuration.MaxTimePerFrameMin, Configuration.MaxTimePerFrameMax,
+                                                   x => settings.MaxTimePerFrame = x);
                 GUILayout.EndHorizontal ();
 
                 GUILayout.BeginHorizontal ();
                 GUILayout.Space (scaledIndentWidth);
-                DrawTickHoldTimeout ();
-                GUILayout.EndHorizontal ();
-
-                GUILayout.BeginHorizontal ();
-                GUILayout.Space (scaledIndentWidth);
-                DrawDebugLogging ();
+                maxCallWait = DrawNumberField (maxCallWaitText, maxCallWait, microsecondsUnitText,
+                                               0, uint.MaxValue, x => settings.MaxCallWait = x);
                 GUILayout.EndHorizontal ();
             }
         }
@@ -532,21 +539,30 @@ namespace KRPC.UI
             }
         }
 
-        void DrawMaxTimePerUpdate ()
+        void DrawPreset ()
         {
-            GUILayout.Label (maxTimePerUpdateText, fixedLabelStyle);
-            uint value;
-            bool valid = uint.TryParse (maxTimePerUpdate, out value);
-            var newMaxTimePerUpdate = GUILayoutExtensions.FilterDigits (
-                GUILayoutExtensions.ValidatedTextField (maxTimePerUpdate, maxTimePerUpdateMaxLength, longTextFieldStyle, valid, errorColor));
-            GUILayout.Label (microsecondsUnitText, labelStyle);
-            if (newMaxTimePerUpdate != maxTimePerUpdate) {
-                maxTimePerUpdate = newMaxTimePerUpdate;
-                if (uint.TryParse (maxTimePerUpdate, out value)) {
-                    config.Configuration.MaxTimePerUpdate = value;
-                    config.Save ();
-                }
+            var settings = config.Configuration;
+            GUILayout.Label (presetText, fixedLabelStyle);
+            var current = settings.CurrentPreset;
+            var selected = current == null ? presetNames.Length - 1 : Configuration.Presets.IndexOf (current);
+            var chosen = GUILayoutExtensions.ComboBox (presetComboId, selected, presetNames, buttonStyle, comboOptionsStyle, comboOptionStyle);
+            // Choosing the custom entry leaves the settings as they are
+            if (chosen != selected && chosen < Configuration.Presets.Count) {
+                Configuration.Presets [chosen].Apply (settings);
+                config.Save ();
+                ShowRateSettings ();
             }
+        }
+
+        /// <summary>
+        /// Set the text of the rate settings' fields from the configuration.
+        /// </summary>
+        void ShowRateSettings ()
+        {
+            var settings = config.Configuration;
+            targetFrameRate = settings.TargetFrameRate.ToString (CultureInfo.CurrentCulture);
+            maxTimePerFrame = settings.MaxTimePerFrame.ToString (CultureInfo.CurrentCulture);
+            maxCallWait = settings.MaxCallWait.ToString (CultureInfo.CurrentCulture);
         }
 
         void DrawAdaptiveRateControlToggle ()
@@ -558,47 +574,23 @@ namespace KRPC.UI
             }
         }
 
-        void DrawBlockingRecvToggle ()
+        /// <summary>
+        /// Draw a field for a whole number setting, with its label and unit, and apply a valid
+        /// edit. Returns the field's text.
+        /// </summary>
+        string DrawNumberField (string label, string text, string unit, uint min, uint max, Action<uint> apply)
         {
-            bool blockingRecv = GUILayout.Toggle (config.Configuration.BlockingRecv, blockingRecvText, toggleStyle, new GUILayoutOption[] { });
-            if (blockingRecv != config.Configuration.BlockingRecv) {
-                config.Configuration.BlockingRecv = blockingRecv;
+            GUILayout.Label (label, fixedLabelStyle);
+            uint value;
+            bool valid = uint.TryParse (text, out value) && value >= min && value <= max;
+            var newText = GUILayoutExtensions.FilterDigits (
+                GUILayoutExtensions.ValidatedTextField (text, numberMaxLength, longTextFieldStyle, valid, errorColor));
+            GUILayout.Label (unit, labelStyle);
+            if (newText != text && uint.TryParse (newText, out value) && value >= min && value <= max) {
+                apply (value);
                 config.Save ();
             }
-        }
-
-        void DrawTickHoldTimeout ()
-        {
-            GUILayout.Label (tickHoldTimeoutText, fixedLabelStyle);
-            uint value;
-            bool valid = uint.TryParse (tickHoldTimeout, out value);
-            var newTickHoldTimeout = GUILayoutExtensions.FilterDigits (
-                GUILayoutExtensions.ValidatedTextField (tickHoldTimeout, tickHoldTimeoutMaxLength, longTextFieldStyle, valid, errorColor));
-            GUILayout.Label (microsecondsUnitText, labelStyle);
-            if (newTickHoldTimeout != tickHoldTimeout) {
-                tickHoldTimeout = newTickHoldTimeout;
-                if (uint.TryParse (tickHoldTimeout, out value)) {
-                    config.Configuration.TickHoldTimeout = value;
-                    config.Save ();
-                }
-            }
-        }
-
-        void DrawRecvTimeout ()
-        {
-            GUILayout.Label (recvTimeoutText, fixedLabelStyle);
-            uint value;
-            bool valid = uint.TryParse (recvTimeout, out value);
-            var newRecvTimeout = GUILayoutExtensions.FilterDigits (
-                GUILayoutExtensions.ValidatedTextField (recvTimeout, recvTimeoutMaxLength, longTextFieldStyle, valid, errorColor));
-            GUILayout.Label (microsecondsUnitText, labelStyle);
-            if (newRecvTimeout != recvTimeout) {
-                recvTimeout = newRecvTimeout;
-                if (uint.TryParse (recvTimeout, out value)) {
-                    config.Configuration.RecvTimeout = value;
-                    config.Save ();
-                }
-            }
+            return newText;
         }
 
         void DrawDebugLogging ()
@@ -629,6 +621,11 @@ namespace KRPC.UI
         void SawClientActivity (object sender, ClientActivityEventArgs e)
         {
             lastClientActivity [e.Client] = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+        }
+
+        void ForgetClient (object sender, ClientDisconnectedEventArgs e)
+        {
+            lastClientActivity.Remove (e.Client);
         }
 
         bool IsClientActive (IClient client)

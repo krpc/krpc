@@ -44,10 +44,10 @@ namespace KRPC
             ConfirmRemoveClient = true;
             PauseServerWithGame = false;
             VerboseErrors = true;
-            MaxTimePerUpdate = 5000;
             AdaptiveRateControl = true;
-            BlockingRecv = true;
-            RecvTimeout = 1000;
+            TargetFrameRate = 60;
+            MaxTimePerFrame = 10000;
+            MaxCallWait = 5000;
             TickHoldTimeout = 1000000;
         }
 
@@ -75,6 +75,23 @@ namespace KRPC
             /// Additional configration settings, specific to the protocol.
             /// </summary>
             public IDictionary<string, string> Settings { get; set; }
+
+            /// <summary>
+            /// The serial port settings a server takes when its settings leave them out.
+            /// </summary>
+            public static readonly IReadOnlyDictionary<string, string> SerialDefaults =
+                new System.Collections.ObjectModel.ReadOnlyDictionary<string, string> (
+                    new Dictionary<string, string> {
+                        { "serialio_baud_rate", "9600" },
+                        { "serialio_data_bits", "8" },
+                        { "serialio_parity", "None" },
+                        { "serialio_stop_bits", "One" }
+                    });
+
+            string SerialSetting (string key)
+            {
+                return Settings.GetValueOrDefault (key, SerialDefaults [key]);
+            }
 
             /// <summary>
             /// Construct default settings for a TCP/IP server
@@ -118,22 +135,22 @@ namespace KRPC
                     ushort.TryParse(Settings.GetValueOrDefault(prefix + "port", DefaultPort (serverProtocol).ToString (CultureInfo.InvariantCulture)), out port);
                     var tcpServer = new TCPServer (serverAddress, port);
                     if (serverProtocol == Protocol.ProtocolBuffersOverTCP)
-                        messageServer = new KRPC.Server.ProtocolBuffers.Server (tcpServer);
+                        messageServer = new KRPC.Server.Delimited.Server (tcpServer);
                     else
                         messageServer = new KRPC.Server.WebSockets.Server (tcpServer);
                 } else if (serverProtocol == Protocol.ProtocolBuffersOverLocalSocket) {
                     var socketServer = new KRPC.Server.LocalSocket.LocalSocketServer (
                         Settings.GetValueOrDefault ("localsocket_path", KRPC.Server.LocalSocket.LocalSocketServer.DefaultPath ()));
-                    messageServer = new KRPC.Server.ProtocolBuffers.Server (socketServer);
+                    messageServer = new KRPC.Server.Delimited.Server (socketServer);
                 } else {
                     uint baudRate = 0;
                     ushort dataBits = 0;
                     SerialPorts.Parity parity;
                     SerialPorts.StopBits stopBits;
-                    uint.TryParse(Settings.GetValueOrDefault("serialio_baud_rate", "9600"), out baudRate);
-                    ushort.TryParse(Settings.GetValueOrDefault("serialio_data_bits", "8"), out dataBits);
-                    Enum.TryParse<SerialPorts.Parity>(Settings.GetValueOrDefault("serialio_parity", "None"), out parity);
-                    Enum.TryParse<SerialPorts.StopBits>(Settings.GetValueOrDefault("serialio_stop_bits", "One"), out stopBits);
+                    uint.TryParse (SerialSetting ("serialio_baud_rate"), out baudRate);
+                    ushort.TryParse (SerialSetting ("serialio_data_bits"), out dataBits);
+                    Enum.TryParse<SerialPorts.Parity> (SerialSetting ("serialio_parity"), out parity);
+                    Enum.TryParse<SerialPorts.StopBits> (SerialSetting ("serialio_stop_bits"), out stopBits);
                     var serialServer = new KRPC.Server.SerialIO.ByteServer(
                         Settings.GetValueOrDefault("serialio_port", string.Empty),
                         baudRate, dataBits, parity, stopBits);
@@ -284,24 +301,140 @@ namespace KRPC
         public bool VerboseErrors { get; set; }
 
         /// <summary>
-        /// Maximum amount of time to spend executing RPCs per frame
-        /// </summary>
-        public uint MaxTimePerUpdate { get; set; }
-
-        /// <summary>
-        /// Whether adaptive rate control is enabled
+        /// Whether the server adapts its time per frame to hold the frame rate at
+        /// <see cref="TargetFrameRate"/>
         /// </summary>
         public bool AdaptiveRateControl { get; set; }
 
         /// <summary>
-        /// Whether blocking receives are enabled
+        /// The lowest frame rate, in frames per second, the server's work pushes the game to,
+        /// with adaptive rate control. From <see cref="TargetFrameRateMin"/> to
+        /// <see cref="TargetFrameRateMax"/>
         /// </summary>
-        public bool BlockingRecv { get; set; }
+        public uint TargetFrameRate { get; set; }
 
         /// <summary>
-        /// Timeout when waiting for data from a client
+        /// The lowest <see cref="TargetFrameRate"/>
         /// </summary>
-        public uint RecvTimeout { get; set; }
+        public const uint TargetFrameRateMin = 1;
+
+        /// <summary>
+        /// The highest <see cref="TargetFrameRate"/>
+        /// </summary>
+        public const uint TargetFrameRateMax = 1000;
+
+        /// <summary>
+        /// A preset of the settings that trade calls a second against the frame rate:
+        /// adaptive rate control, the target frame rate, the max time per frame and the max
+        /// call wait
+        /// </summary>
+        public sealed class Preset
+        {
+            internal Preset (string name, bool adaptiveRateControl, uint targetFrameRate,
+                             uint maxTimePerFrame, uint maxCallWait)
+            {
+                Name = name;
+                AdaptiveRateControl = adaptiveRateControl;
+                TargetFrameRate = targetFrameRate;
+                MaxTimePerFrame = maxTimePerFrame;
+                MaxCallWait = maxCallWait;
+            }
+
+            /// <summary>
+            /// The name of the preset
+            /// </summary>
+            public string Name { get; private set; }
+
+            /// <summary>
+            /// Whether adaptive rate control is on
+            /// </summary>
+            public bool AdaptiveRateControl { get; private set; }
+
+            /// <summary>
+            /// The target frame rate, in frames per second, which applies only with adaptive
+            /// rate control
+            /// </summary>
+            public uint TargetFrameRate { get; private set; }
+
+            /// <summary>
+            /// The max time per frame, in microseconds
+            /// </summary>
+            public uint MaxTimePerFrame { get; private set; }
+
+            /// <summary>
+            /// The max call wait, in microseconds
+            /// </summary>
+            public uint MaxCallWait { get; private set; }
+
+            /// <summary>
+            /// Set the configuration's settings to the preset's. Without adaptive rate
+            /// control, the target frame rate is left as it is
+            /// </summary>
+            public void Apply (Configuration config)
+            {
+                config.AdaptiveRateControl = AdaptiveRateControl;
+                if (AdaptiveRateControl)
+                    config.TargetFrameRate = TargetFrameRate;
+                config.MaxTimePerFrame = MaxTimePerFrame;
+                config.MaxCallWait = MaxCallWait;
+            }
+
+            /// <summary>
+            /// Whether the configuration's settings are the preset's
+            /// </summary>
+            public bool Matches (Configuration config)
+            {
+                return config.AdaptiveRateControl == AdaptiveRateControl &&
+                    (!AdaptiveRateControl || config.TargetFrameRate == TargetFrameRate) &&
+                    config.MaxTimePerFrame == MaxTimePerFrame &&
+                    config.MaxCallWait == MaxCallWait;
+            }
+        }
+
+        /// <summary>
+        /// The presets, from the one that favors the frame rate to the one that favors calls
+        /// </summary>
+        public static readonly IList<Preset> Presets = new System.Collections.ObjectModel.ReadOnlyCollection<Preset> (
+            new [] {
+                new Preset ("Game first", false, 60, 1000, 1000),
+                new Preset ("Balanced", true, 60, 10000, 5000),
+                new Preset ("Calls first", false, 60, 20000, 20000)
+            });
+
+        /// <summary>
+        /// The preset the settings match, or null if they match none
+        /// </summary>
+        public Preset CurrentPreset {
+            get {
+                foreach (var preset in Presets)
+                    if (preset.Matches (this))
+                        return preset;
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// The most time, in microseconds, the server spends per frame. The budget without
+        /// adaptive rate control, and its ceiling with it. From <see cref="MaxTimePerFrameMin"/>
+        /// to <see cref="MaxTimePerFrameMax"/>
+        /// </summary>
+        public uint MaxTimePerFrame { get; set; }
+
+        /// <summary>
+        /// The smallest <see cref="MaxTimePerFrame"/>, 100 microseconds
+        /// </summary>
+        public const uint MaxTimePerFrameMin = 100;
+
+        /// <summary>
+        /// The largest <see cref="MaxTimePerFrame"/>, one second
+        /// </summary>
+        public const uint MaxTimePerFrameMax = 1000000;
+
+        /// <summary>
+        /// The most frame time, in microseconds, the server spends waiting to gain a client's
+        /// call this tick, and the longest it waits for one. Zero never waits
+        /// </summary>
+        public uint MaxCallWait { get; set; }
 
         /// <summary>
         /// How long a client may hold the game on one physics tick before the server takes

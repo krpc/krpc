@@ -419,12 +419,11 @@ namespace KRPC.Client.Services.KRPC
         /// <summary>
         /// Construct a ClientInfo from the values of its fields.
         /// </summary>
-        public ClientInfo (byte[] id, string name, string address, uint protocolVersion) : this ()
+        public ClientInfo (byte[] id, string name, string address) : this ()
         {
             Id = id;
             Name = name;
             Address = address;
-            ProtocolVersion = protocolVersion;
         }
 
         /// <summary>
@@ -443,11 +442,6 @@ namespace KRPC.Client.Services.KRPC
         public string Address { get; private set; }
 
         /// <summary>
-        /// The protocol version of the client's connection.
-        /// </summary>
-        public uint ProtocolVersion { get; private set; }
-
-        /// <summary>
         /// Returns true if this ClientInfo is equal to the given object.
         /// </summary>
         public override bool Equals (object obj)
@@ -460,7 +454,7 @@ namespace KRPC.Client.Services.KRPC
         /// </summary>
         public bool Equals (ClientInfo other)
         {
-            return global::KRPC.Client.ValueUtils.Equal (Id, other.Id) && global::KRPC.Client.ValueUtils.Equal (Name, other.Name) && global::KRPC.Client.ValueUtils.Equal (Address, other.Address) && global::KRPC.Client.ValueUtils.Equal (ProtocolVersion, other.ProtocolVersion);
+            return global::KRPC.Client.ValueUtils.Equal (Id, other.Id) && global::KRPC.Client.ValueUtils.Equal (Name, other.Name) && global::KRPC.Client.ValueUtils.Equal (Address, other.Address);
         }
 
         /// <summary>
@@ -472,7 +466,6 @@ namespace KRPC.Client.Services.KRPC
             hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (Id);
             hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (Name);
             hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (Address);
-            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (ProtocolVersion);
             return hash;
         }
 
@@ -508,9 +501,6 @@ namespace KRPC.Client.Services.KRPC
             if (result != 0)
                 return result;
             result = global::System.Collections.Generic.Comparer<string>.Default.Compare (Address, other.Address);
-            if (result != 0)
-                return result;
-            result = global::System.Collections.Generic.Comparer<uint>.Default.Compare (ProtocolVersion, other.ProtocolVersion);
             if (result != 0)
                 return result;
             return 0;
@@ -562,34 +552,35 @@ namespace KRPC.Client.Services.KRPC
         /// <summary>
         /// Construct a ServerSettings from the values of its fields.
         /// </summary>
-        public ServerSettings (uint maxTimePerUpdate, bool adaptiveRateControl, bool blockingRecv, uint recvTimeout, uint tickHoldTimeout) : this ()
+        public ServerSettings (bool adaptiveRateControl, uint targetFrameRate, uint maxTimePerFrame, uint maxCallWait, uint tickHoldTimeout) : this ()
         {
-            MaxTimePerUpdate = maxTimePerUpdate;
             AdaptiveRateControl = adaptiveRateControl;
-            BlockingRecv = blockingRecv;
-            RecvTimeout = recvTimeout;
+            TargetFrameRate = targetFrameRate;
+            MaxTimePerFrame = maxTimePerFrame;
+            MaxCallWait = maxCallWait;
             TickHoldTimeout = tickHoldTimeout;
         }
 
         /// <summary>
-        /// The current maximum time spent executing calls per update, in microseconds.
-        /// </summary>
-        public uint MaxTimePerUpdate { get; private set; }
-
-        /// <summary>
-        /// Whether the server adjusts <see cref="global::KRPC.Client.Services.KRPC.ServerSettings.MaxTimePerUpdate" /> to hold the frame rate.
+        /// Whether the server adapts its time per frame to hold the frame rate at
+        /// <see cref="global::KRPC.Client.Services.KRPC.ServerSettings.TargetFrameRate" />.
         /// </summary>
         public bool AdaptiveRateControl { get; private set; }
 
         /// <summary>
-        /// Whether the server waits for the next call in an update.
+        /// The lowest frame rate the server's work pushes the game to, in frames per second.
         /// </summary>
-        public bool BlockingRecv { get; private set; }
+        public uint TargetFrameRate { get; private set; }
 
         /// <summary>
-        /// The time the server waits for the next call, in microseconds.
+        /// The server's budget per frame, or its ceiling with adaptive rate control, in microseconds.
         /// </summary>
-        public uint RecvTimeout { get; private set; }
+        public uint MaxTimePerFrame { get; private set; }
+
+        /// <summary>
+        /// The longest the server waits for a client's next call, in microseconds.
+        /// </summary>
+        public uint MaxCallWait { get; private set; }
 
         /// <summary>
         /// The longest time a client may hold the game on one physics tick, in microseconds.
@@ -612,7 +603,7 @@ namespace KRPC.Client.Services.KRPC
         /// </summary>
         public bool Equals (ServerSettings other)
         {
-            return global::KRPC.Client.ValueUtils.Equal (MaxTimePerUpdate, other.MaxTimePerUpdate) && global::KRPC.Client.ValueUtils.Equal (AdaptiveRateControl, other.AdaptiveRateControl) && global::KRPC.Client.ValueUtils.Equal (BlockingRecv, other.BlockingRecv) && global::KRPC.Client.ValueUtils.Equal (RecvTimeout, other.RecvTimeout) && global::KRPC.Client.ValueUtils.Equal (TickHoldTimeout, other.TickHoldTimeout);
+            return global::KRPC.Client.ValueUtils.Equal (AdaptiveRateControl, other.AdaptiveRateControl) && global::KRPC.Client.ValueUtils.Equal (TargetFrameRate, other.TargetFrameRate) && global::KRPC.Client.ValueUtils.Equal (MaxTimePerFrame, other.MaxTimePerFrame) && global::KRPC.Client.ValueUtils.Equal (MaxCallWait, other.MaxCallWait) && global::KRPC.Client.ValueUtils.Equal (TickHoldTimeout, other.TickHoldTimeout);
         }
 
         /// <summary>
@@ -621,10 +612,10 @@ namespace KRPC.Client.Services.KRPC
         public override int GetHashCode ()
         {
             int hash = 17;
-            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (MaxTimePerUpdate);
             hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (AdaptiveRateControl);
-            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (BlockingRecv);
-            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (RecvTimeout);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (TargetFrameRate);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (MaxTimePerFrame);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (MaxCallWait);
             hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (TickHoldTimeout);
             return hash;
         }
@@ -654,16 +645,16 @@ namespace KRPC.Client.Services.KRPC
         public int CompareTo (ServerSettings other)
         {
             int result;
-            result = global::System.Collections.Generic.Comparer<uint>.Default.Compare (MaxTimePerUpdate, other.MaxTimePerUpdate);
-            if (result != 0)
-                return result;
             result = global::System.Collections.Generic.Comparer<bool>.Default.Compare (AdaptiveRateControl, other.AdaptiveRateControl);
             if (result != 0)
                 return result;
-            result = global::System.Collections.Generic.Comparer<bool>.Default.Compare (BlockingRecv, other.BlockingRecv);
+            result = global::System.Collections.Generic.Comparer<uint>.Default.Compare (TargetFrameRate, other.TargetFrameRate);
             if (result != 0)
                 return result;
-            result = global::System.Collections.Generic.Comparer<uint>.Default.Compare (RecvTimeout, other.RecvTimeout);
+            result = global::System.Collections.Generic.Comparer<uint>.Default.Compare (MaxTimePerFrame, other.MaxTimePerFrame);
+            if (result != 0)
+                return result;
+            result = global::System.Collections.Generic.Comparer<uint>.Default.Compare (MaxCallWait, other.MaxCallWait);
             if (result != 0)
                 return result;
             result = global::System.Collections.Generic.Comparer<uint>.Default.Compare (TickHoldTimeout, other.TickHoldTimeout);
@@ -718,7 +709,7 @@ namespace KRPC.Client.Services.KRPC
         /// <summary>
         /// Construct a ServerStatistics from the values of its fields.
         /// </summary>
-        public ServerStatistics (ulong bytesRead, ulong bytesWritten, float bytesReadRate, float bytesWrittenRate, ulong rpcsExecuted, float rpcRate, float timePerRpcUpdate, float pollTimePerRpcUpdate, float execTimePerRpcUpdate, uint deferredCalls, uint streams, ulong streamEvaluations, float streamEvaluationRate, ulong streamUpdatesSent, float timePerStreamUpdate) : this ()
+        public ServerStatistics (ulong bytesRead, ulong bytesWritten, float bytesReadRate, float bytesWrittenRate, ulong rpcsExecuted, float rpcRate, float frameRate, float timePerFrame, float execTimePerFrame, float waitTimePerFrame, float streamTimePerFrame, float budgetPerFrame, float medianTurnaround, uint deferredCalls, uint streams, ulong streamEvaluations, float streamEvaluationRate, ulong streamUpdatesSent) : this ()
         {
             BytesRead = bytesRead;
             BytesWritten = bytesWritten;
@@ -726,15 +717,18 @@ namespace KRPC.Client.Services.KRPC
             BytesWrittenRate = bytesWrittenRate;
             RpcsExecuted = rpcsExecuted;
             RpcRate = rpcRate;
-            TimePerRpcUpdate = timePerRpcUpdate;
-            PollTimePerRpcUpdate = pollTimePerRpcUpdate;
-            ExecTimePerRpcUpdate = execTimePerRpcUpdate;
+            FrameRate = frameRate;
+            TimePerFrame = timePerFrame;
+            ExecTimePerFrame = execTimePerFrame;
+            WaitTimePerFrame = waitTimePerFrame;
+            StreamTimePerFrame = streamTimePerFrame;
+            BudgetPerFrame = budgetPerFrame;
+            MedianTurnaround = medianTurnaround;
             DeferredCalls = deferredCalls;
             Streams = streams;
             StreamEvaluations = streamEvaluations;
             StreamEvaluationRate = streamEvaluationRate;
             StreamUpdatesSent = streamUpdatesSent;
-            TimePerStreamUpdate = timePerStreamUpdate;
         }
 
         /// <summary>
@@ -768,19 +762,44 @@ namespace KRPC.Client.Services.KRPC
         public float RpcRate { get; private set; }
 
         /// <summary>
-        /// The time spent receiving and executing calls per update, in seconds.
+        /// The game's frame rate, in frames per second.
         /// </summary>
-        public float TimePerRpcUpdate { get; private set; }
+        public float FrameRate { get; private set; }
 
         /// <summary>
-        /// The time spent receiving calls per update, in seconds.
+        /// The server's time per frame, in seconds: executing calls, waiting for them and
+        /// updating streams.
         /// </summary>
-        public float PollTimePerRpcUpdate { get; private set; }
+        public float TimePerFrame { get; private set; }
 
         /// <summary>
-        /// The time spent executing calls per update, in seconds.
+        /// The time spent executing calls per frame, in seconds.
         /// </summary>
-        public float ExecTimePerRpcUpdate { get; private set; }
+        public float ExecTimePerFrame { get; private set; }
+
+        /// <summary>
+        /// The time spent waiting for calls per frame, in seconds.
+        /// </summary>
+        public float WaitTimePerFrame { get; private set; }
+
+        /// <summary>
+        /// The time spent updating streams per frame, in seconds.
+        /// </summary>
+        public float StreamTimePerFrame { get; private set; }
+
+        /// <summary>
+        /// The time the server may spend per frame, in seconds.
+        /// </summary>
+        /// <remarks>
+        /// Adaptive rate control adjusts it, up to <see cref="global::KRPC.Client.Services.KRPC.ServerSettings.MaxTimePerFrame" />.
+        /// </remarks>
+        public float BudgetPerFrame { get; private set; }
+
+        /// <summary>
+        /// The median time between a response and the client's next call, over the
+        /// clients' recent calls, in seconds.
+        /// </summary>
+        public float MedianTurnaround { get; private set; }
 
         /// <summary>
         /// The number of calls left for the next update, because the update ran out of time
@@ -809,11 +828,6 @@ namespace KRPC.Client.Services.KRPC
         public ulong StreamUpdatesSent { get; private set; }
 
         /// <summary>
-        /// The time spent updating streams per update, in seconds.
-        /// </summary>
-        public float TimePerStreamUpdate { get; private set; }
-
-        /// <summary>
         /// Returns true if this ServerStatistics is equal to the given object.
         /// </summary>
         public override bool Equals (object obj)
@@ -826,7 +840,7 @@ namespace KRPC.Client.Services.KRPC
         /// </summary>
         public bool Equals (ServerStatistics other)
         {
-            return global::KRPC.Client.ValueUtils.Equal (BytesRead, other.BytesRead) && global::KRPC.Client.ValueUtils.Equal (BytesWritten, other.BytesWritten) && global::KRPC.Client.ValueUtils.Equal (BytesReadRate, other.BytesReadRate) && global::KRPC.Client.ValueUtils.Equal (BytesWrittenRate, other.BytesWrittenRate) && global::KRPC.Client.ValueUtils.Equal (RpcsExecuted, other.RpcsExecuted) && global::KRPC.Client.ValueUtils.Equal (RpcRate, other.RpcRate) && global::KRPC.Client.ValueUtils.Equal (TimePerRpcUpdate, other.TimePerRpcUpdate) && global::KRPC.Client.ValueUtils.Equal (PollTimePerRpcUpdate, other.PollTimePerRpcUpdate) && global::KRPC.Client.ValueUtils.Equal (ExecTimePerRpcUpdate, other.ExecTimePerRpcUpdate) && global::KRPC.Client.ValueUtils.Equal (DeferredCalls, other.DeferredCalls) && global::KRPC.Client.ValueUtils.Equal (Streams, other.Streams) && global::KRPC.Client.ValueUtils.Equal (StreamEvaluations, other.StreamEvaluations) && global::KRPC.Client.ValueUtils.Equal (StreamEvaluationRate, other.StreamEvaluationRate) && global::KRPC.Client.ValueUtils.Equal (StreamUpdatesSent, other.StreamUpdatesSent) && global::KRPC.Client.ValueUtils.Equal (TimePerStreamUpdate, other.TimePerStreamUpdate);
+            return global::KRPC.Client.ValueUtils.Equal (BytesRead, other.BytesRead) && global::KRPC.Client.ValueUtils.Equal (BytesWritten, other.BytesWritten) && global::KRPC.Client.ValueUtils.Equal (BytesReadRate, other.BytesReadRate) && global::KRPC.Client.ValueUtils.Equal (BytesWrittenRate, other.BytesWrittenRate) && global::KRPC.Client.ValueUtils.Equal (RpcsExecuted, other.RpcsExecuted) && global::KRPC.Client.ValueUtils.Equal (RpcRate, other.RpcRate) && global::KRPC.Client.ValueUtils.Equal (FrameRate, other.FrameRate) && global::KRPC.Client.ValueUtils.Equal (TimePerFrame, other.TimePerFrame) && global::KRPC.Client.ValueUtils.Equal (ExecTimePerFrame, other.ExecTimePerFrame) && global::KRPC.Client.ValueUtils.Equal (WaitTimePerFrame, other.WaitTimePerFrame) && global::KRPC.Client.ValueUtils.Equal (StreamTimePerFrame, other.StreamTimePerFrame) && global::KRPC.Client.ValueUtils.Equal (BudgetPerFrame, other.BudgetPerFrame) && global::KRPC.Client.ValueUtils.Equal (MedianTurnaround, other.MedianTurnaround) && global::KRPC.Client.ValueUtils.Equal (DeferredCalls, other.DeferredCalls) && global::KRPC.Client.ValueUtils.Equal (Streams, other.Streams) && global::KRPC.Client.ValueUtils.Equal (StreamEvaluations, other.StreamEvaluations) && global::KRPC.Client.ValueUtils.Equal (StreamEvaluationRate, other.StreamEvaluationRate) && global::KRPC.Client.ValueUtils.Equal (StreamUpdatesSent, other.StreamUpdatesSent);
         }
 
         /// <summary>
@@ -841,15 +855,18 @@ namespace KRPC.Client.Services.KRPC
             hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (BytesWrittenRate);
             hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (RpcsExecuted);
             hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (RpcRate);
-            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (TimePerRpcUpdate);
-            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (PollTimePerRpcUpdate);
-            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (ExecTimePerRpcUpdate);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (FrameRate);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (TimePerFrame);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (ExecTimePerFrame);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (WaitTimePerFrame);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (StreamTimePerFrame);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (BudgetPerFrame);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (MedianTurnaround);
             hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (DeferredCalls);
             hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (Streams);
             hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (StreamEvaluations);
             hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (StreamEvaluationRate);
             hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (StreamUpdatesSent);
-            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (TimePerStreamUpdate);
             return hash;
         }
 
@@ -896,13 +913,25 @@ namespace KRPC.Client.Services.KRPC
             result = global::System.Collections.Generic.Comparer<float>.Default.Compare (RpcRate, other.RpcRate);
             if (result != 0)
                 return result;
-            result = global::System.Collections.Generic.Comparer<float>.Default.Compare (TimePerRpcUpdate, other.TimePerRpcUpdate);
+            result = global::System.Collections.Generic.Comparer<float>.Default.Compare (FrameRate, other.FrameRate);
             if (result != 0)
                 return result;
-            result = global::System.Collections.Generic.Comparer<float>.Default.Compare (PollTimePerRpcUpdate, other.PollTimePerRpcUpdate);
+            result = global::System.Collections.Generic.Comparer<float>.Default.Compare (TimePerFrame, other.TimePerFrame);
             if (result != 0)
                 return result;
-            result = global::System.Collections.Generic.Comparer<float>.Default.Compare (ExecTimePerRpcUpdate, other.ExecTimePerRpcUpdate);
+            result = global::System.Collections.Generic.Comparer<float>.Default.Compare (ExecTimePerFrame, other.ExecTimePerFrame);
+            if (result != 0)
+                return result;
+            result = global::System.Collections.Generic.Comparer<float>.Default.Compare (WaitTimePerFrame, other.WaitTimePerFrame);
+            if (result != 0)
+                return result;
+            result = global::System.Collections.Generic.Comparer<float>.Default.Compare (StreamTimePerFrame, other.StreamTimePerFrame);
+            if (result != 0)
+                return result;
+            result = global::System.Collections.Generic.Comparer<float>.Default.Compare (BudgetPerFrame, other.BudgetPerFrame);
+            if (result != 0)
+                return result;
+            result = global::System.Collections.Generic.Comparer<float>.Default.Compare (MedianTurnaround, other.MedianTurnaround);
             if (result != 0)
                 return result;
             result = global::System.Collections.Generic.Comparer<uint>.Default.Compare (DeferredCalls, other.DeferredCalls);
@@ -918,9 +947,6 @@ namespace KRPC.Client.Services.KRPC
             if (result != 0)
                 return result;
             result = global::System.Collections.Generic.Comparer<ulong>.Default.Compare (StreamUpdatesSent, other.StreamUpdatesSent);
-            if (result != 0)
-                return result;
-            result = global::System.Collections.Generic.Comparer<float>.Default.Compare (TimePerStreamUpdate, other.TimePerStreamUpdate);
             if (result != 0)
                 return result;
             return 0;

@@ -27,10 +27,10 @@ listening arrives in the program's environment, as ``KRPC_TEST_TCPIP_PORT`` for 
 transport the client connects over.
 
 The server it is measured against runs unpaced. A round trip is served over and over inside one
-update for as long as the client answers within the receive timeout, so paced it is the client's
+update for as long as the server waits for the client's next call, so paced it is the client's
 cost inflated by the part of each update that does not go to RPCs, and once the client's own
-turnaround passes that timeout it stops being the client's cost at all and becomes 16.7 ms, the
-update rate. Unpaced the number is the client and nothing else.
+turnaround passes the max call wait it stops being the client's cost at all and becomes 16.7 ms,
+the update rate. Unpaced the number is the client and nothing else.
 """
 
 import json

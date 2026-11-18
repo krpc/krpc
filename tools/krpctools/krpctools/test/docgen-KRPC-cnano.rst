@@ -2440,15 +2440,6 @@ Main kRPC service, used by clients to interact with basic server functionality.
          The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
 
 
-   .. member:: uint32_t protocol_version
-
-      The protocol version of the client's connection.
-
-      .. macro:: KRPC_FIELD_KRPC_CLIENTINFO_PROTOCOLVERSION
-
-         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
-
-
 
 .. type:: krpc_KRPC_ServerSettings_t
 
@@ -2461,38 +2452,39 @@ Main kRPC service, used by clients to interact with basic server functionality.
       The service and structure ids of the structure, for :func:`krpc_KRPC_Type_StructTypeById`.
 
 
-   .. member:: uint32_t max_time_per_update
-
-      The current maximum time spent executing calls per update, in microseconds.
-
-      .. macro:: KRPC_FIELD_KRPC_SERVERSETTINGS_MAXTIMEPERUPDATE
-
-         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
-
-
    .. member:: bool adaptive_rate_control
 
-      Whether the server adjusts :member:`krpc_KRPC_ServerSettings_t.max_time_per_update` to hold the frame rate.
+      Whether the server adapts its time per frame to hold the frame rate at
+      :member:`krpc_KRPC_ServerSettings_t.target_frame_rate`.
 
       .. macro:: KRPC_FIELD_KRPC_SERVERSETTINGS_ADAPTIVERATECONTROL
 
          The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
 
 
-   .. member:: bool blocking_recv
+   .. member:: uint32_t target_frame_rate
 
-      Whether the server waits for the next call in an update.
+      The lowest frame rate the server's work pushes the game to, in frames per second.
 
-      .. macro:: KRPC_FIELD_KRPC_SERVERSETTINGS_BLOCKINGRECV
+      .. macro:: KRPC_FIELD_KRPC_SERVERSETTINGS_TARGETFRAMERATE
 
          The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
 
 
-   .. member:: uint32_t recv_timeout
+   .. member:: uint32_t max_time_per_frame
 
-      The time the server waits for the next call, in microseconds.
+      The server's budget per frame, or its ceiling with adaptive rate control, in microseconds.
 
-      .. macro:: KRPC_FIELD_KRPC_SERVERSETTINGS_RECVTIMEOUT
+      .. macro:: KRPC_FIELD_KRPC_SERVERSETTINGS_MAXTIMEPERFRAME
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
+   .. member:: uint32_t max_call_wait
+
+      The longest the server waits for a client's next call, in microseconds.
+
+      .. macro:: KRPC_FIELD_KRPC_SERVERSETTINGS_MAXCALLWAIT
 
          The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
 
@@ -2572,29 +2564,67 @@ Main kRPC service, used by clients to interact with basic server functionality.
          The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
 
 
-   .. member:: float time_per_rpc_update
+   .. member:: float frame_rate
 
-      The time spent receiving and executing calls per update, in seconds.
+      The game's frame rate, in frames per second.
 
-      .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_TIMEPERRPCUPDATE
-
-         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
-
-
-   .. member:: float poll_time_per_rpc_update
-
-      The time spent receiving calls per update, in seconds.
-
-      .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_POLLTIMEPERRPCUPDATE
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_FRAMERATE
 
          The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
 
 
-   .. member:: float exec_time_per_rpc_update
+   .. member:: float time_per_frame
 
-      The time spent executing calls per update, in seconds.
+      The server's time per frame, in seconds: executing calls, waiting for them and
+      updating streams.
 
-      .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_EXECTIMEPERRPCUPDATE
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_TIMEPERFRAME
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
+   .. member:: float exec_time_per_frame
+
+      The time spent executing calls per frame, in seconds.
+
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_EXECTIMEPERFRAME
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
+   .. member:: float wait_time_per_frame
+
+      The time spent waiting for calls per frame, in seconds.
+
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_WAITTIMEPERFRAME
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
+   .. member:: float stream_time_per_frame
+
+      The time spent updating streams per frame, in seconds.
+
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_STREAMTIMEPERFRAME
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
+   .. member:: float budget_per_frame
+
+      The time the server may spend per frame, in seconds.
+
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_BUDGETPERFRAME
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
+   .. member:: float median_turnaround
+
+      The median time between a response and the client's next call, over the
+      clients' recent calls, in seconds.
+
+      .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_MEDIANTURNAROUND
 
          The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
 
@@ -2641,15 +2671,6 @@ Main kRPC service, used by clients to interact with basic server functionality.
       The number of stream updates sent to clients.
 
       .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_STREAMUPDATESSENT
-
-         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
-
-
-   .. member:: float time_per_stream_update
-
-      The time spent updating streams per update, in seconds.
-
-      .. macro:: KRPC_FIELD_KRPC_SERVERSTATISTICS_TIMEPERSTREAMUPDATE
 
          The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
 

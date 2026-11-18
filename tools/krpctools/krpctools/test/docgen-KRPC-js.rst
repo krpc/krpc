@@ -2407,12 +2407,6 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
       :Type: ``string``
 
-   .. attribute:: protocolVersion
-
-      The protocol version of the client's connection.
-
-      :Type: ``number``
-
 
 .. class:: ServerSettings(fields)
 
@@ -2421,27 +2415,28 @@ Main kRPC service, used by clients to interact with basic server functionality.
    .. note::
 
       See :attr:`KRPC.ServerStatus.settings`.
-   .. attribute:: maxTimePerUpdate
+   .. attribute:: adaptiveRateControl
 
-      The current maximum time spent executing calls per update, in microseconds.
+      Whether the server adapts its time per frame to hold the frame rate at
+      :attr:`KRPC.ServerSettings.targetFrameRate`.
+
+      :Type: ``boolean``
+
+   .. attribute:: targetFrameRate
+
+      The lowest frame rate the server's work pushes the game to, in frames per second.
 
       :Type: ``number``
 
-   .. attribute:: adaptiveRateControl
+   .. attribute:: maxTimePerFrame
 
-      Whether the server adjusts :attr:`KRPC.ServerSettings.maxTimePerUpdate` to hold the frame rate.
+      The server's budget per frame, or its ceiling with adaptive rate control, in microseconds.
 
-      :Type: ``boolean``
+      :Type: ``number``
 
-   .. attribute:: blockingRecv
+   .. attribute:: maxCallWait
 
-      Whether the server waits for the next call in an update.
-
-      :Type: ``boolean``
-
-   .. attribute:: recvTimeout
-
-      The time the server waits for the next call, in microseconds.
+      The longest the server waits for a client's next call, in microseconds.
 
       :Type: ``number``
 
@@ -2495,21 +2490,47 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
       :Type: ``number``
 
-   .. attribute:: timePerRpcUpdate
+   .. attribute:: frameRate
 
-      The time spent receiving and executing calls per update, in seconds.
-
-      :Type: ``number``
-
-   .. attribute:: pollTimePerRpcUpdate
-
-      The time spent receiving calls per update, in seconds.
+      The game's frame rate, in frames per second.
 
       :Type: ``number``
 
-   .. attribute:: execTimePerRpcUpdate
+   .. attribute:: timePerFrame
 
-      The time spent executing calls per update, in seconds.
+      The server's time per frame, in seconds: executing calls, waiting for them and
+      updating streams.
+
+      :Type: ``number``
+
+   .. attribute:: execTimePerFrame
+
+      The time spent executing calls per frame, in seconds.
+
+      :Type: ``number``
+
+   .. attribute:: waitTimePerFrame
+
+      The time spent waiting for calls per frame, in seconds.
+
+      :Type: ``number``
+
+   .. attribute:: streamTimePerFrame
+
+      The time spent updating streams per frame, in seconds.
+
+      :Type: ``number``
+
+   .. attribute:: budgetPerFrame
+
+      The time the server may spend per frame, in seconds.
+
+      :Type: ``number``
+
+   .. attribute:: medianTurnaround
+
+      The median time between a response and the client's next call, over the
+      clients' recent calls, in seconds.
 
       :Type: ``number``
 
@@ -2543,12 +2564,6 @@ Main kRPC service, used by clients to interact with basic server functionality.
       The number of stream updates sent to clients.
 
       :Type: ``bigint``
-
-   .. attribute:: timePerStreamUpdate
-
-      The time spent updating streams per update, in seconds.
-
-      :Type: ``number``
 
 
 .. class:: ServerStatus(fields)

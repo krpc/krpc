@@ -31,7 +31,19 @@ namespace KRPC.Server.SerialIO
 
         public int ReadTimeout {
             get { return port.ReadTimeout; }
-            set { port.ReadTimeout = value; }
+            set {
+#if NET
+                // A read on .NET's Unix serial stream is a request its I/O thread completes,
+                // and a read that times out cancels the request, which may drop bytes that
+                // arrive as it gives up. So a read there waits with no timeout, until closing
+                // the port ends it.
+                if (!OperatingSystem.IsWindows ()) {
+                    port.ReadTimeout = SerialPort.InfiniteTimeout;
+                    return;
+                }
+#endif
+                port.ReadTimeout = value;
+            }
         }
 
         public int BytesToRead {
@@ -55,6 +67,8 @@ namespace KRPC.Server.SerialIO
 
         public int Read (byte[] buffer, int offset, int count)
         {
+            // A read returns once any bytes have arrived. One that times out takes nothing: on
+            // Mono it polls the port before reading, and on Windows the read completes empty
             return port.Read (buffer, offset, count);
         }
 
