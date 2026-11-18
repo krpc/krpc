@@ -49,6 +49,14 @@ local function _decode_string(data)
   return _present(_unpack(data, 's'))
 end
 
+local function _decode_text(data)
+  local value = _decode_string(data)
+  if not compat.valid_utf8(value) then
+    error('A string is not valid UTF-8', 0)
+  end
+  return value
+end
+
 local function _decode_signed(data)
   return _present(_unpack(data, 'j'))
 end
@@ -73,7 +81,7 @@ local _value_decoders = {
   [Types.UINT32] = _decode_varint,
   [Types.UINT64] = _decode_uint64,
   [Types.BOOL] = function(data) return _decode_varint(data) ~= 0 end,
-  [Types.STRING] = _decode_string,
+  [Types.STRING] = _decode_text,
   [Types.BYTES] = _decode_string,
   [Types.ENUMERATION] = function(data, typ)
     return typ.lua_type(_decode_signed(data))

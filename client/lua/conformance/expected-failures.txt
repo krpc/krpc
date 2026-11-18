@@ -10,7 +10,6 @@ test_calls.py::test_too_many_arguments[procedure]  # Arguments past the last par
 test_calls.py::test_too_many_arguments[method]  # As test_too_many_arguments[procedure]
 test_codec.py::test_too_few_items[tuple]  # A short wire tuple decodes short
 test_codec.py::test_extra_items[tuple]  # A tuple with extra items fails to decode
-test_codec.py::test_invalid_utf8  # A string that is not valid UTF-8 decodes
 test_connection.py::test_stall  # No stall timeout
 test_connection.py::test_handshake_timeout_values[zero]  # A zero, negative or NaN timeout raises no argument error
 test_connection.py::test_handshake_timeout_values[negative]  # As test_handshake_timeout_values[zero]

@@ -60,4 +60,11 @@ end
 -- number is never negative, so this is the plain comparison.
 compat.ult = math.ult or function(a, b) return a < b end
 
+-- Whether a string is valid UTF-8. Lua 5.1 and 5.2 have no utf8 library, and take any string.
+if utf8 ~= nil then
+  compat.valid_utf8 = function(s) return utf8.len(s) ~= nil end
+else
+  compat.valid_utf8 = function() return true end
+end
+
 return compat

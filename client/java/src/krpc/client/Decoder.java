@@ -166,7 +166,7 @@ public class Decoder {
 
   static String decodeString(ByteString data) throws IOException {
     CodedInputStream stream = CodedInputStream.newInstance(data.toByteArray());
-    return stream.readString();
+    return stream.readStringRequireUtf8();
   }
 
   static byte[] decodeBytes(ByteString data) throws IOException {
