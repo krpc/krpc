@@ -9,27 +9,27 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 
 public class TreeTraversal {
-    public static void main(String[] args) {
-        Connection connection = Connection.newInstance();
-        Vessel vessel =
-            SpaceCenter.newInstance(connection).getActiveVessel();
-        Part root = vessel.getParts().getRoot();
-        Deque<Pair<Part, Integer>> stack =
-            new ArrayDeque<Pair<Part, Integer>>();
-        stack.push(new Pair<Part, Integer>(root, 0));
-        while (stack.size() > 0) {
-            Pair<Part, Integer> item = stack.pop();
-            Part part = item.getValue0();
-            int depth = item.getValue1();
-            String prefix = "";
-            for (int i = 0; i < depth; i++) {
-                prefix += " ";
-            }
-            System.out.println(prefix + part.getTitle());
-            for (Part child : part.getChildren()) {
-                stack.push(new Pair<Part, Integer>(child, depth + 1));
-            }
+  public static void main(String[] args) {
+    try (Connection connection = Connection.newInstance()) {
+      Vessel vessel =
+          SpaceCenter.newInstance(connection).getActiveVessel();
+      Part root = vessel.getParts().getRoot();
+      Deque<Pair<Part, Integer>> stack =
+          new ArrayDeque<Pair<Part, Integer>>();
+      stack.push(new Pair<Part, Integer>(root, 0));
+      while (stack.size() > 0) {
+        Pair<Part, Integer> item = stack.pop();
+        Part part = item.getValue0();
+        int depth = item.getValue1();
+        String prefix = "";
+        for (int i = 0; i < depth; i++) {
+          prefix += " ";
         }
-        connection.close();
+        System.out.println(prefix + part.getTitle());
+        for (Part child : part.getChildren()) {
+          stack.push(new Pair<Part, Integer>(child, depth + 1));
+        }
+      }
     }
+  }
 }
