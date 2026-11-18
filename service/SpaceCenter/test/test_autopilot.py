@@ -1694,11 +1694,11 @@ def _make_autopilot_launch_test_class(  # noqa: PLR0913
             # Wait briefly between autopilot engagement and launch to check the
             # pre-launch behavior of the autopilot. Control loop should be held until
             # launch so an initial kick in controls is not produced.
-            time.sleep(1)
+            self.wait_game_time(1)
             self.vessel.control.activate_next_stage()
             if pre_launch_sequence:
                 # Rocket has a prelaunch spin up, release after 0.5 seconds
-                self.wait(0.5)
+                self.wait_game_time(0.5)
                 self.vessel.control.activate_next_stage()
 
         def assert_steady(self, oscillation_amplitude, attitude_error):
@@ -1721,9 +1721,9 @@ def _make_autopilot_launch_test_class(  # noqa: PLR0913
             # Launch, holding vertical, and assert the actuators have settled to a
             # smooth hold with little oscillation.
             self.lift_off()
-            self.wait(launch_settle_delay)
+            self.wait_game_time(launch_settle_delay)
             self.ap.diagnostic_logging = True
-            self.wait(10)
+            self.wait_game_time(10)
             self.ap.diagnostic_logging = False
             self.assert_steady(hold_oscillation_amplitude, hold_attitude_error)
 
@@ -1731,11 +1731,11 @@ def _make_autopilot_launch_test_class(  # noqa: PLR0913
             # Launch, hold vertical for 10 seconds, pitch over 5 degrees, then assert
             # the actuators have settled to a smooth hold with little oscillation.
             self.lift_off()
-            self.wait(10)
+            self.wait_game_time(10)
             self.ap.target_pitch_and_heading(85, 90)
-            self.wait(pitch_settle_delay)
+            self.wait_game_time(pitch_settle_delay)
             self.ap.diagnostic_logging = True
-            self.wait(10)
+            self.wait_game_time(10)
             self.ap.diagnostic_logging = False
             self.assert_steady(hold_oscillation_amplitude, hold_attitude_error)
 
@@ -1745,10 +1745,10 @@ def _make_autopilot_launch_test_class(  # noqa: PLR0913
             # Assert the actuators have settled to a smooth hold with little
             # oscillation from 10 second onwards.
             self.lift_off()
-            self.wait(10)
+            self.wait_game_time(10)
             self.ap.diagnostic_logging = True
             for i in range(200):
-                self.wait(0.1)
+                self.wait_game_time(0.1)
                 self.ap.target_pitch_and_heading(90 - 0.1 * i, 90)
             self.ap.diagnostic_logging = False
             self.assert_steady(turn_oscillation_amplitude, turn_attitude_error)
@@ -1759,11 +1759,11 @@ def _make_autopilot_launch_test_class(  # noqa: PLR0913
             # Assert the actuators have settled to a smooth hold with little
             # oscillation from 10 second onwards.
             self.lift_off()
-            self.wait(10)
+            self.wait_game_time(10)
             self.ap.diagnostic_logging = True
             self.ap.target_smoothing_time = 20
             self.ap.target_pitch_and_heading(70, 90)
-            self.wait(20)
+            self.wait_game_time(20)
             self.ap.target_smoothing_time = 0
             self.ap.diagnostic_logging = False
             self.assert_steady(turn_oscillation_amplitude, turn_attitude_error)
