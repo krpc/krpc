@@ -151,7 +151,7 @@ changes one of those, such as the compiler.
 | Bazelisk | OS and `.bazelversion` | Every job that misses it |
 | Third-party C++ libraries | The libraries' Bazel actions | `linux-test-client-cpp`, `windows-test-client-cpp` |
 | vcpkg binaries | Package set, runner image and ABI hashes | The vcpkg actions |
-| ccache | Compiler, CMake template and vcpkg ABI hashes | The CMake consumer jobs |
+| ccache | Job, compiler, CMake template and vcpkg ABI hashes | The CMake consumer jobs |
 
 ### Bazel Downloads
 
@@ -190,8 +190,11 @@ why a package rebuilt.
 
 ### ccache
 
-The CMake consumer jobs compile through ccache with `CCACHE_COMPILERCHECK=content`, so a new
-runner image with the same compiler still hits.
+The CMake consumer jobs compile through ccache with `CCACHE_COMPILERCHECK=content`. ccache
+checks each object against the compiler's contents, its arguments and the preprocessed source.
+A job that misses its exact key restores the newest cache of the same job. A runner image that
+updates CMake changes the vcpkg ABI hashes and so the key, and objects from the same compiler
+still hit.
 
 ## Flakes
 
