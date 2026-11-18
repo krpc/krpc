@@ -7,9 +7,7 @@
 #endif
 #include <krpc_cnano.h>
 #include <krpc_cnano/services/space_center.h>
-#include <math.h>
-
-typedef krpc_tuple_double_double_double_t vector3;
+#include <stdio.h>
 
 int main() {
   krpc_connection_t conn;

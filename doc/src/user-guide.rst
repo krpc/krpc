@@ -32,14 +32,15 @@ in.
 Flying
 ------
 
-How to steer a vessel with the auto-pilot, and how to write a control loop that acts on every
-physics tick.
+How to steer a vessel with the auto-pilot, how to write a control loop that acts on every physics
+tick, and how boats and submarines float.
 
 .. toctree::
    :maxdepth: 1
 
    user-guide/autopilot
    user-guide/control-loops
+   user-guide/boats-and-submarines
 
 The Server
 ----------

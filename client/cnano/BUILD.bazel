@@ -81,6 +81,23 @@ cc_library(
     deps = ["@c_nanopb//:nanopb"],
 )
 
+# The library printing each error to stderr, for the in-game runs of the documentation
+# examples, which ignore the codes the functions return
+cc_library(
+    name = "krpc_cnano_print_errors",
+    testonly = True,
+    srcs = srcs + [":protobuf"],
+    hdrs = hdrs + [":protobuf"],
+    defines = [
+        "KRPC_ERROR_MESSAGES",
+        "KRPC_PRINT_ERRORS_TO_STDERR",
+    ],
+    includes = ["include"],
+    linkopts = ws2_32,
+    visibility = ["//doc:__subpackages__"],
+    deps = ["@c_nanopb//:nanopb"],
+)
+
 test_suite(
     name = "test",
     tests = [

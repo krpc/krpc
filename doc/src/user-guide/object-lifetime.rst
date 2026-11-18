@@ -14,12 +14,64 @@ Loading a save, quickloading and reverting all replace the game's own objects. A
 parts are rebuilt the same way whenever it comes back into range.
 
 An object obtained beforehand goes on working, and reads the state of the loaded game. So you
-can hold onto a vessel or a part across a quickload:
+can hold onto a part's parachute across a quickload:
 
-.. literalinclude:: /scripts/user-guide/object-lifetime/Quickload.py
-   :language: python
-   :start-after: [docs]
-   :end-before: [/docs]
+.. tabs::
+
+   .. group-tab:: Python
+
+      .. literalinclude:: /scripts/user-guide/object-lifetime/Quickload.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
+
+   .. group-tab:: C#
+
+      .. literalinclude:: /scripts/user-guide/object-lifetime/Quickload.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C++
+
+      .. literalinclude:: /scripts/user-guide/object-lifetime/Quickload.cpp
+         :language: cpp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/user-guide/object-lifetime/Quickload.c
+         :language: c
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: Java
+
+      .. literalinclude:: /scripts/user-guide/object-lifetime/Quickload.java
+         :language: java
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: Lua
+
+      .. literalinclude:: /scripts/user-guide/object-lifetime/Quickload.lua
+         :language: lua
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/object-lifetime/Quickload.js
+         :language: javascript
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
 Destroyed Objects
 -----------------
@@ -28,10 +80,62 @@ Once what an object identifies is destroyed, every member of it that reads the g
 ``KRPC.ObjectDestroyedException``. Catch it as you would any other exception the client
 library defines:
 
-.. literalinclude:: /scripts/user-guide/object-lifetime/DestroyedPart.py
-   :language: python
-   :start-after: [docs]
-   :end-before: [/docs]
+.. tabs::
+
+   .. group-tab:: Python
+
+      .. literalinclude:: /scripts/user-guide/object-lifetime/DestroyedPart.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
+
+   .. group-tab:: C#
+
+      .. literalinclude:: /scripts/user-guide/object-lifetime/DestroyedPart.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C++
+
+      .. literalinclude:: /scripts/user-guide/object-lifetime/DestroyedPart.cpp
+         :language: cpp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/user-guide/object-lifetime/DestroyedPart.c
+         :language: c
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: Java
+
+      .. literalinclude:: /scripts/user-guide/object-lifetime/DestroyedPart.java
+         :language: java
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: Lua
+
+      .. literalinclude:: /scripts/user-guide/object-lifetime/DestroyedPart.lua
+         :language: lua
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/object-lifetime/DestroyedPart.js
+         :language: javascript
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
 The ``KRPC`` API reference for each client language documents it alongside the other
 exceptions the server raises.

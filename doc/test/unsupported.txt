@@ -1,0 +1,19 @@
+# The examples this harness cannot run, one per line, as "<language> <key>  # reason". The
+# language is * for every language that has the example.
+* tutorials/raster-prop-monitor/CameraVideo  # Shows a window, and needs Pillow
+* tutorials/control-panel/ControlPanel  # Runs in a web page
+* client/Connecting2  # Connects to a remote address
+cnano client/ConnectingCustom  # Talks to the server over its own standard input and output
+js client/Dashboard  # Runs in a web page
+js client/StreamScope  # await using needs Node.js 24, and the build runs Node.js 22
+js api/docking-camera/DockingCameraExample  # Runs in a web page
+* communication-protocols/serialio/RPC  # Needs a serial port
+* communication-protocols/websockets/RPC  # A CommonJS script that needs the ws and protobufjs packages
+* communication-protocols/websockets/Stream  # As communication-protocols/websockets/RPC
+* extending/ServiceAPIExample  # Calls the example service, which the game does not have
+* extending/attributes/Enumeration  # As extending/ServiceAPIExample
+* extending/attributes/PlantFlag  # As extending/ServiceAPIExample
+* extending/attributes/ServiceProperty  # As extending/ServiceAPIExample
+* extending/attributes/Structure  # As extending/ServiceAPIExample
+* extending/testing/conftest  # Part of an example test suite, not a program
+* extending/testing/test_heatshields  # As extending/testing/conftest

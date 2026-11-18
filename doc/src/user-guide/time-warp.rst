@@ -14,11 +14,63 @@ Warping to a Time
 ``SpaceCenter.WarpTo`` warps until a universal time, then stops. This example warps to ten seconds
 before the vessel reaches apoapsis:
 
-.. literalinclude:: /scripts/user-guide/time-warp/WarpTo.py
-   :language: python
-   :start-after: [docs]
-   :end-before: [/docs]
-   :dedent:
+.. tabs::
+
+   .. group-tab:: Python
+
+      .. literalinclude:: /scripts/user-guide/time-warp/WarpTo.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C#
+
+      .. literalinclude:: /scripts/user-guide/time-warp/WarpTo.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C++
+
+      .. literalinclude:: /scripts/user-guide/time-warp/WarpTo.cpp
+         :language: cpp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/user-guide/time-warp/WarpTo.c
+         :language: c
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: Java
+
+      .. literalinclude:: /scripts/user-guide/time-warp/WarpTo.java
+         :language: java
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: Lua
+
+      .. literalinclude:: /scripts/user-guide/time-warp/WarpTo.lua
+         :language: lua
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/time-warp/WarpTo.js
+         :language: javascript
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
 The call returns once the time is reached. It uses rails warp when the game allows it, and physics
 warp otherwise, such as in an atmosphere. It slows the warp as the time approaches, and arrives close
@@ -37,13 +89,66 @@ Warp Factors
 
 A warp factor is the position of the warp rate on the game's warp control, not the rate itself.
 ``SpaceCenter.RailsWarpFactor`` sets rails warp, from 0 to 7, and
-``SpaceCenter.PhysicsWarpFactor`` sets physics warp, from 0 to 3. Zero stops warping:
+``SpaceCenter.PhysicsWarpFactor`` sets physics warp, from 0 to 3. Zero stops warping. This
+example prints the highest rails warp factor the game allows now, then sets rails warp to 3:
 
-.. literalinclude:: /scripts/user-guide/time-warp/WarpFactor.py
-   :language: python
-   :start-after: [docs]
-   :end-before: [/docs]
-   :dedent:
+.. tabs::
+
+   .. group-tab:: Python
+
+      .. literalinclude:: /scripts/user-guide/time-warp/WarpFactor.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C#
+
+      .. literalinclude:: /scripts/user-guide/time-warp/WarpFactor.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C++
+
+      .. literalinclude:: /scripts/user-guide/time-warp/WarpFactor.cpp
+         :language: cpp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/user-guide/time-warp/WarpFactor.c
+         :language: c
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: Java
+
+      .. literalinclude:: /scripts/user-guide/time-warp/WarpFactor.java
+         :language: java
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: Lua
+
+      .. literalinclude:: /scripts/user-guide/time-warp/WarpFactor.lua
+         :language: lua
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/time-warp/WarpFactor.js
+         :language: javascript
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
 Setting one kind of warp stops the other. A factor above the highest the game allows is lowered to
 it, with no exception. ``SpaceCenter.WarpMode`` gives the kind of warp in use, and

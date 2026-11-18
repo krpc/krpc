@@ -3,8 +3,7 @@
 Interacting with Parts
 ======================
 
-The following examples demonstrate use of the :ref:`python-api-parts` functionality to
-achieve various tasks. The :ref:`parts guide <user-guide-parts>` explains the tree of
+The following examples use the parts of a vessel to achieve various tasks. The :ref:`parts guide <user-guide-parts>` explains the tree of
 parts, attachment modes, fuel lines, staging and part modules.
 
 Deploying all Parachutes
@@ -15,55 +14,96 @@ your Kerbals by deploying all the parachutes:
 
 .. tabs::
 
-   .. tab:: Python
+   .. group-tab:: Python
 
       .. literalinclude:: /scripts/tutorials/parts/DeployParachutes.py
          :language: python
 
-   .. tab:: C#
+   .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/parts/DeployParachutes.cs
          :language: csharp
 
-   .. tab:: C++
+   .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/parts/DeployParachutes.cpp
          :language: cpp
 
-   .. tab:: C
+   .. group-tab:: C
 
       .. literalinclude:: /scripts/tutorials/parts/DeployParachutes.c
          :language: c
 
-   .. tab:: Java
+   .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/parts/DeployParachutes.java
          :language: java
 
-   .. tab:: Lua
+   .. group-tab:: Lua
 
       .. literalinclude:: /scripts/tutorials/parts/DeployParachutes.lua
          :language: lua
 
-   .. tab:: JavaScript
+   .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/tutorials/parts/DeployParachutes.js
          :language: javascript
 
 The script deploys the parachutes one call at a time, and the game can advance between the
 calls. A :ref:`server side function <server-side-functions>` deploys them all in the same
-physics tick, with a single call:
+physics tick, with a single call. Python and JavaScript compile it from a function. A C#
+lambda holds no loop, so C# and the other clients build the loop with the
+:ref:`expression API <server-side-functions-api>`:
 
 .. tabs::
 
-   .. tab:: Python
+   .. group-tab:: Python
 
       .. literalinclude:: /scripts/tutorials/parts/DeployParachutesFunction.py
          :language: python
          :start-after: [docs]
          :end-before: [/docs]
 
-   .. tab:: JavaScript
+   .. group-tab:: C#
+
+      .. literalinclude:: /scripts/tutorials/parts/DeployParachutesFunction.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C++
+
+      .. literalinclude:: /scripts/tutorials/parts/DeployParachutesFunction.cpp
+         :language: cpp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/tutorials/parts/DeployParachutesFunction.c
+         :language: c
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: Java
+
+      .. literalinclude:: /scripts/tutorials/parts/DeployParachutesFunction.java
+         :language: java
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: Lua
+
+      .. literalinclude:: /scripts/tutorials/parts/DeployParachutesFunction.lua
+         :language: lua
+         :start-after: [docs]
+         :end-before: [/docs]
+
+   .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/tutorials/parts/DeployParachutesFunction.js
          :language: javascript
@@ -78,37 +118,37 @@ control the vessel from it:
 
 .. tabs::
 
-   .. tab:: Python
+   .. group-tab:: Python
 
       .. literalinclude:: /scripts/tutorials/parts/ControlFromHere.py
          :language: python
 
-   .. tab:: C#
+   .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/parts/ControlFromHere.cs
          :language: csharp
 
-   .. tab:: C++
+   .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/parts/ControlFromHere.cpp
          :language: cpp
 
-   .. tab:: C
+   .. group-tab:: C
 
       .. literalinclude:: /scripts/tutorials/parts/ControlFromHere.c
          :language: c
 
-   .. tab:: Java
+   .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/parts/ControlFromHere.java
          :language: java
 
-   .. tab:: Lua
+   .. group-tab:: Lua
 
       .. literalinclude:: /scripts/tutorials/parts/ControlFromHere.lua
          :language: lua
 
-   .. tab:: JavaScript
+   .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/tutorials/parts/ControlFromHere.js
          :language: javascript
@@ -122,55 +162,57 @@ https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines
 
 .. tabs::
 
-   .. tab:: Python
+   .. group-tab:: Python
 
       .. literalinclude:: /scripts/tutorials/parts/CombinedIsp.py
          :language: python
 
-   .. tab:: C#
+   .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/parts/CombinedIsp.cs
          :language: csharp
 
-   .. tab:: C++
+   .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/parts/CombinedIsp.cpp
          :language: cpp
 
-   .. tab:: C
+   .. group-tab:: C
 
       .. literalinclude:: /scripts/tutorials/parts/CombinedIsp.c
          :language: c
 
-   .. tab:: Java
+   .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/parts/CombinedIsp.java
          :language: java
 
-   .. tab:: Lua
+   .. group-tab:: Lua
 
       .. literalinclude:: /scripts/tutorials/parts/CombinedIsp.lua
          :language: lua
 
-   .. tab:: JavaScript
+   .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/tutorials/parts/CombinedIsp.js
          :language: javascript
 
 The script reads the thrust and specific impulse of each engine with separate calls, which can
 land in different physics ticks. A :ref:`server side function <server-side-functions>`
-reads them all in the same tick, with a single call:
+reads them all in the same tick, with a single call. Python, C# and JavaScript compile it from a
+function, and the other clients build it with the
+:ref:`expression API <server-side-functions-api>`:
 
 .. tabs::
 
-   .. tab:: Python
+   .. group-tab:: Python
 
       .. literalinclude:: /scripts/tutorials/parts/CombinedIspFunction.py
          :language: python
          :start-after: [docs]
          :end-before: [/docs]
 
-   .. tab:: C#
+   .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/parts/CombinedIspFunction.cs
          :language: csharp
@@ -178,7 +220,43 @@ reads them all in the same tick, with a single call:
          :end-before: [/docs]
          :dedent:
 
-   .. tab:: JavaScript
+   .. group-tab:: C++
+
+      .. literalinclude:: /scripts/tutorials/parts/CombinedIspFunction.cpp
+         :language: cpp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/tutorials/parts/CombinedIspFunction.c
+         :language: c
+         :start-after: [helpers]
+         :end-before: [/helpers]
+
+      .. literalinclude:: /scripts/tutorials/parts/CombinedIspFunction.c
+         :language: c
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: Java
+
+      .. literalinclude:: /scripts/tutorials/parts/CombinedIspFunction.java
+         :language: java
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: Lua
+
+      .. literalinclude:: /scripts/tutorials/parts/CombinedIspFunction.lua
+         :language: lua
+         :start-after: [docs]
+         :end-before: [/docs]
+
+   .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/tutorials/parts/CombinedIspFunction.js
          :language: javascript

@@ -1,15 +1,5 @@
-#ifdef _WIN32
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#define sleep(seconds) Sleep((seconds) * 1000)
-#else
-#include <unistd.h>
-#endif
 #include <krpc_cnano.h>
 #include <krpc_cnano/services/space_center.h>
-#include <math.h>
-
-typedef krpc_tuple_double_double_double_t vector3;
 
 int main() {
   krpc_connection_t conn;
@@ -32,4 +22,6 @@ int main() {
   krpc_SpaceCenter_AutoPilot_set_Engaged(conn, ap, true);
   krpc_SpaceCenter_AutoPilot_Wait(conn, ap, -1);
   krpc_SpaceCenter_AutoPilot_set_Engaged(conn, ap, false);
+
+  krpc_disconnect(conn);
 }

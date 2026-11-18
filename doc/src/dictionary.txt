@@ -117,6 +117,7 @@ hostname
 inkscape
 initializers
 integration
+integrations
 interactable
 internet
 intra
@@ -155,6 +156,7 @@ microtask
 minifier
 mitigations
 mits
+monopropellant
 mutex
 namespace
 namespaces

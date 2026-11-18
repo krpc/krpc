@@ -15,37 +15,37 @@ vessel:
 
 .. tabs::
 
-   .. tab:: Python
+   .. group-tab:: Python
 
       .. literalinclude:: /scripts/user-guide/vectors-and-rotations/Vector3.py
          :language: python
 
-   .. tab:: C#
+   .. group-tab:: C#
 
       .. literalinclude:: /scripts/user-guide/vectors-and-rotations/Vector3.cs
          :language: csharp
 
-   .. tab:: C++
+   .. group-tab:: C++
 
       .. literalinclude:: /scripts/user-guide/vectors-and-rotations/Vector3.cpp
          :language: cpp
 
-   .. tab:: C
+   .. group-tab:: C
 
       .. literalinclude:: /scripts/user-guide/vectors-and-rotations/Vector3.c
          :language: c
 
-   .. tab:: Java
+   .. group-tab:: Java
 
       .. literalinclude:: /scripts/user-guide/vectors-and-rotations/Vector3.java
          :language: java
 
-   .. tab:: Lua
+   .. group-tab:: Lua
 
       .. literalinclude:: /scripts/user-guide/vectors-and-rotations/Vector3.lua
          :language: lua
 
-   .. tab:: JavaScript
+   .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/vectors-and-rotations/Vector3.js
          :language: javascript
@@ -77,37 +77,37 @@ A rotation is a unit quaternion, a 4-tuple ``(x, y, z, w)``. The rotation that d
 
 .. tabs::
 
-   .. tab:: Python
+   .. group-tab:: Python
 
       .. literalinclude:: /scripts/user-guide/vectors-and-rotations/Quaternion.py
          :language: python
 
-   .. tab:: C#
+   .. group-tab:: C#
 
       .. literalinclude:: /scripts/user-guide/vectors-and-rotations/Quaternion.cs
          :language: csharp
 
-   .. tab:: C++
+   .. group-tab:: C++
 
       .. literalinclude:: /scripts/user-guide/vectors-and-rotations/Quaternion.cpp
          :language: cpp
 
-   .. tab:: C
+   .. group-tab:: C
 
       .. literalinclude:: /scripts/user-guide/vectors-and-rotations/Quaternion.c
          :language: c
 
-   .. tab:: Java
+   .. group-tab:: Java
 
       .. literalinclude:: /scripts/user-guide/vectors-and-rotations/Quaternion.java
          :language: java
 
-   .. tab:: Lua
+   .. group-tab:: Lua
 
       .. literalinclude:: /scripts/user-guide/vectors-and-rotations/Quaternion.lua
          :language: lua
 
-   .. tab:: JavaScript
+   .. group-tab:: JavaScript
 
       .. literalinclude:: /scripts/user-guide/vectors-and-rotations/Quaternion.js
          :language: javascript
@@ -127,15 +127,67 @@ standard library are in radians. The API reference gives the unit of each one.
 Computing on the Server
 -----------------------
 
-The standard library service does vector and quaternion arithmetic, so you do not need a maths
+The standard library service does vector and quaternion arithmetic, so you do not need a math
 library in your client. This example finds the angle between the direction of the active vessel
 and its prograde direction:
 
-.. literalinclude:: /scripts/user-guide/vectors-and-rotations/AngleToPrograde.py
-   :language: python
-   :start-after: [docs]
-   :end-before: [/docs]
-   :dedent:
+.. tabs::
+
+   .. group-tab:: Python
+
+      .. literalinclude:: /scripts/user-guide/vectors-and-rotations/AngleToPrograde.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C#
+
+      .. literalinclude:: /scripts/user-guide/vectors-and-rotations/AngleToPrograde.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C++
+
+      .. literalinclude:: /scripts/user-guide/vectors-and-rotations/AngleToPrograde.cpp
+         :language: cpp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/user-guide/vectors-and-rotations/AngleToPrograde.c
+         :language: c
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: Java
+
+      .. literalinclude:: /scripts/user-guide/vectors-and-rotations/AngleToPrograde.java
+         :language: java
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: Lua
+
+      .. literalinclude:: /scripts/user-guide/vectors-and-rotations/AngleToPrograde.lua
+         :language: lua
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/user-guide/vectors-and-rotations/AngleToPrograde.js
+         :language: javascript
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
 The vector functions add, subtract, scale, normalize and interpolate vectors, and give their dot
 and cross products, lengths, distances and angles. The quaternion functions compose, invert and

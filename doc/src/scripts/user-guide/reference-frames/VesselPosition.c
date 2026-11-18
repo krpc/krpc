@@ -1,13 +1,6 @@
-#ifdef _WIN32
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#define sleep(seconds) Sleep((seconds) * 1000)
-#else
-#include <unistd.h>
-#endif
 #include <krpc_cnano.h>
 #include <krpc_cnano/services/space_center.h>
-#include <math.h>
+#include <stdio.h>
 
 int main() {
   krpc_connection_t conn;
@@ -25,5 +18,7 @@ int main() {
 
   krpc_tuple_double_double_double_t position;
   krpc_SpaceCenter_Vessel_Position(conn, &position, vessel, body_frame);
-  printf("%.2f, %.2f, %.2f\n", position.e0, position.e1, position.e2);
+  printf("(%.1f, %.1f, %.1f)\n", position.e0, position.e1, position.e2);
+
+  krpc_disconnect(conn);
 }

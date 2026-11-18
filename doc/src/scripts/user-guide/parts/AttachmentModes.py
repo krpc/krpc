@@ -11,6 +11,6 @@ while stack:
         attach_mode = "axial"
     else:  # radially_attached
         attach_mode = "radial"
-    print(" " * depth, part.title, "-", attach_mode)
+    print(" " * depth + part.title, "-", attach_mode)
     for child in part.children:
         stack.append((child, depth + 1))

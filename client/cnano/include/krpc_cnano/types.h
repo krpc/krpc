@@ -30,19 +30,19 @@ typedef uint64_t krpc_object_t;
 typedef int krpc_enum_t;
 
 #define KRPC_NULL_LIST {0, NULL}
-#define KRPC_FREE_LIST(l) \
-  {                       \
-    krpc_free(l.items);   \
-    l.items = NULL;       \
-    l.size = 0;           \
+#define KRPC_FREE_LIST(l)      \
+  {                            \
+    krpc_free((void*)l.items); \
+    l.items = NULL;            \
+    l.size = 0;                \
   }
 
 #define KRPC_NULL_SET {0, NULL}
-#define KRPC_FREE_SET(s) \
-  {                      \
-    krpc_free(s.items);  \
-    s.items = NULL;      \
-    s.size = 0;          \
+#define KRPC_FREE_SET(s)       \
+  {                            \
+    krpc_free((void*)s.items); \
+    s.items = NULL;            \
+    s.size = 0;                \
   }
 
 #define KRPC_NULL_DICTIONARY {0, NULL}

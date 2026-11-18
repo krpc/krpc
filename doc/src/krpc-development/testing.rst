@@ -129,3 +129,42 @@ To test against a local build of one, pass ``--mod NAME PATH`` to either command
 
    A test run that is killed, not interrupted, leaves the game running. Stop it with
    ``pkill -f KSP.x86_64``, or ``taskkill /f /im KSP_x64.exe`` on Windows.
+
+Documentation Examples in the Game
+----------------------------------
+
+The tests in ``doc/test/`` run the example programs in ``doc/src/scripts/`` against the game. Each
+test is marked ``example`` and its language, and the long flights ``slow``. Select them with
+``-m``:
+
+.. code-block:: bash
+
+   bazel run //tools/game:test-ksp -- doc/test -m "python and not slow"
+
+A run with no path runs them too, slow flights included, which takes several hours. Pass
+``-m "not example"`` to run only the tests in ``service/*/test/``. The examples run on Linux
+only, and are skipped on Windows.
+
+An example passes when it exits with code 0, or for an example that runs until stopped, when it
+is still running and printing after a few seconds. It must write nothing to its error output.
+Some examples also check the game afterward, such as a launch reaching orbit.
+
+``doc/test/examples.py`` declares how each example runs. An entry names the example by its path
+under ``doc/src/scripts/`` without the extension, and covers every language that has it. The
+client guide folders share the ``client/`` prefix:
+
+.. code-block:: python
+
+   Example("client/Streaming1", "orbit", run=Loop())
+   Example(
+       "tutorials/parts/DeployParachutes",
+       "parts-tree-fresh",
+       check=checks.parachutes_deployed,
+   )
+
+The second argument names one of the game setups in ``SETUPS``, such as a vessel in orbit, or a
+craft on the launch pad.
+
+``doc/test/unsupported.txt`` lists the examples the tests cannot run. Each line names the
+language, or ``*`` for every language, and the example, with the reason as a comment.
+``//doc:test`` checks that every example is declared or listed, so a new example needs an entry.

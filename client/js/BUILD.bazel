@@ -58,6 +58,7 @@ clientgen_js_index(
 js_library(
     name = "package_json",
     srcs = ["package.json"],
+    visibility = ["//doc/test:__pkg__"],
 )
 
 ts_config(
@@ -80,7 +81,10 @@ ts_project(
     root_dir = "src",
     transpiler = "tsc",
     tsconfig = ":tsconfig",
-    visibility = ["//doc:__pkg__"],
+    visibility = [
+        "//doc:__pkg__",
+        "//doc/test:__pkg__",
+    ],
     deps = [
         ":node_modules/@bufbuild/protobuf",
         ":node_modules/acorn",

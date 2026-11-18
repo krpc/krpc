@@ -8,6 +8,7 @@
 #include <krpc_cnano.h>
 #include <krpc_cnano/services/space_center.h>
 #include <math.h>
+#include <stdio.h>
 
 typedef krpc_tuple_double_double_double_t vector3;
 
@@ -36,9 +37,8 @@ int main() {
     // Compute the dot product of d and v
     double dotProd = d.e0 * v.e0 + d.e1 * v.e1 + d.e2 * v.e2;
 
-    // Compute the magnitude of v
+    // Compute the magnitude of v, as d is a unit vector
     double vMag = sqrt(v.e0 * v.e0 + v.e1 * v.e1 + v.e2 * v.e2);
-    // Note: don't need to magnitude of d as it is a unit vector
 
     // Compute the angle between the vectors
     double angle = 0;

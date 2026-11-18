@@ -1,3 +1,15 @@
+#ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#define sleep_ms(ms) Sleep(ms)
+#else
+#define _POSIX_C_SOURCE 200809L
+#include <time.h>
+static void sleep_ms(long ms) {
+  struct timespec duration = {ms / 1000, (ms % 1000) * 1000000};
+  nanosleep(&duration, NULL);
+}
+#endif
 #include <krpc_cnano.h>
 #include <krpc_cnano/services/mech_jeb.h>
 #include <krpc_cnano/services/space_center.h>
@@ -25,8 +37,12 @@ int main() {
   krpc_SpaceCenter_Control_ActivateNextStage(conn, NULL, control);
 
   bool enabled = true;
-  while (enabled)
+  while (enabled) {
     krpc_MechJeb_AscentAutopilot_Enabled(conn, &enabled, ascent);
+    sleep_ms(1000);
+  }
 
   printf("Launch complete\n");
+
+  krpc_disconnect(conn);
 }

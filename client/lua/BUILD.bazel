@@ -21,6 +21,8 @@ lua_library(
         "client/lua/": "",
         "protobuf/KRPC.lua": "krpc/schema/KRPC.lua",
     },
+    # //doc runs its Lua examples against the client in game
+    visibility = ["//doc:__pkg__"],
 )
 
 lua_deps = [

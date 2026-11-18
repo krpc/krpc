@@ -21,11 +21,11 @@ for (const engine of activeEngines) {
 let thrust = 0;
 let fuelConsumption = 0;
 for (const engine of activeEngines) {
-  const engineThrust = await engine.getThrust();
+  const engineThrust = await engine.getAvailableThrust();
   thrust += engineThrust;
   fuelConsumption += engineThrust / (await engine.getSpecificImpulse());
 }
 const isp = thrust / fuelConsumption;
 
-console.log(`Combined vacuum Isp = ${isp.toFixed(0)} seconds`);
+console.log(`Combined Isp = ${isp.toFixed(0)} seconds`);
 await conn.close();

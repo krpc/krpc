@@ -1,0 +1,81 @@
+load("@aspect_rules_js//js:defs.bzl", "js_binary")
+load("@rules_cc//cc:defs.bzl", "cc_library")
+load("@rules_python//python:defs.bzl", "py_library", "py_test")
+load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
+
+# The in-game tests of the documentation examples. The game runs them with
+# bazel run //tools/game:test-ksp -- doc/test
+
+test_suite(
+    name = "test",
+    tests = [
+        ":coverage",
+        ":pyright",
+        ":ruff",
+    ],
+    visibility = ["//doc:__pkg__"],
+)
+
+# What the coverage test reads: the manifest, its types and the listings
+py_library(
+    name = "manifest",
+    srcs = [
+        "checks.py",
+        "examples.py",
+        "flights.py",
+        "listing.py",
+        "monitor.py",
+        "spec.py",
+    ],
+    data = ["unsupported.txt"],
+    imports = ["../.."],
+)
+
+py_test(
+    name = "coverage",
+    size = "small",
+    srcs = ["coverage_test.py"],
+    data = ["//doc:scripts"],
+    main = "coverage_test.py",
+    deps = [":manifest"],
+)
+
+py_ruff_test(
+    name = "ruff",
+    size = "small",
+    srcs = glob(["*.py"]),
+)
+
+py_pyright_test(
+    name = "pyright",
+    size = "medium",
+    srcs = glob(["*.py"]),
+    # The tests do not check for None results
+    disable = ["reportOptionalMemberAccess"],
+    deps = [
+        "//client/python:krpc_lib",
+        "//tools/krpctools:krpctools_lib",
+    ],
+)
+
+# Opens the C-nano examples' serial connection over TCP/IP, for //doc:run-scripts-cnano
+cc_library(
+    name = "cnano_redirect",
+    testonly = True,
+    srcs = ["cnano_redirect.c"],
+    visibility = ["//doc:__pkg__"],
+    deps = ["//client/cnano:krpc_cnano_print_errors"],
+)
+
+# Runs a JavaScript example against the game's WebSockets server
+js_binary(
+    name = "run-example-js",
+    testonly = True,
+    data = [
+        "example_hooks.mjs",
+        "//client/js:lib",
+        "//client/js:package_json",
+        "//doc:scripts-js",
+    ],
+    entry_point = "run_example.mjs",
+)

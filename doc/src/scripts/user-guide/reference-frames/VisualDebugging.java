@@ -7,7 +7,7 @@ import org.javatuples.Triplet;
 
 
 public class VisualDebugging {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         Connection connection = Connection.newInstance("Visual Debugging");
         SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
         Drawing drawing = Drawing.newInstance(connection);
@@ -23,7 +23,7 @@ public class VisualDebugging {
           refFrame, 10, true);
         line.setEndArrow(true);
         line.setLabel("Surface velocity");
-        while (true) {
-        }
+        while (true)
+            Thread.sleep(1000);
     }
 }

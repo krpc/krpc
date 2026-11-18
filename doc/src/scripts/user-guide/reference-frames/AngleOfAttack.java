@@ -3,7 +3,6 @@ import krpc.client.services.SpaceCenter;
 
 import org.javatuples.Triplet;
 
-import java.lang.Math;
 
 public class AngleOfAttack {
     public static void main(String[] args) throws InterruptedException {
@@ -23,13 +22,12 @@ public class AngleOfAttack {
                 + d.getValue1() * v.getValue1()
                 + d.getValue2() * v.getValue2();
 
-            // Compute the magnitude of v
+            // Compute the magnitude of v, as d is a unit vector
             double vMag = Math.sqrt(
                   v.getValue0() * v.getValue0()
                 + v.getValue1() * v.getValue1()
                 + v.getValue2() * v.getValue2()
             );
-            // Note: don't need to magnitude of d as it is a unit vector
 
             // Compute the angle between the vectors
             double angle = 0;

@@ -17,3 +17,4 @@ const event = await conn.addEvent(({ ascent }) => !ascent.enabled, {
 await event.wait();
 
 console.log("Launch complete");
+await conn.close();

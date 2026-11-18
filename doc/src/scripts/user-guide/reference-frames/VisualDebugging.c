@@ -1,12 +1,18 @@
+#ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#define sleep(seconds) Sleep((seconds) * 1000)
+#else
+#include <unistd.h>
+#endif
 #include <krpc_cnano.h>
 #include <krpc_cnano/services/drawing.h>
 #include <krpc_cnano/services/space_center.h>
-#include <krpc_cnano/services/ui.h>
 
 int main() {
   krpc_connection_t conn;
   if (krpc_open_serial(&conn, "COM0") != KRPC_OK) return 1;
-  if (krpc_connect(conn, "Visual debugging") != KRPC_OK) return 1;
+  if (krpc_connect(conn, "Visual Debugging") != KRPC_OK) return 1;
 
   krpc_SpaceCenter_Vessel_t vessel;
   krpc_SpaceCenter_ActiveVessel(conn, &vessel);
@@ -26,6 +32,5 @@ int main() {
                                    true);
   krpc_Drawing_Line_set_EndArrow(conn, line, true);
   krpc_Drawing_Line_set_Label(conn, line, "Surface velocity");
-  while (true) {
-  }
+  while (true) sleep(1);
 }

@@ -9,8 +9,8 @@ const isp = await conn.run(
     let fuelConsumption = 0;
     for (const engine of vessel.parts.engines) {
       if (engine.active && engine.hasFuel) {
-        thrust += engine.thrust;
-        fuelConsumption += engine.thrust / engine.specificImpulse;
+        thrust += engine.availableThrust;
+        fuelConsumption += engine.availableThrust / engine.specificImpulse;
       }
     }
     return thrust / fuelConsumption;
@@ -18,5 +18,5 @@ const isp = await conn.run(
   { vessel },
 );
 // [/docs]
-console.log(isp);
+console.log(`Combined Isp = ${isp.toFixed(0)} seconds`);
 await conn.close();

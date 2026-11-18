@@ -10,9 +10,11 @@ class Program {
         // [docs]
         var isp = connection.Run (() =>
             vessel.Parts.Engines.Where (e => e.Active && e.HasFuel)
-                .Select (e => e.Thrust).Sum () /
+                .Select (e => e.AvailableThrust).Sum () /
             vessel.Parts.Engines.Where (e => e.Active && e.HasFuel)
-                .Select (e => e.Thrust / e.SpecificImpulse).Sum ());
+                .Select (e => e.AvailableThrust / e.SpecificImpulse)
+                .Sum ());
         // [/docs]
+        Console.WriteLine ("Combined Isp = {0:F0} seconds", isp);
     }
 }
