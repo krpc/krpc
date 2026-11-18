@@ -359,7 +359,7 @@ at = [
 
 [[dep]]
 name = "NetAnalyzers"
-version = "10.0.403"
+version = "10.0.404"
 source = "nuget:Microsoft.CodeAnalysis.NetAnalyzers"
 below = "11"
 regen = ["nuget"]
@@ -393,7 +393,7 @@ at = [
 
 [[dep]]
 name = "System.IO.Ports"
-version = "10.0.14"
+version = "10.0.15"
 source = "nuget:System.IO.Ports"
 below = "11"
 regen = ["nuget"]

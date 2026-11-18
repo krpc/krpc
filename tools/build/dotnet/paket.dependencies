@@ -4,11 +4,11 @@ source https://api.nuget.org/v3/index.json
 strategy: min
 
 nuget Google.Protobuf 3.36.2
-nuget Microsoft.CodeAnalysis.NetAnalyzers 10.0.403
+nuget Microsoft.CodeAnalysis.NetAnalyzers 10.0.404
 
 nuget Moq 4.21.0 framework: net10.0
 nuget System.CommandLine 2.0.14 framework: net10.0
-nuget System.IO.Ports 10.0.14 framework: net10.0
+nuget System.IO.Ports 10.0.15 framework: net10.0
 
 group tools
     storage: none
