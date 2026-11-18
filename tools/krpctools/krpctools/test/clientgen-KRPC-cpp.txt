@@ -4884,32 +4884,28 @@ inline KRPC::KRPC(const ::krpc::Connection& connection):
 inline std::string KRPC::get_client_id() {
   auto _data = this->_connection.invoke("KRPC", "GetClientID", {}, ::krpc::Connection::Returns::value);
   std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
 inline std::string KRPC::get_client_name() {
   auto _data = this->_connection.invoke("KRPC", "GetClientName", {}, ::krpc::Connection::Returns::value);
   std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
 inline krpc::schema::Services KRPC::get_services() {
   auto _data = this->_connection.invoke("KRPC", "GetServices", {}, ::krpc::Connection::Returns::value);
   krpc::schema::Services _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
 inline KRPC::ServerStatus KRPC::get_status() {
   auto _data = this->_connection.invoke("KRPC", "GetStatus", {}, ::krpc::Connection::Returns::value);
   KRPC::ServerStatus _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -4928,16 +4924,14 @@ inline void KRPC::release_tick() {
 inline std::vector<KRPC::ClientInfo> KRPC::clients() {
   auto _data = this->_connection.invoke("KRPC", "get_Clients", {}, ::krpc::Connection::Returns::value);
   std::vector<KRPC::ClientInfo> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
 inline KRPC::GameScene KRPC::game_scene() {
   auto _data = this->_connection.invoke("KRPC", "get_GameScene", {}, ::krpc::Connection::Returns::value);
   KRPC::GameScene _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -4951,16 +4945,14 @@ inline void KRPC::set_game_scene(KRPC::GameScene value) {
 inline uint32_t KRPC::game_state_loads() {
   auto _data = this->_connection.invoke("KRPC", "get_GameStateLoads", {}, ::krpc::Connection::Returns::value);
   uint32_t _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
 inline bool KRPC::paused() {
   auto _data = this->_connection.invoke("KRPC", "get_Paused", {}, ::krpc::Connection::Returns::value);
   bool _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -5137,8 +5129,7 @@ inline bool KRPC::Expression::has_return_type() {
   _args.push_back(encoder::encode_arg(*this));
   auto _data = this->_connection.invoke("KRPC", "Expression_get_HasReturnType", _args, ::krpc::Connection::Returns::value);
   bool _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -5148,8 +5139,7 @@ inline std::vector<KRPC::Type> KRPC::Expression::parameter_types() {
   _args.push_back(encoder::encode_arg(*this));
   auto _data = this->_connection.invoke("KRPC", "Expression_get_ParameterTypes", _args, ::krpc::Connection::Returns::value);
   std::vector<KRPC::Type> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -5159,8 +5149,7 @@ inline KRPC::Type KRPC::Expression::return_type() {
   _args.push_back(encoder::encode_arg(*this));
   auto _data = this->_connection.invoke("KRPC", "Expression_get_ReturnType", _args, ::krpc::Connection::Returns::value);
   KRPC::Type _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -5171,8 +5160,7 @@ inline KRPC::Expression KRPC::Expression::add(::krpc::Connection& _connection, K
   _args.push_back(encoder::encode_arg(arg1));
   auto _data = _connection.invoke("KRPC", "Expression_static_Add", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5183,8 +5171,7 @@ inline KRPC::Expression KRPC::Expression::aggregate(::krpc::Connection& _connect
   _args.push_back(encoder::encode_arg(func));
   auto _data = _connection.invoke("KRPC", "Expression_static_Aggregate", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5196,8 +5183,7 @@ inline KRPC::Expression KRPC::Expression::aggregate_with_seed(::krpc::Connection
   _args.push_back(encoder::encode_arg(func));
   auto _data = _connection.invoke("KRPC", "Expression_static_AggregateWithSeed", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5208,8 +5194,7 @@ inline KRPC::Expression KRPC::Expression::all(::krpc::Connection& _connection, K
   _args.push_back(encoder::encode_arg(predicate));
   auto _data = _connection.invoke("KRPC", "Expression_static_All", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5220,8 +5205,7 @@ inline KRPC::Expression KRPC::Expression::and_(::krpc::Connection& _connection, 
   _args.push_back(encoder::encode_arg(arg1));
   auto _data = _connection.invoke("KRPC", "Expression_static_And", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5232,8 +5216,7 @@ inline KRPC::Expression KRPC::Expression::any(::krpc::Connection& _connection, K
   _args.push_back(encoder::encode_arg(predicate));
   auto _data = _connection.invoke("KRPC", "Expression_static_Any", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5244,8 +5227,7 @@ inline KRPC::Expression KRPC::Expression::append(::krpc::Connection& _connection
   _args.push_back(encoder::encode_arg(value));
   auto _data = _connection.invoke("KRPC", "Expression_static_Append", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5256,8 +5238,7 @@ inline KRPC::Expression KRPC::Expression::assign(::krpc::Connection& _connection
   _args.push_back(encoder::encode_arg(value));
   auto _data = _connection.invoke("KRPC", "Expression_static_Assign", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5267,8 +5248,7 @@ inline KRPC::Expression KRPC::Expression::average(::krpc::Connection& _connectio
   _args.push_back(encoder::encode_arg(arg));
   auto _data = _connection.invoke("KRPC", "Expression_static_Average", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5278,8 +5258,7 @@ inline KRPC::Expression KRPC::Expression::block(::krpc::Connection& _connection,
   _args.push_back(encoder::encode_arg(statements));
   auto _data = _connection.invoke("KRPC", "Expression_static_Block", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5290,16 +5269,14 @@ inline KRPC::Expression KRPC::Expression::block_with_variables(::krpc::Connectio
   _args.push_back(encoder::encode_arg(statements));
   auto _data = _connection.invoke("KRPC", "Expression_static_BlockWithVariables", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
 inline KRPC::Expression KRPC::Expression::break_(::krpc::Connection& _connection) {
   auto _data = _connection.invoke("KRPC", "Expression_static_Break", {}, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5311,8 +5288,7 @@ inline KRPC::Expression KRPC::Expression::build_dictionary(::krpc::Connection& _
   _args.push_back(encoder::encode_arg(value_func));
   auto _data = _connection.invoke("KRPC", "Expression_static_BuildDictionary", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5322,8 +5298,7 @@ inline KRPC::Expression KRPC::Expression::call(::krpc::Connection& _connection, 
   _args.push_back(encoder::encode_arg(call));
   auto _data = _connection.invoke("KRPC", "Expression_static_Call", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5334,8 +5309,7 @@ inline KRPC::Expression KRPC::Expression::call_with_arguments(::krpc::Connection
   _args.push_back(encoder::encode_arg(args));
   auto _data = _connection.invoke("KRPC", "Expression_static_CallWithArguments", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5346,8 +5320,7 @@ inline KRPC::Expression KRPC::Expression::cast(::krpc::Connection& _connection, 
   _args.push_back(encoder::encode_arg(type));
   auto _data = _connection.invoke("KRPC", "Expression_static_Cast", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5357,8 +5330,7 @@ inline KRPC::Expression KRPC::Expression::clear(::krpc::Connection& _connection,
   _args.push_back(encoder::encode_arg(collection));
   auto _data = _connection.invoke("KRPC", "Expression_static_Clear", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5369,8 +5341,7 @@ inline KRPC::Expression KRPC::Expression::concat(::krpc::Connection& _connection
   _args.push_back(encoder::encode_arg(arg2));
   auto _data = _connection.invoke("KRPC", "Expression_static_Concat", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5382,8 +5353,7 @@ inline KRPC::Expression KRPC::Expression::conditional(::krpc::Connection& _conne
   _args.push_back(encoder::encode_arg(if_false));
   auto _data = _connection.invoke("KRPC", "Expression_static_Conditional", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5394,8 +5364,7 @@ inline KRPC::Expression KRPC::Expression::conditional_and(::krpc::Connection& _c
   _args.push_back(encoder::encode_arg(arg1));
   auto _data = _connection.invoke("KRPC", "Expression_static_ConditionalAnd", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5406,8 +5375,7 @@ inline KRPC::Expression KRPC::Expression::conditional_or(::krpc::Connection& _co
   _args.push_back(encoder::encode_arg(arg1));
   auto _data = _connection.invoke("KRPC", "Expression_static_ConditionalOr", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5417,8 +5385,7 @@ inline KRPC::Expression KRPC::Expression::constant_bool(::krpc::Connection& _con
   _args.push_back(encoder::encode_arg(value));
   auto _data = _connection.invoke("KRPC", "Expression_static_ConstantBool", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5428,8 +5395,7 @@ inline KRPC::Expression KRPC::Expression::constant_bytes(::krpc::Connection& _co
   _args.push_back(encoder::encode_arg(value));
   auto _data = _connection.invoke("KRPC", "Expression_static_ConstantBytes", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5439,8 +5405,7 @@ inline KRPC::Expression KRPC::Expression::constant_double(::krpc::Connection& _c
   _args.push_back(encoder::encode_arg(value));
   auto _data = _connection.invoke("KRPC", "Expression_static_ConstantDouble", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5452,8 +5417,7 @@ inline KRPC::Expression KRPC::Expression::constant_enum(::krpc::Connection& _con
   _args.push_back(encoder::encode_arg(value));
   auto _data = _connection.invoke("KRPC", "Expression_static_ConstantEnum", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5465,8 +5429,7 @@ inline KRPC::Expression KRPC::Expression::constant_enum_by_id(::krpc::Connection
   _args.push_back(encoder::encode_arg(value));
   auto _data = _connection.invoke("KRPC", "Expression_static_ConstantEnumById", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5476,8 +5439,7 @@ inline KRPC::Expression KRPC::Expression::constant_float(::krpc::Connection& _co
   _args.push_back(encoder::encode_arg(value));
   auto _data = _connection.invoke("KRPC", "Expression_static_ConstantFloat", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5487,8 +5449,7 @@ inline KRPC::Expression KRPC::Expression::constant_int(::krpc::Connection& _conn
   _args.push_back(encoder::encode_arg(value));
   auto _data = _connection.invoke("KRPC", "Expression_static_ConstantInt", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5498,8 +5459,7 @@ inline KRPC::Expression KRPC::Expression::constant_long(::krpc::Connection& _con
   _args.push_back(encoder::encode_arg(value));
   auto _data = _connection.invoke("KRPC", "Expression_static_ConstantLong", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5509,8 +5469,7 @@ inline KRPC::Expression KRPC::Expression::constant_null(::krpc::Connection& _con
   _args.push_back(encoder::encode_arg(type));
   auto _data = _connection.invoke("KRPC", "Expression_static_ConstantNull", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5520,8 +5479,7 @@ inline KRPC::Expression KRPC::Expression::constant_object(::krpc::Connection& _c
   _args.push_back(encoder::encode_arg(value));
   auto _data = _connection.invoke("KRPC", "Expression_static_ConstantObject", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5531,8 +5489,7 @@ inline KRPC::Expression KRPC::Expression::constant_string(::krpc::Connection& _c
   _args.push_back(encoder::encode_arg(value));
   auto _data = _connection.invoke("KRPC", "Expression_static_ConstantString", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5542,8 +5499,7 @@ inline KRPC::Expression KRPC::Expression::constant_uint(::krpc::Connection& _con
   _args.push_back(encoder::encode_arg(value));
   auto _data = _connection.invoke("KRPC", "Expression_static_ConstantUInt", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5553,8 +5509,7 @@ inline KRPC::Expression KRPC::Expression::constant_ulong(::krpc::Connection& _co
   _args.push_back(encoder::encode_arg(value));
   auto _data = _connection.invoke("KRPC", "Expression_static_ConstantULong", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5565,8 +5520,7 @@ inline KRPC::Expression KRPC::Expression::contains(::krpc::Connection& _connecti
   _args.push_back(encoder::encode_arg(value));
   auto _data = _connection.invoke("KRPC", "Expression_static_Contains", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5577,16 +5531,14 @@ inline KRPC::Expression KRPC::Expression::contains_key(::krpc::Connection& _conn
   _args.push_back(encoder::encode_arg(key));
   auto _data = _connection.invoke("KRPC", "Expression_static_ContainsKey", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
 inline KRPC::Expression KRPC::Expression::continue_(::krpc::Connection& _connection) {
   auto _data = _connection.invoke("KRPC", "Expression_static_Continue", {}, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5596,8 +5548,7 @@ inline KRPC::Expression KRPC::Expression::convert_to_string(::krpc::Connection& 
   _args.push_back(encoder::encode_arg(arg));
   auto _data = _connection.invoke("KRPC", "Expression_static_ConvertToString", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5607,8 +5558,7 @@ inline KRPC::Expression KRPC::Expression::count(::krpc::Connection& _connection,
   _args.push_back(encoder::encode_arg(arg));
   auto _data = _connection.invoke("KRPC", "Expression_static_Count", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5619,8 +5569,7 @@ inline KRPC::Expression KRPC::Expression::create_dictionary(::krpc::Connection& 
   _args.push_back(encoder::encode_arg(values));
   auto _data = _connection.invoke("KRPC", "Expression_static_CreateDictionary", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5631,8 +5580,7 @@ inline KRPC::Expression KRPC::Expression::create_empty_dictionary(::krpc::Connec
   _args.push_back(encoder::encode_arg(value_type));
   auto _data = _connection.invoke("KRPC", "Expression_static_CreateEmptyDictionary", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5642,8 +5590,7 @@ inline KRPC::Expression KRPC::Expression::create_empty_list(::krpc::Connection& 
   _args.push_back(encoder::encode_arg(value_type));
   auto _data = _connection.invoke("KRPC", "Expression_static_CreateEmptyList", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5653,8 +5600,7 @@ inline KRPC::Expression KRPC::Expression::create_empty_set(::krpc::Connection& _
   _args.push_back(encoder::encode_arg(value_type));
   auto _data = _connection.invoke("KRPC", "Expression_static_CreateEmptySet", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5664,8 +5610,7 @@ inline KRPC::Expression KRPC::Expression::create_list(::krpc::Connection& _conne
   _args.push_back(encoder::encode_arg(values));
   auto _data = _connection.invoke("KRPC", "Expression_static_CreateList", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5675,8 +5620,7 @@ inline KRPC::Expression KRPC::Expression::create_set(::krpc::Connection& _connec
   _args.push_back(encoder::encode_arg(values));
   auto _data = _connection.invoke("KRPC", "Expression_static_CreateSet", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5687,8 +5631,7 @@ inline KRPC::Expression KRPC::Expression::create_struct(::krpc::Connection& _con
   _args.push_back(encoder::encode_arg(field_values));
   auto _data = _connection.invoke("KRPC", "Expression_static_CreateStruct", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5698,8 +5641,7 @@ inline KRPC::Expression KRPC::Expression::create_tuple(::krpc::Connection& _conn
   _args.push_back(encoder::encode_arg(elements));
   auto _data = _connection.invoke("KRPC", "Expression_static_CreateTuple", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5709,8 +5651,7 @@ inline KRPC::Expression KRPC::Expression::dictionary_keys(::krpc::Connection& _c
   _args.push_back(encoder::encode_arg(dictionary));
   auto _data = _connection.invoke("KRPC", "Expression_static_DictionaryKeys", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5720,8 +5661,7 @@ inline KRPC::Expression KRPC::Expression::dictionary_values(::krpc::Connection& 
   _args.push_back(encoder::encode_arg(dictionary));
   auto _data = _connection.invoke("KRPC", "Expression_static_DictionaryValues", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5731,8 +5671,7 @@ inline KRPC::Expression KRPC::Expression::distinct(::krpc::Connection& _connecti
   _args.push_back(encoder::encode_arg(arg));
   auto _data = _connection.invoke("KRPC", "Expression_static_Distinct", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5743,8 +5682,7 @@ inline KRPC::Expression KRPC::Expression::divide(::krpc::Connection& _connection
   _args.push_back(encoder::encode_arg(arg1));
   auto _data = _connection.invoke("KRPC", "Expression_static_Divide", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5755,8 +5693,7 @@ inline KRPC::Expression KRPC::Expression::element_at(::krpc::Connection& _connec
   _args.push_back(encoder::encode_arg(index));
   auto _data = _connection.invoke("KRPC", "Expression_static_ElementAt", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5767,8 +5704,7 @@ inline KRPC::Expression KRPC::Expression::equal(::krpc::Connection& _connection,
   _args.push_back(encoder::encode_arg(arg1));
   auto _data = _connection.invoke("KRPC", "Expression_static_Equal", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5779,8 +5715,7 @@ inline KRPC::Expression KRPC::Expression::except(::krpc::Connection& _connection
   _args.push_back(encoder::encode_arg(arg2));
   auto _data = _connection.invoke("KRPC", "Expression_static_Except", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5791,8 +5726,7 @@ inline KRPC::Expression KRPC::Expression::exclusive_or(::krpc::Connection& _conn
   _args.push_back(encoder::encode_arg(arg1));
   auto _data = _connection.invoke("KRPC", "Expression_static_ExclusiveOr", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5802,8 +5736,7 @@ inline KRPC::Expression KRPC::Expression::first(::krpc::Connection& _connection,
   _args.push_back(encoder::encode_arg(arg));
   auto _data = _connection.invoke("KRPC", "Expression_static_First", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5815,8 +5748,7 @@ inline KRPC::Expression KRPC::Expression::for_each(::krpc::Connection& _connecti
   _args.push_back(encoder::encode_arg(body));
   auto _data = _connection.invoke("KRPC", "Expression_static_ForEach", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5827,8 +5759,7 @@ inline KRPC::Expression KRPC::Expression::get(::krpc::Connection& _connection, K
   _args.push_back(encoder::encode_arg(index));
   auto _data = _connection.invoke("KRPC", "Expression_static_Get", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5839,8 +5770,7 @@ inline KRPC::Expression KRPC::Expression::get_field(::krpc::Connection& _connect
   _args.push_back(encoder::encode_arg(name));
   auto _data = _connection.invoke("KRPC", "Expression_static_GetField", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5851,8 +5781,7 @@ inline KRPC::Expression KRPC::Expression::get_field_by_index(::krpc::Connection&
   _args.push_back(encoder::encode_arg(index));
   auto _data = _connection.invoke("KRPC", "Expression_static_GetFieldByIndex", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5863,8 +5792,7 @@ inline KRPC::Expression KRPC::Expression::greater_than(::krpc::Connection& _conn
   _args.push_back(encoder::encode_arg(arg1));
   auto _data = _connection.invoke("KRPC", "Expression_static_GreaterThan", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5875,8 +5803,7 @@ inline KRPC::Expression KRPC::Expression::greater_than_or_equal(::krpc::Connecti
   _args.push_back(encoder::encode_arg(arg1));
   auto _data = _connection.invoke("KRPC", "Expression_static_GreaterThanOrEqual", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5887,8 +5814,7 @@ inline KRPC::Expression KRPC::Expression::group_by(::krpc::Connection& _connecti
   _args.push_back(encoder::encode_arg(key));
   auto _data = _connection.invoke("KRPC", "Expression_static_GroupBy", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5899,8 +5825,7 @@ inline KRPC::Expression KRPC::Expression::if_then(::krpc::Connection& _connectio
   _args.push_back(encoder::encode_arg(body));
   auto _data = _connection.invoke("KRPC", "Expression_static_IfThen", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5912,8 +5837,7 @@ inline KRPC::Expression KRPC::Expression::if_then_else(::krpc::Connection& _conn
   _args.push_back(encoder::encode_arg(else_body));
   auto _data = _connection.invoke("KRPC", "Expression_static_IfThenElse", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5924,8 +5848,7 @@ inline KRPC::Expression KRPC::Expression::intersect(::krpc::Connection& _connect
   _args.push_back(encoder::encode_arg(arg2));
   auto _data = _connection.invoke("KRPC", "Expression_static_Intersect", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5936,8 +5859,7 @@ inline KRPC::Expression KRPC::Expression::invoke(::krpc::Connection& _connection
   _args.push_back(encoder::encode_arg(args));
   auto _data = _connection.invoke("KRPC", "Expression_static_Invoke", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5947,8 +5869,7 @@ inline KRPC::Expression KRPC::Expression::is_null(::krpc::Connection& _connectio
   _args.push_back(encoder::encode_arg(value));
   auto _data = _connection.invoke("KRPC", "Expression_static_IsNull", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5959,8 +5880,7 @@ inline KRPC::Expression KRPC::Expression::lambda(::krpc::Connection& _connection
   _args.push_back(encoder::encode_arg(body));
   auto _data = _connection.invoke("KRPC", "Expression_static_Lambda", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5970,8 +5890,7 @@ inline KRPC::Expression KRPC::Expression::last(::krpc::Connection& _connection, 
   _args.push_back(encoder::encode_arg(arg));
   auto _data = _connection.invoke("KRPC", "Expression_static_Last", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5982,8 +5901,7 @@ inline KRPC::Expression KRPC::Expression::left_shift(::krpc::Connection& _connec
   _args.push_back(encoder::encode_arg(arg1));
   auto _data = _connection.invoke("KRPC", "Expression_static_LeftShift", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -5994,8 +5912,7 @@ inline KRPC::Expression KRPC::Expression::less_than(::krpc::Connection& _connect
   _args.push_back(encoder::encode_arg(arg1));
   auto _data = _connection.invoke("KRPC", "Expression_static_LessThan", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6006,8 +5923,7 @@ inline KRPC::Expression KRPC::Expression::less_than_or_equal(::krpc::Connection&
   _args.push_back(encoder::encode_arg(arg1));
   auto _data = _connection.invoke("KRPC", "Expression_static_LessThanOrEqual", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6019,8 +5935,7 @@ inline KRPC::Expression KRPC::Expression::match(::krpc::Connection& _connection,
   _args.push_back(encoder::encode_arg(bodies));
   auto _data = _connection.invoke("KRPC", "Expression_static_Match", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6030,8 +5945,7 @@ inline KRPC::Expression KRPC::Expression::max(::krpc::Connection& _connection, K
   _args.push_back(encoder::encode_arg(arg));
   auto _data = _connection.invoke("KRPC", "Expression_static_Max", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6042,8 +5956,7 @@ inline KRPC::Expression KRPC::Expression::max_by(::krpc::Connection& _connection
   _args.push_back(encoder::encode_arg(key));
   auto _data = _connection.invoke("KRPC", "Expression_static_MaxBy", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6053,8 +5966,7 @@ inline KRPC::Expression KRPC::Expression::min(::krpc::Connection& _connection, K
   _args.push_back(encoder::encode_arg(arg));
   auto _data = _connection.invoke("KRPC", "Expression_static_Min", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6065,8 +5977,7 @@ inline KRPC::Expression KRPC::Expression::min_by(::krpc::Connection& _connection
   _args.push_back(encoder::encode_arg(key));
   auto _data = _connection.invoke("KRPC", "Expression_static_MinBy", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6077,8 +5988,7 @@ inline KRPC::Expression KRPC::Expression::modulo(::krpc::Connection& _connection
   _args.push_back(encoder::encode_arg(arg1));
   auto _data = _connection.invoke("KRPC", "Expression_static_Modulo", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6089,8 +5999,7 @@ inline KRPC::Expression KRPC::Expression::multiply(::krpc::Connection& _connecti
   _args.push_back(encoder::encode_arg(arg1));
   auto _data = _connection.invoke("KRPC", "Expression_static_Multiply", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6100,8 +6009,7 @@ inline KRPC::Expression KRPC::Expression::negate(::krpc::Connection& _connection
   _args.push_back(encoder::encode_arg(arg));
   auto _data = _connection.invoke("KRPC", "Expression_static_Negate", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6111,8 +6019,7 @@ inline KRPC::Expression KRPC::Expression::not_(::krpc::Connection& _connection, 
   _args.push_back(encoder::encode_arg(arg));
   auto _data = _connection.invoke("KRPC", "Expression_static_Not", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6123,8 +6030,7 @@ inline KRPC::Expression KRPC::Expression::not_equal(::krpc::Connection& _connect
   _args.push_back(encoder::encode_arg(arg1));
   auto _data = _connection.invoke("KRPC", "Expression_static_NotEqual", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6135,8 +6041,7 @@ inline KRPC::Expression KRPC::Expression::or_(::krpc::Connection& _connection, K
   _args.push_back(encoder::encode_arg(arg1));
   auto _data = _connection.invoke("KRPC", "Expression_static_Or", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6147,8 +6052,7 @@ inline KRPC::Expression KRPC::Expression::order_by(::krpc::Connection& _connecti
   _args.push_back(encoder::encode_arg(key));
   auto _data = _connection.invoke("KRPC", "Expression_static_OrderBy", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6159,8 +6063,7 @@ inline KRPC::Expression KRPC::Expression::parameter(::krpc::Connection& _connect
   _args.push_back(encoder::encode_arg(type));
   auto _data = _connection.invoke("KRPC", "Expression_static_Parameter", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6171,8 +6074,7 @@ inline KRPC::Expression KRPC::Expression::power(::krpc::Connection& _connection,
   _args.push_back(encoder::encode_arg(arg1));
   auto _data = _connection.invoke("KRPC", "Expression_static_Power", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6183,8 +6085,7 @@ inline KRPC::Expression KRPC::Expression::remove(::krpc::Connection& _connection
   _args.push_back(encoder::encode_arg(value));
   auto _data = _connection.invoke("KRPC", "Expression_static_Remove", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6195,8 +6096,7 @@ inline KRPC::Expression KRPC::Expression::remove_at(::krpc::Connection& _connect
   _args.push_back(encoder::encode_arg(index));
   auto _data = _connection.invoke("KRPC", "Expression_static_RemoveAt", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6206,16 +6106,14 @@ inline KRPC::Expression KRPC::Expression::return_(::krpc::Connection& _connectio
   _args.push_back(encoder::encode_arg(value));
   auto _data = _connection.invoke("KRPC", "Expression_static_Return", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
 inline KRPC::Expression KRPC::Expression::return_nothing(::krpc::Connection& _connection) {
   auto _data = _connection.invoke("KRPC", "Expression_static_ReturnNothing", {}, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6225,8 +6123,7 @@ inline KRPC::Expression KRPC::Expression::reverse(::krpc::Connection& _connectio
   _args.push_back(encoder::encode_arg(arg));
   auto _data = _connection.invoke("KRPC", "Expression_static_Reverse", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6237,8 +6134,7 @@ inline KRPC::Expression KRPC::Expression::right_shift(::krpc::Connection& _conne
   _args.push_back(encoder::encode_arg(arg1));
   auto _data = _connection.invoke("KRPC", "Expression_static_RightShift", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6249,8 +6145,7 @@ inline KRPC::Expression KRPC::Expression::select(::krpc::Connection& _connection
   _args.push_back(encoder::encode_arg(func));
   auto _data = _connection.invoke("KRPC", "Expression_static_Select", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6261,8 +6156,7 @@ inline KRPC::Expression KRPC::Expression::select_many(::krpc::Connection& _conne
   _args.push_back(encoder::encode_arg(func));
   auto _data = _connection.invoke("KRPC", "Expression_static_SelectMany", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6274,8 +6168,7 @@ inline KRPC::Expression KRPC::Expression::set(::krpc::Connection& _connection, K
   _args.push_back(encoder::encode_arg(value));
   auto _data = _connection.invoke("KRPC", "Expression_static_Set", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6286,8 +6179,7 @@ inline KRPC::Expression KRPC::Expression::skip(::krpc::Connection& _connection, 
   _args.push_back(encoder::encode_arg(count));
   auto _data = _connection.invoke("KRPC", "Expression_static_Skip", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6298,8 +6190,7 @@ inline KRPC::Expression KRPC::Expression::state_variable(::krpc::Connection& _co
   _args.push_back(encoder::encode_arg(initial_value));
   auto _data = _connection.invoke("KRPC", "Expression_static_StateVariable", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6309,8 +6200,7 @@ inline KRPC::Expression KRPC::Expression::string_concat(::krpc::Connection& _con
   _args.push_back(encoder::encode_arg(args));
   auto _data = _connection.invoke("KRPC", "Expression_static_StringConcat", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6321,8 +6211,7 @@ inline KRPC::Expression KRPC::Expression::string_contains(::krpc::Connection& _c
   _args.push_back(encoder::encode_arg(value));
   auto _data = _connection.invoke("KRPC", "Expression_static_StringContains", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6333,8 +6222,7 @@ inline KRPC::Expression KRPC::Expression::string_ends_with(::krpc::Connection& _
   _args.push_back(encoder::encode_arg(value));
   auto _data = _connection.invoke("KRPC", "Expression_static_StringEndsWith", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6345,8 +6233,7 @@ inline KRPC::Expression KRPC::Expression::string_get(::krpc::Connection& _connec
   _args.push_back(encoder::encode_arg(index));
   auto _data = _connection.invoke("KRPC", "Expression_static_StringGet", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6357,8 +6244,7 @@ inline KRPC::Expression KRPC::Expression::string_index_of(::krpc::Connection& _c
   _args.push_back(encoder::encode_arg(value));
   auto _data = _connection.invoke("KRPC", "Expression_static_StringIndexOf", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6369,8 +6255,7 @@ inline KRPC::Expression KRPC::Expression::string_join(::krpc::Connection& _conne
   _args.push_back(encoder::encode_arg(values));
   auto _data = _connection.invoke("KRPC", "Expression_static_StringJoin", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6380,8 +6265,7 @@ inline KRPC::Expression KRPC::Expression::string_length(::krpc::Connection& _con
   _args.push_back(encoder::encode_arg(arg));
   auto _data = _connection.invoke("KRPC", "Expression_static_StringLength", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6393,8 +6277,7 @@ inline KRPC::Expression KRPC::Expression::string_replace(::krpc::Connection& _co
   _args.push_back(encoder::encode_arg(new_value));
   auto _data = _connection.invoke("KRPC", "Expression_static_StringReplace", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6405,8 +6288,7 @@ inline KRPC::Expression KRPC::Expression::string_split(::krpc::Connection& _conn
   _args.push_back(encoder::encode_arg(separator));
   auto _data = _connection.invoke("KRPC", "Expression_static_StringSplit", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6417,8 +6299,7 @@ inline KRPC::Expression KRPC::Expression::string_starts_with(::krpc::Connection&
   _args.push_back(encoder::encode_arg(value));
   auto _data = _connection.invoke("KRPC", "Expression_static_StringStartsWith", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6430,8 +6311,7 @@ inline KRPC::Expression KRPC::Expression::string_substring(::krpc::Connection& _
   _args.push_back(encoder::encode_arg(length));
   auto _data = _connection.invoke("KRPC", "Expression_static_StringSubstring", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6441,8 +6321,7 @@ inline KRPC::Expression KRPC::Expression::string_to_lower(::krpc::Connection& _c
   _args.push_back(encoder::encode_arg(arg));
   auto _data = _connection.invoke("KRPC", "Expression_static_StringToLower", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6452,8 +6331,7 @@ inline KRPC::Expression KRPC::Expression::string_to_upper(::krpc::Connection& _c
   _args.push_back(encoder::encode_arg(arg));
   auto _data = _connection.invoke("KRPC", "Expression_static_StringToUpper", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6463,8 +6341,7 @@ inline KRPC::Expression KRPC::Expression::string_trim(::krpc::Connection& _conne
   _args.push_back(encoder::encode_arg(arg));
   auto _data = _connection.invoke("KRPC", "Expression_static_StringTrim", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6474,8 +6351,7 @@ inline KRPC::Expression KRPC::Expression::string_trim_end(::krpc::Connection& _c
   _args.push_back(encoder::encode_arg(arg));
   auto _data = _connection.invoke("KRPC", "Expression_static_StringTrimEnd", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6485,8 +6361,7 @@ inline KRPC::Expression KRPC::Expression::string_trim_start(::krpc::Connection& 
   _args.push_back(encoder::encode_arg(arg));
   auto _data = _connection.invoke("KRPC", "Expression_static_StringTrimStart", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6497,8 +6372,7 @@ inline KRPC::Expression KRPC::Expression::subtract(::krpc::Connection& _connecti
   _args.push_back(encoder::encode_arg(arg1));
   auto _data = _connection.invoke("KRPC", "Expression_static_Subtract", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6508,8 +6382,7 @@ inline KRPC::Expression KRPC::Expression::sum(::krpc::Connection& _connection, K
   _args.push_back(encoder::encode_arg(arg));
   auto _data = _connection.invoke("KRPC", "Expression_static_Sum", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6521,8 +6394,7 @@ inline KRPC::Expression KRPC::Expression::switch_(::krpc::Connection& _connectio
   _args.push_back(encoder::encode_arg(bodies));
   auto _data = _connection.invoke("KRPC", "Expression_static_Switch", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6533,8 +6405,7 @@ inline KRPC::Expression KRPC::Expression::take(::krpc::Connection& _connection, 
   _args.push_back(encoder::encode_arg(count));
   auto _data = _connection.invoke("KRPC", "Expression_static_Take", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6546,8 +6417,7 @@ inline KRPC::Expression KRPC::Expression::throw_(::krpc::Connection& _connection
   _args.push_back(encoder::encode_arg(message));
   auto _data = _connection.invoke("KRPC", "Expression_static_Throw", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6559,8 +6429,7 @@ inline KRPC::Expression KRPC::Expression::throw_by_id(::krpc::Connection& _conne
   _args.push_back(encoder::encode_arg(message));
   auto _data = _connection.invoke("KRPC", "Expression_static_ThrowById", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6570,8 +6439,7 @@ inline KRPC::Expression KRPC::Expression::to_list(::krpc::Connection& _connectio
   _args.push_back(encoder::encode_arg(arg));
   auto _data = _connection.invoke("KRPC", "Expression_static_ToList", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6581,8 +6449,7 @@ inline KRPC::Expression KRPC::Expression::to_set(::krpc::Connection& _connection
   _args.push_back(encoder::encode_arg(arg));
   auto _data = _connection.invoke("KRPC", "Expression_static_ToSet", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6596,8 +6463,7 @@ inline KRPC::Expression KRPC::Expression::try_catch(::krpc::Connection& _connect
   _args.push_back(encoder::encode_arg(handler));
   auto _data = _connection.invoke("KRPC", "Expression_static_TryCatch", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6609,8 +6475,7 @@ inline KRPC::Expression KRPC::Expression::try_catch_all(::krpc::Connection& _con
   _args.push_back(encoder::encode_arg(handler));
   auto _data = _connection.invoke("KRPC", "Expression_static_TryCatchAll", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6624,8 +6489,7 @@ inline KRPC::Expression KRPC::Expression::try_catch_by_id(::krpc::Connection& _c
   _args.push_back(encoder::encode_arg(handler));
   auto _data = _connection.invoke("KRPC", "Expression_static_TryCatchById", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6636,8 +6500,7 @@ inline KRPC::Expression KRPC::Expression::try_finally(::krpc::Connection& _conne
   _args.push_back(encoder::encode_arg(finalizer));
   auto _data = _connection.invoke("KRPC", "Expression_static_TryFinally", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6648,8 +6511,7 @@ inline KRPC::Expression KRPC::Expression::union_(::krpc::Connection& _connection
   _args.push_back(encoder::encode_arg(arg2));
   auto _data = _connection.invoke("KRPC", "Expression_static_Union", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6660,8 +6522,7 @@ inline KRPC::Expression KRPC::Expression::variable(::krpc::Connection& _connecti
   _args.push_back(encoder::encode_arg(type));
   auto _data = _connection.invoke("KRPC", "Expression_static_Variable", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6672,8 +6533,7 @@ inline KRPC::Expression KRPC::Expression::where(::krpc::Connection& _connection,
   _args.push_back(encoder::encode_arg(func));
   auto _data = _connection.invoke("KRPC", "Expression_static_Where", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6684,8 +6544,7 @@ inline KRPC::Expression KRPC::Expression::while_(::krpc::Connection& _connection
   _args.push_back(encoder::encode_arg(body));
   auto _data = _connection.invoke("KRPC", "Expression_static_While", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -6697,8 +6556,7 @@ inline KRPC::Expression KRPC::Expression::zip(::krpc::Connection& _connection, K
   _args.push_back(encoder::encode_arg(func));
   auto _data = _connection.invoke("KRPC", "Expression_static_Zip", _args, ::krpc::Connection::Returns::value);
     KRPC::Expression _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -9851,8 +9709,7 @@ inline KRPC::TypeCode KRPC::Type::code() {
   _args.push_back(encoder::encode_arg(*this));
   auto _data = this->_connection.invoke("KRPC", "Type_get_Code", _args, ::krpc::Connection::Returns::value);
   KRPC::TypeCode _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -9862,8 +9719,7 @@ inline std::string KRPC::Type::name() {
   _args.push_back(encoder::encode_arg(*this));
   auto _data = this->_connection.invoke("KRPC", "Type_get_Name", _args, ::krpc::Connection::Returns::value);
   std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -9873,8 +9729,7 @@ inline bool KRPC::Type::nullable() {
   _args.push_back(encoder::encode_arg(*this));
   auto _data = this->_connection.invoke("KRPC", "Type_get_Nullable", _args, ::krpc::Connection::Returns::value);
   bool _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -9884,8 +9739,7 @@ inline std::string KRPC::Type::service() {
   _args.push_back(encoder::encode_arg(*this));
   auto _data = this->_connection.invoke("KRPC", "Type_get_Service", _args, ::krpc::Connection::Returns::value);
   std::string _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
@@ -9895,24 +9749,21 @@ inline std::vector<KRPC::Type> KRPC::Type::types() {
   _args.push_back(encoder::encode_arg(*this));
   auto _data = this->_connection.invoke("KRPC", "Type_get_Types", _args, ::krpc::Connection::Returns::value);
   std::vector<KRPC::Type> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &this->_connection);
+  decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
 inline KRPC::Type KRPC::Type::bool_(::krpc::Connection& _connection) {
   auto _data = _connection.invoke("KRPC", "Type_static_Bool", {}, ::krpc::Connection::Returns::value);
     KRPC::Type _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
 inline KRPC::Type KRPC::Type::bytes(::krpc::Connection& _connection) {
   auto _data = _connection.invoke("KRPC", "Type_static_Bytes", {}, ::krpc::Connection::Returns::value);
     KRPC::Type _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -9923,8 +9774,7 @@ inline KRPC::Type KRPC::Type::class_type(::krpc::Connection& _connection, std::s
   _args.push_back(encoder::encode_arg(name));
   auto _data = _connection.invoke("KRPC", "Type_static_ClassType", _args, ::krpc::Connection::Returns::value);
     KRPC::Type _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -9935,8 +9785,7 @@ inline KRPC::Type KRPC::Type::class_type_by_id(::krpc::Connection& _connection, 
   _args.push_back(encoder::encode_arg(class_id));
   auto _data = _connection.invoke("KRPC", "Type_static_ClassTypeById", _args, ::krpc::Connection::Returns::value);
     KRPC::Type _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -9947,16 +9796,14 @@ inline KRPC::Type KRPC::Type::dictionary_type(::krpc::Connection& _connection, K
   _args.push_back(encoder::encode_arg(value_type));
   auto _data = _connection.invoke("KRPC", "Type_static_DictionaryType", _args, ::krpc::Connection::Returns::value);
     KRPC::Type _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
 inline KRPC::Type KRPC::Type::double_(::krpc::Connection& _connection) {
   auto _data = _connection.invoke("KRPC", "Type_static_Double", {}, ::krpc::Connection::Returns::value);
     KRPC::Type _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -9967,8 +9814,7 @@ inline KRPC::Type KRPC::Type::enumeration_type(::krpc::Connection& _connection, 
   _args.push_back(encoder::encode_arg(name));
   auto _data = _connection.invoke("KRPC", "Type_static_EnumerationType", _args, ::krpc::Connection::Returns::value);
     KRPC::Type _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -9979,24 +9825,21 @@ inline KRPC::Type KRPC::Type::enumeration_type_by_id(::krpc::Connection& _connec
   _args.push_back(encoder::encode_arg(enumeration_id));
   auto _data = _connection.invoke("KRPC", "Type_static_EnumerationTypeById", _args, ::krpc::Connection::Returns::value);
     KRPC::Type _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
 inline KRPC::Type KRPC::Type::float_(::krpc::Connection& _connection) {
   auto _data = _connection.invoke("KRPC", "Type_static_Float", {}, ::krpc::Connection::Returns::value);
     KRPC::Type _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
 inline KRPC::Type KRPC::Type::int_(::krpc::Connection& _connection) {
   auto _data = _connection.invoke("KRPC", "Type_static_Int", {}, ::krpc::Connection::Returns::value);
     KRPC::Type _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -10006,16 +9849,14 @@ inline KRPC::Type KRPC::Type::list_type(::krpc::Connection& _connection, KRPC::T
   _args.push_back(encoder::encode_arg(value_type));
   auto _data = _connection.invoke("KRPC", "Type_static_ListType", _args, ::krpc::Connection::Returns::value);
     KRPC::Type _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
 inline KRPC::Type KRPC::Type::long_(::krpc::Connection& _connection) {
   auto _data = _connection.invoke("KRPC", "Type_static_Long", {}, ::krpc::Connection::Returns::value);
     KRPC::Type _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -10025,8 +9866,7 @@ inline KRPC::Type KRPC::Type::nullable_type(::krpc::Connection& _connection, KRP
   _args.push_back(encoder::encode_arg(value_type));
   auto _data = _connection.invoke("KRPC", "Type_static_NullableType", _args, ::krpc::Connection::Returns::value);
     KRPC::Type _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -10036,16 +9876,14 @@ inline KRPC::Type KRPC::Type::set_type(::krpc::Connection& _connection, KRPC::Ty
   _args.push_back(encoder::encode_arg(value_type));
   auto _data = _connection.invoke("KRPC", "Type_static_SetType", _args, ::krpc::Connection::Returns::value);
     KRPC::Type _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
 inline KRPC::Type KRPC::Type::string(::krpc::Connection& _connection) {
   auto _data = _connection.invoke("KRPC", "Type_static_String", {}, ::krpc::Connection::Returns::value);
     KRPC::Type _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -10056,8 +9894,7 @@ inline KRPC::Type KRPC::Type::struct_type(::krpc::Connection& _connection, std::
   _args.push_back(encoder::encode_arg(name));
   auto _data = _connection.invoke("KRPC", "Type_static_StructType", _args, ::krpc::Connection::Returns::value);
     KRPC::Type _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -10068,8 +9905,7 @@ inline KRPC::Type KRPC::Type::struct_type_by_id(::krpc::Connection& _connection,
   _args.push_back(encoder::encode_arg(struct_id));
   auto _data = _connection.invoke("KRPC", "Type_static_StructTypeById", _args, ::krpc::Connection::Returns::value);
     KRPC::Type _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
@@ -10079,24 +9915,21 @@ inline KRPC::Type KRPC::Type::tuple_type(::krpc::Connection& _connection, std::v
   _args.push_back(encoder::encode_arg(value_types));
   auto _data = _connection.invoke("KRPC", "Type_static_TupleType", _args, ::krpc::Connection::Returns::value);
     KRPC::Type _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
 inline KRPC::Type KRPC::Type::uint(::krpc::Connection& _connection) {
   auto _data = _connection.invoke("KRPC", "Type_static_UInt", {}, ::krpc::Connection::Returns::value);
     KRPC::Type _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
 inline KRPC::Type KRPC::Type::ulong(::krpc::Connection& _connection) {
   auto _data = _connection.invoke("KRPC", "Type_static_ULong", {}, ::krpc::Connection::Returns::value);
     KRPC::Type _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), &_connection);
+  decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 

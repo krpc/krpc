@@ -12,8 +12,7 @@ _args.push_back(encoder::encode_arg({{x.name}}));
 {% endmacro %}
 {% macro return(type, set_client, is_static=False) %}
 {{type}} _result{};
-if (!_data.is_null())
-  decoder::decode(_result, _data.value(), &{% if is_static %}_connection{% else %}this->_connection{% endif %});
+decoder::decode_result(_result, _data, &{% if is_static %}_connection{% else %}this->_connection{% endif %});
 return _result;
 {% endmacro %}
 {% macro stream(service, procedure, type, has_args, is_static=False) %}

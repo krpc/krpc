@@ -1,4 +1,5 @@
 #include <krpc_cnano.h>
+#include <krpc_cnano/decoder.h>
 #include <krpc_cnano/encoder.h>
 #include <krpc_cnano/pb.h>
 #include <krpc_cnano/pb_decode.h>
@@ -426,6 +427,11 @@ krpc_error_t krpc_invoke(krpc_connection_t connection, krpc_schema_ProcedureResu
     // A response holds one result, for its one call
     if (response->results_count != 1) return krpc_protocol_error(connection);
     *result = response->results[0];
+    if (result->is_null && krpc_result_has_value(result)) {
+      // The caller returns on the failure without freeing the result
+      krpc_free_result((krpc_result_t *)result->value.arg);
+      KRPC_FAIL(ENCODING, "A null result has a value");
+    }
     return KRPC_OK;
   }
 }

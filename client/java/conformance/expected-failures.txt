@@ -24,7 +24,6 @@ test_streams.py::test_procedure_returning_an_event  # The testee cannot stream a
 test_concurrency.py::test_wake_update_waiter[close]  # As test_wait_for_update
 test_concurrency.py::test_wake_update_waiter[connection-failure]  # As test_wait_for_update
 test_codec.py::test_malformed_data[list(nullable sint32)]  # A presence bool other than 0 or 1, or data after a null, decodes
-test_values.py::test_null_result_with_a_value  # A result with is_null set reads as null, whatever its value
 test_concurrency.py::test_update_callback_after_close  # As test_streams.py::test_update_callback
 test_streams.py::test_drop_last_handle  # Dropping the last handle leaves the stream on the server
 test_events.py::test_drop_last_handle  # As test_streams.py::test_drop_last_handle

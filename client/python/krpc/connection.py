@@ -14,7 +14,7 @@ from krpc.declarations import DeclaredClass, connection_lookup, declaration_erro
 from krpc.decoder import Decoder
 from krpc.definitions import register_all
 from krpc.encoder import Encoder
-from krpc.error import ConnectionError, ServerError
+from krpc.error import ConnectionError, EncodingError, ServerError
 from krpc.event import Event
 from krpc.functioncompiler import (
     NO_VALUE,
@@ -624,7 +624,18 @@ class Connection:
             raise self._build_error(result.error)
 
         # Decode the response and return the (optional) result
-        if return_type is None or result.is_null:
+        if return_type is None:
+            return None
+        if result.is_null:
+            if result.value:
+                raise EncodingError(
+                    "%s.%s returned null with a value" % (service, procedure)
+                )
+            if not return_type.nullable:
+                raise EncodingError(
+                    "%s.%s returned null, for a result that cannot be null"
+                    % (service, procedure)
+                )
             return None
         return Decoder.decode(self, result.value, return_type)
 

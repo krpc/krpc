@@ -183,6 +183,7 @@ schema::ProcedureResult Connection::send_request(schema::Request request, const 
   schema::ProcedureResult result = std::move(*response.mutable_results(0));
 
   if (result.has_error()) state->throwers->throw_exception(result.error());
+  if (result.is_null() && !result.value().empty()) throw EncodingError("A null result has a value");
 
   return result;
 }

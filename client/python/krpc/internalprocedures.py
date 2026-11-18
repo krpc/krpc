@@ -8,7 +8,6 @@ from collections.abc import Iterable
 from typing import TYPE_CHECKING, cast
 
 import krpc.schema.KRPC_pb2 as KRPC
-from krpc.error import EncodingError
 
 if TYPE_CHECKING:
     from typing_extensions import TypeIs
@@ -47,7 +46,7 @@ class InternalProcedures:
             [self._types.procedure_call_type],
             self._types.stream_type,
         )
-        return cast(int, _non_null(result))
+        return cast(int, result)
 
     def set_stream_rate(self, stream_id: int, rate: float) -> None:
         self._invoke(
@@ -79,7 +78,7 @@ class InternalProcedures:
             [self.expression_type],
             self._types.stream_type,
         )
-        return cast(int, _non_null(result))
+        return cast(int, result)
 
     def compile_function(self, function: Expression) -> None:
         self._invoke("CompileFunction", [function], [self.expression_type])
@@ -95,7 +94,7 @@ class InternalProcedures:
                 "RunFunction",
                 [function, arguments],
                 [self.expression_type, self._arguments_type],
-                self._types.bytes_type,
+                self._types.nullable(self._types.bytes_type),
             ),
         )
 
@@ -104,7 +103,7 @@ class InternalProcedures:
         result = self._invoke(
             "AddEvent", [function], [self.expression_type], self._types.event_type
         )
-        return cast("Event", _non_null(result))
+        return cast("Event", result)
 
     def _invoke(
         self,
@@ -116,10 +115,3 @@ class InternalProcedures:
         return self._connection._invoke(
             "KRPC", procedure, args, param_types, return_type
         )
-
-
-def _non_null(value: object) -> object:
-    """A stream id or an event, which cannot be null"""
-    if value is None:
-        raise EncodingError("A null result for a value that cannot be null")
-    return value

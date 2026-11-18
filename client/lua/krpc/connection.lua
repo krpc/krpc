@@ -192,6 +192,10 @@ function Connection:_invoke(service, procedure, args, param_types, return_type, 
   if return_type then
     -- A null result is signaled out-of-band by is_null; the value field is unset
     if result.is_null then
+      if result.value ~= nil and result.value ~= '' then
+        error(errors.EncodingError(string.format(
+          '%s.%s() returned null with a value', service, procedure)), 0)
+      end
       if not return_type.nullable then
         error(errors.EncodingError(string.format(
           '%s.%s() returned null, for a result that cannot be null', service, procedure)), 0)

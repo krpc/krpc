@@ -63,6 +63,14 @@ void decode_item(T& value, const std::string& data, Connection* connection);
 
 uint32_t decode_size(const std::string& data);
 
+/** Decode the result of a call. Only a std::optional takes a null result, and a null result for
+    any other type throws EncodingError. */
+template <typename T>
+void decode_result(std::optional<T>& value, const schema::ProcedureResult& result,
+                   Connection* connection);
+template <typename T>
+void decode_result(T& value, const schema::ProcedureResult& result, Connection* connection);
+
 /** Read the size prefix a message is preceded by out of a buffer. Returns false if the buffer
     does not hold a complete prefix yet, leaving size and prefix_length untouched. */
 bool decode_size_prefix(const char* data, size_t length, uint32_t* size, size_t* prefix_length);
@@ -96,6 +104,22 @@ inline void decode(std::optional<T>& value, const std::string& data, Connection*
   T inner;
   decode(inner, data, connection);
   value = inner;
+}
+
+template <typename T>
+inline void decode_result(std::optional<T>& value, const schema::ProcedureResult& result,
+                          Connection* connection) {
+  if (result.is_null()) {
+    value.reset();
+    return;
+  }
+  decode(value, result.value(), connection);
+}
+
+template <typename T>
+inline void decode_result(T& value, const schema::ProcedureResult& result, Connection* connection) {
+  if (result.is_null()) throw EncodingError("A null result for a value that cannot be null");
+  decode(value, result.value(), connection);
 }
 
 // Decode one of the values a collection or a structure holds, where a nullable position is

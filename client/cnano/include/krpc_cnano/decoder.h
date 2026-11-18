@@ -23,6 +23,8 @@ typedef struct {
 krpc_error_t krpc_init_result(krpc_result_t* result);
 krpc_error_t krpc_free_result(krpc_result_t* result);
 krpc_error_t krpc_get_return_value(krpc_result_t* result, pb_istream_t* stream);
+/* Whether a result whose value krpc_init_result's callback decodes holds a value */
+bool krpc_result_has_value(const krpc_schema_ProcedureResult* message);
 
 /*[[[cog
 types = [

@@ -20,7 +20,6 @@ test_streams.py::test_procedure_returning_an_event  # The testee cannot stream a
 test_concurrency.py::test_close_while_holding[updates]  # As test_wait_for_update
 test_concurrency.py::test_wake_update_waiter[close]  # As test_wait_for_update
 test_concurrency.py::test_wake_update_waiter[connection-failure]  # As test_wait_for_update
-test_values.py::test_null_result_with_a_value  # A result with is_null set reads as null, whatever its value
 test_streams.py::test_first_call_superseded  # The client has no race points
 test_streams.py::test_callback_after_remove  # The client has no race points
 test_streams.py::test_callback_removed_during_update  # The client has no race points

@@ -16,7 +16,6 @@ test_values.py::test_null_for_non_nullable[struct]  # As test_null_for_non_nulla
 test_values.py::test_null_for_non_nullable[tuple]  # As test_null_for_non_nullable[bool]
 test_values.py::test_null_for_non_nullable[uint32]  # As test_null_for_non_nullable[bool]
 test_values.py::test_null_for_non_nullable[uint64]  # As test_null_for_non_nullable[bool]
-test_values.py::test_null_result_for_non_nullable  # A null result decodes as None
 test_values.py::test_out_of_range[float-above]  # A double beyond the largest float raises OverflowError
 test_values.py::test_out_of_range[float-below]  # As test_out_of_range[float-above]
 test_values.py::test_out_of_range[sint32-above]  # The encoder checks only that an unsigned number is not negative
@@ -36,7 +35,6 @@ test_calls.py::test_undefined_type[class]  # A member whose type names an undefi
 test_calls.py::test_undefined_type[enumeration]  # As above
 test_calls.py::test_undefined_type[wrong-kind]  # As above
 test_calls.py::test_undefined_type[enumeration-default]  # Building the services raises an error
-test_values.py::test_null_result_with_a_value  # A result with is_null set reads as null, whatever its value
 test_streams.py::test_first_call_superseded  # The client has no race points
 test_streams.py::test_callback_after_remove  # The client has no race points
 test_streams.py::test_callback_removed_during_update  # The client has no race points
