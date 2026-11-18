@@ -480,7 +480,7 @@ at = ["MODULE.bazel: org.javatuples:javatuples:{version}"]
 
 [[dep]]
 name = "bufbuild-protobuf"
-version = "2.16.0"
+version = "2.17.0"
 source = "npm:@bufbuild/protobuf"
 verify = [{ source = "npm:@bufbuild/protoc-gen-es", version = "{version}" }]
 regen = ["pnpm"]
@@ -498,7 +498,7 @@ at = ['client/js/package.json: "acorn": "^{version}"']
 
 [[dep]]
 name = "biome"
-version = "2.6.5"
+version = "2.6.8"
 source = "npm:@biomejs/biome"
 regen = ["pnpm"]
 at = ['client/js/package.json: "@biomejs/biome": "{version}"']
