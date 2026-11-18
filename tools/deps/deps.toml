@@ -286,7 +286,7 @@ at = [
 
 [[dep]]
 name = "asio"
-version = "1.38.2"
+version = "1.39.0"
 source = "github-tag:chriskohlhoff/asio"
 tag = 'asio-(\d+-\d+-\d+)'
 at = [
