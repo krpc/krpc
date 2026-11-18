@@ -13,8 +13,6 @@ test_errors.py::test_whole_message[NullReferenceException]  # As above
 test_errors.py::test_whole_message[OverflowException]  # As above
 test_errors.py::test_whole_message[TimeoutException]  # As above
 test_calls.py::test_class_extension_members  # The testee dispatch covers KRPC and TestService only
-test_codec.py::test_too_few_items[tuple]  # A short wire tuple decodes short
-test_codec.py::test_extra_items[tuple]  # A tuple with extra items fails to decode
 test_codec.py::test_invalid_utf8  # A string that is not valid UTF-8 decodes
 test_connection.py::test_handshake_timeout[none]  # No handshake timeout
 test_connection.py::test_handshake_timeout[partial]  # As test_handshake_timeout[none]

@@ -6,7 +6,6 @@ test_connection.py::test_handshake_timeout_values[zero]  # A zero timeout waits 
 test_connection.py::test_stall_timeout_values[zero]  # As test_handshake_timeout_values[zero]
 test_values.py::test_undeclared_enum_result  # An enum result holds any number
 test_values.py::test_undeclared_flags_result  # As test_undeclared_enum_result
-test_codec.py::test_extra_items[tuple]  # A tuple with extra items fails to decode
 test_codec.py::test_invalid_utf8  # A string that is not valid UTF-8 decodes
 test_streams.py::test_procedure_returning_an_event  # The testee cannot stream a procedure that returns an event
 test_concurrency.py::test_wait_holding_another @skip  # The dispatcher thread waits for the condition held, so the update of the stream waited on is never announced

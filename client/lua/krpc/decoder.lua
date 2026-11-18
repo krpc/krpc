@@ -212,10 +212,14 @@ function _decode(data, typ)
     end
     return result
   elseif code == Types.TUPLE then
+    -- Items past the size of the tuple type are ignored
     local items, count = _decode_items(data, _ITEMS)
     local value_types = typ.value_types
+    if count < #value_types then
+      error('A tuple has too few items', 0)
+    end
     local result = List{}
-    for i = 1, count do
+    for i = 1, #value_types do
       result[i] = _decode_item(items[i], value_types[i])
     end
     return result

@@ -89,8 +89,9 @@ inline void decode(std::tuple<Ts...>& tuple, const std::string& data, Connection
   // See the note on the list below for why the message this arrives in is kept between calls.
   static thread_local krpc::schema::Tuple tupleMessage;
   if (!tupleMessage.ParseFromString(data)) throw EncodingError("Failed to decode message");
-  if (tupleMessage.items_size() != static_cast<int>(sizeof...(Ts)))
-    throw EncodingError("Tuple has the wrong number of items");
+  // Items past the size of the tuple type are ignored
+  if (tupleMessage.items_size() < static_cast<int>(sizeof...(Ts)))
+    throw EncodingError("Tuple has too few items");
   int index = 0;
   std::apply(
       [&](Ts&... args) { (decode_item(args, tupleMessage.items(index++), connection), ...); },

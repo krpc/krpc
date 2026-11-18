@@ -189,6 +189,13 @@ function encoder.encode(x, typ)
     return _concat(parts)
   elseif code == Types.TUPLE then
     local value_types = typ.value_types
+    -- A null item may be a nil, which leaves a hole that # cannot count past, so only an
+    -- item past the last of the type is refused here. A missing item is a null.
+    for k in pairs(x) do
+      if type(k) == 'number' and k > #value_types then
+        error(string.format('A tuple with an item at %d for a tuple type of %d', k, #value_types), 0)
+      end
+    end
     local parts = {}
     for i = 1, #value_types do
       parts[i] = _delimited(_ITEMS, _encode_item(x[i], value_types[i]))

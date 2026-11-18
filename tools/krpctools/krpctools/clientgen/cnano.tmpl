@@ -465,7 +465,10 @@ static inline bool krpc_decode_callback_item_{{ typ.name }}(
       KRPC_CALLBACK_RETURN_ERROR("skipping an appended struct field");
     break;
 {% else %}
-    KRPC_CALLBACK_RETURN_ERROR("unexpected tuple item");
+    // Items past the size of the tuple type are skipped
+    if (!pb_read(stream, NULL, stream->bytes_left))
+      KRPC_CALLBACK_RETURN_ERROR("skipping an extra tuple item");
+    break;
 {% endif %}
   }
   state->pos++;
@@ -547,6 +550,9 @@ static inline krpc_error_t krpc_decode_{{ typ.name }}(
 {% if typ.kind == 'struct' %}
   if (state.pos < {{ typ.value_types | length }})
     KRPC_FAIL(ENCODING, "Too few fields for a {{ typ.name }}");
+{% else %}
+  if (state.pos < {{ typ.value_types | length }})
+    KRPC_FAIL(ENCODING, "Too few items for a {{ typ.name }}");
 {% endif %}
 {% elif typ.kind in ('list', 'set') %}
   typedef struct State { size_t capacity; {{ typ.ctype }} * value; } State;
