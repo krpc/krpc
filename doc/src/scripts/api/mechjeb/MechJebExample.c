@@ -43,4 +43,6 @@ int main() {
   }
 
   printf("Launch complete\n");
+
+  krpc_disconnect(conn);
 }
