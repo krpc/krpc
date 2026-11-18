@@ -238,8 +238,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@typescript/vfs@1.6.5':
-    resolution: {integrity: sha512-gobLHQLmvQGJInFk31NvgMd1uYzRXsd8qgnOssyLD055R2QPnw1ubRbBQ4+T+5qC7IQVuYXdvNDE2G7tMDVHgw==}
+  '@typescript/vfs@1.6.6':
+    resolution: {integrity: sha512-gXw0+tpchiQUjTcbnNIPnyLFIhbwJ7M1VaxLQ1vXhjQxtTBK3sdDLY1ih0jxCu1I5K3V0dDxq8CkVZtIMspC3A==}
     peerDependencies:
       typescript: '*'
 
@@ -331,7 +331,7 @@ snapshots:
   '@bufbuild/protoplugin@2.17.0':
     dependencies:
       '@bufbuild/protobuf': 2.17.0
-      '@typescript/vfs': 1.6.5(typescript@5.4.5)
+      '@typescript/vfs': 1.6.6(typescript@5.4.5)
       typescript: 5.4.5
     transitivePeerDependencies:
       - supports-color
@@ -400,7 +400,7 @@ snapshots:
   '@typescript/typescript-win32-x64@7.0.2':
     optional: true
 
-  '@typescript/vfs@1.6.5(typescript@5.4.5)':
+  '@typescript/vfs@1.6.6(typescript@5.4.5)':
     dependencies:
       debug: 4.4.3
       typescript: 5.4.5
