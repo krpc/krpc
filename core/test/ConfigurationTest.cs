@@ -15,6 +15,39 @@ namespace KRPC.Test
         }
 
         [Test]
+        public void DefaultsAreTheBalancedPreset ()
+        {
+            var config = new Configuration ();
+            Assert.AreEqual ("Balanced", config.CurrentPreset.Name);
+        }
+
+        [Test]
+        public void ApplyAPreset ()
+        {
+            var config = new Configuration ();
+            config.TargetFrameRate = 30;
+            var callsFirst = Configuration.Presets [2];
+            callsFirst.Apply (config);
+            Assert.AreSame (callsFirst, config.CurrentPreset);
+            Assert.IsFalse (config.AdaptiveRateControl);
+            Assert.AreEqual (20000, config.MaxTimePerFrame);
+            Assert.AreEqual (20000, config.MaxCallWait);
+            // Without adaptive rate control, the target is left as it is
+            Assert.AreEqual (30, config.TargetFrameRate);
+        }
+
+        [Test]
+        public void EditingASettingLeavesThePreset ()
+        {
+            var config = new Configuration ();
+            config.MaxCallWait = 2000;
+            Assert.IsNull (config.CurrentPreset);
+            config.MaxCallWait = 5000;
+            config.TargetFrameRate = 30;
+            Assert.IsNull (config.CurrentPreset);
+        }
+
+        [Test]
         public void DefaultServers ()
         {
             var servers = Configuration.DefaultServers ();

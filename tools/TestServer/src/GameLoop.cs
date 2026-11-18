@@ -91,6 +91,7 @@ namespace TestServer
             var busy = (Stopwatch.GetTimestamp () - start) * 1000d / Stopwatch.Frequency;
             if (frameTicks > 0)
                 WaitUntil (start + frameTicks);
+            core.EndFrame ();
             KRPC.Benchmarks.GameLoop.FrameEnded ();
             return busy;
         }

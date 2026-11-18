@@ -538,6 +538,12 @@ namespace KRPC
         /// </summary>
         public void Update()
         {
+            // The game runs a frame's fixed updates before its Update, and their work, the
+            // server's included, moves the time Update runs at. So the frame's length is the
+            // game's own. It is the previous frame's, one frame behind the server's time, which
+            // the budget's averages over its window of frames absorb
+            if (core != null)
+                core.EndFrame (Time.unscaledDeltaTime);
             GameSceneSwitcher.Update ();
             if (IsPaused && !config.Configuration.PauseServerWithGame)
                 FixedUpdate();

@@ -36,7 +36,9 @@
     <Compile Include="..\InternalsVisibleTo.cs">
       <Link>InternalsVisibleTo.cs</Link>
     </Compile>
+    <Compile Include="CallWait.cs" />
     <Compile Include="Configuration.cs" />
+    <Compile Include="FrameBudget.cs" />
     <Compile Include="Core.cs" />
     <Compile Include="Server\Arrivals.cs" />
     <Compile Include="Server\ClientActivityEventArgs.cs" />

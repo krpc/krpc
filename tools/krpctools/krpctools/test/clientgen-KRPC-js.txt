@@ -1615,7 +1615,7 @@ export interface Service extends RemoteService<"KRPC"> {
    * See {@link ServerStatus.settings}.
    */
   readonly ServerSettings: {
-    new (fields: { readonly maxTimePerUpdate: number; readonly adaptiveRateControl: boolean; readonly blockingRecv: boolean; readonly recvTimeout: number; readonly tickHoldTimeout: number }): ServerSettings;
+    new (fields: { readonly adaptiveRateControl: boolean; readonly targetFrameRate: number; readonly maxTimePerFrame: number; readonly maxCallWait: number; readonly tickHoldTimeout: number }): ServerSettings;
     [Symbol.hasInstance](value: unknown): value is ServerSettings;
   };
   /**
@@ -1624,7 +1624,7 @@ export interface Service extends RemoteService<"KRPC"> {
    * See {@link ServerStatus.statistics}.
    */
   readonly ServerStatistics: {
-    new (fields: { readonly bytesRead: number | bigint; readonly bytesWritten: number | bigint; readonly bytesReadRate: number; readonly bytesWrittenRate: number; readonly rpcsExecuted: number | bigint; readonly rpcRate: number; readonly timePerRpcUpdate: number; readonly pollTimePerRpcUpdate: number; readonly execTimePerRpcUpdate: number; readonly deferredCalls: number; readonly streams: number; readonly streamEvaluations: number | bigint; readonly streamEvaluationRate: number; readonly streamUpdatesSent: number | bigint; readonly timePerStreamUpdate: number }): ServerStatistics;
+    new (fields: { readonly bytesRead: number | bigint; readonly bytesWritten: number | bigint; readonly bytesReadRate: number; readonly bytesWrittenRate: number; readonly rpcsExecuted: number | bigint; readonly rpcRate: number; readonly frameRate: number; readonly timePerFrame: number; readonly execTimePerFrame: number; readonly waitTimePerFrame: number; readonly streamTimePerFrame: number; readonly budgetPerFrame: number; readonly medianTurnaround: number; readonly deferredCalls: number; readonly streams: number; readonly streamEvaluations: number | bigint; readonly streamEvaluationRate: number; readonly streamUpdatesSent: number | bigint }): ServerStatistics;
     [Symbol.hasInstance](value: unknown): value is ServerStatistics;
   };
   /**
@@ -1803,14 +1803,17 @@ export const ClientInfo = declareStruct<Service["ClientInfo"]>("KRPC", "ClientIn
  * See {@link ServerStatus.settings}.
  */
 export interface ServerSettings extends RemoteStruct<"KRPC.ServerSettings"> {
-  /** The current maximum time spent executing calls per update, in microseconds. */
-  readonly maxTimePerUpdate: number;
-  /** Whether the server adjusts {@link ServerSettings.maxTimePerUpdate} to hold the frame rate. */
+  /**
+   * Whether the server adapts its time per frame to hold the frame rate at
+   * {@link ServerSettings.targetFrameRate}.
+   */
   readonly adaptiveRateControl: boolean;
-  /** Whether the server waits for the next call in an update. */
-  readonly blockingRecv: boolean;
-  /** The time the server waits for the next call, in microseconds. */
-  readonly recvTimeout: number;
+  /** The lowest frame rate the server's work pushes the game to, in frames per second. */
+  readonly targetFrameRate: number;
+  /** The server's budget per frame, or its ceiling with adaptive rate control, in microseconds. */
+  readonly maxTimePerFrame: number;
+  /** The longest the server waits for a client's next call, in microseconds. */
+  readonly maxCallWait: number;
   /**
    * The longest time a client may hold the game on one physics tick, in microseconds.
    *
@@ -1818,7 +1821,7 @@ export interface ServerSettings extends RemoteStruct<"KRPC.ServerSettings"> {
    */
   readonly tickHoldTimeout: number;
 }
-export const ServerSettings = declareStruct<Service["ServerSettings"]>("KRPC", "ServerSettings", [["maxTimePerUpdate"], ["adaptiveRateControl"], ["blockingRecv"], ["recvTimeout"], ["tickHoldTimeout"]]);
+export const ServerSettings = declareStruct<Service["ServerSettings"]>("KRPC", "ServerSettings", [["adaptiveRateControl"], ["targetFrameRate"], ["maxTimePerFrame"], ["maxCallWait"], ["tickHoldTimeout"]]);
 
 /**
  * The performance statistics of the server.
@@ -1838,12 +1841,30 @@ export interface ServerStatistics extends RemoteStruct<"KRPC.ServerStatistics"> 
   readonly rpcsExecuted: bigint;
   /** The number of calls executed per second. */
   readonly rpcRate: number;
-  /** The time spent receiving and executing calls per update, in seconds. */
-  readonly timePerRpcUpdate: number;
-  /** The time spent receiving calls per update, in seconds. */
-  readonly pollTimePerRpcUpdate: number;
-  /** The time spent executing calls per update, in seconds. */
-  readonly execTimePerRpcUpdate: number;
+  /** The game's frame rate, in frames per second. */
+  readonly frameRate: number;
+  /**
+   * The server's time per frame, in seconds: executing calls, waiting for them and
+   * updating streams.
+   */
+  readonly timePerFrame: number;
+  /** The time spent executing calls per frame, in seconds. */
+  readonly execTimePerFrame: number;
+  /** The time spent waiting for calls per frame, in seconds. */
+  readonly waitTimePerFrame: number;
+  /** The time spent updating streams per frame, in seconds. */
+  readonly streamTimePerFrame: number;
+  /**
+   * The time the server may spend per frame, in seconds.
+   *
+   * Adaptive rate control adjusts it, up to {@link ServerSettings.maxTimePerFrame}.
+   */
+  readonly budgetPerFrame: number;
+  /**
+   * The median time between a response and the client's next call, over the
+   * clients' recent calls, in seconds.
+   */
+  readonly medianTurnaround: number;
   /**
    * The number of calls left for the next update, because the update ran out of time
    * or the call yielded.
@@ -1857,10 +1878,8 @@ export interface ServerStatistics extends RemoteStruct<"KRPC.ServerStatistics"> 
   readonly streamEvaluationRate: number;
   /** The number of stream updates sent to clients. */
   readonly streamUpdatesSent: bigint;
-  /** The time spent updating streams per update, in seconds. */
-  readonly timePerStreamUpdate: number;
 }
-export const ServerStatistics = declareStruct<Service["ServerStatistics"]>("KRPC", "ServerStatistics", [["bytesRead"], ["bytesWritten"], ["bytesReadRate"], ["bytesWrittenRate"], ["rpcsExecuted"], ["rpcRate"], ["timePerRpcUpdate"], ["pollTimePerRpcUpdate"], ["execTimePerRpcUpdate"], ["deferredCalls"], ["streams"], ["streamEvaluations"], ["streamEvaluationRate"], ["streamUpdatesSent"], ["timePerStreamUpdate"]]);
+export const ServerStatistics = declareStruct<Service["ServerStatistics"]>("KRPC", "ServerStatistics", [["bytesRead"], ["bytesWritten"], ["bytesReadRate"], ["bytesWrittenRate"], ["rpcsExecuted"], ["rpcRate"], ["frameRate"], ["timePerFrame"], ["execTimePerFrame"], ["waitTimePerFrame"], ["streamTimePerFrame"], ["budgetPerFrame"], ["medianTurnaround"], ["deferredCalls"], ["streams"], ["streamEvaluations"], ["streamEvaluationRate"], ["streamUpdatesSent"]]);
 
 /**
  * The status of the server.

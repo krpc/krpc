@@ -64,7 +64,7 @@ namespace TestServer
             Description = "Output debug information about the server"
         };
         static readonly Option<bool> noFramePacingOption = new Option<bool> ("--no-frame-pacing") {
-            Description = "Run the update loop as fast as it will go, rather than pacing it to the frame limit, and turn adaptive rate control off with it. For timing a client: paced, a call whose client takes longer than the receive timeout to send the next one is served once per update, so the round trip measures the update rate rather than the client. Overrides --frame-limit."
+            Description = "Run the update loop as fast as it will go, rather than pacing it to the frame limit, and turn adaptive rate control off with it. For timing a client: paced, a call whose client takes longer than the max call wait to send the next one is served once per update, so the round trip measures the update rate rather than the client. Overrides --frame-limit."
         };
         static readonly Option<double> frameLimitOption = new Option<double> ("--frame-limit") {
             Description = "The most frames to run a second, as a game's frame limiter does.",
@@ -78,6 +78,9 @@ namespace TestServer
         };
         static readonly Option<uint> frameWorkOption = new Option<uint> ("--frame-work-us") {
             Description = "Microseconds of the game's own work to simulate in each frame, such as rendering."
+        };
+        static readonly Option<string> presetOption = new Option<string> ("--preset") {
+            Description = "The preset of the server's rate settings: game-first, balanced or calls-first. Balanced by default."
         };
 
         public static int Main (string[] args)
@@ -100,7 +103,8 @@ namespace TestServer
                 frameLimitOption,
                 fixedRateOption,
                 tickWorkOption,
-                frameWorkOption
+                frameWorkOption,
+                presetOption
             };
             root.SetAction (Run);
             return ToolCommandLine.Invoke (root, args);
@@ -141,9 +145,19 @@ namespace TestServer
                 "Loaded " + typeof (KRPC.Benchmarks.Benchmark).Assembly.GetName ().Name);
 
             var core = Core.Instance;
-            // Adaptive rate control keys off how long an update took against a target update
-            // rate. Unpaced there is no such rate, so all it does is wander MaxTimePerUpdate
-            // around, which is run to run variation in a measurement for nothing.
+            var presetName = result.GetValue (presetOption);
+            if (presetName != null) {
+                var preset = Configuration.Presets.FirstOrDefault (
+                    x => x.Name.ToLowerInvariant ().Replace (' ', '-') == presetName);
+                if (preset == null) {
+                    Logger.WriteLine ("Preset '" + presetName + "' not known", Logger.Severity.Error);
+                    return;
+                }
+                preset.Apply (Configuration.Instance);
+            }
+            // Adaptive rate control keys off how long a frame took against a target frame
+            // rate. Unpaced there is no such rate, so all it does is wander the budget around,
+            // which is run to run variation in a measurement for nothing.
             if (!framePacing)
                 Configuration.Instance.AdaptiveRateControl = false;
             var serverVersion = Assembly.GetEntryAssembly ().GetName ().Version;

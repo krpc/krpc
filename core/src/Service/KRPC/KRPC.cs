@@ -42,10 +42,10 @@ namespace KRPC.Service.KRPC
                 Version = core.Version ?? "unknown",
                 ProtocolVersion = client != null ? Server.ProtocolVersion.Current : 0,
                 Settings = new ServerSettings {
-                    MaxTimePerUpdate = core.MaxTimePerUpdate,
                     AdaptiveRateControl = config.AdaptiveRateControl,
-                    BlockingRecv = config.BlockingRecv,
-                    RecvTimeout = config.RecvTimeout,
+                    TargetFrameRate = config.TargetFrameRate,
+                    MaxTimePerFrame = config.MaxTimePerFrame,
+                    MaxCallWait = config.MaxCallWait,
                     TickHoldTimeout = config.TickHoldTimeout
                 },
                 Statistics = new ServerStatistics {
@@ -55,15 +55,18 @@ namespace KRPC.Service.KRPC
                     BytesWrittenRate = core.BytesWrittenRate,
                     RpcsExecuted = core.RPCsExecuted,
                     RpcRate = core.RPCRate,
-                    TimePerRpcUpdate = core.TimePerRPCUpdate,
-                    PollTimePerRpcUpdate = core.PollTimePerRPCUpdate,
-                    ExecTimePerRpcUpdate = core.ExecTimePerRPCUpdate,
+                    FrameRate = core.FrameRate,
+                    TimePerFrame = core.TimePerFrame,
+                    ExecTimePerFrame = core.ExecTimePerFrame,
+                    WaitTimePerFrame = core.WaitTimePerFrame,
+                    StreamTimePerFrame = core.StreamTimePerFrame,
+                    BudgetPerFrame = core.BudgetPerFrame / 1e6f,
+                    MedianTurnaround = core.MedianTurnaround,
                     DeferredCalls = core.DeferredCalls,
                     Streams = core.Streams,
                     StreamEvaluations = core.StreamEvaluations,
                     StreamEvaluationRate = core.StreamEvaluationRate,
-                    StreamUpdatesSent = core.StreamUpdatesSent,
-                    TimePerStreamUpdate = core.TimePerStreamUpdate
+                    StreamUpdatesSent = core.StreamUpdatesSent
                 }
             };
         }

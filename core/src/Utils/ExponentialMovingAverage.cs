@@ -29,6 +29,12 @@ namespace KRPC.Utils
             return (float)value;
         }
 
+        public void Reset ()
+        {
+            value = 0d;
+            lastUpdate = timer.ElapsedTicks;
+        }
+
         public float Value {
             get { return (float)value; }
         }

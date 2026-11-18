@@ -49,8 +49,8 @@ encoding the result and serializing the response:
 ``:update-loop`` measures the server's update loop: the calls a second that clients of different
 shapes get, and what the loop costs the frame. It runs a ``TestServer`` that models a game's frame
 loop, with fixed steps at 50 a second, simulated work in each step and each frame, and a frame
-limit of 60 frames a second. ``--game`` picks a light or a heavy game, and ``--shape`` the client
-shapes:
+limit of 60 frames a second. ``--game`` picks a light or a heavy game, ``--shape`` the client
+shapes, and ``--preset`` the server's rate settings, Balanced by default:
 
 .. code-block:: bash
 
@@ -69,7 +69,7 @@ theirs.
 
 The client targets run the server with ``--no-frame-pacing``, so its update loop runs as fast as
 it can. A paced server adds the rest of each update to a round trip. It also serves a client that
-is slower than its receive timeout once per update, which measures 16.7 ms and not the client.
+is slower than its max call wait once per update, which measures 16.7 ms and not the client.
 
 ``:clients`` runs every client in turn, each with its own server, and reports one column per
 language. Its JSON file holds every client's results, and ``:compare`` shows it as one block per

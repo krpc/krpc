@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using KRPC.Utils;
@@ -42,6 +43,7 @@ namespace KRPC.Server.SerialIO
         bool opened;
         volatile bool closing;
         volatile bool failed;
+        long lastArrival;
         volatile Action receivedHandler;
 
         public BufferedPort (IPort innerPort)
@@ -61,6 +63,13 @@ namespace KRPC.Server.SerialIO
         /// </summary>
         public bool IsOpen {
             get { return !failed && port.IsOpen; }
+        }
+
+        /// <summary>
+        /// The <see cref="Stopwatch.GetTimestamp"/> at which bytes last arrived.
+        /// </summary>
+        public long LastArrival {
+            get { return Interlocked.Read (ref lastArrival); }
         }
 
         /// <summary>
@@ -213,6 +222,7 @@ namespace KRPC.Server.SerialIO
                     Thread.Sleep (readTimeout);
                     continue;
                 }
+                Interlocked.Exchange (ref lastArrival, Stopwatch.GetTimestamp ());
                 lock (receivedLock)
                     received.Append (buffer, 0, size);
                 var handler = receivedHandler;

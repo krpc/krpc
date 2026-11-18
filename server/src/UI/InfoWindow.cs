@@ -8,41 +8,47 @@ namespace KRPC.UI
     sealed class InfoWindow : Window
     {
         const float windowWidth = 300f;
-        GUIStyle labelStyle, nameLabelStyle, valueLabelStyle, separatorStyle, buttonStyle;
+        const float nameWidth = 140f;
+        const float valueWidth = 150f;
+        const float indentWidth = 12f;
+        GUIStyle labelStyle, nameLabelStyle, indentedNameLabelStyle, valueLabelStyle, separatorStyle, buttonStyle;
 
-        const string networkInfoText = "Network Info";
-        const string bytesReadText = "Data read";
-        const string bytesWrittenText = "Data written";
-        const string bytesReadRateText = "Data read rate";
-        const string bytesWrittenRateText = "Data written rate";
+        const string frameText = "Frame";
+        const string frameRateText = "Frame rate";
+        const string budgetText = "Budget";
+        const string serverTimeText = "Server time";
+        const string executingText = "Executing";
+        const string waitingText = "Waiting";
+        const string streamTimeText = "Streams";
 
-        const string rpcInfoText = "RPC Execution Info";
-        const string rpcsExecutedText = "RPCs Executed";
-        const string rpcRateText = "RPC Rate";
-        const string rpcExecutionMode = "Execution mode";
-        const string adaptiveModeText = "Adaptive";
-        const string staticModeText = "Static";
-        const string maxTimePerUpdateText = "Max. time per update";
-        const string rpcReceiveModeText = "Receive mode";
-        const string blockingModeText = "Blocking";
-        const string nonBlockingModeText = "Non-blocking";
-        const string recvTimeoutText = "Receive timeout";
-        const string tickHoldTimeoutText = "Tick hold timeout";
-        const string timePerRPCUpdateText = "Time per update";
-        const string pollTimePerRPCUpdateText = "Poll time per update";
-        const string execTimePerRPCUpdateText = "Exec time per update";
+        const string callsText = "Calls";
+        const string callRateText = "Call rate";
+        const string limitedByText = "Limited by";
+        const string medianTurnaroundText = "Median turnaround";
         const string deferredCallsText = "Deferred calls";
+        const string callsExecutedText = "Calls executed";
 
-        const string streamInfoText = "Stream Execution Info";
-        const string streamsText = "Current Streams";
-        const string streamEvaluationsText = "Stream Evaluations";
-        const string streamEvaluationRateText = "Stream Evaluation Rate";
-        const string streamUpdatesSentText = "Stream Updates Sent";
-        const string timePerStreamUpdateText = "Time per update";
+        const string streamsText = "Streams";
+        const string openStreamsText = "Open streams";
+        const string evaluationsText = "Evaluations";
+        const string updatesSentText = "Updates sent";
 
-        const string notApplicableText = "n/a";
+        const string networkText = "Network";
+        const string readText = "Read";
+        const string writtenText = "Written";
 
-        const string clearStatisticsText = "Clear Statistics";
+        const string noValueText = "-";
+        const string limitSlowGameText = "Slow game";
+        const string limitBudgetText = "Budget";
+        const string limitMaxCallWaitText = "Max. call wait";
+        const string limitClientText = "Client";
+
+        const string clearStatisticsText = "Clear statistics";
+
+        // The share of frames the budget stops the server in, past which the budget is the limit
+        const float budgetBoundShare = 0.5f;
+        // The share of the target frame rate below which the game is slow
+        const float slowFrameRateShare = 0.95f;
 
         protected override void Init ()
         {
@@ -57,11 +63,14 @@ namespace KRPC.UI
 
             nameLabelStyle = new GUIStyle (skin.label);
             nameLabelStyle.margin = new RectOffset (0, 0, 0, 0);
-            nameLabelStyle.fixedWidth = 160f;
+            nameLabelStyle.fixedWidth = nameWidth;
+
+            indentedNameLabelStyle = new GUIStyle (nameLabelStyle);
+            indentedNameLabelStyle.padding.left += (int)indentWidth;
 
             valueLabelStyle = new GUIStyle (skin.label);
             valueLabelStyle.margin = new RectOffset (0, 0, 0, 0);
-            valueLabelStyle.fixedWidth = 120f;
+            valueLabelStyle.fixedWidth = valueWidth;
 
             separatorStyle = GUILayoutExtensions.SeparatorStyle (new Color (0f, 0f, 0f, 0.25f));
             separatorStyle.fixedHeight = 2;
@@ -75,21 +84,22 @@ namespace KRPC.UI
         const float updateTime = 0.2f;
         DateTime lastUpdate = DateTime.Now;
         bool update = true;
-        // The value shown in each row, by position, as two sections have a "Time per update" row
-        readonly IList<string> values = new List<string> ();
-        int row;
+        // The value shown in each row, by label, refreshed every updateTime seconds
+        readonly IDictionary<string, string> values = new Dictionary<string, string> ();
 
-        void DrawInfo (string label, string value)
+        void DrawInfo (string label, string value, bool indented = false)
         {
-            if (row == values.Count)
-                values.Add (value);
-            else if (update)
-                values [row] = value;
+            if (update || !values.ContainsKey (label))
+                values [label] = value;
             GUILayout.BeginHorizontal ();
-            GUILayout.Label (label, nameLabelStyle);
-            GUILayout.Label (values [row], valueLabelStyle);
+            GUILayout.Label (label, indented ? indentedNameLabelStyle : nameLabelStyle);
+            GUILayout.Label (values [label], valueLabelStyle);
             GUILayout.EndHorizontal ();
-            row++;
+        }
+
+        void DrawSection (string title)
+        {
+            GUILayout.Label (title, labelStyle);
         }
 
         protected override void Draw (bool needRescale)
@@ -99,9 +109,12 @@ namespace KRPC.UI
                 Style.fixedWidth = windowWidth * GameSettings.UI_SCALE;
                 labelStyle.fontSize = scaledFontSize;
                 nameLabelStyle.fontSize = scaledFontSize;
-                nameLabelStyle.fixedWidth = 160f * GameSettings.UI_SCALE;
+                nameLabelStyle.fixedWidth = nameWidth * GameSettings.UI_SCALE;
+                indentedNameLabelStyle.fontSize = scaledFontSize;
+                indentedNameLabelStyle.fixedWidth = nameWidth * GameSettings.UI_SCALE;
+                indentedNameLabelStyle.padding.left = nameLabelStyle.padding.left + (int)(indentWidth * GameSettings.UI_SCALE);
                 valueLabelStyle.fontSize = scaledFontSize;
-                valueLabelStyle.fixedWidth = 120f * GameSettings.UI_SCALE;
+                valueLabelStyle.fixedWidth = valueWidth * GameSettings.UI_SCALE;
                 buttonStyle.fontSize = scaledFontSize;
 
                 // Force window to resize to height of content
@@ -109,54 +122,85 @@ namespace KRPC.UI
             }
 
             update = ((DateTime.Now - lastUpdate).TotalSeconds > updateTime);
-            row = 0;
             if (update)
                 lastUpdate = DateTime.Now;
             var core = Core.Instance;
+            var config = Configuration.Instance;
 
             GUILayout.BeginVertical ();
 
-            GUILayout.Label (networkInfoText, labelStyle);
-            DrawInfo (bytesReadText, BytesToString (core.BytesRead));
-            DrawInfo (bytesWrittenText, BytesToString (core.BytesWritten));
-            DrawInfo (bytesReadRateText, BytesToString ((ulong)core.BytesReadRate) + "/s");
-            DrawInfo (bytesWrittenRateText, BytesToString ((ulong)core.BytesWrittenRate) + "/s");
+            DrawSection (frameText);
+            DrawInfo (frameRateText, FrameRate (core, config));
+            DrawInfo (budgetText, Milliseconds (core.BudgetPerFrame / 1e6f));
+            DrawInfo (serverTimeText, Milliseconds (core.TimePerFrame));
+            DrawInfo (executingText, Milliseconds (core.ExecTimePerFrame), true);
+            DrawInfo (waitingText, Milliseconds (core.WaitTimePerFrame), true);
+            DrawInfo (streamTimeText, Milliseconds (core.StreamTimePerFrame), true);
 
             GUILayoutExtensions.Separator (separatorStyle);
 
-            GUILayout.Label (rpcInfoText, labelStyle);
-            Configuration config = Configuration.Instance;
-            DrawInfo (rpcsExecutedText, core.RPCsExecuted.ToString (CultureInfo.CurrentCulture));
-            DrawInfo (rpcRateText, Math.Round (core.RPCRate) + " RPC/s");
-            DrawInfo (rpcExecutionMode, config.AdaptiveRateControl ? adaptiveModeText : staticModeText);
-            DrawInfo (maxTimePerUpdateText, core.MaxTimePerUpdate + " us");
-            DrawInfo (rpcReceiveModeText, config.BlockingRecv ? blockingModeText : nonBlockingModeText);
-            DrawInfo (recvTimeoutText, config.BlockingRecv ? config.RecvTimeout + " us" : notApplicableText);
-            DrawInfo (tickHoldTimeoutText, config.TickHoldTimeout + " us");
-            DrawInfo (timePerRPCUpdateText, string.Format (CultureInfo.CurrentCulture, "{0:F5} s", core.TimePerRPCUpdate));
-            DrawInfo (pollTimePerRPCUpdateText, string.Format (CultureInfo.CurrentCulture, "{0:F5} s", core.PollTimePerRPCUpdate));
-            DrawInfo (execTimePerRPCUpdateText, string.Format (CultureInfo.CurrentCulture, "{0:F5} s", core.ExecTimePerRPCUpdate));
-            DrawInfo (deferredCallsText, core.DeferredCalls.ToString (CultureInfo.CurrentCulture));
+            DrawSection (callsText);
+            DrawInfo (callRateText, Count (core.RPCRate) + " calls/s");
+            DrawInfo (limitedByText, Limit (core, config));
+            var turnaround = core.MedianTurnaround;
+            DrawInfo (medianTurnaroundText, turnaround > 0 ? Milliseconds (turnaround) : noValueText);
+            DrawInfo (deferredCallsText, Count (core.DeferredCalls));
+            DrawInfo (callsExecutedText, Count (core.RPCsExecuted));
 
             GUILayoutExtensions.Separator (separatorStyle);
 
-            GUILayout.Label (streamInfoText, labelStyle);
-            DrawInfo (streamsText, core.Streams.ToString (CultureInfo.CurrentCulture));
-            DrawInfo (streamEvaluationsText, core.StreamEvaluations.ToString (CultureInfo.CurrentCulture));
-            DrawInfo (streamEvaluationRateText, Math.Round (core.StreamEvaluationRate) + "/s");
-            DrawInfo (streamUpdatesSentText, core.StreamUpdatesSent.ToString (CultureInfo.CurrentCulture));
-            DrawInfo (timePerStreamUpdateText, string.Format (CultureInfo.CurrentCulture, "{0:F5} s", core.TimePerStreamUpdate));
+            DrawSection (streamsText);
+            DrawInfo (openStreamsText, Count (core.Streams));
+            DrawInfo (evaluationsText, Count (core.StreamEvaluationRate) + "/s (" + Count (core.StreamEvaluations) + ")");
+            DrawInfo (updatesSentText, Count (core.StreamUpdatesSent));
 
             GUILayoutExtensions.Separator (separatorStyle);
 
-            GUILayout.BeginHorizontal ();
-            if (GUILayout.Button (clearStatisticsText, buttonStyle)) {
+            DrawSection (networkText);
+            DrawInfo (readText, BytesToString ((ulong)core.BytesReadRate) + "/s (" + BytesToString (core.BytesRead) + ")");
+            DrawInfo (writtenText, BytesToString ((ulong)core.BytesWrittenRate) + "/s (" + BytesToString (core.BytesWritten) + ")");
+
+            GUILayoutExtensions.Separator (separatorStyle);
+
+            if (GUILayout.Button (clearStatisticsText, buttonStyle))
                 core.ClearStats ();
-            }
-            GUILayout.EndHorizontal ();
 
             GUILayout.EndVertical ();
             GUI.DragWindow ();
+        }
+
+        static string FrameRate (Core core, Configuration config)
+        {
+            var rate = Count (core.FrameRate) + " fps";
+            if (!config.AdaptiveRateControl)
+                return rate;
+            return rate + " (target " + config.TargetFrameRate.ToString (CultureInfo.CurrentCulture) + ")";
+        }
+
+        // What holds the call rate down, by the causes the server performance guide lists
+        static string Limit (Core core, Configuration config)
+        {
+            if (core.RPCRate < 1)
+                return noValueText;
+            if (config.AdaptiveRateControl && core.BudgetAtFloor &&
+                core.FrameRate < config.TargetFrameRate * slowFrameRateShare)
+                return limitSlowGameText;
+            if (core.BudgetBoundShare > budgetBoundShare)
+                return limitBudgetText;
+            if (core.MedianTurnaround * 1e6f > config.MaxCallWait)
+                return limitMaxCallWaitText;
+            return limitClientText;
+        }
+
+        // A time in seconds, shown in milliseconds
+        static string Milliseconds (float seconds)
+        {
+            return string.Format (CultureInfo.CurrentCulture, "{0:F2} ms", seconds * 1000);
+        }
+
+        static string Count (double value)
+        {
+            return Math.Round (value).ToString ("N0", CultureInfo.CurrentCulture);
         }
 
         static string BytesToString (ulong bytes)
@@ -166,7 +210,7 @@ namespace KRPC.UI
                 return "0 " + suffix [0];
             int place = Convert.ToInt32 (Math.Floor (Math.Log (bytes, 1024)));
             double num = Math.Round (bytes / Math.Pow (1024, place), 1);
-            return num + " " + suffix [place];
+            return num.ToString (CultureInfo.CurrentCulture) + " " + suffix [place];
         }
     }
 }

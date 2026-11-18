@@ -23,8 +23,11 @@
     <Compile Include="$(bazel-bin)\core\TestAssemblyInfo.cs">
       <Link>TestAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="CallWaitTest.cs" />
+    <Compile Include="CallWaitUpdateTest.cs" />
     <Compile Include="ConfigurationTest.cs" />
     <Compile Include="CoreTest.cs" />
+    <Compile Include="FrameBudgetTest.cs" />
     <Compile Include="PinnedUpdateTime.cs" />
     <Compile Include="PipeliningTest.cs" />
     <Compile Include="ScriptedClient.cs" />

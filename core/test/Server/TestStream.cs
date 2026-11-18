@@ -80,6 +80,10 @@ namespace KRPC.Test.Server
         /// </summary>
         public int Writes { get; private set; }
 
+        public long LastArrival {
+            get { return 0; }
+        }
+
         public ulong BytesRead { get; private set; }
 
         public ulong BytesWritten { get; private set; }

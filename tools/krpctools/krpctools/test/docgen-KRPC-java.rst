@@ -1963,26 +1963,27 @@
 
       See :meth:`ServerStatus.getSettings()`.
 
-   .. constructor:: public ServerSettings(int maxTimePerUpdate, boolean adaptiveRateControl, boolean blockingRecv, int recvTimeout, int tickHoldTimeout)
+   .. constructor:: public ServerSettings(boolean adaptiveRateControl, int targetFrameRate, int maxTimePerFrame, int maxCallWait, int tickHoldTimeout)
 
       Construct a ServerSettings from the values of its fields.
 
 
-   .. method:: int getMaxTimePerUpdate()
-
-      The current maximum time spent executing calls per update, in microseconds.
-
    .. method:: boolean getAdaptiveRateControl()
 
-      Whether the server adjusts :meth:`ServerSettings.getMaxTimePerUpdate()` to hold the frame rate.
+      Whether the server adapts its time per frame to hold the frame rate at
+      :meth:`ServerSettings.getTargetFrameRate()`.
 
-   .. method:: boolean getBlockingRecv()
+   .. method:: int getTargetFrameRate()
 
-      Whether the server waits for the next call in an update.
+      The lowest frame rate the server's work pushes the game to, in frames per second.
 
-   .. method:: int getRecvTimeout()
+   .. method:: int getMaxTimePerFrame()
 
-      The time the server waits for the next call, in microseconds.
+      The server's budget per frame, or its ceiling with adaptive rate control, in microseconds.
+
+   .. method:: int getMaxCallWait()
+
+      The longest the server waits for a client's next call, in microseconds.
 
    .. method:: int getTickHoldTimeout()
 
@@ -1997,7 +1998,7 @@
 
       See :meth:`ServerStatus.getStatistics()`.
 
-   .. constructor:: public ServerStatistics(long bytesRead, long bytesWritten, float bytesReadRate, float bytesWrittenRate, long rpcsExecuted, float rpcRate, float timePerRpcUpdate, float pollTimePerRpcUpdate, float execTimePerRpcUpdate, int deferredCalls, int streams, long streamEvaluations, float streamEvaluationRate, long streamUpdatesSent, float timePerStreamUpdate)
+   .. constructor:: public ServerStatistics(long bytesRead, long bytesWritten, float bytesReadRate, float bytesWrittenRate, long rpcsExecuted, float rpcRate, float frameRate, float timePerFrame, float execTimePerFrame, float waitTimePerFrame, float streamTimePerFrame, float budgetPerFrame, float medianTurnaround, int deferredCalls, int streams, long streamEvaluations, float streamEvaluationRate, long streamUpdatesSent)
 
       Construct a ServerStatistics from the values of its fields.
 
@@ -2026,17 +2027,35 @@
 
       The number of calls executed per second.
 
-   .. method:: float getTimePerRpcUpdate()
+   .. method:: float getFrameRate()
 
-      The time spent receiving and executing calls per update, in seconds.
+      The game's frame rate, in frames per second.
 
-   .. method:: float getPollTimePerRpcUpdate()
+   .. method:: float getTimePerFrame()
 
-      The time spent receiving calls per update, in seconds.
+      The server's time per frame, in seconds: executing calls, waiting for them and
+      updating streams.
 
-   .. method:: float getExecTimePerRpcUpdate()
+   .. method:: float getExecTimePerFrame()
 
-      The time spent executing calls per update, in seconds.
+      The time spent executing calls per frame, in seconds.
+
+   .. method:: float getWaitTimePerFrame()
+
+      The time spent waiting for calls per frame, in seconds.
+
+   .. method:: float getStreamTimePerFrame()
+
+      The time spent updating streams per frame, in seconds.
+
+   .. method:: float getBudgetPerFrame()
+
+      The time the server may spend per frame, in seconds.
+
+   .. method:: float getMedianTurnaround()
+
+      The median time between a response and the client's next call, over the
+      clients' recent calls, in seconds.
 
    .. method:: int getDeferredCalls()
 
@@ -2058,10 +2077,6 @@
    .. method:: long getStreamUpdatesSent()
 
       The number of stream updates sent to clients.
-
-   .. method:: float getTimePerStreamUpdate()
-
-      The time spent updating streams per update, in seconds.
 
 
 .. type:: public class ServerStatus

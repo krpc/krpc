@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Sockets;
 using System.Threading;
@@ -56,6 +57,7 @@ namespace KRPC.Server
 
         long bytesRead;
         long bytesWritten;
+        long lastArrival;
         volatile Action receivedHandler;
 
         public SocketStream (NetworkStream innerStream, Socket innerSocket)
@@ -173,6 +175,10 @@ namespace KRPC.Server
             set { receivedHandler = value; }
         }
 
+        public long LastArrival {
+            get { return Interlocked.Read (ref lastArrival); }
+        }
+
         public ulong BytesRead {
             get { return (ulong)Interlocked.Read (ref bytesRead); }
         }
@@ -231,6 +237,7 @@ namespace KRPC.Server
                     var size = stream.Read (buffer, 0, buffer.Length);
                     if (size <= 0)
                         break;
+                    Interlocked.Exchange (ref lastArrival, Stopwatch.GetTimestamp ());
                     var chunk = new byte [size];
                     Array.Copy (buffer, chunk, size);
                     lock (receivedLock) {

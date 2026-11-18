@@ -38,8 +38,13 @@ namespace KRPC.UI
         int previousRows;
 
         bool showAdvancedServerOptions;
-        string maxTimePerUpdate;
-        string recvTimeout;
+        readonly object presetComboId = new object ();
+        // The presets' names, then the entry for settings that match none
+        static readonly string[] presetNames =
+            Configuration.Presets.Select (x => x.Name).Concat (new [] { "Custom" }).ToArray ();
+        string targetFrameRate;
+        string maxTimePerFrame;
+        string maxCallWait;
         string tickHoldTimeout;
         // Style settings
         internal readonly Color errorColor = Color.yellow;
@@ -51,9 +56,7 @@ namespace KRPC.UI
         const float serverInfoLabelWidth = 110f;
         const float indentWidth = 15f;
         float scaledIndentWidth;
-        const int maxTimePerUpdateMaxLength = 20;
-        const int recvTimeoutMaxLength = 20;
-        const int tickHoldTimeoutMaxLength = 20;
+        const int numberMaxLength = 20;
         // Text strings
         const string startAllServersText = "Start server";
         const string stopAllServersText = "Stop server";
@@ -80,12 +83,14 @@ namespace KRPC.UI
         const string autoAcceptConnectionsText = "Auto-accept new clients";
         const string confirmRemoveClientText = "Confirm disconnecting a client";
         const string pauseServerWithGameText = "Pause the server when the game pauses";
-        const string maxTimePerUpdateText = "Max. time per update";
+        const string presetText = "Preset";
         const string adaptiveRateControlText = "Adaptive rate control";
-        const string blockingRecvText = "Blocking receives";
-        const string recvTimeoutText = "Receive timeout";
+        const string targetFrameRateText = "Target frame rate";
+        const string maxTimePerFrameText = "Max. time per frame";
+        const string maxCallWaitText = "Max. call wait";
         const string tickHoldTimeoutText = "Tick hold timeout";
         const string microsecondsUnitText = "us";
+        const string framesPerSecondUnitText = "fps";
         const string debugLoggingText = "Debug logging";
         const string showInfoWindowText = "Show info";
         const string showProblemsWindowText = "Show problems";
@@ -153,8 +158,7 @@ namespace KRPC.UI
             comboOptionStyle = GUILayoutExtensions.ComboOptionStyle ();
 
             Errors = new List<string> ();
-            maxTimePerUpdate = config.Configuration.MaxTimePerUpdate.ToString (CultureInfo.CurrentCulture);
-            recvTimeout = config.Configuration.RecvTimeout.ToString (CultureInfo.CurrentCulture);
+            ShowRateSettings ();
             tickHoldTimeout = config.Configuration.TickHoldTimeout.ToString (CultureInfo.CurrentCulture);
 
             if (core.Servers.Count == 1)
@@ -442,9 +446,22 @@ namespace KRPC.UI
                 DrawPauseServerWithGameToggle ();
                 GUILayout.EndHorizontal ();
 
+                var settings = config.Configuration;
                 GUILayout.BeginHorizontal ();
                 GUILayout.Space (scaledIndentWidth);
-                DrawMaxTimePerUpdate ();
+                DrawDebugLogging ();
+                GUILayout.EndHorizontal ();
+
+                GUILayout.BeginHorizontal ();
+                GUILayout.Space (scaledIndentWidth);
+                tickHoldTimeout = DrawNumberField (tickHoldTimeoutText, tickHoldTimeout, microsecondsUnitText,
+                                                   0, uint.MaxValue, x => settings.TickHoldTimeout = x);
+                GUILayout.EndHorizontal ();
+
+                // The rows below the preset are the settings a preset sets
+                GUILayout.BeginHorizontal ();
+                GUILayout.Space (scaledIndentWidth);
+                DrawPreset ();
                 GUILayout.EndHorizontal ();
 
                 GUILayout.BeginHorizontal ();
@@ -452,24 +469,27 @@ namespace KRPC.UI
                 DrawAdaptiveRateControlToggle ();
                 GUILayout.EndHorizontal ();
 
+                // The target applies only with adaptive rate control
                 GUILayout.BeginHorizontal ();
                 GUILayout.Space (scaledIndentWidth);
-                DrawBlockingRecvToggle ();
+                GUI.enabled = settings.AdaptiveRateControl;
+                targetFrameRate = DrawNumberField (targetFrameRateText, targetFrameRate, framesPerSecondUnitText,
+                                                   Configuration.TargetFrameRateMin, Configuration.TargetFrameRateMax,
+                                                   x => settings.TargetFrameRate = x);
+                GUI.enabled = true;
                 GUILayout.EndHorizontal ();
 
                 GUILayout.BeginHorizontal ();
                 GUILayout.Space (scaledIndentWidth);
-                DrawRecvTimeout ();
+                maxTimePerFrame = DrawNumberField (maxTimePerFrameText, maxTimePerFrame, microsecondsUnitText,
+                                                   Configuration.MaxTimePerFrameMin, Configuration.MaxTimePerFrameMax,
+                                                   x => settings.MaxTimePerFrame = x);
                 GUILayout.EndHorizontal ();
 
                 GUILayout.BeginHorizontal ();
                 GUILayout.Space (scaledIndentWidth);
-                DrawTickHoldTimeout ();
-                GUILayout.EndHorizontal ();
-
-                GUILayout.BeginHorizontal ();
-                GUILayout.Space (scaledIndentWidth);
-                DrawDebugLogging ();
+                maxCallWait = DrawNumberField (maxCallWaitText, maxCallWait, microsecondsUnitText,
+                                               0, uint.MaxValue, x => settings.MaxCallWait = x);
                 GUILayout.EndHorizontal ();
             }
         }
@@ -519,21 +539,30 @@ namespace KRPC.UI
             }
         }
 
-        void DrawMaxTimePerUpdate ()
+        void DrawPreset ()
         {
-            GUILayout.Label (maxTimePerUpdateText, fixedLabelStyle);
-            uint value;
-            bool valid = uint.TryParse (maxTimePerUpdate, out value);
-            var newMaxTimePerUpdate = GUILayoutExtensions.FilterDigits (
-                GUILayoutExtensions.ValidatedTextField (maxTimePerUpdate, maxTimePerUpdateMaxLength, longTextFieldStyle, valid, errorColor));
-            GUILayout.Label (microsecondsUnitText, labelStyle);
-            if (newMaxTimePerUpdate != maxTimePerUpdate) {
-                maxTimePerUpdate = newMaxTimePerUpdate;
-                if (uint.TryParse (maxTimePerUpdate, out value)) {
-                    config.Configuration.MaxTimePerUpdate = value;
-                    config.Save ();
-                }
+            var settings = config.Configuration;
+            GUILayout.Label (presetText, fixedLabelStyle);
+            var current = settings.CurrentPreset;
+            var selected = current == null ? presetNames.Length - 1 : Configuration.Presets.IndexOf (current);
+            var chosen = GUILayoutExtensions.ComboBox (presetComboId, selected, presetNames, buttonStyle, comboOptionsStyle, comboOptionStyle);
+            // Choosing the custom entry leaves the settings as they are
+            if (chosen != selected && chosen < Configuration.Presets.Count) {
+                Configuration.Presets [chosen].Apply (settings);
+                config.Save ();
+                ShowRateSettings ();
             }
+        }
+
+        /// <summary>
+        /// Set the text of the rate settings' fields from the configuration.
+        /// </summary>
+        void ShowRateSettings ()
+        {
+            var settings = config.Configuration;
+            targetFrameRate = settings.TargetFrameRate.ToString (CultureInfo.CurrentCulture);
+            maxTimePerFrame = settings.MaxTimePerFrame.ToString (CultureInfo.CurrentCulture);
+            maxCallWait = settings.MaxCallWait.ToString (CultureInfo.CurrentCulture);
         }
 
         void DrawAdaptiveRateControlToggle ()
@@ -545,47 +574,23 @@ namespace KRPC.UI
             }
         }
 
-        void DrawBlockingRecvToggle ()
+        /// <summary>
+        /// Draw a field for a whole number setting, with its label and unit, and apply a valid
+        /// edit. Returns the field's text.
+        /// </summary>
+        string DrawNumberField (string label, string text, string unit, uint min, uint max, Action<uint> apply)
         {
-            bool blockingRecv = GUILayout.Toggle (config.Configuration.BlockingRecv, blockingRecvText, toggleStyle, new GUILayoutOption[] { });
-            if (blockingRecv != config.Configuration.BlockingRecv) {
-                config.Configuration.BlockingRecv = blockingRecv;
+            GUILayout.Label (label, fixedLabelStyle);
+            uint value;
+            bool valid = uint.TryParse (text, out value) && value >= min && value <= max;
+            var newText = GUILayoutExtensions.FilterDigits (
+                GUILayoutExtensions.ValidatedTextField (text, numberMaxLength, longTextFieldStyle, valid, errorColor));
+            GUILayout.Label (unit, labelStyle);
+            if (newText != text && uint.TryParse (newText, out value) && value >= min && value <= max) {
+                apply (value);
                 config.Save ();
             }
-        }
-
-        void DrawTickHoldTimeout ()
-        {
-            GUILayout.Label (tickHoldTimeoutText, fixedLabelStyle);
-            uint value;
-            bool valid = uint.TryParse (tickHoldTimeout, out value);
-            var newTickHoldTimeout = GUILayoutExtensions.FilterDigits (
-                GUILayoutExtensions.ValidatedTextField (tickHoldTimeout, tickHoldTimeoutMaxLength, longTextFieldStyle, valid, errorColor));
-            GUILayout.Label (microsecondsUnitText, labelStyle);
-            if (newTickHoldTimeout != tickHoldTimeout) {
-                tickHoldTimeout = newTickHoldTimeout;
-                if (uint.TryParse (tickHoldTimeout, out value)) {
-                    config.Configuration.TickHoldTimeout = value;
-                    config.Save ();
-                }
-            }
-        }
-
-        void DrawRecvTimeout ()
-        {
-            GUILayout.Label (recvTimeoutText, fixedLabelStyle);
-            uint value;
-            bool valid = uint.TryParse (recvTimeout, out value);
-            var newRecvTimeout = GUILayoutExtensions.FilterDigits (
-                GUILayoutExtensions.ValidatedTextField (recvTimeout, recvTimeoutMaxLength, longTextFieldStyle, valid, errorColor));
-            GUILayout.Label (microsecondsUnitText, labelStyle);
-            if (newRecvTimeout != recvTimeout) {
-                recvTimeout = newRecvTimeout;
-                if (uint.TryParse (recvTimeout, out value)) {
-                    config.Configuration.RecvTimeout = value;
-                    config.Save ();
-                }
-            }
+            return newText;
         }
 
         void DrawDebugLogging ()

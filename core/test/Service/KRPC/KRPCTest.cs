@@ -26,15 +26,16 @@ namespace KRPC.Test.Service.KRPC
         public void GetStatusSettings ()
         {
             var config = Configuration.Instance;
-            var recvTimeout = config.RecvTimeout;
+            var maxCallWait = config.MaxCallWait;
             try {
-                config.RecvTimeout = 1234;
+                config.MaxCallWait = 1234;
                 var settings = global::KRPC.Service.KRPC.KRPC.GetStatus ().Settings;
-                Assert.AreEqual (1234, settings.RecvTimeout);
-                Assert.AreEqual (Core.Instance.MaxTimePerUpdate, settings.MaxTimePerUpdate);
+                Assert.AreEqual (1234, settings.MaxCallWait);
+                Assert.AreEqual (config.MaxTimePerFrame, settings.MaxTimePerFrame);
+                Assert.AreEqual (config.TargetFrameRate, settings.TargetFrameRate);
                 Assert.AreEqual (config.TickHoldTimeout, settings.TickHoldTimeout);
             } finally {
-                config.RecvTimeout = recvTimeout;
+                config.MaxCallWait = maxCallWait;
             }
         }
 

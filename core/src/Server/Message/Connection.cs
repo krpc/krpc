@@ -70,6 +70,8 @@ namespace KRPC.Server.Message
         // whenever it reads or changes the state the reader uses: the buffer, the held
         // messages and the connection's state
         readonly object receiveLock = new object ();
+        // When the bytes last read into the buffer arrived
+        long lastArrival;
         // Bytes written and not yet sent, so that the responses to requests read ahead go out
         // in one send
         readonly MemoryStream unsent = new MemoryStream ();
@@ -425,7 +427,9 @@ namespace KRPC.Server.Message
 
         void Enqueue (SchemaMessage message)
         {
-            inbox.Enqueue (message.Request.ToMessageOffGameThread ());
+            var request = message.Request.ToMessageOffGameThread ();
+            request.Arrived = lastArrival;
+            inbox.Enqueue (request);
         }
 
         /// <summary>
@@ -867,6 +871,7 @@ namespace KRPC.Server.Message
                 received = true;
             }
             if (received) {
+                lastArrival = Stream.LastArrival;
                 stallTimer.Reset ();
                 stallTimer.Start ();
             }

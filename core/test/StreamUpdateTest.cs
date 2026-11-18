@@ -71,7 +71,7 @@ namespace KRPC.Test
         }
 
         Core core;
-        bool blockingRecv;
+        uint maxCallWait;
         PinnedUpdateTime updateTime;
         ScriptedClient client;
         List<List<SentResult>> updates;
@@ -81,8 +81,8 @@ namespace KRPC.Test
         {
             core = Core.Instance;
             CallContext.GameScene = GameScene.Flight;
-            blockingRecv = Configuration.Instance.BlockingRecv;
-            Configuration.Instance.BlockingRecv = false;
+            maxCallWait = Configuration.Instance.MaxCallWait;
+            Configuration.Instance.MaxCallWait = 0;
             updateTime = new PinnedUpdateTime ();
             client = new ScriptedClient (0, 0);
             updates = new List<List<SentResult>> ();
@@ -105,7 +105,7 @@ namespace KRPC.Test
         public void TearDown ()
         {
             core.ClientDisconnected (client);
-            Configuration.Instance.BlockingRecv = blockingRecv;
+            Configuration.Instance.MaxCallWait = maxCallWait;
             updateTime.Restore ();
         }
 

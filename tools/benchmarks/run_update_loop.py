@@ -104,7 +104,7 @@ METRICS = (
     ("server per frame", "ms", "", "median"),
     ("waiting per frame", "ms", "", "median"),
     ("longest frame", "ms", "", "max"),
-    ("max time per update", "us", "", "median"),
+    ("budget per frame", "us", "", "median"),
     ("server cpu", "cores", "", "median"),
 )
 
@@ -119,6 +119,11 @@ def main():
         help="the game to model; every game when not given",
     )
     parser.add_argument(
+        "--preset",
+        choices=("game-first", "balanced", "calls-first"),
+        help="the preset of the server's rate settings; balanced when not given",
+    )
+    parser.add_argument(
         "--shape",
         action="append",
         help="run only the shapes whose names start with this, or 'waits' for the waits; "
@@ -128,26 +133,29 @@ def main():
     results = []
     environment = {}
     for game in args.game or GAMES:
-        results += measure_game(args.server, game, args.game, args.shape, environment)
+        results += measure_game(
+            args.server, game, args.game, args.shape, args.preset, environment
+        )
     runner.report(results, SUITE, environment, args.json, render=table)
     return 0
 
 
-def measure_game(executable, game, games, shapes, environment):
+def measure_game(executable, game, games, shapes, preset, environment):
     """Run every shape against one game. Each point gets a TestServer of its own, so that
     adaptive rate control carries nothing from one point to the next."""
-    environment["%s game" % game] = ", ".join(options(game))
+    environment["%s game" % game] = ", ".join(options(game, preset))
     results = []
     # The waits are the runtime's, the same whatever the game, so they run once
     if _selected("waits", shapes) and game == (games or list(GAMES))[0]:
-        with serving(executable, game, environment) as (conn, _, _):
+        with serving(executable, game, preset, environment) as (conn, _, _):
             results += measure_waits(conn)
     for shape, points in SHAPES:
         if not _selected(shape, shapes):
             continue
         scenario = "%s game, %s" % (game, shape)
         for label, clients in points:
-            with serving(executable, game, environment) as (_, server, counters):
+            served = serving(executable, game, preset, environment)
+            with served as (_, server, counters):
                 if clients == "stall":
                     results += measure_stall(scenario, label, server, counters)
                 else:
@@ -156,10 +164,10 @@ def measure_game(executable, game, games, shapes, environment):
 
 
 @contextlib.contextmanager
-def serving(executable, game, environment):
+def serving(executable, game, preset, environment):
     """Start a TestServer modeling a game, and yield a connection to it, its host and port,
     and its counters."""
-    with testserver.running(executable, extra=options(game)) as endpoint:
+    with testserver.running(executable, extra=options(game, preset)) as endpoint:
         with testserver.connect("update loop counters", endpoint) as conn:
             environment.setdefault("server", conn.krpc.get_status().version)
             environment.setdefault(
@@ -170,9 +178,12 @@ def serving(executable, game, environment):
             yield conn, ("localhost", endpoint.address), counters
 
 
-def options(game):
-    """TestServer's options for a game."""
-    return ["--%s=%s" % (name, value) for name, value in GAMES[game].items()]
+def options(game, preset):
+    """TestServer's options for a game, and for a preset when one is given."""
+    result = ["--%s=%s" % (name, value) for name, value in GAMES[game].items()]
+    if preset:
+        result.append("--preset=%s" % preset)
+    return result
 
 
 def pacing(game):
@@ -346,7 +357,7 @@ def window(before, after, calls):
         "server per frame": delta("update_seconds") * per_frame if frames else None,
         "waiting per frame": delta("poll_seconds") * per_frame if frames else None,
         "longest frame": after["max_frame_seconds"] * 1000.0,
-        "max time per update": after["max_time_per_update"],
+        "budget per frame": after["budget_per_frame"],
         "server cpu": None,
     }
     if before["cpu_seconds"] is not None and elapsed > 0:

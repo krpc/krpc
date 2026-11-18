@@ -12,7 +12,7 @@ namespace KRPC.Test
     public class TickHoldTest
     {
         Core core;
-        bool blockingRecv;
+        uint maxCallWait;
         uint tickHoldTimeout;
         PinnedUpdateTime updateTime;
         readonly List<ScriptedClient> clients = new List<ScriptedClient> ();
@@ -25,12 +25,12 @@ namespace KRPC.Test
             // run in one. Set here, as another fixture may have left a different scene
             CallContext.GameScene = GameScene.Flight;
             var config = Configuration.Instance;
-            blockingRecv = config.BlockingRecv;
+            maxCallWait = config.MaxCallWait;
             tickHoldTimeout = config.TickHoldTimeout;
-            // Without blocking receives the server polls each client once per pass, so a
+            // With no call wait the server polls each client once per pass, so a
             // client that is not ready costs it one poll. The number of updates a script
             // takes is then decided by the script and not by a clock
-            config.BlockingRecv = false;
+            config.MaxCallWait = 0;
             updateTime = new PinnedUpdateTime ();
         }
 
@@ -41,7 +41,7 @@ namespace KRPC.Test
                 core.ClientDisconnected (client);
             clients.Clear ();
             var config = Configuration.Instance;
-            config.BlockingRecv = blockingRecv;
+            config.MaxCallWait = maxCallWait;
             config.TickHoldTimeout = tickHoldTimeout;
             updateTime.Restore ();
         }

@@ -130,21 +130,22 @@ class ServerSettings(NamedTuple):
 
     See :attr:`krpc.services.krpc.ServerStatus.settings`.
     """
-    max_time_per_update: int
-    """
-    The current maximum time spent executing calls per update, in microseconds.
-    """
     adaptive_rate_control: bool
     """
-    Whether the server adjusts :attr:`krpc.services.krpc.ServerSettings.max_time_per_update` to hold the frame rate.
+    Whether the server adapts its time per frame to hold the frame rate at
+    :attr:`krpc.services.krpc.ServerSettings.target_frame_rate`.
     """
-    blocking_recv: bool
+    target_frame_rate: int
     """
-    Whether the server waits for the next call in an update.
+    The lowest frame rate the server's work pushes the game to, in frames per second.
     """
-    recv_timeout: int
+    max_time_per_frame: int
     """
-    The time the server waits for the next call, in microseconds.
+    The server's budget per frame, or its ceiling with adaptive rate control, in microseconds.
+    """
+    max_call_wait: int
+    """
+    The longest the server waits for a client's next call, in microseconds.
     """
     tick_hold_timeout: int
     """
@@ -184,17 +185,37 @@ class ServerStatistics(NamedTuple):
     """
     The number of calls executed per second.
     """
-    time_per_rpc_update: float
+    frame_rate: float
     """
-    The time spent receiving and executing calls per update, in seconds.
+    The game's frame rate, in frames per second.
     """
-    poll_time_per_rpc_update: float
+    time_per_frame: float
     """
-    The time spent receiving calls per update, in seconds.
+    The server's time per frame, in seconds: executing calls, waiting for them and
+    updating streams.
     """
-    exec_time_per_rpc_update: float
+    exec_time_per_frame: float
     """
-    The time spent executing calls per update, in seconds.
+    The time spent executing calls per frame, in seconds.
+    """
+    wait_time_per_frame: float
+    """
+    The time spent waiting for calls per frame, in seconds.
+    """
+    stream_time_per_frame: float
+    """
+    The time spent updating streams per frame, in seconds.
+    """
+    budget_per_frame: float
+    """
+    The time the server may spend per frame, in seconds.
+
+    Adaptive rate control adjusts it, up to :attr:`krpc.services.krpc.ServerSettings.max_time_per_frame`.
+    """
+    median_turnaround: float
+    """
+    The median time between a response and the client's next call, over the
+    clients' recent calls, in seconds.
     """
     deferred_calls: int
     """
@@ -216,10 +237,6 @@ class ServerStatistics(NamedTuple):
     stream_updates_sent: int
     """
     The number of stream updates sent to clients.
-    """
-    time_per_stream_update: float
-    """
-    The time spent updating streams per update, in seconds.
     """
 
 

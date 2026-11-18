@@ -12,28 +12,29 @@ namespace KRPC.Service.KRPC
     public struct ServerSettings
     {
         /// <summary>
-        /// The current maximum time spent executing calls per update, in microseconds.
-        /// </summary>
-        [KRPCProperty]
-        public uint MaxTimePerUpdate { get; set; }
-
-        /// <summary>
-        /// Whether the server adjusts <see cref="MaxTimePerUpdate"/> to hold the frame rate.
+        /// Whether the server adapts its time per frame to hold the frame rate at
+        /// <see cref="TargetFrameRate"/>.
         /// </summary>
         [KRPCProperty]
         public bool AdaptiveRateControl { get; set; }
 
         /// <summary>
-        /// Whether the server waits for the next call in an update.
+        /// The lowest frame rate the server's work pushes the game to, in frames per second.
         /// </summary>
         [KRPCProperty]
-        public bool BlockingRecv { get; set; }
+        public uint TargetFrameRate { get; set; }
 
         /// <summary>
-        /// The time the server waits for the next call, in microseconds.
+        /// The server's budget per frame, or its ceiling with adaptive rate control, in microseconds.
         /// </summary>
         [KRPCProperty]
-        public uint RecvTimeout { get; set; }
+        public uint MaxTimePerFrame { get; set; }
+
+        /// <summary>
+        /// The longest the server waits for a client's next call, in microseconds.
+        /// </summary>
+        [KRPCProperty]
+        public uint MaxCallWait { get; set; }
 
         /// <summary>
         /// The longest time a client may hold the game on one physics tick, in microseconds.

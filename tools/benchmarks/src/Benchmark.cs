@@ -70,7 +70,7 @@ namespace KRPC.Benchmarks
         /// <summary>
         /// Running totals of the frames the host has run and the time the server has spent in
         /// its updates, for the update loop benchmarks. Times are in seconds, apart from
-        /// <c>max_time_per_update</c>, the server's current limit, in microseconds.
+        /// <c>budget_per_frame</c>, the server's current budget, in microseconds.
         /// </summary>
         /// <remarks>
         /// <c>max_frame_seconds</c> is the longest frame since the previous call.

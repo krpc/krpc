@@ -294,9 +294,9 @@ def environment(conn):
     return {
         "server": status.version,
         "adaptive rate control": str(status.settings.adaptive_rate_control),
-        "max time per update": "%d us" % status.settings.max_time_per_update,
-        "blocking recv": str(status.settings.blocking_recv),
-        "recv timeout": "%d us" % status.settings.recv_timeout,
+        "target frame rate": "%d frames/s" % status.settings.target_frame_rate,
+        "max time per frame": "%d us" % status.settings.max_time_per_frame,
+        "max call wait": "%d us" % status.settings.max_call_wait,
     }
 
 
@@ -316,7 +316,8 @@ def settings(conn, frame_pacing):
         [
             "frame pacing %s" % pacing,
             "adaptive rate control %s" % status.settings.adaptive_rate_control,
-            "max time per update %d us" % status.settings.max_time_per_update,
-            "recv timeout %d us" % status.settings.recv_timeout,
+            "target frame rate %d frames/s" % status.settings.target_frame_rate,
+            "max time per frame %d us" % status.settings.max_time_per_frame,
+            "max call wait %d us" % status.settings.max_call_wait,
         ]
     )

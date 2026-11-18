@@ -39,6 +39,12 @@ namespace KRPC.Server
         void Write (byte[] buffer, int offset, int size);
 
         /// <summary>
+        /// The <see cref="System.Diagnostics.Stopwatch.GetTimestamp"/> at which bytes last
+        /// arrived, or zero if the stream does not record it.
+        /// </summary>
+        long LastArrival { get; }
+
+        /// <summary>
         /// The total number of bytes read from the stream.
         /// </summary>
         ulong BytesRead { get; }

@@ -52,7 +52,7 @@ namespace KRPC.Benchmarks
                 { "stream_seconds", Seconds (core.StreamTicks) },
                 { "rpcs", core.RPCsExecuted },
                 // In microseconds, the working value that adaptive rate control adjusts
-                { "max_time_per_update", core.MaxTimePerUpdate }
+                { "budget_per_frame", core.BudgetPerFrame }
             };
             maxFrameTicks = 0;
             return counters;

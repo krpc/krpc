@@ -33,6 +33,10 @@ namespace KRPC.Server.SerialIO
             }
         }
 
+        public long LastArrival {
+            get { return port != null ? port.LastArrival : 0; }
+        }
+
         public int Read (byte[] buffer, int offset, int size)
         {
             if (port == null)

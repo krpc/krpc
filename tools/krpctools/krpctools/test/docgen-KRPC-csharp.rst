@@ -2462,26 +2462,27 @@
 
       See :prop:`ServerStatus.Settings`.
 
-   .. function:: ServerSettings(uint maxTimePerUpdate, bool adaptiveRateControl, bool blockingRecv, uint recvTimeout, uint tickHoldTimeout)
+   .. function:: ServerSettings(bool adaptiveRateControl, uint targetFrameRate, uint maxTimePerFrame, uint maxCallWait, uint tickHoldTimeout)
 
       Construct a ServerSettings from the values of its fields.
 
 
-   .. property:: uint MaxTimePerUpdate { get; }
-
-      The current maximum time spent executing calls per update, in microseconds.
-
    .. property:: bool AdaptiveRateControl { get; }
 
-      Whether the server adjusts :prop:`ServerSettings.MaxTimePerUpdate` to hold the frame rate.
+      Whether the server adapts its time per frame to hold the frame rate at
+      :prop:`ServerSettings.TargetFrameRate`.
 
-   .. property:: bool BlockingRecv { get; }
+   .. property:: uint TargetFrameRate { get; }
 
-      Whether the server waits for the next call in an update.
+      The lowest frame rate the server's work pushes the game to, in frames per second.
 
-   .. property:: uint RecvTimeout { get; }
+   .. property:: uint MaxTimePerFrame { get; }
 
-      The time the server waits for the next call, in microseconds.
+      The server's budget per frame, or its ceiling with adaptive rate control, in microseconds.
+
+   .. property:: uint MaxCallWait { get; }
+
+      The longest the server waits for a client's next call, in microseconds.
 
    .. property:: uint TickHoldTimeout { get; }
 
@@ -2496,7 +2497,7 @@
 
       See :prop:`ServerStatus.Statistics`.
 
-   .. function:: ServerStatistics(ulong bytesRead, ulong bytesWritten, float bytesReadRate, float bytesWrittenRate, ulong rpcsExecuted, float rpcRate, float timePerRpcUpdate, float pollTimePerRpcUpdate, float execTimePerRpcUpdate, uint deferredCalls, uint streams, ulong streamEvaluations, float streamEvaluationRate, ulong streamUpdatesSent, float timePerStreamUpdate)
+   .. function:: ServerStatistics(ulong bytesRead, ulong bytesWritten, float bytesReadRate, float bytesWrittenRate, ulong rpcsExecuted, float rpcRate, float frameRate, float timePerFrame, float execTimePerFrame, float waitTimePerFrame, float streamTimePerFrame, float budgetPerFrame, float medianTurnaround, uint deferredCalls, uint streams, ulong streamEvaluations, float streamEvaluationRate, ulong streamUpdatesSent)
 
       Construct a ServerStatistics from the values of its fields.
 
@@ -2525,17 +2526,35 @@
 
       The number of calls executed per second.
 
-   .. property:: float TimePerRpcUpdate { get; }
+   .. property:: float FrameRate { get; }
 
-      The time spent receiving and executing calls per update, in seconds.
+      The game's frame rate, in frames per second.
 
-   .. property:: float PollTimePerRpcUpdate { get; }
+   .. property:: float TimePerFrame { get; }
 
-      The time spent receiving calls per update, in seconds.
+      The server's time per frame, in seconds: executing calls, waiting for them and
+      updating streams.
 
-   .. property:: float ExecTimePerRpcUpdate { get; }
+   .. property:: float ExecTimePerFrame { get; }
 
-      The time spent executing calls per update, in seconds.
+      The time spent executing calls per frame, in seconds.
+
+   .. property:: float WaitTimePerFrame { get; }
+
+      The time spent waiting for calls per frame, in seconds.
+
+   .. property:: float StreamTimePerFrame { get; }
+
+      The time spent updating streams per frame, in seconds.
+
+   .. property:: float BudgetPerFrame { get; }
+
+      The time the server may spend per frame, in seconds.
+
+   .. property:: float MedianTurnaround { get; }
+
+      The median time between a response and the client's next call, over the
+      clients' recent calls, in seconds.
 
    .. property:: uint DeferredCalls { get; }
 
@@ -2557,10 +2576,6 @@
    .. property:: ulong StreamUpdatesSent { get; }
 
       The number of stream updates sent to clients.
-
-   .. property:: float TimePerStreamUpdate { get; }
-
-      The time spent updating streams per update, in seconds.
 
 
 .. struct:: ServerStatus
