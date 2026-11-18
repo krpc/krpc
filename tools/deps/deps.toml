@@ -381,7 +381,7 @@ at = [
 
 [[dep]]
 name = "System.CommandLine"
-version = "2.0.14"
+version = "3.0.0"
 source = "nuget:System.CommandLine"
 regen = ["nuget"]
 at = [
