@@ -1,32 +1,4 @@
 # The conformance tests the Python client fails, one per line, with the reason as a comment
-test_values.py::test_null_for_non_nullable[bool]  # A null argument is sent
-test_values.py::test_null_for_non_nullable[bytes]  # As test_null_for_non_nullable[bool]
-test_values.py::test_null_for_non_nullable[dictionary]  # As test_null_for_non_nullable[bool]
-test_values.py::test_null_for_non_nullable[double]  # As test_null_for_non_nullable[bool]
-test_values.py::test_null_for_non_nullable[enum]  # As test_null_for_non_nullable[bool]
-test_values.py::test_null_for_non_nullable[float]  # As test_null_for_non_nullable[bool]
-test_values.py::test_null_for_non_nullable[list]  # As test_null_for_non_nullable[bool]
-test_values.py::test_null_for_non_nullable[object]  # As test_null_for_non_nullable[bool]
-test_values.py::test_null_for_non_nullable[set]  # As test_null_for_non_nullable[bool]
-test_values.py::test_null_for_non_nullable[sint32]  # As test_null_for_non_nullable[bool]
-test_values.py::test_null_for_non_nullable[sint64]  # As test_null_for_non_nullable[bool]
-test_values.py::test_null_for_non_nullable[string]  # As test_null_for_non_nullable[bool]
-test_values.py::test_null_for_non_nullable[struct]  # As test_null_for_non_nullable[bool]
-test_values.py::test_null_for_non_nullable[tuple]  # As test_null_for_non_nullable[bool]
-test_values.py::test_null_for_non_nullable[uint32]  # As test_null_for_non_nullable[bool]
-test_values.py::test_null_for_non_nullable[uint64]  # As test_null_for_non_nullable[bool]
-test_values.py::test_out_of_range[float-above]  # A double beyond the largest float raises OverflowError
-test_values.py::test_out_of_range[float-below]  # As test_out_of_range[float-above]
-test_values.py::test_out_of_range[sint32-above]  # The encoder checks only that an unsigned number is not negative
-test_values.py::test_out_of_range[sint32-below]  # As test_out_of_range[sint32-above]
-test_values.py::test_out_of_range[sint64-above]  # As test_out_of_range[sint32-above]
-test_values.py::test_out_of_range[uint32-above]  # As test_out_of_range[sint32-above]
-test_values.py::test_wrong_collection[string-for-list]  # Any iterable coerces to a list
-test_values.py::test_wrong_collection[bytes-for-list]  # As test_wrong_collection[string-for-list]
-test_values.py::test_wrong_collection[dictionary-for-list]  # As test_wrong_collection[string-for-list]
-test_codec.py::test_out_of_range[sint32]  # As test_values.py::test_out_of_range[sint32-above]
-test_codec.py::test_out_of_range[sint64]  # As test_values.py::test_out_of_range[sint32-above]
-test_codec.py::test_out_of_range[uint32]  # As test_values.py::test_out_of_range[sint32-above]
 test_calls.py::test_unknown_type  # A structure holding a left-out structure is exposed
 test_calls.py::test_undefined_type[class]  # A member whose type names an undefined class or enumeration is exposed
 test_calls.py::test_undefined_type[enumeration]  # As above

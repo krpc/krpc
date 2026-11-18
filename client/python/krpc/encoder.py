@@ -11,6 +11,14 @@ from google.protobuf.internal import wire_format as protobuf_wire_format
 
 import krpc.schema.KRPC_pb2 as KRPC
 from krpc.error import EncodingError
+from krpc.limits import (
+    SINT32_MAX,
+    SINT32_MIN,
+    SINT64_MAX,
+    SINT64_MIN,
+    UINT32_MAX,
+    UINT64_MAX,
+)
 from krpc.platform import bytelength
 from krpc.types import (
     ClassType,
@@ -212,7 +220,12 @@ class _ValueEncoder:
 
     @classmethod
     def encode_float(cls, value: float) -> bytes:
-        return struct.pack("<f", value)
+        try:
+            return struct.pack("<f", value)
+        except OverflowError as exn:
+            raise ValueError(
+                "Value is beyond the range of a float, got %r" % value
+            ) from exn
 
     @classmethod
     def _encode_varint(cls, value: int) -> bytes:
@@ -237,15 +250,27 @@ class _ValueEncoder:
         return b"".join(data)
 
     @classmethod
+    def encode_sint32(cls, value: int) -> bytes:
+        if not SINT32_MIN <= value <= SINT32_MAX:
+            raise ValueError("Value is beyond the range of a sint32, got %d" % value)
+        return cls._encode_signed_varint(value)
+
+    @classmethod
+    def encode_sint64(cls, value: int) -> bytes:
+        if not SINT64_MIN <= value <= SINT64_MAX:
+            raise ValueError("Value is beyond the range of a sint64, got %d" % value)
+        return cls._encode_signed_varint(value)
+
+    @classmethod
     def encode_uint32(cls, value: int) -> bytes:
-        if value < 0:
-            raise ValueError("Value must be non-negative, got %d" % value)
+        if not 0 <= value <= UINT32_MAX:
+            raise ValueError("Value is beyond the range of a uint32, got %d" % value)
         return cls._encode_varint(value)
 
     @classmethod
     def encode_uint64(cls, value: int) -> bytes:
-        if value < 0:
-            raise ValueError("Value must be non-negative, got %d" % value)
+        if not 0 <= value <= UINT64_MAX:
+            raise ValueError("Value is beyond the range of a uint64, got %d" % value)
         return cls._encode_varint(value)
 
     @classmethod
@@ -264,11 +289,10 @@ class _ValueEncoder:
 
 
 # The encoder for each value type, looked up by type code, as this is on the hot path of
-# every remote procedure call. The signed integer types share an encoder, named for what
-# it writes
+# every remote procedure call
 _VALUE_ENCODERS: Mapping[KRPC.Type.TypeCode, Callable[[Any], bytes]] = {
-    KRPC.Type.SINT32: _ValueEncoder._encode_signed_varint,
-    KRPC.Type.SINT64: _ValueEncoder._encode_signed_varint,
+    KRPC.Type.SINT32: _ValueEncoder.encode_sint32,
+    KRPC.Type.SINT64: _ValueEncoder.encode_sint64,
     KRPC.Type.UINT32: _ValueEncoder.encode_uint32,
     KRPC.Type.UINT64: _ValueEncoder.encode_uint64,
     KRPC.Type.DOUBLE: _ValueEncoder.encode_double,

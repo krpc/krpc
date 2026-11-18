@@ -417,8 +417,16 @@ class Types:
                 return typ.python_type(value._connection, value._object_id)
         # Collection types
         try:
-            # Coerce tuples to lists
-            if isinstance(value, Iterable) and isinstance(typ, ListType):
+            # A string, bytes and a dictionary are iterable, but are not taken as their
+            # characters or keys for a list, a tuple or a structure
+            if isinstance(typ, (ListType, TupleType, StructType)) and isinstance(
+                value, (str, bytes, Mapping)
+            ):
+                raise ValueError
+            # Coerce a tuple, or another sequence of items, to a list
+            if isinstance(typ, ListType):
+                if not isinstance(value, Iterable):
+                    raise ValueError
                 return typ.python_type(self.coerce_to(x, typ.value_type) for x in value)
             # Coerce lists (with appropriate number of elements) to tuples
             if isinstance(value, Iterable) and isinstance(typ, TupleType):

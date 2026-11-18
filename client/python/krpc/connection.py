@@ -676,6 +676,10 @@ class Connection:
             if isinstance(value, DefaultArgument):
                 continue
             if value is None:
+                if not typ.nullable:
+                    raise TypeError(
+                        "%s.%s() argument %d cannot be None" % (service, procedure, i)
+                    )
                 # A null argument is signaled out-of-band; the value field is left unset
                 arguments.add(position=i, is_null=True)
                 continue
