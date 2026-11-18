@@ -1638,6 +1638,7 @@ TestAutoPilotAttitudeSlow = _make_autopilot_test_class(
 TestAutoPilotAttitudeChatter = _make_autopilot_test_class(
     "TestAutoPilotAttitudeChatter",
     "AutoPilotChatter",
+    saturation_limit=1,
     slew_chatter_limit=0.7,
     control_spike_limit=30,
     rebound_limit=1.5,
@@ -1648,6 +1649,7 @@ TestAutoPilotAttitudeChatter = _make_autopilot_test_class(
 TestAutoPilotAttitudeFlexible = _make_autopilot_test_class(
     "TestAutoPilotAttitudeFlexible",
     "AutoPilotFlexible",
+    winding_limit=1,
     slew_chatter_limit=1.2,
     roll_control_limit=1,
     control_spike_limit=50,
