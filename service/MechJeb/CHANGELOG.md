@@ -12,7 +12,7 @@
   `TranslatronMode.KeepRelative`, as MechJeb 2.15 has no such mode (#1326)
 - **Breaking:** Remove `MechJeb.APIReady`, in place of `MechJeb.Available` and `MechJeb.Ready`
   (#1326)
-- **Breaking:** Remove `Operation.MakeNode`, deprecated in 0.7.1 (#1381)
+- **Breaking:** Remove `Operation.MakeNode`, deprecated in 0.7.1 (#1382)
 - Make `OperationLan.NewLAN` and `OperationLongitude.NewSurfaceLongitude` set the same
   longitude (#1326)
 - Release the autopilots of both ascent paths when the ascent autopilot is disabled (#1326)
