@@ -3,8 +3,7 @@
 Interacting with Parts
 ======================
 
-The following examples demonstrate use of the :ref:`python-api-parts` functionality to
-achieve various tasks. The :ref:`parts guide <user-guide-parts>` explains the tree of
+The following examples use the parts of a vessel to achieve various tasks. The :ref:`parts guide <user-guide-parts>` explains the tree of
 parts, attachment modes, fuel lines, staging and part modules.
 
 Deploying all Parachutes
