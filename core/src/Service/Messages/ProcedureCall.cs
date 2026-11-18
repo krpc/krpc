@@ -23,6 +23,18 @@ namespace KRPC.Service.Messages
         /// </summary>
         internal System.Exception DecodeException { get; set; }
 
+        /// <summary>
+        /// The call as the client sent it, while an argument is left to decode on the game
+        /// thread, or null once every argument is decoded.
+        /// </summary>
+        internal Schema.KRPC.ProcedureCall Encoded { get; set; }
+
+        /// <summary>
+        /// Whether decoding the call off the game thread failed, so the whole call decodes on
+        /// the game thread, where the failure is reported.
+        /// </summary>
+        internal bool DecodeFailed { get; set; }
+
         public ProcedureCall (string service, string procedure)
         {
             Service = service;

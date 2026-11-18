@@ -119,6 +119,15 @@ namespace KRPC.Server.Message
         }
 
         /// <summary>
+        /// Send the responses held back while their clients had more requests queued.
+        /// </summary>
+        public void Flush ()
+        {
+            foreach (var connection in connections.Values)
+                connection.Flush ();
+        }
+
+        /// <summary>
         /// Address the server is listening on. Format depends on the server protocol.
         /// </summary>
         public virtual string Address {

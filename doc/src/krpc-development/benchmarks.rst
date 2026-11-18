@@ -64,8 +64,8 @@ The client targets measure a client's cost: the round trip for a call, and calls
 collections. Each client is timed from inside itself, so each target is a program in its own
 language. The report has one block per transport, TCP/IP and local socket.
 
-The C-nano target uses a socket, not a serial port. The server polls a serial port at an interval
-longer than every measured case, so a serial port would measure the poll.
+The C-nano target uses a socket, as the other clients do, so that its results compare with
+theirs.
 
 The client targets run the server with ``--no-frame-pacing``, so its update loop runs as fast as
 it can. A paced server adds the rest of each update to a round trip. It also serves a client that

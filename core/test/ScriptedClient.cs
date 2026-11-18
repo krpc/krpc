@@ -32,8 +32,10 @@ namespace KRPC.Test
             public bool DataAvailable {
                 get {
                     // Counted here, since the server polls for a request while it waits
-                    // for one
+                    // for one. Each poll signals an arrival, as if the request's bytes were
+                    // still coming in, so that the server polls again rather than waiting.
                     polls++;
+                    Arrivals.Set ();
                     if (pollsBeforeGone > 0 && polls > pollsBeforeGone)
                         onPollsBeforeGone ();
                     if (pending.Count == 0)

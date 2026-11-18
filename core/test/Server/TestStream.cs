@@ -72,7 +72,13 @@ namespace KRPC.Test.Server
                 throw new InvalidOperationException ();
             outputStream.Write (buffer, offset, size);
             BytesWritten += (ulong)size;
+            Writes++;
         }
+
+        /// <summary>
+        /// The number of writes made to the stream.
+        /// </summary>
+        public int Writes { get; private set; }
 
         public ulong BytesRead { get; private set; }
 

@@ -26,6 +26,7 @@
     <Compile Include="ConfigurationTest.cs" />
     <Compile Include="CoreTest.cs" />
     <Compile Include="PinnedUpdateTime.cs" />
+    <Compile Include="PipeliningTest.cs" />
     <Compile Include="ScriptedClient.cs" />
     <Compile Include="Service\FunctionStreamTest.cs" />
     <Compile Include="Service\KRPC\ExpressionTest.Collections.cs" />
@@ -53,6 +54,7 @@
     <Compile Include="Server\SerialIO\BufferedPortTest.cs" />
     <Compile Include="Server\SerialIO\ByteBufferTest.cs" />
     <Compile Include="Server\SerialIO\ByteClientTest.cs" />
+    <Compile Include="Server\SerialIO\SerialPortTest.cs" />
     <Compile Include="Server\SerialIO\ServerTest.cs" />
     <Compile Include="Server\LocalSocket\AssumptionsTest.cs" />
     <Compile Include="Server\LocalSocket\LocalSocketServerTest.cs" />
@@ -60,6 +62,7 @@
     <Compile Include="Server\LocalSocket\UnixSocketTest.cs" />
     <Compile Include="Server\MessageHarness.cs" />
     <Compile Include="Server\SocketClientTest.cs" />
+    <Compile Include="Server\SocketStreamTest.cs" />
     <Compile Include="Server\TCP\AssumptionsTest.cs" />
     <Compile Include="Server\TCP\NetworkInformationTest.cs" />
     <Compile Include="Server\TCP\TCPServerTest.cs" />

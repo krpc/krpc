@@ -92,5 +92,10 @@ namespace KRPC.Server
         /// Handler to trigger when a new client requests a connection.
         /// </summary>
         event EventHandler<ClientRequestingConnectionEventArgs<IMessageStream>> OnClientRequestingConnection;
+
+        /// <summary>
+        /// Send the responses held back while their clients had more requests queued.
+        /// </summary>
+        void Flush ();
     }
 }

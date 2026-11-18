@@ -96,6 +96,9 @@ per tick.
 Remove a stream once you no longer need it, or give it a rate. The :ref:`server performance guide
 <server-performance>` describes the settings.
 
+The server ends the connection of a client that falls too far behind in reading its updates, as
+:ref:`the protocol describes <communication-protocol-unread-limit>`.
+
 Events
 ------
 

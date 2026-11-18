@@ -8,9 +8,7 @@ namespace KRPC.Server
     /// </summary>
     sealed class SocketClient : IClient<IByteStream>
     {
-        readonly Socket socket;
         readonly SocketStream stream;
-        readonly byte[] connectedTestBuffer = new byte[1];
 
         public SocketClient (Socket socket, string address)
         {
@@ -18,7 +16,6 @@ namespace KRPC.Server
                 throw new ArgumentNullException (nameof (socket));
             Guid = Guid.NewGuid ();
             Address = address ?? string.Empty;
-            this.socket = socket;
             stream = new SocketStream (new NetworkStream (socket), socket);
         }
 
@@ -34,27 +31,17 @@ namespace KRPC.Server
             get { return stream; }
         }
 
+        /// <summary>
+        /// Whether the client is connected: until the peer closes and the bytes it sent before
+        /// are read, or until the client is closed.
+        /// </summary>
         public bool Connected {
-            get {
-                try {
-                    if (!(socket.Connected || stream.HalfClosed))
-                        return false;
-                    // A closed peer polls readable and then reads nothing, which tells a
-                    // disconnect apart from an idle connection
-                    if (socket.Poll (0, SelectMode.SelectRead))
-                        return socket.Receive (connectedTestBuffer, SocketFlags.Peek) != 0;
-                    return true;
-                } catch (SocketException) {
-                    return false;
-                } catch (ObjectDisposedException) {
-                    return false;
-                }
-            }
+            get { return stream.Open; }
         }
 
         public void Close ()
         {
-            socket.Close ();
+            stream.Close ();
         }
 
         public override bool Equals (object obj)

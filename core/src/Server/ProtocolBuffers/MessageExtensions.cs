@@ -305,20 +305,91 @@ namespace KRPC.Server.ProtocolBuffers
         {
             var result = new Request ();
             result.Id = request.Id;
+            foreach (var call in request.Calls)
+                result.Calls.Add (Decode (call));
+            return result;
+        }
+
+        static ProcedureCall Decode (Schema.KRPC.ProcedureCall call)
+        {
+            try {
+                return call.ToMessage ();
+            } catch (System.Exception e) {
+                // Fails only this call when it runs
+                return new ProcedureCall (call.Service, call.ServiceId, call.Procedure, call.ProcedureId) {
+                    DecodeException = e
+                };
+            }
+        }
+
+        /// <summary>
+        /// Decode a request off the game thread. An argument holding an object is left
+        /// encoded, as the object store belongs to the game thread, and the object resolves
+        /// when its call runs. <see cref="DecodeRemaining"/> decodes the rest.
+        /// </summary>
+        public static Request ToMessageOffGameThread (this Schema.KRPC.Request request)
+        {
+            var result = new Request ();
+            result.Id = request.Id;
             foreach (var call in request.Calls) {
+                ProcedureCall decoded;
                 try {
-                    result.Calls.Add (call.ToMessage ());
-                } catch (System.Exception e) {
-                    // Fails only this call when it runs
-                    result.Calls.Add (new ProcedureCall (call.Service, call.ServiceId, call.Procedure, call.ProcedureId) {
-                        DecodeException = e
-                    });
+                    decoded = call.ToMessage (true);
+                } catch (System.Exception) {
+                    decoded = new ProcedureCall (call.Service, call.ServiceId, call.Procedure, call.ProcedureId) {
+                        Encoded = call,
+                        DecodeFailed = true
+                    };
                 }
+                result.Calls.Add (decoded);
             }
             return result;
         }
 
+        /// <summary>
+        /// Decode the arguments <see cref="ToMessageOffGameThread"/> left encoded, on the game
+        /// thread. A call that fails decodes again from the start, so that its error is the one
+        /// a call decoded wholly on the game thread gives.
+        /// </summary>
+        public static void DecodeRemaining (this Request request)
+        {
+            var calls = request.Calls;
+            for (int i = 0; i < calls.Count; i++) {
+                var call = calls [i];
+                if (call.Encoded == null)
+                    continue;
+                if (call.DecodeFailed || !TryDecodeRemaining (call))
+                    calls [i] = Decode (call.Encoded);
+            }
+        }
+
+        static bool TryDecodeRemaining (ProcedureCall call)
+        {
+            var arguments = call.Arguments;
+            for (int i = 0; i < arguments.Count; i++) {
+                var argument = arguments [i];
+                if (argument.Encoded == null)
+                    continue;
+                try {
+                    argument.Decoded (Encoder.Decode (argument.Encoded, argument.Spec));
+                } catch (System.Exception) {
+                    return false;
+                }
+            }
+            call.Encoded = null;
+            return true;
+        }
+
         public static ProcedureCall ToMessage (this Schema.KRPC.ProcedureCall call)
+        {
+            return call.ToMessage (false);
+        }
+
+        /// <summary>
+        /// Decode a call. With <paramref name="deferObjects"/>, an argument holding an object
+        /// is left encoded, and the call keeps its encoding for <see cref="DecodeRemaining"/>.
+        /// </summary>
+        static ProcedureCall ToMessage (this Schema.KRPC.ProcedureCall call, bool deferObjects)
         {
             // Note: a call to an invalid procedure returns with no decoded arguments, and an invalid argument throws
             var result = new ProcedureCall (call.Service, call.ServiceId, call.Procedure, call.ProcedureId);
@@ -335,7 +406,11 @@ namespace KRPC.Server.ProtocolBuffers
                             "Duplicate argument position " + argument.Position +
                             " for " + procedureSignature.FullyQualifiedName);
                     var spec = procedureSignature.Parameters [(int)argument.Position].Spec;
-                    result.Arguments.Add (argument.ToMessage (spec));
+                    if (deferObjects && !argument.IsNull && !spec.HoldsOnlyValues) {
+                        result.Arguments.Add (new Argument (argument.Position, argument.Value, spec));
+                        result.Encoded = call;
+                    } else
+                        result.Arguments.Add (argument.ToMessage (spec));
                 }
             } catch (RPCException) {
             }

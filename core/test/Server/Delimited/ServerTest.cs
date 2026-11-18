@@ -322,6 +322,122 @@ namespace KRPC.Test.Server.Delimited
         }
 
         [Test]
+        public void ReadAheadKeepsTheOrder ()
+        {
+            var harness = Harness ();
+            var client = harness.Handshake ();
+            for (ulong id = 1; id <= 40; id++)
+                harness.Send (MessageHarness.Request (id));
+            harness.Server.Update ();
+            for (ulong id = 1; id <= 40; id++) {
+                Assert.IsTrue (client.Stream.DataAvailable);
+                Assert.AreEqual (id, client.Stream.Read ().Id);
+            }
+            Assert.IsFalse (client.Stream.DataAvailable);
+        }
+
+        [Test]
+        public void ResponsesToRequestsReadAheadGoOutInOneWrite ()
+        {
+            var harness = Harness ();
+            var client = harness.Handshake ();
+            harness.Send (MessageHarness.Request (1));
+            harness.Send (MessageHarness.Request (2));
+            harness.Server.Update ();
+            var writes = harness.Stream.Writes;
+            Assert.AreEqual (1, client.Stream.Read ().Id);
+            client.Stream.Write (new KRPC.Service.Messages.Response { Id = 1 });
+            // Held back, as the client has another request queued
+            Assert.AreEqual (writes, harness.Stream.Writes);
+            Assert.AreEqual (2, client.Stream.Read ().Id);
+            client.Stream.Write (new KRPC.Service.Messages.Response { Id = 2 });
+            Assert.AreEqual (writes + 1, harness.Stream.Writes);
+            var messages = harness.Receive ();
+            Assert.AreEqual (2, messages.Count);
+            Assert.AreEqual (1, messages [0].Response.Id);
+            Assert.AreEqual (2, messages [1].Response.Id);
+        }
+
+        [Test]
+        public void FlushSendsAResponseHeldBack ()
+        {
+            var harness = Harness ();
+            var client = harness.Handshake ();
+            harness.Send (MessageHarness.Request (1));
+            harness.Send (MessageHarness.Request (2));
+            harness.Server.Update ();
+            Assert.AreEqual (1, client.Stream.Read ().Id);
+            client.Stream.Write (new KRPC.Service.Messages.Response { Id = 1 });
+            Assert.AreEqual (0, harness.Receive ().Count);
+            harness.Server.Flush ();
+            Assert.AreEqual (1, harness.ReceiveOne ().Response.Id);
+        }
+
+        [Test]
+        public void ReadAheadStopsAtTheInboxDepth ()
+        {
+            var harness = Harness ();
+            var client = harness.Handshake ();
+            // More bytes of requests than the connection reads ahead
+            const int count = 10000;
+            for (ulong id = 1; id <= count; id++)
+                harness.Send (MessageHarness.Request (id));
+            harness.Server.Update ();
+            harness.Server.Update ();
+            Assert.IsTrue (harness.Stream.DataAvailable);
+            for (ulong id = 1; id <= count; id++)
+                Assert.AreEqual (id, client.Stream.Read ().Id);
+            Assert.IsFalse (client.Stream.DataAvailable);
+            Assert.IsFalse (harness.Stream.DataAvailable);
+        }
+
+        [Test]
+        public void DisconnectBehindQueuedRequests ()
+        {
+            var harness = Harness ();
+            var client = harness.Handshake ();
+            harness.Send (MessageHarness.Request (1));
+            harness.Send (MessageHarness.Request (2));
+            harness.Send (MessageHarness.Disconnect (Reason.Closed));
+            harness.Server.Update ();
+            Assert.IsTrue (client.Connected);
+            Assert.AreEqual (1, client.Stream.Read ().Id);
+            Assert.AreEqual (2, client.Stream.Read ().Id);
+            Assert.IsFalse (client.Stream.DataAvailable);
+            Assert.IsFalse (client.Connected);
+        }
+
+        [Test]
+        public void MalformedMessageBehindQueuedRequests ()
+        {
+            var harness = Harness ();
+            var client = harness.Handshake ();
+            harness.Send (MessageHarness.Request (1));
+            harness.Send (MessageHarness.Request (2));
+            // A length prefix, then bytes that are not a message
+            harness.SendBytes (new byte[] { 0x03, 0xff, 0xff, 0xff });
+            harness.Server.Update ();
+            Assert.IsTrue (client.Connected);
+            Assert.AreEqual (1, client.Stream.Read ().Id);
+            Assert.AreEqual (2, client.Stream.Read ().Id);
+            Assert.IsFalse (client.Stream.DataAvailable);
+            CheckDisconnect (harness, Reason.MalformedMessage);
+        }
+
+        [Test]
+        public void QueuedRequestsAreDroppedWhenTheByteClientDisconnects ()
+        {
+            var harness = Harness ();
+            var client = harness.Handshake ();
+            harness.Send (MessageHarness.Request (1));
+            harness.Send (MessageHarness.Request (2));
+            harness.Server.Update ();
+            harness.DisconnectByteClient ();
+            CollectionAssert.AreEqual (new [] { client }, harness.Disconnected);
+            Assert.IsFalse (client.Stream.DataAvailable);
+        }
+
+        [Test]
         public void WriteResponse ()
         {
             var harness = Harness ();

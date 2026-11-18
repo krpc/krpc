@@ -125,6 +125,17 @@ calls in a request run in order, and the results in the response are in the same
 The client specification states how a client numbers and matches requests. See
 :doc:`/client-spec/calls`.
 
+A client may send requests without waiting for the responses to earlier ones. The server runs a
+client's requests one at a time, in the order they were sent, so their responses arrive in that
+order too. A call that waits on the game holds up the requests behind it. The server reads up to
+16 requests ahead, and leaves the rest to the transport's flow control, which holds the client's
+writes until the server catches up.
+
+.. _communication-protocol-unread-limit:
+
+A client must also read what the server sends. The server ends the connection of a client that
+leaves more than 16 MB of responses and stream updates unread.
+
 .. _communication-protocol-anatomy-of-a-request:
 
 Anatomy of a Request

@@ -64,15 +64,15 @@ namespace KRPC.Server.WebSockets
 
         protected override void Write (IMessage message)
         {
-            // No frame before the upgrade, where the client reads HTTP, or after a close frame
-            if (!upgraded || closeSent)
-                return;
-            using (var bufferStream = new MemoryStream ()) {
-                message.WriteTo (bufferStream);
-                var payload = bufferStream.ToArray ();
-                var frame = new Frame (OpCode.Binary, payload);
-                Stream.Write (frame.Header.ToBytes ());
-                Stream.Write (frame.Payload);
+            // The stream's reader thread can write a pong or a close frame as it reads
+            lock (OutputLock) {
+                // No frame before the upgrade, where the client reads HTTP, or after a close frame
+                if (!upgraded || closeSent)
+                    return;
+                var size = message.CalculateSize ();
+                var header = new Header (OpCode.Binary, (ulong)size).ToBytes ();
+                Output.Write (header, 0, header.Length);
+                message.WriteTo (Output);
             }
         }
 
@@ -89,10 +89,24 @@ namespace KRPC.Server.WebSockets
 
         void WriteClose (Frame closeFrame)
         {
-            if (closeSent)
-                return;
-            closeSent = true;
-            Stream.Write (closeFrame.ToBytes ());
+            lock (OutputLock) {
+                if (closeSent)
+                    return;
+                closeSent = true;
+                WriteFrame (closeFrame);
+            }
+        }
+
+        /// <summary>
+        /// Send a control frame, after the messages written before it.
+        /// </summary>
+        void WriteFrame (Frame frame)
+        {
+            lock (OutputLock) {
+                var bytes = frame.ToBytes ();
+                Output.Write (bytes, 0, bytes.Length);
+                SendOutput ();
+            }
         }
 
         /// <summary>
@@ -253,7 +267,7 @@ namespace KRPC.Server.WebSockets
                     }
                 } else if (opCode == OpCode.Ping) {
                     // Send pong with copy of ping's payload
-                    Stream.Write (Frame.Pong (frame.Payload).ToBytes ());
+                    WriteFrame (Frame.Pong (frame.Payload));
                 } else if (opCode == OpCode.Close) {
                     throw Closed (frame);
                 }
@@ -282,7 +296,8 @@ namespace KRPC.Server.WebSockets
                     WriteClose (Frame.Close (frame.Payload));
                 }
                 // Close connection with no reply if an undefined status is used
-                closeSent = true;
+                lock (OutputLock)
+                    closeSent = true;
             } else {
                 // Send close with no status
                 WriteClose (Frame.Close ());

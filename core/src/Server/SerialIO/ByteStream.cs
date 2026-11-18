@@ -3,7 +3,7 @@ using System.IO;
 
 namespace KRPC.Server.SerialIO
 {
-    sealed class ByteStream : IByteStream
+    sealed class ByteStream : IByteStream, IReaderThreadStream
     {
         BufferedPort port;
 
@@ -23,6 +23,13 @@ namespace KRPC.Server.SerialIO
                 } catch (ObjectDisposedException) {
                     return false;
                 }
+            }
+        }
+
+        public Action Received {
+            set {
+                if (port != null)
+                    port.Received = value;
             }
         }
 
@@ -76,6 +83,9 @@ namespace KRPC.Server.SerialIO
 
         public void Close ()
         {
+            // The port outlives the stream, and carries the next client's stream
+            if (port != null)
+                port.Received = null;
             port = null;
         }
     }

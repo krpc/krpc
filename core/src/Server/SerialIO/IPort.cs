@@ -46,7 +46,7 @@ namespace KRPC.Server.SerialIO
         /// <summary>
         /// Read up to count bytes into buffer, starting at offset, waiting up to the read timeout
         /// for the first of them. Returns the number of bytes read, and throws TimeoutException if
-        /// none arrive in time.
+        /// none arrive in time. A read that gives up takes no byte, so none are lost.
         /// </summary>
         int Read (byte[] buffer, int offset, int count);
 

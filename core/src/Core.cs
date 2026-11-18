@@ -539,7 +539,6 @@ namespace KRPC
         bool heldTick;
 
         Stopwatch rpcTimer = new Stopwatch ();
-        Stopwatch rpcPollTimeout = new Stopwatch ();
         Stopwatch rpcPollTimer = new Stopwatch ();
         Stopwatch rpcExecTimer = new Stopwatch ();
         List<RequestContinuation> rpcYieldedContinuations = new List<RequestContinuation> ();
@@ -560,7 +559,7 @@ namespace KRPC
         {
             rpcTimer.Reset ();
             rpcTimer.Start ();
-            rpcPollTimeout.Reset ();
+            long rpcStart = Stopwatch.GetTimestamp ();
             rpcPollTimer.Reset ();
             rpcExecTimer.Reset ();
             heldTick = false;
@@ -575,25 +574,27 @@ namespace KRPC
 
             while (true) {
 
-                // Poll for RPCs
+                // Poll for RPCs, waiting for bytes to arrive between polls
                 rpcPollTimer.Start ();
-                rpcPollTimeout.Reset ();
-                rpcPollTimeout.Start ();
+                long pollDeadline = Math.Min (
+                    Stopwatch.GetTimestamp () + recvTimeoutTicks, rpcStart + maxTimePerUpdateTicks);
                 while (true) {
+                    // Cleared before the poll, so that bytes arriving during it end the wait
+                    Arrivals.Reset ();
                     PollRequests (rpcYieldedContinuations);
                     if (rpcContinuations.Count > 0)
                         break;
                     // Wait for the client to release the tick, so that a call it makes after
-                    // seeing an earlier result is executed in this update
+                    // seeing an earlier result is executed in this update. The client's
+                    // disconnect also sets the signal.
                     if (TickHeld) {
                         heldTick = true;
+                        Arrivals.WaitUntil (tickHoldDeadline);
                         continue;
                     }
                     if (!config.BlockingRecv)
                         break;
-                    if (rpcPollTimeout.ElapsedTicks > recvTimeoutTicks)
-                        break;
-                    if (rpcTimer.ElapsedTicks > maxTimePerUpdateTicks)
+                    if (!Arrivals.WaitUntil (pollDeadline))
                         break;
                 }
                 rpcPollTimer.Stop ();
@@ -655,6 +656,11 @@ namespace KRPC
                     Logger.Severity.Error);
                 ReleaseTickHold ();
             }
+
+            // Send the responses held back for clients with more requests queued, as a
+            // request left for the next update holds back the responses before it
+            for (int i = 0; i < Servers.Count; i++)
+                Servers [i].InnerServer.Flush ();
 
             // Run yielded continuations on the next update
             var tmp = rpcContinuations;

@@ -64,6 +64,52 @@ namespace KRPC.Service
         /// </summary>
         internal int? EnumMask { get; private set; }
 
+        /// <summary>
+        /// Whether a value of the type holds no object of a class and no message, at any
+        /// position inside it. Such a value decodes off the game thread, as it needs no lookup
+        /// in the object store and nothing else holds the value the decoder builds.
+        /// </summary>
+        internal bool HoldsOnlyValues {
+            get {
+                // Worked out on first use, as a structure's fields come from reflection. Two
+                // threads that race here store the same answer.
+                if (holdsOnlyValues == 0)
+                    holdsOnlyValues = WorkOutHoldsOnlyValues () ? 1 : 2;
+                return holdsOnlyValues == 1;
+            }
+        }
+
+        int holdsOnlyValues;
+
+        bool WorkOutHoldsOnlyValues ()
+        {
+            switch (Kind) {
+            case TypeKind.Enum:
+            case TypeKind.Double:
+            case TypeKind.Single:
+            case TypeKind.Int32:
+            case TypeKind.Int64:
+            case TypeKind.UInt32:
+            case TypeKind.UInt64:
+            case TypeKind.Boolean:
+            case TypeKind.String:
+            case TypeKind.Bytes:
+                return true;
+            case TypeKind.Struct:
+                IList<System.Reflection.PropertyInfo> fields;
+                IList<TypeSpec> fieldSpecs;
+                TypeUtils.GetStructFieldsAndSpecs (Type, out fields, out fieldSpecs);
+                return fieldSpecs.All (x => x.HoldsOnlyValues);
+            case TypeKind.Tuple:
+            case TypeKind.List:
+            case TypeKind.Set:
+            case TypeKind.Dictionary:
+                return types.All (x => x.HoldsOnlyValues);
+            default:
+                return false;
+            }
+        }
+
         static readonly IDictionary<Type,IDictionary<int,object>> enumValues =
             new Dictionary<Type,IDictionary<int,object>> ();
 

@@ -14,7 +14,7 @@ namespace KRPC.Server.Delimited
 
         public Connection (Message.Server server, IClient<IByteStream> client) : base (server, client)
         {
-            codedOutputStream = new CodedOutputStream (new ByteOutputAdapterStream (client.Stream), true);
+            codedOutputStream = new CodedOutputStream (Output, true);
         }
 
         protected override int Read (ref SchemaMessage message, byte[] data, int offset, int length)

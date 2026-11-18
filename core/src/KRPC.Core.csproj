@@ -38,6 +38,7 @@
     </Compile>
     <Compile Include="Configuration.cs" />
     <Compile Include="Core.cs" />
+    <Compile Include="Server\Arrivals.cs" />
     <Compile Include="Server\ClientActivityEventArgs.cs" />
     <Compile Include="Server\ClientConnectedEventArgs.cs" />
     <Compile Include="Server\ClientConnectionRequest.cs" />
@@ -49,6 +50,7 @@
     <Compile Include="Server\DisconnectReason.cs" />
     <Compile Include="Server\IClient.cs" />
     <Compile Include="Server\IHalfClosableStream.cs" />
+    <Compile Include="Server\IReaderThreadStream.cs" />
     <Compile Include="Server\IMessageStream.cs" />
     <Compile Include="Server\IServer.cs" />
     <Compile Include="Server\IStream.cs" />
@@ -80,7 +82,6 @@
     <Compile Include="Server\LocalSocket\LocalSocketServer.cs" />
     <Compile Include="Server\LocalSocket\UnixEndPoint.cs" />
     <Compile Include="Server\LocalSocket\UnixSocket.cs" />
-    <Compile Include="Server\Delimited\ByteOutputAdapterStream.cs" />
     <Compile Include="Server\Delimited\Connection.cs" />
     <Compile Include="Server\Delimited\Server.cs" />
     <Compile Include="Server\Message\Connection.cs" />
