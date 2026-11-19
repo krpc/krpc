@@ -44,6 +44,16 @@ namespace KRPC.Server.SerialIO
         void DiscardInBuffer ();
 
         /// <summary>
+        /// Discard data written to the port and not yet sent.
+        /// </summary>
+        void DiscardOutBuffer ();
+
+        /// <summary>
+        /// Turn off flow control, so that a write held by it completes.
+        /// </summary>
+        void DisableFlowControl ();
+
+        /// <summary>
         /// Read up to count bytes into buffer, starting at offset, waiting up to the read timeout
         /// for the first of them. Returns the number of bytes read, and throws TimeoutException if
         /// none arrive in time. A read that gives up takes no byte, so none are lost.

@@ -56,6 +56,24 @@ namespace KRPC.Test.Server.SerialIO
 
         public int Writes { get; private set; }
 
+        /// <summary>
+        /// Number of writes that started after the port was closed.
+        /// </summary>
+        public int WritesWhileClosed { get; private set; }
+
+        public int OutputDiscards { get; private set; }
+
+        /// <summary>
+        /// Set to fail discarding the output with this exception.
+        /// </summary>
+        public Exception DiscardFailure { get; set; }
+
+        /// <summary>
+        /// Whether writes wait until flow control is turned off, standing for a client that
+        /// holds its RTS line low.
+        /// </summary>
+        public bool FlowControlHeld { get; set; }
+
         public void Open ()
         {
             IsOpen = true;
@@ -70,6 +88,21 @@ namespace KRPC.Test.Server.SerialIO
         {
             lock (dataLock)
                 toRead.Clear ();
+        }
+
+        public void DiscardOutBuffer ()
+        {
+            if (DiscardFailure != null)
+                throw DiscardFailure;
+            OutputDiscards++;
+        }
+
+        public void DisableFlowControl ()
+        {
+            lock (dataLock) {
+                FlowControlHeld = false;
+                Monitor.PulseAll (dataLock);
+            }
         }
 
         /// <summary>
@@ -117,9 +150,13 @@ namespace KRPC.Test.Server.SerialIO
 
         public void Write (byte[] buffer, int offset, int count)
         {
+            if (!IsOpen)
+                WritesWhileClosed++;
             if (WriteDelay > 0)
                 Thread.Sleep (WriteDelay);
             lock (dataLock) {
+                while (FlowControlHeld)
+                    Monitor.Wait (dataLock);
                 if (WriteFailure != null) {
                     var failure = WriteFailure;
                     WriteFailure = null;
@@ -311,6 +348,7 @@ namespace KRPC.Test.Server.SerialIO
                 port.Write (new byte[] { (byte)i }, 0, 1);
             port.Close ();
             Assert.AreEqual (4, testPort.Written.Length);
+            Assert.AreEqual (0, testPort.OutputDiscards);
         }
 
         /// <summary>
@@ -372,6 +410,51 @@ namespace KRPC.Test.Server.SerialIO
                 Assert.IsFalse (port.IsOpen);
             } finally {
                 port.Close ();
+            }
+        }
+
+        /// <summary>
+        /// A write held by flow control when the port closes is released: closing discards the
+        /// port's output and turns flow control off, the write completes before the port
+        /// closes, and no further write starts.
+        /// </summary>
+        [Test]
+        public void CloseReleasesAWriteHeldByFlowControl ()
+        {
+            var testPort = new TestPort ();
+            testPort.FlowControlHeld = true;
+            var port = new BufferedPort (testPort);
+            port.Open ();
+            var data = new byte [3 * 4096];
+            port.Write (data, 0, data.Length);
+            var timer = Stopwatch.StartNew ();
+            port.Close ();
+            Assert.Less (timer.ElapsedMilliseconds, 1500, "Closing waited too long for the held write");
+            Assert.AreEqual (1, testPort.OutputDiscards);
+            Assert.IsFalse (testPort.FlowControlHeld);
+            Assert.AreEqual (1, testPort.Writes);
+            Assert.AreEqual (0, testPort.WritesWhileClosed);
+        }
+
+        /// <summary>
+        /// A port that fails to release a held write, such as one whose device was removed, is
+        /// still closed.
+        /// </summary>
+        [Test]
+        public void CloseFinishesWhenReleasingAHeldWriteFails ()
+        {
+            var testPort = new TestPort ();
+            testPort.FlowControlHeld = true;
+            testPort.DiscardFailure = new System.IO.IOException ("device removed");
+            var port = new BufferedPort (testPort);
+            port.Open ();
+            try {
+                port.Write (new byte[] { 1 }, 0, 1);
+                port.Close ();
+                Assert.IsFalse (port.IsOpen);
+                Assert.IsFalse (testPort.IsOpen);
+            } finally {
+                testPort.DisableFlowControl ();
             }
         }
 

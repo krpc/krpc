@@ -120,10 +120,27 @@ namespace KRPC.Server.SerialIO
                 Monitor.PulseAll (receivedLock);
             lock (sendingLock)
                 Monitor.PulseAll (sendingLock);
-            // Wait for the write thread first, so that it can send what is left in the send
-            // buffer. A thread that does not finish in time fails its transfer when the port
-            // is closed under it.
+            // Wait for the write thread first, so that it can send what is left in the send buffer
             JoinThread (writeThread);
+            // A write still waiting on the port, such as one held by flow control, is released.
+            // The rest of the send buffer is dropped, the port's output is discarded, and flow
+            // control is turned off so that the write completes. Closing the port does not end
+            // a native write blocked on it, and the game cannot exit while one is blocked
+            var writeStuck = writeThread != null && writeThread.IsAlive;
+            lock (sendingLock)
+                sending.Clear ();
+            if (writeStuck) {
+                try {
+                    port.DiscardOutBuffer ();
+                    port.DisableFlowControl ();
+                } catch (Exception exn) when (exn is IOException || exn is InvalidOperationException) {
+                    // The close goes on, so that the port and the read thread are still closed
+                    Logger.WriteLine (
+                        "SerialIO: failed to release a held write on " + port.PortName + "; " + exn.Message,
+                        Logger.Severity.Debug);
+                }
+                JoinThread (writeThread);
+            }
             // A read that waits with a timeout ends at it. The port closes only after that, as
             // a read still waiting on a closed port could take the bytes of another file that
             // reuses its descriptor. Closing the port ends a read that waits with no timeout.
@@ -135,8 +152,6 @@ namespace KRPC.Server.SerialIO
             readThread = null;
             lock (receivedLock)
                 received.Clear ();
-            lock (sendingLock)
-                sending.Clear ();
         }
 
         /// <summary>
@@ -248,7 +263,9 @@ namespace KRPC.Server.SerialIO
                 try {
                     port.Write (buffer, 0, size);
                 } catch (System.Exception exn) {
-                    Fail (exn);
+                    // A write ended by closing the port is not a failure
+                    if (!closing)
+                        Fail (exn);
                     return;
                 }
             }

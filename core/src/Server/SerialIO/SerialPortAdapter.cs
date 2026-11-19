@@ -65,6 +65,16 @@ namespace KRPC.Server.SerialIO
             port.DiscardInBuffer ();
         }
 
+        public void DiscardOutBuffer ()
+        {
+            port.DiscardOutBuffer ();
+        }
+
+        public void DisableFlowControl ()
+        {
+            port.Handshake = Handshake.None;
+        }
+
         public int Read (byte[] buffer, int offset, int count)
         {
             // A read returns once any bytes have arrived. One that times out takes nothing: on
