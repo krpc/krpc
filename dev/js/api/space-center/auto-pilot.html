@@ -1639,7 +1639,31 @@ when SAS is enabled.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Equivalent to <a class="reference internal" href="control.html#SpaceCenter.Control.getSASMode" title="SpaceCenter.Control.getSASMode"><code class="xref js js-meth docutils literal notranslate"><span class="pre">SpaceCenter.Control.getSASMode()</span></code></a></p>
+<p>Equivalent to <a class="reference internal" href="control.html#SpaceCenter.Control.getSASMode" title="SpaceCenter.Control.getSASMode"><code class="xref js js-meth docutils literal notranslate"><span class="pre">SpaceCenter.Control.getSASMode()</span></code></a>.
+Throws an exception if set to a mode not in <a class="reference internal" href="#SpaceCenter.AutoPilot.getAvailableSASModes" title="SpaceCenter.AutoPilot.getAvailableSASModes"><code class="xref js js-meth docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.getAvailableSASModes()</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="SpaceCenter.AutoPilot.getAvailableSASModes">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">AutoPilot</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getAvailableSASModes</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.AutoPilot.getAvailableSASModes" title="Link to this definition">#</a></dt>
+<dd><p>The SAS modes that <a class="reference internal" href="#SpaceCenter.AutoPilot.getSASMode" title="SpaceCenter.AutoPilot.getSASMode"><code class="xref js js-meth docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.getSASMode()</span></code></a> can be set to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">Set</span></code> of <a class="reference internal" href="control.html#SpaceCenter.SASMode" title="SpaceCenter.SASMode"><code class="xref js js-class docutils literal notranslate"><span class="pre">SpaceCenter.SASMode</span></code></a></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Equivalent to <a class="reference internal" href="control.html#SpaceCenter.Control.getAvailableSASModes" title="SpaceCenter.Control.getAvailableSASModes"><code class="xref js js-meth docutils literal notranslate"><span class="pre">SpaceCenter.Control.getAvailableSASModes()</span></code></a>. The modes depend on the SAS
+level of the vessel’s pilot or probe core, the navball speed mode, and whether
+there is a target and a maneuver node.</p>
 </div>
 </dd></dl>
 

@@ -2937,6 +2937,16 @@
         <li><a href="python/api/space-center/parts.html#SpaceCenter.ResourceDrain.available_resources">(ResourceDrain attribute)</a>
 </li>
       </ul></li>
+      <li><a href="lua/api/space-center/auto-pilot.html#lua-SpaceCenter.AutoPilot.available_sas_modes">available_sas_modes (attribute in SpaceCenter.AutoPilot)</a>
+
+      <ul>
+        <li><a href="lua/api/space-center/control.html#lua-SpaceCenter.Control.available_sas_modes">(attribute in SpaceCenter.Control)</a>
+</li>
+        <li><a href="python/api/space-center/auto-pilot.html#SpaceCenter.AutoPilot.available_sas_modes">(AutoPilot attribute)</a>
+</li>
+        <li><a href="python/api/space-center/control.html#SpaceCenter.Control.available_sas_modes">(Control attribute)</a>
+</li>
+      </ul></li>
       <li><a href="lua/api/space-center/parts.html#lua-SpaceCenter.Part.available_seats">available_seats (attribute in SpaceCenter.Part)</a>
 
       <ul>
@@ -7363,10 +7373,10 @@
         <li><a href="python/api/mechjeb/maneuver-planner.html#MechJeb.OperationTransfer.error_message">(OperationTransfer attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/drawing/map-marker.html#lua-Drawing.MapMarkerIcon.escape">escape (data in Drawing.MapMarkerIcon)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="java/api/drawing/map-marker.html#krpc.client.services.Drawing.MapMarkerIcon.ESCAPE">ESCAPE (Java field)</a>
 </li>
       <li><a href="lua/api/space-center/vessel.html#lua-SpaceCenter.VesselSituation.escaping">escaping (data in SpaceCenter.VesselSituation)</a>
@@ -7473,6 +7483,12 @@
 
       <ul>
         <li><a href="python/api/space-center/vessel.html#SpaceCenter.CrewMember.experience">(CrewMember attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="lua/api/space-center/vessel.html#lua-SpaceCenter.CrewMember.experience_level">experience_level (attribute in SpaceCenter.CrewMember)</a>
+
+      <ul>
+        <li><a href="python/api/space-center/vessel.html#SpaceCenter.CrewMember.experience_level">(CrewMember attribute)</a>
 </li>
       </ul></li>
       <li><a href="lua/api/space-center/parts.html#lua-SpaceCenter.Part.experiment">experiment (attribute in SpaceCenter.Part)</a>
@@ -8965,6 +8981,8 @@
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ResourceDrain.getAvailableResources()">getAvailableResources() (Java method)</a>
 </li>
+      <li><a href="java/api/space-center/auto-pilot.html#krpc.client.services.SpaceCenter.AutoPilot.getAvailableSASModes()">getAvailableSASModes() (Java method)</a>, <a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.Control.getAvailableSASModes()">[1]</a>
+</li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.getAvailableSeats()">getAvailableSeats() (Java method)</a>
 </li>
       <li><a href="java/api/kerbal-engineer-redux/stage.html#krpc.client.services.KerbalEngineerRedux.Stage.getAvailableThrust()">getAvailableThrust() (Java method)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Engine.getAvailableThrust()">[1]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RCS.getAvailableThrust()">[2]</a>, <a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getAvailableThrust()">[3]</a>
@@ -9585,6 +9603,8 @@
       </ul></li>
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.CrewMember.getExperience()">getExperience() (Java method)</a>
 </li>
+      <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.CrewMember.getExperienceLevel()">getExperienceLevel() (Java method)</a>
+</li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.getExperiment()">getExperiment() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.getExperiments()">getExperiments() (Java method)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Parts.getExperiments()">[1]</a>
@@ -9917,6 +9937,10 @@
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Decoupler.getImpulse()">getImpulse() (Java method)</a>
 </li>
+      <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.CrewMember.getInactive()">getInactive() (Java method)</a>
+</li>
+      <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.CrewMember.getInactiveUntil()">getInactiveUntil() (Java method)</a>
+</li>
       <li><a href="java/api/space-center/orbit.html#krpc.client.services.SpaceCenter.Orbit.getInclination()">getInclination() (Java method)</a>
 </li>
       <li><a href="java/api/mechjeb/maneuver-planner.html#krpc.client.services.MechJeb.OperationAdvancedTransfer.getIncludeCaptureBurn()">getIncludeCaptureBurn() (Java method)</a>
@@ -10027,6 +10051,12 @@
 
       <ul>
         <li><a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.getKerbalActuatorsAvailable()">(Java method)</a>
+</li>
+      </ul></li>
+      <li><a href="js/api/space-center/space-center.html#SpaceCenter.getKerbals">getKerbals() (built-in function)</a>
+
+      <ul>
+        <li><a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.getKerbals()">(Java method)</a>
 </li>
       </ul></li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Engine.getKerbinSeaLevelSpecificImpulse()">getKerbinSeaLevelSpecificImpulse() (Java method)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RCS.getKerbinSeaLevelSpecificImpulse()">[1]</a>, <a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getKerbinSeaLevelSpecificImpulse()">[2]</a>
@@ -10141,14 +10171,14 @@
 </li>
       <li><a href="java/api/drawing/text.html#krpc.client.services.Drawing.Text.getLineSpacing()">getLineSpacing() (Java method)</a>, <a href="java/api/ui/text.html#krpc.client.services.UI.Text.getLineSpacing()">[1]</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Leg.getLoad()">getLoad() (Java method)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Wheel.getLoad()">[1]</a>
 </li>
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getLoaded()">getLoaded() (Java method)</a>
 </li>
       <li><a href="java/api/ui/rect-transform.html#krpc.client.services.UI.RectTransform.getLocalPosition()">getLocalPosition() (Java method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticHinge.getLocked()">getLocked() (Java method)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticPiston.getLocked()">[1]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticRotation.getLocked()">[2]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticRotor.getLocked()">[3]</a>
 </li>
       <li><a href="java/api/kerbal-engineer-redux/impact.html#krpc.client.services.KerbalEngineerRedux.Impact.getLongitude()">getLongitude() (Java method)</a>, <a href="java/api/mechjeb/rover-autopilot.html#krpc.client.services.MechJeb.RoverWaypoint.getLongitude()">[1]</a>, <a href="java/api/scansat/scansat.html#krpc.client.services.ScanSat.Anomaly.getLongitude()">[2]</a>, <a href="java/api/space-center/flight.html#krpc.client.services.SpaceCenter.Flight.getLongitude()">[3]</a>, <a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.LaunchSite.getLongitude()">[4]</a>, <a href="java/api/space-center/waypoints.html#krpc.client.services.SpaceCenter.Waypoint.getLongitude()">[5]</a>
@@ -12443,6 +12473,18 @@
 </li>
       <li><a href="java/api/scansat/scanner.html#krpc.client.services.ScanSat.ScannerState.IN_RANGE">IN_RANGE (Java field)</a>
 </li>
+      <li><a href="lua/api/space-center/vessel.html#lua-SpaceCenter.CrewMember.inactive">inactive (attribute in SpaceCenter.CrewMember)</a>
+
+      <ul>
+        <li><a href="python/api/space-center/vessel.html#SpaceCenter.CrewMember.inactive">(CrewMember attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="lua/api/space-center/vessel.html#lua-SpaceCenter.CrewMember.inactive_until">inactive_until (attribute in SpaceCenter.CrewMember)</a>
+
+      <ul>
+        <li><a href="python/api/space-center/vessel.html#SpaceCenter.CrewMember.inactive_until">(CrewMember attribute)</a>
+</li>
+      </ul></li>
       <li><a href="lua/api/space-center/orbit.html#lua-SpaceCenter.Orbit.inclination">inclination (attribute in SpaceCenter.Orbit)</a>
 
       <ul>
@@ -12532,12 +12574,12 @@
 </li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Thruster.initial_thrust_position">initial_thrust_position() (Thruster method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Thruster.initialThrustDirection(ReferenceFrame)">initialThrustDirection(ReferenceFrame) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Thruster.initialThrustPosition(ReferenceFrame)">initialThrustPosition(ReferenceFrame) (Java method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/space-center/parts.html#lua-SpaceCenter.Experiment.inoperable">inoperable (attribute in SpaceCenter.Experiment)</a>
 
       <ul>
@@ -13044,6 +13086,12 @@
 
       <ul>
         <li><a href="js/api/kerbal-engineer-redux/kerbal-engineer-redux.html#module-KerbalEngineerRedux">(module)</a>, <a href="lua/api/kerbal-engineer-redux/kerbal-engineer-redux.html#lua-KerbalEngineerRedux">[1]</a>
+</li>
+      </ul></li>
+      <li><a href="lua/api/space-center/space-center.html#lua-SpaceCenter.kerbals">kerbals (attribute in SpaceCenter)</a>
+
+      <ul>
+        <li><a href="python/api/space-center/space-center.html#SpaceCenter.kerbals">(in module SpaceCenter)</a>
 </li>
       </ul></li>
       <li><a href="lua/api/space-center/parts.html#lua-SpaceCenter.Engine.kerbin_sea_level_specific_impulse">kerbin_sea_level_specific_impulse (attribute in SpaceCenter.Engine)</a>
@@ -16181,6 +16229,8 @@
 </li>
       <li><a href="csharp/api/space-center/auto-pilot.html#property-KRPC.Client.Services.SpaceCenter.AutoPilot.AutoTune">KRPC.Client.Services.SpaceCenter.AutoPilot.AutoTune (C# property)</a>
 </li>
+      <li><a href="csharp/api/space-center/auto-pilot.html#property-KRPC.Client.Services.SpaceCenter.AutoPilot.AvailableSASModes">KRPC.Client.Services.SpaceCenter.AutoPilot.AvailableSASModes (C# property)</a>
+</li>
       <li><a href="csharp/api/space-center/auto-pilot.html#property-KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentAttitudeError">KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentAttitudeError (C# property)</a>
 </li>
       <li><a href="csharp/api/space-center/auto-pilot.html#property-KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentError">KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentError (C# property)</a>
@@ -16747,6 +16797,8 @@
 </li>
       <li><a href="csharp/api/space-center/control.html#property-KRPC.Client.Services.SpaceCenter.Control.Antennas">KRPC.Client.Services.SpaceCenter.Control.Antennas (C# property)</a>
 </li>
+      <li><a href="csharp/api/space-center/control.html#property-KRPC.Client.Services.SpaceCenter.Control.AvailableSASModes">KRPC.Client.Services.SpaceCenter.Control.AvailableSASModes (C# property)</a>
+</li>
       <li><a href="csharp/api/space-center/control.html#function-KRPC.Client.Services.SpaceCenter.Control.Board">KRPC.Client.Services.SpaceCenter.Control.Board (C# function)</a>
 </li>
       <li><a href="csharp/api/space-center/control.html#property-KRPC.Client.Services.SpaceCenter.Control.Brakes">KRPC.Client.Services.SpaceCenter.Control.Brakes (C# property)</a>
@@ -16919,7 +16971,13 @@
 </li>
       <li><a href="csharp/api/space-center/vessel.html#property-KRPC.Client.Services.SpaceCenter.CrewMember.Experience">KRPC.Client.Services.SpaceCenter.CrewMember.Experience (C# property)</a>
 </li>
+      <li><a href="csharp/api/space-center/vessel.html#property-KRPC.Client.Services.SpaceCenter.CrewMember.ExperienceLevel">KRPC.Client.Services.SpaceCenter.CrewMember.ExperienceLevel (C# property)</a>
+</li>
       <li><a href="csharp/api/space-center/vessel.html#property-KRPC.Client.Services.SpaceCenter.CrewMember.Gender">KRPC.Client.Services.SpaceCenter.CrewMember.Gender (C# property)</a>
+</li>
+      <li><a href="csharp/api/space-center/vessel.html#property-KRPC.Client.Services.SpaceCenter.CrewMember.Inactive">KRPC.Client.Services.SpaceCenter.CrewMember.Inactive (C# property)</a>
+</li>
+      <li><a href="csharp/api/space-center/vessel.html#property-KRPC.Client.Services.SpaceCenter.CrewMember.InactiveUntil">KRPC.Client.Services.SpaceCenter.CrewMember.InactiveUntil (C# property)</a>
 </li>
       <li><a href="csharp/api/space-center/vessel.html#property-KRPC.Client.Services.SpaceCenter.CrewMember.Name">KRPC.Client.Services.SpaceCenter.CrewMember.Name (C# property)</a>
 </li>
@@ -18712,6 +18770,8 @@
       <li><a href="csharp/api/space-center/space-center.html#function-KRPC.Client.Services.SpaceCenter.SpaceCenter.GetKerbal">KRPC.Client.Services.SpaceCenter.SpaceCenter.GetKerbal (C# function)</a>
 </li>
       <li><a href="csharp/api/space-center/space-center.html#property-KRPC.Client.Services.SpaceCenter.SpaceCenter.KerbalActuatorsAvailable">KRPC.Client.Services.SpaceCenter.SpaceCenter.KerbalActuatorsAvailable (C# property)</a>
+</li>
+      <li><a href="csharp/api/space-center/space-center.html#property-KRPC.Client.Services.SpaceCenter.SpaceCenter.Kerbals">KRPC.Client.Services.SpaceCenter.SpaceCenter.Kerbals (C# property)</a>
 </li>
       <li><a href="csharp/api/space-center/space-center.html#property-KRPC.Client.Services.SpaceCenter.SpaceCenter.KOSAvailable">KRPC.Client.Services.SpaceCenter.SpaceCenter.KOSAvailable (C# property)</a>
 </li>
@@ -23930,6 +23990,8 @@
 </li>
       <li><a href="cpp/api/space-center/auto-pilot.html#_CPPv4N4krpc8services11SpaceCenter9AutoPilot9auto_tuneEv">krpc::services::SpaceCenter::AutoPilot::auto_tune (C++ function)</a>
 </li>
+      <li><a href="cpp/api/space-center/auto-pilot.html#_CPPv4N4krpc8services11SpaceCenter9AutoPilot19available_sas_modesEv">krpc::services::SpaceCenter::AutoPilot::available_sas_modes (C++ function)</a>
+</li>
       <li><a href="cpp/api/space-center/auto-pilot.html#_CPPv4N4krpc8services11SpaceCenter9AutoPilot22current_attitude_errorEv">krpc::services::SpaceCenter::AutoPilot::current_attitude_error (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/auto-pilot.html#_CPPv4N4krpc8services11SpaceCenter9AutoPilot13current_errorEv">krpc::services::SpaceCenter::AutoPilot::current_error (C++ function)</a>
@@ -24604,6 +24666,8 @@
 </li>
       <li><a href="cpp/api/space-center/control.html#_CPPv4N4krpc8services11SpaceCenter7Control8antennasEv">krpc::services::SpaceCenter::Control::antennas (C++ function)</a>
 </li>
+      <li><a href="cpp/api/space-center/control.html#_CPPv4N4krpc8services11SpaceCenter7Control19available_sas_modesEv">krpc::services::SpaceCenter::Control::available_sas_modes (C++ function)</a>
+</li>
       <li><a href="cpp/api/space-center/control.html#_CPPv4N4krpc8services11SpaceCenter7Control5boardEv">krpc::services::SpaceCenter::Control::board (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/control.html#_CPPv4N4krpc8services11SpaceCenter7Control6brakesEv">krpc::services::SpaceCenter::Control::brakes (C++ function)</a>
@@ -24878,7 +24942,13 @@
 </li>
       <li><a href="cpp/api/space-center/vessel.html#_CPPv4N4krpc8services11SpaceCenter10CrewMember10experienceEv">krpc::services::SpaceCenter::CrewMember::experience (C++ function)</a>
 </li>
+      <li><a href="cpp/api/space-center/vessel.html#_CPPv4N4krpc8services11SpaceCenter10CrewMember16experience_levelEv">krpc::services::SpaceCenter::CrewMember::experience_level (C++ function)</a>
+</li>
       <li><a href="cpp/api/space-center/vessel.html#_CPPv4N4krpc8services11SpaceCenter10CrewMember6genderEv">krpc::services::SpaceCenter::CrewMember::gender (C++ function)</a>
+</li>
+      <li><a href="cpp/api/space-center/vessel.html#_CPPv4N4krpc8services11SpaceCenter10CrewMember8inactiveEv">krpc::services::SpaceCenter::CrewMember::inactive (C++ function)</a>
+</li>
+      <li><a href="cpp/api/space-center/vessel.html#_CPPv4N4krpc8services11SpaceCenter10CrewMember14inactive_untilEv">krpc::services::SpaceCenter::CrewMember::inactive_until (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/vessel.html#_CPPv4N4krpc8services11SpaceCenter10CrewMember4nameEv">krpc::services::SpaceCenter::CrewMember::name (C++ function)</a>
 </li>
@@ -25128,14 +25198,14 @@
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter6Engine19available_thrust_atEd">krpc::services::SpaceCenter::Engine::available_thrust_at (C++ function)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter6Engine16available_torqueEv">krpc::services::SpaceCenter::Engine::available_torque (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter6Engine11can_restartEv">krpc::services::SpaceCenter::Engine::can_restart (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter6Engine18can_reverse_thrustEv">krpc::services::SpaceCenter::Engine::can_reverse_thrust (C++ function)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter6Engine12can_shutdownEv">krpc::services::SpaceCenter::Engine::can_shutdown (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter6Engine8flameoutEv">krpc::services::SpaceCenter::Engine::flameout (C++ function)</a>
@@ -25521,6 +25591,8 @@
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter6Intake5speedEv">krpc::services::SpaceCenter::Intake::speed (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/space-center.html#_CPPv4N4krpc8services11SpaceCenter26kerbal_actuators_availableEv">krpc::services::SpaceCenter::kerbal_actuators_available (C++ function)</a>
+</li>
+      <li><a href="cpp/api/space-center/space-center.html#_CPPv4N4krpc8services11SpaceCenter7kerbalsEv">krpc::services::SpaceCenter::kerbals (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/space-center.html#_CPPv4N4krpc8services11SpaceCenter13kos_availableEv">krpc::services::SpaceCenter::kos_available (C++ function)</a>
 </li>
@@ -32536,6 +32608,8 @@
 </li>
       <li><a href="cnano/api/space-center/auto-pilot.html#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_AutoTune">krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_AutoTune (C function)</a>
 </li>
+      <li><a href="cnano/api/space-center/auto-pilot.html#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_AvailableSASModes">krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_AvailableSASModes (C function)</a>
+</li>
       <li><a href="cnano/api/space-center/auto-pilot.html#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_CurrentAttitudeError">krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_CurrentAttitudeError (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/auto-pilot.html#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_CurrentError">krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_CurrentError (C function)</a>
@@ -33266,6 +33340,8 @@
 </li>
       <li><a href="cnano/api/space-center/control.html#c.krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_Antennas">krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_Antennas (C function)</a>
 </li>
+      <li><a href="cnano/api/space-center/control.html#c.krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_AvailableSASModes">krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_AvailableSASModes (C function)</a>
+</li>
       <li><a href="cnano/api/space-center/control.html#c.krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_Board">krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_Board (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/control.html#c.krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_Brakes">krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_Brakes (C function)</a>
@@ -33550,7 +33626,13 @@
 </li>
       <li><a href="cnano/api/space-center/vessel.html#c.krpc_SpaceCenter_CrewMember_t.krpc_SpaceCenter_CrewMember_Experience">krpc_SpaceCenter_CrewMember_t.krpc_SpaceCenter_CrewMember_Experience (C function)</a>
 </li>
+      <li><a href="cnano/api/space-center/vessel.html#c.krpc_SpaceCenter_CrewMember_t.krpc_SpaceCenter_CrewMember_ExperienceLevel">krpc_SpaceCenter_CrewMember_t.krpc_SpaceCenter_CrewMember_ExperienceLevel (C function)</a>
+</li>
       <li><a href="cnano/api/space-center/vessel.html#c.krpc_SpaceCenter_CrewMember_t.krpc_SpaceCenter_CrewMember_Gender">krpc_SpaceCenter_CrewMember_t.krpc_SpaceCenter_CrewMember_Gender (C function)</a>
+</li>
+      <li><a href="cnano/api/space-center/vessel.html#c.krpc_SpaceCenter_CrewMember_t.krpc_SpaceCenter_CrewMember_Inactive">krpc_SpaceCenter_CrewMember_t.krpc_SpaceCenter_CrewMember_Inactive (C function)</a>
+</li>
+      <li><a href="cnano/api/space-center/vessel.html#c.krpc_SpaceCenter_CrewMember_t.krpc_SpaceCenter_CrewMember_InactiveUntil">krpc_SpaceCenter_CrewMember_t.krpc_SpaceCenter_CrewMember_InactiveUntil (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/vessel.html#c.krpc_SpaceCenter_CrewMember_t.krpc_SpaceCenter_CrewMember_Name">krpc_SpaceCenter_CrewMember_t.krpc_SpaceCenter_CrewMember_Name (C function)</a>
 </li>
@@ -34235,6 +34317,8 @@
       <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_Intake_t.krpc_SpaceCenter_Intake_Speed">krpc_SpaceCenter_Intake_t.krpc_SpaceCenter_Intake_Speed (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/space-center.html#c.krpc_SpaceCenter_KerbalActuatorsAvailable">krpc_SpaceCenter_KerbalActuatorsAvailable (C function)</a>
+</li>
+      <li><a href="cnano/api/space-center/space-center.html#c.krpc_SpaceCenter_Kerbals">krpc_SpaceCenter_Kerbals (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/space-center.html#c.krpc_SpaceCenter_KOSAvailable">krpc_SpaceCenter_KOSAvailable (C function)</a>
 </li>

@@ -3084,7 +3084,8 @@ See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCent
 <dl class="cs class">
 <dt class="sig sig-object cs" id="class-KRPC.Client.Services.SpaceCenter.CrewMember">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">CrewMember</span></span><a class="headerlink" href="#class-KRPC.Client.Services.SpaceCenter.CrewMember" title="Link to this definition">#</a></dt>
-<dd><p>Represents crew in a vessel. Can be obtained using <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Vessel.Crew" title="property: KRPC.Client.Services.SpaceCenter.Vessel.Crew"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Vessel.Crew</span></code></a>.</p>
+<dd><p>A Kerbal in the crew roster. Can be obtained using <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Vessel.Crew" title="property: KRPC.Client.Services.SpaceCenter.Vessel.Crew"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Vessel.Crew</span></code></a>,
+<a class="reference internal" href="space-center.html#property-KRPC.Client.Services.SpaceCenter.SpaceCenter.Kerbals" title="property: KRPC.Client.Services.SpaceCenter.SpaceCenter.Kerbals"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">SpaceCenter.Kerbals</span></code></a> or <a class="reference internal" href="space-center.html#function-KRPC.Client.Services.SpaceCenter.SpaceCenter.GetKerbal" title="function: KRPC.Client.Services.SpaceCenter.SpaceCenter.GetKerbal"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">SpaceCenter.GetKerbal</span></code></a>.</p>
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.CrewMember.Name">
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Name</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.CrewMember.Name" title="Link to this definition">#</a></dt>
@@ -3110,7 +3111,31 @@ See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCent
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.CrewMember.OnMission">
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">OnMission</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.CrewMember.OnMission" title="Link to this definition">#</a></dt>
-<dd><p>Whether the crew member is on a mission.</p>
+<dd><p>Whether the crew member is on a mission, assigned to a vessel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.CrewMember.Inactive">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Inactive</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.CrewMember.Inactive" title="Link to this definition">#</a></dt>
+<dd><p>Whether the crew member is inactive, and so unavailable for a mission until
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.CrewMember.InactiveUntil" title="property: KRPC.Client.Services.SpaceCenter.CrewMember.InactiveUntil"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">CrewMember.InactiveUntil</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.CrewMember.InactiveUntil">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">?</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">InactiveUntil</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.CrewMember.InactiveUntil" title="Link to this definition">#</a></dt>
+<dd><p>The universal time at which the crew member stops being inactive, in seconds.
+Returns <code class="docutils literal notranslate"><span class="pre">null</span></code> if the crew member is not inactive.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>All</p>
@@ -3144,6 +3169,17 @@ See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCent
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.CrewMember.Experience">
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Experience</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.CrewMember.Experience" title="Link to this definition">#</a></dt>
 <dd><p>The crew members experience.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.CrewMember.ExperienceLevel">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Int32" title="type: msdn ~&gt; System.Int32"><span class="pre">int</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">ExperienceLevel</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.CrewMember.ExperienceLevel" title="Link to this definition">#</a></dt>
+<dd><p>The crew member’s experience level, the number of stars, from 0 to 5.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>All</p>

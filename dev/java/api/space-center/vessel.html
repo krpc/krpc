@@ -3024,7 +3024,8 @@ See <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel
 <dl class="java type">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CrewMember">
 <span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">CrewMember</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember" title="Link to this definition">#</a></dt>
-<dd><p>Represents crew in a vessel. Can be obtained using <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getCrew()" title="krpc.client.services.SpaceCenter.Vessel.getCrew()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getCrew()</span></code></a>.</p>
+<dd><p>A Kerbal in the crew roster. Can be obtained using <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getCrew()" title="krpc.client.services.SpaceCenter.Vessel.getCrew()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getCrew()</span></code></a>,
+<a class="reference internal" href="space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.getKerbals()" title="krpc.client.services.SpaceCenter.SpaceCenter.getKerbals()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">SpaceCenter.getKerbals()</span></code></a> or <a class="reference internal" href="space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.getKerbal(String)" title="krpc.client.services.SpaceCenter.SpaceCenter.getKerbal(String)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">SpaceCenter.getKerbal(String)</span></code></a>.</p>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CrewMember.getName()">
 <a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getName</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.getName()" title="Link to this definition">#</a></dt>
@@ -3045,7 +3046,21 @@ See <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CrewMember.getOnMission()">
 <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getOnMission</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.getOnMission()" title="Link to this definition">#</a></dt>
-<dd><p>Whether the crew member is on a mission.</p>
+<dd><p>Whether the crew member is on a mission, assigned to a vessel.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CrewMember.getInactive()">
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getInactive</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.getInactive()" title="Link to this definition">#</a></dt>
+<dd><p>Whether the crew member is inactive, and so unavailable for a mission until
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.CrewMember.getInactiveUntil()" title="krpc.client.services.SpaceCenter.CrewMember.getInactiveUntil()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">CrewMember.getInactiveUntil()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CrewMember.getInactiveUntil()">
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a> <span class="sig-name descname"><span class="pre">getInactiveUntil</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.getInactiveUntil()" title="Link to this definition">#</a></dt>
+<dd><p>The universal time at which the crew member stops being inactive, in seconds.
+Returns <code class="docutils literal notranslate"><span class="pre">null</span></code> if the crew member is not inactive.</p>
 </dd></dl>
 
 <dl class="java method">
@@ -3079,6 +3094,12 @@ See <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CrewMember.setExperience(float)">
 <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setExperience</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.setExperience(float)" title="Link to this definition">#</a></dt>
 <dd><p>The crew members experience.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CrewMember.getExperienceLevel()">
+<span class="pre">int</span> <span class="sig-name descname"><span class="pre">getExperienceLevel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CrewMember.getExperienceLevel()" title="Link to this definition">#</a></dt>
+<dd><p>The crew member’s experience level, the number of stars, from 0 to 5.</p>
 </dd></dl>
 
 <dl class="java method">

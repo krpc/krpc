@@ -46,7 +46,21 @@ AutoPilot
 
       .. note::
 
-         Equivalent to :func:`krpc_SpaceCenter_Control_SASMode`
+         Equivalent to :func:`krpc_SpaceCenter_Control_SASMode`.
+         Throws an exception if set to a mode not in :func:`krpc_SpaceCenter_AutoPilot_AvailableSASModes`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_AvailableSASModes(krpc_connection_t connection, krpc_set_enum_t * returnValue, krpc_SpaceCenter_AutoPilot_t instance)
+
+      The SAS modes that :func:`krpc_SpaceCenter_AutoPilot_SASMode` can be set to.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Equivalent to :func:`krpc_SpaceCenter_Control_AvailableSASModes`. The modes depend on the SAS
+         level of the vessel's pilot or probe core, the navball speed mode, and whether
+         there is a target and a maneuver node.
 
    .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_Engaged(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_AutoPilot_t instance)
    .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_set_Engaged(krpc_connection_t connection, krpc_SpaceCenter_AutoPilot_t instance, bool value)

@@ -1071,7 +1071,8 @@ Vessel
 
 .. type:: public class CrewMember
 
-   Represents crew in a vessel. Can be obtained using :meth:`Vessel.getCrew()`.
+   A Kerbal in the crew roster. Can be obtained using :meth:`Vessel.getCrew()`,
+   :meth:`SpaceCenter.getKerbals()` or :meth:`SpaceCenter.getKerbal(String)`.
 
    .. method:: String getName()
 
@@ -1091,7 +1092,23 @@ Vessel
    .. method:: boolean getOnMission()
 
 
-      Whether the crew member is on a mission.
+      Whether the crew member is on a mission, assigned to a vessel.
+
+   
+
+   .. method:: boolean getInactive()
+
+
+      Whether the crew member is inactive, and so unavailable for a mission until
+      :meth:`CrewMember.getInactiveUntil()`.
+
+   
+
+   .. method:: Double getInactiveUntil()
+
+
+      The universal time at which the crew member stops being inactive, in seconds.
+      Returns ``null`` if the crew member is not inactive.
 
    
 
@@ -1116,6 +1133,13 @@ Vessel
    .. method:: void setExperience(float value)
 
       The crew members experience.
+
+   
+
+   .. method:: int getExperienceLevel()
+
+
+      The crew member's experience level, the number of stars, from 0 to 5.
 
    
 

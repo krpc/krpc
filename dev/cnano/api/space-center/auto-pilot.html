@@ -1639,7 +1639,25 @@ when SAS is enabled.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Equivalent to <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Control_SASMode()</span></code></p>
+<p>Equivalent to <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Control_SASMode()</span></code>.
+Throws an exception if set to a mode not in <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_AvailableSASModes" title="krpc_SpaceCenter_AutoPilot_AvailableSASModes"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_AvailableSASModes()</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_AvailableSASModes">
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_AutoPilot_AvailableSASModes</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_set_enum_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t" title="krpc_SpaceCenter_AutoPilot_t"><span class="n"><span class="pre">krpc_SpaceCenter_AutoPilot_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_AvailableSASModes" title="Link to this definition">#</a><br /></dt>
+<dd><p>The SAS modes that <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_SASMode" title="krpc_SpaceCenter_AutoPilot_SASMode"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_SASMode()</span></code></a> can be set to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Equivalent to <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Control_AvailableSASModes()</span></code>. The modes depend on the SAS
+level of the vessel’s pilot or probe core, the navball speed mode, and whether
+there is a target and a maneuver node.</p>
 </div>
 </dd></dl>
 

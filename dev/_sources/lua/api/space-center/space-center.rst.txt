@@ -659,6 +659,15 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 
 
+.. attribute:: kerbals: List
+
+   The Kerbals in the roster.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
 .. staticmethod:: create_kerbal(name: string, job: string, male: boolean)
 
    Creates a Kerbal.

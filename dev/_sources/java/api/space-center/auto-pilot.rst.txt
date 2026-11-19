@@ -44,7 +44,22 @@ AutoPilot
 
       .. note::
 
-         Equivalent to :meth:`Control.getSASMode()`
+         Equivalent to :meth:`Control.getSASMode()`.
+         Throws an exception if set to a mode not in :meth:`AutoPilot.getAvailableSASModes()`.
+
+   .. method:: java.util.Set<SASMode> getAvailableSASModes()
+
+
+      The SAS modes that :meth:`AutoPilot.getSASMode()` can be set to.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Equivalent to :meth:`Control.getAvailableSASModes()`. The modes depend on the SAS
+         level of the vessel's pilot or probe core, the navball speed mode, and whether
+         there is a target and a maneuver node.
 
    .. method:: boolean getEngaged()
 

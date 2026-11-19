@@ -1672,7 +1672,25 @@ the left of the navball that appear when SAS is enabled.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Equivalent to <a class="reference internal" href="auto-pilot.html#krpc.client.services.SpaceCenter.AutoPilot.getSASMode()" title="krpc.client.services.SpaceCenter.AutoPilot.getSASMode()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getSASMode()</span></code></a></p>
+<p>Equivalent to <a class="reference internal" href="auto-pilot.html#krpc.client.services.SpaceCenter.AutoPilot.getSASMode()" title="krpc.client.services.SpaceCenter.AutoPilot.getSASMode()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getSASMode()</span></code></a>.
+Throws an exception if set to a mode not in <a class="reference internal" href="#krpc.client.services.SpaceCenter.Control.getAvailableSASModes()" title="krpc.client.services.SpaceCenter.Control.getAvailableSASModes()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Control.getAvailableSASModes()</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getAvailableSASModes()">
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="java.util.Set"><span class="pre">Set</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.SASMode" title="krpc.client.services.SpaceCenter.SASMode"><span class="pre">SASMode</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getAvailableSASModes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getAvailableSASModes()" title="Link to this definition">#</a></dt>
+<dd><p>The SAS modes that <a class="reference internal" href="#krpc.client.services.SpaceCenter.Control.getSASMode()" title="krpc.client.services.SpaceCenter.Control.getSASMode()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Control.getSASMode()</span></code></a> can be set to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Equivalent to <a class="reference internal" href="auto-pilot.html#krpc.client.services.SpaceCenter.AutoPilot.getAvailableSASModes()" title="krpc.client.services.SpaceCenter.AutoPilot.getAvailableSASModes()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getAvailableSASModes()</span></code></a>. The modes depend on the SAS
+level of the vessel’s pilot or probe core, the navball speed mode, and whether
+there is a target and a maneuver node.</p>
 </div>
 </dd></dl>
 

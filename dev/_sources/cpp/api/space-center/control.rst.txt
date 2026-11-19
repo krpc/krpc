@@ -73,7 +73,21 @@ Control
 
       .. note::
 
-         Equivalent to :func:`AutoPilot::sas_mode`
+         Equivalent to :func:`AutoPilot::sas_mode`.
+         Throws an exception if set to a mode not in :func:`Control::available_sas_modes`.
+
+   .. function:: std::set<SASMode> available_sas_modes()
+
+      The SAS modes that :func:`Control::sas_mode` can be set to.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Equivalent to :func:`AutoPilot::available_sas_modes`. The modes depend on the SAS
+         level of the vessel's pilot or probe core, the navball speed mode, and whether
+         there is a target and a maneuver node.
 
    .. function:: SpeedMode speed_mode()
    .. function:: void set_speed_mode(SpeedMode value)

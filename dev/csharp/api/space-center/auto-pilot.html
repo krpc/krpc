@@ -1623,7 +1623,25 @@ when SAS is enabled.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Equivalent to <a class="reference internal" href="control.html#property-KRPC.Client.Services.SpaceCenter.Control.SASMode" title="property: KRPC.Client.Services.SpaceCenter.Control.SASMode"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Control.SASMode</span></code></a></p>
+<p>Equivalent to <a class="reference internal" href="control.html#property-KRPC.Client.Services.SpaceCenter.Control.SASMode" title="property: KRPC.Client.Services.SpaceCenter.Control.SASMode"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Control.SASMode</span></code></a>.
+Throws an exception if set to a mode not in <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.AvailableSASModes" title="property: KRPC.Client.Services.SpaceCenter.AutoPilot.AvailableSASModes"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">AutoPilot.AvailableSASModes</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.AvailableSASModes">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Collections.Generic.ISet-1" title="type: msdn ~&gt; System.Collections.Generic.ISet"><span class="pre">ISet</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="control.html#enum-KRPC.Client.Services.SpaceCenter.SASMode" title="enum: KRPC.Client.Services.SpaceCenter.SASMode"><span class="pre">SASMode</span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">AvailableSASModes</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.AvailableSASModes" title="Link to this definition">#</a></dt>
+<dd><p>The SAS modes that <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.SASMode" title="property: KRPC.Client.Services.SpaceCenter.AutoPilot.SASMode"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">AutoPilot.SASMode</span></code></a> can be set to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Equivalent to <a class="reference internal" href="control.html#property-KRPC.Client.Services.SpaceCenter.Control.AvailableSASModes" title="property: KRPC.Client.Services.SpaceCenter.Control.AvailableSASModes"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Control.AvailableSASModes</span></code></a>. The modes depend on the SAS
+level of the vessel’s pilot or probe core, the navball speed mode, and whether
+there is a target and a maneuver node.</p>
 </div>
 </dd></dl>
 

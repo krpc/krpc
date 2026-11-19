@@ -565,6 +565,12 @@ Service
 
       :Game Scenes: All
 
+   .. property:: System.Collections.Generic.IList<CrewMember> Kerbals { get; }
+
+      The Kerbals in the roster.
+
+      :Game Scenes: All
+
    .. function:: void CreateKerbal(string name, string job, bool male)
 
       Creates a Kerbal.

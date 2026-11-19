@@ -3463,7 +3463,8 @@ See <a class="reference internal" href="#SpaceCenter.Vessel.getSituation" title=
 <dl class="js class">
 <dt class="sig sig-object js" id="SpaceCenter.CrewMember">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="n"><span class="pre">SpaceCenter</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">CrewMember</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.CrewMember" title="Link to this definition">#</a></dt>
-<dd><p>Represents crew in a vessel. Can be obtained using <a class="reference internal" href="#SpaceCenter.Vessel.getCrew" title="SpaceCenter.Vessel.getCrew"><code class="xref js js-meth docutils literal notranslate"><span class="pre">SpaceCenter.Vessel.getCrew()</span></code></a>.</p>
+<dd><p>A Kerbal in the crew roster. Can be obtained using <a class="reference internal" href="#SpaceCenter.Vessel.getCrew" title="SpaceCenter.Vessel.getCrew"><code class="xref js js-meth docutils literal notranslate"><span class="pre">SpaceCenter.Vessel.getCrew()</span></code></a>,
+<a class="reference internal" href="space-center.html#SpaceCenter.getKerbals" title="SpaceCenter.getKerbals"><code class="xref js js-func docutils literal notranslate"><span class="pre">SpaceCenter.getKerbals()</span></code></a> or <a class="reference internal" href="space-center.html#SpaceCenter.getKerbal" title="SpaceCenter.getKerbal"><code class="xref js js-func docutils literal notranslate"><span class="pre">SpaceCenter.getKerbal()</span></code></a>.</p>
 <dl class="js method">
 <dt class="sig sig-object js" id="SpaceCenter.CrewMember.getName">
 <span class="sig-prename descclassname"><span class="n"><span class="pre">CrewMember</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getName</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.CrewMember.getName" title="Link to this definition">#</a></dt>
@@ -3497,13 +3498,43 @@ See <a class="reference internal" href="#SpaceCenter.Vessel.getSituation" title=
 <dl class="js method">
 <dt class="sig sig-object js" id="SpaceCenter.CrewMember.getOnMission">
 <span class="sig-prename descclassname"><span class="n"><span class="pre">CrewMember</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getOnMission</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.CrewMember.getOnMission" title="Link to this definition">#</a></dt>
-<dd><p>Whether the crew member is on a mission.</p>
+<dd><p>Whether the crew member is on a mission, assigned to a vessel.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Property<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">boolean</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="SpaceCenter.CrewMember.getInactive">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">CrewMember</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getInactive</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.CrewMember.getInactive" title="Link to this definition">#</a></dt>
+<dd><p>Whether the crew member is inactive, and so unavailable for a mission until
+<a class="reference internal" href="#SpaceCenter.CrewMember.getInactiveUntil" title="SpaceCenter.CrewMember.getInactiveUntil"><code class="xref js js-meth docutils literal notranslate"><span class="pre">SpaceCenter.CrewMember.getInactiveUntil()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">boolean</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="SpaceCenter.CrewMember.getInactiveUntil">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">CrewMember</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getInactiveUntil</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.CrewMember.getInactiveUntil" title="Link to this definition">#</a></dt>
+<dd><p>The universal time at which the crew member stops being inactive, in seconds.
+Returns <code class="docutils literal notranslate"><span class="pre">null</span></code> if the crew member is not inactive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code> or <code class="docutils literal notranslate"><span class="pre">null</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -3549,6 +3580,20 @@ See <a class="reference internal" href="#SpaceCenter.Vessel.getSituation" title=
 <dl class="field-list simple">
 <dt class="field-odd">Property<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="SpaceCenter.CrewMember.getExperienceLevel">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">CrewMember</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getExperienceLevel</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.CrewMember.getExperienceLevel" title="Link to this definition">#</a></dt>
+<dd><p>The crew member’s experience level, the number of stars, from 0 to 5.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>

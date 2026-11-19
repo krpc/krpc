@@ -210,6 +210,15 @@ SpaceCenter service
 * Fix the auto-pilot turning away from its target when ``AutoPilot.ReferenceFrame`` changes while ``AutoPilot.TargetSmoothingTime`` is set (:issue:`1373`)
 * Fix ``Load``, ``Quickload``, ``RevertToLaunch`` and the launch RPCs sometimes leaving the game on the loading screen (:issue:`1374`)
 * Add the scenario modules of newly installed mods to a save loaded with ``Load`` or ``Quickload`` (:issue:`1374`)
+* Crew
+
+  * Add ``SpaceCenter.Kerbals``, every Kerbal in the roster (:issue:`1383`)
+  * Add ``CrewMember.Inactive``, ``InactiveUntil`` and ``ExperienceLevel`` (:issue:`1383`)
+  * Fix ``CrewMember.OnMission`` being true for a Kerbal who is not assigned to a vessel (:issue:`1383`)
+  * Fix ``SpaceCenter.GetKerbal`` not finding applicants and tourists (:issue:`1383`)
+  * Fix setting ``CrewMember.Experience`` leaving the experience level unchanged (:issue:`1383`)
+
+* Add ``AvailableSASModes`` to ``AutoPilot`` and ``Control``, the SAS modes that can be set (:issue:`1383`)
 
 
 DockingCamera service

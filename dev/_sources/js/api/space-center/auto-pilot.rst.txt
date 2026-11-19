@@ -47,7 +47,23 @@ AutoPilot
 
       .. note::
 
-         Equivalent to :meth:`SpaceCenter.Control.getSASMode`
+         Equivalent to :meth:`SpaceCenter.Control.getSASMode`.
+         Throws an exception if set to a mode not in :meth:`SpaceCenter.AutoPilot.getAvailableSASModes`.
+
+   .. method:: getAvailableSASModes()
+
+      The SAS modes that :meth:`SpaceCenter.AutoPilot.getSASMode` can be set to.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Set`` of :class:`SpaceCenter.SASMode`
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Equivalent to :meth:`SpaceCenter.Control.getAvailableSASModes`. The modes depend on the SAS
+         level of the vessel's pilot or probe core, the navball speed mode, and whether
+         there is a target and a maneuver node.
 
    .. method:: getEngaged()
                setEngaged(value)

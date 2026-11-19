@@ -69,7 +69,20 @@ Control
 
       .. note::
 
-         Equivalent to :attr:`SpaceCenter.AutoPilot.sas_mode`
+         Equivalent to :attr:`SpaceCenter.AutoPilot.sas_mode`.
+         Throws an exception if set to a mode not in :attr:`SpaceCenter.Control.available_sas_modes`.
+
+   .. attribute:: available_sas_modes: Set
+
+      The SAS modes that :attr:`SpaceCenter.Control.sas_mode` can be set to.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         Equivalent to :attr:`SpaceCenter.AutoPilot.available_sas_modes`. The modes depend on the SAS
+         level of the vessel's pilot or probe core, the navball speed mode, and whether
+         there is a target and a maneuver node.
 
    .. attribute:: speed_mode: SpaceCenter.SpeedMode
 

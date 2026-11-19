@@ -2987,7 +2987,8 @@ See <a class="reference internal" href="#lua-SpaceCenter.Vessel.situation" title
 <dl class="lua class">
 <dt class="sig sig-object lua" id="lua-SpaceCenter.CrewMember">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">SpaceCenter.</span></span><span class="sig-name descname"><span class="pre">CrewMember</span></span><a class="headerlink" href="#lua-SpaceCenter.CrewMember" title="Link to this definition">#</a></dt>
-<dd><p>Represents crew in a vessel. Can be obtained using <a class="reference internal" href="#lua-SpaceCenter.Vessel.crew" title="SpaceCenter.Vessel.crew"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Vessel.crew</span></code></a>.</p>
+<dd><p>A Kerbal in the crew roster. Can be obtained using <a class="reference internal" href="#lua-SpaceCenter.Vessel.crew" title="SpaceCenter.Vessel.crew"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Vessel.crew</span></code></a>,
+<a class="reference internal" href="space-center.html#lua-SpaceCenter.kerbals" title="SpaceCenter.kerbals"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.kerbals</span></code></a> or <a class="reference internal" href="space-center.html#lua-SpaceCenter.get_kerbal" title="SpaceCenter.get_kerbal"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.get_kerbal()</span></code></a>.</p>
 <dl class="lua attribute">
 <dt class="sig sig-object lua" id="lua-SpaceCenter.CrewMember.name">
 <span class="sig-name descname"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><a class="headerlink" href="#lua-SpaceCenter.CrewMember.name" title="Link to this definition">#</a></dt>
@@ -3013,7 +3014,31 @@ See <a class="reference internal" href="#lua-SpaceCenter.Vessel.situation" title
 <dl class="lua attribute">
 <dt class="sig sig-object lua" id="lua-SpaceCenter.CrewMember.on_mission">
 <span class="sig-name descname"><span class="pre">on_mission</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.CrewMember.on_mission" title="Link to this definition">#</a></dt>
-<dd><p>Whether the crew member is on a mission.</p>
+<dd><p>Whether the crew member is on a mission, assigned to a vessel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CrewMember.inactive">
+<span class="sig-name descname"><span class="pre">inactive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-SpaceCenter.CrewMember.inactive" title="Link to this definition">#</a></dt>
+<dd><p>Whether the crew member is inactive, and so unavailable for a mission until
+<a class="reference internal" href="#lua-SpaceCenter.CrewMember.inactive_until" title="SpaceCenter.CrewMember.inactive_until"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.CrewMember.inactive_until</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CrewMember.inactive_until">
+<span class="sig-name descname"><span class="pre">inactive_until</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">nil</span></code><a class="headerlink" href="#lua-SpaceCenter.CrewMember.inactive_until" title="Link to this definition">#</a></dt>
+<dd><p>The universal time at which the crew member stops being inactive, in seconds.
+Returns <code class="docutils literal notranslate"><span class="pre">nil</span></code> if the crew member is not inactive.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
@@ -3050,6 +3075,17 @@ See <a class="reference internal" href="#lua-SpaceCenter.Vessel.situation" title
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.CrewMember.experience_level">
+<span class="sig-name descname"><span class="pre">experience_level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-SpaceCenter.CrewMember.experience_level" title="Link to this definition">#</a></dt>
+<dd><p>The crew member’s experience level, the number of stars, from 0 to 5.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 </dl>
 </dd></dl>

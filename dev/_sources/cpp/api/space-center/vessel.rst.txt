@@ -1050,7 +1050,8 @@ Vessel
 
 .. class:: CrewMember
 
-   Represents crew in a vessel. Can be obtained using :func:`Vessel::crew`.
+   A Kerbal in the crew roster. Can be obtained using :func:`Vessel::crew`,
+   :func:`kerbals` or :func:`get_kerbal`.
 
    .. function:: std::string name()
    .. function:: void set_name(std::string value)
@@ -1067,7 +1068,21 @@ Vessel
 
    .. function:: bool on_mission()
 
-      Whether the crew member is on a mission.
+      Whether the crew member is on a mission, assigned to a vessel.
+
+   
+
+   .. function:: bool inactive()
+
+      Whether the crew member is inactive, and so unavailable for a mission until
+      :func:`CrewMember::inactive_until`.
+
+   
+
+   .. function:: std::optional<double> inactive_until()
+
+      The universal time at which the crew member stops being inactive, in seconds.
+      Returns ``NULL`` if the crew member is not inactive.
 
    
 
@@ -1089,6 +1104,12 @@ Vessel
    .. function:: void set_experience(float value)
 
       The crew members experience.
+
+   
+
+   .. function:: int32_t experience_level()
+
+      The crew member's experience level, the number of stars, from 0 to 5.
 
    
 

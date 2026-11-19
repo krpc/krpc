@@ -1162,7 +1162,8 @@ Vessel
 
 .. class:: CrewMember
 
-   Represents crew in a vessel. Can be obtained using :meth:`SpaceCenter.Vessel.getCrew`.
+   A Kerbal in the crew roster. Can be obtained using :meth:`SpaceCenter.Vessel.getCrew`,
+   :func:`SpaceCenter.getKerbals` or :func:`SpaceCenter.getKerbal`.
 
    .. method:: getName()
                setName(value)
@@ -1183,10 +1184,28 @@ Vessel
 
    .. method:: getOnMission()
 
-      Whether the crew member is on a mission.
+      Whether the crew member is on a mission, assigned to a vessel.
 
       :Property: Read-only, cannot be set
       :rtype: ``boolean``
+   
+
+   .. method:: getInactive()
+
+      Whether the crew member is inactive, and so unavailable for a mission until
+      :meth:`SpaceCenter.CrewMember.getInactiveUntil`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+   
+
+   .. method:: getInactiveUntil()
+
+      The universal time at which the crew member stops being inactive, in seconds.
+      Returns ``null`` if the crew member is not inactive.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number`` or ``null``
    
 
    .. method:: getCourage()
@@ -1213,6 +1232,14 @@ Vessel
       The crew members experience.
 
       :Property: Can be read or written
+      :rtype: ``number``
+   
+
+   .. method:: getExperienceLevel()
+
+      The crew member's experience level, the number of stars, from 0 to 5.
+
+      :Property: Read-only, cannot be set
       :rtype: ``number``
    
 

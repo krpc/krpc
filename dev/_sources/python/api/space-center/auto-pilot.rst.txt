@@ -44,7 +44,23 @@ AutoPilot
 
       .. note::
 
-         Equivalent to :attr:`Control.sas_mode`
+         Equivalent to :attr:`Control.sas_mode`.
+         Throws an exception if set to a mode not in :attr:`AutoPilot.available_sas_modes`.
+
+   .. attribute:: available_sas_modes
+
+      The SAS modes that :attr:`AutoPilot.sas_mode` can be set to.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: set(:class:`SASMode`)
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Equivalent to :attr:`Control.available_sas_modes`. The modes depend on the SAS
+         level of the vessel's pilot or probe core, the navball speed mode, and whether
+         there is a target and a maneuver node.
 
    .. attribute:: engaged
 

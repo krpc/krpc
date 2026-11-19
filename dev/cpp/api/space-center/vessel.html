@@ -3012,7 +3012,8 @@ See <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vess
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter10CrewMemberE">
 <span id="_CPPv3N4krpc8services11SpaceCenter10CrewMemberE"></span><span id="_CPPv2N4krpc8services11SpaceCenter10CrewMemberE"></span><span id="krpc::services::SpaceCenter::CrewMember"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CrewMember</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter10CrewMemberE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Represents crew in a vessel. Can be obtained using <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel4crewEv" title="krpc::services::SpaceCenter::Vessel::crew"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::crew()</span></code></a>.</p>
+<dd><p>A Kerbal in the crew roster. Can be obtained using <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel4crewEv" title="krpc::services::SpaceCenter::Vessel::crew"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::crew()</span></code></a>,
+<a class="reference internal" href="space-center.html#_CPPv4N4krpc8services11SpaceCenter7kerbalsEv" title="krpc::services::SpaceCenter::kerbals"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">kerbals()</span></code></a> or <a class="reference internal" href="space-center.html#_CPPv4N4krpc8services11SpaceCenter10get_kerbalENSt6stringE" title="krpc::services::SpaceCenter::get_kerbal"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">get_kerbal()</span></code></a>.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter10CrewMember4nameEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter10CrewMember4nameEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter10CrewMember4nameEv"></span><span id="krpc::services::SpaceCenter::CrewMember::name"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter10CrewMember4nameEv" title="Link to this definition">#</a><br /></dt>
@@ -3033,7 +3034,21 @@ See <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vess
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter10CrewMember10on_missionEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter10CrewMember10on_missionEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter10CrewMember10on_missionEv"></span><span id="krpc::services::SpaceCenter::CrewMember::on_mission"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">on_mission</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter10CrewMember10on_missionEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>Whether the crew member is on a mission.</p>
+<dd><p>Whether the crew member is on a mission, assigned to a vessel.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter10CrewMember8inactiveEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter10CrewMember8inactiveEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter10CrewMember8inactiveEv"></span><span id="krpc::services::SpaceCenter::CrewMember::inactive"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">inactive</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter10CrewMember8inactiveEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the crew member is inactive, and so unavailable for a mission until
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter10CrewMember14inactive_untilEv" title="krpc::services::SpaceCenter::CrewMember::inactive_until"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">CrewMember::inactive_until()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter10CrewMember14inactive_untilEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter10CrewMember14inactive_untilEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter10CrewMember14inactive_untilEv"></span><span id="krpc::services::SpaceCenter::CrewMember::inactive_until"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">optional</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">inactive_until</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter10CrewMember14inactive_untilEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The universal time at which the crew member stops being inactive, in seconds.
+Returns <code class="docutils literal notranslate"><span class="pre">NULL</span></code> if the crew member is not inactive.</p>
 </dd></dl>
 
 <dl class="cpp function">
@@ -3067,6 +3082,12 @@ See <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vess
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter10CrewMember14set_experienceEf">
 <span id="_CPPv3N4krpc8services11SpaceCenter10CrewMember14set_experienceEf"></span><span id="_CPPv2N4krpc8services11SpaceCenter10CrewMember14set_experienceEf"></span><span id="krpc::services::SpaceCenter::CrewMember::set_experience__float"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_experience</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter10CrewMember14set_experienceEf" title="Link to this definition">#</a><br /></dt>
 <dd><p>The crew members experience.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter10CrewMember16experience_levelEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter10CrewMember16experience_levelEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter10CrewMember16experience_levelEv"></span><span id="krpc::services::SpaceCenter::CrewMember::experience_level"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">experience_level</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter10CrewMember16experience_levelEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The crew member’s experience level, the number of stars, from 0 to 5.</p>
 </dd></dl>
 
 <dl class="cpp function">

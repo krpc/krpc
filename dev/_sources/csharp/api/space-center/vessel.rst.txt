@@ -1053,7 +1053,8 @@ Vessel
 
 .. class:: CrewMember
 
-   Represents crew in a vessel. Can be obtained using :prop:`Vessel.Crew`.
+   A Kerbal in the crew roster. Can be obtained using :prop:`Vessel.Crew`,
+   :prop:`SpaceCenter.Kerbals <SpaceCenter.SpaceCenter.Kerbals>` or :meth:`SpaceCenter.GetKerbal <SpaceCenter.SpaceCenter.GetKerbal>`.
 
    .. property:: string Name { get; set; }
 
@@ -1069,7 +1070,21 @@ Vessel
 
    .. property:: bool OnMission { get; }
 
-      Whether the crew member is on a mission.
+      Whether the crew member is on a mission, assigned to a vessel.
+
+      :Game Scenes: All
+
+   .. property:: bool Inactive { get; }
+
+      Whether the crew member is inactive, and so unavailable for a mission until
+      :prop:`CrewMember.InactiveUntil`.
+
+      :Game Scenes: All
+
+   .. property:: double? InactiveUntil { get; }
+
+      The universal time at which the crew member stops being inactive, in seconds.
+      Returns ``null`` if the crew member is not inactive.
 
       :Game Scenes: All
 
@@ -1088,6 +1103,12 @@ Vessel
    .. property:: float Experience { get; set; }
 
       The crew members experience.
+
+      :Game Scenes: All
+
+   .. property:: int ExperienceLevel { get; }
+
+      The crew member's experience level, the number of stars, from 0 to 5.
 
       :Game Scenes: All
 

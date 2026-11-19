@@ -1633,7 +1633,25 @@ when SAS is enabled.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Equivalent to <a class="reference internal" href="control.html#_CPPv4N4krpc8services11SpaceCenter7Control8sas_modeEv" title="krpc::services::SpaceCenter::Control::sas_mode"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Control::sas_mode()</span></code></a></p>
+<p>Equivalent to <a class="reference internal" href="control.html#_CPPv4N4krpc8services11SpaceCenter7Control8sas_modeEv" title="krpc::services::SpaceCenter::Control::sas_mode"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Control::sas_mode()</span></code></a>.
+Throws an exception if set to a mode not in <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter9AutoPilot19available_sas_modesEv" title="krpc::services::SpaceCenter::AutoPilot::available_sas_modes"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">AutoPilot::available_sas_modes()</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter9AutoPilot19available_sas_modesEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter9AutoPilot19available_sas_modesEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter9AutoPilot19available_sas_modesEv"></span><span id="krpc::services::SpaceCenter::AutoPilot::available_sas_modes"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">set</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="control.html#_CPPv4N4krpc8services11SpaceCenter7SASModeE" title="krpc::services::SpaceCenter::SASMode"><span class="n"><span class="pre">SASMode</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">available_sas_modes</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter9AutoPilot19available_sas_modesEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The SAS modes that <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter9AutoPilot8sas_modeEv" title="krpc::services::SpaceCenter::AutoPilot::sas_mode"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">AutoPilot::sas_mode()</span></code></a> can be set to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Equivalent to <a class="reference internal" href="control.html#_CPPv4N4krpc8services11SpaceCenter7Control19available_sas_modesEv" title="krpc::services::SpaceCenter::Control::available_sas_modes"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Control::available_sas_modes()</span></code></a>. The modes depend on the SAS
+level of the vessel’s pilot or probe core, the navball speed mode, and whether
+there is a target and a maneuver node.</p>
 </div>
 </dd></dl>
 

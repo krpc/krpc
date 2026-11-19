@@ -829,6 +829,17 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 
 
+.. function:: getKerbals()
+
+   The Kerbals in the roster.
+
+   :Property: Read-only, cannot be set
+   :rtype: ``Array`` of :class:`SpaceCenter.CrewMember`
+   
+
+
+
+
 .. function:: createKerbal(name, job, male)
 
    Creates a Kerbal.

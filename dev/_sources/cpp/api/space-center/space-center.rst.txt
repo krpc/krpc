@@ -572,6 +572,12 @@ Service
 
    
 
+   .. function:: std::vector<CrewMember> kerbals()
+
+      The Kerbals in the roster.
+
+   
+
    .. function:: void create_kerbal(std::string name, std::string job, bool male)
 
       Creates a Kerbal.

@@ -1623,7 +1623,25 @@ when SAS is enabled.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Equivalent to <a class="reference internal" href="control.html#lua-SpaceCenter.Control.sas_mode" title="SpaceCenter.Control.sas_mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Control.sas_mode</span></code></a></p>
+<p>Equivalent to <a class="reference internal" href="control.html#lua-SpaceCenter.Control.sas_mode" title="SpaceCenter.Control.sas_mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Control.sas_mode</span></code></a>.
+Throws an exception if set to a mode not in <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.available_sas_modes" title="SpaceCenter.AutoPilot.available_sas_modes"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.available_sas_modes</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-SpaceCenter.AutoPilot.available_sas_modes">
+<span class="sig-name descname"><span class="pre">available_sas_modes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Set</span></code><a class="headerlink" href="#lua-SpaceCenter.AutoPilot.available_sas_modes" title="Link to this definition">#</a></dt>
+<dd><p>The SAS modes that <a class="reference internal" href="#lua-SpaceCenter.AutoPilot.sas_mode" title="SpaceCenter.AutoPilot.sas_mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.sas_mode</span></code></a> can be set to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Equivalent to <a class="reference internal" href="control.html#lua-SpaceCenter.Control.available_sas_modes" title="SpaceCenter.Control.available_sas_modes"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Control.available_sas_modes</span></code></a>. The modes depend on the SAS
+level of the vessel’s pilot or probe core, the navball speed mode, and whether
+there is a target and a maneuver node.</p>
 </div>
 </dd></dl>
 

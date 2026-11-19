@@ -1144,7 +1144,8 @@ Vessel
 
 .. class:: CrewMember
 
-   Represents crew in a vessel. Can be obtained using :attr:`Vessel.crew`.
+   A Kerbal in the crew roster. Can be obtained using :attr:`Vessel.crew`,
+   :attr:`kerbals` or :meth:`get_kerbal`.
 
    .. attribute:: name
 
@@ -1164,10 +1165,28 @@ Vessel
 
    .. attribute:: on_mission
 
-      Whether the crew member is on a mission.
+      Whether the crew member is on a mission, assigned to a vessel.
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
+   
+
+   .. attribute:: inactive
+
+      Whether the crew member is inactive, and so unavailable for a mission until
+      :attr:`CrewMember.inactive_until`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: inactive_until
+
+      The universal time at which the crew member stops being inactive, in seconds.
+      Returns ``None`` if the crew member is not inactive.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float or None
    
 
    .. attribute:: courage
@@ -1192,6 +1211,14 @@ Vessel
 
       :Attribute: Can be read or written
       :rtype: float
+   
+
+   .. attribute:: experience_level
+
+      The crew member's experience level, the number of stars, from 0 to 5.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: int
    
 
    .. attribute:: badass

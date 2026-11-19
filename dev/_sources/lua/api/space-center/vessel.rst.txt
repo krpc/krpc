@@ -971,7 +971,8 @@ Vessel
 
 .. class:: CrewMember
 
-   Represents crew in a vessel. Can be obtained using :attr:`SpaceCenter.Vessel.crew`.
+   A Kerbal in the crew roster. Can be obtained using :attr:`SpaceCenter.Vessel.crew`,
+   :attr:`SpaceCenter.kerbals` or :meth:`SpaceCenter.get_kerbal`.
 
    .. attribute:: name: string
 
@@ -987,7 +988,21 @@ Vessel
 
    .. attribute:: on_mission: boolean
 
-      Whether the crew member is on a mission.
+      Whether the crew member is on a mission, assigned to a vessel.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: inactive: boolean
+
+      Whether the crew member is inactive, and so unavailable for a mission until
+      :attr:`SpaceCenter.CrewMember.inactive_until`.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: inactive_until: number | nil
+
+      The universal time at which the crew member stops being inactive, in seconds.
+      Returns ``nil`` if the crew member is not inactive.
 
       :Attribute: Read-only, cannot be set
 
@@ -1008,6 +1023,12 @@ Vessel
       The crew members experience.
 
       :Attribute: Can be read or written
+
+   .. attribute:: experience_level: number
+
+      The crew member's experience level, the number of stars, from 0 to 5.
+
+      :Attribute: Read-only, cannot be set
 
    .. attribute:: badass: boolean
 

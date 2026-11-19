@@ -71,7 +71,21 @@ Control
 
       .. note::
 
-         Equivalent to :prop:`AutoPilot.SASMode`
+         Equivalent to :prop:`AutoPilot.SASMode`.
+         Throws an exception if set to a mode not in :prop:`Control.AvailableSASModes`.
+
+   .. property:: System.Collections.Generic.ISet<SASMode> AvailableSASModes { get; }
+
+      The SAS modes that :prop:`Control.SASMode` can be set to.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Equivalent to :prop:`AutoPilot.AvailableSASModes`. The modes depend on the SAS
+         level of the vessel's pilot or probe core, the navball speed mode, and whether
+         there is a target and a maneuver node.
 
    .. property:: SpeedMode SpeedMode { get; set; }
 

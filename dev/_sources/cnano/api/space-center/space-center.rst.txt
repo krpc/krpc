@@ -753,6 +753,15 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 
 
+.. function:: krpc_error_t krpc_SpaceCenter_Kerbals(krpc_connection_t connection, krpc_list_object_t * returnValue)
+
+   The Kerbals in the roster.
+
+   
+
+
+
+
 .. function:: krpc_error_t krpc_SpaceCenter_CreateKerbal(krpc_connection_t connection, const char * name, const char * job, bool male)
 
    Creates a Kerbal.

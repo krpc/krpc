@@ -555,6 +555,13 @@ Service
 
    
 
+   .. method:: java.util.List<CrewMember> getKerbals()
+
+
+      The Kerbals in the roster.
+
+   
+
    .. method:: void createKerbal(String name, String job, boolean male)
 
       Creates a Kerbal.
