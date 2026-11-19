@@ -126,8 +126,10 @@ check back on later. It too needs step 10's release published, not just drafted.
 not landed within the wait (inflation can lag by a few hours), re-run the step later to re-check.
 
 The npm step publishes the package as `@krpc-org/krpc`, so the release account must be a member of
-the `@krpc-org` organization on npm. A version on npm cannot be published again, even after it is
-unpublished.
+the `@krpc-org` organization on npm. It needs npm 11.15.0 or later, which preflight checks. The
+step stages the package with the token, then approves it with `npm stage approve`, which asks for
+your 2FA. A re-run approves a version staged earlier. A version on npm cannot be published
+again, even after it is unpublished.
 
 SpaceDock has no API keys, so its step logs in with the account's username and password. The email
 to followers cannot be recalled, and a version can only be deleted by hand on the site. The step
