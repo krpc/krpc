@@ -26,7 +26,6 @@ namespace KRPC.UI
         public event EventHandler<ServerEventArgs> OnStartServerPressed;
         public event EventHandler<ServerEventArgs> OnStopServerPressed;
 
-        readonly HashSet<Guid> expandServers = new HashSet<Guid> ();
         readonly IDictionary<Guid, EditServer> editServers = new Dictionary<Guid, EditServer> ();
         readonly IDictionary<IClient, long> lastClientActivity = new Dictionary<IClient, long> ();
         const long lastActivityMillisecondsInterval = 100;
@@ -160,9 +159,6 @@ namespace KRPC.UI
             Errors = new List<string> ();
             ShowRateSettings ();
             tickHoldTimeout = config.Configuration.TickHoldTimeout.ToString (CultureInfo.CurrentCulture);
-
-            if (core.Servers.Count == 1)
-                expandServers.Add (core.Servers [0].Id);
         }
 
         void OnDestroy()
@@ -258,7 +254,8 @@ namespace KRPC.UI
         {
             var running = server.Running;
             var editingServer = editServers.ContainsKey (server.Id);
-            var expanded = expandServers.Contains (server.Id);
+            var expandedServers = config.Configuration.ExpandedServers;
+            var expanded = expandedServers.Contains (server.Id);
 
             GUILayout.BeginHorizontal ();
             var icons = Icons.Instance;
@@ -283,9 +280,10 @@ namespace KRPC.UI
             if (!editingServer && Event.current.type == EventType.MouseDown &&
                 GUILayoutUtility.GetLastRect ().Contains (Event.current.mousePosition)) {
                 if (expanded)
-                    expandServers.Remove (server.Id);
+                    expandedServers.Remove (server.Id);
                 else
-                    expandServers.Add (server.Id);
+                    expandedServers.Add (server.Id);
+                config.Save ();
                 expanded = !expanded;
                 Resized = true;
                 Event.current.Use ();

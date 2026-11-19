@@ -15,6 +15,17 @@ namespace KRPC.Test
         }
 
         [Test]
+        public void RemovingAServerForgetsItIsExpanded ()
+        {
+            var config = new Configuration ();
+            var server = config.NewServer (Protocol.ProtocolBuffersOverTCP);
+            config.Servers.Add (server);
+            config.ExpandedServers.Add (server.Id);
+            config.RemoveServer (server.Id);
+            Assert.IsEmpty (config.ExpandedServers);
+        }
+
+        [Test]
         public void DefaultsAreTheBalancedPreset ()
         {
             var config = new Configuration ();

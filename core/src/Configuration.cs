@@ -38,6 +38,7 @@ namespace KRPC
             MainWindowPosition = new Tuple<float,float,float,float> (0, 0, 0, 0);
             InfoWindowVisible = false;
             InfoWindowPosition = new Tuple<float,float,float,float> (0, 0, 0, 0);
+            ExpandedServers = new HashSet<Guid> ();
             HiddenServiceProblems = string.Empty;
             AutoStartServers = true;
             AutoAcceptConnections = true;
@@ -242,6 +243,7 @@ namespace KRPC
             for (var i = 0; i < servers.Count; i++) {
                 if (servers [i].Id == id) {
                     servers.RemoveAt (i);
+                    ExpandedServers.Remove (id);
                     return;
                 }
             }
@@ -267,6 +269,11 @@ namespace KRPC
         /// Screen position of the info window
         /// </summary>
         public Tuple<float,float,float,float> InfoWindowPosition { get; set; }
+
+        /// <summary>
+        /// The identifiers of the servers expanded in the main server window
+        /// </summary>
+        public ISet<Guid> ExpandedServers { get; private set; }
 
         /// <summary>
         /// The digest of the service problems the player chose not to be shown again, or an

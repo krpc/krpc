@@ -73,6 +73,7 @@ namespace KRPC
         [Persistent] RectStorage mainWindowPosition = new RectStorage ();
         [Persistent] bool infoWindowVisible;
         [Persistent] RectStorage infoWindowPosition = new RectStorage ();
+        [Persistent] string expandedServers = string.Empty;
         [Persistent] string hiddenServiceProblems = string.Empty;
         [Persistent] bool autoStartServers;
         [Persistent] bool autoAcceptConnections;
@@ -113,6 +114,7 @@ namespace KRPC
             mainWindowPosition = RectStorage.FromRect (Configuration.MainWindowPosition.ToRect ());
             infoWindowVisible = Configuration.InfoWindowVisible;
             infoWindowPosition = RectStorage.FromRect (Configuration.InfoWindowPosition.ToRect ());
+            expandedServers = string.Join (",", Configuration.ExpandedServers.Select (x => x.ToString ()).ToArray ());
             hiddenServiceProblems = Configuration.HiddenServiceProblems;
             autoStartServers = Configuration.AutoStartServers;
             autoAcceptConnections = Configuration.AutoAcceptConnections;
@@ -125,7 +127,6 @@ namespace KRPC
             maxTimePerFrame = Configuration.MaxTimePerFrame;
             maxCallWait = Configuration.MaxCallWait;
             tickHoldTimeout = Configuration.TickHoldTimeout;
-
         }
 
         protected override void AfterLoad ()
@@ -140,6 +141,13 @@ namespace KRPC
             Configuration.MainWindowPosition = mainWindowPosition.AsRect ().ToTuple ();
             Configuration.InfoWindowVisible = infoWindowVisible;
             Configuration.InfoWindowPosition = infoWindowPosition.AsRect ().ToTuple ();
+            Configuration.ExpandedServers.Clear ();
+            // Ignore an identifier that does not parse, or names no server
+            foreach (var id in (expandedServers ?? string.Empty).Split (',')) {
+                Guid guid;
+                if (Guid.TryParse (id.Trim (), out guid) && Configuration.Servers.Any (x => x.Id == guid))
+                    Configuration.ExpandedServers.Add (guid);
+            }
             Configuration.HiddenServiceProblems = hiddenServiceProblems ?? string.Empty;
             Configuration.AutoStartServers = autoStartServers;
             Configuration.AutoAcceptConnections = autoAcceptConnections;
