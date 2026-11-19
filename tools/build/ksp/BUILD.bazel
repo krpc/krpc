@@ -74,11 +74,6 @@ import_dll(
 )
 
 import_dll(
-    name = "KRPC.IO.Ports",
-    dll = "@csharp_krpc_io_ports//file",
-)
-
-import_dll(
     name = "Google.Protobuf",
     dll = "@csharp_protobuf_unity//:lib/net45/Google.Protobuf.dll",
 )
@@ -90,10 +85,4 @@ copy_file(
     name = "Google.Protobuf-file",
     src = "@csharp_protobuf_unity//:lib/net45/Google.Protobuf.dll",
     out = "Google.Protobuf.dll",
-)
-
-copy_file(
-    name = "KRPC.IO.Ports-file",
-    src = "@csharp_krpc_io_ports//file",
-    out = "KRPC.IO.Ports.dll",
 )

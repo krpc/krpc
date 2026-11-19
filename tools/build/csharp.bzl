@@ -9,7 +9,7 @@ load(
 
 def _with_analyzers(kwargs):
     kwargs["deps"] = kwargs.get("deps", []) + ["@paket.main//microsoft.codeanalysis.netanalyzers"]
-    kwargs["analyzer_configs"] = ["//tools/build/dotnet:analyzers.globalconfig"]
+    kwargs["analyzer_configs"] = ["//tools/build/dotnet:analyzers.globalconfig"] + kwargs.get("analyzer_configs", [])
     return kwargs
 
 def csharp_library(**kwargs):

@@ -1757,7 +1757,6 @@ GAME
     .DS_Store = False
     Google.Protobuf v3.5.1.0 / v3.5.1 = False
     KRPC.Drawing v0.4.5.0 = False
-    KRPC.IO.Ports v0.0.0.0 = True
     KRPC.InfernalRobotics v0.4.5.0 = False
     KRPC.KerbalAlarmClock v0.4.5.0 = False
     KRPC.RemoteTech v0.4.5.0 = False

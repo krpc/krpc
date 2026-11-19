@@ -31,9 +31,6 @@
     <Reference Include="Google.Protobuf">
       <HintPath>$(bazel-bin)\tools\build\ksp\Google.Protobuf.dll</HintPath>
     </Reference>
-    <Reference Include="KRPC.IO.Ports">
-      <HintPath>$(bazel-bin)\tools\build\ksp\KRPC.IO.Ports.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(bazel-bin)\service\KerbalEngineerRedux\AssemblyInfo.cs">

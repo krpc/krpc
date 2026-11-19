@@ -1171,7 +1171,6 @@ GAME
     ModuleManager v3.0.7.0 = False
     Google.Protobuf v3.9.1.0 / v3.9.1 = True
     KRPC.Drawing v0.4.8.0 = False
-    KRPC.IO.Ports v0.0.0.0 = True
     KRPC.InfernalRobotics v0.4.8.0 = False
     KRPC.KerbalAlarmClock v0.4.8.0 = False
     KRPC.RemoteTech v0.4.8.0 = False

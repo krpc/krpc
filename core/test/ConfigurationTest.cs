@@ -1,5 +1,13 @@
+using System;
+using System.Collections.Generic;
 using KRPC.Server;
+using KRPC.Server.SerialIO;
 using NUnit.Framework;
+#if NET
+using SerialPorts = System.IO.Ports;
+#else
+using SerialPorts = KRPC.IO.Ports;
+#endif
 
 namespace KRPC.Test
 {
@@ -100,6 +108,47 @@ namespace KRPC.Test
             var config = new Configuration.Server (Protocol.ProtocolBuffersOverWebsockets);
             config.Settings.Remove ("ws_port");
             Assert.AreEqual ("ws://127.0.0.1:50001", config.Create ().Address);
+        }
+
+        static ByteServer SerialServer (string flowControl)
+        {
+            var settings = new Dictionary<string, string> { { "serialio_port", "COM1" } };
+            if (flowControl != null)
+                settings ["serialio_flow_control"] = flowControl;
+            var config = new Configuration.Server {
+                Id = Guid.NewGuid (),
+                Name = "Serial",
+                Protocol = Protocol.ProtocolBuffersOverSerialIO,
+                Settings = settings
+            };
+            var server = config.Create ();
+            return (ByteServer)((KRPC.Server.SerialIO.Server)server.InnerServer).InnerServer;
+        }
+
+        [Test]
+        public void SerialFlowControl ()
+        {
+            Assert.AreEqual (SerialPorts.Handshake.None, SerialServer (null).FlowControl);
+            Assert.AreEqual (SerialPorts.Handshake.None, SerialServer ("None").FlowControl);
+            Assert.AreEqual (SerialPorts.Handshake.RequestToSend, SerialServer ("RequestToSend").FlowControl);
+        }
+
+        [Test]
+        public void SerialFlowControlUnsupported ()
+        {
+            // XON/XOFF bytes would collide with the binary messages
+            Assert.AreEqual (SerialPorts.Handshake.None, SerialServer ("XOnXOff").FlowControl);
+            Assert.AreEqual (SerialPorts.Handshake.None, SerialServer ("RequestToSendXOnXOff").FlowControl);
+            Assert.AreEqual (SerialPorts.Handshake.None, SerialServer ("Unknown").FlowControl);
+            // The number of RequestToSend, which the server window would show and save as None
+            Assert.AreEqual (SerialPorts.Handshake.None, SerialServer ("2").FlowControl);
+        }
+
+        [Test]
+        public void SerialServerRejectsXOnXOff ()
+        {
+            Assert.Throws<ArgumentException> (() => new ByteServer (
+                "COM1", 9600, 8, SerialPorts.Parity.None, SerialPorts.StopBits.One, SerialPorts.Handshake.XOnXOff));
         }
     }
 }

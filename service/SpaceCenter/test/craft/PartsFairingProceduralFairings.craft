@@ -12,7 +12,7 @@ OverrideDefault = False,False,False,False
 OverrideActionControl = 0,0,0,0
 OverrideAxisControl = 0,0,0,0
 OverrideGroupNames = ,,,
-_modVersions = ModuleManager=4.2.3|0Harmony=2.2.1|HarmonyInstallChecker=2.2.1|SerializationFix=1.0.1|0_MultipleModuleInPartAPI=1.0.0|KSPCommunityFixes=1.41.1|ROUtils=1.2.0|ProceduralFairings=6.8.0|KSPSteamCtrlr=0.0.1|Google.Protobuf=3.10.1|KRPC.Benchmark=0.8.0|KRPC.Core=0.8.0|KRPC.Debug=0.8.0|KRPC.DockingCamera=0.8.0|KRPC.Drawing=0.8.0|KRPC.IO.Ports=0.0.0|KRPC.InfernalRobotics=0.8.0|KRPC.KerbalAlarmClock=0.8.0|KRPC.LiDAR=0.8.0|KRPC.RemoteTech=0.8.0|KRPC.SpaceCenter=0.8.0|KRPC.UI=0.8.0|KRPC=0.8.0|TestingTools=0.8.0
+_modVersions = ModuleManager=4.2.3|0Harmony=2.2.1|HarmonyInstallChecker=2.2.1|SerializationFix=1.0.1|0_MultipleModuleInPartAPI=1.0.0|KSPCommunityFixes=1.41.1|ROUtils=1.2.0|ProceduralFairings=6.8.0|KSPSteamCtrlr=0.0.1|Google.Protobuf=3.10.1|KRPC.Benchmark=0.8.0|KRPC.Core=0.8.0|KRPC.Debug=0.8.0|KRPC.DockingCamera=0.8.0|KRPC.Drawing=0.8.0|KRPC.InfernalRobotics=0.8.0|KRPC.KerbalAlarmClock=0.8.0|KRPC.LiDAR=0.8.0|KRPC.RemoteTech=0.8.0|KRPC.SpaceCenter=0.8.0|KRPC.UI=0.8.0|KRPC=0.8.0|TestingTools=0.8.0
 PART
 {
 	part = probeCoreOcto.v2_4294453426

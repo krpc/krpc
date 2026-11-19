@@ -349,15 +349,6 @@ at = [
 ]
 
 [[dep]]
-name = "KRPC.IO.Ports"
-version = "1.0.0"
-source = "github-release:krpc/krpc-io-ports"
-at = [
-  { file = "MODULE.bazel", text = "https://github.com/krpc/krpc-io-ports/releases/download/v{version}/KRPC.IO.Ports.dll", sha256 = true },
-  { file = "MODULE.bazel", text = "https://raw.githubusercontent.com/krpc/krpc-io-ports/master/LICENSE", sha256 = true },
-]
-
-[[dep]]
 name = "NetAnalyzers"
 version = "10.0.404"
 source = "nuget:Microsoft.CodeAnalysis.NetAnalyzers"

@@ -86,7 +86,8 @@ namespace KRPC
                         { "serialio_baud_rate", "9600" },
                         { "serialio_data_bits", "8" },
                         { "serialio_parity", "None" },
-                        { "serialio_stop_bits", "One" }
+                        { "serialio_stop_bits", "One" },
+                        { "serialio_flow_control", "None" }
                     });
 
             string SerialSetting (string key)
@@ -148,13 +149,23 @@ namespace KRPC
                     ushort dataBits = 0;
                     SerialPorts.Parity parity;
                     SerialPorts.StopBits stopBits;
+                    SerialPorts.Handshake flowControl;
                     uint.TryParse (SerialSetting ("serialio_baud_rate"), out baudRate);
                     ushort.TryParse (SerialSetting ("serialio_data_bits"), out dataBits);
                     Enum.TryParse<SerialPorts.Parity> (SerialSetting ("serialio_parity"), out parity);
                     Enum.TryParse<SerialPorts.StopBits> (SerialSetting ("serialio_stop_bits"), out stopBits);
+                    var flowControlName = SerialSetting ("serialio_flow_control");
+                    if (flowControlName == "RequestToSend")
+                        flowControl = SerialPorts.Handshake.RequestToSend;
+                    else {
+                        flowControl = SerialPorts.Handshake.None;
+                        if (flowControlName != "None")
+                            Logger.WriteLine ("Unsupported serialio_flow_control '" + flowControlName +
+                                              "', using None", Logger.Severity.Warning);
+                    }
                     var serialServer = new KRPC.Server.SerialIO.ByteServer(
                         Settings.GetValueOrDefault("serialio_port", string.Empty),
-                        baudRate, dataBits, parity, stopBits);
+                        baudRate, dataBits, parity, stopBits, flowControl);
                     messageServer = new KRPC.Server.SerialIO.Server (serialServer);
                 }
                 return new KRPC.Server.Server (Id, serverProtocol, Name, messageServer);

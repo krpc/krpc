@@ -222,6 +222,7 @@ namespace KRPC
                 text.Append (", serialio_data_bits = ").Append (serial.DataBits.ToString (CultureInfo.InvariantCulture));
                 text.Append (", serialio_parity = ").Append (serial.Parity);
                 text.Append (", serialio_stop_bits = ").Append (serial.StopBits);
+                text.Append (", serialio_flow_control = ").Append (serial.FlowControl);
             }
             text.Append (", logLevel = ").Append (Logger.Level);
             text.Append (", autoStartServers = ").Append (config.AutoStartServers);

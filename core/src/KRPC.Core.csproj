@@ -7,6 +7,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Deterministic>true</Deterministic>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <AllowUnsafeBlocks Condition="'$(TargetFramework)' == 'net472'">true</AllowUnsafeBlocks>
   </PropertyGroup>
   <Import Project="$(SolutionDir)tools\build\msbuild\bazeldirs.props" />
   <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
@@ -15,12 +16,23 @@
     <Reference Include="Google.Protobuf">
       <HintPath>$(bazel-bin)\tools\build\ksp\Google.Protobuf.dll</HintPath>
     </Reference>
-    <Reference Include="KRPC.IO.Ports">
-      <HintPath>$(bazel-bin)\tools\build\ksp\KRPC.IO.Ports.dll</HintPath>
-    </Reference>
     <Compile Include="$(bazel-bin)/protobuf/KRPC_unity.cs">
       <Link>KRPC.cs</Link>
     </Compile>
+    <Compile Include="IO\Ports\Handshake.cs" />
+    <Compile Include="IO\Ports\ISerialStream.cs" />
+    <Compile Include="IO\Ports\Parity.cs" />
+    <Compile Include="IO\Ports\SerialData.cs" />
+    <Compile Include="IO\Ports\SerialError.cs" />
+    <Compile Include="IO\Ports\SerialErrorEventArgs.cs" />
+    <Compile Include="IO\Ports\SerialPinChange.cs" />
+    <Compile Include="IO\Ports\SerialPinChangedEventArgs.cs" />
+    <Compile Include="IO\Ports\SerialPort.cs" />
+    <Compile Include="IO\Ports\SerialPortStream.cs" />
+    <Compile Include="IO\Ports\SerialReceivedEventArgs.cs" />
+    <Compile Include="IO\Ports\SerialSignal.cs" />
+    <Compile Include="IO\Ports\StopBits.cs" />
+    <Compile Include="IO\Ports\WinSerialStream.cs" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
     <PackageReference Include="Google.Protobuf" Version="3.36.2" />

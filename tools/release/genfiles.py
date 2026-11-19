@@ -27,7 +27,6 @@ CONTENTS = (
     "bazel-bin/tools/*/AssemblyInfo.cs",
     "bazel-krpc/external/+http_archive+ksp/KSP_Data/Managed",
     "bazel-bin/tools/build/ksp/Google.Protobuf.dll",
-    "bazel-bin/tools/build/ksp/KRPC.IO.Ports.dll",
 )
 
 

@@ -42,9 +42,11 @@ namespace KRPC.Server.SerialIO
 
         /// <summary>
         /// Create a SerialIO server. After Start() is called, the server
-        /// will listen for connection requests on the port.
+        /// will listen for connection requests on the port. The flow control is
+        /// none or RTS/CTS.
         /// </summary>
-        public ByteServer (string address, uint baudRate, ushort dataBits, Parity parity, StopBits stopBits)
+        public ByteServer (string address, uint baudRate, ushort dataBits, Parity parity, StopBits stopBits,
+                           Handshake flowControl = Handshake.None)
         {
             Address = address;
             BaudRate = baudRate;
@@ -53,6 +55,9 @@ namespace KRPC.Server.SerialIO
             DataBits = dataBits;
             Parity = parity;
             StopBits = stopBits;
+            if (flowControl != Handshake.None && flowControl != Handshake.RequestToSend)
+                throw new ArgumentException ("Flow control must be None or RequestToSend", nameof (flowControl));
+            FlowControl = flowControl;
         }
 
         /// <summary>
@@ -66,11 +71,13 @@ namespace KRPC.Server.SerialIO
             }
             Logger.WriteLine ("SerialIO.Server: starting " + Address, Logger.Severity.Debug);
             var serialPort = new SerialPort (Address, (int)BaudRate, Parity, DataBits, StopBits);
+            serialPort.Handshake = FlowControl;
             Logger.WriteLine ("SerialIO.Server: port name = " + Address, Logger.Severity.Debug);
             Logger.WriteLine ("SerialIO.Server: baud rate = " + serialPort.BaudRate, Logger.Severity.Debug);
             Logger.WriteLine ("SerialIO.Server: data bits = " + serialPort.DataBits, Logger.Severity.Debug);
             Logger.WriteLine ("SerialIO.Server: parity = " + serialPort.Parity, Logger.Severity.Debug);
             Logger.WriteLine ("SerialIO.Server: stop bits = " + serialPort.StopBits, Logger.Severity.Debug);
+            Logger.WriteLine ("SerialIO.Server: flow control = " + serialPort.Handshake, Logger.Severity.Debug);
             port = new BufferedPort (new SerialPortAdapter (serialPort));
             try {
                 port.Open();
@@ -174,6 +181,11 @@ namespace KRPC.Server.SerialIO
         public StopBits StopBits { get; private set; }
 
         /// <summary>
+        /// Flow control, either none or RTS/CTS.
+        /// </summary>
+        public Handshake FlowControl { get; private set; }
+
+        /// <summary>
         /// Information about the server.
         /// </summary>
         public string Info {
@@ -183,7 +195,8 @@ namespace KRPC.Server.SerialIO
                     "Baud rate = " + BaudRate + newline +
                     "Data bits = " + DataBits + newline +
                     "Parity = " + Parity + newline +
-                    "Stop bits = " + StopBits;
+                    "Stop bits = " + StopBits + newline +
+                    "Flow control = " + (FlowControl == Handshake.RequestToSend ? "RTS/CTS" : "None");
             }
         }
 
