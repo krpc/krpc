@@ -53,7 +53,7 @@ A release preparation pull request takes `main` from the version being released 
 ## 3. Release on GitHub
 
 9. `tools/release/40-build-assets.py` - builds all the release archives and collects them in
-   `assets/`, along with a SHA256 checksum file.
+   `assets/`. GitHub records the SHA-256 digest of each asset.
 10. `tools/release/50-release-github.py` - creates a **draft** GitHub release for the tag with the
    changelog as release notes and the assets attached. Review the draft on GitHub and publish it
    from there.
