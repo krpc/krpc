@@ -273,13 +273,10 @@ namespace KRPC.UI
                 GUILayout.Label (server.Name, labelStyle);
             else
                 editServers [server.Id].DrawName ();
-            // The number of clients, as a collapsed server does not list them
-            if (!editingServer && !expanded) {
-                var clients = server.Clients.Count ();
-                if (clients > 0) {
-                    GUILayout.FlexibleSpace ();
-                    GUILayout.Label (clients.ToString (CultureInfo.CurrentCulture) + (clients == 1 ? " client" : " clients"), labelStyle);
-                }
+            var clients = server.Clients.Count ();
+            if (clients > 0) {
+                GUILayout.FlexibleSpace ();
+                GUILayout.Label (clients.ToString (CultureInfo.CurrentCulture) + (clients == 1 ? " client" : " clients"), labelStyle);
             }
             GUILayout.EndHorizontal ();
 
