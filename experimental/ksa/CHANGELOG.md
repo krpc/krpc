@@ -19,7 +19,7 @@
     window
   - Fix serial servers failing to start on Linux and macOS, with the native serial port library
     not found
-  - Support KSA v2026.11.10.5801
+  - Support KSA v2026.11.16.5901
   - Move the kRPC menu to a `kRPC` item in the game's Mods menu, which opens the server window
 
 - Crew and life support

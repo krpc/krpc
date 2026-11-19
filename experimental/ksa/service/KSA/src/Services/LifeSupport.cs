@@ -65,8 +65,11 @@ namespace KRPC.KSA.Services
                 forecasts.Clear ();
                 global::KSA.LifeSupport.ComputeZoneForecasts (tree, tree.Moles.States, null, false, v.GetOutsideAir (), forecasts);
                 if (internalZone == null) {
+                    // An empty forecast for a vehicle with no habitat zones, with infinite times
+                    if (forecasts.Count == 0)
+                        return new LifeSupportForecast (0, 0, 0, 0, 0, false, v.GetOutsideAir (), false);
                     var worst = global::KSA.LifeSupport.FindWorst (forecasts);
-                    return worst.Kittens == 0 && forecasts.Count > 0 ? forecasts [0] : worst;
+                    return worst.Kittens == 0 ? forecasts [0] : worst;
                 }
                 foreach (var forecast in forecasts) {
                     if (forecast.Zone == internalZone.Number)
@@ -113,7 +116,7 @@ namespace KRPC.KSA.Services
         /// </summary>
         [KRPCProperty]
         public float AirTime {
-            get { return (float)Forecast.AirSeconds; }
+            get { return Seconds (Forecast.AirRemaining); }
         }
 
         /// <summary>
@@ -121,7 +124,7 @@ namespace KRPC.KSA.Services
         /// </summary>
         [KRPCProperty]
         public float ScrubberTime {
-            get { return (float)Forecast.ScrubberSeconds; }
+            get { return Seconds (Forecast.ScrubberRemaining); }
         }
 
         /// <summary>
@@ -129,7 +132,7 @@ namespace KRPC.KSA.Services
         /// </summary>
         [KRPCProperty]
         public float WaterTime {
-            get { return (float)Forecast.WaterSeconds; }
+            get { return Seconds (Forecast.WaterRemaining); }
         }
 
         /// <summary>
@@ -137,7 +140,7 @@ namespace KRPC.KSA.Services
         /// </summary>
         [KRPCProperty]
         public float FoodTime {
-            get { return (float)Forecast.FoodSeconds; }
+            get { return Seconds (Forecast.FoodRemaining); }
         }
 
         /// <summary>
@@ -146,7 +149,7 @@ namespace KRPC.KSA.Services
         /// </summary>
         [KRPCProperty]
         public float Time {
-            get { return (float)Forecast.LevelSeconds; }
+            get { return Seconds (Forecast.LevelRemaining); }
         }
 
         /// <summary>
@@ -154,18 +157,7 @@ namespace KRPC.KSA.Services
         /// </summary>
         [KRPCProperty]
         public LifeSupportSupply LimitingSupply {
-            get {
-                // In the order the game names the limit
-                var forecast = Forecast;
-                var seconds = forecast.LevelSeconds;
-                if (forecast.AirSeconds <= seconds)
-                    return LifeSupportSupply.Air;
-                if (forecast.ScrubberSeconds <= seconds)
-                    return LifeSupportSupply.Scrubber;
-                if (forecast.WaterSeconds <= seconds)
-                    return LifeSupportSupply.Water;
-                return LifeSupportSupply.Food;
-            }
+            get { return (LifeSupportSupply)Forecast.FindLimitSupply (); }
         }
 
         /// <summary>
@@ -181,7 +173,13 @@ namespace KRPC.KSA.Services
         /// </summary>
         [KRPCProperty]
         public float TimeToNextLevel {
-            get { return (float)Forecast.SecondsToNextLevel; }
+            get { return Seconds (Forecast.TimeToNextLevel); }
+        }
+
+        // Infinite for a supply that does not run out
+        static float Seconds (UniverseTime time)
+        {
+            return (float)LifeSupportForecast.ToSeconds (time);
         }
     }
 }

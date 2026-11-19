@@ -136,7 +136,7 @@ namespace KRPC.KSA.Services
             if (controller == null)
                 return false;
             foreach (var nozzle in controller.Data.Nozzles) {
-                if (ReferenceEquals (nozzle.Rocket?.Core.Controller, engine))
+                if (ReferenceEquals (nozzle.Rocket?.Controller, engine))
                     return true;
             }
             return false;

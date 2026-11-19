@@ -100,8 +100,16 @@ namespace KRPC.KSA.Services
         public IList<string> Propellants {
             get {
                 _ = Part.InternalPart;
-                return engine.Cores.SelectMany (core => core.Reaction.ReactantPhases)
-                    .Select (phase => phase.Name).Distinct ().ToList ();
+                var propellants = new List<string> ();
+                foreach (var rocket in engine.Rockets) {
+                    foreach (var core in rocket.Cores) {
+                        foreach (var phase in core.Reaction.ReactantPhases) {
+                            if (!propellants.Contains (phase.Name))
+                                propellants.Add (phase.Name);
+                        }
+                    }
+                }
+                return propellants;
             }
         }
 

@@ -9,8 +9,8 @@ downloads the release zip to take its sha256.
 Commits nothing: the change goes in a pull request with the fixes the new
 build needs.
 
-    01-update-ksa.py 2026.11.10.5801
-    01-update-ksa.py 2026.11.10.5801 --starmap 0.5.4
+    01-update-ksa.py <ksa build>
+    01-update-ksa.py <ksa build> --starmap <starmap release>
 """
 
 import argparse
@@ -84,7 +84,7 @@ def main():
     parser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
-    parser.add_argument("ksa_version", help="the KSA build, e.g. 2026.11.10.5801")
+    parser.add_argument("ksa_version", help="the KSA build, as YYYY.MM.DD.NNNN")
     parser.add_argument("--starmap", help="the StarMap release, e.g. 0.5.4")
     arguments = parser.parse_args()
     if not re.fullmatch(r"\d{4}\.\d+\.\d+\.\d+", arguments.ksa_version):
