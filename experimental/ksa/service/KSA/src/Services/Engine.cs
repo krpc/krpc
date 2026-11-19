@@ -140,6 +140,115 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The thrust of the engine at full throttle and the given atmospheric pressure, in
+        /// Newtons. Zero when it is inactive or has no propellant.
+        /// </summary>
+        /// <param name="pressure">The atmospheric pressure, in pascals.</param>
+        [KRPCMethod]
+        public float AvailableThrustAt (float pressure)
+        {
+            return (float)PerformanceAt (pressure).thrust;
+        }
+
+        /// <summary>
+        /// The specific impulse of the engine at the given atmospheric pressure, in seconds.
+        /// Zero when it is inactive or has no propellant.
+        /// </summary>
+        /// <param name="pressure">The atmospheric pressure, in pascals.</param>
+        [KRPCMethod]
+        public float SpecificImpulseAt (float pressure)
+        {
+            var (thrust, massFlowRate) = PerformanceAt (pressure);
+            return (float)(massFlowRate > 0 ? thrust / (massFlowRate * Engines.G0) : 0);
+        }
+
+        (double thrust, double massFlowRate) PerformanceAt (float pressure)
+        {
+            if (!(pressure >= 0))
+                throw new ArgumentException ("The pressure is negative or not a number");
+            var vehicle = Part.InternalVehicle;
+            var performance = engine.ComputeActivePerformance (
+                in Engines.State (vehicle, engine), vehicle.TotalMassPropsAsmb.Offset, pressure, 1f);
+            return (performance.ThrustMax.Length (), performance.MassFlowRateMax);
+        }
+
+        /// <summary>
+        /// The thrust of the engine at full throttle and the current atmospheric pressure, in
+        /// Newtons, whether or not it is active and has propellant.
+        /// </summary>
+        [KRPCProperty]
+        public float MaxThrust {
+            get {
+                var vehicle = Part.InternalVehicle;
+                return RocketControllerData.ComputeFromRockets (
+                    engine.Rockets, vehicle.PhysicsEnvironment.AtmosphericPressure, 1f).ThrustMax.Length ();
+            }
+        }
+
+        /// <summary>
+        /// The thrust of the engine at full throttle in a vacuum, in Newtons, whether or not
+        /// it is active and has propellant.
+        /// </summary>
+        [KRPCProperty]
+        public float MaxVacuumThrust {
+            get {
+                _ = Part.InternalPart;
+                return RocketControllerData.ComputeFromRockets (engine.Rockets, 0f, 1f).ThrustMax.Length ();
+            }
+        }
+
+        /// <summary>
+        /// Whether the engine is a solid rocket motor. Once ignited, a solid motor burns at
+        /// full thrust until its grain runs out.
+        /// </summary>
+        [KRPCProperty]
+        public bool Solid {
+            get {
+                _ = Part.InternalPart;
+                return engine.Rockets.Any (rocket => rocket is SolidRocket);
+            }
+        }
+
+        /// <summary>
+        /// The mass of the propellant grain of a solid rocket motor, in kilograms.
+        /// </summary>
+        /// <remarks>
+        /// Some of the grain is left unburned when the motor burns out. Throws an exception
+        /// if the engine is not a solid rocket motor.
+        /// </remarks>
+        [KRPCProperty]
+        public float GrainMass {
+            get {
+                if (!Solid)
+                    throw new InvalidOperationException ("The engine is not a solid rocket motor");
+                var moles = Part.InternalVehicle.Parts.Moles.States;
+                float mass = 0;
+                foreach (var rocket in engine.Rockets.OfType<SolidRocket> ())
+                    mass += rocket.Motor.ComputeGrainMass (moles);
+                return mass;
+            }
+        }
+
+        /// <summary>
+        /// The pressure in the engine's combustion chamber, in pascals. Zero when it is not
+        /// firing.
+        /// </summary>
+        [KRPCProperty]
+        public float ChamberPressure {
+            get {
+                if (!ModuleStateful<RocketCore, RocketCoreState, RocketCoreGlobalState, EmptyStruct>.TryGetFrom (
+                    Part.InternalVehicle.Parts.States, out var states))
+                    return 0;
+                float pressure = 0;
+                foreach (var rocket in engine.Rockets) {
+                    foreach (var core in rocket.Cores)
+                        pressure = Math.Max (pressure, states.GetState (core).Conditions.Core.Pressure);
+                }
+                return pressure;
+            }
+        }
+
+        /// <summary>
         /// The specific impulse of the engine at the current atmospheric pressure, in seconds.
         /// Zero when it is inactive or has no propellant.
         /// </summary>

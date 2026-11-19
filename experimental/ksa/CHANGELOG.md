@@ -38,6 +38,14 @@
   - Add the time until a kitten's condition worsens, it gets radiation sickness, or it takes a
     lethal dose
   - Add the habitat zones linked through closed hatches, and the hatches to open
+- Engines and mass properties
+  - Add solid rocket motors to `Engine`, with their grain mass, and the chamber pressure of
+    every engine
+  - Add the thrust and specific impulse of an engine at a given pressure, and its maximum
+    thrust
+  - Fix `Engine.Thrust` and `Vehicle.Thrust` to include solid rocket motors, which fire
+    whatever the throttle
+  - Add the dry mass, inertia, RCS torque and accelerations of a vehicle
 - Control and power
   - Add `Vehicle.ControlState`, the reason a vehicle cannot be flown
   - Add the power switch of a probe core: its mode, storm standby and power status
