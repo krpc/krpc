@@ -54,6 +54,10 @@ namespace TestServer
             Description = "For SerialIO based protocols, the number of stop bits.",
             DefaultValueFactory = _ => SerialPorts.StopBits.One
         };
+        static readonly Option<SerialPorts.Handshake> flowControlOption = new Option<SerialPorts.Handshake> ("--flow-control") {
+            Description = "For SerialIO based protocols, the flow control. Either None or RequestToSend.",
+            DefaultValueFactory = _ => SerialPorts.Handshake.None
+        }.AcceptOnlyFromAmong ("None", "RequestToSend");
         static readonly Option<bool> debugOption = new Option<bool> ("--debug") {
             Description = "Set log level to 'debug', defaults to 'info'"
         };
@@ -96,6 +100,7 @@ namespace TestServer
                 dataBitsOption,
                 parityOption,
                 stopBitsOption,
+                flowControlOption,
                 debugOption,
                 quietOption,
                 serverDebugOption,
@@ -136,6 +141,7 @@ namespace TestServer
             ushort dataBits = result.GetValue (dataBitsOption);
             SerialPorts.Parity parity = result.GetValue (parityOption);
             SerialPorts.StopBits stopBits = result.GetValue (stopBitsOption);
+            SerialPorts.Handshake flowControl = result.GetValue (flowControlOption);
 
             // Services are found by scanning the assemblies that are loaded, and the runtime
             // does not load one until something in it is used. Nothing in this program calls
@@ -189,7 +195,7 @@ namespace TestServer
                     server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverWebsockets, "TestServer", messageServer);
                 } else if (serverType == "serialio") {
                     serialServer = new KRPC.Server.SerialIO.ByteServer (
-                        serialioPort, baudRate, dataBits, parity, stopBits);
+                        serialioPort, baudRate, dataBits, parity, stopBits, flowControl);
                     var messageServer = new KRPC.Server.SerialIO.Server (serialServer);
                     server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverSerialIO, "TestServer", messageServer);
                 } else if (serverType == "localsocket") {

@@ -29,6 +29,7 @@ namespace KRPC.UI
         const string dataBitsLabelText = "Data bits:";
         const string parityLabelText = "Parity:";
         const string stopBitsLabelText = "Stop bits:";
+        const string flowControlLabelText = "Flow control:";
         const string localhostText = "localhost";
         const string manualText = "Manual";
         const string anyText = "Any";
@@ -47,6 +48,9 @@ namespace KRPC.UI
         string[] stopBitsOptions = {
             "None", "One", "Two", "OnePointFive"
         };
+        // The setting values, and the names the combo box shows for them
+        string[] flowControlOptions = { "None", "RequestToSend" };
+        string[] flowControlNames = { "None", "RTS/CTS" };
 
         // Editable fields
         Protocol protocol;
@@ -62,6 +66,7 @@ namespace KRPC.UI
         readonly object addressComboId = new object ();
         readonly object parityComboId = new object ();
         readonly object stopBitsComboId = new object ();
+        readonly object flowControlComboId = new object ();
 
         // Names for the fields whose value is too long for the field it is edited in, unique
         // in the same way, and how far each has been scrolled sideways. The field is a
@@ -216,6 +221,13 @@ namespace KRPC.UI
                         stopBitsComboId, stopBitsOptions.IndexOf(settings["serialio_stop_bits"]), stopBitsOptions,
                         window.buttonStyle, window.comboOptionsStyle, window.comboOptionStyle)];
                 GUILayout.EndHorizontal();
+
+                GUILayout.BeginHorizontal();
+                DrawFieldLabel (flowControlLabelText);
+                settings["serialio_flow_control"] = flowControlOptions [GUILayoutExtensions.ComboBox (
+                        flowControlComboId, Math.Max (0, flowControlOptions.IndexOf(settings["serialio_flow_control"])), flowControlNames,
+                        window.buttonStyle, window.comboOptionsStyle, window.comboOptionStyle)];
+                GUILayout.EndHorizontal();
             }
         }
 
@@ -278,7 +290,7 @@ namespace KRPC.UI
                     window.Errors.Add(invalidDataBitsText);
                 allowedKeys = new List<string> {
                     "serialio_port", "serialio_baud_rate", "serialio_data_bits",
-                    "serialio_parity", "serialio_stop_bits" };
+                    "serialio_parity", "serialio_stop_bits", "serialio_flow_control" };
             }
             settings = settings
                 .Where(x => allowedKeys.Contains(x.Key))
