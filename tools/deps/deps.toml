@@ -196,6 +196,7 @@ at = [
   'experimental/ksa/tools/release/BUILD.bazel: python_version = "{version}"',
   'experimental/ksa/server/BUILD.bazel: python_version = "{version}"',
   'experimental/ksa/service/KSA/BUILD.bazel: python_version = "{version}"',
+  'experimental/ksa/service/KFS/BUILD.bazel: python_version = "{version}"',
   'experimental/ksa/tools/game/BUILD.bazel: python_version = "{version}"',
   'experimental/ksa/tools/grpc/BUILD.bazel: python_version = "{version}"',
 ]

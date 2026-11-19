@@ -45,3 +45,4 @@ API Reference
    :maxdepth: 1
 
    python/api/ksa
+   python/api/kfs

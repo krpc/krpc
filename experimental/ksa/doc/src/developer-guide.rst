@@ -14,10 +14,11 @@ Layout
 The folders mirror those at the root of the repository:
 
 * ``server/`` - the StarMap entry point, ``Addon.cs``, which holds all the StarMap and game
-  lifecycle code, with the server windows. ``server/grpc/`` is the gRPC
-  server.
+  lifecycle code, with the server windows. ``server/grpc/`` is the gRPC server.
 * ``service/KSA/`` - the ``KSA`` service, its in-game tests, its service definitions and the
   client stubs.
+* ``service/KFS/`` - the same for the ``KFS`` service, which runs programs on kFS, the game's
+  flight software.
 * ``doc/`` - this documentation. The pages are in ``doc/src/``, and the templates of the
   generated API pages in ``doc/api/``.
 * ``tools/build/`` - the ``@ksa`` repository of the KSA install, and the rules for the mod.

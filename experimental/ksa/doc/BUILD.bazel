@@ -33,7 +33,10 @@ expand_files(
     },
 )
 
-defs = ["//experimental/ksa/service/KSA:KSA-definitions"]
+defs = [
+    "//experimental/ksa/service/KSA:KSA-definitions",
+    "//experimental/ksa/service/KFS:KFS-definitions",
+]
 
 # The client languages with API pages
 DOC_LANGUAGES = [
@@ -71,9 +74,9 @@ templates = glob(["api/**/*.tmpl"])
         ] + defs,
         outs = ["gen/grpc/" + template.removesuffix(".tmpl") + ".rst"],
         cmd = ("$(execpath //experimental/ksa/tools/grpc:docgen) $(execpath %s) " +
-               "$(execpath order.txt) $@ $(execpath %s)") % (
+               "$(execpath order.txt) $@ %s") % (
             template,
-            defs[0],
+            " ".join(["$(execpath %s)" % x for x in defs]),
         ),
         tools = ["//experimental/ksa/tools/grpc:docgen"],
     )

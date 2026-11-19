@@ -37,15 +37,17 @@ genrule(
     srcs = [
         "//experimental/ksa/service/KSA:KSA-proto",
         "//experimental/ksa/service/KSA:StdLib-proto",
+        "//experimental/ksa/service/KFS:KFS-proto",
     ],
     outs = [
         "grpc-python/KSA_pb2.py",
         "grpc-python/KSA_pb2_grpc.py",
+        "grpc-python/KFS_pb2.py",
+        "grpc-python/KFS_pb2_grpc.py",
         "grpc-python/StdLib_pb2.py",
         "grpc-python/StdLib_pb2_grpc.py",
     ],
-    cmd = "$(execpath :grpc-protoc) $(RULEDIR)/grpc-python " +
-          "$$(dirname $(execpath //experimental/ksa/service/KSA:KSA-proto)) $(SRCS)",
+    cmd = "$(execpath :grpc-protoc) $(RULEDIR)/grpc-python $(SRCS)",
     tools = [":grpc-protoc"],
 )
 

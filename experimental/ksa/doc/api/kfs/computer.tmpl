@@ -1,0 +1,14 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.highlight }}
+{{ domain.currentmodule('KFS') }}
+{% import domain.macros as macros with context %}
+
+Computer
+========
+
+{{ macros.class(services['KFS'].classes['Computer']) }}
+{{ macros.enumeration(services['KFS'].enumerations['ComputerState']) }}
+{{ macros.enumeration(services['KFS'].enumerations['ControlMode']) }}
+{{ macros.struct(services['KFS'].structs['Diagnostic']) }}
+{{ macros.struct(services['KFS'].structs['Trap']) }}
+{{ macros.enumeration(services['KFS'].enumerations['TrapCode']) }}

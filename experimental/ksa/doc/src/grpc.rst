@@ -26,7 +26,9 @@ Generating a Client
 -------------------
 
 The ``stubs/grpc`` folder of the release archive holds a ``.proto`` file for each kRPC service.
-Generate a client from them with ``protoc`` and the gRPC plugin for your language.
+A service that uses the types of another imports its ``.proto``, as ``KFS.proto`` imports
+``KSA.proto``. Generate a client from them with ``protoc`` and the gRPC plugin for your
+language.
 
 The `gRPC documentation <https://grpc.io/docs/languages/>`_ has a quick start and a basics
 tutorial for each supported language, covering code generation, channels and calls.
@@ -148,3 +150,4 @@ API Reference
 
    grpc/api/ksa
    grpc/api/messages
+   grpc/api/kfs

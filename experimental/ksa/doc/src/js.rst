@@ -49,3 +49,4 @@ API Reference
    :maxdepth: 1
 
    js/api/ksa
+   js/api/kfs

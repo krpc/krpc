@@ -1,0 +1,256 @@
+load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
+load("@bazel_skylib//rules:copy_file.bzl", "copy_file")
+load("@bazel_skylib//rules:write_file.bzl", "write_file")
+load("@rules_cc//cc:defs.bzl", "cc_library")
+load("@rules_java//java:defs.bzl", "java_library")
+load("@rules_pkg//pkg:mappings.bzl", "pkg_files", "strip_prefix")
+load("//:config.bzl", "author")
+load("//experimental/ksa:config.bzl", "mod_version")
+load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
+load("//tools/build:csharp.bzl", "csharp_library")
+load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
+load("//tools/krpctools:clientgen.bzl", "clientgen_cnano", "clientgen_cpp", "clientgen_csharp", "clientgen_java", "clientgen_js")
+load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
+
+package(default_visibility = ["//experimental/ksa:__subpackages__"])
+
+# The KFS service, for kFS, the game's flight software
+
+csharp_assembly_info(
+    name = "AssemblyInfo",
+    cls_compliant = False,
+    copyright = author,
+    description = "The KFS service of kRPC for KSA",
+    title = "KRPC.KSA.KFS",
+    version = mod_version,
+)
+
+csharp_library(
+    name = "KRPC.KSA.KFS",
+    srcs = glob(["src/**/*.cs"]) + [":AssemblyInfo"],
+    generate_documentation_file = True,
+    target_frameworks = ["net10.0"],
+    treat_warnings_as_errors = True,
+    warning_level = 4,
+    deps = [
+        "//core:KRPC.Core.net10",
+        "//experimental/ksa/service/KSA:KRPC.KSA.Service",
+        "@ksa//:Brutal",
+        "@ksa//:KSA",
+    ],
+)
+
+# The service definitions, and the client stubs of the service, which ship with the mod beside
+# the KSA stubs, whose types they use
+
+service_definitions(
+    name = "KFS-definitions",
+    out = "KRPC.KSA.KFS.json",
+    assemblies = [
+        ":KRPC.KSA.KFS",
+        "//experimental/ksa/service/KSA:KRPC.KSA.Service",
+    ],
+    references = ["@ksa//:assemblies"],
+    service = "KFS",
+)
+
+clientgen_csharp(
+    name = "KFS-csharp",
+    out = "csharp/KFS.cs",
+    defs = ":KFS-definitions",
+    service = "KFS",
+    deps = ["//experimental/ksa/service/KSA:KSA-csharp"],
+)
+
+clientgen_cpp(
+    name = "KFS-cpp",
+    out = "cpp/include/krpc/services/kfs.hpp",
+    defs = ":KFS-definitions",
+    service = "KFS",
+    deps = ["//experimental/ksa/service/KSA:KSA-cpp"],
+)
+
+clientgen_cnano(
+    name = "KFS-cnano",
+    out = "cnano/include/krpc_cnano/services/kfs.h",
+    defs = ":KFS-definitions",
+    service = "KFS",
+    deps = ["//experimental/ksa/service/KSA:KSA-cnano"],
+)
+
+clientgen_java(
+    name = "KFS-java",
+    out = "java/krpc/client/services/KFS.java",
+    defs = ":KFS-definitions",
+    service = "KFS",
+    deps = ["//experimental/ksa/service/KSA:KSA-java"],
+)
+
+# The JavaScript stubs, compiled as the KSA ones are, beside the KSA declarations they import
+clientgen_js(
+    name = "KFS-js-declarations",
+    out = "js-gen/KFS.ts",
+    client_module = None,
+    defs = ":KFS-definitions",
+    service = "KFS",
+    deps = ["//experimental/ksa/service/KSA:KSA-js-declarations"],
+)
+
+write_file(
+    name = "KFS-js-services",
+    out = "js-gen/services.ts",
+    content = [
+        "",
+        "declare module \"@krpc-org/krpc\" {",
+        "  interface Services {",
+        "    readonly kfs: Service;",
+        "  }",
+        "}",
+    ],
+)
+
+genrule(
+    name = "KFS-js-src",
+    srcs = [
+        ":KFS-js-declarations",
+        ":KFS-js-services",
+    ],
+    outs = ["js-src/KFS.ts"],
+    cmd = "cat $(SRCS) > $@",
+)
+
+copy_file(
+    name = "KSA-js-types",
+    src = "//experimental/ksa/service/KSA:KSA-js-types",
+    out = "js-src/KSA.d.ts",
+)
+
+ts_project(
+    name = "KFS-js",
+    srcs = [
+        ":KFS-js-src",
+        ":KSA-js-types",
+    ],
+    declaration = True,
+    out_dir = "js",
+    root_dir = "js-src",
+    transpiler = "tsc",
+    tsconfig = "tsconfig-stubs.json",
+    deps = [
+        "//client/js:lib",
+        "//client/js:node_modules/@bufbuild/protobuf",
+    ],
+)
+
+filegroup(
+    name = "KFS-js-types",
+    srcs = [":KFS-js"],
+    output_group = "types",
+)
+
+# Imports KSA.proto for the KSA classes its procedures take
+genrule(
+    name = "KFS-proto",
+    srcs = [":KFS-definitions"],
+    outs = ["grpc/KFS.proto"],
+    cmd = "$(execpath //experimental/ksa/tools/grpc:protogen) $< KFS $@",
+    tools = ["//experimental/ksa/tools/grpc:protogen"],
+)
+
+pkg_files(
+    name = "stub-files",
+    srcs = [
+        ":KFS-cnano",
+        ":KFS-cpp",
+        ":KFS-csharp",
+        ":KFS-definitions",
+        ":KFS-java",
+        ":KFS-js",
+        ":KFS-js-types",
+        ":KFS-proto",
+    ],
+    strip_prefix = strip_prefix.from_pkg(),
+)
+
+# The stubs as libraries, compiled against the clients and the KSA stubs
+
+csharp_library(
+    name = "csharp-library",
+    srcs = [":KFS-csharp"],
+    target_frameworks = ["net10.0"],
+    deps = [
+        "//client/csharp:KRPC.Client",
+        "//experimental/ksa/service/KSA:csharp-library",
+        "@paket.main//google.protobuf",
+    ],
+)
+
+write_file(
+    name = "compile-cpp-src",
+    out = "compile-cpp.cpp",
+    content = ["#include <krpc/services/kfs.hpp>"],
+)
+
+cc_library(
+    name = "cpp-library",
+    srcs = [":compile-cpp-src"],
+    hdrs = [":KFS-cpp"],
+    includes = ["cpp/include"],
+    deps = ["//experimental/ksa/service/KSA:cpp-library"],
+)
+
+write_file(
+    name = "compile-cnano-src",
+    out = "compile-cnano.c",
+    content = [
+        "#include <krpc_cnano.h>",
+        "#include <krpc_cnano/services/kfs.h>",
+    ],
+)
+
+cc_library(
+    name = "cnano-library",
+    srcs = [":compile-cnano-src"],
+    hdrs = [":KFS-cnano"],
+    includes = ["cnano/include"],
+    deps = ["//experimental/ksa/service/KSA:cnano-library"],
+)
+
+java_library(
+    name = "java-library",
+    srcs = [":KFS-java"],
+    deps = [
+        "//client/java:krpc",
+        "//experimental/ksa/service/KSA:java-library",
+        "@maven//:com_google_protobuf_protobuf_java",
+        "@maven//:org_javatuples_javatuples",
+    ],
+)
+
+test_suite(
+    name = "test",
+    tests = [
+        ":pyright",
+        ":ruff",
+    ],
+)
+
+py_ruff_test(
+    name = "ruff",
+    size = "small",
+    srcs = glob(["test/*.py"]),
+)
+
+# The tests use the services as the client builds them at run time, so their attribute
+# accesses on them are unchecked
+py_pyright_test(
+    name = "pyright",
+    size = "medium",
+    srcs = glob(["test/*.py"]),
+    disable = ["reportAttributeAccessIssue"],
+    python_version = "3.12",
+    deps = [
+        "//experimental/ksa/tools/game:ksatest",
+        "@krpc_pypi//pytest",
+    ],
+)

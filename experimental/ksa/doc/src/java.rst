@@ -45,3 +45,4 @@ API Reference
    :maxdepth: 1
 
    java/api/ksa
+   java/api/kfs

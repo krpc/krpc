@@ -4,6 +4,7 @@ using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using KSA;
+using KSA.Kfs;
 
 namespace KRPC.KSA.Services
 {
@@ -14,7 +15,8 @@ namespace KRPC.KSA.Services
     /// <remarks>
     /// The auto-pilot points the vehicle in the direction set by <see cref="Mode"/>, once
     /// engaged. It is the game's own flight computer, so the game's flight computer
-    /// controls change the same settings.
+    /// controls change the same settings. Changing a setting throws an exception while a kFS
+    /// program controls the vehicle.
     /// </remarks>
     [KRPCClass (Service = "KSA", GameScene = GameScene.Flight)]
     public class AutoPilot : Equatable<AutoPilot>, IGameObjectState
@@ -60,13 +62,24 @@ namespace KRPC.KSA.Services
             get { return new Vehicle (vehicle).InternalVehicle.FlightComputer; }
         }
 
+        // The flight computer, to change its settings. A kFS program that controls the
+        // vehicle also steers it through these settings
+        FlightComputer SteeredComputer {
+            get {
+                var computer = Computer;
+                if (KfsPrototype.Enabled && vehicle.KfsHost?.Computer.UnderKfsControl == true)
+                    throw new InvalidOperationException ("A kFS program controls the vehicle");
+                return computer;
+            }
+        }
+
         /// <summary>
         /// Engage the auto-pilot.
         /// </summary>
         [KRPCMethod]
         public void Engage ()
         {
-            Computer.AttitudeMode = FlightComputerAttitudeMode.Auto;
+            SteeredComputer.AttitudeMode = FlightComputerAttitudeMode.Auto;
         }
 
         /// <summary>
@@ -75,7 +88,7 @@ namespace KRPC.KSA.Services
         [KRPCMethod]
         public void Disengage ()
         {
-            Computer.AttitudeMode = FlightComputerAttitudeMode.Manual;
+            SteeredComputer.AttitudeMode = FlightComputerAttitudeMode.Manual;
         }
 
         /// <summary>
@@ -100,7 +113,7 @@ namespace KRPC.KSA.Services
         public AutoPilotMode Mode {
             get { return GetMode (Computer); }
             set {
-                var computer = Computer;
+                var computer = SteeredComputer;
                 switch (value) {
                 case AutoPilotMode.Attitude:
                     if (GetMode (computer) != AutoPilotMode.Attitude)
@@ -150,7 +163,7 @@ namespace KRPC.KSA.Services
             }
             set {
                 CheckFinite (value);
-                var computer = Computer;
+                var computer = SteeredComputer;
                 var target = GetMode (computer) == AutoPilotMode.Attitude
                     ? computer.CustomAttitudeTarget : CurrentAttitude ();
                 target.Z = Flight.HeadingToYaw (value);
@@ -175,11 +188,11 @@ namespace KRPC.KSA.Services
             }
             set {
                 if (double.IsNaN (value)) {
-                    Computer.RollMode = FlightComputerRollMode.Decoupled;
+                    SteeredComputer.RollMode = FlightComputerRollMode.Decoupled;
                     return;
                 }
                 SetTargetAngle (0, value);
-                Computer.RollMode = FlightComputerRollMode.Up;
+                SteeredComputer.RollMode = FlightComputerRollMode.Up;
             }
         }
 
@@ -194,7 +207,7 @@ namespace KRPC.KSA.Services
         {
             CheckPitch (pitch);
             CheckFinite (heading);
-            var computer = Computer;
+            var computer = SteeredComputer;
             var target = GetMode (computer) == AutoPilotMode.Attitude
                 ? computer.CustomAttitudeTarget : CurrentAttitude ();
             target.Y = DegreesToRadians (pitch);
@@ -217,7 +230,7 @@ namespace KRPC.KSA.Services
         public bool AutoBurn {
             get { return Computer.BurnMode == FlightComputerBurnMode.Auto; }
             set {
-                var computer = Computer;
+                var computer = SteeredComputer;
                 if (value && computer.Burn == null)
                     throw new InvalidOperationException ("The vehicle has no burn planned");
                 computer.BurnMode = value ? FlightComputerBurnMode.Auto : FlightComputerBurnMode.Manual;
@@ -381,7 +394,7 @@ namespace KRPC.KSA.Services
         void SetTargetAngle (int axis, double degrees)
         {
             CheckFinite (degrees);
-            var computer = Computer;
+            var computer = SteeredComputer;
             var target = GetMode (computer) == AutoPilotMode.Attitude
                 ? computer.CustomAttitudeTarget : CurrentAttitude ();
             var radians = DegreesToRadians (degrees);

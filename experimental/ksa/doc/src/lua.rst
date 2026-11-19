@@ -44,3 +44,4 @@ API Reference
    :maxdepth: 1
 
    lua/api/ksa
+   lua/api/kfs

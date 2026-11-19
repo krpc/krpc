@@ -50,3 +50,4 @@ API Reference
    :maxdepth: 1
 
    cpp/api/ksa
+   cpp/api/kfs

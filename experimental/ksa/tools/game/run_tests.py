@@ -39,7 +39,7 @@ def main():
     if not any(is_test_path(arg, ksa) for arg in args):
         args += [
             os.path.join(ksa, "server", "test"),
-            os.path.join(ksa, "service", "KSA", "test"),
+            os.path.join(ksa, "service"),
         ]
     return pytest.main(
         [

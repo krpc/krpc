@@ -4,6 +4,9 @@ Generated code for the `KSA` service, for the kRPC clients that need it. Use the
 client libraries version @CLIENT_VERSION@. Python and Lua build the service when they connect, and
 need no stubs. JavaScript builds it too, and its stubs add the service's types and values.
 
+The `KFS` service, for kFS, the game's flight software, has its stubs beside each `KSA`
+stub, and uses them.
+
 ## C#
 
 Add `csharp/KSA.cs` to a project that references the `KRPC.Client` package:
