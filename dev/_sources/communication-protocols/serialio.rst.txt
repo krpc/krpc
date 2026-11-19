@@ -11,14 +11,31 @@ as an Arduino.
 .. note::
 
    Streams and events are not supported over serial IO. The server accepts the stream and event
-   RPCs, but their updates have no flow control and can fill its write buffer, as described under
-   :ref:`communication-protocol-serialio-buffering`.
+   RPCs, but their updates go out as fast as the game makes them and can fill its write buffer,
+   as described under :ref:`communication-protocol-serialio-buffering`.
 
 Configuring the Server
 ----------------------
 
 To use this protocol, add a server in the server window and select *Protobuf over SerialIO* as its
-protocol. The window sets the serial port name and the baud rate, which defaults to 9600.
+protocol. The window sets the serial port and its line settings: the baud rate, data bits, parity,
+stop bits and flow control. The baud rate defaults to 9600.
+
+.. _communication-protocol-serialio-flow-control:
+
+Flow Control
+------------
+
+The server uses no flow control by default. At high baud rates, a USB serial adapter can drop
+bytes when it receives them faster than its host reads them. Setting *Flow control* to *RTS/CTS*
+pauses each end's sending while the other end is not ready.
+
+RTS/CTS needs both ends set to it, and a cable that carries the RTS and CTS lines. A server set to
+RTS/CTS sends nothing while the client holds its RTS line low, or while its CTS line is
+unconnected. Many microcontroller boards wire only TX and RX, so they cannot use it.
+
+The flow control is hardware only. XON/XOFF would stop the line on bytes that occur in the binary
+messages.
 
 Framing
 -------
@@ -58,15 +75,18 @@ Buffering and Data Rates
 ------------------------
 
 A serial port carries data far more slowly than the game produces it. At the default 9600 baud it
-carries roughly a thousand bytes per second. The server buffers up to a megabyte of data in each
-direction:
+carries roughly a thousand bytes per second. The server buffers up to a megabyte of data it
+receives, and 16 megabytes of data it sends:
 
 * Data received from the port waits in its buffer until the game reads it. A full buffer pauses
-  reading from the port, and no data is lost.
+  reading from the port. With :ref:`RTS/CTS <communication-protocol-serialio-flow-control>`, the
+  client's sending then pauses too, and no data is lost. Without it, the port's own small buffer
+  overflows and drops data.
 
-* Data written by the game waits in its buffer until the port has sent it. The buffer fills when a
-  client sends requests faster than it reads their responses. The server then drops the session
-  and stops, and is started again from the server window.
+* Data written by the game waits in its buffer until the port has sent it. A single response
+  larger than the buffer is still sent. The buffer fills when a client sends requests faster than
+  it reads their responses. The server then drops the session and stops, and is started again
+  from the server window.
 
 To keep the write buffer from filling, read each response before sending the next request.
 

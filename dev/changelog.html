@@ -630,6 +630,7 @@
 <li><p>Read up to 16 requests ahead of the one running, and hold a client that sends faster than the server runs its calls (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1376">#1376</a>)</p></li>
 <li><p>Read from a serial port as bytes arrive, so a client over serial gets several calls per update (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1376">#1376</a>)</p></li>
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">MemberBinder.ReadOnlyField</span></code>, for a mod setting that the mod declares read-only (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1382">#1382</a>)</p></li>
+<li><p>Fix a serial IO server stopping when it sends a response over a megabyte, such as <code class="docutils literal notranslate"><span class="pre">KRPC.GetServices</span></code> with every service installed (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1386">#1386</a>)</p></li>
 </ul>
 </section>
 <section id="server">
@@ -669,6 +670,8 @@
 <li><p>Name a server added in the server window “Server”, “Server 2” and so on (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1385">#1385</a>)</p></li>
 <li><p>Remember which servers are expanded in the server window (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1385">#1385</a>)</p></li>
 <li><p>Show the number of connected clients beside a collapsed server in the server window (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1385">#1385</a>)</p></li>
+<li><p>Add RTS/CTS flow control to serial IO servers, set in the server window (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1386">#1386</a>)</p></li>
+<li><p>Build the serial port code into <code class="docutils literal notranslate"><span class="pre">KRPC.Core.dll</span></code>, in place of a separate <code class="docutils literal notranslate"><span class="pre">KRPC.IO.Ports.dll</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1386">#1386</a>)</p></li>
 </ul>
 </section>
 <section id="spacecenter-service">
@@ -1304,6 +1307,7 @@
 <li><p>Generate the JavaScript client’s API documentation, with <code class="docutils literal notranslate"><span class="pre">krpc-docgen</span> <span class="pre">js</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1346">#1346</a>)</p></li>
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">--frame-limit</span></code>, <code class="docutils literal notranslate"><span class="pre">--fixed-rate</span></code>, <code class="docutils literal notranslate"><span class="pre">--tick-work-us</span></code> and <code class="docutils literal notranslate"><span class="pre">--frame-work-us</span></code> to <code class="docutils literal notranslate"><span class="pre">krpc-testserver</span></code>, which model a game’s frame loop (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1376">#1376</a>)</p></li>
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">--preset</span></code> to <code class="docutils literal notranslate"><span class="pre">krpc-testserver</span></code>, for its rate settings (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1376">#1376</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">--flow-control</span></code> to the <code class="docutils literal notranslate"><span class="pre">TestServer</span></code>, for RTS/CTS over serial IO (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1386">#1386</a>)</p></li>
 </ul>
 </section>
 </section>

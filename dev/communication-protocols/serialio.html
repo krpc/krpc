@@ -603,13 +603,25 @@ as an Arduino.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Streams and events are not supported over serial IO. The server accepts the stream and event
-RPCs, but their updates have no flow control and can fill its write buffer, as described under
-<a class="reference internal" href="#communication-protocol-serialio-buffering"><span class="std std-ref">Buffering and Data Rates</span></a>.</p>
+RPCs, but their updates go out as fast as the game makes them and can fill its write buffer,
+as described under <a class="reference internal" href="#communication-protocol-serialio-buffering"><span class="std std-ref">Buffering and Data Rates</span></a>.</p>
 </div>
 <section id="configuring-the-server">
 <h2>Configuring the Server<a class="headerlink" href="#configuring-the-server" title="Link to this heading">#</a></h2>
 <p>To use this protocol, add a server in the server window and select <em>Protobuf over SerialIO</em> as its
-protocol. The window sets the serial port name and the baud rate, which defaults to 9600.</p>
+protocol. The window sets the serial port and its line settings: the baud rate, data bits, parity,
+stop bits and flow control. The baud rate defaults to 9600.</p>
+</section>
+<section id="flow-control">
+<span id="communication-protocol-serialio-flow-control"></span><h2>Flow Control<a class="headerlink" href="#flow-control" title="Link to this heading">#</a></h2>
+<p>The server uses no flow control by default. At high baud rates, a USB serial adapter can drop
+bytes when it receives them faster than its host reads them. Setting <em>Flow control</em> to <em>RTS/CTS</em>
+pauses each end’s sending while the other end is not ready.</p>
+<p>RTS/CTS needs both ends set to it, and a cable that carries the RTS and CTS lines. A server set to
+RTS/CTS sends nothing while the client holds its RTS line low, or while its CTS line is
+unconnected. Many microcontroller boards wire only TX and RX, so they cannot use it.</p>
+<p>The flow control is hardware only. XON/XOFF would stop the line on bytes that occur in the binary
+messages.</p>
 </section>
 <section id="framing">
 <h2>Framing<a class="headerlink" href="#framing" title="Link to this heading">#</a></h2>
@@ -639,14 +651,17 @@ stale partial message only by a manual reset.</p>
 <section id="buffering-and-data-rates">
 <span id="communication-protocol-serialio-buffering"></span><h2>Buffering and Data Rates<a class="headerlink" href="#buffering-and-data-rates" title="Link to this heading">#</a></h2>
 <p>A serial port carries data far more slowly than the game produces it. At the default 9600 baud it
-carries roughly a thousand bytes per second. The server buffers up to a megabyte of data in each
-direction:</p>
+carries roughly a thousand bytes per second. The server buffers up to a megabyte of data it
+receives, and 16 megabytes of data it sends:</p>
 <ul class="simple">
 <li><p>Data received from the port waits in its buffer until the game reads it. A full buffer pauses
-reading from the port, and no data is lost.</p></li>
-<li><p>Data written by the game waits in its buffer until the port has sent it. The buffer fills when a
-client sends requests faster than it reads their responses. The server then drops the session
-and stops, and is started again from the server window.</p></li>
+reading from the port. With <a class="reference internal" href="#communication-protocol-serialio-flow-control"><span class="std std-ref">RTS/CTS</span></a>, the
+client’s sending then pauses too, and no data is lost. Without it, the port’s own small buffer
+overflows and drops data.</p></li>
+<li><p>Data written by the game waits in its buffer until the port has sent it. A single response
+larger than the buffer is still sent. The buffer fills when a client sends requests faster than
+it reads their responses. The server then drops the session and stops, and is started again
+from the server window.</p></li>
 </ul>
 <p>To keep the write buffer from filling, read each response before sending the next request.</p>
 </section>
@@ -816,6 +831,7 @@ a <code class="docutils literal notranslate"><span class="pre">disconnect</span>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuring-the-server">Configuring the Server</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flow-control">Flow Control</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#framing">Framing</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sessions">Sessions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#resetting-clients">Resetting Clients</a></li>

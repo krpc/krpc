@@ -200,7 +200,9 @@ Over a Serial Port
 ^^^^^^^^^^^^^^^^^^
 
 Select "Protobuf over SerialIO" as the server's protocol. The server window also sets the port
-name and the baud rate. The following connects to a server, and prints its version:
+name and the line settings, including
+:ref:`flow control <communication-protocol-serialio-flow-control>`. The following connects to a
+server, and prints its version:
 
 .. literalinclude:: /scripts/cnano/ConnectingSerial.c
 
@@ -477,8 +479,8 @@ Client API Reference
 .. function:: krpc_error_t krpc_open_serial(krpc_connection_t * connection, const char * port)
 
    Opens the serial port named *port*, such as ``/dev/ttyS0`` or ``COM3``, and writes the
-   connection into *connection*. The port keeps its baud rate and framing, so set them to match
-   the server window, such as with ``stty`` on Linux.
+   connection into *connection*. The port keeps its baud rate, framing and flow control, so set
+   them to match the server window, such as with ``stty`` on Linux.
 
    On Arduino, it takes a serial port and a baud rate instead:
    ``krpc_open_serial(&conn, &Serial, 9600)``. It starts the port with 8 data bits, no parity and

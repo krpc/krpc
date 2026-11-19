@@ -1737,7 +1737,9 @@ outside Arduino, it includes none, and you supply your own.</p>
 <section id="over-a-serial-port">
 <h3>Over a Serial Port<a class="headerlink" href="#over-a-serial-port" title="Link to this heading">#</a></h3>
 <p>Select “Protobuf over SerialIO” as the server’s protocol. The server window also sets the port
-name and the baud rate. The following connects to a server, and prints its version:</p>
+name and the line settings, including
+<a class="reference internal" href="communication-protocols/serialio.html#communication-protocol-serialio-flow-control"><span class="std std-ref">flow control</span></a>. The following connects to a
+server, and prints its version:</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano.h&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/krpc.h&gt;</span>
 
@@ -2294,8 +2296,8 @@ no error.</p>
 <dt class="sig sig-object c" id="c.krpc_open_serial">
 <a class="reference internal" href="#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_open_serial</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">connection</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">port</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_open_serial" title="Link to this definition">#</a><br /></dt>
 <dd><p>Opens the serial port named <em>port</em>, such as <code class="docutils literal notranslate"><span class="pre">/dev/ttyS0</span></code> or <code class="docutils literal notranslate"><span class="pre">COM3</span></code>, and writes the
-connection into <em>connection</em>. The port keeps its baud rate and framing, so set them to match
-the server window, such as with <code class="docutils literal notranslate"><span class="pre">stty</span></code> on Linux.</p>
+connection into <em>connection</em>. The port keeps its baud rate, framing and flow control, so set
+them to match the server window, such as with <code class="docutils literal notranslate"><span class="pre">stty</span></code> on Linux.</p>
 <p>On Arduino, it takes a serial port and a baud rate instead:
 <code class="docutils literal notranslate"><span class="pre">krpc_open_serial(&amp;conn,</span> <span class="pre">&amp;Serial,</span> <span class="pre">9600)</span></code>. It starts the port with 8 data bits, no parity and
 1 stop bit, waits for the port to be ready, then opens a connection over it with

@@ -107,6 +107,7 @@ Core
 * Read up to 16 requests ahead of the one running, and hold a client that sends faster than the server runs its calls (:issue:`1376`)
 * Read from a serial port as bytes arrive, so a client over serial gets several calls per update (:issue:`1376`)
 * Add ``MemberBinder.ReadOnlyField``, for a mod setting that the mod declares read-only (:issue:`1382`)
+* Fix a serial IO server stopping when it sends a response over a megabyte, such as ``KRPC.GetServices`` with every service installed (:issue:`1386`)
 
 
 Server
@@ -146,6 +147,8 @@ Server
 * Name a server added in the server window "Server", "Server 2" and so on (:issue:`1385`)
 * Remember which servers are expanded in the server window (:issue:`1385`)
 * Show the number of connected clients beside a collapsed server in the server window (:issue:`1385`)
+* Add RTS/CTS flow control to serial IO servers, set in the server window (:issue:`1386`)
+* Build the serial port code into ``KRPC.Core.dll``, in place of a separate ``KRPC.IO.Ports.dll`` (:issue:`1386`)
 
 
 SpaceCenter service
@@ -752,6 +755,7 @@ krpctools
 * Generate the JavaScript client's API documentation, with ``krpc-docgen js`` (:issue:`1346`)
 * Add ``--frame-limit``, ``--fixed-rate``, ``--tick-work-us`` and ``--frame-work-us`` to ``krpc-testserver``, which model a game's frame loop (:issue:`1376`)
 * Add ``--preset`` to ``krpc-testserver``, for its rate settings (:issue:`1376`)
+* Add ``--flow-control`` to the ``TestServer``, for RTS/CTS over serial IO (:issue:`1386`)
 
 
 v0.7.0
