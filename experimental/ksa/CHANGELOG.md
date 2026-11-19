@@ -38,6 +38,8 @@
   - Add the time until a kitten's condition worsens, it gets radiation sickness, or it takes a
     lethal dose
   - Add the habitat zones linked through closed hatches, and the hatches to open
+  - Add `Vehicle.Mission`, the mission planned in the editor, with the times of its legs
+  - Add whether a habitat zone's supplies last the mission, and the kittens planned for each leg
 - Engines and mass properties
   - Add solid rocket motors to `Engine`, with their grain mass, and the chamber pressure of
     every engine

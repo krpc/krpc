@@ -103,6 +103,28 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// Whether the zone's supplies last its crew through the vehicle's mission. <c>null</c>
+        /// without a feasible mission with time left, or while
+        /// <see cref="KSA.LifeSupportEnabled"/> is false.
+        /// </summary>
+        [KRPCProperty (Nullable = true)]
+        public MissionSupplies MissionSupplies {
+            get { return Services.MissionSupplies.Compute (this) == null ? null : new MissionSupplies (this); }
+        }
+
+        /// <summary>
+        /// The number of kittens planned in the zone for a leg of the vehicle's mission. The
+        /// plan defaults to the kittens seated in the zone.
+        /// </summary>
+        /// <param name="leg">The leg.</param>
+        [KRPCMethod]
+        public int PlannedKittens (MissionLeg leg)
+        {
+            var internalZone = InternalZone;
+            return CrewPlan.GetKittens (internalZone, (global::KSA.MissionLeg)leg, internalZone.CountKittens ());
+        }
+
+        /// <summary>
         /// The zones that join this one when closed docking port hatches between them open.
         /// </summary>
         /// <remarks>

@@ -358,6 +358,14 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The mission planned for the vehicle, or <c>null</c> if it has none.
+        /// </summary>
+        [KRPCProperty (Nullable = true)]
+        public Mission Mission {
+            get { return InternalVehicle.Parts.Mission == null ? null : new Mission (this); }
+        }
+
+        /// <summary>
         /// The most urgent coming event of each kitten in the vehicle, most urgent first.
         /// </summary>
         /// <remarks>
