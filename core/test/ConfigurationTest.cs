@@ -75,11 +75,11 @@ namespace KRPC.Test
             var config = new Configuration ();
             foreach (var server in Configuration.DefaultServers ())
                 config.Servers.Add (server);
-            Assert.AreEqual ("TCP/IP Server 2", config.NewServer (Protocol.ProtocolBuffersOverTCP).Name);
+            Assert.AreEqual ("Server", config.NewServer (Protocol.ProtocolBuffersOverTCP).Name);
             config.Servers.Add (config.NewServer (Protocol.ProtocolBuffersOverTCP));
-            Assert.AreEqual ("TCP/IP Server 3", config.NewServer (Protocol.ProtocolBuffersOverTCP).Name);
-            config.Servers.Clear ();
-            Assert.AreEqual ("WebSockets Server", config.NewServer (Protocol.ProtocolBuffersOverWebsockets).Name);
+            Assert.AreEqual ("Server 2", config.NewServer (Protocol.ProtocolBuffersOverWebsockets).Name);
+            config.Servers.Add (config.NewServer (Protocol.ProtocolBuffersOverTCP));
+            Assert.AreEqual ("Server 3", config.NewServer (Protocol.ProtocolBuffersOverTCP).Name);
         }
 
         [Test]

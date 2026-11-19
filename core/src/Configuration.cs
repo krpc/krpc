@@ -198,15 +198,14 @@ namespace KRPC
         }
 
         /// <summary>
-        /// Default settings for a new server of the protocol, named for the protocol and
-        /// numbered when a server already has that name
+        /// Default settings for a new server of the protocol, named "Server" and numbered
+        /// when a server already has that name
         /// </summary>
         public Server NewServer (Protocol protocol)
         {
-            var server = new Server (protocol);
-            var name = server.Name;
+            var server = new Server (protocol) { Name = "Server" };
             for (var i = 2; servers.Exists (x => x.Name == server.Name); i++)
-                server.Name = name + " " + i.ToString (CultureInfo.InvariantCulture);
+                server.Name = "Server " + i.ToString (CultureInfo.InvariantCulture);
             return server;
         }
 
