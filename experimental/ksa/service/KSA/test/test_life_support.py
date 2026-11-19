@@ -82,6 +82,12 @@ class TestLifeSupport(ksatest.TestCase):
         self.assertAlmostEqual(vehicle.air_mass, life_support.air_mass, delta=1e-3)
         self.assertAlmostEqual(vehicle.time, life_support.time, delta=60)
 
+    def test_no_linked_zones(self):
+        (zone,) = self.vehicle.habitat_zones
+        self.assertEqual([], zone.linked_zones)
+        with self.assertRaises(ValueError):
+            zone.hatches_to(zone)
+
     def test_habitat(self):
         habitat = self.cabin()
         self.assertEqual(18, habitat.meal_capacity)
@@ -233,3 +239,75 @@ class TestKittenCondition(ksatest.TestCase):
         for kitten in self.kittens:
             self.assertTrue(kitten.killed_in_action)
             self.assertEqual(self.ksa.DeathCause.no_scrubber, kitten.cause_of_death)
+
+
+class TestCrewEvents(ksatest.TestCase):
+    """Follows the crew of Gemini7 without supplies. With two kittens in 1.4 cubic meters,
+    the canisters run out first: degraded after 0.875 hours without, incapacitated after
+    1.925 and dead after 2.8."""
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.load_save()
+        cls.vehicle = cls.find_vehicle("Gemini7")
+        cls.kittens = cls.vehicle.crew
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.load_save()
+
+    def warp_to(self, ut):
+        # The game stops the warp when supplies run out, and when a kitten's condition
+        # worsens
+        for _ in range(10):
+            if self.ksa.ut >= ut - 1:
+                return
+            self.ksa.warp_to(ut)
+        self.fail("The warp did not reach the time")
+
+    def test_crew_events(self):
+        stage = self.ksa.CrewStage
+        hazard = self.ksa.CrewHazard
+        scrubber = self.ksa.LifeSupportSupply.scrubber
+
+        # With full supplies, the next events are supplies running low
+        events = self.vehicle.crew_events
+        self.assertCountEqual(self.kittens, [event.kitten for event in events])
+        self.assertEqual(events[0], self.vehicle.next_crew_event)
+        for event in events:
+            self.assertEqual(stage.low, event.stage)
+            self.assertNotEqual(hazard.radiation, event.hazard)
+            self.assertGreater(event.time_to, 0)
+            self.assertAlmostEqual(
+                event.ut - self.ksa.ut, event.time_to, delta=event.time_to * 1e-3 + 1
+            )
+        for kitten in self.kittens:
+            self.assertAlmostEqual(
+                0.875 * 3600, kitten.time_to_next_condition(scrubber), delta=60
+            )
+            self.assertEqual(math.inf, kitten.time_to_radiation_sickness)
+            self.assertEqual(math.inf, kitten.time_to_lethal_dose)
+
+        # Without supplies, death from the lack of canisters is within a day, so it is
+        # the most urgent event
+        start = self.ksa.ut
+        self.ksa.Debug.empty_resources(self.vehicle)
+        ksatest.wait_until(lambda: self.vehicle.next_crew_event.stage == stage.dead)
+        event = self.vehicle.next_crew_event
+        self.assertEqual(hazard.scrubber, event.hazard)
+        self.assertAlmostEqual(start + 2.8 * 3600, event.ut, delta=120)
+        for kitten in self.kittens:
+            self.assertAlmostEqual(
+                0.875 * 3600, kitten.time_to_next_condition(scrubber), delta=120
+            )
+
+        # Degraded, the kittens are next incapacitated
+        self.warp_to(start + 3600)
+        self.assertAlmostEqual(event.ut, self.vehicle.next_crew_event.ut, delta=120)
+        for kitten in self.kittens:
+            self.assertAlmostEqual(
+                start + 1.925 * 3600 - self.ksa.ut,
+                kitten.time_to_next_condition(scrubber),
+                delta=120,
+            )

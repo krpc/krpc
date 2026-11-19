@@ -33,6 +33,11 @@
     add `Kitten.CanGoOnEva` and `Kitten.CanBoard`
   - Add the life support of a kitten's suit, and taking and stowing supplies on EVA
   - Add `DockingPort.HatchOpen`
+  - Add `Vehicle.CrewEvents` and `NextCrewEvent`, each kitten's most urgent coming event, as
+    the game's crew clock shows them
+  - Add the time until a kitten's condition worsens, it gets radiation sickness, or it takes a
+    lethal dose
+  - Add the habitat zones linked through closed hatches, and the hatches to open
 - Control and power
   - Add `Vehicle.ControlState`, the reason a vehicle cannot be flown
   - Add the power switch of a probe core: its mode, storm standby and power status

@@ -250,6 +250,30 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The most urgent coming event of each kitten in the vehicle, most urgent first.
+        /// </summary>
+        /// <remarks>
+        /// The order is the game's crew clock's: events within a day come first, the worst
+        /// first. Empty while <see cref="KSA.LifeSupportEnabled"/> and
+        /// <see cref="KSA.RadiationEnabled"/> are both false.
+        /// </remarks>
+        [KRPCProperty]
+        public IList<CrewEvent> CrewEvents {
+            get { return CrewEvent.Of (this); }
+        }
+
+        /// <summary>
+        /// The most urgent of <see cref="CrewEvents"/>, or <c>null</c> if there is none.
+        /// </summary>
+        [KRPCProperty (Nullable = true)]
+        public CrewEvent NextCrewEvent {
+            get {
+                var crewEvents = CrewEvent.Of (this);
+                return crewEvents.Count == 0 ? null : crewEvents [0];
+            }
+        }
+
+        /// <summary>
         /// Whether the vehicle has a control module, such as a capsule or a probe core.
         /// </summary>
         [KRPCProperty]
