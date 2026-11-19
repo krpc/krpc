@@ -1,3 +1,8 @@
+## core
+
+- Fix a serial IO server stopping when it sends a response over a megabyte, such as
+  `KRPC.GetServices` with every service installed (#1386)
+
 ## server
 
 - Add RTS/CTS flow control to serial IO servers, set in the server window (#1386)

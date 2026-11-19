@@ -28,10 +28,10 @@ namespace KRPC.Server.SerialIO
         // Amount of unread received data at which reading from the port pauses, so that a
         // client sending faster than the game reads cannot grow the buffer without limit
         const int receiveLimit = 1024 * 1024;
-        // Amount of unsent written data at which the port is failed. A caller writing faster
-        // than the configured baud rate would otherwise grow the buffer without limit, and
-        // written data has nowhere else to wait
-        const int sendLimit = 1024 * 1024;
+        // Amount of unsent data at which a further write fails the port, as the caller is
+        // writing faster than the port sends. A write into a buffer under the limit is accepted
+        // in full, so one large message still goes out
+        internal const int SendLimit = 16 * 1024 * 1024;
 
         readonly IPort port;
         readonly ByteBuffer received = new ByteBuffer ();
@@ -158,14 +158,14 @@ namespace KRPC.Server.SerialIO
 
         /// <summary>
         /// Queue size bytes from buffer, starting at offset, to be sent over the port. Fails the
-        /// port when the amount of queued data reaches the send limit, which means data is being
-        /// written faster than the port can carry it.
+        /// port when the data already queued has reached the send limit, which means data is
+        /// being written faster than the port can carry it.
         /// </summary>
         public void Write (byte[] buffer, int offset, int size)
         {
             CheckFailed ();
             lock (sendingLock) {
-                if (sending.Length + size > sendLimit) {
+                if (sending.Length >= SendLimit) {
                     var exn = new IOException (
                         "Data is being written to the serial port " + port.PortName +
                         " faster than the port can send it");

@@ -342,11 +342,33 @@ namespace KRPC.Test.Server.SerialIO
             var port = new BufferedPort (testPort);
             port.Open ();
             try {
-                var chunk = new byte [64 * 1024];
+                var chunk = new byte [1024 * 1024];
                 Assert.Throws<System.IO.IOException> (() => {
-                    for (int i = 0; i < 32; i++)
+                    for (int i = 0; i <= BufferedPort.SendLimit / chunk.Length + 1; i++)
                         port.Write (chunk, 0, chunk.Length);
                 });
+                Assert.IsFalse (port.IsOpen);
+            } finally {
+                port.Close ();
+            }
+        }
+
+        /// <summary>
+        /// A single message larger than the send limit, such as the reply to GetServices, is
+        /// accepted, and only a write on top of it fails the port.
+        /// </summary>
+        [Test]
+        public void OneWriteLargerThanTheSendLimitIsAccepted ()
+        {
+            var testPort = new TestPort ();
+            testPort.WriteDelay = 30000;
+            var port = new BufferedPort (testPort);
+            port.Open ();
+            try {
+                var message = new byte [2 * BufferedPort.SendLimit];
+                port.Write (message, 0, message.Length);
+                Assert.IsTrue (port.IsOpen);
+                Assert.Throws<System.IO.IOException> (() => port.Write (new byte[] { 1 }, 0, 1));
                 Assert.IsFalse (port.IsOpen);
             } finally {
                 port.Close ();

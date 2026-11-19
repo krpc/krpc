@@ -75,17 +75,18 @@ Buffering and Data Rates
 ------------------------
 
 A serial port carries data far more slowly than the game produces it. At the default 9600 baud it
-carries roughly a thousand bytes per second. The server buffers up to a megabyte of data in each
-direction:
+carries roughly a thousand bytes per second. The server buffers up to a megabyte of data it
+receives, and 16 megabytes of data it sends:
 
 * Data received from the port waits in its buffer until the game reads it. A full buffer pauses
   reading from the port. With :ref:`RTS/CTS <communication-protocol-serialio-flow-control>`, the
   client's sending then pauses too, and no data is lost. Without it, the port's own small buffer
   overflows and drops data.
 
-* Data written by the game waits in its buffer until the port has sent it. The buffer fills when a
-  client sends requests faster than it reads their responses. The server then drops the session
-  and stops, and is started again from the server window.
+* Data written by the game waits in its buffer until the port has sent it. A single response
+  larger than the buffer is still sent. The buffer fills when a client sends requests faster than
+  it reads their responses. The server then drops the session and stops, and is started again
+  from the server window.
 
 To keep the write buffer from filling, read each response before sending the next request.
 
