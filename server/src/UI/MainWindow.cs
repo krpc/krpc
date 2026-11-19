@@ -273,10 +273,18 @@ namespace KRPC.UI
                 GUILayout.Label (server.Name, labelStyle);
             else
                 editServers [server.Id].DrawName ();
+            // The number of clients, as a collapsed server does not list them
+            if (!editingServer && !expanded) {
+                var clients = server.Clients.Count ();
+                if (clients > 0) {
+                    GUILayout.FlexibleSpace ();
+                    GUILayout.Label (clients.ToString (CultureInfo.CurrentCulture) + (clients == 1 ? " client" : " clients"), labelStyle);
+                }
+            }
             GUILayout.EndHorizontal ();
 
-            // Expand/collapse when the header row (icon, activity light and name) is
-            // clicked. Skipped while editing, where the row holds the name text field.
+            // Expand/collapse when the header row is clicked. Skipped while editing, where
+            // the row holds the name text field.
             if (!editingServer && Event.current.type == EventType.MouseDown &&
                 GUILayoutUtility.GetLastRect ().Contains (Event.current.mousePosition)) {
                 if (expanded)
