@@ -742,6 +742,7 @@ SpaceCenter.Control.Source
 SpaceCenter.Control.State
 SpaceCenter.Control.SAS
 SpaceCenter.Control.SASMode
+SpaceCenter.Control.AvailableSASModes
 SpaceCenter.Control.SpeedMode
 SpaceCenter.Control.EngineGimbals
 SpaceCenter.Control.ThrustReversers
@@ -1704,6 +1705,7 @@ SpaceCenter.ReferenceFrame.Remove
 SpaceCenter.AutoPilot
 SpaceCenter.AutoPilot.SAS
 SpaceCenter.AutoPilot.SASMode
+SpaceCenter.AutoPilot.AvailableSASModes
 SpaceCenter.AutoPilot.Engaged
 SpaceCenter.AutoPilot.UpdateMode
 SpaceCenter.AutoPilot.Update

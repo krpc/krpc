@@ -113,11 +113,38 @@ namespace KRPC.SpaceCenter.Services
         /// These modes are equivalent to the mode buttons to the left of the navball that appear
         /// when SAS is enabled.
         /// </summary>
-        /// <remarks>Equivalent to <see cref="Control.SASMode"/></remarks>
+        /// <remarks>
+        /// Equivalent to <see cref="Control.SASMode"/>.
+        /// Throws an exception if set to a mode not in <see cref="AvailableSASModes"/>.
+        /// </remarks>
         [KRPCProperty]
         public SASMode SASMode {
             get { return GetSASMode (InternalVessel); }
             set { SetSASMode (InternalVessel, value); }
+        }
+
+        /// <summary>
+        /// The SAS modes that <see cref="SASMode"/> can be set to.
+        /// </summary>
+        /// <remarks>
+        /// Equivalent to <see cref="Control.AvailableSASModes"/>. The modes depend on the SAS
+        /// level of the vessel's pilot or probe core, the navball speed mode, and whether
+        /// there is a target and a maneuver node.
+        /// </remarks>
+        [KRPCProperty]
+        public HashSet<SASMode> AvailableSASModes {
+            get { return GetAvailableSASModes (InternalVessel); }
+        }
+
+        internal static HashSet<SASMode> GetAvailableSASModes (global::Vessel vessel)
+        {
+            var autopilot = vessel.Autopilot;
+            var modes = new HashSet<SASMode> ();
+            foreach (SASMode mode in Enum.GetValues (typeof (SASMode))) {
+                if (autopilot.CanSetMode (mode.FromSASMode ()))
+                    modes.Add (mode);
+            }
+            return modes;
         }
 
         internal static SASMode GetSASMode (global::Vessel vessel)

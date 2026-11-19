@@ -6,3 +6,4 @@
   - Fix `CrewMember.OnMission` being true for a Kerbal who is not assigned to a vessel (#1383)
   - Fix `SpaceCenter.GetKerbal` not finding applicants and tourists (#1383)
   - Fix setting `CrewMember.Experience` leaving the experience level unchanged (#1383)
+- Add `AvailableSASModes` to `AutoPilot` and `Control`, the SAS modes that can be set (#1383)
