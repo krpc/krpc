@@ -380,6 +380,7 @@ SpaceCenter.KOSAvailable
 SpaceCenter.B9PartSwitchAvailable
 SpaceCenter.TweakScaleRescaledAvailable
 SpaceCenter.RealAntennasAvailable
+SpaceCenter.Kerbals
 SpaceCenter.CreateKerbal
 SpaceCenter.GetKerbal
 SpaceCenter.MapFilter
@@ -741,6 +742,7 @@ SpaceCenter.Control.Source
 SpaceCenter.Control.State
 SpaceCenter.Control.SAS
 SpaceCenter.Control.SASMode
+SpaceCenter.Control.AvailableSASModes
 SpaceCenter.Control.SpeedMode
 SpaceCenter.Control.EngineGimbals
 SpaceCenter.Control.ThrustReversers
@@ -855,9 +857,12 @@ SpaceCenter.CrewMember
 SpaceCenter.CrewMember.Name
 SpaceCenter.CrewMember.Type
 SpaceCenter.CrewMember.OnMission
+SpaceCenter.CrewMember.Inactive
+SpaceCenter.CrewMember.InactiveUntil
 SpaceCenter.CrewMember.Courage
 SpaceCenter.CrewMember.Stupidity
 SpaceCenter.CrewMember.Experience
+SpaceCenter.CrewMember.ExperienceLevel
 SpaceCenter.CrewMember.Badass
 SpaceCenter.CrewMember.Veteran
 SpaceCenter.CrewMember.Trait
@@ -1700,6 +1705,7 @@ SpaceCenter.ReferenceFrame.Remove
 SpaceCenter.AutoPilot
 SpaceCenter.AutoPilot.SAS
 SpaceCenter.AutoPilot.SASMode
+SpaceCenter.AutoPilot.AvailableSASModes
 SpaceCenter.AutoPilot.Engaged
 SpaceCenter.AutoPilot.UpdateMode
 SpaceCenter.AutoPilot.Update

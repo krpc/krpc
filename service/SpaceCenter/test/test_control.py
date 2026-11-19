@@ -274,6 +274,31 @@ class TestControlActiveVessel(ControlMixin, TestCase):
         self.control.sas = False
         self.space_center.clear_target()
 
+    def test_available_sas_modes(self):
+        sas_mode = self.space_center.SASMode
+        free = {
+            sas_mode.stability_assist,
+            sas_mode.prograde,
+            sas_mode.retrograde,
+            sas_mode.normal,
+            sas_mode.anti_normal,
+            sas_mode.radial,
+            sas_mode.anti_radial,
+        }
+        self.assertEqual(free, self.control.available_sas_modes)
+        self.assertEqual(free, self.auto_pilot.available_sas_modes)
+        self.control.add_node(self.space_center.ut + 60, 100, 0, 0)
+        self.space_center.target_body = self.space_center.bodies["Mun"]
+        self.wait()
+        try:
+            self.assertEqual(
+                free | {sas_mode.maneuver, sas_mode.target, sas_mode.anti_target},
+                self.control.available_sas_modes,
+            )
+        finally:
+            self.space_center.clear_target()
+            self.control.remove_nodes()
+
     def test_speed_mode_with_target(self):
         speed_mode = self.space_center.SpeedMode
         self.space_center.target_body = self.space_center.bodies["Mun"]
@@ -539,6 +564,93 @@ class TestControlRover(TestCase):
             lambda: self.flight.horizontal_speed > 0.01,
             message="the rover to stop",
         )
+
+
+# The SAS skill level each mode needs, from the game's table
+SAS_MODE_SKILL = {
+    "stability_assist": 0,
+    "prograde": 1,
+    "retrograde": 1,
+    "normal": 2,
+    "anti_normal": 2,
+    "radial": 2,
+    "anti_radial": 2,
+    "target": 3,
+    "anti_target": 3,
+    "maneuver": 3,
+}
+
+
+class AvailableSASModesMixin(Mixin):
+    """The vessel is in orbit with a target, and a maneuver node where the game allows
+    one, so only its SAS level limits the modes."""
+
+    @classmethod
+    def set_up_vessel(cls, node=True):
+        cls.set_circular_orbit("Kerbin", 100000)
+        cls.space_center = cls.connect().space_center
+        cls.vessel = cls.space_center.active_vessel
+        cls.control = cls.vessel.control
+        if node:
+            cls.control.add_node(cls.space_center.ut + 600, 100, 0, 0)
+        cls.space_center.target_body = cls.space_center.bodies["Mun"]
+        cls.wait()
+
+    def modes_at_level(self, level):
+        sas_mode = self.space_center.SASMode
+        return {
+            getattr(sas_mode, name)
+            for name, skill in SAS_MODE_SKILL.items()
+            if skill <= level
+        }
+
+
+class TestAvailableSASModesProbeCore(AvailableSASModesMixin, TestCase):
+    """The sandbox test save leaves full SAS off, so a probe's modes are those of its
+    probe core's SAS level."""
+
+    def test_okto2(self):
+        self.launch("ShortRangeProbe")
+        self.set_up_vessel()
+        self.assertEqual(self.modes_at_level(2), self.control.available_sas_modes)
+        self.assertEqual(
+            self.modes_at_level(2), self.vessel.auto_pilot.available_sas_modes
+        )
+
+    def test_rc001s(self):
+        self.launch("Probe")
+        self.set_up_vessel()
+        self.assertEqual(self.modes_at_level(3), self.control.available_sas_modes)
+
+
+class TestAvailableSASModesPilot(AvailableSASModesMixin, TestCase):
+    """In a career game, a crewed vessel with no probe core has the SAS level of its
+    pilot, which rises with the pilot's experience level. The career save's tracking
+    station allows no maneuver nodes, so the maneuver mode is never available."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save("krpctest_career", always_load=True)
+        sc = cls.connect().space_center
+        pilot = next(
+            kerbal
+            for kerbal in sc.kerbals
+            if kerbal.trait == "Pilot"
+            and kerbal.roster_status == sc.RosterStatus.available
+        )
+        cls.launch("Jumping Flea", crew=[pilot.name], save=None)
+        cls.set_up_vessel(node=False)
+        cls.pilot = cls.vessel.crew[0]
+
+    def test_pilot_levels(self):
+        for level, experience in enumerate((0, 2, 8, 16, 32, 64)):
+            self.pilot.experience = experience
+            self.wait()
+            self.assertEqual(level, self.pilot.experience_level)
+            self.assertEqual(
+                self.modes_at_level(level) - {self.space_center.SASMode.maneuver},
+                self.control.available_sas_modes,
+            )
 
 
 class TestControlProbe(TestCase):

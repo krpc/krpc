@@ -259,6 +259,9 @@ class TestVessel(TestCase):
         self.assertTrue(crew_member.name.endswith(" Kerman"))
         self.assertEqual(self.space_center.CrewMemberType.crew, crew_member.type)
         self.assertTrue(crew_member.on_mission)
+        self.assertFalse(crew_member.inactive)
+        self.assertIsNone(crew_member.inactive_until)
+        self.assertIn(crew_member.experience_level, range(6))
         part = crew_member.part
         self.assertIsNotNone(part)
         self.assertEqual(1, part.crew_capacity)

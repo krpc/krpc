@@ -1186,6 +1186,21 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The Kerbals in the roster.
+        /// </summary>
+        [KRPCProperty]
+        public static IList<CrewMember> Kerbals
+        {
+            get {
+                var roster = HighLogic.CurrentGame.CrewRoster;
+                var kerbals = new List<CrewMember> (roster.Count);
+                for (int i = 0; i < roster.Count; i++)
+                    kerbals.Add (new CrewMember (roster [i]));
+                return kerbals;
+            }
+        }
+
+        /// <summary>
         /// Find a Kerbal by name.
         /// </summary>
         /// <param name="name"></param>
@@ -1193,12 +1208,8 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProcedure(Nullable = true)]
         public static CrewMember GetKerbal(string name)
         {
-            var crewMember = HighLogic.CurrentGame.CrewRoster.Crew.FirstOrDefault((ProtoCrewMember pcm) => pcm.name == name);
-            if (crewMember != null)
-            {
-                return new CrewMember(crewMember);
-            }
-            return null;
+            var crewMember = HighLogic.CurrentGame.CrewRoster [name];
+            return crewMember == null ? null : new CrewMember (crewMember);
         }
 
         /// <summary>

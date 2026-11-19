@@ -11,7 +11,8 @@ using ObjectNotLoadedException = KRPC.Service.KRPC.ObjectNotLoadedException;
 namespace KRPC.SpaceCenter.Services
 {
     /// <summary>
-    /// Represents crew in a vessel. Can be obtained using <see cref="Vessel.Crew"/>.
+    /// A Kerbal in the crew roster. Can be obtained using <see cref="Vessel.Crew"/>,
+    /// <see cref="SpaceCenter.Kerbals"/> or <see cref="SpaceCenter.GetKerbal"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     public class CrewMember : Equatable<CrewMember>, IGameObjectState
@@ -111,11 +112,32 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Whether the crew member is on a mission.
+        /// Whether the crew member is on a mission, assigned to a vessel.
         /// </summary>
         [KRPCProperty]
         public bool OnMission {
-            get { return !InternalCrewMember.inactive; }
+            get { return InternalCrewMember.rosterStatus == ProtoCrewMember.RosterStatus.Assigned; }
+        }
+
+        /// <summary>
+        /// Whether the crew member is inactive, and so unavailable for a mission until
+        /// <see cref="InactiveUntil"/>.
+        /// </summary>
+        [KRPCProperty]
+        public bool Inactive {
+            get { return InternalCrewMember.inactive; }
+        }
+
+        /// <summary>
+        /// The universal time at which the crew member stops being inactive, in seconds.
+        /// Returns <c>null</c> if the crew member is not inactive.
+        /// </summary>
+        [KRPCProperty]
+        public double? InactiveUntil {
+            get {
+                var crewMember = InternalCrewMember;
+                return crewMember.inactive ? crewMember.inactiveTimeEnd : (double?)null;
+            }
         }
 
         /// <summary>
@@ -142,7 +164,24 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public float Experience {
             get { return InternalCrewMember.experience; }
-            set { InternalCrewMember.experience = value; }
+            set {
+                var crewMember = InternalCrewMember;
+                var level = KerbalRoster.CalculateExperienceLevel (value);
+                crewMember.experience = value;
+                // The navball SAS buttons and the crew portraits update on this event
+                if (crewMember.experienceLevel != level) {
+                    crewMember.experienceLevel = level;
+                    GameEvents.onKerbalLevelUp.Fire (crewMember);
+                }
+            }
+        }
+
+        /// <summary>
+        /// The crew member's experience level, the number of stars, from 0 to 5.
+        /// </summary>
+        [KRPCProperty]
+        public int ExperienceLevel {
+            get { return InternalCrewMember.experienceLevel; }
         }
 
         /// <summary>
