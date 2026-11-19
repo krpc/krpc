@@ -73,5 +73,102 @@ namespace KRPC.KSA.Services
         public float Power {
             get { return State.Consumed.Value (); }
         }
+
+        /// <summary>
+        /// Whether the part has a power switch, as a probe core does.
+        /// </summary>
+        [KRPCProperty]
+        public bool HasPowerSwitch {
+            get { return module.PowerSwitch; }
+        }
+
+        global::KSA.PowerConsumer Switched {
+            get {
+                if (!module.PowerSwitch)
+                    throw new InvalidOperationException ("The part has no power switch");
+                return module;
+            }
+        }
+
+        /// <summary>
+        /// The setting of the power switch.
+        /// </summary>
+        /// <remarks>
+        /// Throws an exception if the part has no power switch.
+        /// </remarks>
+        [KRPCProperty]
+        public PowerMode Mode {
+            get { return ToMode (Switched.Mode); }
+            set { Switched.SetMode (FromMode (value)); }
+        }
+
+        /// <summary>
+        /// Whether the part goes on standby, drawing no power, while a radiation storm is under
+        /// way at the vehicle.
+        /// </summary>
+        /// <remarks>
+        /// The game takes a storm of level 1 or worse on the S scale, as
+        /// <see cref="Flight.RadiationStormLevel"/> gives. Throws an exception if the part has
+        /// no power switch.
+        /// </remarks>
+        [KRPCProperty]
+        public bool StandbyInStorms {
+            get { return Switched.StandbyInStorms; }
+            set { Switched.SetStandbyInStorms (value); }
+        }
+
+        /// <summary>
+        /// The power status of the part.
+        /// </summary>
+        /// <remarks>
+        /// Throws an exception if the part has no power switch.
+        /// </remarks>
+        [KRPCProperty]
+        public PowerStatus Status {
+            get {
+                switch (Switched.ComputeStatus (Part.InternalVehicle.Parts)) {
+                case global::KSA.PowerStatus.Off:
+                    return PowerStatus.Off;
+                case global::KSA.PowerStatus.Standby:
+                    return PowerStatus.Standby;
+                case global::KSA.PowerStatus.Rebooting:
+                    return PowerStatus.Rebooting;
+                case global::KSA.PowerStatus.Low:
+                    return PowerStatus.Low;
+                case global::KSA.PowerStatus.Out:
+                    return PowerStatus.Out;
+                case global::KSA.PowerStatus.Failed:
+                    return PowerStatus.Failed;
+                default:
+                    return PowerStatus.On;
+                }
+            }
+        }
+
+        static PowerMode ToMode (PowerSwitchMode mode)
+        {
+            switch (mode) {
+            case PowerSwitchMode.Off:
+                return PowerMode.Off;
+            case PowerSwitchMode.On:
+                return PowerMode.On;
+            default:
+                return PowerMode.Auto;
+            }
+        }
+
+        static PowerSwitchMode FromMode (PowerMode mode)
+        {
+            switch (mode) {
+            case PowerMode.Off:
+                return PowerSwitchMode.Off;
+            case PowerMode.Auto:
+                return PowerSwitchMode.Auto;
+            case PowerMode.On:
+                return PowerSwitchMode.On;
+            default:
+                throw new ArgumentException ("Unknown power mode");
+            }
+        }
     }
 }

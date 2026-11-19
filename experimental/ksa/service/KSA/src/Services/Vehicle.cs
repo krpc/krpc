@@ -257,6 +257,44 @@ namespace KRPC.KSA.Services
             get { return InternalVehicle.HasControlModule; }
         }
 
+        static readonly Func<global::KSA.Vehicle, VehicleControl> control =
+            Accessor.Getter<global::KSA.Vehicle, VehicleControl> ("_control");
+
+        /// <summary>
+        /// Whether the vehicle can be flown, or why not.
+        /// </summary>
+        /// <remarks>
+        /// This is the reason the game gives when the vehicle does not respond to its controls.
+        /// </remarks>
+        [KRPCProperty]
+        public ControlState ControlState {
+            get {
+                var v = InternalVehicle;
+                if (!v.HasControlModule)
+                    return ControlState.NoControlModule;
+                if (v.IsControllable)
+                    return ControlState.Controllable;
+                switch (control (v)) {
+                case VehicleControl.NoCrew:
+                    return ControlState.NoCrew;
+                case VehicleControl.CrewIncapacitated:
+                    return ControlState.CrewIncapacitated;
+                case VehicleControl.ProbeCoreUnpowered:
+                    return ControlState.ProbeCoreUnpowered;
+                case VehicleControl.ProbeCoreOff:
+                    return ControlState.ProbeCoreOff;
+                case VehicleControl.ProbeCoreFailed:
+                    return ControlState.ProbeCoreFailed;
+                case VehicleControl.ProbeCoreStormStandby:
+                    return ControlState.ProbeCoreStormStandby;
+                case VehicleControl.ProbeCoreRebooting:
+                    return ControlState.ProbeCoreRebooting;
+                default:
+                    return ControlState.Controllable;
+                }
+            }
+        }
+
         /// <summary>
         /// How long the supplies of the vehicle's worst habitat zone last its crew, or
         /// <c>null</c> if the vehicle has no habitats.
@@ -363,6 +401,14 @@ namespace KRPC.KSA.Services
         [KRPCProperty]
         public IList<PowerConsumer> PowerConsumers {
             get { return Parts.SelectMany (part => part.PowerConsumers).ToList (); }
+        }
+
+        /// <summary>
+        /// The avionics of the vehicle's probe cores.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Avionics> Avionics {
+            get { return Parts.Select (part => part.Avionics).Where (avionics => avionics != null).ToList (); }
         }
 
         /// <summary>

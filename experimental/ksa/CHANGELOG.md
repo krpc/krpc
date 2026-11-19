@@ -33,6 +33,11 @@
     add `Kitten.CanGoOnEva` and `Kitten.CanBoard`
   - Add the life support of a kitten's suit, and taking and stowing supplies on EVA
   - Add `DockingPort.HatchOpen`
+- Control and power
+  - Add `Vehicle.ControlState`, the reason a vehicle cannot be flown
+  - Add the power switch of a probe core: its mode, storm standby and power status
+  - Add `Part.PowerForecast`, the charge, draw and time left of a part's electrical circuit
+  - Add the radiation dose, health and reboots of a probe core's avionics
 
 - Flight and orbits
   - **Breaking:** Return the scale height at sea level from `Body.ScaleHeight`

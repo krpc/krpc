@@ -330,6 +330,25 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The charge, draw and supply of the electrical circuit the part is on.
+        /// </summary>
+        [KRPCProperty]
+        public PowerForecast PowerForecast {
+            get { return new PowerForecast (this); }
+        }
+
+        /// <summary>
+        /// The part's avionics, or <c>null</c> if it has none. A probe core has avionics.
+        /// </summary>
+        [KRPCProperty (Nullable = true)]
+        public Avionics Avionics {
+            get {
+                var modules = InternalPart.SubtreeModules.Get<global::KSA.Avionics> ();
+                return modules.IsEmpty ? null : new Avionics (this, modules [0]);
+            }
+        }
+
+        /// <summary>
         /// The part's solar panels.
         /// </summary>
         [KRPCProperty]

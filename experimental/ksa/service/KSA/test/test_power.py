@@ -207,3 +207,154 @@ class TestRadiation(ksatest.TestCase):
         flight = self.ksa.launch_vehicle(name, SITE).flight
         self.assertTrue(math.isnan(flight.orbit_average_dose_rate))
         self.assertGreater(flight.dose_rate, 0)
+
+
+class TestProbeCore(ksatest.TestCase):
+    """Launches a small probe core, with its own 2500 J battery and a 3 W draw."""
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.load_save()
+        name = cls.conn.testing_tools.register_vehicle(str(VEHICLES / "ProbeCoreTest"))
+        cls.vehicle = cls.ksa.launch_vehicle(name, SITE)
+        cls.part = cls.vehicle.root_part
+        cls.core = cls.part.power_consumers[0]
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.load_save()
+
+    def tearDown(self):
+        self.core.mode = self.ksa.PowerMode.auto
+        self.core.standby_in_storms = False
+        ksatest.wait_until(
+            lambda: self.vehicle.control_state == self.ksa.ControlState.controllable
+        )
+
+    def test_control_state(self):
+        self.assertEqual(self.ksa.ControlState.controllable, self.vehicle.control_state)
+        self.assertTrue(self.vehicle.controllable)
+
+    def test_power_switch(self):
+        self.assertTrue(self.core.has_power_switch)
+        self.assertEqual(self.ksa.PowerMode.auto, self.core.mode)
+        self.assertEqual(self.ksa.PowerStatus.on, self.core.status)
+        self.core.mode = self.ksa.PowerMode.off
+        self.assertEqual(self.ksa.PowerMode.off, self.core.mode)
+        ksatest.wait_until(
+            lambda: self.vehicle.control_state == self.ksa.ControlState.probe_core_off
+        )
+        self.assertEqual(self.ksa.PowerStatus.off, self.core.status)
+        self.assertFalse(self.vehicle.controllable)
+        self.core.mode = self.ksa.PowerMode.on
+        self.assertEqual(self.ksa.PowerMode.on, self.core.mode)
+        ksatest.wait_until(
+            lambda: self.vehicle.control_state == self.ksa.ControlState.controllable
+        )
+        self.assertEqual(self.ksa.PowerStatus.on, self.core.status)
+
+    def test_standby_in_storms(self):
+        self.assertFalse(self.core.standby_in_storms)
+        self.core.standby_in_storms = True
+        self.assertTrue(self.core.standby_in_storms)
+
+    def test_power_forecast(self):
+        forecast = self.part.power_forecast
+        self.assertTrue(forecast.has_battery)
+        self.assertAlmostEqual(3, forecast.draw, places=3)
+        self.assertEqual(0, forecast.supply)
+        self.assertGreater(forecast.charge, 2400)
+        self.assertLessEqual(forecast.charge, 2500)
+        self.assertAlmostEqual(
+            forecast.charge / forecast.draw, forecast.time_left, delta=1
+        )
+        # Switched off, the core draws nothing
+        self.core.mode = self.ksa.PowerMode.off
+        ksatest.wait_until(lambda: forecast.draw == 0)
+        self.assertEqual(math.inf, forecast.time_left)
+
+    def test_avionics(self):
+        avionics = self.part.avionics
+        self.assertIsNotNone(avionics)
+        self.assertEqual(self.part, avionics.part)
+        self.assertEqual([avionics], self.vehicle.avionics)
+        self.assertEqual(self.ksa.AvionicsHealth.ok, avionics.health)
+        self.assertEqual(100, avionics.tolerance)
+        self.assertGreaterEqual(avionics.dose, 0)
+        self.assertLess(avionics.dose, 1)
+        self.assertFalse(avionics.rebooting)
+        if math.isnan(avionics.dose_rate):
+            self.assertEqual(math.inf, avionics.time_left)
+        else:
+            self.assertGreater(avionics.time_left, 0)
+
+
+class TestProbeCoreUnpowered(ksatest.TestCase):
+    """Runs the battery of a small probe core flat, in about 14 minutes."""
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.load_save()
+        name = cls.conn.testing_tools.register_vehicle(str(VEHICLES / "ProbeCoreTest"))
+        cls.vehicle = cls.ksa.launch_vehicle(name, SITE)
+        cls.part = cls.vehicle.root_part
+        cls.core = cls.part.power_consumers[0]
+        forecast = cls.part.power_forecast
+        ut = cls.ksa.ut + forecast.time_left + 60
+        # The game stops the warp for its low power alerts
+        for _ in range(20):
+            if cls.ksa.ut >= ut - 1:
+                break
+            cls.ksa.warp_to(ut)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.load_save()
+
+    def test_unpowered(self):
+        self.assertEqual(
+            self.ksa.ControlState.probe_core_unpowered, self.vehicle.control_state
+        )
+        self.assertEqual(self.ksa.PowerStatus.out, self.core.status)
+        forecast = self.part.power_forecast
+        self.assertTrue(forecast.has_battery)
+        self.assertEqual(0, forecast.charge)
+        self.assertEqual(0, forecast.time_left)
+
+
+class TestNoPowerSwitch(ksatest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.load_save()
+        cls.vehicle = cls.find_vehicle("Gemini7")
+
+    def test_crewed_control_state(self):
+        self.assertEqual(self.ksa.ControlState.controllable, self.vehicle.control_state)
+        for vehicle in self.ksa.vehicles:
+            self.assertEqual(
+                vehicle.controllable,
+                vehicle.control_state == self.ksa.ControlState.controllable,
+            )
+
+    def test_no_power_switch(self):
+        consumers = [c for c in self.vehicle.power_consumers if not c.has_power_switch]
+        self.assertTrue(consumers)
+        consumer = consumers[0]
+        with self.assertRaises(RuntimeError):
+            _ = consumer.mode
+        with self.assertRaises(RuntimeError):
+            _ = consumer.status
+        with self.assertRaises(RuntimeError):
+            consumer.standby_in_storms = True
+        self.assertEqual([], self.vehicle.avionics)
+
+    def test_power_forecast(self):
+        forecast = self.vehicle.root_part.power_forecast
+        self.assertTrue(forecast.has_battery)
+        self.assertGreater(forecast.charge, 0)
+        self.assertGreaterEqual(forecast.draw, 0)
+        self.assertGreaterEqual(forecast.supply, 0)
+        self.assertGreater(forecast.time_left, 0)
