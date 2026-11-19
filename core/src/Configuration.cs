@@ -38,6 +38,7 @@ namespace KRPC
             MainWindowPosition = new Tuple<float,float,float,float> (0, 0, 0, 0);
             InfoWindowVisible = false;
             InfoWindowPosition = new Tuple<float,float,float,float> (0, 0, 0, 0);
+            ExpandedServers = new HashSet<Guid> ();
             HiddenServiceProblems = string.Empty;
             AutoStartServers = true;
             AutoAcceptConnections = true;
@@ -198,15 +199,14 @@ namespace KRPC
         }
 
         /// <summary>
-        /// Default settings for a new server of the protocol, named for the protocol and
-        /// numbered when a server already has that name
+        /// Default settings for a new server of the protocol, named "Server" and numbered
+        /// when a server already has that name
         /// </summary>
         public Server NewServer (Protocol protocol)
         {
-            var server = new Server (protocol);
-            var name = server.Name;
+            var server = new Server (protocol) { Name = "Server" };
             for (var i = 2; servers.Exists (x => x.Name == server.Name); i++)
-                server.Name = name + " " + i.ToString (CultureInfo.InvariantCulture);
+                server.Name = "Server " + i.ToString (CultureInfo.InvariantCulture);
             return server;
         }
 
@@ -243,6 +243,7 @@ namespace KRPC
             for (var i = 0; i < servers.Count; i++) {
                 if (servers [i].Id == id) {
                     servers.RemoveAt (i);
+                    ExpandedServers.Remove (id);
                     return;
                 }
             }
@@ -268,6 +269,11 @@ namespace KRPC
         /// Screen position of the info window
         /// </summary>
         public Tuple<float,float,float,float> InfoWindowPosition { get; set; }
+
+        /// <summary>
+        /// The identifiers of the servers expanded in the main server window
+        /// </summary>
+        public ISet<Guid> ExpandedServers { get; private set; }
 
         /// <summary>
         /// The digest of the service problems the player chose not to be shown again, or an
