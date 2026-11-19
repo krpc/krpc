@@ -40,7 +40,9 @@
   - Add the temperature, speed of sound, oxygen fraction and molar mass of an atmosphere to
     `Body`
 
-- Space weather
+- Radiation and space weather
+  - Add the radiation shielding of a part, its cover by the vehicle's tanks, and the dose rate
+    behind them
   - Add the solar wind and radiation storm at a vehicle, and the coronal mass ejections heading
     for it, with their forecast arrival
   - Add the geomagnetic storm of a body, and the activity and recent coronal mass ejections of

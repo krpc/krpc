@@ -151,6 +151,61 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The areal density of the part's radiation shielding, its hull included, in
+        /// <unit>kg/m^2</unit>. Zero for an unshielded part.
+        /// </summary>
+        [KRPCProperty]
+        public float ShieldArealDensity {
+            get { return (float)RadiationShield.ComputeArealDensity (InternalPart); }
+        }
+
+        /// <summary>
+        /// The mass of the shielding material added to the part, in kilograms. Zero when the
+        /// shielding is built into the hull.
+        /// </summary>
+        [KRPCProperty]
+        public float ShieldMass {
+            get { return RadiationShield.ComputeMass (InternalPart); }
+        }
+
+        /// <summary>
+        /// The fraction of the sky, seen from the part, that the contents of the vehicle's tanks
+        /// cover, between 0 and 1. The contents shield the part from radiation.
+        /// </summary>
+        [KRPCProperty]
+        public float TankCover {
+            get {
+                RadiationShield.GetTransmission (InternalPart, out var tankCover);
+                return (float)tankCover;
+            }
+        }
+
+        // Scratch space for the particle event dose
+        static readonly List<DoseTerm> doseTerms = new List<DoseTerm> ();
+
+        /// <summary>
+        /// The radiation dose rate inside the part, behind its shielding and the vehicle's tanks,
+        /// in sieverts per second. Includes any solar particle event under way. A kitten in the
+        /// part's seats receives this dose rate.
+        /// </summary>
+        /// <remarks>
+        /// <see cref="Flight.DoseRate"/> gives the dose rate with no shielding.
+        /// </remarks>
+        [KRPCProperty]
+        public float DoseRate {
+            get {
+                // As the game's part window and crew dose compute it
+                var vehicle = InternalVehicle;
+                var transmission = RadiationShield.GetTransmission (InternalPart);
+                var position = vehicle.GetPositionEcl ();
+                var rates = Radiation.ComputeDoseRates (vehicle.Parent, vehicle.GetPositionCci (), position);
+                var events = ParticleEvents.ComputeDoseRate (
+                    position, vehicle.Parent, rates.StarExposure, Universe.GetElapsedSeconds (), doseTerms);
+                return (float)(rates.Through (transmission) + events * transmission.Star).Value ();
+            }
+        }
+
+        /// <summary>
         /// The position of the part's origin, in meters.
         /// </summary>
         /// <param name="referenceFrame">The reference frame of the position.</param>

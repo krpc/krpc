@@ -316,6 +316,10 @@ KSA.Part.Sequence
 KSA.Part.Mass
 KSA.Part.DryMass
 KSA.Part.Resources
+KSA.Part.ShieldArealDensity
+KSA.Part.ShieldMass
+KSA.Part.TankCover
+KSA.Part.DoseRate
 KSA.Part.Tanks
 KSA.Part.Habitats
 KSA.Part.Batteries
