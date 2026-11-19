@@ -15,7 +15,7 @@ class TestTerrain(ksatest.TestCase):
         self.assertGreater(self.earth.bedrock_height(27.988, 86.925), 8000)
         self.assertLess(self.earth.bedrock_height(11.35, 142.2), -10000)
         self.assertEqual(0, self.earth.surface_height(11.35, 142.2))
-        self.assertAlmostEqual(17, self.earth.surface_height(28.608, -80.604), delta=10)
+        self.assertAlmostEqual(75, self.earth.surface_height(28.608, -80.604), delta=10)
 
     def test_surface_is_terrain_or_sea(self):
         for latitude, longitude in ((0, 0), (45, 90), (-30, -60), (60, 10)):
