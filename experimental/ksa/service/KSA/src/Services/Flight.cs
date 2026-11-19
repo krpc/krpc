@@ -306,6 +306,63 @@ namespace KRPC.KSA.Services
             }
         }
 
+        SolarWindReading SolarWind {
+            get { return Radiation.ComputeSolarWindAt (InternalVehicle.GetPositionEcl (), Universe.GetElapsedSeconds ()); }
+        }
+
+        /// <summary>
+        /// The speed of the solar wind at the vehicle, in <unit>m/s</unit>. Zero if no star
+        /// has a solar wind.
+        /// </summary>
+        [KRPCProperty]
+        public float SolarWindSpeed {
+            get { return (float)(SolarWind.Speed * 1000); }
+        }
+
+        /// <summary>
+        /// The dynamic pressure of the solar wind at the vehicle, in pascals.
+        /// </summary>
+        [KRPCProperty]
+        public float SolarWindPressure {
+            get { return (float)SolarWind.Pressure; }
+        }
+
+        /// <summary>
+        /// The northward component of the magnetic field carried by the solar wind at the
+        /// vehicle, in teslas. A southward field, a negative value, drives geomagnetic storms.
+        /// </summary>
+        [KRPCProperty]
+        public float SolarWindNorthwardField {
+            get { return (float)(SolarWind.NorthwardField * 1e-9); }
+        }
+
+        /// <summary>
+        /// The flux of solar energetic protons at the vehicle during a solar particle event, in
+        /// protons per square centimeter per second per steradian. Zero outside an event.
+        /// </summary>
+        [KRPCProperty]
+        public float ProtonFlux {
+            get { return (float)SpaceWeatherAlerts.ComputeStormFlux (InternalVehicle.GetPositionEcl (), Universe.GetElapsedSeconds ()); }
+        }
+
+        /// <summary>
+        /// The level of the radiation storm at the vehicle, from 0 for none to 5 for the
+        /// most severe. The S level of the game's space weather window.
+        /// </summary>
+        [KRPCProperty]
+        public int RadiationStormLevel {
+            get { return SpaceWeatherAlerts.GetSLevel (ProtonFlux); }
+        }
+
+        /// <summary>
+        /// The coronal mass ejections heading for the vehicle, as the game's space weather
+        /// window lists them.
+        /// </summary>
+        [KRPCProperty]
+        public IList<CoronalMassEjection> IncomingCoronalMassEjections {
+            get { return CoronalMassEjection.Incoming (InternalVehicle.GetPositionEcl ()); }
+        }
+
         /// <summary>
         /// The dynamic pressure acting on the vehicle, in pascals.
         /// </summary>

@@ -40,6 +40,12 @@
   - Add the temperature, speed of sound, oxygen fraction and molar mass of an atmosphere to
     `Body`
 
+- Space weather
+  - Add the solar wind and radiation storm at a vehicle, and the coronal mass ejections heading
+    for it, with their forecast arrival
+  - Add the geomagnetic storm of a body, and the activity and recent coronal mass ejections of
+    a star
+
 - Clients
   - Add stubs and documentation for the JavaScript client
   - Add a WebSockets server on port 50001 to the default settings, for the JavaScript client

@@ -9,6 +9,8 @@ millisievert
 readme
 sievert
 sieverts
+steradian
+teslas
 undock
 unshielded
 untick
