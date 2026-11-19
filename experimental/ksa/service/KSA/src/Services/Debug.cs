@@ -233,10 +233,13 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
-        /// Fill the propellant, batteries and other consumables of a vehicle, as the game's
+        /// Fill the propellant and other substances in the tanks of a vehicle, as the game's
         /// refill command does.
         /// </summary>
         /// <param name="vehicle">The vehicle.</param>
+        /// <remarks>
+        /// The batteries keep their charge.
+        /// </remarks>
         [KRPCMethod]
         public static void FillResources (Vehicle vehicle)
         {
@@ -244,10 +247,13 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
-        /// Empty the propellant, batteries and other consumables of a vehicle, as the game's
+        /// Empty the propellant and other substances in the tanks of a vehicle, as the game's
         /// empty command does.
         /// </summary>
         /// <param name="vehicle">The vehicle.</param>
+        /// <remarks>
+        /// The batteries keep their charge.
+        /// </remarks>
         [KRPCMethod]
         public static void EmptyResources (Vehicle vehicle)
         {
