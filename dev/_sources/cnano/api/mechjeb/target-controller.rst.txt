@@ -22,32 +22,20 @@ TargetController
    .. function:: krpc_error_t krpc_MechJeb_TargetController_CanAlign(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_TargetController_t instance)
 
       Whether the vessel can align with the target, which it can with a docking port.
+      Throws an exception if there is no target.
 
       :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_MechJeb_TargetController_Distance(krpc_connection_t connection, float * returnValue, krpc_MechJeb_TargetController_t instance)
 
-      The distance to the target, in meters.
+      The distance to the target, in meters. Throws an exception if there is no target.
 
       :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_MechJeb_TargetController_DockingAxis(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_MechJeb_TargetController_t instance)
 
-      The world space docking axis of the target.
-
-      :Game Scenes: Flight
-
-   .. function:: krpc_error_t krpc_MechJeb_TargetController_GetPositionTargetPosition(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_MechJeb_TargetController_t instance)
-
-      The world space position of the position target.
-
-
-      :Game Scenes: Flight
-
-   .. function:: krpc_error_t krpc_MechJeb_TargetController_GetPositionTargetString(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_TargetController_t instance)
-
-      The position target as text.
-
+      The world space docking axis of the target. Throws an exception if there is no
+      target.
 
       :Game Scenes: Flight
 
@@ -57,16 +45,9 @@ TargetController
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_MechJeb_TargetController_PickPositionTargetOnMap(krpc_connection_t connection, krpc_MechJeb_TargetController_t instance)
-
-      Let the player pick the position target on the map.
-
-
-      :Game Scenes: Flight
-
    .. function:: krpc_error_t krpc_MechJeb_TargetController_Position(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_MechJeb_TargetController_t instance)
 
-      The world space position of the target.
+      The world space position of the target. Throws an exception if there is no target.
 
       :Game Scenes: Flight
 
@@ -78,13 +59,15 @@ TargetController
 
    .. function:: krpc_error_t krpc_MechJeb_TargetController_RelativePosition(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_MechJeb_TargetController_t instance)
 
-      The world space position of the vessel relative to the target.
+      The world space position of the vessel relative to the target. Throws an exception
+      if there is no target.
 
       :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_MechJeb_TargetController_RelativeVelocity(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_MechJeb_TargetController_t instance)
 
       The world space velocity of the vessel relative to the target, in :math:`\mathrm{m/s}`.
+      Throws an exception if there is no target.
 
       :Game Scenes: Flight
 
@@ -103,21 +86,10 @@ TargetController
 
          Set the direction with :func:`krpc_MechJeb_TargetController_UpdateDirectionTarget`.
 
-   .. function:: krpc_error_t krpc_MechJeb_TargetController_SetPositionTarget(krpc_connection_t connection, krpc_MechJeb_TargetController_t instance, krpc_SpaceCenter_CelestialBody_t body, double latitude, double longitude)
-
-      Set the target to a position on the surface of a body.
-
-      :Parameters:
-
-       * **body** -- The body.
-       * **latitude** -- The latitude, in degrees.
-       * **longitude** -- The longitude, in degrees.
-
-      :Game Scenes: Flight
-
    .. function:: krpc_error_t krpc_MechJeb_TargetController_TargetOrbit(krpc_connection_t connection, krpc_SpaceCenter_Orbit_t * returnValue, krpc_MechJeb_TargetController_t instance)
 
-      The orbit of the target.
+      The orbit of the target. Throws an exception if there is no target, or the target
+      has no orbit.
 
       :Game Scenes: Flight
 

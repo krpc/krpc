@@ -18,6 +18,7 @@ TargetController
    .. attribute:: can_align
 
       Whether the vessel can align with the target, which it can with a docking port.
+      Throws an exception if there is no target.
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
@@ -25,7 +26,7 @@ TargetController
 
    .. attribute:: distance
 
-      The distance to the target, in meters.
+      The distance to the target, in meters. Throws an exception if there is no target.
 
       :Attribute: Read-only, cannot be set
       :rtype: float
@@ -33,24 +34,11 @@ TargetController
 
    .. attribute:: docking_axis
 
-      The world space docking axis of the target.
+      The world space docking axis of the target. Throws an exception if there is no
+      target.
 
       :Attribute: Read-only, cannot be set
       :rtype: tuple(float, float, float)
-      :Game Scenes: Flight
-
-   .. method:: get_position_target_position()
-
-      The world space position of the position target.
-
-      :rtype: tuple(float, float, float)
-      :Game Scenes: Flight
-
-   .. method:: get_position_target_string()
-
-      The position target as text.
-
-      :rtype: str
       :Game Scenes: Flight
 
    .. attribute:: normal_target_exists
@@ -61,15 +49,9 @@ TargetController
       :rtype: bool
       :Game Scenes: Flight
 
-   .. method:: pick_position_target_on_map()
-
-      Let the player pick the position target on the map.
-
-      :Game Scenes: Flight
-
    .. attribute:: position
 
-      The world space position of the target.
+      The world space position of the target. Throws an exception if there is no target.
 
       :Attribute: Read-only, cannot be set
       :rtype: tuple(float, float, float)
@@ -85,7 +67,8 @@ TargetController
 
    .. attribute:: relative_position
 
-      The world space position of the vessel relative to the target.
+      The world space position of the vessel relative to the target. Throws an exception
+      if there is no target.
 
       :Attribute: Read-only, cannot be set
       :rtype: tuple(float, float, float)
@@ -94,6 +77,7 @@ TargetController
    .. attribute:: relative_velocity
 
       The world space velocity of the vessel relative to the target, in :math:`\mathrm{m/s}`.
+      Throws an exception if there is no target.
 
       :Attribute: Read-only, cannot be set
       :rtype: tuple(float, float, float)
@@ -111,18 +95,10 @@ TargetController
 
          Set the direction with :meth:`TargetController.update_direction_target`.
 
-   .. method:: set_position_target(body, latitude, longitude)
-
-      Set the target to a position on the surface of a body.
-
-      :param SpaceCenter.CelestialBody body: The body.
-      :param float latitude: The latitude, in degrees.
-      :param float longitude: The longitude, in degrees.
-      :Game Scenes: Flight
-
    .. attribute:: target_orbit
 
-      The orbit of the target.
+      The orbit of the target. Throws an exception if there is no target, or the target
+      has no orbit.
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`SpaceCenter.Orbit`

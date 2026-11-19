@@ -8,7 +8,8 @@ ManeuverPlanner
 
 .. type:: krpc_MechJeb_ManeuverPlanner_t
 
-   The maneuver planner, which makes maneuver nodes for its operations.
+   The Maneuver Planner window, which makes maneuver nodes for its operations, and
+   executes them.
 
    .. note::
 
@@ -17,6 +18,13 @@ ManeuverPlanner
    .. macro:: KRPC_CLASS_MECHJEB_MANEUVERPLANNER
 
       The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+   .. function:: krpc_error_t krpc_MechJeb_ManeuverPlanner_OperationAdvancedTransfer(krpc_connection_t connection, krpc_MechJeb_OperationAdvancedTransfer_t * returnValue, krpc_MechJeb_ManeuverPlanner_t instance)
+
+      The operation that transfers to another planet, at the departure that needs the
+      least delta-v.
+
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_MechJeb_ManeuverPlanner_OperationApoapsis(krpc_connection_t connection, krpc_MechJeb_OperationApoapsis_t * returnValue, krpc_MechJeb_ManeuverPlanner_t instance)
 
@@ -33,6 +41,12 @@ ManeuverPlanner
    .. function:: krpc_error_t krpc_MechJeb_ManeuverPlanner_OperationCourseCorrection(krpc_connection_t connection, krpc_MechJeb_OperationCourseCorrection_t * returnValue, krpc_MechJeb_ManeuverPlanner_t instance)
 
       The operation that fine tunes the closest approach to the target.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_ManeuverPlanner_OperationEccentricity(krpc_connection_t connection, krpc_MechJeb_OperationEccentricity_t * returnValue, krpc_MechJeb_ManeuverPlanner_t instance)
+
+      The operation that changes the eccentricity.
 
       :Game Scenes: Flight
 
@@ -114,6 +128,69 @@ ManeuverPlanner
 
       :Game Scenes: Flight
 
+   .. function:: krpc_error_t krpc_MechJeb_ManeuverPlanner_AbortNodeExecution(krpc_connection_t connection, krpc_MechJeb_ManeuverPlanner_t instance)
+
+      Stop executing the maneuver nodes.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_ManeuverPlanner_ExecuteAllNodes(krpc_connection_t connection, krpc_MechJeb_ManeuverPlanner_t instance)
+
+      Execute all the maneuver nodes. Throws an exception if the vessel has no maneuver
+      node.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_ManeuverPlanner_ExecuteNextNode(krpc_connection_t connection, krpc_MechJeb_ManeuverPlanner_t instance)
+
+      Execute the next maneuver node. Throws an exception if the vessel has no maneuver
+      node.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_ManeuverPlanner_Autowarp(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_ManeuverPlanner_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_ManeuverPlanner_set_Autowarp(krpc_connection_t connection, krpc_MechJeb_ManeuverPlanner_t instance, bool value)
+
+      Whether to warp time to the burn.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The same setting as :func:`krpc_MechJeb_AscentSettings_Autowarp`,
+         :func:`krpc_MechJeb_LandingGuidance_Autowarp` and :func:`krpc_MechJeb_RendezvousAutopilot_Autowarp`.
+
+   .. function:: krpc_error_t krpc_MechJeb_ManeuverPlanner_ExecutingNode(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_ManeuverPlanner_t instance)
+
+      Whether a maneuver node is being executed.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_ManeuverPlanner_LeadTime(krpc_connection_t connection, double * returnValue, krpc_MechJeb_ManeuverPlanner_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_ManeuverPlanner_set_LeadTime(krpc_connection_t connection, krpc_MechJeb_ManeuverPlanner_t instance, double value)
+
+      The time before the burn at which time warp stops, in seconds.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_ManeuverPlanner_RCSOnly(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_ManeuverPlanner_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_ManeuverPlanner_set_RCSOnly(krpc_connection_t connection, krpc_MechJeb_ManeuverPlanner_t instance, bool value)
+
+      Whether to burn with the RCS thrusters in place of the engines.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_ManeuverPlanner_KillRollRotation(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_ManeuverPlanner_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_ManeuverPlanner_set_KillRollRotation(krpc_connection_t connection, krpc_MechJeb_ManeuverPlanner_t instance, bool value)
+
+      Whether to stop the vessel's roll before the burn.
+
+      :Game Scenes: Flight
+
 
 
 .. macro:: KRPC_EXCEPTION_MECHJEB_OPERATIONEXCEPTION
@@ -182,9 +259,14 @@ TimeSelector
       :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
-   .. macro:: KRPC_MECHJEB_TIMEREFERENCE_ALTITUDE
+   .. macro:: KRPC_MECHJEB_TIMEREFERENCE_COMPUTED
 
-      At :func:`krpc_MechJeb_TimeSelector_CircularizeAltitude`.
+      At the optimum time.
+
+
+   .. macro:: KRPC_MECHJEB_TIMEREFERENCE_XFROMNOW
+
+      After :func:`krpc_MechJeb_TimeSelector_LeadTime`.
 
 
    .. macro:: KRPC_MECHJEB_TIMEREFERENCE_APOAPSIS
@@ -192,14 +274,14 @@ TimeSelector
       At the next apoapsis.
 
 
-   .. macro:: KRPC_MECHJEB_TIMEREFERENCE_CLOSESTAPPROACH
+   .. macro:: KRPC_MECHJEB_TIMEREFERENCE_PERIAPSIS
 
-      At the closest approach to the target.
+      At the next periapsis.
 
 
-   .. macro:: KRPC_MECHJEB_TIMEREFERENCE_COMPUTED
+   .. macro:: KRPC_MECHJEB_TIMEREFERENCE_ALTITUDE
 
-      At the optimum time.
+      At :func:`krpc_MechJeb_TimeSelector_CircularizeAltitude`.
 
 
    .. macro:: KRPC_MECHJEB_TIMEREFERENCE_EQASCENDING
@@ -212,21 +294,6 @@ TimeSelector
       At the equatorial descending node.
 
 
-   .. macro:: KRPC_MECHJEB_TIMEREFERENCE_EQHIGHESTAD
-
-      At the cheaper of the equatorial ascending and descending nodes.
-
-
-   .. macro:: KRPC_MECHJEB_TIMEREFERENCE_EQNEARESTAD
-
-      At the nearer of the equatorial ascending and descending nodes.
-
-
-   .. macro:: KRPC_MECHJEB_TIMEREFERENCE_PERIAPSIS
-
-      At the next periapsis.
-
-
    .. macro:: KRPC_MECHJEB_TIMEREFERENCE_RELASCENDING
 
       At the next ascending node with the target.
@@ -235,6 +302,21 @@ TimeSelector
    .. macro:: KRPC_MECHJEB_TIMEREFERENCE_RELDESCENDING
 
       At the next descending node with the target.
+
+
+   .. macro:: KRPC_MECHJEB_TIMEREFERENCE_CLOSESTAPPROACH
+
+      At the closest approach to the target.
+
+
+   .. macro:: KRPC_MECHJEB_TIMEREFERENCE_EQHIGHESTAD
+
+      At the cheaper of the equatorial ascending and descending nodes.
+
+
+   .. macro:: KRPC_MECHJEB_TIMEREFERENCE_EQNEARESTAD
+
+      At the nearer of the equatorial ascending and descending nodes.
 
 
    .. macro:: KRPC_MECHJEB_TIMEREFERENCE_RELHIGHESTAD
@@ -247,14 +329,84 @@ TimeSelector
       At the nearer of the ascending and descending nodes with the target.
 
 
-   .. macro:: KRPC_MECHJEB_TIMEREFERENCE_XFROMNOW
-
-      After :func:`krpc_MechJeb_TimeSelector_LeadTime`.
-
-
 
 Operations
 ----------
+
+OperationAdvancedTransfer
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+.. type:: krpc_MechJeb_OperationAdvancedTransfer_t
+
+   An interplanetary transfer to the target body, at the departure that needs the least
+   delta-v before :func:`krpc_MechJeb_OperationAdvancedTransfer_MaxArrivalTime`.
+
+   .. note::
+
+      MechJeb searches for the departure in the background. The first call to
+      ``MakeNodes`` starts the search, and throws an :macro:`KRPC_EXCEPTION_MECHJEB_OPERATIONEXCEPTION`
+      until it finishes. See :func:`krpc_MechJeb_OperationAdvancedTransfer_Searching`.
+
+   .. macro:: KRPC_CLASS_MECHJEB_OPERATIONADVANCEDTRANSFER
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+   .. function:: krpc_error_t krpc_MechJeb_OperationAdvancedTransfer_MaxArrivalTime(krpc_connection_t connection, double * returnValue, krpc_MechJeb_OperationAdvancedTransfer_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_OperationAdvancedTransfer_set_MaxArrivalTime(krpc_connection_t connection, krpc_MechJeb_OperationAdvancedTransfer_t instance, double value)
+
+      The latest arrival time, as a time from now, in seconds.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_OperationAdvancedTransfer_IncludeCaptureBurn(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_OperationAdvancedTransfer_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_OperationAdvancedTransfer_set_IncludeCaptureBurn(krpc_connection_t connection, krpc_MechJeb_OperationAdvancedTransfer_t instance, bool value)
+
+      Whether to plan a capture burn at the destination.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_OperationAdvancedTransfer_PeriapsisHeight(krpc_connection_t connection, double * returnValue, krpc_MechJeb_OperationAdvancedTransfer_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_OperationAdvancedTransfer_set_PeriapsisHeight(krpc_connection_t connection, krpc_MechJeb_OperationAdvancedTransfer_t instance, double value)
+
+      The altitude of the periapsis at the destination, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_OperationAdvancedTransfer_Searching(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_OperationAdvancedTransfer_t instance)
+
+      Whether MechJeb is searching for the departure.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_OperationAdvancedTransfer_SearchProgress(krpc_connection_t connection, int32_t * returnValue, krpc_MechJeb_OperationAdvancedTransfer_t instance)
+
+      The progress of the search for the departure, as a percentage.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_OperationAdvancedTransfer_ErrorMessage(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_OperationAdvancedTransfer_t instance)
+
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_OperationAdvancedTransfer_MakeNodes(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_MechJeb_OperationAdvancedTransfer_t instance)
+
+      Make the maneuver nodes of the operation. Throws an :macro:`KRPC_EXCEPTION_MECHJEB_OPERATIONEXCEPTION`
+      if the operation cannot make them.
+
+
+      :returns: The maneuver nodes.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
+
+
 
 OperationApoapsis
 ^^^^^^^^^^^^^^^^^
@@ -270,18 +422,8 @@ OperationApoapsis
 
    .. function:: krpc_error_t krpc_MechJeb_OperationApoapsis_ErrorMessage(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_OperationApoapsis_t instance)
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. function:: krpc_error_t krpc_MechJeb_OperationApoapsis_MakeNode(krpc_connection_t connection, krpc_SpaceCenter_Node_t * returnValue, krpc_MechJeb_OperationApoapsis_t instance)
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_MechJeb_OperationApoapsis_MakeNodes(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_MechJeb_OperationApoapsis_t instance)
@@ -296,7 +438,8 @@ OperationApoapsis
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. function:: krpc_error_t krpc_MechJeb_OperationApoapsis_NewApoapsis(krpc_connection_t connection, double * returnValue, krpc_MechJeb_OperationApoapsis_t instance)
    .. function:: krpc_error_t krpc_MechJeb_OperationApoapsis_set_NewApoapsis(krpc_connection_t connection, krpc_MechJeb_OperationApoapsis_t instance, double value)
@@ -331,18 +474,8 @@ OperationCircularize
 
    .. function:: krpc_error_t krpc_MechJeb_OperationCircularize_ErrorMessage(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_OperationCircularize_t instance)
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. function:: krpc_error_t krpc_MechJeb_OperationCircularize_MakeNode(krpc_connection_t connection, krpc_SpaceCenter_Node_t * returnValue, krpc_MechJeb_OperationCircularize_t instance)
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_MechJeb_OperationCircularize_MakeNodes(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_MechJeb_OperationCircularize_t instance)
@@ -357,7 +490,8 @@ OperationCircularize
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. function:: krpc_error_t krpc_MechJeb_OperationCircularize_TimeSelector(krpc_connection_t connection, krpc_MechJeb_TimeSelector_t * returnValue, krpc_MechJeb_OperationCircularize_t instance)
 
@@ -379,8 +513,8 @@ OperationCourseCorrection
 
       The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
-   .. function:: krpc_error_t krpc_MechJeb_OperationCourseCorrection_CourseCorrectFinalPeA(krpc_connection_t connection, double * returnValue, krpc_MechJeb_OperationCourseCorrection_t instance)
-   .. function:: krpc_error_t krpc_MechJeb_OperationCourseCorrection_set_CourseCorrectFinalPeA(krpc_connection_t connection, krpc_MechJeb_OperationCourseCorrection_t instance, double value)
+   .. function:: krpc_error_t krpc_MechJeb_OperationCourseCorrection_FinalPeriapsisAltitude(krpc_connection_t connection, double * returnValue, krpc_MechJeb_OperationCourseCorrection_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_OperationCourseCorrection_set_FinalPeriapsisAltitude(krpc_connection_t connection, krpc_MechJeb_OperationCourseCorrection_t instance, double value)
 
       The periapsis altitude at a target body, in meters.
 
@@ -388,7 +522,7 @@ OperationCourseCorrection
 
    .. function:: krpc_error_t krpc_MechJeb_OperationCourseCorrection_ErrorMessage(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_OperationCourseCorrection_t instance)
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
       :Game Scenes: Flight
 
@@ -397,16 +531,6 @@ OperationCourseCorrection
 
       The closest approach distance to a target vessel, in meters.
 
-      :Game Scenes: Flight
-
-   .. function:: krpc_error_t krpc_MechJeb_OperationCourseCorrection_MakeNode(krpc_connection_t connection, krpc_SpaceCenter_Node_t * returnValue, krpc_MechJeb_OperationCourseCorrection_t instance)
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_MechJeb_OperationCourseCorrection_MakeNodes(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_MechJeb_OperationCourseCorrection_t instance)
@@ -421,7 +545,56 @@ OperationCourseCorrection
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
+
+
+
+OperationEccentricity
+^^^^^^^^^^^^^^^^^^^^^
+
+
+.. type:: krpc_MechJeb_OperationEccentricity_t
+
+   Change the eccentricity.
+
+   .. macro:: KRPC_CLASS_MECHJEB_OPERATIONECCENTRICITY
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+   .. function:: krpc_error_t krpc_MechJeb_OperationEccentricity_ErrorMessage(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_OperationEccentricity_t instance)
+
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_OperationEccentricity_MakeNodes(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_MechJeb_OperationEccentricity_t instance)
+
+      Make the maneuver nodes of the operation. Throws an :macro:`KRPC_EXCEPTION_MECHJEB_OPERATIONEXCEPTION`
+      if the operation cannot make them.
+
+
+      :returns: The maneuver nodes.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
+
+   .. function:: krpc_error_t krpc_MechJeb_OperationEccentricity_NewEccentricity(krpc_connection_t connection, double * returnValue, krpc_MechJeb_OperationEccentricity_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_OperationEccentricity_set_NewEccentricity(krpc_connection_t connection, krpc_MechJeb_OperationEccentricity_t instance, double value)
+
+      The new eccentricity.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_OperationEccentricity_TimeSelector(krpc_connection_t connection, krpc_MechJeb_TimeSelector_t * returnValue, krpc_MechJeb_OperationEccentricity_t instance)
+
+      The time of the maneuver.
+
+      :Game Scenes: Flight
 
 
 
@@ -439,18 +612,8 @@ OperationEllipticize
 
    .. function:: krpc_error_t krpc_MechJeb_OperationEllipticize_ErrorMessage(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_OperationEllipticize_t instance)
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. function:: krpc_error_t krpc_MechJeb_OperationEllipticize_MakeNode(krpc_connection_t connection, krpc_SpaceCenter_Node_t * returnValue, krpc_MechJeb_OperationEllipticize_t instance)
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_MechJeb_OperationEllipticize_MakeNodes(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_MechJeb_OperationEllipticize_t instance)
@@ -465,7 +628,8 @@ OperationEllipticize
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. function:: krpc_error_t krpc_MechJeb_OperationEllipticize_NewApoapsis(krpc_connection_t connection, double * returnValue, krpc_MechJeb_OperationEllipticize_t instance)
    .. function:: krpc_error_t krpc_MechJeb_OperationEllipticize_set_NewApoapsis(krpc_connection_t connection, krpc_MechJeb_OperationEllipticize_t instance, double value)
@@ -503,18 +667,8 @@ OperationInclination
 
    .. function:: krpc_error_t krpc_MechJeb_OperationInclination_ErrorMessage(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_OperationInclination_t instance)
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. function:: krpc_error_t krpc_MechJeb_OperationInclination_MakeNode(krpc_connection_t connection, krpc_SpaceCenter_Node_t * returnValue, krpc_MechJeb_OperationInclination_t instance)
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_MechJeb_OperationInclination_MakeNodes(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_MechJeb_OperationInclination_t instance)
@@ -529,7 +683,8 @@ OperationInclination
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. function:: krpc_error_t krpc_MechJeb_OperationInclination_NewInclination(krpc_connection_t connection, double * returnValue, krpc_MechJeb_OperationInclination_t instance)
    .. function:: krpc_error_t krpc_MechJeb_OperationInclination_set_NewInclination(krpc_connection_t connection, krpc_MechJeb_OperationInclination_t instance, double value)
@@ -560,18 +715,8 @@ OperationInterplanetaryTransfer
 
    .. function:: krpc_error_t krpc_MechJeb_OperationInterplanetaryTransfer_ErrorMessage(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_OperationInterplanetaryTransfer_t instance)
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. function:: krpc_error_t krpc_MechJeb_OperationInterplanetaryTransfer_MakeNode(krpc_connection_t connection, krpc_SpaceCenter_Node_t * returnValue, krpc_MechJeb_OperationInterplanetaryTransfer_t instance)
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_MechJeb_OperationInterplanetaryTransfer_MakeNodes(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_MechJeb_OperationInterplanetaryTransfer_t instance)
@@ -586,7 +731,8 @@ OperationInterplanetaryTransfer
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. function:: krpc_error_t krpc_MechJeb_OperationInterplanetaryTransfer_WaitForPhaseAngle(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_OperationInterplanetaryTransfer_t instance)
    .. function:: krpc_error_t krpc_MechJeb_OperationInterplanetaryTransfer_set_WaitForPhaseAngle(krpc_connection_t connection, krpc_MechJeb_OperationInterplanetaryTransfer_t instance, bool value)
@@ -611,18 +757,8 @@ OperationKillRelVel
 
    .. function:: krpc_error_t krpc_MechJeb_OperationKillRelVel_ErrorMessage(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_OperationKillRelVel_t instance)
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. function:: krpc_error_t krpc_MechJeb_OperationKillRelVel_MakeNode(krpc_connection_t connection, krpc_SpaceCenter_Node_t * returnValue, krpc_MechJeb_OperationKillRelVel_t instance)
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_MechJeb_OperationKillRelVel_MakeNodes(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_MechJeb_OperationKillRelVel_t instance)
@@ -637,7 +773,8 @@ OperationKillRelVel
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. function:: krpc_error_t krpc_MechJeb_OperationKillRelVel_TimeSelector(krpc_connection_t connection, krpc_MechJeb_TimeSelector_t * returnValue, krpc_MechJeb_OperationKillRelVel_t instance)
 
@@ -661,7 +798,7 @@ OperationLambert
 
    .. function:: krpc_error_t krpc_MechJeb_OperationLambert_ErrorMessage(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_OperationLambert_t instance)
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
       :Game Scenes: Flight
 
@@ -670,16 +807,6 @@ OperationLambert
 
       The time from the maneuver to the intercept, in seconds.
 
-      :Game Scenes: Flight
-
-   .. function:: krpc_error_t krpc_MechJeb_OperationLambert_MakeNode(krpc_connection_t connection, krpc_SpaceCenter_Node_t * returnValue, krpc_MechJeb_OperationLambert_t instance)
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_MechJeb_OperationLambert_MakeNodes(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_MechJeb_OperationLambert_t instance)
@@ -694,7 +821,8 @@ OperationLambert
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. function:: krpc_error_t krpc_MechJeb_OperationLambert_TimeSelector(krpc_connection_t connection, krpc_MechJeb_TimeSelector_t * returnValue, krpc_MechJeb_OperationLambert_t instance)
 
@@ -718,18 +846,8 @@ OperationLan
 
    .. function:: krpc_error_t krpc_MechJeb_OperationLan_ErrorMessage(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_OperationLan_t instance)
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. function:: krpc_error_t krpc_MechJeb_OperationLan_MakeNode(krpc_connection_t connection, krpc_SpaceCenter_Node_t * returnValue, krpc_MechJeb_OperationLan_t instance)
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_MechJeb_OperationLan_MakeNodes(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_MechJeb_OperationLan_t instance)
@@ -744,7 +862,8 @@ OperationLan
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. function:: krpc_error_t krpc_MechJeb_OperationLan_NewLAN(krpc_connection_t connection, double * returnValue, krpc_MechJeb_OperationLan_t instance)
    .. function:: krpc_error_t krpc_MechJeb_OperationLan_set_NewLAN(krpc_connection_t connection, krpc_MechJeb_OperationLan_t instance, double value)
@@ -781,18 +900,8 @@ OperationLongitude
 
    .. function:: krpc_error_t krpc_MechJeb_OperationLongitude_ErrorMessage(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_OperationLongitude_t instance)
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. function:: krpc_error_t krpc_MechJeb_OperationLongitude_MakeNode(krpc_connection_t connection, krpc_SpaceCenter_Node_t * returnValue, krpc_MechJeb_OperationLongitude_t instance)
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_MechJeb_OperationLongitude_MakeNodes(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_MechJeb_OperationLongitude_t instance)
@@ -807,7 +916,8 @@ OperationLongitude
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. function:: krpc_error_t krpc_MechJeb_OperationLongitude_NewSurfaceLongitude(krpc_connection_t connection, double * returnValue, krpc_MechJeb_OperationLongitude_t instance)
    .. function:: krpc_error_t krpc_MechJeb_OperationLongitude_set_NewSurfaceLongitude(krpc_connection_t connection, krpc_MechJeb_OperationLongitude_t instance, double value)
@@ -844,18 +954,8 @@ OperationMoonReturn
 
    .. function:: krpc_error_t krpc_MechJeb_OperationMoonReturn_ErrorMessage(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_OperationMoonReturn_t instance)
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. function:: krpc_error_t krpc_MechJeb_OperationMoonReturn_MakeNode(krpc_connection_t connection, krpc_SpaceCenter_Node_t * returnValue, krpc_MechJeb_OperationMoonReturn_t instance)
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_MechJeb_OperationMoonReturn_MakeNodes(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_MechJeb_OperationMoonReturn_t instance)
@@ -870,7 +970,8 @@ OperationMoonReturn
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. function:: krpc_error_t krpc_MechJeb_OperationMoonReturn_MoonReturnAltitude(krpc_connection_t connection, double * returnValue, krpc_MechJeb_OperationMoonReturn_t instance)
    .. function:: krpc_error_t krpc_MechJeb_OperationMoonReturn_set_MoonReturnAltitude(krpc_connection_t connection, krpc_MechJeb_OperationMoonReturn_t instance, double value)
@@ -895,18 +996,8 @@ OperationPeriapsis
 
    .. function:: krpc_error_t krpc_MechJeb_OperationPeriapsis_ErrorMessage(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_OperationPeriapsis_t instance)
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. function:: krpc_error_t krpc_MechJeb_OperationPeriapsis_MakeNode(krpc_connection_t connection, krpc_SpaceCenter_Node_t * returnValue, krpc_MechJeb_OperationPeriapsis_t instance)
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_MechJeb_OperationPeriapsis_MakeNodes(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_MechJeb_OperationPeriapsis_t instance)
@@ -921,7 +1012,8 @@ OperationPeriapsis
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. function:: krpc_error_t krpc_MechJeb_OperationPeriapsis_NewPeriapsis(krpc_connection_t connection, double * returnValue, krpc_MechJeb_OperationPeriapsis_t instance)
    .. function:: krpc_error_t krpc_MechJeb_OperationPeriapsis_set_NewPeriapsis(krpc_connection_t connection, krpc_MechJeb_OperationPeriapsis_t instance, double value)
@@ -952,18 +1044,8 @@ OperationPlane
 
    .. function:: krpc_error_t krpc_MechJeb_OperationPlane_ErrorMessage(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_OperationPlane_t instance)
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. function:: krpc_error_t krpc_MechJeb_OperationPlane_MakeNode(krpc_connection_t connection, krpc_SpaceCenter_Node_t * returnValue, krpc_MechJeb_OperationPlane_t instance)
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_MechJeb_OperationPlane_MakeNodes(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_MechJeb_OperationPlane_t instance)
@@ -978,7 +1060,8 @@ OperationPlane
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. function:: krpc_error_t krpc_MechJeb_OperationPlane_TimeSelector(krpc_connection_t connection, krpc_MechJeb_TimeSelector_t * returnValue, krpc_MechJeb_OperationPlane_t instance)
 
@@ -1008,18 +1091,8 @@ OperationResonantOrbit
 
    .. function:: krpc_error_t krpc_MechJeb_OperationResonantOrbit_ErrorMessage(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_OperationResonantOrbit_t instance)
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. function:: krpc_error_t krpc_MechJeb_OperationResonantOrbit_MakeNode(krpc_connection_t connection, krpc_SpaceCenter_Node_t * returnValue, krpc_MechJeb_OperationResonantOrbit_t instance)
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_MechJeb_OperationResonantOrbit_MakeNodes(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_MechJeb_OperationResonantOrbit_t instance)
@@ -1034,7 +1107,8 @@ OperationResonantOrbit
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. function:: krpc_error_t krpc_MechJeb_OperationResonantOrbit_ResonanceDenominator(krpc_connection_t connection, int32_t * returnValue, krpc_MechJeb_OperationResonantOrbit_t instance)
    .. function:: krpc_error_t krpc_MechJeb_OperationResonantOrbit_set_ResonanceDenominator(krpc_connection_t connection, krpc_MechJeb_OperationResonantOrbit_t instance, int32_t value)
@@ -1072,18 +1146,8 @@ OperationSemiMajor
 
    .. function:: krpc_error_t krpc_MechJeb_OperationSemiMajor_ErrorMessage(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_OperationSemiMajor_t instance)
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. function:: krpc_error_t krpc_MechJeb_OperationSemiMajor_MakeNode(krpc_connection_t connection, krpc_SpaceCenter_Node_t * returnValue, krpc_MechJeb_OperationSemiMajor_t instance)
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_MechJeb_OperationSemiMajor_MakeNodes(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_MechJeb_OperationSemiMajor_t instance)
@@ -1098,7 +1162,8 @@ OperationSemiMajor
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. function:: krpc_error_t krpc_MechJeb_OperationSemiMajor_NewSemiMajorAxis(krpc_connection_t connection, double * returnValue, krpc_MechJeb_OperationSemiMajor_t instance)
    .. function:: krpc_error_t krpc_MechJeb_OperationSemiMajor_set_NewSemiMajorAxis(krpc_connection_t connection, krpc_MechJeb_OperationSemiMajor_t instance, double value)
@@ -1135,18 +1200,8 @@ OperationTransfer
 
    .. function:: krpc_error_t krpc_MechJeb_OperationTransfer_ErrorMessage(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_OperationTransfer_t instance)
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. function:: krpc_error_t krpc_MechJeb_OperationTransfer_MakeNode(krpc_connection_t connection, krpc_SpaceCenter_Node_t * returnValue, krpc_MechJeb_OperationTransfer_t instance)
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_MechJeb_OperationTransfer_MakeNodes(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_MechJeb_OperationTransfer_t instance)
@@ -1161,19 +1216,52 @@ OperationTransfer
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
-   .. function:: krpc_error_t krpc_MechJeb_OperationTransfer_InterceptOnly(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_OperationTransfer_t instance)
-   .. function:: krpc_error_t krpc_MechJeb_OperationTransfer_set_InterceptOnly(krpc_connection_t connection, krpc_MechJeb_OperationTransfer_t instance, bool value)
+   .. function:: krpc_error_t krpc_MechJeb_OperationTransfer_Capture(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_OperationTransfer_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_OperationTransfer_set_Capture(krpc_connection_t connection, krpc_MechJeb_OperationTransfer_t instance, bool value)
 
-      Whether to plan only the intercept, with no capture burn, for an impact or a flyby.
+      Whether the transfer ends in the target's orbit. Without capture, it is an impact or
+      a flyby.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_MechJeb_OperationTransfer_SimpleTransfer(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_OperationTransfer_t instance)
-   .. function:: krpc_error_t krpc_MechJeb_OperationTransfer_set_SimpleTransfer(krpc_connection_t connection, krpc_MechJeb_OperationTransfer_t instance, bool value)
+   .. function:: krpc_error_t krpc_MechJeb_OperationTransfer_PlanCapture(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_OperationTransfer_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_OperationTransfer_set_PlanCapture(krpc_connection_t connection, krpc_MechJeb_OperationTransfer_t instance, bool value)
 
-      Whether the transfer is coplanar.
+      Whether to make a second node for the capture burn.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`krpc_MechJeb_OperationTransfer_Capture`.
+
+   .. function:: krpc_error_t krpc_MechJeb_OperationTransfer_Rendezvous(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_OperationTransfer_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_OperationTransfer_set_Rendezvous(krpc_connection_t connection, krpc_MechJeb_OperationTransfer_t instance, bool value)
+
+      Whether to meet the target, rather than reach its orbit.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_OperationTransfer_LagTime(krpc_connection_t connection, double * returnValue, krpc_MechJeb_OperationTransfer_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_OperationTransfer_set_LagTime(krpc_connection_t connection, krpc_MechJeb_OperationTransfer_t instance, double value)
+
+      The time by which the vessel arrives behind the target, in seconds.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`krpc_MechJeb_OperationTransfer_Rendezvous`.
+
+   .. function:: krpc_error_t krpc_MechJeb_OperationTransfer_Coplanar(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_OperationTransfer_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_OperationTransfer_set_Coplanar(krpc_connection_t connection, krpc_MechJeb_OperationTransfer_t instance, bool value)
+
+      Whether the transfer stays in the vessel's orbital plane.
 
       :Game Scenes: Flight
 

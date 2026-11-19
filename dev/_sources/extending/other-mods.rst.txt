@@ -19,7 +19,8 @@ loaded the mod's assembly. The constructor only names the mod, as it can run bef
 loaded.
 
 ``Bind`` sets static fields through the ``ModBinder``. Its ``Type`` method finds a type of the mod
-by its full name, and binds a getter, setter, field, method or constructor of it. A type or member
+by its full name, and binds a getter, setter, field, method or constructor of it. ``ReadOnlyField``
+binds a field that the mod declares read-only and writes through reflection. A type or member
 missing from the installed version binds a delegate that throws when called. Only the procedures
 that use it fail. Bind through ``mod.Require`` to fail the whole integration instead. An exception
 from ``Bind`` does the same.

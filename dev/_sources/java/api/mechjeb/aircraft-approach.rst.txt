@@ -1,0 +1,101 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.MechJeb
+
+AircraftApproach
+================
+
+
+.. type:: public class AircraftApproach
+
+   The Aircraft Approach and Autoland window, which lands a plane on a runway.
+
+   .. method:: java.util.List<String> getRunways()
+
+
+      The names of the runways on the body the vessel is at.
+
+      :Game Scenes: Flight
+
+   .. method:: String getRunway()
+
+   .. method:: void setRunway(String value)
+
+      The name of the runway to land on. Throws an exception if there is no runway on the
+      body the vessel is at, or when set to the name of no such runway.
+
+      :Game Scenes: Flight
+
+   .. method:: double getDistanceToRunway()
+
+
+      The distance to the start of the runway, in meters.
+
+      :Game Scenes: Flight
+
+   .. method:: void autoland()
+
+      Land on the runway. Throws an exception if there is no runway on the body the vessel
+      is at.
+
+      :Game Scenes: Flight
+
+   .. method:: void abort()
+
+      Stop the autoland.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getEnabled()
+
+
+      Whether the autoland is running.
+
+      :Game Scenes: Flight
+
+   .. method:: String getState()
+
+
+      The stage of the approach, as MechJeb's window describes it.
+
+      :Game Scenes: Flight
+
+   .. method:: double getGlideslope()
+
+   .. method:: void setGlideslope(double value)
+
+      The glideslope of the approach, in degrees.
+
+      :Game Scenes: Flight
+
+   .. method:: double getApproachSpeed()
+
+   .. method:: void setApproachSpeed(double value)
+
+      The speed of the approach, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. method:: double getTouchdownSpeed()
+
+   .. method:: void setTouchdownSpeed(double value)
+
+      The speed at touchdown, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getEngageReverseIfAvailable()
+
+   .. method:: void setEngageReverseIfAvailable(boolean value)
+
+      Whether to reverse the thrust at touchdown, on engines that can.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getBrakeAsSoonAsLanded()
+
+   .. method:: void setBrakeAsSoonAsLanded(boolean value)
+
+      Whether to brake as soon as the vessel is landed.
+
+      :Game Scenes: Flight

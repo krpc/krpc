@@ -23,9 +23,15 @@ SmartRCS
 
       :Game Scenes: Flight
 
-   .. property:: RCSController RCSController { get; }
+   .. property:: bool RCSForRotation { get; set; }
 
-      The RCS controller. The same as :prop:`MechJeb.RCSController <MechJeb.MechJeb.RCSController>`.
+      Whether to use the RCS for rotation.
+
+      :Game Scenes: Flight
+
+   .. property:: bool RCSThrottle { get; set; }
+
+      Whether to throttle the RCS when the engines are off.
 
       :Game Scenes: Flight
 

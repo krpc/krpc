@@ -1,0 +1,59 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::MechJeb
+
+AttitudeAdjustment
+==================
+
+
+.. class:: AttitudeAdjustment
+
+   The Attitude Adjustment window, which selects the attitude controller that the
+   autopilots steer with.
+
+   .. function:: bool rcs_auto()
+   .. function:: void set_rcs_auto(bool value)
+
+      Whether the attitude controller turns RCS on for a large attitude error, and off once
+      the vessel settles.
+
+      :Game Scenes: Flight
+
+   .. function:: AttitudeController controller()
+   .. function:: void set_controller(AttitudeController value)
+
+      The attitude controller.
+
+      :Game Scenes: Flight
+
+
+
+.. namespace:: krpc::services::MechJeb
+.. enum-struct:: AttitudeController
+
+   An attitude controller of MechJeb. See :func:`AttitudeAdjustment::controller`.
+
+
+   .. enumerator:: mj
+
+      MechJeb's original attitude controller.
+
+
+   .. enumerator:: kos
+
+      The attitude controller of kOS.
+
+
+   .. enumerator:: hybrid
+
+      A hybrid of the MechJeb and kOS controllers.
+
+
+   .. enumerator:: better
+
+      MechJeb's default controller.
+
+
+   .. enumerator:: lqr
+
+      A linear-quadratic regulator.

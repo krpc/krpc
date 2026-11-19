@@ -27,12 +27,20 @@ SmartRCS
       :rtype: :class:`SmartRCSMode`
       :Game Scenes: Flight
 
-   .. attribute:: rcs_controller
+   .. attribute:: rcs_for_rotation
 
-      The RCS controller. The same as :attr:`rcs_controller`.
+      Whether to use the RCS for rotation.
 
-      :Attribute: Read-only, cannot be set
-      :rtype: :class:`RCSController`
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: rcs_throttle
+
+      Whether to throttle the RCS when the engines are off.
+
+      :Attribute: Can be read or written
+      :rtype: bool
       :Game Scenes: Flight
 
 

@@ -66,6 +66,19 @@ SmartASS
 
       :Game Scenes: Flight
 
+   .. function:: double roll()
+   .. function:: void set_roll(double value)
+
+      The roll, in degrees. 0 is top side up.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`SmartASS::force_roll`, and applies in every mode but
+         :enumerator:`SmartASSAutopilotMode::kill_rot` and the surface modes.
+
    .. function:: double surface_heading()
    .. function:: void set_surface_heading(double value)
 
@@ -76,7 +89,8 @@ SmartASS
 
       .. note::
 
-         Applies in the :enumerator:`SmartASSAutopilotMode::surface` mode.
+         Requires :func:`SmartASS::force_yaw`, and applies in the :enumerator:`SmartASSAutopilotMode::surface`
+         mode.
 
    .. function:: double surface_pitch()
    .. function:: void set_surface_pitch(double value)
@@ -88,7 +102,8 @@ SmartASS
 
       .. note::
 
-         Applies in the :enumerator:`SmartASSAutopilotMode::surface` mode.
+         Requires :func:`SmartASS::force_pitch`, and applies in the :enumerator:`SmartASSAutopilotMode::surface`
+         mode.
 
    .. function:: double surface_roll()
    .. function:: void set_surface_roll(double value)
@@ -100,7 +115,8 @@ SmartASS
 
       .. note::
 
-         Applies in the :enumerator:`SmartASSAutopilotMode::surface` mode.
+         Requires :func:`SmartASS::force_roll`, and applies in the :enumerator:`SmartASSAutopilotMode::surface`
+         mode.
 
    .. function:: double surface_vel_yaw()
    .. function:: void set_surface_vel_yaw(double value)
@@ -112,7 +128,8 @@ SmartASS
 
       .. note::
 
-         Applies in the :enumerator:`SmartASSAutopilotMode::surface_prograde` and
+         Requires :func:`SmartASS::force_yaw`, and applies in the
+         :enumerator:`SmartASSAutopilotMode::surface_prograde` and
          :enumerator:`SmartASSAutopilotMode::surface_retrograde` modes.
 
    .. function:: double surface_vel_pitch()
@@ -125,7 +142,8 @@ SmartASS
 
       .. note::
 
-         Applies in the :enumerator:`SmartASSAutopilotMode::surface_prograde` and
+         Requires :func:`SmartASS::force_pitch`, and applies in the
+         :enumerator:`SmartASSAutopilotMode::surface_prograde` and
          :enumerator:`SmartASSAutopilotMode::surface_retrograde` modes.
 
    .. function:: double surface_vel_roll()
@@ -138,7 +156,8 @@ SmartASS
 
       .. note::
 
-         Applies in the :enumerator:`SmartASSAutopilotMode::surface_prograde` and
+         Requires :func:`SmartASS::force_roll`, and applies in the
+         :enumerator:`SmartASSAutopilotMode::surface_prograde` and
          :enumerator:`SmartASSAutopilotMode::surface_retrograde` modes.
 
    .. function:: AttitudeReference advanced_reference()
@@ -221,15 +240,10 @@ SmartASS
       Point at the next maneuver node.
 
 
-   .. enumerator:: advanced
+   .. enumerator:: surface
 
-      Point in the direction set by :func:`SmartASS::advanced_reference` and
-      :func:`SmartASS::advanced_direction`.
-
-
-   .. enumerator:: automatic
-
-      Set by MechJeb's autopilots. Cannot be set.
+      Point in the direction set by :func:`SmartASS::surface_heading`,
+      :func:`SmartASS::surface_pitch` and :func:`SmartASS::surface_roll`.
 
 
    .. enumerator:: prograde
@@ -262,6 +276,49 @@ SmartASS
       Point radially inward.
 
 
+   .. enumerator:: relative_plus
+
+      Point along the velocity relative to the target.
+
+
+   .. enumerator:: relative_minus
+
+      Point against the velocity relative to the target.
+
+
+   .. enumerator:: target_plus
+
+      Point at the target.
+
+
+   .. enumerator:: target_minus
+
+      Point away from the target.
+
+
+   .. enumerator:: parallel_plus
+
+      Point parallel to the target's orientation. For a docking port, along its axis
+      and away from it.
+
+
+   .. enumerator:: parallel_minus
+
+      Point antiparallel to the target's orientation. For a docking port, along its axis
+      and toward it.
+
+
+   .. enumerator:: advanced
+
+      Point in the direction set by :func:`SmartASS::advanced_reference` and
+      :func:`SmartASS::advanced_direction`.
+
+
+   .. enumerator:: automatic
+
+      Set by MechJeb's autopilots. Cannot be set.
+
+
    .. enumerator:: surface_prograde
 
       Point along the surface velocity.
@@ -282,47 +339,9 @@ SmartASS
       Point against the horizontal surface velocity.
 
 
-   .. enumerator:: surface
-
-      Point in the direction set by :func:`SmartASS::surface_heading`,
-      :func:`SmartASS::surface_pitch` and :func:`SmartASS::surface_roll`.
-
-
    .. enumerator:: vertical_plus
 
       Point up, normal to the surface.
-
-
-   .. enumerator:: target_plus
-
-      Point at the target.
-
-
-   .. enumerator:: target_minus
-
-      Point away from the target.
-
-
-   .. enumerator:: relative_plus
-
-      Point along the velocity relative to the target.
-
-
-   .. enumerator:: relative_minus
-
-      Point against the velocity relative to the target.
-
-
-   .. enumerator:: parallel_plus
-
-      Point parallel to the target's orientation. For a docking port, along its axis
-      and away from it.
-
-
-   .. enumerator:: parallel_minus
-
-      Point antiparallel to the target's orientation. For a docking port, along its axis
-      and toward it.
 
 
 

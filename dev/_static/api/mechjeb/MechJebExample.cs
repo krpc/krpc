@@ -9,11 +9,11 @@ class MechJebExample
     {
         using (var connection = new Connection (name: "MechJeb Example")) {
             var vessel = connection.SpaceCenter ().ActiveVessel;
-            var ascent = connection.MechJeb ().AscentAutopilot;
+            var ascent = connection.MechJeb ().AscentGuidance;
 
             ascent.DesiredOrbitAltitude = 100000;
             ascent.DesiredInclination = 6;
-            ascent.Autostage = true;
+            ascent.Settings.Autostage = true;
             ascent.Enabled = true;
 
             vessel.Control.ActivateNextStage ();

@@ -32,57 +32,57 @@ Service
 
       :Game Scenes: Flight
 
-   .. function:: AirplaneAutopilot airplane_autopilot()
+   .. function:: AircraftApproach aircraft_approach()
 
-      The airplane autopilot.
-
-      :Game Scenes: Flight
-
-   .. function:: DeployableController antenna_controller()
-
-      The controller of the deployable antennas.
+      The Aircraft Approach and Autoland window.
 
       :Game Scenes: Flight
 
-   .. function:: AscentAutopilot ascent_autopilot()
+   .. function:: AircraftAutopilot aircraft_autopilot()
 
-      The ascent autopilot.
+      The Aircraft Autopilot window.
+
+      :Game Scenes: Flight
+
+   .. function:: AscentGuidance ascent_guidance()
+
+      The Ascent Guidance window.
+
+      :Game Scenes: Flight
+
+   .. function:: AttitudeAdjustment attitude_adjustment()
+
+      The Attitude Adjustment window.
 
       :Game Scenes: Flight
 
    .. function:: DockingAutopilot docking_autopilot()
 
-      The docking autopilot.
+      The Docking Autopilot window.
 
       :Game Scenes: Flight
 
-   .. function:: LandingAutopilot landing_autopilot()
+   .. function:: LandingGuidance landing_guidance()
 
-      The landing autopilot.
+      The Landing Guidance window.
 
       :Game Scenes: Flight
 
    .. function:: ManeuverPlanner maneuver_planner()
 
-      The maneuver planner.
-
-      :Game Scenes: Flight
-
-   .. function:: NodeExecutor node_executor()
-
-      The maneuver node executor.
-
-      :Game Scenes: Flight
-
-   .. function:: RCSController rcs_controller()
-
-      The RCS controller.
+      The Maneuver Planner window.
 
       :Game Scenes: Flight
 
    .. function:: RendezvousAutopilot rendezvous_autopilot()
 
-      The rendezvous autopilot.
+      The Rendezvous Autopilot window.
+
+      :Game Scenes: Flight
+
+   .. function:: RoverAutopilot rover_autopilot()
+
+      The Rover Autopilot window.
 
       :Game Scenes: Flight
 
@@ -98,33 +98,21 @@ Service
 
       :Game Scenes: Flight
 
-   .. function:: DeployableController solar_panel_controller()
-
-      The controller of the deployable solar panels.
-
-      :Game Scenes: Flight
-
-   .. function:: StagingController staging_controller()
-
-      The staging controller.
-
-      :Game Scenes: Flight
-
    .. function:: TargetController target_controller()
 
-      The target controller.
-
-      :Game Scenes: Flight
-
-   .. function:: ThrustController thrust_controller()
-
-      The thrust controller.
+      The target controller, which holds MechJeb's target.
 
       :Game Scenes: Flight
 
    .. function:: Translatron translatron()
 
       The Translatron window.
+
+      :Game Scenes: Flight
+
+   .. function:: Utilities utilities()
+
+      The Utilities window.
 
       :Game Scenes: Flight
 

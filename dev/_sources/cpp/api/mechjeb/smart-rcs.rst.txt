@@ -25,9 +25,17 @@ SmartRCS
 
       :Game Scenes: Flight
 
-   .. function:: RCSController rcs_controller()
+   .. function:: bool rcs_for_rotation()
+   .. function:: void set_rcs_for_rotation(bool value)
 
-      The RCS controller. The same as :func:`rcs_controller`.
+      Whether to use the RCS for rotation.
+
+      :Game Scenes: Flight
+
+   .. function:: bool rcs_throttle()
+   .. function:: void set_rcs_throttle(bool value)
+
+      Whether to throttle the RCS when the engines are off.
 
       :Game Scenes: Flight
 

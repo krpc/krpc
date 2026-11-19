@@ -641,7 +641,8 @@ instance of each subclass. It calls <code class="docutils literal notranslate"><
 loaded the mod’s assembly. The constructor only names the mod, as it can run before the game has
 loaded.</p>
 <p><code class="docutils literal notranslate"><span class="pre">Bind</span></code> sets static fields through the <code class="docutils literal notranslate"><span class="pre">ModBinder</span></code>. Its <code class="docutils literal notranslate"><span class="pre">Type</span></code> method finds a type of the mod
-by its full name, and binds a getter, setter, field, method or constructor of it. A type or member
+by its full name, and binds a getter, setter, field, method or constructor of it. <code class="docutils literal notranslate"><span class="pre">ReadOnlyField</span></code>
+binds a field that the mod declares read-only and writes through reflection. A type or member
 missing from the installed version binds a delegate that throws when called. Only the procedures
 that use it fail. Bind through <code class="docutils literal notranslate"><span class="pre">mod.Require</span></code> to fail the whole integration instead. An exception
 from <code class="docutils literal notranslate"><span class="pre">Bind</span></code> does the same.</p>

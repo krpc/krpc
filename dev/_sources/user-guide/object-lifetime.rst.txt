@@ -245,6 +245,9 @@ Infernal Robotics servo, a LaserDist laser, a docking camera, a SCANsat scanner,
 Prop Monitor computer or external camera are destroyed once their part is destroyed, or once the
 part loses the module that provides them.
 
+A MechJeb rover waypoint is destroyed once the rover autopilot's waypoints are cleared or
+replaced.
+
 A Raster Prop Monitor monitor is a prop in its part's IVA, which KSP builds only for the active
 vessel. It is not loaded while its part has no IVA, and works again once the vessel is active.
 A Raster Prop Monitor display is kept by the service, and lasts until the server stops.

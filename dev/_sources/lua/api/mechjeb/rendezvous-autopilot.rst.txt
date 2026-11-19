@@ -33,3 +33,19 @@ RendezvousAutopilot
       The largest number of orbits to wait for the phase angle.
 
       :Attribute: Can be read or written
+
+   .. attribute:: max_closing_speed: number
+
+      The largest speed at which to approach the target, in :math:`\mathrm{m/s}`.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: autowarp: boolean
+
+      Whether to warp time during the rendezvous.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         The same setting as :attr:`MechJeb.ManeuverPlanner.autowarp`.

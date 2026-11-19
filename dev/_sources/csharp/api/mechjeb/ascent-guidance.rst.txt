@@ -1,0 +1,698 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.MechJeb
+
+AscentGuidance
+==============
+
+
+.. class:: AscentGuidance
+
+   The Ascent Guidance window, which flies the vessel to orbit.
+
+   .. note::
+
+      See the `MechJeb wiki <https://github.com/MuMech/MechJeb2/wiki/Ascent-Guidance>`_
+      for how to set up this autopilot.
+
+   .. property:: bool Enabled { get; set; }
+
+      Whether the module is enabled.
+
+      :Game Scenes: Flight
+
+   .. property:: string Status { get; }
+
+      The autopilot status, which depends on the selected ascent path.
+
+      :Game Scenes: Flight
+
+   .. property:: AscentType AscentType { get; set; }
+
+      The ascent path.
+
+      :Game Scenes: Flight
+
+   .. property:: AscentSettings Settings { get; }
+
+      The Ascent Settings window.
+
+      :Game Scenes: Flight
+
+   .. property:: PVGSettings PVGSettings { get; }
+
+      The PVG Settings window, with the settings of the :value:`AscentType.PVG` path.
+
+      :Game Scenes: Flight
+
+   .. property:: ClassicPath ClassicPath { get; }
+
+      The Ascent Path Editor window, with the settings of the
+      :value:`AscentType.Classic` path.
+
+      :Game Scenes: Flight
+
+   .. property:: double DesiredOrbitAltitude { get; set; }
+
+      The altitude of the final circular orbit, in meters.
+
+      :Game Scenes: Flight
+
+   .. property:: double DesiredApoapsis { get; set; }
+
+      The target apoapsis, in meters.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies on the :value:`AscentType.PVG` path.
+
+   .. property:: bool AttachAltFlag { get; set; }
+
+      Whether the orbit is attached at :prop:`AscentGuidance.DesiredAttachAlt`.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies on the :value:`AscentType.PVG` path, with an early shutoff stage, set by
+         :prop:`PVGSettings.OptimizeStageFlag` and :prop:`PVGSettings.OptimizeStage`.
+         Without one, MechJeb always attaches the orbit.
+
+   .. property:: double DesiredAttachAlt { get; set; }
+
+      The altitude at which the orbit is attached, in meters.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies on the :value:`AscentType.PVG` path. Requires :prop:`AscentGuidance.AttachAltFlag`,
+         unless there is no early shutoff stage. See :prop:`PVGSettings.OptimizeStage`.
+
+   .. property:: double DesiredFPA { get; set; }
+
+      The flight path angle at orbit insertion, in degrees.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies on the :value:`AscentType.PVG` path, when there is no early shutoff
+         stage. See :prop:`PVGSettings.OptimizeStage`.
+
+   .. property:: double DesiredInclination { get; set; }
+
+      The inclination of the final circular orbit, in degrees.
+
+      :Game Scenes: Flight
+
+   .. property:: AscentLaunchMode LaunchMode { get; }
+
+      The launch mode, which gives whether the autopilot is waiting for a timed launch.
+
+      :Game Scenes: Flight
+
+   .. function:: void LaunchToRendezvous()
+
+      Launch to rendezvous with the target. Throws an exception if there is no target, or
+      the ascent path is PVG.
+
+
+      :Game Scenes: Flight
+
+   .. property:: double LaunchPhaseAngle { get; set; }
+
+      The phase angle to the target of a launch to rendezvous, in degrees.
+
+      :Game Scenes: Flight
+
+   .. function:: void LaunchToTargetPlane()
+
+      Launch into the plane of the target. Throws an exception if there is no target.
+
+
+      :Game Scenes: Flight
+
+   .. property:: double LaunchLANDifference { get; set; }
+
+      The difference from the target's longitude of the ascending node of a launch into the
+      target's plane, in degrees.
+
+      :Game Scenes: Flight
+
+   .. function:: void LaunchToMatchLan()
+
+      Launch into the plane of the target, at the time the target's longitude of the
+      ascending node, less :prop:`AscentGuidance.LaunchLANDifference`, passes overhead. Keeps
+      :prop:`AscentGuidance.DesiredInclination`. Throws an exception if there is no target, or the
+      ascent path is not :value:`AscentType.PVG`.
+
+
+      :Game Scenes: Flight
+
+   .. function:: void LaunchToLan()
+
+      Launch into the plane with longitude of the ascending node :prop:`AscentGuidance.DesiredLan`
+      and inclination :prop:`AscentGuidance.DesiredInclination`. Throws an exception if the ascent
+      path is not :value:`AscentType.PVG`.
+
+
+      :Game Scenes: Flight
+
+   .. property:: double DesiredLan { get; set; }
+
+      The longitude of the ascending node of a launch to a LAN, in degrees.
+      See :meth:`AscentGuidance.LaunchToLan`.
+
+      :Game Scenes: Flight
+
+   .. function:: void AbortTimedLaunch()
+
+      Abort a timed launch that has not started yet. Throws an exception if the launch mode
+      is :value:`AscentLaunchMode.Unknown`.
+
+
+      :Game Scenes: Flight
+
+   .. property:: int WarpCountDown { get; set; }
+
+      The time before a timed launch at which time warp stops, in seconds.
+
+      :Game Scenes: Flight
+
+   .. property:: bool OverrideWarpToPlane { get; set; }
+
+      Whether a timed launch launches at once, rather than at the time it computes.
+
+      :Game Scenes: Flight
+
+
+
+.. enum:: AscentType
+
+   The ascent path. See :prop:`AscentGuidance.AscentType`.
+
+
+   .. enumerator:: Classic
+
+      The classic ascent path. See :prop:`AscentGuidance.ClassicPath`.
+
+
+   .. enumerator:: PVG
+
+      Primer Vector Guidance, for RSS/RO. See :prop:`AscentGuidance.PVGSettings`.
+
+
+
+.. enum:: AscentLaunchMode
+
+   The launch mode of the ascent autopilot. See :prop:`AscentGuidance.LaunchMode`.
+
+
+   .. enumerator:: Normal
+
+      The autopilot is not performing a timed launch.
+
+
+   .. enumerator:: Rendezvous
+
+      A timed launch to rendezvous with the target vessel.
+
+
+   .. enumerator:: TargetPlane
+
+      A timed launch into the plane of the target.
+
+
+   .. enumerator:: MatchLan
+
+      A timed launch to the target's longitude of the ascending node. See
+      :meth:`AscentGuidance.LaunchToMatchLan`.
+
+
+   .. enumerator:: Lan
+
+      A timed launch to a longitude of the ascending node. See
+      :meth:`AscentGuidance.LaunchToLan`.
+
+
+   .. enumerator:: Unknown
+
+      A timed launch of another kind, started from MechJeb's window.
+
+
+
+AscentSettings
+--------------
+
+
+.. class:: AscentSettings
+
+   The Ascent Settings window, which holds the settings shared by the ascent paths.
+
+   .. property:: bool ForceRoll { get; set; }
+
+      Whether the autopilot controls the roll.
+
+      :Game Scenes: Flight
+
+   .. property:: double VerticalRoll { get; set; }
+
+      The roll during the vertical climb, in degrees.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :prop:`AscentSettings.ForceRoll`.
+
+   .. property:: double TurnRoll { get; set; }
+
+      The roll during the turn, in degrees.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :prop:`AscentSettings.ForceRoll`.
+
+   .. property:: double RollAltitude { get; set; }
+
+      The altitude above which the autopilot controls the roll, in meters.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :prop:`AscentSettings.ForceRoll`.
+
+   .. property:: bool LimitAngleOfAttack { get; set; }
+
+      Whether to limit the angle of attack.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies on the :value:`AscentType.Classic` path.
+
+   .. property:: double MaxAngleOfAttack { get; set; }
+
+      The largest angle of attack, in degrees.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :prop:`AscentSettings.LimitAngleOfAttack`, and applies on the :value:`AscentType.Classic`
+         path.
+
+   .. property:: double AngleOfAttackLimitFadeoutPressure { get; set; }
+
+      The dynamic pressure below which the angle of attack limit fades out, in pascals.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :prop:`AscentSettings.LimitAngleOfAttack`, and applies on the :value:`AscentType.Classic`
+         path.
+
+   .. property:: bool LimitingAngleOfAttack { get; }
+
+      Whether the angle of attack limit is limiting the steering.
+
+      :Game Scenes: Flight
+
+   .. property:: double CurrentMaxAngleOfAttack { get; }
+
+      The largest angle of attack the limit allows now, in degrees.
+
+      :Game Scenes: Flight
+
+   .. property:: bool CorrectiveSteering { get; set; }
+
+      Whether the autopilot steers by the velocity vector rather than the position vector.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         It is more accurate, though large craft may do better without it. Applies on the
+         :value:`AscentType.Classic` path.
+
+   .. property:: double CorrectiveSteeringGain { get; set; }
+
+      The gain of the corrective steering.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :prop:`AscentSettings.CorrectiveSteering`, and applies on the :value:`AscentType.Classic` path.
+
+   .. property:: bool Autostage { get; set; }
+
+      Whether the autopilot stages when the current stage runs out of fuel.
+
+      :Game Scenes: Flight
+
+   .. property:: Autostaging Staging { get; }
+
+      The autostaging settings. The same object as :prop:`Utilities.Staging`.
+
+      :Game Scenes: Flight
+
+   .. property:: ThrustLimiter Thrust { get; }
+
+      The throttle limiters. The same object as :prop:`Utilities.Thrust`.
+
+      :Game Scenes: Flight
+
+   .. property:: bool AutodeploySolarPanels { get; set; }
+
+      Whether to deploy the solar panels when the ascent finishes.
+
+      :Game Scenes: Flight
+
+   .. property:: bool AutoDeployAntennas { get; set; }
+
+      Whether to deploy the antennas when the ascent finishes.
+
+      :Game Scenes: Flight
+
+   .. property:: bool Autowarp { get; set; }
+
+      Whether to warp time during the ascent.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The same setting as :prop:`ManeuverPlanner.Autowarp`.
+
+   .. property:: bool SkipCircularization { get; set; }
+
+      Whether to skip the circularization burn.
+
+      :Game Scenes: Flight
+
+
+
+PVGSettings
+-----------
+
+
+.. class:: PVGSettings
+
+   The PVG Settings window, which holds the settings of the Primer Vector Guidance ascent path.
+
+   .. property:: double DynamicPressureTrigger { get; set; }
+
+      The dynamic pressure below which guidance starts, in pascals.
+
+      :Game Scenes: Flight
+
+   .. property:: bool FixedCoast { get; set; }
+
+      Whether the coast has a fixed length.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :prop:`PVGSettings.CoastStageFlag`.
+
+   .. property:: double FixedCoastLength { get; set; }
+
+      The length of the coast, in seconds.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :prop:`PVGSettings.FixedCoast`.
+
+   .. property:: double MinDeltaV { get; set; }
+
+      The smallest delta-v of a stage that guidance plans with, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. property:: int LastStage { get; set; }
+
+      The last stage that guidance plans with.
+
+      :Game Scenes: Flight
+
+   .. property:: bool OptimizeStageFlag { get; set; }
+
+      Whether guidance may shut off :prop:`PVGSettings.OptimizeStage` early.
+
+      :Game Scenes: Flight
+
+   .. property:: int OptimizeStage { get; set; }
+
+      The stage that guidance may shut off early.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :prop:`PVGSettings.OptimizeStageFlag`. -1 is no stage.
+
+   .. property:: bool UnguidedStagesFlag { get; set; }
+
+      Whether guidance leaves :prop:`PVGSettings.UnguidedStages` unguided.
+
+      :Game Scenes: Flight
+
+   .. property:: System.Collections.Generic.IList<int> UnguidedStages { get; set; }
+
+      The stages that guidance leaves unguided.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :prop:`PVGSettings.UnguidedStagesFlag`.
+
+   .. property:: bool CoastStageFlag { get; set; }
+
+      Whether guidance coasts in :prop:`PVGSettings.CoastStage`.
+
+      :Game Scenes: Flight
+
+   .. property:: int CoastStage { get; set; }
+
+      The stage before or after which guidance coasts.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :prop:`PVGSettings.CoastStageFlag`.
+
+   .. property:: bool CoastBeforeFlag { get; set; }
+
+      Whether the coast comes before :prop:`PVGSettings.CoastStage`, rather than after it.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :prop:`PVGSettings.CoastStageFlag`.
+
+   .. property:: double UllageLeadTime { get; set; }
+
+      The time before an ignition at which RCS settles the propellant, in seconds.
+
+      :Game Scenes: Flight
+
+   .. property:: bool SpinupStageFlag { get; set; }
+
+      Whether to spin up the vessel before :prop:`PVGSettings.SpinupStage`.
+
+      :Game Scenes: Flight
+
+   .. property:: int SpinupStage { get; set; }
+
+      The stage before which to spin up the vessel.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :prop:`PVGSettings.SpinupStageFlag`.
+
+   .. property:: double SpinupAngularVelocity { get; set; }
+
+      The angular velocity of the spin-up, in :math:`\mathrm{rad/s}`.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :prop:`PVGSettings.SpinupStageFlag`. MechJeb's window shows it in revolutions per
+         minute.
+
+   .. property:: double SpinupLeadTime { get; set; }
+
+      The time before staging at which the spin-up starts, in seconds.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :prop:`PVGSettings.SpinupStageFlag`.
+
+   .. property:: double LimitQa { get; set; }
+
+      The limit on dynamic pressure times angle of attack, in :math:`\mathrm{Pa \cdot rad}`.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         MechJeb clamps it to between 0 and 10000.
+
+   .. property:: double PitchRate { get; set; }
+
+      The pitch rate of the booster, in :math:`\mathrm{deg/s}`.
+
+      :Game Scenes: Flight
+
+   .. property:: double PitchStartVelocity { get; set; }
+
+      The speed at which the booster starts to pitch over, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. property:: int StagingTrigger { get; set; }
+
+      The stage after which guidance starts.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :prop:`PVGSettings.StagingTriggerFlag`.
+
+   .. property:: bool StagingTriggerFlag { get; set; }
+
+      Whether guidance starts after :prop:`PVGSettings.StagingTrigger`.
+
+      :Game Scenes: Flight
+
+
+
+ClassicPath
+-----------
+
+
+.. class:: ClassicPath
+
+   The Ascent Path Editor window, which holds the settings of the classic ascent path.
+
+   .. property:: bool AutoPath { get; set; }
+
+      Whether the autopilot chooses the turn altitudes and speed.
+
+      :Game Scenes: Flight
+
+   .. property:: float AutoTurnPercent { get; set; }
+
+      The altitude at which an automatic turn starts, as a fraction of the height of the
+      atmosphere.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :prop:`ClassicPath.AutoPath`.
+
+   .. property:: float AutoTurnSpeedFactor { get; set; }
+
+      The factor that sets the speed at which an automatic turn starts.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :prop:`ClassicPath.AutoPath`.
+
+   .. property:: double AutoTurnStartAltitude { get; }
+
+      The altitude at which an automatic turn starts, in meters.
+
+      :Game Scenes: Flight
+
+   .. property:: double AutoTurnStartVelocity { get; }
+
+      The speed at which an automatic turn starts, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. property:: double AutoTurnEndAltitude { get; }
+
+      The altitude at which an automatic turn ends, in meters.
+
+      :Game Scenes: Flight
+
+   .. property:: double TurnStartAltitude { get; set; }
+
+      The altitude at which the turn starts, in meters.
+
+      :Game Scenes: Flight
+
+   .. property:: double TurnStartVelocity { get; set; }
+
+      The speed at which the turn starts, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. property:: double TurnEndAltitude { get; set; }
+
+      The altitude at which the turn ends, in meters.
+
+      :Game Scenes: Flight
+
+   .. property:: double TurnEndAngle { get; set; }
+
+      The final flight path angle, in degrees.
+
+      :Game Scenes: Flight
+
+   .. property:: double TurnShapeExponent { get; set; }
+
+      The steepness of the turn, between 0 and 1.
+
+      :Game Scenes: Flight

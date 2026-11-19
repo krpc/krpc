@@ -19,32 +19,22 @@ TargetController
 
 
       Whether the vessel can align with the target, which it can with a docking port.
+      Throws an exception if there is no target.
 
       :Game Scenes: Flight
 
    .. method:: float getDistance()
 
 
-      The distance to the target, in meters.
+      The distance to the target, in meters. Throws an exception if there is no target.
 
       :Game Scenes: Flight
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> getDockingAxis()
 
 
-      The world space docking axis of the target.
-
-      :Game Scenes: Flight
-
-   .. method:: org.javatuples.Triplet<Double,Double,Double> getPositionTargetPosition()
-
-      The world space position of the position target.
-
-      :Game Scenes: Flight
-
-   .. method:: String getPositionTargetString()
-
-      The position target as text.
+      The world space docking axis of the target. Throws an exception if there is no
+      target.
 
       :Game Scenes: Flight
 
@@ -55,16 +45,10 @@ TargetController
 
       :Game Scenes: Flight
 
-   .. method:: void pickPositionTargetOnMap()
-
-      Let the player pick the position target on the map.
-
-      :Game Scenes: Flight
-
    .. method:: org.javatuples.Triplet<Double,Double,Double> getPosition()
 
 
-      The world space position of the target.
+      The world space position of the target. Throws an exception if there is no target.
 
       :Game Scenes: Flight
 
@@ -78,7 +62,8 @@ TargetController
    .. method:: org.javatuples.Triplet<Double,Double,Double> getRelativePosition()
 
 
-      The world space position of the vessel relative to the target.
+      The world space position of the vessel relative to the target. Throws an exception
+      if there is no target.
 
       :Game Scenes: Flight
 
@@ -86,6 +71,7 @@ TargetController
 
 
       The world space velocity of the vessel relative to the target, in :math:`\mathrm{m/s}`.
+      Throws an exception if there is no target.
 
       :Game Scenes: Flight
 
@@ -101,19 +87,11 @@ TargetController
 
          Set the direction with :meth:`TargetController.updateDirectionTarget(org.javatuples.Triplet<Double,Double,Double>)`.
 
-   .. method:: void setPositionTarget(SpaceCenter.CelestialBody body, double latitude, double longitude)
-
-      Set the target to a position on the surface of a body.
-
-      :param SpaceCenter.CelestialBody body: The body.
-      :param double latitude: The latitude, in degrees.
-      :param double longitude: The longitude, in degrees.
-      :Game Scenes: Flight
-
    .. method:: SpaceCenter.Orbit getTargetOrbit()
 
 
-      The orbit of the target.
+      The orbit of the target. Throws an exception if there is no target, or the target
+      has no orbit.
 
       :Game Scenes: Flight
 

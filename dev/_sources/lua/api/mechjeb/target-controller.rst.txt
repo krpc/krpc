@@ -18,28 +18,22 @@ TargetController
    .. attribute:: can_align: boolean
 
       Whether the vessel can align with the target, which it can with a docking port.
+      Throws an exception if there is no target.
 
       :Attribute: Read-only, cannot be set
 
    .. attribute:: distance: number
 
-      The distance to the target, in meters.
+      The distance to the target, in meters. Throws an exception if there is no target.
 
       :Attribute: Read-only, cannot be set
 
    .. attribute:: docking_axis: Tuple
 
-      The world space docking axis of the target.
+      The world space docking axis of the target. Throws an exception if there is no
+      target.
 
       :Attribute: Read-only, cannot be set
-
-   .. method:: get_position_target_position(): Tuple
-
-      The world space position of the position target.
-
-   .. method:: get_position_target_string(): string
-
-      The position target as text.
 
    .. attribute:: normal_target_exists: boolean
 
@@ -47,13 +41,9 @@ TargetController
 
       :Attribute: Read-only, cannot be set
 
-   .. method:: pick_position_target_on_map()
-
-      Let the player pick the position target on the map.
-
    .. attribute:: position: Tuple
 
-      The world space position of the target.
+      The world space position of the target. Throws an exception if there is no target.
 
       :Attribute: Read-only, cannot be set
 
@@ -65,13 +55,15 @@ TargetController
 
    .. attribute:: relative_position: Tuple
 
-      The world space position of the vessel relative to the target.
+      The world space position of the vessel relative to the target. Throws an exception
+      if there is no target.
 
       :Attribute: Read-only, cannot be set
 
    .. attribute:: relative_velocity: Tuple
 
       The world space velocity of the vessel relative to the target, in :math:`\mathrm{m/s}`.
+      Throws an exception if there is no target.
 
       :Attribute: Read-only, cannot be set
 
@@ -85,17 +77,10 @@ TargetController
 
          Set the direction with :meth:`MechJeb.TargetController.update_direction_target`.
 
-   .. method:: set_position_target(body: SpaceCenter.CelestialBody, latitude: number, longitude: number)
-
-      Set the target to a position on the surface of a body.
-
-      :param body: The body.
-      :param latitude: The latitude, in degrees.
-      :param longitude: The longitude, in degrees.
-
    .. attribute:: target_orbit: SpaceCenter.Orbit
 
-      The orbit of the target.
+      The orbit of the target. Throws an exception if there is no target, or the target
+      has no orbit.
 
       :Attribute: Read-only, cannot be set
 

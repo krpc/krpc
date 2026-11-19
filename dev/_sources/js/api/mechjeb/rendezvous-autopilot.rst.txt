@@ -45,3 +45,26 @@ RendezvousAutopilot
       :Property: Can be read or written
       :rtype: ``number``
       :Game Scenes: Flight
+
+   .. method:: getMaxClosingSpeed()
+               setMaxClosingSpeed(value)
+
+      The largest speed at which to approach the target, in :math:`\mathrm{m/s}`.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getAutowarp()
+               setAutowarp(value)
+
+      Whether to warp time during the rendezvous.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The same setting as :meth:`MechJeb.ManeuverPlanner.getAutowarp`.

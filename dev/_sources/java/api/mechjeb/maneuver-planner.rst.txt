@@ -8,11 +8,20 @@ ManeuverPlanner
 
 .. type:: public class ManeuverPlanner
 
-   The maneuver planner, which makes maneuver nodes for its operations.
+   The Maneuver Planner window, which makes maneuver nodes for its operations, and
+   executes them.
 
    .. note::
 
       MechJeb shares the operations, and most of their settings, between vessels.
+
+   .. method:: OperationAdvancedTransfer getOperationAdvancedTransfer()
+
+
+      The operation that transfers to another planet, at the departure that needs the
+      least delta-v.
+
+      :Game Scenes: Flight
 
    .. method:: OperationApoapsis getOperationApoapsis()
 
@@ -32,6 +41,13 @@ ManeuverPlanner
 
 
       The operation that fine tunes the closest approach to the target.
+
+      :Game Scenes: Flight
+
+   .. method:: OperationEccentricity getOperationEccentricity()
+
+
+      The operation that changes the eccentricity.
 
       :Game Scenes: Flight
 
@@ -126,6 +142,71 @@ ManeuverPlanner
 
       :Game Scenes: Flight
 
+   .. method:: void abortNodeExecution()
+
+      Stop executing the maneuver nodes.
+
+      :Game Scenes: Flight
+
+   .. method:: void executeAllNodes()
+
+      Execute all the maneuver nodes. Throws an exception if the vessel has no maneuver
+      node.
+
+      :Game Scenes: Flight
+
+   .. method:: void executeNextNode()
+
+      Execute the next maneuver node. Throws an exception if the vessel has no maneuver
+      node.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getAutowarp()
+
+   .. method:: void setAutowarp(boolean value)
+
+      Whether to warp time to the burn.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The same setting as :meth:`AscentSettings.getAutowarp()`,
+         :meth:`LandingGuidance.getAutowarp()` and :meth:`RendezvousAutopilot.getAutowarp()`.
+
+   .. method:: boolean getExecutingNode()
+
+
+      Whether a maneuver node is being executed.
+
+      :Game Scenes: Flight
+
+   .. method:: double getLeadTime()
+
+   .. method:: void setLeadTime(double value)
+
+      The time before the burn at which time warp stops, in seconds.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getRCSOnly()
+
+   .. method:: void setRCSOnly(boolean value)
+
+      Whether to burn with the RCS thrusters in place of the engines.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getKillRollRotation()
+
+   .. method:: void setKillRollRotation(boolean value)
+
+      Whether to stop the vessel's roll before the burn.
+
+      :Game Scenes: Flight
+
 
 
 .. type:: public class OperationException
@@ -187,9 +268,14 @@ TimeSelector
    The time reference of a maneuver. See :meth:`TimeSelector.getTimeReference()`.
 
 
-   .. field:: public TimeReference ALTITUDE
+   .. field:: public TimeReference COMPUTED
 
-      At :meth:`TimeSelector.getCircularizeAltitude()`.
+      At the optimum time.
+
+
+   .. field:: public TimeReference X_FROM_NOW
+
+      After :meth:`TimeSelector.getLeadTime()`.
 
 
    .. field:: public TimeReference APOAPSIS
@@ -197,14 +283,14 @@ TimeSelector
       At the next apoapsis.
 
 
-   .. field:: public TimeReference CLOSEST_APPROACH
+   .. field:: public TimeReference PERIAPSIS
 
-      At the closest approach to the target.
+      At the next periapsis.
 
 
-   .. field:: public TimeReference COMPUTED
+   .. field:: public TimeReference ALTITUDE
 
-      At the optimum time.
+      At :meth:`TimeSelector.getCircularizeAltitude()`.
 
 
    .. field:: public TimeReference EQ_ASCENDING
@@ -217,21 +303,6 @@ TimeSelector
       At the equatorial descending node.
 
 
-   .. field:: public TimeReference EQ_HIGHEST_AD
-
-      At the cheaper of the equatorial ascending and descending nodes.
-
-
-   .. field:: public TimeReference EQ_NEAREST_AD
-
-      At the nearer of the equatorial ascending and descending nodes.
-
-
-   .. field:: public TimeReference PERIAPSIS
-
-      At the next periapsis.
-
-
    .. field:: public TimeReference REL_ASCENDING
 
       At the next ascending node with the target.
@@ -240,6 +311,21 @@ TimeSelector
    .. field:: public TimeReference REL_DESCENDING
 
       At the next descending node with the target.
+
+
+   .. field:: public TimeReference CLOSEST_APPROACH
+
+      At the closest approach to the target.
+
+
+   .. field:: public TimeReference EQ_HIGHEST_AD
+
+      At the cheaper of the equatorial ascending and descending nodes.
+
+
+   .. field:: public TimeReference EQ_NEAREST_AD
+
+      At the nearer of the equatorial ascending and descending nodes.
 
 
    .. field:: public TimeReference REL_HIGHEST_AD
@@ -252,37 +338,68 @@ TimeSelector
       At the nearer of the ascending and descending nodes with the target.
 
 
-   .. field:: public TimeReference X_FROM_NOW
-
-      After :meth:`TimeSelector.getLeadTime()`.
-
-
 
 Operations
 ----------
 
-OperationApoapsis
-^^^^^^^^^^^^^^^^^
+OperationAdvancedTransfer
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
-.. type:: public class OperationApoapsis
+.. type:: public class OperationAdvancedTransfer
 
-   Change the apoapsis.
+   An interplanetary transfer to the target body, at the departure that needs the least
+   delta-v before :meth:`OperationAdvancedTransfer.getMaxArrivalTime()`.
+
+   .. note::
+
+      MechJeb searches for the departure in the background. The first call to
+      ``MakeNodes`` starts the search, and throws an :type:`OperationException`
+      until it finishes. See :meth:`OperationAdvancedTransfer.getSearching()`.
+
+   .. method:: double getMaxArrivalTime()
+
+   .. method:: void setMaxArrivalTime(double value)
+
+      The latest arrival time, as a time from now, in seconds.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getIncludeCaptureBurn()
+
+   .. method:: void setIncludeCaptureBurn(boolean value)
+
+      Whether to plan a capture burn at the destination.
+
+      :Game Scenes: Flight
+
+   .. method:: double getPeriapsisHeight()
+
+   .. method:: void setPeriapsisHeight(double value)
+
+      The altitude of the periapsis at the destination, in meters.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getSearching()
+
+
+      Whether MechJeb is searching for the departure.
+
+      :Game Scenes: Flight
+
+   .. method:: int getSearchProgress()
+
+
+      The progress of the search for the departure, as a percentage.
+
+      :Game Scenes: Flight
 
    .. method:: String getErrorMessage()
 
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. method:: SpaceCenter.Node makeNode()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. method:: java.util.List<SpaceCenter.Node> makeNodes()
@@ -296,7 +413,39 @@ OperationApoapsis
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
+
+
+
+OperationApoapsis
+^^^^^^^^^^^^^^^^^
+
+
+.. type:: public class OperationApoapsis
+
+   Change the apoapsis.
+
+   .. method:: String getErrorMessage()
+
+
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
+
+      :Game Scenes: Flight
+
+   .. method:: java.util.List<SpaceCenter.Node> makeNodes()
+
+      Make the maneuver nodes of the operation. Throws an :type:`OperationException`
+      if the operation cannot make them.
+
+      :returns: The maneuver nodes.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. method:: double getNewApoapsis()
 
@@ -330,17 +479,8 @@ OperationCircularize
    .. method:: String getErrorMessage()
 
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. method:: SpaceCenter.Node makeNode()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. method:: java.util.List<SpaceCenter.Node> makeNodes()
@@ -354,7 +494,8 @@ OperationCircularize
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. method:: TimeSelector getTimeSelector()
 
@@ -373,9 +514,9 @@ OperationCourseCorrection
 
    Fine tune the closest approach to the target.
 
-   .. method:: double getCourseCorrectFinalPeA()
+   .. method:: double getFinalPeriapsisAltitude()
 
-   .. method:: void setCourseCorrectFinalPeA(double value)
+   .. method:: void setFinalPeriapsisAltitude(double value)
 
       The periapsis altitude at a target body, in meters.
 
@@ -384,7 +525,7 @@ OperationCourseCorrection
    .. method:: String getErrorMessage()
 
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
       :Game Scenes: Flight
 
@@ -394,15 +535,6 @@ OperationCourseCorrection
 
       The closest approach distance to a target vessel, in meters.
 
-      :Game Scenes: Flight
-
-   .. method:: SpaceCenter.Node makeNode()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. method:: java.util.List<SpaceCenter.Node> makeNodes()
@@ -416,7 +548,54 @@ OperationCourseCorrection
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
+
+
+
+OperationEccentricity
+^^^^^^^^^^^^^^^^^^^^^
+
+
+.. type:: public class OperationEccentricity
+
+   Change the eccentricity.
+
+   .. method:: String getErrorMessage()
+
+
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
+
+      :Game Scenes: Flight
+
+   .. method:: java.util.List<SpaceCenter.Node> makeNodes()
+
+      Make the maneuver nodes of the operation. Throws an :type:`OperationException`
+      if the operation cannot make them.
+
+      :returns: The maneuver nodes.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
+
+   .. method:: double getNewEccentricity()
+
+   .. method:: void setNewEccentricity(double value)
+
+      The new eccentricity.
+
+      :Game Scenes: Flight
+
+   .. method:: TimeSelector getTimeSelector()
+
+
+      The time of the maneuver.
+
+      :Game Scenes: Flight
 
 
 
@@ -431,17 +610,8 @@ OperationEllipticize
    .. method:: String getErrorMessage()
 
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. method:: SpaceCenter.Node makeNode()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. method:: java.util.List<SpaceCenter.Node> makeNodes()
@@ -455,7 +625,8 @@ OperationEllipticize
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. method:: double getNewApoapsis()
 
@@ -493,17 +664,8 @@ OperationInclination
    .. method:: String getErrorMessage()
 
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. method:: SpaceCenter.Node makeNode()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. method:: java.util.List<SpaceCenter.Node> makeNodes()
@@ -517,7 +679,8 @@ OperationInclination
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. method:: double getNewInclination()
 
@@ -547,17 +710,8 @@ OperationInterplanetaryTransfer
    .. method:: String getErrorMessage()
 
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. method:: SpaceCenter.Node makeNode()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. method:: java.util.List<SpaceCenter.Node> makeNodes()
@@ -571,7 +725,8 @@ OperationInterplanetaryTransfer
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. method:: boolean getWaitForPhaseAngle()
 
@@ -594,17 +749,8 @@ OperationKillRelVel
    .. method:: String getErrorMessage()
 
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. method:: SpaceCenter.Node makeNode()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. method:: java.util.List<SpaceCenter.Node> makeNodes()
@@ -618,7 +764,8 @@ OperationKillRelVel
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. method:: TimeSelector getTimeSelector()
 
@@ -640,7 +787,7 @@ OperationLambert
    .. method:: String getErrorMessage()
 
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
       :Game Scenes: Flight
 
@@ -650,15 +797,6 @@ OperationLambert
 
       The time from the maneuver to the intercept, in seconds.
 
-      :Game Scenes: Flight
-
-   .. method:: SpaceCenter.Node makeNode()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. method:: java.util.List<SpaceCenter.Node> makeNodes()
@@ -672,7 +810,8 @@ OperationLambert
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. method:: TimeSelector getTimeSelector()
 
@@ -694,17 +833,8 @@ OperationLan
    .. method:: String getErrorMessage()
 
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. method:: SpaceCenter.Node makeNode()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. method:: java.util.List<SpaceCenter.Node> makeNodes()
@@ -718,7 +848,8 @@ OperationLan
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. method:: double getNewLAN()
 
@@ -754,17 +885,8 @@ OperationLongitude
    .. method:: String getErrorMessage()
 
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. method:: SpaceCenter.Node makeNode()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. method:: java.util.List<SpaceCenter.Node> makeNodes()
@@ -778,7 +900,8 @@ OperationLongitude
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. method:: double getNewSurfaceLongitude()
 
@@ -814,17 +937,8 @@ OperationMoonReturn
    .. method:: String getErrorMessage()
 
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. method:: SpaceCenter.Node makeNode()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. method:: java.util.List<SpaceCenter.Node> makeNodes()
@@ -838,7 +952,8 @@ OperationMoonReturn
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. method:: double getMoonReturnAltitude()
 
@@ -861,17 +976,8 @@ OperationPeriapsis
    .. method:: String getErrorMessage()
 
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. method:: SpaceCenter.Node makeNode()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. method:: java.util.List<SpaceCenter.Node> makeNodes()
@@ -885,7 +991,8 @@ OperationPeriapsis
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. method:: double getNewPeriapsis()
 
@@ -915,17 +1022,8 @@ OperationPlane
    .. method:: String getErrorMessage()
 
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. method:: SpaceCenter.Node makeNode()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. method:: java.util.List<SpaceCenter.Node> makeNodes()
@@ -939,7 +1037,8 @@ OperationPlane
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. method:: TimeSelector getTimeSelector()
 
@@ -967,17 +1066,8 @@ OperationResonantOrbit
    .. method:: String getErrorMessage()
 
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. method:: SpaceCenter.Node makeNode()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. method:: java.util.List<SpaceCenter.Node> makeNodes()
@@ -991,7 +1081,8 @@ OperationResonantOrbit
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. method:: int getResonanceDenominator()
 
@@ -1029,17 +1120,8 @@ OperationSemiMajor
    .. method:: String getErrorMessage()
 
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. method:: SpaceCenter.Node makeNode()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. method:: java.util.List<SpaceCenter.Node> makeNodes()
@@ -1053,7 +1135,8 @@ OperationSemiMajor
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. method:: double getNewSemiMajorAxis()
 
@@ -1089,17 +1172,8 @@ OperationTransfer
    .. method:: String getErrorMessage()
 
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. method:: SpaceCenter.Node makeNode()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. method:: java.util.List<SpaceCenter.Node> makeNodes()
@@ -1113,21 +1187,57 @@ OperationTransfer
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
-   .. method:: boolean getInterceptOnly()
+   .. method:: boolean getCapture()
 
-   .. method:: void setInterceptOnly(boolean value)
+   .. method:: void setCapture(boolean value)
 
-      Whether to plan only the intercept, with no capture burn, for an impact or a flyby.
+      Whether the transfer ends in the target's orbit. Without capture, it is an impact or
+      a flyby.
 
       :Game Scenes: Flight
 
-   .. method:: boolean getSimpleTransfer()
+   .. method:: boolean getPlanCapture()
 
-   .. method:: void setSimpleTransfer(boolean value)
+   .. method:: void setPlanCapture(boolean value)
 
-      Whether the transfer is coplanar.
+      Whether to make a second node for the capture burn.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`OperationTransfer.getCapture()`.
+
+   .. method:: boolean getRendezvous()
+
+   .. method:: void setRendezvous(boolean value)
+
+      Whether to meet the target, rather than reach its orbit.
+
+      :Game Scenes: Flight
+
+   .. method:: double getLagTime()
+
+   .. method:: void setLagTime(double value)
+
+      The time by which the vessel arrives behind the target, in seconds.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`OperationTransfer.getRendezvous()`.
+
+   .. method:: boolean getCoplanar()
+
+   .. method:: void setCoplanar(boolean value)
+
+      Whether the transfer stays in the vessel's orbital plane.
 
       :Game Scenes: Flight
 

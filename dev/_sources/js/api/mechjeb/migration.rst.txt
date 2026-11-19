@@ -1,0 +1,243 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: MechJeb
+   :no-index:
+
+Migration from KRPC.MechJeb 0.7.1
+=================================
+
+kRPC 0.8 adds the MechJeb service, which Genhis' KRPC.MechJeb 0.7.1 provided before. The
+service follows MechJeb's windows, so some 0.7.1 members moved or were renamed. 0.7.1 names
+are given as in C#.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 35 30
+
+   * - 0.7.1
+     - 0.8
+     - Note
+   * - ``MechJeb.AscentAutopilot``
+     - :func:`MechJeb.getAscentGuidance`
+     -
+   * - ``MechJeb.AirplaneAutopilot``
+     - :func:`MechJeb.getAircraftAutopilot`
+     -
+   * - ``MechJeb.LandingAutopilot``
+     - :func:`MechJeb.getLandingGuidance`
+     -
+   * - ``MechJeb.ThrustController``
+     - :meth:`MechJeb.Utilities.getThrust`
+     -
+   * - ``MechJeb.StagingController``
+     - :meth:`MechJeb.Utilities.getStaging`
+     -
+   * - ``MechJeb.SolarPanelController``
+     - :meth:`MechJeb.Utilities.getSolarPanels`
+     -
+   * - ``MechJeb.AntennaController``
+     - :meth:`MechJeb.Utilities.getAntennas`
+     -
+   * - ``MechJeb.NodeExecutor``
+     - :func:`MechJeb.getManeuverPlanner`
+     - Its members move to the maneuver planner, below
+   * - ``MechJeb.RCSController``
+     - :func:`MechJeb.getSmartRCS`
+     - Its members move to Smart RCS, below
+   * - ``MechJeb.APIReady``
+     - :func:`MechJeb.getAvailable` and :func:`MechJeb.getReady`
+     -
+   * - ``AscentAutopilot.Enabled``
+     - :meth:`MechJeb.AscentGuidance.getEnabled`
+     -
+   * - ``AscentAutopilot.Status``
+     - :meth:`MechJeb.AscentGuidance.getStatus`
+     -
+   * - ``AscentAutopilot.DesiredOrbitAltitude``
+     - :meth:`MechJeb.AscentGuidance.getDesiredOrbitAltitude`
+     -
+   * - ``AscentAutopilot.DesiredInclination``
+     - :meth:`MechJeb.AscentGuidance.getDesiredInclination`
+     -
+   * - ``AscentAutopilot.LaunchPhaseAngle``
+     - :meth:`MechJeb.AscentGuidance.getLaunchPhaseAngle`
+     -
+   * - ``AscentAutopilot.LaunchLANDifference``
+     - :meth:`MechJeb.AscentGuidance.getLaunchLANDifference`
+     -
+   * - ``AscentAutopilot.WarpCountDown``
+     - :meth:`MechJeb.AscentGuidance.getWarpCountDown`
+     -
+   * - ``AscentAutopilot.LaunchMode``
+     - :meth:`MechJeb.AscentGuidance.getLaunchMode`
+     -
+   * - ``AscentAutopilot.AbortTimedLaunch``
+     - :meth:`MechJeb.AscentGuidance.abortTimedLaunch`
+     -
+   * - ``AscentAutopilot.LaunchToRendezvous``
+     - :meth:`MechJeb.AscentGuidance.launchToRendezvous`
+     -
+   * - ``AscentAutopilot.LaunchToTargetPlane``
+     - :meth:`MechJeb.AscentGuidance.launchToTargetPlane`
+     -
+   * - ``AscentAutopilot.AscentPathIndex``
+     - :meth:`MechJeb.AscentGuidance.getAscentType`
+     - 0 is :attr:`MechJeb.AscentType.classic` and 2 is :attr:`MechJeb.AscentType.pvg`
+   * - ``AscentAutopilot.AscentPathClassic``
+     - :meth:`MechJeb.AscentGuidance.getClassicPath`
+     -
+   * - ``AscentAutopilot.AscentPathPVG``
+     - :meth:`MechJeb.AscentGuidance.getPVGSettings`
+     -
+   * - ``AscentAutopilot.CorrectiveSteering``
+     - :meth:`MechJeb.AscentSettings.getCorrectiveSteering`
+     - Through :meth:`MechJeb.AscentGuidance.getSettings`
+   * - ``AscentAutopilot.CorrectiveSteeringGain``
+     - :meth:`MechJeb.AscentSettings.getCorrectiveSteeringGain`
+     - Through :meth:`MechJeb.AscentGuidance.getSettings`
+   * - ``AscentAutopilot.ForceRoll``
+     - :meth:`MechJeb.AscentSettings.getForceRoll`
+     - Through :meth:`MechJeb.AscentGuidance.getSettings`
+   * - ``AscentAutopilot.VerticalRoll``
+     - :meth:`MechJeb.AscentSettings.getVerticalRoll`
+     - Through :meth:`MechJeb.AscentGuidance.getSettings`
+   * - ``AscentAutopilot.TurnRoll``
+     - :meth:`MechJeb.AscentSettings.getTurnRoll`
+     - Through :meth:`MechJeb.AscentGuidance.getSettings`
+   * - ``AscentAutopilot.AutodeploySolarPanels``
+     - :meth:`MechJeb.AscentSettings.getAutodeploySolarPanels`
+     - Through :meth:`MechJeb.AscentGuidance.getSettings`
+   * - ``AscentAutopilot.AutoDeployAntennas``
+     - :meth:`MechJeb.AscentSettings.getAutoDeployAntennas`
+     - Through :meth:`MechJeb.AscentGuidance.getSettings`
+   * - ``AscentAutopilot.SkipCircularization``
+     - :meth:`MechJeb.AscentSettings.getSkipCircularization`
+     - Through :meth:`MechJeb.AscentGuidance.getSettings`
+   * - ``AscentAutopilot.Autostage``
+     - :meth:`MechJeb.AscentSettings.getAutostage`
+     - Through :meth:`MechJeb.AscentGuidance.getSettings`
+   * - ``AscentAutopilot.LimitAoA``
+     - :meth:`MechJeb.AscentSettings.getLimitAngleOfAttack`
+     - Through :meth:`MechJeb.AscentGuidance.getSettings`
+   * - ``AscentAutopilot.MaxAoA``
+     - :meth:`MechJeb.AscentSettings.getMaxAngleOfAttack`
+     - Through :meth:`MechJeb.AscentGuidance.getSettings`
+   * - ``AscentAutopilot.AoALimitFadeoutPressure``
+     - :meth:`MechJeb.AscentSettings.getAngleOfAttackLimitFadeoutPressure`
+     - Through :meth:`MechJeb.AscentGuidance.getSettings`
+   * - ``AscentAutopilot.ThrustController``
+     - :meth:`MechJeb.AscentSettings.getThrust`
+     -
+   * - ``AscentAutopilot.StagingController``
+     - :meth:`MechJeb.AscentSettings.getStaging`
+     -
+   * - ``AscentAutopilot.AscentPathGT``
+     - Removed
+     - MechJeb 2.15 has no gravity turn path
+   * - ``AscentClassic``
+     - :class:`MechJeb.ClassicPath`
+     - Members keep their names
+   * - ``AscentPVG.DesiredApoapsis``
+     - :meth:`MechJeb.AscentGuidance.getDesiredApoapsis`
+     -
+   * - ``AscentPVG.AttachAltFlag``
+     - :meth:`MechJeb.AscentGuidance.getAttachAltFlag`
+     -
+   * - ``AscentPVG.DesiredAttachAlt``
+     - :meth:`MechJeb.AscentGuidance.getDesiredAttachAlt`
+     -
+   * - ``AscentPVG``
+     - :class:`MechJeb.PVGSettings`
+     - Its other members keep their names
+   * - ``AscentGT``
+     - Removed
+     - MechJeb 2.15 has no gravity turn path
+   * - ``ThrustController``
+     - :class:`MechJeb.ThrustLimiter`
+     - Members keep their names
+   * - ``ThrustController.SmoothThrottle, ThrottleSmoothingTime``
+     - Removed
+     - MechJeb 2.15 removed them
+   * - ``StagingController``
+     - :class:`MechJeb.Autostaging`
+     - Its other members keep their names
+   * - ``StagingController.AutostagingOnce``
+     - :meth:`MechJeb.Autostaging.autostageOnce`
+     - :meth:`MechJeb.Autostaging.getAutostagingOnce` is read-only
+   * - ``NodeExecutor.ExecuteOneNode``
+     - :meth:`MechJeb.ManeuverPlanner.executeNextNode`
+     -
+   * - ``NodeExecutor.ExecuteAllNodes``
+     - :meth:`MechJeb.ManeuverPlanner.executeAllNodes`
+     -
+   * - ``NodeExecutor.Abort``
+     - :meth:`MechJeb.ManeuverPlanner.abortNodeExecution`
+     -
+   * - ``NodeExecutor.Enabled``
+     - :meth:`MechJeb.ManeuverPlanner.getExecutingNode`
+     -
+   * - ``NodeExecutor.Autowarp``
+     - :meth:`MechJeb.ManeuverPlanner.getAutowarp`
+     -
+   * - ``NodeExecutor.LeadTime``
+     - :meth:`MechJeb.ManeuverPlanner.getLeadTime`
+     -
+   * - ``NodeExecutor.Tolerance``
+     - Removed
+     - MechJeb 2.15 removed it
+   * - ``RCSController.RCSThrottle``
+     - :meth:`MechJeb.SmartRCS.getRCSThrottle`
+     -
+   * - ``RCSController.RCSForRotation``
+     - :meth:`MechJeb.SmartRCS.getRCSForRotation`
+     -
+   * - ``SmartRCS.RCSController``
+     - Removed
+     - Its members are on :class:`MechJeb.SmartRCS`
+   * - ``LandingAutopilot``
+     - :class:`MechJeb.LandingGuidance`
+     - Its other members keep their names
+   * - ``LandingAutopilot.RcsAdjustment``
+     - :meth:`MechJeb.LandingGuidance.getRCSAdjustment`
+     -
+   * - ``LandingAutopilot.LandAtPositionTarget``
+     - :meth:`MechJeb.LandingGuidance.landAtTarget`
+     -
+   * - ``LandingAutopilot.LandUntargeted``
+     - :meth:`MechJeb.LandingGuidance.landSomewhere`
+     -
+   * - ``LandingAutopilot.StopLanding``
+     - :meth:`MechJeb.LandingGuidance.abortAutoland`
+     -
+   * - ``TargetController.SetPositionTarget``
+     - :meth:`MechJeb.LandingGuidance.setTarget`
+     -
+   * - ``TargetController.PickPositionTargetOnMap``
+     - :meth:`MechJeb.LandingGuidance.pickTargetOnMap`
+     -
+   * - ``TargetController.GetPositionTargetString``
+     - :meth:`MechJeb.LandingGuidance.getTargetString`
+     -
+   * - ``TargetController.GetPositionTargetPosition``
+     - :meth:`MechJeb.LandingGuidance.getTargetPosition`
+     -
+   * - ``AirplaneAutopilot``
+     - :class:`MechJeb.AircraftAutopilot`
+     - Members keep their names
+   * - ``Operation.MakeNode``
+     - :meth:`MechJeb.OperationApoapsis.makeNodes`
+     - On each operation. It returns every node
+   * - ``OperationCourseCorrection.CourseCorrectFinalPeA``
+     - :meth:`MechJeb.OperationCourseCorrection.getFinalPeriapsisAltitude`
+     -
+   * - ``OperationTransfer.InterceptOnly``
+     - :meth:`MechJeb.OperationTransfer.getCapture`
+     - The inverse
+   * - ``OperationTransfer.SimpleTransfer``
+     - :meth:`MechJeb.OperationTransfer.getCoplanar`
+     -
+   * - ``OperationTransfer.PeriodOffset``
+     - :meth:`MechJeb.OperationTransfer.getLagTime`
+     - A time in seconds, rather than a fraction of the target's period
+
+Members not listed keep their names and classes.

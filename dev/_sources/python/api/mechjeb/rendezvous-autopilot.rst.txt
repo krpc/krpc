@@ -41,3 +41,24 @@ RendezvousAutopilot
       :Attribute: Can be read or written
       :rtype: float
       :Game Scenes: Flight
+
+   .. attribute:: max_closing_speed
+
+      The largest speed at which to approach the target, in :math:`\mathrm{m/s}`.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: autowarp
+
+      Whether to warp time during the rendezvous.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The same setting as :attr:`ManeuverPlanner.autowarp`.

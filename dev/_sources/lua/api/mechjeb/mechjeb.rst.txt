@@ -35,27 +35,36 @@ This service provides functionality to interact with MechJeb 2.
 
 
 
-.. attribute:: airplane_autopilot: MechJeb.AirplaneAutopilot
+.. attribute:: aircraft_approach: MechJeb.AircraftApproach
 
-   The airplane autopilot.
-
-   :Attribute: Read-only, cannot be set
-
-
-
-
-.. attribute:: antenna_controller: MechJeb.DeployableController
-
-   The controller of the deployable antennas.
+   The Aircraft Approach and Autoland window.
 
    :Attribute: Read-only, cannot be set
 
 
 
 
-.. attribute:: ascent_autopilot: MechJeb.AscentAutopilot
+.. attribute:: aircraft_autopilot: MechJeb.AircraftAutopilot
 
-   The ascent autopilot.
+   The Aircraft Autopilot window.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: ascent_guidance: MechJeb.AscentGuidance
+
+   The Ascent Guidance window.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: attitude_adjustment: MechJeb.AttitudeAdjustment
+
+   The Attitude Adjustment window.
 
    :Attribute: Read-only, cannot be set
 
@@ -64,16 +73,16 @@ This service provides functionality to interact with MechJeb 2.
 
 .. attribute:: docking_autopilot: MechJeb.DockingAutopilot
 
-   The docking autopilot.
+   The Docking Autopilot window.
 
    :Attribute: Read-only, cannot be set
 
 
 
 
-.. attribute:: landing_autopilot: MechJeb.LandingAutopilot
+.. attribute:: landing_guidance: MechJeb.LandingGuidance
 
-   The landing autopilot.
+   The Landing Guidance window.
 
    :Attribute: Read-only, cannot be set
 
@@ -82,25 +91,7 @@ This service provides functionality to interact with MechJeb 2.
 
 .. attribute:: maneuver_planner: MechJeb.ManeuverPlanner
 
-   The maneuver planner.
-
-   :Attribute: Read-only, cannot be set
-
-
-
-
-.. attribute:: node_executor: MechJeb.NodeExecutor
-
-   The maneuver node executor.
-
-   :Attribute: Read-only, cannot be set
-
-
-
-
-.. attribute:: rcs_controller: MechJeb.RCSController
-
-   The RCS controller.
+   The Maneuver Planner window.
 
    :Attribute: Read-only, cannot be set
 
@@ -109,7 +100,16 @@ This service provides functionality to interact with MechJeb 2.
 
 .. attribute:: rendezvous_autopilot: MechJeb.RendezvousAutopilot
 
-   The rendezvous autopilot.
+   The Rendezvous Autopilot window.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: rover_autopilot: MechJeb.RoverAutopilot
+
+   The Rover Autopilot window.
 
    :Attribute: Read-only, cannot be set
 
@@ -134,36 +134,9 @@ This service provides functionality to interact with MechJeb 2.
 
 
 
-.. attribute:: solar_panel_controller: MechJeb.DeployableController
-
-   The controller of the deployable solar panels.
-
-   :Attribute: Read-only, cannot be set
-
-
-
-
-.. attribute:: staging_controller: MechJeb.StagingController
-
-   The staging controller.
-
-   :Attribute: Read-only, cannot be set
-
-
-
-
 .. attribute:: target_controller: MechJeb.TargetController
 
-   The target controller.
-
-   :Attribute: Read-only, cannot be set
-
-
-
-
-.. attribute:: thrust_controller: MechJeb.ThrustController
-
-   The thrust controller.
+   The target controller, which holds MechJeb's target.
 
    :Attribute: Read-only, cannot be set
 
@@ -173,6 +146,15 @@ This service provides functionality to interact with MechJeb 2.
 .. attribute:: translatron: MechJeb.Translatron
 
    The Translatron window.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: utilities: MechJeb.Utilities
+
+   The Utilities window.
 
    :Attribute: Read-only, cannot be set
 

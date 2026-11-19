@@ -106,6 +106,7 @@ Core
 * End the connection of a client that leaves more than 16 MB of messages unread (:issue:`1376`)
 * Read up to 16 requests ahead of the one running, and hold a client that sends faster than the server runs its calls (:issue:`1376`)
 * Read from a serial port as bytes arrive, so a client over serial gets several calls per update (:issue:`1376`)
+* Add ``MemberBinder.ReadOnlyField``, for a mod setting that the mod declares read-only (:issue:`1382`)
 
 
 Server
@@ -253,7 +254,54 @@ LIDAR service
 MechJeb service
 ^^^^^^^^^^^^^^^
 
-* Add the MechJeb service, ported from Genhis' kRPC.MechJeb and updated for MechJeb 2.15.4.0 (:issue:`1326`)
+* Move the MechJeb service into kRPC from Genhis' KRPC.MechJeb 0.7.1, and update it for MechJeb 2.15.4.0 (:issue:`1326`)
+* :breaking:`Breaking` Remove ``AscentGT`` and ``AscentAutopilot.AscentPathGT``, as MechJeb 2.15 has no gravity turn ascent path (:issue:`1326`)
+* :breaking:`Breaking` Remove ``NodeExecutor.Tolerance``, ``ThrustController.SmoothThrottle`` and ``ThrustController.ThrottleSmoothingTime``, which MechJeb 2.15 removed (:issue:`1326`)
+* :breaking:`Breaking` Remove ``OperationTransfer.PeriodOffset``, which MechJeb 2.15 replaced with a lag time (:issue:`1326`)
+* :breaking:`Breaking` Throw an exception on setting ``SmartRCSMode.ZeroVelocity`` or ``TranslatronMode.KeepRelative``, as MechJeb 2.15 has no such mode (:issue:`1326`)
+* :breaking:`Breaking` Remove ``MechJeb.APIReady``, in place of ``MechJeb.Available`` and ``MechJeb.Ready`` (:issue:`1326`)
+* :breaking:`Breaking` Remove ``Operation.MakeNode``, deprecated in 0.7.1 (:issue:`1382`)
+* Make ``OperationLan.NewLAN`` and ``OperationLongitude.NewSurfaceLongitude`` set the same longitude (:issue:`1326`)
+* Release the autopilots of both ascent paths when the ascent autopilot is disabled (:issue:`1326`)
+* Log a MechJeb member the service cannot bind, and fail only the calls that use it, in place of an error pop-up (:issue:`1326`)
+* Throw an exception from the ``TargetController`` members that need a target, when there is none (:issue:`1382`)
+* Throw an exception from ``LandingGuidance.LandAtTarget`` when there is no landing target, and from both landing methods when the vessel is landed (:issue:`1382`)
+* Throw an exception from ``ManeuverPlanner.ExecuteNextNode`` and ``ExecuteAllNodes`` when the vessel has no maneuver node (:issue:`1382`)
+* ``Operation.MakeNodes``
+
+  * Plan from the orbit after the vessel's last maneuver node (:issue:`1382`)
+  * Set ``ErrorMessage`` to the error it throws, and clear the message of an earlier call (:issue:`1382`)
+  * Remove the nodes it placed when it fails to place one (:issue:`1382`)
+
+* Apply ``AscentSettings.LimitAngleOfAttack`` on the classic ascent path without MechJeb's ascent window (:issue:`1382`)
+* Apply ``SmartASS.ForcePitch``, ``ForceYaw`` and ``ForceRoll`` in the surface modes without the Smart A.S.S. window (:issue:`1382`)
+* :breaking:`Breaking` Rename ``AscentAutopilot.LimitAoA``, ``MaxAoA`` and ``AoALimitFadeoutPressure`` to ``LimitAngleOfAttack``, ``MaxAngleOfAttack`` and ``AngleOfAttackLimitFadeoutPressure`` (:issue:`1382`)
+* :breaking:`Breaking` Rename ``OperationCourseCorrection.CourseCorrectFinalPeA`` to ``FinalPeriapsisAltitude`` (:issue:`1382`)
+* :breaking:`Breaking` Lay out the service like MechJeb's windows. The docs list each moved member (:issue:`1382`)
+* :breaking:`Breaking` Rename ``AscentAutopilot`` to ``AscentGuidance``, and move its settings to ``AscentGuidance.Settings`` (:issue:`1382`)
+* :breaking:`Breaking` Replace ``AscentPathClassic`` and ``AscentPathPVG`` with ``AscentGuidance.ClassicPath`` and ``PVGSettings``, and ``AscentPathIndex`` with ``AscentType`` (:issue:`1382`)
+* :breaking:`Breaking` Move ``ThrustController``, ``StagingController`` and the deployable controllers into ``Utilities``, as ``Thrust``, ``Staging``, ``SolarPanels`` and ``Antennas`` (:issue:`1382`)
+* :breaking:`Breaking` Move the members of ``NodeExecutor`` to ``ManeuverPlanner``, and of ``RCSController`` to ``SmartRCS`` (:issue:`1382`)
+* :breaking:`Breaking` Rename ``LandingAutopilot`` to ``LandingGuidance``, with the landing target members of ``TargetController`` (:issue:`1382`)
+* :breaking:`Breaking` Rename ``AirplaneAutopilot`` to ``AircraftAutopilot`` (:issue:`1382`)
+* :breaking:`Breaking` Rename ``LandingAutopilot.RcsAdjustment`` to ``LandingGuidance.RCSAdjustment`` (:issue:`1382`)
+* :breaking:`Breaking` Make ``Autostaging.AutostagingOnce`` read-only, and add ``AutostageOnce`` to set it (:issue:`1382`)
+* Throw an exception from ``LandingGuidance.GetTargetPosition`` when there is no landing target (:issue:`1382`)
+* Add ``Autowarp`` to ``AscentSettings``, ``LandingGuidance`` and ``RendezvousAutopilot`` (:issue:`1382`)
+* Add ``ManeuverPlanner.OperationEccentricity``, the operation that changes the eccentricity (:issue:`1382`)
+* Add ``OperationTransfer.Capture``, ``PlanCapture``, ``Rendezvous``, ``LagTime`` and ``Coplanar`` (:issue:`1382`)
+* :breaking:`Breaking` Remove ``OperationTransfer.InterceptOnly`` and ``SimpleTransfer``, in place of ``Capture`` and ``Coplanar`` (:issue:`1382`)
+* Add ``SmartASS.Roll``, the roll of the modes that point in a direction (:issue:`1382`)
+* Add the launches to a longitude of the ascending node, ``AscentGuidance.LaunchToLan`` and ``LaunchToMatchLan``, with ``DesiredLan`` and their ``AscentLaunchMode`` values (:issue:`1382`)
+* Add ``AscentGuidance.DesiredFPA`` and ``OverrideWarpToPlane`` (:issue:`1382`)
+* Add ``AscentSettings.RollAltitude``, ``LimitingAngleOfAttack`` and ``CurrentMaxAngleOfAttack`` (:issue:`1382`)
+* Add the stage, coast, spin-up and Qα limit settings of the PVG Settings window to ``PVGSettings`` (:issue:`1382`)
+* Add ``ManeuverPlanner.OperationAdvancedTransfer``, a transfer to another planet at the departure that needs the least delta-v (:issue:`1382`)
+* Add ``AircraftApproach``, the Aircraft Approach & Autoland window, which lands a plane on a runway (:issue:`1382`)
+* Add ``RoverAutopilot``, the Rover Autopilot window, which drives a rover along waypoints (:issue:`1382`)
+* Add ``ManeuverPlanner.RCSOnly`` and ``KillRollRotation``, and ``RendezvousAutopilot.MaxClosingSpeed`` (:issue:`1382`)
+* Add ``ThrustLimiter.LimitToPreventUnstableIgnition``, ``AutoRCSUllaging``, and ``Limiter``, the limiter that limits the throttle (:issue:`1382`)
+* Add ``AttitudeAdjustment``, the Attitude Adjustment window, which selects the attitude controller (:issue:`1382`)
 
 
 Raster Prop Monitor service

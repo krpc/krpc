@@ -56,6 +56,17 @@ SmartASS
 
       :Attribute: Can be read or written
 
+   .. attribute:: roll: number
+
+      The roll, in degrees. 0 is top side up.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.SmartASS.force_roll`, and applies in every mode but
+         :data:`MechJeb.SmartASSAutopilotMode.kill_rot` and the surface modes.
+
    .. attribute:: surface_heading: number
 
       The heading, in degrees.
@@ -64,7 +75,8 @@ SmartASS
 
       .. note::
 
-         Applies in the :data:`MechJeb.SmartASSAutopilotMode.surface` mode.
+         Requires :attr:`MechJeb.SmartASS.force_yaw`, and applies in the :data:`MechJeb.SmartASSAutopilotMode.surface`
+         mode.
 
    .. attribute:: surface_pitch: number
 
@@ -74,7 +86,8 @@ SmartASS
 
       .. note::
 
-         Applies in the :data:`MechJeb.SmartASSAutopilotMode.surface` mode.
+         Requires :attr:`MechJeb.SmartASS.force_pitch`, and applies in the :data:`MechJeb.SmartASSAutopilotMode.surface`
+         mode.
 
    .. attribute:: surface_roll: number
 
@@ -84,7 +97,8 @@ SmartASS
 
       .. note::
 
-         Applies in the :data:`MechJeb.SmartASSAutopilotMode.surface` mode.
+         Requires :attr:`MechJeb.SmartASS.force_roll`, and applies in the :data:`MechJeb.SmartASSAutopilotMode.surface`
+         mode.
 
    .. attribute:: surface_vel_yaw: number
 
@@ -94,7 +108,8 @@ SmartASS
 
       .. note::
 
-         Applies in the :data:`MechJeb.SmartASSAutopilotMode.surface_prograde` and
+         Requires :attr:`MechJeb.SmartASS.force_yaw`, and applies in the
+         :data:`MechJeb.SmartASSAutopilotMode.surface_prograde` and
          :data:`MechJeb.SmartASSAutopilotMode.surface_retrograde` modes.
 
    .. attribute:: surface_vel_pitch: number
@@ -105,7 +120,8 @@ SmartASS
 
       .. note::
 
-         Applies in the :data:`MechJeb.SmartASSAutopilotMode.surface_prograde` and
+         Requires :attr:`MechJeb.SmartASS.force_pitch`, and applies in the
+         :data:`MechJeb.SmartASSAutopilotMode.surface_prograde` and
          :data:`MechJeb.SmartASSAutopilotMode.surface_retrograde` modes.
 
    .. attribute:: surface_vel_roll: number
@@ -116,7 +132,8 @@ SmartASS
 
       .. note::
 
-         Applies in the :data:`MechJeb.SmartASSAutopilotMode.surface_prograde` and
+         Requires :attr:`MechJeb.SmartASS.force_roll`, and applies in the
+         :data:`MechJeb.SmartASSAutopilotMode.surface_prograde` and
          :data:`MechJeb.SmartASSAutopilotMode.surface_retrograde` modes.
 
    .. attribute:: advanced_reference: MechJeb.AttitudeReference
@@ -193,15 +210,10 @@ SmartASS
       Point at the next maneuver node.
 
 
-   .. data:: advanced
+   .. data:: surface
 
-      Point in the direction set by :attr:`MechJeb.SmartASS.advanced_reference` and
-      :attr:`MechJeb.SmartASS.advanced_direction`.
-
-
-   .. data:: automatic
-
-      Set by MechJeb's autopilots. Cannot be set.
+      Point in the direction set by :attr:`MechJeb.SmartASS.surface_heading`,
+      :attr:`MechJeb.SmartASS.surface_pitch` and :attr:`MechJeb.SmartASS.surface_roll`.
 
 
    .. data:: prograde
@@ -234,6 +246,49 @@ SmartASS
       Point radially inward.
 
 
+   .. data:: relative_plus
+
+      Point along the velocity relative to the target.
+
+
+   .. data:: relative_minus
+
+      Point against the velocity relative to the target.
+
+
+   .. data:: target_plus
+
+      Point at the target.
+
+
+   .. data:: target_minus
+
+      Point away from the target.
+
+
+   .. data:: parallel_plus
+
+      Point parallel to the target's orientation. For a docking port, along its axis
+      and away from it.
+
+
+   .. data:: parallel_minus
+
+      Point antiparallel to the target's orientation. For a docking port, along its axis
+      and toward it.
+
+
+   .. data:: advanced
+
+      Point in the direction set by :attr:`MechJeb.SmartASS.advanced_reference` and
+      :attr:`MechJeb.SmartASS.advanced_direction`.
+
+
+   .. data:: automatic
+
+      Set by MechJeb's autopilots. Cannot be set.
+
+
    .. data:: surface_prograde
 
       Point along the surface velocity.
@@ -254,47 +309,9 @@ SmartASS
       Point against the horizontal surface velocity.
 
 
-   .. data:: surface
-
-      Point in the direction set by :attr:`MechJeb.SmartASS.surface_heading`,
-      :attr:`MechJeb.SmartASS.surface_pitch` and :attr:`MechJeb.SmartASS.surface_roll`.
-
-
    .. data:: vertical_plus
 
       Point up, normal to the surface.
-
-
-   .. data:: target_plus
-
-      Point at the target.
-
-
-   .. data:: target_minus
-
-      Point away from the target.
-
-
-   .. data:: relative_plus
-
-      Point along the velocity relative to the target.
-
-
-   .. data:: relative_minus
-
-      Point against the velocity relative to the target.
-
-
-   .. data:: parallel_plus
-
-      Point parallel to the target's orientation. For a docking port, along its axis
-      and away from it.
-
-
-   .. data:: parallel_minus
-
-      Point antiparallel to the target's orientation. For a docking port, along its axis
-      and toward it.
 
 
 

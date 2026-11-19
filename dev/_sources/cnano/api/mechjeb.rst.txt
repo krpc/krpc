@@ -7,34 +7,35 @@ MechJeb
 
 Provides functionality to interact with the `MechJeb`_ mod. |MechJeb tested|
 Originally written by `Genhis <https://github.com/Genhis/KRPC.MechJeb>`_.
-The service acts on the MechJeb of the active vessel, which needs a part with MechJeb.
+The service acts on the MechJeb of the active vessel, which needs a part with MechJeb. Its
+classes follow MechJeb's windows: a setting is found under the window that shows it.
 
 .. toctree::
    :includehidden:
    :maxdepth: 1
 
    mechjeb/mechjeb
-   mechjeb/airplane-autopilot
-   mechjeb/ascent-autopilot
-   mechjeb/docking-autopilot
-   mechjeb/landing-autopilot
-   mechjeb/rendezvous-autopilot
+   mechjeb/ascent-guidance
+   mechjeb/utilities
    mechjeb/maneuver-planner
+   mechjeb/landing-guidance
+   mechjeb/rendezvous-autopilot
+   mechjeb/docking-autopilot
+   mechjeb/aircraft-autopilot
+   mechjeb/aircraft-approach
+   mechjeb/rover-autopilot
    mechjeb/smart-ass
    mechjeb/smart-rcs
    mechjeb/translatron
-   mechjeb/deployable-controller
-   mechjeb/node-executor
-   mechjeb/rcs-controller
-   mechjeb/staging-controller
+   mechjeb/attitude-adjustment
    mechjeb/target-controller
-   mechjeb/thrust-controller
+   mechjeb/migration
 
 Example
 -------
 
 The following example launches the active vessel into a 100 km orbit, inclined at 6 degrees, with
-the ascent autopilot, and waits for the ascent to finish:
+Ascent Guidance, and waits for the ascent to finish:
 
 .. literalinclude:: /scripts/api/mechjeb/MechJebExample.c
 

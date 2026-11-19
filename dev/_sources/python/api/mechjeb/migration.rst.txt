@@ -1,0 +1,242 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: MechJeb
+
+Migration from KRPC.MechJeb 0.7.1
+=================================
+
+kRPC 0.8 adds the MechJeb service, which Genhis' KRPC.MechJeb 0.7.1 provided before. The
+service follows MechJeb's windows, so some 0.7.1 members moved or were renamed. 0.7.1 names
+are given as in C#.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 35 30
+
+   * - 0.7.1
+     - 0.8
+     - Note
+   * - ``MechJeb.AscentAutopilot``
+     - :attr:`ascent_guidance`
+     -
+   * - ``MechJeb.AirplaneAutopilot``
+     - :attr:`aircraft_autopilot`
+     -
+   * - ``MechJeb.LandingAutopilot``
+     - :attr:`landing_guidance`
+     -
+   * - ``MechJeb.ThrustController``
+     - :attr:`Utilities.thrust`
+     -
+   * - ``MechJeb.StagingController``
+     - :attr:`Utilities.staging`
+     -
+   * - ``MechJeb.SolarPanelController``
+     - :attr:`Utilities.solar_panels`
+     -
+   * - ``MechJeb.AntennaController``
+     - :attr:`Utilities.antennas`
+     -
+   * - ``MechJeb.NodeExecutor``
+     - :attr:`maneuver_planner`
+     - Its members move to the maneuver planner, below
+   * - ``MechJeb.RCSController``
+     - :attr:`smart_rcs`
+     - Its members move to Smart RCS, below
+   * - ``MechJeb.APIReady``
+     - :attr:`available` and :attr:`ready`
+     -
+   * - ``AscentAutopilot.Enabled``
+     - :attr:`AscentGuidance.enabled`
+     -
+   * - ``AscentAutopilot.Status``
+     - :attr:`AscentGuidance.status`
+     -
+   * - ``AscentAutopilot.DesiredOrbitAltitude``
+     - :attr:`AscentGuidance.desired_orbit_altitude`
+     -
+   * - ``AscentAutopilot.DesiredInclination``
+     - :attr:`AscentGuidance.desired_inclination`
+     -
+   * - ``AscentAutopilot.LaunchPhaseAngle``
+     - :attr:`AscentGuidance.launch_phase_angle`
+     -
+   * - ``AscentAutopilot.LaunchLANDifference``
+     - :attr:`AscentGuidance.launch_lan_difference`
+     -
+   * - ``AscentAutopilot.WarpCountDown``
+     - :attr:`AscentGuidance.warp_count_down`
+     -
+   * - ``AscentAutopilot.LaunchMode``
+     - :attr:`AscentGuidance.launch_mode`
+     -
+   * - ``AscentAutopilot.AbortTimedLaunch``
+     - :meth:`AscentGuidance.abort_timed_launch`
+     -
+   * - ``AscentAutopilot.LaunchToRendezvous``
+     - :meth:`AscentGuidance.launch_to_rendezvous`
+     -
+   * - ``AscentAutopilot.LaunchToTargetPlane``
+     - :meth:`AscentGuidance.launch_to_target_plane`
+     -
+   * - ``AscentAutopilot.AscentPathIndex``
+     - :attr:`AscentGuidance.ascent_type`
+     - 0 is :attr:`AscentType.classic` and 2 is :attr:`AscentType.pvg`
+   * - ``AscentAutopilot.AscentPathClassic``
+     - :attr:`AscentGuidance.classic_path`
+     -
+   * - ``AscentAutopilot.AscentPathPVG``
+     - :attr:`AscentGuidance.pvg_settings`
+     -
+   * - ``AscentAutopilot.CorrectiveSteering``
+     - :attr:`AscentSettings.corrective_steering`
+     - Through :attr:`AscentGuidance.settings`
+   * - ``AscentAutopilot.CorrectiveSteeringGain``
+     - :attr:`AscentSettings.corrective_steering_gain`
+     - Through :attr:`AscentGuidance.settings`
+   * - ``AscentAutopilot.ForceRoll``
+     - :attr:`AscentSettings.force_roll`
+     - Through :attr:`AscentGuidance.settings`
+   * - ``AscentAutopilot.VerticalRoll``
+     - :attr:`AscentSettings.vertical_roll`
+     - Through :attr:`AscentGuidance.settings`
+   * - ``AscentAutopilot.TurnRoll``
+     - :attr:`AscentSettings.turn_roll`
+     - Through :attr:`AscentGuidance.settings`
+   * - ``AscentAutopilot.AutodeploySolarPanels``
+     - :attr:`AscentSettings.autodeploy_solar_panels`
+     - Through :attr:`AscentGuidance.settings`
+   * - ``AscentAutopilot.AutoDeployAntennas``
+     - :attr:`AscentSettings.auto_deploy_antennas`
+     - Through :attr:`AscentGuidance.settings`
+   * - ``AscentAutopilot.SkipCircularization``
+     - :attr:`AscentSettings.skip_circularization`
+     - Through :attr:`AscentGuidance.settings`
+   * - ``AscentAutopilot.Autostage``
+     - :attr:`AscentSettings.autostage`
+     - Through :attr:`AscentGuidance.settings`
+   * - ``AscentAutopilot.LimitAoA``
+     - :attr:`AscentSettings.limit_angle_of_attack`
+     - Through :attr:`AscentGuidance.settings`
+   * - ``AscentAutopilot.MaxAoA``
+     - :attr:`AscentSettings.max_angle_of_attack`
+     - Through :attr:`AscentGuidance.settings`
+   * - ``AscentAutopilot.AoALimitFadeoutPressure``
+     - :attr:`AscentSettings.angle_of_attack_limit_fadeout_pressure`
+     - Through :attr:`AscentGuidance.settings`
+   * - ``AscentAutopilot.ThrustController``
+     - :attr:`AscentSettings.thrust`
+     -
+   * - ``AscentAutopilot.StagingController``
+     - :attr:`AscentSettings.staging`
+     -
+   * - ``AscentAutopilot.AscentPathGT``
+     - Removed
+     - MechJeb 2.15 has no gravity turn path
+   * - ``AscentClassic``
+     - :class:`ClassicPath`
+     - Members keep their names
+   * - ``AscentPVG.DesiredApoapsis``
+     - :attr:`AscentGuidance.desired_apoapsis`
+     -
+   * - ``AscentPVG.AttachAltFlag``
+     - :attr:`AscentGuidance.attach_alt_flag`
+     -
+   * - ``AscentPVG.DesiredAttachAlt``
+     - :attr:`AscentGuidance.desired_attach_alt`
+     -
+   * - ``AscentPVG``
+     - :class:`PVGSettings`
+     - Its other members keep their names
+   * - ``AscentGT``
+     - Removed
+     - MechJeb 2.15 has no gravity turn path
+   * - ``ThrustController``
+     - :class:`ThrustLimiter`
+     - Members keep their names
+   * - ``ThrustController.SmoothThrottle, ThrottleSmoothingTime``
+     - Removed
+     - MechJeb 2.15 removed them
+   * - ``StagingController``
+     - :class:`Autostaging`
+     - Its other members keep their names
+   * - ``StagingController.AutostagingOnce``
+     - :meth:`Autostaging.autostage_once`
+     - :attr:`Autostaging.autostaging_once` is read-only
+   * - ``NodeExecutor.ExecuteOneNode``
+     - :meth:`ManeuverPlanner.execute_next_node`
+     -
+   * - ``NodeExecutor.ExecuteAllNodes``
+     - :meth:`ManeuverPlanner.execute_all_nodes`
+     -
+   * - ``NodeExecutor.Abort``
+     - :meth:`ManeuverPlanner.abort_node_execution`
+     -
+   * - ``NodeExecutor.Enabled``
+     - :attr:`ManeuverPlanner.executing_node`
+     -
+   * - ``NodeExecutor.Autowarp``
+     - :attr:`ManeuverPlanner.autowarp`
+     -
+   * - ``NodeExecutor.LeadTime``
+     - :attr:`ManeuverPlanner.lead_time`
+     -
+   * - ``NodeExecutor.Tolerance``
+     - Removed
+     - MechJeb 2.15 removed it
+   * - ``RCSController.RCSThrottle``
+     - :attr:`SmartRCS.rcs_throttle`
+     -
+   * - ``RCSController.RCSForRotation``
+     - :attr:`SmartRCS.rcs_for_rotation`
+     -
+   * - ``SmartRCS.RCSController``
+     - Removed
+     - Its members are on :class:`SmartRCS`
+   * - ``LandingAutopilot``
+     - :class:`LandingGuidance`
+     - Its other members keep their names
+   * - ``LandingAutopilot.RcsAdjustment``
+     - :attr:`LandingGuidance.rcs_adjustment`
+     -
+   * - ``LandingAutopilot.LandAtPositionTarget``
+     - :meth:`LandingGuidance.land_at_target`
+     -
+   * - ``LandingAutopilot.LandUntargeted``
+     - :meth:`LandingGuidance.land_somewhere`
+     -
+   * - ``LandingAutopilot.StopLanding``
+     - :meth:`LandingGuidance.abort_autoland`
+     -
+   * - ``TargetController.SetPositionTarget``
+     - :meth:`LandingGuidance.set_target`
+     -
+   * - ``TargetController.PickPositionTargetOnMap``
+     - :meth:`LandingGuidance.pick_target_on_map`
+     -
+   * - ``TargetController.GetPositionTargetString``
+     - :meth:`LandingGuidance.get_target_string`
+     -
+   * - ``TargetController.GetPositionTargetPosition``
+     - :meth:`LandingGuidance.get_target_position`
+     -
+   * - ``AirplaneAutopilot``
+     - :class:`AircraftAutopilot`
+     - Members keep their names
+   * - ``Operation.MakeNode``
+     - :meth:`OperationApoapsis.make_nodes`
+     - On each operation. It returns every node
+   * - ``OperationCourseCorrection.CourseCorrectFinalPeA``
+     - :attr:`OperationCourseCorrection.final_periapsis_altitude`
+     -
+   * - ``OperationTransfer.InterceptOnly``
+     - :attr:`OperationTransfer.capture`
+     - The inverse
+   * - ``OperationTransfer.SimpleTransfer``
+     - :attr:`OperationTransfer.coplanar`
+     -
+   * - ``OperationTransfer.PeriodOffset``
+     - :attr:`OperationTransfer.lag_time`
+     - A time in seconds, rather than a fraction of the target's period
+
+Members not listed keep their names and classes.

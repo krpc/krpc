@@ -8,11 +8,19 @@ ManeuverPlanner
 
 .. class:: ManeuverPlanner
 
-   The maneuver planner, which makes maneuver nodes for its operations.
+   The Maneuver Planner window, which makes maneuver nodes for its operations, and
+   executes them.
 
    .. note::
 
       MechJeb shares the operations, and most of their settings, between vessels.
+
+   .. attribute:: operation_advanced_transfer: MechJeb.OperationAdvancedTransfer
+
+      The operation that transfers to another planet, at the departure that needs the
+      least delta-v.
+
+      :Attribute: Read-only, cannot be set
 
    .. attribute:: operation_apoapsis: MechJeb.OperationApoapsis
 
@@ -29,6 +37,12 @@ ManeuverPlanner
    .. attribute:: operation_course_correction: MechJeb.OperationCourseCorrection
 
       The operation that fine tunes the closest approach to the target.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: operation_eccentricity: MechJeb.OperationEccentricity
+
+      The operation that changes the eccentricity.
 
       :Attribute: Read-only, cannot be set
 
@@ -110,6 +124,55 @@ ManeuverPlanner
 
       :Attribute: Read-only, cannot be set
 
+   .. method:: abort_node_execution()
+
+      Stop executing the maneuver nodes.
+
+   .. method:: execute_all_nodes()
+
+      Execute all the maneuver nodes. Throws an exception if the vessel has no maneuver
+      node.
+
+   .. method:: execute_next_node()
+
+      Execute the next maneuver node. Throws an exception if the vessel has no maneuver
+      node.
+
+   .. attribute:: autowarp: boolean
+
+      Whether to warp time to the burn.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         The same setting as :attr:`MechJeb.AscentSettings.autowarp`,
+         :attr:`MechJeb.LandingGuidance.autowarp` and :attr:`MechJeb.RendezvousAutopilot.autowarp`.
+
+   .. attribute:: executing_node: boolean
+
+      Whether a maneuver node is being executed.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: lead_time: number
+
+      The time before the burn at which time warp stops, in seconds.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: rcs_only: boolean
+
+      Whether to burn with the RCS thrusters in place of the engines.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: kill_roll_rotation: boolean
+
+      Whether to stop the vessel's roll before the burn.
+
+      :Attribute: Can be read or written
+
 
 
 .. class:: OperationException
@@ -163,9 +226,14 @@ TimeSelector
    The time reference of a maneuver. See :attr:`MechJeb.TimeSelector.time_reference`.
 
 
-   .. data:: altitude
+   .. data:: computed
 
-      At :attr:`MechJeb.TimeSelector.circularize_altitude`.
+      At the optimum time.
+
+
+   .. data:: x_from_now
+
+      After :attr:`MechJeb.TimeSelector.lead_time`.
 
 
    .. data:: apoapsis
@@ -173,14 +241,14 @@ TimeSelector
       At the next apoapsis.
 
 
-   .. data:: closest_approach
+   .. data:: periapsis
 
-      At the closest approach to the target.
+      At the next periapsis.
 
 
-   .. data:: computed
+   .. data:: altitude
 
-      At the optimum time.
+      At :attr:`MechJeb.TimeSelector.circularize_altitude`.
 
 
    .. data:: eq_ascending
@@ -193,21 +261,6 @@ TimeSelector
       At the equatorial descending node.
 
 
-   .. data:: eq_highest_ad
-
-      At the cheaper of the equatorial ascending and descending nodes.
-
-
-   .. data:: eq_nearest_ad
-
-      At the nearer of the equatorial ascending and descending nodes.
-
-
-   .. data:: periapsis
-
-      At the next periapsis.
-
-
    .. data:: rel_ascending
 
       At the next ascending node with the target.
@@ -216,6 +269,21 @@ TimeSelector
    .. data:: rel_descending
 
       At the next descending node with the target.
+
+
+   .. data:: closest_approach
+
+      At the closest approach to the target.
+
+
+   .. data:: eq_highest_ad
+
+      At the cheaper of the equatorial ascending and descending nodes.
+
+
+   .. data:: eq_nearest_ad
+
+      At the nearer of the equatorial ascending and descending nodes.
 
 
    .. data:: rel_highest_ad
@@ -228,14 +296,74 @@ TimeSelector
       At the nearer of the ascending and descending nodes with the target.
 
 
-   .. data:: x_from_now
-
-      After :attr:`MechJeb.TimeSelector.lead_time`.
-
-
 
 Operations
 ----------
+
+OperationAdvancedTransfer
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationAdvancedTransfer
+
+   An interplanetary transfer to the target body, at the departure that needs the least
+   delta-v before :attr:`MechJeb.OperationAdvancedTransfer.max_arrival_time`.
+
+   .. note::
+
+      MechJeb searches for the departure in the background. The first call to
+      ``MakeNodes`` starts the search, and throws an :class:`MechJeb.OperationException`
+      until it finishes. See :attr:`MechJeb.OperationAdvancedTransfer.searching`.
+
+   .. attribute:: max_arrival_time: number
+
+      The latest arrival time, as a time from now, in seconds.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: include_capture_burn: boolean
+
+      Whether to plan a capture burn at the destination.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: periapsis_height: number
+
+      The altitude of the periapsis at the destination, in meters.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: searching: boolean
+
+      Whether MechJeb is searching for the departure.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: search_progress: number
+
+      The progress of the search for the departure, as a percentage.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: error_message: string
+
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
+
+      :Attribute: Read-only, cannot be set
+
+   .. method:: make_nodes(): List
+
+      Make the maneuver nodes of the operation. Throws an :class:`MechJeb.OperationException`
+      if the operation cannot make them.
+
+      :returns: The maneuver nodes.
+
+      .. note::
+
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
+
+
 
 OperationApoapsis
 ^^^^^^^^^^^^^^^^^
@@ -247,17 +375,9 @@ OperationApoapsis
 
    .. attribute:: error_message: string
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
       :Attribute: Read-only, cannot be set
-
-   .. method:: make_node(): SpaceCenter.Node
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
 
    .. method:: make_nodes(): List
 
@@ -268,7 +388,8 @@ OperationApoapsis
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. attribute:: new_apoapsis: number
 
@@ -298,17 +419,9 @@ OperationCircularize
 
    .. attribute:: error_message: string
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
       :Attribute: Read-only, cannot be set
-
-   .. method:: make_node(): SpaceCenter.Node
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
 
    .. method:: make_nodes(): List
 
@@ -319,7 +432,8 @@ OperationCircularize
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. attribute:: time_selector: MechJeb.TimeSelector
 
@@ -337,7 +451,7 @@ OperationCourseCorrection
 
    Fine tune the closest approach to the target.
 
-   .. attribute:: course_correct_final_pe_a: number
+   .. attribute:: final_periapsis_altitude: number
 
       The periapsis altitude at a target body, in meters.
 
@@ -345,7 +459,7 @@ OperationCourseCorrection
 
    .. attribute:: error_message: string
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
       :Attribute: Read-only, cannot be set
 
@@ -354,14 +468,6 @@ OperationCourseCorrection
       The closest approach distance to a target vessel, in meters.
 
       :Attribute: Can be read or written
-
-   .. method:: make_node(): SpaceCenter.Node
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
 
    .. method:: make_nodes(): List
 
@@ -372,7 +478,48 @@ OperationCourseCorrection
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
+
+
+
+OperationEccentricity
+^^^^^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationEccentricity
+
+   Change the eccentricity.
+
+   .. attribute:: error_message: string
+
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
+
+      :Attribute: Read-only, cannot be set
+
+   .. method:: make_nodes(): List
+
+      Make the maneuver nodes of the operation. Throws an :class:`MechJeb.OperationException`
+      if the operation cannot make them.
+
+      :returns: The maneuver nodes.
+
+      .. note::
+
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
+
+   .. attribute:: new_eccentricity: number
+
+      The new eccentricity.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: time_selector: MechJeb.TimeSelector
+
+      The time of the maneuver.
+
+      :Attribute: Read-only, cannot be set
 
 
 
@@ -386,17 +533,9 @@ OperationEllipticize
 
    .. attribute:: error_message: string
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
       :Attribute: Read-only, cannot be set
-
-   .. method:: make_node(): SpaceCenter.Node
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
 
    .. method:: make_nodes(): List
 
@@ -407,7 +546,8 @@ OperationEllipticize
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. attribute:: new_apoapsis: number
 
@@ -439,17 +579,9 @@ OperationInclination
 
    .. attribute:: error_message: string
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
       :Attribute: Read-only, cannot be set
-
-   .. method:: make_node(): SpaceCenter.Node
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
 
    .. method:: make_nodes(): List
 
@@ -460,7 +592,8 @@ OperationInclination
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. attribute:: new_inclination: number
 
@@ -486,17 +619,9 @@ OperationInterplanetaryTransfer
 
    .. attribute:: error_message: string
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
       :Attribute: Read-only, cannot be set
-
-   .. method:: make_node(): SpaceCenter.Node
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
 
    .. method:: make_nodes(): List
 
@@ -507,7 +632,8 @@ OperationInterplanetaryTransfer
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. attribute:: wait_for_phase_angle: boolean
 
@@ -527,17 +653,9 @@ OperationKillRelVel
 
    .. attribute:: error_message: string
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
       :Attribute: Read-only, cannot be set
-
-   .. method:: make_node(): SpaceCenter.Node
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
 
    .. method:: make_nodes(): List
 
@@ -548,7 +666,8 @@ OperationKillRelVel
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. attribute:: time_selector: MechJeb.TimeSelector
 
@@ -568,7 +687,7 @@ OperationLambert
 
    .. attribute:: error_message: string
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
       :Attribute: Read-only, cannot be set
 
@@ -577,14 +696,6 @@ OperationLambert
       The time from the maneuver to the intercept, in seconds.
 
       :Attribute: Can be read or written
-
-   .. method:: make_node(): SpaceCenter.Node
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
 
    .. method:: make_nodes(): List
 
@@ -595,7 +706,8 @@ OperationLambert
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. attribute:: time_selector: MechJeb.TimeSelector
 
@@ -615,17 +727,9 @@ OperationLan
 
    .. attribute:: error_message: string
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
       :Attribute: Read-only, cannot be set
-
-   .. method:: make_node(): SpaceCenter.Node
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
 
    .. method:: make_nodes(): List
 
@@ -636,7 +740,8 @@ OperationLan
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. attribute:: new_lan: number
 
@@ -667,17 +772,9 @@ OperationLongitude
 
    .. attribute:: error_message: string
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
       :Attribute: Read-only, cannot be set
-
-   .. method:: make_node(): SpaceCenter.Node
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
 
    .. method:: make_nodes(): List
 
@@ -688,7 +785,8 @@ OperationLongitude
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. attribute:: new_surface_longitude: number
 
@@ -719,17 +817,9 @@ OperationMoonReturn
 
    .. attribute:: error_message: string
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
       :Attribute: Read-only, cannot be set
-
-   .. method:: make_node(): SpaceCenter.Node
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
 
    .. method:: make_nodes(): List
 
@@ -740,7 +830,8 @@ OperationMoonReturn
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. attribute:: moon_return_altitude: number
 
@@ -760,17 +851,9 @@ OperationPeriapsis
 
    .. attribute:: error_message: string
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
       :Attribute: Read-only, cannot be set
-
-   .. method:: make_node(): SpaceCenter.Node
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
 
    .. method:: make_nodes(): List
 
@@ -781,7 +864,8 @@ OperationPeriapsis
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. attribute:: new_periapsis: number
 
@@ -807,17 +891,9 @@ OperationPlane
 
    .. attribute:: error_message: string
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
       :Attribute: Read-only, cannot be set
-
-   .. method:: make_node(): SpaceCenter.Node
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
 
    .. method:: make_nodes(): List
 
@@ -828,7 +904,8 @@ OperationPlane
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. attribute:: time_selector: MechJeb.TimeSelector
 
@@ -854,17 +931,9 @@ OperationResonantOrbit
 
    .. attribute:: error_message: string
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
       :Attribute: Read-only, cannot be set
-
-   .. method:: make_node(): SpaceCenter.Node
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
 
    .. method:: make_nodes(): List
 
@@ -875,7 +944,8 @@ OperationResonantOrbit
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. attribute:: resonance_denominator: number
 
@@ -907,17 +977,9 @@ OperationSemiMajor
 
    .. attribute:: error_message: string
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
       :Attribute: Read-only, cannot be set
-
-   .. method:: make_node(): SpaceCenter.Node
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
 
    .. method:: make_nodes(): List
 
@@ -928,7 +990,8 @@ OperationSemiMajor
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. attribute:: new_semi_major_axis: number
 
@@ -960,17 +1023,9 @@ OperationTransfer
 
    .. attribute:: error_message: string
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
       :Attribute: Read-only, cannot be set
-
-   .. method:: make_node(): SpaceCenter.Node
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
 
    .. method:: make_nodes(): List
 
@@ -981,17 +1036,45 @@ OperationTransfer
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
-   .. attribute:: intercept_only: boolean
+   .. attribute:: capture: boolean
 
-      Whether to plan only the intercept, with no capture burn, for an impact or a flyby.
+      Whether the transfer ends in the target's orbit. Without capture, it is an impact or
+      a flyby.
 
       :Attribute: Can be read or written
 
-   .. attribute:: simple_transfer: boolean
+   .. attribute:: plan_capture: boolean
 
-      Whether the transfer is coplanar.
+      Whether to make a second node for the capture burn.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.OperationTransfer.capture`.
+
+   .. attribute:: rendezvous: boolean
+
+      Whether to meet the target, rather than reach its orbit.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: lag_time: number
+
+      The time by which the vessel arrives behind the target, in seconds.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.OperationTransfer.rendezvous`.
+
+   .. attribute:: coplanar: boolean
+
+      Whether the transfer stays in the vessel's orbital plane.
 
       :Attribute: Can be read or written
 

@@ -27,57 +27,57 @@ Service
 
       :Game Scenes: Flight
 
-   .. property:: AirplaneAutopilot AirplaneAutopilot { get; }
+   .. property:: AircraftApproach AircraftApproach { get; }
 
-      The airplane autopilot.
-
-      :Game Scenes: Flight
-
-   .. property:: DeployableController AntennaController { get; }
-
-      The controller of the deployable antennas.
+      The Aircraft Approach and Autoland window.
 
       :Game Scenes: Flight
 
-   .. property:: AscentAutopilot AscentAutopilot { get; }
+   .. property:: AircraftAutopilot AircraftAutopilot { get; }
 
-      The ascent autopilot.
+      The Aircraft Autopilot window.
+
+      :Game Scenes: Flight
+
+   .. property:: AscentGuidance AscentGuidance { get; }
+
+      The Ascent Guidance window.
+
+      :Game Scenes: Flight
+
+   .. property:: AttitudeAdjustment AttitudeAdjustment { get; }
+
+      The Attitude Adjustment window.
 
       :Game Scenes: Flight
 
    .. property:: DockingAutopilot DockingAutopilot { get; }
 
-      The docking autopilot.
+      The Docking Autopilot window.
 
       :Game Scenes: Flight
 
-   .. property:: LandingAutopilot LandingAutopilot { get; }
+   .. property:: LandingGuidance LandingGuidance { get; }
 
-      The landing autopilot.
+      The Landing Guidance window.
 
       :Game Scenes: Flight
 
    .. property:: ManeuverPlanner ManeuverPlanner { get; }
 
-      The maneuver planner.
-
-      :Game Scenes: Flight
-
-   .. property:: NodeExecutor NodeExecutor { get; }
-
-      The maneuver node executor.
-
-      :Game Scenes: Flight
-
-   .. property:: RCSController RCSController { get; }
-
-      The RCS controller.
+      The Maneuver Planner window.
 
       :Game Scenes: Flight
 
    .. property:: RendezvousAutopilot RendezvousAutopilot { get; }
 
-      The rendezvous autopilot.
+      The Rendezvous Autopilot window.
+
+      :Game Scenes: Flight
+
+   .. property:: RoverAutopilot RoverAutopilot { get; }
+
+      The Rover Autopilot window.
 
       :Game Scenes: Flight
 
@@ -93,33 +93,21 @@ Service
 
       :Game Scenes: Flight
 
-   .. property:: DeployableController SolarPanelController { get; }
-
-      The controller of the deployable solar panels.
-
-      :Game Scenes: Flight
-
-   .. property:: StagingController StagingController { get; }
-
-      The staging controller.
-
-      :Game Scenes: Flight
-
    .. property:: TargetController TargetController { get; }
 
-      The target controller.
-
-      :Game Scenes: Flight
-
-   .. property:: ThrustController ThrustController { get; }
-
-      The thrust controller.
+      The target controller, which holds MechJeb's target.
 
       :Game Scenes: Flight
 
    .. property:: Translatron Translatron { get; }
 
       The Translatron window.
+
+      :Game Scenes: Flight
+
+   .. property:: Utilities Utilities { get; }
+
+      The Utilities window.
 
       :Game Scenes: Flight
 

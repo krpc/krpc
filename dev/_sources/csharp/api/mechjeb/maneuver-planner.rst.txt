@@ -8,11 +8,19 @@ ManeuverPlanner
 
 .. class:: ManeuverPlanner
 
-   The maneuver planner, which makes maneuver nodes for its operations.
+   The Maneuver Planner window, which makes maneuver nodes for its operations, and
+   executes them.
 
    .. note::
 
       MechJeb shares the operations, and most of their settings, between vessels.
+
+   .. property:: OperationAdvancedTransfer OperationAdvancedTransfer { get; }
+
+      The operation that transfers to another planet, at the departure that needs the
+      least delta-v.
+
+      :Game Scenes: Flight
 
    .. property:: OperationApoapsis OperationApoapsis { get; }
 
@@ -29,6 +37,12 @@ ManeuverPlanner
    .. property:: OperationCourseCorrection OperationCourseCorrection { get; }
 
       The operation that fine tunes the closest approach to the target.
+
+      :Game Scenes: Flight
+
+   .. property:: OperationEccentricity OperationEccentricity { get; }
+
+      The operation that changes the eccentricity.
 
       :Game Scenes: Flight
 
@@ -110,6 +124,65 @@ ManeuverPlanner
 
       :Game Scenes: Flight
 
+   .. function:: void AbortNodeExecution()
+
+      Stop executing the maneuver nodes.
+
+
+      :Game Scenes: Flight
+
+   .. function:: void ExecuteAllNodes()
+
+      Execute all the maneuver nodes. Throws an exception if the vessel has no maneuver
+      node.
+
+
+      :Game Scenes: Flight
+
+   .. function:: void ExecuteNextNode()
+
+      Execute the next maneuver node. Throws an exception if the vessel has no maneuver
+      node.
+
+
+      :Game Scenes: Flight
+
+   .. property:: bool Autowarp { get; set; }
+
+      Whether to warp time to the burn.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The same setting as :prop:`AscentSettings.Autowarp`,
+         :prop:`LandingGuidance.Autowarp` and :prop:`RendezvousAutopilot.Autowarp`.
+
+   .. property:: bool ExecutingNode { get; }
+
+      Whether a maneuver node is being executed.
+
+      :Game Scenes: Flight
+
+   .. property:: double LeadTime { get; set; }
+
+      The time before the burn at which time warp stops, in seconds.
+
+      :Game Scenes: Flight
+
+   .. property:: bool RCSOnly { get; set; }
+
+      Whether to burn with the RCS thrusters in place of the engines.
+
+      :Game Scenes: Flight
+
+   .. property:: bool KillRollRotation { get; set; }
+
+      Whether to stop the vessel's roll before the burn.
+
+      :Game Scenes: Flight
+
 
 
 .. class:: OperationException
@@ -165,9 +238,14 @@ TimeSelector
    The time reference of a maneuver. See :prop:`TimeSelector.TimeReference`.
 
 
-   .. enumerator:: Altitude
+   .. enumerator:: Computed
 
-      At :prop:`TimeSelector.CircularizeAltitude`.
+      At the optimum time.
+
+
+   .. enumerator:: XFromNow
+
+      After :prop:`TimeSelector.LeadTime`.
 
 
    .. enumerator:: Apoapsis
@@ -175,14 +253,14 @@ TimeSelector
       At the next apoapsis.
 
 
-   .. enumerator:: ClosestApproach
+   .. enumerator:: Periapsis
 
-      At the closest approach to the target.
+      At the next periapsis.
 
 
-   .. enumerator:: Computed
+   .. enumerator:: Altitude
 
-      At the optimum time.
+      At :prop:`TimeSelector.CircularizeAltitude`.
 
 
    .. enumerator:: EqAscending
@@ -195,21 +273,6 @@ TimeSelector
       At the equatorial descending node.
 
 
-   .. enumerator:: EqHighestAd
-
-      At the cheaper of the equatorial ascending and descending nodes.
-
-
-   .. enumerator:: EqNearestAd
-
-      At the nearer of the equatorial ascending and descending nodes.
-
-
-   .. enumerator:: Periapsis
-
-      At the next periapsis.
-
-
    .. enumerator:: RelAscending
 
       At the next ascending node with the target.
@@ -218,6 +281,21 @@ TimeSelector
    .. enumerator:: RelDescending
 
       At the next descending node with the target.
+
+
+   .. enumerator:: ClosestApproach
+
+      At the closest approach to the target.
+
+
+   .. enumerator:: EqHighestAd
+
+      At the cheaper of the equatorial ascending and descending nodes.
+
+
+   .. enumerator:: EqNearestAd
+
+      At the nearer of the equatorial ascending and descending nodes.
 
 
    .. enumerator:: RelHighestAd
@@ -230,37 +308,59 @@ TimeSelector
       At the nearer of the ascending and descending nodes with the target.
 
 
-   .. enumerator:: XFromNow
-
-      After :prop:`TimeSelector.LeadTime`.
-
-
 
 Operations
 ----------
 
-OperationApoapsis
-^^^^^^^^^^^^^^^^^
+OperationAdvancedTransfer
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
-.. class:: OperationApoapsis
+.. class:: OperationAdvancedTransfer
 
-   Change the apoapsis.
+   An interplanetary transfer to the target body, at the departure that needs the least
+   delta-v before :prop:`OperationAdvancedTransfer.MaxArrivalTime`.
 
-   .. property:: string ErrorMessage { get; }
+   .. note::
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      MechJeb searches for the departure in the background. The first call to
+      ``MakeNodes`` starts the search, and throws an :type:`OperationException`
+      until it finishes. See :prop:`OperationAdvancedTransfer.Searching`.
+
+   .. property:: double MaxArrivalTime { get; set; }
+
+      The latest arrival time, as a time from now, in seconds.
 
       :Game Scenes: Flight
 
-   .. function:: SpaceCenter.Node MakeNode()
+   .. property:: bool IncludeCaptureBurn { get; set; }
 
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+      Whether to plan a capture burn at the destination.
 
-      Make the maneuver nodes of the operation, and return the first one.
+      :Game Scenes: Flight
 
+   .. property:: double PeriapsisHeight { get; set; }
 
-      :returns: The first maneuver node.
+      The altitude of the periapsis at the destination, in meters.
+
+      :Game Scenes: Flight
+
+   .. property:: bool Searching { get; }
+
+      Whether MechJeb is searching for the departure.
+
+      :Game Scenes: Flight
+
+   .. property:: int SearchProgress { get; }
+
+      The progress of the search for the departure, as a percentage.
+
+      :Game Scenes: Flight
+
+   .. property:: string ErrorMessage { get; }
+
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
+
       :Game Scenes: Flight
 
    .. function:: System.Collections.Generic.IList<SpaceCenter.Node> MakeNodes()
@@ -275,7 +375,39 @@ OperationApoapsis
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
+
+
+
+OperationApoapsis
+^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationApoapsis
+
+   Change the apoapsis.
+
+   .. property:: string ErrorMessage { get; }
+
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
+
+      :Game Scenes: Flight
+
+   .. function:: System.Collections.Generic.IList<SpaceCenter.Node> MakeNodes()
+
+      Make the maneuver nodes of the operation. Throws an :type:`OperationException`
+      if the operation cannot make them.
+
+
+      :returns: The maneuver nodes.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. property:: double NewApoapsis { get; set; }
 
@@ -305,18 +437,8 @@ OperationCircularize
 
    .. property:: string ErrorMessage { get; }
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. function:: SpaceCenter.Node MakeNode()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: System.Collections.Generic.IList<SpaceCenter.Node> MakeNodes()
@@ -331,7 +453,8 @@ OperationCircularize
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. property:: TimeSelector TimeSelector { get; }
 
@@ -349,7 +472,7 @@ OperationCourseCorrection
 
    Fine tune the closest approach to the target.
 
-   .. property:: double CourseCorrectFinalPeA { get; set; }
+   .. property:: double FinalPeriapsisAltitude { get; set; }
 
       The periapsis altitude at a target body, in meters.
 
@@ -357,7 +480,7 @@ OperationCourseCorrection
 
    .. property:: string ErrorMessage { get; }
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
       :Game Scenes: Flight
 
@@ -365,16 +488,6 @@ OperationCourseCorrection
 
       The closest approach distance to a target vessel, in meters.
 
-      :Game Scenes: Flight
-
-   .. function:: SpaceCenter.Node MakeNode()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: System.Collections.Generic.IList<SpaceCenter.Node> MakeNodes()
@@ -389,7 +502,51 @@ OperationCourseCorrection
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
+
+
+
+OperationEccentricity
+^^^^^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationEccentricity
+
+   Change the eccentricity.
+
+   .. property:: string ErrorMessage { get; }
+
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
+
+      :Game Scenes: Flight
+
+   .. function:: System.Collections.Generic.IList<SpaceCenter.Node> MakeNodes()
+
+      Make the maneuver nodes of the operation. Throws an :type:`OperationException`
+      if the operation cannot make them.
+
+
+      :returns: The maneuver nodes.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
+
+   .. property:: double NewEccentricity { get; set; }
+
+      The new eccentricity.
+
+      :Game Scenes: Flight
+
+   .. property:: TimeSelector TimeSelector { get; }
+
+      The time of the maneuver.
+
+      :Game Scenes: Flight
 
 
 
@@ -403,18 +560,8 @@ OperationEllipticize
 
    .. property:: string ErrorMessage { get; }
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. function:: SpaceCenter.Node MakeNode()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: System.Collections.Generic.IList<SpaceCenter.Node> MakeNodes()
@@ -429,7 +576,8 @@ OperationEllipticize
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. property:: double NewApoapsis { get; set; }
 
@@ -461,18 +609,8 @@ OperationInclination
 
    .. property:: string ErrorMessage { get; }
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. function:: SpaceCenter.Node MakeNode()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: System.Collections.Generic.IList<SpaceCenter.Node> MakeNodes()
@@ -487,7 +625,8 @@ OperationInclination
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. property:: double NewInclination { get; set; }
 
@@ -513,18 +652,8 @@ OperationInterplanetaryTransfer
 
    .. property:: string ErrorMessage { get; }
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. function:: SpaceCenter.Node MakeNode()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: System.Collections.Generic.IList<SpaceCenter.Node> MakeNodes()
@@ -539,7 +668,8 @@ OperationInterplanetaryTransfer
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. property:: bool WaitForPhaseAngle { get; set; }
 
@@ -559,18 +689,8 @@ OperationKillRelVel
 
    .. property:: string ErrorMessage { get; }
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. function:: SpaceCenter.Node MakeNode()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: System.Collections.Generic.IList<SpaceCenter.Node> MakeNodes()
@@ -585,7 +705,8 @@ OperationKillRelVel
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. property:: TimeSelector TimeSelector { get; }
 
@@ -605,7 +726,7 @@ OperationLambert
 
    .. property:: string ErrorMessage { get; }
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
       :Game Scenes: Flight
 
@@ -613,16 +734,6 @@ OperationLambert
 
       The time from the maneuver to the intercept, in seconds.
 
-      :Game Scenes: Flight
-
-   .. function:: SpaceCenter.Node MakeNode()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: System.Collections.Generic.IList<SpaceCenter.Node> MakeNodes()
@@ -637,7 +748,8 @@ OperationLambert
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. property:: TimeSelector TimeSelector { get; }
 
@@ -657,18 +769,8 @@ OperationLan
 
    .. property:: string ErrorMessage { get; }
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. function:: SpaceCenter.Node MakeNode()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: System.Collections.Generic.IList<SpaceCenter.Node> MakeNodes()
@@ -683,7 +785,8 @@ OperationLan
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. property:: double NewLAN { get; set; }
 
@@ -715,18 +818,8 @@ OperationLongitude
 
    .. property:: string ErrorMessage { get; }
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. function:: SpaceCenter.Node MakeNode()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: System.Collections.Generic.IList<SpaceCenter.Node> MakeNodes()
@@ -741,7 +834,8 @@ OperationLongitude
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. property:: double NewSurfaceLongitude { get; set; }
 
@@ -773,18 +867,8 @@ OperationMoonReturn
 
    .. property:: string ErrorMessage { get; }
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. function:: SpaceCenter.Node MakeNode()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: System.Collections.Generic.IList<SpaceCenter.Node> MakeNodes()
@@ -799,7 +883,8 @@ OperationMoonReturn
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. property:: double MoonReturnAltitude { get; set; }
 
@@ -819,18 +904,8 @@ OperationPeriapsis
 
    .. property:: string ErrorMessage { get; }
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. function:: SpaceCenter.Node MakeNode()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: System.Collections.Generic.IList<SpaceCenter.Node> MakeNodes()
@@ -845,7 +920,8 @@ OperationPeriapsis
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. property:: double NewPeriapsis { get; set; }
 
@@ -871,18 +947,8 @@ OperationPlane
 
    .. property:: string ErrorMessage { get; }
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. function:: SpaceCenter.Node MakeNode()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: System.Collections.Generic.IList<SpaceCenter.Node> MakeNodes()
@@ -897,7 +963,8 @@ OperationPlane
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. property:: TimeSelector TimeSelector { get; }
 
@@ -923,18 +990,8 @@ OperationResonantOrbit
 
    .. property:: string ErrorMessage { get; }
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. function:: SpaceCenter.Node MakeNode()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: System.Collections.Generic.IList<SpaceCenter.Node> MakeNodes()
@@ -949,7 +1006,8 @@ OperationResonantOrbit
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. property:: int ResonanceDenominator { get; set; }
 
@@ -981,18 +1039,8 @@ OperationSemiMajor
 
    .. property:: string ErrorMessage { get; }
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. function:: SpaceCenter.Node MakeNode()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: System.Collections.Generic.IList<SpaceCenter.Node> MakeNodes()
@@ -1007,7 +1055,8 @@ OperationSemiMajor
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. property:: double NewSemiMajorAxis { get; set; }
 
@@ -1039,18 +1088,8 @@ OperationTransfer
 
    .. property:: string ErrorMessage { get; }
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. function:: SpaceCenter.Node MakeNode()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: System.Collections.Generic.IList<SpaceCenter.Node> MakeNodes()
@@ -1065,17 +1104,47 @@ OperationTransfer
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
-   .. property:: bool InterceptOnly { get; set; }
+   .. property:: bool Capture { get; set; }
 
-      Whether to plan only the intercept, with no capture burn, for an impact or a flyby.
+      Whether the transfer ends in the target's orbit. Without capture, it is an impact or
+      a flyby.
 
       :Game Scenes: Flight
 
-   .. property:: bool SimpleTransfer { get; set; }
+   .. property:: bool PlanCapture { get; set; }
 
-      Whether the transfer is coplanar.
+      Whether to make a second node for the capture burn.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :prop:`OperationTransfer.Capture`.
+
+   .. property:: bool Rendezvous { get; set; }
+
+      Whether to meet the target, rather than reach its orbit.
+
+      :Game Scenes: Flight
+
+   .. property:: double LagTime { get; set; }
+
+      The time by which the vessel arrives behind the target, in seconds.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :prop:`OperationTransfer.Rendezvous`.
+
+   .. property:: bool Coplanar { get; set; }
+
+      Whether the transfer stays in the vessel's orbital plane.
 
       :Game Scenes: Flight
 

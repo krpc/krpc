@@ -23,11 +23,17 @@ SmartRCS
 
       :Attribute: Can be read or written
 
-   .. attribute:: rcs_controller: MechJeb.RCSController
+   .. attribute:: rcs_for_rotation: boolean
 
-      The RCS controller. The same as :attr:`MechJeb.rcs_controller`.
+      Whether to use the RCS for rotation.
 
-      :Attribute: Read-only, cannot be set
+      :Attribute: Can be read or written
+
+   .. attribute:: rcs_throttle: boolean
+
+      Whether to throttle the RCS when the engines are off.
+
+      :Attribute: Can be read or written
 
 
 

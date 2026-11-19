@@ -1,0 +1,242 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.MechJeb
+
+Migration from KRPC.MechJeb 0.7.1
+=================================
+
+kRPC 0.8 adds the MechJeb service, which Genhis' KRPC.MechJeb 0.7.1 provided before. The
+service follows MechJeb's windows, so some 0.7.1 members moved or were renamed. 0.7.1 names
+are given as in C#.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 35 30
+
+   * - 0.7.1
+     - 0.8
+     - Note
+   * - ``MechJeb.AscentAutopilot``
+     - :prop:`MechJeb.AscentGuidance <MechJeb.MechJeb.AscentGuidance>`
+     -
+   * - ``MechJeb.AirplaneAutopilot``
+     - :prop:`MechJeb.AircraftAutopilot <MechJeb.MechJeb.AircraftAutopilot>`
+     -
+   * - ``MechJeb.LandingAutopilot``
+     - :prop:`MechJeb.LandingGuidance <MechJeb.MechJeb.LandingGuidance>`
+     -
+   * - ``MechJeb.ThrustController``
+     - :prop:`Utilities.Thrust`
+     -
+   * - ``MechJeb.StagingController``
+     - :prop:`Utilities.Staging`
+     -
+   * - ``MechJeb.SolarPanelController``
+     - :prop:`Utilities.SolarPanels`
+     -
+   * - ``MechJeb.AntennaController``
+     - :prop:`Utilities.Antennas`
+     -
+   * - ``MechJeb.NodeExecutor``
+     - :prop:`MechJeb.ManeuverPlanner <MechJeb.MechJeb.ManeuverPlanner>`
+     - Its members move to the maneuver planner, below
+   * - ``MechJeb.RCSController``
+     - :prop:`MechJeb.SmartRCS <MechJeb.MechJeb.SmartRCS>`
+     - Its members move to Smart RCS, below
+   * - ``MechJeb.APIReady``
+     - :prop:`MechJeb.Available <MechJeb.MechJeb.Available>` and :prop:`MechJeb.Ready <MechJeb.MechJeb.Ready>`
+     -
+   * - ``AscentAutopilot.Enabled``
+     - :prop:`AscentGuidance.Enabled`
+     -
+   * - ``AscentAutopilot.Status``
+     - :prop:`AscentGuidance.Status`
+     -
+   * - ``AscentAutopilot.DesiredOrbitAltitude``
+     - :prop:`AscentGuidance.DesiredOrbitAltitude`
+     -
+   * - ``AscentAutopilot.DesiredInclination``
+     - :prop:`AscentGuidance.DesiredInclination`
+     -
+   * - ``AscentAutopilot.LaunchPhaseAngle``
+     - :prop:`AscentGuidance.LaunchPhaseAngle`
+     -
+   * - ``AscentAutopilot.LaunchLANDifference``
+     - :prop:`AscentGuidance.LaunchLANDifference`
+     -
+   * - ``AscentAutopilot.WarpCountDown``
+     - :prop:`AscentGuidance.WarpCountDown`
+     -
+   * - ``AscentAutopilot.LaunchMode``
+     - :prop:`AscentGuidance.LaunchMode`
+     -
+   * - ``AscentAutopilot.AbortTimedLaunch``
+     - :meth:`AscentGuidance.AbortTimedLaunch`
+     -
+   * - ``AscentAutopilot.LaunchToRendezvous``
+     - :meth:`AscentGuidance.LaunchToRendezvous`
+     -
+   * - ``AscentAutopilot.LaunchToTargetPlane``
+     - :meth:`AscentGuidance.LaunchToTargetPlane`
+     -
+   * - ``AscentAutopilot.AscentPathIndex``
+     - :prop:`AscentGuidance.AscentType`
+     - 0 is :value:`AscentType.Classic` and 2 is :value:`AscentType.PVG`
+   * - ``AscentAutopilot.AscentPathClassic``
+     - :prop:`AscentGuidance.ClassicPath`
+     -
+   * - ``AscentAutopilot.AscentPathPVG``
+     - :prop:`AscentGuidance.PVGSettings`
+     -
+   * - ``AscentAutopilot.CorrectiveSteering``
+     - :prop:`AscentSettings.CorrectiveSteering`
+     - Through :prop:`AscentGuidance.Settings`
+   * - ``AscentAutopilot.CorrectiveSteeringGain``
+     - :prop:`AscentSettings.CorrectiveSteeringGain`
+     - Through :prop:`AscentGuidance.Settings`
+   * - ``AscentAutopilot.ForceRoll``
+     - :prop:`AscentSettings.ForceRoll`
+     - Through :prop:`AscentGuidance.Settings`
+   * - ``AscentAutopilot.VerticalRoll``
+     - :prop:`AscentSettings.VerticalRoll`
+     - Through :prop:`AscentGuidance.Settings`
+   * - ``AscentAutopilot.TurnRoll``
+     - :prop:`AscentSettings.TurnRoll`
+     - Through :prop:`AscentGuidance.Settings`
+   * - ``AscentAutopilot.AutodeploySolarPanels``
+     - :prop:`AscentSettings.AutodeploySolarPanels`
+     - Through :prop:`AscentGuidance.Settings`
+   * - ``AscentAutopilot.AutoDeployAntennas``
+     - :prop:`AscentSettings.AutoDeployAntennas`
+     - Through :prop:`AscentGuidance.Settings`
+   * - ``AscentAutopilot.SkipCircularization``
+     - :prop:`AscentSettings.SkipCircularization`
+     - Through :prop:`AscentGuidance.Settings`
+   * - ``AscentAutopilot.Autostage``
+     - :prop:`AscentSettings.Autostage`
+     - Through :prop:`AscentGuidance.Settings`
+   * - ``AscentAutopilot.LimitAoA``
+     - :prop:`AscentSettings.LimitAngleOfAttack`
+     - Through :prop:`AscentGuidance.Settings`
+   * - ``AscentAutopilot.MaxAoA``
+     - :prop:`AscentSettings.MaxAngleOfAttack`
+     - Through :prop:`AscentGuidance.Settings`
+   * - ``AscentAutopilot.AoALimitFadeoutPressure``
+     - :prop:`AscentSettings.AngleOfAttackLimitFadeoutPressure`
+     - Through :prop:`AscentGuidance.Settings`
+   * - ``AscentAutopilot.ThrustController``
+     - :prop:`AscentSettings.Thrust`
+     -
+   * - ``AscentAutopilot.StagingController``
+     - :prop:`AscentSettings.Staging`
+     -
+   * - ``AscentAutopilot.AscentPathGT``
+     - Removed
+     - MechJeb 2.15 has no gravity turn path
+   * - ``AscentClassic``
+     - :type:`ClassicPath`
+     - Members keep their names
+   * - ``AscentPVG.DesiredApoapsis``
+     - :prop:`AscentGuidance.DesiredApoapsis`
+     -
+   * - ``AscentPVG.AttachAltFlag``
+     - :prop:`AscentGuidance.AttachAltFlag`
+     -
+   * - ``AscentPVG.DesiredAttachAlt``
+     - :prop:`AscentGuidance.DesiredAttachAlt`
+     -
+   * - ``AscentPVG``
+     - :type:`PVGSettings`
+     - Its other members keep their names
+   * - ``AscentGT``
+     - Removed
+     - MechJeb 2.15 has no gravity turn path
+   * - ``ThrustController``
+     - :type:`ThrustLimiter`
+     - Members keep their names
+   * - ``ThrustController.SmoothThrottle, ThrottleSmoothingTime``
+     - Removed
+     - MechJeb 2.15 removed them
+   * - ``StagingController``
+     - :type:`Autostaging`
+     - Its other members keep their names
+   * - ``StagingController.AutostagingOnce``
+     - :meth:`Autostaging.AutostageOnce`
+     - :prop:`Autostaging.AutostagingOnce` is read-only
+   * - ``NodeExecutor.ExecuteOneNode``
+     - :meth:`ManeuverPlanner.ExecuteNextNode`
+     -
+   * - ``NodeExecutor.ExecuteAllNodes``
+     - :meth:`ManeuverPlanner.ExecuteAllNodes`
+     -
+   * - ``NodeExecutor.Abort``
+     - :meth:`ManeuverPlanner.AbortNodeExecution`
+     -
+   * - ``NodeExecutor.Enabled``
+     - :prop:`ManeuverPlanner.ExecutingNode`
+     -
+   * - ``NodeExecutor.Autowarp``
+     - :prop:`ManeuverPlanner.Autowarp`
+     -
+   * - ``NodeExecutor.LeadTime``
+     - :prop:`ManeuverPlanner.LeadTime`
+     -
+   * - ``NodeExecutor.Tolerance``
+     - Removed
+     - MechJeb 2.15 removed it
+   * - ``RCSController.RCSThrottle``
+     - :prop:`SmartRCS.RCSThrottle`
+     -
+   * - ``RCSController.RCSForRotation``
+     - :prop:`SmartRCS.RCSForRotation`
+     -
+   * - ``SmartRCS.RCSController``
+     - Removed
+     - Its members are on :type:`SmartRCS`
+   * - ``LandingAutopilot``
+     - :type:`LandingGuidance`
+     - Its other members keep their names
+   * - ``LandingAutopilot.RcsAdjustment``
+     - :prop:`LandingGuidance.RCSAdjustment`
+     -
+   * - ``LandingAutopilot.LandAtPositionTarget``
+     - :meth:`LandingGuidance.LandAtTarget`
+     -
+   * - ``LandingAutopilot.LandUntargeted``
+     - :meth:`LandingGuidance.LandSomewhere`
+     -
+   * - ``LandingAutopilot.StopLanding``
+     - :meth:`LandingGuidance.AbortAutoland`
+     -
+   * - ``TargetController.SetPositionTarget``
+     - :meth:`LandingGuidance.SetTarget`
+     -
+   * - ``TargetController.PickPositionTargetOnMap``
+     - :meth:`LandingGuidance.PickTargetOnMap`
+     -
+   * - ``TargetController.GetPositionTargetString``
+     - :meth:`LandingGuidance.GetTargetString`
+     -
+   * - ``TargetController.GetPositionTargetPosition``
+     - :meth:`LandingGuidance.GetTargetPosition`
+     -
+   * - ``AirplaneAutopilot``
+     - :type:`AircraftAutopilot`
+     - Members keep their names
+   * - ``Operation.MakeNode``
+     - :meth:`OperationApoapsis.MakeNodes`
+     - On each operation. It returns every node
+   * - ``OperationCourseCorrection.CourseCorrectFinalPeA``
+     - :prop:`OperationCourseCorrection.FinalPeriapsisAltitude`
+     -
+   * - ``OperationTransfer.InterceptOnly``
+     - :prop:`OperationTransfer.Capture`
+     - The inverse
+   * - ``OperationTransfer.SimpleTransfer``
+     - :prop:`OperationTransfer.Coplanar`
+     -
+   * - ``OperationTransfer.PeriodOffset``
+     - :prop:`OperationTransfer.LagTime`
+     - A time in seconds, rather than a fraction of the target's period
+
+Members not listed keep their names and classes.

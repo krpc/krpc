@@ -68,6 +68,20 @@ SmartASS
 
       :Game Scenes: Flight
 
+   .. method:: double getRoll()
+
+   .. method:: void setRoll(double value)
+
+      The roll, in degrees. 0 is top side up.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`SmartASS.getForceRoll()`, and applies in every mode but
+         :field:`SmartASSAutopilotMode.KILL_ROT` and the surface modes.
+
    .. method:: double getSurfaceHeading()
 
    .. method:: void setSurfaceHeading(double value)
@@ -79,7 +93,8 @@ SmartASS
 
       .. note::
 
-         Applies in the :field:`SmartASSAutopilotMode.SURFACE` mode.
+         Requires :meth:`SmartASS.getForceYaw()`, and applies in the :field:`SmartASSAutopilotMode.SURFACE`
+         mode.
 
    .. method:: double getSurfacePitch()
 
@@ -92,7 +107,8 @@ SmartASS
 
       .. note::
 
-         Applies in the :field:`SmartASSAutopilotMode.SURFACE` mode.
+         Requires :meth:`SmartASS.getForcePitch()`, and applies in the :field:`SmartASSAutopilotMode.SURFACE`
+         mode.
 
    .. method:: double getSurfaceRoll()
 
@@ -105,7 +121,8 @@ SmartASS
 
       .. note::
 
-         Applies in the :field:`SmartASSAutopilotMode.SURFACE` mode.
+         Requires :meth:`SmartASS.getForceRoll()`, and applies in the :field:`SmartASSAutopilotMode.SURFACE`
+         mode.
 
    .. method:: double getSurfaceVelYaw()
 
@@ -118,7 +135,8 @@ SmartASS
 
       .. note::
 
-         Applies in the :field:`SmartASSAutopilotMode.SURFACE_PROGRADE` and
+         Requires :meth:`SmartASS.getForceYaw()`, and applies in the
+         :field:`SmartASSAutopilotMode.SURFACE_PROGRADE` and
          :field:`SmartASSAutopilotMode.SURFACE_RETROGRADE` modes.
 
    .. method:: double getSurfaceVelPitch()
@@ -132,7 +150,8 @@ SmartASS
 
       .. note::
 
-         Applies in the :field:`SmartASSAutopilotMode.SURFACE_PROGRADE` and
+         Requires :meth:`SmartASS.getForcePitch()`, and applies in the
+         :field:`SmartASSAutopilotMode.SURFACE_PROGRADE` and
          :field:`SmartASSAutopilotMode.SURFACE_RETROGRADE` modes.
 
    .. method:: double getSurfaceVelRoll()
@@ -146,7 +165,8 @@ SmartASS
 
       .. note::
 
-         Applies in the :field:`SmartASSAutopilotMode.SURFACE_PROGRADE` and
+         Requires :meth:`SmartASS.getForceRoll()`, and applies in the
+         :field:`SmartASSAutopilotMode.SURFACE_PROGRADE` and
          :field:`SmartASSAutopilotMode.SURFACE_RETROGRADE` modes.
 
    .. method:: AttitudeReference getAdvancedReference()
@@ -229,15 +249,10 @@ SmartASS
       Point at the next maneuver node.
 
 
-   .. field:: public SmartASSAutopilotMode ADVANCED
+   .. field:: public SmartASSAutopilotMode SURFACE
 
-      Point in the direction set by :meth:`SmartASS.getAdvancedReference()` and
-      :meth:`SmartASS.getAdvancedDirection()`.
-
-
-   .. field:: public SmartASSAutopilotMode AUTOMATIC
-
-      Set by MechJeb's autopilots. Cannot be set.
+      Point in the direction set by :meth:`SmartASS.getSurfaceHeading()`,
+      :meth:`SmartASS.getSurfacePitch()` and :meth:`SmartASS.getSurfaceRoll()`.
 
 
    .. field:: public SmartASSAutopilotMode PROGRADE
@@ -270,6 +285,49 @@ SmartASS
       Point radially inward.
 
 
+   .. field:: public SmartASSAutopilotMode RELATIVE_PLUS
+
+      Point along the velocity relative to the target.
+
+
+   .. field:: public SmartASSAutopilotMode RELATIVE_MINUS
+
+      Point against the velocity relative to the target.
+
+
+   .. field:: public SmartASSAutopilotMode TARGET_PLUS
+
+      Point at the target.
+
+
+   .. field:: public SmartASSAutopilotMode TARGET_MINUS
+
+      Point away from the target.
+
+
+   .. field:: public SmartASSAutopilotMode PARALLEL_PLUS
+
+      Point parallel to the target's orientation. For a docking port, along its axis
+      and away from it.
+
+
+   .. field:: public SmartASSAutopilotMode PARALLEL_MINUS
+
+      Point antiparallel to the target's orientation. For a docking port, along its axis
+      and toward it.
+
+
+   .. field:: public SmartASSAutopilotMode ADVANCED
+
+      Point in the direction set by :meth:`SmartASS.getAdvancedReference()` and
+      :meth:`SmartASS.getAdvancedDirection()`.
+
+
+   .. field:: public SmartASSAutopilotMode AUTOMATIC
+
+      Set by MechJeb's autopilots. Cannot be set.
+
+
    .. field:: public SmartASSAutopilotMode SURFACE_PROGRADE
 
       Point along the surface velocity.
@@ -290,47 +348,9 @@ SmartASS
       Point against the horizontal surface velocity.
 
 
-   .. field:: public SmartASSAutopilotMode SURFACE
-
-      Point in the direction set by :meth:`SmartASS.getSurfaceHeading()`,
-      :meth:`SmartASS.getSurfacePitch()` and :meth:`SmartASS.getSurfaceRoll()`.
-
-
    .. field:: public SmartASSAutopilotMode VERTICAL_PLUS
 
       Point up, normal to the surface.
-
-
-   .. field:: public SmartASSAutopilotMode TARGET_PLUS
-
-      Point at the target.
-
-
-   .. field:: public SmartASSAutopilotMode TARGET_MINUS
-
-      Point away from the target.
-
-
-   .. field:: public SmartASSAutopilotMode RELATIVE_PLUS
-
-      Point along the velocity relative to the target.
-
-
-   .. field:: public SmartASSAutopilotMode RELATIVE_MINUS
-
-      Point against the velocity relative to the target.
-
-
-   .. field:: public SmartASSAutopilotMode PARALLEL_PLUS
-
-      Point parallel to the target's orientation. For a docking port, along its axis
-      and away from it.
-
-
-   .. field:: public SmartASSAutopilotMode PARALLEL_MINUS
-
-      Point antiparallel to the target's orientation. For a docking port, along its axis
-      and toward it.
 
 
 

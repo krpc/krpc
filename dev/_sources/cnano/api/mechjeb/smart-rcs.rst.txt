@@ -29,9 +29,17 @@ SmartRCS
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_MechJeb_SmartRCS_RCSController(krpc_connection_t connection, krpc_MechJeb_RCSController_t * returnValue, krpc_MechJeb_SmartRCS_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_SmartRCS_RCSForRotation(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_SmartRCS_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_SmartRCS_set_RCSForRotation(krpc_connection_t connection, krpc_MechJeb_SmartRCS_t instance, bool value)
 
-      The RCS controller. The same as :func:`krpc_MechJeb_RCSController`.
+      Whether to use the RCS for rotation.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_SmartRCS_RCSThrottle(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_SmartRCS_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_SmartRCS_set_RCSThrottle(krpc_connection_t connection, krpc_MechJeb_SmartRCS_t instance, bool value)
+
+      Whether to throttle the RCS when the engines are off.
 
       :Game Scenes: Flight
 

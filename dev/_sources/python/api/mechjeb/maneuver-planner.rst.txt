@@ -8,11 +8,21 @@ ManeuverPlanner
 
 .. class:: ManeuverPlanner
 
-   The maneuver planner, which makes maneuver nodes for its operations.
+   The Maneuver Planner window, which makes maneuver nodes for its operations, and
+   executes them.
 
    .. note::
 
       MechJeb shares the operations, and most of their settings, between vessels.
+
+   .. attribute:: operation_advanced_transfer
+
+      The operation that transfers to another planet, at the departure that needs the
+      least delta-v.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`OperationAdvancedTransfer`
+      :Game Scenes: Flight
 
    .. attribute:: operation_apoapsis
 
@@ -36,6 +46,14 @@ ManeuverPlanner
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`OperationCourseCorrection`
+      :Game Scenes: Flight
+
+   .. attribute:: operation_eccentricity
+
+      The operation that changes the eccentricity.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`OperationEccentricity`
       :Game Scenes: Flight
 
    .. attribute:: operation_ellipticize
@@ -142,6 +160,72 @@ ManeuverPlanner
       :rtype: :class:`OperationTransfer`
       :Game Scenes: Flight
 
+   .. method:: abort_node_execution()
+
+      Stop executing the maneuver nodes.
+
+      :Game Scenes: Flight
+
+   .. method:: execute_all_nodes()
+
+      Execute all the maneuver nodes. Throws an exception if the vessel has no maneuver
+      node.
+
+      :Game Scenes: Flight
+
+   .. method:: execute_next_node()
+
+      Execute the next maneuver node. Throws an exception if the vessel has no maneuver
+      node.
+
+      :Game Scenes: Flight
+
+   .. attribute:: autowarp
+
+      Whether to warp time to the burn.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The same setting as :attr:`AscentSettings.autowarp`,
+         :attr:`LandingGuidance.autowarp` and :attr:`RendezvousAutopilot.autowarp`.
+
+   .. attribute:: executing_node
+
+      Whether a maneuver node is being executed.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: lead_time
+
+      The time before the burn at which time warp stops, in seconds.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: rcs_only
+
+      Whether to burn with the RCS thrusters in place of the engines.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: kill_roll_rotation
+
+      Whether to stop the vessel's roll before the burn.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
 
 
 .. class:: OperationException
@@ -203,9 +287,14 @@ TimeSelector
    The time reference of a maneuver. See :attr:`TimeSelector.time_reference`.
 
 
-   .. data:: altitude
+   .. data:: computed
 
-      At :attr:`TimeSelector.circularize_altitude`.
+      At the optimum time.
+
+
+   .. data:: x_from_now
+
+      After :attr:`TimeSelector.lead_time`.
 
 
    .. data:: apoapsis
@@ -213,14 +302,14 @@ TimeSelector
       At the next apoapsis.
 
 
-   .. data:: closest_approach
+   .. data:: periapsis
 
-      At the closest approach to the target.
+      At the next periapsis.
 
 
-   .. data:: computed
+   .. data:: altitude
 
-      At the optimum time.
+      At :attr:`TimeSelector.circularize_altitude`.
 
 
    .. data:: eq_ascending
@@ -233,21 +322,6 @@ TimeSelector
       At the equatorial descending node.
 
 
-   .. data:: eq_highest_ad
-
-      At the cheaper of the equatorial ascending and descending nodes.
-
-
-   .. data:: eq_nearest_ad
-
-      At the nearer of the equatorial ascending and descending nodes.
-
-
-   .. data:: periapsis
-
-      At the next periapsis.
-
-
    .. data:: rel_ascending
 
       At the next ascending node with the target.
@@ -256,6 +330,21 @@ TimeSelector
    .. data:: rel_descending
 
       At the next descending node with the target.
+
+
+   .. data:: closest_approach
+
+      At the closest approach to the target.
+
+
+   .. data:: eq_highest_ad
+
+      At the cheaper of the equatorial ascending and descending nodes.
+
+
+   .. data:: eq_nearest_ad
+
+      At the nearer of the equatorial ascending and descending nodes.
 
 
    .. data:: rel_highest_ad
@@ -268,39 +357,71 @@ TimeSelector
       At the nearer of the ascending and descending nodes with the target.
 
 
-   .. data:: x_from_now
-
-      After :attr:`TimeSelector.lead_time`.
-
-
 
 Operations
 ----------
 
-OperationApoapsis
-^^^^^^^^^^^^^^^^^
+OperationAdvancedTransfer
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
-.. class:: OperationApoapsis
+.. class:: OperationAdvancedTransfer
 
-   Change the apoapsis.
+   An interplanetary transfer to the target body, at the departure that needs the least
+   delta-v before :attr:`OperationAdvancedTransfer.max_arrival_time`.
+
+   .. note::
+
+      MechJeb searches for the departure in the background. The first call to
+      ``MakeNodes`` starts the search, and throws an :class:`OperationException`
+      until it finishes. See :attr:`OperationAdvancedTransfer.searching`.
+
+   .. attribute:: max_arrival_time
+
+      The latest arrival time, as a time from now, in seconds.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: include_capture_burn
+
+      Whether to plan a capture burn at the destination.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: periapsis_height
+
+      The altitude of the periapsis at the destination, in meters.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: searching
+
+      Whether MechJeb is searching for the departure.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: search_progress
+
+      The progress of the search for the departure, as a percentage.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: int
+      :Game Scenes: Flight
 
    .. attribute:: error_message
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
       :Attribute: Read-only, cannot be set
       :rtype: str
-      :Game Scenes: Flight
-
-   .. method:: make_node()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
-      :rtype: :class:`SpaceCenter.Node`
       :Game Scenes: Flight
 
    .. method:: make_nodes()
@@ -315,7 +436,41 @@ OperationApoapsis
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
+
+
+
+OperationApoapsis
+^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationApoapsis
+
+   Change the apoapsis.
+
+   .. attribute:: error_message
+
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: str
+      :Game Scenes: Flight
+
+   .. method:: make_nodes()
+
+      Make the maneuver nodes of the operation. Throws an :class:`OperationException`
+      if the operation cannot make them.
+
+      :returns: The maneuver nodes.
+      :rtype: list(:class:`SpaceCenter.Node`)
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. attribute:: new_apoapsis
 
@@ -349,20 +504,10 @@ OperationCircularize
 
    .. attribute:: error_message
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
       :Attribute: Read-only, cannot be set
       :rtype: str
-      :Game Scenes: Flight
-
-   .. method:: make_node()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
-      :rtype: :class:`SpaceCenter.Node`
       :Game Scenes: Flight
 
    .. method:: make_nodes()
@@ -377,7 +522,8 @@ OperationCircularize
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. attribute:: time_selector
 
@@ -397,7 +543,7 @@ OperationCourseCorrection
 
    Fine tune the closest approach to the target.
 
-   .. attribute:: course_correct_final_pe_a
+   .. attribute:: final_periapsis_altitude
 
       The periapsis altitude at a target body, in meters.
 
@@ -407,7 +553,7 @@ OperationCourseCorrection
 
    .. attribute:: error_message
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
       :Attribute: Read-only, cannot be set
       :rtype: str
@@ -421,14 +567,37 @@ OperationCourseCorrection
       :rtype: float
       :Game Scenes: Flight
 
-   .. method:: make_node()
+   .. method:: make_nodes()
 
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+      Make the maneuver nodes of the operation. Throws an :class:`OperationException`
+      if the operation cannot make them.
 
-      Make the maneuver nodes of the operation, and return the first one.
+      :returns: The maneuver nodes.
+      :rtype: list(:class:`SpaceCenter.Node`)
+      :Game Scenes: Flight
 
-      :returns: The first maneuver node.
-      :rtype: :class:`SpaceCenter.Node`
+
+      .. note::
+
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
+
+
+
+OperationEccentricity
+^^^^^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationEccentricity
+
+   Change the eccentricity.
+
+   .. attribute:: error_message
+
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: str
       :Game Scenes: Flight
 
    .. method:: make_nodes()
@@ -443,7 +612,24 @@ OperationCourseCorrection
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
+
+   .. attribute:: new_eccentricity
+
+      The new eccentricity.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: time_selector
+
+      The time of the maneuver.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`TimeSelector`
+      :Game Scenes: Flight
 
 
 
@@ -457,20 +643,10 @@ OperationEllipticize
 
    .. attribute:: error_message
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
       :Attribute: Read-only, cannot be set
       :rtype: str
-      :Game Scenes: Flight
-
-   .. method:: make_node()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
-      :rtype: :class:`SpaceCenter.Node`
       :Game Scenes: Flight
 
    .. method:: make_nodes()
@@ -485,7 +661,8 @@ OperationEllipticize
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. attribute:: new_apoapsis
 
@@ -523,20 +700,10 @@ OperationInclination
 
    .. attribute:: error_message
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
       :Attribute: Read-only, cannot be set
       :rtype: str
-      :Game Scenes: Flight
-
-   .. method:: make_node()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
-      :rtype: :class:`SpaceCenter.Node`
       :Game Scenes: Flight
 
    .. method:: make_nodes()
@@ -551,7 +718,8 @@ OperationInclination
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. attribute:: new_inclination
 
@@ -581,20 +749,10 @@ OperationInterplanetaryTransfer
 
    .. attribute:: error_message
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
       :Attribute: Read-only, cannot be set
       :rtype: str
-      :Game Scenes: Flight
-
-   .. method:: make_node()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
-      :rtype: :class:`SpaceCenter.Node`
       :Game Scenes: Flight
 
    .. method:: make_nodes()
@@ -609,7 +767,8 @@ OperationInterplanetaryTransfer
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. attribute:: wait_for_phase_angle
 
@@ -631,20 +790,10 @@ OperationKillRelVel
 
    .. attribute:: error_message
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
       :Attribute: Read-only, cannot be set
       :rtype: str
-      :Game Scenes: Flight
-
-   .. method:: make_node()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
-      :rtype: :class:`SpaceCenter.Node`
       :Game Scenes: Flight
 
    .. method:: make_nodes()
@@ -659,7 +808,8 @@ OperationKillRelVel
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. attribute:: time_selector
 
@@ -681,7 +831,7 @@ OperationLambert
 
    .. attribute:: error_message
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
       :Attribute: Read-only, cannot be set
       :rtype: str
@@ -693,16 +843,6 @@ OperationLambert
 
       :Attribute: Can be read or written
       :rtype: float
-      :Game Scenes: Flight
-
-   .. method:: make_node()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
-      :rtype: :class:`SpaceCenter.Node`
       :Game Scenes: Flight
 
    .. method:: make_nodes()
@@ -717,7 +857,8 @@ OperationLambert
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. attribute:: time_selector
 
@@ -739,20 +880,10 @@ OperationLan
 
    .. attribute:: error_message
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
       :Attribute: Read-only, cannot be set
       :rtype: str
-      :Game Scenes: Flight
-
-   .. method:: make_node()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
-      :rtype: :class:`SpaceCenter.Node`
       :Game Scenes: Flight
 
    .. method:: make_nodes()
@@ -767,7 +898,8 @@ OperationLan
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. attribute:: new_lan
 
@@ -803,20 +935,10 @@ OperationLongitude
 
    .. attribute:: error_message
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
       :Attribute: Read-only, cannot be set
       :rtype: str
-      :Game Scenes: Flight
-
-   .. method:: make_node()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
-      :rtype: :class:`SpaceCenter.Node`
       :Game Scenes: Flight
 
    .. method:: make_nodes()
@@ -831,7 +953,8 @@ OperationLongitude
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. attribute:: new_surface_longitude
 
@@ -867,20 +990,10 @@ OperationMoonReturn
 
    .. attribute:: error_message
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
       :Attribute: Read-only, cannot be set
       :rtype: str
-      :Game Scenes: Flight
-
-   .. method:: make_node()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
-      :rtype: :class:`SpaceCenter.Node`
       :Game Scenes: Flight
 
    .. method:: make_nodes()
@@ -895,7 +1008,8 @@ OperationMoonReturn
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. attribute:: moon_return_altitude
 
@@ -917,20 +1031,10 @@ OperationPeriapsis
 
    .. attribute:: error_message
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
       :Attribute: Read-only, cannot be set
       :rtype: str
-      :Game Scenes: Flight
-
-   .. method:: make_node()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
-      :rtype: :class:`SpaceCenter.Node`
       :Game Scenes: Flight
 
    .. method:: make_nodes()
@@ -945,7 +1049,8 @@ OperationPeriapsis
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. attribute:: new_periapsis
 
@@ -975,20 +1080,10 @@ OperationPlane
 
    .. attribute:: error_message
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
       :Attribute: Read-only, cannot be set
       :rtype: str
-      :Game Scenes: Flight
-
-   .. method:: make_node()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
-      :rtype: :class:`SpaceCenter.Node`
       :Game Scenes: Flight
 
    .. method:: make_nodes()
@@ -1003,7 +1098,8 @@ OperationPlane
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. attribute:: time_selector
 
@@ -1031,20 +1127,10 @@ OperationResonantOrbit
 
    .. attribute:: error_message
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
       :Attribute: Read-only, cannot be set
       :rtype: str
-      :Game Scenes: Flight
-
-   .. method:: make_node()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
-      :rtype: :class:`SpaceCenter.Node`
       :Game Scenes: Flight
 
    .. method:: make_nodes()
@@ -1059,7 +1145,8 @@ OperationResonantOrbit
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. attribute:: resonance_denominator
 
@@ -1097,20 +1184,10 @@ OperationSemiMajor
 
    .. attribute:: error_message
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
       :Attribute: Read-only, cannot be set
       :rtype: str
-      :Game Scenes: Flight
-
-   .. method:: make_node()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
-      :rtype: :class:`SpaceCenter.Node`
       :Game Scenes: Flight
 
    .. method:: make_nodes()
@@ -1125,7 +1202,8 @@ OperationSemiMajor
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. attribute:: new_semi_major_axis
 
@@ -1161,20 +1239,10 @@ OperationTransfer
 
    .. attribute:: error_message
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
       :Attribute: Read-only, cannot be set
       :rtype: str
-      :Game Scenes: Flight
-
-   .. method:: make_node()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-      :returns: The first maneuver node.
-      :rtype: :class:`SpaceCenter.Node`
       :Game Scenes: Flight
 
    .. method:: make_nodes()
@@ -1189,19 +1257,55 @@ OperationTransfer
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
-   .. attribute:: intercept_only
+   .. attribute:: capture
 
-      Whether to plan only the intercept, with no capture burn, for an impact or a flyby.
+      Whether the transfer ends in the target's orbit. Without capture, it is an impact or
+      a flyby.
 
       :Attribute: Can be read or written
       :rtype: bool
       :Game Scenes: Flight
 
-   .. attribute:: simple_transfer
+   .. attribute:: plan_capture
 
-      Whether the transfer is coplanar.
+      Whether to make a second node for the capture burn.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :attr:`OperationTransfer.capture`.
+
+   .. attribute:: rendezvous
+
+      Whether to meet the target, rather than reach its orbit.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: lag_time
+
+      The time by which the vessel arrives behind the target, in seconds.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :attr:`OperationTransfer.rendezvous`.
+
+   .. attribute:: coplanar
+
+      Whether the transfer stays in the vessel's orbital plane.
 
       :Attribute: Can be read or written
       :rtype: bool

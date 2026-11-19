@@ -40,36 +40,48 @@ This service provides functionality to interact with MechJeb 2.
 
 
 
-.. attribute:: airplane_autopilot
+.. attribute:: aircraft_approach
 
-   The airplane autopilot.
+   The Aircraft Approach and Autoland window.
 
    :Attribute: Read-only, cannot be set
-   :rtype: :class:`AirplaneAutopilot`
+   :rtype: :class:`AircraftApproach`
    :Game Scenes: Flight
 
 
 
 
 
-.. attribute:: antenna_controller
+.. attribute:: aircraft_autopilot
 
-   The controller of the deployable antennas.
+   The Aircraft Autopilot window.
 
    :Attribute: Read-only, cannot be set
-   :rtype: :class:`DeployableController`
+   :rtype: :class:`AircraftAutopilot`
    :Game Scenes: Flight
 
 
 
 
 
-.. attribute:: ascent_autopilot
+.. attribute:: ascent_guidance
 
-   The ascent autopilot.
+   The Ascent Guidance window.
 
    :Attribute: Read-only, cannot be set
-   :rtype: :class:`AscentAutopilot`
+   :rtype: :class:`AscentGuidance`
+   :Game Scenes: Flight
+
+
+
+
+
+.. attribute:: attitude_adjustment
+
+   The Attitude Adjustment window.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: :class:`AttitudeAdjustment`
    :Game Scenes: Flight
 
 
@@ -78,7 +90,7 @@ This service provides functionality to interact with MechJeb 2.
 
 .. attribute:: docking_autopilot
 
-   The docking autopilot.
+   The Docking Autopilot window.
 
    :Attribute: Read-only, cannot be set
    :rtype: :class:`DockingAutopilot`
@@ -88,12 +100,12 @@ This service provides functionality to interact with MechJeb 2.
 
 
 
-.. attribute:: landing_autopilot
+.. attribute:: landing_guidance
 
-   The landing autopilot.
+   The Landing Guidance window.
 
    :Attribute: Read-only, cannot be set
-   :rtype: :class:`LandingAutopilot`
+   :rtype: :class:`LandingGuidance`
    :Game Scenes: Flight
 
 
@@ -102,7 +114,7 @@ This service provides functionality to interact with MechJeb 2.
 
 .. attribute:: maneuver_planner
 
-   The maneuver planner.
+   The Maneuver Planner window.
 
    :Attribute: Read-only, cannot be set
    :rtype: :class:`ManeuverPlanner`
@@ -112,36 +124,24 @@ This service provides functionality to interact with MechJeb 2.
 
 
 
-.. attribute:: node_executor
-
-   The maneuver node executor.
-
-   :Attribute: Read-only, cannot be set
-   :rtype: :class:`NodeExecutor`
-   :Game Scenes: Flight
-
-
-
-
-
-.. attribute:: rcs_controller
-
-   The RCS controller.
-
-   :Attribute: Read-only, cannot be set
-   :rtype: :class:`RCSController`
-   :Game Scenes: Flight
-
-
-
-
-
 .. attribute:: rendezvous_autopilot
 
-   The rendezvous autopilot.
+   The Rendezvous Autopilot window.
 
    :Attribute: Read-only, cannot be set
    :rtype: :class:`RendezvousAutopilot`
+   :Game Scenes: Flight
+
+
+
+
+
+.. attribute:: rover_autopilot
+
+   The Rover Autopilot window.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: :class:`RoverAutopilot`
    :Game Scenes: Flight
 
 
@@ -172,48 +172,12 @@ This service provides functionality to interact with MechJeb 2.
 
 
 
-.. attribute:: solar_panel_controller
-
-   The controller of the deployable solar panels.
-
-   :Attribute: Read-only, cannot be set
-   :rtype: :class:`DeployableController`
-   :Game Scenes: Flight
-
-
-
-
-
-.. attribute:: staging_controller
-
-   The staging controller.
-
-   :Attribute: Read-only, cannot be set
-   :rtype: :class:`StagingController`
-   :Game Scenes: Flight
-
-
-
-
-
 .. attribute:: target_controller
 
-   The target controller.
+   The target controller, which holds MechJeb's target.
 
    :Attribute: Read-only, cannot be set
    :rtype: :class:`TargetController`
-   :Game Scenes: Flight
-
-
-
-
-
-.. attribute:: thrust_controller
-
-   The thrust controller.
-
-   :Attribute: Read-only, cannot be set
-   :rtype: :class:`ThrustController`
    :Game Scenes: Flight
 
 
@@ -226,6 +190,18 @@ This service provides functionality to interact with MechJeb 2.
 
    :Attribute: Read-only, cannot be set
    :rtype: :class:`Translatron`
+   :Game Scenes: Flight
+
+
+
+
+
+.. attribute:: utilities
+
+   The Utilities window.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: :class:`Utilities`
    :Game Scenes: Flight
 
 

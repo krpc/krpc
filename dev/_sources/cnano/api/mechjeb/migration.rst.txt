@@ -1,0 +1,242 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Migration from KRPC.MechJeb 0.7.1
+=================================
+
+kRPC 0.8 adds the MechJeb service, which Genhis' KRPC.MechJeb 0.7.1 provided before. The
+service follows MechJeb's windows, so some 0.7.1 members moved or were renamed. 0.7.1 names
+are given as in C#.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 35 30
+
+   * - 0.7.1
+     - 0.8
+     - Note
+   * - ``MechJeb.AscentAutopilot``
+     - :func:`krpc_MechJeb_AscentGuidance`
+     -
+   * - ``MechJeb.AirplaneAutopilot``
+     - :func:`krpc_MechJeb_AircraftAutopilot`
+     -
+   * - ``MechJeb.LandingAutopilot``
+     - :func:`krpc_MechJeb_LandingGuidance`
+     -
+   * - ``MechJeb.ThrustController``
+     - :func:`krpc_MechJeb_Utilities_Thrust`
+     -
+   * - ``MechJeb.StagingController``
+     - :func:`krpc_MechJeb_Utilities_Staging`
+     -
+   * - ``MechJeb.SolarPanelController``
+     - :func:`krpc_MechJeb_Utilities_SolarPanels`
+     -
+   * - ``MechJeb.AntennaController``
+     - :func:`krpc_MechJeb_Utilities_Antennas`
+     -
+   * - ``MechJeb.NodeExecutor``
+     - :func:`krpc_MechJeb_ManeuverPlanner`
+     - Its members move to the maneuver planner, below
+   * - ``MechJeb.RCSController``
+     - :func:`krpc_MechJeb_SmartRCS`
+     - Its members move to Smart RCS, below
+   * - ``MechJeb.APIReady``
+     - :func:`krpc_MechJeb_Available` and :func:`krpc_MechJeb_Ready`
+     -
+   * - ``AscentAutopilot.Enabled``
+     - :func:`krpc_MechJeb_AscentGuidance_Enabled`
+     -
+   * - ``AscentAutopilot.Status``
+     - :func:`krpc_MechJeb_AscentGuidance_Status`
+     -
+   * - ``AscentAutopilot.DesiredOrbitAltitude``
+     - :func:`krpc_MechJeb_AscentGuidance_DesiredOrbitAltitude`
+     -
+   * - ``AscentAutopilot.DesiredInclination``
+     - :func:`krpc_MechJeb_AscentGuidance_DesiredInclination`
+     -
+   * - ``AscentAutopilot.LaunchPhaseAngle``
+     - :func:`krpc_MechJeb_AscentGuidance_LaunchPhaseAngle`
+     -
+   * - ``AscentAutopilot.LaunchLANDifference``
+     - :func:`krpc_MechJeb_AscentGuidance_LaunchLANDifference`
+     -
+   * - ``AscentAutopilot.WarpCountDown``
+     - :func:`krpc_MechJeb_AscentGuidance_WarpCountDown`
+     -
+   * - ``AscentAutopilot.LaunchMode``
+     - :func:`krpc_MechJeb_AscentGuidance_LaunchMode`
+     -
+   * - ``AscentAutopilot.AbortTimedLaunch``
+     - :func:`krpc_MechJeb_AscentGuidance_AbortTimedLaunch`
+     -
+   * - ``AscentAutopilot.LaunchToRendezvous``
+     - :func:`krpc_MechJeb_AscentGuidance_LaunchToRendezvous`
+     -
+   * - ``AscentAutopilot.LaunchToTargetPlane``
+     - :func:`krpc_MechJeb_AscentGuidance_LaunchToTargetPlane`
+     -
+   * - ``AscentAutopilot.AscentPathIndex``
+     - :func:`krpc_MechJeb_AscentGuidance_AscentType`
+     - 0 is :macro:`KRPC_MECHJEB_ASCENTTYPE_CLASSIC` and 2 is :macro:`KRPC_MECHJEB_ASCENTTYPE_PVG`
+   * - ``AscentAutopilot.AscentPathClassic``
+     - :func:`krpc_MechJeb_AscentGuidance_ClassicPath`
+     -
+   * - ``AscentAutopilot.AscentPathPVG``
+     - :func:`krpc_MechJeb_AscentGuidance_PVGSettings`
+     -
+   * - ``AscentAutopilot.CorrectiveSteering``
+     - :func:`krpc_MechJeb_AscentSettings_CorrectiveSteering`
+     - Through :func:`krpc_MechJeb_AscentGuidance_Settings`
+   * - ``AscentAutopilot.CorrectiveSteeringGain``
+     - :func:`krpc_MechJeb_AscentSettings_CorrectiveSteeringGain`
+     - Through :func:`krpc_MechJeb_AscentGuidance_Settings`
+   * - ``AscentAutopilot.ForceRoll``
+     - :func:`krpc_MechJeb_AscentSettings_ForceRoll`
+     - Through :func:`krpc_MechJeb_AscentGuidance_Settings`
+   * - ``AscentAutopilot.VerticalRoll``
+     - :func:`krpc_MechJeb_AscentSettings_VerticalRoll`
+     - Through :func:`krpc_MechJeb_AscentGuidance_Settings`
+   * - ``AscentAutopilot.TurnRoll``
+     - :func:`krpc_MechJeb_AscentSettings_TurnRoll`
+     - Through :func:`krpc_MechJeb_AscentGuidance_Settings`
+   * - ``AscentAutopilot.AutodeploySolarPanels``
+     - :func:`krpc_MechJeb_AscentSettings_AutodeploySolarPanels`
+     - Through :func:`krpc_MechJeb_AscentGuidance_Settings`
+   * - ``AscentAutopilot.AutoDeployAntennas``
+     - :func:`krpc_MechJeb_AscentSettings_AutoDeployAntennas`
+     - Through :func:`krpc_MechJeb_AscentGuidance_Settings`
+   * - ``AscentAutopilot.SkipCircularization``
+     - :func:`krpc_MechJeb_AscentSettings_SkipCircularization`
+     - Through :func:`krpc_MechJeb_AscentGuidance_Settings`
+   * - ``AscentAutopilot.Autostage``
+     - :func:`krpc_MechJeb_AscentSettings_Autostage`
+     - Through :func:`krpc_MechJeb_AscentGuidance_Settings`
+   * - ``AscentAutopilot.LimitAoA``
+     - :func:`krpc_MechJeb_AscentSettings_LimitAngleOfAttack`
+     - Through :func:`krpc_MechJeb_AscentGuidance_Settings`
+   * - ``AscentAutopilot.MaxAoA``
+     - :func:`krpc_MechJeb_AscentSettings_MaxAngleOfAttack`
+     - Through :func:`krpc_MechJeb_AscentGuidance_Settings`
+   * - ``AscentAutopilot.AoALimitFadeoutPressure``
+     - :func:`krpc_MechJeb_AscentSettings_AngleOfAttackLimitFadeoutPressure`
+     - Through :func:`krpc_MechJeb_AscentGuidance_Settings`
+   * - ``AscentAutopilot.ThrustController``
+     - :func:`krpc_MechJeb_AscentSettings_Thrust`
+     -
+   * - ``AscentAutopilot.StagingController``
+     - :func:`krpc_MechJeb_AscentSettings_Staging`
+     -
+   * - ``AscentAutopilot.AscentPathGT``
+     - Removed
+     - MechJeb 2.15 has no gravity turn path
+   * - ``AscentClassic``
+     - :type:`krpc_MechJeb_ClassicPath_t`
+     - Members keep their names
+   * - ``AscentPVG.DesiredApoapsis``
+     - :func:`krpc_MechJeb_AscentGuidance_DesiredApoapsis`
+     -
+   * - ``AscentPVG.AttachAltFlag``
+     - :func:`krpc_MechJeb_AscentGuidance_AttachAltFlag`
+     -
+   * - ``AscentPVG.DesiredAttachAlt``
+     - :func:`krpc_MechJeb_AscentGuidance_DesiredAttachAlt`
+     -
+   * - ``AscentPVG``
+     - :type:`krpc_MechJeb_PVGSettings_t`
+     - Its other members keep their names
+   * - ``AscentGT``
+     - Removed
+     - MechJeb 2.15 has no gravity turn path
+   * - ``ThrustController``
+     - :type:`krpc_MechJeb_ThrustLimiter_t`
+     - Members keep their names
+   * - ``ThrustController.SmoothThrottle, ThrottleSmoothingTime``
+     - Removed
+     - MechJeb 2.15 removed them
+   * - ``StagingController``
+     - :type:`krpc_MechJeb_Autostaging_t`
+     - Its other members keep their names
+   * - ``StagingController.AutostagingOnce``
+     - :func:`krpc_MechJeb_Autostaging_AutostageOnce`
+     - :func:`krpc_MechJeb_Autostaging_AutostagingOnce` is read-only
+   * - ``NodeExecutor.ExecuteOneNode``
+     - :func:`krpc_MechJeb_ManeuverPlanner_ExecuteNextNode`
+     -
+   * - ``NodeExecutor.ExecuteAllNodes``
+     - :func:`krpc_MechJeb_ManeuverPlanner_ExecuteAllNodes`
+     -
+   * - ``NodeExecutor.Abort``
+     - :func:`krpc_MechJeb_ManeuverPlanner_AbortNodeExecution`
+     -
+   * - ``NodeExecutor.Enabled``
+     - :func:`krpc_MechJeb_ManeuverPlanner_ExecutingNode`
+     -
+   * - ``NodeExecutor.Autowarp``
+     - :func:`krpc_MechJeb_ManeuverPlanner_Autowarp`
+     -
+   * - ``NodeExecutor.LeadTime``
+     - :func:`krpc_MechJeb_ManeuverPlanner_LeadTime`
+     -
+   * - ``NodeExecutor.Tolerance``
+     - Removed
+     - MechJeb 2.15 removed it
+   * - ``RCSController.RCSThrottle``
+     - :func:`krpc_MechJeb_SmartRCS_RCSThrottle`
+     -
+   * - ``RCSController.RCSForRotation``
+     - :func:`krpc_MechJeb_SmartRCS_RCSForRotation`
+     -
+   * - ``SmartRCS.RCSController``
+     - Removed
+     - Its members are on :type:`krpc_MechJeb_SmartRCS_t`
+   * - ``LandingAutopilot``
+     - :type:`krpc_MechJeb_LandingGuidance_t`
+     - Its other members keep their names
+   * - ``LandingAutopilot.RcsAdjustment``
+     - :func:`krpc_MechJeb_LandingGuidance_RCSAdjustment`
+     -
+   * - ``LandingAutopilot.LandAtPositionTarget``
+     - :func:`krpc_MechJeb_LandingGuidance_LandAtTarget`
+     -
+   * - ``LandingAutopilot.LandUntargeted``
+     - :func:`krpc_MechJeb_LandingGuidance_LandSomewhere`
+     -
+   * - ``LandingAutopilot.StopLanding``
+     - :func:`krpc_MechJeb_LandingGuidance_AbortAutoland`
+     -
+   * - ``TargetController.SetPositionTarget``
+     - :func:`krpc_MechJeb_LandingGuidance_SetTarget`
+     -
+   * - ``TargetController.PickPositionTargetOnMap``
+     - :func:`krpc_MechJeb_LandingGuidance_PickTargetOnMap`
+     -
+   * - ``TargetController.GetPositionTargetString``
+     - :func:`krpc_MechJeb_LandingGuidance_GetTargetString`
+     -
+   * - ``TargetController.GetPositionTargetPosition``
+     - :func:`krpc_MechJeb_LandingGuidance_GetTargetPosition`
+     -
+   * - ``AirplaneAutopilot``
+     - :type:`krpc_MechJeb_AircraftAutopilot_t`
+     - Members keep their names
+   * - ``Operation.MakeNode``
+     - :func:`krpc_MechJeb_OperationApoapsis_MakeNodes`
+     - On each operation. It returns every node
+   * - ``OperationCourseCorrection.CourseCorrectFinalPeA``
+     - :func:`krpc_MechJeb_OperationCourseCorrection_FinalPeriapsisAltitude`
+     -
+   * - ``OperationTransfer.InterceptOnly``
+     - :func:`krpc_MechJeb_OperationTransfer_Capture`
+     - The inverse
+   * - ``OperationTransfer.SimpleTransfer``
+     - :func:`krpc_MechJeb_OperationTransfer_Coplanar`
+     -
+   * - ``OperationTransfer.PeriodOffset``
+     - :func:`krpc_MechJeb_OperationTransfer_LagTime`
+     - A time in seconds, rather than a fraction of the target's period
+
+Members not listed keep their names and classes.

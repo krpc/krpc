@@ -18,32 +18,20 @@ TargetController
    .. function:: bool can_align()
 
       Whether the vessel can align with the target, which it can with a docking port.
+      Throws an exception if there is no target.
 
       :Game Scenes: Flight
 
    .. function:: float distance()
 
-      The distance to the target, in meters.
+      The distance to the target, in meters. Throws an exception if there is no target.
 
       :Game Scenes: Flight
 
    .. function:: std::tuple<double, double, double> docking_axis()
 
-      The world space docking axis of the target.
-
-      :Game Scenes: Flight
-
-   .. function:: std::tuple<double, double, double> get_position_target_position()
-
-      The world space position of the position target.
-
-
-      :Game Scenes: Flight
-
-   .. function:: std::string get_position_target_string()
-
-      The position target as text.
-
+      The world space docking axis of the target. Throws an exception if there is no
+      target.
 
       :Game Scenes: Flight
 
@@ -53,16 +41,9 @@ TargetController
 
       :Game Scenes: Flight
 
-   .. function:: void pick_position_target_on_map()
-
-      Let the player pick the position target on the map.
-
-
-      :Game Scenes: Flight
-
    .. function:: std::tuple<double, double, double> position()
 
-      The world space position of the target.
+      The world space position of the target. Throws an exception if there is no target.
 
       :Game Scenes: Flight
 
@@ -74,13 +55,15 @@ TargetController
 
    .. function:: std::tuple<double, double, double> relative_position()
 
-      The world space position of the vessel relative to the target.
+      The world space position of the vessel relative to the target. Throws an exception
+      if there is no target.
 
       :Game Scenes: Flight
 
    .. function:: std::tuple<double, double, double> relative_velocity()
 
       The world space velocity of the vessel relative to the target, in :math:`\mathrm{m/s}`.
+      Throws an exception if there is no target.
 
       :Game Scenes: Flight
 
@@ -99,21 +82,10 @@ TargetController
 
          Set the direction with :func:`TargetController::update_direction_target`.
 
-   .. function:: void set_position_target(SpaceCenter::CelestialBody body, double latitude, double longitude)
-
-      Set the target to a position on the surface of a body.
-
-      :Parameters:
-
-       * **body** -- The body.
-       * **latitude** -- The latitude, in degrees.
-       * **longitude** -- The longitude, in degrees.
-
-      :Game Scenes: Flight
-
    .. function:: SpaceCenter::Orbit target_orbit()
 
-      The orbit of the target.
+      The orbit of the target. Throws an exception if there is no target, or the target
+      has no orbit.
 
       :Game Scenes: Flight
 

@@ -8,11 +8,19 @@ ManeuverPlanner
 
 .. class:: ManeuverPlanner
 
-   The maneuver planner, which makes maneuver nodes for its operations.
+   The Maneuver Planner window, which makes maneuver nodes for its operations, and
+   executes them.
 
    .. note::
 
       MechJeb shares the operations, and most of their settings, between vessels.
+
+   .. function:: OperationAdvancedTransfer operation_advanced_transfer()
+
+      The operation that transfers to another planet, at the departure that needs the
+      least delta-v.
+
+      :Game Scenes: Flight
 
    .. function:: OperationApoapsis operation_apoapsis()
 
@@ -29,6 +37,12 @@ ManeuverPlanner
    .. function:: OperationCourseCorrection operation_course_correction()
 
       The operation that fine tunes the closest approach to the target.
+
+      :Game Scenes: Flight
+
+   .. function:: OperationEccentricity operation_eccentricity()
+
+      The operation that changes the eccentricity.
 
       :Game Scenes: Flight
 
@@ -110,6 +124,69 @@ ManeuverPlanner
 
       :Game Scenes: Flight
 
+   .. function:: void abort_node_execution()
+
+      Stop executing the maneuver nodes.
+
+
+      :Game Scenes: Flight
+
+   .. function:: void execute_all_nodes()
+
+      Execute all the maneuver nodes. Throws an exception if the vessel has no maneuver
+      node.
+
+
+      :Game Scenes: Flight
+
+   .. function:: void execute_next_node()
+
+      Execute the next maneuver node. Throws an exception if the vessel has no maneuver
+      node.
+
+
+      :Game Scenes: Flight
+
+   .. function:: bool autowarp()
+   .. function:: void set_autowarp(bool value)
+
+      Whether to warp time to the burn.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The same setting as :func:`AscentSettings::autowarp`,
+         :func:`LandingGuidance::autowarp` and :func:`RendezvousAutopilot::autowarp`.
+
+   .. function:: bool executing_node()
+
+      Whether a maneuver node is being executed.
+
+      :Game Scenes: Flight
+
+   .. function:: double lead_time()
+   .. function:: void set_lead_time(double value)
+
+      The time before the burn at which time warp stops, in seconds.
+
+      :Game Scenes: Flight
+
+   .. function:: bool rcs_only()
+   .. function:: void set_rcs_only(bool value)
+
+      Whether to burn with the RCS thrusters in place of the engines.
+
+      :Game Scenes: Flight
+
+   .. function:: bool kill_roll_rotation()
+   .. function:: void set_kill_roll_rotation(bool value)
+
+      Whether to stop the vessel's roll before the burn.
+
+      :Game Scenes: Flight
+
 
 
 .. namespace:: krpc::services::MechJeb
@@ -170,9 +247,14 @@ TimeSelector
    The time reference of a maneuver. See :func:`TimeSelector::time_reference`.
 
 
-   .. enumerator:: altitude
+   .. enumerator:: computed
 
-      At :func:`TimeSelector::circularize_altitude`.
+      At the optimum time.
+
+
+   .. enumerator:: x_from_now
+
+      After :func:`TimeSelector::lead_time`.
 
 
    .. enumerator:: apoapsis
@@ -180,14 +262,14 @@ TimeSelector
       At the next apoapsis.
 
 
-   .. enumerator:: closest_approach
+   .. enumerator:: periapsis
 
-      At the closest approach to the target.
+      At the next periapsis.
 
 
-   .. enumerator:: computed
+   .. enumerator:: altitude
 
-      At the optimum time.
+      At :func:`TimeSelector::circularize_altitude`.
 
 
    .. enumerator:: eq_ascending
@@ -200,21 +282,6 @@ TimeSelector
       At the equatorial descending node.
 
 
-   .. enumerator:: eq_highest_ad
-
-      At the cheaper of the equatorial ascending and descending nodes.
-
-
-   .. enumerator:: eq_nearest_ad
-
-      At the nearer of the equatorial ascending and descending nodes.
-
-
-   .. enumerator:: periapsis
-
-      At the next periapsis.
-
-
    .. enumerator:: rel_ascending
 
       At the next ascending node with the target.
@@ -223,6 +290,21 @@ TimeSelector
    .. enumerator:: rel_descending
 
       At the next descending node with the target.
+
+
+   .. enumerator:: closest_approach
+
+      At the closest approach to the target.
+
+
+   .. enumerator:: eq_highest_ad
+
+      At the cheaper of the equatorial ascending and descending nodes.
+
+
+   .. enumerator:: eq_nearest_ad
+
+      At the nearer of the equatorial ascending and descending nodes.
 
 
    .. enumerator:: rel_highest_ad
@@ -235,37 +317,62 @@ TimeSelector
       At the nearer of the ascending and descending nodes with the target.
 
 
-   .. enumerator:: x_from_now
-
-      After :func:`TimeSelector::lead_time`.
-
-
 
 Operations
 ----------
 
-OperationApoapsis
-^^^^^^^^^^^^^^^^^
+OperationAdvancedTransfer
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
-.. class:: OperationApoapsis
+.. class:: OperationAdvancedTransfer
 
-   Change the apoapsis.
+   An interplanetary transfer to the target body, at the departure that needs the least
+   delta-v before :func:`OperationAdvancedTransfer::max_arrival_time`.
 
-   .. function:: std::string error_message()
+   .. note::
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      MechJeb searches for the departure in the background. The first call to
+      ``MakeNodes`` starts the search, and throws an :class:`OperationException`
+      until it finishes. See :func:`OperationAdvancedTransfer::searching`.
+
+   .. function:: double max_arrival_time()
+   .. function:: void set_max_arrival_time(double value)
+
+      The latest arrival time, as a time from now, in seconds.
 
       :Game Scenes: Flight
 
-   .. function:: SpaceCenter::Node make_node()
+   .. function:: bool include_capture_burn()
+   .. function:: void set_include_capture_burn(bool value)
 
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
+      Whether to plan a capture burn at the destination.
 
-      Make the maneuver nodes of the operation, and return the first one.
+      :Game Scenes: Flight
 
+   .. function:: double periapsis_height()
+   .. function:: void set_periapsis_height(double value)
 
-      :returns: The first maneuver node.
+      The altitude of the periapsis at the destination, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: bool searching()
+
+      Whether MechJeb is searching for the departure.
+
+      :Game Scenes: Flight
+
+   .. function:: int32_t search_progress()
+
+      The progress of the search for the departure, as a percentage.
+
+      :Game Scenes: Flight
+
+   .. function:: std::string error_message()
+
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
+
       :Game Scenes: Flight
 
    .. function:: std::vector<SpaceCenter::Node> make_nodes()
@@ -280,7 +387,39 @@ OperationApoapsis
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
+
+
+
+OperationApoapsis
+^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationApoapsis
+
+   Change the apoapsis.
+
+   .. function:: std::string error_message()
+
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
+
+      :Game Scenes: Flight
+
+   .. function:: std::vector<SpaceCenter::Node> make_nodes()
+
+      Make the maneuver nodes of the operation. Throws an :class:`OperationException`
+      if the operation cannot make them.
+
+
+      :returns: The maneuver nodes.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. function:: double new_apoapsis()
    .. function:: void set_new_apoapsis(double value)
@@ -311,18 +450,8 @@ OperationCircularize
 
    .. function:: std::string error_message()
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. function:: SpaceCenter::Node make_node()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: std::vector<SpaceCenter::Node> make_nodes()
@@ -337,7 +466,8 @@ OperationCircularize
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. function:: TimeSelector time_selector()
 
@@ -355,8 +485,8 @@ OperationCourseCorrection
 
    Fine tune the closest approach to the target.
 
-   .. function:: double course_correct_final_pe_a()
-   .. function:: void set_course_correct_final_pe_a(double value)
+   .. function:: double final_periapsis_altitude()
+   .. function:: void set_final_periapsis_altitude(double value)
 
       The periapsis altitude at a target body, in meters.
 
@@ -364,7 +494,7 @@ OperationCourseCorrection
 
    .. function:: std::string error_message()
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
       :Game Scenes: Flight
 
@@ -373,16 +503,6 @@ OperationCourseCorrection
 
       The closest approach distance to a target vessel, in meters.
 
-      :Game Scenes: Flight
-
-   .. function:: SpaceCenter::Node make_node()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: std::vector<SpaceCenter::Node> make_nodes()
@@ -397,7 +517,52 @@ OperationCourseCorrection
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
+
+
+
+OperationEccentricity
+^^^^^^^^^^^^^^^^^^^^^
+
+
+.. class:: OperationEccentricity
+
+   Change the eccentricity.
+
+   .. function:: std::string error_message()
+
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
+
+      :Game Scenes: Flight
+
+   .. function:: std::vector<SpaceCenter::Node> make_nodes()
+
+      Make the maneuver nodes of the operation. Throws an :class:`OperationException`
+      if the operation cannot make them.
+
+
+      :returns: The maneuver nodes.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
+
+   .. function:: double new_eccentricity()
+   .. function:: void set_new_eccentricity(double value)
+
+      The new eccentricity.
+
+      :Game Scenes: Flight
+
+   .. function:: TimeSelector time_selector()
+
+      The time of the maneuver.
+
+      :Game Scenes: Flight
 
 
 
@@ -411,18 +576,8 @@ OperationEllipticize
 
    .. function:: std::string error_message()
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. function:: SpaceCenter::Node make_node()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: std::vector<SpaceCenter::Node> make_nodes()
@@ -437,7 +592,8 @@ OperationEllipticize
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. function:: double new_apoapsis()
    .. function:: void set_new_apoapsis(double value)
@@ -471,18 +627,8 @@ OperationInclination
 
    .. function:: std::string error_message()
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. function:: SpaceCenter::Node make_node()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: std::vector<SpaceCenter::Node> make_nodes()
@@ -497,7 +643,8 @@ OperationInclination
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. function:: double new_inclination()
    .. function:: void set_new_inclination(double value)
@@ -524,18 +671,8 @@ OperationInterplanetaryTransfer
 
    .. function:: std::string error_message()
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. function:: SpaceCenter::Node make_node()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: std::vector<SpaceCenter::Node> make_nodes()
@@ -550,7 +687,8 @@ OperationInterplanetaryTransfer
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. function:: bool wait_for_phase_angle()
    .. function:: void set_wait_for_phase_angle(bool value)
@@ -571,18 +709,8 @@ OperationKillRelVel
 
    .. function:: std::string error_message()
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. function:: SpaceCenter::Node make_node()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: std::vector<SpaceCenter::Node> make_nodes()
@@ -597,7 +725,8 @@ OperationKillRelVel
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. function:: TimeSelector time_selector()
 
@@ -617,7 +746,7 @@ OperationLambert
 
    .. function:: std::string error_message()
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
       :Game Scenes: Flight
 
@@ -626,16 +755,6 @@ OperationLambert
 
       The time from the maneuver to the intercept, in seconds.
 
-      :Game Scenes: Flight
-
-   .. function:: SpaceCenter::Node make_node()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: std::vector<SpaceCenter::Node> make_nodes()
@@ -650,7 +769,8 @@ OperationLambert
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. function:: TimeSelector time_selector()
 
@@ -670,18 +790,8 @@ OperationLan
 
    .. function:: std::string error_message()
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. function:: SpaceCenter::Node make_node()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: std::vector<SpaceCenter::Node> make_nodes()
@@ -696,7 +806,8 @@ OperationLan
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. function:: double new_lan()
    .. function:: void set_new_lan(double value)
@@ -729,18 +840,8 @@ OperationLongitude
 
    .. function:: std::string error_message()
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. function:: SpaceCenter::Node make_node()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: std::vector<SpaceCenter::Node> make_nodes()
@@ -755,7 +856,8 @@ OperationLongitude
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. function:: double new_surface_longitude()
    .. function:: void set_new_surface_longitude(double value)
@@ -788,18 +890,8 @@ OperationMoonReturn
 
    .. function:: std::string error_message()
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. function:: SpaceCenter::Node make_node()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: std::vector<SpaceCenter::Node> make_nodes()
@@ -814,7 +906,8 @@ OperationMoonReturn
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. function:: double moon_return_altitude()
    .. function:: void set_moon_return_altitude(double value)
@@ -835,18 +928,8 @@ OperationPeriapsis
 
    .. function:: std::string error_message()
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. function:: SpaceCenter::Node make_node()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: std::vector<SpaceCenter::Node> make_nodes()
@@ -861,7 +944,8 @@ OperationPeriapsis
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. function:: double new_periapsis()
    .. function:: void set_new_periapsis(double value)
@@ -888,18 +972,8 @@ OperationPlane
 
    .. function:: std::string error_message()
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. function:: SpaceCenter::Node make_node()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: std::vector<SpaceCenter::Node> make_nodes()
@@ -914,7 +988,8 @@ OperationPlane
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. function:: TimeSelector time_selector()
 
@@ -940,18 +1015,8 @@ OperationResonantOrbit
 
    .. function:: std::string error_message()
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. function:: SpaceCenter::Node make_node()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: std::vector<SpaceCenter::Node> make_nodes()
@@ -966,7 +1031,8 @@ OperationResonantOrbit
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. function:: int32_t resonance_denominator()
    .. function:: void set_resonance_denominator(int32_t value)
@@ -1000,18 +1066,8 @@ OperationSemiMajor
 
    .. function:: std::string error_message()
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. function:: SpaceCenter::Node make_node()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: std::vector<SpaceCenter::Node> make_nodes()
@@ -1026,7 +1082,8 @@ OperationSemiMajor
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
    .. function:: double new_semi_major_axis()
    .. function:: void set_new_semi_major_axis(double value)
@@ -1059,18 +1116,8 @@ OperationTransfer
 
    .. function:: std::string error_message()
 
-      The warning from the last call to ``MakeNodes``, or an empty string.
+      The warning or error from the last call to ``MakeNodes``, or an empty string.
 
-      :Game Scenes: Flight
-
-   .. function:: SpaceCenter::Node make_node()
-
-      .. warning:: Deprecated. Use ``MakeNodes`` instead.
-
-      Make the maneuver nodes of the operation, and return the first one.
-
-
-      :returns: The first maneuver node.
       :Game Scenes: Flight
 
    .. function:: std::vector<SpaceCenter::Node> make_nodes()
@@ -1085,19 +1132,52 @@ OperationTransfer
 
       .. note::
 
-         A warning may be left in ``ErrorMessage``.
+         The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+         left in ``ErrorMessage``.
 
-   .. function:: bool intercept_only()
-   .. function:: void set_intercept_only(bool value)
+   .. function:: bool capture()
+   .. function:: void set_capture(bool value)
 
-      Whether to plan only the intercept, with no capture burn, for an impact or a flyby.
+      Whether the transfer ends in the target's orbit. Without capture, it is an impact or
+      a flyby.
 
       :Game Scenes: Flight
 
-   .. function:: bool simple_transfer()
-   .. function:: void set_simple_transfer(bool value)
+   .. function:: bool plan_capture()
+   .. function:: void set_plan_capture(bool value)
 
-      Whether the transfer is coplanar.
+      Whether to make a second node for the capture burn.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`OperationTransfer::capture`.
+
+   .. function:: bool rendezvous()
+   .. function:: void set_rendezvous(bool value)
+
+      Whether to meet the target, rather than reach its orbit.
+
+      :Game Scenes: Flight
+
+   .. function:: double lag_time()
+   .. function:: void set_lag_time(double value)
+
+      The time by which the vessel arrives behind the target, in seconds.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`OperationTransfer::rendezvous`.
+
+   .. function:: bool coplanar()
+   .. function:: void set_coplanar(bool value)
+
+      Whether the transfer stays in the vessel's orbital plane.
 
       :Game Scenes: Flight
 

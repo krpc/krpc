@@ -30,12 +30,22 @@ SmartRCS
       :rtype: :class:`MechJeb.SmartRCSMode`
       :Game Scenes: Flight
 
-   .. method:: getRCSController()
+   .. method:: getRCSForRotation()
+               setRCSForRotation(value)
 
-      The RCS controller. The same as :func:`MechJeb.getRCSController`.
+      Whether to use the RCS for rotation.
 
-      :Property: Read-only, cannot be set
-      :rtype: :class:`MechJeb.RCSController`
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getRCSThrottle()
+               setRCSThrottle(value)
+
+      Whether to throttle the RCS when the engines are off.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
       :Game Scenes: Flight
 
 

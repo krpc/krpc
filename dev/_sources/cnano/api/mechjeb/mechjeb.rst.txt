@@ -34,19 +34,9 @@ This service provides functionality to interact with MechJeb 2.
 
 
 
-.. function:: krpc_error_t krpc_MechJeb_AirplaneAutopilot(krpc_connection_t connection, krpc_MechJeb_AirplaneAutopilot_t * returnValue)
+.. function:: krpc_error_t krpc_MechJeb_AircraftApproach(krpc_connection_t connection, krpc_MechJeb_AircraftApproach_t * returnValue)
 
-   The airplane autopilot.
-
-   :Game Scenes: Flight
-
-
-
-
-
-.. function:: krpc_error_t krpc_MechJeb_AntennaController(krpc_connection_t connection, krpc_MechJeb_DeployableController_t * returnValue)
-
-   The controller of the deployable antennas.
+   The Aircraft Approach and Autoland window.
 
    :Game Scenes: Flight
 
@@ -54,9 +44,29 @@ This service provides functionality to interact with MechJeb 2.
 
 
 
-.. function:: krpc_error_t krpc_MechJeb_AscentAutopilot(krpc_connection_t connection, krpc_MechJeb_AscentAutopilot_t * returnValue)
+.. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot(krpc_connection_t connection, krpc_MechJeb_AircraftAutopilot_t * returnValue)
 
-   The ascent autopilot.
+   The Aircraft Autopilot window.
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_MechJeb_AscentGuidance(krpc_connection_t connection, krpc_MechJeb_AscentGuidance_t * returnValue)
+
+   The Ascent Guidance window.
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_MechJeb_AttitudeAdjustment(krpc_connection_t connection, krpc_MechJeb_AttitudeAdjustment_t * returnValue)
+
+   The Attitude Adjustment window.
 
    :Game Scenes: Flight
 
@@ -66,7 +76,7 @@ This service provides functionality to interact with MechJeb 2.
 
 .. function:: krpc_error_t krpc_MechJeb_DockingAutopilot(krpc_connection_t connection, krpc_MechJeb_DockingAutopilot_t * returnValue)
 
-   The docking autopilot.
+   The Docking Autopilot window.
 
    :Game Scenes: Flight
 
@@ -74,9 +84,9 @@ This service provides functionality to interact with MechJeb 2.
 
 
 
-.. function:: krpc_error_t krpc_MechJeb_LandingAutopilot(krpc_connection_t connection, krpc_MechJeb_LandingAutopilot_t * returnValue)
+.. function:: krpc_error_t krpc_MechJeb_LandingGuidance(krpc_connection_t connection, krpc_MechJeb_LandingGuidance_t * returnValue)
 
-   The landing autopilot.
+   The Landing Guidance window.
 
    :Game Scenes: Flight
 
@@ -86,27 +96,7 @@ This service provides functionality to interact with MechJeb 2.
 
 .. function:: krpc_error_t krpc_MechJeb_ManeuverPlanner(krpc_connection_t connection, krpc_MechJeb_ManeuverPlanner_t * returnValue)
 
-   The maneuver planner.
-
-   :Game Scenes: Flight
-
-
-
-
-
-.. function:: krpc_error_t krpc_MechJeb_NodeExecutor(krpc_connection_t connection, krpc_MechJeb_NodeExecutor_t * returnValue)
-
-   The maneuver node executor.
-
-   :Game Scenes: Flight
-
-
-
-
-
-.. function:: krpc_error_t krpc_MechJeb_RCSController(krpc_connection_t connection, krpc_MechJeb_RCSController_t * returnValue)
-
-   The RCS controller.
+   The Maneuver Planner window.
 
    :Game Scenes: Flight
 
@@ -116,7 +106,17 @@ This service provides functionality to interact with MechJeb 2.
 
 .. function:: krpc_error_t krpc_MechJeb_RendezvousAutopilot(krpc_connection_t connection, krpc_MechJeb_RendezvousAutopilot_t * returnValue)
 
-   The rendezvous autopilot.
+   The Rendezvous Autopilot window.
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_MechJeb_RoverAutopilot(krpc_connection_t connection, krpc_MechJeb_RoverAutopilot_t * returnValue)
+
+   The Rover Autopilot window.
 
    :Game Scenes: Flight
 
@@ -144,39 +144,9 @@ This service provides functionality to interact with MechJeb 2.
 
 
 
-.. function:: krpc_error_t krpc_MechJeb_SolarPanelController(krpc_connection_t connection, krpc_MechJeb_DeployableController_t * returnValue)
-
-   The controller of the deployable solar panels.
-
-   :Game Scenes: Flight
-
-
-
-
-
-.. function:: krpc_error_t krpc_MechJeb_StagingController(krpc_connection_t connection, krpc_MechJeb_StagingController_t * returnValue)
-
-   The staging controller.
-
-   :Game Scenes: Flight
-
-
-
-
-
 .. function:: krpc_error_t krpc_MechJeb_TargetController(krpc_connection_t connection, krpc_MechJeb_TargetController_t * returnValue)
 
-   The target controller.
-
-   :Game Scenes: Flight
-
-
-
-
-
-.. function:: krpc_error_t krpc_MechJeb_ThrustController(krpc_connection_t connection, krpc_MechJeb_ThrustController_t * returnValue)
-
-   The thrust controller.
+   The target controller, which holds MechJeb's target.
 
    :Game Scenes: Flight
 
@@ -187,6 +157,16 @@ This service provides functionality to interact with MechJeb 2.
 .. function:: krpc_error_t krpc_MechJeb_Translatron(krpc_connection_t connection, krpc_MechJeb_Translatron_t * returnValue)
 
    The Translatron window.
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_MechJeb_Utilities(krpc_connection_t connection, krpc_MechJeb_Utilities_t * returnValue)
+
+   The Utilities window.
 
    :Game Scenes: Flight
 

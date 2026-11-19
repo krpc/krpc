@@ -1,0 +1,105 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: MechJeb
+
+AircraftApproach
+================
+
+
+.. class:: AircraftApproach
+
+   The Aircraft Approach and Autoland window, which lands a plane on a runway.
+
+   .. attribute:: runways
+
+      The names of the runways on the body the vessel is at.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(str)
+      :Game Scenes: Flight
+
+   .. attribute:: runway
+
+      The name of the runway to land on. Throws an exception if there is no runway on the
+      body the vessel is at, or when set to the name of no such runway.
+
+      :Attribute: Can be read or written
+      :rtype: str
+      :Game Scenes: Flight
+
+   .. attribute:: distance_to_runway
+
+      The distance to the start of the runway, in meters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. method:: autoland()
+
+      Land on the runway. Throws an exception if there is no runway on the body the vessel
+      is at.
+
+      :Game Scenes: Flight
+
+   .. method:: abort()
+
+      Stop the autoland.
+
+      :Game Scenes: Flight
+
+   .. attribute:: enabled
+
+      Whether the autoland is running.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: state
+
+      The stage of the approach, as MechJeb's window describes it.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: str
+      :Game Scenes: Flight
+
+   .. attribute:: glideslope
+
+      The glideslope of the approach, in degrees.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: approach_speed
+
+      The speed of the approach, in :math:`\mathrm{m/s}`.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: touchdown_speed
+
+      The speed at touchdown, in :math:`\mathrm{m/s}`.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: engage_reverse_if_available
+
+      Whether to reverse the thrust at touchdown, on engines that can.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: brake_as_soon_as_landed
+
+      Whether to brake as soon as the vessel is landed.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight

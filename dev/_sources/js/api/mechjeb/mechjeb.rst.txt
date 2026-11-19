@@ -41,36 +41,48 @@ This service provides functionality to interact with MechJeb 2.
 
 
 
-.. function:: getAirplaneAutopilot()
+.. function:: getAircraftApproach()
 
-   The airplane autopilot.
+   The Aircraft Approach and Autoland window.
 
    :Property: Read-only, cannot be set
-   :rtype: :class:`MechJeb.AirplaneAutopilot`
+   :rtype: :class:`MechJeb.AircraftApproach`
    :Game Scenes: Flight
 
 
 
 
 
-.. function:: getAntennaController()
+.. function:: getAircraftAutopilot()
 
-   The controller of the deployable antennas.
+   The Aircraft Autopilot window.
 
    :Property: Read-only, cannot be set
-   :rtype: :class:`MechJeb.DeployableController`
+   :rtype: :class:`MechJeb.AircraftAutopilot`
    :Game Scenes: Flight
 
 
 
 
 
-.. function:: getAscentAutopilot()
+.. function:: getAscentGuidance()
 
-   The ascent autopilot.
+   The Ascent Guidance window.
 
    :Property: Read-only, cannot be set
-   :rtype: :class:`MechJeb.AscentAutopilot`
+   :rtype: :class:`MechJeb.AscentGuidance`
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: getAttitudeAdjustment()
+
+   The Attitude Adjustment window.
+
+   :Property: Read-only, cannot be set
+   :rtype: :class:`MechJeb.AttitudeAdjustment`
    :Game Scenes: Flight
 
 
@@ -79,7 +91,7 @@ This service provides functionality to interact with MechJeb 2.
 
 .. function:: getDockingAutopilot()
 
-   The docking autopilot.
+   The Docking Autopilot window.
 
    :Property: Read-only, cannot be set
    :rtype: :class:`MechJeb.DockingAutopilot`
@@ -89,12 +101,12 @@ This service provides functionality to interact with MechJeb 2.
 
 
 
-.. function:: getLandingAutopilot()
+.. function:: getLandingGuidance()
 
-   The landing autopilot.
+   The Landing Guidance window.
 
    :Property: Read-only, cannot be set
-   :rtype: :class:`MechJeb.LandingAutopilot`
+   :rtype: :class:`MechJeb.LandingGuidance`
    :Game Scenes: Flight
 
 
@@ -103,7 +115,7 @@ This service provides functionality to interact with MechJeb 2.
 
 .. function:: getManeuverPlanner()
 
-   The maneuver planner.
+   The Maneuver Planner window.
 
    :Property: Read-only, cannot be set
    :rtype: :class:`MechJeb.ManeuverPlanner`
@@ -113,36 +125,24 @@ This service provides functionality to interact with MechJeb 2.
 
 
 
-.. function:: getNodeExecutor()
-
-   The maneuver node executor.
-
-   :Property: Read-only, cannot be set
-   :rtype: :class:`MechJeb.NodeExecutor`
-   :Game Scenes: Flight
-
-
-
-
-
-.. function:: getRCSController()
-
-   The RCS controller.
-
-   :Property: Read-only, cannot be set
-   :rtype: :class:`MechJeb.RCSController`
-   :Game Scenes: Flight
-
-
-
-
-
 .. function:: getRendezvousAutopilot()
 
-   The rendezvous autopilot.
+   The Rendezvous Autopilot window.
 
    :Property: Read-only, cannot be set
    :rtype: :class:`MechJeb.RendezvousAutopilot`
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: getRoverAutopilot()
+
+   The Rover Autopilot window.
+
+   :Property: Read-only, cannot be set
+   :rtype: :class:`MechJeb.RoverAutopilot`
    :Game Scenes: Flight
 
 
@@ -173,48 +173,12 @@ This service provides functionality to interact with MechJeb 2.
 
 
 
-.. function:: getSolarPanelController()
-
-   The controller of the deployable solar panels.
-
-   :Property: Read-only, cannot be set
-   :rtype: :class:`MechJeb.DeployableController`
-   :Game Scenes: Flight
-
-
-
-
-
-.. function:: getStagingController()
-
-   The staging controller.
-
-   :Property: Read-only, cannot be set
-   :rtype: :class:`MechJeb.StagingController`
-   :Game Scenes: Flight
-
-
-
-
-
 .. function:: getTargetController()
 
-   The target controller.
+   The target controller, which holds MechJeb's target.
 
    :Property: Read-only, cannot be set
    :rtype: :class:`MechJeb.TargetController`
-   :Game Scenes: Flight
-
-
-
-
-
-.. function:: getThrustController()
-
-   The thrust controller.
-
-   :Property: Read-only, cannot be set
-   :rtype: :class:`MechJeb.ThrustController`
    :Game Scenes: Flight
 
 
@@ -227,6 +191,18 @@ This service provides functionality to interact with MechJeb 2.
 
    :Property: Read-only, cannot be set
    :rtype: :class:`MechJeb.Translatron`
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: getUtilities()
+
+   The Utilities window.
+
+   :Property: Read-only, cannot be set
+   :rtype: :class:`MechJeb.Utilities`
    :Game Scenes: Flight
 
 

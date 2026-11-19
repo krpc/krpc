@@ -19,6 +19,7 @@ TargetController
    .. method:: getCanAlign()
 
       Whether the vessel can align with the target, which it can with a docking port.
+      Throws an exception if there is no target.
 
       :Property: Read-only, cannot be set
       :rtype: ``boolean``
@@ -26,7 +27,7 @@ TargetController
 
    .. method:: getDistance()
 
-      The distance to the target, in meters.
+      The distance to the target, in meters. Throws an exception if there is no target.
 
       :Property: Read-only, cannot be set
       :rtype: ``number``
@@ -34,24 +35,11 @@ TargetController
 
    .. method:: getDockingAxis()
 
-      The world space docking axis of the target.
+      The world space docking axis of the target. Throws an exception if there is no
+      target.
 
       :Property: Read-only, cannot be set
       :rtype: ``[number, number, number]``
-      :Game Scenes: Flight
-
-   .. method:: getPositionTargetPosition()
-
-      The world space position of the position target.
-
-      :rtype: ``[number, number, number]``
-      :Game Scenes: Flight
-
-   .. method:: getPositionTargetString()
-
-      The position target as text.
-
-      :rtype: ``string``
       :Game Scenes: Flight
 
    .. method:: getNormalTargetExists()
@@ -62,15 +50,9 @@ TargetController
       :rtype: ``boolean``
       :Game Scenes: Flight
 
-   .. method:: pickPositionTargetOnMap()
-
-      Let the player pick the position target on the map.
-
-      :Game Scenes: Flight
-
    .. method:: getPosition()
 
-      The world space position of the target.
+      The world space position of the target. Throws an exception if there is no target.
 
       :Property: Read-only, cannot be set
       :rtype: ``[number, number, number]``
@@ -86,7 +68,8 @@ TargetController
 
    .. method:: getRelativePosition()
 
-      The world space position of the vessel relative to the target.
+      The world space position of the vessel relative to the target. Throws an exception
+      if there is no target.
 
       :Property: Read-only, cannot be set
       :rtype: ``[number, number, number]``
@@ -95,6 +78,7 @@ TargetController
    .. method:: getRelativeVelocity()
 
       The world space velocity of the vessel relative to the target, in :math:`\mathrm{m/s}`.
+      Throws an exception if there is no target.
 
       :Property: Read-only, cannot be set
       :rtype: ``[number, number, number]``
@@ -113,21 +97,10 @@ TargetController
 
          Set the direction with :meth:`MechJeb.TargetController.updateDirectionTarget`.
 
-   .. method:: setPositionTarget(body, latitude, longitude)
-
-      Set the target to a position on the surface of a body.
-
-      :param body: The body.
-      :type body: :class:`SpaceCenter.CelestialBody`
-      :param latitude: The latitude, in degrees.
-      :type latitude: ``number``
-      :param longitude: The longitude, in degrees.
-      :type longitude: ``number``
-      :Game Scenes: Flight
-
    .. method:: getTargetOrbit()
 
-      The orbit of the target.
+      The orbit of the target. Throws an exception if there is no target, or the target
+      has no orbit.
 
       :Property: Read-only, cannot be set
       :rtype: :class:`SpaceCenter.Orbit`

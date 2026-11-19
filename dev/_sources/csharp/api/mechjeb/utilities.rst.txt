@@ -1,0 +1,438 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.MechJeb
+
+Utilities
+=========
+
+
+.. class:: Utilities
+
+   The Utilities window, which holds the autostaging and throttle settings, and deploys
+   the solar panels and antennas.
+
+   .. property:: DeployableController Antennas { get; }
+
+      The deployable antennas.
+
+      :Game Scenes: Flight
+
+   .. property:: DeployableController SolarPanels { get; }
+
+      The solar panels.
+
+      :Game Scenes: Flight
+
+   .. property:: Autostaging Staging { get; }
+
+      The autostaging settings. The same object as :prop:`AscentSettings.Staging`.
+
+      :Game Scenes: Flight
+
+   .. property:: ThrustLimiter Thrust { get; }
+
+      The throttle limiters. The same object as :prop:`AscentSettings.Thrust`.
+
+      :Game Scenes: Flight
+
+
+
+Autostaging
+-----------
+
+
+.. class:: Autostaging
+
+   The autostaging settings, which the Utilities and Ascent Settings windows show.
+
+   .. property:: bool Enabled { get; set; }
+
+      Whether the module is enabled.
+
+      :Game Scenes: Flight
+
+   .. property:: bool AutostagingOnce { get; }
+
+      Whether the controller disables itself after the next staging.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         See :meth:`Autostaging.AutostageOnce`.
+
+   .. function:: void AutostageOnce()
+
+      Enable the controller until the next staging. Throws an exception if the controller is
+      enabled.
+
+
+      :Game Scenes: Flight
+
+   .. property:: int AutostageLimit { get; set; }
+
+      The last stage the controller activates.
+
+      :Game Scenes: Flight
+
+   .. property:: double AutostagePostDelay { get; set; }
+
+      The delay after each staging, in seconds.
+
+      :Game Scenes: Flight
+
+   .. property:: double AutostagePreDelay { get; set; }
+
+      The delay before each staging, in seconds.
+
+      :Game Scenes: Flight
+
+   .. property:: double ClampAutoStageThrustPct { get; set; }
+
+      The fraction of full thrust at which the controller releases the launch clamps.
+
+      :Game Scenes: Flight
+
+   .. property:: double FairingMaxAerothermalFlux { get; set; }
+
+      The largest aerothermal flux at which the controller jettisons a fairing, in
+      :math:`\mathrm{W/m^{2}}`.
+
+      :Game Scenes: Flight
+
+   .. property:: double FairingMaxDynamicPressure { get; set; }
+
+      The largest dynamic pressure at which the controller jettisons a fairing, in pascals.
+
+      :Game Scenes: Flight
+
+   .. property:: double FairingMinAltitude { get; set; }
+
+      The lowest altitude at which the controller jettisons a fairing, in meters.
+
+      :Game Scenes: Flight
+
+   .. property:: bool HotStaging { get; set; }
+
+      Whether the controller ignites the next stage before the current one burns out.
+
+      :Game Scenes: Flight
+
+   .. property:: double HotStagingLeadTime { get; set; }
+
+      The time before burnout at which a hot staging happens, in seconds.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :prop:`Autostaging.HotStaging`.
+
+
+
+ThrustLimiter
+-------------
+
+
+.. class:: ThrustLimiter
+
+   The throttle limiters, which the Utilities and Ascent Settings windows show.
+
+   .. property:: bool DifferentialThrottle { get; set; }
+
+      Whether the controller throttles the engines differentially to steer.
+
+      :Game Scenes: Flight
+
+   .. property:: DifferentialThrottleStatus DifferentialThrottleStatus { get; }
+
+      The result of the differential throttle.
+
+      :Game Scenes: Flight
+
+   .. property:: bool ElectricThrottle { get; set; }
+
+      Whether to limit the throttle of electric engines to the available power.
+
+      :Game Scenes: Flight
+
+   .. property:: double ElectricThrottleHi { get; set; }
+
+      The charge level at which electric engines run at full throttle, between 0 and 1.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :prop:`ThrustLimiter.ElectricThrottle`.
+
+   .. property:: double ElectricThrottleLo { get; set; }
+
+      The charge level at which electric engines stop, between 0 and 1.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :prop:`ThrustLimiter.ElectricThrottle`.
+
+   .. property:: double FlameoutSafetyPct { get; set; }
+
+      The safety margin of the jet engines' air intake, as a percentage.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :prop:`ThrustLimiter.LimitToPreventFlameout`.
+
+   .. property:: bool LimitAcceleration { get; set; }
+
+      Whether to limit the acceleration.
+
+      :Game Scenes: Flight
+
+   .. property:: bool LimitDynamicPressure { get; set; }
+
+      Whether to limit the dynamic pressure.
+
+      :Game Scenes: Flight
+
+   .. property:: bool LimitThrottle { get; set; }
+
+      Whether to limit the throttle.
+
+      :Game Scenes: Flight
+
+   .. property:: bool LimitToPreventFlameout { get; set; }
+
+      Whether to limit the throttle to keep jet engines from flaming out.
+
+      :Game Scenes: Flight
+
+   .. property:: bool LimitToPreventOverheats { get; set; }
+
+      Whether to limit the throttle to keep parts from overheating.
+
+      :Game Scenes: Flight
+
+   .. property:: bool LimiterMinThrottle { get; set; }
+
+      Whether to keep the throttle above :prop:`ThrustLimiter.MinThrottle`.
+
+      :Game Scenes: Flight
+
+   .. property:: bool ManageIntakes { get; set; }
+
+      Whether the controller opens and closes the air intakes.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :prop:`ThrustLimiter.LimitToPreventFlameout`.
+
+   .. property:: double MaxAcceleration { get; set; }
+
+      The largest acceleration, in :math:`\mathrm{m/s^{2}}`.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :prop:`ThrustLimiter.LimitAcceleration`.
+
+   .. property:: double MaxDynamicPressure { get; set; }
+
+      The largest dynamic pressure, in pascals.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :prop:`ThrustLimiter.LimitDynamicPressure`.
+
+   .. property:: double MaxThrottle { get; set; }
+
+      The largest throttle, between 0 and 1.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :prop:`ThrustLimiter.LimitThrottle`.
+
+   .. property:: double MinThrottle { get; set; }
+
+      The smallest throttle, between 0 and 1.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :prop:`ThrustLimiter.LimiterMinThrottle`.
+
+   .. property:: bool LimitToPreventUnstableIgnition { get; set; }
+
+      Whether to hold the throttle at zero while the engines' fuel is unstable.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         MechJeb shows this setting only with Real Fuels, as stock engines have
+         stable fuel.
+
+   .. property:: bool AutoRCSUllaging { get; set; }
+
+      Whether to fire the RCS forward to settle the fuel before the engines ignite.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         MechJeb shows this setting only with Real Fuels, as stock engines have
+         stable fuel.
+
+   .. property:: LimitMode Limiter { get; }
+
+      The limiter that limits the throttle now.
+
+      :Game Scenes: Flight
+
+
+
+.. enum:: LimitMode
+
+   A throttle limiter. See :prop:`ThrustLimiter.Limiter`.
+
+
+   .. enumerator:: None
+
+      No limiter limits the throttle.
+
+
+   .. enumerator:: TerminalVelocity
+
+      The terminal velocity limit.
+
+
+   .. enumerator:: Temperature
+
+      :prop:`ThrustLimiter.LimitToPreventOverheats`.
+
+
+   .. enumerator:: Flameout
+
+      :prop:`ThrustLimiter.LimitToPreventFlameout`.
+
+
+   .. enumerator:: Acceleration
+
+      :prop:`ThrustLimiter.LimitAcceleration`.
+
+
+   .. enumerator:: Throttle
+
+      :prop:`ThrustLimiter.LimitThrottle`.
+
+
+   .. enumerator:: DynamicPressure
+
+      :prop:`ThrustLimiter.LimitDynamicPressure`.
+
+
+   .. enumerator:: MinThrottle
+
+      :prop:`ThrustLimiter.LimiterMinThrottle`.
+
+
+   .. enumerator:: Electric
+
+      :prop:`ThrustLimiter.ElectricThrottle`.
+
+
+   .. enumerator:: UnstableIgnition
+
+      :prop:`ThrustLimiter.LimitToPreventUnstableIgnition`.
+
+
+   .. enumerator:: AutoRCSUllage
+
+      :prop:`ThrustLimiter.AutoRCSUllaging`.
+
+
+
+.. enum:: DifferentialThrottleStatus
+
+   The result of the differential throttle. See
+   :prop:`ThrustLimiter.DifferentialThrottleStatus`.
+
+
+   .. enumerator:: Success
+
+      The throttles balance the thrust.
+
+
+   .. enumerator:: AllEnginesOff
+
+      All the engines are off.
+
+
+   .. enumerator:: MoreEnginesRequired
+
+      The vessel needs more engines.
+
+
+   .. enumerator:: SolverFailed
+
+      The solver found no solution.
+
+
+
+DeployableController
+--------------------
+
+
+.. class:: DeployableController
+
+   The controller of one kind of deployable part, such as antennas or solar panels.
+
+   .. function:: bool AllRetracted()
+
+      Whether all the parts are retracted.
+
+
+      :Game Scenes: Flight
+
+   .. property:: bool AutoDeploy { get; set; }
+
+      Whether a MechJeb autopilot deploys the parts.
+
+      :Game Scenes: Flight
+
+   .. function:: void ExtendAll()
+
+      Extend all the parts.
+
+
+      :Game Scenes: Flight
+
+   .. function:: void RetractAll()
+
+      Retract all the parts.
+
+
+      :Game Scenes: Flight

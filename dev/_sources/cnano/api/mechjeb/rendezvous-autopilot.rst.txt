@@ -40,3 +40,22 @@ RendezvousAutopilot
       The largest number of orbits to wait for the phase angle.
 
       :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_RendezvousAutopilot_MaxClosingSpeed(krpc_connection_t connection, double * returnValue, krpc_MechJeb_RendezvousAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_RendezvousAutopilot_set_MaxClosingSpeed(krpc_connection_t connection, krpc_MechJeb_RendezvousAutopilot_t instance, double value)
+
+      The largest speed at which to approach the target, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_RendezvousAutopilot_Autowarp(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_RendezvousAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_RendezvousAutopilot_set_Autowarp(krpc_connection_t connection, krpc_MechJeb_RendezvousAutopilot_t instance, bool value)
+
+      Whether to warp time during the rendezvous.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The same setting as :func:`krpc_MechJeb_ManeuverPlanner_Autowarp`.

@@ -1,0 +1,112 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: MechJeb
+   :no-index:
+
+AircraftApproach
+================
+
+
+.. class:: AircraftApproach
+
+   The Aircraft Approach and Autoland window, which lands a plane on a runway.
+
+   .. method:: getRunways()
+
+      The names of the runways on the body the vessel is at.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of ``string``
+      :Game Scenes: Flight
+
+   .. method:: getRunway()
+               setRunway(value)
+
+      The name of the runway to land on. Throws an exception if there is no runway on the
+      body the vessel is at, or when set to the name of no such runway.
+
+      :Property: Can be read or written
+      :rtype: ``string``
+      :Game Scenes: Flight
+
+   .. method:: getDistanceToRunway()
+
+      The distance to the start of the runway, in meters.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: autoland()
+
+      Land on the runway. Throws an exception if there is no runway on the body the vessel
+      is at.
+
+      :Game Scenes: Flight
+
+   .. method:: abort()
+
+      Stop the autoland.
+
+      :Game Scenes: Flight
+
+   .. method:: getEnabled()
+
+      Whether the autoland is running.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getState()
+
+      The stage of the approach, as MechJeb's window describes it.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``string``
+      :Game Scenes: Flight
+
+   .. method:: getGlideslope()
+               setGlideslope(value)
+
+      The glideslope of the approach, in degrees.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getApproachSpeed()
+               setApproachSpeed(value)
+
+      The speed of the approach, in :math:`\mathrm{m/s}`.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getTouchdownSpeed()
+               setTouchdownSpeed(value)
+
+      The speed at touchdown, in :math:`\mathrm{m/s}`.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getEngageReverseIfAvailable()
+               setEngageReverseIfAvailable(value)
+
+      Whether to reverse the thrust at touchdown, on engines that can.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getBrakeAsSoonAsLanded()
+               setBrakeAsSoonAsLanded(value)
+
+      Whether to brake as soon as the vessel is landed.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight

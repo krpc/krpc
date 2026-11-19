@@ -27,10 +27,19 @@ SmartRCS
 
       :Game Scenes: Flight
 
-   .. method:: RCSController getRCSController()
+   .. method:: boolean getRCSForRotation()
 
+   .. method:: void setRCSForRotation(boolean value)
 
-      The RCS controller. The same as :meth:`MechJeb.getRCSController()`.
+      Whether to use the RCS for rotation.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getRCSThrottle()
+
+   .. method:: void setRCSThrottle(boolean value)
+
+      Whether to throttle the RCS when the engines are off.
 
       :Game Scenes: Flight
 

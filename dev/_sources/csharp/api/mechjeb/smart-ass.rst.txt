@@ -61,6 +61,18 @@ SmartASS
 
       :Game Scenes: Flight
 
+   .. property:: double Roll { get; set; }
+
+      The roll, in degrees. 0 is top side up.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :prop:`SmartASS.ForceRoll`, and applies in every mode but
+         :value:`SmartASSAutopilotMode.KillRot` and the surface modes.
+
    .. property:: double SurfaceHeading { get; set; }
 
       The heading, in degrees.
@@ -70,7 +82,8 @@ SmartASS
 
       .. note::
 
-         Applies in the :value:`SmartASSAutopilotMode.Surface` mode.
+         Requires :prop:`SmartASS.ForceYaw`, and applies in the :value:`SmartASSAutopilotMode.Surface`
+         mode.
 
    .. property:: double SurfacePitch { get; set; }
 
@@ -81,7 +94,8 @@ SmartASS
 
       .. note::
 
-         Applies in the :value:`SmartASSAutopilotMode.Surface` mode.
+         Requires :prop:`SmartASS.ForcePitch`, and applies in the :value:`SmartASSAutopilotMode.Surface`
+         mode.
 
    .. property:: double SurfaceRoll { get; set; }
 
@@ -92,7 +106,8 @@ SmartASS
 
       .. note::
 
-         Applies in the :value:`SmartASSAutopilotMode.Surface` mode.
+         Requires :prop:`SmartASS.ForceRoll`, and applies in the :value:`SmartASSAutopilotMode.Surface`
+         mode.
 
    .. property:: double SurfaceVelYaw { get; set; }
 
@@ -103,7 +118,8 @@ SmartASS
 
       .. note::
 
-         Applies in the :value:`SmartASSAutopilotMode.SurfacePrograde` and
+         Requires :prop:`SmartASS.ForceYaw`, and applies in the
+         :value:`SmartASSAutopilotMode.SurfacePrograde` and
          :value:`SmartASSAutopilotMode.SurfaceRetrograde` modes.
 
    .. property:: double SurfaceVelPitch { get; set; }
@@ -115,7 +131,8 @@ SmartASS
 
       .. note::
 
-         Applies in the :value:`SmartASSAutopilotMode.SurfacePrograde` and
+         Requires :prop:`SmartASS.ForcePitch`, and applies in the
+         :value:`SmartASSAutopilotMode.SurfacePrograde` and
          :value:`SmartASSAutopilotMode.SurfaceRetrograde` modes.
 
    .. property:: double SurfaceVelRoll { get; set; }
@@ -127,7 +144,8 @@ SmartASS
 
       .. note::
 
-         Applies in the :value:`SmartASSAutopilotMode.SurfacePrograde` and
+         Requires :prop:`SmartASS.ForceRoll`, and applies in the
+         :value:`SmartASSAutopilotMode.SurfacePrograde` and
          :value:`SmartASSAutopilotMode.SurfaceRetrograde` modes.
 
    .. property:: AttitudeReference AdvancedReference { get; set; }
@@ -206,15 +224,10 @@ SmartASS
       Point at the next maneuver node.
 
 
-   .. enumerator:: Advanced
+   .. enumerator:: Surface
 
-      Point in the direction set by :prop:`SmartASS.AdvancedReference` and
-      :prop:`SmartASS.AdvancedDirection`.
-
-
-   .. enumerator:: Automatic
-
-      Set by MechJeb's autopilots. Cannot be set.
+      Point in the direction set by :prop:`SmartASS.SurfaceHeading`,
+      :prop:`SmartASS.SurfacePitch` and :prop:`SmartASS.SurfaceRoll`.
 
 
    .. enumerator:: Prograde
@@ -247,6 +260,49 @@ SmartASS
       Point radially inward.
 
 
+   .. enumerator:: RelativePlus
+
+      Point along the velocity relative to the target.
+
+
+   .. enumerator:: RelativeMinus
+
+      Point against the velocity relative to the target.
+
+
+   .. enumerator:: TargetPlus
+
+      Point at the target.
+
+
+   .. enumerator:: TargetMinus
+
+      Point away from the target.
+
+
+   .. enumerator:: ParallelPlus
+
+      Point parallel to the target's orientation. For a docking port, along its axis
+      and away from it.
+
+
+   .. enumerator:: ParallelMinus
+
+      Point antiparallel to the target's orientation. For a docking port, along its axis
+      and toward it.
+
+
+   .. enumerator:: Advanced
+
+      Point in the direction set by :prop:`SmartASS.AdvancedReference` and
+      :prop:`SmartASS.AdvancedDirection`.
+
+
+   .. enumerator:: Automatic
+
+      Set by MechJeb's autopilots. Cannot be set.
+
+
    .. enumerator:: SurfacePrograde
 
       Point along the surface velocity.
@@ -267,47 +323,9 @@ SmartASS
       Point against the horizontal surface velocity.
 
 
-   .. enumerator:: Surface
-
-      Point in the direction set by :prop:`SmartASS.SurfaceHeading`,
-      :prop:`SmartASS.SurfacePitch` and :prop:`SmartASS.SurfaceRoll`.
-
-
    .. enumerator:: VerticalPlus
 
       Point up, normal to the surface.
-
-
-   .. enumerator:: TargetPlus
-
-      Point at the target.
-
-
-   .. enumerator:: TargetMinus
-
-      Point away from the target.
-
-
-   .. enumerator:: RelativePlus
-
-      Point along the velocity relative to the target.
-
-
-   .. enumerator:: RelativeMinus
-
-      Point against the velocity relative to the target.
-
-
-   .. enumerator:: ParallelPlus
-
-      Point parallel to the target's orientation. For a docking port, along its axis
-      and away from it.
-
-
-   .. enumerator:: ParallelMinus
-
-      Point antiparallel to the target's orientation. For a docking port, along its axis
-      and toward it.
 
 
 

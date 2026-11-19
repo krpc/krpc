@@ -1,0 +1,229 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::MechJeb
+
+RoverAutopilot
+==============
+
+
+.. class:: RoverAutopilot
+
+   The Rover Autopilot window, which drives a rover at a heading and speed, or along its
+   waypoints.
+
+   .. function:: bool control_heading()
+   .. function:: void set_control_heading(bool value)
+
+      Whether the autopilot holds :func:`RoverAutopilot::heading`.
+
+      :Game Scenes: Flight
+
+   .. function:: double heading()
+   .. function:: void set_heading(double value)
+
+      The heading to hold, in degrees.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`RoverAutopilot::control_heading`.
+
+   .. function:: double heading_error()
+
+      The difference between the vessel's heading and the heading to hold, in degrees.
+
+      :Game Scenes: Flight
+
+   .. function:: bool control_speed()
+   .. function:: void set_control_speed(bool value)
+
+      Whether the autopilot holds :func:`RoverAutopilot::speed`.
+
+      :Game Scenes: Flight
+
+   .. function:: double speed()
+   .. function:: void set_speed(double value)
+
+      The speed to hold, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`RoverAutopilot::control_speed`.
+
+   .. function:: double speed_error()
+
+      The difference between the vessel's speed and the speed to hold, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. function:: double target_speed()
+
+      The speed the autopilot drives at now, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. function:: bool stability_control()
+   .. function:: void set_stability_control(bool value)
+
+      Whether the autopilot keeps the rover upright.
+
+      :Game Scenes: Flight
+
+   .. function:: bool brake_on_eject()
+   .. function:: void set_brake_on_eject(bool value)
+
+      Whether to brake when the crew leaves the rover.
+
+      :Game Scenes: Flight
+
+   .. function:: bool brake_on_energy_depletion()
+   .. function:: void set_brake_on_energy_depletion(bool value)
+
+      Whether to brake when the rover runs out of electric charge.
+
+      :Game Scenes: Flight
+
+   .. function:: bool warp_to_daylight()
+   .. function:: void set_warp_to_daylight(bool value)
+
+      Whether to warp time to daylight after braking for a lack of electric charge.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`RoverAutopilot::brake_on_energy_depletion`.
+
+   .. function:: std::vector<RoverWaypoint> waypoints()
+
+      The waypoints, in the order the rover drives to them.
+
+      :Game Scenes: Flight
+
+   .. function:: int32_t waypoint_index()
+
+      The index of the waypoint the autopilot drives to, or -1 if there is none.
+
+      :Game Scenes: Flight
+
+   .. function:: bool loop_waypoints()
+   .. function:: void set_loop_waypoints(bool value)
+
+      Whether to return to the first waypoint after the last one.
+
+      :Game Scenes: Flight
+
+   .. function:: RoverWaypoint add_waypoint(double latitude, double longitude)
+
+      Add a waypoint at a position on the surface of the body the vessel is at.
+
+      :Parameters:
+
+       * **latitude** -- The latitude, in degrees.
+       * **longitude** -- The longitude, in degrees.
+
+      :returns: The waypoint.
+      :Game Scenes: Flight
+
+   .. function:: void clear_waypoints()
+
+      Remove all the waypoints.
+
+
+      :Game Scenes: Flight
+
+   .. function:: RoverWaypoint add_target()
+
+      Add a waypoint at the target. Throws an exception if the target is not a vessel or a
+      position on the surface.
+
+
+      :returns: The waypoint.
+      :Game Scenes: Flight
+
+   .. function:: void drive_to_target()
+
+      Replace the waypoints with the target, and drive to it. Throws an exception if the
+      target is not a vessel or a position on the surface.
+
+
+      :Game Scenes: Flight
+
+   .. function:: void drive()
+
+      Drive along the waypoints. Throws an exception if there are none.
+
+
+      :Game Scenes: Flight
+
+   .. function:: void stop()
+
+      Stop driving along the waypoints.
+
+
+      :Game Scenes: Flight
+
+
+
+RoverWaypoint
+-------------
+
+
+.. class:: RoverWaypoint
+
+   A waypoint of the :class:`RoverAutopilot`, as the Waypoints window shows it.
+
+   .. note::
+
+      The object is destroyed once the waypoints are cleared or replaced, as by
+      :func:`RoverAutopilot::clear_waypoints` and :func:`RoverAutopilot::drive_to_target`.
+
+   .. function:: double latitude()
+   .. function:: void set_latitude(double value)
+
+      The latitude of the waypoint, in degrees. Throws an exception when set if the waypoint
+      is at a vessel.
+
+      :Game Scenes: Flight
+
+   .. function:: double longitude()
+   .. function:: void set_longitude(double value)
+
+      The longitude of the waypoint, in degrees. Throws an exception when set if the waypoint
+      is at a vessel.
+
+      :Game Scenes: Flight
+
+   .. function:: float radius()
+   .. function:: void set_radius(float value)
+
+      The distance from the waypoint at which the rover has reached it, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: std::string name()
+   .. function:: void set_name(std::string value)
+
+      The name of the waypoint.
+
+      :Game Scenes: Flight
+
+   .. function:: float min_speed()
+   .. function:: void set_min_speed(float value)
+
+      The lowest speed on the way to the waypoint, in :math:`\mathrm{m/s}`, or 0 for no limit.
+
+      :Game Scenes: Flight
+
+   .. function:: float max_speed()
+   .. function:: void set_max_speed(float value)
+
+      The highest speed on the way to the waypoint, in :math:`\mathrm{m/s}`, or 0 for no limit.
+
+      :Game Scenes: Flight

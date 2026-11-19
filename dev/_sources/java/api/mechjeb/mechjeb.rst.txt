@@ -29,66 +29,66 @@ Service
 
       :Game Scenes: Flight
 
-   .. method:: AirplaneAutopilot getAirplaneAutopilot()
+   .. method:: AircraftApproach getAircraftApproach()
 
 
-      The airplane autopilot.
-
-      :Game Scenes: Flight
-
-   .. method:: DeployableController getAntennaController()
-
-
-      The controller of the deployable antennas.
+      The Aircraft Approach and Autoland window.
 
       :Game Scenes: Flight
 
-   .. method:: AscentAutopilot getAscentAutopilot()
+   .. method:: AircraftAutopilot getAircraftAutopilot()
 
 
-      The ascent autopilot.
+      The Aircraft Autopilot window.
+
+      :Game Scenes: Flight
+
+   .. method:: AscentGuidance getAscentGuidance()
+
+
+      The Ascent Guidance window.
+
+      :Game Scenes: Flight
+
+   .. method:: AttitudeAdjustment getAttitudeAdjustment()
+
+
+      The Attitude Adjustment window.
 
       :Game Scenes: Flight
 
    .. method:: DockingAutopilot getDockingAutopilot()
 
 
-      The docking autopilot.
+      The Docking Autopilot window.
 
       :Game Scenes: Flight
 
-   .. method:: LandingAutopilot getLandingAutopilot()
+   .. method:: LandingGuidance getLandingGuidance()
 
 
-      The landing autopilot.
+      The Landing Guidance window.
 
       :Game Scenes: Flight
 
    .. method:: ManeuverPlanner getManeuverPlanner()
 
 
-      The maneuver planner.
-
-      :Game Scenes: Flight
-
-   .. method:: NodeExecutor getNodeExecutor()
-
-
-      The maneuver node executor.
-
-      :Game Scenes: Flight
-
-   .. method:: RCSController getRCSController()
-
-
-      The RCS controller.
+      The Maneuver Planner window.
 
       :Game Scenes: Flight
 
    .. method:: RendezvousAutopilot getRendezvousAutopilot()
 
 
-      The rendezvous autopilot.
+      The Rendezvous Autopilot window.
+
+      :Game Scenes: Flight
+
+   .. method:: RoverAutopilot getRoverAutopilot()
+
+
+      The Rover Autopilot window.
 
       :Game Scenes: Flight
 
@@ -106,31 +106,10 @@ Service
 
       :Game Scenes: Flight
 
-   .. method:: DeployableController getSolarPanelController()
-
-
-      The controller of the deployable solar panels.
-
-      :Game Scenes: Flight
-
-   .. method:: StagingController getStagingController()
-
-
-      The staging controller.
-
-      :Game Scenes: Flight
-
    .. method:: TargetController getTargetController()
 
 
-      The target controller.
-
-      :Game Scenes: Flight
-
-   .. method:: ThrustController getThrustController()
-
-
-      The thrust controller.
+      The target controller, which holds MechJeb's target.
 
       :Game Scenes: Flight
 
@@ -138,6 +117,13 @@ Service
 
 
       The Translatron window.
+
+      :Game Scenes: Flight
+
+   .. method:: Utilities getUtilities()
+
+
+      The Utilities window.
 
       :Game Scenes: Flight
 

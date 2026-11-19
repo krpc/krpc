@@ -40,3 +40,24 @@ RendezvousAutopilot
       The largest number of orbits to wait for the phase angle.
 
       :Game Scenes: Flight
+
+   .. method:: double getMaxClosingSpeed()
+
+   .. method:: void setMaxClosingSpeed(double value)
+
+      The largest speed at which to approach the target, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getAutowarp()
+
+   .. method:: void setAutowarp(boolean value)
+
+      Whether to warp time during the rendezvous.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The same setting as :meth:`ManeuverPlanner.getAutowarp()`.
