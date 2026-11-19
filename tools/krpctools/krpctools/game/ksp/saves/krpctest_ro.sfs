@@ -3561,7 +3561,6 @@ GAME
 		KRPC.Debug v0.8.0.0 = True
 		KRPC.DockingCamera v0.8.0.0 = True
 		KRPC.Drawing v0.8.0.0 = True
-		KRPC.IO.Ports v0.0.0.0 = True
 		KRPC.InfernalRobotics v0.8.0.0 = True
 		KRPC.KerbalAlarmClock v0.8.0.0 = True
 		KRPC.KerbalEngineerRedux v0.8.0.0 = True

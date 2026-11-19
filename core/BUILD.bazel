@@ -6,6 +6,12 @@ load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
 exports_files(["CHANGELOG.md"])
 
 filegroup(
+    name = "LICENSE.KRPC.IO.Ports",
+    srcs = ["src/IO/Ports/LICENSE"],
+    visibility = ["//:__pkg__"],
+)
+
+filegroup(
     name = "core",
     srcs = [
         ":KRPC.Core.net472",
@@ -52,6 +58,10 @@ csharp_library(
         "//protobuf:csharp_unity",
     ],
     out = "KRPC.Core",
+    # The serial port classes in src/IO/Ports are imported from Mono. WinSerialStream uses
+    # unsafe code, and src/IO/Ports/.editorconfig keeps the analyzers and warnings off them
+    allow_unsafe_blocks = True,
+    analyzer_configs = ["src/IO/Ports/.editorconfig"],
     internals_visible_to = internals_visible_to,
     target_frameworks = ["net472"],
     treat_warnings_as_errors = True,
@@ -59,13 +69,16 @@ csharp_library(
     warning_level = 4,
     deps = [
         "//tools/build/ksp:Google.Protobuf",
-        "//tools/build/ksp:KRPC.IO.Ports",
     ],
 )
 
 csharp_library(
     name = "KRPC.Core.net10",
-    srcs = glob(["src/**/*.cs"]) + [
+    # The System.IO.Ports package provides the serial port classes on .NET
+    srcs = glob(
+        ["src/**/*.cs"],
+        exclude = ["src/IO/Ports/**"],
+    ) + [
         ":AssemblyInfo",
         "//protobuf:csharp",
     ],

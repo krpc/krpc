@@ -40,8 +40,8 @@ license_text = """This license (LGPL v3) applies to all parts of kRPC except for
   - GameData/kRPC/Google.Protobuf.dll is a binary from Google's protobuf project.
     See LICENSE.Google.Protobuf
 
-  - GameData/kRPC/KRPC.IO.Ports.dll is a modified binary from the Mono project.
-    See LICENSE.KRPC.IO.Ports
+  - GameData/kRPC/KRPC.Core.dll includes serial port code adapted from the Mono
+    project, under the MIT license. See LICENSE.KRPC.IO.Ports
 
   - GameData/ModuleManager.*.dll is Module Manager, released under a CC share-alike
     license. See https://github.com/sarbian/ModuleManager
@@ -123,8 +123,7 @@ pkg_zip(
         "//server",
         "//tools/build/ksp:Google.Protobuf.dll",
         "//tools/build/protobuf:LICENSE.Google.Protobuf",
-        "//tools/build/ksp:KRPC.IO.Ports.dll",
-        "@csharp_krpc_io_ports_license//file",
+        "//core:LICENSE.KRPC.IO.Ports",
         # Module Manager
         "@module_manager//file",
         # Schema
@@ -141,7 +140,7 @@ pkg_zip(
         "server/src/icons": "GameData/kRPC/icons",
         "tools/build/ksp/": "GameData/kRPC/",
         "tools/build/protobuf/LICENSE.Google.Protobuf": "LICENSE.Google.Protobuf",
-        "../+http_file+csharp_krpc_io_ports_license/file/LICENSE.KRPC.IO.Ports": "LICENSE.KRPC.IO.Ports",
+        "core/src/IO/Ports/LICENSE": "LICENSE.KRPC.IO.Ports",
         # Services, beside the paths of service_zip_path_map
         "service/SpaceCenter/src/module-manager.cfg": "GameData/kRPC/module-manager.cfg",
         # Module Manager
@@ -236,7 +235,6 @@ filegroup(
         "//tools/TestingTools",
         "//tools/benchmarks:KRPC.Benchmark.net472",
         "//tools/build/ksp:Google.Protobuf.dll",
-        "//tools/build/ksp:KRPC.IO.Ports.dll",
     ] + service_targets(),
 )
 

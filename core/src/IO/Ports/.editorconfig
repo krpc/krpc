@@ -1,0 +1,10 @@
+# The serial port classes here are imported from Mono, through krpc/krpc-io-ports, and kept as
+# they are. The analyzers and the missing documentation warnings stay off for them.
+root = false
+
+[*.cs]
+generated_code = true
+# Missing XML comment for a public member
+dotnet_diagnostic.CS1591.severity = none
+# XML comment not placed on a valid element
+dotnet_diagnostic.CS1587.severity = none
