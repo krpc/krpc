@@ -380,6 +380,7 @@ SpaceCenter.KOSAvailable
 SpaceCenter.B9PartSwitchAvailable
 SpaceCenter.TweakScaleRescaledAvailable
 SpaceCenter.RealAntennasAvailable
+SpaceCenter.Kerbals
 SpaceCenter.CreateKerbal
 SpaceCenter.GetKerbal
 SpaceCenter.MapFilter
@@ -855,9 +856,12 @@ SpaceCenter.CrewMember
 SpaceCenter.CrewMember.Name
 SpaceCenter.CrewMember.Type
 SpaceCenter.CrewMember.OnMission
+SpaceCenter.CrewMember.Inactive
+SpaceCenter.CrewMember.InactiveUntil
 SpaceCenter.CrewMember.Courage
 SpaceCenter.CrewMember.Stupidity
 SpaceCenter.CrewMember.Experience
+SpaceCenter.CrewMember.ExperienceLevel
 SpaceCenter.CrewMember.Badass
 SpaceCenter.CrewMember.Veteran
 SpaceCenter.CrewMember.Trait
