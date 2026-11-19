@@ -4,13 +4,16 @@ A release is a sequence of small Python scripts in `tools/release/`, run in numb
 few manual steps in between. Each script does one step, can be re-run if something fails, and asks
 for confirmation before publishing anything externally. They can be run from any directory; they
 locate the repository root themselves. They need nothing beyond a Python 3.12 interpreter and the
-tools of the step being run.
+tools of the step being run. This guide releases the KSP mod, the clients and the tools. The KSA
+mod releases separately.
 
 All the credentials live in one git-ignored TOML file at the root of the repository. Copy
 `tools/release/release-credentials.toml.template` to `release-credentials.toml`, fill in every value, and `chmod 600` it; the template says what each one is and where to get it. The scripts pass these to `gh`, `twine`,
 `dotnet`, `luarocks`, `aws`, `gpg` and `npm` explicitly, so none of those tools needs to be configured
 or logged in beforehand, and whatever account they are already set up with is ignored. Git is the
 exception: pushes to `krpc/krpc`, `krpc-arduino` and your vcpkg fork use your normal git setup.
+The `krpc-arduino` clone and the vcpkg fork are reached over SSH, so they need an SSH key on the
+release account.
 
 The two vcpkg steps also need a git checkout of vcpkg pointed to by `VCPKG_ROOT` (the same one the
 client vcpkg test scripts use) and a fork of `microsoft/vcpkg` on the release account; `gh` creates
@@ -37,12 +40,19 @@ A release preparation pull request takes `main` from the version being released 
    pull request merged in the meantime lands its fragment on the next version.
 5. Once it merges, check out the fold commit, the parent of the bump commit:
    `git checkout <bump commit>^`. The remaining steps run from there.
-6. `tools/release/10-preflight.py` - checks the tree is clean, the commit is on `origin/main`, the
-   changelogs are folded, reports which components have changelog sections for the new version,
-   and checks the needed tools are installed and every credential is present. Read-only, so run it
-   as often as you like.
+6. `tools/release/10-preflight.py` - checks the release can start, and publishes nothing, so run
+   it as often as you like:
+   * The tree is clean, the commit is on `origin/main`, and the changelogs are folded. It also
+     reports which components have changelog sections for the new version.
+   * `bazel`, `git` and `gh` are installed. A missing publish tool, such as `npm`, or a missing
+     `VCPKG_ROOT`, is a warning, as only its own step needs it.
+   * Every credential is present. It logs in to GitHub, luarocks.org, AWS, the Central Portal,
+     npm and SpaceDock, and imports the GPG key. The PyPI and nuget.org keys get a format check
+     only, as an upload is their only test.
+   * The version is not already on npm or Maven Central, where it cannot be published again.
 7. `tools/release/20-build-and-test.py` - builds everything and runs the full headless test and
-   lint suites. Pass `--expunge` to start from a pristine Bazel state.
+   lint suites, plus `//doc:linkcheck`, which needs network access. Pass `--expunge` to start from
+   a pristine Bazel state.
 
 ## 2. Tag
 
@@ -52,16 +62,20 @@ A release preparation pull request takes `main` from the version being released 
 
 ## 3. Release on GitHub
 
-9. `tools/release/40-build-assets.py` - builds all the release archives and collects them in
-   `assets/`. GitHub records the SHA-256 digest of each asset.
+9. `tools/release/40-build-assets.py` - builds the release assets and collects them in `assets/`:
+   the mod, each client's package, the krpctools wheel and `krpc-genfiles-x.x.x.zip`, the
+   generated C# sources for opening `kRPC.sln` without a build. GitHub records the SHA-256 digest
+   of each asset.
 10. `tools/release/50-release-github.py` - creates a **draft** GitHub release for the tag with the
    changelog as release notes and the assets attached. Review the draft on GitHub and publish it
    from there.
 
 ## 4. Release the mod, clients and tools
 
-Each script releases one package, and they can be run in any order. The client and tool scripts
-build and re-test the component first. Each script prompts before publishing.
+Each script releases one package, and they can be run in any order. The Python, krpctools, C#,
+Lua, Java and JavaScript scripts build and re-test the component first. Each script prompts
+before publishing. Every step needs the whole credentials file, even the keys it does not use, so
+a release with a missing key stops before it publishes anything.
 
 11. `tools/release/60-release-python.py` - Python client to PyPI.
 12. `tools/release/61-release-krpctools.py` - krpctools to PyPI.
@@ -102,11 +116,19 @@ unpublished.
 
 SpaceDock has no API keys, so its step logs in with the account's username and password. The email
 to followers cannot be recalled, and a version can only be deleted by hand on the site. The step
-links the changelog page of the docs, so it checks that the docs workflow of the tag has published
-that page.
+uploads `assets/krpc-x.x.x.zip`, so it needs step 9's assets. It links the changelog page of the
+docs, so it checks that the docs workflow of the tag has published that page.
 
 ## 5. Announce the release
 
 24. `tools/release/71-announcements.py` - prints the checklist of announcements:
     * Update the forum release thread, and post an update notice to it.
     * Post on Discord and Reddit.
+
+## Rebuilding the docs of a released version
+
+`tools/release/publish-docs.py` rebuilds the frozen docs of a released version, for a fix made
+after the release. The fix is a commit on a `v<version>-docs` branch off the tag. The script
+builds that content with the current toolchain and theme. With `--publish DIR`, it stages the
+result into the `gh-pages` checkout `DIR` and commits, for you to push. `--help` lists its other
+options.
