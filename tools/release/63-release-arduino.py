@@ -120,6 +120,26 @@ def set_version(arduino):
     )
 
 
+def tag_release(arduino):
+    """Tag the working copy's HEAD as the release, and push the tag.
+
+    A tag left at HEAD by an earlier run is pushed again, so the step can be
+    re-run after a failed push.
+    """
+    git = ("git", "-C", arduino)
+    if lib.succeeds(*git, "rev-parse", "-q", "--verify", f"refs/tags/{lib.TAG}"):
+        tagged = lib.capture(*git, "rev-parse", f"{lib.TAG}^{{commit}}")
+        if tagged != lib.capture(*git, "rev-parse", "HEAD"):
+            raise lib.ReleaseError(
+                f"{lib.TAG} in {arduino} points at {tagged}, not HEAD; "
+                f"delete the tag to make it again"
+            )
+        print(f"{lib.TAG} already points at HEAD")
+    else:
+        lib.run(*git, "tag", "-a", lib.TAG, "-m", lib.TAG)
+    lib.run(*git, "push", "origin", f"refs/tags/{lib.TAG}")
+
+
 def main():
     lib.require("bazel", "git")
     commit = lib.capture("git", "rev-parse", "HEAD")
@@ -161,8 +181,7 @@ def main():
 
     lib.banner("Tagging the Arduino library release")
     lib.confirm(f"Tag and push krpc-arduino {lib.TAG}?")
-    lib.run("git", "tag", "-a", lib.TAG, "-m", lib.TAG, cwd=arduino)
-    lib.run("git", "push", "--tags", cwd=arduino)
+    tag_release(arduino)
 
 
 if __name__ == "__main__":

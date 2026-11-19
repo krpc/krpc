@@ -96,6 +96,21 @@ Two steps are done by hand:
     by hand, linking the changelog at `https://krpc.github.io/krpc/<version>/changelog.html`.
 23. Bump the version number on [KSP-AVC online](https://ksp-avc.cybutek.net/).
 
+The Arduino step builds the C-nano client and lays it out as an Arduino library. It then pushes
+the library and tags it, and the Arduino Library Manager indexes the tag. No CI job compiles the
+library, so at the push prompt compile an example against the library the step prints:
+
+```bash
+sketch=$(mktemp -d)/ConnectingArduino
+mkdir "$sketch"
+cp doc/src/scripts/cnano/ConnectingArduino.ino "$sketch"
+ARDUINO_DIRECTORIES_USER=$(mktemp -d) arduino-cli compile \
+  -b arduino:avr:uno --library <printed path> "$sketch"
+```
+
+arduino-cli needs the sketch in a folder of the same name. The empty user directory hides any
+kRPC library installed in `~/Arduino/libraries`.
+
 The Maven Central step uploads the signed bundle to the Central Portal, which validates it without
 publishing. The step publishes it only once validation passes and you confirm. A version on Maven
 Central cannot be removed or replaced. Declining drops the upload, so the step can be re-run.
