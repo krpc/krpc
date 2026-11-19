@@ -136,7 +136,6 @@ Server
 * Give the kRPC windows an opaque background (:issue:`1349`)
 * Add a WebSockets server on port 50001 to a new install, beside the TCP/IP server on port 50000, and name each for its protocol (:issue:`1371`)
 * Default the port of a WebSockets server to 50001 in the server window (:issue:`1371`)
-* Number the name of a server added in the server window when another server has that name (:issue:`1371`)
 * :breaking:`Breaking` Replace "Max. time per update" with "Max. time per frame", 10 ms by default, and "Blocking receives" and "Receive timeout" with "Max. call wait", 5 ms by default (:issue:`1376`)
 * Hold the frame rate at the new "Target frame rate" setting with adaptive rate control, 60 fps by default (:issue:`1376`)
 * Add presets to the advanced settings: "Game first", "Balanced" and "Calls first" (:issue:`1376`)
@@ -144,6 +143,9 @@ Server
 * Fix "Clear statistics" leaving the data read and written (:issue:`1376`)
 * Hide the server windows while the game hides its UI, such as on a loading screen (:issue:`1376`)
 * Fix errors logged on every scene change, and on quitting, when the server fails its startup checks (:issue:`1376`)
+* Name a server added in the server window "Server", "Server 2" and so on (:issue:`1385`)
+* Remember which servers are expanded in the server window (:issue:`1385`)
+* Show the number of connected clients beside a collapsed server in the server window (:issue:`1385`)
 
 
 SpaceCenter service
