@@ -86,8 +86,13 @@ class TestPart(ksatest.TestCase):
             for x in part.velocity(self.vehicle.reference_frame):
                 self.assertAlmostEqual(0, x, delta=1e-3)
         frame = self.ksa.bodies["Earth"].non_rotating_reference_frame
-        expected = self.vehicle.velocity(frame)
-        actual = self.vehicle.root_part.velocity(frame)
+        # Paused, so both calls see the same game time
+        self.ksa.simulation_speed = 0
+        try:
+            expected = self.vehicle.velocity(frame)
+            actual = self.vehicle.root_part.velocity(frame)
+        finally:
+            self.ksa.simulation_speed = 1
         for x, y in zip(expected, actual):
             self.assertAlmostEqual(x, y, delta=0.1)
 
