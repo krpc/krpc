@@ -28,6 +28,7 @@ class TestTutorials(ksatest.TestCase):
             check=False,
         )
         self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        return result.stdout
 
     def test_launch_into_orbit(self):
         self.run_tutorial("launch-into-orbit/launch_into_orbit.py")
@@ -36,3 +37,11 @@ class TestTutorials(ksatest.TestCase):
         self.assertGreater(
             orbit.periapsis_altitude, body.atmosphere_radius - body.radius
         )
+
+    def test_launch_with_kfs(self):
+        try:
+            output = self.run_tutorial("launch-with-kfs/launch_with_kfs.py")
+        finally:
+            self.conn.kfs.available = False
+        self.assertIn("Staging", output)
+        self.assertIn("staged 1", output)
