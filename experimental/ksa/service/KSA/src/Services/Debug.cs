@@ -49,8 +49,10 @@ namespace KRPC.KSA.Services
         /// </summary>
         /// <param name="vehicle">The vehicle.</param>
         /// <param name="body">The body to orbit.</param>
-        /// <param name="semiMajorAxis">The semi-major axis, in meters.</param>
-        /// <param name="eccentricity">The eccentricity.</param>
+        /// <param name="semiMajorAxis">The semi-major axis, in meters. Negative or positive
+        /// for a hyperbolic orbit.</param>
+        /// <param name="eccentricity">The eccentricity. Below 1 for an elliptical orbit, and
+        /// above 1 for a hyperbolic one.</param>
         /// <param name="inclination">The inclination, in radians.</param>
         /// <param name="longitudeOfAscendingNode">The longitude of the ascending node, in radians.</param>
         /// <param name="argumentOfPeriapsis">The argument of periapsis, in radians.</param>
@@ -67,17 +69,9 @@ namespace KRPC.KSA.Services
         {
             if (ReferenceEquals (body, null))
                 throw new ArgumentNullException (nameof (body));
-            if (!(semiMajorAxis != 0 && eccentricity >= 0 && eccentricity != 1))
-                throw new ArgumentException ("The orbit is not elliptical or hyperbolic");
-            var parent = body.InternalBody;
-            var periapsis = Math.Abs (semiMajorAxis * (1 - eccentricity));
-            global::KSA.Orbit Create (UniverseTime timeAtPeriapsis) => global::KSA.Orbit.Create (parent, new OrbitData (
-                timeAtPeriapsis, parent.Mass, periapsis, eccentricity, inclination, longitudeOfAscendingNode,
-                argumentOfPeriapsis), LineColor (vehicle));
-            // The game's elements give the time at periapsis, found from the mean motion
-            var now = Universe.GetElapsedTime ();
-            var meanMotion = Create (now).GetMeanMotion ();
-            Teleport (vehicle, Create (now + (epoch - now.Seconds () - meanAnomalyAtEpoch / meanMotion)));
+            Teleport (vehicle, Orbit.FromElements (
+                body.InternalBody, semiMajorAxis, eccentricity, inclination, longitudeOfAscendingNode,
+                argumentOfPeriapsis, meanAnomalyAtEpoch, epoch, LineColor (vehicle)));
         }
 
         /// <summary>

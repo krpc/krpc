@@ -17,6 +17,8 @@ KSA.Save
 KSA.Load
 KSA.TakeScreenshot
 KSA.ShowMessage
+KSA.RaycastDistance
+KSA.RaycastPart
 KSA.TransformPosition
 KSA.TransformDirection
 KSA.TransformRotation
@@ -132,9 +134,15 @@ KSA.Orbit.ArgumentOfPeriapsis
 KSA.Orbit.TrueAnomaly
 KSA.Orbit.MeanAnomaly
 KSA.Orbit.EccentricAnomaly
+KSA.Orbit.SemiLatusRectum
+KSA.Orbit.SpecificAngularMomentum
 KSA.Orbit.TrueAnomalyAtUT
+KSA.Orbit.MeanAnomalyAtUT
+KSA.Orbit.EccentricAnomalyAtUT
 KSA.Orbit.UTAtTrueAnomaly
+KSA.Orbit.TrueAnomalyAtRadius
 KSA.Orbit.RadiusAt
+KSA.Orbit.SpeedAt
 KSA.Orbit.PositionAt
 KSA.Orbit.VelocityAt
 KSA.Orbit.RelativeInclination
@@ -147,6 +155,9 @@ KSA.Orbit.EndUT
 KSA.Orbit.EndTransition
 KSA.Orbit.TimeToSOIChange
 KSA.Orbit.NextOrbit
+KSA.Orbit.CreateFromElements
+KSA.Orbit.CreateFromPositionAndVelocity
+KSA.Orbit.Remove
 KSA.OrbitTransition
 KSA.OrbitTransition.None
 KSA.OrbitTransition.Encounter
@@ -224,6 +235,9 @@ KSA.Flight.SpeedOfSound
 KSA.Flight.Mach
 KSA.Flight.OutsideAir
 KSA.Flight.DynamicPressure
+KSA.Flight.Depth
+KSA.Flight.SubmergedPortion
+KSA.Flight.BuoyantForce
 KSA.Flight.DoseRate
 KSA.Flight.OrbitAverageDoseRate
 KSA.Flight.SolarWindSpeed
@@ -305,6 +319,8 @@ KSA.Burn.OrbitAverageDoseRate
 KSA.Burn.ReferenceFrame
 KSA.Burn.Position
 KSA.Burn.Direction
+KSA.Burn.BurnVector
+KSA.Burn.RemainingBurnVector
 KSA.Burn.Remove
 KSA.Part
 KSA.Part.Name
@@ -320,6 +336,7 @@ KSA.Part.ShieldArealDensity
 KSA.Part.ShieldMass
 KSA.Part.TankCover
 KSA.Part.DoseRate
+KSA.Part.Highlight
 KSA.Part.Tanks
 KSA.Part.Habitats
 KSA.Part.Batteries
@@ -431,6 +448,12 @@ KSA.ParachuteState.Full
 KSA.ParachuteState.Cut
 KSA.ParachuteState.Ripped
 KSA.ParachuteState.SeveredLines
+KSA.HighlightColor
+KSA.HighlightColor.None
+KSA.HighlightColor.Green
+KSA.HighlightColor.Yellow
+KSA.HighlightColor.Red
+KSA.HighlightColor.Purple
 KSA.DockingPort
 KSA.DockingPort.Part
 KSA.DockingPort.Docked

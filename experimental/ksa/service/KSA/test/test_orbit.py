@@ -278,3 +278,167 @@ class TestPredictedOrbit(ksatest.TestCase):
             _ = orbit.eccentricity
         with self.assertRaises(self.conn.krpc.ObjectDestroyedException):
             _ = next_orbit.eccentricity
+
+
+def wrap(angle):
+    """The angle in the range -pi to pi."""
+    return (angle + math.pi) % (2 * math.pi) - math.pi
+
+
+class TestOrbitFormulas(ksatest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.load_save()
+        cls.orbit = cls.find_vehicle("Gemini7").orbit
+        cls.earth = cls.ksa.bodies["Earth"]
+
+    def test_semi_latus_rectum(self):
+        a = self.orbit.semi_major_axis
+        e = self.orbit.eccentricity
+        p = self.orbit.semi_latus_rectum
+        self.assertAlmostEqual(a * (1 - e * e), p, delta=p * 1e-9)
+        mu = self.earth.gravitational_parameter
+        h = self.orbit.specific_angular_momentum
+        self.assertAlmostEqual(math.sqrt(mu * p), h, delta=h * 1e-9)
+
+    def test_speed_at(self):
+        ut = self.ksa.ut + 1000
+        frame = self.earth.non_rotating_reference_frame
+        velocity = self.orbit.velocity_at(ut, frame)
+        speed = math.sqrt(sum(x * x for x in velocity))
+        self.assertAlmostEqual(speed, self.orbit.speed_at(ut), delta=1e-3)
+
+    def test_mean_and_eccentric_anomaly_at_ut(self):
+        ut = self.ksa.ut + 1000
+        e = self.orbit.eccentricity
+        mean = self.orbit.mean_anomaly_at_ut(ut)
+        eccentric = self.orbit.eccentric_anomaly_at_ut(ut)
+        # Kepler's equation
+        self.assertAlmostEqual(
+            0, wrap(eccentric - e * math.sin(eccentric) - mean), places=6
+        )
+        # The mean anomaly advances at the mean motion
+        later = self.orbit.mean_anomaly_at_ut(ut + 100)
+        self.assertAlmostEqual(
+            0, wrap(later - mean - 100 * self.orbit.mean_motion), places=6
+        )
+
+    def test_true_anomaly_at_radius(self):
+        ut = self.ksa.ut + 1000
+        radius = self.orbit.radius_at(ut)
+        true_anomaly = abs(wrap(self.orbit.true_anomaly_at_ut(ut)))
+        self.assertAlmostEqual(
+            true_anomaly, self.orbit.true_anomaly_at_radius(radius), places=4
+        )
+        self.assertAlmostEqual(
+            0, self.orbit.true_anomaly_at_radius(self.orbit.periapsis), places=4
+        )
+        self.assertTrue(
+            math.isnan(self.orbit.true_anomaly_at_radius(self.orbit.apoapsis + 1e3))
+        )
+        with self.assertRaises(ValueError):
+            self.orbit.true_anomaly_at_radius(0)
+
+
+class TestCreatedOrbit(ksatest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.load_save()
+        cls.orbit_class = cls.ksa.Orbit
+        cls.earth = cls.ksa.bodies["Earth"]
+
+    def test_create_from_elements(self):
+        ut = self.ksa.ut
+        orbit = self.orbit_class.create_from_elements(
+            self.earth, 9e6, 0.1, 0.5, 1, 2, 0.3, ut
+        )
+        try:
+            self.assertEqual(self.earth, orbit.body)
+            self.assertAlmostEqual(9e6, orbit.semi_major_axis, delta=1)
+            self.assertAlmostEqual(0.1, orbit.eccentricity, places=9)
+            self.assertAlmostEqual(0.5, orbit.inclination, places=9)
+            self.assertAlmostEqual(1, orbit.longitude_of_ascending_node, places=9)
+            self.assertAlmostEqual(2, orbit.argument_of_periapsis, places=9)
+            self.assertAlmostEqual(0.3, orbit.mean_anomaly_at_ut(ut), places=6)
+            self.assertIsNone(orbit.next_orbit)
+        finally:
+            orbit.remove()
+
+    def test_create_hyperbolic(self):
+        for semi_major_axis in (-2e7, 2e7):
+            orbit = self.orbit_class.create_from_elements(
+                self.earth, semi_major_axis, 1.5, 0, 0, 0, 0, self.ksa.ut
+            )
+            try:
+                self.assertAlmostEqual(-2e7, orbit.semi_major_axis, delta=1)
+                self.assertAlmostEqual(1.5, orbit.eccentricity, places=9)
+                self.assertAlmostEqual(2e7 * 0.5, orbit.periapsis, delta=1)
+            finally:
+                orbit.remove()
+
+    def test_true_anomaly_at_radius_of_circular_orbit(self):
+        orbit = self.orbit_class.create_from_elements(
+            self.earth, 9e6, 0, 0, 0, 0, 0, self.ksa.ut
+        )
+        try:
+            self.assertEqual(0, orbit.true_anomaly_at_radius(9e6))
+            self.assertTrue(math.isnan(orbit.true_anomaly_at_radius(9.1e6)))
+        finally:
+            orbit.remove()
+
+    def test_create_from_position_and_velocity(self):
+        vehicle_orbit = self.find_vehicle("Gemini7").orbit
+        frame = self.earth.non_rotating_reference_frame
+        ut = self.ksa.ut + 600
+        position = vehicle_orbit.position_at(ut, frame)
+        velocity = vehicle_orbit.velocity_at(ut, frame)
+        orbit = self.orbit_class.create_from_position_and_velocity(
+            self.earth, position, velocity, ut, frame
+        )
+        try:
+            self.assertAlmostEqual(
+                vehicle_orbit.semi_major_axis, orbit.semi_major_axis, delta=1
+            )
+            self.assertAlmostEqual(
+                vehicle_orbit.eccentricity, orbit.eccentricity, places=6
+            )
+            self.assertAlmostEqual(
+                vehicle_orbit.inclination, orbit.inclination, places=6
+            )
+            for expected, actual in zip(position, orbit.position_at(ut, frame)):
+                self.assertAlmostEqual(expected, actual, delta=1)
+            later = ut + 1000
+            for expected, actual in zip(
+                vehicle_orbit.position_at(later, frame), orbit.position_at(later, frame)
+            ):
+                self.assertAlmostEqual(expected, actual, delta=10)
+        finally:
+            orbit.remove()
+
+    def test_remove(self):
+        orbit = self.orbit_class.create_from_elements(
+            self.earth, 9e6, 0, 0, 0, 0, 0, self.ksa.ut
+        )
+        orbit.remove()
+        with self.assertRaises(self.conn.krpc.ObjectDestroyedException):
+            _ = orbit.semi_major_axis
+        with self.assertRaises(RuntimeError):
+            self.earth.orbit.remove()
+
+    def test_invalid_orbits(self):
+        ut = self.ksa.ut
+        with self.assertRaises(ValueError):
+            self.orbit_class.create_from_elements(self.earth, 9e6, 1, 0, 0, 0, 0, ut)
+        with self.assertRaises(ValueError):
+            self.orbit_class.create_from_elements(self.earth, -9e6, 0.5, 0, 0, 0, 0, ut)
+        with self.assertRaises(ValueError):
+            self.orbit_class.create_from_elements(
+                self.earth, 9e6, math.nan, 0, 0, 0, 0, ut
+            )
+        frame = self.earth.non_rotating_reference_frame
+        with self.assertRaises(ValueError):
+            self.orbit_class.create_from_position_and_velocity(
+                self.earth, (0, 0, 0), (0, 7000, 0), ut, frame
+            )

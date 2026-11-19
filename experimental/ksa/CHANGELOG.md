@@ -39,6 +39,15 @@
   - Add the air temperature, speed of sound, Mach number and breathable air to `Flight`
   - Add the temperature, speed of sound, oxygen fraction and molar mass of an atmosphere to
     `Body`
+  - Add the depth, submerged portion and buoyant force of a vehicle to `Flight`
+  - Add `Orbit.SpeedAt`, `MeanAnomalyAtUT`, `EccentricAnomalyAtUT`, `TrueAnomalyAtRadius`,
+    `SemiLatusRectum` and `SpecificAngularMomentum`
+  - Add creating an orbit from its elements, or from a position and velocity
+  - Move a burn by setting `Burn.UT`, and add `Burn.BurnVector` and `RemainingBurnVector`
+
+- Parts
+  - Add `KSA.RaycastDistance` and `KSA.RaycastPart`, to find the parts along a ray
+  - Add `Part.Highlight`, to highlight a part in one of the game's colors
 
 - Radiation and space weather
   - Add the radiation shielding of a part, its cover by the vehicle's tanks, and the dose rate

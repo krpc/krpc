@@ -1,4 +1,5 @@
 import math
+import time
 
 import ksatest
 
@@ -90,3 +91,63 @@ def dot(a, b):
 
 def norm(a):
     return math.sqrt(dot(a, a))
+
+
+class TestBuoyancy(ksatest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.load_save()
+        cls.earth = cls.ksa.bodies["Earth"]
+
+    def weight(self, vehicle):
+        r = vehicle.flight.mean_altitude + self.earth.radius
+        return vehicle.mass * self.earth.gravitational_parameter / (r * r)
+
+    def test_in_orbit(self):
+        vehicle = self.find_vehicle("Gemini7")
+        flight = vehicle.flight
+        self.assertEqual(0, flight.depth)
+        self.assertEqual(0, flight.submerged_portion)
+        self.assertLess(flight.buoyant_force, self.weight(vehicle) * 1e-6)
+
+
+class TestSurfaceBuoyancy(ksatest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.load_save()
+        cls.earth = cls.ksa.bodies["Earth"]
+        cls.vehicle = cls.find_vehicle("Gemini7")
+        cls.rocket = cls.find_vehicle("Rocket")
+        # The middle of the Atlantic, and Kansas
+        cls.ksa.Debug.set_landed(cls.vehicle, cls.earth, 0, -30)
+        cls.ksa.Debug.set_landed(cls.rocket, cls.earth, 39, -98)
+        time.sleep(10)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.load_save()
+
+    def test_on_land(self):
+        # The air the rocket displaces holds up a small part of its weight
+        flight = self.rocket.flight
+        self.assertEqual(0, flight.depth)
+        self.assertEqual(0, flight.submerged_portion)
+        r = flight.mean_altitude + self.earth.radius
+        weight = self.rocket.mass * self.earth.gravitational_parameter / (r * r)
+        self.assertGreater(flight.buoyant_force, 0)
+        self.assertLess(flight.buoyant_force, weight * 0.1)
+
+    def test_in_ocean(self):
+        flight = self.vehicle.flight
+        self.assertTrue(self.earth.has_ocean)
+        self.assertGreater(flight.submerged_portion, 0)
+        self.assertLessEqual(flight.submerged_portion, 1)
+        self.assertGreaterEqual(flight.depth, 0)
+        self.assertGreater(flight.buoyant_force, 0)
+        if self.vehicle.situation == self.ksa.Situation.floating:
+            # Floating at rest, the buoyant force holds up the weight
+            r = flight.mean_altitude + self.earth.radius
+            weight = self.vehicle.mass * self.earth.gravitational_parameter / (r * r)
+            self.assertAlmostEqual(weight, flight.buoyant_force, delta=weight * 0.1)

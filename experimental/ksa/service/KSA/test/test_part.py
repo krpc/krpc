@@ -314,3 +314,32 @@ class TestDecoupler(ksatest.TestCase):
         self.assertEqual(parts, len(self.vehicle.parts) + len(separated[0].parts))
         with self.assertRaises(RuntimeError):
             decoupler.decouple()
+
+
+class TestPartHighlight(ksatest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.load_save()
+        cls.parts = cls.find_vehicle("Gemini7").parts
+
+    def tearDown(self):
+        for part in self.parts:
+            part.highlight = self.ksa.HighlightColor.none
+
+    def test_highlight(self):
+        part = self.parts[0]
+        self.assertEqual(self.ksa.HighlightColor.none, part.highlight)
+        for color in (
+            self.ksa.HighlightColor.green,
+            self.ksa.HighlightColor.yellow,
+            self.ksa.HighlightColor.red,
+            self.ksa.HighlightColor.purple,
+        ):
+            part.highlight = color
+            self.assertEqual(color, part.highlight)
+        # Other parts keep their highlight
+        for other in self.parts[1:]:
+            self.assertEqual(self.ksa.HighlightColor.none, other.highlight)
+        part.highlight = self.ksa.HighlightColor.none
+        self.assertEqual(self.ksa.HighlightColor.none, part.highlight)

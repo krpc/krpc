@@ -206,6 +206,23 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The color the part is highlighted in.
+        /// </summary>
+        /// <remarks>
+        /// The life support window uses this highlight to pick parts, and replaces it on
+        /// the parts it picks from.
+        /// </remarks>
+        [KRPCProperty]
+        public HighlightColor Highlight {
+            get { return (HighlightColor)InternalPart.HighlightedForPicking; }
+            set {
+                if (!Enum.IsDefined (value))
+                    throw new ArgumentException ("Unknown highlight color");
+                InternalPart.HighlightedForPicking = (HighlightTint)value;
+            }
+        }
+
+        /// <summary>
         /// The position of the part's origin, in meters.
         /// </summary>
         /// <param name="referenceFrame">The reference frame of the position.</param>

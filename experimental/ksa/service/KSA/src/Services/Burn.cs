@@ -107,9 +107,27 @@ namespace KRPC.KSA.Services
         /// <summary>
         /// The universal time of the burn, in seconds. The burn is centered on this time.
         /// </summary>
+        /// <remarks>
+        /// Setting it moves the burn along the vehicle's trajectory, as the game's burn
+        /// editor does. The change in velocity keeps its prograde, normal and radial parts.
+        /// Throws an exception if the time is in the past, or beyond the vehicle's predicted
+        /// trajectory.
+        /// </remarks>
         [KRPCProperty]
         public double UT {
             get { return InternalBurn.Time.Seconds (); }
+            set {
+                if (!double.IsFinite (value))
+                    throw new ArgumentException ("The time is not a finite number");
+                var b = InternalBurn;
+                if (!(value > Universe.GetElapsedSeconds ()))
+                    throw new ArgumentException ("The time of the burn is not in the future");
+                var time = new UniverseTime (value);
+                if (new Vehicle (vehicle).InternalVehicle.FlightPlan.TryFindPatch (time) == null)
+                    throw new ArgumentException ("The time of the burn is beyond the predicted trajectory");
+                b.Time = time;
+                Computer.BurnUpdated (b);
+            }
         }
 
         /// <summary>
@@ -260,6 +278,40 @@ namespace KRPC.KSA.Services
         {
             var directionVlf = InternalBurn.DeltaVVlf.NormalizeOrZero ();
             return Vectors.ToTuple (referenceFrame.DirectionFromEcl (directionVlf.Transform (Vlf2Ecl)));
+        }
+
+        /// <summary>
+        /// The change in velocity of the burn, in meters per second.
+        /// </summary>
+        /// <param name="referenceFrame">The reference frame of the vector.</param>
+        /// <remarks>
+        /// The vector has the direction of <see cref="Direction"/> and the length of
+        /// <see cref="DeltaV"/>.
+        /// </remarks>
+        [KRPCMethod]
+        public Tuple<double, double, double> BurnVector (ReferenceFrame referenceFrame)
+        {
+            return Vectors.ToTuple (referenceFrame.DirectionFromEcl (InternalBurn.DeltaVVlf.Transform (Vlf2Ecl)));
+        }
+
+        /// <summary>
+        /// The change in velocity still to burn, in meters per second.
+        /// </summary>
+        /// <param name="referenceFrame">The reference frame of the vector.</param>
+        /// <remarks>
+        /// The vector has the length of <see cref="RemainingDeltaV"/>. The flight computer
+        /// tracks the progress of the next burn only. For later burns this is
+        /// <see cref="BurnVector"/>.
+        /// </remarks>
+        [KRPCMethod]
+        public Tuple<double, double, double> RemainingBurnVector (ReferenceFrame referenceFrame)
+        {
+            var target = Target;
+            if (target == null)
+                return BurnVector (referenceFrame);
+            var toGoCci = double3.Unpack (target.DeltaVToGoCci);
+            var toGoEcl = toGoCci.Transform (new Vehicle (vehicle).InternalVehicle.Orbit.Parent.GetCci2Cce ());
+            return Vectors.ToTuple (referenceFrame.DirectionFromEcl (toGoEcl));
         }
 
         internal IParentBody Body {

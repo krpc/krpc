@@ -106,6 +106,57 @@ class TestBurn(ksatest.TestCase):
         )
         self.assertVectorAlmostEqual((0, 0, 0), velocity, 1e-6)
 
+    def test_set_ut(self):
+        burn = self.vehicle.add_burn(self.ksa.ut + 900, prograde=10, normal=5)
+        ut = self.ksa.ut + 1200
+        burn.ut = ut
+        self.assertAlmostEqual(ut, burn.ut, delta=1e-3)
+        self.assertEqual((10, 5, 0), (burn.prograde, burn.normal, burn.radial))
+        self.assertEqual([burn], self.vehicle.burns)
+        frame = self.ksa.bodies["Earth"].non_rotating_reference_frame
+        self.assertVectorAlmostEqual(
+            self.vehicle.orbit.position_at(ut, frame), burn.position(frame), 1
+        )
+        with self.assertRaises(ValueError):
+            burn.ut = math.nan
+        with self.assertRaises(ValueError):
+            burn.ut = self.ksa.ut - 10
+        self.assertAlmostEqual(ut, burn.ut, delta=1e-3)
+
+    def test_burn_vector(self):
+        burn = self.vehicle.add_burn(
+            self.ksa.ut + 900, prograde=10, normal=20, radial=-5
+        )
+        self.assertVectorAlmostEqual(
+            (10, 20, -5), burn.burn_vector(burn.reference_frame), 1e-4
+        )
+        frame = self.ksa.bodies["Earth"].non_rotating_reference_frame
+        vector = burn.burn_vector(frame)
+        direction = burn.direction(frame)
+        self.assertVectorAlmostEqual(
+            tuple(x * burn.delta_v for x in direction), vector, 1e-4
+        )
+
+    def test_remaining_burn_vector(self):
+        sooner = self.vehicle.add_burn(self.ksa.ut + 900, prograde=10)
+        later = self.vehicle.add_burn(self.ksa.ut + 1800, radial=10)
+        frame = self.ksa.bodies["Earth"].non_rotating_reference_frame
+        # Before the burn starts, nothing has been burned
+        ksatest.wait_until(lambda: not math.isnan(sooner.ignition_time))
+        self.assertVectorAlmostEqual(
+            sooner.burn_vector(frame), sooner.remaining_burn_vector(frame), 1e-3
+        )
+        remaining = sooner.remaining_burn_vector(frame)
+        self.assertAlmostEqual(
+            sooner.remaining_delta_v,
+            math.sqrt(sum(x * x for x in remaining)),
+            delta=1e-3,
+        )
+        # The flight computer tracks the next burn only
+        self.assertVectorAlmostEqual(
+            later.burn_vector(frame), later.remaining_burn_vector(frame), 1e-6
+        )
+
     def assertVectorAlmostEqual(self, expected, actual, delta):
         self.assertEqual(len(expected), len(actual))
         for x, y in zip(expected, actual):

@@ -404,6 +404,54 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The depth of the vehicle's center of mass below the ocean surface, in meters. Zero
+        /// above the surface.
+        /// </summary>
+        /// <remarks>
+        /// The ocean surface includes its waves.
+        /// </remarks>
+        [KRPCProperty]
+        public double Depth {
+            get {
+                ref readonly var environment = ref InternalVehicle.PhysicsEnvironment;
+                if (environment.OceanRadius <= environment.TerrainRadius)
+                    return 0;
+                return Math.Max (0, environment.OceanRadius - PositionCcf.Length ());
+            }
+        }
+
+        /// <summary>
+        /// The fraction of the vehicle's volume below the ocean surface, between 0 and 1.
+        /// </summary>
+        [KRPCProperty]
+        public float SubmergedPortion {
+            get {
+                var v = InternalVehicle;
+                var volume = v.Props.TotalVolume;
+                return volume > 0 ? (float)Math.Min (1, v.PhysicsEnvironment.OceanVolume / volume) : 0;
+            }
+        }
+
+        /// <summary>
+        /// The buoyant force on the vehicle from the ocean and the atmosphere, in newtons. It
+        /// acts against gravity.
+        /// </summary>
+        [KRPCProperty]
+        public float BuoyantForce {
+            get {
+                // As the game's physics step applies it
+                var v = InternalVehicle;
+                ref readonly var environment = ref v.PhysicsEnvironment;
+                if (!environment.InPhysicsRadius)
+                    return 0;
+                var oceanVolume = environment.OceanVolume;
+                var airVolume = Math.Max (0, v.Props.TotalVolume - oceanVolume);
+                var displaced = environment.OceanDensity * oceanVolume + environment.AtmosphericDensity * airVolume;
+                return (float)(environment.GravitationBub.Length () * displaced);
+            }
+        }
+
+        /// <summary>
         /// The time until the vehicle hits the surface on its current trajectory, in seconds.
         /// Not a number if its trajectory does not hit the surface.
         /// </summary>

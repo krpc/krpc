@@ -26,6 +26,11 @@ namespace KRPC.KSA.Services
         readonly Burn burn;
         readonly int patchIndex;
         readonly global::KSA.Orbit fixedOrbit;
+        // Whether a client created the orbit, and whether it has since been removed
+        bool created;
+        bool removed;
+
+        static readonly ClientObjects<Orbit> createdOrbits = new ClientObjects<Orbit> (x => x.removed = true);
 
         internal Orbit (global::KSA.Vehicle vehicle, int patchIndex = 0)
         {
@@ -100,6 +105,8 @@ namespace KRPC.KSA.Services
 
         GameObjectState State {
             get {
+                if (removed)
+                    return GameObjectState.Destroyed;
                 if (fixedOrbit != null)
                     return Vehicles.StateOf (fixedOrbit.Parent);
                 if (burn != null)
@@ -115,6 +122,119 @@ namespace KRPC.KSA.Services
         static double Radians (double degrees)
         {
             return degrees * (Math.PI / 180d);
+        }
+
+        /// <summary>
+        /// Create the orbit with the given elements around a body. The angles are those of
+        /// <see cref="Orbit"/>.
+        /// </summary>
+        /// <param name="body">The body being orbited.</param>
+        /// <param name="semiMajorAxis">The semi-major axis, in meters. Negative or positive
+        /// for a hyperbolic orbit.</param>
+        /// <param name="eccentricity">The eccentricity. Below 1 for an elliptical orbit, and
+        /// above 1 for a hyperbolic one.</param>
+        /// <param name="inclination">The inclination, in radians.</param>
+        /// <param name="longitudeOfAscendingNode">The longitude of the ascending node, in radians.</param>
+        /// <param name="argumentOfPeriapsis">The argument of periapsis, in radians.</param>
+        /// <param name="meanAnomalyAtEpoch">The mean anomaly at the epoch, in radians.</param>
+        /// <param name="epoch">The universal time of the epoch, in seconds.</param>
+        /// <remarks>
+        /// The orbit is a single conic around <paramref name="body"/>, with no
+        /// <see cref="NextOrbit"/>. It is held until <see cref="Remove"/> is called on it, or
+        /// the client that created it disconnects.
+        /// </remarks>
+        [KRPCMethod]
+        public static Orbit CreateFromElements (
+            Body body, double semiMajorAxis, double eccentricity, double inclination,
+            double longitudeOfAscendingNode, double argumentOfPeriapsis, double meanAnomalyAtEpoch, double epoch)
+        {
+            if (ReferenceEquals (body, null))
+                throw new ArgumentNullException (nameof (body));
+            return Created (FromElements (
+                body.InternalBody, semiMajorAxis, eccentricity, inclination, longitudeOfAscendingNode,
+                argumentOfPeriapsis, meanAnomalyAtEpoch, epoch, default));
+        }
+
+        /// <summary>
+        /// Create the orbit around a body through the given position and velocity.
+        /// </summary>
+        /// <param name="body">The body being orbited.</param>
+        /// <param name="position">The position, in meters, relative to where the body is
+        /// now.</param>
+        /// <param name="velocity">The velocity, in meters per second.</param>
+        /// <param name="ut">The universal time of the position and velocity, in seconds.</param>
+        /// <param name="referenceFrame">The reference frame of the position and velocity.</param>
+        /// <remarks>
+        /// The orbit is a single conic around <paramref name="body"/>, with no
+        /// <see cref="NextOrbit"/>. It is held until <see cref="Remove"/> is called on it, or
+        /// the client that created it disconnects.
+        /// </remarks>
+        [KRPCMethod]
+        public static Orbit CreateFromPositionAndVelocity (
+            Body body, Tuple<double, double, double> position, Tuple<double, double, double> velocity,
+            double ut, ReferenceFrame referenceFrame)
+        {
+            if (ReferenceEquals (body, null))
+                throw new ArgumentNullException (nameof (body));
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException (nameof (referenceFrame));
+            if (!double.IsFinite (ut))
+                throw new ArgumentException ("The time is not a finite number");
+            var parent = body.InternalBody;
+            var positionEcl = referenceFrame.PositionToEcl (Vectors.ToVector (position));
+            var velocityEcl = referenceFrame.VelocityToEcl (positionEcl, Vectors.ToVector (velocity));
+            var cce2Cci = parent.GetCci2Cce ().Inverse ();
+            var positionCci = (positionEcl - parent.GetPositionEcl ()).Transform (cce2Cci);
+            var velocityCci = (velocityEcl - parent.GetVelocityEcl ()).Transform (cce2Cci);
+            if (positionCci.LengthSquared () < 1)
+                throw new ArgumentException ("The position is at the center of the body");
+            var orbit = global::KSA.Orbit.CreateFromStateCci (parent, new UniverseTime (ut), positionCci, velocityCci, default);
+            if (!double.IsFinite (orbit.SemiMajorAxis) || !double.IsFinite (orbit.Eccentricity))
+                throw new ArgumentException ("The position and velocity do not describe an orbit");
+            return Created (orbit);
+        }
+
+        // The game's orbit with the given elements. The game's elements give the time at
+        // periapsis, which we find from the mean motion.
+        internal static global::KSA.Orbit FromElements (
+            IParentBody parent, double semiMajorAxis, double eccentricity, double inclination,
+            double longitudeOfAscendingNode, double argumentOfPeriapsis, double meanAnomalyAtEpoch, double epoch,
+            byte4 lineColor)
+        {
+            if (!(double.IsFinite (semiMajorAxis) && double.IsFinite (eccentricity) && double.IsFinite (inclination) &&
+                  double.IsFinite (longitudeOfAscendingNode) && double.IsFinite (argumentOfPeriapsis) &&
+                  double.IsFinite (meanAnomalyAtEpoch) && double.IsFinite (epoch)))
+                throw new ArgumentException ("The orbital elements are not finite numbers");
+            if (!(eccentricity >= 0 && eccentricity < 1 && semiMajorAxis > 0) &&
+                !(eccentricity > 1 && semiMajorAxis != 0))
+                throw new ArgumentException ("The orbit is not elliptical or hyperbolic");
+            var periapsis = Math.Abs (semiMajorAxis * (1 - eccentricity));
+            global::KSA.Orbit Create (UniverseTime timeAtPeriapsis) => global::KSA.Orbit.Create (parent, new OrbitData (
+                timeAtPeriapsis, parent.Mass, periapsis, eccentricity, inclination, longitudeOfAscendingNode,
+                argumentOfPeriapsis), lineColor);
+            var now = Universe.GetElapsedTime ();
+            var meanMotion = Create (now).GetMeanMotion ();
+            return Create (now + (epoch - now.Seconds () - meanAnomalyAtEpoch / meanMotion));
+        }
+
+        static Orbit Created (global::KSA.Orbit orbit)
+        {
+            return createdOrbits.Add (new Orbit (orbit) { created = true });
+        }
+
+        /// <summary>
+        /// Remove an orbit created by <see cref="CreateFromElements"/> or
+        /// <see cref="CreateFromPositionAndVelocity"/>.
+        /// </summary>
+        /// <remarks>
+        /// Throws an exception if the orbit was not created by a client.
+        /// </remarks>
+        [KRPCMethod]
+        public void Remove ()
+        {
+            if (!created)
+                throw new InvalidOperationException ("The orbit was not created by a client");
+            createdOrbits.Remove (this);
         }
 
         /// <summary>
@@ -316,6 +436,87 @@ namespace KRPC.KSA.Services
                 var orbit = InternalOrbit;
                 return Radians (orbit.GetEccentricAnomaly (orbit.GetStateVectorsAt (Now).TrueAnomaly).Degrees);
             }
+        }
+
+        /// <summary>
+        /// The <a href="https://en.wikipedia.org/wiki/Conic_section#Conic_parameters">semi-latus
+        /// rectum</a> of the orbit, in meters.
+        /// </summary>
+        [KRPCProperty]
+        public double SemiLatusRectum {
+            get { return InternalOrbit.SemiLatusRectum (); }
+        }
+
+        /// <summary>
+        /// The specific angular momentum of the orbit, in <unit>m^2/s</unit>.
+        /// </summary>
+        [KRPCProperty]
+        public double SpecificAngularMomentum {
+            get {
+                var orbit = InternalOrbit;
+                return Math.Sqrt (orbit.Mu * orbit.SemiLatusRectum ());
+            }
+        }
+
+        /// <summary>
+        /// The orbital speed at the given time, in meters per second.
+        /// </summary>
+        /// <param name="ut">Universal time, in seconds.</param>
+        [KRPCMethod]
+        public double SpeedAt (double ut)
+        {
+            return InternalOrbit.GetVelocityCciAt (new UniverseTime (ut)).Length ();
+        }
+
+        /// <summary>
+        /// The mean anomaly at the given time, in radians.
+        /// </summary>
+        /// <param name="ut">Universal time, in seconds.</param>
+        [KRPCMethod]
+        public double MeanAnomalyAtUT (double ut)
+        {
+            var orbit = InternalOrbit;
+            return Radians (orbit.GetMeanAnomaly (orbit.GetStateVectorsAt (new UniverseTime (ut)).TrueAnomaly).Degrees);
+        }
+
+        /// <summary>
+        /// The eccentric anomaly at the given time, in radians. For a hyperbolic orbit, this
+        /// is the hyperbolic anomaly.
+        /// </summary>
+        /// <param name="ut">Universal time, in seconds.</param>
+        [KRPCMethod]
+        public double EccentricAnomalyAtUT (double ut)
+        {
+            var orbit = InternalOrbit;
+            return Radians (orbit.GetEccentricAnomaly (orbit.GetStateVectorsAt (new UniverseTime (ut)).TrueAnomaly).Degrees);
+        }
+
+        /// <summary>
+        /// The true anomaly at which the orbit reaches the given distance from the center of
+        /// the body, in radians, between 0 and <math>\pi</math>. Not a number if the orbit
+        /// never reaches it.
+        /// </summary>
+        /// <param name="radius">The distance from the center of the body, in meters.</param>
+        /// <remarks>
+        /// The orbit also reaches the distance at the negative of this anomaly. Zero for a
+        /// circular orbit at the distance. Throws an exception if the distance is not
+        /// positive.
+        /// </remarks>
+        [KRPCMethod]
+        public double TrueAnomalyAtRadius (double radius)
+        {
+            if (!(radius > 0))
+                throw new ArgumentException ("The radius is not positive");
+            var orbit = InternalOrbit;
+            var semiLatusRectum = orbit.SemiLatusRectum ();
+            // A circular orbit reaches its radius at every anomaly
+            if (orbit.Eccentricity < 1e-9)
+                return Math.Abs (radius - semiLatusRectum) <= 1e-9 * semiLatusRectum ? 0 : double.NaN;
+            var cosine = (semiLatusRectum / radius - 1) / orbit.Eccentricity;
+            // Rounding takes the cosine just past 1 at an apsis
+            if (Math.Abs (cosine) > 1 + 1e-9)
+                return double.NaN;
+            return Math.Acos (Math.Clamp (cosine, -1, 1));
         }
 
         /// <summary>
