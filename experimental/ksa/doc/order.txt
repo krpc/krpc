@@ -263,6 +263,11 @@ KSA.Flight.IncomingCoronalMassEjections
 KSA.Flight.GForce
 KSA.Flight.AngleOfAttack
 KSA.Flight.SideslipAngle
+KSA.Flight.Drag
+KSA.Flight.Lift
+KSA.Flight.AerodynamicForce
+KSA.Flight.AerodynamicTorque
+KSA.Flight.SimulateAerodynamicForceAt
 KSA.Flight.Prograde
 KSA.Flight.Normal
 KSA.Flight.Radial

@@ -451,6 +451,115 @@ namespace KRPC.KSA.Services
             }
         }
 
+        // The aerodynamic force and torque on the vehicle in its body axes, as the physics
+        // step applies them, and the direction of the airflow
+        void AerodynamicLoads (out double3 forceBody, out double3 torqueBody, out double3 flowDirectionBody)
+        {
+            var v = InternalVehicle;
+            ref readonly var environment = ref v.PhysicsEnvironment;
+            var airVelocityBody = v.GetSurfaceVelocityCci ().Transform (v.Orbit.Parent.GetCci2Cce ()).Transform (v.Body2Cce.Inverse ());
+            flowDirectionBody = -airVelocityBody.NormalizeOrZero ();
+            forceBody = double3.Zero;
+            torqueBody = double3.Zero;
+            if (!environment.InPhysicsRadius || environment.AtmosphericDensity <= 0)
+                return;
+            AeroLoads.Compute (
+                v, v.Orbit.Parent.GetPhysicalAtmosphere (), environment.AtmosphericDensity,
+                environment.AtmosphericTemperature, environment.SpeedOfSound, airVelocityBody, v.BodyRates,
+                out forceBody, out torqueBody);
+        }
+
+        /// <summary>
+        /// The aerodynamic force on the vehicle, in newtons.
+        /// </summary>
+        /// <param name="referenceFrame">The reference frame of the force.</param>
+        /// <remarks>
+        /// The game computes the force from the surfaces of the vehicle's hull.
+        /// </remarks>
+        [KRPCMethod]
+        public Tuple<double, double, double> AerodynamicForce (ReferenceFrame referenceFrame)
+        {
+            AerodynamicLoads (out var force, out _, out _);
+            return Vectors.ToTuple (referenceFrame.DirectionFromEcl (force.Transform (InternalVehicle.Body2Cce)));
+        }
+
+        /// <summary>
+        /// The aerodynamic torque on the vehicle about its center of mass, in
+        /// <unit>N.m</unit>. The vector points along the axis of the torque.
+        /// </summary>
+        /// <param name="referenceFrame">The reference frame of the torque.</param>
+        [KRPCMethod]
+        public Tuple<double, double, double> AerodynamicTorque (ReferenceFrame referenceFrame)
+        {
+            AerodynamicLoads (out _, out var torque, out _);
+            return Vectors.ToTuple (referenceFrame.DirectionFromEcl (torque.Transform (InternalVehicle.Body2Cce)));
+        }
+
+        /// <summary>
+        /// The part of the aerodynamic force along the airflow, in newtons.
+        /// </summary>
+        [KRPCProperty]
+        public float Drag {
+            get {
+                AerodynamicLoads (out var force, out _, out var flow);
+                return (float)double3.Dot (force, flow);
+            }
+        }
+
+        /// <summary>
+        /// The part of the aerodynamic force across the airflow, in newtons.
+        /// </summary>
+        [KRPCProperty]
+        public float Lift {
+            get {
+                AerodynamicLoads (out var force, out _, out var flow);
+                return (float)(force - double3.Dot (force, flow) * flow).Length ();
+            }
+        }
+
+        /// <summary>
+        /// The aerodynamic force the vehicle would have at a given position and velocity, in
+        /// its current attitude and rotation, in newtons.
+        /// </summary>
+        /// <param name="body">The body whose atmosphere the vehicle flies through.</param>
+        /// <param name="position">The position, in meters.</param>
+        /// <param name="velocity">The velocity, in meters per second.</param>
+        /// <param name="referenceFrame">The reference frame of the position, velocity and
+        /// force.</param>
+        /// <remarks>
+        /// The atmosphere moves with the body's rotation.
+        /// </remarks>
+        [KRPCMethod]
+        public Tuple<double, double, double> SimulateAerodynamicForceAt (
+            Body body, Tuple<double, double, double> position, Tuple<double, double, double> velocity,
+            ReferenceFrame referenceFrame)
+        {
+            if (ReferenceEquals (body, null))
+                throw new ArgumentNullException (nameof (body));
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException (nameof (referenceFrame));
+            var v = InternalVehicle;
+            var parent = body.InternalBody;
+            var positionEcl = referenceFrame.PositionToEcl (Vectors.ToVector (position));
+            var velocityEcl = referenceFrame.VelocityToEcl (positionEcl, Vectors.ToVector (velocity));
+            var relativePosition = positionEcl - parent.GetPositionEcl ();
+            var airVelocityEcl = velocityEcl - parent.GetVelocityEcl () -
+                double3.Cross (parent.GetAngularVelocityCce (), relativePosition);
+            var force = double3.Zero;
+            var atmosphere = parent.GetPhysicalAtmosphere ();
+            var altitude = relativePosition.Length () - parent.MeanRadius;
+            if (atmosphere != null && altitude < atmosphere.Height) {
+                var conditions = atmosphere.ComputeConditionsAtAltitude (Math.Max (altitude, 0));
+                var speedOfSound = atmosphere.Mixture.ComputeSpeedOfSound (conditions.Temperature);
+                var airVelocityBody = airVelocityEcl.Transform (v.Body2Cce.Inverse ());
+                AeroLoads.Compute (
+                    v, atmosphere, conditions.Density, conditions.Temperature, speedOfSound, airVelocityBody, v.BodyRates,
+                    out var forceBody, out _);
+                force = forceBody.Transform (v.Body2Cce);
+            }
+            return Vectors.ToTuple (referenceFrame.DirectionFromEcl (force));
+        }
+
         /// <summary>
         /// The time until the vehicle hits the surface on its current trajectory, in seconds.
         /// Not a number if its trajectory does not hit the surface.

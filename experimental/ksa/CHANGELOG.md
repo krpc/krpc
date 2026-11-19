@@ -50,6 +50,8 @@
   - Add the temperature, speed of sound, oxygen fraction and molar mass of an atmosphere to
     `Body`
   - Add the depth, submerged portion and buoyant force of a vehicle to `Flight`
+  - Add the aerodynamic force, torque, lift and drag on a vehicle to `Flight`, and the force at
+    another position and velocity
   - Add `Orbit.SpeedAt`, `MeanAnomalyAtUT`, `EccentricAnomalyAtUT`, `TrueAnomalyAtRadius`,
     `SemiLatusRectum` and `SpecificAngularMomentum`
   - Add creating an orbit from its elements, or from a position and velocity

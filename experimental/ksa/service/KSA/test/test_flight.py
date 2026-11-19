@@ -151,3 +151,121 @@ class TestSurfaceBuoyancy(ksatest.TestCase):
             r = flight.mean_altitude + self.earth.radius
             weight = self.vehicle.mass * self.earth.gravitational_parameter / (r * r)
             self.assertAlmostEqual(weight, flight.buoyant_force, delta=weight * 0.1)
+
+
+class TestAerodynamicsInOrbit(ksatest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.load_save()
+        cls.vehicle = cls.find_vehicle("Gemini7")
+
+    def test_no_loads(self):
+        flight = self.vehicle.flight
+        frame = self.vehicle.reference_frame
+        self.assertEqual((0, 0, 0), flight.aerodynamic_force(frame))
+        self.assertEqual((0, 0, 0), flight.aerodynamic_torque(frame))
+        self.assertEqual(0, flight.drag)
+        self.assertEqual(0, flight.lift)
+
+
+class TestAerodynamicsInFlight(ksatest.TestCase):
+    """Places Gemini7 10 km above Kansas, flying east at 250 m/s, and pauses the game."""
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.load_save()
+        cls.earth = cls.ksa.bodies["Earth"]
+        cls.vehicle = cls.find_vehicle("Gemini7")
+        cls.frame = cls.earth.reference_frame
+        surface = cls.earth.surface_position(39, -98, cls.frame)
+        east = cls.earth.surface_position(39, -97.99, cls.frame)
+        up = tuple(x / norm(surface) for x in surface)
+        position = tuple(x + 10e3 * u for x, u in zip(surface, up))
+        east = tuple(e - s for e, s in zip(east, surface))
+        velocity = tuple(250 * x / norm(east) for x in east)
+        # Landed first, so the vehicle moves with the surface, as orbital speed this low
+        # destroys it
+        cls.ksa.Debug.set_landed(cls.vehicle, cls.earth, 39, -98)
+        cls.ksa.Debug.set_position(cls.vehicle, position, cls.frame)
+        cls.ksa.Debug.set_velocity(cls.vehicle, velocity, cls.frame)
+        time.sleep(1)
+        cls.ksa.simulation_speed = 0
+        cls.flight = cls.vehicle.flight
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.ksa.simulation_speed = 1
+        cls.load_save()
+
+    def test_against_acceleration(self):
+        # With the engines off, the air gives the vehicle its proper acceleration
+        force = norm(self.flight.aerodynamic_force(self.frame))
+        acceleration = self.flight.g_force * 9.80665
+        self.assertGreater(force, 0)
+        self.assertAlmostEqual(
+            self.vehicle.mass * acceleration, force, delta=force * 0.05
+        )
+
+    def test_lift_and_drag(self):
+        force = norm(self.flight.aerodynamic_force(self.frame))
+        drag = self.flight.drag
+        lift = self.flight.lift
+        self.assertGreater(drag, 0)
+        self.assertGreaterEqual(lift, 0)
+        self.assertAlmostEqual(force, math.hypot(lift, drag), delta=force * 1e-3)
+        # Drag over dynamic pressure gives a drag area within the vehicle's size, broadside
+        # at most
+        area = drag / self.flight.dynamic_pressure
+        self.assertGreater(area, 1)
+        self.assertLess(area, 100)
+
+    def test_torque(self):
+        torque = self.flight.aerodynamic_torque(self.vehicle.reference_frame)
+        self.assertTrue(all(math.isfinite(x) for x in torque))
+
+    def test_simulate_here(self):
+        position = self.vehicle.position(self.frame)
+        velocity = self.vehicle.velocity(self.frame)
+        expected = self.flight.aerodynamic_force(self.frame)
+        actual = self.flight.simulate_aerodynamic_force_at(
+            self.earth, position, velocity, self.frame
+        )
+        for x, y in zip(expected, actual):
+            self.assertAlmostEqual(x, y, delta=norm(expected) * 0.02)
+
+    def test_simulate_elsewhere(self):
+        position = self.vehicle.position(self.frame)
+        velocity = self.vehicle.velocity(self.frame)
+        here = norm(
+            self.flight.simulate_aerodynamic_force_at(
+                self.earth, position, velocity, self.frame
+            )
+        )
+        # Higher, the air is thinner
+        up = tuple(x / norm(position) for x in position)
+        higher = tuple(x + 10e3 * u for x, u in zip(position, up))
+        self.assertLess(
+            norm(
+                self.flight.simulate_aerodynamic_force_at(
+                    self.earth, higher, velocity, self.frame
+                )
+            ),
+            here / 2,
+        )
+        # Above the atmosphere, there is none
+        space = tuple(x + 500e3 * u for x, u in zip(position, up))
+        self.assertEqual(
+            (0, 0, 0),
+            self.flight.simulate_aerodynamic_force_at(
+                self.earth, space, velocity, self.frame
+            ),
+        )
+        # At rest relative to the surface, there is none
+        self.assertEqual(
+            (0, 0, 0),
+            self.flight.simulate_aerodynamic_force_at(
+                self.earth, position, (0, 0, 0), self.frame
+            ),
+        )
