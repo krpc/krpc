@@ -486,7 +486,7 @@ namespace KRPC.IO.Ports
 		const int fInX = 0x0200;
 		//const int fErrorChar = 0x0400;
 		//const int fNull = 0x0800;
-		//const int fRtsControl1 = 0x1000;
+		const int fRtsControl1 = 0x1000;
 		const int fRtsControl2 = 0x2000;
 		//const int fAbortOnError = 0x4000;
 
@@ -510,16 +510,18 @@ namespace KRPC.IO.Ports
 			this.parity = (byte)parity;
 			this.byte_size = (byte)byte_size;
 
-			// Clear Handshake flags
-			flags &= ~(fOutxCtsFlow | fOutX | fInX | fRtsControl2);
+			// Clear Handshake flags. fRtsControl is a two bit field, and the flags come from the
+			// driver, which keeps the mode the port was last left in, so both bits are cleared
+			flags &= ~(fOutxCtsFlow | fOutX | fInX | fRtsControl1 | fRtsControl2);
 
-			// Set Handshake flags
+			// Set Handshake flags. Without RTS handshaking, RTS follows RtsEnable (RTS_CONTROL_ENABLE)
 			switch (hs)
 			{
 				case Handshake.None:
+					flags |= fRtsControl1;
 					break;
 				case Handshake.XOnXOff:
-					flags |= fOutX | fInX;
+					flags |= fOutX | fInX | fRtsControl1;
 					break;
 				case Handshake.RequestToSend:
 					flags |= fOutxCtsFlow | fRtsControl2;

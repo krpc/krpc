@@ -1,5 +1,5 @@
 # The serial port classes here are imported from Mono, through krpc/krpc-io-ports, and kept as
-# they are. The analyzers and the missing documentation warnings stay off for them.
+# close to upstream as they can be. The analyzers and the missing documentation warnings stay off for them.
 root = false
 
 [*.cs]
