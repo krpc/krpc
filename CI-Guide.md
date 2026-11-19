@@ -242,10 +242,11 @@ A hint never fails the check, and the check is not required.
 ## Documentation Site
 
 `docs` publishes into the `gh-pages` branch, one directory per version. A push to `main`
-refreshes `dev/`, and a `v*` tag writes `<version>/` once. `doc/gen_docs_index.py` then mirrors
-the newest release into `latest/`, and regenerates the version switcher and the root redirect.
-Runs share one concurrency group and never cancel each other, as a release moves a tag and
-`main` together and both push to `gh-pages`.
+refreshes `dev/`, and a `v*` tag builds `<version>/`. Later runs leave `<version>/` alone. A
+re-run of the tag's workflow replaces it, as does `tools/release/publish-docs.py` by hand.
+After each build, `doc/gen_docs_index.py` mirrors the newest release into `latest/`, and
+regenerates the version switcher and the root redirect. Runs share one concurrency group and never
+cancel each other, as a release moves a tag and `main` together and both push to `gh-pages`.
 
 ## Changing CI
 
