@@ -25,6 +25,8 @@ The first four lines set up the page for the client language. ``macros.service``
 service's procedures and properties. A class, enumeration, structure or exception has a macro of
 its own, such as ``macros.class(services['SpaceCenter'].classes['Vessel'])``. The templates are
 `Jinja <https://jinja.palletsprojects.com>`_, so a page can hold any other text as well.
+``domain.codeext`` is the file extension of the language's examples. It is empty for ``http``,
+which has no examples, so ``{% if domain.codeext %}`` leaves an example out of those pages.
 
 The ordering file lists each member of the service by its full name, in the order the pages
 document them:
@@ -49,10 +51,11 @@ service's assembly (see :ref:`service-api-clientgen`). Then it writes a page for
    krpc-docgen python order.txt LaunchControl.json \
        --page launch-control.tmpl python/launch-control.rst
 
-Run ``krpc-docgen`` once for each language: ``cnano``, ``cpp``, ``csharp``, ``java``, ``lua`` or
-``python``. Pass the definitions of every service the documentation links to, as well as the
-service's own. ``--documented`` writes the full name of each member the pages document, to check
-that none is left out.
+Run ``krpc-docgen`` once for each language: ``cnano``, ``cpp``, ``csharp``, ``http``, ``java``,
+``js``, ``lua`` or ``python``. ``http`` documents the path of each procedure on the
+:doc:`HTTP server </http>`. Pass the definitions of every service the documentation links to, as
+well as the service's own. ``--documented`` writes the full name of each member the pages
+document, to check that none is left out.
 
 The text of the pages is the service's :doc:`documentation </extending/documentation>`.
 ``krpc-servicedefs`` reads it from the XML documentation file beside the assembly. Build the
@@ -61,8 +64,9 @@ assembly with ``<GenerateDocumentationFile>true</GenerateDocumentationFile>`` to
 Sphinx Setup
 ------------
 
-The Python, C++ and C pages use the domains built into Sphinx. The C#, Java and Lua pages need the
-`sphinx-csharp <https://pypi.org/project/sphinx-csharp>`_,
-`sphinx-java <https://pypi.org/project/sphinx-java>`_ and
-`sphinx-lua-ls <https://pypi.org/project/sphinx-lua-ls>`_ extensions. A service whose
-documentation has units or formulas also needs ``sphinx.ext.mathjax``.
+The Python, C++, C and JavaScript pages use the domains built into Sphinx. The C#, Java, Lua and
+HTTP pages need the `sphinx-csharp <https://pypi.org/project/sphinx-csharp>`_,
+`sphinx-java <https://pypi.org/project/sphinx-java>`_,
+`sphinx-lua-ls <https://pypi.org/project/sphinx-lua-ls>`_ and
+`sphinxcontrib-httpdomain <https://pypi.org/project/sphinxcontrib-httpdomain>`_ extensions. A
+service whose documentation has units or formulas also needs ``sphinx.ext.mathjax``.

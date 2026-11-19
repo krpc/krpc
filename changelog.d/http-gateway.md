@@ -9,3 +9,4 @@
 ## tools/krpctools
 
 - Add the `http` server type and `--http-port` to `krpc-testserver` (#1390)
+- Add the `http` language to `krpc-docgen` (#1390)

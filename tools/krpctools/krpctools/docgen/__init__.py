@@ -18,6 +18,7 @@ from .cpp import CppDomain
 from .csharp import CsharpDomain
 from .docgen import DocumentationGenerator
 from .extensions import AppendExtension
+from .http import HttpDomain
 from .java import JavaDomain
 from .js import JsDomain
 from .lua import LuaDomain
@@ -103,6 +104,7 @@ DOMAINS = {
     "cnano": CnanoDomain,
     "cpp": CppDomain,
     "csharp": CsharpDomain,
+    "http": HttpDomain,
     "java": JavaDomain,
     "js": JsDomain,
     "lua": LuaDomain,
