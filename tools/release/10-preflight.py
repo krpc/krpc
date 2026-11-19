@@ -133,6 +133,15 @@ def check_tools(report):
             report.ok(tool)
         else:
             report.warn(f"{tool} not found (needed by one of the publish steps)")
+    if shutil.which("npm"):
+        try:
+            if not lib.npm_supports_staging():
+                report.warn(
+                    f"npm is older than {lib.NPM_MINIMUM}, "
+                    f"which the npm step needs for npm stage"
+                )
+        except lib.ReleaseError as exception:
+            report.warn(str(exception))
     # vcpkg lives at $VCPKG_ROOT/vcpkg rather than on PATH, so it is checked
     # separately; only the two vcpkg publish steps need it.
     root = os.environ.get("VCPKG_ROOT")

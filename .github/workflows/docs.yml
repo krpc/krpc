@@ -4,7 +4,8 @@ name: docs
 # (GitHub Pages: "Deploy from a branch" -> gh-pages / root). Each run touches
 # only its own subdirectory, so every other version is left untouched:
 #   * a push to `main`   refreshes  gh-pages/dev/       (overwritten each time)
-#   * a push of a `v*` tag freezes  gh-pages/<version>/ (write-once)
+#   * a push of a `v*` tag builds   gh-pages/<version>/ (replaced by a re-run of
+#     the tag's workflow, and otherwise left alone)
 # gen_docs_index.py additionally mirrors the newest release into gh-pages/latest/
 # so `/latest/` always resolves to the current stable docs; it recomputes the
 # newest release from what is on disk, so releasing an older patch does not move

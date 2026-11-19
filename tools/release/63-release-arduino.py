@@ -22,7 +22,8 @@ import lib
 # nanopb as an external dependency rather than bundling it, so it is copied in
 # separately: headers beside the C-nano headers in krpc_cnano/ (they are
 # included as <krpc_cnano/pb.h>), sources at the top level with the other
-# C-nano sources.
+# C-nano sources. The sources include the headers by bare name, so their
+# includes are rewritten to the krpc_cnano/ path.
 NANOPB_HEADERS = ("pb.h", "pb_common.h", "pb_encode.h", "pb_decode.h")
 NANOPB_SOURCES = ("pb_common.c", "pb_encode.c", "pb_decode.c")
 
@@ -79,7 +80,14 @@ def rebuild_source(arduino, archive_path, nanopb):
     for name in NANOPB_HEADERS:
         shutil.copy(nanopb[name], source / "krpc_cnano")
     for name in NANOPB_SOURCES:
-        shutil.copy(nanopb[name], source)
+        text, count = re.subn(
+            r'(?m)^(\s*#\s*include\s+)"(pb\w*\.h)"',
+            r'\1"krpc_cnano/\2"',
+            nanopb[name].read_text(),
+        )
+        if count == 0:
+            raise lib.ReleaseError(f"no nanopb includes to rewrite in {name}")
+        (source / name).write_text(text)
 
     # The Arduino builder only compiles C++, so give sources a .cpp suffix.
     for entry in list(source.glob("*.c")):
@@ -110,6 +118,26 @@ def set_version(arduino):
     properties.write_text(
         re.sub(r"(?m)^version=.*$", f"version={lib.VERSION}", properties.read_text())
     )
+
+
+def tag_release(arduino):
+    """Tag the working copy's HEAD as the release, and push the tag.
+
+    A tag left at HEAD by an earlier run is pushed again, so the step can be
+    re-run after a failed push.
+    """
+    git = ("git", "-C", arduino)
+    if lib.succeeds(*git, "rev-parse", "-q", "--verify", f"refs/tags/{lib.TAG}"):
+        tagged = lib.capture(*git, "rev-parse", f"{lib.TAG}^{{commit}}")
+        if tagged != lib.capture(*git, "rev-parse", "HEAD"):
+            raise lib.ReleaseError(
+                f"{lib.TAG} in {arduino} points at {tagged}, not HEAD; "
+                f"delete the tag to make it again"
+            )
+        print(f"{lib.TAG} already points at HEAD")
+    else:
+        lib.run(*git, "tag", "-a", lib.TAG, "-m", lib.TAG)
+    lib.run(*git, "push", "origin", f"refs/tags/{lib.TAG}")
 
 
 def main():
@@ -153,8 +181,7 @@ def main():
 
     lib.banner("Tagging the Arduino library release")
     lib.confirm(f"Tag and push krpc-arduino {lib.TAG}?")
-    lib.run("git", "tag", "-a", lib.TAG, "-m", lib.TAG, cwd=arduino)
-    lib.run("git", "push", "--tags", cwd=arduino)
+    tag_release(arduino)
 
 
 if __name__ == "__main__":

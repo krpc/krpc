@@ -3,7 +3,6 @@
 ready for uploading to the GitHub release.
 """
 
-import hashlib
 import shutil
 from pathlib import Path
 
@@ -60,20 +59,11 @@ def main():
             raise lib.ReleaseError(f"{asset} was not built")
         shutil.copy(asset, directory)
 
-    # Same format as sha256sum, so the file can be checked with it. Written
-    # over the assets alone, never over the checksum file itself.
-    checksums = directory / f"SHA256SUMS-{lib.VERSION}.txt"
-    lines = []
-    for name in sorted(path.name for path in files):
-        digest = hashlib.sha256((directory / name).read_bytes()).hexdigest()
-        lines.append(f"{digest}  {name}")
-    checksums.write_text("\n".join(lines) + "\n")
-
     lib.banner("Done")
     for path in sorted(directory.iterdir()):
         print(f"{path.stat().st_size:>12}  {path.name}")
     print()
-    print(f"{len(files) + 1} files ({len(files)} assets + checksums).")
+    print(f"{len(files)} assets.")
     print("Next: tools/release/50-release-github.py")
 
 

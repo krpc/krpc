@@ -25,40 +25,55 @@ CONTENTS = (
     "bazel-bin/service/*/AssemblyInfo.cs",
     "bazel-bin/service/*/ServiceInfo.cs",
     "bazel-bin/tools/*/AssemblyInfo.cs",
-    "bazel-krpc/external/+http_archive+ksp/KSP_Data/Managed",
     "bazel-bin/tools/build/ksp/Google.Protobuf.dll",
 )
 
+# Paths under the external repositories of the output base, stored under
+# bazel-krpc/external, where the .csproj files look for them
+EXTERNAL = ("+http_archive+ksp/KSP_Data/Managed",)
+EXTERNAL_ARCHIVE_DIR = Path("bazel-krpc/external")
 
-def add(archive, path):
-    """Add a file, or every file under a directory, at its own path.
+
+def add(archive, path, name):
+    """Add a file, or every file under a directory, stored at name.
 
     Symbolic links are followed and stored as the files they point at; the
     Bazel output paths are reached through them.
     """
     if path.is_dir():
         for directory, _, names in os.walk(path, followlinks=True):
-            for name in sorted(names):
-                child = Path(directory, name)
+            for child_name in sorted(names):
+                child = Path(directory, child_name)
                 if child.is_file():
-                    archive.write(child, child.as_posix())
+                    archive.write(child, (name / child.relative_to(path)).as_posix())
     else:
-        archive.write(path, path.as_posix())
+        archive.write(path, name.as_posix())
+
+
+def add_matches(archive, pattern, base, archive_dir):
+    """Add every path under base matching pattern, stored under archive_dir."""
+    matches = sorted(glob.glob(pattern, root_dir=base))
+    if not matches:
+        raise lib.ReleaseError(f"nothing matched {pattern} in {base}")
+    for match in matches:
+        add(archive, base / match, archive_dir / match)
 
 
 def main():
     lib.require("bazel")
     lib.run("bazel", "build", "//:csproj")
 
+    # The bazel-<folder> symlink is named for the checkout, so the external
+    # repositories are found through the output base
+    external = Path(lib.capture("bazel", "info", "output_base")) / "external"
+
     output = Path(f"bazel-bin/krpc-genfiles-{lib.VERSION}.zip")
     output.unlink(missing_ok=True)
     with zipfile.ZipFile(output, "w", zipfile.ZIP_DEFLATED) as archive:
         for pattern in CONTENTS:
-            matches = sorted(glob.glob(pattern))
-            if not matches:
-                raise lib.ReleaseError(f"nothing matched {pattern}")
-            for match in matches:
-                add(archive, Path(match))
+            add_matches(archive, pattern, Path("."), Path())
+        for pattern in EXTERNAL:
+            add_matches(archive, pattern, external, EXTERNAL_ARCHIVE_DIR)
     print(f"Wrote {output}")
 
 

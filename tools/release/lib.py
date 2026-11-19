@@ -321,6 +321,24 @@ def luarocks_key_works(key):
 # The JavaScript client's package on npm
 NPM_PACKAGE = "@krpc-org/krpc"
 NPM_REGISTRY = "https://registry.npmjs.org"
+# The first npm with `npm stage`, which the npm step publishes through
+NPM_MINIMUM = "11.15.0"
+
+
+def npm_version():
+    """The version of the npm on PATH, as a tuple of integers."""
+    text = capture("npm", "--version")
+    try:
+        return tuple(int(part) for part in text.split("-")[0].split("."))
+    except ValueError as exception:
+        raise ReleaseError(
+            f"could not read the npm version from {text!r}"
+        ) from exception
+
+
+def npm_supports_staging():
+    """Whether the npm on PATH has `npm stage`."""
+    return npm_version() >= tuple(int(part) for part in NPM_MINIMUM.split("."))
 
 
 def npm_user(token):
