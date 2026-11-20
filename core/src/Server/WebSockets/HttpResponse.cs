@@ -11,6 +11,10 @@ namespace KRPC.Server.WebSockets
             return new HttpResponse (400, "Bad Request", message);
         }
 
+        public static HttpResponse CreateForbidden (string message = null) {
+            return new HttpResponse (403, "Forbidden", message);
+        }
+
         public static HttpResponse CreateNotFound (string message = null) {
             return new HttpResponse (404, "Not Found", message);
         }

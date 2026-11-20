@@ -227,6 +227,9 @@ namespace KRPC
             var http = server.InnerServer as Server.HTTP.Server;
             if (http != null)
                 text.Append (", http_allowed_origins = ").Append (http.AllowedOrigins);
+            var websockets = server.InnerServer as Server.WebSockets.Server;
+            if (websockets != null)
+                text.Append (", ws_allowed_origins = ").Append (websockets.AllowedOrigins);
             text.Append (", logLevel = ").Append (Logger.Level);
             text.Append (", autoStartServers = ").Append (config.AutoStartServers);
             text.Append (", autoAcceptConnections = ").Append (config.AutoAcceptConnections);

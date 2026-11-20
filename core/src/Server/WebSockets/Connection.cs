@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Google.Protobuf;
@@ -50,8 +51,11 @@ namespace KRPC.Server.WebSockets
         /// </summary>
         int fragmentsVerifiedPosition;
 
-        public Connection (Message.Server server, IClient<IByteStream> client) : base (server, client)
+        readonly AllowedOrigins allowedOrigins;
+
+        public Connection (Server server, IClient<IByteStream> client) : base (server, client)
         {
+            allowedOrigins = server.AllowedOrigins;
         }
 
         protected override bool PartialMessage {
@@ -156,6 +160,19 @@ namespace KRPC.Server.WebSockets
             return offset;
         }
 
+        // A web page on another site can open a connection to the server, and browsers apply
+        // no CORS to WebSockets, so the server checks the origin itself
+        void CheckOrigin (HttpRequest request)
+        {
+            IList<string> values;
+            if (!request.Headers.TryGetValue ("origin", out values))
+                return;
+            var origin = string.Join (",", values);
+            if (!allowedOrigins.Allows (origin))
+                throw new HandshakeException (HttpResponse.CreateForbidden (
+                    "Connections from " + origin + " are not allowed. Add the origin to the server's allowed origins."));
+        }
+
         int Upgrade (byte[] data, int offset, int length)
         {
             var requestLength = ConnectionRequest.Length (data, offset, length);
@@ -163,6 +180,7 @@ namespace KRPC.Server.WebSockets
                 return 0;
             try {
                 var request = ConnectionRequest.Read (data, offset, requestLength);
+                CheckOrigin (request);
                 Stream.Write (ConnectionRequest.WriteResponse (request.Headers ["sec-websocket-key"].Single ()));
             } catch (HandshakeException e) {
                 Logger.WriteLine ("WebSockets handshake from " + Label + " failed: " + e.Response, Logger.Severity.Warning);

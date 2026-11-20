@@ -70,6 +70,7 @@ namespace KRPC.UI
         const string addressText = "Address";
         const string originsText = "Origins";
         const string sameOriginText = "Same origin only";
+        const string noWebPagesText = "No web pages";
         // The name of each protocol, indexed by its Protocol value
         internal static readonly string[] protocolNames = {
             "Protobuf over TCP/IP",
@@ -305,7 +306,7 @@ namespace KRPC.UI
             } else if (expanded) {
                 DrawServerInfoRow (protocolText, protocolNames [(int)server.Protocol]);
                 DrawServerInfoRow (addressText, server.Address);
-                if (server.Protocol == Protocol.JSONOverHTTP)
+                if (server.Protocol == Protocol.JSONOverHTTP || server.Protocol == Protocol.ProtocolBuffersOverWebsockets)
                     DrawServerInfoRow (originsText, AllowedOriginsText (server));
                 DrawServerInfoLines (server.Info);
                 if (listsClients)
@@ -351,7 +352,7 @@ namespace KRPC.UI
         }
 
         // The origins a server allows, from its saved settings. The text is cached by
-        // setting, as the window is drawn every frame.
+        // protocol and setting, as the window is drawn every frame.
         string AllowedOriginsText (KRPC.Server.Server server)
         {
             var saved = config.Configuration.Servers.FirstOrDefault (x => x.Id == server.Id);
@@ -361,15 +362,16 @@ namespace KRPC.UI
                 if (saved.Settings.TryGetValue (Configuration.Server.SettingsPrefix (server.Protocol) + "allowed_origins", out value))
                     setting = value;
             }
+            var key = server.Protocol + ":" + setting;
             string text;
-            if (!allowedOriginsTexts.TryGetValue (setting, out text)) {
-                text = sameOriginText;
+            if (!allowedOriginsTexts.TryGetValue (key, out text)) {
+                text = server.Protocol == Protocol.JSONOverHTTP ? sameOriginText : noWebPagesText;
                 if (KRPC.Server.AllowedOrigins.IsValid (setting)) {
                     var origins = new KRPC.Server.AllowedOrigins (setting);
                     if (!origins.None)
                         text = origins.ToString ();
                 }
-                allowedOriginsTexts [setting] = text;
+                allowedOriginsTexts [key] = text;
             }
             return text;
         }
