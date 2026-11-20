@@ -99,6 +99,7 @@ py_binary(
     visibility = ["//visibility:public"],
     deps = [
         ":benchmarks_lib",
+        "//client/http:krpc_http",
         "//tools/game:bazel_ksp",
         "@krpc_pypi//pytest",
     ],
@@ -137,6 +138,23 @@ py_binary(
     main = "run_python.py",
     visibility = ["//visibility:public"],
     deps = [":benchmarks_lib"],
+)
+
+# The HTTP server, from a standard-library Python client: `bazel run //tools/benchmarks:http`.
+py_binary(
+    name = "http",
+    srcs = [
+        "run_http.py",
+        "run_python.py",
+    ],
+    args = ["--server=$(rootpath //tools/TestServer)"],
+    data = ["//tools/TestServer"],
+    main = "run_http.py",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":benchmarks_lib",
+        "//client/http:krpc_http",
+    ],
 )
 
 # The client benchmarks, one target per language: `bazel run //tools/benchmarks:cpp` and so
@@ -251,6 +269,7 @@ py_binary(
     srcs = [
         "run_client.py",
         "run_clients.py",
+        "run_http.py",
         "run_python.py",
     ],
     args = [
@@ -271,7 +290,10 @@ py_binary(
     ],
     main = "run_clients.py",
     visibility = ["//visibility:public"],
-    deps = [":benchmarks_lib"],
+    deps = [
+        ":benchmarks_lib",
+        "//client/http:krpc_http",
+    ],
 )
 
 # Compare two runs: `bazel run //tools/benchmarks:compare -- before.json after.json`.
@@ -309,6 +331,7 @@ py_pyright_test(
     size = "medium",
     srcs = glob(["*.py"]) + glob(["server/*.py"]),
     deps = [
+        "//client/http:krpc_http",
         "//client/python:krpc_lib",
         "//tools/krpctools:krpctools_lib",
         "@krpc_pypi//pytest",

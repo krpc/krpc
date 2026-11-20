@@ -14,6 +14,7 @@ Provides functionality to interact with the `SCANsat`_ mod. |SCANsat tested|
    scansat/scanner
    scansat/map
 
+{% if domain.codeext %}
 Example
 -------
 
@@ -21,5 +22,6 @@ The following example switches on the scanners of the active vessel, then prints
 coverage of the body it orbits and the height of the terrain below it:
 
 .. literalinclude:: /scripts/api/scansat/ScanSatExample.{{ domain.codeext }}
+{% endif %}
 
 .. include:: /mods.inc

@@ -85,7 +85,34 @@ namespace KRPC.Test
         {
             Assert.AreEqual (50000, Configuration.DefaultPort (Protocol.ProtocolBuffersOverTCP));
             Assert.AreEqual (50001, Configuration.DefaultPort (Protocol.ProtocolBuffersOverWebsockets));
+            Assert.AreEqual (50003, Configuration.DefaultPort (Protocol.JSONOverHTTP));
             Assert.AreEqual (0, Configuration.DefaultPort (Protocol.ProtocolBuffersOverLocalSocket));
+        }
+
+        [Test]
+        public void HTTPServer ()
+        {
+            var config = new Configuration.Server (Protocol.JSONOverHTTP);
+            Assert.AreEqual ("HTTP Server", config.Name);
+            Assert.AreEqual ("127.0.0.1", config.Settings ["http_address"]);
+            Assert.AreEqual ("50003", config.Settings ["http_port"]);
+            var server = config.Create ();
+            Assert.IsInstanceOf<KRPC.Server.HTTP.Server> (server.InnerServer);
+            Assert.AreEqual ("http://127.0.0.1:50003", server.Address);
+            Assert.IsTrue (((KRPC.Server.HTTP.Server)server.InnerServer).AllowedOrigins.None);
+        }
+
+        [Test]
+        public void HTTPServerAllowedOrigins ()
+        {
+            var config = new Configuration.Server (Protocol.JSONOverHTTP);
+            config.Settings ["http_allowed_origins"] = "http://localhost:8080";
+            var origins = ((KRPC.Server.HTTP.Server)config.Create ().InnerServer).AllowedOrigins;
+            Assert.IsTrue (origins.Allows ("http://localhost:8080"));
+            // An invalid setting allows no other origin
+            config.Settings ["http_allowed_origins"] = "localhost:8080";
+            origins = ((KRPC.Server.HTTP.Server)config.Create ().InnerServer).AllowedOrigins;
+            Assert.IsTrue (origins.None);
         }
 
         [Test]

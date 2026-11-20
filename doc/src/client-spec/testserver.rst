@@ -24,8 +24,8 @@ Protocols
 ---------
 
 ``--type`` picks the :doc:`communication protocol </communication-protocols>`: ``protobuf`` for
-TCP/IP (the default), ``localsocket``, ``websockets`` or ``serialio``. Here the server takes
-clients over websockets and TCP/IP at the same time:
+TCP/IP (the default), ``localsocket``, ``websockets``, ``serialio`` or ``http``. Here the server
+takes clients over websockets and TCP/IP at the same time:
 
 .. code-block:: sh
 
@@ -33,8 +33,10 @@ clients over websockets and TCP/IP at the same time:
      --tcpip-port=50000
 
 ``--localsocket-path`` names the socket of a local socket server, and ``--serialio-port`` the
-port of a serial IO server. ``krpc-testserver --help`` lists every option, including the bind
-address, the serial port settings and the log level.
+port of a serial IO server. ``--http-port`` sets the port of an HTTP server, which prints it as
+``http_port = <port>``, and ``--http-allowed-origins`` the origins whose web pages may call it.
+``krpc-testserver --help`` lists every option, including the bind address, the serial port
+settings and the log level.
 
 Services
 --------

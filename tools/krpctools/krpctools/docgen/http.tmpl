@@ -1,0 +1,214 @@
+{% macro service(x) %}{{ mark_documented(x) }}
+.. _{{ domain.label(x) }}:
+
+{% if x.deprecated %}{{ deprecated(x) }}
+
+{% endif %}
+{{ gendoc(x.documentation) }}
+
+{% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) }}
+
+{% endif %}
+{% for member in x.members.values() %}
+{% if member.member_type == 'procedure' %}
+{{ procedure(member) }}
+{% elif member.member_type == 'property' %}
+{{ property(member) }}
+{% endif %}
+
+{% endfor %}
+{% endmacro %}
+
+{% macro class(x) %}{{ mark_documented(x) }}
+{% if not domain.class_supported(x) %}
+{% for member in x.members.values() %}{{ mark_documented(member) }}{% endfor %}
+{% else %}
+.. _{{ domain.label(x) }}:
+
+.. rubric:: {{ x.name }}
+
+{% if x.deprecated %}{{ deprecated(x) }}
+
+{% endif %}
+{{ gendoc(x.documentation) }}
+
+{% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) }}
+
+{% endif %}
+A ``{{ x.name }}`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+{% for member in x.members.values() %}
+{% if member.member_type == 'class_method' %}
+{{ class_method(member) }}
+{% elif member.member_type == 'class_static_method' %}
+{{ procedure(member) }}
+{% elif member.member_type == 'class_property' %}
+{{ property(member) }}
+{% endif %}
+
+{% endfor %}
+{% endif %}
+{% endmacro %}
+
+{% macro procedure(x) %}{{ mark_documented(x) }}
+{% if domain.supported(x) %}
+.. http:post:: {{ domain.path(x) }}
+
+{{ body(x, x.parameters) }}
+{% endif %}
+{% endmacro %}
+
+{% macro class_method(x) %}{{ mark_documented(x) }}
+{% if domain.supported(x) %}
+.. http:post:: {{ domain.path(x) }}
+
+{{ body(x, x.parameters[1:], object=True) }}
+{% endif %}
+{% endmacro %}
+
+{% macro property(x) %}{{ mark_documented(x) }}
+{% if domain.supported(x) %}
+{% if x.getter != None %}
+.. http:get:: {{ domain.path(x) }}
+
+{{ description(x) }}
+{% if x.member_type == 'class_property' %}
+{{ object_parameter(x) }}
+{% endif %}
+   :resjson {{ domain.return_type(x.type) }} value:{% if hasdoc(x.documentation, './returns') %} {{ gendoc(x.documentation, './returns') | singleline }}{% endif +%}
+
+{% endif %}
+{% if x.setter != None %}
+.. http:put:: {{ domain.path(x) }}
+
+{{ description(x) }}
+{% if x.member_type == 'class_property' %}
+{{ object_parameter(x) }}
+{% endif %}
+   :reqjson {{ domain.parameter_type(x.type) }} value: The new value.
+
+{% endif %}
+{% if x.appended != '' %}{{ x.appended }}
+{% endif %}
+{% endif %}
+{% endmacro %}
+
+{% macro class_property(x) %}{{ mark_documented(x) }}
+{{ property(x) }}
+{% endmacro %}
+
+{% macro body(x, parameters, object=False) %}
+{{ description(x) }}
+{% if object %}
+{{ object_parameter(x) }}
+{% endif %}
+{% for p in parameters %}
+   :reqjson {{ domain.parameter_type(p.type) }} {{ p.name | snakecase }}:{% if hasdoc(p.documentation, './param[@name=\''+p.name+'\']') %} {{ gendoc(p.documentation, './param[@name=\''+p.name+'\']') | singleline }}{% endif %}{% if p.has_default_value %} Optional, defaults to ``{{ domain.default_value(p.default_value, p.type) }}``.{% endif +%}
+{% endfor %}
+{% if x.return_type != None %}
+   :resjson {{ domain.return_type(x.return_type) }} value:{% if hasdoc(x.documentation, './returns') %} {{ gendoc(x.documentation, './returns') | singleline }}{% endif +%}
+{% endif %}
+
+{% if x.appended != '' %}{{ x.appended | indent }}
+{% endif %}
+{% endmacro %}
+
+{% macro description(x) %}
+{% if x.deprecated %}{{ deprecated(x) | indent }}
+
+{% endif %}
+{{ gendoc(x.documentation) | indent }}
+
+{% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
+
+{% endif %}
+{% endmacro %}
+
+{% macro object_parameter(x) %}
+   :param id: The identifier of the {{ see('T:' + x.service_name + '.' + x.class_name) }} object.
+{% endmacro %}
+
+{% macro enumeration(x) %}{{ mark_documented(x) }}
+.. _{{ domain.label(x) }}:
+
+.. rubric:: {{ x.name }}
+
+{% if x.deprecated %}{{ deprecated(x) }}
+
+{% endif %}
+{{ gendoc(x.documentation) }}
+
+{% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) }}
+
+{% endif %}
+{% if x.flags %}
+A flags enumeration, passed and returned as a list of the names of its values:
+{% else %}
+Passed and returned as the name of one of its values:
+{% endif %}
+
+{% for value in x.values.values() %}{{ mark_documented(value) }}
+``"{{ value.name | snakecase }}"``
+{% if value.deprecated %}{{ deprecated(value) | indent }}
+
+{% endif %}
+{{ gendoc(value.documentation) | indent }}
+
+{% if hasdoc(value.documentation, './remarks') %}{{ remarks(value.documentation) | indent }}
+
+{% endif %}
+{% endfor %}
+{% endmacro %}
+
+{% macro struct(x) %}{{ mark_documented(x) }}
+.. _{{ domain.label(x) }}:
+
+.. rubric:: {{ x.name }}
+
+{% if x.deprecated %}{{ deprecated(x) }}
+
+{% endif %}
+{{ gendoc(x.documentation) }}
+
+{% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) }}
+
+{% endif %}
+Passed and returned as an object with these fields:
+
+{% for field in x.fields.values() %}{{ mark_documented(field) }}
+``{{ field.name | snakecase }}`` ({{ domain.field_type(field) }})
+{% if field.deprecated %}{{ deprecated(field) | indent }}
+
+{% endif %}
+{{ gendoc(field.documentation) | indent }}
+
+{% endfor %}
+{% endmacro %}
+
+{% macro exception(x) %}{{ mark_documented(x) }}
+.. _{{ domain.label(x) }}:
+
+.. rubric:: {{ x.name }}
+
+{% if x.deprecated %}{{ deprecated(x) }}
+
+{% endif %}
+{{ gendoc(x.documentation) }}
+
+{{ domain.raised_as(x) }}
+
+{% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) }}
+
+{% endif %}
+{% endmacro %}
+
+{% macro remarks(x) %}
+.. note::
+
+{{ gendoc(x, './remarks') | indent }}
+{% endmacro %}
+
+{% macro deprecated(x) %}
+.. warning:: Deprecated.{% if x.deprecated_reason != '' %} {{ gendesc(x.deprecated_reason) }}{% endif %}
+{% endmacro %}

@@ -1,0 +1,64 @@
+load("@rules_python//python:defs.bzl", "py_binary", "py_library")
+load("//tools/build:client_test.bzl", "client_test")
+load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
+
+test_suite(
+    name = "test",
+    tests = [
+        ":client",
+        ":lint",
+    ],
+)
+
+# A minimal client, which calls the HTTP server with the standard library, for the tests and
+# the benchmarks
+py_library(
+    name = "krpc_http",
+    srcs = ["krpc_http.py"],
+    imports = ["."],
+    visibility = ["//tools/benchmarks:__pkg__"],
+)
+
+py_binary(
+    name = "httptest",
+    testonly = True,
+    srcs = ["test_http.py"],
+    main = "test_http.py",
+    deps = [
+        ":krpc_http",
+        "@krpc_pypi//openapi_spec_validator",
+    ],
+)
+
+# The HTTP server, against a TestServer
+client_test(
+    name = "client",
+    size = "medium",
+    # The origins the origin and CORS tests expect the server to allow
+    server_args = ["--http-allowed-origins=http://allowed.example,http://localhost:8080"],
+    server_executable = "//tools/TestServer",
+    server_type = "http",
+    tags = ["requires-network"],
+    test_executable = ":httptest",
+)
+
+test_suite(
+    name = "lint",
+    tests = [
+        ":pyright",
+        ":ruff",
+    ],
+)
+
+py_ruff_test(
+    name = "ruff",
+    size = "small",
+    srcs = glob(["*.py"]),
+)
+
+py_pyright_test(
+    name = "pyright",
+    size = "medium",
+    srcs = glob(["*.py"]),
+    deps = ["@krpc_pypi//openapi_spec_validator"],
+)

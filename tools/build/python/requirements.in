@@ -17,6 +17,7 @@ websocket-client==1.9.2
 basedpyright==1.40.2
 cogapp==3.6.1
 hatchling
+openapi-spec-validator==0.9.0
 pytest
 ruff==0.17.5
 
@@ -35,6 +36,7 @@ sphinx-design==0.8.0
 sphinx-java==1.0.0
 sphinx-lua-ls==3.12.1
 sphinx-tabs==3.5.0
+sphinxcontrib-httpdomain==2.2.1
 sphinxcontrib-spelling==8.0.2
 spylls==0.1.7
 

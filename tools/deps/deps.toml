@@ -677,6 +677,13 @@ regen = ["pip"]
 at = ["tools/build/python/requirements.in: pydata-sphinx-theme=={version}"]
 
 [[dep]]
+name = "openapi-spec-validator"
+version = "0.9.0"
+source = "pypi:openapi-spec-validator"
+regen = ["pip"]
+at = ["tools/build/python/requirements.in: openapi-spec-validator=={version}"]
+
+[[dep]]
 name = "pyenchant"
 version = "3.3.0"
 source = "pypi:pyenchant"
@@ -724,6 +731,13 @@ version = "3.5.0"
 source = "pypi:sphinx-tabs"
 regen = ["pip"]
 at = ["tools/build/python/requirements.in: sphinx-tabs=={version}"]
+
+[[dep]]
+name = "sphinxcontrib-httpdomain"
+version = "2.2.1"
+source = "pypi:sphinxcontrib-httpdomain"
+regen = ["pip"]
+at = ["tools/build/python/requirements.in: sphinxcontrib-httpdomain=={version}"]
 
 [[dep]]
 name = "sphinxcontrib-spelling"

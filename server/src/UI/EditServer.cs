@@ -39,6 +39,9 @@ namespace KRPC.UI
         const string invalidBaudRateText = "Baud rate is not an integer";
         const string invalidDataBitsText = "Data bits must be between 5 and 8 inclusive";
         const string pathLabelText = "Socket:";
+        const string originsLabelText = "Origins:";
+        const int originsMaxLength = 1024;
+        const string invalidOriginsText = "Origins must be \"*\", or a comma-separated list of origins such as \"http://localhost:8080\"";
         static readonly string invalidPathText =
             "Socket path must not be empty, and must take at most " +
             LocalSocketServer.MaximumPathLength + " bytes";
@@ -73,8 +76,10 @@ namespace KRPC.UI
         // window onto its value that follows the caret
         readonly string pathFieldName;
         readonly string portNameFieldName;
+        readonly string originsFieldName;
         float pathScroll;
         float portNameScroll;
+        float originsScroll;
 
         public EditServer (MainWindow mainWindow, Configuration.Server server)
         {
@@ -82,6 +87,7 @@ namespace KRPC.UI
             id = server.Id;
             pathFieldName = "path " + id;
             portNameFieldName = "port " + id;
+            originsFieldName = "origins " + id;
 
             name = server.Name;
             protocol = server.Protocol;
@@ -108,9 +114,9 @@ namespace KRPC.UI
             GUILayout.Label (text, window.labelStyle, GUILayout.Width (labelWidth * GameSettings.UI_SCALE));
         }
 
-        // The prefix of the address and port keys, which differs between TCP/IP and WebSockets
+        // The prefix of the address and port keys, which differs between TCP/IP, WebSockets and HTTP
         string SettingsPrefix {
-            get { return protocol == Protocol.ProtocolBuffersOverWebsockets ? "ws_" : "tcpip_"; }
+            get { return Configuration.Server.SettingsPrefix (protocol); }
         }
 
         public void Draw ()
@@ -120,8 +126,7 @@ namespace KRPC.UI
             protocol = (Protocol)GUILayoutExtensions.ComboBox (protocolComboId, (int)protocol, MainWindow.protocolNames, window.buttonStyle, window.comboOptionsStyle, window.comboOptionStyle);
             GUILayout.EndHorizontal ();
 
-            if (protocol == Protocol.ProtocolBuffersOverTCP ||
-                protocol == Protocol.ProtocolBuffersOverWebsockets) {
+            if (SettingsPrefix != null) {
                 var addressKey = SettingsPrefix + "address";
                 var portKey = SettingsPrefix + "port";
                 GUILayout.BeginHorizontal();
@@ -169,6 +174,19 @@ namespace KRPC.UI
                     GUILayoutExtensions.ValidatedTextField (settings[portKey], portMaxLength, window.stretchyTextFieldStyle,
                         ValidPort (settings[portKey]), window.errorColor));
                 GUILayout.EndHorizontal();
+
+                if (protocol == Protocol.JSONOverHTTP) {
+                    var originsKey = SettingsPrefix + "allowed_origins";
+                    GUILayout.BeginHorizontal();
+                    DrawFieldLabel (originsLabelText);
+                    if (!settings.ContainsKey(originsKey))
+                        settings[originsKey] = Configuration.Server.DefaultAllowedOrigins (protocol);
+                    settings[originsKey] = GUILayoutExtensions.ValidatedScrollingTextField (
+                        originsFieldName, settings[originsKey], ref originsScroll,
+                        originsMaxLength, window.stretchyTextFieldStyle,
+                        KRPC.Server.AllowedOrigins.IsValid (settings[originsKey]), window.errorColor);
+                    GUILayout.EndHorizontal();
+                }
             } else if (protocol == Protocol.ProtocolBuffersOverLocalSocket) {
                 GUILayout.BeginHorizontal();
                 DrawFieldLabel (pathLabelText);
@@ -267,8 +285,7 @@ namespace KRPC.UI
         {
             window.Errors.Clear();
             IList<string> allowedKeys = null;
-            if (protocol == Protocol.ProtocolBuffersOverTCP ||
-                protocol == Protocol.ProtocolBuffersOverWebsockets)
+            if (SettingsPrefix != null)
             {
                 var addressKey = SettingsPrefix + "address";
                 var portKey = SettingsPrefix + "port";
@@ -277,6 +294,14 @@ namespace KRPC.UI
                 if (!ValidPort (settings[portKey]))
                     window.Errors.Add(invalidPortText);
                 allowedKeys = new List<string> { addressKey, portKey };
+                if (protocol == Protocol.JSONOverHTTP) {
+                    var originsKey = SettingsPrefix + "allowed_origins";
+                    string origins;
+                    settings.TryGetValue (originsKey, out origins);
+                    if (!KRPC.Server.AllowedOrigins.IsValid (origins))
+                        window.Errors.Add(invalidOriginsText);
+                    allowedKeys.Add (originsKey);
+                }
             } else if (protocol == Protocol.ProtocolBuffersOverLocalSocket) {
                 if (!ValidPath (settings["localsocket_path"]))
                     window.Errors.Add(invalidPathText);

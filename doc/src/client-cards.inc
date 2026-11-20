@@ -56,3 +56,11 @@
       :img-top: _static/clients/javascript.svg
       :img-alt:
       :class-card: client-card
+
+   .. grid-item-card:: HTTP
+      :link: http
+      :link-type: doc
+      :text-align: center
+      :img-top: _static/clients/http.svg
+      :img-alt:
+      :class-card: client-card

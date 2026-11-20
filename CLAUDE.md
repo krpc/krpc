@@ -11,6 +11,7 @@ Current version: `tools/krpc-version.sh`. Full setup: `doc/src/krpc-development/
  * `client/` — one dir per language.
    See *Client pages* under *Keeping the docs current* before changing one.
  * `client/conformance/` — client conformance tests; the client spec (`doc/src/client-spec/`) is generated from them.
+ * `client/http/` — tests of the HTTP server, through a minimal standard-library Python client.
  * `tools/krpctools/` — `clientgen` (stubs), `docgen` (API docs), `servicedefs`.
  * `tools/krpctools/krpctools/game/` — in-game test framework (`krpc-game`); `tools/game/` — its
    runners for the repository; `tools/TestServer/` — game-less server.

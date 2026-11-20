@@ -18,6 +18,7 @@ Provides functionality to interact with the `Kerbal Engineer Redux`_ mod.
    kerbal-engineer-redux/burn-time
    kerbal-engineer-redux/rendezvous
 
+{% if domain.codeext %}
 Example
 -------
 
@@ -25,5 +26,6 @@ The following example prints the delta-v and thrust-to-weight ratio of each stag
 vessel, from the current stage onward, then the time to burn 500 m/s:
 
 .. literalinclude:: /scripts/api/kerbal-engineer-redux/KerbalEngineerReduxExample.{{ domain.codeext }}
+{% endif %}
 
 .. include:: /mods.inc

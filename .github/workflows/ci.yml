@@ -86,6 +86,8 @@ jobs:
             test: //client/js:test
             artifact: client-js
             path: bazel-bin/client/js/krpc-js-*.tgz
+          - name: test-client-http
+            test: //client/http:test
           - name: test-tools
             test: //client/conformance:test //tools/benchmarks:test //tools/game:test //tools/krpctools:test
           - name: test-build-scripts
@@ -178,6 +180,8 @@ jobs:
           - name: test-client-js
             build: //client/js:js
             test: //client/js:test
+          - name: test-client-http
+            test: //client/http:test
           - name: test-tools
             test: //client/conformance:test //tools/benchmarks:test //tools/game:test //tools/krpctools:test
           - name: test-build-scripts

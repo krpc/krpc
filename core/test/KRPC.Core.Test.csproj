@@ -51,6 +51,9 @@
     <Compile Include="UpdateEventsTest.cs" />
     <Compile Include="Server\ClientRequestingConnectionArgsTest.cs" />
     <Compile Include="Server\Delimited\ServerTest.cs" />
+    <Compile Include="Server\AllowedOriginsTest.cs" />
+    <Compile Include="Server\HTTP\JsonTest.cs" />
+    <Compile Include="Server\HTTP\RoutesTest.cs" />
     <Compile Include="Server\ProtocolBuffers\EncoderTest.cs" />
     <Compile Include="Server\ProtocolBuffers\MessageExtensionsTest.cs" />
     <Compile Include="Server\ProtocolBuffers\SchemaTest.cs" />

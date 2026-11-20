@@ -205,6 +205,7 @@ test_suite(
         "//client/conformance:test",
         "//client/cpp:test",
         "//client/csharp:test",
+        "//client/http:test",
         "//client/java:test",
         "//client/js:test",
         "//client/lua:test",

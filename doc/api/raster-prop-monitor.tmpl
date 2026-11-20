@@ -18,6 +18,7 @@ Provides functionality to interact with the `Raster Prop Monitor`_ mod.
    raster-prop-monitor/display
    raster-prop-monitor/external-camera
 
+{% if domain.codeext %}
 Example
 -------
 
@@ -38,6 +39,7 @@ The page text names Raster Prop Monitor's ``SAS`` variable, and the format gives
 screens of the Mk1 Lander Can, NAV is ``buttonR1``.
 {% if domain.name in ('lua', 'cnano') %}
 This client has no events, so the example does not answer the ENTER button.
+{% endif %}
 {% endif %}
 
 .. include:: /mods.inc

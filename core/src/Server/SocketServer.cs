@@ -232,6 +232,8 @@ namespace KRPC.Server
                     Logger.WriteLine (logName + ".Listener: client connected (" + client.Address + ")", Logger.Severity.Debug);
                     lock (acceptedLock)
                         accepted.Add (client);
+                    // Ends the server's wait for calls, so that its update adds the client
+                    Arrivals.Set ();
                 }
             } catch (Exception e) {
                 // Stop closes the socket to end the blocking accept, which then throws

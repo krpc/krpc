@@ -14,8 +14,8 @@ the game, and comes with client libraries for many popular languages.
  * [Forum release thread](https://forum.kerbalspaceprogram.com/topic/130742-1125-krpc-control-the-game-using-c-c-java-lua-python-ruby-haskell-c-arduino-v060/)
  * [Discord](https://discord.gg/bXuaTrj)
 
-| [**Python**](https://krpc.github.io/krpc/latest/python.html) | [**C#**](https://krpc.github.io/krpc/latest/csharp.html) | [**C++**](https://krpc.github.io/krpc/latest/cpp.html) | [**C-nano**](https://krpc.github.io/krpc/latest/cnano.html) | [**Java**](https://krpc.github.io/krpc/latest/java.html) | [**Lua**](https://krpc.github.io/krpc/latest/lua.html) |
-|:-:|:-:|:-:|:-:|:-:|:-:|
+| [**Python**](https://krpc.github.io/krpc/latest/python.html) | [**C#**](https://krpc.github.io/krpc/latest/csharp.html) | [**C++**](https://krpc.github.io/krpc/latest/cpp.html) | [**C-nano**](https://krpc.github.io/krpc/latest/cnano.html) | [**Java**](https://krpc.github.io/krpc/latest/java.html) | [**Lua**](https://krpc.github.io/krpc/latest/lua.html) | [**JavaScript**](https://krpc.github.io/krpc/latest/js.html) | [**HTTP**](https://krpc.github.io/krpc/latest/http.html) |
+|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
 
 ## Contributing
 

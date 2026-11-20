@@ -32,12 +32,14 @@ bodies and orbits, flight control, maneuver nodes and the auto-pilot.
    space-center/contracts
    space-center/alarms
 
+{% if domain.codeext %}
 Example
 -------
 
 The following example prints the name of the active vessel:
 
 .. literalinclude:: /scripts/api/space-center/SpaceCenterExample.{{ domain.codeext }}
+{% endif %}
 
 Mods
 ----

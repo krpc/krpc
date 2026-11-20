@@ -31,6 +31,7 @@ classes follow MechJeb's windows: a setting is found under the window that shows
    mechjeb/target-controller
    mechjeb/migration
 
+{% if domain.codeext %}
 Example
 -------
 
@@ -38,5 +39,6 @@ The following example launches the active vessel into a 100 km orbit, inclined a
 Ascent Guidance, and waits for the ascent to finish:
 
 .. literalinclude:: /scripts/api/mechjeb/MechJebExample.{{ domain.codeext }}
+{% endif %}
 
 .. include:: /mods.inc

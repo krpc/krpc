@@ -15,6 +15,7 @@ Provides the following classes:
    remote-tech/comms
    remote-tech/antenna
 
+{% if domain.codeext %}
 Example
 -------
 
@@ -22,5 +23,6 @@ The following example sets the target of a dish on the active vessel then prints
 out the signal delay to the active vessel.
 
 .. literalinclude:: /scripts/api/remote-tech/RemoteTechExample.{{ domain.codeext }}
+{% endif %}
 
 .. include:: /mods.inc

@@ -24,6 +24,11 @@ namespace KRPC.Server
         /// A server using Protocol Buffer messages over a unix domain socket,
         /// for clients running on the same machine.
         /// </summary>
-        ProtocolBuffersOverLocalSocket
+        ProtocolBuffersOverLocalSocket,
+        /// <summary>
+        /// A server taking calls as HTTP requests with JSON bodies, all of them on one
+        /// client that lasts while the server runs.
+        /// </summary>
+        JSONOverHTTP
     }
 }

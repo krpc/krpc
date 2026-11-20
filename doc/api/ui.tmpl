@@ -28,9 +28,11 @@ messages, panels, buttons, text and input fields.
    ui/size-fitter
    ui/rect-transform
 
+{% if domain.codeext %}
 Example
 -------
 
 The following example shows a message at the top of the screen for 10 seconds:
 
 .. literalinclude:: /scripts/api/ui/UIExample.{{ domain.codeext }}
+{% endif %}

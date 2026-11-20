@@ -46,7 +46,7 @@ namespace KRPC
                 id = server.Id.ToString ();
                 name = server.Name;
                 protocol = server.Protocol.ToString ();
-                settings = server.Settings.Select(x => new KeyValuePair { key = x.Key, value = x.Value}).ToList();
+                settings = server.Settings.Select(x => new KeyValuePair { key = x.Key, value = Encode (x.Value)}).ToList();
             }
 
             public void AfterLoad (Configuration.Server server)
@@ -62,7 +62,19 @@ namespace KRPC
                     server.Protocol = Protocol.ProtocolBuffersOverTCP;
                     protocol = server.Protocol.ToString ();
                 }
-                server.Settings = settings.ToDictionary(x => x.key, x => x.value);
+                server.Settings = settings.ToDictionary(x => x.key, x => Decode (x.value));
+            }
+
+            // The settings file reads "//" as the start of a comment, which would cut an origin
+            // such as http://localhost:8080 short, so it is written as %2F%2F
+            static string Encode (string value)
+            {
+                return value.Replace ("//", "%2F%2F");
+            }
+
+            static string Decode (string value)
+            {
+                return value.Replace ("%2F", "/");
             }
         }
 
