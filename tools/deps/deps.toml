@@ -726,6 +726,13 @@ regen = ["pip"]
 at = ["tools/build/python/requirements.in: sphinx-tabs=={version}"]
 
 [[dep]]
+name = "sphinxcontrib-httpdomain"
+version = "2.2.1"
+source = "pypi:sphinxcontrib-httpdomain"
+regen = ["pip"]
+at = ["tools/build/python/requirements.in: sphinxcontrib-httpdomain=={version}"]
+
+[[dep]]
 name = "sphinxcontrib-spelling"
 version = "8.0.2"
 source = "pypi:sphinxcontrib-spelling"

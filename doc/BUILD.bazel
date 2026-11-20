@@ -70,6 +70,8 @@ stage_files(
         ":cpp-api-toctree",
         ":csharp-api",
         ":csharp-api-toctree",
+        ":http-api",
+        ":http-api-toctree",
         ":images",
         ":java-api",
         ":java-api-toctree",
@@ -174,6 +176,7 @@ py_console_script_binary(
         "@krpc_pypi//sphinx_java",
         "@krpc_pypi//sphinx_lua_ls",
         "@krpc_pypi//sphinx_tabs",
+        "@krpc_pypi//sphinxcontrib_httpdomain",
         "@krpc_pypi//sphinxcontrib_spelling",
         "@krpc_pypi//spylls",
     ],
@@ -197,6 +200,7 @@ py_binary(
         "@krpc_pypi//sphinx_java",
         "@krpc_pypi//sphinx_lua_ls",
         "@krpc_pypi//sphinx_tabs",
+        "@krpc_pypi//sphinxcontrib_httpdomain",
         "@krpc_pypi//sphinxcontrib_spelling",
         "@krpc_pypi//spylls",
         "@krpc_pypi//watchdog",
@@ -259,6 +263,11 @@ api_toctree(
 )
 
 api_toctree(
+    name = "http-api-toctree",
+    language = "http",
+)
+
+api_toctree(
     name = "java-api-toctree",
     language = "java",
 )
@@ -300,6 +309,19 @@ docgen(
     defs = defs,
     language = "cpp",
     outdir = "src/cpp",
+)
+
+# Server side functions have no paths over HTTP, so the KRPC page marks the expression
+# classes as documented in place of a page for them
+docgen(
+    name = "http-api",
+    srcs = glob(
+        ["api/**/*.tmpl"],
+        exclude = ["api/krpc/expressions.tmpl"],
+    ),
+    defs = defs,
+    language = "http",
+    outdir = "src/http",
 )
 
 docgen(
@@ -440,6 +462,7 @@ test_suite(
         ":check-documented-cnano",
         ":check-documented-cpp",
         ":check-documented-csharp",
+        ":check-documented-http",
         ":check-documented-java",
         ":check-documented-js",
         ":check-documented-lua",
@@ -458,6 +481,13 @@ check_documented_test(
     name = "check-documented-csharp",
     size = "small",
     srcs = [":csharp-api"],
+    members = "order.txt",
+)
+
+check_documented_test(
+    name = "check-documented-http",
+    size = "small",
+    srcs = [":http-api"],
     members = "order.txt",
 )
 

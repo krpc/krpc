@@ -1,9 +1,11 @@
+.. default-domain:: http
 .. highlight:: json
 
 HTTP
 ====
 
-This guide describes how to call the server over HTTP, and the features it provides.
+This guide describes how to call the server over HTTP, and the features it provides. The
+:ref:`http-client-reference` gives the path of each procedure.
 
 Each procedure has a URL, with arguments and results in JSON. You can call it from curl, a web
 page or any language that sends HTTP requests:
@@ -56,8 +58,11 @@ are removed.
 Paths
 -----
 
-Each property and method has a path, built from its name. The request method depends on the kind
-of member:
+The :ref:`routing table <http-routingtable>` lists every path. ``GET /`` returns an empty response
+with status 200, as a health check.
+
+The :ref:`http-client-reference` gives the path of each property and method. The request method
+depends on the kind of member:
 
 .. list-table::
    :header-rows: 1
@@ -79,8 +84,7 @@ of member:
    * - Calling a static method
      - ``POST /space-center/alarm-manager/add-alarm``
 
-``<id>`` is the object's identifier. ``GET /`` returns an empty response with status 200, as a
-health check.
+``<id>`` is the object's identifier.
 
 A request with the wrong method for its path gets status 405, Method Not Allowed. The response's
 ``Allow`` header lists the methods the path takes. For example,
@@ -188,3 +192,10 @@ no ``Origin`` header.
 
 A request gets status 403 unless its ``Host`` header names ``localhost`` or an IP address. See
 :ref:`http-security` for more details.
+
+.. _http-client-reference:
+
+Service API Reference
+---------------------
+
+.. include:: http/api.inc

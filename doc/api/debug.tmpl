@@ -14,9 +14,11 @@ consequences, as the game's own debug menu.
 
    debug/debug
 
+{% if domain.codeext %}
 Example
 -------
 
 The following example switches on infinite propellant, the cheat from the game's debug menu:
 
 .. literalinclude:: /scripts/api/debug/DebugExample.{{ domain.codeext }}
+{% endif %}

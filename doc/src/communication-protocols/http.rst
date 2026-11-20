@@ -4,8 +4,8 @@ HTTP
 This protocol takes each call as an HTTP request, with its arguments and result in JSON. Each
 procedure has a path, such as ``GET /space-center/active-vessel``.
 
-The :doc:`HTTP guide </http>` describes how to use it. This page gives the rationale behind the
-design.
+The :doc:`HTTP guide </http>` describes how to use it, and its :ref:`http-client-reference` gives
+the path of each procedure. This page gives the rationale behind the design.
 
 One Session
 -----------

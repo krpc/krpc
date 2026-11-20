@@ -26,6 +26,7 @@ tracking station.
    drawing/sphere
    drawing/text
 
+{% if domain.codeext %}
 Example
 -------
 
@@ -34,3 +35,4 @@ direction it points. The server removes a client's drawings when the client disc
 example waits 10 seconds before it exits:
 
 .. literalinclude:: /scripts/api/drawing/DrawingExample.{{ domain.codeext }}
+{% endif %}

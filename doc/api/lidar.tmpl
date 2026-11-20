@@ -19,6 +19,7 @@ Provides functionality to interact with the `LiDAR`_ mod.
    lidar/lidar
    lidar/laser
 
+{% if domain.codeext %}
 LiDAR Replacement
 -----------------
 
@@ -29,6 +30,7 @@ ray. This example casts 8 rays below the root part of the active vessel:
 {% if domain.name in ('python', 'csharp') %}
 
 The function stream casts every ray in the same physics tick, as a LiDAR does.
+{% endif %}
 {% endif %}
 
 .. include:: /mods.inc
