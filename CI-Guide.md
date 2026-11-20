@@ -47,6 +47,10 @@ lines each. A job stays outside a matrix when it produces more than one artifact
 other than Bazel, saves a cache on a push, or is named in another job's `needs`, which cannot
 address a single matrix entry.
 
+`//doc:clangtidy` runs in a Linux job of its own, `test-docs-clangtidy`. It checks about 190
+examples, each parsing every generated service header, and takes about 8 minutes. Inside
+`test-docs` it would make that the slowest job of the workflow.
+
 Windows runs everything Linux runs, except these:
 
 - **The serial transport tests.** They link two pseudo-terminals with socat, which has no Windows
