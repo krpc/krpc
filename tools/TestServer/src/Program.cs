@@ -33,8 +33,12 @@ namespace TestServer
         static readonly Option<ushort> httpPortOption = new Option<ushort> ("--http-port") {
             Description = "For the http protocol, the port number to use. If unspecified, use an ephemeral port."
         };
+        static readonly Option<string> websocketsAllowedOriginsOption = new Option<string> ("--websockets-allowed-origins") {
+            Description = "For the websockets protocol, the origins whose web pages may connect: a comma-separated list, localhost for pages served from a loopback address, or * for any.",
+            DefaultValueFactory = _ => "localhost"
+        };
         static readonly Option<string> httpAllowedOriginsOption = new Option<string> ("--http-allowed-origins") {
-            Description = "For the http protocol, the origins whose web pages may call it: a comma-separated list, or * for any."
+            Description = "For the http protocol, the origins whose web pages may call it: a comma-separated list, localhost for pages served from a loopback address, or * for any."
         };
         static readonly Option<string> localsocketPathOption = new Option<string> ("--localsocket-path") {
             Description = "For local socket protocols, the path of the socket to use.",
@@ -102,6 +106,7 @@ namespace TestServer
                 websocketsPortOption,
                 httpPortOption,
                 httpAllowedOriginsOption,
+                websocketsAllowedOriginsOption,
                 localsocketPathOption,
                 serialioPortOption,
                 baudRateOption,
@@ -145,6 +150,7 @@ namespace TestServer
             ushort websocketsPort = result.GetValue (websocketsPortOption);
             ushort httpPort = result.GetValue (httpPortOption);
             string httpAllowedOrigins = result.GetValue (httpAllowedOriginsOption);
+            string websocketsAllowedOrigins = result.GetValue (websocketsAllowedOriginsOption);
             string serialioPort = result.GetValue (serialioPortOption);
             string localsocketPath = result.GetValue (localsocketPathOption);
             uint baudRate = result.GetValue (baudRateOption);
@@ -202,7 +208,14 @@ namespace TestServer
                     server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverTCP, "TestServer", messageServer);
                 } else if (serverType == "websockets") {
                     websocketsServer = new TCPServer (bindAddress, websocketsPort);
-                    var messageServer = new KRPC.Server.WebSockets.Server (websocketsServer);
+                    KRPC.Server.AllowedOrigins origins;
+                    try {
+                        origins = new KRPC.Server.AllowedOrigins (websocketsAllowedOrigins);
+                    } catch (ArgumentException e) {
+                        Logger.WriteLine (e.Message, Logger.Severity.Error);
+                        return;
+                    }
+                    var messageServer = new KRPC.Server.WebSockets.Server (websocketsServer, origins);
                     server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverWebsockets, "TestServer", messageServer);
                 } else if (serverType == "http") {
                     httpServer = new TCPServer (bindAddress, httpPort);

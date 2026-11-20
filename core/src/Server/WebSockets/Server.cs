@@ -8,9 +8,16 @@ namespace KRPC.Server.WebSockets
         /// <summary>
         /// Create a websockets server.
         /// </summary>
-        public Server (IServer<IByteStream> server) : base (server)
+        public Server (IServer<IByteStream> server, AllowedOrigins origins = null) : base (server)
         {
+            AllowedOrigins = origins ?? new AllowedOrigins ("localhost");
         }
+
+        /// <summary>
+        /// The origins whose web pages may connect. A client that is not a web page sends no
+        /// origin, and may always connect.
+        /// </summary>
+        public AllowedOrigins AllowedOrigins { get; private set; }
 
         /// <summary>
         /// Server address.

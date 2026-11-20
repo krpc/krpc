@@ -77,6 +77,7 @@ namespace KRPC.Test
             Assert.AreEqual (Protocol.ProtocolBuffersOverWebsockets, servers [1].Protocol);
             Assert.AreEqual ("127.0.0.1", servers [1].Settings ["ws_address"]);
             Assert.AreEqual ("50001", servers [1].Settings ["ws_port"]);
+            Assert.AreEqual ("localhost", servers [1].Settings ["ws_allowed_origins"]);
             Assert.AreNotEqual (servers [0].Id, servers [1].Id);
         }
 
@@ -100,6 +101,18 @@ namespace KRPC.Test
             Assert.IsInstanceOf<KRPC.Server.HTTP.Server> (server.InnerServer);
             Assert.AreEqual ("http://127.0.0.1:50003", server.Address);
             Assert.IsTrue (((KRPC.Server.HTTP.Server)server.InnerServer).AllowedOrigins.None);
+        }
+
+        [Test]
+        public void WebSocketsServerAllowedOrigins ()
+        {
+            var config = new Configuration.Server (Protocol.ProtocolBuffersOverWebsockets);
+            Assert.IsTrue (((KRPC.Server.WebSockets.Server)config.Create ().InnerServer).AllowedOrigins.Local);
+            // A server saved before the setting existed allows pages from this machine
+            config.Settings.Remove ("ws_allowed_origins");
+            Assert.IsTrue (((KRPC.Server.WebSockets.Server)config.Create ().InnerServer).AllowedOrigins.Local);
+            config.Settings ["ws_allowed_origins"] = "*";
+            Assert.IsTrue (((KRPC.Server.WebSockets.Server)config.Create ().InnerServer).AllowedOrigins.Any);
         }
 
         [Test]

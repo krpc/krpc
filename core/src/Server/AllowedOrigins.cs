@@ -6,7 +6,8 @@ namespace KRPC.Server
 {
     /// <summary>
     /// The origins whose web pages may connect to a server. The setting is a comma-separated
-    /// list of origins, or <c>*</c> for any origin.
+    /// list of origins, <c>localhost</c> for a page served from a loopback address on any port, or
+    /// <c>*</c> for any origin.
     /// </summary>
     public sealed class AllowedOrigins
     {
@@ -24,6 +25,8 @@ namespace KRPC.Server
                 var origin = Canonical (entry);
                 if (entry == "*")
                     Any = true;
+                else if (entry == "localhost")
+                    Local = true;
                 else if (origin != null)
                     origins.Add (origin);
                 else
@@ -39,10 +42,15 @@ namespace KRPC.Server
         public bool Any { get; private set; }
 
         /// <summary>
+        /// Whether a page served from a loopback address is allowed, on any port.
+        /// </summary>
+        public bool Local { get; private set; }
+
+        /// <summary>
         /// Whether the origins allow no page from another origin.
         /// </summary>
         public bool None {
-            get { return !Any && origins.Count == 0; }
+            get { return !Any && !Local && origins.Count == 0; }
         }
 
         /// <summary>
@@ -50,7 +58,7 @@ namespace KRPC.Server
         /// </summary>
         public static bool IsValid (string setting)
         {
-            return Entries (setting).All (x => x == "*" || Canonical (x) != null);
+            return Entries (setting).All (x => x == "*" || x == "localhost" || Canonical (x) != null);
         }
 
         static IEnumerable<string> Entries (string setting)
@@ -87,7 +95,21 @@ namespace KRPC.Server
         {
             if (Any)
                 return true;
-            return origin != "null" && origins.Contains (origin.ToLowerInvariant ());
+            if (origin == "null")
+                return false;
+            if (Local && IsLocal (origin))
+                return true;
+            return origins.Contains (origin.ToLowerInvariant ());
+        }
+
+        // An origin whose host is this machine, by name or loopback address
+        static bool IsLocal (string origin)
+        {
+            var canonical = Canonical (origin);
+            if (canonical == null)
+                return false;
+            var host = new Uri (canonical).Host;
+            return host == "localhost" || host == "127.0.0.1" || host == "[::1]";
         }
 
         /// <summary>
@@ -96,6 +118,8 @@ namespace KRPC.Server
         public override string ToString ()
         {
             var entries = origins.OrderBy (x => x, StringComparer.Ordinal).ToList ();
+            if (Local)
+                entries.Insert (0, "localhost");
             if (Any)
                 entries.Insert (0, "*");
             return string.Join (", ", entries);

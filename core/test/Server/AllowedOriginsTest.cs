@@ -51,6 +51,20 @@ namespace KRPC.Test.Server
             Assert.AreEqual ("*", origins.ToString ());
         }
 
+        [Test]
+        public void Local ()
+        {
+            var origins = new AllowedOrigins ("localhost");
+            Assert.IsTrue (origins.Local);
+            Assert.IsFalse (origins.None);
+            foreach (var origin in new [] { "http://localhost", "http://localhost:8000", "https://127.0.0.1:5173", "http://[::1]:8080" })
+                Assert.IsTrue (origins.Allows (origin), origin);
+            foreach (var origin in new [] { "http://example.com", "http://localhost.example.com", "http://127.0.0.2", "null" })
+                Assert.IsFalse (origins.Allows (origin), origin);
+            Assert.AreEqual ("localhost", origins.ToString ());
+            Assert.AreEqual ("localhost, http://example.com", new AllowedOrigins ("http://example.com, localhost").ToString ());
+        }
+
         [TestCase ("localhost:8080")]
         [TestCase ("http://localhost:8080/")]
         [TestCase ("http://localhost:8080/path")]
@@ -69,6 +83,7 @@ namespace KRPC.Test.Server
         [TestCase ("*")]
         [TestCase ("http://localhost:8080,https://editor.swagger.io")]
         [TestCase ("http://[::1]:8080")]
+        [TestCase ("localhost, http://example.com")]
         public void Valid (string setting)
         {
             Assert.IsTrue (AllowedOrigins.IsValid (setting));

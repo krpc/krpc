@@ -28,9 +28,42 @@ namespace KRPC.Test.Server.WebSockets
             "Connection: Upgrade\r\n" +
             "Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo=\r\n\r\n";
 
-        static MessageHarness Harness ()
+        static MessageHarness Harness (string origins = "localhost")
         {
-            return new MessageHarness (byteServer => new KRPC.Server.WebSockets.Server (byteServer), true);
+            return new MessageHarness (byteServer => new KRPC.Server.WebSockets.Server (byteServer, new AllowedOrigins (origins)), true);
+        }
+
+        static string RequestFrom (string origin)
+        {
+            return validRequest.Replace ("Host: localhost\r\n", "Host: localhost\r\nOrigin: " + origin + "\r\n");
+        }
+
+        [Test]
+        public void OriginOfThisMachine ()
+        {
+            CheckValidConnectionRequest (RequestFrom ("http://localhost:8000"));
+            CheckValidConnectionRequest (RequestFrom ("http://127.0.0.1:5173"));
+        }
+
+        [TestCase ("http://example.com")]
+        [TestCase ("null")]
+        public void OriginRefused (string origin)
+        {
+            var response = CheckInvalidConnectionRequest (RequestFrom (origin));
+            StringAssert.StartsWith ("HTTP/1.1 403 Forbidden\r\n", response);
+        }
+
+        [Test]
+        public void OriginAllowed ()
+        {
+            var harness = Harness ("http://example.com");
+            harness.SendBytes (Encoding.ASCII.GetBytes (RequestFrom ("http://example.com")));
+            harness.Server.Update ();
+            Assert.AreEqual (validResponse, Encoding.ASCII.GetString (harness.ReceiveBytes ()));
+            harness = Harness ("*");
+            harness.SendBytes (Encoding.ASCII.GetBytes (RequestFrom ("null")));
+            harness.Server.Update ();
+            Assert.AreEqual (validResponse, Encoding.ASCII.GetString (harness.ReceiveBytes ()));
         }
 
         static void CheckValidConnectionRequest (string request)

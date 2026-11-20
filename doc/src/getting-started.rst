@@ -50,8 +50,8 @@ Stop a server, then click its "Edit" button to change its settings. Click "Save"
    addresses, "Any" for all of them, or "Manual" to type one in.
 3. **Port**: The TCP port, 50000 by default for TCP/IP, 50001 for WebSockets and 50003 for HTTP.
    Change it only if another program uses that port.
-4. **Origins**: For HTTP, the web pages on other sites that may call the server. See
-   :doc:`the HTTP guide </http>`.
+4. **Origins**: For WebSockets and HTTP, the web pages on other sites that may connect. See
+   :ref:`communication-protocol-websockets-origins` and :doc:`the HTTP guide </http>`.
 
 "Show advanced settings" reveals these settings:
 

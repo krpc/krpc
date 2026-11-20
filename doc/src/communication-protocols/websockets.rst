@@ -28,6 +28,22 @@ Open a websockets connection to the server with the path ``/``, for example
 The connection carries the requests, the responses and the stream updates. To end it, send a
 :ref:`disconnect <communication-protocol-disconnect>` and then a close frame.
 
+.. _communication-protocol-websockets-origins:
+
+Web Pages
+---------
+
+A web page sends its origin with the upgrade request, and the server refuses a page whose origin it
+does not allow, with status 403. *Origins*, in the server window, lists the origins it allows:
+
+* ``localhost``, the default, allows a page served from ``localhost`` or a loopback address, on
+  any port, such as ``http://localhost:8000`` or ``http://127.0.0.1:5173``.
+* An origin, such as ``http://192.168.1.10:8000``, allows pages from that scheme, host and port.
+* ``*`` allows any page, including one opened as a local file, which has the origin ``null``.
+
+The entries are comma-separated. A client that is not a web page, such as Node.js, sends no
+origin, and the server always accepts it.
+
 Examples
 --------
 

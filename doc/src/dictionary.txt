@@ -148,6 +148,7 @@ libz
 linters
 linux
 localhost
+loopback
 lossy
 lua
 luarocks

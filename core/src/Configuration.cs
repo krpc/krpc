@@ -118,15 +118,18 @@ namespace KRPC
                 Settings = new Dictionary<string, string>{
                     {prefix + "address", IPAddress.Loopback.ToString()},
                     {prefix + "port", DefaultPort (protocol).ToString (CultureInfo.InvariantCulture)}};
+                if (protocol == Protocol.ProtocolBuffersOverWebsockets)
+                    Settings [prefix + "allowed_origins"] = DefaultAllowedOrigins (protocol);
             }
 
             /// <summary>
             /// The origins a server of the protocol allows when its settings leave them out:
-            /// none for HTTP, which allows the pages it serves itself.
+            /// pages served from a loopback address for WebSockets, and none for HTTP, which allows
+            /// the pages it serves itself.
             /// </summary>
             public static string DefaultAllowedOrigins (Protocol protocol)
             {
-                return string.Empty;
+                return protocol == Protocol.ProtocolBuffersOverWebsockets ? "localhost" : string.Empty;
             }
 
             /// <summary>
@@ -181,7 +184,7 @@ namespace KRPC
                     if (serverProtocol == Protocol.ProtocolBuffersOverTCP)
                         messageServer = new KRPC.Server.Delimited.Server (tcpServer);
                     else if (serverProtocol == Protocol.ProtocolBuffersOverWebsockets)
-                        messageServer = new KRPC.Server.WebSockets.Server (tcpServer);
+                        messageServer = new KRPC.Server.WebSockets.Server (tcpServer, AllowedOrigins ());
                     else
                         messageServer = new KRPC.Server.HTTP.Server (tcpServer, AllowedOrigins ());
                 } else if (serverProtocol == Protocol.ProtocolBuffersOverLocalSocket) {

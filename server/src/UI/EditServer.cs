@@ -41,7 +41,7 @@ namespace KRPC.UI
         const string pathLabelText = "Socket:";
         const string originsLabelText = "Origins:";
         const int originsMaxLength = 1024;
-        const string invalidOriginsText = "Origins must be \"*\", or a comma-separated list of origins such as \"http://localhost:8080\"";
+        const string invalidOriginsText = "Origins must be \"*\", or a comma-separated list of \"localhost\" and origins such as \"http://example.com:8080\"";
         static readonly string invalidPathText =
             "Socket path must not be empty, and must take at most " +
             LocalSocketServer.MaximumPathLength + " bytes";
@@ -175,7 +175,7 @@ namespace KRPC.UI
                         ValidPort (settings[portKey]), window.errorColor));
                 GUILayout.EndHorizontal();
 
-                if (protocol == Protocol.JSONOverHTTP) {
+                if (protocol != Protocol.ProtocolBuffersOverTCP) {
                     var originsKey = SettingsPrefix + "allowed_origins";
                     GUILayout.BeginHorizontal();
                     DrawFieldLabel (originsLabelText);
@@ -294,7 +294,7 @@ namespace KRPC.UI
                 if (!ValidPort (settings[portKey]))
                     window.Errors.Add(invalidPortText);
                 allowedKeys = new List<string> { addressKey, portKey };
-                if (protocol == Protocol.JSONOverHTTP) {
+                if (protocol != Protocol.ProtocolBuffersOverTCP) {
                     var originsKey = SettingsPrefix + "allowed_origins";
                     string origins;
                     settings.TryGetValue (originsKey, out origins);
