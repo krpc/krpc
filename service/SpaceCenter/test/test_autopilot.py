@@ -1790,6 +1790,7 @@ TestAutoPilotLaunchKerbalX = _make_autopilot_launch_test_class(
 TestAutoPilotLaunchMunsplorer = _make_autopilot_launch_test_class(
     "TestAutoPilotLaunchMunsplorer",
     "PT Series Munsplorer",
+    hold_attitude_error=1,
 )
 
 TestAutoPilotLaunchScienceJr = _make_autopilot_launch_test_class(
