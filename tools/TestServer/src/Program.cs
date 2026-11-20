@@ -17,7 +17,7 @@ namespace TestServer
     static class MainClass
     {
         static readonly Option<string> typeOption = new Option<string> ("--type") {
-            Description = "Type of server to run. Either protobuf, websockets, serialio or localsocket, or several separated by commas, each of a different transport.",
+            Description = "Type of server to run. Either protobuf, websockets, serialio, localsocket or http, or several separated by commas, each of a different transport.",
             DefaultValueFactory = _ => "protobuf"
         };
         static readonly Option<string> bindOption = new Option<string> ("--bind") {
@@ -29,6 +29,9 @@ namespace TestServer
         };
         static readonly Option<ushort> websocketsPortOption = new Option<ushort> ("--websockets-port") {
             Description = "For the websockets protocols, the port number to use. If unspecified, use an ephemeral port."
+        };
+        static readonly Option<ushort> httpPortOption = new Option<ushort> ("--http-port") {
+            Description = "For the http protocol, the port number to use. If unspecified, use an ephemeral port."
         };
         static readonly Option<string> localsocketPathOption = new Option<string> ("--localsocket-path") {
             Description = "For local socket protocols, the path of the socket to use.",
@@ -94,6 +97,7 @@ namespace TestServer
                 bindOption,
                 tcpipPortOption,
                 websocketsPortOption,
+                httpPortOption,
                 localsocketPathOption,
                 serialioPortOption,
                 baudRateOption,
@@ -135,6 +139,7 @@ namespace TestServer
             string bind = result.GetValue (bindOption);
             ushort tcpipPort = result.GetValue (tcpipPortOption);
             ushort websocketsPort = result.GetValue (websocketsPortOption);
+            ushort httpPort = result.GetValue (httpPortOption);
             string serialioPort = result.GetValue (serialioPortOption);
             string localsocketPath = result.GetValue (localsocketPathOption);
             uint baudRate = result.GetValue (baudRateOption);
@@ -180,6 +185,7 @@ namespace TestServer
             var types = type.Split (',');
             TCPServer tcpServer = null;
             TCPServer websocketsServer = null;
+            TCPServer httpServer = null;
             KRPC.Server.SerialIO.ByteServer serialServer = null;
             KRPC.Server.LocalSocket.LocalSocketServer socketServer = null;
             var servers = new List<Server> ();
@@ -193,6 +199,10 @@ namespace TestServer
                     websocketsServer = new TCPServer (bindAddress, websocketsPort);
                     var messageServer = new KRPC.Server.WebSockets.Server (websocketsServer);
                     server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverWebsockets, "TestServer", messageServer);
+                } else if (serverType == "http") {
+                    httpServer = new TCPServer (bindAddress, httpPort);
+                    var messageServer = new KRPC.Server.HTTP.Server (httpServer);
+                    server = new Server (Guid.NewGuid (), Protocol.JSONOverHTTP, "TestServer", messageServer);
                 } else if (serverType == "serialio") {
                     serialServer = new KRPC.Server.SerialIO.ByteServer (
                         serialioPort, baudRate, dataBits, parity, stopBits, flowControl);
@@ -214,12 +224,14 @@ namespace TestServer
             core.StartAll ();
             Logger.WriteLine ("type = " + type);
             Logger.WriteLine ("frame pacing = " + loop.Description);
-            if (tcpServer != null || websocketsServer != null)
+            if (tcpServer != null || websocketsServer != null || httpServer != null)
                 Logger.WriteLine ("bind = " + bindAddress);
             if (tcpServer != null)
                 Logger.WriteLine ("tcpip_port = " + tcpServer.ActualPort);
             if (websocketsServer != null)
                 Logger.WriteLine ("websockets_port = " + websocketsServer.ActualPort);
+            if (httpServer != null)
+                Logger.WriteLine ("http_port = " + httpServer.ActualPort);
             if (serialServer != null) {
                 Logger.WriteLine ("serialio_port = " + serialServer.Address);
             }

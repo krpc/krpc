@@ -98,7 +98,12 @@ def run(config):
             test_environment["KRPC_TEST_LOCALSOCKET_PATH"] = path
             print("Server started, socket = %s" % path)
         else:
-            name = "websockets_port" if websockets else "tcpip_port"
+            if websockets:
+                name = "websockets_port"
+            elif config["server_type"] == "http":
+                name = "http_port"
+            else:
+                name = "tcpip_port"
             port = setting(reader.output, name)
             test_environment["KRPC_TEST_" + name.upper()] = port
             print("Server started, port = %s" % port)

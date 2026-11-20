@@ -5,3 +5,7 @@
 ## server
 
 - Add *JSON over HTTP* to the protocols in the server window, on port 50003 by default (#1390)
+
+## tools/krpctools
+
+- Add the `http` server type and `--http-port` to `krpc-testserver` (#1390)
