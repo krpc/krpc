@@ -105,6 +105,7 @@ def _test_config_impl(ctx):
         content = json.encode({
             "sphinx_build": ctx.executable.sphinx_build.short_path,
             "builder": ctx.attr.builder,
+            "jobs": _JOBS,
             "src_dir": _get_src_dir(ctx.files.srcs, short_path = True),
             "opts": ctx.attr.opts,
             "env": {key: _rootpath(target) for key, target in ctx.attr.env_files.items()},
