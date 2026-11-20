@@ -15,16 +15,18 @@ Building the Panel
 
 The script imports the client, so we bundle the two into one file for the page. The following
 installs the client and `esbuild <https://esbuild.github.io>`_, then bundles them as
-``control-panel.js``, which the page loads:
+``control-panel.js``, which the page loads, and serves the page:
 
 .. code-block:: bash
 
    npm install @krpc-org/krpc esbuild
    npx esbuild ControlPanel.js --bundle --format=iife \
-     --outfile=control-panel.js
+     --outfile=control-panel.js --servedir=.
 
-The ``iife`` format gives a classic script, which a browser runs from a page opened as a local
-file. Open ``control-panel.html`` in the browser.
+Open ``http://127.0.0.1:8000/control-panel.html`` in the browser. The server accepts a page from
+a loopback address by default. Opened from another machine, by the address of this one, the page
+needs that origin added to the server's *Origins*, as
+:ref:`communication-protocol-websockets-origins` describes.
 
 In the game, the server window has a "Protobuf over WebSockets" server on port 50001 by default.
 Enter its address and port in the panel, and click "Connect".

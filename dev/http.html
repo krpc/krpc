@@ -1952,8 +1952,10 @@ languages:</p>
 <span id="http-allowed-origins"></span><h2>Allowed Origins<a class="headerlink" href="#allowed-origins" title="Link to this heading">#</a></h2>
 <p>A web page on another site can call the server only if the server allows the page’s origin. To
 allow origins, edit the HTTP server in the server window, and set <em>Origins</em>. It is a
-comma-separated list of origins, each a scheme, a host and an optional port, or <code class="docutils literal notranslate"><span class="pre">*</span></code> for any
-origin. It is empty by default, which allows the server’s own origin only.</p>
+comma-separated list of origins, each a scheme, a host and an optional port. The entry
+<code class="docutils literal notranslate"><span class="pre">localhost</span></code> allows a page served from <code class="docutils literal notranslate"><span class="pre">localhost</span></code> or a loopback address, on any port, and
+<code class="docutils literal notranslate"><span class="pre">*</span></code> any origin. It is
+empty by default, which allows the server’s own origin only.</p>
 <p>A response to a page from an allowed origin carries the CORS headers the browser needs. A request
 from any other origin gets status 403. The check applies to web pages only, as curl and other
 tools send no <code class="docutils literal notranslate"><span class="pre">Origin</span></code> header.</p>

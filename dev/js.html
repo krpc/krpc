@@ -1785,8 +1785,15 @@ connection in game. The connection fails after 5 seconds by default. Pass <code 
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>A browser blocks a page served over <code class="docutils literal notranslate"><span class="pre">https://</span></code> from connecting to a <code class="docutils literal notranslate"><span class="pre">ws://</span></code> address. Open
-the page over <code class="docutils literal notranslate"><span class="pre">http://</span></code>, or as a local file.</p>
+<p>By default, the server accepts a web page served from <code class="docutils literal notranslate"><span class="pre">localhost</span></code> or a loopback address,
+such as <code class="docutils literal notranslate"><span class="pre">http://localhost:8000</span></code>. A page from another origin needs it added to the server’s
+<em>Origins</em> in the server window, and a page opened as a local file needs <code class="docutils literal notranslate"><span class="pre">*</span></code>. See
+<a class="reference internal" href="communication-protocols/websockets.html#communication-protocol-websockets-origins"><span class="std std-ref">Web Pages</span></a>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A browser blocks a page served over <code class="docutils literal notranslate"><span class="pre">https://</span></code> from connecting to a <code class="docutils literal notranslate"><span class="pre">ws://</span></code> address. Serve
+the page over <code class="docutils literal notranslate"><span class="pre">http://</span></code>.</p>
 </div>
 <section id="closing-the-connection">
 <h3>Closing the Connection<a class="headerlink" href="#closing-the-connection" title="Link to this heading">#</a></h3>

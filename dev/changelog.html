@@ -633,6 +633,7 @@
 <li><p>Fix a serial IO server stopping when it sends a response over a megabyte, such as <code class="docutils literal notranslate"><span class="pre">KRPC.GetServices</span></code> with every service installed (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1386">#1386</a>)</p></li>
 <li><p>Add a JSON over HTTP server, for calling procedures with no client library (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1391">#1391</a>)</p></li>
 <li><p>Serve an OpenAPI document of the HTTP server’s paths (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1391">#1391</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Refuse WebSockets connections from web pages whose origin is not allowed, by default any page not served from this machine (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1392">#1392</a>)</p></li>
 </ul>
 </section>
 <section id="server">
@@ -675,6 +676,7 @@
 <li><p>Add RTS/CTS flow control to serial IO servers, set in the server window (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1386">#1386</a>)</p></li>
 <li><p>Build the serial port code into <code class="docutils literal notranslate"><span class="pre">KRPC.Core.dll</span></code>, in place of a separate <code class="docutils literal notranslate"><span class="pre">KRPC.IO.Ports.dll</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1386">#1386</a>)</p></li>
 <li><p>Add *JSON over HTTP* to the protocols in the server window, on port 50003 by default, with the origins whose web pages may call it (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1391">#1391</a>)</p></li>
+<li><p>Add the origins whose web pages may connect to WebSockets servers in the server window (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1392">#1392</a>)</p></li>
 </ul>
 </section>
 <section id="spacecenter-service">
@@ -1314,6 +1316,7 @@
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">--flow-control</span></code> to the <code class="docutils literal notranslate"><span class="pre">TestServer</span></code>, for RTS/CTS over serial IO (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1386">#1386</a>)</p></li>
 <li><p>Add the <code class="docutils literal notranslate"><span class="pre">http</span></code> server type, <code class="docutils literal notranslate"><span class="pre">--http-port</span></code> and <code class="docutils literal notranslate"><span class="pre">--http-allowed-origins</span></code> to <code class="docutils literal notranslate"><span class="pre">krpc-testserver</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1391">#1391</a>)</p></li>
 <li><p>Add the <code class="docutils literal notranslate"><span class="pre">http</span></code> language to <code class="docutils literal notranslate"><span class="pre">krpc-docgen</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1391">#1391</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">--websockets-allowed-origins</span></code> to <code class="docutils literal notranslate"><span class="pre">krpc-testserver</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1392">#1392</a>)</p></li>
 </ul>
 </section>
 </section>

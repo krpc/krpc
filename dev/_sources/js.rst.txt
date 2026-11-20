@@ -70,8 +70,15 @@ WebSockets works over a network, so your program can run on a different machine 
 
 .. note::
 
-   A browser blocks a page served over ``https://`` from connecting to a ``ws://`` address. Open
-   the page over ``http://``, or as a local file.
+   By default, the server accepts a web page served from ``localhost`` or a loopback address,
+   such as ``http://localhost:8000``. A page from another origin needs it added to the server's
+   *Origins* in the server window, and a page opened as a local file needs ``*``. See
+   :ref:`communication-protocol-websockets-origins`.
+
+.. note::
+
+   A browser blocks a page served over ``https://`` from connecting to a ``ws://`` address. Serve
+   the page over ``http://``.
 
 Closing the Connection
 ^^^^^^^^^^^^^^^^^^^^^^

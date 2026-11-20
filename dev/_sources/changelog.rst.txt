@@ -110,6 +110,7 @@ Core
 * Fix a serial IO server stopping when it sends a response over a megabyte, such as ``KRPC.GetServices`` with every service installed (:issue:`1386`)
 * Add a JSON over HTTP server, for calling procedures with no client library (:issue:`1391`)
 * Serve an OpenAPI document of the HTTP server's paths (:issue:`1391`)
+* :breaking:`Breaking` Refuse WebSockets connections from web pages whose origin is not allowed, by default any page not served from this machine (:issue:`1392`)
 
 
 Server
@@ -152,6 +153,7 @@ Server
 * Add RTS/CTS flow control to serial IO servers, set in the server window (:issue:`1386`)
 * Build the serial port code into ``KRPC.Core.dll``, in place of a separate ``KRPC.IO.Ports.dll`` (:issue:`1386`)
 * Add \*JSON over HTTP\* to the protocols in the server window, on port 50003 by default, with the origins whose web pages may call it (:issue:`1391`)
+* Add the origins whose web pages may connect to WebSockets servers in the server window (:issue:`1392`)
 
 
 SpaceCenter service
@@ -762,6 +764,7 @@ krpctools
 * Add ``--flow-control`` to the ``TestServer``, for RTS/CTS over serial IO (:issue:`1386`)
 * Add the ``http`` server type, ``--http-port`` and ``--http-allowed-origins`` to ``krpc-testserver`` (:issue:`1391`)
 * Add the ``http`` language to ``krpc-docgen`` (:issue:`1391`)
+* Add ``--websockets-allowed-origins`` to ``krpc-testserver`` (:issue:`1392`)
 
 
 v0.7.0

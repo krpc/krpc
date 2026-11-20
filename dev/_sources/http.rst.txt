@@ -220,8 +220,10 @@ Allowed Origins
 
 A web page on another site can call the server only if the server allows the page's origin. To
 allow origins, edit the HTTP server in the server window, and set *Origins*. It is a
-comma-separated list of origins, each a scheme, a host and an optional port, or ``*`` for any
-origin. It is empty by default, which allows the server's own origin only.
+comma-separated list of origins, each a scheme, a host and an optional port. The entry
+``localhost`` allows a page served from ``localhost`` or a loopback address, on any port, and
+``*`` any origin. It is
+empty by default, which allows the server's own origin only.
 
 A response to a page from an allowed origin carries the CORS headers the browser needs. A request
 from any other origin gets status 403. The check applies to web pages only, as curl and other

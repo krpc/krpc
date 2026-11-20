@@ -622,8 +622,9 @@ takes clients over websockets and TCP/IP at the same time:</p>
 <p><code class="docutils literal notranslate"><span class="pre">--localsocket-path</span></code> names the socket of a local socket server, and <code class="docutils literal notranslate"><span class="pre">--serialio-port</span></code> the
 port of a serial IO server. <code class="docutils literal notranslate"><span class="pre">--http-port</span></code> sets the port of an HTTP server, which prints it as
 <code class="docutils literal notranslate"><span class="pre">http_port</span> <span class="pre">=</span> <span class="pre">&lt;port&gt;</span></code>, and <code class="docutils literal notranslate"><span class="pre">--http-allowed-origins</span></code> the origins whose web pages may call it.
-<code class="docutils literal notranslate"><span class="pre">krpc-testserver</span> <span class="pre">--help</span></code> lists every option, including the bind address, the serial port
-settings and the log level.</p>
+<code class="docutils literal notranslate"><span class="pre">--websockets-allowed-origins</span></code> sets the origins a websockets server accepts, <code class="docutils literal notranslate"><span class="pre">localhost</span></code> by
+default. <code class="docutils literal notranslate"><span class="pre">krpc-testserver</span> <span class="pre">--help</span></code> lists every option, including the bind address, the serial
+port settings and the log level.</p>
 </section>
 <section id="services">
 <h2>Services<a class="headerlink" href="#services" title="Link to this heading">#</a></h2>
