@@ -146,7 +146,7 @@ Server
 * Fix errors logged on every scene change, and on quitting, when the server fails its startup checks (:issue:`1376`)
 * Name a server added in the server window "Server", "Server 2" and so on (:issue:`1385`)
 * Remember which servers are expanded in the server window (:issue:`1385`)
-* Show the number of connected clients beside a collapsed server in the server window (:issue:`1385`)
+* Show the number of connected clients beside each server in the server window (:issue:`1385`)
 * Add RTS/CTS flow control to serial IO servers, set in the server window (:issue:`1386`)
 * Build the serial port code into ``KRPC.Core.dll``, in place of a separate ``KRPC.IO.Ports.dll`` (:issue:`1386`)
 
