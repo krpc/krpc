@@ -3,8 +3,9 @@
 
 Signs the jar, POM, sources jar and javadoc jar, uploads them to the Central
 Portal as a bundle, and publishes the bundle once the Central Portal has
-validated it. Requires gpg, MAVEN_CENTRAL_USERNAME, MAVEN_CENTRAL_PASSWORD,
-MAVEN_GPG_KEY and MAVEN_GPG_PASSPHRASE.
+validated it. The step returns once publishing starts, which the Central Portal
+can take half an hour to finish. Requires gpg, MAVEN_CENTRAL_USERNAME,
+MAVEN_CENTRAL_PASSWORD, MAVEN_GPG_KEY and MAVEN_GPG_PASSPHRASE.
 """
 
 import tempfile
@@ -88,13 +89,10 @@ def main():
         maven.drop(credentials, deployment)
         raise
 
-    try:
-        maven.wait(credentials, deployment, {"PUBLISHED"})
-    except maven.DeploymentTimeout as exception:
-        # Published already: the deployment goes out without the step
-        lib.warning(f"{exception}. Do not re-run this step.")
-        return
-    print("Published. It reaches https://repo1.maven.org/maven2/ within the hour.")
+    lib.banner("Done")
+    print("Publishing started. Do not re-run this step.")
+    print(f"Check it reaches PUBLISHED at {maven.DEPLOYMENTS_PAGE}")
+    print("It then reaches https://repo1.maven.org/maven2/ within the hour.")
 
 
 if __name__ == "__main__":

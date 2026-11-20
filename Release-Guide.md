@@ -114,7 +114,8 @@ kRPC library installed in `~/Arduino/libraries`.
 
 The Maven Central step uploads the signed bundle to the Central Portal, which validates it without
 publishing. The step publishes it only once validation passes and you confirm. A version on Maven
-Central cannot be removed or replaced. Declining drops the upload, so the step can be re-run.
+Central cannot be removed or replaced. Declining drops the upload, so the step can be re-run. The
+step returns once publishing starts, and prints the Central Portal page to check it finishes.
 
 The two vcpkg steps hash the archive attached to the published GitHub release and open a pull
 request to `microsoft/vcpkg` from your fork, so run them after step 10's release has been published,
