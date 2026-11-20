@@ -17,6 +17,7 @@ websocket-client==1.9.2
 basedpyright==1.40.2
 cogapp==3.6.1
 hatchling
+openapi-spec-validator==0.9.0
 pytest
 ruff==0.17.5
 

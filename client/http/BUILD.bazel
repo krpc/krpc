@@ -22,7 +22,10 @@ py_binary(
     testonly = True,
     srcs = ["test_http.py"],
     main = "test_http.py",
-    deps = [":krpc_http"],
+    deps = [
+        ":krpc_http",
+        "@krpc_pypi//openapi_spec_validator",
+    ],
 )
 
 # The HTTP server, against a TestServer
@@ -53,4 +56,5 @@ py_pyright_test(
     name = "pyright",
     size = "medium",
     srcs = glob(["*.py"]),
+    deps = ["@krpc_pypi//openapi_spec_validator"],
 )

@@ -58,8 +58,9 @@ are removed.
 Paths
 -----
 
-The :ref:`routing table <http-routingtable>` lists every path. ``GET /`` returns an empty response
-with status 200, as a health check.
+The :ref:`routing table <http-routingtable>` lists every path, and the :ref:`OpenAPI document
+<http-openapi>` describes each one for tools to read. ``GET /`` returns an empty response with
+status 200, as a health check.
 
 The :ref:`http-client-reference` gives the path of each property and method. The request method
 depends on the kind of member:
@@ -182,6 +183,31 @@ Arguments and results are encoded as JSON values, based on the type in the proce
      - An object for a dictionary with string keys, otherwise a list of ``[key, value]`` pairs.
    * - Nullable
      - The value, or ``null``.
+
+.. _http-openapi:
+
+OpenAPI
+-------
+
+``GET /openapi.json`` returns an `OpenAPI <https://www.openapis.org>`_ 3.0 document describing every
+path, with the types of its parameters and results:
+
+.. code-block:: sh
+
+   curl -o krpc.json http://127.0.0.1:50003/openapi.json
+
+The document covers the services of the server it comes from, including those of the mods
+installed in the game.
+
+Tools that read OpenAPI documents work with it:
+
+* Postman and Insomnia import it as a collection of requests.
+* `OpenAPI Generator <https://openapi-generator.tech>`_ generates a client from it, in many
+  languages:
+
+  .. code-block:: sh
+
+     openapi-generator generate -i krpc.json -g go -o krpc-go
 
 Web Pages
 ---------

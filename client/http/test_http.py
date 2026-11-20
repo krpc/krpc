@@ -7,6 +7,7 @@ import socket
 import unittest
 
 from krpc_http import Client, Error
+from openapi_spec_validator import validate
 
 PORT = int(os.environ.get("KRPC_TEST_HTTP_PORT", "50003"))
 SERVICE = "/test-service"
@@ -52,6 +53,77 @@ class TestHealthCheck(unittest.TestCase):
             self.assertEqual(200, connection.getresponse().status)
         finally:
             connection.close()
+
+
+class TestOpenApi(TestCase):
+    def document(self) -> dict:
+        status, headers, document = self.client.request("GET", "/openapi.json")
+        self.assertEqual(200, status)
+        self.assertEqual("application/json; charset=utf-8", headers["Content-Type"])
+        return document
+
+    def test_valid(self) -> None:
+        validate(self.document())
+
+    def test_streams_and_expressions_have_no_path(self) -> None:
+        operations = [
+            operation["operationId"]
+            for methods in self.document()["paths"].values()
+            for operation in methods.values()
+        ]
+        self.assertIn("KRPC_GetStatus", operations)
+        self.assertNotIn("KRPC_AddStream", operations)
+        self.assertNotIn("KRPC_GetServices", operations)
+        # Nothing runs a server side function over HTTP, so expressions have no paths
+        self.assertEqual(
+            [],
+            [x for x in operations if x.startswith(("KRPC_Expression_", "KRPC_Type_"))],
+        )
+
+    def test_class_property(self) -> None:
+        path = self.document()["paths"]["/test-service/test-class/{id}/int-property"]
+        get = path["get"]
+        self.assertEqual("TestService_TestClass_get_IntProperty", get["operationId"])
+        self.assertEqual(["TestService"], get["tags"])
+        self.assertEqual("id", get["parameters"][0]["name"])
+        self.assertEqual(
+            {"$ref": "#/components/schemas/TestService.TestClass"},
+            get["parameters"][0]["schema"],
+        )
+        self.assertEqual(
+            {"type": "integer", "format": "int32"},
+            get["responses"]["200"]["content"]["application/json"]["schema"][
+                "properties"
+            ]["value"],
+        )
+        body = path["put"]["requestBody"]["content"]["application/json"]["schema"]
+        self.assertEqual(["value"], body["required"])
+
+    def test_optional_parameters(self) -> None:
+        post = self.document()["paths"]["/test-service/optional-arguments"]["post"]
+        body = post["requestBody"]["content"]["application/json"]["schema"]
+        self.assertEqual(["x", "y", "z", "obj"], list(body["properties"]))
+        self.assertEqual(["x"], body["required"])
+        self.assertEqual(
+            {
+                "allOf": [{"$ref": "#/components/schemas/TestService.TestClass"}],
+                "nullable": True,
+            },
+            body["properties"]["obj"],
+        )
+
+    def test_types(self) -> None:
+        schemas = self.document()["components"]["schemas"]
+        self.assertEqual(
+            ["value_a", "value_b", "value_c"], schemas["TestService.TestEnum"]["enum"]
+        )
+        self.assertEqual("array", schemas["TestService.TestFlags"]["type"])
+        struct = schemas["TestService.TestStruct"]
+        self.assertEqual(
+            ["int_field", "string_field", "enum_field", "list_field"],
+            struct["required"],
+        )
+        self.assertNotIn("KRPC.Expression", schemas)
 
 
 class TestCalls(TestCase):

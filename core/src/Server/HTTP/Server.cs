@@ -60,8 +60,7 @@ namespace KRPC.Server.HTTP
         readonly List<Connection> updating = new List<Connection> ();
         Session session;
         bool sessionStarted;
-        Routes routes;
-        Codec codec;
+        Definitions definitions;
         ulong nextId = 1;
         readonly Queue<Pending> queued = new Queue<Pending> ();
         readonly Dictionary<ulong, Pending> running = new Dictionary<ulong, Pending> ();
@@ -83,6 +82,7 @@ namespace KRPC.Server.HTTP
         /// </summary>
         public void Start ()
         {
+            definitions = Definitions.Instance;
             tcpServer.Start ();
             session = new Session (this);
             sessionStarted = false;
@@ -260,24 +260,20 @@ namespace KRPC.Server.HTTP
         void Handle (Connection connection, Connection.Slot slot, HttpRequest request)
         {
             CheckHost (request);
-            if (routes == null) {
-                var services = global::KRPC.Service.KRPC.KRPC.GetServices ().ToProtobufMessage ();
-                routes = new Routes (services);
-                codec = new Codec (services);
-            }
             var path = request.Target;
             var query = path.IndexOf ('?');
             if (query >= 0)
                 path = path.Substring (0, query);
-            if (path == "/") {
+            if (path == "/" || path == "/openapi.json") {
                 if (request.Method != "GET")
-                    throw new RequestException (405, "/ takes GET") { Allow = "GET" };
+                    throw new RequestException (405, path + " takes GET") { Allow = "GET" };
                 // The root is a health check, with an empty body
-                connection.Complete (slot, BuildResponse (200, null, slot.Close, null));
+                var body = path == "/" ? null : definitions.OpenApi;
+                connection.Complete (slot, BuildResponse (200, body, slot.Close, null));
                 return;
             }
             ulong id;
-            var route = routes.Find (request.Method, path, out id);
+            var route = definitions.Routes.Find (request.Method, path, out id);
             var call = new Schema.KRPC.ProcedureCall { Service = route.Service, Procedure = route.Procedure.Name };
             if (route.Instance)
                 call.Arguments.Add (new Schema.KRPC.Argument { Position = 0, Value = Codec.EncodeObject (id) });
@@ -362,7 +358,7 @@ namespace KRPC.Server.HTTP
                         throw new RequestException (400, "Parameter " + entry.Key + " cannot be null");
                     argument.IsNull = true;
                 } else {
-                    argument.Value = codec.Encode (value, parameter.Type, "Parameter " + entry.Key);
+                    argument.Value = definitions.Codec.Encode (value, parameter.Type, "Parameter " + entry.Key);
                 }
                 call.Arguments.Add (argument);
             }
@@ -387,7 +383,7 @@ namespace KRPC.Server.HTTP
             if (returnType == null || returnType.Code == Schema.KRPC.Type.Types.TypeCode.None)
                 body = "{}";
             else
-                body = Json.Write (Routes.Entries ("value", result.IsNull ? null : codec.Decode (result.Value, returnType)));
+                body = Json.Write (Routes.Entries ("value", result.IsNull ? null : definitions.Codec.Decode (result.Value, returnType)));
         }
 
         static string ErrorBody (string service, string name, string description, string stackTrace)

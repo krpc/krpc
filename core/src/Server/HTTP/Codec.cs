@@ -48,8 +48,7 @@ namespace KRPC.Server.HTTP
         }
 
         /// <summary>
-        /// Whether a value of the type can be carried in JSON. An expression or a type of one
-        /// cannot, as nothing runs a server side function over HTTP.
+        /// Whether a value of the type can be carried in JSON.
         /// </summary>
         public static bool Supported (Type type)
         {
@@ -61,10 +60,18 @@ namespace KRPC.Server.HTTP
             case TypeCode.Services:
                 return false;
             case TypeCode.Class:
-                return type.Service != "KRPC" || (type.Name != "Expression" && type.Name != "Type");
+                return !Excluded (type.Service, type.Name);
             default:
                 return type.Types_.All (Supported);
             }
+        }
+
+        /// <summary>
+        /// Whether a class builds server side functions, which nothing runs over HTTP.
+        /// </summary>
+        public static bool Excluded (string service, string name)
+        {
+            return service == "KRPC" && (name == "Expression" || name == "Type");
         }
 
         /// <summary>

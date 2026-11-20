@@ -36,7 +36,8 @@ cannot write a kebab case key as ``obj.key``, and ``jq`` cannot write it as ``.k
 An object's identifier is a segment of the path, so the path of a class member cannot match the
 path of a static method.
 
-``GET /`` returns an empty response, as a health check.
+``GET /`` returns an empty response, as a health check. The paths are listed in the OpenAPI
+document at ``GET /openapi.json``, in the form tools read.
 
 Values
 ------

@@ -16,6 +16,7 @@ namespace KRPC.Server.HTTP
 
         public Routes (Schema.KRPC.Services services)
         {
+            All = new List<Route> ();
             foreach (var service in services.Services_) {
                 foreach (var procedure in service.Procedures) {
                     var route = Create (service.Name, procedure);
@@ -32,9 +33,15 @@ namespace KRPC.Server.HTTP
                         continue;
                     }
                     methods [route.Method] = route;
+                    All.Add (route);
                 }
             }
         }
+
+        /// <summary>
+        /// Every route, in the order of the services and their procedures.
+        /// </summary>
+        public IList<Route> All { get; private set; }
 
         /// <summary>
         /// A name in kebab case, the words of its snake case joined by '-'.

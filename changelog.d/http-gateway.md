@@ -1,6 +1,7 @@
 ## core
 
 - Add a JSON over HTTP server, for calling procedures with no client library (#1390)
+- Serve an OpenAPI document of the HTTP server's paths (#1390)
 
 ## server
 
