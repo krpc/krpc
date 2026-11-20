@@ -60,8 +60,13 @@ jobs:
           - name: build-benchmarks
             build: //tools/benchmarks/...
             cpp-cache: restore
+          # The doc examples' clang-tidy takes longer than the rest of
+          # //doc:test, so it has a job of its own. --build_tests_only stops
+          # the test_suite building the clang-tidy check as a dependency.
           - name: test-docs
-            test: //doc:test
+            test: --build_tests_only -- //doc:test -//doc:clangtidy
+          - name: test-docs-clangtidy
+            test: //doc:clangtidy
           - name: test-core
             test: //core:test
           - name: test-service
