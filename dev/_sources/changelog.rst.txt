@@ -8,238 +8,219 @@ Changelog
 =========
 
 
-v0.8.0 - unreleased
--------------------
+v0.8.0
+------
 
 
 Core
 ^^^^
 
-* :breaking:`Breaking` Refuse a service whose parameter defaults to a value its enumeration does not declare (:issue:`1192`)
-* Close a WebSockets connection whose frame is too large to buffer, which threw ``OverflowException`` (:issue:`1193`)
-* Update a stream when its value changes between 0.0 and -0.0, or a collection it returns changes in place (:issue:`1199`)
-* :breaking:`Breaking` Fire a ``KRPC.AddEvent`` event once each time its function becomes true (:issue:`1234`)
-* Connections
+* Protocol
 
   * :breaking:`Breaking` Carry each client on one connection, as protocol version 2, where every message is a ``Message``. Clients from earlier releases cannot connect (:issue:`1219`)
   * Add an id to each request, which the server copies onto its response (:issue:`1219`)
-  * End a connection with a ``Disconnect`` message giving the reason (:issue:`1219`)
-  * Refuse a connection the player denies with the status ``DENIED`` (:issue:`1219`)
+  * End a connection with a ``Disconnect`` message giving the reason, and refuse one the player denies with the status ``DENIED`` (:issue:`1219`)
   * Start a new session on a ``ConnectionRequest`` sent during a session, on every transport (:issue:`1219`)
-  * Accept the stream RPCs over serial IO, which returned an error, with no flow control for their updates (:issue:`1219`)
-  * End a connection whose message stalls partway, after 3 seconds over serial IO and 30 seconds otherwise (:issue:`1219`)
-  * Name a client in log lines by its address and the start of its identifier (:issue:`1219`)
-  * Log each request at the debug level as one line naming its calls and their errors, and stop logging each stream update (:issue:`1219`)
-  * Move the default local socket to ``krpc.sock`` in ``XDG_RUNTIME_DIR`` or ``LOCALAPPDATA``, or to ``/tmp/krpc-<user>.sock`` (:issue:`1219`)
-
-* Exceptions
-
+  * :breaking:`Breaking` Encode a stream or an event as the ``uint64`` id of its stream, and remove the ``Stream`` and ``Event`` messages (:issue:`1266`)
+  * Add ``internal`` to the ``Procedure`` message, set for the stream, event and server side function procedures of the ``KRPC`` service (:issue:`1269`)
+  * :breaking:`Breaking` Rename ``name`` in the ``Error`` message to ``exception``, and add ``service_id`` and ``exception_id`` (:issue:`1324`)
   * Report the .NET exception each kRPC exception stands for, as ``mapped_type`` in ``KRPC.Exception`` (:issue:`1172`)
-  * Allow a ``<see cref>`` in service documentation to link to an exception, including a .NET exception that a kRPC exception maps (:issue:`1185`)
+
+* Procedure and type ids
+
+  * :breaking:`Breaking` Derive each procedure id from a hash of its name, which changes every id (:issue:`1265`)
+  * Give each class, enumeration, structure and exception an id, a hash of its name (:issue:`1324`)
+  * Add ``id`` to the ``Service``, ``Procedure``, ``Class``, ``Enumeration``, ``Struct`` and ``Exception`` messages, and ``service_id`` and ``id`` to the ``Type`` message (:issue:`1265`, :issue:`1324`)
+
+* Calls and arguments
+
+  * :breaking:`Breaking` Reject an argument with bytes left over, an unknown field, a 32-bit number out of range, a tuple with the wrong number of items, an undeclared enum value, or a bool other than 0 or 1 (:issue:`1280`)
+  * :breaking:`Breaking` Fail a call with an argument position past the procedure's last parameter, or with two arguments at one position (:issue:`1290`)
+  * Fail only the call whose argument the server cannot decode, and run the other calls in the request (:issue:`1280`)
+
+* Connections and performance
+
+  * Wait for a client's next call by its measured time between calls, so a client that pauses briefly between calls gets several calls per frame (:issue:`1376`)
+  * Read and write each connection on threads of its own, so a client that stops reading cannot freeze the game (:issue:`1376`)
+  * Read up to 16 requests ahead of the one running, and end the connection of a client that leaves more than 16 MB of messages unread (:issue:`1376`)
+  * Read from a serial port as bytes arrive, and accept the stream RPCs over serial IO (:issue:`1219`, :issue:`1376`)
+  * End a connection whose message stalls partway, after 3 seconds over serial IO and 30 seconds otherwise (:issue:`1219`)
+  * Move the default local socket to ``krpc.sock`` in ``XDG_RUNTIME_DIR`` or ``LOCALAPPDATA``, or to ``/tmp/krpc-<user>.sock`` (:issue:`1219`)
+  * Start the remaining servers when one fails to start (:issue:`1330`)
+  * Load the services faster in games with many mods (:issue:`1353`)
+  * Fix a serial IO server stopping when it sends a response over a megabyte (:issue:`1386`)
+  * Fix a WebSockets connection with a frame too large to buffer throwing ``OverflowException`` (:issue:`1193`)
+  * Fix RPCs stopping on .NET after a client disconnects during a yielding call (:issue:`1189`)
+
+* HTTP and WebSockets
+
+  * Add a JSON over HTTP server, with an OpenAPI document, for calling procedures with no client library (:issue:`1391`)
+  * :breaking:`Breaking` Refuse WebSockets connections from web pages whose origin is not allowed, by default any page not served from this machine (:issue:`1392`)
+
+* Streams and events
+
+  * :breaking:`Breaking` Fire a ``KRPC.AddEvent`` event once each time its function becomes true (:issue:`1234`)
+  * Update a stream when its value changes between 0.0 and -0.0, or a collection it returns changes in place (:issue:`1199`)
+  * Run a stream of a call or server side function with no value on each update, for its effects (:issue:`1198`)
+  * Fix rate limited streams updating at as little as half their rate (:issue:`1310`)
+
+* Server side functions
+
+  * Add the ``KRPC.Expression.Match`` and ``KRPC.Expression.Switch`` statements (:issue:`1334`)
+  * Combine flags enumeration values with ``KRPC.Expression.And``, ``Or``, ``ExclusiveOr`` and ``Not`` (:issue:`1311`, :issue:`1313`)
+  * Add variants of the procedures that take ids in place of names, such as ``KRPC.Type.ClassTypeById`` and ``KRPC.Expression.GetFieldByIndex`` (:issue:`1336`)
+  * :breaking:`Breaking` ``KRPC.Expression.CallWithArguments`` takes a call template, and throws an exception for a call that carries arguments (:issue:`1352`)
+  * Fail when a function is built, in place of when it runs, for a null constant passed to a parameter that cannot be null (:issue:`1352`)
+
+* Server status and settings
+
+  * :breaking:`Breaking` Return ``KRPC.GetStatus`` as the struct ``KRPC.ServerStatus``, with the settings and statistics in nested structs, and remove the ``Status`` message (:issue:`1244`)
+  * :breaking:`Breaking` Replace the statistics per update with statistics per frame, adding ``FrameRate``, ``BudgetPerFrame`` and ``MedianTurnaround`` (:issue:`1376`)
+  * :breaking:`Breaking` Rename the stream counters to ``Streams``, ``StreamEvaluations`` and ``StreamEvaluationRate``, and add ``TickHoldTimeout``, ``DeferredCalls`` and ``StreamUpdatesSent`` (:issue:`1244`)
+  * :breaking:`Breaking` Replace the settings ``MaxTimePerUpdate``, ``BlockingRecv`` and ``RecvTimeout`` with ``TargetFrameRate``, ``MaxTimePerFrame`` and ``MaxCallWait`` (:issue:`1376`)
+  * :breaking:`Breaking` Remove the "One RPC per update" setting and ``KRPC.ServerSettings.OneRpcPerUpdate`` (:issue:`1349`)
+  * Turn on "Auto-start server" by default (:issue:`1349`)
+
+* Writing services
+
+  * Support flags enumerations, a ``KRPCEnum`` with ``[Flags]`` whose values a client can combine, marked by ``flags`` in the ``Enumeration`` message (:issue:`1311`)
+  * Add ``Id`` to the attributes, with ``GetterId`` and ``SetterId`` on ``KRPCProperty``, to resolve an id clash, and ``KRPCProcedureId`` for a procedure a class inherits (:issue:`1265`, :issue:`1324`)
+  * Add ``ModAPI``, ``ModBinder``, ``MemberBinder`` and the ``RequiresMod`` attribute, for a service that binds to another mod by name (:issue:`1341`, :issue:`1342`, :issue:`1382`)
+  * Add ``StdLib.ImageFormat``, the format of the images from the camera services (:issue:`1341`)
+  * Allow a ``<see cref>`` in service documentation to link to an exception, or a member of a service with a custom name (:issue:`1185`, :issue:`1188`)
+  * :breaking:`Breaking` Reject two services, two types of a service, or two members, values, fields or parameters that share a name, ignoring case (:issue:`1324`, :issue:`1325`, :issue:`1338`)
+  * :breaking:`Breaking` Reject a type named after its service, a method ``GetFoo`` or ``SetFoo`` beside a property ``Foo``, or a parameter or value name that is not ASCII letters and digits (:issue:`1325`, :issue:`1338`)
+  * :breaking:`Breaking` Reject a service declared by more than one class, or a parameter defaulting to a value its enumeration does not declare (:issue:`1192`, :issue:`1325`)
+  * :breaking:`Breaking` Reject a stream or an event outside a return value, or a stream returned by a procedure that is not internal (:issue:`1269`)
 
 * Logging
 
+  * Log each request at the debug level as one line naming its calls and their errors, and stop logging each stream update (:issue:`1219`)
   * Log the transport connection lines and object store sweeps at the debug level (:issue:`1235`)
   * Log the address and settings of a server when it starts (:issue:`1235`)
-  * Leave the time out of log lines, which the game log adds (:issue:`1235`)
+  * Name a client in log lines by its address and the start of its identifier, and leave out the time, which the game log adds (:issue:`1219`, :issue:`1235`)
 
-* Resolve documentation references to the procedures and properties of a service with a custom name (:issue:`1188`)
-* Fix RPCs stopping on .NET after a client disconnects during a yielding call (:issue:`1189`)
-* Run a stream of a call or server side function with no value on each update, for its effects (:issue:`1198`)
-* Server status
-
-  * :breaking:`Breaking` Return ``KRPC.GetStatus`` as the struct ``KRPC.ServerStatus``, with the settings and statistics in nested structs, and remove the ``Status`` message (:issue:`1244`)
-  * :breaking:`Breaking` Rename the stream counters to ``Streams``, ``StreamEvaluations`` and ``StreamEvaluationRate`` (:issue:`1244`)
-  * Add ``TickHoldTimeout``, ``DeferredCalls`` and ``StreamUpdatesSent`` to the server status (:issue:`1244`)
-  * :breaking:`Breaking` Replace ``MaxTimePerUpdate``, ``BlockingRecv`` and ``RecvTimeout`` in the settings with ``TargetFrameRate``, ``MaxTimePerFrame`` and ``MaxCallWait`` (:issue:`1376`)
-  * :breaking:`Breaking` Replace the statistics per update with statistics per frame, and add ``FrameRate``, ``BudgetPerFrame`` and ``MedianTurnaround`` (:issue:`1376`)
-
-* Procedure ids
-
-  * :breaking:`Breaking` Derive each procedure id from a hash of its name, which changes every id (:issue:`1265`)
-  * Add ``Id`` to ``KRPCProcedure`` and ``KRPCMethod``, and ``GetterId`` and ``SetterId`` to ``KRPCProperty``, to resolve an id clash (:issue:`1265`)
-  * Add ``KRPCProcedureId`` to set the id of a procedure a class inherits (:issue:`1265`)
-  * Add ``id`` to the ``Service`` and ``Procedure`` messages that ``KRPC.GetServices`` returns (:issue:`1265`)
-
-* :breaking:`Breaking` Encode a stream or an event as the ``uint64`` id of its stream (:issue:`1266`)
-* :breaking:`Breaking` Remove the ``Stream`` and ``Event`` messages (:issue:`1266`)
-* Add ``internal`` to the ``Procedure`` message (:issue:`1269`)
-* Mark the stream, event and server side function procedures of the ``KRPC`` service as internal (:issue:`1269`)
-* :breaking:`Breaking` Reject a service that holds a stream or an event anywhere but a return value, or a stream returned by a procedure that is not internal (:issue:`1269`)
-* :breaking:`Breaking` Reject an argument with bytes left over or an unknown field (:issue:`1280`)
-* :breaking:`Breaking` Reject a 32-bit number out of range, a tuple with the wrong number of items, an undeclared enum value, or a bool other than 0 or 1 (:issue:`1280`)
-* Fail only the call whose argument the server cannot decode, and run the other calls in the request (:issue:`1280`)
-* :breaking:`Breaking` Fail a call with an argument position past the procedure's last parameter, or with two arguments at one position, in place of ignoring an argument (:issue:`1290`)
-* Fix rate limited streams updating at as little as half their rate (:issue:`1310`)
-* Support flags enumerations, a ``KRPCEnum`` with ``[Flags]`` whose values a client can combine (:issue:`1311`)
-* Add ``flags`` to the ``Enumeration`` message, set for a flags enumeration (:issue:`1311`)
-* Combine flags enumeration values in server side functions with ``KRPC.Expression.And``, ``Or`` and ``ExclusiveOr`` (:issue:`1311`)
-* Take a flags enumeration value in ``KRPC.Expression.Not``, which gives the declared values it does not hold (:issue:`1313`)
-* Type ids
-
-  * Give each class, enumeration, structure and exception an id, a hash of its name (:issue:`1324`)
-  * Add ``Id`` to ``KRPCClass``, ``KRPCEnum``, ``KRPCStruct`` and ``KRPCException``, to resolve an id clash (:issue:`1324`)
-  * Add ``id`` to the ``Class``, ``Enumeration``, ``Struct`` and ``Exception`` messages that ``KRPC.GetServices`` returns, and ``service_id`` and ``id`` to the ``Type`` message (:issue:`1324`)
-  * Add ``service_id`` and ``exception_id`` to the ``Error`` message (:issue:`1324`)
-  * :breaking:`Breaking` Rename ``name`` in the ``Error`` message to ``exception`` (:issue:`1324`)
-  * :breaking:`Breaking` Reject two types of a service with the same name, ignoring case (:issue:`1324`)
-
-* :breaking:`Breaking` Reject a service declared by more than one class (:issue:`1325`)
-* :breaking:`Breaking` Reject two services with the same name, ignoring case (:issue:`1325`)
-* :breaking:`Breaking` Reject a class, enumeration, structure or exception with the name of its service, ignoring case (:issue:`1325`)
-* Start the remaining servers when one fails to start (:issue:`1330`)
-* Add ``KRPC.Expression.Match`` and ``KRPC.Expression.Switch`` statements to server side functions (:issue:`1334`)
-* Add variants of the server side function procedures that take ids in place of names, such as ``KRPC.Type.ClassTypeById`` and ``KRPC.Expression.GetFieldByIndex`` (:issue:`1336`)
-* :breaking:`Breaking` Reject members of a service or class, values of an enumeration, fields of a structure, or parameters of a procedure that share a name, ignoring case (:issue:`1338`)
-* :breaking:`Breaking` Reject a method ``GetFoo`` or ``SetFoo`` beside a property ``Foo`` (:issue:`1338`)
-* :breaking:`Breaking` Reject parameter and enumeration value names that are not ASCII letters and digits, starting with a letter (:issue:`1338`)
-* Add ``StdLib.ImageFormat``, the format of the images from the DockingCamera, ScanSat and RasterPropMonitor services (:issue:`1341`)
-* Add ``ModAPI``, ``ModBinder`` and ``MemberBinder``, for a service that binds to another mod by name, and fails only the calls that use a missing member (:issue:`1341`)
-* Add the ``RequiresMod`` attribute, which fails the calls of a member whose mod is missing, failed to load or is not ready (:issue:`1342`)
-* Turn on "Auto-start server" by default (:issue:`1349`)
-* :breaking:`Breaking` Remove the "One RPC per update" setting and ``KRPC.ServerSettings.OneRpcPerUpdate`` (:issue:`1349`)
-* :breaking:`Breaking` ``KRPC.Expression.CallWithArguments`` takes a call template, and throws an exception for a call that carries arguments (:issue:`1352`)
-* Fail when a server side function is built, in place of when it runs, for a null constant passed to a parameter that cannot be null (:issue:`1352`)
-* Load the services faster in games with many mods (:issue:`1353`)
-* Wait for a client's next call by its measured time between calls, so a client that pauses for a few milliseconds between calls gets several calls per update (:issue:`1376`)
-* Read and write each client's connection on threads of its own, so a client that stops reading cannot freeze the game (:issue:`1376`)
-* End the connection of a client that leaves more than 16 MB of messages unread (:issue:`1376`)
-* Read up to 16 requests ahead of the one running, and hold a client that sends faster than the server runs its calls (:issue:`1376`)
-* Read from a serial port as bytes arrive, so a client over serial gets several calls per update (:issue:`1376`)
-* Add ``MemberBinder.ReadOnlyField``, for a mod setting that the mod declares read-only (:issue:`1382`)
-* Fix a serial IO server stopping when it sends a response over a megabyte, such as ``KRPC.GetServices`` with every service installed (:issue:`1386`)
-* Add a JSON over HTTP server, for calling procedures with no client library (:issue:`1391`)
-* Serve an OpenAPI document of the HTTP server's paths (:issue:`1391`)
-* :breaking:`Breaking` Refuse WebSockets connections from web pages whose origin is not allowed, by default any page not served from this machine (:issue:`1392`)
 
 
 Server
 ^^^^^^
 
-* :breaking:`Breaking` Listen on one port or socket path per server, removing the stream port and stream path settings (:issue:`1219`)
-* :breaking:`Breaking` Reset each existing server's settings to their defaults, so a TCP/IP and a WebSockets server both use port 50000 until one is changed (:issue:`1219`)
-* :breaking:`Breaking` Turn on "Auto-accept new clients" for new installs. An existing settings file keeps its value (:issue:`1219`)
-* Name the TCP/IP protocol "Protobuf over TCP/IP" in the server window (:issue:`1225`)
-* Log a connection the player is asked to allow once, naming the client, and an auto-accepted connection at the debug level (:issue:`1235`)
-* Log auto-starting the servers only when one is stopped (:issue:`1235`)
-* Fix the game scene in log lines reading ``Inherit, Flight`` (:issue:`1235`)
-* Fix the server window keeping its height after clients disconnect (:issue:`1186`)
-* Show deferred calls and stream updates in the info window, and name the stream counters as evaluations (:issue:`1244`)
-* Load a mod's API when some of its methods are missing, and fail only the calls that use them (:issue:`1341`)
-* Disable only the integration of a mod that fails to load, and give the reason in the errors of its RPCs (:issue:`1341`)
-* Load each supported mod whatever its version (:issue:`1341`)
-* Fail the class members of a mod service with the reason when its mod is missing or failed to load (:issue:`1342`)
-* Keep running when a service has errors, and leave out only the members with them and the members that use them (:issue:`1345`)
-* List the members left out, and the mods whose support failed to load, in a window at the main menu, which the server window can open again (:issue:`1345`)
-* List the RPCs that use a missing member, such as after a game update (:issue:`1345`)
-* Start a new install with one server, with the default settings (:issue:`1349`)
-* Keep the server settings on an upgrade, as the release no longer includes ``settings.cfg`` (:issue:`1349`)
-* Keep each readable setting from a damaged ``settings.cfg``, and back up a file with no readable settings as ``settings.cfg.bak`` (:issue:`1349`)
-* Widen the server window so the advanced settings fit (:issue:`1349`)
-* Line up the labels in the server window's advanced settings with their text fields (:issue:`1349`)
-* Give the kRPC windows an opaque background (:issue:`1349`)
-* Add a WebSockets server on port 50001 to a new install, beside the TCP/IP server on port 50000, and name each for its protocol (:issue:`1371`)
-* Default the port of a WebSockets server to 50001 in the server window (:issue:`1371`)
-* :breaking:`Breaking` Replace "Max. time per update" with "Max. time per frame", 10 ms by default, and "Blocking receives" and "Receive timeout" with "Max. call wait", 5 ms by default (:issue:`1376`)
-* Hold the frame rate at the new "Target frame rate" setting with adaptive rate control, 60 fps by default (:issue:`1376`)
-* Add presets to the advanced settings: "Game first", "Balanced" and "Calls first" (:issue:`1376`)
-* Reorganize the server info window around the frame, and add a "Limited by" row naming what holds down the call rate (:issue:`1376`)
-* Fix "Clear statistics" leaving the data read and written (:issue:`1376`)
-* Hide the server windows while the game hides its UI, such as on a loading screen (:issue:`1376`)
-* Fix errors logged on every scene change, and on quitting, when the server fails its startup checks (:issue:`1376`)
-* Name a server added in the server window "Server", "Server 2" and so on (:issue:`1385`)
-* Remember which servers are expanded in the server window (:issue:`1385`)
-* Show the number of connected clients beside each server in the server window (:issue:`1385`)
-* Add RTS/CTS flow control to serial IO servers, set in the server window (:issue:`1386`)
-* Build the serial port code into ``KRPC.Core.dll``, in place of a separate ``KRPC.IO.Ports.dll`` (:issue:`1386`)
-* Add \*JSON over HTTP\* to the protocols in the server window, on port 50003 by default, with the origins whose web pages may call it (:issue:`1391`)
-* Add the origins whose web pages may connect to WebSockets servers in the server window (:issue:`1392`)
+* Servers and settings
+
+  * :breaking:`Breaking` Listen on one port or socket path per server, removing the stream port and stream path settings (:issue:`1219`)
+  * :breaking:`Breaking` Reset each existing server's settings to their defaults, so a TCP/IP and a WebSockets server both use port 50000 until one is changed (:issue:`1219`)
+  * :breaking:`Breaking` Turn on "Auto-accept new clients" for new installs. An existing settings file keeps its value (:issue:`1219`)
+  * Start a new install with a TCP/IP server on port 50000 and a WebSockets server on port 50001, each named for its protocol (:issue:`1349`, :issue:`1371`)
+  * Add \*JSON over HTTP\* to the protocols, on port 50003 by default, and the origins whose web pages may connect to WebSockets and HTTP servers (:issue:`1391`, :issue:`1392`)
+  * Add RTS/CTS flow control to serial IO servers (:issue:`1386`)
+  * Keep the server settings on an upgrade, as the release no longer includes ``settings.cfg`` (:issue:`1349`)
+  * Keep each readable setting from a damaged ``settings.cfg``, and back up a file with no readable settings as ``settings.cfg.bak`` (:issue:`1349`)
+  * Build the serial port code into ``KRPC.Core.dll``, in place of a separate ``KRPC.IO.Ports.dll`` (:issue:`1386`)
+
+* Performance
+
+  * :breaking:`Breaking` Replace "Max. time per update" with "Max. time per frame", 10 ms by default, and "Blocking receives" and "Receive timeout" with "Max. call wait", 5 ms by default (:issue:`1376`)
+  * Hold the frame rate at the new "Target frame rate" setting with adaptive rate control, 60 fps by default (:issue:`1376`)
+  * Add presets to the advanced settings: "Game first", "Balanced" and "Calls first" (:issue:`1376`)
+
+* Server windows
+
+  * Show the number of connected clients beside each server, and remember which servers are expanded (:issue:`1385`)
+  * Name a server added in the window "Server", "Server 2" and so on, and default the port of a WebSockets server to 50001 (:issue:`1371`, :issue:`1385`)
+  * Name the TCP/IP protocol "Protobuf over TCP/IP" (:issue:`1225`)
+  * Reorganize the info window around the frame, with deferred calls, stream updates and a "Limited by" row naming what holds down the call rate (:issue:`1244`, :issue:`1376`)
+  * Widen the server window so the advanced settings fit, and line up their labels (:issue:`1349`)
+  * Give the kRPC windows an opaque background, and hide them while the game hides its UI (:issue:`1349`, :issue:`1376`)
+  * Fix the server window keeping its height after clients disconnect (:issue:`1186`)
+  * Fix "Clear statistics" leaving the data read and written (:issue:`1376`)
+
+* Mods and service errors
+
+  * Keep running when a service has errors, and leave out only the members with them and the members that use them (:issue:`1345`)
+  * Load each supported mod whatever its version, and fail only the calls that use a missing member (:issue:`1341`)
+  * Disable only the integration of a mod that fails to load, and give the reason in the errors of its RPCs (:issue:`1341`, :issue:`1342`)
+  * List the members left out, the RPCs that use them, and the mods whose support failed to load, in a window at the main menu (:issue:`1345`)
+
+* Logging
+
+  * Log a connection the player is asked to allow once, naming the client, and an auto-accepted connection at the debug level (:issue:`1235`)
+  * Log auto-starting the servers only when one is stopped (:issue:`1235`)
+  * Fix the game scene in log lines reading ``Inherit, Flight`` (:issue:`1235`)
+  * Fix errors logged on every scene change, and on quitting, when the server fails its startup checks (:issue:`1376`)
+
 
 
 SpaceCenter service
 ^^^^^^^^^^^^^^^^^^^
 
-* Log an auto-pilot failure once, naming the vessel and client, in place of on every physics tick (:issue:`1235`)
-* Typeset units and formulas in the API documentation, and write them as Unicode text in client documentation, e.g. ``m/s²`` (:issue:`1169`)
-* Allow the rails warp rates the game allows the player, which ignore the altitude limits when the periapsis is clear of the atmosphere and terrain (:issue:`1167`)
-* Fix the ``MomentOfInertia`` and ``InertiaTensor`` of ``Vessel`` and ``EditorVessel`` measuring each part from its origin instead of its center of mass (:issue:`1191`)
-* Fix ``ControlSurface.AvailableTorque`` scaling the torque about each axis by the surface's distance along that axis, and overstating the roll torque of a surface close to the center line (:issue:`1191`)
-* Add ``ControlSurface.DeflectionAngle``, ``ControlRange`` and ``ActuatorSpeed`` (:issue:`1191`)
-* Fix the auto-pilot oscillating or departing on aircraft (:issue:`1191`, :issue:`526`)
-* Add ``AutoPilot.LimitAngularVelocity``, on by default, which limits the angular velocity to what the control surfaces hold against the aerodynamics (:issue:`1191`, :issue:`526`)
-* Shrink the auto-pilot's attenuation angles with the share of the torque that comes from control surfaces (:issue:`1191`, :issue:`526`)
-* Add an aerodynamics section to the auto-pilot info window, and make its sections collapsible (:issue:`1191`)
-* Fix ``RaycastDistance`` and ``RaycastPart`` hitting trigger volumes, such as the robotic arm scanner's (:issue:`1233`)
-* Fix the ``Vessel.Flight`` link to the ``Flight`` class (:issue:`1252`)
+* Auto-pilot
+
+  * Fix the auto-pilot oscillating or departing on aircraft (:issue:`1191`, :issue:`526`)
+  * Add ``AutoPilot.LimitAngularVelocity``, on by default, which limits the angular velocity to what the control surfaces hold against the aerodynamics (:issue:`1191`, :issue:`526`)
+  * Shrink the attenuation angles with the share of the torque that comes from control surfaces (:issue:`1191`, :issue:`526`)
+  * Turn with a moving target, such as a gravity turn's pitch, and measure the angular velocity in ``AutoPilot.Wait`` relative to the target (:issue:`1373`)
+  * Fix limit-cycling on a vessel steered by slow engine gimbals, such as the KS-25 (:issue:`1348`, :issue:`1347`)
+  * Fix the auto-pilot keeping its flexible-craft mitigations after staging or docking (:issue:`1373`)
+  * Fix the auto-pilot turning away from its target when ``AutoPilot.ReferenceFrame`` changes while ``AutoPilot.TargetSmoothingTime`` is set (:issue:`1373`)
+  * Add ``AvailableSASModes`` to ``AutoPilot`` and ``Control``, the SAS modes that can be set (:issue:`1383`)
+  * Add an aerodynamics section to the info window, and make its sections collapsible (:issue:`1191`)
+  * Log a failure once, naming the vessel and client, in place of on every physics tick (:issue:`1235`)
+
 * Parts
 
-  * :breaking:`Breaking` Rename ``ConfigNode.GetValues`` and ``ConfigNode.GetNodes`` to ``ConfigNode.FindValues`` and ``ConfigNode.FindNodes`` (:issue:`1261`)
-  * Add ``Part.JointBreakForce``, ``Part.JointBreakTorque``, ``Part.JointSpring``, ``Part.JointDamper``, ``Part.JointAngularSpring`` and ``Part.JointAngularDamper``, the strength and stiffness of the joint to the parent part (:issue:`1362`)
-  * Add ``Part.BreakingForce`` and ``Part.BreakingTorque`` (:issue:`1362`)
-
-* :breaking:`Breaking` Make ``MapFilterType`` a flags enumeration, and change ``MapFilterType.All`` from -1 to 32767 (:issue:`1311`)
-* Fix setting a ``PartField`` skipping the callbacks the right-click menu runs, which left changes such as a B9PartSwitch subtype switch without effect (:issue:`1314`)
-* Support the curved solar panels from Near Future Solar in ``SolarPanel`` (:issue:`1314`)
-* Include the cost of part modules, such as fairing panels and TweakScale's scaling, in ``Part.Cost`` (:issue:`1314`)
-* Fix setting ``Camera.Mode`` to IVA straight after a launch doing nothing, and setting it again in the IVA leaving it (:issue:`1318`)
-* Support RealAntennas
-
-  * Add its link budget to ``Antenna``: gain, transmit power, tech level, band, data rate, beamwidth, power draw and enabled (:issue:`1320`)
-  * Add antenna targeting to ``Antenna`` (:issue:`1320`)
-  * Add data rates and antennas to ``CommLink`` (:issue:`1320`)
-  * List each antenna of a part with several in ``Parts.Antennas`` (:issue:`1320`)
-  * Add ``SpaceCenter.RealAntennasAvailable`` (:issue:`1320`)
-
-* Add ``<Mod>Available`` for each supported mod that lacked one, such as ``RealChuteAvailable`` (:issue:`1340`)
-* Keep the FAR, RealFuels, RealAntennas and Action Groups Extended RPCs working when a mod update removes members, and fail only the RPCs that use them (:issue:`1341`)
-* Fail the FAR and RealFuels members, and ``Part.Tag``, with the reason when the mod is missing or failed to load (:issue:`1342`)
-* Fix ``Vessel.Name``, ``EditorVessel.Name`` and ``EditorVessel.Description`` returning a localization tag for stock craft (:issue:`1343`)
-* Fix the auto-pilot limit-cycling on a vessel steered by slow engine gimbals, such as the KS-25 (:issue:`1348`, :issue:`1347`)
-* Fix velocities, orbits and orbital reference frames throwing an exception in a Kopernicus system whose star is not named ``Sun`` (:issue:`1359`)
-* Fix ``CelestialBody.SurfaceGravity`` differing from the gravity the game applies by about 0.03% (:issue:`1359`)
-* Test with Kopernicus, Real Solar System, Realism Overhaul and Procedural Parts, and list their tested versions in the documentation (:issue:`1359`)
-* Engines and RCS
-
-  * Add ``Engine.GimbalResponseSpeed`` and ``Engine.GimbalResponseSpeedEnabled``, the gimbal's response lag (:issue:`1360`)
-  * Add ``Engine.GimbalPitchEnabled``, ``Engine.GimbalYawEnabled`` and ``Engine.GimbalRollEnabled`` (:issue:`1360`)
-  * Fix ``Engine.AvailableTorque`` counting the pitch and yaw of a gimbal with those axes disabled (:issue:`1360`)
-  * Apply the axis toggles of a gimbal or RCS block to ``Engine.GimbalActuation``, ``RCS.RotationOverride`` and ``RCS.TranslationOverride`` (:issue:`1360`)
-
-* Wheels and landing legs
-
-  * Add ``Leg.SuspensionSpring``, ``Leg.SuspensionDamper``, ``Leg.SuspensionTravel`` and ``Leg.Load``, the live state of the suspension, and the same on ``Wheel`` (:issue:`1361`)
-  * Add ``Leg.ImpactTolerance`` and ``Leg.ExplodeMultiplier``, the load that breaks or destroys the leg, and the same on ``Wheel`` (:issue:`1361`)
-  * Add ``Leg.ContactPosition`` and ``Wheel.ContactPosition``, the bottom of the foot or wheel (:issue:`1361`)
+  * :breaking:`Breaking` Rename ``ConfigNode.GetValues`` and ``GetNodes`` to ``FindValues`` and ``FindNodes`` (:issue:`1261`)
+  * Add the strength and stiffness of the joint to the parent part, such as ``Part.JointBreakForce`` and ``Part.JointSpring``, and ``Part.BreakingForce`` and ``BreakingTorque`` (:issue:`1362`)
+  * Add ``ControlSurface.DeflectionAngle``, ``ControlRange`` and ``ActuatorSpeed`` (:issue:`1191`)
+  * Add ``Engine.GimbalResponseSpeed`` and the gimbal axis toggles, such as ``Engine.GimbalPitchEnabled`` (:issue:`1360`)
+  * Apply the axis toggles of a gimbal or RCS block to ``Engine.AvailableTorque``, ``Engine.GimbalActuation`` and the RCS overrides (:issue:`1360`)
+  * Add the live suspension state to ``Leg`` and ``Wheel``, such as ``SuspensionSpring`` and ``Load``, and the tolerances that break them, and ``ContactPosition`` (:issue:`1361`)
   * Add ``Leg.SuspensionSpringStrength`` and ``Leg.SuspensionDamperStrength`` (:issue:`1361`)
+  * Include the cost of part modules, such as fairing panels and TweakScale's scaling, in ``Part.Cost`` (:issue:`1314`)
+  * Fix setting a ``PartField`` skipping the callbacks the right-click menu runs, such as for a B9PartSwitch subtype switch (:issue:`1314`)
+  * Fix ``ControlSurface.AvailableTorque`` scaling the torque by the surface's distance along each axis, and overstating roll torque near the center line (:issue:`1191`)
 
-* Add ``Vessel.LaunchSite``, the launch site the vessel was launched from (:issue:`1363`)
-* Add ``LaunchSite.Latitude``, ``LaunchSite.Longitude`` and ``LaunchSite.Altitude``, the point vessels launch from (:issue:`1363`)
-* Fix the auto-pilot keeping its flexible-craft mitigations after separating a stage or docking (:issue:`1373`)
-* Make the auto-pilot turn with a moving target, such as a gravity turn's pitch (:issue:`1373`)
-* Make ``AutoPilot.Wait`` measure the angular velocity relative to the target (:issue:`1373`)
-* Fix the auto-pilot turning away from its target when ``AutoPilot.ReferenceFrame`` changes while ``AutoPilot.TargetSmoothingTime`` is set (:issue:`1373`)
-* Fix ``Load``, ``Quickload``, ``RevertToLaunch`` and the launch RPCs sometimes leaving the game on the loading screen (:issue:`1374`)
-* Add the scenario modules of newly installed mods to a save loaded with ``Load`` or ``Quickload`` (:issue:`1374`)
-* Crew
+* Vessels and crew
 
-  * Add ``SpaceCenter.Kerbals``, every Kerbal in the roster (:issue:`1383`)
-  * Add ``CrewMember.Inactive``, ``InactiveUntil`` and ``ExperienceLevel`` (:issue:`1383`)
-  * Fix ``CrewMember.OnMission`` being true for a Kerbal who is not assigned to a vessel (:issue:`1383`)
-  * Fix ``SpaceCenter.GetKerbal`` not finding applicants and tourists (:issue:`1383`)
-  * Fix setting ``CrewMember.Experience`` leaving the experience level unchanged (:issue:`1383`)
+  * Add ``SpaceCenter.Kerbals``, every Kerbal in the roster, and ``CrewMember.Inactive``, ``InactiveUntil`` and ``ExperienceLevel`` (:issue:`1383`)
+  * Fix ``CrewMember.OnMission``, ``CrewMember.Experience`` and ``SpaceCenter.GetKerbal`` for unassigned Kerbals, applicants and tourists (:issue:`1383`)
+  * Add ``Vessel.LaunchSite``, and ``LaunchSite.Latitude``, ``Longitude`` and ``Altitude`` (:issue:`1363`)
+  * Fix the ``MomentOfInertia`` and ``InertiaTensor`` of ``Vessel`` and ``EditorVessel`` measuring each part from its origin instead of its center of mass (:issue:`1191`)
+  * Fix ``Vessel.Name``, ``EditorVessel.Name`` and ``EditorVessel.Description`` returning a localization tag for stock craft (:issue:`1343`)
+  * Fix ``RaycastDistance`` and ``RaycastPart`` hitting trigger volumes, such as the robotic arm scanner's (:issue:`1233`)
 
-* Add ``AvailableSASModes`` to ``AutoPilot`` and ``Control``, the SAS modes that can be set (:issue:`1383`)
+* Game
+
+  * Allow the rails warp rates the game allows the player, which ignore the altitude limits when the periapsis is clear of the atmosphere and terrain (:issue:`1167`)
+  * Fix ``Load``, ``Quickload``, ``RevertToLaunch`` and the launch RPCs sometimes leaving the game on the loading screen (:issue:`1374`)
+  * Add the scenario modules of newly installed mods to a save loaded with ``Load`` or ``Quickload`` (:issue:`1374`)
+  * Fix setting ``Camera.Mode`` to IVA straight after a launch doing nothing, and setting it again in the IVA leaving it (:issue:`1318`)
+  * :breaking:`Breaking` Make ``MapFilterType`` a flags enumeration, and change ``MapFilterType.All`` from -1 to 32767 (:issue:`1311`)
+  * Fix ``CelestialBody.SurfaceGravity`` differing from the gravity the game applies by about 0.03% (:issue:`1359`)
+
+* Mods
+
+  * Support RealAntennas: link budgets, targeting and data rates on ``Antenna`` and ``CommLink``, and each antenna of a part with several (:issue:`1320`)
+  * Support the curved solar panels from Near Future Solar in ``SolarPanel`` (:issue:`1314`)
+  * Add ``<Mod>Available`` for each supported mod that lacked one, such as ``RealChuteAvailable`` (:issue:`1320`, :issue:`1340`)
+  * Keep the FAR, RealFuels, RealAntennas and Action Groups Extended RPCs working when a mod update removes members, and fail only the RPCs that use them (:issue:`1341`)
+  * Fail the FAR and RealFuels members, and ``Part.Tag``, with the reason when the mod is missing or failed to load (:issue:`1342`)
+  * Fix velocities, orbits and orbital reference frames throwing an exception in a Kopernicus system whose star is not named ``Sun`` (:issue:`1359`)
+  * Test with Kopernicus, Real Solar System, Realism Overhaul and Procedural Parts, and list their tested versions in the documentation (:issue:`1359`)
+
+* Documentation
+
+  * Typeset units and formulas in the API documentation, and write them as Unicode text in client documentation, e.g. ``m/s²`` (:issue:`1169`)
+  * Fix the ``Vessel.Flight`` link to the ``Flight`` class (:issue:`1252`)
+
 
 
 DockingCamera service
 ^^^^^^^^^^^^^^^^^^^^^
 
-* Stop logging each read of ``Camera.Image`` (:issue:`1235`)
-* :breaking:`Breaking` Support the public Docking Camera (KURS) 1.3.9 release, in place of an unreleased fork (:issue:`1232`)
-* :breaking:`Breaking` ``Camera.Image`` throws an exception if the camera is off or not started, in place of returning an empty array (:issue:`1232`)
-* Support the cameras Docking Camera (KURS) adds to docking ports (:issue:`1232`)
-* :breaking:`Breaking` ``Camera.Image`` is a method taking a ``StdLib.ImageFormat`` and a JPEG quality (:issue:`1317`)
+* :breaking:`Breaking` Support the public Docking Camera (KURS) 1.3.9 release, in place of an unreleased fork, including the cameras it adds to docking ports (:issue:`1232`)
+* :breaking:`Breaking` Make ``Camera.Image`` a method taking a ``StdLib.ImageFormat`` and a JPEG quality, which throws an exception if the camera is off or not started (:issue:`1232`, :issue:`1317`)
 * Keep working when a Docking Camera update removes members, and fail only the RPCs that use them (:issue:`1341`)
+* Stop logging each read of ``Camera.Image`` (:issue:`1235`)
 
 
 InfernalRobotics service
@@ -274,61 +255,60 @@ MechJeb service
 ^^^^^^^^^^^^^^^
 
 * Move the MechJeb service into kRPC from Genhis' KRPC.MechJeb 0.7.1, and update it for MechJeb 2.15.4.0 (:issue:`1326`)
-* :breaking:`Breaking` Remove ``AscentGT`` and ``AscentAutopilot.AscentPathGT``, as MechJeb 2.15 has no gravity turn ascent path (:issue:`1326`)
-* :breaking:`Breaking` Remove ``NodeExecutor.Tolerance``, ``ThrustController.SmoothThrottle`` and ``ThrustController.ThrottleSmoothingTime``, which MechJeb 2.15 removed (:issue:`1326`)
-* :breaking:`Breaking` Remove ``OperationTransfer.PeriodOffset``, which MechJeb 2.15 replaced with a lag time (:issue:`1326`)
-* :breaking:`Breaking` Throw an exception on setting ``SmartRCSMode.ZeroVelocity`` or ``TranslatronMode.KeepRelative``, as MechJeb 2.15 has no such mode (:issue:`1326`)
-* :breaking:`Breaking` Remove ``MechJeb.APIReady``, in place of ``MechJeb.Available`` and ``MechJeb.Ready`` (:issue:`1326`)
-* :breaking:`Breaking` Remove ``Operation.MakeNode``, deprecated in 0.7.1 (:issue:`1382`)
-* Make ``OperationLan.NewLAN`` and ``OperationLongitude.NewSurfaceLongitude`` set the same longitude (:issue:`1326`)
-* Release the autopilots of both ascent paths when the ascent autopilot is disabled (:issue:`1326`)
 * Log a MechJeb member the service cannot bind, and fail only the calls that use it, in place of an error pop-up (:issue:`1326`)
-* Throw an exception from the ``TargetController`` members that need a target, when there is none (:issue:`1382`)
-* Throw an exception from ``LandingGuidance.LandAtTarget`` when there is no landing target, and from both landing methods when the vessel is landed (:issue:`1382`)
-* Throw an exception from ``ManeuverPlanner.ExecuteNextNode`` and ``ExecuteAllNodes`` when the vessel has no maneuver node (:issue:`1382`)
-* ``Operation.MakeNodes``
+* Layout
 
-  * Plan from the orbit after the vessel's last maneuver node (:issue:`1382`)
-  * Set ``ErrorMessage`` to the error it throws, and clear the message of an earlier call (:issue:`1382`)
-  * Remove the nodes it placed when it fails to place one (:issue:`1382`)
+  * :breaking:`Breaking` Lay out the service like MechJeb's windows. The docs list each moved member (:issue:`1382`)
+  * :breaking:`Breaking` Rename ``AscentAutopilot`` to ``AscentGuidance``, with its settings in ``AscentGuidance.Settings``, ``LandingAutopilot`` to ``LandingGuidance``, and ``AirplaneAutopilot`` to ``AircraftAutopilot`` (:issue:`1382`)
+  * :breaking:`Breaking` Replace ``AscentPathClassic`` and ``AscentPathPVG`` with ``AscentGuidance.ClassicPath`` and ``PVGSettings``, and ``AscentPathIndex`` with ``AscentType`` (:issue:`1382`)
+  * :breaking:`Breaking` Move ``ThrustController``, ``StagingController`` and the deployable controllers into ``Utilities``, as ``Thrust``, ``Staging``, ``SolarPanels`` and ``Antennas`` (:issue:`1382`)
+  * :breaking:`Breaking` Move the members of ``NodeExecutor`` to ``ManeuverPlanner``, of ``RCSController`` to ``SmartRCS``, and the landing target members of ``TargetController`` to ``LandingGuidance`` (:issue:`1382`)
+  * :breaking:`Breaking` Spell out abbreviations in names, such as ``LimitAoA`` to ``LimitAngleOfAttack``, ``CourseCorrectFinalPeA`` to ``FinalPeriapsisAltitude`` and ``RcsAdjustment`` to ``RCSAdjustment`` (:issue:`1382`)
+  * :breaking:`Breaking` Make ``Autostaging.AutostagingOnce`` read-only, and add ``AutostageOnce`` to set it (:issue:`1382`)
 
-* Apply ``AscentSettings.LimitAngleOfAttack`` on the classic ascent path without MechJeb's ascent window (:issue:`1382`)
-* Apply ``SmartASS.ForcePitch``, ``ForceYaw`` and ``ForceRoll`` in the surface modes without the Smart A.S.S. window (:issue:`1382`)
-* :breaking:`Breaking` Rename ``AscentAutopilot.LimitAoA``, ``MaxAoA`` and ``AoALimitFadeoutPressure`` to ``LimitAngleOfAttack``, ``MaxAngleOfAttack`` and ``AngleOfAttackLimitFadeoutPressure`` (:issue:`1382`)
-* :breaking:`Breaking` Rename ``OperationCourseCorrection.CourseCorrectFinalPeA`` to ``FinalPeriapsisAltitude`` (:issue:`1382`)
-* :breaking:`Breaking` Lay out the service like MechJeb's windows. The docs list each moved member (:issue:`1382`)
-* :breaking:`Breaking` Rename ``AscentAutopilot`` to ``AscentGuidance``, and move its settings to ``AscentGuidance.Settings`` (:issue:`1382`)
-* :breaking:`Breaking` Replace ``AscentPathClassic`` and ``AscentPathPVG`` with ``AscentGuidance.ClassicPath`` and ``PVGSettings``, and ``AscentPathIndex`` with ``AscentType`` (:issue:`1382`)
-* :breaking:`Breaking` Move ``ThrustController``, ``StagingController`` and the deployable controllers into ``Utilities``, as ``Thrust``, ``Staging``, ``SolarPanels`` and ``Antennas`` (:issue:`1382`)
-* :breaking:`Breaking` Move the members of ``NodeExecutor`` to ``ManeuverPlanner``, and of ``RCSController`` to ``SmartRCS`` (:issue:`1382`)
-* :breaking:`Breaking` Rename ``LandingAutopilot`` to ``LandingGuidance``, with the landing target members of ``TargetController`` (:issue:`1382`)
-* :breaking:`Breaking` Rename ``AirplaneAutopilot`` to ``AircraftAutopilot`` (:issue:`1382`)
-* :breaking:`Breaking` Rename ``LandingAutopilot.RcsAdjustment`` to ``LandingGuidance.RCSAdjustment`` (:issue:`1382`)
-* :breaking:`Breaking` Make ``Autostaging.AutostagingOnce`` read-only, and add ``AutostageOnce`` to set it (:issue:`1382`)
-* Throw an exception from ``LandingGuidance.GetTargetPosition`` when there is no landing target (:issue:`1382`)
-* Add ``Autowarp`` to ``AscentSettings``, ``LandingGuidance`` and ``RendezvousAutopilot`` (:issue:`1382`)
-* Add ``ManeuverPlanner.OperationEccentricity``, the operation that changes the eccentricity (:issue:`1382`)
-* Add ``OperationTransfer.Capture``, ``PlanCapture``, ``Rendezvous``, ``LagTime`` and ``Coplanar`` (:issue:`1382`)
-* :breaking:`Breaking` Remove ``OperationTransfer.InterceptOnly`` and ``SimpleTransfer``, in place of ``Capture`` and ``Coplanar`` (:issue:`1382`)
-* Add ``SmartASS.Roll``, the roll of the modes that point in a direction (:issue:`1382`)
-* Add the launches to a longitude of the ascending node, ``AscentGuidance.LaunchToLan`` and ``LaunchToMatchLan``, with ``DesiredLan`` and their ``AscentLaunchMode`` values (:issue:`1382`)
-* Add ``AscentGuidance.DesiredFPA`` and ``OverrideWarpToPlane`` (:issue:`1382`)
-* Add ``AscentSettings.RollAltitude``, ``LimitingAngleOfAttack`` and ``CurrentMaxAngleOfAttack`` (:issue:`1382`)
-* Add the stage, coast, spin-up and Qα limit settings of the PVG Settings window to ``PVGSettings`` (:issue:`1382`)
-* Add ``ManeuverPlanner.OperationAdvancedTransfer``, a transfer to another planet at the departure that needs the least delta-v (:issue:`1382`)
-* Add ``AircraftApproach``, the Aircraft Approach & Autoland window, which lands a plane on a runway (:issue:`1382`)
-* Add ``RoverAutopilot``, the Rover Autopilot window, which drives a rover along waypoints (:issue:`1382`)
-* Add ``ManeuverPlanner.RCSOnly`` and ``KillRollRotation``, and ``RendezvousAutopilot.MaxClosingSpeed`` (:issue:`1382`)
-* Add ``ThrustLimiter.LimitToPreventUnstableIgnition``, ``AutoRCSUllaging``, and ``Limiter``, the limiter that limits the throttle (:issue:`1382`)
-* Add ``AttitudeAdjustment``, the Attitude Adjustment window, which selects the attitude controller (:issue:`1382`)
+* Removed for MechJeb 2.15
+
+  * :breaking:`Breaking` Remove ``AscentGT`` and ``AscentAutopilot.AscentPathGT``, as MechJeb 2.15 has no gravity turn ascent path (:issue:`1326`)
+  * :breaking:`Breaking` Remove ``NodeExecutor.Tolerance``, ``ThrustController.SmoothThrottle``, ``ThrottleSmoothingTime`` and ``OperationTransfer.PeriodOffset`` (:issue:`1326`)
+  * :breaking:`Breaking` Throw an exception on setting ``SmartRCSMode.ZeroVelocity`` or ``TranslatronMode.KeepRelative``, as MechJeb 2.15 has no such mode (:issue:`1326`)
+  * :breaking:`Breaking` Remove ``MechJeb.APIReady``, in place of ``MechJeb.Available`` and ``MechJeb.Ready`` (:issue:`1326`)
+  * :breaking:`Breaking` Remove ``Operation.MakeNode``, deprecated in 0.7.1 (:issue:`1382`)
+  * :breaking:`Breaking` Remove ``OperationTransfer.InterceptOnly`` and ``SimpleTransfer``, in place of ``Capture`` and ``Coplanar`` (:issue:`1382`)
+
+* New windows and operations
+
+  * Add ``AircraftApproach``, the Aircraft Approach & Autoland window, which lands a plane on a runway (:issue:`1382`)
+  * Add ``RoverAutopilot``, the Rover Autopilot window, which drives a rover along waypoints (:issue:`1382`)
+  * Add ``AttitudeAdjustment``, the Attitude Adjustment window, which selects the attitude controller (:issue:`1382`)
+  * Add ``ManeuverPlanner.OperationAdvancedTransfer``, a transfer to another planet at the departure that needs the least delta-v (:issue:`1382`)
+  * Add ``ManeuverPlanner.OperationEccentricity``, which changes the eccentricity (:issue:`1382`)
+
+* New settings
+
+  * Add the launches to a longitude of the ascending node, ``AscentGuidance.LaunchToLan`` and ``LaunchToMatchLan``, with ``DesiredLan`` (:issue:`1382`)
+  * Add ``AscentGuidance.DesiredFPA`` and ``OverrideWarpToPlane``, and ``AscentSettings.RollAltitude``, ``LimitingAngleOfAttack`` and ``CurrentMaxAngleOfAttack`` (:issue:`1382`)
+  * Add the stage, coast, spin-up and Qα limit settings of the PVG Settings window to ``PVGSettings`` (:issue:`1382`)
+  * Add ``OperationTransfer.Capture``, ``PlanCapture``, ``Rendezvous``, ``LagTime`` and ``Coplanar`` (:issue:`1382`)
+  * Add ``Autowarp`` to ``AscentSettings``, ``LandingGuidance`` and ``RendezvousAutopilot`` (:issue:`1382`)
+  * Add ``ManeuverPlanner.RCSOnly`` and ``KillRollRotation``, ``RendezvousAutopilot.MaxClosingSpeed`` and ``SmartASS.Roll`` (:issue:`1382`)
+  * Add ``ThrustLimiter.LimitToPreventUnstableIgnition``, ``AutoRCSUllaging``, and ``Limiter``, the limiter that limits the throttle (:issue:`1382`)
+
+* Fixes
+
+  * Plan ``Operation.MakeNodes`` from the orbit after the last maneuver node, and remove the nodes it placed when it fails (:issue:`1382`)
+  * Set ``Operation.ErrorMessage`` to the error ``MakeNodes`` throws, and clear the message of an earlier call (:issue:`1382`)
+  * Apply ``AscentSettings.LimitAngleOfAttack`` and the ``SmartASS`` force settings without MechJeb's windows open (:issue:`1382`)
+  * Make ``OperationLan.NewLAN`` and ``OperationLongitude.NewSurfaceLongitude`` set the same longitude (:issue:`1326`)
+  * Release the autopilots of both ascent paths when the ascent autopilot is disabled (:issue:`1326`)
+  * Throw an exception from the members that need a target, a landing target or a maneuver node when there is none, and from the landing methods when landed (:issue:`1382`)
+
 
 
 Raster Prop Monitor service
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * Add the Raster Prop Monitor service, with the persistent variables that IVA props show and switches set, reads of any RPM variable, and the pages, buttons, text and images of IVA monitors (:issue:`1335`)
-* Add screen pages that a script draws and whose button presses it answers, with an optional Module Manager patch that gives every RPM screen one (:issue:`1335`)
-* Add page button captures, so a press of an RPM page button shows a script's page (:issue:`1335`)
+* Add screen pages that a script draws and whose button presses it answers, and page button captures that show a script's page (:issue:`1335`)
 * Add PNG and JPEG images from RPM's external cameras, which a stream turns into video (:issue:`424`)
 
 
@@ -341,53 +321,53 @@ SCANsat service
 Trajectories service
 ^^^^^^^^^^^^^^^^^^^^
 
-* Add Trajectories service
-* Make ``Available`` callable in every game scene (:issue:`1340`)
+* Add the Trajectories service, with the predicted trajectory and impact point, the target, and the descent profile (:issue:`1253`)
 
 
 C-nano client
 ^^^^^^^^^^^^^
 
-* :breaking:`Breaking` Connect with protocol version 2 (:issue:`1219`)
-* :breaking:`Breaking` Remove ``KRPC_SINGLE_CONNECTION``, as every mechanism opens one connection (:issue:`1219`)
-* :breaking:`Breaking` Return ``KRPC_ERROR_CONNECTION_REFUSED`` from ``krpc_connect`` when the server denies the connection or does not support the client's protocol version (:issue:`1219`)
-* :breaking:`Breaking` Return ``KRPC_ERROR_CONNECTION_FAILED`` from ``krpc_connect`` when the server's response cannot be read (:issue:`1219`)
-* Add ``krpc_disconnect``, which sends the server a disconnect message before closing the connection (:issue:`1219`)
-* Skip messages an earlier session left on a serial line while connecting (:issue:`1219`)
-* Name the references in service documentation by their C names (:issue:`1185`)
-* Document every parameter of a service function, with the value returned under ``returnValue`` (:issue:`1185`)
-* Fix the documentation of the services that Doxygen warns about, such as code holding an ``@`` (:issue:`1185`)
+* Connections
+
+  * :breaking:`Breaking` Connect with protocol version 2, and remove ``KRPC_SINGLE_CONNECTION``, as every mechanism opens one connection (:issue:`1219`)
+  * :breaking:`Breaking` Return ``KRPC_ERROR_CONNECTION_REFUSED`` from ``krpc_connect`` when the server denies the connection or its protocol version, and ``KRPC_ERROR_CONNECTION_FAILED`` when the response cannot be read (:issue:`1219`)
+  * Add ``krpc_disconnect``, which sends the server a disconnect message before closing the connection (:issue:`1219`)
+  * Skip messages an earlier session left on a serial line while connecting (:issue:`1219`)
+  * Relicense the C-nano client and the Arduino library under the MIT license (:issue:`1281`)
+  * Fix the Arduino library failing to compile with ``pb_common.h: No such file or directory`` (:issue:`1387`)
+
 * Transports
 
-  * :breaking:`Breaking` Build every transport into the library, and choose one when opening a connection with ``krpc_open_serial``, ``krpc_open_tcp`` or ``krpc_open_localsocket``, in place of ``krpc_open`` (:issue:`1176`)
+  * :breaking:`Breaking` Build every transport into the library, and choose one when opening a connection with ``krpc_open_serial``, ``krpc_open_tcp`` or ``krpc_open_localsocket`` (:issue:`1176`)
   * :breaking:`Breaking` Remove ``KRPC_COMMUNICATION_TCP``, ``KRPC_COMMUNICATION_LOCALSOCKET`` and ``krpc_connection_config_t``, and the ``tcp`` and ``localsocket`` vcpkg features (:issue:`1176`)
   * :breaking:`Breaking` Replace ``KRPC_COMMUNICATION_CUSTOM`` with a ``krpc_transport_t`` that a program fills in (:issue:`1176`)
   * :breaking:`Breaking` On Arduino, open any ``Stream``, such as ``SoftwareSerial`` or a USB port, with ``krpc_open_stream``, or start a serial port with ``krpc_open_serial`` (:issue:`1176`)
 
-* :breaking:`Breaking` Return ``krpc_KRPC_GetStatus`` as ``krpc_KRPC_ServerStatus_t``, whose ``version`` is allocated on the heap (:issue:`1244`)
-* :breaking:`Breaking` Call procedures by the hashed ids, which needs a server of the same version (:issue:`1265`)
-* :breaking:`Breaking` Return a stream or an event as the ``uint64_t`` id of its stream (:issue:`1266`)
-* :breaking:`Breaking` Replace ``krpc_KRPC_CompileFunction`` and ``krpc_KRPC_RunFunction`` with ``krpc_compile_function`` and ``krpc_run_function``, in ``krpc_cnano/functions.h`` (:issue:`1267`)
-* Add a ``_call`` function for each procedure, such as ``krpc_SpaceCenter_Flight_Speed_call``, for ``krpc_KRPC_Expression_Call`` (:issue:`1267`)
-* :breaking:`Breaking` Leave internal procedures out of the services, such as ``krpc_KRPC_AddStream`` (:issue:`1269`)
-* Relicense the C-nano client and the Arduino library under the MIT license (:issue:`1281`)
-* Mark deprecated classes, enumerations, enumeration values, structures and structure fields with ``KRPC_DEPRECATED`` (:issue:`1322`)
-* Mark the ``_call`` functions of deprecated procedures with ``KRPC_DEPRECATED`` (:issue:`1322`)
-* Deprecate each member of a deprecated service, class, enumeration or structure (:issue:`1322`)
+* Services and types
+
+  * :breaking:`Breaking` Call procedures by the hashed ids, which needs a server of the same version (:issue:`1265`)
+  * :breaking:`Breaking` Return a stream or an event as the ``uint64_t`` id of its stream (:issue:`1266`)
+  * :breaking:`Breaking` Leave internal procedures, such as ``krpc_KRPC_AddStream``, out of the services (:issue:`1269`)
+  * :breaking:`Breaking` Return ``krpc_KRPC_GetStatus`` as ``krpc_KRPC_ServerStatus_t``, whose ``version`` is allocated on the heap (:issue:`1244`)
+  * Mark deprecated types, values and procedures with ``KRPC_DEPRECATED``, and deprecate each member of a deprecated service, class, enumeration or structure (:issue:`1322`)
+  * Document every parameter of a service function, and name references by their C names (:issue:`1185`)
+  * Fix the clang-tidy warning from ``KRPC_FREE_LIST`` and ``KRPC_FREE_SET`` on a list or set of strings (:issue:`1375`)
+
 * Errors
 
   * :breaking:`Breaking` Replace the error codes with one per kind of error: ``KRPC_ERROR_CONNECTION``, ``KRPC_ERROR_SERVER``, ``KRPC_ERROR_ENCODING``, ``KRPC_ERROR_ARGUMENT`` and ``KRPC_ERROR_NO_MEMORY``. ``KRPC_ERROR_CONNECTION_REFUSED``, ``KRPC_ERROR_BUFFER_TOO_SMALL``, ``KRPC_ERROR_IO`` and ``KRPC_ERROR_EOF`` stay (:issue:`1333`)
-  * Add ``krpc_get_error_info``, the details of the last error: the ids of a server exception, the status of a refused connection, the reason of a disconnect and the transport's failure (:issue:`1333`)
+  * Add ``krpc_get_error_info``, the details of the last error, such as the ids of a server exception or the reason of a disconnect (:issue:`1333`)
   * Add a ``KRPC_EXCEPTION_`` macro for each exception of a service, and ``KRPC_IS_EXCEPTION`` to check the last error against it (:issue:`1333`)
-  * Add ``KRPC_ERROR_CODES_ONLY``, which keeps only the code of each error (:issue:`1333`)
   * :breaking:`Breaking` Give a message for every error under ``KRPC_ERROR_MESSAGES``, with the message of its cause, which a transport gives with the new ``krpc_set_error_cause`` (:issue:`1333`)
+  * Add ``KRPC_ERROR_CODES_ONLY``, which keeps only the code of each error (:issue:`1333`)
   * :breaking:`Breaking` Return ``KRPC_ERROR_ARGUMENT`` for a null string argument, a null argument to a ``krpc_open_`` function, and a local socket path that is too long (:issue:`1333`)
 
-* Add a ``KRPC_CLASS_``, ``KRPC_ENUMERATION_`` or ``KRPC_STRUCT_`` macro for each type of a service, with its ids for server side functions (:issue:`1336`)
-* Add a ``KRPC_FIELD_`` macro for each field of a structure, with its position for ``krpc_KRPC_Expression_GetFieldByIndex`` (:issue:`1336`)
-* Add a ``_call_template`` function for each member, which fills in a call with no instance or arguments, for ``krpc_KRPC_Expression_CallWithArguments`` (:issue:`1352`)
-* Fix the clang-tidy warning from ``KRPC_FREE_LIST`` and ``KRPC_FREE_SET`` on a list or set of strings (:issue:`1375`)
-* Fix the Arduino library failing to compile with ``pb_common.h: No such file or directory`` (:issue:`1387`)
+* Server side functions
+
+  * :breaking:`Breaking` Replace ``krpc_KRPC_CompileFunction`` and ``krpc_KRPC_RunFunction`` with ``krpc_compile_function`` and ``krpc_run_function``, in ``krpc_cnano/functions.h`` (:issue:`1267`)
+  * Add a ``_call`` function for each procedure, such as ``krpc_SpaceCenter_Flight_Speed_call``, for ``krpc_KRPC_Expression_Call``, and a ``_call_template`` function for each member (:issue:`1267`, :issue:`1352`)
+  * Add a ``KRPC_CLASS_``, ``KRPC_ENUMERATION_``, ``KRPC_STRUCT_`` or ``KRPC_FIELD_`` macro for each type and structure field, with its ids for server side functions (:issue:`1336`)
+
 
 
 C# client
@@ -396,61 +376,57 @@ C# client
 * Connections
 
   * :breaking:`Breaking` Connect over one connection, removing the ``streamPort`` and ``streamPath`` parameters of the ``Connection`` constructor and ``Connection.ConnectLocal``. A server from before 0.8 refuses the connection (:issue:`1219`)
-  * :breaking:`Breaking` Rename the ``rpcPort`` and ``rpcPath`` parameters of the ``Connection`` constructor and ``Connection.ConnectLocal`` to ``port`` and ``path`` (:issue:`1219`)
+  * :breaking:`Breaking` Rename the ``rpcPort`` and ``rpcPath`` parameters to ``port`` and ``path`` (:issue:`1219`)
   * :breaking:`Breaking` Give up after 5 seconds if the server does not accept the connection. Pass a ``handshakeTimeout`` of ``Timeout.InfiniteTimeSpan`` to wait for the player to approve it (:issue:`1219`)
-  * Add ``handshakeTimeout`` and ``stallTimeout`` parameters to the ``Connection`` constructor and ``Connection.ConnectLocal`` (:issue:`1219`)
+  * Add the ``handshakeTimeout`` and ``stallTimeout`` parameters (:issue:`1219`)
   * Send calls from several threads without waiting for each other's responses (:issue:`1219`)
-  * Tell the server when the connection is disposed (:issue:`1219`)
-  * Add ``Status`` and ``Reason`` to ``ConnectionException`` for a refused or ended connection (:issue:`1219`)
-  * :breaking:`Breaking` Throw ``ConnectionException`` when the server cannot be reached, with the ``SocketException`` as its inner exception (:issue:`1219`)
-  * Keep a thread interrupt pending across ``Dispose``, which closes the connection in full (:issue:`1219`)
+  * Tell the server when the connection is disposed, and keep a thread interrupt pending across ``Dispose`` (:issue:`1219`)
 
-* Streams and events
+* Packaging
 
-  * :breaking:`Breaking` Throw ``StreamRemovedException`` when reading or waiting on a removed stream or event (:issue:`1219`)
-  * :breaking:`Breaking` Wait with no deadline in ``Stream.Wait`` and ``Event.Wait`` by default, or for an infinite timeout, and throw ``ArgumentOutOfRangeException`` for a negative or NaN one (:issue:`1219`)
-  * Keep a stream running when a value fails to decode, dropping the value (:issue:`1219`)
-  * Stream a lambda or server side function with no value as a ``Stream`` (:issue:`1198`)
-  * Add an overload of ``Connection.GetCall`` for a lambda with no value (:issue:`1198`)
-  * :breaking:`Breaking` Derive ``Stream<T>`` from a new class ``Stream``, ambiguous with ``System.IO.Stream`` in a file that uses both namespaces (:issue:`1198`)
-  * :breaking:`Breaking` Return the stream id from ``KRPC.AddStream`` and ``KRPC.AddFunctionStream`` (:issue:`1266`)
-  * :breaking:`Breaking` Take the type code of the return value in ``IConnection.Invoke`` (:issue:`1266`)
-  * Make ``Stream`` and ``Event`` ``IDisposable``, to remove them at the end of a ``using`` block (:issue:`1291`)
+  * Target .NET Standard 2.0 in place of .NET Framework 4.7.2, so a .NET 5 or later project uses the package without a compatibility warning (:issue:`1274`)
+  * Fix .NET Framework programs failing to load ``System.Memory`` when decoding a nullable value in a collection or structure (:issue:`1274`)
+  * :breaking:`Breaking` Regenerate service stubs generated by an earlier ``krpc-clientgen``. ``Encoder.Decode`` moved to ``Decoder.Decode``, and stubs from before 0.7.0 can miss a stream's first update (:issue:`1219`, :issue:`1332`)
 
-* :breaking:`Breaking` Regenerate service stubs generated before 0.7.0, which can miss the first update of a stream or event they return (:issue:`1219`)
-* Fix the links in service documentation, which named no type or member (:issue:`1185`)
-* Fix a nullable enum return value, which threw ``InvalidCastException`` (:issue:`1194`)
-* Exceptions
+* Services and types
 
-  * :breaking:`Breaking` Remove the trailing space after ``Server stack trace:`` in an exception's message, and separate its lines with ``\n`` on every platform (:issue:`1172`)
+  * Add ``Bind`` to classes with static methods, for calling them without passing the connection (:issue:`1195`)
+  * Generate a flags enumeration with ``[Flags]`` (:issue:`1311`)
+  * Order remote objects by id, with ``CompareTo`` and the comparison operators (:issue:`1377`)
+  * :breaking:`Breaking` Leave internal procedures, such as ``KRPC.AddStream``, out of the services (:issue:`1269`)
+  * :breaking:`Breaking` Return ``KRPC.GetStatus`` as the struct ``ServerStatus`` (:issue:`1244`)
+  * Mark a deprecated service with ``[Obsolete]``, and deprecate each member of a deprecated service, class, enumeration or structure (:issue:`1322`)
+  * Fix a nullable enum return value throwing ``InvalidCastException`` (:issue:`1194`)
+  * Fix the links in service documentation, which named no type or member (:issue:`1185`)
 
-* Add ``Bind`` to classes with static methods, for calling them without passing the connection (:issue:`1195`)
-* :breaking:`Breaking` Return ``KRPC.GetStatus`` as the struct ``ServerStatus``, with the settings and statistics under ``Settings`` and ``Statistics`` (:issue:`1244`)
-* :breaking:`Breaking` Leave internal procedures out of the services, such as ``KRPC.AddStream`` (:issue:`1269`)
-* Add ``Connection.Compile`` for a server side function built with the expression API (:issue:`1269`)
-* Add ``EncodingException``, thrown when the server returns null for a value that cannot be null (:issue:`1269`)
-* Target .NET Standard 2.0 in place of .NET Framework 4.7.2, so a .NET 5 or later project uses the package without a compatibility warning (:issue:`1274`)
-* Fix .NET Framework programs failing to load ``System.Memory`` when decoding a nullable value in a collection or structure (:issue:`1274`)
-* Generate a flags enumeration with ``[Flags]`` (:issue:`1311`)
-* Compile ``~`` and ``HasFlag`` on flags enumeration values in server side functions (:issue:`1313`)
-* Mark a deprecated service's extension method and ``Service`` class with ``[Obsolete]`` (:issue:`1322`)
-* Deprecate each member of a deprecated service, class, enumeration or structure (:issue:`1322`)
-* :breaking:`Breaking` Move ``Encoder.Decode`` to ``Decoder.Decode``. Stubs generated by an earlier ``krpc-clientgen`` need regenerating (:issue:`1332`)
-* Throw ``ConnectionException`` when the connection request fails to be written (:issue:`1332`)
 * Errors
 
   * :breaking:`Breaking` Derive every exception of the client from the new ``RemoteException`` (:issue:`1333`)
   * :breaking:`Breaking` Rename ``RPCException`` to ``ServerException``, and ``FunctionCompilationException`` to ``CompilationException`` (:issue:`1333`)
-  * :breaking:`Breaking` Remove the generated classes of mapped exceptions, which were never thrown, such as ``KRPC.ArgumentException``, and of ``KRPC.StreamRemovedException``. The .NET exception is thrown, as before (:issue:`1333`)
-  * :breaking:`Breaking` Throw the new ``StreamException`` when a stream or event is removed (:issue:`1333`)
-  * :breaking:`Breaking` Throw ``ConnectionException`` for a call after the connection is disposed (:issue:`1333`)
-  * :breaking:`Breaking` Throw ``ArgumentException`` for a function whose value does not match the type parameter (:issue:`1333`)
-  * :breaking:`Breaking` Throw ``EncodingException`` for every value that fails to decode, and for a null stream value of a type that cannot hold one (:issue:`1333`)
+  * :breaking:`Breaking` Remove the generated classes of mapped exceptions, which were never thrown, such as ``KRPC.ArgumentException``. The .NET exception is thrown, as before (:issue:`1333`)
+  * :breaking:`Breaking` Throw ``ConnectionException`` when the server cannot be reached, with the ``SocketException`` as its inner exception, or for a call after ``Dispose`` (:issue:`1219`, :issue:`1333`)
+  * Add ``Status`` and ``Reason`` to ``ConnectionException`` for a refused or ended connection (:issue:`1219`)
+  * :breaking:`Breaking` Throw ``EncodingException`` for every value that fails to decode, including a null for a type that cannot hold one and an undeclared enumeration value (:issue:`1269`, :issue:`1333`, :issue:`1377`)
+  * Throw ``ArgumentNullException`` for a null passed for a parameter that cannot be null, before the call is sent (:issue:`1377`)
+  * :breaking:`Breaking` Remove the trailing space after ``Server stack trace:`` in an exception's message, and separate its lines with ``\n`` on every platform (:issue:`1172`)
 
-* Add ``Connection.GetCallTemplate`` and ``Connection.GetSetCallTemplate``, which build a call with no instance or arguments, for ``Expression.CallWithArguments`` (:issue:`1352`)
-* Order remote objects by id, with ``CompareTo`` and the comparison operators (:issue:`1377`)
-* Throw ``EncodingException`` for an enumeration result the enumeration does not declare (:issue:`1377`)
-* Throw ``ArgumentNullException`` for a null passed for a parameter that cannot be null, before the call is sent (:issue:`1377`)
+* Streams and events
+
+  * :breaking:`Breaking` Throw the new ``StreamException`` when a stream or event is removed, or read or waited on after removal (:issue:`1219`, :issue:`1333`)
+  * :breaking:`Breaking` Wait with no deadline in ``Stream.Wait`` and ``Event.Wait`` by default, or for an infinite timeout, and throw ``ArgumentOutOfRangeException`` for a negative or NaN one (:issue:`1219`)
+  * Make ``Stream`` and ``Event`` ``IDisposable``, to remove them at the end of a ``using`` block (:issue:`1291`)
+  * Stream a lambda or server side function with no value as a ``Stream``, and add an overload of ``Connection.GetCall`` for one (:issue:`1198`)
+  * :breaking:`Breaking` Derive ``Stream<T>`` from a new class ``Stream``, ambiguous with ``System.IO.Stream`` in a file that uses both namespaces (:issue:`1198`)
+  * :breaking:`Breaking` Take the type code of the return value in ``IConnection.Invoke`` (:issue:`1266`)
+  * Keep a stream running when a value fails to decode, dropping the value (:issue:`1219`)
+
+* Server side functions
+
+  * Add ``Connection.Compile`` for a function built with the expression API (:issue:`1269`)
+  * Add ``Connection.GetCallTemplate`` and ``GetSetCallTemplate``, for ``Expression.CallWithArguments`` (:issue:`1352`)
+  * Compile ``~`` and ``HasFlag`` on flags enumeration values (:issue:`1313`)
+  * :breaking:`Breaking` Throw ``ArgumentException`` for a function whose value does not match the type parameter (:issue:`1333`)
+
 
 
 C++ client
@@ -460,60 +436,53 @@ C++ client
 
   * :breaking:`Breaking` Connect over one connection, removing the ``stream_port`` and ``stream_path`` parameters of ``connect`` and ``connect_local``. A server from before 0.8 refuses the connection (:issue:`1219`)
   * :breaking:`Breaking` Give up after 5 seconds if the server does not accept the connection. Pass a ``handshake_timeout`` of zero to wait for the player to approve it (:issue:`1219`)
-  * Add ``handshake_timeout`` and ``stall_timeout`` parameters to ``connect`` and ``connect_local`` (:issue:`1219`)
+  * Add the ``handshake_timeout`` and ``stall_timeout`` parameters (:issue:`1219`)
   * Send calls from several threads without waiting for each other's responses (:issue:`1219`)
-  * Tell the server when the last client is released (:issue:`1219`)
+  * Add ``close``, which closes the connection for every copy of it, and tell the server when the last copy is released (:issue:`1219`, :issue:`1286`)
+  * :breaking:`Breaking` Services, objects, streams and events hold the connection open, so they stay valid once the connection object is destroyed (:issue:`1286`)
+  * :breaking:`Breaking` Take the connection by reference in service, object, stream and event constructors, as in ``SpaceCenter sc(conn)``, and accept a temporary in a service constructor (:issue:`1285`, :issue:`1286`)
+  * Relicense the C++ client under the MIT license (:issue:`1281`)
+
+* Naming
+
+  * :breaking:`Breaking` Rename ``krpc::Client`` to ``krpc::Connection``, in ``krpc/connection.hpp``. ``krpc.hpp`` includes it as before (:issue:`1332`)
+  * :breaking:`Breaking` Rename ``krpc::Connection`` and ``krpc::LocalConnection`` to ``krpc::TCPIPTransport`` and ``krpc::LocalTransport``, in ``krpc/transport.hpp`` (:issue:`1332`)
+  * :breaking:`Breaking` Rename ``krpc::Object`` and ``krpc::Service`` to ``krpc::RemoteObject`` and ``krpc::RemoteService``, in headers of the same names (:issue:`1332`)
+  * :breaking:`Breaking` Convert names with ``UInt``, ``FoV``, a plural acronym or digits next to an acronym as written, e.g. ``Type::uint``, ``Camera::fov`` and ``MapFilterType::evas`` (:issue:`1339`)
+
+* Services and types
+
+  * Add ``bind`` to classes with static methods, for calling them without passing the connection (:issue:`1195`)
+  * Generate the operators ``|``, ``&``, ``^`` and ``~`` for a flags enumeration (:issue:`1311`)
+  * :breaking:`Breaking` Leave internal procedures, such as ``KRPC::add_stream``, out of the services (:issue:`1269`)
+  * :breaking:`Breaking` Return ``KRPC::get_status`` as the struct ``KRPC::ServerStatus`` (:issue:`1244`)
+  * Declare deprecated services and procedures ``[[deprecated]]``, and deprecate each member of a deprecated service, class, enumeration or structure (:issue:`1322`)
+  * Fix generated headers warning about their own deprecated members, and the service documentation that Doxygen warns about (:issue:`1185`, :issue:`1322`)
+
+* Errors
+
+  * :breaking:`Breaking` Derive every error of the client from the new ``krpc::RemoteError``, and rename ``krpc::RPCError`` to ``krpc::ServerError`` (:issue:`1333`)
+  * :breaking:`Breaking` Throw a server exception with a standard equivalent as the standard exception, e.g. ``KRPC::ArgumentException`` as ``std::invalid_argument`` (:issue:`1172`)
+  * :breaking:`Breaking` Add the server stack trace to an exception's message (:issue:`1172`)
+  * :breaking:`Breaking` Throw ``ConnectionError`` when the server cannot be reached, nesting the error from the socket, or through a connection or object that is not connected (:issue:`1219`, :issue:`1286`)
   * Add ``status`` and ``reason`` to ``ConnectionError`` for a refused or ended connection (:issue:`1219`)
-  * :breaking:`Breaking` Throw ``ConnectionError`` when the server cannot be reached, nesting the error from the socket (:issue:`1219`)
-  * Add ``Client::close``, which closes the connection for every copy of the client (:issue:`1286`)
-  * :breaking:`Breaking` Services, objects, streams and events hold the connection open, so they stay valid once the client is destroyed (:issue:`1286`)
-  * :breaking:`Breaking` A client that is not connected throws ``ConnectionError``, as does a default-constructed object (:issue:`1286`)
+  * Throw ``std::invalid_argument`` for a local socket path that is too long, or a default-constructed object passed as an argument (:issue:`1333`, :issue:`1377`)
+  * Throw ``EncodingError`` for a tuple of the wrong length, which crashed, and for a null function value of a type that cannot hold one (:issue:`1194`, :issue:`1333`)
+  * Raise the exception types of the ``KRPC`` service without first creating a ``KRPC`` service object (:issue:`1269`)
 
 * Streams and events
 
-  * :breaking:`Breaking` Remove a stream or event from the server when its last copy is destroyed (:issue:`1219`)
-  * :breaking:`Breaking` Remove ``Client::remove_stream`` and the ``Stream`` constructor taking a stream id. Remove a stream through its stream object (:issue:`1219`)
-  * :breaking:`Breaking` Wait with no deadline in ``Stream::wait`` and ``Event::wait`` by default, or for an infinite timeout, and throw ``std::invalid_argument`` for a negative or NaN one (:issue:`1219`)
-  * Stream a procedure or server side function with no value as a ``Stream<void>`` (:issue:`1198`)
-  * :breaking:`Breaking` Return the stream id from ``KRPC::add_stream`` and ``KRPC::add_function_stream`` (:issue:`1266`)
-  * :breaking:`Breaking` Remove ``Client::Returns::event``, as a call that returns an event uses ``Returns::stream`` (:issue:`1266`)
-
-* Fix the documentation of the services that Doxygen warns about, such as parameter names that do not match (:issue:`1185`)
-* Throw ``EncodingError`` when decoding a tuple of the wrong length, which crashed (:issue:`1194`)
-* Exceptions
-
-  * :breaking:`Breaking` Throw a server exception with a standard equivalent as the standard exception, in place of ``RPCError``. Its generated name is an alias of it, e.g. ``KRPC::ArgumentException`` of ``std::invalid_argument`` (:issue:`1172`)
-  * :breaking:`Breaking` Add the server stack trace to an exception's message (:issue:`1172`)
-
-* Add ``bind`` to classes with static methods, for calling them without passing the client (:issue:`1195`)
-* :breaking:`Breaking` Return ``KRPC::get_status`` as the struct ``KRPC::ServerStatus``, whose fields are members, with the settings and statistics under ``settings`` and ``statistics`` (:issue:`1244`)
-* :breaking:`Breaking` Leave internal procedures out of the services, such as ``KRPC::add_stream`` (:issue:`1269`)
-* Add ``krpc::compile`` for a server side function built with the expression API (:issue:`1269`)
-* Raise the exception types of the ``KRPC`` service, such as ``KRPC::InvalidOperationException``, without first creating a ``KRPC`` service object (:issue:`1269`)
-* Relicense the C++ client under the MIT license (:issue:`1281`)
-* :breaking:`Breaking` Service constructors take the client by reference, as in ``SpaceCenter sc(conn)`` (:issue:`1285`)
-* :breaking:`Breaking` Object, stream and event constructors take the client by reference, as in ``Vessel(conn, id)`` (:issue:`1286`)
-* Service constructors accept a temporary client, as in ``SpaceCenter sc(krpc::connect())`` (:issue:`1286`)
-* Generate the operators ``|``, ``&``, ``^`` and ``~`` for a flags enumeration (:issue:`1311`)
-* Declare a deprecated service's class ``[[deprecated]]`` (:issue:`1322`)
-* Declare the ``_stream`` and ``_call`` functions of deprecated procedures ``[[deprecated]]`` (:issue:`1322`)
-* Deprecate each member of a deprecated service, class, enumeration or structure (:issue:`1322`)
-* Fix generated headers warning about their own deprecated members (:issue:`1322`)
-* :breaking:`Breaking` Rename the framing classes ``krpc::Connection`` and ``krpc::LocalConnection`` to ``krpc::TCPIPTransport`` and ``krpc::LocalTransport``, in the header ``krpc/transport.hpp`` (:issue:`1332`)
-* :breaking:`Breaking` Rename ``krpc::Client`` to ``krpc::Connection``, in the header ``krpc/connection.hpp`` in place of ``krpc/client.hpp``. ``krpc.hpp`` includes it as before (:issue:`1332`)
-* Throw ``ConnectionError`` when the connection request fails to be written (:issue:`1332`)
-* :breaking:`Breaking` Rename the base classes ``krpc::Object`` and ``krpc::Service`` to ``krpc::RemoteObject`` and ``krpc::RemoteService``, in the headers ``krpc/remote_object.hpp`` and ``krpc/remote_service.hpp`` (:issue:`1332`)
-* Errors
-
-  * :breaking:`Breaking` Derive every error of the client from the new ``krpc::RemoteError`` (:issue:`1333`)
-  * :breaking:`Breaking` Rename ``krpc::RPCError`` to ``krpc::ServerError`` (:issue:`1333`)
+  * :breaking:`Breaking` Remove a stream or event from the server when its last copy is destroyed, and remove ``Client::remove_stream`` and the ``Stream`` constructor taking a stream id (:issue:`1219`)
   * :breaking:`Breaking` Throw ``StreamError`` when the server removes a stream or event (:issue:`1333`)
-  * :breaking:`Breaking` Throw ``std::invalid_argument`` for a local socket path that is too long (:issue:`1333`)
-  * :breaking:`Breaking` Throw ``EncodingError`` for a null function value of a type that cannot hold null (:issue:`1333`)
+  * :breaking:`Breaking` Wait with no deadline in ``Stream::wait`` and ``Event::wait`` by default, or for an infinite timeout, and throw ``std::invalid_argument`` for a negative or NaN one (:issue:`1219`)
+  * :breaking:`Breaking` Remove ``Client::Returns::event``, as a call that returns an event uses ``Returns::stream`` (:issue:`1266`)
+  * Stream a procedure or server side function with no value as a ``Stream<void>`` (:issue:`1198`)
 
-* :breaking:`Breaking` Convert names with ``UInt``, ``ULong``, ``SInt``, ``FoV``, a plural acronym or digits next to an acronym as written, e.g. ``Type::uint``, ``Camera::fov`` and ``MapFilterType::evas`` in place of ``u_int``, ``fo_v`` and ``ev_as`` (:issue:`1339`)
-* Add a static ``_call_template`` function for each member, which builds a call with no instance or arguments, for ``Expression::call_with_arguments`` (:issue:`1352`)
-* Throw ``std::invalid_argument`` for a default-constructed object passed as an argument or called through, before the call is sent (:issue:`1377`)
+* Server side functions
+
+  * Add ``krpc::compile`` for a function built with the expression API (:issue:`1269`)
+  * Add a static ``_call_template`` function for each member, for ``Expression::call_with_arguments`` (:issue:`1352`)
+
 
 
 Java client
@@ -523,57 +492,54 @@ Java client
 
   * :breaking:`Breaking` Connect over one connection, removing the stream port and stream path parameters of ``Connection.newInstance`` and ``Connection.newLocalInstance``. A server from before 0.8 refuses the connection (:issue:`1219`)
   * :breaking:`Breaking` Give up after 5 seconds if the server does not accept the connection. Pass a handshake timeout of ``Duration.ZERO`` to wait for the player to approve it (:issue:`1219`)
-  * Add overloads of ``Connection.newInstance`` and ``Connection.newLocalInstance`` taking a handshake timeout and a stall timeout (:issue:`1219`)
+  * Add overloads of ``Connection.newInstance`` and ``newLocalInstance`` taking a handshake timeout and a stall timeout (:issue:`1219`)
   * Send calls from several threads without waiting for each other's responses (:issue:`1219`)
   * Tell the server when the connection closes (:issue:`1219`)
   * Fix an interrupted call closing the connection (:issue:`1219`)
+  * Publish the client to Maven Central as ``io.github.krpc:krpc-java`` (:issue:`1231`)
+
+* Naming
+
+  * :breaking:`Breaking` Name enumeration constants in upper snake case, e.g. ``AltimeterMode.AGL`` and ``TypeCode.UINT32`` in place of ``A_GL`` and ``U_INT32`` (:issue:`1339`)
+  * :breaking:`Breaking` Lower case a leading acronym in method and field names, e.g. ``CelestialBody.mslPosition`` and ``Type.uint`` in place of ``mSLPosition`` and ``uInt`` (:issue:`1339`)
+  * :breaking:`Breaking` Move ``Encoder.decode`` to ``Decoder.decode``. Stubs generated by an earlier ``krpc-clientgen`` need regenerating (:issue:`1332`)
+
+* Services and types
+
+  * Add ``bind`` to classes with static methods, for calling them without passing the connection (:issue:`1195`)
+  * :deprecated:`Deprecated` Passing the connection to ``addStream`` and ``getCall`` for a static method (:issue:`1195`)
+  * :breaking:`Breaking` Generate a flags enumeration, such as ``SpaceCenter.MapFilterType``, as a class of constants with ``or``, ``and``, ``xor``, ``andNot`` and ``contains`` (:issue:`1311`)
+  * :breaking:`Breaking` Leave internal procedures, such as ``KRPC.addStream``, out of the services (:issue:`1269`)
+  * :breaking:`Breaking` Return ``KRPC.getStatus`` as the struct ``KRPC.ServerStatus`` (:issue:`1244`)
+  * Mark a deprecated service with ``@Deprecated``, and deprecate each member of a deprecated service, class, enumeration or structure (:issue:`1322`)
+  * Fix remote objects with an id past 63 bits ordering first (:issue:`1377`)
+  * Fix the javadoc of the services, with links that named no method and markup ``javadoc`` rejects (:issue:`1185`)
+
+* Errors
+
+  * :breaking:`Breaking` Make every exception unchecked, deriving the new ``RemoteException``, and remove ``throws IOException`` from ``newInstance``, ``newLocalInstance`` and ``close`` (:issue:`1333`)
+  * :breaking:`Breaking` Rename ``RPCException`` to ``ServerException`` (:issue:`1333`)
+  * :breaking:`Breaking` Remove the generated classes of mapped exceptions, which were never thrown, such as ``KRPC.ArgumentException`` (:issue:`1333`)
+  * :breaking:`Breaking` Throw ``InvalidOperationException`` as ``IllegalStateException``, and ``ArgumentOutOfRangeException`` as ``IllegalArgumentException`` (:issue:`1172`)
+  * :breaking:`Breaking` Throw ``ConnectionException`` for a call or stream the connection ends, and when the server cannot be reached or its host name does not resolve (:issue:`1219`, :issue:`1332`, :issue:`1333`)
   * Add ``getStatus`` and ``getReason`` to ``ConnectionException`` for a refused or ended connection (:issue:`1219`)
-  * Throw ``ConnectionException`` when the server cannot be reached or its host name does not resolve (:issue:`1219`)
+  * :breaking:`Breaking` Throw ``CancellationException`` for an interrupted call or wait (:issue:`1333`)
+  * :breaking:`Breaking` Throw ``IllegalArgumentException`` for a null in a position that cannot hold one, before the call is sent, a local socket path that is too long, and a method ``addStream`` or ``getCall`` cannot find (:issue:`1333`, :issue:`1377`)
+  * Throw ``EncodingException``, with the message of its cause, for a tuple with too few items or an undeclared enumeration value (:issue:`1333`, :issue:`1377`)
 
 * Streams and events
 
-  * :breaking:`Breaking` Throw ``IllegalArgumentException`` from ``waitForUpdateWithTimeout`` and ``waitForWithTimeout`` for a negative or NaN timeout, and wait with no deadline for an infinite one (:issue:`1219`)
-  * Keep a stream running when a value fails to decode, dropping the value (:issue:`1219`)
-  * Stream a procedure or server side function with no value as a ``Stream<Void>`` (:issue:`1198`)
-  * :breaking:`Breaking` Return the stream id from ``KRPC.addStream`` and ``KRPC.addFunctionStream`` (:issue:`1266`)
-  * Make ``Stream`` and ``Event`` ``AutoCloseable``, to remove them at the end of a try-with-resources block (:issue:`1291`)
-
-* Fix the links to members in the javadoc of the services, which named no method (:issue:`1185`)
-* Fix the javadoc of the services that ``javadoc`` rejects, such as lists and setters with a ``@return`` tag (:issue:`1185`)
-* Exceptions
-
-  * :breaking:`Breaking` Throw ``InvalidOperationException`` as ``IllegalStateException``, and ``ArgumentOutOfRangeException`` as ``IllegalArgumentException`` (:issue:`1172`)
-
-* :deprecated:`Deprecated` Passing the connection to ``addStream`` and ``getCall`` for a static method, which now take only its arguments (:issue:`1195`)
-* Add ``bind`` to classes with static methods, for calling them without passing the connection (:issue:`1195`)
-* Publish the client to Maven Central as ``io.github.krpc:krpc-java`` (:issue:`1231`)
-* :breaking:`Breaking` Return ``KRPC.getStatus`` as the struct ``KRPC.ServerStatus``, with the settings and statistics under ``getSettings`` and ``getStatistics`` (:issue:`1244`)
-* :breaking:`Breaking` Leave internal procedures out of the services, such as ``KRPC.addStream`` (:issue:`1269`)
-* Add ``Connection.compile`` for a server side function built with the expression API (:issue:`1269`)
-* :breaking:`Breaking` Generate a flags enumeration, such as ``SpaceCenter.MapFilterType``, as a class of constants with ``or``, ``and``, ``xor``, ``andNot`` and ``contains`` (:issue:`1311`)
-* Mark a deprecated service's class with ``@Deprecated`` (:issue:`1322`)
-* Deprecate each member of a deprecated service, class, enumeration or structure (:issue:`1322`)
-* :breaking:`Breaking` Move ``Encoder.decode`` to ``Decoder.decode``. Stubs generated by an earlier ``krpc-clientgen`` need regenerating (:issue:`1332`)
-* Throw ``ConnectionException`` when the connection request fails to be written, or the server closes the connection before answering it (:issue:`1332`)
-* Errors
-
-  * :breaking:`Breaking` Make every exception unchecked, deriving the new ``RemoteException`` (:issue:`1333`)
-  * :breaking:`Breaking` Rename ``RPCException`` to ``ServerException`` (:issue:`1333`)
-  * :breaking:`Breaking` Remove ``throws IOException`` from ``Connection.newInstance``, ``newLocalInstance`` and ``close`` (:issue:`1333`)
-  * :breaking:`Breaking` Remove the generated classes of mapped exceptions, which were never thrown, such as ``KRPC.ArgumentException``, and of ``KRPC.StreamRemovedException`` (:issue:`1333`)
   * :breaking:`Breaking` Throw ``StreamException`` when the server removes a stream or event (:issue:`1333`)
-  * :breaking:`Breaking` Throw ``ConnectionException`` for a call or stream the connection ends, in place of an ``RPCException`` or ``StreamException`` wrapping it (:issue:`1333`)
-  * :breaking:`Breaking` Throw ``CancellationException`` for an interrupted call or wait (:issue:`1333`)
-  * :breaking:`Breaking` Throw ``IllegalArgumentException`` for a null object, a null in a position that cannot hold one, a local socket path that is too long, and a method ``addStream`` or ``getCall`` cannot find (:issue:`1333`)
-  * Throw ``EncodingException`` for a tuple with too few items (:issue:`1333`)
-  * Give an ``EncodingException`` the message of its cause (:issue:`1333`)
+  * :breaking:`Breaking` Throw ``IllegalArgumentException`` from ``waitForUpdateWithTimeout`` and ``waitForWithTimeout`` for a negative or NaN timeout, and wait with no deadline for an infinite one (:issue:`1219`)
+  * Make ``Stream`` and ``Event`` ``AutoCloseable``, to remove them at the end of a try-with-resources block (:issue:`1291`)
+  * Stream a procedure or server side function with no value as a ``Stream<Void>`` (:issue:`1198`)
+  * Keep a stream running when a value fails to decode, dropping the value (:issue:`1219`)
 
-* :breaking:`Breaking` Name enumeration constants in upper snake case, e.g. ``AltimeterMode.AGL``, ``AlarmType.SOI_CHANGE`` and ``TypeCode.UINT32`` in place of ``A_GL``, ``S_OI_CHANGE`` and ``U_INT32`` (:issue:`1339`)
-* :breaking:`Breaking` Lower case a leading acronym in method and field names, e.g. ``CelestialBody.mslPosition`` and ``Type.uint`` in place of ``mSLPosition`` and ``uInt`` (:issue:`1339`)
-* Add ``Connection.getCallTemplate``, which builds a call with no instance or arguments, for ``Expression.callWithArguments`` (:issue:`1352`)
-* Fix remote objects with an id past 63 bits ordering first (:issue:`1377`)
-* Throw ``EncodingException`` for an enumeration result the enumeration does not declare, in place of returning null (:issue:`1377`)
-* Throw ``IllegalArgumentException`` for a null passed for a parameter that cannot be null, before the call is sent (:issue:`1377`)
+* Server side functions
+
+  * Add ``Connection.compile`` for a function built with the expression API (:issue:`1269`)
+  * Add ``Connection.getCallTemplate``, for ``Expression.callWithArguments`` (:issue:`1352`)
+
 
 
 JavaScript client
@@ -589,38 +555,39 @@ JavaScript client
 Lua client
 ^^^^^^^^^^
 
-* :breaking:`Breaking` Connect with protocol version 2, and fail to connect to a server from before 0.8 (:issue:`1219`)
-* Add a ``handshake_timeout`` parameter to ``connect`` and ``connect_local`` (:issue:`1219`)
-* Tell the server when the connection closes (:issue:`1219`)
-* :breaking:`Breaking` Return ``get_status`` as a struct, with the settings and statistics under ``settings`` and ``statistics`` (:issue:`1244`)
-* :breaking:`Breaking` Return a stream or an event as the id of its stream (:issue:`1266`)
-* :breaking:`Breaking` Replace ``KRPC.compile_function`` and ``KRPC.run_function`` with ``Client:compile`` and ``Client:run`` (:issue:`1267`)
-* Add ``Connection:get_call``, for ``KRPC.Expression.call`` (:issue:`1267`)
-* :breaking:`Breaking` Leave internal procedures out of the services, such as ``KRPC.add_stream`` (:issue:`1269`)
-* Null values
+* Connections
 
-  * :breaking:`Breaking` Return ``nil`` for a null result, in place of ``Types.none`` (:issue:`1278`)
-  * Pass a ``nil`` argument as null, for a parameter that can be null and has no default (:issue:`1278`)
+  * :breaking:`Breaking` Connect with protocol version 2, and fail to connect to a server from before 0.8 (:issue:`1219`)
+  * Add a ``handshake_timeout`` parameter to ``connect`` and ``connect_local``, and raise an error for one that is not positive (:issue:`1219`, :issue:`1377`)
+  * Tell the server when the connection closes (:issue:`1219`)
+  * :deprecated:`Deprecated` ``krpc.platform.sleep``, in favor of luasocket's ``socket.sleep``. It now sleeps without holding a CPU core, and for fractions of a second (:issue:`1323`)
+
+* Services and types
+
+  * :breaking:`Breaking` Return ``nil`` for a null result, in place of ``Types.none``, and pass a ``nil`` argument as null (:issue:`1278`)
+  * :breaking:`Breaking` Convert names with ``UInt``, ``FoV``, a plural acronym or digits next to an acronym as written, e.g. ``Type.uint``, ``Camera.fov`` and ``MapFilterType.evas`` (:issue:`1339`)
+  * :breaking:`Breaking` Leave internal procedures, such as ``KRPC.add_stream``, out of the services (:issue:`1269`)
+  * :breaking:`Breaking` Return ``get_status`` as a struct (:issue:`1244`)
+  * :breaking:`Breaking` Return a stream or an event as the id of its stream (:issue:`1266`)
+  * Add ``union``, ``intersection``, ``difference`` and ``contains`` to the values of a flags enumeration (:issue:`1311`)
+  * Order remote objects by id with ``<`` (:issue:`1377`)
+  * Warn once per member on standard error on a use of a deprecated member, including through ``get_call`` (:issue:`1322`)
+  * Deprecate each member of a deprecated service, class or enumeration (:issue:`1322`)
   * Fix a ``nil`` argument dropping the arguments after it (:issue:`1278`)
+  * Fix a returned enumeration value comparing unequal to the same named value (:issue:`1377`)
 
-* Add ``union``, ``intersection``, ``difference`` and ``contains`` to the values of a flags enumeration (:issue:`1311`)
-* Warn once per member on standard error on a use of a deprecated service, procedure, method, property, class, enumeration, enumeration value or structure (:issue:`1322`)
-* Warn when ``get_call`` builds the call of a deprecated procedure, method or property (:issue:`1322`)
-* Deprecate each member of a deprecated service, class or enumeration (:issue:`1322`)
-* :deprecated:`Deprecated` ``krpc.platform.sleep``, in favor of luasocket's ``socket.sleep``. It now sleeps without holding a CPU core, and for fractions of a second (:issue:`1323`)
 * Errors
 
   * :breaking:`Breaking` Raise errors as objects of the new classes ``krpc.RemoteError``, ``krpc.ConnectionError``, ``krpc.ServerError`` and ``krpc.EncodingError``, in place of strings. An argument the client rejects still raises a string (:issue:`1333`)
   * :breaking:`Breaking` Drop the source position and the ``Service.Name:`` prefix from the message of an error, which the error's fields now carry (:issue:`1333`)
-  * :breaking:`Breaking` Raise ``ConnectionError`` for malformed service definitions (:issue:`1333`)
-  * :breaking:`Breaking` Raise ``bad argument :issue:`2` to 'connect_local'`` for a local socket path that is too long (:issue:`1333`)
+  * :breaking:`Breaking` Raise ``ConnectionError`` for malformed service definitions, and ``bad argument :issue:`2` to 'connect_local'`` for a local socket path that is too long (:issue:`1333`)
 
-* :breaking:`Breaking` Convert names with ``UInt``, ``ULong``, ``SInt``, ``FoV``, a plural acronym or digits next to an acronym as written, e.g. ``Type.uint``, ``Camera.fov`` and ``MapFilterType.evas`` in place of ``u_int``, ``fo_v`` and ``ev_as`` (:issue:`1339`)
-* Add ``Connection:get_call_template``, which builds a call with no instance or arguments, for ``Expression.call_with_arguments`` (:issue:`1352`)
-* Take a procedure, such as ``Engine.get_has_fuel``, as its call template where a call is expected (:issue:`1352`)
-* Order remote objects by id with ``<`` (:issue:`1377`)
-* Fix a returned enumeration value comparing unequal to the same named value (:issue:`1377`)
-* Raise an error for a handshake timeout that is not positive (:issue:`1377`)
+* Server side functions
+
+  * :breaking:`Breaking` Replace ``KRPC.compile_function`` and ``KRPC.run_function`` with ``Client:compile`` and ``Client:run`` (:issue:`1267`)
+  * Add ``Connection:get_call``, for ``KRPC.Expression.call`` (:issue:`1267`)
+  * Add ``Connection:get_call_template``, and take a procedure such as ``Engine.get_has_fuel`` as its call template, for ``Expression.call_with_arguments`` (:issue:`1352`)
+
 
 
 Python client
@@ -629,142 +596,134 @@ Python client
 * Connections
 
   * :breaking:`Breaking` Connect over one connection, removing the ``stream_port`` and ``stream_path`` parameters of ``connect`` and ``connect_local``. A server from before 0.8 refuses the connection (:issue:`1219`)
-  * :breaking:`Breaking` Rename the ``rpc_port`` and ``rpc_path`` parameters of ``connect`` and ``connect_local`` to ``port`` and ``path`` (:issue:`1219`)
+  * :breaking:`Breaking` Rename the ``rpc_port`` and ``rpc_path`` parameters to ``port`` and ``path`` (:issue:`1219`)
   * :breaking:`Breaking` Give up after 5 seconds if the server does not accept the connection. Pass ``handshake_timeout=None`` to wait for the player to approve it (:issue:`1219`)
-  * Add ``handshake_timeout`` and ``stall_timeout`` parameters to ``connect`` and ``connect_local`` (:issue:`1219`)
+  * Add the ``handshake_timeout`` and ``stall_timeout`` parameters (:issue:`1219`)
   * Send calls from several threads without waiting for each other's responses (:issue:`1219`)
-  * Fix later calls reading the wrong response after a call is interrupted by an exception (:issue:`1219`)
   * Tell the server when the connection closes (:issue:`1219`)
-  * Add ``status`` and ``reason`` to ``ConnectionError`` for a refused or ended connection (:issue:`1219`)
-  * :breaking:`Breaking` Raise ``ConnectionError`` when the server cannot be reached, with the ``OSError`` as its cause (:issue:`1219`)
+  * Fix later calls reading the wrong response after a call is interrupted by an exception (:issue:`1219`)
 
-* Streams and events
+* Naming
 
-  * :breaking:`Breaking` Raise ``ValueError`` from ``Stream.wait`` and ``Event.wait`` for a negative or NaN timeout, and wait with no deadline for an infinite one (:issue:`1219`)
-  * Keep a stream running when a value fails to decode, dropping the value (:issue:`1219`)
-  * Fix ``Stream.wait`` and ``Event.wait`` returning before the timeout on Windows (:issue:`1220`)
-  * Stream a procedure, property setter or server side function with no value as a stream of ``None`` (:issue:`1198`)
-  * Build the call of a property setter with ``get_call`` (:issue:`1198`)
-  * :breaking:`Breaking` Return the stream id from ``KRPC.add_stream`` and ``KRPC.add_function_stream`` (:issue:`1266`)
-  * Remove a stream or an event at the end of a ``with`` statement on it (:issue:`1291`)
-  * :deprecated:`Deprecated` ``Client.stream``, superseded by ``add_stream`` in a ``with`` statement (:issue:`1291`)
-
-* Link the references in service docstrings with Sphinx roles (:issue:`1185`)
-* Fix the lists and parameter references in service docstrings, which were invalid reStructuredText (:issue:`1185`)
-* Write the units and formulas in service documentation as Unicode text in docstrings (:issue:`1169`)
-* Fix a ``SyntaxWarning`` for an invalid escape sequence on importing the ``SpaceCenter`` stubs (:issue:`1169`)
-* Exceptions
-
-  * Raise a ``KRPC`` exception as its own class, derived from the builtin it was raised as before, so ``except conn.krpc.ArgumentException`` catches it (:issue:`1172`)
-  * Raise a ``ServerError`` for a server error whose type names a class, in place of failing with a ``TypeError`` (:issue:`1300`)
-
-* :breaking:`Breaking` Return ``KRPC.get_status`` as the named tuple ``ServerStatus``, with the settings and statistics under ``settings`` and ``statistics`` (:issue:`1244`)
-* :breaking:`Breaking` Leave internal procedures out of the services, such as ``KRPC.add_stream`` (:issue:`1269`)
-* Accept a server side function built with the expression API in ``Client.compile`` (:issue:`1269`)
-* Support ``isinstance`` with a class accessed through a connection, such as ``isinstance(vessel, conn.space_center.Vessel)`` (:issue:`1279`)
-* Publish a wheel in place of an sdist (:issue:`1289`)
-* Services
-
-  * Keep the parameters of a deprecated procedure in its signature, for a service built from the server's definitions (:issue:`1301`)
-  * :breaking:`Breaking` Remove ``use_pregenerated_stubs`` (:issue:`1302`)
-  * :breaking:`Breaking` Raise an ``AttributeError`` for a service the server lacks (:issue:`1302`)
-  * :breaking:`Breaking` Raise a ``TypeError`` for a static method called on a class imported from a service's module (:issue:`1302`)
-  * Add ``connect[T]`` and ``connect_local[T]``, which type the client as ``T`` for type hints, such as for a mod's services (:issue:`1303`)
-  * Add a client type to each service's module, such as ``SpaceCenterClient``, to combine with others in a subclass (:issue:`1303`)
+  * :breaking:`Breaking` Rename ``krpc.Client`` to ``krpc.Connection``, and each ``<Service>Client`` to ``<Service>Connection``, such as ``krpc.ksp.KSPConnection`` (:issue:`1332`)
+  * :breaking:`Breaking` Rename the transports ``krpc.Connection`` and ``krpc.LocalConnection`` to ``krpc.TCPIPTransport`` and ``krpc.LocalTransport`` (:issue:`1332`)
+  * :breaking:`Breaking` Rename the base classes of generated types to ``RemoteObject``, ``RemoteEnum``, ``RemoteFlags`` and ``RemoteService`` (:issue:`1332`)
   * :breaking:`Breaking` Move the modules of the KSP services from ``krpc.services`` to ``krpc.ksp``, such as ``krpc.ksp.spacecenter`` (:issue:`1304`)
+  * :breaking:`Breaking` Convert names with ``UInt``, ``FoV``, a plural acronym or digits next to an acronym as written, e.g. ``Type.uint``, ``Camera.fov`` and ``MapFilterType.evas`` (:issue:`1339`)
 
-* Server side functions
+* Services and types
 
-  * Type the functions ``compile``, ``run``, ``add_stream`` and ``add_event`` take, and the ``KRPC.Expression`` object ``compile`` returns (:issue:`1306`)
+  * Add ``connect[T]`` and ``connect_local[T]``, which type the connection as ``T``, and a connection type per service module to combine in a subclass (:issue:`1303`)
+  * Support ``isinstance`` with a class accessed through a connection, such as ``isinstance(vessel, conn.space_center.Vessel)`` (:issue:`1279`)
+  * Support flags enumerations, such as ``SpaceCenter.MapFilterType``, as an ``enum.Flag`` (:issue:`1311`)
+  * :breaking:`Breaking` Remove ``use_pregenerated_stubs``, and raise an ``AttributeError`` for a service the server lacks (:issue:`1302`)
+  * :breaking:`Breaking` Raise a ``TypeError`` for a static method called on a class imported from a service's module (:issue:`1302`)
+  * :breaking:`Breaking` Leave internal procedures, such as ``KRPC.add_stream``, out of the services (:issue:`1269`)
+  * :breaking:`Breaking` Return ``KRPC.get_status`` as the named tuple ``ServerStatus`` (:issue:`1244`)
+  * Warn on a use of a deprecated member, including through a stream or ``get_call``, and mark them with ``@deprecated`` in the stubs (:issue:`1322`)
+  * Deprecate each member of a deprecated service, class, enumeration or structure (:issue:`1322`)
+  * Keep the parameters of a deprecated procedure in its signature (:issue:`1301`)
 
-* Support flags enumerations, such as ``SpaceCenter.MapFilterType``, as an ``enum.Flag`` (:issue:`1311`)
-* Raise ``EncodingError`` for an enumeration result the enumeration does not declare, in place of ``ValueError`` (:issue:`1311`)
-* Compile ``|``, ``&``, ``^``, ``~``, ``in`` and truth tests on flags enumeration values in server side functions (:issue:`1313`)
-* Warn when a stream or ``get_call`` uses a deprecated procedure, method or property (:issue:`1322`)
-* Warn on a use of a deprecated service, class, enumeration, enumeration value, structure, structure field or exception (:issue:`1322`)
-* Mark deprecated members of the generated stubs with ``@deprecated``, so type checkers report them (:issue:`1322`)
-* Deprecate each member of a deprecated service, class, enumeration or structure (:issue:`1322`)
-* :breaking:`Breaking` Rename ``krpc.Connection``, the socket of a connection, to ``krpc.TCPIPTransport``, and ``krpc.LocalConnection`` to ``krpc.LocalTransport`` (:issue:`1332`)
-* :breaking:`Breaking` Rename the base classes of generated types ``krpc.types.ClassBase``, ``DocEnum`` and ``DocFlag``, and ``krpc.service.ServiceBase``, to ``RemoteObject``, ``RemoteEnum``, ``RemoteFlags`` and ``RemoteService`` (:issue:`1332`)
-* :breaking:`Breaking` Rename ``krpc.Client`` to ``krpc.Connection``, ``krpc.ksp.KSPClient`` to ``krpc.ksp.KSPConnection``, and each service module's ``<Service>Client`` to ``<Service>Connection`` (:issue:`1332`)
-* Raise ``ConnectionError`` when the connection request fails to be written (:issue:`1332`)
+* Arguments
+
+  * Raise ``ValueError`` for a tuple or structure of the wrong length, a negative unsigned value, or a local socket path that is too long (:issue:`1333`)
+  * Raise an error for a number out of range of its type, or for a string, bytes or a dictionary passed for a list, tuple or structure (:issue:`1377`)
+  * Raise ``TypeError`` for ``None`` passed for a parameter that cannot be null, before the call is sent (:issue:`1333`, :issue:`1377`)
+
 * Errors
 
   * :breaking:`Breaking` Derive every error of the client from the new ``krpc.error.RemoteError`` (:issue:`1333`)
   * :breaking:`Breaking` Rename ``krpc.error.RPCError`` to ``ServerError``, and ``FunctionCompilationError`` to ``CompilationError`` (:issue:`1333`)
-  * Derive the exception classes a service declares, and a mapped exception with no builtin, from ``ServerError`` (:issue:`1333`)
-  * :breaking:`Breaking` Raise ``StreamError`` when the server removes a stream or event (:issue:`1333`)
-  * :breaking:`Breaking` Raise ``ValueError`` for a tuple or structure of the wrong length, a negative unsigned value, a null in a position that cannot hold one, and a local socket path that is too long (:issue:`1333`)
-  * :breaking:`Breaking` Raise ``ValueError`` in place of ``StreamError`` for arguments to a streamed function, and for a compiled function with parameters passed to ``add_stream`` or ``add_event`` (:issue:`1333`)
-  * :breaking:`Breaking` Raise ``ConnectionError`` for malformed service definitions (:issue:`1333`)
-  * Raise ``EncodingError`` for every value that fails to decode, including a string or tuple cut short (:issue:`1333`)
+  * Raise each exception a service declares as its own class, derived from ``ServerError`` or the builtin it maps, so ``except conn.krpc.ArgumentException`` catches it (:issue:`1172`, :issue:`1300`, :issue:`1333`)
+  * :breaking:`Breaking` Raise ``ConnectionError`` when the server cannot be reached, with the ``OSError`` as its cause, or sends malformed service definitions (:issue:`1219`, :issue:`1333`)
+  * Add ``status`` and ``reason`` to ``ConnectionError`` for a refused or ended connection (:issue:`1219`)
+  * Raise ``EncodingError`` for every value that fails to decode, including an enumeration value the enumeration does not declare (:issue:`1311`, :issue:`1333`)
 
-* Compile ``match`` statements in server side functions (:issue:`1337`)
-* :breaking:`Breaking` Convert names with ``UInt``, ``ULong``, ``SInt``, ``FoV``, a plural acronym or digits next to an acronym as written, e.g. ``Type.uint``, ``Camera.fov`` and ``MapFilterType.evas`` in place of ``u_int``, ``fo_v`` and ``ev_as`` (:issue:`1339`)
-* Add ``Connection.get_call_template``, which builds a call with no instance or arguments, for ``Expression.call_with_arguments`` (:issue:`1352`)
-* Take a member, such as ``Engine.has_fuel``, as its call template where a call is expected (:issue:`1352`)
-* Raise ``StreamError`` for a stream of a procedure that returns an event (:issue:`1377`)
-* Raise an error for a number outside the range of its parameter's type, in place of sending a wrong value (:issue:`1377`)
-* Raise ``TypeError`` for ``None`` passed for a parameter that cannot be null, before the call is sent (:issue:`1377`)
-* Raise an error for a string, bytes or a dictionary passed for a list, a tuple or a structure (:issue:`1377`)
+* Streams and events
+
+  * :breaking:`Breaking` Raise ``ValueError`` from ``Stream.wait`` and ``Event.wait`` for a negative or NaN timeout, and wait with no deadline for an infinite one (:issue:`1219`)
+  * :breaking:`Breaking` Raise ``StreamError`` when the server removes a stream or event, or for a stream of a procedure that returns an event (:issue:`1333`, :issue:`1377`)
+  * :breaking:`Breaking` Raise ``ValueError`` in place of ``StreamError`` for arguments to a streamed function, and for a compiled function with parameters (:issue:`1333`)
+  * Remove a stream or an event at the end of a ``with`` statement on it (:issue:`1291`)
+  * :deprecated:`Deprecated` ``Client.stream``, superseded by ``add_stream`` in a ``with`` statement (:issue:`1291`)
+  * Stream a procedure, property setter or server side function with no value as a stream of ``None``, and build the call of a property setter with ``get_call`` (:issue:`1198`)
+  * Keep a stream running when a value fails to decode, dropping the value (:issue:`1219`)
+  * Fix ``Stream.wait`` and ``Event.wait`` returning before the timeout on Windows (:issue:`1220`)
+
+* Server side functions
+
+  * Compile ``match`` statements, and ``|``, ``&``, ``^``, ``~``, ``in`` and truth tests on flags enumeration values (:issue:`1313`, :issue:`1337`)
+  * Accept a function built with the expression API in ``Connection.compile`` (:issue:`1269`)
+  * Add ``Connection.get_call_template``, and take a member such as ``Engine.has_fuel`` as its call template, for ``Expression.call_with_arguments`` (:issue:`1352`)
+  * Type the functions ``compile``, ``run``, ``add_stream`` and ``add_event`` take, and the ``KRPC.Expression`` object ``compile`` returns (:issue:`1306`)
+
+* Documentation and packaging
+
+  * Link the references in service docstrings with Sphinx roles, and fix their invalid reStructuredText (:issue:`1185`)
+  * Write the units and formulas in docstrings as Unicode text (:issue:`1169`)
+  * Fix a ``SyntaxWarning`` for an invalid escape sequence on importing the ``SpaceCenter`` stubs (:issue:`1169`)
+  * Publish a wheel in place of an sdist (:issue:`1289`)
+
 
 
 krpctools
 ^^^^^^^^^
 
-* Relicense krpctools, including the bundled ServiceDefinitions tool, under the LGPLv3 (:issue:`1221`)
-* Add ``<unit>`` and a LaTeX subset for ``<math>`` to service documentation, typeset by ``krpc-docgen`` and written as Unicode text by ``krpc-clientgen`` (:issue:`1169`)
-* Report invalid documentation markup as an error from ``krpc-docgen``, and a warning from ``krpc-clientgen`` (:issue:`1169`)
-* Write the ``mapped_type`` of each exception to the service definitions (:issue:`1172`)
-* Generate Python, C++ and Java exceptions that stand for their language's equivalent (:issue:`1172`)
-* Link each ``<see cref>`` in generated client documentation to the member it names, and warn about one ``krpc-clientgen`` cannot resolve (:issue:`1185`)
-* Allow a ``<see cref>`` to a service in ``krpc-docgen`` (:issue:`1185`)
-* Fix the ``krpc-docgen`` link to a C-nano property that has only a setter (:issue:`1185`)
-* Fix bytes default arguments in generated C# and C++ code and in the Lua documentation (:issue:`1194`)
-* Add ``krpc-conformance``, which runs the client conformance tests against a client library (:issue:`1220`)
-* :breaking:`Breaking` Set the port of the ``TestServer`` websockets server with ``--websockets-port``, in place of ``--tcpip-port`` (:issue:`1220`)
-* Generate a C++ ``_stream`` function for a method with no return value (:issue:`1198`)
-* Add ``krpc-testserver``, which runs the ``TestServer`` bundled with krpctools (:issue:`1228`)
-* Run ``krpc-servicedefs`` and the ``TestServer`` on Windows (:issue:`1228`)
-* Fix serial IO in the ``TestServer`` (:issue:`1228`)
-* Print a plain error when the ``krpc-docgen`` ordering file is missing a member (:issue:`1228`)
-* :breaking:`Breaking` Stop releasing the ``TestServer`` archive and Docker image, replaced by ``krpc-testserver`` (:issue:`1228`)
-* :breaking:`Breaking` Pass the directories of the assemblies a service references to ``krpc-servicedefs`` with ``--reference-dir``, in place of the Kerbal Space Program directory (:issue:`1228`)
-* :deprecated:`Deprecated` ``--ksp`` in ``krpc-clientgen``, superseded by ``--reference-dir`` (:issue:`1228`)
-* Generate several pages in one ``krpc-docgen`` run, with ``--page`` (:issue:`1252`)
-* :breaking:`Breaking` Replace the ``SOURCE`` and ``OUTPUT`` arguments of ``krpc-docgen`` with ``--page`` (:issue:`1252`)
-* Fix ``krpc-docgen`` Java links to a service's own procedures and properties, and to enumeration values (:issue:`1252`)
-* :breaking:`Breaking` Write the Lua API documentation from ``krpc-docgen`` for ``sphinx-lua-ls``, in place of ``sphinxcontrib-luadomain``, with typed signatures (:issue:`1202`)
-* Generate a ``_call`` function for each procedure of a C-nano service (:issue:`1267`)
-* Leave internal procedures out of generated services and API documentation (:issue:`1269`)
-* Ship the ``TestService2`` and ``ConformanceService`` definitions beside ``TestService.json``, for a conformance testee whose client generates its stubs ahead of time (:issue:`1284`)
-* Publish a wheel in place of an sdist (:issue:`1289`)
-* Reject unknown options and invalid values in ``krpc-testserver`` and ``krpc-servicedefs`` (:issue:`1296`)
-* Write the members in ``krpc-servicedefs`` output in a fixed order (:issue:`1296`)
-* Testing against a live game
+* Packaging
 
+  * Relicense krpctools, including the bundled ServiceDefinitions tool, under the LGPLv3 (:issue:`1221`)
+  * Publish a wheel in place of an sdist (:issue:`1289`)
+
+* Client generation
+
+  * Generate the JavaScript client's TypeScript modules with ``krpc-clientgen js`` (:issue:`1346`)
+  * Name the connection class ``Connection`` in C++ and Python, and decode values with ``Decoder`` in C# and Java (:issue:`1332`)
+  * Generate exceptions that stand for their language's equivalent, and derive the others from ``ServerError`` or ``ServerException`` (:issue:`1172`, :issue:`1333`)
+  * Generate the C-nano ``_call`` functions, and the ``KRPC_EXCEPTION_``, ``KRPC_CLASS_``, ``KRPC_ENUMERATION_``, ``KRPC_STRUCT_`` and ``KRPC_FIELD_`` macros (:issue:`1267`, :issue:`1333`, :issue:`1336`)
+  * Generate a C++ ``_stream`` function for a method with no return value (:issue:`1198`)
+  * Support flags enumerations in ``krpc-clientgen`` and ``krpc-docgen`` (:issue:`1311`)
+  * Leave internal procedures out of generated services and API documentation (:issue:`1269`)
+  * Name the module of another service a generated Python module imports with ``--include`` (:issue:`1304`)
+  * :deprecated:`Deprecated` ``--ksp`` in ``krpc-clientgen``, superseded by ``--reference-dir`` (:issue:`1228`)
+  * Fix bytes default arguments in generated C# and C++ code and in the Lua documentation (:issue:`1194`)
+
+* Documentation generation
+
+  * :breaking:`Breaking` Replace the ``SOURCE`` and ``OUTPUT`` arguments of ``krpc-docgen`` with ``--page``, which generates several pages in one run (:issue:`1252`)
+  * Add the ``js`` language to ``krpc-docgen`` (:issue:`1346`)
+  * Add the ``http`` language to ``krpc-docgen`` (:issue:`1391`)
+  * :breaking:`Breaking` Write the Lua API documentation for ``sphinx-lua-ls``, in place of ``sphinxcontrib-luadomain``, with typed signatures (:issue:`1202`)
+  * Add ``<unit>`` and a LaTeX subset for ``<math>`` to service documentation, typeset by ``krpc-docgen`` and written as Unicode text by ``krpc-clientgen`` (:issue:`1169`)
+  * Report invalid documentation markup as an error from ``krpc-docgen``, and a warning from ``krpc-clientgen`` (:issue:`1169`)
+  * Link each ``<see cref>`` to the member it names, including a service, and warn about one ``krpc-clientgen`` cannot resolve (:issue:`1185`)
+  * Say in the reference docs what each client raises for each exception of a service (:issue:`1333`)
+  * Print a plain error when the ordering file is missing a member (:issue:`1228`)
+  * Fix the links to a C-nano property with only a setter, and the Java links to a service's own members and to enumeration values (:issue:`1185`, :issue:`1252`)
+
+* Service definitions
+
+  * :breaking:`Breaking` Pass the directories of the assemblies a service references to ``krpc-servicedefs`` with ``--reference-dir``, in place of the Kerbal Space Program directory (:issue:`1228`)
+  * Write the ``mapped_type`` of each exception to the service definitions (:issue:`1172`)
+  * Run ``krpc-servicedefs`` on Windows, and write its members in a fixed order (:issue:`1228`, :issue:`1296`)
+  * Reject unknown options and invalid values in ``krpc-servicedefs`` and ``krpc-testserver`` (:issue:`1296`)
+
+* Test server
+
+  * Add ``krpc-testserver``, which runs the bundled ``TestServer``, on Windows too (:issue:`1228`)
+  * :breaking:`Breaking` Stop releasing the ``TestServer`` archive and Docker image, replaced by ``krpc-testserver`` (:issue:`1228`)
+  * :breaking:`Breaking` Set the port of the WebSockets server with ``--websockets-port``, in place of ``--tcpip-port`` (:issue:`1220`)
+  * Add the ``http`` server type, with ``--http-port`` and ``--http-allowed-origins``, and ``--websockets-allowed-origins`` (:issue:`1391`, :issue:`1392`)
+  * Add ``--frame-limit``, ``--fixed-rate``, ``--tick-work-us``, ``--frame-work-us`` and ``--preset``, which model a game's frame loop (:issue:`1376`)
+  * Add ``--flow-control``, for RTS/CTS over serial IO (:issue:`1386`)
+  * Fix serial IO (:issue:`1228`)
+
+* Testing
+
+  * Add ``krpc-conformance``, which runs the client conformance tests against a client library (:issue:`1220`)
+  * Ship the ``TestService2``, ``ConformanceService`` and ``DeprecatedService`` definitions beside ``TestService.json``, and add ``DeprecationSignals`` to the testee protocol (:issue:`1284`, :issue:`1322`)
   * Add ``krpc-game``, which installs kRPC, its test add-on and the requested mods into KSP, and runs the game (:issue:`1299`)
   * Add ``krpctools.game``, with a pytest plugin and test case classes for testing a mod against a running game (:issue:`1299`)
 
-* Name the module of another service a generated Python module imports with ``--include``, for a mod whose service uses another mod's types (:issue:`1304`)
-* Support flags enumerations in ``clientgen`` and ``docgen`` (:issue:`1311`)
-* Add the ``DeprecationSignals`` command to the conformance testee protocol, which a testee needs for the deprecation tests (:issue:`1322`)
-* Ship the ``DeprecatedService`` definitions beside ``TestService.json`` (:issue:`1322`)
-* Name the connection class ``Connection`` in generated C++ and Python stubs (:issue:`1332`)
-* Decode values with ``Decoder`` in generated C# and Java stubs (:issue:`1332`)
-* Generate C++ mapped exceptions as aliases of the standard exceptions, and derive the other exceptions from ``ServerError`` or ``ServerException`` (:issue:`1333`)
-* Generate no class for a mapped exception in C# and Java stubs (:issue:`1333`)
-* Say in the reference docs what each client raises for each exception of a service (:issue:`1333`)
-* Generate a ``KRPC_EXCEPTION_`` macro of the ids of each exception in C-nano stubs (:issue:`1333`)
-* Generate the C-nano ``KRPC_CLASS_``, ``KRPC_ENUMERATION_``, ``KRPC_STRUCT_`` and ``KRPC_FIELD_`` macros (:issue:`1336`)
-* Generate a TypeScript module of a service for the JavaScript client, with ``krpc-clientgen js`` (:issue:`1346`)
-* Generate the JavaScript client's API documentation, with ``krpc-docgen js`` (:issue:`1346`)
-* Add ``--frame-limit``, ``--fixed-rate``, ``--tick-work-us`` and ``--frame-work-us`` to ``krpc-testserver``, which model a game's frame loop (:issue:`1376`)
-* Add ``--preset`` to ``krpc-testserver``, for its rate settings (:issue:`1376`)
-* Add ``--flow-control`` to the ``TestServer``, for RTS/CTS over serial IO (:issue:`1386`)
-* Add the ``http`` server type, ``--http-port`` and ``--http-allowed-origins`` to ``krpc-testserver`` (:issue:`1391`)
-* Add the ``http`` language to ``krpc-docgen`` (:issue:`1391`)
-* Add ``--websockets-allowed-origins`` to ``krpc-testserver`` (:issue:`1392`)
 
 
 v0.7.0
