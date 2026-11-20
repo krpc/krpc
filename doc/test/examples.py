@@ -690,6 +690,7 @@ API = [
 PAGES = [
     Example("getting-started/HelloWorld", "orbit"),
     Example("index/Launch", "pad", run=Exit(timeout=300), slow=True),
+    Example("index/LaunchHTTP", "pad", run=Exit(timeout=300), slow=True),
     *_exits(
         "orbit",
         "communication-protocols/localsocket/RPC",
