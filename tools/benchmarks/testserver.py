@@ -33,6 +33,7 @@ import krpc
 ADDRESSES = {
     "tcpip_port": re.compile(r"tcpip_port = (\d+)"),
     "localsocket_path": re.compile(r"localsocket_path = (\S+)"),
+    "http_port": re.compile(r"http_port = (\d+)"),
 }
 READY = "Server started successfully"
 
@@ -44,6 +45,11 @@ LOCAL_SOCKET = "localsocket"
 TRANSPORTS = (TCP, LOCAL_SOCKET)
 LABELS = {TCP: "TCP/IP", LOCAL_SOCKET: "a local socket"}
 SERVER_TYPES = {TCP: "protobuf", LOCAL_SOCKET: "localsocket"}
+
+# JSON over HTTP, which only the HTTP suite measures, as the protocol buffer clients cannot
+# speak it. Its address is a port.
+HTTP = "http"
+SERVER_TYPES[HTTP] = "http"
 
 # Every variable a benchmark program reads to find the server. A program looks for the socket
 # path first and falls back to the port, so setting only the one the transport being measured
@@ -246,7 +252,9 @@ def _environment():
 
 
 def _wait_for_endpoint(process, log, transport):
-    name = "localsocket_path" if transport == LOCAL_SOCKET else "tcpip_port"
+    name = {LOCAL_SOCKET: "localsocket_path", HTTP: "http_port"}.get(
+        transport, "tcpip_port"
+    )
     deadline = time.time() + STARTUP_TIMEOUT_SECONDS
     while time.time() < deadline:
         output = log.read()
@@ -308,16 +316,20 @@ def settings(conn, frame_pacing):
     and only whoever started it knows which way it went. ``None`` says nobody here did, and
     a string describes a loop other than the default.
     """
-    status = conn.krpc.get_status()
+    return describe(conn.krpc.get_status().settings, frame_pacing)
+
+
+def describe(server_settings, frame_pacing):
+    """``settings`` for a server's settings already read, by whichever protocol read them."""
     pacing = frame_pacing
     if not isinstance(pacing, str):
         pacing = {True: "60 updates/s", False: "off", None: "not known"}[frame_pacing]
     return ", ".join(
         [
             "frame pacing %s" % pacing,
-            "adaptive rate control %s" % status.settings.adaptive_rate_control,
-            "target frame rate %d frames/s" % status.settings.target_frame_rate,
-            "max time per frame %d us" % status.settings.max_time_per_frame,
-            "max call wait %d us" % status.settings.max_call_wait,
+            "adaptive rate control %s" % server_settings.adaptive_rate_control,
+            "target frame rate %d frames/s" % server_settings.target_frame_rate,
+            "max time per frame %d us" % server_settings.max_time_per_frame,
+            "max call wait %d us" % server_settings.max_call_wait,
         ]
     )

@@ -10,11 +10,13 @@ test_suite(
     ],
 )
 
-# A minimal client, which calls the HTTP server with the standard library
+# A minimal client, which calls the HTTP server with the standard library, for the tests and
+# the benchmarks
 py_library(
     name = "krpc_http",
     srcs = ["krpc_http.py"],
     imports = ["."],
+    visibility = ["//tools/benchmarks:__pkg__"],
 )
 
 py_binary(

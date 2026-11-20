@@ -9,7 +9,8 @@ apiece, so that what a call costs in one client can be read against another.
 The clients are measured one after another rather than at once: run together they would be
 timing each other's load as well as their own. Each gets a server of its own, so a column here
 and a run of that client's target are the same measurement. Every transport the machine has is
-measured, and reported as a table apiece.
+measured, and reported as a table apiece. The http column is the JSON over HTTP server, in the
+TCP/IP table, as HTTP runs over TCP/IP.
 
 The file `--json` writes holds every client's results together, and `//tools/benchmarks:compare`
 reads it as it reads any other run, reporting a block per client.
@@ -17,20 +18,21 @@ reads it as it reads any other run, reporting a block per client.
 
 import sys
 
-from tools.benchmarks import report, run_client, run_python, runner
+from tools.benchmarks import report, run_client, run_http, run_python, runner
 
 SUITE = "clients"
 
-# The python client is measured in this process, since it needs no program of its own; the
-# others arrive as `--client language=path` from the bazel target.
+# The python client and the HTTP server are measured in this process, since they need no
+# program of their own; the others arrive as `--client language=path` from the bazel target.
 PYTHON = "python"
+HTTP = "http"
 
 
 def main():
     args = arguments()
     results = []
     environment = {}
-    for name, client in [(PYTHON, None)] + args.client:
+    for name, client in [(PYTHON, None), (HTTP, None)] + args.client:
         measured, version, settings = measure(args, name, client)
         results += measured
         # One line for the lot, not one per client: they are measured against servers started
@@ -44,8 +46,10 @@ def main():
 
 def measure(args, name, client):
     """Measure one client, and say what it was measured against."""
-    if client is None:
+    if name == PYTHON:
         results, environment = run_python.measure(args.server)
+    elif name == HTTP:
+        results, environment = run_http.measure(args.server)
     else:
         results, environment = run_client.measure(
             args.server, "client, %s" % name, client
