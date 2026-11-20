@@ -652,17 +652,23 @@ namespace KRPC
             ulong rpcsExecuted = 0;
 
             rpcYieldedContinuations.Clear ();
-            for (int i = 0; i < Servers.Count; i++)
-                Servers [i].InnerServer.Update ();
+            UpdateServers ();
 
             while (true) {
 
                 // Poll for RPCs, waiting for bytes to arrive between polls
                 rpcPollTimer.Start ();
+                var woken = false;
                 while (true) {
                     // Cleared before the poll, so that bytes arriving during it end the wait
                     Arrivals.Reset ();
                     PollRequests (rpcYieldedContinuations);
+                    // A wake that brought no request may be a new connection, a handshake or a
+                    // disconnect, which the servers handle in their update
+                    if (rpcContinuations.Count == 0 && woken) {
+                        UpdateServers ();
+                        PollRequests (rpcYieldedContinuations);
+                    }
                     if (rpcContinuations.Count > 0)
                         break;
                     // Wait for the client to release the tick, so that a call it makes after
@@ -670,13 +676,13 @@ namespace KRPC
                     // disconnect also sets the signal.
                     if (TickHeld) {
                         heldTick = true;
-                        Arrivals.WaitUntil (tickHoldDeadline);
+                        woken = Arrivals.WaitUntil (tickHoldDeadline);
                         continue;
                     }
                     var waitDeadline = CallWaitDeadline (rpcStart + allowance, maxCallWaitTicks);
                     if (waitDeadline == 0)
                         break;
-                    Arrivals.WaitUntil (waitDeadline);
+                    woken = Arrivals.WaitUntil (waitDeadline);
                 }
                 rpcPollTimer.Stop ();
 
@@ -761,6 +767,16 @@ namespace KRPC
             DeferredCalls = (uint)rpcContinuations.Count;
             frameExec += rpcExecTimer.ElapsedTicks;
             frameWait += rpcPollTimer.ElapsedTicks;
+        }
+
+        /// <summary>
+        /// Accept new connections, and move the others through their handshakes, approval and
+        /// disconnects.
+        /// </summary>
+        void UpdateServers ()
+        {
+            for (int i = 0; i < Servers.Count; i++)
+                Servers [i].InnerServer.Update ();
         }
 
         /// <summary>

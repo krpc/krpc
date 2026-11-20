@@ -151,5 +151,4 @@ What a hold means for the server:
   held. Physics runs on a fixed time step, so a game whose ticks are held runs
   slower than real time and simulates every tick in turn.
 * Streams do not update inside a hold, as stream updates are sent once the update
-  has finished executing calls. New connections are not accepted either, as the
-  servers are polled between updates.
+  has finished executing calls.
