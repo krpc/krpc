@@ -57,7 +57,7 @@ def main():
     lib.banner("Done")
     print(f"Draft created: {url}")
     print("Review it on GitHub and publish it from there.")
-    print("Next: the 6x and 7x scripts, in any order")
+    print("Next: the 6x and 7x scripts, in any order, with 70 after 69")
 
 
 if __name__ == "__main__":
