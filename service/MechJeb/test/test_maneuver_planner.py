@@ -134,6 +134,7 @@ class TestManeuverPlannerInOrbit(MechJebInOrbitTestCase):
 
     def test_advanced_transfer(self):
         operation = self.planner.operation_advanced_transfer
+        periapsis_height = operation.periapsis_height
         self.sc.target_body = self.sc.bodies["Duna"]
         try:
             self.wait_until(lambda: self.mj.target_controller.normal_target_exists)
@@ -153,6 +154,7 @@ class TestManeuverPlannerInOrbit(MechJebInOrbitTestCase):
             self.assertEqual(1, len(nodes))
             self.assertEqual(self.sc.bodies["Sun"], nodes[0].orbit.next_orbit.body)
         finally:
+            operation.periapsis_height = periapsis_height
             self.sc.clear_target()
 
     def test_advanced_transfer_without_target(self):
