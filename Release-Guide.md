@@ -50,9 +50,10 @@ A release preparation pull request takes `main` from the version being released 
      npm and SpaceDock, and imports the GPG key. The PyPI and nuget.org keys get a format check
      only, as an upload is their only test.
    * The version is not already on npm or Maven Central, where it cannot be published again.
-7. `tools/release/20-build-and-test.py` - builds everything and runs the full headless test and
-   lint suites, plus `//doc:linkcheck`, which needs network access. Pass `--expunge` to start from
-   a pristine Bazel state.
+7. `tools/release/20-build-and-test.py` - builds everything from a clean output tree and runs the
+   full headless test and lint suites, plus `//doc:linkcheck`, which needs network access. Every
+   test runs, with no cached results. Check the build log is clean, with no warnings. Pass
+   `--expunge` to also discard the downloaded toolchains.
 
 ## 2. Tag
 
