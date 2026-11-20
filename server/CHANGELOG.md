@@ -1,58 +1,62 @@
 ## [v0.8.0]
-- **Breaking:** Listen on one port or socket path per server, removing the stream port and
-  stream path settings (#1219)
-- **Breaking:** Reset each existing server's settings to their defaults, so a TCP/IP and a
-  WebSockets server both use port 50000 until one is changed (#1219)
-- **Breaking:** Turn on "Auto-accept new clients" for new installs. An existing settings file
-  keeps its value (#1219)
-- Name the TCP/IP protocol "Protobuf over TCP/IP" in the server window (#1225)
-- Log a connection the player is asked to allow once, naming the client, and an auto-accepted
-  connection at the debug level (#1235)
-- Log auto-starting the servers only when one is stopped (#1235)
-- Fix the game scene in log lines reading `Inherit, Flight` (#1235)
-- Fix the server window keeping its height after clients disconnect (#1186)
-- Show deferred calls and stream updates in the info window, and name the stream counters as
-  evaluations (#1244)
-- Load a mod's API when some of its methods are missing, and fail only the calls that use them (#1341)
-- Disable only the integration of a mod that fails to load, and give the reason in the errors of
-  its RPCs (#1341)
-- Load each supported mod whatever its version (#1341)
-- Fail the class members of a mod service with the reason when its mod is missing or failed to
-  load (#1342)
-- Keep running when a service has errors, and leave out only the members with them and the members
-  that use them (#1345)
-- List the members left out, and the mods whose support failed to load, in a window at the main
-  menu, which the server window can open again (#1345)
-- List the RPCs that use a missing member, such as after a game update (#1345)
-- Start a new install with one server, with the default settings (#1349)
-- Keep the server settings on an upgrade, as the release no longer includes `settings.cfg` (#1349)
-- Keep each readable setting from a damaged `settings.cfg`, and back up a file with no readable
-  settings as `settings.cfg.bak` (#1349)
-- Widen the server window so the advanced settings fit (#1349)
-- Line up the labels in the server window's advanced settings with their text fields (#1349)
-- Give the kRPC windows an opaque background (#1349)
-- Add a WebSockets server on port 50001 to a new install, beside the TCP/IP server on port 50000,
-  and name each for its protocol (#1371)
-- Default the port of a WebSockets server to 50001 in the server window (#1371)
-- **Breaking:** Replace "Max. time per update" with "Max. time per frame", 10 ms by default,
-  and "Blocking receives" and "Receive timeout" with "Max. call wait", 5 ms by default (#1376)
-- Hold the frame rate at the new "Target frame rate" setting with adaptive rate control,
-  60 fps by default (#1376)
-- Add presets to the advanced settings: "Game first", "Balanced" and "Calls first" (#1376)
-- Reorganize the server info window around the frame, and add a "Limited by" row naming what
-  holds down the call rate (#1376)
-- Fix "Clear statistics" leaving the data read and written (#1376)
-- Hide the server windows while the game hides its UI, such as on a loading screen (#1376)
-- Fix errors logged on every scene change, and on quitting, when the server fails its
-  startup checks (#1376)
-- Name a server added in the server window "Server", "Server 2" and so on (#1385)
-- Remember which servers are expanded in the server window (#1385)
-- Show the number of connected clients beside each server in the server window (#1385)
-- Add RTS/CTS flow control to serial IO servers, set in the server window (#1386)
-- Build the serial port code into `KRPC.Core.dll`, in place of a separate `KRPC.IO.Ports.dll` (#1386)
-- Add *JSON over HTTP* to the protocols in the server window, on port 50003 by default, with the
-  origins whose web pages may call it (#1391)
-- Add the origins whose web pages may connect to WebSockets servers in the server window (#1392)
+
+- Servers and settings
+  - **Breaking:** Listen on one port or socket path per server, removing the stream port and
+    stream path settings (#1219)
+  - **Breaking:** Reset each existing server's settings to their defaults, so a TCP/IP and a
+    WebSockets server both use port 50000 until one is changed (#1219)
+  - **Breaking:** Turn on "Auto-accept new clients" for new installs. An existing settings file
+    keeps its value (#1219)
+  - Start a new install with a TCP/IP server on port 50000 and a WebSockets server on port
+    50001, each named for its protocol (#1349, #1371)
+  - Add *JSON over HTTP* to the protocols, on port 50003 by default, and the origins whose web
+    pages may connect to WebSockets and HTTP servers (#1391, #1392)
+  - Add RTS/CTS flow control to serial IO servers (#1386)
+  - Keep the server settings on an upgrade, as the release no longer includes `settings.cfg`
+    (#1349)
+  - Keep each readable setting from a damaged `settings.cfg`, and back up a file with no
+    readable settings as `settings.cfg.bak` (#1349)
+  - Build the serial port code into `KRPC.Core.dll`, in place of a separate
+    `KRPC.IO.Ports.dll` (#1386)
+
+- Performance
+  - **Breaking:** Replace "Max. time per update" with "Max. time per frame", 10 ms by default,
+    and "Blocking receives" and "Receive timeout" with "Max. call wait", 5 ms by default (#1376)
+  - Hold the frame rate at the new "Target frame rate" setting with adaptive rate control,
+    60 fps by default (#1376)
+  - Add presets to the advanced settings: "Game first", "Balanced" and "Calls first" (#1376)
+
+- Server windows
+  - Show the number of connected clients beside each server, and remember which servers are
+    expanded (#1385)
+  - Name a server added in the window "Server", "Server 2" and so on, and default the port of a
+    WebSockets server to 50001 (#1371, #1385)
+  - Name the TCP/IP protocol "Protobuf over TCP/IP" (#1225)
+  - Reorganize the info window around the frame, with deferred calls, stream updates and a
+    "Limited by" row naming what holds down the call rate (#1244, #1376)
+  - Widen the server window so the advanced settings fit, and line up their labels (#1349)
+  - Give the kRPC windows an opaque background, and hide them while the game hides its UI
+    (#1349, #1376)
+  - Fix the server window keeping its height after clients disconnect (#1186)
+  - Fix "Clear statistics" leaving the data read and written (#1376)
+
+- Mods and service errors
+  - Keep running when a service has errors, and leave out only the members with them and the
+    members that use them (#1345)
+  - Load each supported mod whatever its version, and fail only the calls that use a missing
+    member (#1341)
+  - Disable only the integration of a mod that fails to load, and give the reason in the errors
+    of its RPCs (#1341, #1342)
+  - List the members left out, the RPCs that use them, and the mods whose support failed to
+    load, in a window at the main menu (#1345)
+
+- Logging
+  - Log a connection the player is asked to allow once, naming the client, and an auto-accepted
+    connection at the debug level (#1235)
+  - Log auto-starting the servers only when one is stopped (#1235)
+  - Fix the game scene in log lines reading `Inherit, Flight` (#1235)
+  - Fix errors logged on every scene change, and on quitting, when the server fails its startup
+    checks (#1376)
 
 ## [v0.7.0]
 - **Breaking:** KSP 1.12.5 is the minimum supported version, matching the maximum (#1048)

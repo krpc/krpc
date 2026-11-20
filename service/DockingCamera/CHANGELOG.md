@@ -1,13 +1,12 @@
 ## [v0.8.0]
 
-- Stop logging each read of `Camera.Image` (#1235)
 - **Breaking:** Support the public Docking Camera (KURS) 1.3.9 release, in place of an
-  unreleased fork (#1232)
-- **Breaking:** `Camera.Image` throws an exception if the camera is off or not started, in place
-  of returning an empty array (#1232)
-- Support the cameras Docking Camera (KURS) adds to docking ports (#1232)
-- **Breaking:** `Camera.Image` is a method taking a `StdLib.ImageFormat` and a JPEG quality (#1317)
-- Keep working when a Docking Camera update removes members, and fail only the RPCs that use them (#1341)
+  unreleased fork, including the cameras it adds to docking ports (#1232)
+- **Breaking:** Make `Camera.Image` a method taking a `StdLib.ImageFormat` and a JPEG quality,
+  which throws an exception if the camera is off or not started (#1232, #1317)
+- Keep working when a Docking Camera update removes members, and fail only the RPCs that use
+  them (#1341)
+- Stop logging each read of `Camera.Image` (#1235)
 
 ## [v0.7.0]
 

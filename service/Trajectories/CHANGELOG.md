@@ -1,4 +1,5 @@
 ## [v0.8.0]
 
-- Add Trajectories service
-- Make `Available` callable in every game scene (#1340)
+- Add the Trajectories service, with the predicted trajectory and impact point, the target, and
+  the descent profile (#1253)
+

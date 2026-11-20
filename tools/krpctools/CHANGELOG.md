@@ -1,74 +1,75 @@
 ## [v0.8.0]
-- Relicense krpctools, including the bundled ServiceDefinitions tool, under the LGPLv3 (#1221)
-- Add `<unit>` and a LaTeX subset for `<math>` to service documentation, typeset by
-  `krpc-docgen` and written as Unicode text by `krpc-clientgen` (#1169)
-- Report invalid documentation markup as an error from `krpc-docgen`, and a warning from
-  `krpc-clientgen` (#1169)
-- Write the `mapped_type` of each exception to the service definitions (#1172)
-- Generate Python, C++ and Java exceptions that stand for their language's equivalent (#1172)
-- Link each `<see cref>` in generated client documentation to the member it names, and warn
-  about one `krpc-clientgen` cannot resolve (#1185)
-- Allow a `<see cref>` to a service in `krpc-docgen` (#1185)
-- Fix the `krpc-docgen` link to a C-nano property that has only a setter (#1185)
-- Fix bytes default arguments in generated C# and C++ code and in the Lua documentation (#1194)
-- Add `krpc-conformance`, which runs the client conformance tests against a client library
-  (#1220)
-- **Breaking:** Set the port of the `TestServer` websockets server with `--websockets-port`, in
-  place of `--tcpip-port` (#1220)
-- Generate a C++ `_stream` function for a method with no return value (#1198)
-- Add `krpc-testserver`, which runs the `TestServer` bundled with krpctools (#1228)
-- Run `krpc-servicedefs` and the `TestServer` on Windows (#1228)
-- Fix serial IO in the `TestServer` (#1228)
-- Print a plain error when the `krpc-docgen` ordering file is missing a member (#1228)
-- **Breaking:** Stop releasing the `TestServer` archive and Docker image, replaced by
-  `krpc-testserver` (#1228)
-- **Breaking:** Pass the directories of the assemblies a service references to
-  `krpc-servicedefs` with `--reference-dir`, in place of the Kerbal Space Program directory
-  (#1228)
-- **Deprecated:** `--ksp` in `krpc-clientgen`, superseded by `--reference-dir` (#1228)
-- Generate several pages in one `krpc-docgen` run, with `--page` (#1252)
-- **Breaking:** Replace the `SOURCE` and `OUTPUT` arguments of `krpc-docgen` with `--page` (#1252)
-- Fix `krpc-docgen` Java links to a service's own procedures and properties, and to enumeration
-  values (#1252)
-- **Breaking:** Write the Lua API documentation from `krpc-docgen` for `sphinx-lua-ls`, in place of
-  `sphinxcontrib-luadomain`, with typed signatures (#1202)
-- Generate a `_call` function for each procedure of a C-nano service (#1267)
-- Leave internal procedures out of generated services and API documentation (#1269)
-- Ship the `TestService2` and `ConformanceService` definitions beside `TestService.json`, for a
-  conformance testee whose client generates its stubs ahead of time (#1284)
-- Publish a wheel in place of an sdist (#1289)
-- Reject unknown options and invalid values in `krpc-testserver` and `krpc-servicedefs` (#1296)
-- Write the members in `krpc-servicedefs` output in a fixed order (#1296)
 
-- Testing against a live game
+- Packaging
+  - Relicense krpctools, including the bundled ServiceDefinitions tool, under the LGPLv3
+    (#1221)
+  - Publish a wheel in place of an sdist (#1289)
+
+- Client generation
+  - Generate the JavaScript client's TypeScript modules with `krpc-clientgen js` (#1346)
+  - Name the connection class `Connection` in C++ and Python, and decode values with `Decoder`
+    in C# and Java (#1332)
+  - Generate exceptions that stand for their language's equivalent, and derive the others from
+    `ServerError` or `ServerException` (#1172, #1333)
+  - Generate the C-nano `_call` functions, and the `KRPC_EXCEPTION_`, `KRPC_CLASS_`,
+    `KRPC_ENUMERATION_`, `KRPC_STRUCT_` and `KRPC_FIELD_` macros (#1267, #1333, #1336)
+  - Generate a C++ `_stream` function for a method with no return value (#1198)
+  - Support flags enumerations in `krpc-clientgen` and `krpc-docgen` (#1311)
+  - Leave internal procedures out of generated services and API documentation (#1269)
+  - Name the module of another service a generated Python module imports with `--include` (#1304)
+  - **Deprecated:** `--ksp` in `krpc-clientgen`, superseded by `--reference-dir` (#1228)
+  - Fix bytes default arguments in generated C# and C++ code and in the Lua documentation
+    (#1194)
+
+- Documentation generation
+  - **Breaking:** Replace the `SOURCE` and `OUTPUT` arguments of `krpc-docgen` with `--page`,
+    which generates several pages in one run (#1252)
+  - Add the `js` language to `krpc-docgen` (#1346)
+  - Add the `http` language to `krpc-docgen` (#1391)
+  - **Breaking:** Write the Lua API documentation for `sphinx-lua-ls`, in place of
+    `sphinxcontrib-luadomain`, with typed signatures (#1202)
+  - Add `<unit>` and a LaTeX subset for `<math>` to service documentation, typeset by
+    `krpc-docgen` and written as Unicode text by `krpc-clientgen` (#1169)
+  - Report invalid documentation markup as an error from `krpc-docgen`, and a warning from
+    `krpc-clientgen` (#1169)
+  - Link each `<see cref>` to the member it names, including a service, and warn about one
+    `krpc-clientgen` cannot resolve (#1185)
+  - Say in the reference docs what each client raises for each exception of a service (#1333)
+  - Print a plain error when the ordering file is missing a member (#1228)
+  - Fix the links to a C-nano property with only a setter, and the Java links to a service's own
+    members and to enumeration values (#1185, #1252)
+
+- Service definitions
+  - **Breaking:** Pass the directories of the assemblies a service references to
+    `krpc-servicedefs` with `--reference-dir`, in place of the Kerbal Space Program directory
+    (#1228)
+  - Write the `mapped_type` of each exception to the service definitions (#1172)
+  - Run `krpc-servicedefs` on Windows, and write its members in a fixed order (#1228, #1296)
+  - Reject unknown options and invalid values in `krpc-servicedefs` and `krpc-testserver`
+    (#1296)
+
+- Test server
+  - Add `krpc-testserver`, which runs the bundled `TestServer`, on Windows too (#1228)
+  - **Breaking:** Stop releasing the `TestServer` archive and Docker image, replaced by
+    `krpc-testserver` (#1228)
+  - **Breaking:** Set the port of the WebSockets server with `--websockets-port`, in place of
+    `--tcpip-port` (#1220)
+  - Add the `http` server type, with `--http-port` and `--http-allowed-origins`, and
+    `--websockets-allowed-origins` (#1391, #1392)
+  - Add `--frame-limit`, `--fixed-rate`, `--tick-work-us`, `--frame-work-us` and `--preset`,
+    which model a game's frame loop (#1376)
+  - Add `--flow-control`, for RTS/CTS over serial IO (#1386)
+  - Fix serial IO (#1228)
+
+- Testing
+  - Add `krpc-conformance`, which runs the client conformance tests against a client library
+    (#1220)
+  - Ship the `TestService2`, `ConformanceService` and `DeprecatedService` definitions beside
+    `TestService.json`, and add `DeprecationSignals` to the testee protocol (#1284, #1322)
   - Add `krpc-game`, which installs kRPC, its test add-on and the requested mods into KSP, and
     runs the game (#1299)
   - Add `krpctools.game`, with a pytest plugin and test case classes for testing a mod against
     a running game (#1299)
-
-- Name the module of another service a generated Python module imports with `--include`, for a mod whose service uses another mod's types (#1304)
-- Support flags enumerations in `clientgen` and `docgen` (#1311)
-- Add the `DeprecationSignals` command to the conformance testee protocol, which a testee needs for
-  the deprecation tests (#1322)
-- Ship the `DeprecatedService` definitions beside `TestService.json` (#1322)
-- Name the connection class `Connection` in generated C++ and Python stubs (#1332)
-- Decode values with `Decoder` in generated C# and Java stubs (#1332)
-- Generate C++ mapped exceptions as aliases of the standard exceptions, and derive the other
-  exceptions from `ServerError` or `ServerException` (#1333)
-- Generate no class for a mapped exception in C# and Java stubs (#1333)
-- Say in the reference docs what each client raises for each exception of a service (#1333)
-- Generate a `KRPC_EXCEPTION_` macro of the ids of each exception in C-nano stubs (#1333)
-- Generate the C-nano `KRPC_CLASS_`, `KRPC_ENUMERATION_`, `KRPC_STRUCT_` and `KRPC_FIELD_` macros
-  (#1336)
-- Generate a TypeScript module of a service for the JavaScript client, with `krpc-clientgen js` (#1346)
-- Generate the JavaScript client's API documentation, with `krpc-docgen js` (#1346)
-- Add `--frame-limit`, `--fixed-rate`, `--tick-work-us` and `--frame-work-us` to
-  `krpc-testserver`, which model a game's frame loop (#1376)
-- Add `--preset` to `krpc-testserver`, for its rate settings (#1376)
-- Add `--flow-control` to the `TestServer`, for RTS/CTS over serial IO (#1386)
-- Add the `http` server type, `--http-port` and `--http-allowed-origins` to `krpc-testserver` (#1391)
-- Add the `http` language to `krpc-docgen` (#1391)
-- Add `--websockets-allowed-origins` to `krpc-testserver` (#1392)
 
 ## [v0.7.0]
 - **Breaking:** Require `--include` in `krpc-clientgen` for each service whose types a C++ or C

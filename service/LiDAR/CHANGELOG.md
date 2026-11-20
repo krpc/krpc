@@ -1,4 +1,5 @@
 ## [v0.8.0]
+
 - **Deprecated:** The `LIDAR` service, superseded by `SpaceCenter.RaycastDistance` (#1233)
 
 ## [v0.7.0]

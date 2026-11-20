@@ -1,109 +1,89 @@
 ## [v0.8.0]
 
-- Log an auto-pilot failure once, naming the vessel and client, in place of on every physics
-  tick (#1235)
-- Typeset units and formulas in the API documentation, and write them as Unicode text in
-  client documentation, e.g. `m/s²` (#1169)
-- Allow the rails warp rates the game allows the player, which ignore the altitude limits when
-  the periapsis is clear of the atmosphere and terrain (#1167)
-- Fix the `MomentOfInertia` and `InertiaTensor` of `Vessel` and `EditorVessel` measuring each
-  part from its origin instead of its center of mass (#1191)
-- Fix `ControlSurface.AvailableTorque` scaling the torque about each axis by the surface's
-  distance along that axis, and overstating the roll torque of a surface close to the center
-  line (#1191)
-- Add `ControlSurface.DeflectionAngle`, `ControlRange` and `ActuatorSpeed` (#1191)
-- Fix the auto-pilot oscillating or departing on aircraft (#1191, #526)
-- Add `AutoPilot.LimitAngularVelocity`, on by default, which limits the angular velocity to what
-  the control surfaces hold against the aerodynamics (#1191, #526)
-- Shrink the auto-pilot's attenuation angles with the share of the torque that comes from control
-  surfaces (#1191, #526)
-- Add an aerodynamics section to the auto-pilot info window, and make its sections
-  collapsible (#1191)
-- Fix `RaycastDistance` and `RaycastPart` hitting trigger volumes, such as the robotic arm
-  scanner's (#1233)
-- Fix the `Vessel.Flight` link to the `Flight` class (#1252)
+- Auto-pilot
+  - Fix the auto-pilot oscillating or departing on aircraft (#1191, #526)
+  - Add `AutoPilot.LimitAngularVelocity`, on by default, which limits the angular velocity to
+    what the control surfaces hold against the aerodynamics (#1191, #526)
+  - Shrink the attenuation angles with the share of the torque that comes from control surfaces
+    (#1191, #526)
+  - Turn with a moving target, such as a gravity turn's pitch, and measure the angular velocity
+    in `AutoPilot.Wait` relative to the target (#1373)
+  - Fix limit-cycling on a vessel steered by slow engine gimbals, such as the KS-25 (#1348,
+    #1347)
+  - Fix the auto-pilot keeping its flexible-craft mitigations after staging or docking (#1373)
+  - Fix the auto-pilot turning away from its target when `AutoPilot.ReferenceFrame` changes
+    while `AutoPilot.TargetSmoothingTime` is set (#1373)
+  - Add `AvailableSASModes` to `AutoPilot` and `Control`, the SAS modes that can be set (#1383)
+  - Add an aerodynamics section to the info window, and make its sections collapsible (#1191)
+  - Log a failure once, naming the vessel and client, in place of on every physics tick (#1235)
 
 - Parts
-  - **Breaking:** Rename `ConfigNode.GetValues` and `ConfigNode.GetNodes` to
-    `ConfigNode.FindValues` and `ConfigNode.FindNodes` (#1261)
-  - Add `Part.JointBreakForce`, `Part.JointBreakTorque`, `Part.JointSpring`,
-    `Part.JointDamper`, `Part.JointAngularSpring` and `Part.JointAngularDamper`, the
-    strength and stiffness of the joint to the parent part (#1362)
-  - Add `Part.BreakingForce` and `Part.BreakingTorque` (#1362)
-
-- **Breaking:** Make `MapFilterType` a flags enumeration, and change `MapFilterType.All` from -1
-  to 32767 (#1311)
-- Fix setting a `PartField` skipping the callbacks the right-click menu runs, which left changes
-  such as a B9PartSwitch subtype switch without effect (#1314)
-- Support the curved solar panels from Near Future Solar in `SolarPanel` (#1314)
-- Include the cost of part modules, such as fairing panels and TweakScale's scaling, in
-  `Part.Cost` (#1314)
-- Fix setting `Camera.Mode` to IVA straight after a launch doing nothing, and setting it again
-  in the IVA leaving it (#1318)
-
-- Support RealAntennas
-  - Add its link budget to `Antenna`: gain, transmit power, tech level, band, data rate,
-    beamwidth, power draw and enabled (#1320)
-  - Add antenna targeting to `Antenna` (#1320)
-  - Add data rates and antennas to `CommLink` (#1320)
-  - List each antenna of a part with several in `Parts.Antennas` (#1320)
-  - Add `SpaceCenter.RealAntennasAvailable` (#1320)
-
-- Add `<Mod>Available` for each supported mod that lacked one, such as `RealChuteAvailable` (#1340)
-- Keep the FAR, RealFuels, RealAntennas and Action Groups Extended RPCs working when a mod update
-  removes members, and fail only the RPCs that use them (#1341)
-- Fail the FAR and RealFuels members, and `Part.Tag`, with the reason when the mod is missing or
-  failed to load (#1342)
-- Fix `Vessel.Name`, `EditorVessel.Name` and `EditorVessel.Description` returning a
-  localization tag for stock craft (#1343)
-- Fix the auto-pilot limit-cycling on a vessel steered by slow engine gimbals, such as the KS-25
-  (#1348, #1347)
-- Fix velocities, orbits and orbital reference frames throwing an exception in a Kopernicus
-  system whose star is not named `Sun` (#1359)
-- Fix `CelestialBody.SurfaceGravity` differing from the gravity the game applies by about
-  0.03% (#1359)
-- Test with Kopernicus, Real Solar System, Realism Overhaul and Procedural Parts, and list their
-  tested versions in the documentation (#1359)
-
-- Engines and RCS
-  - Add `Engine.GimbalResponseSpeed` and `Engine.GimbalResponseSpeedEnabled`, the gimbal's
-    response lag (#1360)
-  - Add `Engine.GimbalPitchEnabled`, `Engine.GimbalYawEnabled` and `Engine.GimbalRollEnabled`
-    (#1360)
-  - Fix `Engine.AvailableTorque` counting the pitch and yaw of a gimbal with those axes
-    disabled (#1360)
-  - Apply the axis toggles of a gimbal or RCS block to `Engine.GimbalActuation`,
-    `RCS.RotationOverride` and `RCS.TranslationOverride` (#1360)
-
-- Wheels and landing legs
-  - Add `Leg.SuspensionSpring`, `Leg.SuspensionDamper`, `Leg.SuspensionTravel` and
-    `Leg.Load`, the live state of the suspension, and the same on `Wheel` (#1361)
-  - Add `Leg.ImpactTolerance` and `Leg.ExplodeMultiplier`, the load that breaks or destroys
-    the leg, and the same on `Wheel` (#1361)
-  - Add `Leg.ContactPosition` and `Wheel.ContactPosition`, the bottom of the foot or wheel
-    (#1361)
+  - **Breaking:** Rename `ConfigNode.GetValues` and `GetNodes` to `FindValues` and `FindNodes`
+    (#1261)
+  - Add the strength and stiffness of the joint to the parent part, such as
+    `Part.JointBreakForce` and `Part.JointSpring`, and `Part.BreakingForce` and
+    `BreakingTorque` (#1362)
+  - Add `ControlSurface.DeflectionAngle`, `ControlRange` and `ActuatorSpeed` (#1191)
+  - Add `Engine.GimbalResponseSpeed` and the gimbal axis toggles, such as
+    `Engine.GimbalPitchEnabled` (#1360)
+  - Apply the axis toggles of a gimbal or RCS block to `Engine.AvailableTorque`,
+    `Engine.GimbalActuation` and the RCS overrides (#1360)
+  - Add the live suspension state to `Leg` and `Wheel`, such as `SuspensionSpring` and `Load`,
+    and the tolerances that break them, and `ContactPosition` (#1361)
   - Add `Leg.SuspensionSpringStrength` and `Leg.SuspensionDamperStrength` (#1361)
+  - Include the cost of part modules, such as fairing panels and TweakScale's scaling, in
+    `Part.Cost` (#1314)
+  - Fix setting a `PartField` skipping the callbacks the right-click menu runs, such as for a
+    B9PartSwitch subtype switch (#1314)
+  - Fix `ControlSurface.AvailableTorque` scaling the torque by the surface's distance along
+    each axis, and overstating roll torque near the center line (#1191)
 
-- Add `Vessel.LaunchSite`, the launch site the vessel was launched from (#1363)
-- Add `LaunchSite.Latitude`, `LaunchSite.Longitude` and `LaunchSite.Altitude`, the point
-  vessels launch from (#1363)
-- Fix the auto-pilot keeping its flexible-craft mitigations after separating a stage or docking (#1373)
-- Make the auto-pilot turn with a moving target, such as a gravity turn's pitch (#1373)
-- Make `AutoPilot.Wait` measure the angular velocity relative to the target (#1373)
-- Fix the auto-pilot turning away from its target when `AutoPilot.ReferenceFrame` changes while
-  `AutoPilot.TargetSmoothingTime` is set (#1373)
-- Fix `Load`, `Quickload`, `RevertToLaunch` and the launch RPCs sometimes leaving the game on
-  the loading screen (#1374)
-- Add the scenario modules of newly installed mods to a save loaded with `Load` or `Quickload` (#1374)
+- Vessels and crew
+  - Add `SpaceCenter.Kerbals`, every Kerbal in the roster, and `CrewMember.Inactive`,
+    `InactiveUntil` and `ExperienceLevel` (#1383)
+  - Fix `CrewMember.OnMission`, `CrewMember.Experience` and `SpaceCenter.GetKerbal` for
+    unassigned Kerbals, applicants and tourists (#1383)
+  - Add `Vessel.LaunchSite`, and `LaunchSite.Latitude`, `Longitude` and `Altitude` (#1363)
+  - Fix the `MomentOfInertia` and `InertiaTensor` of `Vessel` and `EditorVessel` measuring each
+    part from its origin instead of its center of mass (#1191)
+  - Fix `Vessel.Name`, `EditorVessel.Name` and `EditorVessel.Description` returning a
+    localization tag for stock craft (#1343)
+  - Fix `RaycastDistance` and `RaycastPart` hitting trigger volumes, such as the robotic arm
+    scanner's (#1233)
 
-- Crew
-  - Add `SpaceCenter.Kerbals`, every Kerbal in the roster (#1383)
-  - Add `CrewMember.Inactive`, `InactiveUntil` and `ExperienceLevel` (#1383)
-  - Fix `CrewMember.OnMission` being true for a Kerbal who is not assigned to a vessel (#1383)
-  - Fix `SpaceCenter.GetKerbal` not finding applicants and tourists (#1383)
-  - Fix setting `CrewMember.Experience` leaving the experience level unchanged (#1383)
+- Game
+  - Allow the rails warp rates the game allows the player, which ignore the altitude limits when
+    the periapsis is clear of the atmosphere and terrain (#1167)
+  - Fix `Load`, `Quickload`, `RevertToLaunch` and the launch RPCs sometimes leaving the game on
+    the loading screen (#1374)
+  - Add the scenario modules of newly installed mods to a save loaded with `Load` or
+    `Quickload` (#1374)
+  - Fix setting `Camera.Mode` to IVA straight after a launch doing nothing, and setting it again
+    in the IVA leaving it (#1318)
+  - **Breaking:** Make `MapFilterType` a flags enumeration, and change `MapFilterType.All` from
+    -1 to 32767 (#1311)
+  - Fix `CelestialBody.SurfaceGravity` differing from the gravity the game applies by about
+    0.03% (#1359)
 
-- Add `AvailableSASModes` to `AutoPilot` and `Control`, the SAS modes that can be set (#1383)
+- Mods
+  - Support RealAntennas: link budgets, targeting and data rates on `Antenna` and `CommLink`,
+    and each antenna of a part with several (#1320)
+  - Support the curved solar panels from Near Future Solar in `SolarPanel` (#1314)
+  - Add `<Mod>Available` for each supported mod that lacked one, such as `RealChuteAvailable`
+    (#1320, #1340)
+  - Keep the FAR, RealFuels, RealAntennas and Action Groups Extended RPCs working when a mod
+    update removes members, and fail only the RPCs that use them (#1341)
+  - Fail the FAR and RealFuels members, and `Part.Tag`, with the reason when the mod is missing
+    or failed to load (#1342)
+  - Fix velocities, orbits and orbital reference frames throwing an exception in a Kopernicus
+    system whose star is not named `Sun` (#1359)
+  - Test with Kopernicus, Real Solar System, Realism Overhaul and Procedural Parts, and list
+    their tested versions in the documentation (#1359)
+
+- Documentation
+  - Typeset units and formulas in the API documentation, and write them as Unicode text in
+    client documentation, e.g. `m/s²` (#1169)
+  - Fix the `Vessel.Flight` link to the `Flight` class (#1252)
 
 ## [v0.7.0]
 
