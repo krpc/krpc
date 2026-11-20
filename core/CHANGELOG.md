@@ -1,4 +1,4 @@
-## [v0.8.0] - unreleased
+## [v0.8.0]
 
 - **Breaking:** Refuse a service whose parameter defaults to a value its enumeration does not
   declare (#1192)
@@ -35,6 +35,107 @@
   - Log the transport connection lines and object store sweeps at the debug level (#1235)
   - Log the address and settings of a server when it starts (#1235)
   - Leave the time out of log lines, which the game log adds (#1235)
+
+- Resolve documentation references to the procedures and properties of a service with a
+  custom name (#1188)
+- Fix RPCs stopping on .NET after a client disconnects during a yielding call (#1189)
+- Run a stream of a call or server side function with no value on each update, for its
+  effects (#1198)
+
+- Server status
+  - **Breaking:** Return `KRPC.GetStatus` as the struct `KRPC.ServerStatus`, with the settings
+    and statistics in nested structs, and remove the `Status` message (#1244)
+  - **Breaking:** Rename the stream counters to `Streams`, `StreamEvaluations` and
+    `StreamEvaluationRate` (#1244)
+  - Add `TickHoldTimeout`, `DeferredCalls` and `StreamUpdatesSent` to the server status (#1244)
+  - **Breaking:** Replace `MaxTimePerUpdate`, `BlockingRecv` and `RecvTimeout` in the settings
+    with `TargetFrameRate`, `MaxTimePerFrame` and `MaxCallWait` (#1376)
+  - **Breaking:** Replace the statistics per update with statistics per frame, and add
+    `FrameRate`, `BudgetPerFrame` and `MedianTurnaround` (#1376)
+
+- Procedure ids
+  - **Breaking:** Derive each procedure id from a hash of its name, which changes every id (#1265)
+  - Add `Id` to `KRPCProcedure` and `KRPCMethod`, and `GetterId` and `SetterId` to
+    `KRPCProperty`, to resolve an id clash (#1265)
+  - Add `KRPCProcedureId` to set the id of a procedure a class inherits (#1265)
+  - Add `id` to the `Service` and `Procedure` messages that `KRPC.GetServices` returns (#1265)
+
+- **Breaking:** Encode a stream or an event as the `uint64` id of its stream (#1266)
+- **Breaking:** Remove the `Stream` and `Event` messages (#1266)
+- Add `internal` to the `Procedure` message (#1269)
+- Mark the stream, event and server side function procedures of the `KRPC` service as internal
+  (#1269)
+- **Breaking:** Reject a service that holds a stream or an event anywhere but a return value, or a
+  stream returned by a procedure that is not internal (#1269)
+- **Breaking:** Reject an argument with bytes left over or an unknown field (#1280)
+- **Breaking:** Reject a 32-bit number out of range, a tuple with the wrong number of items, an
+  undeclared enum value, or a bool other than 0 or 1 (#1280)
+- Fail only the call whose argument the server cannot decode, and run the other calls in the
+  request (#1280)
+- **Breaking:** Fail a call with an argument position past the procedure's last parameter, or with
+  two arguments at one position, in place of ignoring an argument (#1290)
+- Fix rate limited streams updating at as little as half their rate (#1310)
+- Support flags enumerations, a `KRPCEnum` with `[Flags]` whose values a client can combine (#1311)
+- Add `flags` to the `Enumeration` message, set for a flags enumeration (#1311)
+- Combine flags enumeration values in server side functions with `KRPC.Expression.And`, `Or` and
+  `ExclusiveOr` (#1311)
+- Take a flags enumeration value in `KRPC.Expression.Not`, which gives the declared values it does
+  not hold (#1313)
+
+- Type ids
+  - Give each class, enumeration, structure and exception an id, a hash of its name (#1324)
+  - Add `Id` to `KRPCClass`, `KRPCEnum`, `KRPCStruct` and `KRPCException`, to resolve an id
+    clash (#1324)
+  - Add `id` to the `Class`, `Enumeration`, `Struct` and `Exception` messages that
+    `KRPC.GetServices` returns, and `service_id` and `id` to the `Type` message (#1324)
+  - Add `service_id` and `exception_id` to the `Error` message (#1324)
+  - **Breaking:** Rename `name` in the `Error` message to `exception` (#1324)
+  - **Breaking:** Reject two types of a service with the same name, ignoring case (#1324)
+
+- **Breaking:** Reject a service declared by more than one class (#1325)
+- **Breaking:** Reject two services with the same name, ignoring case (#1325)
+- **Breaking:** Reject a class, enumeration, structure or exception with the name of its service,
+  ignoring case (#1325)
+- Start the remaining servers when one fails to start (#1330)
+- Add `KRPC.Expression.Match` and `KRPC.Expression.Switch` statements to server side functions
+  (#1334)
+- Add variants of the server side function procedures that take ids in place of names, such as
+  `KRPC.Type.ClassTypeById` and `KRPC.Expression.GetFieldByIndex` (#1336)
+- **Breaking:** Reject members of a service or class, values of an enumeration, fields of a
+  structure, or parameters of a procedure that share a name, ignoring case (#1338)
+- **Breaking:** Reject a method `GetFoo` or `SetFoo` beside a property `Foo` (#1338)
+- **Breaking:** Reject parameter and enumeration value names that are not ASCII letters and digits,
+  starting with a letter (#1338)
+- Add `StdLib.ImageFormat`, the format of the images from the DockingCamera, ScanSat and
+  RasterPropMonitor services (#1341)
+- Add `ModAPI`, `ModBinder` and `MemberBinder`, for a service that binds to another mod by name,
+  and fails only the calls that use a missing member (#1341)
+- Add the `RequiresMod` attribute, which fails the calls of a member whose mod is missing, failed to
+  load or is not ready (#1342)
+- Turn on "Auto-start server" by default (#1349)
+- **Breaking:** Remove the "One RPC per update" setting and
+  `KRPC.ServerSettings.OneRpcPerUpdate` (#1349)
+- **Breaking:** `KRPC.Expression.CallWithArguments` takes a call template, and throws an exception
+  for a call that carries arguments (#1352)
+- Fail when a server side function is built, in place of when it runs, for a null constant passed
+  to a parameter that cannot be null (#1352)
+- Load the services faster in games with many mods (#1353)
+- Wait for a client's next call by its measured time between calls, so a client that pauses
+  for a few milliseconds between calls gets several calls per update (#1376)
+- Read and write each client's connection on threads of its own, so a client that stops
+  reading cannot freeze the game (#1376)
+- End the connection of a client that leaves more than 16 MB of messages unread (#1376)
+- Read up to 16 requests ahead of the one running, and hold a client that sends faster than
+  the server runs its calls (#1376)
+- Read from a serial port as bytes arrive, so a client over serial gets several calls per
+  update (#1376)
+- Add `MemberBinder.ReadOnlyField`, for a mod setting that the mod declares read-only (#1382)
+- Fix a serial IO server stopping when it sends a response over a megabyte, such as
+  `KRPC.GetServices` with every service installed (#1386)
+- Add a JSON over HTTP server, for calling procedures with no client library (#1391)
+- Serve an OpenAPI document of the HTTP server's paths (#1391)
+- **Breaking:** Refuse WebSockets connections from web pages whose origin is not allowed, by
+  default any page not served from this machine (#1392)
 
 ## [v0.7.0]
 

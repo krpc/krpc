@@ -1,4 +1,4 @@
-## [v0.8.0] - unreleased
+## [v0.8.0]
 
 - Connections
   - **Breaking:** Connect over one connection, removing the `stream_port` and `stream_path`
@@ -23,6 +23,12 @@
     timeout, and wait with no deadline for an infinite one (#1219)
   - Keep a stream running when a value fails to decode, dropping the value (#1219)
   - Fix `Stream.wait` and `Event.wait` returning before the timeout on Windows (#1220)
+  - Stream a procedure, property setter or server side function with no value as a stream of
+    `None` (#1198)
+  - Build the call of a property setter with `get_call` (#1198)
+  - **Breaking:** Return the stream id from `KRPC.add_stream` and `KRPC.add_function_stream` (#1266)
+  - Remove a stream or an event at the end of a `with` statement on it (#1291)
+  - **Deprecated:** `Client.stream`, superseded by `add_stream` in a `with` statement (#1291)
 
 - Link the references in service docstrings with Sphinx roles (#1185)
 - Fix the lists and parameter references in service docstrings, which were invalid
@@ -33,6 +39,77 @@
 - Exceptions
   - Raise a `KRPC` exception as its own class, derived from the builtin it was raised as
     before, so `except conn.krpc.ArgumentException` catches it (#1172)
+  - Raise a `ServerError` for a server error whose type names a class, in place of failing with a `TypeError` (#1300)
+
+- **Breaking:** Return `KRPC.get_status` as the named tuple `ServerStatus`, with the
+  settings and statistics under `settings` and `statistics` (#1244)
+- **Breaking:** Leave internal procedures out of the services, such as `KRPC.add_stream` (#1269)
+- Accept a server side function built with the expression API in `Client.compile` (#1269)
+- Support `isinstance` with a class accessed through a connection, such as
+  `isinstance(vessel, conn.space_center.Vessel)` (#1279)
+- Publish a wheel in place of an sdist (#1289)
+
+- Services
+  - Keep the parameters of a deprecated procedure in its signature, for a service built from the server's definitions (#1301)
+  - **Breaking:** Remove `use_pregenerated_stubs` (#1302)
+  - **Breaking:** Raise an `AttributeError` for a service the server lacks (#1302)
+  - **Breaking:** Raise a `TypeError` for a static method called on a class imported from a service's module (#1302)
+  - Add `connect[T]` and `connect_local[T]`, which type the client as `T` for type hints, such as for a mod's services (#1303)
+  - Add a client type to each service's module, such as `SpaceCenterClient`, to combine with others in a subclass (#1303)
+  - **Breaking:** Move the modules of the KSP services from `krpc.services` to `krpc.ksp`, such as `krpc.ksp.spacecenter` (#1304)
+
+- Server side functions
+  - Type the functions `compile`, `run`, `add_stream` and `add_event` take, and the `KRPC.Expression` object `compile` returns (#1306)
+
+- Support flags enumerations, such as `SpaceCenter.MapFilterType`, as an `enum.Flag` (#1311)
+- Raise `EncodingError` for an enumeration result the enumeration does not declare, in place of
+  `ValueError` (#1311)
+- Compile `|`, `&`, `^`, `~`, `in` and truth tests on flags enumeration values in server side
+  functions (#1313)
+- Warn when a stream or `get_call` uses a deprecated procedure, method or property (#1322)
+- Warn on a use of a deprecated service, class, enumeration, enumeration value, structure,
+  structure field or exception (#1322)
+- Mark deprecated members of the generated stubs with `@deprecated`, so type checkers report them (#1322)
+- Deprecate each member of a deprecated service, class, enumeration or structure (#1322)
+- **Breaking:** Rename `krpc.Connection`, the socket of a connection, to
+  `krpc.TCPIPTransport`, and `krpc.LocalConnection` to `krpc.LocalTransport` (#1332)
+- **Breaking:** Rename the base classes of generated types `krpc.types.ClassBase`, `DocEnum`
+  and `DocFlag`, and `krpc.service.ServiceBase`, to `RemoteObject`, `RemoteEnum`, `RemoteFlags`
+  and `RemoteService` (#1332)
+- **Breaking:** Rename `krpc.Client` to `krpc.Connection`, `krpc.ksp.KSPClient` to
+  `krpc.ksp.KSPConnection`, and each service module's `<Service>Client` to `<Service>Connection` (#1332)
+- Raise `ConnectionError` when the connection request fails to be written (#1332)
+
+- Errors
+  - **Breaking:** Derive every error of the client from the new `krpc.error.RemoteError` (#1333)
+  - **Breaking:** Rename `krpc.error.RPCError` to `ServerError`, and
+    `FunctionCompilationError` to `CompilationError` (#1333)
+  - Derive the exception classes a service declares, and a mapped exception with no builtin,
+    from `ServerError` (#1333)
+  - **Breaking:** Raise `StreamError` when the server removes a stream or event (#1333)
+  - **Breaking:** Raise `ValueError` for a tuple or structure of the wrong length, a negative
+    unsigned value, a null in a position that cannot hold one, and a local socket path that is
+    too long (#1333)
+  - **Breaking:** Raise `ValueError` in place of `StreamError` for arguments to a streamed
+    function, and for a compiled function with parameters passed to `add_stream` or `add_event` (#1333)
+  - **Breaking:** Raise `ConnectionError` for malformed service definitions (#1333)
+  - Raise `EncodingError` for every value that fails to decode, including a string or tuple cut
+    short (#1333)
+
+- Compile `match` statements in server side functions (#1337)
+- **Breaking:** Convert names with `UInt`, `ULong`, `SInt`, `FoV`, a plural acronym or digits
+  next to an acronym as written, e.g. `Type.uint`, `Camera.fov` and `MapFilterType.evas` in place of
+  `u_int`, `fo_v` and `ev_as` (#1339)
+- Add `Connection.get_call_template`, which builds a call with no instance or arguments, for
+  `Expression.call_with_arguments` (#1352)
+- Take a member, such as `Engine.has_fuel`, as its call template where a call is expected (#1352)
+- Raise `StreamError` for a stream of a procedure that returns an event (#1377)
+- Raise an error for a number outside the range of its parameter's type, in place of sending a
+  wrong value (#1377)
+- Raise `TypeError` for `None` passed for a parameter that cannot be null, before the
+  call is sent (#1377)
+- Raise an error for a string, bytes or a dictionary passed for a list, a tuple or a
+  structure (#1377)
 
 ## [v0.7.0]
 

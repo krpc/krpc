@@ -1,3 +1,10 @@
+## [v0.8.0]
+- Fix `Alarm.PlaySound` having no effect (#1179)
+- Keep working when a Kerbal Alarm Clock update removes members, and fail only the RPCs that use
+  them (#1341)
+- Limit the service to the scenes Kerbal Alarm Clock runs in, apart from `Available`, which
+  reports whether it is installed in any scene (#1341)
+
 ## [v0.7.0]
 
 - An alarm keeps working across a quickload, and raises `KRPC.ObjectDestroyedException` once

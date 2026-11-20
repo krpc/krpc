@@ -1,6 +1,9 @@
-## [v0.8.0] - unreleased
+## [v0.8.0]
 
 - Relicense the InfernalRobotics service under the GPLv3 (#1221)
+- Keep working when an Infernal Robotics update removes members, and fail only the RPCs that
+  use them (#1341)
+- **Breaking:** Remove `Ready` (#1341)
 
 ## [v0.7.0]
 

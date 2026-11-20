@@ -1,4 +1,4 @@
-## [v0.8.0] - unreleased
+## [v0.8.0]
 
 - Connections
   - **Breaking:** Connect over one connection, removing the `stream_port` and `stream_path`
@@ -13,6 +13,9 @@
   - Add `status` and `reason` to `ConnectionError` for a refused or ended connection (#1219)
   - **Breaking:** Throw `ConnectionError` when the server cannot be reached, nesting the error
     from the socket (#1219)
+  - Add `Client::close`, which closes the connection for every copy of the client (#1286)
+  - **Breaking:** Services, objects, streams and events hold the connection open, so they stay valid once the client is destroyed (#1286)
+  - **Breaking:** A client that is not connected throws `ConnectionError`, as does a default-constructed object (#1286)
 
 - Streams and events
   - **Breaking:** Remove a stream or event from the server when its last copy is destroyed (#1219)
@@ -20,6 +23,10 @@
     Remove a stream through its stream object (#1219)
   - **Breaking:** Wait with no deadline in `Stream::wait` and `Event::wait` by default, or for an
     infinite timeout, and throw `std::invalid_argument` for a negative or NaN one (#1219)
+  - Stream a procedure or server side function with no value as a `Stream<void>` (#1198)
+  - **Breaking:** Return the stream id from `KRPC::add_stream` and `KRPC::add_function_stream` (#1266)
+  - **Breaking:** Remove `Client::Returns::event`, as a call that returns an event uses
+    `Returns::stream` (#1266)
 
 - Fix the documentation of the services that Doxygen warns about, such as parameter names
   that do not match (#1185)
@@ -29,6 +36,45 @@
     exception, in place of `RPCError`. Its generated name is an alias of it, e.g.
     `KRPC::ArgumentException` of `std::invalid_argument` (#1172)
   - **Breaking:** Add the server stack trace to an exception's message (#1172)
+
+- Add `bind` to classes with static methods, for calling them without passing the client (#1195)
+- **Breaking:** Return `KRPC::get_status` as the struct `KRPC::ServerStatus`, whose fields are
+  members, with the settings and statistics under `settings` and `statistics` (#1244)
+- **Breaking:** Leave internal procedures out of the services, such as `KRPC::add_stream` (#1269)
+- Add `krpc::compile` for a server side function built with the expression API (#1269)
+- Raise the exception types of the `KRPC` service, such as `KRPC::InvalidOperationException`,
+  without first creating a `KRPC` service object (#1269)
+- Relicense the C++ client under the MIT license (#1281)
+- **Breaking:** Service constructors take the client by reference, as in `SpaceCenter sc(conn)` (#1285)
+- **Breaking:** Object, stream and event constructors take the client by reference, as in `Vessel(conn, id)` (#1286)
+- Service constructors accept a temporary client, as in `SpaceCenter sc(krpc::connect())` (#1286)
+- Generate the operators `|`, `&`, `^` and `~` for a flags enumeration (#1311)
+- Declare a deprecated service's class `[[deprecated]]` (#1322)
+- Declare the `_stream` and `_call` functions of deprecated procedures `[[deprecated]]` (#1322)
+- Deprecate each member of a deprecated service, class, enumeration or structure (#1322)
+- Fix generated headers warning about their own deprecated members (#1322)
+- **Breaking:** Rename the framing classes `krpc::Connection` and `krpc::LocalConnection` to
+  `krpc::TCPIPTransport` and `krpc::LocalTransport`, in the header `krpc/transport.hpp` (#1332)
+- **Breaking:** Rename `krpc::Client` to `krpc::Connection`, in the header `krpc/connection.hpp`
+  in place of `krpc/client.hpp`. `krpc.hpp` includes it as before (#1332)
+- Throw `ConnectionError` when the connection request fails to be written (#1332)
+- **Breaking:** Rename the base classes `krpc::Object` and `krpc::Service` to `krpc::RemoteObject`
+  and `krpc::RemoteService`, in the headers `krpc/remote_object.hpp` and `krpc/remote_service.hpp` (#1332)
+
+- Errors
+  - **Breaking:** Derive every error of the client from the new `krpc::RemoteError` (#1333)
+  - **Breaking:** Rename `krpc::RPCError` to `krpc::ServerError` (#1333)
+  - **Breaking:** Throw `StreamError` when the server removes a stream or event (#1333)
+  - **Breaking:** Throw `std::invalid_argument` for a local socket path that is too long (#1333)
+  - **Breaking:** Throw `EncodingError` for a null function value of a type that cannot hold null (#1333)
+
+- **Breaking:** Convert names with `UInt`, `ULong`, `SInt`, `FoV`, a plural acronym or digits
+  next to an acronym as written, e.g. `Type::uint`, `Camera::fov` and `MapFilterType::evas` in
+  place of `u_int`, `fo_v` and `ev_as` (#1339)
+- Add a static `_call_template` function for each member, which builds a call with no instance
+  or arguments, for `Expression::call_with_arguments` (#1352)
+- Throw `std::invalid_argument` for a default-constructed object passed as an argument or called
+  through, before the call is sent (#1377)
 
 ## [v0.7.0]
 
