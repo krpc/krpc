@@ -105,9 +105,8 @@ namespace KRPC.MechJeb.Maneuver
             // MechJeb holds it in kilometers
             get { return periapsisHeight.Get (Instance) * 1000d; }
             set {
+                // Only the nodes depend on the periapsis, so the search goes on
                 var instance = Instance;
-                if (periapsisHeight.Get (instance) != value / 1000d)
-                    StopSearch (instance);
                 periapsisHeight.Set (instance, value / 1000d);
                 // MechJeb's window keeps the value while the target body stays the same
                 var targetController = MechJeb.TargetController;
@@ -141,7 +140,8 @@ namespace KRPC.MechJeb.Maneuver
         }
 
         // Stop the search, so the next MakeNodes starts one with the current settings. MechJeb's
-        // window does this on any change to its settings.
+        // window does this on any change to its settings, and we do it on a change to a
+        // setting the search reads.
         static void StopSearch (object instance)
         {
             var calculator = worker.Get (instance);
