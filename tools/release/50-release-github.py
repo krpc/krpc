@@ -43,6 +43,9 @@ def main():
         lib.TAG,
         "--verify-tag",
         "--draft",
+        # Other release trains publish to this repository too, so the newest
+        # release is not always this train's
+        "--latest=false",
         "--title",
         f"kRPC {lib.TAG}",
         "--notes",
