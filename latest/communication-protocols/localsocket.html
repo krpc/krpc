@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Protocol Buffers over a Local Socket &#8212; kRPC v0.7.0 documentation</title>
+    <title>Local Socket &#8212; kRPC v0.8.0 documentation</title>
   
   
   
@@ -26,42 +26,45 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e540dda1" />
+    <link rel="stylesheet" type="text/css" href="../_static/lua.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=6a604523" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=ba67256c" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <script defer src="../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../_static/documentation_options.js?v=fe7df9b0"></script>
+    <script src="../_static/documentation_options.js?v=486e5634"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../_static/design-tabs.js?v=fcb327ea"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'communication-protocols/localsocket';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
+        DOCUMENTATION_OPTIONS.theme_version = '0.24.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.7.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.8.0';
         DOCUMENTATION_OPTIONS.show_version_warning_banner =
             true;
         </script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <script src="../_static/external-links.js?v=e8892020"></script>
     <script src="../_static/build-info.js?v=19ceb065"></script>
-    <link rel="canonical" href="https://krpc.github.io/krpc/0.7.0/communication-protocols/localsocket.html" />
+    <link rel="canonical" href="https://krpc.github.io/krpc/0.8.0/communication-protocols/localsocket.html" />
+    <link rel="icon" href="../_static/logo-mark.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Protocol Buffers over WebSockets" href="websockets.html" />
-    <link rel="prev" title="Protocol Buffers over TCP/IP" href="tcpip.html" />
+    <link rel="next" title="WebSockets" href="websockets.html" />
+    <link rel="prev" title="TCP/IP" href="tcpip.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.7.0" />
+  <meta name="docsearch:version" content="0.8.0" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -109,7 +112,7 @@
   
     <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
     <span class="fa-solid fa-bars"></span>
   </button>
   
@@ -128,8 +131,14 @@
   
   
   
+    
+    
+      
+    
+    
+    <img src="../_static/logo-on-light.svg" class="logo__image only-light" alt="kRPC"/>
+    <img src="../_static/logo-on-dark.svg" class="logo__image only-dark pst-js-only" alt="kRPC"/>
   
-    <p class="title logo__title">kRPC Documentation</p>
   
 </a></div>
     
@@ -158,98 +167,32 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cnano.html">
-    C-nano
+  <a class="nav-link nav-internal" href="../user-guide.html">
+    User Guides
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../csharp.html">
-    C#
+  <a class="nav-link nav-internal" href="../clients.html">
+    Clients
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../developer-guide.html">
+    Developer Guide
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cpp.html">
-    C++
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../java.html">
-    Java
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../lua.html">
-    Lua
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../python.html">
-    Python
-  </a>
-</li>
-
-            <li class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button"
-                data-bs-toggle="dropdown" aria-expanded="false"
-                aria-controls="pst-nav-more-links">
-                    More
-                </button>
-                <ul id="pst-nav-more-links" class="dropdown-menu">
-                    
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../third-party.html">
-    Other Clients, Services and Scripts
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../compiling.html">
-    Compiling kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../extending.html">
-    Extending kRPC
-  </a>
-</li>
-
-
-<li class=" current active">
-  <a class="nav-link dropdown-item nav-internal" href="../communication-protocols.html">
-    Communication Protocols
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../internals.html">
-    Internals of kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../changelog.html">
+  <a class="nav-link nav-internal" href="../changelog.html">
     Changelog
   </a>
 </li>
 
-                </ul>
-            </li>
-            
   </ul>
 </nav></div>
       
@@ -293,14 +236,14 @@
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
   <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
-    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
   </ul>
 </div></div>
       
@@ -316,6 +259,28 @@
           
           
           <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://discord.gg/bXuaTrj" title="Discord" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-discord fa-lg" aria-hidden="true"></i><span class="visually-hidden">Discord</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://forum.kerbalspaceprogram.com/topic/130742-1125-krpc-control-the-game-using-c-c-java-lua-python-ruby-haskell-c-arduino-v060/" title="Forum" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-comments fa-lg" aria-hidden="true"></i><span class="visually-hidden">Forum</span></a>
         </li>
 </ul></div>
       
@@ -335,7 +300,7 @@
   
 
   
-    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page" aria-expanded="false" aria-controls="pst-secondary-sidebar-modal">
       <span class="fa-solid fa-outdent"></span>
     </button>
   
@@ -349,7 +314,7 @@
       
       
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
       <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
@@ -380,78 +345,22 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cnano.html">
-    C-nano
+  <a class="nav-link nav-internal" href="../user-guide.html">
+    User Guides
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../csharp.html">
-    C#
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cpp.html">
-    C++
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../java.html">
-    Java
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../lua.html">
-    Lua
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../python.html">
-    Python
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../third-party.html">
-    Other Clients, Services and Scripts
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../compiling.html">
-    Compiling kRPC
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../extending.html">
-    Extending kRPC
+  <a class="nav-link nav-internal" href="../clients.html">
+    Clients
   </a>
 </li>
 
 
 <li class="nav-item current active">
-  <a class="nav-link nav-internal" href="../communication-protocols.html">
-    Communication Protocols
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../internals.html">
-    Internals of kRPC
+  <a class="nav-link nav-internal" href="../developer-guide.html">
+    Developer Guide
   </a>
 </li>
 
@@ -496,14 +405,14 @@
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
   <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
-    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
   </ul>
 </div></div>
         
@@ -519,6 +428,28 @@
           
           
           <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://discord.gg/bXuaTrj" title="Discord" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-discord fa-lg" aria-hidden="true"></i><span class="visually-hidden">Discord</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://forum.kerbalspaceprogram.com/topic/130742-1125-krpc-control-the-game-using-c-c-java-lua-python-ruby-haskell-c-arduino-v060/" title="Forum" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-comments fa-lg" aria-hidden="true"></i><span class="visually-hidden">Forum</span></a>
         </li>
 </ul></div>
         
@@ -540,11 +471,65 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="tcpip.html">Protocol Buffers over TCP/IP</a></li>
-<li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#">Protocol Buffers over a Local Socket</a></li>
-<li class="toctree-l1"><a class="reference internal" href="websockets.html">Protocol Buffers over WebSockets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="serialio.html">Protocol Buffers over Serial IO</a></li>
-<li class="toctree-l1"><a class="reference internal" href="messages.html">Messaging Protocol</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../extending.html">Extending kRPC</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../extending/attributes.html">Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/types.html">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/events.html">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/multi-tick.html">Multi-Tick RPCs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/game-scenes.html">Game Scenes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/deprecation.html">Deprecating Service Members</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/extending-other-services.html">Extending Other Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/other-mods.html">Wrapping Another Mod</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/documentation.html">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/errors.html">Errors and Warnings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/clientgen.html">Generating Service Code for Static Clients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/docgen.html">API Reference Pages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/testing.html">In-Game Tests</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../communication-protocols.html">Communication Protocols</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="tcpip.html">TCP/IP</a></li>
+<li class="toctree-l2 current active"><a aria-current="page" class="current reference internal" href="#">Local Socket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="websockets.html">WebSockets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="serialio.html">Serial IO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="messages.html">Messaging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="http.html">HTTP</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../client-design.html">Client Design</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../client-design/python.html">Python Client Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-design/csharp.html">C# Client Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-design/cpp.html">C++ Client Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-design/cnano.html">C-nano Client Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-design/java.html">Java Client Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-design/lua.html">Lua Client Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-design/js.html">JavaScript Client Design</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../client-spec.html">Client Specification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/conformance.html">Conformance Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/testserver.html">Test Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/connection.html">Connection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/calls.html">Calls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/values.html">Values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/codec.html">Codec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/errors.html">Errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/objects.html">Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/streams.html">Streams</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/events.html">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/concurrency.html">Concurrency</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/functions.html">Server Side Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/coverage.html">Client Coverage</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../krpctools.html">krpctools</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../krpc-development.html">kRPC Development</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../krpc-development/code-structure.html">Code Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../krpc-development/building.html">Building from Source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../krpc-development/testing.html">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../krpc-development/benchmarks.html">Benchmarks</a></li>
+</ul>
+</details></li>
 </ul>
 </div>
 </nav></div>
@@ -582,13 +567,16 @@
     
     <li class="breadcrumb-item breadcrumb-home">
       <a href="../index.html" class="nav-link" aria-label="Home">
-        <i class="fa-solid fa-home"></i>
+        <i class="fa-solid fa-house"></i>
       </a>
     </li>
     
+    <li class="breadcrumb-item"><a href="../developer-guide.html" class="nav-link">Developer Guide</a></li>
+    
+    
     <li class="breadcrumb-item"><a href="../communication-protocols.html" class="nav-link">Communication Protocols</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Protocol Buffers over a Local Socket</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Local Socket</span></li>
   </ul>
 </nav>
 </div>
@@ -605,14 +593,12 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="protocol-buffers-over-a-local-socket">
-<h1>Protocol Buffers over a Local Socket<a class="headerlink" href="#protocol-buffers-over-a-local-socket" title="Link to this heading">#</a></h1>
-<p>This communication protocol allows a client running on the same machine as the game to interact
-with a kRPC server over a unix domain socket, rather than a TCP/IP connection.</p>
-<p>A local socket carries the same messages as <a class="reference internal" href="tcpip.html"><span class="doc">Protocol Buffers over TCP/IP</span></a> over a cheaper path, bypassing the
-network stack. A client that makes many calls in quick succession completes more of them per
-physics update. A client that makes one call and then waits runs at the game’s update rate
-either way.</p>
+  <section id="local-socket">
+<h1>Local Socket<a class="headerlink" href="#local-socket" title="Link to this heading">#</a></h1>
+<p>This protocol carries the <a class="reference internal" href="messages.html"><span class="doc">messages</span></a> over a unix domain socket, for a client on
+the same machine as the game. It bypasses the network stack, so a client that makes many calls in
+quick succession completes more of them per physics update. A client that makes one call and then
+waits runs at the game’s update rate either way.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>If a client library is available for your language, you do not need to implement this
@@ -623,79 +609,53 @@ protocol.</p>
 <p>Unix domain sockets are available on Linux, macOS, and Windows 10 1803 and Windows
 Server 2019 or later.</p>
 </div>
-<section id="sending-and-receiving-messages">
-<h2>Sending and Receiving Messages<a class="headerlink" href="#sending-and-receiving-messages" title="Link to this heading">#</a></h2>
-<p>Identical to <a class="reference internal" href="tcpip.html"><span class="doc">Protocol Buffers over TCP/IP</span></a>: messages are encoded according to the protobuf binary format, and are
-prefixed with their size in bytes encoded as a Protocol Buffers varint.</p>
+<section id="connecting">
+<h2>Connecting<a class="headerlink" href="#connecting" title="Link to this heading">#</a></h2>
+<p>To use this protocol, add a server in the server window and select <em>Protobuf over local socket</em> as
+its protocol. The window shows the socket path, which defaults to the path under
+<a class="reference internal" href="#default-socket-path">Default Socket Path</a>.</p>
+<p>Open a unix domain socket to that path. Then send the
+<a class="reference internal" href="messages.html#communication-protocol-handshake"><span class="std std-ref">connection handshake</span></a>. The framing and the rest of the
+connection are the same as for <a class="reference internal" href="tcpip.html"><span class="doc">TCP/IP</span></a>.</p>
 </section>
-<section id="connecting-to-the-rpc-server">
-<h2>Connecting to the RPC Server<a class="headerlink" href="#connecting-to-the-rpc-server" title="Link to this heading">#</a></h2>
-<p>The handshake is identical to <a class="reference internal" href="tcpip.html"><span class="doc">Protocol Buffers over TCP/IP</span></a>, differing only in how the connection is opened:</p>
+<section id="default-socket-path">
+<span id="communication-protocol-localsocket-default-path"></span><h2>Default Socket Path<a class="headerlink" href="#default-socket-path" title="Link to this heading">#</a></h2>
+<p>The server and its clients each compute the default path for themselves, by the same rule:</p>
 <ol class="arabic simple">
-<li><p>Open a unix domain socket to the path the RPC server is listening on. The server window shows
-the path, which by default is <code class="docutils literal notranslate"><span class="pre">krpc/rpc</span></code> inside the directory named by the
-<code class="docutils literal notranslate"><span class="pre">XDG_RUNTIME_DIR</span></code> environment variable, or by <code class="docutils literal notranslate"><span class="pre">LOCALAPPDATA</span></code> on Windows. See
-<a class="reference internal" href="#default-socket-paths">Default Socket Paths</a> for the whole rule.</p></li>
-<li><p>Send a <code class="docutils literal notranslate"><span class="pre">ConnectionRequest</span></code> message with its <code class="docutils literal notranslate"><span class="pre">type</span></code> field set to <code class="docutils literal notranslate"><span class="pre">ConnectionRequest.RPC</span></code>
-and its <code class="docutils literal notranslate"><span class="pre">protocol_version</span></code> field set to 1, exactly as for TCP/IP.</p></li>
-<li><p>Receive a <code class="docutils literal notranslate"><span class="pre">ConnectionResponse</span></code> message, check that <code class="docutils literal notranslate"><span class="pre">status</span></code> is <code class="docutils literal notranslate"><span class="pre">ConnectionResponse.OK</span></code>
-and <code class="docutils literal notranslate"><span class="pre">protocol_version</span></code> is 1, and keep the 16-byte <code class="docutils literal notranslate"><span class="pre">client_identifier</span></code> for the stream
-connection.</p></li>
-</ol>
-</section>
-<section id="connecting-to-the-stream-server">
-<h2>Connecting to the Stream Server<a class="headerlink" href="#connecting-to-the-stream-server" title="Link to this heading">#</a></h2>
-<p>As for <a class="reference internal" href="tcpip.html"><span class="doc">Protocol Buffers over TCP/IP</span></a>, open a second connection, this time to the stream server’s socket path
-(<code class="docutils literal notranslate"><span class="pre">krpc/stream</span></code> by default), and send a <code class="docutils literal notranslate"><span class="pre">ConnectionRequest</span></code> with its <code class="docutils literal notranslate"><span class="pre">type</span></code> field set to
-<code class="docutils literal notranslate"><span class="pre">ConnectionRequest.STREAM</span></code>, its <code class="docutils literal notranslate"><span class="pre">protocol_version</span></code> field set to 1, and its
-<code class="docutils literal notranslate"><span class="pre">client_identifier</span></code> field set to the value received above.</p>
-<p>Connecting to the stream server is optional. If the client doesn’t require stream functionality,
-there is no need to connect.</p>
-</section>
-<section id="default-socket-paths">
-<h2>Default Socket Paths<a class="headerlink" href="#default-socket-paths" title="Link to this heading">#</a></h2>
-<p>The server and its clients each compute the default paths for themselves. They meet only by
-following the same rule. For a socket named <code class="docutils literal notranslate"><span class="pre">rpc</span></code> or <code class="docutils literal notranslate"><span class="pre">stream</span></code>:</p>
-<ol class="arabic simple">
-<li><p>If <code class="docutils literal notranslate"><span class="pre">XDG_RUNTIME_DIR</span></code> is set and not empty, the path is <code class="docutils literal notranslate"><span class="pre">krpc/&lt;name&gt;</span></code> inside it. On Windows
+<li><p>If <code class="docutils literal notranslate"><span class="pre">XDG_RUNTIME_DIR</span></code> is set and not empty, the path is <code class="docutils literal notranslate"><span class="pre">krpc.sock</span></code> inside it. On Windows
 <code class="docutils literal notranslate"><span class="pre">LOCALAPPDATA</span></code> is read instead, as there is no runtime directory there.</p></li>
-<li><p>Otherwise the path is <code class="docutils literal notranslate"><span class="pre">krpc-&lt;user&gt;/&lt;name&gt;</span></code> inside <code class="docutils literal notranslate"><span class="pre">/tmp</span></code>, where <code class="docutils literal notranslate"><span class="pre">&lt;user&gt;</span></code> is the name of
-the account running the process. <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> is fixed, as <code class="docutils literal notranslate"><span class="pre">TMPDIR</span></code> is set per process and would
-move the directory for the server or the client alone. Windows always names a directory in
-<code class="docutils literal notranslate"><span class="pre">LOCALAPPDATA</span></code>, and so never reaches this step.</p></li>
+<li><p>Otherwise the path is <code class="docutils literal notranslate"><span class="pre">krpc-&lt;user&gt;.sock</span></code> inside <code class="docutils literal notranslate"><span class="pre">/tmp</span></code>, where <code class="docutils literal notranslate"><span class="pre">&lt;user&gt;</span></code> is the name of
+the account running the process. <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> is fixed, as <code class="docutils literal notranslate"><span class="pre">TMPDIR</span></code> is set per process. Windows
+always names a directory in <code class="docutils literal notranslate"><span class="pre">LOCALAPPDATA</span></code>, and so never reaches this step.</p></li>
 </ol>
 <p>The user name comes from the account database, as <code class="docutils literal notranslate"><span class="pre">USER</span></code> is unset in a process started without a
-login shell. A client whose language offers only the environment, and finds nothing there, reports
-an error. A path built without the user name would be shared between accounts.</p>
+login shell. A client whose language offers only the environment, and finds no user name there,
+reports an error.</p>
 </section>
-<section id="socket-paths">
-<h2>Socket Paths<a class="headerlink" href="#socket-paths" title="Link to this heading">#</a></h2>
+<section id="path-length-and-permissions">
+<h2>Path Length and Permissions<a class="headerlink" href="#path-length-and-permissions" title="Link to this heading">#</a></h2>
 <p>A socket path is limited to 100 bytes, as the operating system copies the address into a fixed size
-structure. The limit counts the bytes a path takes rather than its characters, so a path using
-multi-byte characters reaches it sooner. The server reports a path that is too long.</p>
-<p>The socket file is created when the server starts and removed when it stops. A killed server leaves
-the file behind, and the next server to use that path removes it before binding.</p>
-<p>A stale file is indistinguishable from a live one, so the server connects to the path first and
-refuses to start if the connection succeeds. A path holding a file with content is left alone.</p>
+structure. The limit counts bytes rather than characters, so a path using multi-byte characters
+reaches it sooner.</p>
 <p>The permissions on the socket and on the directory holding it control access to the server.
-<code class="docutils literal notranslate"><span class="pre">XDG_RUNTIME_DIR</span></code> and <code class="docutils literal notranslate"><span class="pre">LOCALAPPDATA</span></code> are private to the account they belong to, so sockets
-placed there are reachable only by that user.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> fallback is created with whatever the process <code class="docutils literal notranslate"><span class="pre">umask</span></code> allows, which can leave the
-socket open to the user’s group. Set <code class="docutils literal notranslate"><span class="pre">XDG_RUNTIME_DIR</span></code> or configure the paths where that
-matters.</p>
+<code class="docutils literal notranslate"><span class="pre">XDG_RUNTIME_DIR</span></code> and <code class="docutils literal notranslate"><span class="pre">LOCALAPPDATA</span></code> are private to the account they belong to, so a socket
+placed there is reachable only by that user.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> fallback socket sits directly in <code class="docutils literal notranslate"><span class="pre">/tmp</span></code>. Its permissions follow the process
+<code class="docutils literal notranslate"><span class="pre">umask</span></code>, which can leave the socket open to the user’s group. Set <code class="docutils literal notranslate"><span class="pre">XDG_RUNTIME_DIR</span></code> or configure
+the path where that matters.</p>
 </section>
-<section id="invoking-remote-procedures">
-<h2>Invoking Remote Procedures<a class="headerlink" href="#invoking-remote-procedures" title="Link to this heading">#</a></h2>
-<p>See <a class="reference internal" href="messages.html"><span class="doc">Messaging Protocol</span></a>.</p>
-</section>
-<section id="examples">
-<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h2>
-<p>The following Python code connects to the RPC server over a local socket using the name “Jeb”, then
-invokes the <code class="docutils literal notranslate"><span class="pre">KRPC.GetStatus</span></code> RPC and prints the server version number from the response. The
-message encoding is identical to the TCP/IP protocol; only the socket differs.</p>
-<p>It is written for the POSIX socket API, so it runs on Linux and macOS. The protocol is the same on
-Windows, where the address family is reached through winsock, as Python’s socket module does not
-expose it.</p>
+<section id="example">
+<h2>Example<a class="headerlink" href="#example" title="Link to this heading">#</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This example shows the protocol, and omits much of the behavior a client library needs, such as
+handling errors and failed connections. A client library should
+implement the <a class="reference internal" href="../client-spec.html"><span class="doc">client specification</span></a> in its entirety.</p>
+</div>
+<p>The example uses the POSIX socket API, so it runs on Linux and macOS. On Windows, Python’s socket
+module lacks the address family, and the socket is opened through winsock instead.</p>
+<p>The following script connects to the server over a local socket with the name “Example”, calls
+<code class="docutils literal notranslate"><span class="pre">KRPC.GetStatus</span></code> and prints the server version. It then ends the connection:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">getpass</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">socket</span>
@@ -718,15 +678,21 @@ expose it.</p>
     <span class="k">return</span> <span class="n">_DecodeVarint</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
 
+<span class="k">def</span><span class="w"> </span><span class="nf">decode_string</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Decode a string: its length as a varint, then its UTF-8 bytes"""</span>
+    <span class="n">size</span><span class="p">,</span> <span class="n">position</span> <span class="o">=</span> <span class="n">_DecodeVarint</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span><span class="p">[</span><span class="n">position</span> <span class="p">:</span> <span class="n">position</span> <span class="o">+</span> <span class="n">size</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">"utf-8"</span><span class="p">)</span>
+
+
 <span class="k">def</span><span class="w"> </span><span class="nf">send_message</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">"""Send a message, prefixed with its size, to a socket"""</span>
+<span class="w">    </span><span class="sd">"""Send a message, prefixed with its size, to a unix domain socket"""</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">SerializeToString</span><span class="p">()</span>
     <span class="n">size</span> <span class="o">=</span> <span class="n">encode_varint</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
     <span class="n">conn</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="n">size</span> <span class="o">+</span> <span class="n">data</span><span class="p">)</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">recv_message</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">msg_type</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">"""Receive a message, prefixed with its size, from a socket"""</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">recv_message</span><span class="p">(</span><span class="n">conn</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Receive a size-prefixed Message from a unix domain socket"""</span>
     <span class="c1"># Receive the size of the message data</span>
     <span class="n">data</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">""</span>
     <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
@@ -737,52 +703,54 @@ expose it.</p>
         <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
             <span class="k">pass</span>
     <span class="c1"># Receive the message data</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">""</span>
+    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">size</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">+=</span> <span class="n">conn</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="n">size</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
     <span class="c1"># Decode the message</span>
-    <span class="n">msg</span> <span class="o">=</span> <span class="n">msg_type</span><span class="p">()</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">Message</span><span class="p">()</span>
     <span class="n">msg</span><span class="o">.</span><span class="n">ParseFromString</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">msg</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">default_path</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">"""The path the server listens on, unless it was configured with another"""</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">default_path</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""The path the server listens on by default"""</span>
     <span class="n">directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"XDG_RUNTIME_DIR"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">directory</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="s2">"krpc"</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">"/tmp"</span><span class="p">,</span> <span class="s2">"krpc-"</span> <span class="o">+</span> <span class="n">getpass</span><span class="o">.</span><span class="n">getuser</span><span class="p">(),</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="s2">"krpc.sock"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">"/tmp"</span><span class="p">,</span> <span class="s2">"krpc-"</span> <span class="o">+</span> <span class="n">getpass</span><span class="o">.</span><span class="n">getuser</span><span class="p">()</span> <span class="o">+</span> <span class="s2">".sock"</span><span class="p">)</span>
 
 
-<span class="c1"># Open a unix domain socket to the RPC server</span>
-<span class="n">rpc_conn</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_UNIX</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
-<span class="n">rpc_conn</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">default_path</span><span class="p">(</span><span class="s2">"rpc"</span><span class="p">))</span>
+<span class="c1"># Open a unix domain socket to the server</span>
+<span class="n">conn</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_UNIX</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">default_path</span><span class="p">())</span>
 
-<span class="c1"># Send an RPC connection request</span>
-<span class="n">request</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">ConnectionRequest</span><span class="p">()</span>
-<span class="n">request</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">ConnectionRequest</span><span class="o">.</span><span class="n">RPC</span>
-<span class="n">request</span><span class="o">.</span><span class="n">protocol_version</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="n">request</span><span class="o">.</span><span class="n">client_name</span> <span class="o">=</span> <span class="s2">"Jeb"</span>
-<span class="n">send_message</span><span class="p">(</span><span class="n">rpc_conn</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
+<span class="c1"># Send a connection request</span>
+<span class="n">message</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">Message</span><span class="p">()</span>
+<span class="n">message</span><span class="o">.</span><span class="n">connection_request</span><span class="o">.</span><span class="n">protocol_version</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">message</span><span class="o">.</span><span class="n">connection_request</span><span class="o">.</span><span class="n">client_name</span> <span class="o">=</span> <span class="s2">"Example"</span>
+<span class="n">send_message</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
 
 <span class="c1"># Receive the connection response</span>
-<span class="n">response</span> <span class="o">=</span> <span class="n">recv_message</span><span class="p">(</span><span class="n">rpc_conn</span><span class="p">,</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">ConnectionResponse</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">recv_message</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span><span class="o">.</span><span class="n">connection_response</span>
 
 <span class="c1"># Check the connection was successful</span>
 <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status</span> <span class="o">!=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">ConnectionResponse</span><span class="o">.</span><span class="n">OK</span><span class="p">:</span>
     <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"Connection failed: "</span> <span class="o">+</span> <span class="n">response</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
-<span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">protocol_version</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
-    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"The server does not support protocol version 1"</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Connected to RPC server"</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">protocol_version</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"The server does not support protocol version 2"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Connected to the server"</span><span class="p">)</span>
 
-<span class="c1"># Invoke the KRPC.GetStatus RPC</span>
-<span class="n">call</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">ProcedureCall</span><span class="p">()</span>
+<span class="c1"># Invoke the KRPC.GetStatus RPC, in a request with the id 1</span>
+<span class="n">message</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">Message</span><span class="p">()</span>
+<span class="n">message</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">call</span> <span class="o">=</span> <span class="n">message</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">calls</span><span class="o">.</span><span class="n">add</span><span class="p">()</span>
 <span class="n">call</span><span class="o">.</span><span class="n">service</span> <span class="o">=</span> <span class="s2">"KRPC"</span>
 <span class="n">call</span><span class="o">.</span><span class="n">procedure</span> <span class="o">=</span> <span class="s2">"GetStatus"</span>
-<span class="n">request</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">Request</span><span class="p">()</span>
-<span class="n">request</span><span class="o">.</span><span class="n">calls</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">call</span><span class="p">])</span>
-<span class="n">send_message</span><span class="p">(</span><span class="n">rpc_conn</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
+<span class="n">send_message</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
 
-<span class="c1"># Receive the response</span>
-<span class="n">response</span> <span class="o">=</span> <span class="n">recv_message</span><span class="p">(</span><span class="n">rpc_conn</span><span class="p">,</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">Response</span><span class="p">)</span>
+<span class="c1"># Receive the response, which carries the id of the request it answers</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">recv_message</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span><span class="o">.</span><span class="n">response</span>
+<span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="mi">1</span>
 
 <span class="c1"># Check for an error in the response</span>
 <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">HasField</span><span class="p">(</span><span class="s2">"error"</span><span class="p">):</span>
@@ -793,12 +761,27 @@ expose it.</p>
 <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">HasField</span><span class="p">(</span><span class="s2">"error"</span><span class="p">):</span>
     <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"ERROR: "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">error</span><span class="p">))</span>
 
-<span class="c1"># Decode the return value as a Status message</span>
-<span class="n">status</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">Status</span><span class="p">()</span>
-<span class="n">status</span><span class="o">.</span><span class="n">ParseFromString</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+<span class="c1"># Decode the return value, a ServerStatus structure sent as a Tuple of its</span>
+<span class="c1"># fields</span>
+<span class="n">status</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">Tuple</span><span class="o">.</span><span class="n">FromString</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 
-<span class="c1"># Print out the Status message</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+<span class="c1"># Print out the server version, the first field</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">decode_string</span><span class="p">(</span><span class="n">status</span><span class="o">.</span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+<span class="c1"># End the connection with a disconnect, then close the write side</span>
+<span class="n">disconnect</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">Disconnect</span><span class="p">(</span><span class="n">reason</span><span class="o">=</span><span class="n">KRPC</span><span class="o">.</span><span class="n">Disconnect</span><span class="o">.</span><span class="n">CLOSED</span><span class="p">)</span>
+<span class="n">send_message</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">Message</span><span class="p">(</span><span class="n">disconnect</span><span class="o">=</span><span class="n">disconnect</span><span class="p">))</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">shutdown</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">SHUT_WR</span><span class="p">)</span>
+
+<span class="c1"># Discard anything still arriving until the server closes its side, or a</span>
+<span class="c1"># second passes with nothing</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">settimeout</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="k">while</span> <span class="n">conn</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">4096</span><span class="p">):</span>
+        <span class="k">pass</span>
+<span class="k">except</span> <span class="ne">TimeoutError</span><span class="p">:</span>
+    <span class="k">pass</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
 </div>
 </section>
@@ -820,7 +803,7 @@ expose it.</p>
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Protocol Buffers over TCP/IP</p>
+        <p class="prev-next-title">TCP/IP</p>
       </div>
     </a>
     <a class="right-next"
@@ -828,7 +811,7 @@ expose it.</p>
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Protocol Buffers over WebSockets</p>
+        <p class="prev-next-title">WebSockets</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -839,7 +822,7 @@ expose it.</p>
             
             
               
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <dialog id="pst-secondary-sidebar-modal" tabindex="-1"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
@@ -851,13 +834,10 @@ expose it.</p>
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sending-and-receiving-messages">Sending and Receiving Messages</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#connecting-to-the-rpc-server">Connecting to the RPC Server</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#connecting-to-the-stream-server">Connecting to the Stream Server</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#default-socket-paths">Default Socket Paths</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#socket-paths">Socket Paths</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#invoking-remote-procedures">Invoking Remote Procedures</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#connecting">Connecting</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#default-socket-path">Default Socket Path</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#path-length-and-permissions">Path Length and Permissions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
 </ul>
   </nav></div>
 
@@ -883,8 +863,8 @@ expose it.</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -917,7 +897,7 @@ expose it.</p>
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
 </p></div>
       
     </div>

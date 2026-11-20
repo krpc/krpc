@@ -1,0 +1,194 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Box
+===
+
+
+.. _http-Drawing.Box:
+
+.. rubric:: Box
+
+The edges of a box. Created using :http:post:`/drawing/add-box`.
+
+A ``Box`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /drawing/box/(id)/center
+
+   Position of the center of the box.
+
+
+   :param id: The identifier of the :ref:`Box <http-Drawing.Box>` object.
+
+   :resjson tuple<double, double, double> value:
+
+.. http:put:: /drawing/box/(id)/center
+
+   Position of the center of the box.
+
+
+   :param id: The identifier of the :ref:`Box <http-Drawing.Box>` object.
+
+   :reqjson tuple<double, double, double> value: The new value.
+
+
+
+
+.. http:get:: /drawing/box/(id)/size
+
+   Lengths of the sides of the box along its x, y and z axes, in meters.
+
+
+   :param id: The identifier of the :ref:`Box <http-Drawing.Box>` object.
+
+   :resjson tuple<double, double, double> value:
+
+.. http:put:: /drawing/box/(id)/size
+
+   Lengths of the sides of the box along its x, y and z axes, in meters.
+
+
+   :param id: The identifier of the :ref:`Box <http-Drawing.Box>` object.
+
+   :reqjson tuple<double, double, double> value: The new value.
+
+
+
+
+.. http:get:: /drawing/box/(id)/rotation
+
+   Rotation of the box, as a quaternion.
+
+
+   :param id: The identifier of the :ref:`Box <http-Drawing.Box>` object.
+
+   :resjson tuple<double, double, double, double> value:
+
+.. http:put:: /drawing/box/(id)/rotation
+
+   Rotation of the box, as a quaternion.
+
+
+   :param id: The identifier of the :ref:`Box <http-Drawing.Box>` object.
+
+   :reqjson tuple<double, double, double, double> value: The new value.
+
+
+
+
+.. http:get:: /drawing/box/(id)/reference-frame
+
+   Reference frame for the position and rotation of the box.
+
+
+   :param id: The identifier of the :ref:`Box <http-Drawing.Box>` object.
+
+   :resjson SpaceCenter.ReferenceFrame value:
+
+.. http:put:: /drawing/box/(id)/reference-frame
+
+   Reference frame for the position and rotation of the box.
+
+
+   :param id: The identifier of the :ref:`Box <http-Drawing.Box>` object.
+
+   :reqjson SpaceCenter.ReferenceFrame value: The new value.
+
+
+
+
+.. http:get:: /drawing/box/(id)/visible
+
+   Whether the object is visible.
+
+
+   :param id: The identifier of the :ref:`Box <http-Drawing.Box>` object.
+
+   :resjson bool value:
+
+.. http:put:: /drawing/box/(id)/visible
+
+   Whether the object is visible.
+
+
+   :param id: The identifier of the :ref:`Box <http-Drawing.Box>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /drawing/box/(id)/color
+
+   The color of the edges.
+
+
+   :param id: The identifier of the :ref:`Box <http-Drawing.Box>` object.
+
+   :resjson StdLib.ColorRGB value:
+
+.. http:put:: /drawing/box/(id)/color
+
+   The color of the edges.
+
+
+   :param id: The identifier of the :ref:`Box <http-Drawing.Box>` object.
+
+   :reqjson StdLib.ColorRGB value: The new value.
+
+
+
+
+.. http:get:: /drawing/box/(id)/thickness
+
+   The thickness of the edges.
+
+
+   :param id: The identifier of the :ref:`Box <http-Drawing.Box>` object.
+
+   :resjson float value:
+
+.. http:put:: /drawing/box/(id)/thickness
+
+   The thickness of the edges.
+
+
+   :param id: The identifier of the :ref:`Box <http-Drawing.Box>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /drawing/box/(id)/material
+
+   Material used to render the object.
+   Creates the material from a shader with the given name.
+
+
+   :param id: The identifier of the :ref:`Box <http-Drawing.Box>` object.
+
+   :resjson string value:
+
+.. http:put:: /drawing/box/(id)/material
+
+   Material used to render the object.
+   Creates the material from a shader with the given name.
+
+
+   :param id: The identifier of the :ref:`Box <http-Drawing.Box>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:post:: /drawing/box/(id)/remove
+
+   Remove the object.
+
+
+   :param id: The identifier of the :ref:`Box <http-Drawing.Box>` object.

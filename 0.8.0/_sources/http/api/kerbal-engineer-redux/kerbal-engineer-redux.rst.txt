@@ -1,0 +1,120 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Service
+=======
+
+
+.. _http-KerbalEngineerRedux:
+
+This service provides the flight readouts of
+`Kerbal Engineer Redux <https://forum.kerbalspaceprogram.com/topic/17833-kerbal-engineer-redux/>`_.
+
+.. note::
+
+   The flight readouts are for the active vessel only. A procedure that needs the vessel
+   simulation waits for a result that started after the vessel last changed: a switch, a
+   stage or a change in its parts. Other changes, such as shutting down an engine, show in
+   the next result.
+
+
+
+.. http:get:: /kerbal-engineer-redux/available
+
+   Whether Kerbal Engineer Redux is available.
+
+
+   :resjson bool value:
+
+
+
+
+.. http:post:: /kerbal-engineer-redux/impact
+
+   The impact of the vessel with the terrain, or ``null`` if its orbit does not meet
+   the terrain. Throws an exception if the vessel is not the active vessel.
+
+
+   :reqjson SpaceCenter.Vessel vessel: The active vessel.
+   :resjson KerbalEngineerRedux.Impact? value:
+
+
+
+
+
+.. http:post:: /kerbal-engineer-redux/suicide-burn
+
+   The suicide burn that stops the vessel at the terrain, or ``null`` if its orbit
+   does not meet the terrain or its thrust cannot overcome gravity. Throws an exception
+   if the vessel is not the active vessel.
+
+
+   :reqjson SpaceCenter.Vessel vessel: The active vessel.
+   :resjson KerbalEngineerRedux.SuicideBurn? value:
+
+
+
+
+
+.. http:post:: /kerbal-engineer-redux/stages
+
+   The stages of the vessel, lowest stage number first. Throws an exception if the
+   vessel is not the active vessel.
+
+   .. note::
+
+      The last is the current stage. The thrust and thrust-to-weight ratios are for the
+      pressure and gravity at the vessel's altitude.
+
+
+   :reqjson SpaceCenter.Vessel vessel: The active vessel.
+   :resjson list<KerbalEngineerRedux.Stage> value:
+
+
+
+
+
+.. http:post:: /kerbal-engineer-redux/editor-stages
+
+   The stages of the vessel in the editor, lowest stage number first.
+
+   .. note::
+
+      The last is the first stage to activate, and the list is empty when the editor has no
+      vessel. The thrust-to-weight ratios are for the gravity at the body's surface. The
+      masses leave out the crew.
+
+
+   :reqjson SpaceCenter.CelestialBody body: The body to launch from.
+   :reqjson double altitude: The altitude for the atmospheric pressure, in meters. Optional, defaults to ``0.0``.
+   :reqjson double mach: The Mach number, for engines whose thrust depends on it. Optional, defaults to ``0.0``.
+   :resjson list<KerbalEngineerRedux.Stage> value:
+
+
+
+
+
+.. http:post:: /kerbal-engineer-redux/burn-time
+
+   The time to burn a delta-v, or ``null`` if the vessel has too little delta-v.
+   Throws an exception if the vessel is not the active vessel.
+
+
+   :reqjson SpaceCenter.Vessel vessel: The active vessel.
+   :reqjson double delta_v: The delta-v, in :math:`\mathrm{m/s}`.
+   :resjson KerbalEngineerRedux.BurnTime? value:
+
+
+
+
+
+.. http:post:: /kerbal-engineer-redux/rendezvous
+
+   The transfer to the vessel's target, or ``null`` if it has no target, or the
+   target is the body it orbits. Throws an exception if the vessel is not the active
+   vessel.
+
+
+   :reqjson SpaceCenter.Vessel vessel: The active vessel.
+   :resjson KerbalEngineerRedux.Rendezvous? value:

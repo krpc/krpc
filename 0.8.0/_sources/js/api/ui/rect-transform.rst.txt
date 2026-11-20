@@ -1,0 +1,110 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: UI
+   :no-index:
+
+Rect Transform
+==============
+
+
+.. class:: RectTransform
+
+   A Unity engine Rect Transform for a UI object.
+   See the `Unity manual <https://docs.unity3d.com/Manual/class-RectTransform.html>`_ for more details.
+
+   .. method:: getPosition()
+               setPosition(value)
+
+      Position of the rectangles pivot point relative to the anchors.
+
+      :Property: Can be read or written
+      :rtype: ``[number, number]``
+   
+
+   .. method:: getLocalPosition()
+               setLocalPosition(value)
+
+      Position of the rectangles pivot point relative to the anchors.
+
+      :Property: Can be read or written
+      :rtype: ``[number, number, number]``
+   
+
+   .. method:: getSize()
+               setSize(value)
+
+      Width and height of the rectangle.
+
+      :Property: Can be read or written
+      :rtype: ``[number, number]``
+   
+
+   .. method:: getUpperRight()
+               setUpperRight(value)
+
+      Position of the rectangles upper right corner relative to the anchors.
+
+      :Property: Can be read or written
+      :rtype: ``[number, number]``
+   
+
+   .. method:: getLowerLeft()
+               setLowerLeft(value)
+
+      Position of the rectangles lower left corner relative to the anchors.
+
+      :Property: Can be read or written
+      :rtype: ``[number, number]``
+   
+
+   .. method:: setAnchor(value)
+
+      Set the minimum and maximum anchor points as a fraction of the size of the parent rectangle.
+
+      :Property: Write-only, cannot be read
+      :rtype: ``[number, number]``
+   
+
+   .. method:: getAnchorMax()
+               setAnchorMax(value)
+
+      The anchor point for the lower left corner of the rectangle defined as a fraction of the size of the parent rectangle.
+
+      :Property: Can be read or written
+      :rtype: ``[number, number]``
+   
+
+   .. method:: getAnchorMin()
+               setAnchorMin(value)
+
+      The anchor point for the upper right corner of the rectangle defined as a fraction of the size of the parent rectangle.
+
+      :Property: Can be read or written
+      :rtype: ``[number, number]``
+   
+
+   .. method:: getPivot()
+               setPivot(value)
+
+      Location of the pivot point around which the rectangle rotates, defined as a fraction of the size of the rectangle itself.
+
+      :Property: Can be read or written
+      :rtype: ``[number, number]``
+   
+
+   .. method:: getRotation()
+               setRotation(value)
+
+      Rotation, as a quaternion, of the object around its pivot point.
+
+      :Property: Can be read or written
+      :rtype: ``[number, number, number, number]``
+   
+
+   .. method:: getScale()
+               setScale(value)
+
+      Scale factor applied to the object in the x, y and z dimensions.
+
+      :Property: Can be read or written
+      :rtype: ``[number, number, number]``

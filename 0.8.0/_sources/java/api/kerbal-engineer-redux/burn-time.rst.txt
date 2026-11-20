@@ -1,0 +1,24 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.KerbalEngineerRedux
+
+Burn Time
+=========
+
+
+.. type:: public class BurnTime
+
+   The time to burn a delta-v at full thrust, staging as each stage runs dry.
+
+   .. constructor:: public BurnTime(double duration, double halfDuration)
+
+      Construct a BurnTime from the values of its fields.
+
+
+   .. method:: double getDuration()
+
+      The duration of the burn, in seconds.
+
+   .. method:: double getHalfDuration()
+
+      The time to burn half the delta-v, in seconds.

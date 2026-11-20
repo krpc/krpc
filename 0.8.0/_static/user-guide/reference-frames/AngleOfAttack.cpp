@@ -1,0 +1,39 @@
+#include <chrono>
+#include <cmath>
+#include <iomanip>
+#include <iostream>
+#include <krpc.hpp>
+#include <krpc/services/space_center.hpp>
+#include <thread>
+
+static const double pi = 3.1415926535897;
+
+int main() {
+  krpc::Connection conn = krpc::connect("Angle of attack");
+  krpc::services::SpaceCenter space_center(conn);
+  auto vessel = space_center.active_vessel().value();
+
+  while (true) {
+    auto d = vessel.direction(vessel.orbit().body().reference_frame());
+    auto v = vessel.velocity(vessel.orbit().body().reference_frame());
+
+    // Compute the dot product of d and v
+    double dotProd = std::get<0>(d) * std::get<0>(v) +
+                     std::get<1>(d) * std::get<1>(v) +
+                     std::get<2>(d) * std::get<2>(v);
+
+    // Compute the magnitude of v, as d is a unit vector
+    double vMag = sqrt(std::get<0>(v) * std::get<0>(v) +
+                       std::get<1>(v) * std::get<1>(v) +
+                       std::get<2>(v) * std::get<2>(v));
+
+    // Compute the angle between the vectors
+    double angle = 0;
+    if (vMag > 0) angle = acos(dotProd / vMag) * (180.0 / pi);
+
+    std::cout << "Angle of attack = " << std::fixed << std::setprecision(1)
+              << angle << " degrees" << std::endl;
+
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+  }
+}

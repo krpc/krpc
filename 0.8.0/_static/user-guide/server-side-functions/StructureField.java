@@ -1,0 +1,25 @@
+import krpc.client.Connection;
+import krpc.client.Event;
+import krpc.client.services.KRPC.Expression;
+import krpc.client.services.KRPC.Type;
+import krpc.client.services.SpaceCenter;
+import krpc.client.services.SpaceCenter.Flight;
+import krpc.client.services.SpaceCenter.Vessel;
+import krpc.schema.KRPC.ProcedureCall;
+
+
+public class StructureField {
+  public static void main(String[] args) {
+    try (Connection connection = Connection.newInstance()) {
+      SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
+      Vessel vessel = spaceCenter.getActiveVessel();
+      ProcedureCall siteInfo = connection.getCall(
+          vessel.getComms().getControlPath().get(0), "getStart");
+      // [docs]
+      Expression.Bound e = Expression.bind(connection);
+      // The Name field of a structure a call returns
+      Expression expr = e.getField(e.call(siteInfo), "Name");
+      // [/docs]
+    }
+  }
+}

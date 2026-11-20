@@ -1,5 +1,5 @@
 local krpc = require 'krpc'
-local conn = krpc.connect('Example')
+local conn = krpc.connect()
 local vessel = conn.space_center.active_vessel
 
 for _,parachute in ipairs(vessel.parts.parachutes) do

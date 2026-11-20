@@ -1,0 +1,194 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+NavballMarker
+=============
+
+
+.. _http-Drawing.NavballMarker:
+
+.. rubric:: NavballMarker
+
+A marker drawn on the navball. Created using :http:post:`/drawing/add-navball-marker`.
+
+A ``NavballMarker`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /drawing/navball-marker/(id)/direction
+
+   Direction that the marker is drawn at.
+
+
+   :param id: The identifier of the :ref:`NavballMarker <http-Drawing.NavballMarker>` object.
+
+   :resjson tuple<double, double, double> value:
+
+.. http:put:: /drawing/navball-marker/(id)/direction
+
+   Direction that the marker is drawn at.
+
+
+   :param id: The identifier of the :ref:`NavballMarker <http-Drawing.NavballMarker>` object.
+
+   :reqjson tuple<double, double, double> value: The new value.
+
+
+
+
+.. http:get:: /drawing/navball-marker/(id)/reference-frame
+
+   Reference frame that the direction of the marker is in.
+
+
+   :param id: The identifier of the :ref:`NavballMarker <http-Drawing.NavballMarker>` object.
+
+   :resjson SpaceCenter.ReferenceFrame value:
+
+.. http:put:: /drawing/navball-marker/(id)/reference-frame
+
+   Reference frame that the direction of the marker is in.
+
+
+   :param id: The identifier of the :ref:`NavballMarker <http-Drawing.NavballMarker>` object.
+
+   :reqjson SpaceCenter.ReferenceFrame value: The new value.
+
+
+
+
+.. http:get:: /drawing/navball-marker/(id)/visible
+
+   Whether the marker is visible.
+
+   .. note::
+
+      A visible marker is still hidden while it is on the far side of the navball.
+
+
+   :param id: The identifier of the :ref:`NavballMarker <http-Drawing.NavballMarker>` object.
+
+   :resjson bool value:
+
+.. http:put:: /drawing/navball-marker/(id)/visible
+
+   Whether the marker is visible.
+
+   .. note::
+
+      A visible marker is still hidden while it is on the far side of the navball.
+
+
+   :param id: The identifier of the :ref:`NavballMarker <http-Drawing.NavballMarker>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /drawing/navball-marker/(id)/color
+
+   Set the color
+
+
+   :param id: The identifier of the :ref:`NavballMarker <http-Drawing.NavballMarker>` object.
+
+   :resjson StdLib.ColorRGB value:
+
+.. http:put:: /drawing/navball-marker/(id)/color
+
+   Set the color
+
+
+   :param id: The identifier of the :ref:`NavballMarker <http-Drawing.NavballMarker>` object.
+
+   :reqjson StdLib.ColorRGB value: The new value.
+
+
+
+
+.. http:get:: /drawing/navball-marker/(id)/icon
+
+   The icon that the marker is drawn with.
+   See :http:post:`/drawing/navball-marker/available-icons` for the icons that can be used.
+
+
+   :param id: The identifier of the :ref:`NavballMarker <http-Drawing.NavballMarker>` object.
+
+   :resjson string value:
+
+.. http:put:: /drawing/navball-marker/(id)/icon
+
+   The icon that the marker is drawn with.
+   See :http:post:`/drawing/navball-marker/available-icons` for the icons that can be used.
+
+
+   :param id: The identifier of the :ref:`NavballMarker <http-Drawing.NavballMarker>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:get:: /drawing/navball-marker/(id)/image
+
+   The image that the marker is drawn with in place of its icon, or null to draw the
+   icon.
+
+
+   :param id: The identifier of the :ref:`NavballMarker <http-Drawing.NavballMarker>` object.
+
+   :resjson Drawing.Image? value:
+
+.. http:put:: /drawing/navball-marker/(id)/image
+
+   The image that the marker is drawn with in place of its icon, or null to draw the
+   icon.
+
+
+   :param id: The identifier of the :ref:`NavballMarker <http-Drawing.NavballMarker>` object.
+
+   :reqjson Drawing.Image? value: The new value.
+
+
+
+
+.. http:post:: /drawing/navball-marker/available-icons
+
+   A list of all available icons, taken from "GameData/Squad/Contracts/Icons/".
+
+
+   :resjson list<string> value:
+
+
+
+
+
+.. http:get:: /drawing/navball-marker/(id)/size
+
+   Size of the marker, relative to the size of the navball's own markers.
+
+
+   :param id: The identifier of the :ref:`NavballMarker <http-Drawing.NavballMarker>` object.
+
+   :resjson float value:
+
+.. http:put:: /drawing/navball-marker/(id)/size
+
+   Size of the marker, relative to the size of the navball's own markers.
+
+
+   :param id: The identifier of the :ref:`NavballMarker <http-Drawing.NavballMarker>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:post:: /drawing/navball-marker/(id)/remove
+
+   Remove the marker.
+
+
+   :param id: The identifier of the :ref:`NavballMarker <http-Drawing.NavballMarker>` object.

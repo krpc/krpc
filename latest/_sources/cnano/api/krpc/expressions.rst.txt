@@ -6,7 +6,7 @@ Expressions
 ===========
 
 The nodes a server side function is built from, and the types they work with. See the
-:rst:ref:`server side functions tutorial <tutorial-server-side-functions>` for how a function is
+:rst:ref:`server side functions guide <server-side-functions>` for how a function is
 assembled and run.
 
 
@@ -17,6 +17,10 @@ assembled and run.
    .. note::
 
       Numeric operands of differing types are converted to a common type.
+
+   .. macro:: KRPC_CLASS_KRPC_EXPRESSION
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_KRPC_Expression_ReturnType(krpc_connection_t connection, krpc_KRPC_Type_t * returnValue, krpc_KRPC_Expression_t instance)
 
@@ -154,6 +158,18 @@ assembled and run.
 
    
 
+   .. function:: krpc_error_t krpc_KRPC_Expression_ConstantEnumById(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, uint32_t serviceId, uint32_t enumerationId, int32_t value)
+
+      A constant value of an enumeration a service defines, named by ids.
+
+      :Parameters:
+
+       * **serviceId** -- The id of the service the enumeration is defined in.
+       * **enumerationId** -- The id of the enumeration.
+       * **value** -- The value of the member of the enumeration.
+
+   
+
    .. function:: krpc_error_t krpc_KRPC_Expression_ConstantNull(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Type_t type)
 
       A null constant of the given type.
@@ -201,20 +217,22 @@ assembled and run.
 
    .. function:: krpc_error_t krpc_KRPC_Expression_CallWithArguments(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, const krpc_schema_ProcedureCall * call, const krpc_dictionary_int32_object_t * args)
 
-      An RPC call, where some or all of the arguments are computed by expressions.
+      An RPC call, with its arguments computed by expressions.
 
       :Parameters:
 
-       * **call** -- The RPC to call.
+       * **call** -- The call template.
        * **args** -- Expressions computing the call's arguments, by position.
 
    
 
       .. note::
 
+         The call is a call template, which names the procedure and carries no arguments.
          Position 0 is the instance of a class method or property. A position with no
-         expression takes the argument encoded in the call, or the parameter's default. A
-         collection the procedure returns is copied, as a client would receive it.
+         expression takes the parameter's default. A collection the procedure returns is
+         copied, as a client would receive it. Throws an exception if the call carries an
+         argument.
 
    .. function:: krpc_error_t krpc_KRPC_Expression_Equal(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg0, krpc_KRPC_Expression_t arg1)
 
@@ -313,6 +331,10 @@ assembled and run.
 
    
 
+      .. note::
+
+         Also takes two values of a flags enumeration, and gives the values they share.
+
    .. function:: krpc_error_t krpc_KRPC_Expression_Or(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg0, krpc_KRPC_Expression_t arg1)
 
       Logical or bitwise or, which evaluates both operands.
@@ -323,6 +345,10 @@ assembled and run.
        * **arg1** -- The second operand.
 
    
+
+      .. note::
+
+         Also takes two values of a flags enumeration, and gives their combination.
 
    .. function:: krpc_error_t krpc_KRPC_Expression_ConditionalAnd(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg0, krpc_KRPC_Expression_t arg1)
 
@@ -357,6 +383,10 @@ assembled and run.
 
    
 
+      .. note::
+
+         Also takes two values of a flags enumeration, and gives the values in only one of them.
+
    .. function:: krpc_error_t krpc_KRPC_Expression_Not(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg)
 
       Logical or bitwise negation.
@@ -366,6 +396,10 @@ assembled and run.
        * **arg** -- The operand.
 
    
+
+      .. note::
+
+         Also takes a value of a flags enumeration, and gives the declared values it does not hold.
 
    .. function:: krpc_error_t krpc_KRPC_Expression_Negate(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg)
 
@@ -691,9 +725,43 @@ assembled and run.
          :func:`krpc_KRPC_Expression_BlockWithVariables`, or a parameter of an enclosing :func:`krpc_KRPC_Expression_Lambda`.
          A :func:`krpc_KRPC_Expression_Break` or :func:`krpc_KRPC_Expression_Continue` in the body applies to this loop.
 
+   .. function:: krpc_error_t krpc_KRPC_Expression_Match(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t value, const krpc_list_list_object_t * cases, const krpc_list_object_t * bodies)
+
+      A match statement, which evaluates the first matching case.
+
+      :Parameters:
+
+       * **value** -- The value to match.
+       * **cases** -- The test values of each case.
+       * **bodies** -- The statement of each case.
+
+   
+
+      .. note::
+
+         Test values compare as for :func:`krpc_KRPC_Expression_Equal`, and a case with none is the default.
+         A :func:`krpc_KRPC_Expression_Break` in a body ends the enclosing loop.
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_Switch(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t value, const krpc_list_list_object_t * cases, const krpc_list_object_t * bodies)
+
+      A switch statement, which evaluates from the first matching case on.
+
+      :Parameters:
+
+       * **value** -- The value to match.
+       * **cases** -- The test values of each case.
+       * **bodies** -- The statement of each case.
+
+   
+
+      .. note::
+
+         Test values compare as for :func:`krpc_KRPC_Expression_Equal`, and a case with none is the default.
+         A :func:`krpc_KRPC_Expression_Break` in a body ends the switch.
+
    .. function:: krpc_error_t krpc_KRPC_Expression_Break(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue)
 
-      A break statement, which ends the enclosing loop.
+      A break statement, which ends the enclosing loop or :func:`krpc_KRPC_Expression_Switch`.
 
 
    
@@ -737,7 +805,26 @@ assembled and run.
       .. note::
 
          The client receives the exception as an error from the function, or from the stream
-         or event evaluating it. Throws an exception if the service does not declare it.
+         or event evaluating it. For example, the service ``KRPC`` and the name
+         ``Error`` raise :macro:`KRPC_EXCEPTION_KRPC_ERROR`. Throws an exception if the service does not
+         declare it.
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_ThrowById(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, uint32_t serviceId, uint32_t exceptionId, krpc_KRPC_Expression_t message)
+
+      A throw statement, which raises the exception with the given ids.
+
+      :Parameters:
+
+       * **serviceId** -- The id of the service the exception is defined in.
+       * **exceptionId** -- The id of the exception.
+       * **message** -- The message of the exception.
+
+   
+
+      .. note::
+
+         Raises the exception as :func:`krpc_KRPC_Expression_Throw` does. Throws an exception if the
+         service does not declare it.
 
    .. function:: krpc_error_t krpc_KRPC_Expression_TryCatch(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t body, const char * service, const char * name, krpc_KRPC_Expression_t message, krpc_KRPC_Expression_t handler)
 
@@ -757,6 +844,25 @@ assembled and run.
 
          Only an exception a service declares can be named, and :func:`krpc_KRPC_Expression_TryCatchAll`
          handles any exception. Throws an exception if the service does not declare it.
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_TryCatchById(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t body, uint32_t serviceId, uint32_t exceptionId, krpc_KRPC_Expression_t message, krpc_KRPC_Expression_t handler)
+
+      A try-catch statement that handles the exception with the given ids.
+
+      :Parameters:
+
+       * **body** -- The statement to evaluate.
+       * **serviceId** -- The id of the service the exception is defined in.
+       * **exceptionId** -- The id of the exception.
+       * **message** -- A string variable assigned the exception's message, or null.
+       * **handler** -- The statement evaluated when the exception is caught.
+
+   
+
+      .. note::
+
+         Handles the exception as :func:`krpc_KRPC_Expression_TryCatch` does. Throws an exception if the
+         service does not declare it.
 
    .. function:: krpc_error_t krpc_KRPC_Expression_TryCatchAll(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t body, krpc_KRPC_Expression_t message, krpc_KRPC_Expression_t handler)
 
@@ -1067,6 +1173,23 @@ assembled and run.
 
       :returns: The value of the field.
    
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_GetFieldByIndex(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg, int32_t index)
+
+      The value of a field of a structure, named by its position. Throws an exception if
+      the value is not a structure, or the index is out of range.
+
+      :Parameters:
+
+       * **arg** -- The structure.
+       * **index** -- The position of the field to access.
+
+      :returns: The value of the field.
+   
+
+      .. note::
+
+         The fields are numbered from 0, in the order the structure defines them.
 
    .. function:: krpc_error_t krpc_KRPC_Expression_ConvertToString(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg)
 
@@ -1743,6 +1866,10 @@ assembled and run.
 
    The type of a value a procedure takes or returns.
 
+   .. macro:: KRPC_CLASS_KRPC_TYPE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_KRPC_Type_Double(krpc_connection_t connection, krpc_KRPC_Type_t * returnValue)
 
       A double precision floating point number type.
@@ -1836,6 +1963,39 @@ assembled and run.
 
        * **service** -- The name of the service the structure is defined in.
        * **name** -- The name of the structure.
+
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Type_ClassTypeById(krpc_connection_t connection, krpc_KRPC_Type_t * returnValue, uint32_t serviceId, uint32_t classId)
+
+      The type of a class defined by a service, named by ids.
+
+      :Parameters:
+
+       * **serviceId** -- The id of the service the class is defined in.
+       * **classId** -- The id of the class.
+
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Type_EnumerationTypeById(krpc_connection_t connection, krpc_KRPC_Type_t * returnValue, uint32_t serviceId, uint32_t enumerationId)
+
+      The type of an enumeration defined by a service, named by ids.
+
+      :Parameters:
+
+       * **serviceId** -- The id of the service the enumeration is defined in.
+       * **enumerationId** -- The id of the enumeration.
+
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Type_StructTypeById(krpc_connection_t connection, krpc_KRPC_Type_t * returnValue, uint32_t serviceId, uint32_t structId)
+
+      The type of a structure defined by a service, named by ids.
+
+      :Parameters:
+
+       * **serviceId** -- The id of the service the structure is defined in.
+       * **structId** -- The id of the structure.
 
    
 
@@ -1936,6 +2096,11 @@ assembled and run.
 .. type:: krpc_KRPC_TypeCode_t
 
    The kind of a type, with the values of the communication protocol's type codes.
+
+   .. macro:: KRPC_ENUMERATION_KRPC_TYPECODE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_KRPC_TYPECODE_DOUBLE

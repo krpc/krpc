@@ -1,0 +1,568 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Service
+=======
+
+
+.. _http-Debug:
+
+Provides functionality to modify the state of the simulation directly, in ways
+the game normally does not allow: teleporting a vessel, setting its attitude,
+applying forces to its parts, refilling its tanks and enabling the game's cheat
+options.
+
+.. note::
+
+   Everything in this service is cheating. It has the same effect on a save as the
+   game's own debug menu (Alt+F12), and the same consequences: contracts, records and
+   career progress made with it are not earned. It is intended for setting up a
+   scenario to fly or a script to test, without flying there first.
+
+
+
+.. http:post:: /debug/set-circular-orbit
+
+   Move the active vessel onto a circular orbit around a body.
+
+
+   :reqjson SpaceCenter.CelestialBody body: Body to orbit.
+   :reqjson double altitude: Altitude of the orbit, in meters above sea level.
+
+
+
+
+
+.. http:post:: /debug/set-orbit
+
+   Move the active vessel onto the orbit with the given orbital elements. The angles use
+   the same units and conventions as :ref:`SpaceCenter.Orbit <http-SpaceCenter.Orbit>`.
+
+
+   :reqjson SpaceCenter.CelestialBody body: Body to orbit.
+   :reqjson double semi_major_axis: Semi-major axis of the orbit, in meters.
+   :reqjson double eccentricity: Eccentricity of the orbit.
+   :reqjson double inclination: Inclination of the orbit, in radians.
+   :reqjson double longitude_of_ascending_node: Longitude of the ascending node, in radians.
+   :reqjson double argument_of_periapsis: Argument of periapsis, in radians.
+   :reqjson double mean_anomaly_at_epoch: Mean anomaly at epoch, in radians.
+   :reqjson double epoch: Universal time of the epoch, in seconds.
+
+
+
+
+
+.. http:post:: /debug/set-landed
+
+   Place the active vessel on the surface of a body at the given latitude and longitude,
+   and wait for it to come to rest.
+
+
+   :reqjson SpaceCenter.CelestialBody body: Body to land on.
+   :reqjson double latitude: Latitude in degrees.
+   :reqjson double longitude: Longitude in degrees.
+   :reqjson double altitude: Height above the terrain to settle at, in meters. Defaults to 0, resting on the surface. Optional, defaults to ``0.0``.
+
+
+
+
+
+.. http:post:: /debug/set-flight
+
+   Place the active vessel in atmospheric flight over the given point: at the given altitude
+   and airspeed, pointing along the given heading at the given pitch and roll, and
+   let physics resume so that it is flying. Use this to set up an in-air scenario
+   without flying the craft up from the runway.
+
+   .. note::
+
+      The pitch, heading and roll match those reported by the vessel's
+      :ref:`SpaceCenter.Flight <http-SpaceCenter.Flight>`.
+
+
+   :reqjson SpaceCenter.CelestialBody body: Body to fly over.
+   :reqjson double latitude: Latitude in degrees.
+   :reqjson double longitude: Longitude in degrees.
+   :reqjson double altitude: Altitude in meters above sea level.
+   :reqjson double speed: Airspeed in :math:`\mathrm{m/s}`, relative to the surface.
+   :reqjson double heading: Compass heading to point along, in degrees (90 is east).
+   :reqjson double pitch: Pitch above the horizon, in degrees. Defaults to 0 (level). Optional, defaults to ``0.0``.
+   :reqjson double roll: Roll, in degrees. Defaults to 0 (wings level). Optional, defaults to ``0.0``.
+   :reqjson double angle_of_attack: Angle of attack in degrees: how far the airspeed vector sits below the nose, in the pitch plane. 0 (the default) puts the airspeed along the nose; a positive value gives a nose-up attitude relative to the flight path, so the flight-path angle is *pitch* minus this. Optional, defaults to ``0.0``.
+
+
+
+
+
+.. http:post:: /debug/set-position
+
+   Move the active vessel to the given position, leaving its velocity as it is. To put it
+   alongside another vessel, pass a position in that vessel's reference frame.
+
+   .. note::
+
+      This is the inverse of :http:post:`/space-center/vessel/(id)/position` in the same
+      reference frame.
+
+
+   :reqjson tuple<double, double, double> position: Position of the vessel's center of mass, in meters.
+   :reqjson SpaceCenter.ReferenceFrame? reference_frame: Reference frame the position is in. Defaults to the reference frame of the body being orbited. Optional, defaults to ``null``.
+
+
+
+
+
+.. http:post:: /debug/set-velocity
+
+   Set the velocity of the active vessel, leaving it where it is. The vessel is moved onto the
+   orbit that passes through its current position at the new velocity, so this works
+   in orbit and in the atmosphere alike.
+
+   .. note::
+
+      This is the inverse of :http:post:`/space-center/vessel/(id)/velocity` in the same
+      reference frame.
+
+
+   :reqjson tuple<double, double, double> velocity: Velocity in :math:`\mathrm{m/s}`.
+   :reqjson SpaceCenter.ReferenceFrame? reference_frame: Reference frame the velocity is in. Defaults to the reference frame of the body being orbited, which rotates with it, so a zero velocity leaves the vessel at rest relative to the ground. Optional, defaults to ``null``.
+
+
+
+
+
+.. http:post:: /debug/set-pitch-heading-roll
+
+   Set the attitude of a vessel to the given pitch, heading and roll in the given
+   reference frame, and stop it rotating. Lets a script start from a fixed, still
+   pose without first flying the autopilot there.
+
+   .. note::
+
+      The angles match those reported by the vessel's
+      :ref:`SpaceCenter.Flight <http-SpaceCenter.Flight>`.
+
+
+   :reqjson double pitch: Target pitch, in degrees.
+   :reqjson double heading: Target heading, in degrees.
+   :reqjson double roll: Target roll, in degrees.
+   :reqjson SpaceCenter.ReferenceFrame? reference_frame: Reference frame the angles are in. Defaults to the vessel's surface reference frame. Optional, defaults to ``null``.
+   :reqjson SpaceCenter.Vessel? vessel: Vessel to rotate. Defaults to the active vessel. Optional, defaults to ``null``.
+
+
+
+
+
+.. http:post:: /debug/set-direction
+
+   Point a vessel along the given direction in the given reference frame, and stop it
+   rotating. This is :http:post:`/debug/set-pitch-heading-roll` with a pointing vector instead
+   of a pitch and heading, matching the attitude the autopilot holds for the same
+   target direction and roll.
+
+
+   :reqjson tuple<double, double, double> direction: Direction to point the nose of the vessel in.
+   :reqjson double roll: Target roll, in degrees, or ``NaN`` to leave the roll uncontrolled.
+   :reqjson SpaceCenter.ReferenceFrame? reference_frame: Reference frame the direction and roll are in. Defaults to the vessel's surface reference frame. Optional, defaults to ``null``.
+   :reqjson SpaceCenter.Vessel? vessel: Vessel to rotate. Defaults to the active vessel. Optional, defaults to ``null``.
+
+
+
+
+
+.. http:post:: /debug/apply-rotation
+
+   Rotate a vessel about the given axis, in its own reference frame, by the given angle.
+
+
+   :reqjson double angle: Angle to rotate by, in degrees.
+   :reqjson tuple<double, double, double> axis: Axis to rotate about.
+   :reqjson SpaceCenter.Vessel? vessel: Vessel to rotate. Defaults to the active vessel. Optional, defaults to ``null``.
+
+
+
+
+
+.. http:post:: /debug/set-angular-velocity
+
+   Set the angular velocity of a vessel, expressed in the given reference frame. Pass a
+   zero vector to stop the vessel rotating.
+
+   .. note::
+
+      The whole vessel is put into a rigid rotation about its center of mass, so it spins in
+      place rather than shearing apart or translating.
+
+
+   :reqjson tuple<double, double, double> angular_velocity: Angular velocity, in :math:`\mathrm{rad/s}`. The direction is the axis of rotation and the magnitude is the rate.
+   :reqjson SpaceCenter.ReferenceFrame? reference_frame: Reference frame the angular velocity is in. Defaults to the vessel's surface reference frame. Optional, defaults to ``null``.
+   :reqjson SpaceCenter.Vessel? vessel: Vessel to rotate. Defaults to the active vessel. Optional, defaults to ``null``.
+
+
+
+
+
+.. http:post:: /debug/add-force
+
+   Exert a constant force on a part, acting at the given position.
+
+   .. note::
+
+      The force is removed when the client that added it disconnects.
+
+
+   :reqjson SpaceCenter.Part part: The part to apply the force to.
+   :reqjson tuple<double, double, double> force: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+   :reqjson tuple<double, double, double> position: The position at which the force acts, as a vector.
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: The reference frame that the force and position are in.
+   :resjson SpaceCenter.Force value: An object that can be used to remove or modify the force.
+
+
+
+
+
+.. http:post:: /debug/instantaneous-force
+
+   Exert an instantaneous force on a part, acting at the given position.
+
+   .. note::
+
+      The force is applied instantaneously in a single physics update.
+
+
+   :reqjson SpaceCenter.Part part: The part to apply the force to.
+   :reqjson tuple<double, double, double> force: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+   :reqjson tuple<double, double, double> position: The position at which the force acts, as a vector.
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: The reference frame that the force and position are in.
+
+
+
+
+
+.. http:post:: /debug/fill-all-resources
+
+   Fill every resource tank on a vessel to its maximum capacity.
+
+
+   :reqjson SpaceCenter.Vessel? vessel: Vessel to fill. Defaults to the active vessel. Optional, defaults to ``null``.
+
+
+
+
+
+.. http:post:: /debug/fill-resources
+
+   Fill the tanks of a single resource on a vessel to their maximum capacity.
+
+
+   :reqjson string resource_name: Name of the resource to fill, for example ``"LiquidFuel"``.
+   :reqjson SpaceCenter.Vessel? vessel: Vessel to fill. Defaults to the active vessel. Optional, defaults to ``null``.
+
+
+
+
+
+.. http:get:: /debug/infinite-propellant
+
+   Whether engines and RCS thrusters draw no propellant.
+
+
+   :resjson bool value:
+
+.. http:put:: /debug/infinite-propellant
+
+   Whether engines and RCS thrusters draw no propellant.
+
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /debug/infinite-electricity
+
+   Whether parts draw no electric charge.
+
+
+   :resjson bool value:
+
+.. http:put:: /debug/infinite-electricity
+
+   Whether parts draw no electric charge.
+
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /debug/no-crash-damage
+
+   Whether parts survive collisions that would otherwise destroy them.
+
+
+   :resjson bool value:
+
+.. http:put:: /debug/no-crash-damage
+
+   Whether parts survive collisions that would otherwise destroy them.
+
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /debug/unbreakable-joints
+
+   Whether the joints between parts are rigid and cannot break.
+
+
+   :resjson bool value:
+
+.. http:put:: /debug/unbreakable-joints
+
+   Whether the joints between parts are rigid and cannot break.
+
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /debug/ignore-max-temperature
+
+   Whether parts survive temperatures above their maximum, instead of exploding.
+
+
+   :resjson bool value:
+
+.. http:put:: /debug/ignore-max-temperature
+
+   Whether parts survive temperatures above their maximum, instead of exploding.
+
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /debug/allow-part-clipping
+
+   Whether parts may be placed so that they intersect one another in the editor.
+
+
+   :resjson bool value:
+
+.. http:put:: /debug/allow-part-clipping
+
+   Whether parts may be placed so that they intersect one another in the editor.
+
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /debug/non-strict-attachment-orientation
+
+   Whether parts may be attached in any orientation, rather than only the ones their
+   attachment nodes allow.
+
+
+   :resjson bool value:
+
+.. http:put:: /debug/non-strict-attachment-orientation
+
+   Whether parts may be attached in any orientation, rather than only the ones their
+   attachment nodes allow.
+
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /debug/ignore-kerbal-inventory-limits
+
+   Whether a kerbal's inventory may hold more than its slot and mass limits allow.
+
+
+   :resjson bool value:
+
+.. http:put:: /debug/ignore-kerbal-inventory-limits
+
+   Whether a kerbal's inventory may hold more than its slot and mass limits allow.
+
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /debug/ignore-eva-construction-mass-limit
+
+   Whether EVA construction may move parts heavier than a kerbal can normally carry.
+
+
+   :resjson bool value:
+
+.. http:put:: /debug/ignore-eva-construction-mass-limit
+
+   Whether EVA construction may move parts heavier than a kerbal can normally carry.
+
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /debug/ignore-agency-mindset-on-contracts
+
+   Whether contracts are offered regardless of the agency mindset that normally
+   restricts which ones appear.
+
+
+   :resjson bool value:
+
+.. http:put:: /debug/ignore-agency-mindset-on-contracts
+
+   Whether contracts are offered regardless of the agency mindset that normally
+   restricts which ones appear.
+
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /debug/pause-on-vessel-unpack
+
+   Whether the game pauses whenever a vessel comes off rails.
+
+
+   :resjson bool value:
+
+.. http:put:: /debug/pause-on-vessel-unpack
+
+   Whether the game pauses whenever a vessel comes off rails.
+
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /debug/biomes-visible
+
+   Whether biome boundaries are drawn on the surface of bodies.
+
+
+   :resjson bool value:
+
+.. http:put:: /debug/biomes-visible
+
+   Whether biome boundaries are drawn on the surface of bodies.
+
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /debug/gravity-multiplier
+
+   Multiplier applied to the force of gravity on every vessel. 1 is normal gravity,
+   0 is weightlessness.
+
+
+   :resjson double value:
+
+.. http:put:: /debug/gravity-multiplier
+
+   Multiplier applied to the force of gravity on every vessel. 1 is normal gravity,
+   0 is weightlessness.
+
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /debug/funds
+
+   The number of funds the player has. Only available in career mode.
+
+
+   :resjson double value:
+
+.. http:put:: /debug/funds
+
+   The number of funds the player has. Only available in career mode.
+
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /debug/science
+
+   The amount of science the player has. Only available in career and science mode.
+
+
+   :resjson float value:
+
+.. http:put:: /debug/science
+
+   The amount of science the player has. Only available in career and science mode.
+
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /debug/reputation
+
+   The player's reputation. Only available in career mode.
+
+
+   :resjson float value:
+
+.. http:put:: /debug/reputation
+
+   The player's reputation. Only available in career mode.
+
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:post:: /debug/unlock-technology-tree
+
+   Research every node in the technology tree and purchase every part in it.
+   Only available in career and science mode.
+
+
+
+
+
+
+
+.. http:post:: /debug/upgrade-facilities
+
+   Upgrade every building at the space center to its highest level.
+   Only available in career mode.
+
+
+
+
+
+
+
+.. http:post:: /debug/max-kerbal-experience
+
+   Raise every kerbal in the roster to the highest experience level.

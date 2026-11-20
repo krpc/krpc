@@ -1,0 +1,76 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.RasterPropMonitor
+
+Display
+=======
+
+
+.. class:: Display
+
+   A screen page that a script draws, and whose button presses it answers. Obtained by
+   calling :prop:`Monitor.Display` or :meth:`RasterPropMonitor.Display <RasterPropMonitor.RasterPropMonitor.Display>`.
+
+   .. note::
+
+      A monitor shows a display on a page whose handler is ``KRPCDisplay``. kRPC's
+      optional Module Manager patch adds such a page, named ``krpc``, to every monitor.
+      The content is kept while KSP builds the IVA again, but not saved with the game.
+
+   .. property:: string Name { get; }
+
+      The name of the display, or ``null`` for a monitor's own display.
+
+      :Game Scenes: Flight
+
+   .. property:: string Text { get; set; }
+
+      The text of the display, in Raster Prop Monitor's page format. It can hold
+      markup, such as ``[#ff0000]`` for a color, and a line can format variables, as
+      in ``{0:F0} m $&$ ALTITUDE``. Raster Prop Monitor updates the variables as
+      it draws.
+
+      :Game Scenes: Flight
+
+   .. property:: byte[] Image { get; set; }
+
+      The background image of the display, drawn under the text and scaled to the
+      screen, as a PNG or JPEG image. ``null`` for none.
+      Throws an exception if the image does not decode.
+
+      :Game Scenes: Flight
+
+   .. function:: void Clear()
+
+      Clear the text and the image.
+
+
+      :Game Scenes: Flight
+
+   .. property:: bool Shown { get; }
+
+      Whether a monitor shows the display now.
+
+      :Game Scenes: Flight
+
+   .. function:: KRPC.Client.Event ButtonPressed(int id)
+
+      An event that fires when a monitor showing the display has a button pressed.
+      The event lasts until it is removed.
+
+      :parameters:
+
+       * **id** -- The button's index in :prop:`Monitor.Buttons`.
+
+      :Game Scenes: Flight
+
+   .. function:: KRPC.Client.Event ButtonReleased(int id)
+
+      An event that fires when a monitor showing the display has a button released.
+      The event lasts until it is removed.
+
+      :parameters:
+
+       * **id** -- The button's index in :prop:`Monitor.Buttons`.
+
+      :Game Scenes: Flight

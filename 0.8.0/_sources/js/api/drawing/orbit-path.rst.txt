@@ -1,0 +1,167 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: Drawing
+   :no-index:
+
+OrbitPath
+=========
+
+
+.. class:: OrbitPath
+
+   The path of an orbit. Created using :func:`Drawing.addOrbit`.
+
+   .. method:: getOrbit()
+               setOrbit(value)
+
+      The orbit.
+
+      :Property: Can be read or written
+      :rtype: :class:`SpaceCenter.Orbit`
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: getWholeOrbit()
+               setWholeOrbit(value)
+
+      Whether the whole orbit is drawn, up to where it leaves the sphere of influence of
+      its body. When false, the orbit is drawn from :meth:`Drawing.OrbitPath.getStartTrueAnomaly`
+      to :meth:`Drawing.OrbitPath.getEndTrueAnomaly`.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: getStartTrueAnomaly()
+               setStartTrueAnomaly(value)
+
+      The true anomaly at which the path starts, in radians.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Setting this sets :meth:`Drawing.OrbitPath.getWholeOrbit` to false.
+
+   .. method:: getEndTrueAnomaly()
+               setEndTrueAnomaly(value)
+
+      The true anomaly at which the path ends, in radians.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Setting this sets :meth:`Drawing.OrbitPath.getWholeOrbit` to false.
+
+   .. method:: getVisible()
+               setVisible(value)
+
+      Whether the object is visible.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: getColor()
+               setColor(value)
+
+      The color of the path.
+
+      :Property: Can be read or written
+      :rtype: :class:`StdLib.ColorRGB`
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         For a path drawn with more than one color, this is the color at its start.
+
+   .. method:: getColors()
+               setColors(value)
+
+      The colors of the path, blended evenly from its start to its end.
+
+      :Property: Can be read or written
+      :rtype: ``Array`` of :class:`StdLib.ColorRGB`
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Throws an exception if the list is empty or holds more than 8 colors.
+
+   .. method:: getThickness()
+               setThickness(value)
+
+      The thickness of the path.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: getStartArrow()
+               setStartArrow(value)
+
+      Whether an arrow head is drawn at the start.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: getEndArrow()
+               setEndArrow(value)
+
+      Whether an arrow head is drawn at the end.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: getArrowSize()
+               setArrowSize(value)
+
+      The size of the arrow heads, relative to the thickness.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: getDashed()
+               setDashed(value)
+
+      Whether the path is drawn as a dashed line.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: getLabel()
+               setLabel(value)
+
+      Text drawn halfway along the path, facing the camera. Empty for no label.
+
+      :Property: Can be read or written
+      :rtype: ``string``
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: getMaterial()
+               setMaterial(value)
+
+      Material used to render the object.
+      Creates the material from a shader with the given name.
+
+      :Property: Can be read or written
+      :rtype: ``string``
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: remove()
+
+      Remove the object.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph

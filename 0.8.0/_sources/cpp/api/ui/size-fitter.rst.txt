@@ -1,0 +1,48 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::UI
+
+Size Fitter
+===========
+
+
+.. class:: SizeFitter
+
+   Sizes a panel to fit what it contains, rather than the other way round.
+   See :func:`Panel::size_fitter`.
+
+   .. function:: ContentSizeFit horizontal_fit()
+   .. function:: void set_horizontal_fit(ContentSizeFit value)
+
+      How the width of the panel is chosen.
+
+   
+
+   .. function:: ContentSizeFit vertical_fit()
+   .. function:: void set_vertical_fit(ContentSizeFit value)
+
+      How the height of the panel is chosen.
+
+   
+
+
+
+.. namespace:: krpc::services::UI
+.. enum-struct:: ContentSizeFit
+
+   How a size fitter sizes a panel along one direction.
+
+
+   .. enumerator:: unconstrained
+
+      Leave the size alone.
+
+
+   .. enumerator:: min_size
+
+      Use the smallest size the contents will fit in.
+
+
+   .. enumerator:: preferred_size
+
+      Use the size the contents ask for.

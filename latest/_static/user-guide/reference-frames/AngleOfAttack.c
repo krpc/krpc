@@ -1,0 +1,51 @@
+#ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#define sleep(seconds) Sleep((seconds) * 1000)
+#else
+#include <unistd.h>
+#endif
+#include <krpc_cnano.h>
+#include <krpc_cnano/services/space_center.h>
+#include <math.h>
+#include <stdio.h>
+
+typedef krpc_tuple_double_double_double_t vector3;
+
+static double pi = 3.1415926535897;
+
+int main() {
+  krpc_connection_t conn;
+  if (krpc_open_serial(&conn, "COM0") != KRPC_OK) return 1;
+  if (krpc_connect(conn, "Angle of attack") != KRPC_OK) return 1;
+
+  krpc_SpaceCenter_Vessel_t vessel;
+  krpc_SpaceCenter_ActiveVessel(conn, &vessel);
+  krpc_SpaceCenter_Orbit_t orbit;
+  krpc_SpaceCenter_Vessel_Orbit(conn, &orbit, vessel);
+  krpc_SpaceCenter_CelestialBody_t body;
+  krpc_SpaceCenter_Orbit_Body(conn, &body, orbit);
+  krpc_SpaceCenter_ReferenceFrame_t body_ref;
+  krpc_SpaceCenter_CelestialBody_ReferenceFrame(conn, &body_ref, body);
+
+  while (true) {
+    vector3 d;
+    vector3 v;
+    krpc_SpaceCenter_Vessel_Direction(conn, &d, vessel, body_ref);
+    krpc_SpaceCenter_Vessel_Velocity(conn, &v, vessel, body_ref);
+
+    // Compute the dot product of d and v
+    double dotProd = d.e0 * v.e0 + d.e1 * v.e1 + d.e2 * v.e2;
+
+    // Compute the magnitude of v, as d is a unit vector
+    double vMag = sqrt(v.e0 * v.e0 + v.e1 * v.e1 + v.e2 * v.e2);
+
+    // Compute the angle between the vectors
+    double angle = 0;
+    if (vMag > 0) angle = acos(dotProd / vMag) * (180.0 / pi);
+
+    printf("Angle of attack = %.1f degrees\n", angle);
+
+    sleep(1);
+  }
+}

@@ -1,0 +1,157 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Computer
+========
+
+
+.. _http-RasterPropMonitor.Computer:
+
+.. rubric:: Computer
+
+The Raster Prop Monitor computer of a part, which holds the variables its props show.
+Obtained by calling :http:post:`/raster-prop-monitor/computer` or
+:http:post:`/raster-prop-monitor/computers`.
+
+A ``Computer`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /raster-prop-monitor/computer/(id)/part
+
+   The part the computer is on.
+
+
+   :param id: The identifier of the :ref:`Computer <http-RasterPropMonitor.Computer>` object.
+
+   :resjson SpaceCenter.Part value:
+
+
+
+
+.. http:post:: /raster-prop-monitor/computer/(id)/persistent-variable
+
+   The value of a persistent variable of the part, or else of the vessel, or
+   ``null`` if neither is set. Props read it as ``PERSISTENT_name``.
+
+
+   :param id: The identifier of the :ref:`Computer <http-RasterPropMonitor.Computer>` object.
+
+   :reqjson string name: The name of the variable, without the ``PERSISTENT_`` prefix.
+   :resjson double? value:
+
+
+
+
+
+.. http:post:: /raster-prop-monitor/computer/(id)/set-persistent-variable
+
+   Set a persistent variable of the part. The props that show it update.
+
+
+   :param id: The identifier of the :ref:`Computer <http-RasterPropMonitor.Computer>` object.
+
+   :reqjson string name: The name of the variable, without the ``PERSISTENT_`` prefix.
+   :reqjson double value: The value.
+
+
+
+
+
+.. http:post:: /raster-prop-monitor/computer/(id)/remove-persistent-variable
+
+   Remove a persistent variable of the part. The props that show it update.
+
+
+   :param id: The identifier of the :ref:`Computer <http-RasterPropMonitor.Computer>` object.
+
+   :reqjson string name: The name of the variable, without the ``PERSISTENT_`` prefix.
+
+
+
+
+
+
+
+
+.. http:post:: /raster-prop-monitor/computer/(id)/variable-type
+
+   The type of a variable's current value.
+   Throws an exception if Raster Prop Monitor does not recognize the variable.
+
+
+   :param id: The identifier of the :ref:`Computer <http-RasterPropMonitor.Computer>` object.
+
+   :reqjson string name: The name of the variable, e.g. ``ALTITUDE``.
+   :resjson RasterPropMonitor.VariableType value:
+
+
+
+
+
+.. http:post:: /raster-prop-monitor/computer/(id)/number-variable
+
+   The value of a number variable. Raster Prop Monitor gives a boolean as 0 or 1.
+   Throws an exception if Raster Prop Monitor does not recognize the variable, or
+   its value is a string.
+
+
+   :param id: The identifier of the :ref:`Computer <http-RasterPropMonitor.Computer>` object.
+
+   :reqjson string name: The name of the variable, e.g. ``ALTITUDE``.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /raster-prop-monitor/computer/(id)/string-variable
+
+   The value of a variable as a string. A number gives its invariant culture string.
+   Throws an exception if Raster Prop Monitor does not recognize the variable.
+
+
+   :param id: The identifier of the :ref:`Computer <http-RasterPropMonitor.Computer>` object.
+
+   :reqjson string name: The name of the variable, e.g. ``ALTITUDE``.
+   :resjson string value:
+
+
+
+
+
+.. http:post:: /raster-prop-monitor/computer/(id)/format-variables
+
+   Text with its variables formatted as a monitor page formats them, e.g.
+   ``{0:SIP6.1}m $&$ ALTITUDE``. Each line takes its own variables.
+   Throws an exception if Raster Prop Monitor does not recognize a variable, or a
+   format is invalid.
+
+
+   :param id: The identifier of the :ref:`Computer <http-RasterPropMonitor.Computer>` object.
+
+   :reqjson string text: The text, in the format of a monitor page.
+   :resjson string value:
+
+
+
+
+
+
+
+.. _http-RasterPropMonitor.VariableType:
+
+.. rubric:: VariableType
+
+The type of a Raster Prop Monitor variable. See :http:post:`/raster-prop-monitor/computer/(id)/variable-type`.
+
+Passed and returned as the name of one of its values:
+
+
+``"number"``
+   A number. Access using :http:post:`/raster-prop-monitor/computer/(id)/number-variable`.
+
+
+``"string"``
+   A string. Access using :http:post:`/raster-prop-monitor/computer/(id)/string-variable`.

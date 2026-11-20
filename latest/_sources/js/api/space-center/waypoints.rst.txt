@@ -1,0 +1,228 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: SpaceCenter
+   :no-index:
+
+Waypoints
+=========
+
+
+.. class:: WaypointManager
+
+   Waypoints are the location markers you can see on the map view showing you where contracts are targeted for.
+   With this structure, you can obtain coordinate data for the locations of these waypoints.
+   Obtained by calling :func:`SpaceCenter.getWaypointManager`.
+
+   .. method:: getWaypoints()
+
+      A list of all existing waypoints.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`SpaceCenter.Waypoint`
+   
+
+   .. method:: addWaypoint(latitude, longitude, body, name)
+
+      Creates a waypoint at the given position at ground level, and returns a
+      :class:`SpaceCenter.Waypoint` object that can be used to modify it.
+
+      :param latitude: Latitude of the waypoint.
+      :type latitude: ``number``
+      :param longitude: Longitude of the waypoint.
+      :type longitude: ``number``
+      :param body: Celestial body the waypoint is attached to.
+      :type body: :class:`SpaceCenter.CelestialBody`
+      :param name: Name of the waypoint.
+      :type name: ``string``
+      :rtype: :class:`SpaceCenter.Waypoint`
+   
+
+   .. method:: addWaypointAtAltitude(latitude, longitude, altitude, body, name)
+
+      Creates a waypoint at the given position and altitude, and returns a
+      :class:`SpaceCenter.Waypoint` object that can be used to modify it.
+
+      :param latitude: Latitude of the waypoint.
+      :type latitude: ``number``
+      :param longitude: Longitude of the waypoint.
+      :type longitude: ``number``
+      :param altitude: Altitude (above sea level) of the waypoint.
+      :type altitude: ``number``
+      :param body: Celestial body the waypoint is attached to.
+      :type body: :class:`SpaceCenter.CelestialBody`
+      :param name: Name of the waypoint.
+      :type name: ``string``
+      :rtype: :class:`SpaceCenter.Waypoint`
+   
+
+   .. method:: getColors()
+
+      An example map of known color - seed pairs.
+      Any other integers may be used as seed.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Map`` from ``string`` to ``number``
+   
+
+   .. method:: getIcons()
+
+      Returns all available icons (from "GameData/Squad/Contracts/Icons/").
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of ``string``
+   
+
+
+
+.. class:: Waypoint
+
+   Represents a waypoint. Can be created using :meth:`SpaceCenter.WaypointManager.addWaypoint`.
+
+   .. method:: getBody()
+               setBody(value)
+
+      The celestial body the waypoint is attached to.
+
+      :Property: Can be read or written
+      :rtype: :class:`SpaceCenter.CelestialBody`
+      :Game Scenes: Flight
+
+   .. method:: getName()
+               setName(value)
+
+      The name of the waypoint as it appears on the map and the contract.
+
+      :Property: Can be read or written
+      :rtype: ``string``
+      :Game Scenes: Flight
+
+   .. method:: getColor()
+               setColor(value)
+
+      The seed of the icon color. See :meth:`SpaceCenter.WaypointManager.getColors` for example colors.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getIcon()
+               setIcon(value)
+
+      The icon of the waypoint.
+
+      :Property: Can be read or written
+      :rtype: ``string``
+      :Game Scenes: Flight
+
+   .. method:: getLatitude()
+               setLatitude(value)
+
+      The latitude of the waypoint.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getLongitude()
+               setLongitude(value)
+
+      The longitude of the waypoint.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getMeanAltitude()
+               setMeanAltitude(value)
+
+      The altitude of the waypoint above sea level, in meters.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getSurfaceAltitude()
+               setSurfaceAltitude(value)
+
+      The altitude of the waypoint above the surface of the body or sea level,
+      whichever is closer, in meters.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getBedrockAltitude()
+               setBedrockAltitude(value)
+
+      The altitude of the waypoint above the surface of the body, in meters.
+      When over water, this is the altitude above the sea floor.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getNearSurface()
+
+      ``true`` if the waypoint is near to the surface of a body.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getGrounded()
+
+      ``true`` if the waypoint is attached to the ground.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getIndex()
+
+      The integer index of this waypoint within its cluster of sibling waypoints.
+      In other words, when you have a cluster of waypoints called "Somewhere Alpha",
+      "Somewhere Beta" and "Somewhere Gamma", the alpha site has index 0, the beta
+      site has index 1 and the gamma site has index 2.
+      When :meth:`SpaceCenter.Waypoint.getClustered` is ``false``, this is zero.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getClustered()
+
+      ``true`` if this waypoint is part of a set of clustered waypoints with greek letter
+      names appended (Alpha, Beta, Gamma, etc).
+      If ``true``, there is a one-to-one correspondence with the greek letter name and
+      the :meth:`SpaceCenter.Waypoint.getIndex`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getHasContract()
+
+      Whether the waypoint belongs to a contract.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getContract()
+
+      The associated contract.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Contract`
+      :Game Scenes: Flight
+
+   .. method:: remove()
+
+      Removes the waypoint.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Any further use of this object throws an exception.

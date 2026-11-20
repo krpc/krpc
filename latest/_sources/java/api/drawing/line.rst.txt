@@ -8,7 +8,7 @@ Line
 
 .. type:: public class Line
 
-   A line. Created using :meth:`addLine(org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>, SpaceCenter.ReferenceFrame, boolean)`.
+   A line. Created using :meth:`Drawing.addLine(org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>, SpaceCenter.ReferenceFrame, boolean)`.
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> getStart()
 

@@ -1,0 +1,127 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.MechJeb
+
+LandingGuidance
+===============
+
+
+.. class:: LandingGuidance
+
+   The Landing Guidance window, which lands at a target or wherever the vessel comes down.
+
+   .. property:: bool Enabled { get; set; }
+
+      Whether the module is enabled.
+
+      :Game Scenes: Flight
+
+   .. property:: string Status { get; }
+
+      The status of the autopilot.
+
+      :Game Scenes: Flight
+
+   .. property:: bool DeployChutes { get; set; }
+
+      Whether the autopilot deploys the parachutes.
+
+      :Game Scenes: Flight
+
+   .. property:: bool DeployGears { get; set; }
+
+      Whether the autopilot deploys the landing gear.
+
+      :Game Scenes: Flight
+
+   .. function:: void LandAtTarget()
+
+      Land at the target. See :meth:`LandingGuidance.SetTarget`.
+      Throws an exception if there is no target, or the vessel is landed or splashed down.
+
+
+      :Game Scenes: Flight
+
+   .. function:: void LandSomewhere()
+
+      Land wherever the vessel comes down. Throws an exception if the vessel is landed or
+      splashed down.
+
+
+      :Game Scenes: Flight
+
+   .. property:: int LimitChutesStage { get; set; }
+
+      The last stage in which the autopilot deploys the parachutes.
+
+      :Game Scenes: Flight
+
+   .. property:: int LimitGearsStage { get; set; }
+
+      The last stage in which the autopilot deploys the landing gear.
+
+      :Game Scenes: Flight
+
+   .. property:: bool RCSAdjustment { get; set; }
+
+      Whether the autopilot corrects its course with RCS.
+
+      :Game Scenes: Flight
+
+   .. function:: void AbortAutoland()
+
+      Stop the landing.
+
+
+      :Game Scenes: Flight
+
+   .. property:: double TouchdownSpeed { get; set; }
+
+      The speed at touchdown, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. function:: System.Tuple<double,double,double> GetTargetPosition()
+
+      The world space position of the landing target. Throws an exception if there is no
+      landing target.
+
+
+      :Game Scenes: Flight
+
+   .. function:: string GetTargetString()
+
+      The landing target as text.
+
+
+      :Game Scenes: Flight
+
+   .. function:: void PickTargetOnMap()
+
+      Let the player pick the landing target on the map.
+
+
+      :Game Scenes: Flight
+
+   .. function:: void SetTarget(SpaceCenter.CelestialBody body, double latitude, double longitude)
+
+      Set the landing target to a position on the surface of a body.
+
+      :parameters:
+
+       * **body** -- The body.
+       * **latitude** -- The latitude, in degrees.
+       * **longitude** -- The longitude, in degrees.
+
+      :Game Scenes: Flight
+
+   .. property:: bool Autowarp { get; set; }
+
+      Whether to warp time during the landing.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The same setting as :prop:`ManeuverPlanner.Autowarp`.

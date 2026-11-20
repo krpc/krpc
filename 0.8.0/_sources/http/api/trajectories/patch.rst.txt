@@ -1,0 +1,141 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Patch
+=====
+
+
+.. _http-Trajectories.Patch:
+
+.. rubric:: Patch
+
+A patch of the trajectory, at its position in :http:post:`/trajectories/patches`.
+
+.. note::
+
+   Trajectories computes the trajectory again as the vessel flies, and the patch reads
+   the latest one. Throws an exception if the trajectory has fewer patches.
+
+
+A ``Patch`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:post:: /trajectories/patch/(id)/position
+
+   The position of the impact, or ``null`` without one.
+
+   .. note::
+
+      In a reference frame that rotates with :http:get:`/trajectories/patch/(id)/body`, the position includes
+      the rotation of the body until the impact.
+
+
+   :param id: The identifier of the :ref:`Patch <http-Trajectories.Patch>` object.
+
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: The reference frame for the position.
+   :resjson tuple<double, double, double>? value:
+
+
+
+
+
+.. http:post:: /trajectories/patch/(id)/velocity
+
+   The velocity at the impact, or ``null`` without one.
+
+   .. note::
+
+      In a reference frame that rotates with :http:get:`/trajectories/patch/(id)/body`, the velocity includes
+      the rotation of the body until the impact.
+
+
+   :param id: The identifier of the :ref:`Patch <http-Trajectories.Patch>` object.
+
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: The reference frame for the velocity.
+   :resjson tuple<double, double, double>? value:
+
+
+
+
+
+.. http:get:: /trajectories/patch/(id)/body
+
+   The celestial body that the patch is relative to.
+
+
+   :param id: The identifier of the :ref:`Patch <http-Trajectories.Patch>` object.
+
+   :resjson SpaceCenter.CelestialBody value:
+
+
+
+
+.. http:get:: /trajectories/patch/(id)/start-ut
+
+   The universal time at the start of the patch, in seconds.
+
+
+   :param id: The identifier of the :ref:`Patch <http-Trajectories.Patch>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /trajectories/patch/(id)/end-ut
+
+   The universal time at the end of the patch, in seconds.
+
+   .. note::
+
+      For a patch that ends in an impact, this is the time of the impact.
+
+
+   :param id: The identifier of the :ref:`Patch <http-Trajectories.Patch>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /trajectories/patch/(id)/atmospheric
+
+   Whether the patch is inside an atmosphere.
+
+
+   :param id: The identifier of the :ref:`Patch <http-Trajectories.Patch>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:post:: /trajectories/patch/(id)/atmospheric-trajectory
+
+   The points of an atmospheric patch, or ``null`` for a patch in space.
+
+   .. note::
+
+      Each point is a tuple ``(ut, x, y, z)``. In a reference frame that rotates with
+      :http:get:`/trajectories/patch/(id)/body`, the positions include the rotation of the body until each point.
+
+
+   :param id: The identifier of the :ref:`Patch <http-Trajectories.Patch>` object.
+
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: The reference frame for the positions.
+   :resjson list<tuple<double, double, double, double>>? value:
+
+
+
+
+
+.. http:get:: /trajectories/patch/(id)/orbital-trajectory
+
+   The orbit of a patch in space, or ``null`` for an atmospheric patch.
+
+
+   :param id: The identifier of the :ref:`Patch <http-Trajectories.Patch>` object.
+
+   :resjson SpaceCenter.Orbit? value:

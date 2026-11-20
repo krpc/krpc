@@ -11,6 +11,10 @@ Contracts
    Contracts manager.
    Obtained by calling :func:`krpc_SpaceCenter_ContractManager`.
 
+   .. macro:: KRPC_CLASS_SPACECENTER_CONTRACTMANAGER
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_SpaceCenter_ContractManager_Types(krpc_connection_t connection, krpc_set_string_t * returnValue, krpc_SpaceCenter_ContractManager_t instance)
 
       A list of all contract types.
@@ -52,6 +56,10 @@ Contracts
 .. type:: krpc_SpaceCenter_Contract_t
 
    A contract. Can be accessed using :func:`krpc_SpaceCenter_ContractManager`.
+
+   .. macro:: KRPC_CLASS_SPACECENTER_CONTRACT
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Contract_Type(krpc_connection_t connection, char * * returnValue, krpc_SpaceCenter_Contract_t instance)
 
@@ -234,6 +242,11 @@ Contracts
 
    The state of a contract. See :func:`krpc_SpaceCenter_Contract_State`.
 
+   .. macro:: KRPC_ENUMERATION_SPACECENTER_CONTRACTSTATE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
 
    .. macro:: KRPC_SPACECENTER_CONTRACTSTATE_ACTIVE
 
@@ -289,6 +302,10 @@ Contracts
 .. type:: krpc_SpaceCenter_ContractParameter_t
 
    A contract parameter. See :func:`krpc_SpaceCenter_Contract_Parameters`.
+
+   .. macro:: KRPC_CLASS_SPACECENTER_CONTRACTPARAMETER
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_SpaceCenter_ContractParameter_Title(krpc_connection_t connection, char * * returnValue, krpc_SpaceCenter_ContractParameter_t instance)
 

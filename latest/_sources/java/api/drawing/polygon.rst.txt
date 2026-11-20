@@ -8,7 +8,7 @@ Polygon
 
 .. type:: public class Polygon
 
-   A polygon. Created using :meth:`addPolygon(java.util.List<org.javatuples.Triplet<Double,Double,Double>>, SpaceCenter.ReferenceFrame, boolean)`.
+   A polygon. Created using :meth:`Drawing.addPolygon(java.util.List<org.javatuples.Triplet<Double,Double,Double>>, SpaceCenter.ReferenceFrame, boolean)`.
 
    .. method:: java.util.List<org.javatuples.Triplet<Double,Double,Double>> getVertices()
 

@@ -1,0 +1,31 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::DockingCamera
+
+Service
+=======
+
+
+.. namespace:: krpc::services
+.. class:: DockingCamera : public krpc::RemoteService
+
+   Provides functionality to interact with Docking Camera (KURS).
+
+   .. function:: DockingCamera(krpc::Connection& connection)
+
+      Construct an instance of this service.
+
+   .. function:: bool available()
+
+      Whether Docking Camera (KURS) is available.
+
+   
+
+   .. function:: Camera camera(SpaceCenter::Part part)
+
+      Get the camera on a part.
+      Throws an exception if the part is not an onboard camera or a docking port.
+
+      :Parameters:
+
+       * **part** -- The part.

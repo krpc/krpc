@@ -1,0 +1,33 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: DockingCamera
+   :no-index:
+
+Service
+=======
+
+
+.. module:: DockingCamera
+
+Provides functionality to interact with Docking Camera (KURS).
+
+
+.. function:: getAvailable()
+
+   Whether Docking Camera (KURS) is available.
+
+   :Property: Read-only, cannot be set
+   :rtype: ``boolean``
+   
+
+
+
+
+.. function:: camera(part)
+
+   Get the camera on a part.
+   Throws an exception if the part is not an onboard camera or a docking port.
+
+   :param part: The part.
+   :type part: :class:`SpaceCenter.Part`
+   :rtype: :class:`DockingCamera.Camera`

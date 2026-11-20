@@ -6,7 +6,7 @@ Expressions
 ===========
 
 The nodes a server side function is built from, and the types they work with. See the
-:rst:ref:`server side functions tutorial <tutorial-server-side-functions>` for how a function is
+:rst:ref:`server side functions guide <server-side-functions>` for how a function is
 assembled and run.
 
 
@@ -157,6 +157,18 @@ assembled and run.
 
       :Game Scenes: All
 
+   .. function:: static Expression ConstantEnumById(IConnection connection, uint serviceId, uint enumerationId, int value)
+
+      A constant value of an enumeration a service defines, named by ids.
+
+      :parameters:
+
+       * **serviceId** -- The id of the service the enumeration is defined in.
+       * **enumerationId** -- The id of the enumeration.
+       * **value** -- The value of the member of the enumeration.
+
+      :Game Scenes: All
+
    .. function:: static Expression ConstantNull(IConnection connection, Type type)
 
       A null constant of the given type.
@@ -207,11 +219,11 @@ assembled and run.
 
    .. function:: static Expression CallWithArguments(IConnection connection, KRPC.Schema.KRPC.ProcedureCall call, System.Collections.Generic.IDictionary<int,Expression> args)
 
-      An RPC call, where some or all of the arguments are computed by expressions.
+      An RPC call, with its arguments computed by expressions.
 
       :parameters:
 
-       * **call** -- The RPC to call.
+       * **call** -- The call template.
        * **args** -- Expressions computing the call's arguments, by position.
 
       :Game Scenes: All
@@ -219,9 +231,11 @@ assembled and run.
 
       .. note::
 
+         The call is a call template, which names the procedure and carries no arguments.
          Position 0 is the instance of a class method or property. A position with no
-         expression takes the argument encoded in the call, or the parameter's default. A
-         collection the procedure returns is copied, as a client would receive it.
+         expression takes the parameter's default. A collection the procedure returns is
+         copied, as a client would receive it. Throws an exception if the call carries an
+         argument.
 
    .. function:: static Expression Equal(IConnection connection, Expression arg0, Expression arg1)
 
@@ -322,6 +336,11 @@ assembled and run.
 
       :Game Scenes: All
 
+
+      .. note::
+
+         Also takes two values of a flags enumeration, and gives the values they share.
+
    .. function:: static Expression Or(IConnection connection, Expression arg0, Expression arg1)
 
       Logical or bitwise or, which evaluates both operands.
@@ -332,6 +351,11 @@ assembled and run.
        * **arg1** -- The second operand.
 
       :Game Scenes: All
+
+
+      .. note::
+
+         Also takes two values of a flags enumeration, and gives their combination.
 
    .. function:: static Expression ConditionalAnd(IConnection connection, Expression arg0, Expression arg1)
 
@@ -366,6 +390,11 @@ assembled and run.
 
       :Game Scenes: All
 
+
+      .. note::
+
+         Also takes two values of a flags enumeration, and gives the values in only one of them.
+
    .. function:: static Expression Not(IConnection connection, Expression arg)
 
       Logical or bitwise negation.
@@ -375,6 +404,11 @@ assembled and run.
        * **arg** -- The operand.
 
       :Game Scenes: All
+
+
+      .. note::
+
+         Also takes a value of a flags enumeration, and gives the declared values it does not hold.
 
    .. function:: static Expression Negate(IConnection connection, Expression arg)
 
@@ -713,9 +747,45 @@ assembled and run.
          :meth:`Expression.BlockWithVariables`, or a parameter of an enclosing :meth:`Expression.Lambda`.
          A :meth:`Expression.Break` or :meth:`Expression.Continue` in the body applies to this loop.
 
+   .. function:: static Expression Match(IConnection connection, Expression value, System.Collections.Generic.IList<System.Collections.Generic.IList<Expression>> cases, System.Collections.Generic.IList<Expression> bodies)
+
+      A match statement, which evaluates the first matching case.
+
+      :parameters:
+
+       * **value** -- The value to match.
+       * **cases** -- The test values of each case.
+       * **bodies** -- The statement of each case.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Test values compare as for :meth:`Expression.Equal`, and a case with none is the default.
+         A :meth:`Expression.Break` in a body ends the enclosing loop.
+
+   .. function:: static Expression Switch(IConnection connection, Expression value, System.Collections.Generic.IList<System.Collections.Generic.IList<Expression>> cases, System.Collections.Generic.IList<Expression> bodies)
+
+      A switch statement, which evaluates from the first matching case on.
+
+      :parameters:
+
+       * **value** -- The value to match.
+       * **cases** -- The test values of each case.
+       * **bodies** -- The statement of each case.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Test values compare as for :meth:`Expression.Equal`, and a case with none is the default.
+         A :meth:`Expression.Break` in a body ends the switch.
+
    .. function:: static Expression Break(IConnection connection)
 
-      A break statement, which ends the enclosing loop.
+      A break statement, which ends the enclosing loop or :meth:`Expression.Switch`.
 
 
       :Game Scenes: All
@@ -760,7 +830,27 @@ assembled and run.
       .. note::
 
          The client receives the exception as an error from the function, or from the stream
-         or event evaluating it. Throws an exception if the service does not declare it.
+         or event evaluating it. For example, the service ``KRPC`` and the name
+         ``Error`` raise :type:`Error`. Throws an exception if the service does not
+         declare it.
+
+   .. function:: static Expression ThrowById(IConnection connection, uint serviceId, uint exceptionId, Expression message)
+
+      A throw statement, which raises the exception with the given ids.
+
+      :parameters:
+
+       * **serviceId** -- The id of the service the exception is defined in.
+       * **exceptionId** -- The id of the exception.
+       * **message** -- The message of the exception.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Raises the exception as :meth:`Expression.Throw` does. Throws an exception if the
+         service does not declare it.
 
    .. function:: static Expression TryCatch(IConnection connection, Expression body, string service, string name, Expression message, Expression handler)
 
@@ -781,6 +871,26 @@ assembled and run.
 
          Only an exception a service declares can be named, and :meth:`Expression.TryCatchAll`
          handles any exception. Throws an exception if the service does not declare it.
+
+   .. function:: static Expression TryCatchById(IConnection connection, Expression body, uint serviceId, uint exceptionId, Expression message, Expression handler)
+
+      A try-catch statement that handles the exception with the given ids.
+
+      :parameters:
+
+       * **body** -- The statement to evaluate.
+       * **serviceId** -- The id of the service the exception is defined in.
+       * **exceptionId** -- The id of the exception.
+       * **message** -- A string variable assigned the exception's message, or null.
+       * **handler** -- The statement evaluated when the exception is caught.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Handles the exception as :meth:`Expression.TryCatch` does. Throws an exception if the
+         service does not declare it.
 
    .. function:: static Expression TryCatchAll(IConnection connection, Expression body, Expression message, Expression handler)
 
@@ -1102,6 +1212,24 @@ assembled and run.
 
       :returns: The value of the field.
       :Game Scenes: All
+
+   .. function:: static Expression GetFieldByIndex(IConnection connection, Expression arg, int index)
+
+      The value of a field of a structure, named by its position. Throws an exception if
+      the value is not a structure, or the index is out of range.
+
+      :parameters:
+
+       * **arg** -- The structure.
+       * **index** -- The position of the field to access.
+
+      :returns: The value of the field.
+      :Game Scenes: All
+
+
+      .. note::
+
+         The fields are numbered from 0, in the order the structure defines them.
 
    .. function:: static Expression ConvertToString(IConnection connection, Expression arg)
 
@@ -1899,6 +2027,39 @@ assembled and run.
 
        * **service** -- The name of the service the structure is defined in.
        * **name** -- The name of the structure.
+
+      :Game Scenes: All
+
+   .. function:: static Type ClassTypeById(IConnection connection, uint serviceId, uint classId)
+
+      The type of a class defined by a service, named by ids.
+
+      :parameters:
+
+       * **serviceId** -- The id of the service the class is defined in.
+       * **classId** -- The id of the class.
+
+      :Game Scenes: All
+
+   .. function:: static Type EnumerationTypeById(IConnection connection, uint serviceId, uint enumerationId)
+
+      The type of an enumeration defined by a service, named by ids.
+
+      :parameters:
+
+       * **serviceId** -- The id of the service the enumeration is defined in.
+       * **enumerationId** -- The id of the enumeration.
+
+      :Game Scenes: All
+
+   .. function:: static Type StructTypeById(IConnection connection, uint serviceId, uint structId)
+
+      The type of a structure defined by a service, named by ids.
+
+      :parameters:
+
+       * **serviceId** -- The id of the service the structure is defined in.
+       * **structId** -- The id of the structure.
 
       :Game Scenes: All
 

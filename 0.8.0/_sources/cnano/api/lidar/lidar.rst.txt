@@ -1,0 +1,27 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Service
+=======
+
+
+.. warning:: Deprecated. Use :func:`krpc_SpaceCenter_RaycastDistance` instead.
+
+Provides functionality to interact with the LiDAR mod.
+
+
+.. function:: krpc_error_t krpc_LIDAR_Available(krpc_connection_t connection, bool * returnValue)
+
+   Whether the LiDAR mod is installed.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_LIDAR_Laser(krpc_connection_t connection, krpc_LIDAR_Laser_t * returnValue, krpc_SpaceCenter_Part_t part)
+
+   Get the LiDAR on a part.
+
+   :Parameters:

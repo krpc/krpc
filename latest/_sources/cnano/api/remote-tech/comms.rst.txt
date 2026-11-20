@@ -10,6 +10,10 @@ Comms
 
    Communications for a vessel.
 
+   .. macro:: KRPC_CLASS_REMOTETECH_COMMS
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_RemoteTech_Comms_Vessel(krpc_connection_t connection, krpc_SpaceCenter_Vessel_t * returnValue, krpc_RemoteTech_Comms_t instance)
 
       Get the vessel.

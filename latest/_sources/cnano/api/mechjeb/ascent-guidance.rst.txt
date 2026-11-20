@@ -1,0 +1,781 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+AscentGuidance
+==============
+
+
+.. type:: krpc_MechJeb_AscentGuidance_t
+
+   The Ascent Guidance window, which flies the vessel to orbit.
+
+   .. note::
+
+      See the `MechJeb wiki <https://github.com/MuMech/MechJeb2/wiki/Ascent-Guidance>`_
+      for how to set up this autopilot.
+
+   .. macro:: KRPC_CLASS_MECHJEB_ASCENTGUIDANCE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+   .. function:: krpc_error_t krpc_MechJeb_AscentGuidance_Enabled(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_AscentGuidance_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AscentGuidance_set_Enabled(krpc_connection_t connection, krpc_MechJeb_AscentGuidance_t instance, bool value)
+
+      Whether the module is enabled.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AscentGuidance_Status(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_AscentGuidance_t instance)
+
+      The autopilot status, which depends on the selected ascent path.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AscentGuidance_AscentType(krpc_connection_t connection, krpc_MechJeb_AscentType_t * returnValue, krpc_MechJeb_AscentGuidance_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AscentGuidance_set_AscentType(krpc_connection_t connection, krpc_MechJeb_AscentGuidance_t instance, krpc_MechJeb_AscentType_t value)
+
+      The ascent path.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AscentGuidance_Settings(krpc_connection_t connection, krpc_MechJeb_AscentSettings_t * returnValue, krpc_MechJeb_AscentGuidance_t instance)
+
+      The Ascent Settings window.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AscentGuidance_PVGSettings(krpc_connection_t connection, krpc_MechJeb_PVGSettings_t * returnValue, krpc_MechJeb_AscentGuidance_t instance)
+
+      The PVG Settings window, with the settings of the :macro:`KRPC_MECHJEB_ASCENTTYPE_PVG` path.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AscentGuidance_ClassicPath(krpc_connection_t connection, krpc_MechJeb_ClassicPath_t * returnValue, krpc_MechJeb_AscentGuidance_t instance)
+
+      The Ascent Path Editor window, with the settings of the
+      :macro:`KRPC_MECHJEB_ASCENTTYPE_CLASSIC` path.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AscentGuidance_DesiredOrbitAltitude(krpc_connection_t connection, double * returnValue, krpc_MechJeb_AscentGuidance_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AscentGuidance_set_DesiredOrbitAltitude(krpc_connection_t connection, krpc_MechJeb_AscentGuidance_t instance, double value)
+
+      The altitude of the final circular orbit, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AscentGuidance_DesiredApoapsis(krpc_connection_t connection, double * returnValue, krpc_MechJeb_AscentGuidance_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AscentGuidance_set_DesiredApoapsis(krpc_connection_t connection, krpc_MechJeb_AscentGuidance_t instance, double value)
+
+      The target apoapsis, in meters.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies on the :macro:`KRPC_MECHJEB_ASCENTTYPE_PVG` path.
+
+   .. function:: krpc_error_t krpc_MechJeb_AscentGuidance_AttachAltFlag(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_AscentGuidance_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AscentGuidance_set_AttachAltFlag(krpc_connection_t connection, krpc_MechJeb_AscentGuidance_t instance, bool value)
+
+      Whether the orbit is attached at :func:`krpc_MechJeb_AscentGuidance_DesiredAttachAlt`.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies on the :macro:`KRPC_MECHJEB_ASCENTTYPE_PVG` path, with an early shutoff stage, set by
+         :func:`krpc_MechJeb_PVGSettings_OptimizeStageFlag` and :func:`krpc_MechJeb_PVGSettings_OptimizeStage`.
+         Without one, MechJeb always attaches the orbit.
+
+   .. function:: krpc_error_t krpc_MechJeb_AscentGuidance_DesiredAttachAlt(krpc_connection_t connection, double * returnValue, krpc_MechJeb_AscentGuidance_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AscentGuidance_set_DesiredAttachAlt(krpc_connection_t connection, krpc_MechJeb_AscentGuidance_t instance, double value)
+
+      The altitude at which the orbit is attached, in meters.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies on the :macro:`KRPC_MECHJEB_ASCENTTYPE_PVG` path. Requires :func:`krpc_MechJeb_AscentGuidance_AttachAltFlag`,
+         unless there is no early shutoff stage. See :func:`krpc_MechJeb_PVGSettings_OptimizeStage`.
+
+   .. function:: krpc_error_t krpc_MechJeb_AscentGuidance_DesiredFPA(krpc_connection_t connection, double * returnValue, krpc_MechJeb_AscentGuidance_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AscentGuidance_set_DesiredFPA(krpc_connection_t connection, krpc_MechJeb_AscentGuidance_t instance, double value)
+
+      The flight path angle at orbit insertion, in degrees.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies on the :macro:`KRPC_MECHJEB_ASCENTTYPE_PVG` path, when there is no early shutoff
+         stage. See :func:`krpc_MechJeb_PVGSettings_OptimizeStage`.
+
+   .. function:: krpc_error_t krpc_MechJeb_AscentGuidance_DesiredInclination(krpc_connection_t connection, double * returnValue, krpc_MechJeb_AscentGuidance_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AscentGuidance_set_DesiredInclination(krpc_connection_t connection, krpc_MechJeb_AscentGuidance_t instance, double value)
+
+      The inclination of the final circular orbit, in degrees.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AscentGuidance_LaunchMode(krpc_connection_t connection, krpc_MechJeb_AscentLaunchMode_t * returnValue, krpc_MechJeb_AscentGuidance_t instance)
+
+      The launch mode, which gives whether the autopilot is waiting for a timed launch.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AscentGuidance_LaunchToRendezvous(krpc_connection_t connection, krpc_MechJeb_AscentGuidance_t instance)
+
+      Launch to rendezvous with the target. Throws an exception if there is no target, or
+      the ascent path is PVG.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AscentGuidance_LaunchPhaseAngle(krpc_connection_t connection, double * returnValue, krpc_MechJeb_AscentGuidance_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AscentGuidance_set_LaunchPhaseAngle(krpc_connection_t connection, krpc_MechJeb_AscentGuidance_t instance, double value)
+
+      The phase angle to the target of a launch to rendezvous, in degrees.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AscentGuidance_LaunchToTargetPlane(krpc_connection_t connection, krpc_MechJeb_AscentGuidance_t instance)
+
+      Launch into the plane of the target. Throws an exception if there is no target.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AscentGuidance_LaunchLANDifference(krpc_connection_t connection, double * returnValue, krpc_MechJeb_AscentGuidance_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AscentGuidance_set_LaunchLANDifference(krpc_connection_t connection, krpc_MechJeb_AscentGuidance_t instance, double value)
+
+      The difference from the target's longitude of the ascending node of a launch into the
+      target's plane, in degrees.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AscentGuidance_LaunchToMatchLan(krpc_connection_t connection, krpc_MechJeb_AscentGuidance_t instance)
+
+      Launch into the plane of the target, at the time the target's longitude of the
+      ascending node, less :func:`krpc_MechJeb_AscentGuidance_LaunchLANDifference`, passes overhead. Keeps
+      :func:`krpc_MechJeb_AscentGuidance_DesiredInclination`. Throws an exception if there is no target, or the
+      ascent path is not :macro:`KRPC_MECHJEB_ASCENTTYPE_PVG`.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AscentGuidance_LaunchToLan(krpc_connection_t connection, krpc_MechJeb_AscentGuidance_t instance)
+
+      Launch into the plane with longitude of the ascending node :func:`krpc_MechJeb_AscentGuidance_DesiredLan`
+      and inclination :func:`krpc_MechJeb_AscentGuidance_DesiredInclination`. Throws an exception if the ascent
+      path is not :macro:`KRPC_MECHJEB_ASCENTTYPE_PVG`.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AscentGuidance_DesiredLan(krpc_connection_t connection, double * returnValue, krpc_MechJeb_AscentGuidance_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AscentGuidance_set_DesiredLan(krpc_connection_t connection, krpc_MechJeb_AscentGuidance_t instance, double value)
+
+      The longitude of the ascending node of a launch to a LAN, in degrees.
+      See :func:`krpc_MechJeb_AscentGuidance_LaunchToLan`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AscentGuidance_AbortTimedLaunch(krpc_connection_t connection, krpc_MechJeb_AscentGuidance_t instance)
+
+      Abort a timed launch that has not started yet. Throws an exception if the launch mode
+      is :macro:`KRPC_MECHJEB_ASCENTLAUNCHMODE_UNKNOWN`.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AscentGuidance_WarpCountDown(krpc_connection_t connection, int32_t * returnValue, krpc_MechJeb_AscentGuidance_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AscentGuidance_set_WarpCountDown(krpc_connection_t connection, krpc_MechJeb_AscentGuidance_t instance, int32_t value)
+
+      The time before a timed launch at which time warp stops, in seconds.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AscentGuidance_OverrideWarpToPlane(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_AscentGuidance_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AscentGuidance_set_OverrideWarpToPlane(krpc_connection_t connection, krpc_MechJeb_AscentGuidance_t instance, bool value)
+
+      Whether a timed launch launches at once, rather than at the time it computes.
+
+      :Game Scenes: Flight
+
+
+
+.. type:: krpc_MechJeb_AscentType_t
+
+   The ascent path. See :func:`krpc_MechJeb_AscentGuidance_AscentType`.
+
+   .. macro:: KRPC_ENUMERATION_MECHJEB_ASCENTTYPE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
+
+   .. macro:: KRPC_MECHJEB_ASCENTTYPE_CLASSIC
+
+      The classic ascent path. See :func:`krpc_MechJeb_AscentGuidance_ClassicPath`.
+
+
+   .. macro:: KRPC_MECHJEB_ASCENTTYPE_PVG
+
+      Primer Vector Guidance, for RSS/RO. See :func:`krpc_MechJeb_AscentGuidance_PVGSettings`.
+
+
+
+.. type:: krpc_MechJeb_AscentLaunchMode_t
+
+   The launch mode of the ascent autopilot. See :func:`krpc_MechJeb_AscentGuidance_LaunchMode`.
+
+   .. macro:: KRPC_ENUMERATION_MECHJEB_ASCENTLAUNCHMODE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
+
+   .. macro:: KRPC_MECHJEB_ASCENTLAUNCHMODE_NORMAL
+
+      The autopilot is not performing a timed launch.
+
+
+   .. macro:: KRPC_MECHJEB_ASCENTLAUNCHMODE_RENDEZVOUS
+
+      A timed launch to rendezvous with the target vessel.
+
+
+   .. macro:: KRPC_MECHJEB_ASCENTLAUNCHMODE_TARGETPLANE
+
+      A timed launch into the plane of the target.
+
+
+   .. macro:: KRPC_MECHJEB_ASCENTLAUNCHMODE_MATCHLAN
+
+      A timed launch to the target's longitude of the ascending node. See
+      :func:`krpc_MechJeb_AscentGuidance_LaunchToMatchLan`.
+
+
+   .. macro:: KRPC_MECHJEB_ASCENTLAUNCHMODE_LAN
+
+      A timed launch to a longitude of the ascending node. See
+      :func:`krpc_MechJeb_AscentGuidance_LaunchToLan`.
+
+
+   .. macro:: KRPC_MECHJEB_ASCENTLAUNCHMODE_UNKNOWN
+
+      A timed launch of another kind, started from MechJeb's window.
+
+
+
+AscentSettings
+--------------
+
+
+.. type:: krpc_MechJeb_AscentSettings_t
+
+   The Ascent Settings window, which holds the settings shared by the ascent paths.
+
+   .. macro:: KRPC_CLASS_MECHJEB_ASCENTSETTINGS
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+   .. function:: krpc_error_t krpc_MechJeb_AscentSettings_ForceRoll(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_AscentSettings_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AscentSettings_set_ForceRoll(krpc_connection_t connection, krpc_MechJeb_AscentSettings_t instance, bool value)
+
+      Whether the autopilot controls the roll.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AscentSettings_VerticalRoll(krpc_connection_t connection, double * returnValue, krpc_MechJeb_AscentSettings_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AscentSettings_set_VerticalRoll(krpc_connection_t connection, krpc_MechJeb_AscentSettings_t instance, double value)
+
+      The roll during the vertical climb, in degrees.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`krpc_MechJeb_AscentSettings_ForceRoll`.
+
+   .. function:: krpc_error_t krpc_MechJeb_AscentSettings_TurnRoll(krpc_connection_t connection, double * returnValue, krpc_MechJeb_AscentSettings_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AscentSettings_set_TurnRoll(krpc_connection_t connection, krpc_MechJeb_AscentSettings_t instance, double value)
+
+      The roll during the turn, in degrees.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`krpc_MechJeb_AscentSettings_ForceRoll`.
+
+   .. function:: krpc_error_t krpc_MechJeb_AscentSettings_RollAltitude(krpc_connection_t connection, double * returnValue, krpc_MechJeb_AscentSettings_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AscentSettings_set_RollAltitude(krpc_connection_t connection, krpc_MechJeb_AscentSettings_t instance, double value)
+
+      The altitude above which the autopilot controls the roll, in meters.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`krpc_MechJeb_AscentSettings_ForceRoll`.
+
+   .. function:: krpc_error_t krpc_MechJeb_AscentSettings_LimitAngleOfAttack(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_AscentSettings_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AscentSettings_set_LimitAngleOfAttack(krpc_connection_t connection, krpc_MechJeb_AscentSettings_t instance, bool value)
+
+      Whether to limit the angle of attack.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies on the :macro:`KRPC_MECHJEB_ASCENTTYPE_CLASSIC` path.
+
+   .. function:: krpc_error_t krpc_MechJeb_AscentSettings_MaxAngleOfAttack(krpc_connection_t connection, double * returnValue, krpc_MechJeb_AscentSettings_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AscentSettings_set_MaxAngleOfAttack(krpc_connection_t connection, krpc_MechJeb_AscentSettings_t instance, double value)
+
+      The largest angle of attack, in degrees.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`krpc_MechJeb_AscentSettings_LimitAngleOfAttack`, and applies on the :macro:`KRPC_MECHJEB_ASCENTTYPE_CLASSIC`
+         path.
+
+   .. function:: krpc_error_t krpc_MechJeb_AscentSettings_AngleOfAttackLimitFadeoutPressure(krpc_connection_t connection, double * returnValue, krpc_MechJeb_AscentSettings_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AscentSettings_set_AngleOfAttackLimitFadeoutPressure(krpc_connection_t connection, krpc_MechJeb_AscentSettings_t instance, double value)
+
+      The dynamic pressure below which the angle of attack limit fades out, in pascals.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`krpc_MechJeb_AscentSettings_LimitAngleOfAttack`, and applies on the :macro:`KRPC_MECHJEB_ASCENTTYPE_CLASSIC`
+         path.
+
+   .. function:: krpc_error_t krpc_MechJeb_AscentSettings_LimitingAngleOfAttack(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_AscentSettings_t instance)
+
+      Whether the angle of attack limit is limiting the steering.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AscentSettings_CurrentMaxAngleOfAttack(krpc_connection_t connection, double * returnValue, krpc_MechJeb_AscentSettings_t instance)
+
+      The largest angle of attack the limit allows now, in degrees.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AscentSettings_CorrectiveSteering(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_AscentSettings_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AscentSettings_set_CorrectiveSteering(krpc_connection_t connection, krpc_MechJeb_AscentSettings_t instance, bool value)
+
+      Whether the autopilot steers by the velocity vector rather than the position vector.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         It is more accurate, though large craft may do better without it. Applies on the
+         :macro:`KRPC_MECHJEB_ASCENTTYPE_CLASSIC` path.
+
+   .. function:: krpc_error_t krpc_MechJeb_AscentSettings_CorrectiveSteeringGain(krpc_connection_t connection, double * returnValue, krpc_MechJeb_AscentSettings_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AscentSettings_set_CorrectiveSteeringGain(krpc_connection_t connection, krpc_MechJeb_AscentSettings_t instance, double value)
+
+      The gain of the corrective steering.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`krpc_MechJeb_AscentSettings_CorrectiveSteering`, and applies on the :macro:`KRPC_MECHJEB_ASCENTTYPE_CLASSIC` path.
+
+   .. function:: krpc_error_t krpc_MechJeb_AscentSettings_Autostage(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_AscentSettings_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AscentSettings_set_Autostage(krpc_connection_t connection, krpc_MechJeb_AscentSettings_t instance, bool value)
+
+      Whether the autopilot stages when the current stage runs out of fuel.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AscentSettings_Staging(krpc_connection_t connection, krpc_MechJeb_Autostaging_t * returnValue, krpc_MechJeb_AscentSettings_t instance)
+
+      The autostaging settings. The same object as :func:`krpc_MechJeb_Utilities_Staging`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AscentSettings_Thrust(krpc_connection_t connection, krpc_MechJeb_ThrustLimiter_t * returnValue, krpc_MechJeb_AscentSettings_t instance)
+
+      The throttle limiters. The same object as :func:`krpc_MechJeb_Utilities_Thrust`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AscentSettings_AutodeploySolarPanels(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_AscentSettings_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AscentSettings_set_AutodeploySolarPanels(krpc_connection_t connection, krpc_MechJeb_AscentSettings_t instance, bool value)
+
+      Whether to deploy the solar panels when the ascent finishes.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AscentSettings_AutoDeployAntennas(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_AscentSettings_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AscentSettings_set_AutoDeployAntennas(krpc_connection_t connection, krpc_MechJeb_AscentSettings_t instance, bool value)
+
+      Whether to deploy the antennas when the ascent finishes.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AscentSettings_Autowarp(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_AscentSettings_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AscentSettings_set_Autowarp(krpc_connection_t connection, krpc_MechJeb_AscentSettings_t instance, bool value)
+
+      Whether to warp time during the ascent.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The same setting as :func:`krpc_MechJeb_ManeuverPlanner_Autowarp`.
+
+   .. function:: krpc_error_t krpc_MechJeb_AscentSettings_SkipCircularization(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_AscentSettings_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AscentSettings_set_SkipCircularization(krpc_connection_t connection, krpc_MechJeb_AscentSettings_t instance, bool value)
+
+      Whether to skip the circularization burn.
+
+      :Game Scenes: Flight
+
+
+
+PVGSettings
+-----------
+
+
+.. type:: krpc_MechJeb_PVGSettings_t
+
+   The PVG Settings window, which holds the settings of the Primer Vector Guidance ascent path.
+
+   .. macro:: KRPC_CLASS_MECHJEB_PVGSETTINGS
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_DynamicPressureTrigger(krpc_connection_t connection, double * returnValue, krpc_MechJeb_PVGSettings_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_set_DynamicPressureTrigger(krpc_connection_t connection, krpc_MechJeb_PVGSettings_t instance, double value)
+
+      The dynamic pressure below which guidance starts, in pascals.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_FixedCoast(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_PVGSettings_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_set_FixedCoast(krpc_connection_t connection, krpc_MechJeb_PVGSettings_t instance, bool value)
+
+      Whether the coast has a fixed length.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`krpc_MechJeb_PVGSettings_CoastStageFlag`.
+
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_FixedCoastLength(krpc_connection_t connection, double * returnValue, krpc_MechJeb_PVGSettings_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_set_FixedCoastLength(krpc_connection_t connection, krpc_MechJeb_PVGSettings_t instance, double value)
+
+      The length of the coast, in seconds.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`krpc_MechJeb_PVGSettings_FixedCoast`.
+
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_MinDeltaV(krpc_connection_t connection, double * returnValue, krpc_MechJeb_PVGSettings_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_set_MinDeltaV(krpc_connection_t connection, krpc_MechJeb_PVGSettings_t instance, double value)
+
+      The smallest delta-v of a stage that guidance plans with, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_LastStage(krpc_connection_t connection, int32_t * returnValue, krpc_MechJeb_PVGSettings_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_set_LastStage(krpc_connection_t connection, krpc_MechJeb_PVGSettings_t instance, int32_t value)
+
+      The last stage that guidance plans with.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_OptimizeStageFlag(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_PVGSettings_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_set_OptimizeStageFlag(krpc_connection_t connection, krpc_MechJeb_PVGSettings_t instance, bool value)
+
+      Whether guidance may shut off :func:`krpc_MechJeb_PVGSettings_OptimizeStage` early.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_OptimizeStage(krpc_connection_t connection, int32_t * returnValue, krpc_MechJeb_PVGSettings_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_set_OptimizeStage(krpc_connection_t connection, krpc_MechJeb_PVGSettings_t instance, int32_t value)
+
+      The stage that guidance may shut off early.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`krpc_MechJeb_PVGSettings_OptimizeStageFlag`. -1 is no stage.
+
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_UnguidedStagesFlag(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_PVGSettings_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_set_UnguidedStagesFlag(krpc_connection_t connection, krpc_MechJeb_PVGSettings_t instance, bool value)
+
+      Whether guidance leaves :func:`krpc_MechJeb_PVGSettings_UnguidedStages` unguided.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_UnguidedStages(krpc_connection_t connection, krpc_list_int32_t * returnValue, krpc_MechJeb_PVGSettings_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_set_UnguidedStages(krpc_connection_t connection, krpc_MechJeb_PVGSettings_t instance, const krpc_list_int32_t * value)
+
+      The stages that guidance leaves unguided.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`krpc_MechJeb_PVGSettings_UnguidedStagesFlag`.
+
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_CoastStageFlag(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_PVGSettings_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_set_CoastStageFlag(krpc_connection_t connection, krpc_MechJeb_PVGSettings_t instance, bool value)
+
+      Whether guidance coasts in :func:`krpc_MechJeb_PVGSettings_CoastStage`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_CoastStage(krpc_connection_t connection, int32_t * returnValue, krpc_MechJeb_PVGSettings_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_set_CoastStage(krpc_connection_t connection, krpc_MechJeb_PVGSettings_t instance, int32_t value)
+
+      The stage before or after which guidance coasts.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`krpc_MechJeb_PVGSettings_CoastStageFlag`.
+
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_CoastBeforeFlag(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_PVGSettings_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_set_CoastBeforeFlag(krpc_connection_t connection, krpc_MechJeb_PVGSettings_t instance, bool value)
+
+      Whether the coast comes before :func:`krpc_MechJeb_PVGSettings_CoastStage`, rather than after it.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`krpc_MechJeb_PVGSettings_CoastStageFlag`.
+
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_UllageLeadTime(krpc_connection_t connection, double * returnValue, krpc_MechJeb_PVGSettings_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_set_UllageLeadTime(krpc_connection_t connection, krpc_MechJeb_PVGSettings_t instance, double value)
+
+      The time before an ignition at which RCS settles the propellant, in seconds.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_SpinupStageFlag(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_PVGSettings_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_set_SpinupStageFlag(krpc_connection_t connection, krpc_MechJeb_PVGSettings_t instance, bool value)
+
+      Whether to spin up the vessel before :func:`krpc_MechJeb_PVGSettings_SpinupStage`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_SpinupStage(krpc_connection_t connection, int32_t * returnValue, krpc_MechJeb_PVGSettings_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_set_SpinupStage(krpc_connection_t connection, krpc_MechJeb_PVGSettings_t instance, int32_t value)
+
+      The stage before which to spin up the vessel.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`krpc_MechJeb_PVGSettings_SpinupStageFlag`.
+
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_SpinupAngularVelocity(krpc_connection_t connection, double * returnValue, krpc_MechJeb_PVGSettings_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_set_SpinupAngularVelocity(krpc_connection_t connection, krpc_MechJeb_PVGSettings_t instance, double value)
+
+      The angular velocity of the spin-up, in :math:`\mathrm{rad/s}`.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`krpc_MechJeb_PVGSettings_SpinupStageFlag`. MechJeb's window shows it in revolutions per
+         minute.
+
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_SpinupLeadTime(krpc_connection_t connection, double * returnValue, krpc_MechJeb_PVGSettings_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_set_SpinupLeadTime(krpc_connection_t connection, krpc_MechJeb_PVGSettings_t instance, double value)
+
+      The time before staging at which the spin-up starts, in seconds.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`krpc_MechJeb_PVGSettings_SpinupStageFlag`.
+
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_LimitQa(krpc_connection_t connection, double * returnValue, krpc_MechJeb_PVGSettings_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_set_LimitQa(krpc_connection_t connection, krpc_MechJeb_PVGSettings_t instance, double value)
+
+      The limit on dynamic pressure times angle of attack, in :math:`\mathrm{Pa \cdot rad}`.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         MechJeb clamps it to between 0 and 10000.
+
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_PitchRate(krpc_connection_t connection, double * returnValue, krpc_MechJeb_PVGSettings_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_set_PitchRate(krpc_connection_t connection, krpc_MechJeb_PVGSettings_t instance, double value)
+
+      The pitch rate of the booster, in :math:`\mathrm{deg/s}`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_PitchStartVelocity(krpc_connection_t connection, double * returnValue, krpc_MechJeb_PVGSettings_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_set_PitchStartVelocity(krpc_connection_t connection, krpc_MechJeb_PVGSettings_t instance, double value)
+
+      The speed at which the booster starts to pitch over, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_StagingTrigger(krpc_connection_t connection, int32_t * returnValue, krpc_MechJeb_PVGSettings_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_set_StagingTrigger(krpc_connection_t connection, krpc_MechJeb_PVGSettings_t instance, int32_t value)
+
+      The stage after which guidance starts.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`krpc_MechJeb_PVGSettings_StagingTriggerFlag`.
+
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_StagingTriggerFlag(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_PVGSettings_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_PVGSettings_set_StagingTriggerFlag(krpc_connection_t connection, krpc_MechJeb_PVGSettings_t instance, bool value)
+
+      Whether guidance starts after :func:`krpc_MechJeb_PVGSettings_StagingTrigger`.
+
+      :Game Scenes: Flight
+
+
+
+ClassicPath
+-----------
+
+
+.. type:: krpc_MechJeb_ClassicPath_t
+
+   The Ascent Path Editor window, which holds the settings of the classic ascent path.
+
+   .. macro:: KRPC_CLASS_MECHJEB_CLASSICPATH
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+   .. function:: krpc_error_t krpc_MechJeb_ClassicPath_AutoPath(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_ClassicPath_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_ClassicPath_set_AutoPath(krpc_connection_t connection, krpc_MechJeb_ClassicPath_t instance, bool value)
+
+      Whether the autopilot chooses the turn altitudes and speed.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_ClassicPath_AutoTurnPercent(krpc_connection_t connection, float * returnValue, krpc_MechJeb_ClassicPath_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_ClassicPath_set_AutoTurnPercent(krpc_connection_t connection, krpc_MechJeb_ClassicPath_t instance, float value)
+
+      The altitude at which an automatic turn starts, as a fraction of the height of the
+      atmosphere.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`krpc_MechJeb_ClassicPath_AutoPath`.
+
+   .. function:: krpc_error_t krpc_MechJeb_ClassicPath_AutoTurnSpeedFactor(krpc_connection_t connection, float * returnValue, krpc_MechJeb_ClassicPath_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_ClassicPath_set_AutoTurnSpeedFactor(krpc_connection_t connection, krpc_MechJeb_ClassicPath_t instance, float value)
+
+      The factor that sets the speed at which an automatic turn starts.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`krpc_MechJeb_ClassicPath_AutoPath`.
+
+   .. function:: krpc_error_t krpc_MechJeb_ClassicPath_AutoTurnStartAltitude(krpc_connection_t connection, double * returnValue, krpc_MechJeb_ClassicPath_t instance)
+
+      The altitude at which an automatic turn starts, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_ClassicPath_AutoTurnStartVelocity(krpc_connection_t connection, double * returnValue, krpc_MechJeb_ClassicPath_t instance)
+
+      The speed at which an automatic turn starts, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_ClassicPath_AutoTurnEndAltitude(krpc_connection_t connection, double * returnValue, krpc_MechJeb_ClassicPath_t instance)
+
+      The altitude at which an automatic turn ends, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_ClassicPath_TurnStartAltitude(krpc_connection_t connection, double * returnValue, krpc_MechJeb_ClassicPath_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_ClassicPath_set_TurnStartAltitude(krpc_connection_t connection, krpc_MechJeb_ClassicPath_t instance, double value)
+
+      The altitude at which the turn starts, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_ClassicPath_TurnStartVelocity(krpc_connection_t connection, double * returnValue, krpc_MechJeb_ClassicPath_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_ClassicPath_set_TurnStartVelocity(krpc_connection_t connection, krpc_MechJeb_ClassicPath_t instance, double value)
+
+      The speed at which the turn starts, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_ClassicPath_TurnEndAltitude(krpc_connection_t connection, double * returnValue, krpc_MechJeb_ClassicPath_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_ClassicPath_set_TurnEndAltitude(krpc_connection_t connection, krpc_MechJeb_ClassicPath_t instance, double value)
+
+      The altitude at which the turn ends, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_ClassicPath_TurnEndAngle(krpc_connection_t connection, double * returnValue, krpc_MechJeb_ClassicPath_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_ClassicPath_set_TurnEndAngle(krpc_connection_t connection, krpc_MechJeb_ClassicPath_t instance, double value)
+
+      The final flight path angle, in degrees.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_ClassicPath_TurnShapeExponent(krpc_connection_t connection, double * returnValue, krpc_MechJeb_ClassicPath_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_ClassicPath_set_TurnShapeExponent(krpc_connection_t connection, krpc_MechJeb_ClassicPath_t instance, double value)
+
+      The steepness of the turn, between 0 and 1.
+
+      :Game Scenes: Flight

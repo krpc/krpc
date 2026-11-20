@@ -1,0 +1,70 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: MechJeb
+   :no-index:
+
+RendezvousAutopilot
+===================
+
+
+.. class:: RendezvousAutopilot
+
+   The rendezvous autopilot, which brings the vessel close to the target vessel.
+
+   .. method:: getEnabled()
+               setEnabled(value)
+
+      Whether the module is enabled.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getStatus()
+
+      The status of the autopilot.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``string``
+      :Game Scenes: Flight
+
+   .. method:: getDesiredDistance()
+               setDesiredDistance(value)
+
+      The final distance from the target, in meters.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getMaxPhasingOrbits()
+               setMaxPhasingOrbits(value)
+
+      The largest number of orbits to wait for the phase angle.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getMaxClosingSpeed()
+               setMaxClosingSpeed(value)
+
+      The largest speed at which to approach the target, in :math:`\mathrm{m/s}`.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getAutowarp()
+               setAutowarp(value)
+
+      Whether to warp time during the rendezvous.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The same setting as :meth:`MechJeb.ManeuverPlanner.getAutowarp`.

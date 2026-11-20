@@ -2,8 +2,8 @@
 .. highlight:: java
 .. package:: krpc.client.services.SpaceCenter
 
-SpaceCenter
-===========
+Service
+=======
 
 
 .. type:: public class SpaceCenter
@@ -144,7 +144,7 @@ SpaceCenter
 
       .. note::
 
-         This is equivalent to calling :meth:`launchVessel(String, String, String, java.util.List<String>, boolean, String)` with the craft directory
+         This is equivalent to calling :meth:`SpaceCenter.launchVessel(String, String, String, java.util.List<String>, boolean, String)` with the craft directory
          set to "VAB" and the launch site set to "LaunchPad".
          Throws an exception if any of the games pre-flight checks fail.
 
@@ -158,7 +158,7 @@ SpaceCenter
 
       .. note::
 
-         This is equivalent to calling :meth:`launchVessel(String, String, String, java.util.List<String>, boolean, String)` with the craft directory
+         This is equivalent to calling :meth:`SpaceCenter.launchVessel(String, String, String, java.util.List<String>, boolean, String)` with the craft directory
          set to "SPH" and the launch site set to "Runway".
          Throws an exception if any of the games pre-flight checks fail.
 
@@ -195,7 +195,7 @@ SpaceCenter
 
       .. note::
 
-         This is the same as calling :meth:`save(String)` with the name "quicksave".
+         This is the same as calling :meth:`SpaceCenter.save(String)` with the name "quicksave".
 
    .. method:: void quickload()
 
@@ -205,7 +205,7 @@ SpaceCenter
 
       .. note::
 
-         This is the same as calling :meth:`load(String)` with the name "quicksave".
+         This is the same as calling :meth:`SpaceCenter.load(String)` with the name "quicksave".
 
    .. method:: boolean getCanSave()
 
@@ -218,7 +218,7 @@ SpaceCenter
 
          The game cannot be saved in some flight states, e.g. while under acceleration
          or moving over the surface. Setting
-         :meth:`KRPC.getGameScene()` to leave flight saves the
+         :meth:`KRPC.KRPC.getGameScene()` to leave flight saves the
          game only when this is true.
 
    .. method:: boolean canRevertToLaunch()
@@ -275,7 +275,7 @@ SpaceCenter
    .. method:: double getG()
 
 
-      The value of the `gravitational constant <https://en.wikipedia.org/wiki/Gravitational_constant>`_ G in :math:`N(m/kg)^2`.
+      The value of the `gravitational constant <https://en.wikipedia.org/wiki/Gravitational_constant>`_ G in :math:`\mathrm{N(m/kg)^{2}}`.
 
    
 
@@ -307,8 +307,8 @@ SpaceCenter
       The current warp factor. This is the index of the rate at which time
       is passing for either regular "on-rails" or physical time warp. Returns 0
       if time warp is not active. When in on-rails time warp, this is equal to
-      :meth:`getRailsWarpFactor()`, and in physics time warp, this is equal to
-      :meth:`getPhysicsWarpFactor()`.
+      :meth:`SpaceCenter.getRailsWarpFactor()`, and in physics time warp, this is equal to
+      :meth:`SpaceCenter.getPhysicsWarpFactor()`.
 
       :Game Scenes: Space Center, Flight, Tracking Station
 
@@ -384,7 +384,6 @@ SpaceCenter
       :param double ut: The universal time to warp to, in seconds.
       :param float maxRailsRate: The maximum warp rate in regular "on-rails" time warp.
       :param float maxPhysicsRate: The maximum warp rate in physical time warp.
-      :returns: When the time warp is complete.
       :Game Scenes: Space Center, Flight, Tracking Station
 
 
@@ -417,10 +416,10 @@ SpaceCenter
 
       Converts a rotation from one reference frame to another.
 
-      :param org.javatuples.Quartet<Double,Double,Double,Double> rotation: Rotation, as a quaternion of the form :math:`(x, y, z, w)`, in reference frame *from*.
+      :param org.javatuples.Quartet<Double,Double,Double,Double> rotation: Rotation, as a quaternion of the form ``(x, y, z, w)``, in reference frame *from*.
       :param ReferenceFrame from: The reference frame that the rotation is in.
       :param ReferenceFrame to: The reference frame to covert the rotation to.
-      :returns: The corresponding rotation, as a quaternion of the form :math:`(x, y, z, w)`, in reference frame *to*.
+      :returns: The corresponding rotation, as a quaternion of the form ``(x, y, z, w)``, in reference frame *to*.
    
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> transformVelocity(org.javatuples.Triplet<Double,Double,Double> position, org.javatuples.Triplet<Double,Double,Double> velocity, ReferenceFrame from, ReferenceFrame to)
@@ -430,7 +429,7 @@ SpaceCenter
       reference frames into account.
 
       :param org.javatuples.Triplet<Double,Double,Double> position: Position, as a vector, in reference frame *from*.
-      :param org.javatuples.Triplet<Double,Double,Double> velocity: Velocity, as a vector that points in the direction of travel and whose magnitude is the speed in meters per second, in reference frame *from*.
+      :param org.javatuples.Triplet<Double,Double,Double> velocity: Velocity, as a vector that points in the direction of travel and whose magnitude is the speed in :math:`\mathrm{m/s}`, in reference frame *from*.
       :param ReferenceFrame from: The reference frame that the position and velocity are in.
       :param ReferenceFrame to: The reference frame to covert the velocity to.
       :returns: The corresponding velocity, as a vector, in reference frame *to*.
@@ -461,14 +460,105 @@ SpaceCenter
    .. method:: boolean getFARAvailable()
 
 
-      Whether `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/>`_ is installed.
+      Whether Ferram Aerospace Research is installed.
+
+   
+
+   .. method:: boolean getAGExtAvailable()
+
+
+      Whether Action Groups Extended is installed.
 
    
 
    .. method:: boolean getRealFuelsAvailable()
 
 
-      Whether `RealFuels <https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/>`_ is installed.
+      Whether RealFuels is installed.
+
+   
+
+   .. method:: boolean getRealChuteAvailable()
+
+
+      Whether RealChute is installed.
+
+   
+
+   .. method:: boolean getProceduralFairingsAvailable()
+
+
+      Whether Procedural Fairings is installed.
+
+   
+
+   .. method:: boolean getNearFutureSolarAvailable()
+
+
+      Whether Near Future Solar is installed.
+
+   
+
+   .. method:: boolean getDMagicAvailable()
+
+
+      Whether DMagic's DMModuleScienceAnimateGeneric is installed.
+
+   
+
+   .. method:: boolean getFirespitterAvailable()
+
+
+      Whether Firespitter is installed.
+
+   
+
+   .. method:: boolean getKerbalActuatorsAvailable()
+
+
+      Whether KerbalActuators is installed.
+
+   
+
+   .. method:: boolean getKSPCommunityPartModulesAvailable()
+
+
+      Whether KSPCommunityPartModules is installed.
+
+   
+
+   .. method:: boolean getKOSAvailable()
+
+
+      Whether kOS is installed.
+
+   
+
+   .. method:: boolean getB9PartSwitchAvailable()
+
+
+      Whether B9PartSwitch is installed.
+
+   
+
+   .. method:: boolean getTweakScaleRescaledAvailable()
+
+
+      Whether TweakScale Rescaled is installed.
+
+   
+
+   .. method:: boolean getRealAntennasAvailable()
+
+
+      Whether RealAntennas is installed.
+
+   
+
+   .. method:: java.util.List<CrewMember> getKerbals()
+
+
+      The Kerbals in the roster.
 
    
 
@@ -514,9 +604,9 @@ SpaceCenter
    .. method:: WarpMode getWarpMode()
 
 
-      The current time warp mode. Returns :meth:`WarpMode.NONE` if time
-      warp is not active, :meth:`WarpMode.RAILS` if regular "on-rails" time warp
-      is active, or :meth:`WarpMode.PHYSICS` if physical time warp is active.
+      The current time warp mode. Returns :field:`WarpMode.NONE` if time
+      warp is not active, :field:`WarpMode.RAILS` if regular "on-rails" time warp
+      is active, or :field:`WarpMode.PHYSICS` if physical time warp is active.
 
       :Game Scenes: Space Center, Flight, Tracking Station
 
@@ -600,7 +690,7 @@ SpaceCenter
 .. type:: public enum AltimeterMode
 
    The mode of the altitude reported on the altimeter.
-   See :meth:`getAltimeterMode()`.
+   See :meth:`SpaceCenter.getAltimeterMode()`.
 
 
    .. field:: public AltimeterMode DEFAULT
@@ -641,93 +731,96 @@ SpaceCenter
 
 
 
-.. type:: public enum MapFilterType
+.. type:: public static final class MapFilterType
 
    The set of things that are visible in map mode.
-   These may be combined with bitwise logic.
+
+   .. note::
+
+      The values may be combined.   A flags enumeration. :std:ref:`java-client-flags` shows how to combine its values.
 
 
-   .. field:: public MapFilterType ALL
+   .. field:: public static final MapFilterType ALL
 
       Everything.
 
 
-   .. field:: public MapFilterType NONE
+   .. field:: public static final MapFilterType NONE
 
       Nothing.
 
 
-   .. field:: public MapFilterType DEBRIS
+   .. field:: public static final MapFilterType DEBRIS
 
       Debris.
 
 
-   .. field:: public MapFilterType UNKNOWN
+   .. field:: public static final MapFilterType UNKNOWN
 
       Unknown.
 
 
-   .. field:: public MapFilterType SPACE_OBJECTS
+   .. field:: public static final MapFilterType SPACE_OBJECTS
 
       SpaceObjects.
 
 
-   .. field:: public MapFilterType PROBES
+   .. field:: public static final MapFilterType PROBES
 
       Probes.
 
 
-   .. field:: public MapFilterType ROVERS
+   .. field:: public static final MapFilterType ROVERS
 
       Rovers.
 
 
-   .. field:: public MapFilterType LANDERS
+   .. field:: public static final MapFilterType LANDERS
 
       Landers.
 
 
-   .. field:: public MapFilterType SHIPS
+   .. field:: public static final MapFilterType SHIPS
 
       Ships.
 
 
-   .. field:: public MapFilterType STATIONS
+   .. field:: public static final MapFilterType STATIONS
 
       Stations.
 
 
-   .. field:: public MapFilterType BASES
+   .. field:: public static final MapFilterType BASES
 
       Bases.
 
 
-   .. field:: public MapFilterType EV_AS
+   .. field:: public static final MapFilterType EVAS
 
       EVAs.
 
 
-   .. field:: public MapFilterType FLAGS
+   .. field:: public static final MapFilterType FLAGS
 
       Flags.
 
 
-   .. field:: public MapFilterType PLANE
+   .. field:: public static final MapFilterType PLANE
 
       Planes.
 
 
-   .. field:: public MapFilterType RELAY
+   .. field:: public static final MapFilterType RELAY
 
       Relays.
 
 
-   .. field:: public MapFilterType SITE
+   .. field:: public static final MapFilterType SITE
 
       Launch Sites.
 
 
-   .. field:: public MapFilterType DEPLOYED_SCIENCE_CONTROLLER
+   .. field:: public static final MapFilterType DEPLOYED_SCIENCE_CONTROLLER
 
       Deployed Science Controllers.
 
@@ -738,7 +831,7 @@ SpaceCenter
    A place where craft can be launched from.
    More of these can be added with mods like Kerbal Konstructs.
 
-   .. constructor:: public LaunchSite(String name, CelestialBody body, EditorFacility editorFacility)
+   .. constructor:: public LaunchSite(String name, CelestialBody body, EditorFacility editorFacility, double latitude, double longitude, double altitude)
 
       Construct a LaunchSite from the values of its fields.
 
@@ -754,6 +847,21 @@ SpaceCenter
    .. method:: EditorFacility getEditorFacility()
 
       Which editor is normally used for this launch site.
+
+   .. method:: double getLatitude()
+
+      The latitude of the point vessels launch from, in degrees, or ``NaN`` if the
+      site has no spawn point.
+
+   .. method:: double getLongitude()
+
+      The longitude of the point vessels launch from, in degrees, or ``NaN`` if the
+      site has no spawn point.
+
+   .. method:: double getAltitude()
+
+      The altitude above sea level of the point vessels launch from, in meters, or
+      ``NaN`` if the site has no spawn point.
 
 
 .. type:: public enum EditorFacility

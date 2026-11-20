@@ -1,0 +1,432 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: SpaceCenter
+   :no-index:
+
+Alarms
+======
+
+
+.. class:: AlarmManager
+
+   Alarm manager.
+   Obtained by calling :func:`SpaceCenter.getAlarmManager`.
+
+   .. method:: getAlarms()
+
+      A list of all alarms.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`SpaceCenter.Alarm`
+   
+
+   .. method:: alarmsWithType(type)
+
+      A list of all alarms of the given type.
+
+      :param type: The type of alarm to return.
+      :type type: :class:`SpaceCenter.AlarmType`
+      :rtype: ``Array`` of :class:`SpaceCenter.Alarm`
+   
+
+   .. method:: alarmWithName(name)
+
+      Returns the first alarm with the given title, or ``null`` if no such
+      alarm exists. Alarm titles are not guaranteed to be unique; if more than
+      one alarm shares the given title, the first one found is returned.
+
+      :param name: The title of the alarm to return.
+      :type name: ``string``
+      :rtype: :class:`SpaceCenter.Alarm` or ``null``
+   
+
+   .. function:: addAlarm(time[, title[, description]])
+
+      Create an alarm.
+
+      :param time: Number of seconds from now that the alarm should trigger.
+      :type time: ``number``
+      :param title: Title for the alarm. Defaults to ``"Alarm"``.
+      :type title: ``string``
+      :param description: Description for the alarm. Defaults to ``""``.
+      :type description: ``string``
+      :rtype: :class:`SpaceCenter.Alarm`
+   
+
+   .. function:: addVesselAlarm(time, vessel[, title[, description]])
+
+      Create an alarm linked to a vessel.
+
+      :param time: Number of seconds from now that the alarm should trigger.
+      :type time: ``number``
+      :param vessel: Vessel to link the alarm to.
+      :type vessel: :class:`SpaceCenter.Vessel`
+      :param title: Title for the alarm. Defaults to ``"Vessel Alarm"``.
+      :type title: ``string``
+      :param description: Description for the alarm. Defaults to ``""``.
+      :type description: ``string``
+      :rtype: :class:`SpaceCenter.Alarm`
+   
+
+   .. function:: addApoapsisAlarm(vessel[, offset[, title[, description]]])
+
+      Create an alarm for the given vessel's next apoapsis.
+
+      :param vessel: The vessel.
+      :type vessel: :class:`SpaceCenter.Vessel`
+      :param offset: Time in seconds to offset the alarm by. Defaults to ``60.0``.
+      :type offset: ``number``
+      :param title: Title for the alarm. Defaults to ``"Apoapsis Alarm"``.
+      :type title: ``string``
+      :param description: Description for the alarm. Defaults to ``""``.
+      :type description: ``string``
+      :rtype: :class:`SpaceCenter.Alarm`
+   
+
+   .. function:: addPeriapsisAlarm(vessel[, offset[, title[, description]]])
+
+      Create an alarm for the given vessel's next periapsis.
+
+      :param vessel: The vessel.
+      :type vessel: :class:`SpaceCenter.Vessel`
+      :param offset: Time in seconds to offset the alarm by. Defaults to ``60.0``.
+      :type offset: ``number``
+      :param title: Title for the alarm. Defaults to ``"Periapsis Alarm"``.
+      :type title: ``string``
+      :param description: Description for the alarm. Defaults to ``""``.
+      :type description: ``string``
+      :rtype: :class:`SpaceCenter.Alarm`
+   
+
+   .. function:: addManeuverNodeAlarm(vessel, node[, offset[, addBurnTime[, title[, description]]]])
+
+      Create an alarm for the given vessel and maneuver node.
+
+      :param vessel: The vessel.
+      :type vessel: :class:`SpaceCenter.Vessel`
+      :param node: The maneuver node.
+      :type node: :class:`SpaceCenter.Node`
+      :param offset: Time in seconds to offset the alarm by. Defaults to ``60.0``.
+      :type offset: ``number``
+      :param addBurnTime: Whether the node's burn time should be included in the alarm. Defaults to ``true``.
+      :type addBurnTime: ``boolean``
+      :param title: Title for the alarm. Defaults to ``"Maneuver Node Alarm"``.
+      :type title: ``string``
+      :param description: Description for the alarm. Defaults to ``""``.
+      :type description: ``string``
+      :rtype: :class:`SpaceCenter.Alarm`
+   
+
+   .. function:: addSOIAlarm(vessel[, offset[, title[, description]]])
+
+      Create an alarm for the given vessel's next sphere of influence change.
+
+      :param vessel: The vessel.
+      :type vessel: :class:`SpaceCenter.Vessel`
+      :param offset: Time in seconds to offset the alarm by. Defaults to ``60.0``.
+      :type offset: ``number``
+      :param title: Title for the alarm. Defaults to ``"SOI Change Alarm"``.
+      :type title: ``string``
+      :param description: Description for the alarm. Defaults to ``""``.
+      :type description: ``string``
+      :rtype: :class:`SpaceCenter.Alarm`
+   
+
+   .. function:: addTransferWindowAlarm(vessel, target[, title[, description]])
+
+      Create an alarm for the next planetary transfer window from the vessel's
+      current parent body to the target body.
+
+      :param vessel: The vessel.
+      :type vessel: :class:`SpaceCenter.Vessel`
+      :param target: The target body.
+      :type target: :class:`SpaceCenter.CelestialBody`
+      :param title: Title for the alarm. Defaults to ``"Transfer Window Alarm"``.
+      :type title: ``string``
+      :param description: Description for the alarm. Defaults to ``""``.
+      :type description: ``string``
+      :rtype: :class:`SpaceCenter.Alarm`
+   
+
+      .. note::
+
+         This relies on KSP's stock transfer-window alarm logic. If KSP cannot
+         compute a transfer from the vessel's current parent body to the target,
+         the resulting alarm may not fire at a useful time; in that case the
+         properties on the returned alarm can still be used to inspect or adjust it.
+
+
+
+.. class:: Alarm
+
+   An alarm. Can be accessed using :func:`SpaceCenter.getAlarmManager`.
+
+   .. method:: getID()
+
+      Unique identifier of the alarm.
+      KSP destroys and recreates an alarm when it is edited.
+      This id will remain constant between the old and new alarms.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getType()
+
+      Type of alarm.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.AlarmType`
+   
+
+   .. method:: getTitle()
+               setTitle(value)
+
+      Title of the alarm.
+
+      :Property: Can be read or written
+      :rtype: ``string``
+   
+
+   .. method:: getDescription()
+               setDescription(value)
+
+      Description of the alarm.
+
+      :Property: Can be read or written
+      :rtype: ``string``
+   
+
+   .. method:: getTime()
+               setTime(value)
+
+      Time the alarm will trigger, in seconds since epoch.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+   
+
+   .. method:: getTimeUntil()
+
+      Time until the alarm triggers, in seconds.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getEventOffset()
+               setEventOffset(value)
+
+      Seconds between the alarm going off and the event it references.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+   
+
+      .. note::
+
+         For a maneuver alarm that includes the burn time, setting this sets the margin
+         before the start of the burn, and the value read back includes half the burn time.
+
+   .. method:: getVessel()
+
+      Vessel the alarm references. ``null`` if it does not reference a vessel.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Vessel` or ``null``
+   
+
+   .. method:: getNode()
+               setNode(value)
+
+      Maneuver node the alarm references. Only valid for alarms of type
+      :attr:`SpaceCenter.AlarmType.maneuver`.
+
+      :Property: Can be read or written
+      :rtype: :class:`SpaceCenter.Node`
+   
+
+      .. note::
+
+         Throws an exception if the alarm is not of
+         type :attr:`SpaceCenter.AlarmType.maneuver`.
+
+   .. method:: getOriginBody()
+               setOriginBody(value)
+
+      Origin body for the transfer window. Only valid for alarms of type
+      :attr:`SpaceCenter.AlarmType.transferWindow`.
+
+      :Property: Can be read or written
+      :rtype: :class:`SpaceCenter.CelestialBody`
+   
+
+      .. note::
+
+         Throws an exception if the alarm is not of
+         type :attr:`SpaceCenter.AlarmType.transferWindow`.
+
+   .. method:: getDestinationBody()
+               setDestinationBody(value)
+
+      Destination body for the transfer window. Only valid for alarms of type
+      :attr:`SpaceCenter.AlarmType.transferWindow`.
+
+      :Property: Can be read or written
+      :rtype: :class:`SpaceCenter.CelestialBody`
+   
+
+      .. note::
+
+         Throws an exception if the alarm is not of
+         type :attr:`SpaceCenter.AlarmType.transferWindow`.
+
+   .. method:: getWarpAction()
+               setWarpAction(value)
+
+      The action taken on time warp when the alarm fires.
+
+      :Property: Can be read or written
+      :rtype: :class:`SpaceCenter.AlarmWarpAction`
+   
+
+   .. method:: getMessageAction()
+               setMessageAction(value)
+
+      The on-screen message behavior when the alarm fires.
+
+      :Property: Can be read or written
+      :rtype: :class:`SpaceCenter.AlarmMessageAction`
+   
+
+   .. method:: getPlaySound()
+               setPlaySound(value)
+
+      Whether the alarm plays a sound when it fires.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+   .. method:: getDeleteOnDismiss()
+               setDeleteOnDismiss(value)
+
+      Whether the alarm is deleted automatically once the player has dismissed
+      the triggered message.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+   .. method:: getTriggered()
+
+      Whether the time of the alarm has passed and its actions have been triggered.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+   
+
+   .. method:: getActioned()
+
+      Whether the alarm's actions were triggered and then completed or closed.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+   
+
+   .. method:: remove()
+
+      Removes the alarm.
+
+   
+
+      .. note::
+
+         Any further use of this object throws an exception.
+
+
+
+.. class:: AlarmType
+
+   The type of an alarm. See :meth:`SpaceCenter.Alarm.getType`.
+
+
+   .. attribute:: raw
+
+      An alarm for a specific date/time or a specific period in the future.
+
+
+   .. attribute:: apoapsis
+
+      An alarm for the next apoapsis of a vessel.
+
+
+   .. attribute:: periapsis
+
+      An alarm for the next periapsis of a vessel.
+
+
+   .. attribute:: maneuver
+
+      An alarm based on a maneuver node on the vessel's flight path.
+
+
+   .. attribute:: soiChange
+
+      An alarm for the next sphere of influence change on the vessel's flight path.
+
+
+   .. attribute:: transferWindow
+
+      An alarm for the next planetary transfer window from the vessel's current
+      orbit to a target body.
+
+
+   .. attribute:: unknown
+
+      The alarm is of a type not recognized by kRPC. Typically this is a type
+      introduced by a mod.
+
+
+
+.. class:: AlarmWarpAction
+
+   The warp action taken when an alarm fires.
+   See :meth:`SpaceCenter.Alarm.getWarpAction`.
+
+
+   .. attribute:: noChange
+
+      Do not change time warp when the alarm fires.
+
+
+   .. attribute:: stopWarp
+
+      Drop out of time warp when the alarm fires.
+
+
+   .. attribute:: pauseGame
+
+      Pause the game when the alarm fires.
+
+
+
+.. class:: AlarmMessageAction
+
+   The on-screen message action taken when an alarm fires.
+   See :meth:`SpaceCenter.Alarm.getMessageAction`.
+
+
+   .. attribute:: noMessage
+
+      Do not display a message when the alarm fires.
+
+
+   .. attribute:: message
+
+      Display a message when the alarm fires.
+
+
+   .. attribute:: messageIfNotActiveVessel
+
+      Display a message only if the alarm's vessel is not the currently active vessel.

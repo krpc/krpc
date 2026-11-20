@@ -1,0 +1,980 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Utilities
+=========
+
+
+.. _http-MechJeb.Utilities:
+
+.. rubric:: Utilities
+
+The Utilities window, which holds the autostaging and throttle settings, and deploys
+the solar panels and antennas.
+
+A ``Utilities`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /mech-jeb/utilities/(id)/antennas
+
+   The deployable antennas.
+
+
+   :param id: The identifier of the :ref:`Utilities <http-MechJeb.Utilities>` object.
+
+   :resjson MechJeb.DeployableController value:
+
+
+
+
+.. http:get:: /mech-jeb/utilities/(id)/solar-panels
+
+   The solar panels.
+
+
+   :param id: The identifier of the :ref:`Utilities <http-MechJeb.Utilities>` object.
+
+   :resjson MechJeb.DeployableController value:
+
+
+
+
+.. http:get:: /mech-jeb/utilities/(id)/staging
+
+   The autostaging settings. The same object as :http:get:`/mech-jeb/ascent-settings/(id)/staging`.
+
+
+   :param id: The identifier of the :ref:`Utilities <http-MechJeb.Utilities>` object.
+
+   :resjson MechJeb.Autostaging value:
+
+
+
+
+.. http:get:: /mech-jeb/utilities/(id)/thrust
+
+   The throttle limiters. The same object as :http:get:`/mech-jeb/ascent-settings/(id)/thrust`.
+
+
+   :param id: The identifier of the :ref:`Utilities <http-MechJeb.Utilities>` object.
+
+   :resjson MechJeb.ThrustLimiter value:
+
+
+
+
+
+Autostaging
+-----------
+
+
+.. _http-MechJeb.Autostaging:
+
+.. rubric:: Autostaging
+
+The autostaging settings, which the Utilities and Ascent Settings windows show.
+
+A ``Autostaging`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /mech-jeb/autostaging/(id)/enabled
+
+   Whether the module is enabled.
+
+
+   :param id: The identifier of the :ref:`Autostaging <http-MechJeb.Autostaging>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/autostaging/(id)/enabled
+
+   Whether the module is enabled.
+
+
+   :param id: The identifier of the :ref:`Autostaging <http-MechJeb.Autostaging>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/autostaging/(id)/autostaging-once
+
+   Whether the controller disables itself after the next staging.
+
+   .. note::
+
+      See :http:post:`/mech-jeb/autostaging/(id)/autostage-once`.
+
+
+   :param id: The identifier of the :ref:`Autostaging <http-MechJeb.Autostaging>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:post:: /mech-jeb/autostaging/(id)/autostage-once
+
+   Enable the controller until the next staging. Throws an exception if the controller is
+   enabled.
+
+
+   :param id: The identifier of the :ref:`Autostaging <http-MechJeb.Autostaging>` object.
+
+
+
+
+
+
+.. http:get:: /mech-jeb/autostaging/(id)/autostage-limit
+
+   The last stage the controller activates.
+
+
+   :param id: The identifier of the :ref:`Autostaging <http-MechJeb.Autostaging>` object.
+
+   :resjson int32 value:
+
+.. http:put:: /mech-jeb/autostaging/(id)/autostage-limit
+
+   The last stage the controller activates.
+
+
+   :param id: The identifier of the :ref:`Autostaging <http-MechJeb.Autostaging>` object.
+
+   :reqjson int32 value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/autostaging/(id)/autostage-post-delay
+
+   The delay after each staging, in seconds.
+
+
+   :param id: The identifier of the :ref:`Autostaging <http-MechJeb.Autostaging>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/autostaging/(id)/autostage-post-delay
+
+   The delay after each staging, in seconds.
+
+
+   :param id: The identifier of the :ref:`Autostaging <http-MechJeb.Autostaging>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/autostaging/(id)/autostage-pre-delay
+
+   The delay before each staging, in seconds.
+
+
+   :param id: The identifier of the :ref:`Autostaging <http-MechJeb.Autostaging>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/autostaging/(id)/autostage-pre-delay
+
+   The delay before each staging, in seconds.
+
+
+   :param id: The identifier of the :ref:`Autostaging <http-MechJeb.Autostaging>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/autostaging/(id)/clamp-auto-stage-thrust-pct
+
+   The fraction of full thrust at which the controller releases the launch clamps.
+
+
+   :param id: The identifier of the :ref:`Autostaging <http-MechJeb.Autostaging>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/autostaging/(id)/clamp-auto-stage-thrust-pct
+
+   The fraction of full thrust at which the controller releases the launch clamps.
+
+
+   :param id: The identifier of the :ref:`Autostaging <http-MechJeb.Autostaging>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/autostaging/(id)/fairing-max-aerothermal-flux
+
+   The largest aerothermal flux at which the controller jettisons a fairing, in
+   :math:`\mathrm{W/m^{2}}`.
+
+
+   :param id: The identifier of the :ref:`Autostaging <http-MechJeb.Autostaging>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/autostaging/(id)/fairing-max-aerothermal-flux
+
+   The largest aerothermal flux at which the controller jettisons a fairing, in
+   :math:`\mathrm{W/m^{2}}`.
+
+
+   :param id: The identifier of the :ref:`Autostaging <http-MechJeb.Autostaging>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/autostaging/(id)/fairing-max-dynamic-pressure
+
+   The largest dynamic pressure at which the controller jettisons a fairing, in pascals.
+
+
+   :param id: The identifier of the :ref:`Autostaging <http-MechJeb.Autostaging>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/autostaging/(id)/fairing-max-dynamic-pressure
+
+   The largest dynamic pressure at which the controller jettisons a fairing, in pascals.
+
+
+   :param id: The identifier of the :ref:`Autostaging <http-MechJeb.Autostaging>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/autostaging/(id)/fairing-min-altitude
+
+   The lowest altitude at which the controller jettisons a fairing, in meters.
+
+
+   :param id: The identifier of the :ref:`Autostaging <http-MechJeb.Autostaging>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/autostaging/(id)/fairing-min-altitude
+
+   The lowest altitude at which the controller jettisons a fairing, in meters.
+
+
+   :param id: The identifier of the :ref:`Autostaging <http-MechJeb.Autostaging>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/autostaging/(id)/hot-staging
+
+   Whether the controller ignites the next stage before the current one burns out.
+
+
+   :param id: The identifier of the :ref:`Autostaging <http-MechJeb.Autostaging>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/autostaging/(id)/hot-staging
+
+   Whether the controller ignites the next stage before the current one burns out.
+
+
+   :param id: The identifier of the :ref:`Autostaging <http-MechJeb.Autostaging>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/autostaging/(id)/hot-staging-lead-time
+
+   The time before burnout at which a hot staging happens, in seconds.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/autostaging/(id)/hot-staging`.
+
+
+   :param id: The identifier of the :ref:`Autostaging <http-MechJeb.Autostaging>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/autostaging/(id)/hot-staging-lead-time
+
+   The time before burnout at which a hot staging happens, in seconds.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/autostaging/(id)/hot-staging`.
+
+
+   :param id: The identifier of the :ref:`Autostaging <http-MechJeb.Autostaging>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+
+ThrustLimiter
+-------------
+
+
+.. _http-MechJeb.ThrustLimiter:
+
+.. rubric:: ThrustLimiter
+
+The throttle limiters, which the Utilities and Ascent Settings windows show.
+
+A ``ThrustLimiter`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /mech-jeb/thrust-limiter/(id)/differential-throttle
+
+   Whether the controller throttles the engines differentially to steer.
+
+
+   :param id: The identifier of the :ref:`ThrustLimiter <http-MechJeb.ThrustLimiter>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/thrust-limiter/(id)/differential-throttle
+
+   Whether the controller throttles the engines differentially to steer.
+
+
+   :param id: The identifier of the :ref:`ThrustLimiter <http-MechJeb.ThrustLimiter>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/thrust-limiter/(id)/differential-throttle-status
+
+   The result of the differential throttle.
+
+
+   :param id: The identifier of the :ref:`ThrustLimiter <http-MechJeb.ThrustLimiter>` object.
+
+   :resjson MechJeb.DifferentialThrottleStatus value:
+
+
+
+
+.. http:get:: /mech-jeb/thrust-limiter/(id)/electric-throttle
+
+   Whether to limit the throttle of electric engines to the available power.
+
+
+   :param id: The identifier of the :ref:`ThrustLimiter <http-MechJeb.ThrustLimiter>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/thrust-limiter/(id)/electric-throttle
+
+   Whether to limit the throttle of electric engines to the available power.
+
+
+   :param id: The identifier of the :ref:`ThrustLimiter <http-MechJeb.ThrustLimiter>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/thrust-limiter/(id)/electric-throttle-hi
+
+   The charge level at which electric engines run at full throttle, between 0 and 1.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/thrust-limiter/(id)/electric-throttle`.
+
+
+   :param id: The identifier of the :ref:`ThrustLimiter <http-MechJeb.ThrustLimiter>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/thrust-limiter/(id)/electric-throttle-hi
+
+   The charge level at which electric engines run at full throttle, between 0 and 1.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/thrust-limiter/(id)/electric-throttle`.
+
+
+   :param id: The identifier of the :ref:`ThrustLimiter <http-MechJeb.ThrustLimiter>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/thrust-limiter/(id)/electric-throttle-lo
+
+   The charge level at which electric engines stop, between 0 and 1.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/thrust-limiter/(id)/electric-throttle`.
+
+
+   :param id: The identifier of the :ref:`ThrustLimiter <http-MechJeb.ThrustLimiter>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/thrust-limiter/(id)/electric-throttle-lo
+
+   The charge level at which electric engines stop, between 0 and 1.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/thrust-limiter/(id)/electric-throttle`.
+
+
+   :param id: The identifier of the :ref:`ThrustLimiter <http-MechJeb.ThrustLimiter>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/thrust-limiter/(id)/flameout-safety-pct
+
+   The safety margin of the jet engines' air intake, as a percentage.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/thrust-limiter/(id)/limit-to-prevent-flameout`.
+
+
+   :param id: The identifier of the :ref:`ThrustLimiter <http-MechJeb.ThrustLimiter>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/thrust-limiter/(id)/flameout-safety-pct
+
+   The safety margin of the jet engines' air intake, as a percentage.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/thrust-limiter/(id)/limit-to-prevent-flameout`.
+
+
+   :param id: The identifier of the :ref:`ThrustLimiter <http-MechJeb.ThrustLimiter>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/thrust-limiter/(id)/limit-acceleration
+
+   Whether to limit the acceleration.
+
+
+   :param id: The identifier of the :ref:`ThrustLimiter <http-MechJeb.ThrustLimiter>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/thrust-limiter/(id)/limit-acceleration
+
+   Whether to limit the acceleration.
+
+
+   :param id: The identifier of the :ref:`ThrustLimiter <http-MechJeb.ThrustLimiter>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/thrust-limiter/(id)/limit-dynamic-pressure
+
+   Whether to limit the dynamic pressure.
+
+
+   :param id: The identifier of the :ref:`ThrustLimiter <http-MechJeb.ThrustLimiter>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/thrust-limiter/(id)/limit-dynamic-pressure
+
+   Whether to limit the dynamic pressure.
+
+
+   :param id: The identifier of the :ref:`ThrustLimiter <http-MechJeb.ThrustLimiter>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/thrust-limiter/(id)/limit-throttle
+
+   Whether to limit the throttle.
+
+
+   :param id: The identifier of the :ref:`ThrustLimiter <http-MechJeb.ThrustLimiter>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/thrust-limiter/(id)/limit-throttle
+
+   Whether to limit the throttle.
+
+
+   :param id: The identifier of the :ref:`ThrustLimiter <http-MechJeb.ThrustLimiter>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/thrust-limiter/(id)/limit-to-prevent-flameout
+
+   Whether to limit the throttle to keep jet engines from flaming out.
+
+
+   :param id: The identifier of the :ref:`ThrustLimiter <http-MechJeb.ThrustLimiter>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/thrust-limiter/(id)/limit-to-prevent-flameout
+
+   Whether to limit the throttle to keep jet engines from flaming out.
+
+
+   :param id: The identifier of the :ref:`ThrustLimiter <http-MechJeb.ThrustLimiter>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/thrust-limiter/(id)/limit-to-prevent-overheats
+
+   Whether to limit the throttle to keep parts from overheating.
+
+
+   :param id: The identifier of the :ref:`ThrustLimiter <http-MechJeb.ThrustLimiter>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/thrust-limiter/(id)/limit-to-prevent-overheats
+
+   Whether to limit the throttle to keep parts from overheating.
+
+
+   :param id: The identifier of the :ref:`ThrustLimiter <http-MechJeb.ThrustLimiter>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/thrust-limiter/(id)/limiter-min-throttle
+
+   Whether to keep the throttle above :http:get:`/mech-jeb/thrust-limiter/(id)/min-throttle`.
+
+
+   :param id: The identifier of the :ref:`ThrustLimiter <http-MechJeb.ThrustLimiter>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/thrust-limiter/(id)/limiter-min-throttle
+
+   Whether to keep the throttle above :http:get:`/mech-jeb/thrust-limiter/(id)/min-throttle`.
+
+
+   :param id: The identifier of the :ref:`ThrustLimiter <http-MechJeb.ThrustLimiter>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/thrust-limiter/(id)/manage-intakes
+
+   Whether the controller opens and closes the air intakes.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/thrust-limiter/(id)/limit-to-prevent-flameout`.
+
+
+   :param id: The identifier of the :ref:`ThrustLimiter <http-MechJeb.ThrustLimiter>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/thrust-limiter/(id)/manage-intakes
+
+   Whether the controller opens and closes the air intakes.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/thrust-limiter/(id)/limit-to-prevent-flameout`.
+
+
+   :param id: The identifier of the :ref:`ThrustLimiter <http-MechJeb.ThrustLimiter>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/thrust-limiter/(id)/max-acceleration
+
+   The largest acceleration, in :math:`\mathrm{m/s^{2}}`.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/thrust-limiter/(id)/limit-acceleration`.
+
+
+   :param id: The identifier of the :ref:`ThrustLimiter <http-MechJeb.ThrustLimiter>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/thrust-limiter/(id)/max-acceleration
+
+   The largest acceleration, in :math:`\mathrm{m/s^{2}}`.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/thrust-limiter/(id)/limit-acceleration`.
+
+
+   :param id: The identifier of the :ref:`ThrustLimiter <http-MechJeb.ThrustLimiter>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/thrust-limiter/(id)/max-dynamic-pressure
+
+   The largest dynamic pressure, in pascals.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/thrust-limiter/(id)/limit-dynamic-pressure`.
+
+
+   :param id: The identifier of the :ref:`ThrustLimiter <http-MechJeb.ThrustLimiter>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/thrust-limiter/(id)/max-dynamic-pressure
+
+   The largest dynamic pressure, in pascals.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/thrust-limiter/(id)/limit-dynamic-pressure`.
+
+
+   :param id: The identifier of the :ref:`ThrustLimiter <http-MechJeb.ThrustLimiter>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/thrust-limiter/(id)/max-throttle
+
+   The largest throttle, between 0 and 1.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/thrust-limiter/(id)/limit-throttle`.
+
+
+   :param id: The identifier of the :ref:`ThrustLimiter <http-MechJeb.ThrustLimiter>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/thrust-limiter/(id)/max-throttle
+
+   The largest throttle, between 0 and 1.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/thrust-limiter/(id)/limit-throttle`.
+
+
+   :param id: The identifier of the :ref:`ThrustLimiter <http-MechJeb.ThrustLimiter>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/thrust-limiter/(id)/min-throttle
+
+   The smallest throttle, between 0 and 1.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/thrust-limiter/(id)/limiter-min-throttle`.
+
+
+   :param id: The identifier of the :ref:`ThrustLimiter <http-MechJeb.ThrustLimiter>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/thrust-limiter/(id)/min-throttle
+
+   The smallest throttle, between 0 and 1.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/thrust-limiter/(id)/limiter-min-throttle`.
+
+
+   :param id: The identifier of the :ref:`ThrustLimiter <http-MechJeb.ThrustLimiter>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/thrust-limiter/(id)/limit-to-prevent-unstable-ignition
+
+   Whether to hold the throttle at zero while the engines' fuel is unstable.
+
+   .. note::
+
+      MechJeb shows this setting only with Real Fuels, as stock engines have
+      stable fuel.
+
+
+   :param id: The identifier of the :ref:`ThrustLimiter <http-MechJeb.ThrustLimiter>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/thrust-limiter/(id)/limit-to-prevent-unstable-ignition
+
+   Whether to hold the throttle at zero while the engines' fuel is unstable.
+
+   .. note::
+
+      MechJeb shows this setting only with Real Fuels, as stock engines have
+      stable fuel.
+
+
+   :param id: The identifier of the :ref:`ThrustLimiter <http-MechJeb.ThrustLimiter>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/thrust-limiter/(id)/auto-rcs-ullaging
+
+   Whether to fire the RCS forward to settle the fuel before the engines ignite.
+
+   .. note::
+
+      MechJeb shows this setting only with Real Fuels, as stock engines have
+      stable fuel.
+
+
+   :param id: The identifier of the :ref:`ThrustLimiter <http-MechJeb.ThrustLimiter>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/thrust-limiter/(id)/auto-rcs-ullaging
+
+   Whether to fire the RCS forward to settle the fuel before the engines ignite.
+
+   .. note::
+
+      MechJeb shows this setting only with Real Fuels, as stock engines have
+      stable fuel.
+
+
+   :param id: The identifier of the :ref:`ThrustLimiter <http-MechJeb.ThrustLimiter>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/thrust-limiter/(id)/limiter
+
+   The limiter that limits the throttle now.
+
+
+   :param id: The identifier of the :ref:`ThrustLimiter <http-MechJeb.ThrustLimiter>` object.
+
+   :resjson MechJeb.LimitMode value:
+
+
+
+
+
+.. _http-MechJeb.LimitMode:
+
+.. rubric:: LimitMode
+
+A throttle limiter. See :http:get:`/mech-jeb/thrust-limiter/(id)/limiter`.
+
+Passed and returned as the name of one of its values:
+
+
+``"none"``
+   No limiter limits the throttle.
+
+
+``"terminal_velocity"``
+   The terminal velocity limit.
+
+
+``"temperature"``
+   :http:get:`/mech-jeb/thrust-limiter/(id)/limit-to-prevent-overheats`.
+
+
+``"flameout"``
+   :http:get:`/mech-jeb/thrust-limiter/(id)/limit-to-prevent-flameout`.
+
+
+``"acceleration"``
+   :http:get:`/mech-jeb/thrust-limiter/(id)/limit-acceleration`.
+
+
+``"throttle"``
+   :http:get:`/mech-jeb/thrust-limiter/(id)/limit-throttle`.
+
+
+``"dynamic_pressure"``
+   :http:get:`/mech-jeb/thrust-limiter/(id)/limit-dynamic-pressure`.
+
+
+``"min_throttle"``
+   :http:get:`/mech-jeb/thrust-limiter/(id)/limiter-min-throttle`.
+
+
+``"electric"``
+   :http:get:`/mech-jeb/thrust-limiter/(id)/electric-throttle`.
+
+
+``"unstable_ignition"``
+   :http:get:`/mech-jeb/thrust-limiter/(id)/limit-to-prevent-unstable-ignition`.
+
+
+``"auto_rcs_ullage"``
+   :http:get:`/mech-jeb/thrust-limiter/(id)/auto-rcs-ullaging`.
+
+
+
+.. _http-MechJeb.DifferentialThrottleStatus:
+
+.. rubric:: DifferentialThrottleStatus
+
+The result of the differential throttle. See
+:http:get:`/mech-jeb/thrust-limiter/(id)/differential-throttle-status`.
+
+Passed and returned as the name of one of its values:
+
+
+``"success"``
+   The throttles balance the thrust.
+
+
+``"all_engines_off"``
+   All the engines are off.
+
+
+``"more_engines_required"``
+   The vessel needs more engines.
+
+
+``"solver_failed"``
+   The solver found no solution.
+
+
+
+DeployableController
+--------------------
+
+
+.. _http-MechJeb.DeployableController:
+
+.. rubric:: DeployableController
+
+The controller of one kind of deployable part, such as antennas or solar panels.
+
+A ``DeployableController`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:post:: /mech-jeb/deployable-controller/(id)/all-retracted
+
+   Whether all the parts are retracted.
+
+
+   :param id: The identifier of the :ref:`DeployableController <http-MechJeb.DeployableController>` object.
+
+   :resjson bool value:
+
+
+
+
+
+.. http:get:: /mech-jeb/deployable-controller/(id)/auto-deploy
+
+   Whether a MechJeb autopilot deploys the parts.
+
+
+   :param id: The identifier of the :ref:`DeployableController <http-MechJeb.DeployableController>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/deployable-controller/(id)/auto-deploy
+
+   Whether a MechJeb autopilot deploys the parts.
+
+
+   :param id: The identifier of the :ref:`DeployableController <http-MechJeb.DeployableController>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:post:: /mech-jeb/deployable-controller/(id)/extend-all
+
+   Extend all the parts.
+
+
+   :param id: The identifier of the :ref:`DeployableController <http-MechJeb.DeployableController>` object.
+
+
+
+
+
+
+.. http:post:: /mech-jeb/deployable-controller/(id)/retract-all
+
+   Retract all the parts.
+
+
+   :param id: The identifier of the :ref:`DeployableController <http-MechJeb.DeployableController>` object.

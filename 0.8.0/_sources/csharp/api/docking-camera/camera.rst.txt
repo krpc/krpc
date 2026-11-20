@@ -1,0 +1,37 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.DockingCamera
+
+Camera
+======
+
+
+.. class:: Camera
+
+   A camera from Docking Camera (KURS), on an onboard camera part or a docking port.
+
+   .. property:: SpaceCenter.Part Part { get; }
+
+      Get the part containing this camera.
+
+      :Game Scenes: All
+
+   .. function:: byte[] Image(StdLib.ImageFormat format = StdLib.ImageFormat.PNG, int quality = 75)
+
+      The image from the camera, 256 by 256 pixels.
+      Throws an exception if the camera is off or not started.
+
+      :parameters:
+
+       * **format** -- The format of the image.
+       * **quality** -- The quality of a JPEG image, from 1 to 100.
+
+      :returns: The image data.
+      :Game Scenes: All
+
+
+      .. note::
+
+         The camera is switched on by setting the ``IsEnabled`` field of its
+         ``PartCameraModule`` or ``DockingCameraModule`` to ``true``, which also opens
+         the camera window.

@@ -1,11 +1,11 @@
 .. default-domain:: java
 .. highlight:: java
 
-Kerbal Alarm Clock API
-======================
+Kerbal Alarm Clock
+==================
 
-Provides RPCs to interact with the `Kerbal Alarm Clock`_ mod. Provides the
-following classes:
+Provides functionality to interact with the `Kerbal Alarm Clock`_ mod.
+|Kerbal Alarm Clock tested| Provides the following classes:
 
 .. toctree::
    :includehidden:
@@ -24,4 +24,4 @@ set to trigger after 10 seconds have passed, and display a message.
 
 .. literalinclude:: /scripts/api/kerbal-alarm-clock/KerbalAlarmClockExample.java
 
-.. _Kerbal Alarm Clock: https://forum.kerbalspaceprogram.com/topic/22809-112x-kerbal-alarm-clock-v31300-april-10/
+.. include:: /mods.inc

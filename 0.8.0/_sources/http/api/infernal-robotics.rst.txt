@@ -1,0 +1,19 @@
+.. default-domain:: http
+.. highlight:: json
+
+InfernalRobotics
+================
+
+Provides functionality to interact with the `Infernal Robotics Next`_ mod.
+|Infernal Robotics Next tested| Provides the following classes:
+
+.. toctree::
+   :includehidden:
+   :maxdepth: 1
+
+   infernal-robotics/infernal-robotics
+   infernal-robotics/servo-group
+   infernal-robotics/servo
+
+
+.. include:: /mods.inc

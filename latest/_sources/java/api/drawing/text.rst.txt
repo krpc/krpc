@@ -8,7 +8,7 @@ Text
 
 .. type:: public class Text
 
-   Text. Created using :meth:`addText(String, SpaceCenter.ReferenceFrame, org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Quartet<Double,Double,Double,Double>, boolean)`.
+   Text. Created using :meth:`Drawing.addText(String, SpaceCenter.ReferenceFrame, org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Quartet<Double,Double,Double,Double>, boolean)`.
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> getPosition()
 

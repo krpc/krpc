@@ -1,0 +1,67 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: Drawing
+
+Point
+=====
+
+
+.. class:: Point
+
+   A point, drawn as a dot that keeps its size on screen. Created using
+   :meth:`add_point`.
+
+   .. attribute:: position
+
+      Position of the point.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. attribute:: reference_frame
+
+      Reference frame for the positions of the object.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`SpaceCenter.ReferenceFrame`
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. attribute:: visible
+
+      Whether the object is visible.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. attribute:: color
+
+      The color of the object.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`StdLib.ColorRGB`
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. attribute:: size
+
+      Diameter of the point, in pixels.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. attribute:: material
+
+      Material used to render the object.
+      Creates the material from a shader with the given name.
+
+      :Attribute: Can be read or written
+      :rtype: str
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: remove()
+
+      Remove the object.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph

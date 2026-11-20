@@ -1,0 +1,47 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Service
+=======
+
+
+Provides functionality to interact with RemoteTech.
+
+
+.. function:: krpc_error_t krpc_RemoteTech_Available(krpc_connection_t connection, bool * returnValue)
+
+   Whether RemoteTech is installed.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_RemoteTech_GroundStations(krpc_connection_t connection, krpc_list_string_t * returnValue)
+
+   The names of the ground stations.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_RemoteTech_Antenna(krpc_connection_t connection, krpc_RemoteTech_Antenna_t * returnValue, krpc_SpaceCenter_Part_t part)
+
+   Get the antenna object for a particular part.
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_RemoteTech_Comms(krpc_connection_t connection, krpc_RemoteTech_Comms_t * returnValue, krpc_SpaceCenter_Vessel_t vessel)
+
+   Get a communications object, representing the communication capability of a particular vessel.
+
+   :Parameters:

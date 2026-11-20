@@ -1,0 +1,709 @@
+// The protocol between the conformance driver and a testee, the small program that drives one
+// client library. The driver writes Commands to the testee's standard input, and the testee
+// writes Output messages to its standard output. Each message is written in the proto3 JSON
+// mapping on a line of its own, with no newline inside it, for example:
+//
+//   {"id":"1","connect":{"protocol":"tcpip","port":50000}}
+//
+// A reader ignores a carriage return before the newline, so the streams can be read and written
+// in text mode, and rejects a field the schema does not define.
+syntax = "proto3";
+
+package krpc.conformance;
+
+option csharp_namespace = "KRPC.Conformance";
+option java_package = "krpc.conformance";
+
+message Output {
+  oneof content {
+    Hello hello = 1;
+    Reply reply = 2;
+    Notification notification = 3;
+  }
+}
+
+// The first message a testee writes, before it reads any command.
+message Hello {
+  // A name for the client, such as "python", used only in the driver's messages.
+  string client = 1;
+  // The profiles the client implements, such as "core" and "streams".
+  repeated string profiles = 2;
+  // The protocols the client can connect over, such as "tcpip".
+  repeated string protocols = 3;
+}
+
+message Command {
+  // Copied onto the reply to the command.
+  uint64 id = 1;
+  // The task to run the command on, created on first use: a thread in a threaded testee, or a
+  // chain of async tasks in an async one. Commands for one task run in order. Unset runs the
+  // command on the default task. A testee without the concurrency profile gets no task name.
+  string task = 2;
+  // A stream or event handle whose condition the testee holds while it runs the command, as a
+  // program that locks the condition to read or wait does. Zero holds none.
+  uint64 condition = 3;
+  // The connection to run the command on, by a name the driver chooses. Unset is the default
+  // connection. Objects and streams keep their handles whichever connection made them. A
+  // testee without the connections profile gets no connection name.
+  string connection = 4;
+  oneof command {
+    Connect connect = 10;
+    Close close = 11;
+    Invoke invoke = 12;
+    AddStream add_stream = 13;
+    Get get = 14;
+    Wait wait = 15;
+    AddCallback add_callback = 16;
+    Compare compare = 17;
+    Hash hash = 18;
+    ObjectId object_id = 19;
+    Members members = 20;
+    Encode encode = 21;
+    Decode decode = 22;
+    SetRate set_rate = 23;
+    GetRate get_rate = 24;
+    Remove remove = 25;
+    CopyStream copy_stream = 26;
+    RemoveCallback remove_callback = 27;
+    AddEndCallback add_end_callback = 28;
+    RemoveEndCallback remove_end_callback = 29;
+    AddUpdateCallback add_update_callback = 30;
+    RemoveUpdateCallback remove_update_callback = 31;
+    WaitEvent wait_event = 32;
+    AddEventCallback add_event_callback = 33;
+    EventStream event_stream = 34;
+    Release release = 35;
+    Interrupt interrupt = 36;
+    Call call = 37;
+    AddFunctionStream add_function_stream = 38;
+    AddFunctionEvent add_function_event = 39;
+    RunFunction run_function = 40;
+    HoldCondition hold_condition = 41;
+    ReleaseCondition release_condition = 42;
+    WaitForUpdate wait_for_update = 43;
+    Order order = 44;
+    CompareHandles compare_handles = 45;
+    Pause pause = 46;
+    AwaitPause await_pause = 47;
+    Resume resume = 48;
+    DropHandle drop_handle = 49;
+    WaitOnCondition wait_on_condition = 50;
+    NotifyCondition notify_condition = 51;
+    HashHandle hash_handle = 52;
+    FailWrite fail_write = 53;
+    CallWithArguments call_with_arguments = 54;
+    CompileFunction compile_function = 55;
+    ScopeEvent scope_event = 56;
+    Declared declared = 57;
+    FlagsUnion flags_union = 58;
+    FlagsContains flags_contains = 59;
+    FlagsDifference flags_difference = 60;
+    DeprecationSignals deprecation_signals = 61;
+  }
+}
+
+message Reply {
+  uint64 id = 1;
+  // The task that ran the command, in a form the testee chooses: the thread in a threaded testee,
+  // or the name of the chain of async tasks (Command.task) in an async one. The testee names the
+  // default chain, with a name other than the empty string. Equal for two replies when one task
+  // ran both commands.
+  string task = 5;
+  oneof result {
+    Value value = 2;
+    Error error = 3;
+    // The handle of a stream the command added.
+    uint64 stream = 4;
+  }
+}
+
+// A call of a callback the driver added. A value callback is passed a value, an end callback an
+// ending, and an update callback neither.
+message Notification {
+  uint64 callback = 1;
+  oneof call {
+    Value value = 2;
+    Ending ending = 3;
+  }
+  // The task the callback ran on, in the form of Reply.task. In an async testee, a callback that
+  // runs outside every chain reports a name no chain has.
+  string task = 4;
+  // Written as the callback returns, for a callback whose behavior reports its return. A
+  // notification for a return carries no call.
+  bool returned = 5;
+  // The reply to the command the callback ran, for a callback whose behavior runs one.
+  Reply result = 6;
+}
+
+// What a callback does once it has written the notification for its call.
+message Behavior {
+  // The time to sleep, in seconds.
+  double sleep = 1;
+  // Whether to write a notification as the callback returns.
+  bool report_return = 2;
+  oneof action {
+    // Blocks until a Release command for the callback.
+    bool block = 3;
+    // Raises an error with the given message.
+    string fail = 4;
+    // Runs a command on the callback's thread, and writes a notification with its reply.
+    Command run = 5;
+    // Raises an error with the given message, of the kind the language keeps apart from its
+    // ordinary exceptions: an Error in Java, or a BaseException that is not an Exception in Python.
+    // A reply reports it with the FATAL kind. A testee whose language has no such kind replies
+    // UNSUPPORTED to the command that adds the callback.
+    string fail_fatally = 8;
+  }
+  // The number of calls, from the first, that only write their notification.
+  uint32 skip = 6;
+  // The number of calls, from the first, that act. Later calls only write their
+  // notification. Zero for every call.
+  uint32 only = 7;
+}
+
+// Releases one blocked call of a callback, or the next call to block.
+message Release {
+  uint64 callback = 1;
+}
+
+// Interrupts the command running on the named task: interrupts the thread in a threaded testee,
+// or cancels the running async task in an async one. A testee whose language cannot replies with
+// an UNSUPPORTED error.
+message Interrupt {
+  string task = 1;
+}
+
+// The end of a stream, as passed to an end callback.
+message Ending {
+  // The error the callback is passed. Unset when it is passed none.
+  Error error = 1;
+}
+
+// Opens a connection. On the default connection, it closes every connection the testee already
+// has, and the testee drops every handle it holds. On a named connection, it closes only a
+// connection of that name.
+message Connect {
+  string protocol = 1;
+  string address = 2;
+  uint32 port = 3;
+  string path = 4;
+  string name = 5;
+  // The handshake timeout in seconds. Unset uses the client's default. Infinity is no timeout,
+  // in the client's form for one, and other values pass to the client as they are.
+  optional double handshake_timeout = 6;
+  // The stall timeout in seconds, as for the handshake timeout. A testee whose client has no
+  // setting ignores it.
+  optional double stall_timeout = 7;
+}
+
+// Closes the connection. With interrupted, the thread first interrupts itself, as the language
+// interrupts a thread, so the close runs with an interrupt pending. It then replies with a bool
+// Value, whether the interrupt is still pending, and otherwise with no value. A testee whose
+// language cannot interrupt a thread replies UNSUPPORTED.
+message Close {
+  bool interrupted = 1;
+}
+
+// A call through the client's generated stub or service object. The procedure is the name the
+// server gives it, such as "TestClass_GetValue". The arguments include the instance of an
+// instance method, as on the wire. Arguments left off the end take their defaults. A testee
+// without the named-arguments profile gets no named arguments.
+message Invoke {
+  string service = 1;
+  string procedure = 2;
+  repeated Value arguments = 3;
+  repeated NamedArgument named_arguments = 4;
+  // An object to call a static method through, in a language that calls a static method on an
+  // object. A testee whose language does not replies with an UNSUPPORTED error.
+  Value through = 5;
+  // Whether to call a static method through its class bound to the connection, in a client of
+  // the bound-classes profile.
+  bool bound = 6;
+}
+
+// An argument passed by the name the server gives the parameter, such as "y".
+message NamedArgument {
+  string name = 1;
+  Value value = 2;
+}
+
+// Adds a stream of a call. When scoped, the testee adds the stream in the language's scoping
+// construct, reads its value, and leaves the construct, which removes the stream. It then replies
+// with a none Value in place of a stream handle.
+message AddStream {
+  Invoke invoke = 1;
+  bool scoped = 2;
+}
+
+// Builds a server side function that makes a call, with KRPC.Expression.Call over the call the
+// client builds for its stream. Replies with the function as an object Value. The call can be of
+// a procedure with no return value, other than a property setter.
+message Call {
+  Invoke invoke = 1;
+}
+
+// Builds a server side function that makes a call, with KRPC.Expression.CallWithArguments over
+// the call the client builds for its stream. Each argument is a server side function, an object
+// Value, keyed by the position it computes. Replies with the function as an object Value.
+message CallWithArguments {
+  Invoke invoke = 1;
+  map<uint32, Value> arguments = 2;
+  // Whether to build the call as the client's call template for the procedure, which names the
+  // member through its class and carries no arguments. The invoke then has no arguments.
+  bool template = 3;
+}
+
+// Adds a stream of a server side function, a KRPC.Expression object. The type is the function's
+// value type, for a client that names the type of a stream. It is one of "double", "float",
+// "sint32", "sint64", "uint32", "uint64", "bool", "string", "bytes", "TestClass", "TestEnum",
+// "TestStruct", "nullable sint32", "list(sint32)", "set(sint32)", "tuple(sint32,bool)" and
+// "dictionary(string,list(sint32))", or unset for a function with no value. A testee for another
+// type replies with an UNSUPPORTED error. A testee whose client gives null for a type named
+// without "nullable", as the client's type can hold null, replies to a Get of the stream with an
+// UNSUPPORTED error.
+message AddFunctionStream {
+  Value function = 1;
+  string type = 2;
+}
+
+// Compiles a server side function, a KRPC.Expression object built with the expression API.
+// Replies with no value.
+message CompileFunction {
+  Value function = 1;
+}
+
+// Adds an event over a server side function. Replies with an event Value.
+message AddFunctionEvent {
+  Value function = 1;
+}
+
+// Runs a server side function with arguments, and replies with its value. The type is as for
+// AddFunctionStream, or unset for a function with no value. Each argument has the type at the
+// same position in argument_types, named as for AddFunctionStream, for a client that types its
+// arguments. A testee whose client gives null for a type named without "nullable", as the
+// client's type can hold null, replies with an UNSUPPORTED error.
+message RunFunction {
+  Value function = 1;
+  string type = 2;
+  repeated Value arguments = 3;
+  repeated string argument_types = 4;
+}
+
+// Takes the condition of a stream or an event, or of the connection's stream updates for a
+// handle of zero, and holds it while the thread runs its later commands, until a
+// ReleaseCondition on the thread. Replies once the condition is held. A testee whose client has
+// no update condition replies to a hold of it with an UNSUPPORTED error.
+message HoldCondition {
+  uint64 stream = 1;
+}
+
+// Lets go of the condition the thread took last with a HoldCondition. A stream or event handle
+// names the handle to let go of it through, one that shares the condition with the handle that
+// took it. Zero lets go through the handle that took it.
+message ReleaseCondition {
+  uint64 stream = 1;
+}
+
+// Waits for the next update message, as the client's connection-wide wait does, with the update
+// condition held. Replies with no value. A testee whose client has no such wait replies with an
+// UNSUPPORTED error.
+message WaitForUpdate {
+  optional double timeout = 1;
+}
+
+// A point in the client where a test can pause a thread, to force a race. The point is named by
+// what the paused thread holds, and each testee maps it to its own client.
+enum RacePoint {
+  RACE_POINT_UNSPECIFIED = 0;
+  // The update thread, with a value of a stream and the stream's callbacks for it, before it
+  // calls them.
+  STREAM_CALLBACKS = 1;
+  // The update thread, before it calls the connection's update callbacks for an update.
+  UPDATE_CALLBACKS = 2;
+  // The thread adding a callback to a stream, with the stream's value, before the callback's
+  // first call.
+  FIRST_CALL = 3;
+  // The thread adding a callback to a stream, once the first call keeps the update thread from
+  // calling the callback, before the callback runs.
+  FIRST_CALL_STARTED = 4;
+  // The thread adding a callback to an event, with a firing the callback has not seen, before it
+  // calls the callback with it.
+  REPLAY = 5;
+  // The update thread, with the ending of a stream stored, before it wakes the stream's waiters and
+  // calls its end callbacks.
+  STREAM_ENDING = 6;
+  // The update thread, with a value of a stream stored, before it wakes the stream's waiters.
+  STREAM_VALUE = 7;
+  // The thread adding a callback to a stream, with the first call made and the values queued
+  // during it passed, before it lets the update thread call the callback.
+  FIRST_CALL_ENDED = 8;
+}
+
+// Arms a pause at a race point. The next thread of the client to reach the point, for any stream,
+// pauses there until a Resume. A testee whose client has no race points replies with an error
+// other than UNSUPPORTED, as the client could add them. A RemoveCallback for a callback whose add
+// is paused removes it.
+message Pause {
+  RacePoint point = 1;
+}
+
+// Arms a write fault. The client's next write to a connection fails with an error whose message
+// is the given text, as a failed socket write does. Armed before connecting, it fails the
+// connection request. Replies with no value. A testee whose client has no write fault replies
+// with an error other than UNSUPPORTED, as the client could add one.
+message FailWrite {
+  string message = 1;
+}
+
+// Waits until a thread has paused at the armed point. Replies with a bool Value, whether one
+// paused within the timeout, in seconds.
+message AwaitPause {
+  double timeout = 1;
+}
+
+// Lets the paused thread go on, and disarms the point.
+message Resume {}
+
+// Reads the value of a stream.
+message Get {
+  uint64 stream = 1;
+}
+
+// Waits for the next update of a stream. Replies with a bool Value, whether the stream updated.
+message Wait {
+  uint64 stream = 1;
+  optional double timeout = 2;
+}
+
+// Waits on the condition of a stream or an event itself, as a program does with the language's
+// condition variable, while the thread holds the condition. Replies with a bool Value, whether
+// the wait was woken before the timeout, in seconds. A wait can be woken without an update.
+message WaitOnCondition {
+  uint64 stream = 1;
+  double timeout = 2;
+}
+
+// Notifies the threads waiting on the condition of a stream or an event, as a program can with the
+// language's condition variable, with no update. The thread takes the condition to notify it.
+// Replies with no value.
+message NotifyCondition {
+  uint64 stream = 1;
+}
+
+// Adds a callback to a stream. Each call of the callback is written as a Notification.
+message AddCallback {
+  uint64 stream = 1;
+  uint64 callback = 2;
+  Behavior behavior = 3;
+}
+
+message RemoveCallback {
+  uint64 callback = 1;
+}
+
+// Adds a callback the stream, or the event, calls once when it ends. Each call is written as a
+// Notification.
+message AddEndCallback {
+  uint64 stream = 1;
+  uint64 callback = 2;
+  Behavior behavior = 3;
+}
+
+message RemoveEndCallback {
+  uint64 callback = 1;
+}
+
+// Adds a callback the connection calls once per stream update. A testee whose client has none
+// replies with an UNSUPPORTED error.
+message AddUpdateCallback {
+  uint64 callback = 1;
+  Behavior behavior = 2;
+}
+
+message RemoveUpdateCallback {
+  uint64 callback = 1;
+}
+
+// Sets the rate of a stream, in Hertz.
+message SetRate {
+  uint64 stream = 1;
+  float rate = 2;
+}
+
+// Reads the rate of a stream. Replies with a float Value.
+message GetRate {
+  uint64 stream = 1;
+}
+
+// Removes a stream, or an event.
+message Remove {
+  uint64 stream = 1;
+}
+
+// Waits for an event to fire. Replies with a bool Value, whether it fired.
+message WaitEvent {
+  uint64 event = 1;
+  optional double timeout = 2;
+}
+
+// Adds a callback to an event. Each call of the callback is written as a Notification.
+message AddEventCallback {
+  uint64 event = 1;
+  uint64 callback = 2;
+  Behavior behavior = 3;
+}
+
+// Calls a procedure that returns an event in the language's scoping construct, reads the event's
+// stream, and leaves the construct, which removes the event. It then replies with a none Value.
+message ScopeEvent {
+  Invoke invoke = 1;
+}
+
+// Gets the stream of an event, and replies with a new stream handle for it.
+message EventStream {
+  uint64 event = 1;
+}
+
+// Copies a stream or event handle, as the language copies one, and replies with the new handle.
+// In a language where a handle is a reference, both handles name the one object.
+message CopyStream {
+  uint64 stream = 1;
+}
+
+// Drops the testee's handle to a stream or an event, as a program lets go of its reference to
+// one, then collects garbage where the language can. The driver removes no callback added through
+// a dropped handle. Replies with no value.
+message DropHandle {
+  uint64 stream = 1;
+}
+
+// Compares two stream handles, or two event handles, with the language's equality. Replies with
+// a bool Value.
+message CompareHandles {
+  uint64 a = 1;
+  uint64 b = 2;
+}
+
+// Hashes a stream handle, or an event handle, with the language's hash. Replies with a uint64
+// Value, or null in a language whose handles have no hash.
+message HashHandle {
+  uint64 stream = 1;
+}
+
+// Compares two objects, two TestService.TestEnum values or two TestService.TestStruct values
+// with the language's equality.
+// Replies with a bool Value.
+message Compare {
+  Value a = 1;
+  Value b = 2;
+}
+
+// Combines two TestService.TestFlags values with the client's union of flags, such as a | b.
+// Replies with the combination as an enum Value.
+message FlagsUnion {
+  Value a = 1;
+  Value b = 2;
+}
+
+// Tests whether a TestService.TestFlags value holds every flag of another, with the client's test
+// for it. Replies with a bool Value.
+message FlagsContains {
+  Value a = 1;
+  Value b = 2;
+}
+
+// Removes the flags of one TestService.TestFlags value from another, such as a & ~b. Replies with
+// the result as an enum Value.
+message FlagsDifference {
+  Value a = 1;
+  Value b = 2;
+}
+
+// Orders two objects or two TestService.TestStruct values with the language's ordering. Replies
+// with a sint32 Value that is negative, zero or positive as a orders before, with or after b. The
+// testee checks that each of the language's comparison operators agrees with that order, and
+// raises an error if one does not. A testee whose language does not order objects replies with
+// an UNSUPPORTED error.
+message Order {
+  Value a = 1;
+  Value b = 2;
+}
+
+// Hashes an object or a TestService.TestStruct value with the language's hash. Replies with a
+// uint64 Value, or null in a language whose values have no hash.
+message Hash {
+  Value a = 1;
+}
+
+// Gets the server's id for a TestService.TestClass object with the client's helper for it.
+// Replies with a uint64 Value. A null object raises the helper's error.
+message ObjectId {
+  Value a = 1;
+}
+
+// Whether the client's type for an enum or struct of a service, reached through the
+// connection, is the type its generated module declares. Replies with a bool Value.
+message Declared {
+  string service = 1;
+  string name = 2;
+}
+
+// Lists the names the client exposes: its services when no service is given, the members of a
+// service, or the members of a class or the values of an enum of a service. Replies with a list
+// Value of strings, or null in a testee that cannot list them.
+message Members {
+  string service = 1;
+  string name = 2;
+}
+
+// Reports what a program gets for a use of a member of a service, and replies with a list Value
+// of strings, one per signal, empty for a member with none. A testee for a language with
+// run-time warnings uses the member and replies with the warnings the use raises. A testee for a
+// language that warns at compile time replies with the compiler's warnings for a use of the member,
+// or the attribute they come from. A testee for a language with no signal for the kind of member
+// replies with an UNSUPPORTED error.
+message DeprecationSignals {
+  string service = 1;
+  // The server's name for the member, such as "DeprecatedProcedure", "DeprecatedProperty",
+  // "DeprecatedEnum" or "DeprecatedEnum.ValueB", or empty for the service itself.
+  string member = 2;
+  // The call that uses a procedure, method or property, for a testee that uses the member.
+  Invoke invoke = 3;
+  // Whether the test reads the reason in the signals. A testee whose language has no reason in a
+  // signal replies with an UNSUPPORTED error.
+  bool reason = 4;
+  // How the testee uses the procedure of invoke: empty to call it, "stream" to add a stream of it,
+  // "call" to build the call that a stream or a server side function is made from, or "template"
+  // to build its call template, when the invoke has no arguments. A testee whose language has no
+  // signal for the use replies with an UNSUPPORTED error.
+  string use = 5;
+}
+
+// Encodes a value with the client's encoder, and replies with the bytes as a bytes Value. The type
+// is one of the codec types the codec tests name, such as "uint32", "list(nullable uint32)" or
+// "TestStruct". The testee builds the client's type for each.
+message Encode {
+  string type = 1;
+  Value value = 2;
+}
+
+// Decodes bytes with the client's decoder, and replies with the value.
+message Decode {
+  string type = 1;
+  bytes data = 2;
+}
+
+// A value of a kRPC type. The testee converts it to and from the language's own value without
+// its client's encoder, so a bug in the encoder cannot cancel out a bug in the decoder. A Value
+// with no case set is the result of a call that returns nothing.
+message Value {
+  oneof value {
+    bool null = 1;
+    double double = 2;
+    float float = 3;
+    sint32 sint32 = 4;
+    sint64 sint64 = 5;
+    uint32 uint32 = 6;
+    uint64 uint64 = 7;
+    bool bool = 8;
+    string string = 9;
+    bytes bytes = 10;
+    Object object = 11;
+    Enum enum = 12;
+    Items list = 13;
+    Items set = 14;
+    Items tuple = 15;
+    Entries dictionary = 16;
+    Struct struct = 17;
+    // An event handle the testee holds, for an event a call returns
+    uint64 event = 18;
+    // A protobuf message a call returns, serialized by the protobuf library
+    bytes message = 19;
+    // An argument of an Invoke skipped by position, for a testee with the skipped-arguments
+    // profile
+    bool skipped = 20;
+  }
+}
+
+// An enum value. A testee for a dynamically typed client needs the service and name to find
+// the enum type. Other testees may leave them unset.
+message Enum {
+  string service = 1;
+  string name = 2;
+  sint32 value = 3;
+  // Made from the client's generated module for the service, with no connection, for a testee
+  // with the declarations profile.
+  bool declared = 4;
+}
+
+message Items {
+  repeated Value items = 1;
+}
+
+message Entries {
+  repeated Entry entries = 1;
+}
+
+message Entry {
+  Value key = 1;
+  Value value = 2;
+}
+
+// A struct value, with its fields in the order the struct declares them. The service and name
+// are as for an Enum.
+message Struct {
+  string service = 1;
+  string name = 2;
+  repeated Value fields = 3;
+  // As for an Enum.
+  bool declared = 4;
+}
+
+// An object handle the testee holds. Each object a call returns gets a new handle, so two
+// handles can refer to one server object. A handle of 0 asks the testee to make an object of the
+// named class with the given id, as the client's constructor does, which can name an object the
+// server never issued.
+message Object {
+  uint64 handle = 1;
+  // The server's id for the object, as the client reports it.
+  uint64 id = 2;
+  string service = 3;
+  string name = 4;
+}
+
+message Error {
+  enum Kind {
+    reserved 6;
+    reserved "TIMEOUT";
+    KIND_UNSPECIFIED = 0;
+    // An error the server reports, with no native type in the language.
+    SERVER = 1;
+    STREAM = 2;
+    CONNECTION = 3;
+    ENCODING = 4;
+    // The language's own argument error.
+    ARGUMENT = 5;
+    // The client offers no way to do what the command asks, such as a SHOULD it does not
+    // implement.
+    UNSUPPORTED = 7;
+    // The error a callback raised for its fail_fatally behavior.
+    FATAL = 8;
+    // The language's own error for a thread interrupted in a call or a wait.
+    INTERRUPT = 9;
+  }
+  Kind kind = 1;
+  // The service and name of the server exception, for a server error the client has a type for.
+  string service = 2;
+  string name = 3;
+  string message = 4;
+  // The names of the native types the raised error is an instance of. Empty for a client with no
+  // error types.
+  repeated string native_types = 5;
+  // The ConnectionResponse status of a refused connection, such as "DENIED".
+  string status = 6;
+  // The Disconnect reason of a connection the server ended, such as "SERVER_STOPPED".
+  string reason = 7;
+  // The type and message of the error that caused this one, in a language that chains errors.
+  // Empty for an error with no cause.
+  string cause = 8;
+}

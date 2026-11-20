@@ -1,0 +1,49 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.UI
+
+Size Fitter
+===========
+
+
+.. type:: public class SizeFitter
+
+   Sizes a panel to fit what it contains, rather than the other way round.
+   See :meth:`Panel.getSizeFitter()`.
+
+   .. method:: ContentSizeFit getHorizontalFit()
+
+   .. method:: void setHorizontalFit(ContentSizeFit value)
+
+      How the width of the panel is chosen.
+
+   
+
+   .. method:: ContentSizeFit getVerticalFit()
+
+   .. method:: void setVerticalFit(ContentSizeFit value)
+
+      How the height of the panel is chosen.
+
+   
+
+
+
+.. type:: public enum ContentSizeFit
+
+   How a size fitter sizes a panel along one direction.
+
+
+   .. field:: public ContentSizeFit UNCONSTRAINED
+
+      Leave the size alone.
+
+
+   .. field:: public ContentSizeFit MIN_SIZE
+
+      Use the smallest size the contents will fit in.
+
+
+   .. field:: public ContentSizeFit PREFERRED_SIZE
+
+      Use the size the contents ask for.

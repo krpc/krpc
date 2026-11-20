@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Layout Element &#8212; kRPC v0.7.0 documentation</title>
+    <title>Layout Element &#8212; kRPC v0.8.0 documentation</title>
   
   
   
@@ -26,34 +26,37 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=e540dda1" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=6a604523" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=ba67256c" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../../_static/documentation_options.js?v=fe7df9b0"></script>
+    <script src="../../../_static/documentation_options.js?v=486e5634"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../../_static/design-tabs.js?v=fcb327ea"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'cnano/api/ui/layout-element';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
+        DOCUMENTATION_OPTIONS.theme_version = '0.24.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.7.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.8.0';
         DOCUMENTATION_OPTIONS.show_version_warning_banner =
             true;
         </script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <script src="../../../_static/external-links.js?v=e8892020"></script>
     <script src="../../../_static/build-info.js?v=19ceb065"></script>
-    <link rel="canonical" href="https://krpc.github.io/krpc/0.7.0/cnano/api/ui/layout-element.html" />
+    <link rel="canonical" href="https://krpc.github.io/krpc/0.8.0/cnano/api/ui/layout-element.html" />
+    <link rel="icon" href="../../../_static/logo-mark.svg"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Size Fitter" href="size-fitter.html" />
@@ -61,7 +64,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.7.0" />
+  <meta name="docsearch:version" content="0.8.0" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -109,7 +112,7 @@
   
     <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
     <span class="fa-solid fa-bars"></span>
   </button>
   
@@ -128,8 +131,14 @@
   
   
   
+    
+    
+      
+    
+    
+    <img src="../../../_static/logo-on-light.svg" class="logo__image only-light" alt="kRPC"/>
+    <img src="../../../_static/logo-on-dark.svg" class="logo__image only-dark pst-js-only" alt="kRPC"/>
   
-    <p class="title logo__title">kRPC Documentation</p>
   
 </a></div>
     
@@ -157,99 +166,33 @@
 </li>
 
 
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
 <li class="nav-item current active">
-  <a class="nav-link nav-internal" href="../../../cnano.html">
-    C-nano
+  <a class="nav-link nav-internal" href="../../../clients.html">
+    Clients
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../csharp.html">
-    C#
+  <a class="nav-link nav-internal" href="../../../developer-guide.html">
+    Developer Guide
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../cpp.html">
-    C++
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../java.html">
-    Java
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../lua.html">
-    Lua
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../python.html">
-    Python
-  </a>
-</li>
-
-            <li class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button"
-                data-bs-toggle="dropdown" aria-expanded="false"
-                aria-controls="pst-nav-more-links">
-                    More
-                </button>
-                <ul id="pst-nav-more-links" class="dropdown-menu">
-                    
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../../../third-party.html">
-    Other Clients, Services and Scripts
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../../../compiling.html">
-    Compiling kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../../../extending.html">
-    Extending kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../../../communication-protocols.html">
-    Communication Protocols
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../../../internals.html">
-    Internals of kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../../../changelog.html">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
     Changelog
   </a>
 </li>
 
-                </ul>
-            </li>
-            
   </ul>
 </nav></div>
       
@@ -293,14 +236,14 @@
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
   <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
-    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
   </ul>
 </div></div>
       
@@ -316,6 +259,28 @@
           
           
           <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://discord.gg/bXuaTrj" title="Discord" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-discord fa-lg" aria-hidden="true"></i><span class="visually-hidden">Discord</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://forum.kerbalspaceprogram.com/topic/130742-1125-krpc-control-the-game-using-c-c-java-lua-python-ruby-haskell-c-arduino-v060/" title="Forum" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-comments fa-lg" aria-hidden="true"></i><span class="visually-hidden">Forum</span></a>
         </li>
 </ul></div>
       
@@ -335,7 +300,7 @@
   
 
   
-    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page" aria-expanded="false" aria-controls="pst-secondary-sidebar-modal">
       <span class="fa-solid fa-outdent"></span>
     </button>
   
@@ -349,7 +314,7 @@
       
       
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
       <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
@@ -379,79 +344,23 @@
 </li>
 
 
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
 <li class="nav-item current active">
-  <a class="nav-link nav-internal" href="../../../cnano.html">
-    C-nano
+  <a class="nav-link nav-internal" href="../../../clients.html">
+    Clients
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../csharp.html">
-    C#
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../cpp.html">
-    C++
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../java.html">
-    Java
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../lua.html">
-    Lua
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../python.html">
-    Python
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../third-party.html">
-    Other Clients, Services and Scripts
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../compiling.html">
-    Compiling kRPC
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../extending.html">
-    Extending kRPC
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../communication-protocols.html">
-    Communication Protocols
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../internals.html">
-    Internals of kRPC
+  <a class="nav-link nav-internal" href="../../../developer-guide.html">
+    Developer Guide
   </a>
 </li>
 
@@ -496,14 +405,14 @@
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
   <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
-    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
   </ul>
 </div></div>
         
@@ -519,6 +428,28 @@
           
           
           <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://discord.gg/bXuaTrj" title="Discord" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-discord fa-lg" aria-hidden="true"></i><span class="visually-hidden">Discord</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://forum.kerbalspaceprogram.com/topic/130742-1125-krpc-control-the-game-using-c-c-java-lua-python-ruby-haskell-c-arduino-v060/" title="Forum" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-comments fa-lg" aria-hidden="true"></i><span class="visually-hidden">Forum</span></a>
         </li>
 </ul></div>
         
@@ -540,103 +471,1195 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../client.html">C-nano Client</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../krpc.html">KRPC API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../krpc/krpc.html">KRPC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../krpc/expressions.html">Expressions</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../python.html">Python</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/krpc.html">KRPC</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/krpc/krpc.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/krpc/expressions.html">Expressions</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../stdlib.html">Standard Library</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../space-center.html">SpaceCenter API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../space-center/space-center.html">SpaceCenter</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../space-center/vessel.html">Vessel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../space-center/stage.html">Stage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../space-center/editor.html">Editor</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../space-center/celestial-body.html">CelestialBody</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../space-center/flight.html">Flight</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../space-center/orbit.html">Orbit</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../space-center/closest-approach.html">Closest Approach</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../space-center/control.html">Control</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../space-center/comms.html">Communications</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../space-center/parts.html">Parts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../space-center/resources.html">Resources</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../space-center/node.html">Node</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../space-center/reference-frame.html">ReferenceFrame</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../space-center/auto-pilot.html">AutoPilot</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../space-center/camera.html">Camera</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../space-center/waypoints.html">Waypoints</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../space-center/contracts.html">Contracts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../space-center/geometry-types.html">Geometry Types</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../space-center/alarms.html">Alarms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../python/api/stdlib.html">Standard Library</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/space-center.html">SpaceCenter</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/space-center/space-center.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/space-center/vessel.html">Vessel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/space-center/stage.html">Stage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/space-center/editor.html">Editor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/space-center/celestial-body.html">CelestialBody</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/space-center/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/space-center/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/space-center/closest-approach.html">Closest Approach</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/space-center/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/space-center/comms.html">Communications</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/space-center/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/space-center/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/space-center/node.html">Node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/space-center/reference-frame.html">ReferenceFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/space-center/auto-pilot.html">AutoPilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/space-center/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/space-center/waypoints.html">Waypoints</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/space-center/contracts.html">Contracts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/space-center/alarms.html">Alarms</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../drawing.html">Drawing API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../drawing/drawing.html">Drawing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../drawing/arc.html">Arc</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../drawing/box.html">Box</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../drawing/circle.html">Circle</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../drawing/image.html">Image</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../drawing/line.html">Line</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../drawing/map-marker.html">MapMarker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../drawing/navball-marker.html">NavballMarker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../drawing/orbit-path.html">OrbitPath</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../drawing/point.html">Point</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../drawing/polygon.html">Polygon</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../drawing/polyline.html">Polyline</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../drawing/sphere.html">Sphere</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../drawing/text.html">Text</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/drawing.html">Drawing</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/drawing/drawing.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/drawing/arc.html">Arc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/drawing/box.html">Box</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/drawing/circle.html">Circle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/drawing/image.html">Image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/drawing/line.html">Line</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/drawing/map-marker.html">MapMarker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/drawing/navball-marker.html">NavballMarker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/drawing/orbit-path.html">OrbitPath</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/drawing/point.html">Point</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/drawing/polygon.html">Polygon</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/drawing/polyline.html">Polyline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/drawing/sphere.html">Sphere</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/drawing/text.html">Text</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="../ui.html">User Interface API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="ui.html">UI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="canvas.html">Canvas</a></li>
-<li class="toctree-l2"><a class="reference internal" href="panel.html">Panel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="text.html">Text</a></li>
-<li class="toctree-l2"><a class="reference internal" href="button.html">Button</a></li>
-<li class="toctree-l2"><a class="reference internal" href="input-field.html">InputField</a></li>
-<li class="toctree-l2"><a class="reference internal" href="toggle.html">Toggle</a></li>
-<li class="toctree-l2"><a class="reference internal" href="toggle-group.html">Toggle Group</a></li>
-<li class="toctree-l2"><a class="reference internal" href="slider.html">Slider</a></li>
-<li class="toctree-l2"><a class="reference internal" href="dropdown.html">Dropdown</a></li>
-<li class="toctree-l2"><a class="reference internal" href="image.html">Image</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scroll-view.html">Scroll View</a></li>
-<li class="toctree-l2"><a class="reference internal" href="layout.html">Layout</a></li>
-<li class="toctree-l2 current active"><a aria-current="page" class="current reference internal" href="#">Layout Element</a></li>
-<li class="toctree-l2"><a class="reference internal" href="size-fitter.html">Size Fitter</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rect-transform.html">Rect Transform</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/ui.html">User Interface</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ui/ui.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ui/canvas.html">Canvas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ui/panel.html">Panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ui/text.html">Text</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ui/button.html">Button</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ui/input-field.html">InputField</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ui/toggle.html">Toggle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ui/toggle-group.html">Toggle Group</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ui/slider.html">Slider</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ui/dropdown.html">Dropdown</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ui/image.html">Image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ui/scroll-view.html">Scroll View</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ui/layout.html">Layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ui/layout-element.html">Layout Element</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ui/size-fitter.html">Size Fitter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ui/rect-transform.html">Rect Transform</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../infernal-robotics.html">InfernalRobotics API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../infernal-robotics/infernal-robotics.html">InfernalRobotics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../infernal-robotics/servo-group.html">ServoGroup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../infernal-robotics/servo.html">Servo</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/debug.html">Debug</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/debug/debug.html">Service</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../kerbal-alarm-clock.html">Kerbal Alarm Clock API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/kerbal-alarm-clock.html">KerbalAlarmClock</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/alarm.html">Alarm</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/alarm-type.html">AlarmType</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/alarm-action.html">AlarmAction</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/docking-camera.html">Docking Camera</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/docking-camera/docking-camera.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/docking-camera/camera.html">Camera</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../remote-tech.html">RemoteTech API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../remote-tech/remote-tech.html">RemoteTech</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../remote-tech/comms.html">Comms</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../remote-tech/antenna.html">Antenna</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/infernal-robotics.html">InfernalRobotics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/infernal-robotics/infernal-robotics.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/infernal-robotics/servo-group.html">ServoGroup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/infernal-robotics/servo.html">Servo</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../lidar.html">LIDAR API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../lidar/lidar.html">LIDAR</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../lidar/laser.html">Laser</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/kerbal-alarm-clock.html">Kerbal Alarm Clock</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/kerbal-alarm-clock/kerbal-alarm-clock.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/kerbal-alarm-clock/alarm.html">Alarm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/kerbal-alarm-clock/alarm-type.html">AlarmType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/kerbal-alarm-clock/alarm-action.html">AlarmAction</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../docking-camera.html">Docking Camera API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../docking-camera/docking-camera.html">DockingCamera</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../docking-camera/camera.html">Camera</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/kerbal-engineer-redux.html">Kerbal Engineer Redux</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/kerbal-engineer-redux/kerbal-engineer-redux.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/kerbal-engineer-redux/impact.html">Impact</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/kerbal-engineer-redux/suicide-burn.html">Suicide Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/kerbal-engineer-redux/stage.html">Stage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/kerbal-engineer-redux/burn-time.html">Burn Time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/kerbal-engineer-redux/rendezvous.html">Rendezvous</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../debug.html">Debug API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../debug/debug.html">Debug</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/lidar.html">LIDAR</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/lidar/lidar.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/lidar/laser.html">Laser</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/mechjeb.html">MechJeb</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/mechjeb/mechjeb.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/mechjeb/ascent-guidance.html">AscentGuidance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/mechjeb/utilities.html">Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/mechjeb/maneuver-planner.html">ManeuverPlanner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/mechjeb/landing-guidance.html">LandingGuidance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/mechjeb/rendezvous-autopilot.html">RendezvousAutopilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/mechjeb/docking-autopilot.html">DockingAutopilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/mechjeb/aircraft-autopilot.html">AircraftAutopilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/mechjeb/aircraft-approach.html">AircraftApproach</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/mechjeb/rover-autopilot.html">RoverAutopilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/mechjeb/smart-ass.html">SmartASS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/mechjeb/smart-rcs.html">SmartRCS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/mechjeb/translatron.html">Translatron</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/mechjeb/attitude-adjustment.html">AttitudeAdjustment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/mechjeb/target-controller.html">TargetController</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/mechjeb/migration.html">Migration from KRPC.MechJeb 0.7.1</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/raster-prop-monitor.html">Raster Prop Monitor</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/raster-prop-monitor/raster-prop-monitor.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/raster-prop-monitor/computer.html">Computer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/raster-prop-monitor/monitor.html">Monitor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/raster-prop-monitor/display.html">Display</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/raster-prop-monitor/external-camera.html">External Camera</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/remote-tech.html">RemoteTech</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/remote-tech/remote-tech.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/remote-tech/comms.html">Comms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/remote-tech/antenna.html">Antenna</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/scansat.html">SCANsat</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/scansat/scansat.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/scansat/scanner.html">Scanner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/scansat/map.html">Map</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/trajectories.html">Trajectories</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/trajectories/trajectories.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/trajectories/patch.html">Patch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/trajectories/descent-profile.html">DescentProfile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/trajectories/descent-profile-node.html">DescentProfileNode</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../csharp.html">C#</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../csharp/api/krpc.html">KRPC</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/krpc/krpc.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/krpc/expressions.html">Expressions</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../csharp/api/stdlib.html">Standard Library</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../csharp/api/space-center.html">SpaceCenter</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/space-center/space-center.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/space-center/vessel.html">Vessel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/space-center/stage.html">Stage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/space-center/editor.html">Editor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/space-center/celestial-body.html">CelestialBody</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/space-center/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/space-center/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/space-center/closest-approach.html">Closest Approach</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/space-center/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/space-center/comms.html">Communications</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/space-center/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/space-center/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/space-center/node.html">Node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/space-center/reference-frame.html">ReferenceFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/space-center/auto-pilot.html">AutoPilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/space-center/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/space-center/waypoints.html">Waypoints</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/space-center/contracts.html">Contracts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/space-center/alarms.html">Alarms</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../csharp/api/drawing.html">Drawing</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/drawing/drawing.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/drawing/arc.html">Arc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/drawing/box.html">Box</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/drawing/circle.html">Circle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/drawing/image.html">Image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/drawing/line.html">Line</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/drawing/map-marker.html">MapMarker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/drawing/navball-marker.html">NavballMarker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/drawing/orbit-path.html">OrbitPath</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/drawing/point.html">Point</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/drawing/polygon.html">Polygon</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/drawing/polyline.html">Polyline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/drawing/sphere.html">Sphere</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/drawing/text.html">Text</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../csharp/api/ui.html">User Interface</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ui/ui.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ui/canvas.html">Canvas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ui/panel.html">Panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ui/text.html">Text</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ui/button.html">Button</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ui/input-field.html">InputField</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ui/toggle.html">Toggle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ui/toggle-group.html">Toggle Group</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ui/slider.html">Slider</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ui/dropdown.html">Dropdown</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ui/image.html">Image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ui/scroll-view.html">Scroll View</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ui/layout.html">Layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ui/layout-element.html">Layout Element</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ui/size-fitter.html">Size Fitter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ui/rect-transform.html">Rect Transform</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../csharp/api/debug.html">Debug</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/debug/debug.html">Service</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../csharp/api/docking-camera.html">Docking Camera</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/docking-camera/docking-camera.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/docking-camera/camera.html">Camera</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../csharp/api/infernal-robotics.html">InfernalRobotics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/infernal-robotics/infernal-robotics.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/infernal-robotics/servo-group.html">ServoGroup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/infernal-robotics/servo.html">Servo</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../csharp/api/kerbal-alarm-clock.html">Kerbal Alarm Clock</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/kerbal-alarm-clock/kerbal-alarm-clock.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/kerbal-alarm-clock/alarm.html">Alarm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/kerbal-alarm-clock/alarm-type.html">AlarmType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/kerbal-alarm-clock/alarm-action.html">AlarmAction</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../csharp/api/kerbal-engineer-redux.html">Kerbal Engineer Redux</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/kerbal-engineer-redux/kerbal-engineer-redux.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/kerbal-engineer-redux/impact.html">Impact</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/kerbal-engineer-redux/suicide-burn.html">Suicide Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/kerbal-engineer-redux/stage.html">Stage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/kerbal-engineer-redux/burn-time.html">Burn Time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/kerbal-engineer-redux/rendezvous.html">Rendezvous</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../csharp/api/lidar.html">LIDAR</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/lidar/lidar.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/lidar/laser.html">Laser</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../csharp/api/mechjeb.html">MechJeb</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/mechjeb/mechjeb.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/mechjeb/ascent-guidance.html">AscentGuidance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/mechjeb/utilities.html">Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/mechjeb/maneuver-planner.html">ManeuverPlanner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/mechjeb/landing-guidance.html">LandingGuidance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/mechjeb/rendezvous-autopilot.html">RendezvousAutopilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/mechjeb/docking-autopilot.html">DockingAutopilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/mechjeb/aircraft-autopilot.html">AircraftAutopilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/mechjeb/aircraft-approach.html">AircraftApproach</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/mechjeb/rover-autopilot.html">RoverAutopilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/mechjeb/smart-ass.html">SmartASS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/mechjeb/smart-rcs.html">SmartRCS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/mechjeb/translatron.html">Translatron</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/mechjeb/attitude-adjustment.html">AttitudeAdjustment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/mechjeb/target-controller.html">TargetController</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/mechjeb/migration.html">Migration from KRPC.MechJeb 0.7.1</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../csharp/api/raster-prop-monitor.html">Raster Prop Monitor</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/raster-prop-monitor/raster-prop-monitor.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/raster-prop-monitor/computer.html">Computer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/raster-prop-monitor/monitor.html">Monitor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/raster-prop-monitor/display.html">Display</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/raster-prop-monitor/external-camera.html">External Camera</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../csharp/api/remote-tech.html">RemoteTech</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/remote-tech/remote-tech.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/remote-tech/comms.html">Comms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/remote-tech/antenna.html">Antenna</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../csharp/api/scansat.html">SCANsat</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/scansat/scansat.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/scansat/scanner.html">Scanner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/scansat/map.html">Map</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../csharp/api/trajectories.html">Trajectories</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/trajectories/trajectories.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/trajectories/patch.html">Patch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/trajectories/descent-profile.html">DescentProfile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/trajectories/descent-profile-node.html">DescentProfileNode</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../cpp.html">C++</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cpp/api/krpc.html">KRPC</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/krpc/krpc.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/krpc/expressions.html">Expressions</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../cpp/api/stdlib.html">Standard Library</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cpp/api/space-center.html">SpaceCenter</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/space-center/space-center.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/space-center/vessel.html">Vessel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/space-center/stage.html">Stage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/space-center/editor.html">Editor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/space-center/celestial-body.html">CelestialBody</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/space-center/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/space-center/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/space-center/closest-approach.html">Closest Approach</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/space-center/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/space-center/comms.html">Communications</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/space-center/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/space-center/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/space-center/node.html">Node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/space-center/reference-frame.html">ReferenceFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/space-center/auto-pilot.html">AutoPilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/space-center/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/space-center/waypoints.html">Waypoints</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/space-center/contracts.html">Contracts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/space-center/alarms.html">Alarms</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cpp/api/drawing.html">Drawing</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/drawing/drawing.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/drawing/arc.html">Arc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/drawing/box.html">Box</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/drawing/circle.html">Circle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/drawing/image.html">Image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/drawing/line.html">Line</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/drawing/map-marker.html">MapMarker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/drawing/navball-marker.html">NavballMarker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/drawing/orbit-path.html">OrbitPath</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/drawing/point.html">Point</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/drawing/polygon.html">Polygon</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/drawing/polyline.html">Polyline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/drawing/sphere.html">Sphere</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/drawing/text.html">Text</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cpp/api/ui.html">User Interface</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ui/ui.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ui/canvas.html">Canvas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ui/panel.html">Panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ui/text.html">Text</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ui/button.html">Button</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ui/input-field.html">InputField</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ui/toggle.html">Toggle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ui/toggle-group.html">Toggle Group</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ui/slider.html">Slider</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ui/dropdown.html">Dropdown</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ui/image.html">Image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ui/scroll-view.html">Scroll View</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ui/layout.html">Layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ui/layout-element.html">Layout Element</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ui/size-fitter.html">Size Fitter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ui/rect-transform.html">Rect Transform</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cpp/api/debug.html">Debug</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/debug/debug.html">Service</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cpp/api/docking-camera.html">Docking Camera</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/docking-camera/docking-camera.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/docking-camera/camera.html">Camera</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cpp/api/infernal-robotics.html">InfernalRobotics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/infernal-robotics/infernal-robotics.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/infernal-robotics/servo-group.html">ServoGroup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/infernal-robotics/servo.html">Servo</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cpp/api/kerbal-alarm-clock.html">Kerbal Alarm Clock</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/kerbal-alarm-clock/kerbal-alarm-clock.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/kerbal-alarm-clock/alarm.html">Alarm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/kerbal-alarm-clock/alarm-type.html">AlarmType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/kerbal-alarm-clock/alarm-action.html">AlarmAction</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cpp/api/kerbal-engineer-redux.html">Kerbal Engineer Redux</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/kerbal-engineer-redux/kerbal-engineer-redux.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/kerbal-engineer-redux/impact.html">Impact</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/kerbal-engineer-redux/suicide-burn.html">Suicide Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/kerbal-engineer-redux/stage.html">Stage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/kerbal-engineer-redux/burn-time.html">Burn Time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/kerbal-engineer-redux/rendezvous.html">Rendezvous</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cpp/api/lidar.html">LIDAR</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/lidar/lidar.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/lidar/laser.html">Laser</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cpp/api/mechjeb.html">MechJeb</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/mechjeb/mechjeb.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/mechjeb/ascent-guidance.html">AscentGuidance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/mechjeb/utilities.html">Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/mechjeb/maneuver-planner.html">ManeuverPlanner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/mechjeb/landing-guidance.html">LandingGuidance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/mechjeb/rendezvous-autopilot.html">RendezvousAutopilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/mechjeb/docking-autopilot.html">DockingAutopilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/mechjeb/aircraft-autopilot.html">AircraftAutopilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/mechjeb/aircraft-approach.html">AircraftApproach</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/mechjeb/rover-autopilot.html">RoverAutopilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/mechjeb/smart-ass.html">SmartASS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/mechjeb/smart-rcs.html">SmartRCS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/mechjeb/translatron.html">Translatron</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/mechjeb/attitude-adjustment.html">AttitudeAdjustment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/mechjeb/target-controller.html">TargetController</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/mechjeb/migration.html">Migration from KRPC.MechJeb 0.7.1</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cpp/api/raster-prop-monitor.html">Raster Prop Monitor</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/raster-prop-monitor/raster-prop-monitor.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/raster-prop-monitor/computer.html">Computer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/raster-prop-monitor/monitor.html">Monitor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/raster-prop-monitor/display.html">Display</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/raster-prop-monitor/external-camera.html">External Camera</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cpp/api/remote-tech.html">RemoteTech</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/remote-tech/remote-tech.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/remote-tech/comms.html">Comms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/remote-tech/antenna.html">Antenna</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cpp/api/scansat.html">SCANsat</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/scansat/scansat.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/scansat/scanner.html">Scanner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/scansat/map.html">Map</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cpp/api/trajectories.html">Trajectories</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/trajectories/trajectories.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/trajectories/patch.html">Patch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/trajectories/descent-profile.html">DescentProfile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/trajectories/descent-profile-node.html">DescentProfileNode</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../../cnano.html">C-nano</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../krpc.html">KRPC</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../krpc/krpc.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../krpc/expressions.html">Expressions</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../stdlib.html">Standard Library</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../space-center.html">SpaceCenter</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../space-center/space-center.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../space-center/vessel.html">Vessel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../space-center/stage.html">Stage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../space-center/editor.html">Editor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../space-center/celestial-body.html">CelestialBody</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../space-center/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../space-center/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../space-center/closest-approach.html">Closest Approach</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../space-center/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../space-center/comms.html">Communications</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../space-center/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../space-center/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../space-center/node.html">Node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../space-center/reference-frame.html">ReferenceFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../space-center/auto-pilot.html">AutoPilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../space-center/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../space-center/waypoints.html">Waypoints</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../space-center/contracts.html">Contracts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../space-center/alarms.html">Alarms</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../drawing.html">Drawing</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../drawing/drawing.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../drawing/arc.html">Arc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../drawing/box.html">Box</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../drawing/circle.html">Circle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../drawing/image.html">Image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../drawing/line.html">Line</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../drawing/map-marker.html">MapMarker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../drawing/navball-marker.html">NavballMarker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../drawing/orbit-path.html">OrbitPath</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../drawing/point.html">Point</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../drawing/polygon.html">Polygon</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../drawing/polyline.html">Polyline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../drawing/sphere.html">Sphere</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../drawing/text.html">Text</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../ui.html">User Interface</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ui.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="canvas.html">Canvas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="panel.html">Panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="text.html">Text</a></li>
+<li class="toctree-l3"><a class="reference internal" href="button.html">Button</a></li>
+<li class="toctree-l3"><a class="reference internal" href="input-field.html">InputField</a></li>
+<li class="toctree-l3"><a class="reference internal" href="toggle.html">Toggle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="toggle-group.html">Toggle Group</a></li>
+<li class="toctree-l3"><a class="reference internal" href="slider.html">Slider</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dropdown.html">Dropdown</a></li>
+<li class="toctree-l3"><a class="reference internal" href="image.html">Image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="scroll-view.html">Scroll View</a></li>
+<li class="toctree-l3"><a class="reference internal" href="layout.html">Layout</a></li>
+<li class="toctree-l3 current active"><a aria-current="page" class="current reference internal" href="#">Layout Element</a></li>
+<li class="toctree-l3"><a class="reference internal" href="size-fitter.html">Size Fitter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rect-transform.html">Rect Transform</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../debug.html">Debug</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../debug/debug.html">Service</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../docking-camera.html">Docking Camera</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../docking-camera/docking-camera.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docking-camera/camera.html">Camera</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../infernal-robotics.html">InfernalRobotics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../infernal-robotics/infernal-robotics.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../infernal-robotics/servo-group.html">ServoGroup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../infernal-robotics/servo.html">Servo</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../kerbal-alarm-clock.html">Kerbal Alarm Clock</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../kerbal-alarm-clock/kerbal-alarm-clock.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../kerbal-alarm-clock/alarm.html">Alarm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../kerbal-alarm-clock/alarm-type.html">AlarmType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../kerbal-alarm-clock/alarm-action.html">AlarmAction</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../kerbal-engineer-redux.html">Kerbal Engineer Redux</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../kerbal-engineer-redux/kerbal-engineer-redux.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../kerbal-engineer-redux/impact.html">Impact</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../kerbal-engineer-redux/suicide-burn.html">Suicide Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../kerbal-engineer-redux/stage.html">Stage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../kerbal-engineer-redux/burn-time.html">Burn Time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../kerbal-engineer-redux/rendezvous.html">Rendezvous</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../lidar.html">LIDAR</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../lidar/lidar.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../lidar/laser.html">Laser</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../mechjeb.html">MechJeb</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../mechjeb/mechjeb.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../mechjeb/ascent-guidance.html">AscentGuidance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../mechjeb/utilities.html">Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../mechjeb/maneuver-planner.html">ManeuverPlanner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../mechjeb/landing-guidance.html">LandingGuidance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../mechjeb/rendezvous-autopilot.html">RendezvousAutopilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../mechjeb/docking-autopilot.html">DockingAutopilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../mechjeb/aircraft-autopilot.html">AircraftAutopilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../mechjeb/aircraft-approach.html">AircraftApproach</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../mechjeb/rover-autopilot.html">RoverAutopilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../mechjeb/smart-ass.html">SmartASS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../mechjeb/smart-rcs.html">SmartRCS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../mechjeb/translatron.html">Translatron</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../mechjeb/attitude-adjustment.html">AttitudeAdjustment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../mechjeb/target-controller.html">TargetController</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../mechjeb/migration.html">Migration from KRPC.MechJeb 0.7.1</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../raster-prop-monitor.html">Raster Prop Monitor</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../raster-prop-monitor/raster-prop-monitor.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../raster-prop-monitor/computer.html">Computer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../raster-prop-monitor/monitor.html">Monitor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../raster-prop-monitor/display.html">Display</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../raster-prop-monitor/external-camera.html">External Camera</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../remote-tech.html">RemoteTech</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../remote-tech/remote-tech.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../remote-tech/comms.html">Comms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../remote-tech/antenna.html">Antenna</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../scansat.html">SCANsat</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../scansat/scansat.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scansat/scanner.html">Scanner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scansat/map.html">Map</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../trajectories.html">Trajectories</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../trajectories/trajectories.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../trajectories/patch.html">Patch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../trajectories/descent-profile.html">DescentProfile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../trajectories/descent-profile-node.html">DescentProfileNode</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../java.html">Java</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../java/api/krpc.html">KRPC</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/krpc/krpc.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/krpc/expressions.html">Expressions</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../java/api/stdlib.html">Standard Library</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../java/api/space-center.html">SpaceCenter</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/space-center/space-center.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/space-center/vessel.html">Vessel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/space-center/stage.html">Stage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/space-center/editor.html">Editor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/space-center/celestial-body.html">CelestialBody</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/space-center/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/space-center/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/space-center/closest-approach.html">Closest Approach</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/space-center/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/space-center/comms.html">Communications</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/space-center/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/space-center/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/space-center/node.html">Node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/space-center/reference-frame.html">ReferenceFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/space-center/auto-pilot.html">AutoPilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/space-center/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/space-center/waypoints.html">Waypoints</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/space-center/contracts.html">Contracts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/space-center/alarms.html">Alarms</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../java/api/drawing.html">Drawing</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/drawing/drawing.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/drawing/arc.html">Arc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/drawing/box.html">Box</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/drawing/circle.html">Circle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/drawing/image.html">Image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/drawing/line.html">Line</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/drawing/map-marker.html">MapMarker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/drawing/navball-marker.html">NavballMarker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/drawing/orbit-path.html">OrbitPath</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/drawing/point.html">Point</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/drawing/polygon.html">Polygon</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/drawing/polyline.html">Polyline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/drawing/sphere.html">Sphere</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/drawing/text.html">Text</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../java/api/ui.html">User Interface</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ui/ui.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ui/canvas.html">Canvas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ui/panel.html">Panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ui/text.html">Text</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ui/button.html">Button</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ui/input-field.html">InputField</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ui/toggle.html">Toggle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ui/toggle-group.html">Toggle Group</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ui/slider.html">Slider</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ui/dropdown.html">Dropdown</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ui/image.html">Image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ui/scroll-view.html">Scroll View</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ui/layout.html">Layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ui/layout-element.html">Layout Element</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ui/size-fitter.html">Size Fitter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ui/rect-transform.html">Rect Transform</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../java/api/debug.html">Debug</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/debug/debug.html">Service</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../java/api/docking-camera.html">Docking Camera</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/docking-camera/docking-camera.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/docking-camera/camera.html">Camera</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../java/api/infernal-robotics.html">InfernalRobotics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/infernal-robotics/infernal-robotics.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/infernal-robotics/servo-group.html">ServoGroup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/infernal-robotics/servo.html">Servo</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../java/api/kerbal-alarm-clock.html">Kerbal Alarm Clock</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/kerbal-alarm-clock/kerbal-alarm-clock.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/kerbal-alarm-clock/alarm.html">Alarm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/kerbal-alarm-clock/alarm-type.html">AlarmType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/kerbal-alarm-clock/alarm-action.html">AlarmAction</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../java/api/kerbal-engineer-redux.html">Kerbal Engineer Redux</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/kerbal-engineer-redux/kerbal-engineer-redux.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/kerbal-engineer-redux/impact.html">Impact</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/kerbal-engineer-redux/suicide-burn.html">Suicide Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/kerbal-engineer-redux/stage.html">Stage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/kerbal-engineer-redux/burn-time.html">Burn Time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/kerbal-engineer-redux/rendezvous.html">Rendezvous</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../java/api/lidar.html">LIDAR</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/lidar/lidar.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/lidar/laser.html">Laser</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../java/api/mechjeb.html">MechJeb</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/mechjeb/mechjeb.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/mechjeb/ascent-guidance.html">AscentGuidance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/mechjeb/utilities.html">Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/mechjeb/maneuver-planner.html">ManeuverPlanner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/mechjeb/landing-guidance.html">LandingGuidance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/mechjeb/rendezvous-autopilot.html">RendezvousAutopilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/mechjeb/docking-autopilot.html">DockingAutopilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/mechjeb/aircraft-autopilot.html">AircraftAutopilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/mechjeb/aircraft-approach.html">AircraftApproach</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/mechjeb/rover-autopilot.html">RoverAutopilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/mechjeb/smart-ass.html">SmartASS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/mechjeb/smart-rcs.html">SmartRCS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/mechjeb/translatron.html">Translatron</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/mechjeb/attitude-adjustment.html">AttitudeAdjustment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/mechjeb/target-controller.html">TargetController</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/mechjeb/migration.html">Migration from KRPC.MechJeb 0.7.1</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../java/api/raster-prop-monitor.html">Raster Prop Monitor</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/raster-prop-monitor/raster-prop-monitor.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/raster-prop-monitor/computer.html">Computer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/raster-prop-monitor/monitor.html">Monitor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/raster-prop-monitor/display.html">Display</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/raster-prop-monitor/external-camera.html">External Camera</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../java/api/remote-tech.html">RemoteTech</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/remote-tech/remote-tech.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/remote-tech/comms.html">Comms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/remote-tech/antenna.html">Antenna</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../java/api/scansat.html">SCANsat</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/scansat/scansat.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/scansat/scanner.html">Scanner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/scansat/map.html">Map</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../java/api/trajectories.html">Trajectories</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/trajectories/trajectories.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/trajectories/patch.html">Patch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/trajectories/descent-profile.html">DescentProfile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/trajectories/descent-profile-node.html">DescentProfileNode</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../lua.html">Lua</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../lua/api/krpc.html">KRPC</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/krpc/krpc.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/krpc/expressions.html">Expressions</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../lua/api/stdlib.html">Standard Library</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../lua/api/space-center.html">SpaceCenter</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/space-center/space-center.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/space-center/vessel.html">Vessel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/space-center/stage.html">Stage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/space-center/editor.html">Editor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/space-center/celestial-body.html">CelestialBody</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/space-center/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/space-center/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/space-center/closest-approach.html">Closest Approach</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/space-center/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/space-center/comms.html">Communications</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/space-center/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/space-center/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/space-center/node.html">Node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/space-center/reference-frame.html">ReferenceFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/space-center/auto-pilot.html">AutoPilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/space-center/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/space-center/waypoints.html">Waypoints</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/space-center/contracts.html">Contracts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/space-center/alarms.html">Alarms</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../lua/api/drawing.html">Drawing</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/drawing/drawing.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/drawing/arc.html">Arc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/drawing/box.html">Box</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/drawing/circle.html">Circle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/drawing/image.html">Image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/drawing/line.html">Line</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/drawing/map-marker.html">MapMarker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/drawing/navball-marker.html">NavballMarker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/drawing/orbit-path.html">OrbitPath</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/drawing/point.html">Point</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/drawing/polygon.html">Polygon</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/drawing/polyline.html">Polyline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/drawing/sphere.html">Sphere</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/drawing/text.html">Text</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../lua/api/ui.html">User Interface</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ui/ui.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ui/canvas.html">Canvas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ui/panel.html">Panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ui/text.html">Text</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ui/button.html">Button</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ui/input-field.html">InputField</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ui/toggle.html">Toggle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ui/toggle-group.html">Toggle Group</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ui/slider.html">Slider</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ui/dropdown.html">Dropdown</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ui/image.html">Image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ui/scroll-view.html">Scroll View</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ui/layout.html">Layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ui/layout-element.html">Layout Element</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ui/size-fitter.html">Size Fitter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ui/rect-transform.html">Rect Transform</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../lua/api/debug.html">Debug</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/debug/debug.html">Service</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../lua/api/docking-camera.html">Docking Camera</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/docking-camera/docking-camera.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/docking-camera/camera.html">Camera</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../lua/api/infernal-robotics.html">InfernalRobotics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/infernal-robotics/infernal-robotics.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/infernal-robotics/servo-group.html">ServoGroup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/infernal-robotics/servo.html">Servo</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../lua/api/kerbal-alarm-clock.html">Kerbal Alarm Clock</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/kerbal-alarm-clock/kerbal-alarm-clock.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/kerbal-alarm-clock/alarm.html">Alarm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/kerbal-alarm-clock/alarm-type.html">AlarmType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/kerbal-alarm-clock/alarm-action.html">AlarmAction</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../lua/api/kerbal-engineer-redux.html">Kerbal Engineer Redux</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/kerbal-engineer-redux/kerbal-engineer-redux.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/kerbal-engineer-redux/impact.html">Impact</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/kerbal-engineer-redux/suicide-burn.html">Suicide Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/kerbal-engineer-redux/stage.html">Stage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/kerbal-engineer-redux/burn-time.html">Burn Time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/kerbal-engineer-redux/rendezvous.html">Rendezvous</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../lua/api/lidar.html">LIDAR</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/lidar/lidar.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/lidar/laser.html">Laser</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../lua/api/mechjeb.html">MechJeb</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/mechjeb/mechjeb.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/mechjeb/ascent-guidance.html">AscentGuidance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/mechjeb/utilities.html">Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/mechjeb/maneuver-planner.html">ManeuverPlanner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/mechjeb/landing-guidance.html">LandingGuidance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/mechjeb/rendezvous-autopilot.html">RendezvousAutopilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/mechjeb/docking-autopilot.html">DockingAutopilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/mechjeb/aircraft-autopilot.html">AircraftAutopilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/mechjeb/aircraft-approach.html">AircraftApproach</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/mechjeb/rover-autopilot.html">RoverAutopilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/mechjeb/smart-ass.html">SmartASS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/mechjeb/smart-rcs.html">SmartRCS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/mechjeb/translatron.html">Translatron</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/mechjeb/attitude-adjustment.html">AttitudeAdjustment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/mechjeb/target-controller.html">TargetController</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/mechjeb/migration.html">Migration from KRPC.MechJeb 0.7.1</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../lua/api/raster-prop-monitor.html">Raster Prop Monitor</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/raster-prop-monitor/raster-prop-monitor.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/raster-prop-monitor/computer.html">Computer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/raster-prop-monitor/monitor.html">Monitor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/raster-prop-monitor/display.html">Display</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/raster-prop-monitor/external-camera.html">External Camera</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../lua/api/remote-tech.html">RemoteTech</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/remote-tech/remote-tech.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/remote-tech/comms.html">Comms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/remote-tech/antenna.html">Antenna</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../lua/api/scansat.html">SCANsat</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/scansat/scansat.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/scansat/scanner.html">Scanner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/scansat/map.html">Map</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../lua/api/trajectories.html">Trajectories</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/trajectories/trajectories.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/trajectories/patch.html">Patch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/trajectories/descent-profile.html">DescentProfile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/trajectories/descent-profile-node.html">DescentProfileNode</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../js.html">JavaScript</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../js/api/krpc.html">KRPC</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/krpc/krpc.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/krpc/expressions.html">Expressions</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../js/api/stdlib.html">Standard Library</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../js/api/space-center.html">SpaceCenter</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/space-center/space-center.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/space-center/vessel.html">Vessel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/space-center/stage.html">Stage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/space-center/editor.html">Editor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/space-center/celestial-body.html">CelestialBody</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/space-center/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/space-center/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/space-center/closest-approach.html">Closest Approach</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/space-center/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/space-center/comms.html">Communications</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/space-center/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/space-center/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/space-center/node.html">Node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/space-center/reference-frame.html">ReferenceFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/space-center/auto-pilot.html">AutoPilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/space-center/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/space-center/waypoints.html">Waypoints</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/space-center/contracts.html">Contracts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/space-center/alarms.html">Alarms</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../js/api/drawing.html">Drawing</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/drawing/drawing.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/drawing/arc.html">Arc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/drawing/box.html">Box</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/drawing/circle.html">Circle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/drawing/image.html">Image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/drawing/line.html">Line</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/drawing/map-marker.html">MapMarker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/drawing/navball-marker.html">NavballMarker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/drawing/orbit-path.html">OrbitPath</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/drawing/point.html">Point</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/drawing/polygon.html">Polygon</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/drawing/polyline.html">Polyline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/drawing/sphere.html">Sphere</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/drawing/text.html">Text</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../js/api/ui.html">User Interface</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ui/ui.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ui/canvas.html">Canvas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ui/panel.html">Panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ui/text.html">Text</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ui/button.html">Button</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ui/input-field.html">InputField</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ui/toggle.html">Toggle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ui/toggle-group.html">Toggle Group</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ui/slider.html">Slider</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ui/dropdown.html">Dropdown</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ui/image.html">Image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ui/scroll-view.html">Scroll View</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ui/layout.html">Layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ui/layout-element.html">Layout Element</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ui/size-fitter.html">Size Fitter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ui/rect-transform.html">Rect Transform</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../js/api/debug.html">Debug</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/debug/debug.html">Service</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../js/api/docking-camera.html">Docking Camera</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/docking-camera/docking-camera.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/docking-camera/camera.html">Camera</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../js/api/infernal-robotics.html">InfernalRobotics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/infernal-robotics/infernal-robotics.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/infernal-robotics/servo-group.html">ServoGroup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/infernal-robotics/servo.html">Servo</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../js/api/kerbal-alarm-clock.html">Kerbal Alarm Clock</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/kerbal-alarm-clock/kerbal-alarm-clock.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/kerbal-alarm-clock/alarm.html">Alarm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/kerbal-alarm-clock/alarm-type.html">AlarmType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/kerbal-alarm-clock/alarm-action.html">AlarmAction</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../js/api/kerbal-engineer-redux.html">Kerbal Engineer Redux</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/kerbal-engineer-redux/kerbal-engineer-redux.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/kerbal-engineer-redux/impact.html">Impact</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/kerbal-engineer-redux/suicide-burn.html">Suicide Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/kerbal-engineer-redux/stage.html">Stage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/kerbal-engineer-redux/burn-time.html">Burn Time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/kerbal-engineer-redux/rendezvous.html">Rendezvous</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../js/api/lidar.html">LIDAR</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/lidar/lidar.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/lidar/laser.html">Laser</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../js/api/mechjeb.html">MechJeb</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/mechjeb/mechjeb.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/mechjeb/ascent-guidance.html">AscentGuidance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/mechjeb/utilities.html">Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/mechjeb/maneuver-planner.html">ManeuverPlanner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/mechjeb/landing-guidance.html">LandingGuidance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/mechjeb/rendezvous-autopilot.html">RendezvousAutopilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/mechjeb/docking-autopilot.html">DockingAutopilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/mechjeb/aircraft-autopilot.html">AircraftAutopilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/mechjeb/aircraft-approach.html">AircraftApproach</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/mechjeb/rover-autopilot.html">RoverAutopilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/mechjeb/smart-ass.html">SmartASS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/mechjeb/smart-rcs.html">SmartRCS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/mechjeb/translatron.html">Translatron</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/mechjeb/attitude-adjustment.html">AttitudeAdjustment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/mechjeb/target-controller.html">TargetController</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/mechjeb/migration.html">Migration from KRPC.MechJeb 0.7.1</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../js/api/raster-prop-monitor.html">Raster Prop Monitor</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/raster-prop-monitor/raster-prop-monitor.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/raster-prop-monitor/computer.html">Computer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/raster-prop-monitor/monitor.html">Monitor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/raster-prop-monitor/display.html">Display</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/raster-prop-monitor/external-camera.html">External Camera</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../js/api/remote-tech.html">RemoteTech</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/remote-tech/remote-tech.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/remote-tech/comms.html">Comms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/remote-tech/antenna.html">Antenna</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../js/api/scansat.html">SCANsat</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/scansat/scansat.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/scansat/scanner.html">Scanner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/scansat/map.html">Map</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../js/api/trajectories.html">Trajectories</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/trajectories/trajectories.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/trajectories/patch.html">Patch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/trajectories/descent-profile.html">DescentProfile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/trajectories/descent-profile-node.html">DescentProfileNode</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../http.html">HTTP</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../http/api/krpc.html">KRPC</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/krpc/krpc.html">Service</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../http/api/stdlib.html">Standard Library</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../http/api/space-center.html">SpaceCenter</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/space-center/space-center.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/space-center/vessel.html">Vessel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/space-center/stage.html">Stage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/space-center/editor.html">Editor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/space-center/celestial-body.html">CelestialBody</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/space-center/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/space-center/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/space-center/closest-approach.html">Closest Approach</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/space-center/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/space-center/comms.html">Communications</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/space-center/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/space-center/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/space-center/node.html">Node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/space-center/reference-frame.html">ReferenceFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/space-center/auto-pilot.html">AutoPilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/space-center/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/space-center/waypoints.html">Waypoints</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/space-center/contracts.html">Contracts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/space-center/alarms.html">Alarms</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../http/api/drawing.html">Drawing</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/drawing/drawing.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/drawing/arc.html">Arc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/drawing/box.html">Box</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/drawing/circle.html">Circle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/drawing/image.html">Image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/drawing/line.html">Line</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/drawing/map-marker.html">MapMarker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/drawing/navball-marker.html">NavballMarker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/drawing/orbit-path.html">OrbitPath</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/drawing/point.html">Point</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/drawing/polygon.html">Polygon</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/drawing/polyline.html">Polyline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/drawing/sphere.html">Sphere</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/drawing/text.html">Text</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../http/api/ui.html">User Interface</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ui/ui.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ui/canvas.html">Canvas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ui/panel.html">Panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ui/text.html">Text</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ui/button.html">Button</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ui/input-field.html">InputField</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ui/toggle.html">Toggle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ui/toggle-group.html">Toggle Group</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ui/slider.html">Slider</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ui/dropdown.html">Dropdown</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ui/image.html">Image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ui/scroll-view.html">Scroll View</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ui/layout.html">Layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ui/layout-element.html">Layout Element</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ui/size-fitter.html">Size Fitter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ui/rect-transform.html">Rect Transform</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../http/api/debug.html">Debug</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/debug/debug.html">Service</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../http/api/docking-camera.html">Docking Camera</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/docking-camera/docking-camera.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/docking-camera/camera.html">Camera</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../http/api/infernal-robotics.html">InfernalRobotics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/infernal-robotics/infernal-robotics.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/infernal-robotics/servo-group.html">ServoGroup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/infernal-robotics/servo.html">Servo</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../http/api/kerbal-alarm-clock.html">Kerbal Alarm Clock</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/kerbal-alarm-clock/kerbal-alarm-clock.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/kerbal-alarm-clock/alarm.html">Alarm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/kerbal-alarm-clock/alarm-type.html">AlarmType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/kerbal-alarm-clock/alarm-action.html">AlarmAction</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../http/api/kerbal-engineer-redux.html">Kerbal Engineer Redux</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/kerbal-engineer-redux/kerbal-engineer-redux.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/kerbal-engineer-redux/impact.html">Impact</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/kerbal-engineer-redux/suicide-burn.html">Suicide Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/kerbal-engineer-redux/stage.html">Stage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/kerbal-engineer-redux/burn-time.html">Burn Time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/kerbal-engineer-redux/rendezvous.html">Rendezvous</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../http/api/lidar.html">LIDAR</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/lidar/lidar.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/lidar/laser.html">Laser</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../http/api/mechjeb.html">MechJeb</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/mechjeb/mechjeb.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/mechjeb/ascent-guidance.html">AscentGuidance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/mechjeb/utilities.html">Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/mechjeb/maneuver-planner.html">ManeuverPlanner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/mechjeb/landing-guidance.html">LandingGuidance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/mechjeb/rendezvous-autopilot.html">RendezvousAutopilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/mechjeb/docking-autopilot.html">DockingAutopilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/mechjeb/aircraft-autopilot.html">AircraftAutopilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/mechjeb/aircraft-approach.html">AircraftApproach</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/mechjeb/rover-autopilot.html">RoverAutopilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/mechjeb/smart-ass.html">SmartASS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/mechjeb/smart-rcs.html">SmartRCS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/mechjeb/translatron.html">Translatron</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/mechjeb/attitude-adjustment.html">AttitudeAdjustment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/mechjeb/target-controller.html">TargetController</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/mechjeb/migration.html">Migration from KRPC.MechJeb 0.7.1</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../http/api/raster-prop-monitor.html">Raster Prop Monitor</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/raster-prop-monitor/raster-prop-monitor.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/raster-prop-monitor/computer.html">Computer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/raster-prop-monitor/monitor.html">Monitor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/raster-prop-monitor/display.html">Display</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/raster-prop-monitor/external-camera.html">External Camera</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../http/api/remote-tech.html">RemoteTech</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/remote-tech/remote-tech.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/remote-tech/comms.html">Comms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/remote-tech/antenna.html">Antenna</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../http/api/scansat.html">SCANsat</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/scansat/scansat.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/scansat/scanner.html">Scanner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/scansat/map.html">Map</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../http/api/trajectories.html">Trajectories</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/trajectories/trajectories.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/trajectories/patch.html">Patch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/trajectories/descent-profile.html">DescentProfile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/trajectories/descent-profile-node.html">DescentProfileNode</a></li>
+</ul>
+</details></li>
 </ul>
 </details></li>
 </ul>
@@ -676,14 +1699,17 @@
     
     <li class="breadcrumb-item breadcrumb-home">
       <a href="../../../index.html" class="nav-link" aria-label="Home">
-        <i class="fa-solid fa-home"></i>
+        <i class="fa-solid fa-house"></i>
       </a>
     </li>
+    
+    <li class="breadcrumb-item"><a href="../../../clients.html" class="nav-link">Clients</a></li>
+    
     
     <li class="breadcrumb-item"><a href="../../../cnano.html" class="nav-link">C-nano</a></li>
     
     
-    <li class="breadcrumb-item"><a href="../ui.html" class="nav-link">User Interface API</a></li>
+    <li class="breadcrumb-item"><a href="../ui.html" class="nav-link">User Interface</a></li>
     
     <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Layout Element</span></li>
   </ul>
@@ -714,50 +1740,56 @@
 out to bring elements up to their preferred size, and anything still left over is
 shared between the elements with a flexible size, in proportion to it.</p>
 </div>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_UI_LayoutElement_t.KRPC_CLASS_UI_LAYOUTELEMENT">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_CLASS_UI_LAYOUTELEMENT</span></span></span><a class="headerlink" href="#c.krpc_UI_LayoutElement_t.KRPC_CLASS_UI_LAYOUTELEMENT" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and class ids of the class, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_ClassTypeById()</span></code>.</p>
+</dd></dl>
+
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_UI_LayoutElement_t.krpc_UI_LayoutElement_MinSize">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_LayoutElement_MinSize</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_UI_LayoutElement_t" title="krpc_UI_LayoutElement_t"><span class="n"><span class="pre">krpc_UI_LayoutElement_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_LayoutElement_t.krpc_UI_LayoutElement_MinSize" title="Link to this definition">#</a><br /></dt>
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_LayoutElement_MinSize</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_UI_LayoutElement_t" title="krpc_UI_LayoutElement_t"><span class="n"><span class="pre">krpc_UI_LayoutElement_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_LayoutElement_t.krpc_UI_LayoutElement_MinSize" title="Link to this definition">#</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_UI_LayoutElement_t.krpc_UI_LayoutElement_set_MinSize">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_LayoutElement_set_MinSize</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_UI_LayoutElement_t" title="krpc_UI_LayoutElement_t"><span class="n"><span class="pre">krpc_UI_LayoutElement_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_LayoutElement_t.krpc_UI_LayoutElement_set_MinSize" title="Link to this definition">#</a><br /></dt>
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_LayoutElement_set_MinSize</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_UI_LayoutElement_t" title="krpc_UI_LayoutElement_t"><span class="n"><span class="pre">krpc_UI_LayoutElement_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_LayoutElement_t.krpc_UI_LayoutElement_set_MinSize" title="Link to this definition">#</a><br /></dt>
 <dd><p>The smallest size the element can be given, in pixels. A negative value in either
 direction leaves that direction unconstrained.</p>
 </dd></dl>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_UI_LayoutElement_t.krpc_UI_LayoutElement_PreferredSize">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_LayoutElement_PreferredSize</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_UI_LayoutElement_t" title="krpc_UI_LayoutElement_t"><span class="n"><span class="pre">krpc_UI_LayoutElement_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_LayoutElement_t.krpc_UI_LayoutElement_PreferredSize" title="Link to this definition">#</a><br /></dt>
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_LayoutElement_PreferredSize</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_UI_LayoutElement_t" title="krpc_UI_LayoutElement_t"><span class="n"><span class="pre">krpc_UI_LayoutElement_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_LayoutElement_t.krpc_UI_LayoutElement_PreferredSize" title="Link to this definition">#</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_UI_LayoutElement_t.krpc_UI_LayoutElement_set_PreferredSize">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_LayoutElement_set_PreferredSize</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_UI_LayoutElement_t" title="krpc_UI_LayoutElement_t"><span class="n"><span class="pre">krpc_UI_LayoutElement_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_LayoutElement_t.krpc_UI_LayoutElement_set_PreferredSize" title="Link to this definition">#</a><br /></dt>
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_LayoutElement_set_PreferredSize</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_UI_LayoutElement_t" title="krpc_UI_LayoutElement_t"><span class="n"><span class="pre">krpc_UI_LayoutElement_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_LayoutElement_t.krpc_UI_LayoutElement_set_PreferredSize" title="Link to this definition">#</a><br /></dt>
 <dd><p>The size the element asks for, in pixels. A negative value in either direction
 leaves that direction unconstrained.</p>
 </dd></dl>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_UI_LayoutElement_t.krpc_UI_LayoutElement_FlexibleSize">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_LayoutElement_FlexibleSize</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_UI_LayoutElement_t" title="krpc_UI_LayoutElement_t"><span class="n"><span class="pre">krpc_UI_LayoutElement_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_LayoutElement_t.krpc_UI_LayoutElement_FlexibleSize" title="Link to this definition">#</a><br /></dt>
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_LayoutElement_FlexibleSize</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_UI_LayoutElement_t" title="krpc_UI_LayoutElement_t"><span class="n"><span class="pre">krpc_UI_LayoutElement_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_LayoutElement_t.krpc_UI_LayoutElement_FlexibleSize" title="Link to this definition">#</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_UI_LayoutElement_t.krpc_UI_LayoutElement_set_FlexibleSize">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_LayoutElement_set_FlexibleSize</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_UI_LayoutElement_t" title="krpc_UI_LayoutElement_t"><span class="n"><span class="pre">krpc_UI_LayoutElement_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_LayoutElement_t.krpc_UI_LayoutElement_set_FlexibleSize" title="Link to this definition">#</a><br /></dt>
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_LayoutElement_set_FlexibleSize</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_UI_LayoutElement_t" title="krpc_UI_LayoutElement_t"><span class="n"><span class="pre">krpc_UI_LayoutElement_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_LayoutElement_t.krpc_UI_LayoutElement_set_FlexibleSize" title="Link to this definition">#</a><br /></dt>
 <dd><p>The share the element takes of the space left over once every element has its
 preferred size. A negative value in either direction takes no share.</p>
 </dd></dl>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_UI_LayoutElement_t.krpc_UI_LayoutElement_IgnoreLayout">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_LayoutElement_IgnoreLayout</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_UI_LayoutElement_t" title="krpc_UI_LayoutElement_t"><span class="n"><span class="pre">krpc_UI_LayoutElement_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_LayoutElement_t.krpc_UI_LayoutElement_IgnoreLayout" title="Link to this definition">#</a><br /></dt>
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_LayoutElement_IgnoreLayout</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_UI_LayoutElement_t" title="krpc_UI_LayoutElement_t"><span class="n"><span class="pre">krpc_UI_LayoutElement_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_LayoutElement_t.krpc_UI_LayoutElement_IgnoreLayout" title="Link to this definition">#</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_UI_LayoutElement_t.krpc_UI_LayoutElement_set_IgnoreLayout">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_LayoutElement_set_IgnoreLayout</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_UI_LayoutElement_t" title="krpc_UI_LayoutElement_t"><span class="n"><span class="pre">krpc_UI_LayoutElement_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_LayoutElement_t.krpc_UI_LayoutElement_set_IgnoreLayout" title="Link to this definition">#</a><br /></dt>
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_LayoutElement_set_IgnoreLayout</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_UI_LayoutElement_t" title="krpc_UI_LayoutElement_t"><span class="n"><span class="pre">krpc_UI_LayoutElement_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_LayoutElement_t.krpc_UI_LayoutElement_set_IgnoreLayout" title="Link to this definition">#</a><br /></dt>
 <dd><p>Whether the layout leaves the element out and lets it be positioned by hand.</p>
 </dd></dl>
 
@@ -800,7 +1832,7 @@ preferred size. A negative value in either direction takes no share.</p>
             
             
               
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <dialog id="pst-secondary-sidebar-modal" tabindex="-1"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
@@ -826,8 +1858,8 @@ preferred size. A negative value in either direction takes no share.</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -860,7 +1892,7 @@ preferred size. A negative value in either direction takes no share.</p>
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
 </p></div>
       
     </div>

@@ -17,9 +17,10 @@ end
 local thrust = 0
 local fuel_consumption = 0
 for _,engine in ipairs(active_engines) do
-    thrust = thrust + engine.thrust
-    fuel_consumption = fuel_consumption + engine.thrust / engine.specific_impulse
+    thrust = thrust + engine.available_thrust
+    fuel_consumption =
+        fuel_consumption + engine.available_thrust / engine.specific_impulse
 end
 local isp = thrust / fuel_consumption
 
-print(string.format('Combined vacuum Isp = %.1f seconds', isp))
+print(string.format('Combined Isp = %.0f seconds', isp))

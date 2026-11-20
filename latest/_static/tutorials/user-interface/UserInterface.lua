@@ -1,5 +1,5 @@
 local krpc = require 'krpc'
-local platform = require 'krpc.platform'
+local socket = require 'socket'
 local List = require 'pl.List'
 local conn = krpc.connect('User Interface Example')
 local canvas = conn.ui.stock_canvas
@@ -22,8 +22,8 @@ local layout = panel:add_vertical_layout()
 layout.padding = conn.ui.Padding(10, 10, 10, 10)
 layout.spacing = 6
 
--- Add a button to set the throttle to maximum, with a tooltip shown while the
--- mouse rests on it
+-- Add a button to set the throttle to maximum, with a tooltip shown while
+-- the mouse rests on it
 local button = panel:add_button("Full Throttle")
 button.tooltip = "Set the throttle to maximum"
 button.layout_element.preferred_size = List{-1, 30}
@@ -55,5 +55,5 @@ while true do
     -- Update the thrust text
     text.content = string.format('Thrust: %.1f kN', vessel.thrust/1000)
 
-    platform.sleep(0.1)
+    socket.sleep(0.1)
 end

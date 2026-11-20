@@ -1,0 +1,449 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Panel
+=====
+
+
+.. _http-UI.Panel:
+
+.. rubric:: Panel
+
+A container for user interface elements.
+Added to a :ref:`Canvas <http-UI.Canvas>` or another panel.
+
+A ``Panel`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ui/panel/(id)/rect-transform
+
+   The rect transform for the UI object.
+
+
+   :param id: The identifier of the :ref:`Panel <http-UI.Panel>` object.
+
+   :resjson UI.RectTransform value:
+
+
+
+
+.. http:get:: /ui/panel/(id)/layout-element
+
+   How much space the UI object asks a layout for.
+
+   .. note::
+
+      Only has an effect when the object is in a panel that has a layout. A canvas is
+      not inside a layout and does not have one.
+
+
+   :param id: The identifier of the :ref:`Panel <http-UI.Panel>` object.
+
+   :resjson UI.LayoutElement value:
+
+
+
+
+.. http:get:: /ui/panel/(id)/style
+
+   How the background of the panel is drawn. A box is the frame to group related
+   controls in, and is how a group box is made.
+
+
+   :param id: The identifier of the :ref:`Panel <http-UI.Panel>` object.
+
+   :resjson UI.PanelStyle value:
+
+.. http:put:: /ui/panel/(id)/style
+
+   How the background of the panel is drawn. A box is the frame to group related
+   controls in, and is how a group box is made.
+
+
+   :param id: The identifier of the :ref:`Panel <http-UI.Panel>` object.
+
+   :reqjson UI.PanelStyle value: The new value.
+
+
+
+
+.. http:get:: /ui/panel/(id)/color
+
+   The color the background of the panel is tinted with.
+
+   .. note::
+
+      Has no effect while the style of the panel is ``"none"``,
+      as the panel is then not drawn at all.
+
+
+   :param id: The identifier of the :ref:`Panel <http-UI.Panel>` object.
+
+   :resjson StdLib.ColorRGBA value:
+
+.. http:put:: /ui/panel/(id)/color
+
+   The color the background of the panel is tinted with.
+
+   .. note::
+
+      Has no effect while the style of the panel is ``"none"``,
+      as the panel is then not drawn at all.
+
+
+   :param id: The identifier of the :ref:`Panel <http-UI.Panel>` object.
+
+   :reqjson StdLib.ColorRGBA value: The new value.
+
+
+
+
+.. http:get:: /ui/panel/(id)/draggable
+
+   Whether the user can move the panel by dragging it.
+
+   .. note::
+
+      Dragging anywhere on the panel moves it, including over the elements it
+      contains, unless one of them takes the pointer for itself. Give a panel a title
+      bar of its own if only part of it should move it.
+      A panel whose style is ``"none"`` is not drawn, so it takes
+      no pointer events of its own and can only be dragged by the elements it
+      contains.
+
+
+   :param id: The identifier of the :ref:`Panel <http-UI.Panel>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ui/panel/(id)/draggable
+
+   Whether the user can move the panel by dragging it.
+
+   .. note::
+
+      Dragging anywhere on the panel moves it, including over the elements it
+      contains, unless one of them takes the pointer for itself. Give a panel a title
+      bar of its own if only part of it should move it.
+      A panel whose style is ``"none"`` is not drawn, so it takes
+      no pointer events of its own and can only be dragged by the elements it
+      contains.
+
+
+   :param id: The identifier of the :ref:`Panel <http-UI.Panel>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ui/panel/(id)/visible
+
+   Whether the UI object is visible.
+
+   .. note::
+
+      This is the object's own setting, which is what it was last set to. An object is
+      only drawn when everything it is inside is visible as well, so an interface can
+      be built with its parts visible, inside a panel that is not, and shown all at
+      once by making that panel visible.
+
+
+   :param id: The identifier of the :ref:`Panel <http-UI.Panel>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ui/panel/(id)/visible
+
+   Whether the UI object is visible.
+
+   .. note::
+
+      This is the object's own setting, which is what it was last set to. An object is
+      only drawn when everything it is inside is visible as well, so an interface can
+      be built with its parts visible, inside a panel that is not, and shown all at
+      once by making that panel visible.
+
+
+   :param id: The identifier of the :ref:`Panel <http-UI.Panel>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:post:: /ui/panel/(id)/add-panel
+
+   Create a panel within this object.
+
+
+   :param id: The identifier of the :ref:`Panel <http-UI.Panel>` object.
+
+   :reqjson bool visible: Whether the new panel is visible. Optional, defaults to ``true``.
+   :resjson UI.Panel value:
+
+
+
+
+
+.. http:post:: /ui/panel/(id)/add-text
+
+   Add text to this object.
+
+
+   :param id: The identifier of the :ref:`Panel <http-UI.Panel>` object.
+
+   :reqjson string content: The text.
+   :reqjson bool visible: Whether the text is visible. Optional, defaults to ``true``.
+   :resjson UI.Text value:
+
+
+
+
+
+.. http:post:: /ui/panel/(id)/add-input-field
+
+   Add an input field to this object.
+
+
+   :param id: The identifier of the :ref:`Panel <http-UI.Panel>` object.
+
+   :reqjson bool visible: Whether the input field is visible. Optional, defaults to ``true``.
+   :resjson UI.InputField value:
+
+
+
+
+
+.. http:post:: /ui/panel/(id)/add-button
+
+   Add a button to this object.
+
+
+   :param id: The identifier of the :ref:`Panel <http-UI.Panel>` object.
+
+   :reqjson string content: The label for the button.
+   :reqjson bool visible: Whether the button is visible. Optional, defaults to ``true``.
+   :resjson UI.Button value:
+
+
+
+
+
+.. http:post:: /ui/panel/(id)/add-toggle
+
+   Add a toggle to this object.
+
+
+   :param id: The identifier of the :ref:`Panel <http-UI.Panel>` object.
+
+   :reqjson string content: The label for the toggle.
+   :reqjson bool visible: Whether the toggle is visible. Optional, defaults to ``true``.
+   :resjson UI.Toggle value:
+
+
+
+
+
+.. http:post:: /ui/panel/(id)/add-toggle-group
+
+   Add a toggle group to this object, to make a set of toggles into radio buttons.
+
+   .. note::
+
+      The group is not drawn and does not take up any space. The toggles that belong
+      to it can be added anywhere.
+
+
+   :param id: The identifier of the :ref:`Panel <http-UI.Panel>` object.
+
+   :resjson UI.ToggleGroup value:
+
+
+
+
+
+.. http:post:: /ui/panel/(id)/add-slider
+
+   Add a slider to this object.
+
+
+   :param id: The identifier of the :ref:`Panel <http-UI.Panel>` object.
+
+   :reqjson bool vertical: Whether the slider runs from bottom to top, rather than from left to right. Optional, defaults to ``false``.
+   :reqjson bool visible: Whether the slider is visible. Optional, defaults to ``true``.
+   :resjson UI.Slider value:
+
+
+
+
+
+.. http:post:: /ui/panel/(id)/add-dropdown
+
+   Add a dropdown to this object.
+
+
+   :param id: The identifier of the :ref:`Panel <http-UI.Panel>` object.
+
+   :reqjson bool visible: Whether the dropdown is visible. Optional, defaults to ``true``.
+   :resjson UI.Dropdown value:
+
+
+
+
+
+.. http:post:: /ui/panel/(id)/add-image
+
+   Add an image to this object.
+
+
+   :param id: The identifier of the :ref:`Panel <http-UI.Panel>` object.
+
+   :reqjson bool visible: Whether the image is visible. Optional, defaults to ``true``.
+   :resjson UI.Image value:
+
+
+
+
+
+.. http:post:: /ui/panel/(id)/add-scroll-view
+
+   Add a scroll view to this object.
+
+
+   :param id: The identifier of the :ref:`Panel <http-UI.Panel>` object.
+
+   :reqjson bool visible: Whether the scroll view is visible. Optional, defaults to ``true``.
+   :resjson UI.ScrollView value:
+
+
+
+
+
+.. http:get:: /ui/panel/(id)/layout
+
+   The layout that arranges the elements of the panel, or ``null`` if they are
+   positioned by hand.
+
+
+   :param id: The identifier of the :ref:`Panel <http-UI.Panel>` object.
+
+   :resjson UI.Layout? value:
+
+
+
+
+.. http:post:: /ui/panel/(id)/add-horizontal-layout
+
+   Arrange the elements of the panel in a row.
+
+
+   :param id: The identifier of the :ref:`Panel <http-UI.Panel>` object.
+
+   :resjson UI.Layout value:
+
+
+
+
+
+.. http:post:: /ui/panel/(id)/add-vertical-layout
+
+   Arrange the elements of the panel in a column.
+
+
+   :param id: The identifier of the :ref:`Panel <http-UI.Panel>` object.
+
+   :resjson UI.Layout value:
+
+
+
+
+
+.. http:post:: /ui/panel/(id)/add-grid-layout
+
+   Arrange the elements of the panel in a grid of equally sized cells.
+
+   .. note::
+
+      The number of columns follows from the size of the panel and the size of a cell.
+      Use :http:get:`/ui/layout/(id)/constraint` to fix it instead.
+
+
+   :param id: The identifier of the :ref:`Panel <http-UI.Panel>` object.
+
+   :resjson UI.Layout value:
+
+
+
+
+
+.. http:get:: /ui/panel/(id)/size-fitter
+
+   Sizes the panel to fit what it contains.
+
+   .. note::
+
+      Both directions start out unconstrained, which leaves the size of the panel
+      alone.
+
+
+   :param id: The identifier of the :ref:`Panel <http-UI.Panel>` object.
+
+   :resjson UI.SizeFitter value:
+
+
+
+
+.. http:post:: /ui/panel/(id)/bring-to-front
+
+   Draw the panel in front of the other elements beside it. Elements are drawn
+   in the order they were added, so of two overlapping panels the newer hides
+   part of the older until the older is brought to the front.
+
+   .. note::
+
+      A draggable panel also brings itself to the front when the user starts
+      dragging it, the way a window comes to the front when it is clicked.
+
+
+   :param id: The identifier of the :ref:`Panel <http-UI.Panel>` object.
+
+
+
+
+
+
+.. http:post:: /ui/panel/(id)/remove
+
+   Remove the UI object.
+
+
+   :param id: The identifier of the :ref:`Panel <http-UI.Panel>` object.
+
+
+
+
+
+
+
+.. _http-UI.PanelStyle:
+
+.. rubric:: PanelStyle
+
+How the background of a panel is drawn.
+
+Passed and returned as the name of one of its values:
+
+
+``"window"``
+   As a window, the heavier of the two frames the game uses.
+
+
+``"box"``
+   As a box, the lighter frame the game groups related controls in.
+
+
+``"none"``
+   Not drawn at all, leaving whatever is behind the panel showing through.

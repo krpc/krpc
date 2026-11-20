@@ -1,0 +1,30 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::LIDAR
+
+Service
+=======
+
+
+.. namespace:: krpc::services
+.. class:: LIDAR : public krpc::RemoteService
+
+   .. warning:: Deprecated. Use :func:`SpaceCenter::raycast_distance` instead.
+
+   Provides functionality to interact with the LiDAR mod.
+
+   .. function:: LIDAR(krpc::Connection& connection)
+
+      Construct an instance of this service.
+
+   .. function:: bool available()
+
+      Whether the LiDAR mod is installed.
+
+   
+
+   .. function:: Laser laser(SpaceCenter::Part part)
+
+      Get the LiDAR on a part.
+
+      :Parameters:

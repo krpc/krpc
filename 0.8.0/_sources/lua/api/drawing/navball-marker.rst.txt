@@ -1,0 +1,67 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: Drawing
+
+NavballMarker
+=============
+
+
+.. class:: NavballMarker
+
+   A marker drawn on the navball. Created using :meth:`Drawing.add_navball_marker`.
+
+   .. attribute:: direction: Tuple
+
+      Direction that the marker is drawn at.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: reference_frame: SpaceCenter.ReferenceFrame
+
+      Reference frame that the direction of the marker is in.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: visible: boolean
+
+      Whether the marker is visible.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         A visible marker is still hidden while it is on the far side of the navball.
+
+   .. attribute:: color: StdLib.ColorRGB
+
+      Set the color
+
+      :Attribute: Can be read or written
+
+   .. attribute:: icon: string
+
+      The icon that the marker is drawn with.
+      See :meth:`Drawing.NavballMarker.available_icons` for the icons that can be used.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: image: Drawing.Image | nil
+
+      The image that the marker is drawn with in place of its icon, or null to draw the
+      icon.
+
+      :Attribute: Can be read or written
+
+   .. staticmethod:: available_icons(): List
+
+      A list of all available icons, taken from "GameData/Squad/Contracts/Icons/".
+
+   .. attribute:: size: number
+
+      Size of the marker, relative to the size of the navball's own markers.
+
+      :Attribute: Can be read or written
+
+   .. method:: remove()
+
+      Remove the marker.

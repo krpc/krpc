@@ -1,0 +1,583 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: KRPC
+
+Service
+=======
+
+
+.. module:: KRPC
+
+Main kRPC service, used by clients to interact with basic server functionality.
+
+
+.. staticmethod:: get_client_id()
+
+   Returns the identifier for the current client.
+
+   :rtype: bytes
+   
+
+
+
+
+.. staticmethod:: get_client_name()
+
+   Returns the name of the current client.
+   This is an empty string if the client has no name.
+
+   :rtype: str
+   
+
+
+
+
+.. attribute:: clients
+
+   The clients that are currently connected to the server.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: list(:class:`ClientInfo`)
+   
+
+
+
+
+.. staticmethod:: get_status()
+
+   Returns the status of the server, with its version, settings and performance statistics.
+
+   :rtype: :class:`ServerStatus`
+   
+
+
+
+
+.. staticmethod:: get_services()
+
+   The services the server provides, with their procedures, classes, enumerations,
+   structures and exceptions.
+
+   :rtype: :class:`krpc.schema.KRPC.Services`
+   
+
+
+
+
+.. staticmethod:: hold_tick()
+
+   Hold the game on its current physics tick until :meth:`release_tick` is called
+   or the hold times out. Every call made in between is executed before the game
+   advances, so a read, compute and write all happen in the state of one tick.
+
+   
+
+   .. note::
+
+      The game renders no frame, takes no input and runs no physics while the tick is
+      held. Keep a hold as short as possible, and release it even when the code between
+      the two calls fails.
+
+      A tick is held once, so this waits for the next tick when the current one has
+      already been released. One client holds the tick at a time, and only a client
+      making a call can hold it: a stream or an event cannot.
+
+      A hold ends by itself when it times out, when the client disconnects, and when the
+      client calls a procedure that takes more than one tick to finish, such as staging
+      or warping. Stream updates are sent once the tick is released, so waiting for a
+      stream or an event inside a hold waits out the timeout.
+
+
+
+
+.. staticmethod:: release_tick()
+
+   Let the game move on from the tick that :meth:`hold_tick` held it on. Does
+   nothing when no tick is held, which is the case once a hold has timed out.
+
+   
+
+
+
+
+.. staticmethod:: next_tick()
+
+   Let the game move on from the tick being held and hold the one after it, so that a
+   program acts on consecutive physics ticks. Holds the soonest tick it can if no tick
+   is currently being held.
+
+   
+
+   .. note::
+
+      A release and a hold made as two separate calls let the game advance between them.
+      This takes the next tick without that gap. Call it at the top of a loop that has to
+      act on every tick, work, and come back to it.
+
+      The game advances one tick per call, so it runs at the rate of the loop for as long
+      as the loop runs. End the loop with :meth:`release_tick`.
+
+      Every limit of :meth:`hold_tick` applies, the timeout included. A hold lost to
+      the timeout is not reported, and the next call takes whatever tick it lands on.
+
+
+
+
+.. attribute:: game_scene
+
+   The current game scene. Setting this switches the game to the given
+   scene, or opens/closes the corresponding facility for the pseudo-scenes.
+   Scene changes happen asynchronously: setting this property returns
+   immediately, and clients should poll it until it reports the requested
+   scene. Setting it to :attr:`GameScene.flight` resumes the save's
+   active vessel, and fails if there is none. Moving between
+   :attr:`GameScene.editor_vab` and :attr:`GameScene.editor_sph`
+   keeps the vessel that is being constructed, as the game's own switch
+   editor button does. Leaving flight saves the game first, unless the game
+   cannot be saved, e.g. while under acceleration.
+
+   :Attribute: Can be read or written
+   :rtype: :class:`GameScene`
+   
+
+
+
+
+.. attribute:: paused
+
+   Whether the game is paused.
+
+   :Attribute: Can be read or written
+   :rtype: bool
+   
+
+
+
+
+.. attribute:: game_state_loads
+
+   The number of game states that have finished loading.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: int
+   
+
+   .. note::
+
+      Increases once a game load, quickload, revert or scene change has finished.
+
+
+
+
+
+.. class:: GameScene
+
+   The game scene. See :attr:`game_scene`.
+
+
+   .. data:: space_center
+
+      The game scene showing the Kerbal Space Center buildings.
+
+
+   .. data:: flight
+
+      The game scene showing a vessel in flight (or on the launchpad/runway).
+
+
+   .. data:: tracking_station
+
+      The tracking station.
+
+
+   .. data:: editor_vab
+
+      The Vehicle Assembly Building.
+
+
+   .. data:: editor_sph
+
+      The Space Plane Hangar.
+
+
+   .. data:: mission_builder
+
+      The mission builder.
+
+
+   .. data:: astronaut_complex
+
+      The astronaut complex. This is a pseudo-scene, shown when the
+      astronaut complex facility is open within the space center scene.
+
+
+   .. data:: mission_control
+
+      Mission control. This is a pseudo-scene, shown when the
+      mission control facility is open within the space center scene.
+
+
+   .. data:: research_and_development
+
+      Research and development. This is a pseudo-scene, shown when the
+      research and development facility is open within the space center scene.
+
+
+   .. data:: administration
+
+      The administration facility. This is a pseudo-scene, shown when the
+      administration facility is open within the space center scene.
+
+
+
+.. class:: ClientInfo(id, name, address)
+
+   A client connected to the server.
+
+   .. note::
+
+      See :attr:`clients`.
+   .. attribute:: id
+
+      The identifier of the client.
+
+      :rtype: bytes
+
+   .. attribute:: name
+
+      The name of the client, or an empty string if it has no name.
+
+      :rtype: str
+
+   .. attribute:: address
+
+      The address of the client.
+
+      :rtype: str
+
+
+.. class:: ServerStatus(version, protocol_version, settings, statistics)
+
+   The status of the server.
+
+   .. note::
+
+      See :meth:`get_status`.
+   .. attribute:: version
+
+      The version of the server, or ``unknown``.
+
+      :rtype: str
+
+   .. attribute:: protocol_version
+
+      The protocol version of the connection.
+
+      :rtype: int
+
+   .. attribute:: settings
+
+      The settings of the server.
+
+      :rtype: :class:`ServerSettings`
+
+   .. attribute:: statistics
+
+      The performance statistics of the server.
+
+      :rtype: :class:`ServerStatistics`
+
+
+.. class:: ServerSettings(adaptive_rate_control, target_frame_rate, max_time_per_frame, max_call_wait, tick_hold_timeout)
+
+   The settings that control how the server executes calls.
+
+   .. note::
+
+      See :attr:`ServerStatus.settings`.
+   .. attribute:: adaptive_rate_control
+
+      Whether the server adapts its time per frame to hold the frame rate at
+      :attr:`ServerSettings.target_frame_rate`.
+
+      :rtype: bool
+
+   .. attribute:: target_frame_rate
+
+      The lowest frame rate the server's work pushes the game to, in frames per second.
+
+      :rtype: int
+
+   .. attribute:: max_time_per_frame
+
+      The server's budget per frame, or its ceiling with adaptive rate control, in microseconds.
+
+      :rtype: int
+
+   .. attribute:: max_call_wait
+
+      The longest the server waits for a client's next call, in microseconds.
+
+      :rtype: int
+
+   .. attribute:: tick_hold_timeout
+
+      The longest time a client may hold the game on one physics tick, in microseconds.
+
+      :rtype: int
+
+
+.. class:: ServerStatistics(bytes_read, bytes_written, bytes_read_rate, bytes_written_rate, rpcs_executed, rpc_rate, frame_rate, time_per_frame, exec_time_per_frame, wait_time_per_frame, stream_time_per_frame, budget_per_frame, median_turnaround, deferred_calls, streams, stream_evaluations, stream_evaluation_rate, stream_updates_sent)
+
+   The performance statistics of the server.
+
+   .. note::
+
+      See :attr:`ServerStatus.statistics`.
+   .. attribute:: bytes_read
+
+      The number of bytes received from clients.
+
+      :rtype: int
+
+   .. attribute:: bytes_written
+
+      The number of bytes sent to clients.
+
+      :rtype: int
+
+   .. attribute:: bytes_read_rate
+
+      The rate bytes are received from clients, in bytes per second.
+
+      :rtype: float
+
+   .. attribute:: bytes_written_rate
+
+      The rate bytes are sent to clients, in bytes per second.
+
+      :rtype: float
+
+   .. attribute:: rpcs_executed
+
+      The number of calls executed.
+
+      :rtype: int
+
+   .. attribute:: rpc_rate
+
+      The number of calls executed per second.
+
+      :rtype: float
+
+   .. attribute:: frame_rate
+
+      The game's frame rate, in frames per second.
+
+      :rtype: float
+
+   .. attribute:: time_per_frame
+
+      The server's time per frame, in seconds: executing calls, waiting for them and
+      updating streams.
+
+      :rtype: float
+
+   .. attribute:: exec_time_per_frame
+
+      The time spent executing calls per frame, in seconds.
+
+      :rtype: float
+
+   .. attribute:: wait_time_per_frame
+
+      The time spent waiting for calls per frame, in seconds.
+
+      :rtype: float
+
+   .. attribute:: stream_time_per_frame
+
+      The time spent updating streams per frame, in seconds.
+
+      :rtype: float
+
+   .. attribute:: budget_per_frame
+
+      The time the server may spend per frame, in seconds.
+
+      :rtype: float
+
+   .. attribute:: median_turnaround
+
+      The median time between a response and the client's next call, over the
+      clients' recent calls, in seconds.
+
+      :rtype: float
+
+   .. attribute:: deferred_calls
+
+      The number of calls left for the next update, because the update ran out of time
+      or the call yielded.
+
+      :rtype: int
+
+   .. attribute:: streams
+
+      The number of open streams, events included.
+
+      :rtype: int
+
+   .. attribute:: stream_evaluations
+
+      The number of stream evaluations, one per stream per update.
+
+      :rtype: int
+
+   .. attribute:: stream_evaluation_rate
+
+      The number of stream evaluations per second.
+
+      :rtype: float
+
+   .. attribute:: stream_updates_sent
+
+      The number of stream updates sent to clients.
+
+      :rtype: int
+
+
+.. class:: InvalidOperationException
+
+   A method call was made to a method that is invalid
+   given the current state of the object.
+
+   A subclass of the builtin ``RuntimeError`` alone.
+
+
+
+.. class:: ArgumentException
+
+   A method was invoked where at least one of the passed arguments does not
+   meet the parameter specification of the method.
+
+   A subclass of the builtin ``ValueError`` alone.
+
+
+
+.. class:: ArgumentNullException
+
+   A null reference was passed to a method that does not accept it as a valid argument.
+
+   A subclass of the builtin ``ValueError`` alone.
+
+
+
+.. class:: ArgumentOutOfRangeException
+
+   The value of an argument is outside the allowable range of values as defined by the invoked method.
+
+   A subclass of the builtin ``ValueError`` alone.
+
+
+
+.. class:: NullReferenceException
+
+   A value was null where its type does not allow one.
+
+   A subclass of the builtin ``TypeError`` alone.
+
+
+
+.. class:: KeyNotFoundException
+
+   A key was not found in a dictionary.
+
+   A subclass of the builtin ``KeyError`` alone.
+
+
+
+.. class:: IndexOutOfRangeException
+
+   An index was outside the bounds of a collection, string or array.
+
+   A subclass of the builtin ``IndexError`` alone.
+
+
+
+.. class:: DivideByZeroException
+
+   An integer was divided by zero.
+
+   A subclass of the builtin ``ZeroDivisionError`` alone.
+
+
+
+.. class:: NotSupportedException
+
+   A method was invoked that is not supported.
+
+   A subclass of the builtin ``NotImplementedError`` alone.
+
+
+
+.. class:: TimeoutException
+
+   An operation did not complete in the time allotted to it.
+
+   A subclass of the builtin ``TimeoutError`` alone.
+
+
+
+.. class:: OverflowException
+
+   An arithmetic or conversion operation overflowed.
+
+   A subclass of the builtin ``OverflowError`` alone.
+
+
+
+.. class:: ObjectDestroyedException
+
+   The game object that a service object refers to no longer exists,
+   so the object cannot be used. For example, the part it represents
+   was destroyed, or the vessel it belongs to was recovered.
+
+   A subclass of :class:`krpc.error.ServerError`.
+
+   .. note::
+
+      See :class:`ObjectNotLoadedException` for a game object that exists but is not
+      loaded.
+
+.. class:: ObjectNotLoadedException
+
+   The game object that a service object refers to exists, but is not loaded.
+   For example, the game is loading, or the vessel carrying the part is unloaded.
+
+   A subclass of :class:`krpc.error.ServerError`.
+
+   .. note::
+
+      See :class:`ObjectDestroyedException` for a game object that no longer exists.
+
+.. class:: UnsupportedSceneException
+
+   The procedure is not available in the current game scene.
+
+   A subclass of :class:`krpc.error.ServerError`.
+
+
+
+.. class:: StreamRemovedException
+
+   A stream was removed by the server, e.g. an event that has finished.
+
+   An alias of :class:`krpc.error.StreamError`.
+
+
+
+.. class:: Error
+
+   A general error, described by its message.
+
+   A subclass of :class:`krpc.error.ServerError`.

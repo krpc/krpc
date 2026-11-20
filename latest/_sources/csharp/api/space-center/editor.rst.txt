@@ -181,19 +181,19 @@ Editor
 
    .. property:: float Mass { get; }
 
-      The total mass of the vessel, including resources and crew, in kg.
+      The total mass of the vessel, including resources and crew, in :math:`\mathrm{kg}`.
 
       :Game Scenes: Editor Vab, Editor Sph
 
    .. property:: float DryMass { get; }
 
-      The total mass of the vessel, excluding resources, in kg.
+      The total mass of the vessel, excluding resources, in :math:`\mathrm{kg}`.
 
       :Game Scenes: Editor Vab, Editor Sph
 
    .. property:: System.Tuple<double,double,double> MomentOfInertia { get; }
 
-      The moment of inertia of the vessel around its center of mass in :math:`kg.m^2`.
+      The moment of inertia of the vessel around its center of mass in :math:`\mathrm{kg \cdot m^{2}}`.
       The inertia values in the returned 3-tuple are around the
       pitch, roll and yaw directions respectively.
       This corresponds to the vessels reference frame (:prop:`EditorVessel.ReferenceFrame`).
@@ -292,7 +292,7 @@ Editor
 
        * **referenceFrame** -- The reference frame that the returned rotation is in.
 
-      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
+      :returns: The rotation as a quaternion of the form ``(x, y, z, w)``.
       :Game Scenes: Editor Vab, Editor Sph
 
    .. function:: System.Tuple<double,double,double> Direction(ReferenceFrame referenceFrame)
@@ -403,19 +403,19 @@ Editor
    .. property:: float DeltaV { get; }
 
       Total delta-v for the vessel in the situation the game's delta-v readout
-      assumes, in m/s. See :prop:`Editor.DeltaVBody`.
+      assumes, in :math:`\mathrm{m/s}`. See :prop:`Editor.DeltaVBody`.
 
       :Game Scenes: Editor Vab, Editor Sph
 
    .. property:: float VacuumDeltaV { get; }
 
-      Total vacuum delta-v for the vessel, in m/s.
+      Total vacuum delta-v for the vessel, in :math:`\mathrm{m/s}`.
 
       :Game Scenes: Editor Vab, Editor Sph
 
    .. property:: float SeaLevelDeltaV { get; }
 
-      Total sea-level delta-v for the vessel, in m/s.
+      Total sea-level delta-v for the vessel, in :math:`\mathrm{m/s}`.
 
       :Game Scenes: Editor Vab, Editor Sph
 
@@ -467,7 +467,7 @@ Editor
 
       The rotation of the vessel, in the reference frame :type:`ReferenceFrame`
 
-      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
+      :returns: The rotation as a quaternion of the form ``(x, y, z, w)``.
       :Game Scenes: Editor Vab, Editor Sph
 
    .. property:: System.Tuple<double,double,double> Direction { get; }
@@ -508,7 +508,7 @@ Editor
    .. property:: double Displacement { get; }
 
       The volume of water the vessel displaces when fully submerged, in
-      :math:`m^3`.
+      :math:`\mathrm{m^{3}}`.
 
       :Game Scenes: Editor Vab, Editor Sph
 
@@ -534,8 +534,8 @@ Editor
 
       :parameters:
 
-       * **density** -- The density of the fluid, in :math:`kg/m^3`.
-       * **gravity** -- The acceleration due to gravity, in :math:`m/s^2`.
+       * **density** -- The density of the fluid, in :math:`\mathrm{kg/m^{3}}`.
+       * **gravity** -- The acceleration due to gravity, in :math:`\mathrm{m/s^{2}}`.
 
       :Game Scenes: Editor Vab, Editor Sph
 
@@ -548,8 +548,8 @@ Editor
 
       :parameters:
 
-       * **density** -- The density of the fluid, in :math:`kg/m^3`.
-       * **gravity** -- The acceleration due to gravity, in :math:`m/s^2`.
+       * **density** -- The density of the fluid, in :math:`\mathrm{kg/m^{3}}`.
+       * **gravity** -- The acceleration due to gravity, in :math:`\mathrm{m/s^{2}}`.
 
-      :returns: A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters.
+      :returns: A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in :math:`\mathrm{N \cdot m}`.
       :Game Scenes: Editor Vab, Editor Sph

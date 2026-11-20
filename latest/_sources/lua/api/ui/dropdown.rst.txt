@@ -16,14 +16,12 @@ Dropdown
       The rect transform for the UI object.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`UI.RectTransform`
 
    .. attribute:: layout_element: UI.LayoutElement
 
       How much space the UI object asks a layout for.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`UI.LayoutElement`
 
       .. note::
 
@@ -35,7 +33,6 @@ Dropdown
       Whether the UI object is visible.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
       .. note::
 
@@ -49,7 +46,6 @@ Dropdown
       The options that the dropdown offers.
 
       :Attribute: Can be read or written
-      :rtype: List
 
       .. note::
 
@@ -61,7 +57,6 @@ Dropdown
       The position in :attr:`UI.Dropdown.options` of the option that is chosen.
 
       :Attribute: Can be read or written
-      :rtype: number
 
       .. note::
 
@@ -72,7 +67,6 @@ Dropdown
       Whether the chosen option has been changed.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
       .. note::
 
@@ -85,7 +79,6 @@ Dropdown
       Whether the control responds to the user.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
       .. note::
 
@@ -98,7 +91,6 @@ Dropdown
       as the skin has it.
 
       :Attribute: Can be read or written
-      :rtype: :class:`StdLib.ColorRGBA`
 
       .. note::
 
@@ -115,7 +107,6 @@ Dropdown
       control. Empty, the default, shows nothing.
 
       :Attribute: Can be read or written
-      :rtype: string
 
    .. method:: remove()
 

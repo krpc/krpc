@@ -2,7 +2,7 @@
 .. highlight:: py
 .. currentmodule:: Drawing
 
-Drawing
+Service
 =======
 
 

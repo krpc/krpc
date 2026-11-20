@@ -1,0 +1,2146 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+ManeuverPlanner
+===============
+
+
+.. _http-MechJeb.ManeuverPlanner:
+
+.. rubric:: ManeuverPlanner
+
+The Maneuver Planner window, which makes maneuver nodes for its operations, and
+executes them.
+
+.. note::
+
+   MechJeb shares the operations, and most of their settings, between vessels.
+
+
+A ``ManeuverPlanner`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /mech-jeb/maneuver-planner/(id)/operation-advanced-transfer
+
+   The operation that transfers to another planet, at the departure that needs the
+   least delta-v.
+
+
+   :param id: The identifier of the :ref:`ManeuverPlanner <http-MechJeb.ManeuverPlanner>` object.
+
+   :resjson MechJeb.OperationAdvancedTransfer value:
+
+
+
+
+.. http:get:: /mech-jeb/maneuver-planner/(id)/operation-apoapsis
+
+   The operation that changes the apoapsis.
+
+
+   :param id: The identifier of the :ref:`ManeuverPlanner <http-MechJeb.ManeuverPlanner>` object.
+
+   :resjson MechJeb.OperationApoapsis value:
+
+
+
+
+.. http:get:: /mech-jeb/maneuver-planner/(id)/operation-circularize
+
+   The operation that circularizes the orbit.
+
+
+   :param id: The identifier of the :ref:`ManeuverPlanner <http-MechJeb.ManeuverPlanner>` object.
+
+   :resjson MechJeb.OperationCircularize value:
+
+
+
+
+.. http:get:: /mech-jeb/maneuver-planner/(id)/operation-course-correction
+
+   The operation that fine tunes the closest approach to the target.
+
+
+   :param id: The identifier of the :ref:`ManeuverPlanner <http-MechJeb.ManeuverPlanner>` object.
+
+   :resjson MechJeb.OperationCourseCorrection value:
+
+
+
+
+.. http:get:: /mech-jeb/maneuver-planner/(id)/operation-eccentricity
+
+   The operation that changes the eccentricity.
+
+
+   :param id: The identifier of the :ref:`ManeuverPlanner <http-MechJeb.ManeuverPlanner>` object.
+
+   :resjson MechJeb.OperationEccentricity value:
+
+
+
+
+.. http:get:: /mech-jeb/maneuver-planner/(id)/operation-ellipticize
+
+   The operation that changes both the periapsis and the apoapsis.
+
+
+   :param id: The identifier of the :ref:`ManeuverPlanner <http-MechJeb.ManeuverPlanner>` object.
+
+   :resjson MechJeb.OperationEllipticize value:
+
+
+
+
+.. http:get:: /mech-jeb/maneuver-planner/(id)/operation-inclination
+
+   The operation that changes the inclination.
+
+
+   :param id: The identifier of the :ref:`ManeuverPlanner <http-MechJeb.ManeuverPlanner>` object.
+
+   :resjson MechJeb.OperationInclination value:
+
+
+
+
+.. http:get:: /mech-jeb/maneuver-planner/(id)/operation-interplanetary-transfer
+
+   The operation that transfers to another planet.
+
+
+   :param id: The identifier of the :ref:`ManeuverPlanner <http-MechJeb.ManeuverPlanner>` object.
+
+   :resjson MechJeb.OperationInterplanetaryTransfer value:
+
+
+
+
+.. http:get:: /mech-jeb/maneuver-planner/(id)/operation-kill-rel-vel
+
+   The operation that matches velocities with the target.
+
+
+   :param id: The identifier of the :ref:`ManeuverPlanner <http-MechJeb.ManeuverPlanner>` object.
+
+   :resjson MechJeb.OperationKillRelVel value:
+
+
+
+
+.. http:get:: /mech-jeb/maneuver-planner/(id)/operation-lambert
+
+   The operation that intercepts the target at a chosen time.
+
+
+   :param id: The identifier of the :ref:`ManeuverPlanner <http-MechJeb.ManeuverPlanner>` object.
+
+   :resjson MechJeb.OperationLambert value:
+
+
+
+
+.. http:get:: /mech-jeb/maneuver-planner/(id)/operation-lan
+
+   The operation that changes the longitude of the ascending node.
+
+
+   :param id: The identifier of the :ref:`ManeuverPlanner <http-MechJeb.ManeuverPlanner>` object.
+
+   :resjson MechJeb.OperationLan value:
+
+
+
+
+.. http:get:: /mech-jeb/maneuver-planner/(id)/operation-longitude
+
+   The operation that changes the surface longitude of the apsis.
+
+
+   :param id: The identifier of the :ref:`ManeuverPlanner <http-MechJeb.ManeuverPlanner>` object.
+
+   :resjson MechJeb.OperationLongitude value:
+
+
+
+
+.. http:get:: /mech-jeb/maneuver-planner/(id)/operation-moon-return
+
+   The operation that returns from a moon.
+
+
+   :param id: The identifier of the :ref:`ManeuverPlanner <http-MechJeb.ManeuverPlanner>` object.
+
+   :resjson MechJeb.OperationMoonReturn value:
+
+
+
+
+.. http:get:: /mech-jeb/maneuver-planner/(id)/operation-periapsis
+
+   The operation that changes the periapsis.
+
+
+   :param id: The identifier of the :ref:`ManeuverPlanner <http-MechJeb.ManeuverPlanner>` object.
+
+   :resjson MechJeb.OperationPeriapsis value:
+
+
+
+
+.. http:get:: /mech-jeb/maneuver-planner/(id)/operation-plane
+
+   The operation that matches planes with the target.
+
+
+   :param id: The identifier of the :ref:`ManeuverPlanner <http-MechJeb.ManeuverPlanner>` object.
+
+   :resjson MechJeb.OperationPlane value:
+
+
+
+
+.. http:get:: /mech-jeb/maneuver-planner/(id)/operation-resonant-orbit
+
+   The operation that changes to a resonant orbit.
+
+
+   :param id: The identifier of the :ref:`ManeuverPlanner <http-MechJeb.ManeuverPlanner>` object.
+
+   :resjson MechJeb.OperationResonantOrbit value:
+
+
+
+
+.. http:get:: /mech-jeb/maneuver-planner/(id)/operation-semi-major
+
+   The operation that changes the semi-major axis.
+
+
+   :param id: The identifier of the :ref:`ManeuverPlanner <http-MechJeb.ManeuverPlanner>` object.
+
+   :resjson MechJeb.OperationSemiMajor value:
+
+
+
+
+.. http:get:: /mech-jeb/maneuver-planner/(id)/operation-transfer
+
+   The operation that transfers to the target.
+
+
+   :param id: The identifier of the :ref:`ManeuverPlanner <http-MechJeb.ManeuverPlanner>` object.
+
+   :resjson MechJeb.OperationTransfer value:
+
+
+
+
+.. http:post:: /mech-jeb/maneuver-planner/(id)/abort-node-execution
+
+   Stop executing the maneuver nodes.
+
+
+   :param id: The identifier of the :ref:`ManeuverPlanner <http-MechJeb.ManeuverPlanner>` object.
+
+
+
+
+
+
+.. http:post:: /mech-jeb/maneuver-planner/(id)/execute-all-nodes
+
+   Execute all the maneuver nodes. Throws an exception if the vessel has no maneuver
+   node.
+
+
+   :param id: The identifier of the :ref:`ManeuverPlanner <http-MechJeb.ManeuverPlanner>` object.
+
+
+
+
+
+
+.. http:post:: /mech-jeb/maneuver-planner/(id)/execute-next-node
+
+   Execute the next maneuver node. Throws an exception if the vessel has no maneuver
+   node.
+
+
+   :param id: The identifier of the :ref:`ManeuverPlanner <http-MechJeb.ManeuverPlanner>` object.
+
+
+
+
+
+
+.. http:get:: /mech-jeb/maneuver-planner/(id)/autowarp
+
+   Whether to warp time to the burn.
+
+   .. note::
+
+      The same setting as :http:get:`/mech-jeb/ascent-settings/(id)/autowarp`,
+      :http:get:`/mech-jeb/landing-guidance/(id)/autowarp` and :http:get:`/mech-jeb/rendezvous-autopilot/(id)/autowarp`.
+
+
+   :param id: The identifier of the :ref:`ManeuverPlanner <http-MechJeb.ManeuverPlanner>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/maneuver-planner/(id)/autowarp
+
+   Whether to warp time to the burn.
+
+   .. note::
+
+      The same setting as :http:get:`/mech-jeb/ascent-settings/(id)/autowarp`,
+      :http:get:`/mech-jeb/landing-guidance/(id)/autowarp` and :http:get:`/mech-jeb/rendezvous-autopilot/(id)/autowarp`.
+
+
+   :param id: The identifier of the :ref:`ManeuverPlanner <http-MechJeb.ManeuverPlanner>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/maneuver-planner/(id)/executing-node
+
+   Whether a maneuver node is being executed.
+
+
+   :param id: The identifier of the :ref:`ManeuverPlanner <http-MechJeb.ManeuverPlanner>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /mech-jeb/maneuver-planner/(id)/lead-time
+
+   The time before the burn at which time warp stops, in seconds.
+
+
+   :param id: The identifier of the :ref:`ManeuverPlanner <http-MechJeb.ManeuverPlanner>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/maneuver-planner/(id)/lead-time
+
+   The time before the burn at which time warp stops, in seconds.
+
+
+   :param id: The identifier of the :ref:`ManeuverPlanner <http-MechJeb.ManeuverPlanner>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/maneuver-planner/(id)/rcs-only
+
+   Whether to burn with the RCS thrusters in place of the engines.
+
+
+   :param id: The identifier of the :ref:`ManeuverPlanner <http-MechJeb.ManeuverPlanner>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/maneuver-planner/(id)/rcs-only
+
+   Whether to burn with the RCS thrusters in place of the engines.
+
+
+   :param id: The identifier of the :ref:`ManeuverPlanner <http-MechJeb.ManeuverPlanner>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/maneuver-planner/(id)/kill-roll-rotation
+
+   Whether to stop the vessel's roll before the burn.
+
+
+   :param id: The identifier of the :ref:`ManeuverPlanner <http-MechJeb.ManeuverPlanner>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/maneuver-planner/(id)/kill-roll-rotation
+
+   Whether to stop the vessel's roll before the burn.
+
+
+   :param id: The identifier of the :ref:`ManeuverPlanner <http-MechJeb.ManeuverPlanner>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+
+.. _http-MechJeb.OperationException:
+
+.. rubric:: OperationException
+
+Thrown when an operation cannot make its nodes, such as when it needs a target and
+there is none.
+
+Returned as an error whose ``service`` and ``name`` are ``"MechJeb"`` and ``"OperationException"``.
+
+
+
+TimeSelector
+------------
+
+
+.. _http-MechJeb.TimeSelector:
+
+.. rubric:: TimeSelector
+
+The time of a maneuver.
+
+A ``TimeSelector`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /mech-jeb/time-selector/(id)/circularize-altitude
+
+   The altitude, in meters.
+
+   .. note::
+
+      Applies to ``"altitude"``.
+
+
+   :param id: The identifier of the :ref:`TimeSelector <http-MechJeb.TimeSelector>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/time-selector/(id)/circularize-altitude
+
+   The altitude, in meters.
+
+   .. note::
+
+      Applies to ``"altitude"``.
+
+
+   :param id: The identifier of the :ref:`TimeSelector <http-MechJeb.TimeSelector>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/time-selector/(id)/lead-time
+
+   The time from now, in seconds.
+
+   .. note::
+
+      Applies to ``"x_from_now"``.
+
+
+   :param id: The identifier of the :ref:`TimeSelector <http-MechJeb.TimeSelector>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/time-selector/(id)/lead-time
+
+   The time from now, in seconds.
+
+   .. note::
+
+      Applies to ``"x_from_now"``.
+
+
+   :param id: The identifier of the :ref:`TimeSelector <http-MechJeb.TimeSelector>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/time-selector/(id)/time-reference
+
+   The time reference. Throws an exception if set to a reference the operation does
+   not allow.
+
+
+   :param id: The identifier of the :ref:`TimeSelector <http-MechJeb.TimeSelector>` object.
+
+   :resjson MechJeb.TimeReference value:
+
+.. http:put:: /mech-jeb/time-selector/(id)/time-reference
+
+   The time reference. Throws an exception if set to a reference the operation does
+   not allow.
+
+
+   :param id: The identifier of the :ref:`TimeSelector <http-MechJeb.TimeSelector>` object.
+
+   :reqjson MechJeb.TimeReference value: The new value.
+
+
+
+
+
+.. _http-MechJeb.TimeReference:
+
+.. rubric:: TimeReference
+
+The time reference of a maneuver. See :http:get:`/mech-jeb/time-selector/(id)/time-reference`.
+
+Passed and returned as the name of one of its values:
+
+
+``"computed"``
+   At the optimum time.
+
+
+``"x_from_now"``
+   After :http:get:`/mech-jeb/time-selector/(id)/lead-time`.
+
+
+``"apoapsis"``
+   At the next apoapsis.
+
+
+``"periapsis"``
+   At the next periapsis.
+
+
+``"altitude"``
+   At :http:get:`/mech-jeb/time-selector/(id)/circularize-altitude`.
+
+
+``"eq_ascending"``
+   At the equatorial ascending node.
+
+
+``"eq_descending"``
+   At the equatorial descending node.
+
+
+``"rel_ascending"``
+   At the next ascending node with the target.
+
+
+``"rel_descending"``
+   At the next descending node with the target.
+
+
+``"closest_approach"``
+   At the closest approach to the target.
+
+
+``"eq_highest_ad"``
+   At the cheaper of the equatorial ascending and descending nodes.
+
+
+``"eq_nearest_ad"``
+   At the nearer of the equatorial ascending and descending nodes.
+
+
+``"rel_highest_ad"``
+   At the cheaper of the ascending and descending nodes with the target.
+
+
+``"rel_nearest_ad"``
+   At the nearer of the ascending and descending nodes with the target.
+
+
+
+Operations
+----------
+
+OperationAdvancedTransfer
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+.. _http-MechJeb.OperationAdvancedTransfer:
+
+.. rubric:: OperationAdvancedTransfer
+
+An interplanetary transfer to the target body, at the departure that needs the least
+delta-v before :http:get:`/mech-jeb/operation-advanced-transfer/(id)/max-arrival-time`.
+
+.. note::
+
+   MechJeb searches for the departure in the background. The first call to
+   ``MakeNodes`` starts the search, and throws an :ref:`OperationException <http-MechJeb.OperationException>`
+   until it finishes. See :http:get:`/mech-jeb/operation-advanced-transfer/(id)/searching`.
+
+
+A ``OperationAdvancedTransfer`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /mech-jeb/operation-advanced-transfer/(id)/max-arrival-time
+
+   The latest arrival time, as a time from now, in seconds.
+
+
+   :param id: The identifier of the :ref:`OperationAdvancedTransfer <http-MechJeb.OperationAdvancedTransfer>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/operation-advanced-transfer/(id)/max-arrival-time
+
+   The latest arrival time, as a time from now, in seconds.
+
+
+   :param id: The identifier of the :ref:`OperationAdvancedTransfer <http-MechJeb.OperationAdvancedTransfer>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/operation-advanced-transfer/(id)/include-capture-burn
+
+   Whether to plan a capture burn at the destination.
+
+
+   :param id: The identifier of the :ref:`OperationAdvancedTransfer <http-MechJeb.OperationAdvancedTransfer>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/operation-advanced-transfer/(id)/include-capture-burn
+
+   Whether to plan a capture burn at the destination.
+
+
+   :param id: The identifier of the :ref:`OperationAdvancedTransfer <http-MechJeb.OperationAdvancedTransfer>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/operation-advanced-transfer/(id)/periapsis-height
+
+   The altitude of the periapsis at the destination, in meters.
+
+
+   :param id: The identifier of the :ref:`OperationAdvancedTransfer <http-MechJeb.OperationAdvancedTransfer>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/operation-advanced-transfer/(id)/periapsis-height
+
+   The altitude of the periapsis at the destination, in meters.
+
+
+   :param id: The identifier of the :ref:`OperationAdvancedTransfer <http-MechJeb.OperationAdvancedTransfer>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/operation-advanced-transfer/(id)/searching
+
+   Whether MechJeb is searching for the departure.
+
+
+   :param id: The identifier of the :ref:`OperationAdvancedTransfer <http-MechJeb.OperationAdvancedTransfer>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /mech-jeb/operation-advanced-transfer/(id)/search-progress
+
+   The progress of the search for the departure, as a percentage.
+
+
+   :param id: The identifier of the :ref:`OperationAdvancedTransfer <http-MechJeb.OperationAdvancedTransfer>` object.
+
+   :resjson int32 value:
+
+
+
+
+.. http:get:: /mech-jeb/operation-advanced-transfer/(id)/error-message
+
+   The warning or error from the last call to ``MakeNodes``, or an empty string.
+
+
+   :param id: The identifier of the :ref:`OperationAdvancedTransfer <http-MechJeb.OperationAdvancedTransfer>` object.
+
+   :resjson string value:
+
+
+
+
+.. http:post:: /mech-jeb/operation-advanced-transfer/(id)/make-nodes
+
+   Make the maneuver nodes of the operation. Throws an :ref:`OperationException <http-MechJeb.OperationException>`
+   if the operation cannot make them.
+
+   .. note::
+
+      The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+      left in ``ErrorMessage``.
+
+
+   :param id: The identifier of the :ref:`OperationAdvancedTransfer <http-MechJeb.OperationAdvancedTransfer>` object.
+
+   :resjson list<SpaceCenter.Node> value: The maneuver nodes.
+
+
+
+
+
+
+OperationApoapsis
+^^^^^^^^^^^^^^^^^
+
+
+.. _http-MechJeb.OperationApoapsis:
+
+.. rubric:: OperationApoapsis
+
+Change the apoapsis.
+
+A ``OperationApoapsis`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /mech-jeb/operation-apoapsis/(id)/error-message
+
+   The warning or error from the last call to ``MakeNodes``, or an empty string.
+
+
+   :param id: The identifier of the :ref:`OperationApoapsis <http-MechJeb.OperationApoapsis>` object.
+
+   :resjson string value:
+
+
+
+
+.. http:post:: /mech-jeb/operation-apoapsis/(id)/make-nodes
+
+   Make the maneuver nodes of the operation. Throws an :ref:`OperationException <http-MechJeb.OperationException>`
+   if the operation cannot make them.
+
+   .. note::
+
+      The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+      left in ``ErrorMessage``.
+
+
+   :param id: The identifier of the :ref:`OperationApoapsis <http-MechJeb.OperationApoapsis>` object.
+
+   :resjson list<SpaceCenter.Node> value: The maneuver nodes.
+
+
+
+
+
+.. http:get:: /mech-jeb/operation-apoapsis/(id)/new-apoapsis
+
+   The new apoapsis altitude, in meters.
+
+
+   :param id: The identifier of the :ref:`OperationApoapsis <http-MechJeb.OperationApoapsis>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/operation-apoapsis/(id)/new-apoapsis
+
+   The new apoapsis altitude, in meters.
+
+
+   :param id: The identifier of the :ref:`OperationApoapsis <http-MechJeb.OperationApoapsis>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/operation-apoapsis/(id)/time-selector
+
+   The time of the maneuver.
+
+
+   :param id: The identifier of the :ref:`OperationApoapsis <http-MechJeb.OperationApoapsis>` object.
+
+   :resjson MechJeb.TimeSelector value:
+
+
+
+
+
+OperationCircularize
+^^^^^^^^^^^^^^^^^^^^
+
+
+.. _http-MechJeb.OperationCircularize:
+
+.. rubric:: OperationCircularize
+
+Circularize the orbit.
+
+.. note::
+
+   To raise the periapsis to the apoapsis, set the time to ``"apoapsis"``, and to lower the apoapsis to the periapsis, set it to ``"periapsis"``. These are the cheapest.
+
+
+A ``OperationCircularize`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /mech-jeb/operation-circularize/(id)/error-message
+
+   The warning or error from the last call to ``MakeNodes``, or an empty string.
+
+
+   :param id: The identifier of the :ref:`OperationCircularize <http-MechJeb.OperationCircularize>` object.
+
+   :resjson string value:
+
+
+
+
+.. http:post:: /mech-jeb/operation-circularize/(id)/make-nodes
+
+   Make the maneuver nodes of the operation. Throws an :ref:`OperationException <http-MechJeb.OperationException>`
+   if the operation cannot make them.
+
+   .. note::
+
+      The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+      left in ``ErrorMessage``.
+
+
+   :param id: The identifier of the :ref:`OperationCircularize <http-MechJeb.OperationCircularize>` object.
+
+   :resjson list<SpaceCenter.Node> value: The maneuver nodes.
+
+
+
+
+
+.. http:get:: /mech-jeb/operation-circularize/(id)/time-selector
+
+   The time of the maneuver.
+
+
+   :param id: The identifier of the :ref:`OperationCircularize <http-MechJeb.OperationCircularize>` object.
+
+   :resjson MechJeb.TimeSelector value:
+
+
+
+
+
+OperationCourseCorrection
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+.. _http-MechJeb.OperationCourseCorrection:
+
+.. rubric:: OperationCourseCorrection
+
+Fine tune the closest approach to the target.
+
+A ``OperationCourseCorrection`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /mech-jeb/operation-course-correction/(id)/final-periapsis-altitude
+
+   The periapsis altitude at a target body, in meters.
+
+
+   :param id: The identifier of the :ref:`OperationCourseCorrection <http-MechJeb.OperationCourseCorrection>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/operation-course-correction/(id)/final-periapsis-altitude
+
+   The periapsis altitude at a target body, in meters.
+
+
+   :param id: The identifier of the :ref:`OperationCourseCorrection <http-MechJeb.OperationCourseCorrection>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/operation-course-correction/(id)/error-message
+
+   The warning or error from the last call to ``MakeNodes``, or an empty string.
+
+
+   :param id: The identifier of the :ref:`OperationCourseCorrection <http-MechJeb.OperationCourseCorrection>` object.
+
+   :resjson string value:
+
+
+
+
+.. http:get:: /mech-jeb/operation-course-correction/(id)/intercept-distance
+
+   The closest approach distance to a target vessel, in meters.
+
+
+   :param id: The identifier of the :ref:`OperationCourseCorrection <http-MechJeb.OperationCourseCorrection>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/operation-course-correction/(id)/intercept-distance
+
+   The closest approach distance to a target vessel, in meters.
+
+
+   :param id: The identifier of the :ref:`OperationCourseCorrection <http-MechJeb.OperationCourseCorrection>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:post:: /mech-jeb/operation-course-correction/(id)/make-nodes
+
+   Make the maneuver nodes of the operation. Throws an :ref:`OperationException <http-MechJeb.OperationException>`
+   if the operation cannot make them.
+
+   .. note::
+
+      The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+      left in ``ErrorMessage``.
+
+
+   :param id: The identifier of the :ref:`OperationCourseCorrection <http-MechJeb.OperationCourseCorrection>` object.
+
+   :resjson list<SpaceCenter.Node> value: The maneuver nodes.
+
+
+
+
+
+
+OperationEccentricity
+^^^^^^^^^^^^^^^^^^^^^
+
+
+.. _http-MechJeb.OperationEccentricity:
+
+.. rubric:: OperationEccentricity
+
+Change the eccentricity.
+
+A ``OperationEccentricity`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /mech-jeb/operation-eccentricity/(id)/error-message
+
+   The warning or error from the last call to ``MakeNodes``, or an empty string.
+
+
+   :param id: The identifier of the :ref:`OperationEccentricity <http-MechJeb.OperationEccentricity>` object.
+
+   :resjson string value:
+
+
+
+
+.. http:post:: /mech-jeb/operation-eccentricity/(id)/make-nodes
+
+   Make the maneuver nodes of the operation. Throws an :ref:`OperationException <http-MechJeb.OperationException>`
+   if the operation cannot make them.
+
+   .. note::
+
+      The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+      left in ``ErrorMessage``.
+
+
+   :param id: The identifier of the :ref:`OperationEccentricity <http-MechJeb.OperationEccentricity>` object.
+
+   :resjson list<SpaceCenter.Node> value: The maneuver nodes.
+
+
+
+
+
+.. http:get:: /mech-jeb/operation-eccentricity/(id)/new-eccentricity
+
+   The new eccentricity.
+
+
+   :param id: The identifier of the :ref:`OperationEccentricity <http-MechJeb.OperationEccentricity>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/operation-eccentricity/(id)/new-eccentricity
+
+   The new eccentricity.
+
+
+   :param id: The identifier of the :ref:`OperationEccentricity <http-MechJeb.OperationEccentricity>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/operation-eccentricity/(id)/time-selector
+
+   The time of the maneuver.
+
+
+   :param id: The identifier of the :ref:`OperationEccentricity <http-MechJeb.OperationEccentricity>` object.
+
+   :resjson MechJeb.TimeSelector value:
+
+
+
+
+
+OperationEllipticize
+^^^^^^^^^^^^^^^^^^^^
+
+
+.. _http-MechJeb.OperationEllipticize:
+
+.. rubric:: OperationEllipticize
+
+Change both the periapsis and the apoapsis.
+
+A ``OperationEllipticize`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /mech-jeb/operation-ellipticize/(id)/error-message
+
+   The warning or error from the last call to ``MakeNodes``, or an empty string.
+
+
+   :param id: The identifier of the :ref:`OperationEllipticize <http-MechJeb.OperationEllipticize>` object.
+
+   :resjson string value:
+
+
+
+
+.. http:post:: /mech-jeb/operation-ellipticize/(id)/make-nodes
+
+   Make the maneuver nodes of the operation. Throws an :ref:`OperationException <http-MechJeb.OperationException>`
+   if the operation cannot make them.
+
+   .. note::
+
+      The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+      left in ``ErrorMessage``.
+
+
+   :param id: The identifier of the :ref:`OperationEllipticize <http-MechJeb.OperationEllipticize>` object.
+
+   :resjson list<SpaceCenter.Node> value: The maneuver nodes.
+
+
+
+
+
+.. http:get:: /mech-jeb/operation-ellipticize/(id)/new-apoapsis
+
+   The new apoapsis altitude, in meters.
+
+
+   :param id: The identifier of the :ref:`OperationEllipticize <http-MechJeb.OperationEllipticize>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/operation-ellipticize/(id)/new-apoapsis
+
+   The new apoapsis altitude, in meters.
+
+
+   :param id: The identifier of the :ref:`OperationEllipticize <http-MechJeb.OperationEllipticize>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/operation-ellipticize/(id)/new-periapsis
+
+   The new periapsis altitude, in meters.
+
+
+   :param id: The identifier of the :ref:`OperationEllipticize <http-MechJeb.OperationEllipticize>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/operation-ellipticize/(id)/new-periapsis
+
+   The new periapsis altitude, in meters.
+
+
+   :param id: The identifier of the :ref:`OperationEllipticize <http-MechJeb.OperationEllipticize>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/operation-ellipticize/(id)/time-selector
+
+   The time of the maneuver.
+
+
+   :param id: The identifier of the :ref:`OperationEllipticize <http-MechJeb.OperationEllipticize>` object.
+
+   :resjson MechJeb.TimeSelector value:
+
+
+
+
+
+OperationInclination
+^^^^^^^^^^^^^^^^^^^^
+
+
+.. _http-MechJeb.OperationInclination:
+
+.. rubric:: OperationInclination
+
+Change the inclination.
+
+A ``OperationInclination`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /mech-jeb/operation-inclination/(id)/error-message
+
+   The warning or error from the last call to ``MakeNodes``, or an empty string.
+
+
+   :param id: The identifier of the :ref:`OperationInclination <http-MechJeb.OperationInclination>` object.
+
+   :resjson string value:
+
+
+
+
+.. http:post:: /mech-jeb/operation-inclination/(id)/make-nodes
+
+   Make the maneuver nodes of the operation. Throws an :ref:`OperationException <http-MechJeb.OperationException>`
+   if the operation cannot make them.
+
+   .. note::
+
+      The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+      left in ``ErrorMessage``.
+
+
+   :param id: The identifier of the :ref:`OperationInclination <http-MechJeb.OperationInclination>` object.
+
+   :resjson list<SpaceCenter.Node> value: The maneuver nodes.
+
+
+
+
+
+.. http:get:: /mech-jeb/operation-inclination/(id)/new-inclination
+
+   The new inclination, in degrees.
+
+
+   :param id: The identifier of the :ref:`OperationInclination <http-MechJeb.OperationInclination>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/operation-inclination/(id)/new-inclination
+
+   The new inclination, in degrees.
+
+
+   :param id: The identifier of the :ref:`OperationInclination <http-MechJeb.OperationInclination>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/operation-inclination/(id)/time-selector
+
+   The time of the maneuver.
+
+
+   :param id: The identifier of the :ref:`OperationInclination <http-MechJeb.OperationInclination>` object.
+
+   :resjson MechJeb.TimeSelector value:
+
+
+
+
+
+OperationInterplanetaryTransfer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+.. _http-MechJeb.OperationInterplanetaryTransfer:
+
+.. rubric:: OperationInterplanetaryTransfer
+
+Transfer to another planet.
+
+A ``OperationInterplanetaryTransfer`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /mech-jeb/operation-interplanetary-transfer/(id)/error-message
+
+   The warning or error from the last call to ``MakeNodes``, or an empty string.
+
+
+   :param id: The identifier of the :ref:`OperationInterplanetaryTransfer <http-MechJeb.OperationInterplanetaryTransfer>` object.
+
+   :resjson string value:
+
+
+
+
+.. http:post:: /mech-jeb/operation-interplanetary-transfer/(id)/make-nodes
+
+   Make the maneuver nodes of the operation. Throws an :ref:`OperationException <http-MechJeb.OperationException>`
+   if the operation cannot make them.
+
+   .. note::
+
+      The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+      left in ``ErrorMessage``.
+
+
+   :param id: The identifier of the :ref:`OperationInterplanetaryTransfer <http-MechJeb.OperationInterplanetaryTransfer>` object.
+
+   :resjson list<SpaceCenter.Node> value: The maneuver nodes.
+
+
+
+
+
+.. http:get:: /mech-jeb/operation-interplanetary-transfer/(id)/wait-for-phase-angle
+
+   Whether to wait for the optimal phase angle. Otherwise the transfer happens now.
+
+
+   :param id: The identifier of the :ref:`OperationInterplanetaryTransfer <http-MechJeb.OperationInterplanetaryTransfer>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/operation-interplanetary-transfer/(id)/wait-for-phase-angle
+
+   Whether to wait for the optimal phase angle. Otherwise the transfer happens now.
+
+
+   :param id: The identifier of the :ref:`OperationInterplanetaryTransfer <http-MechJeb.OperationInterplanetaryTransfer>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+
+OperationKillRelVel
+^^^^^^^^^^^^^^^^^^^
+
+
+.. _http-MechJeb.OperationKillRelVel:
+
+.. rubric:: OperationKillRelVel
+
+Match velocities with the target.
+
+A ``OperationKillRelVel`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /mech-jeb/operation-kill-rel-vel/(id)/error-message
+
+   The warning or error from the last call to ``MakeNodes``, or an empty string.
+
+
+   :param id: The identifier of the :ref:`OperationKillRelVel <http-MechJeb.OperationKillRelVel>` object.
+
+   :resjson string value:
+
+
+
+
+.. http:post:: /mech-jeb/operation-kill-rel-vel/(id)/make-nodes
+
+   Make the maneuver nodes of the operation. Throws an :ref:`OperationException <http-MechJeb.OperationException>`
+   if the operation cannot make them.
+
+   .. note::
+
+      The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+      left in ``ErrorMessage``.
+
+
+   :param id: The identifier of the :ref:`OperationKillRelVel <http-MechJeb.OperationKillRelVel>` object.
+
+   :resjson list<SpaceCenter.Node> value: The maneuver nodes.
+
+
+
+
+
+.. http:get:: /mech-jeb/operation-kill-rel-vel/(id)/time-selector
+
+   The time of the maneuver.
+
+
+   :param id: The identifier of the :ref:`OperationKillRelVel <http-MechJeb.OperationKillRelVel>` object.
+
+   :resjson MechJeb.TimeSelector value:
+
+
+
+
+
+OperationLambert
+^^^^^^^^^^^^^^^^
+
+
+.. _http-MechJeb.OperationLambert:
+
+.. rubric:: OperationLambert
+
+Intercept the target at a chosen time.
+
+A ``OperationLambert`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /mech-jeb/operation-lambert/(id)/error-message
+
+   The warning or error from the last call to ``MakeNodes``, or an empty string.
+
+
+   :param id: The identifier of the :ref:`OperationLambert <http-MechJeb.OperationLambert>` object.
+
+   :resjson string value:
+
+
+
+
+.. http:get:: /mech-jeb/operation-lambert/(id)/intercept-interval
+
+   The time from the maneuver to the intercept, in seconds.
+
+
+   :param id: The identifier of the :ref:`OperationLambert <http-MechJeb.OperationLambert>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/operation-lambert/(id)/intercept-interval
+
+   The time from the maneuver to the intercept, in seconds.
+
+
+   :param id: The identifier of the :ref:`OperationLambert <http-MechJeb.OperationLambert>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:post:: /mech-jeb/operation-lambert/(id)/make-nodes
+
+   Make the maneuver nodes of the operation. Throws an :ref:`OperationException <http-MechJeb.OperationException>`
+   if the operation cannot make them.
+
+   .. note::
+
+      The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+      left in ``ErrorMessage``.
+
+
+   :param id: The identifier of the :ref:`OperationLambert <http-MechJeb.OperationLambert>` object.
+
+   :resjson list<SpaceCenter.Node> value: The maneuver nodes.
+
+
+
+
+
+.. http:get:: /mech-jeb/operation-lambert/(id)/time-selector
+
+   The time of the maneuver.
+
+
+   :param id: The identifier of the :ref:`OperationLambert <http-MechJeb.OperationLambert>` object.
+
+   :resjson MechJeb.TimeSelector value:
+
+
+
+
+
+OperationLan
+^^^^^^^^^^^^
+
+
+.. _http-MechJeb.OperationLan:
+
+.. rubric:: OperationLan
+
+Change the longitude of the ascending node.
+
+A ``OperationLan`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /mech-jeb/operation-lan/(id)/error-message
+
+   The warning or error from the last call to ``MakeNodes``, or an empty string.
+
+
+   :param id: The identifier of the :ref:`OperationLan <http-MechJeb.OperationLan>` object.
+
+   :resjson string value:
+
+
+
+
+.. http:post:: /mech-jeb/operation-lan/(id)/make-nodes
+
+   Make the maneuver nodes of the operation. Throws an :ref:`OperationException <http-MechJeb.OperationException>`
+   if the operation cannot make them.
+
+   .. note::
+
+      The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+      left in ``ErrorMessage``.
+
+
+   :param id: The identifier of the :ref:`OperationLan <http-MechJeb.OperationLan>` object.
+
+   :resjson list<SpaceCenter.Node> value: The maneuver nodes.
+
+
+
+
+
+.. http:get:: /mech-jeb/operation-lan/(id)/new-lan
+
+   The new longitude of the ascending node, in degrees.
+
+   .. note::
+
+      MechJeb holds this value in the target controller of each vessel, as the longitude of
+      the position target. Setting it also moves the position target.
+
+
+   :param id: The identifier of the :ref:`OperationLan <http-MechJeb.OperationLan>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/operation-lan/(id)/new-lan
+
+   The new longitude of the ascending node, in degrees.
+
+   .. note::
+
+      MechJeb holds this value in the target controller of each vessel, as the longitude of
+      the position target. Setting it also moves the position target.
+
+
+   :param id: The identifier of the :ref:`OperationLan <http-MechJeb.OperationLan>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/operation-lan/(id)/time-selector
+
+   The time of the maneuver.
+
+
+   :param id: The identifier of the :ref:`OperationLan <http-MechJeb.OperationLan>` object.
+
+   :resjson MechJeb.TimeSelector value:
+
+
+
+
+
+OperationLongitude
+^^^^^^^^^^^^^^^^^^
+
+
+.. _http-MechJeb.OperationLongitude:
+
+.. rubric:: OperationLongitude
+
+Change the surface longitude of the apsis.
+
+A ``OperationLongitude`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /mech-jeb/operation-longitude/(id)/error-message
+
+   The warning or error from the last call to ``MakeNodes``, or an empty string.
+
+
+   :param id: The identifier of the :ref:`OperationLongitude <http-MechJeb.OperationLongitude>` object.
+
+   :resjson string value:
+
+
+
+
+.. http:post:: /mech-jeb/operation-longitude/(id)/make-nodes
+
+   Make the maneuver nodes of the operation. Throws an :ref:`OperationException <http-MechJeb.OperationException>`
+   if the operation cannot make them.
+
+   .. note::
+
+      The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+      left in ``ErrorMessage``.
+
+
+   :param id: The identifier of the :ref:`OperationLongitude <http-MechJeb.OperationLongitude>` object.
+
+   :resjson list<SpaceCenter.Node> value: The maneuver nodes.
+
+
+
+
+
+.. http:get:: /mech-jeb/operation-longitude/(id)/new-surface-longitude
+
+   The new surface longitude of the apsis after one orbit, in degrees.
+
+   .. note::
+
+      MechJeb holds this value in the target controller of each vessel, as the longitude of
+      the position target. Setting it also moves the position target.
+
+
+   :param id: The identifier of the :ref:`OperationLongitude <http-MechJeb.OperationLongitude>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/operation-longitude/(id)/new-surface-longitude
+
+   The new surface longitude of the apsis after one orbit, in degrees.
+
+   .. note::
+
+      MechJeb holds this value in the target controller of each vessel, as the longitude of
+      the position target. Setting it also moves the position target.
+
+
+   :param id: The identifier of the :ref:`OperationLongitude <http-MechJeb.OperationLongitude>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/operation-longitude/(id)/time-selector
+
+   The time of the maneuver.
+
+
+   :param id: The identifier of the :ref:`OperationLongitude <http-MechJeb.OperationLongitude>` object.
+
+   :resjson MechJeb.TimeSelector value:
+
+
+
+
+
+OperationMoonReturn
+^^^^^^^^^^^^^^^^^^^
+
+
+.. _http-MechJeb.OperationMoonReturn:
+
+.. rubric:: OperationMoonReturn
+
+Return from a moon to the body it orbits.
+
+A ``OperationMoonReturn`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /mech-jeb/operation-moon-return/(id)/error-message
+
+   The warning or error from the last call to ``MakeNodes``, or an empty string.
+
+
+   :param id: The identifier of the :ref:`OperationMoonReturn <http-MechJeb.OperationMoonReturn>` object.
+
+   :resjson string value:
+
+
+
+
+.. http:post:: /mech-jeb/operation-moon-return/(id)/make-nodes
+
+   Make the maneuver nodes of the operation. Throws an :ref:`OperationException <http-MechJeb.OperationException>`
+   if the operation cannot make them.
+
+   .. note::
+
+      The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+      left in ``ErrorMessage``.
+
+
+   :param id: The identifier of the :ref:`OperationMoonReturn <http-MechJeb.OperationMoonReturn>` object.
+
+   :resjson list<SpaceCenter.Node> value: The maneuver nodes.
+
+
+
+
+
+.. http:get:: /mech-jeb/operation-moon-return/(id)/moon-return-altitude
+
+   The approximate periapsis altitude at the body, in meters.
+
+
+   :param id: The identifier of the :ref:`OperationMoonReturn <http-MechJeb.OperationMoonReturn>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/operation-moon-return/(id)/moon-return-altitude
+
+   The approximate periapsis altitude at the body, in meters.
+
+
+   :param id: The identifier of the :ref:`OperationMoonReturn <http-MechJeb.OperationMoonReturn>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+
+OperationPeriapsis
+^^^^^^^^^^^^^^^^^^
+
+
+.. _http-MechJeb.OperationPeriapsis:
+
+.. rubric:: OperationPeriapsis
+
+Change the periapsis.
+
+A ``OperationPeriapsis`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /mech-jeb/operation-periapsis/(id)/error-message
+
+   The warning or error from the last call to ``MakeNodes``, or an empty string.
+
+
+   :param id: The identifier of the :ref:`OperationPeriapsis <http-MechJeb.OperationPeriapsis>` object.
+
+   :resjson string value:
+
+
+
+
+.. http:post:: /mech-jeb/operation-periapsis/(id)/make-nodes
+
+   Make the maneuver nodes of the operation. Throws an :ref:`OperationException <http-MechJeb.OperationException>`
+   if the operation cannot make them.
+
+   .. note::
+
+      The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+      left in ``ErrorMessage``.
+
+
+   :param id: The identifier of the :ref:`OperationPeriapsis <http-MechJeb.OperationPeriapsis>` object.
+
+   :resjson list<SpaceCenter.Node> value: The maneuver nodes.
+
+
+
+
+
+.. http:get:: /mech-jeb/operation-periapsis/(id)/new-periapsis
+
+   The new periapsis altitude, in meters.
+
+
+   :param id: The identifier of the :ref:`OperationPeriapsis <http-MechJeb.OperationPeriapsis>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/operation-periapsis/(id)/new-periapsis
+
+   The new periapsis altitude, in meters.
+
+
+   :param id: The identifier of the :ref:`OperationPeriapsis <http-MechJeb.OperationPeriapsis>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/operation-periapsis/(id)/time-selector
+
+   The time of the maneuver.
+
+
+   :param id: The identifier of the :ref:`OperationPeriapsis <http-MechJeb.OperationPeriapsis>` object.
+
+   :resjson MechJeb.TimeSelector value:
+
+
+
+
+
+OperationPlane
+^^^^^^^^^^^^^^
+
+
+.. _http-MechJeb.OperationPlane:
+
+.. rubric:: OperationPlane
+
+Match planes with the target.
+
+A ``OperationPlane`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /mech-jeb/operation-plane/(id)/error-message
+
+   The warning or error from the last call to ``MakeNodes``, or an empty string.
+
+
+   :param id: The identifier of the :ref:`OperationPlane <http-MechJeb.OperationPlane>` object.
+
+   :resjson string value:
+
+
+
+
+.. http:post:: /mech-jeb/operation-plane/(id)/make-nodes
+
+   Make the maneuver nodes of the operation. Throws an :ref:`OperationException <http-MechJeb.OperationException>`
+   if the operation cannot make them.
+
+   .. note::
+
+      The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+      left in ``ErrorMessage``.
+
+
+   :param id: The identifier of the :ref:`OperationPlane <http-MechJeb.OperationPlane>` object.
+
+   :resjson list<SpaceCenter.Node> value: The maneuver nodes.
+
+
+
+
+
+.. http:get:: /mech-jeb/operation-plane/(id)/time-selector
+
+   The time of the maneuver.
+
+
+   :param id: The identifier of the :ref:`OperationPlane <http-MechJeb.OperationPlane>` object.
+
+   :resjson MechJeb.TimeSelector value:
+
+
+
+
+
+OperationResonantOrbit
+^^^^^^^^^^^^^^^^^^^^^^
+
+
+.. _http-MechJeb.OperationResonantOrbit:
+
+.. rubric:: OperationResonantOrbit
+
+Change to a resonant orbit, to place satellites in a constellation.
+
+.. note::
+
+   Start from an orbit in the plane of the constellation. To deploy satellites, set the
+   denominator to their number. A numerator one less than the denominator is the cheapest,
+   though not the fastest. The two numbers must have no common factor.
+
+
+A ``OperationResonantOrbit`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /mech-jeb/operation-resonant-orbit/(id)/error-message
+
+   The warning or error from the last call to ``MakeNodes``, or an empty string.
+
+
+   :param id: The identifier of the :ref:`OperationResonantOrbit <http-MechJeb.OperationResonantOrbit>` object.
+
+   :resjson string value:
+
+
+
+
+.. http:post:: /mech-jeb/operation-resonant-orbit/(id)/make-nodes
+
+   Make the maneuver nodes of the operation. Throws an :ref:`OperationException <http-MechJeb.OperationException>`
+   if the operation cannot make them.
+
+   .. note::
+
+      The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+      left in ``ErrorMessage``.
+
+
+   :param id: The identifier of the :ref:`OperationResonantOrbit <http-MechJeb.OperationResonantOrbit>` object.
+
+   :resjson list<SpaceCenter.Node> value: The maneuver nodes.
+
+
+
+
+
+.. http:get:: /mech-jeb/operation-resonant-orbit/(id)/resonance-denominator
+
+   The denominator of the ratio of the new orbital period to the current one.
+
+
+   :param id: The identifier of the :ref:`OperationResonantOrbit <http-MechJeb.OperationResonantOrbit>` object.
+
+   :resjson int32 value:
+
+.. http:put:: /mech-jeb/operation-resonant-orbit/(id)/resonance-denominator
+
+   The denominator of the ratio of the new orbital period to the current one.
+
+
+   :param id: The identifier of the :ref:`OperationResonantOrbit <http-MechJeb.OperationResonantOrbit>` object.
+
+   :reqjson int32 value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/operation-resonant-orbit/(id)/resonance-numerator
+
+   The numerator of the ratio of the new orbital period to the current one.
+
+
+   :param id: The identifier of the :ref:`OperationResonantOrbit <http-MechJeb.OperationResonantOrbit>` object.
+
+   :resjson int32 value:
+
+.. http:put:: /mech-jeb/operation-resonant-orbit/(id)/resonance-numerator
+
+   The numerator of the ratio of the new orbital period to the current one.
+
+
+   :param id: The identifier of the :ref:`OperationResonantOrbit <http-MechJeb.OperationResonantOrbit>` object.
+
+   :reqjson int32 value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/operation-resonant-orbit/(id)/time-selector
+
+   The time of the maneuver.
+
+
+   :param id: The identifier of the :ref:`OperationResonantOrbit <http-MechJeb.OperationResonantOrbit>` object.
+
+   :resjson MechJeb.TimeSelector value:
+
+
+
+
+
+OperationSemiMajor
+^^^^^^^^^^^^^^^^^^
+
+
+.. _http-MechJeb.OperationSemiMajor:
+
+.. rubric:: OperationSemiMajor
+
+Change the semi-major axis.
+
+A ``OperationSemiMajor`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /mech-jeb/operation-semi-major/(id)/error-message
+
+   The warning or error from the last call to ``MakeNodes``, or an empty string.
+
+
+   :param id: The identifier of the :ref:`OperationSemiMajor <http-MechJeb.OperationSemiMajor>` object.
+
+   :resjson string value:
+
+
+
+
+.. http:post:: /mech-jeb/operation-semi-major/(id)/make-nodes
+
+   Make the maneuver nodes of the operation. Throws an :ref:`OperationException <http-MechJeb.OperationException>`
+   if the operation cannot make them.
+
+   .. note::
+
+      The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+      left in ``ErrorMessage``.
+
+
+   :param id: The identifier of the :ref:`OperationSemiMajor <http-MechJeb.OperationSemiMajor>` object.
+
+   :resjson list<SpaceCenter.Node> value: The maneuver nodes.
+
+
+
+
+
+.. http:get:: /mech-jeb/operation-semi-major/(id)/new-semi-major-axis
+
+   The new semi-major axis, in meters.
+
+
+   :param id: The identifier of the :ref:`OperationSemiMajor <http-MechJeb.OperationSemiMajor>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/operation-semi-major/(id)/new-semi-major-axis
+
+   The new semi-major axis, in meters.
+
+
+   :param id: The identifier of the :ref:`OperationSemiMajor <http-MechJeb.OperationSemiMajor>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/operation-semi-major/(id)/time-selector
+
+   The time of the maneuver.
+
+
+   :param id: The identifier of the :ref:`OperationSemiMajor <http-MechJeb.OperationSemiMajor>` object.
+
+   :resjson MechJeb.TimeSelector value:
+
+
+
+
+
+OperationTransfer
+^^^^^^^^^^^^^^^^^
+
+
+.. _http-MechJeb.OperationTransfer:
+
+.. rubric:: OperationTransfer
+
+A bi-impulsive (Hohmann) transfer to the target, within one sphere of influence. It
+suits a rendezvous with a vessel or a transfer to a moon.
+
+.. note::
+
+   Despite the name, the transfer is often uni-impulsive. It happens at the selected time,
+   or at the optimum time.
+
+
+A ``OperationTransfer`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /mech-jeb/operation-transfer/(id)/error-message
+
+   The warning or error from the last call to ``MakeNodes``, or an empty string.
+
+
+   :param id: The identifier of the :ref:`OperationTransfer <http-MechJeb.OperationTransfer>` object.
+
+   :resjson string value:
+
+
+
+
+.. http:post:: /mech-jeb/operation-transfer/(id)/make-nodes
+
+   Make the maneuver nodes of the operation. Throws an :ref:`OperationException <http-MechJeb.OperationException>`
+   if the operation cannot make them.
+
+   .. note::
+
+      The nodes follow the vessel's last maneuver node, if it has one. A warning may be
+      left in ``ErrorMessage``.
+
+
+   :param id: The identifier of the :ref:`OperationTransfer <http-MechJeb.OperationTransfer>` object.
+
+   :resjson list<SpaceCenter.Node> value: The maneuver nodes.
+
+
+
+
+
+.. http:get:: /mech-jeb/operation-transfer/(id)/capture
+
+   Whether the transfer ends in the target's orbit. Without capture, it is an impact or
+   a flyby.
+
+
+   :param id: The identifier of the :ref:`OperationTransfer <http-MechJeb.OperationTransfer>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/operation-transfer/(id)/capture
+
+   Whether the transfer ends in the target's orbit. Without capture, it is an impact or
+   a flyby.
+
+
+   :param id: The identifier of the :ref:`OperationTransfer <http-MechJeb.OperationTransfer>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/operation-transfer/(id)/plan-capture
+
+   Whether to make a second node for the capture burn.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/operation-transfer/(id)/capture`.
+
+
+   :param id: The identifier of the :ref:`OperationTransfer <http-MechJeb.OperationTransfer>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/operation-transfer/(id)/plan-capture
+
+   Whether to make a second node for the capture burn.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/operation-transfer/(id)/capture`.
+
+
+   :param id: The identifier of the :ref:`OperationTransfer <http-MechJeb.OperationTransfer>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/operation-transfer/(id)/rendezvous
+
+   Whether to meet the target, rather than reach its orbit.
+
+
+   :param id: The identifier of the :ref:`OperationTransfer <http-MechJeb.OperationTransfer>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/operation-transfer/(id)/rendezvous
+
+   Whether to meet the target, rather than reach its orbit.
+
+
+   :param id: The identifier of the :ref:`OperationTransfer <http-MechJeb.OperationTransfer>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/operation-transfer/(id)/lag-time
+
+   The time by which the vessel arrives behind the target, in seconds.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/operation-transfer/(id)/rendezvous`.
+
+
+   :param id: The identifier of the :ref:`OperationTransfer <http-MechJeb.OperationTransfer>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/operation-transfer/(id)/lag-time
+
+   The time by which the vessel arrives behind the target, in seconds.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/operation-transfer/(id)/rendezvous`.
+
+
+   :param id: The identifier of the :ref:`OperationTransfer <http-MechJeb.OperationTransfer>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/operation-transfer/(id)/coplanar
+
+   Whether the transfer stays in the vessel's orbital plane.
+
+
+   :param id: The identifier of the :ref:`OperationTransfer <http-MechJeb.OperationTransfer>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/operation-transfer/(id)/coplanar
+
+   Whether the transfer stays in the vessel's orbital plane.
+
+
+   :param id: The identifier of the :ref:`OperationTransfer <http-MechJeb.OperationTransfer>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/operation-transfer/(id)/time-selector
+
+   The time of the maneuver.
+
+
+   :param id: The identifier of the :ref:`OperationTransfer <http-MechJeb.OperationTransfer>` object.
+
+   :resjson MechJeb.TimeSelector value:

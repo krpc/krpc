@@ -1,0 +1,27 @@
+import krpc.client.Connection;
+import krpc.client.Event;
+import krpc.client.services.KRPC.Expression;
+import krpc.client.services.KRPC.Type;
+import krpc.client.services.SpaceCenter;
+import krpc.client.services.SpaceCenter.Flight;
+import krpc.client.services.SpaceCenter.Vessel;
+import krpc.schema.KRPC.ProcedureCall;
+
+
+public class TruncateAltitude {
+  public static void main(String[] args) {
+    try (Connection connection = Connection.newInstance()) {
+      SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
+      Vessel vessel = spaceCenter.getActiveVessel();
+      Flight flight = vessel.flight(null);
+      ProcedureCall meanAltitude =
+          connection.getCall(flight, "getMeanAltitude");
+      // [docs]
+      Expression.Bound e = Expression.bind(connection);
+      Type.Bound t = Type.bind(connection);
+      // Truncate the altitude to a whole number of meters
+      Expression expr = e.cast(e.call(meanAltitude), t.int_());
+      // [/docs]
+    }
+  }
+}

@@ -1,0 +1,662 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+SmartASS
+========
+
+
+.. _http-MechJeb.SmartASS:
+
+.. rubric:: SmartASS
+
+The Smart A.S.S. window, which points the vessel in a chosen direction.
+
+A ``SmartASS`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /mech-jeb/smart-ass/(id)/interface-mode
+
+   The mode of the window, which selects its buttons and nothing else.
+   Throws an exception if set to ``"automatic"``.
+
+
+   :param id: The identifier of the :ref:`SmartASS <http-MechJeb.SmartASS>` object.
+
+   :resjson MechJeb.SmartASSInterfaceMode value:
+
+.. http:put:: /mech-jeb/smart-ass/(id)/interface-mode
+
+   The mode of the window, which selects its buttons and nothing else.
+   Throws an exception if set to ``"automatic"``.
+
+
+   :param id: The identifier of the :ref:`SmartASS <http-MechJeb.SmartASS>` object.
+
+   :reqjson MechJeb.SmartASSInterfaceMode value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/smart-ass/(id)/autopilot-mode
+
+   The autopilot mode. Throws an exception if set to
+   ``"automatic"``.
+
+   .. note::
+
+      Call :http:post:`/mech-jeb/smart-ass/(id)/update` to apply a change.
+
+
+   :param id: The identifier of the :ref:`SmartASS <http-MechJeb.SmartASS>` object.
+
+   :resjson MechJeb.SmartASSAutopilotMode value:
+
+.. http:put:: /mech-jeb/smart-ass/(id)/autopilot-mode
+
+   The autopilot mode. Throws an exception if set to
+   ``"automatic"``.
+
+   .. note::
+
+      Call :http:post:`/mech-jeb/smart-ass/(id)/update` to apply a change.
+
+
+   :param id: The identifier of the :ref:`SmartASS <http-MechJeb.SmartASS>` object.
+
+   :reqjson MechJeb.SmartASSAutopilotMode value: The new value.
+
+
+
+
+.. http:post:: /mech-jeb/smart-ass/(id)/update
+
+   Apply the settings.
+
+
+   :param id: The identifier of the :ref:`SmartASS <http-MechJeb.SmartASS>` object.
+
+   :reqjson bool reset_pid: Whether to reset the attitude controller. Use it only if the vessel does not follow the new settings.
+
+
+
+
+
+.. http:get:: /mech-jeb/smart-ass/(id)/force-yaw
+
+   Whether the autopilot controls the yaw in the ``"surface"``,
+   ``"surface_prograde"`` and
+   ``"surface_retrograde"`` modes.
+
+
+   :param id: The identifier of the :ref:`SmartASS <http-MechJeb.SmartASS>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/smart-ass/(id)/force-yaw
+
+   Whether the autopilot controls the yaw in the ``"surface"``,
+   ``"surface_prograde"`` and
+   ``"surface_retrograde"`` modes.
+
+
+   :param id: The identifier of the :ref:`SmartASS <http-MechJeb.SmartASS>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/smart-ass/(id)/force-pitch
+
+   Whether the autopilot controls the pitch in the ``"surface"``,
+   ``"surface_prograde"`` and
+   ``"surface_retrograde"`` modes.
+
+
+   :param id: The identifier of the :ref:`SmartASS <http-MechJeb.SmartASS>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/smart-ass/(id)/force-pitch
+
+   Whether the autopilot controls the pitch in the ``"surface"``,
+   ``"surface_prograde"`` and
+   ``"surface_retrograde"`` modes.
+
+
+   :param id: The identifier of the :ref:`SmartASS <http-MechJeb.SmartASS>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/smart-ass/(id)/force-roll
+
+   Whether the autopilot controls the roll.
+
+
+   :param id: The identifier of the :ref:`SmartASS <http-MechJeb.SmartASS>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/smart-ass/(id)/force-roll
+
+   Whether the autopilot controls the roll.
+
+
+   :param id: The identifier of the :ref:`SmartASS <http-MechJeb.SmartASS>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/smart-ass/(id)/roll
+
+   The roll, in degrees. 0 is top side up.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/smart-ass/(id)/force-roll`, and applies in every mode but
+      ``"kill_rot"`` and the surface modes.
+
+
+   :param id: The identifier of the :ref:`SmartASS <http-MechJeb.SmartASS>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/smart-ass/(id)/roll
+
+   The roll, in degrees. 0 is top side up.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/smart-ass/(id)/force-roll`, and applies in every mode but
+      ``"kill_rot"`` and the surface modes.
+
+
+   :param id: The identifier of the :ref:`SmartASS <http-MechJeb.SmartASS>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/smart-ass/(id)/surface-heading
+
+   The heading, in degrees.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/smart-ass/(id)/force-yaw`, and applies in the ``"surface"``
+      mode.
+
+
+   :param id: The identifier of the :ref:`SmartASS <http-MechJeb.SmartASS>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/smart-ass/(id)/surface-heading
+
+   The heading, in degrees.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/smart-ass/(id)/force-yaw`, and applies in the ``"surface"``
+      mode.
+
+
+   :param id: The identifier of the :ref:`SmartASS <http-MechJeb.SmartASS>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/smart-ass/(id)/surface-pitch
+
+   The pitch above the horizon, in degrees. 90 is straight up.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/smart-ass/(id)/force-pitch`, and applies in the ``"surface"``
+      mode.
+
+
+   :param id: The identifier of the :ref:`SmartASS <http-MechJeb.SmartASS>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/smart-ass/(id)/surface-pitch
+
+   The pitch above the horizon, in degrees. 90 is straight up.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/smart-ass/(id)/force-pitch`, and applies in the ``"surface"``
+      mode.
+
+
+   :param id: The identifier of the :ref:`SmartASS <http-MechJeb.SmartASS>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/smart-ass/(id)/surface-roll
+
+   The roll, in degrees. 0 is top side up.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/smart-ass/(id)/force-roll`, and applies in the ``"surface"``
+      mode.
+
+
+   :param id: The identifier of the :ref:`SmartASS <http-MechJeb.SmartASS>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/smart-ass/(id)/surface-roll
+
+   The roll, in degrees. 0 is top side up.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/smart-ass/(id)/force-roll`, and applies in the ``"surface"``
+      mode.
+
+
+   :param id: The identifier of the :ref:`SmartASS <http-MechJeb.SmartASS>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/smart-ass/(id)/surface-vel-yaw
+
+   The yaw from the surface velocity, in degrees.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/smart-ass/(id)/force-yaw`, and applies in the
+      ``"surface_prograde"`` and
+      ``"surface_retrograde"`` modes.
+
+
+   :param id: The identifier of the :ref:`SmartASS <http-MechJeb.SmartASS>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/smart-ass/(id)/surface-vel-yaw
+
+   The yaw from the surface velocity, in degrees.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/smart-ass/(id)/force-yaw`, and applies in the
+      ``"surface_prograde"`` and
+      ``"surface_retrograde"`` modes.
+
+
+   :param id: The identifier of the :ref:`SmartASS <http-MechJeb.SmartASS>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/smart-ass/(id)/surface-vel-pitch
+
+   The pitch from the surface velocity, in degrees.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/smart-ass/(id)/force-pitch`, and applies in the
+      ``"surface_prograde"`` and
+      ``"surface_retrograde"`` modes.
+
+
+   :param id: The identifier of the :ref:`SmartASS <http-MechJeb.SmartASS>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/smart-ass/(id)/surface-vel-pitch
+
+   The pitch from the surface velocity, in degrees.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/smart-ass/(id)/force-pitch`, and applies in the
+      ``"surface_prograde"`` and
+      ``"surface_retrograde"`` modes.
+
+
+   :param id: The identifier of the :ref:`SmartASS <http-MechJeb.SmartASS>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/smart-ass/(id)/surface-vel-roll
+
+   The roll, in degrees. 0 is top side up.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/smart-ass/(id)/force-roll`, and applies in the
+      ``"surface_prograde"`` and
+      ``"surface_retrograde"`` modes.
+
+
+   :param id: The identifier of the :ref:`SmartASS <http-MechJeb.SmartASS>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/smart-ass/(id)/surface-vel-roll
+
+   The roll, in degrees. 0 is top side up.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/smart-ass/(id)/force-roll`, and applies in the
+      ``"surface_prograde"`` and
+      ``"surface_retrograde"`` modes.
+
+
+   :param id: The identifier of the :ref:`SmartASS <http-MechJeb.SmartASS>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/smart-ass/(id)/advanced-reference
+
+   The reference frame of :http:get:`/mech-jeb/smart-ass/(id)/advanced-direction`. Throws an exception if
+   MechJeb uses a reference this enumeration lacks.
+
+   .. note::
+
+      Applies in the ``"advanced"`` mode.
+
+
+   :param id: The identifier of the :ref:`SmartASS <http-MechJeb.SmartASS>` object.
+
+   :resjson MechJeb.AttitudeReference value:
+
+.. http:put:: /mech-jeb/smart-ass/(id)/advanced-reference
+
+   The reference frame of :http:get:`/mech-jeb/smart-ass/(id)/advanced-direction`. Throws an exception if
+   MechJeb uses a reference this enumeration lacks.
+
+   .. note::
+
+      Applies in the ``"advanced"`` mode.
+
+
+   :param id: The identifier of the :ref:`SmartASS <http-MechJeb.SmartASS>` object.
+
+   :reqjson MechJeb.AttitudeReference value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/smart-ass/(id)/advanced-direction
+
+   The direction in :http:get:`/mech-jeb/smart-ass/(id)/advanced-reference`.
+
+   .. note::
+
+      Applies in the ``"advanced"`` mode.
+
+
+   :param id: The identifier of the :ref:`SmartASS <http-MechJeb.SmartASS>` object.
+
+   :resjson MechJeb.Direction value:
+
+.. http:put:: /mech-jeb/smart-ass/(id)/advanced-direction
+
+   The direction in :http:get:`/mech-jeb/smart-ass/(id)/advanced-reference`.
+
+   .. note::
+
+      Applies in the ``"advanced"`` mode.
+
+
+   :param id: The identifier of the :ref:`SmartASS <http-MechJeb.SmartASS>` object.
+
+   :reqjson MechJeb.Direction value: The new value.
+
+
+
+
+
+.. _http-MechJeb.SmartASSInterfaceMode:
+
+.. rubric:: SmartASSInterfaceMode
+
+The mode of the Smart A.S.S. window. See :http:get:`/mech-jeb/smart-ass/(id)/interface-mode`.
+
+Passed and returned as the name of one of its values:
+
+
+``"orbital"``
+   The orbital modes.
+
+
+``"surface"``
+   The surface modes.
+
+
+``"target"``
+   The target modes.
+
+
+``"advanced"``
+   The advanced mode.
+
+
+``"automatic"``
+   Set by MechJeb's autopilots. Cannot be set.
+
+
+
+.. _http-MechJeb.SmartASSAutopilotMode:
+
+.. rubric:: SmartASSAutopilotMode
+
+The autopilot mode of Smart A.S.S. See :http:get:`/mech-jeb/smart-ass/(id)/autopilot-mode`.
+
+Passed and returned as the name of one of its values:
+
+
+``"off"``
+   Off.
+
+
+``"kill_rot"``
+   Stop the vessel's rotation.
+
+
+``"node"``
+   Point at the next maneuver node.
+
+
+``"surface"``
+   Point in the direction set by :http:get:`/mech-jeb/smart-ass/(id)/surface-heading`,
+   :http:get:`/mech-jeb/smart-ass/(id)/surface-pitch` and :http:get:`/mech-jeb/smart-ass/(id)/surface-roll`.
+
+
+``"prograde"``
+   Point orbital prograde.
+
+
+``"retrograde"``
+   Point orbital retrograde.
+
+
+``"normal_plus"``
+   Point orbit normal.
+
+
+``"normal_minus"``
+   Point orbit anti-normal.
+
+
+``"radial_plus"``
+   Point radially outward.
+
+
+``"radial_minus"``
+   Point radially inward.
+
+
+``"relative_plus"``
+   Point along the velocity relative to the target.
+
+
+``"relative_minus"``
+   Point against the velocity relative to the target.
+
+
+``"target_plus"``
+   Point at the target.
+
+
+``"target_minus"``
+   Point away from the target.
+
+
+``"parallel_plus"``
+   Point parallel to the target's orientation. For a docking port, along its axis
+   and away from it.
+
+
+``"parallel_minus"``
+   Point antiparallel to the target's orientation. For a docking port, along its axis
+   and toward it.
+
+
+``"advanced"``
+   Point in the direction set by :http:get:`/mech-jeb/smart-ass/(id)/advanced-reference` and
+   :http:get:`/mech-jeb/smart-ass/(id)/advanced-direction`.
+
+
+``"automatic"``
+   Set by MechJeb's autopilots. Cannot be set.
+
+
+``"surface_prograde"``
+   Point along the surface velocity.
+
+
+``"surface_retrograde"``
+   Point against the surface velocity.
+
+
+``"horizontal_plus"``
+   Point along the horizontal surface velocity.
+
+
+``"horizontal_minus"``
+   Point against the horizontal surface velocity.
+
+
+``"vertical_plus"``
+   Point up, normal to the surface.
+
+
+
+.. _http-MechJeb.AttitudeReference:
+
+.. rubric:: AttitudeReference
+
+A reference frame of Smart A.S.S. See :http:get:`/mech-jeb/smart-ass/(id)/advanced-reference`.
+
+Passed and returned as the name of one of its values:
+
+
+``"inertial"``
+   The world coordinate system.
+
+
+``"orbit"``
+   Forward is prograde, left is normal and up is radial out.
+
+
+``"orbit_horizontal"``
+   Forward is the orbital velocity projected onto the surface, and up is the surface normal.
+
+
+``"surface_north"``
+   Forward is north, left is west and up is the surface normal.
+
+
+``"surface_velocity"``
+   Forward is the surface velocity, and up is the surface normal perpendicular to it.
+
+
+``"target"``
+   Forward is toward the target, and up is the vessel's heading perpendicular to it.
+
+
+``"relative_velocity"``
+   Forward is the velocity relative to the target.
+
+
+``"target_orientation"``
+   Forward is the direction the target faces, and up is the target's up.
+
+
+``"maneuver_node"``
+   Forward is the burn direction of the next maneuver node.
+
+
+``"sun"``
+   Forward is the orbital velocity of the body that orbits the sun, and up is radial
+   out of that orbit.
+
+
+``"surface_horizontal"``
+   Forward is the horizontal surface velocity, and up is the surface normal.
+
+
+
+.. _http-MechJeb.Direction:
+
+.. rubric:: Direction
+
+A direction of Smart A.S.S. See :http:get:`/mech-jeb/smart-ass/(id)/advanced-direction`.
+
+Passed and returned as the name of one of its values:
+
+
+``"forward"``
+   Forward.
+
+
+``"back"``
+   Back.
+
+
+``"up"``
+   Up.
+
+
+``"down"``
+   Down.
+
+
+``"right"``
+   Right.
+
+
+``"left"``
+   Left.

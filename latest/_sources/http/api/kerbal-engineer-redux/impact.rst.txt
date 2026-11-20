@@ -1,0 +1,39 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Impact
+======
+
+
+.. _http-KerbalEngineerRedux.Impact:
+
+.. rubric:: Impact
+
+The point where the vessel's orbit meets the terrain.
+
+Passed and returned as an object with these fields:
+
+
+``ut`` (double)
+   The universal time of impact, in seconds.
+
+
+``time_to`` (double)
+   The time until impact, in seconds.
+
+
+``latitude`` (double)
+   The latitude of the impact site, in degrees.
+
+
+``longitude`` (double)
+   The longitude of the impact site, in degrees.
+
+
+``elevation`` (double)
+   The elevation of the terrain at the impact site above sea level, in meters.
+
+
+``biome`` (string)
+   The biome of the impact site.

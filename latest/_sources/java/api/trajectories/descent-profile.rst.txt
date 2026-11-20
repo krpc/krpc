@@ -1,0 +1,62 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.Trajectories
+
+DescentProfile
+==============
+
+
+.. type:: public class DescentProfile
+
+   The descent profile, which sets the attitude of the vessel during the descent.
+
+   .. note::
+
+      Each node covers a band of altitude, as a percentage of the height of the atmosphere.
+      A body without an atmosphere uses :meth:`DescentProfile.getFinalApproach()` throughout.
+
+   .. method:: DescentProfileNode getEntry()
+
+
+      The node for atmospheric entry, from 50% to 100% of the height of the atmosphere.
+
+      :Game Scenes: Flight
+
+   .. method:: DescentProfileNode getHighAltitude()
+
+
+      The node for high altitude, from 25% to 50% of the height of the atmosphere.
+
+      :Game Scenes: Flight
+
+   .. method:: DescentProfileNode getLowAltitude()
+
+
+      The node for low altitude, from 5% to 25% of the height of the atmosphere.
+
+      :Game Scenes: Flight
+
+   .. method:: DescentProfileNode getFinalApproach()
+
+
+      The node for the final approach, below 5% of the height of the atmosphere.
+
+      :Game Scenes: Flight
+
+   .. method:: static void save(Connection connection)
+
+      Saves the descent profile to the active vessel.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A change to a node applies without saving. Saving keeps it in the saved game.
+
+   .. method:: static void reset(Connection connection, double aoa)
+
+      Sets every node to an angle of attack, and saves the descent profile.
+
+      :param double aoa: The angle of attack in degrees. The default, 180, is retrograde.
+      :Game Scenes: Flight

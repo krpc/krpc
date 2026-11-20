@@ -1,0 +1,130 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: InfernalRobotics
+
+ServoGroup
+==========
+
+
+.. class:: ServoGroup
+
+   A group of servos, obtained by calling :meth:`InfernalRobotics.servo_groups`
+   or :meth:`InfernalRobotics.servo_group_with_name`. Represents the "Servo Groups"
+   in the InfernalRobotics UI.
+
+   .. attribute:: name: string
+
+      The name of the group.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Renaming a group renames it for every servo in it. This object identifies the
+         group by its name, so a rename destroys every object for the group, including the
+         one the rename was made through. Obtain the group again under the new name.
+
+   .. attribute:: forward_key: string
+
+      The key assigned to be the "forward" key for the group.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: reverse_key: string
+
+      The key assigned to be the "reverse" key for the group.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: speed: number
+
+      The speed multiplier for the group.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: expanded: boolean
+
+      Whether the group is expanded in the InfernalRobotics UI.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: vessel: SpaceCenter.Vessel
+
+      The vessel the group belongs to.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: moving_direction: number
+
+      The direction the group is currently moving in: -1 for reverse, 0 for stopped
+      and 1 for forward.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: advanced_mode: boolean
+
+      Whether the group is in advanced mode.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: electric_charge_required: number
+
+      The total rate at which the servos in the group consume electric charge, in units
+      per second, when moving.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: build_aid: boolean
+
+      Whether the build aid is enabled for the group.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: ik_active: boolean
+
+      Whether inverse kinematics is active for the group.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: servos: List
+
+      The servos that are in the group.
+
+      :Attribute: Read-only, cannot be set
+
+   .. method:: servo_with_name(name: string): InfernalRobotics.Servo | nil
+
+      Returns the servo with the given *name* from this group,
+      or ``nil`` if none exists.
+
+      :param name: Name of servo to find.
+
+   .. attribute:: parts: List
+
+      The parts containing the servos in the group.
+
+      :Attribute: Read-only, cannot be set
+
+   .. method:: move_right()
+
+      Moves all of the servos in the group to the right.
+
+   .. method:: move_left()
+
+      Moves all of the servos in the group to the left.
+
+   .. method:: move_center()
+
+      Moves all of the servos in the group to the center.
+
+   .. method:: move_next_preset()
+
+      Moves all of the servos in the group to the next preset.
+
+   .. method:: move_prev_preset()
+
+      Moves all of the servos in the group to the previous preset.
+
+   .. method:: stop()
+
+      Stops the servos in the group.

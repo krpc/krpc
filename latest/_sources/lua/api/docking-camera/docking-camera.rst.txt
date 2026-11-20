@@ -2,28 +2,27 @@
 .. highlight:: lua
 .. currentmodule:: DockingCamera
 
-DockingCamera
-=============
+Service
+=======
 
 
 .. module:: DockingCamera
 
-Camera service.
+Provides functionality to interact with Docking Camera (KURS).
 
 
 .. attribute:: available: boolean
 
-   Check if the Camera API is available.
+   Whether Docking Camera (KURS) is available.
 
    :Attribute: Read-only, cannot be set
-   :rtype: boolean
 
 
 
 
-.. staticmethod:: camera(part)
+.. staticmethod:: camera(part: SpaceCenter.Part): DockingCamera.Camera
 
-   Get a Camera part.
+   Get the camera on a part.
+   Throws an exception if the part is not an onboard camera or a docking port.
 
-   :param SpaceCenter.Part part:
-   :rtype: :class:`DockingCamera.Camera`
+   :param part: The part.

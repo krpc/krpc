@@ -1,0 +1,42 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: RemoteTech
+
+Service
+=======
+
+
+.. module:: RemoteTech
+
+Provides functionality to interact with RemoteTech.
+
+
+.. attribute:: available: boolean
+
+   Whether RemoteTech is installed.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: ground_stations: List
+
+   The names of the ground stations.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. staticmethod:: antenna(part: SpaceCenter.Part): RemoteTech.Antenna
+
+   Get the antenna object for a particular part.
+
+
+
+
+
+.. staticmethod:: comms(vessel: SpaceCenter.Vessel): RemoteTech.Comms
+
+   Get a communications object, representing the communication capability of a particular vessel.

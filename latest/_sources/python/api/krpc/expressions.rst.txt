@@ -6,7 +6,7 @@ Expressions
 ===========
 
 The nodes a server side function is built from, and the types they work with. See the
-:rst:ref:`server side functions tutorial <tutorial-server-side-functions>` for how a function is
+:rst:ref:`server side functions guide <server-side-functions>` for how a function is
 assembled and run.
 
 
@@ -90,7 +90,7 @@ assembled and run.
       :rtype: :class:`Expression`
    
 
-   .. staticmethod:: constant_u_int(value)
+   .. staticmethod:: constant_uint(value)
 
       A constant value of unsigned integer type.
 
@@ -98,7 +98,7 @@ assembled and run.
       :rtype: :class:`Expression`
    
 
-   .. staticmethod:: constant_u_long(value)
+   .. staticmethod:: constant_ulong(value)
 
       A constant value of unsigned long integer type.
 
@@ -136,6 +136,16 @@ assembled and run.
 
       :param str service: The name of the service the enumeration is defined in.
       :param str name: The name of the enumeration.
+      :param int value: The value of the member of the enumeration.
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: constant_enum_by_id(service_id, enumeration_id, value)
+
+      A constant value of an enumeration a service defines, named by ids.
+
+      :param int service_id: The id of the service the enumeration is defined in.
+      :param int enumeration_id: The id of the enumeration.
       :param int value: The value of the member of the enumeration.
       :rtype: :class:`Expression`
    
@@ -181,18 +191,20 @@ assembled and run.
 
    .. staticmethod:: call_with_arguments(call, args)
 
-      An RPC call, where some or all of the arguments are computed by expressions.
+      An RPC call, with its arguments computed by expressions.
 
-      :param krpc.schema.KRPC.ProcedureCall call: The RPC to call.
+      :param krpc.schema.KRPC.ProcedureCall call: The call template.
       :param dict args: Expressions computing the call's arguments, by position.
       :rtype: :class:`Expression`
    
 
       .. note::
 
+         The call is a call template, which names the procedure and carries no arguments.
          Position 0 is the instance of a class method or property. A position with no
-         expression takes the argument encoded in the call, or the parameter's default. A
-         collection the procedure returns is copied, as a client would receive it.
+         expression takes the parameter's default. A collection the procedure returns is
+         copied, as a client would receive it. Throws an exception if the call carries an
+         argument.
 
    .. staticmethod:: equal(arg0, arg1)
 
@@ -275,6 +287,10 @@ assembled and run.
       :rtype: :class:`Expression`
    
 
+      .. note::
+
+         Also takes two values of a flags enumeration, and gives the values they share.
+
    .. staticmethod:: or_(arg0, arg1)
 
       Logical or bitwise or, which evaluates both operands.
@@ -283,6 +299,10 @@ assembled and run.
       :param Expression arg1: The second operand.
       :rtype: :class:`Expression`
    
+
+      .. note::
+
+         Also takes two values of a flags enumeration, and gives their combination.
 
    .. staticmethod:: conditional_and(arg0, arg1)
 
@@ -311,6 +331,10 @@ assembled and run.
       :rtype: :class:`Expression`
    
 
+      .. note::
+
+         Also takes two values of a flags enumeration, and gives the values in only one of them.
+
    .. staticmethod:: not_(arg)
 
       Logical or bitwise negation.
@@ -318,6 +342,10 @@ assembled and run.
       :param Expression arg: The operand.
       :rtype: :class:`Expression`
    
+
+      .. note::
+
+         Also takes a value of a flags enumeration, and gives the declared values it does not hold.
 
    .. staticmethod:: negate(arg)
 
@@ -597,9 +625,39 @@ assembled and run.
          :meth:`Expression.block_with_variables`, or a parameter of an enclosing :meth:`Expression.lambda_`.
          A :meth:`Expression.break_` or :meth:`Expression.continue_` in the body applies to this loop.
 
+   .. staticmethod:: match(value, cases, bodies)
+
+      A match statement, which evaluates the first matching case.
+
+      :param Expression value: The value to match.
+      :param list cases: The test values of each case.
+      :param list bodies: The statement of each case.
+      :rtype: :class:`Expression`
+   
+
+      .. note::
+
+         Test values compare as for :meth:`Expression.equal`, and a case with none is the default.
+         A :meth:`Expression.break_` in a body ends the enclosing loop.
+
+   .. staticmethod:: switch(value, cases, bodies)
+
+      A switch statement, which evaluates from the first matching case on.
+
+      :param Expression value: The value to match.
+      :param list cases: The test values of each case.
+      :param list bodies: The statement of each case.
+      :rtype: :class:`Expression`
+   
+
+      .. note::
+
+         Test values compare as for :meth:`Expression.equal`, and a case with none is the default.
+         A :meth:`Expression.break_` in a body ends the switch.
+
    .. staticmethod:: break_()
 
-      A break statement, which ends the enclosing loop.
+      A break statement, which ends the enclosing loop or :meth:`Expression.switch`.
 
       :rtype: :class:`Expression`
    
@@ -639,7 +697,24 @@ assembled and run.
       .. note::
 
          The client receives the exception as an error from the function, or from the stream
-         or event evaluating it. Throws an exception if the service does not declare it.
+         or event evaluating it. For example, the service ``KRPC`` and the name
+         ``Error`` raise :class:`Error`. Throws an exception if the service does not
+         declare it.
+
+   .. staticmethod:: throw_by_id(service_id, exception_id, message)
+
+      A throw statement, which raises the exception with the given ids.
+
+      :param int service_id: The id of the service the exception is defined in.
+      :param int exception_id: The id of the exception.
+      :param Expression message: The message of the exception.
+      :rtype: :class:`Expression`
+   
+
+      .. note::
+
+         Raises the exception as :meth:`Expression.throw` does. Throws an exception if the
+         service does not declare it.
 
    .. staticmethod:: try_catch(body, service, name, message, handler)
 
@@ -657,6 +732,23 @@ assembled and run.
 
          Only an exception a service declares can be named, and :meth:`Expression.try_catch_all`
          handles any exception. Throws an exception if the service does not declare it.
+
+   .. staticmethod:: try_catch_by_id(body, service_id, exception_id, message, handler)
+
+      A try-catch statement that handles the exception with the given ids.
+
+      :param Expression body: The statement to evaluate.
+      :param int service_id: The id of the service the exception is defined in.
+      :param int exception_id: The id of the exception.
+      :param Expression or None message: A string variable assigned the exception's message, or null.
+      :param Expression handler: The statement evaluated when the exception is caught.
+      :rtype: :class:`Expression`
+   
+
+      .. note::
+
+         Handles the exception as :meth:`Expression.try_catch` does. Throws an exception if the
+         service does not declare it.
 
    .. staticmethod:: try_catch_all(body, message, handler)
 
@@ -923,6 +1015,21 @@ assembled and run.
       :returns: The value of the field.
       :rtype: :class:`Expression`
    
+
+   .. staticmethod:: get_field_by_index(arg, index)
+
+      The value of a field of a structure, named by its position. Throws an exception if
+      the value is not a structure, or the index is out of range.
+
+      :param Expression arg: The structure.
+      :param int index: The position of the field to access.
+      :returns: The value of the field.
+      :rtype: :class:`Expression`
+   
+
+      .. note::
+
+         The fields are numbered from 0, in the order the structure defines them.
 
    .. staticmethod:: convert_to_string(arg)
 
@@ -1533,14 +1640,14 @@ assembled and run.
       :rtype: :class:`Type`
    
 
-   .. staticmethod:: u_int()
+   .. staticmethod:: uint()
 
       An unsigned 32-bit integer type.
 
       :rtype: :class:`Type`
    
 
-   .. staticmethod:: u_long()
+   .. staticmethod:: ulong()
 
       An unsigned 64-bit integer type.
 
@@ -1592,6 +1699,33 @@ assembled and run.
 
       :param str service: The name of the service the structure is defined in.
       :param str name: The name of the structure.
+      :rtype: :class:`Type`
+   
+
+   .. staticmethod:: class_type_by_id(service_id, class_id)
+
+      The type of a class defined by a service, named by ids.
+
+      :param int service_id: The id of the service the class is defined in.
+      :param int class_id: The id of the class.
+      :rtype: :class:`Type`
+   
+
+   .. staticmethod:: enumeration_type_by_id(service_id, enumeration_id)
+
+      The type of an enumeration defined by a service, named by ids.
+
+      :param int service_id: The id of the service the enumeration is defined in.
+      :param int enumeration_id: The id of the enumeration.
+      :rtype: :class:`Type`
+   
+
+   .. staticmethod:: struct_type_by_id(service_id, struct_id)
+
+      The type of a structure defined by a service, named by ids.
+
+      :param int service_id: The id of the service the structure is defined in.
+      :param int struct_id: The id of the structure.
       :rtype: :class:`Type`
    
 
@@ -1704,22 +1838,22 @@ assembled and run.
       A single precision floating point number.
 
 
-   .. data:: s_int32
+   .. data:: sint32
 
       A signed 32-bit integer.
 
 
-   .. data:: s_int64
+   .. data:: sint64
 
       A signed 64-bit integer.
 
 
-   .. data:: u_int32
+   .. data:: uint32
 
       An unsigned 32-bit integer.
 
 
-   .. data:: u_int64
+   .. data:: uint64
 
       An unsigned 64-bit integer.
 

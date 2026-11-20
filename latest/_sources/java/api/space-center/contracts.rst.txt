@@ -9,7 +9,7 @@ Contracts
 .. type:: public class ContractManager
 
    Contracts manager.
-   Obtained by calling :meth:`getContractManager()`.
+   Obtained by calling :meth:`SpaceCenter.getContractManager()`.
 
    .. method:: java.util.Set<String> getTypes()
 
@@ -57,7 +57,7 @@ Contracts
 
 .. type:: public class Contract
 
-   A contract. Can be accessed using :meth:`getContractManager()`.
+   A contract. Can be accessed using :meth:`SpaceCenter.getContractManager()`.
 
    .. method:: String getType()
 

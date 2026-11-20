@@ -10,6 +10,10 @@ Polygon
 
    A polygon. Created using :func:`krpc_Drawing_AddPolygon`.
 
+   .. macro:: KRPC_CLASS_DRAWING_POLYGON
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_Drawing_Polygon_Vertices(krpc_connection_t connection, krpc_list_tuple_double_double_double_t * returnValue, krpc_Drawing_Polygon_t instance)
    .. function:: krpc_error_t krpc_Drawing_Polygon_set_Vertices(krpc_connection_t connection, krpc_Drawing_Polygon_t instance, const krpc_list_tuple_double_double_double_t * value)
 

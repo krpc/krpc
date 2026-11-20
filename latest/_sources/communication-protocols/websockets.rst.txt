@@ -1,79 +1,68 @@
-Protocol Buffers over WebSockets
-================================
+WebSockets
+==========
 
-This communication protocol allows web browsers to communicate with kRPC over a websockets
-connection, for example from Javascript in a web browser.
+This protocol carries the :doc:`messages <messages>` over a websockets connection, for a client in
+a web browser.
 
-.. note:: If a client library is available for your language, you do not need to implement this
-          protocol.
+.. note:: The :doc:`JavaScript client </js>` implements this protocol, for a web page or
+          Node.js.
 
-Connecting to the RPC Server
-----------------------------
+Framing
+-------
 
-A client invokes remote procedures by communicating with the *RPC server*. To establish a
-connection, open a websockets connection to the server on its RPC port (which defaults to
-50000). The connection URI can also contain a ``name`` parameter with the name of the client to
-display in the on the in-game UI. For example: ``ws://localhost:50000/?name=Jeb``
+Each message is a ``Message``, encoded according to the Protocol Buffers binary format and carried
+in one binary websockets message. The websockets message may be split across fragments.
 
-Request the subprotocol ``krpc.1``, which names protocol version 1. In Javascript:
+Connecting
+----------
 
-.. code-block:: javascript
+A new install has a server for this protocol in the server window, at address ``127.0.0.1`` and
+port ``50001``. To add another, add a server and select *Protobuf over WebSockets* as its
+protocol.
 
-   new WebSocket('ws://localhost:50000/?name=Jeb', 'krpc.1')
+Open a websockets connection to the server with the path ``/``, for example
+``ws://127.0.0.1:50001/``. The upgrade request names no subprotocol. Then send the
+:ref:`connection handshake <communication-protocol-handshake>`. The upgrade and the
+``connection_request`` together have 3 seconds to arrive, timed from the TCP connection.
 
-The server names the subprotocol in its response. It rejects an unsupported version with HTTP
-status 400 and a message in the body. A server from before kRPC 0.7 names no subprotocol, so a
-client that requests ``krpc.1`` fails to connect to it. See :ref:`communication-protocol-version`.
+The connection carries the requests, the responses and the stream updates. To end it, send a
+:ref:`disconnect <communication-protocol-disconnect>` and then a close frame.
 
-Connecting to the Stream Server
--------------------------------
+.. _communication-protocol-websockets-origins:
 
-Clients can receive :ref:`communication-protocol-streams` from the *stream server*. To establish a
-connection, a client must first connect to the RPC server (as above) then do the following:
+Web Pages
+---------
 
-1. Get the identifier of the client by calling the ``KRPC.GetClientID`` remote procedure.
+A web page sends its origin with the upgrade request, and the server refuses a page whose origin it
+does not allow, with status 403. *Origins*, in the server window, lists the origins it allows:
 
-2. Open a websockets connection to the server on its stream port (which defaults to 50001), with an
-   ``id`` query parameter set to the client identifier encoded in base64, and requesting the
-   subprotocol ``krpc.1``. For example: ``ws://localhost:50001/?id=Eeh8Vbj2DkWTcJZTkYlEhQ==``
+* ``localhost``, the default, allows a page served from ``localhost`` or a loopback address, on
+  any port, such as ``http://localhost:8000`` or ``http://127.0.0.1:5173``.
+* An origin, such as ``http://192.168.1.10:8000``, allows pages from that scheme, host and port.
+* ``*`` allows any page, including one opened as a local file, which has the origin ``null``.
 
-Connecting to the stream server is optional. If the client doesn't require stream functionality,
-there is no need to connect.
-
-Sending and Receiving Messages
-------------------------------
-
-Communication with the server is performed via Protocol Buffer messages, encoded according to the
-protobuf binary format.
-
-To send a message to the server:
-
-1. Encode the message using the Protocol Buffers format.
-2. Send a binary websockets message to the server, with payload containing the encoded message
-   data.
-
-To receive a message from the server, do the reverse:
-
-1. Receive a binary websockets message from the server.
-2. Decode the messages payload using the Protocol Buffers format.
-
-Invoking Remote Procedures
---------------------------
-
-See :doc:`messages`.
+The entries are comma-separated. A client that is not a web page, such as Node.js, sends no
+origin, and the server always accepts it.
 
 Examples
 --------
 
-The following code connects to the RPC server at address 127.0.0.1 and port 50000 using
-the name "Jeb". Next, it connects to the stream server on port 50001. It then invokes the
-``KRPC.GetStatus`` RPC, receives and decodes the result and prints out the server version number
-from the response.
+.. note::
+
+   These examples show the protocol, and omit much of the behavior a client library needs, such as
+   handling errors and failed connections. A client library should
+   implement the :doc:`client specification </client-spec>` in its entirety.
+
+The examples run in Node.js, using the ``ws`` and ``protobufjs`` packages. A web browser provides
+the same ``WebSocket`` interface.
+
+The following script connects to the server with the name "Example", calls ``KRPC.GetStatus`` and
+prints the server version. It then ends the connection:
 
 .. literalinclude:: /scripts/communication-protocols/websockets/RPC.js
    :language: javascript
 
-The following example demonstrates how to set up and receive data from the server over a stream:
+The following script adds a stream, then receives its updates on the same connection:
 
 .. literalinclude:: /scripts/communication-protocols/websockets/Stream.js
    :language: javascript

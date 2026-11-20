@@ -1,0 +1,286 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Slider
+======
+
+
+.. _http-UI.Slider:
+
+.. rubric:: Slider
+
+A control for choosing a number by dragging a handle along a track.
+Added to a :ref:`Canvas <http-UI.Canvas>` or a :ref:`Panel <http-UI.Panel>`.
+
+A ``Slider`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ui/slider/(id)/rect-transform
+
+   The rect transform for the UI object.
+
+
+   :param id: The identifier of the :ref:`Slider <http-UI.Slider>` object.
+
+   :resjson UI.RectTransform value:
+
+
+
+
+.. http:get:: /ui/slider/(id)/layout-element
+
+   How much space the UI object asks a layout for.
+
+   .. note::
+
+      Only has an effect when the object is in a panel that has a layout. A canvas is
+      not inside a layout and does not have one.
+
+
+   :param id: The identifier of the :ref:`Slider <http-UI.Slider>` object.
+
+   :resjson UI.LayoutElement value:
+
+
+
+
+.. http:get:: /ui/slider/(id)/visible
+
+   Whether the UI object is visible.
+
+   .. note::
+
+      This is the object's own setting, which is what it was last set to. An object is
+      only drawn when everything it is inside is visible as well, so an interface can
+      be built with its parts visible, inside a panel that is not, and shown all at
+      once by making that panel visible.
+
+
+   :param id: The identifier of the :ref:`Slider <http-UI.Slider>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ui/slider/(id)/visible
+
+   Whether the UI object is visible.
+
+   .. note::
+
+      This is the object's own setting, which is what it was last set to. An object is
+      only drawn when everything it is inside is visible as well, so an interface can
+      be built with its parts visible, inside a panel that is not, and shown all at
+      once by making that panel visible.
+
+
+   :param id: The identifier of the :ref:`Slider <http-UI.Slider>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ui/slider/(id)/value
+
+   The value of the slider, between :http:get:`/ui/slider/(id)/min` and :http:get:`/ui/slider/(id)/max`.
+   Setting a value outside the range is refused.
+
+
+   :param id: The identifier of the :ref:`Slider <http-UI.Slider>` object.
+
+   :resjson float value:
+
+.. http:put:: /ui/slider/(id)/value
+
+   The value of the slider, between :http:get:`/ui/slider/(id)/min` and :http:get:`/ui/slider/(id)/max`.
+   Setting a value outside the range is refused.
+
+
+   :param id: The identifier of the :ref:`Slider <http-UI.Slider>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /ui/slider/(id)/min
+
+   The value at the low end of the slider, which is its left hand end, or the
+   bottom of a vertical slider. Must not be greater than :http:get:`/ui/slider/(id)/max`.
+
+
+   :param id: The identifier of the :ref:`Slider <http-UI.Slider>` object.
+
+   :resjson float value:
+
+.. http:put:: /ui/slider/(id)/min
+
+   The value at the low end of the slider, which is its left hand end, or the
+   bottom of a vertical slider. Must not be greater than :http:get:`/ui/slider/(id)/max`.
+
+
+   :param id: The identifier of the :ref:`Slider <http-UI.Slider>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /ui/slider/(id)/max
+
+   The value at the high end of the slider, which is its right hand end, or the
+   top of a vertical slider. Must not be less than :http:get:`/ui/slider/(id)/min`.
+
+
+   :param id: The identifier of the :ref:`Slider <http-UI.Slider>` object.
+
+   :resjson float value:
+
+.. http:put:: /ui/slider/(id)/max
+
+   The value at the high end of the slider, which is its right hand end, or the
+   top of a vertical slider. Must not be less than :http:get:`/ui/slider/(id)/min`.
+
+
+   :param id: The identifier of the :ref:`Slider <http-UI.Slider>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /ui/slider/(id)/changed
+
+   Whether the slider has been changed.
+
+   .. note::
+
+      This property is set to true when the user moves the slider, and not when a
+      client sets its value.
+      A client script should reset the property to false in order to detect subsequent changes.
+
+
+   :param id: The identifier of the :ref:`Slider <http-UI.Slider>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ui/slider/(id)/changed
+
+   Whether the slider has been changed.
+
+   .. note::
+
+      This property is set to true when the user moves the slider, and not when a
+      client sets its value.
+      A client script should reset the property to false in order to detect subsequent changes.
+
+
+   :param id: The identifier of the :ref:`Slider <http-UI.Slider>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ui/slider/(id)/interactable
+
+   Whether the control responds to the user.
+
+   .. note::
+
+      A control that is not interactable is drawn grayed out and ignores the user,
+      but is still visible. Set its visibility to false to hide it instead.
+
+
+   :param id: The identifier of the :ref:`Slider <http-UI.Slider>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ui/slider/(id)/interactable
+
+   Whether the control responds to the user.
+
+   .. note::
+
+      A control that is not interactable is drawn grayed out and ignores the user,
+      but is still visible. Set its visibility to false to hide it instead.
+
+
+   :param id: The identifier of the :ref:`Slider <http-UI.Slider>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ui/slider/(id)/color
+
+   The color the control is tinted with. White, the default, leaves the control drawn
+   as the skin has it.
+
+   .. note::
+
+      The tint multiplies the sprite the control is drawn with, in every state, so
+      a control can show a state of its own, an engaged autopilot for instance, by
+      color. It is applied to the part of the control that responds to the user:
+      the body of a button, dropdown or input field, the box of a toggle, and the
+      handle of a slider. A control's label is tinted through the color of its
+      text.
+
+
+   :param id: The identifier of the :ref:`Slider <http-UI.Slider>` object.
+
+   :resjson StdLib.ColorRGBA value:
+
+.. http:put:: /ui/slider/(id)/color
+
+   The color the control is tinted with. White, the default, leaves the control drawn
+   as the skin has it.
+
+   .. note::
+
+      The tint multiplies the sprite the control is drawn with, in every state, so
+      a control can show a state of its own, an engaged autopilot for instance, by
+      color. It is applied to the part of the control that responds to the user:
+      the body of a button, dropdown or input field, the box of a toggle, and the
+      handle of a slider. A control's label is tinted through the color of its
+      text.
+
+
+   :param id: The identifier of the :ref:`Slider <http-UI.Slider>` object.
+
+   :reqjson StdLib.ColorRGBA value: The new value.
+
+
+
+
+.. http:get:: /ui/slider/(id)/tooltip
+
+   A short piece of text shown beside the pointer while it rests on the
+   control. Empty, the default, shows nothing.
+
+
+   :param id: The identifier of the :ref:`Slider <http-UI.Slider>` object.
+
+   :resjson string value:
+
+.. http:put:: /ui/slider/(id)/tooltip
+
+   A short piece of text shown beside the pointer while it rests on the
+   control. Empty, the default, shows nothing.
+
+
+   :param id: The identifier of the :ref:`Slider <http-UI.Slider>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:post:: /ui/slider/(id)/remove
+
+   Remove the UI object.
+
+
+   :param id: The identifier of the :ref:`Slider <http-UI.Slider>` object.

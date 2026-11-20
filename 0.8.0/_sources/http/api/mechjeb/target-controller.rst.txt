@@ -1,0 +1,162 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+TargetController
+================
+
+
+.. _http-MechJeb.TargetController:
+
+.. rubric:: TargetController
+
+The target controller, which holds MechJeb's target.
+
+.. note::
+
+   Positions and directions are in world space, the coordinate system of the game's
+   physics.
+
+
+A ``TargetController`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /mech-jeb/target-controller/(id)/can-align
+
+   Whether the vessel can align with the target, which it can with a docking port.
+   Throws an exception if there is no target.
+
+
+   :param id: The identifier of the :ref:`TargetController <http-MechJeb.TargetController>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /mech-jeb/target-controller/(id)/distance
+
+   The distance to the target, in meters. Throws an exception if there is no target.
+
+
+   :param id: The identifier of the :ref:`TargetController <http-MechJeb.TargetController>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /mech-jeb/target-controller/(id)/docking-axis
+
+   The world space docking axis of the target. Throws an exception if there is no
+   target.
+
+
+   :param id: The identifier of the :ref:`TargetController <http-MechJeb.TargetController>` object.
+
+   :resjson tuple<double, double, double> value:
+
+
+
+
+.. http:get:: /mech-jeb/target-controller/(id)/normal-target-exists
+
+   Whether there is a target that is a vessel, a body or a direction target.
+
+
+   :param id: The identifier of the :ref:`TargetController <http-MechJeb.TargetController>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /mech-jeb/target-controller/(id)/position
+
+   The world space position of the target. Throws an exception if there is no target.
+
+
+   :param id: The identifier of the :ref:`TargetController <http-MechJeb.TargetController>` object.
+
+   :resjson tuple<double, double, double> value:
+
+
+
+
+.. http:get:: /mech-jeb/target-controller/(id)/position-target-exists
+
+   Whether there is a target that is a position or a vessel.
+
+
+   :param id: The identifier of the :ref:`TargetController <http-MechJeb.TargetController>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /mech-jeb/target-controller/(id)/relative-position
+
+   The world space position of the vessel relative to the target. Throws an exception
+   if there is no target.
+
+
+   :param id: The identifier of the :ref:`TargetController <http-MechJeb.TargetController>` object.
+
+   :resjson tuple<double, double, double> value:
+
+
+
+
+.. http:get:: /mech-jeb/target-controller/(id)/relative-velocity
+
+   The world space velocity of the vessel relative to the target, in :math:`\mathrm{m/s}`.
+   Throws an exception if there is no target.
+
+
+   :param id: The identifier of the :ref:`TargetController <http-MechJeb.TargetController>` object.
+
+   :resjson tuple<double, double, double> value:
+
+
+
+
+.. http:post:: /mech-jeb/target-controller/(id)/set-direction-target
+
+   Set the target to a direction.
+
+   .. note::
+
+      Set the direction with :http:post:`/mech-jeb/target-controller/(id)/update-direction-target`.
+
+
+   :param id: The identifier of the :ref:`TargetController <http-MechJeb.TargetController>` object.
+
+   :reqjson string name: The name of the target.
+
+
+
+
+
+.. http:get:: /mech-jeb/target-controller/(id)/target-orbit
+
+   The orbit of the target. Throws an exception if there is no target, or the target
+   has no orbit.
+
+
+   :param id: The identifier of the :ref:`TargetController <http-MechJeb.TargetController>` object.
+
+   :resjson SpaceCenter.Orbit value:
+
+
+
+
+.. http:post:: /mech-jeb/target-controller/(id)/update-direction-target
+
+   Set the direction of the direction target.
+
+
+   :param id: The identifier of the :ref:`TargetController <http-MechJeb.TargetController>` object.
+
+   :reqjson tuple<double, double, double> direction: The world space direction.

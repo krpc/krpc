@@ -1,0 +1,127 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::RasterPropMonitor
+
+Computer
+========
+
+
+.. class:: Computer
+
+   The Raster Prop Monitor computer of a part, which holds the variables its props show.
+   Obtained by calling :func:`computer` or
+   :func:`computers`.
+
+   .. function:: SpaceCenter::Part part()
+
+      The part the computer is on.
+
+      :Game Scenes: Flight
+
+   .. function:: std::optional<double> persistent_variable(std::string name)
+
+      The value of a persistent variable of the part, or else of the vessel, or
+      ``NULL`` if neither is set. Props read it as ``PERSISTENT_name``.
+
+      :Parameters:
+
+       * **name** -- The name of the variable, without the ``PERSISTENT_`` prefix.
+
+      :Game Scenes: Flight
+
+   .. function:: void set_persistent_variable(std::string name, double value)
+
+      Set a persistent variable of the part. The props that show it update.
+
+      :Parameters:
+
+       * **name** -- The name of the variable, without the ``PERSISTENT_`` prefix.
+       * **value** -- The value.
+
+      :Game Scenes: Flight
+
+   .. function:: void remove_persistent_variable(std::string name)
+
+      Remove a persistent variable of the part. The props that show it update.
+
+      :Parameters:
+
+       * **name** -- The name of the variable, without the ``PERSISTENT_`` prefix.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc::Event persistent_variable_changed(std::string name)
+
+      An event that fires when :func:`Computer::persistent_variable` changes, such as when a
+      switch in the IVA sets it. The event lasts until it is removed.
+
+      :Parameters:
+
+       * **name** -- The name of the variable, without the ``PERSISTENT_`` prefix.
+
+      :Game Scenes: Flight
+
+   .. function:: VariableType variable_type(std::string name)
+
+      The type of a variable's current value.
+      Throws an exception if Raster Prop Monitor does not recognize the variable.
+
+      :Parameters:
+
+       * **name** -- The name of the variable, e.g. ``ALTITUDE``.
+
+      :Game Scenes: Flight
+
+   .. function:: double number_variable(std::string name)
+
+      The value of a number variable. Raster Prop Monitor gives a boolean as 0 or 1.
+      Throws an exception if Raster Prop Monitor does not recognize the variable, or
+      its value is a string.
+
+      :Parameters:
+
+       * **name** -- The name of the variable, e.g. ``ALTITUDE``.
+
+      :Game Scenes: Flight
+
+   .. function:: std::string string_variable(std::string name)
+
+      The value of a variable as a string. A number gives its invariant culture string.
+      Throws an exception if Raster Prop Monitor does not recognize the variable.
+
+      :Parameters:
+
+       * **name** -- The name of the variable, e.g. ``ALTITUDE``.
+
+      :Game Scenes: Flight
+
+   .. function:: std::string format_variables(std::string text)
+
+      Text with its variables formatted as a monitor page formats them, e.g.
+      ``{0:SIP6.1}m $&$ ALTITUDE``. Each line takes its own variables.
+      Throws an exception if Raster Prop Monitor does not recognize a variable, or a
+      format is invalid.
+
+      :Parameters:
+
+       * **text** -- The text, in the format of a monitor page.
+
+      :Game Scenes: Flight
+
+
+
+
+.. namespace:: krpc::services::RasterPropMonitor
+.. enum-struct:: VariableType
+
+   The type of a Raster Prop Monitor variable. See :func:`Computer::variable_type`.
+
+
+   .. enumerator:: number
+
+      A number. Access using :func:`Computer::number_variable`.
+
+
+   .. enumerator:: string
+
+      A string. Access using :func:`Computer::string_variable`.

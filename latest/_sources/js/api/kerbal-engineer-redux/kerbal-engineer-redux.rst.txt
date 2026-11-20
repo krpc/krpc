@@ -1,0 +1,131 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: KerbalEngineerRedux
+   :no-index:
+
+Service
+=======
+
+
+.. module:: KerbalEngineerRedux
+
+This service provides the flight readouts of
+`Kerbal Engineer Redux <https://forum.kerbalspaceprogram.com/topic/17833-kerbal-engineer-redux/>`_.
+
+.. note::
+
+   The flight readouts are for the active vessel only. A procedure that needs the vessel
+   simulation waits for a result that started after the vessel last changed: a switch, a
+   stage or a change in its parts. Other changes, such as shutting down an engine, show in
+   the next result.
+
+
+
+.. function:: getAvailable()
+
+   Whether Kerbal Engineer Redux is available.
+
+   :Property: Read-only, cannot be set
+   :rtype: ``boolean``
+   
+
+
+
+
+.. function:: impact(vessel)
+
+   The impact of the vessel with the terrain, or ``null`` if its orbit does not meet
+   the terrain. Throws an exception if the vessel is not the active vessel.
+
+   :param vessel: The active vessel.
+   :type vessel: :class:`SpaceCenter.Vessel`
+   :rtype: :class:`KerbalEngineerRedux.Impact` or ``null``
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: suicideBurn(vessel)
+
+   The suicide burn that stops the vessel at the terrain, or ``null`` if its orbit
+   does not meet the terrain or its thrust cannot overcome gravity. Throws an exception
+   if the vessel is not the active vessel.
+
+   :param vessel: The active vessel.
+   :type vessel: :class:`SpaceCenter.Vessel`
+   :rtype: :class:`KerbalEngineerRedux.SuicideBurn` or ``null``
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: stages(vessel)
+
+   The stages of the vessel, lowest stage number first. Throws an exception if the
+   vessel is not the active vessel.
+
+   :param vessel: The active vessel.
+   :type vessel: :class:`SpaceCenter.Vessel`
+   :rtype: ``Array`` of :class:`KerbalEngineerRedux.Stage`
+   :Game Scenes: Flight
+
+
+   .. note::
+
+      The last is the current stage. The thrust and thrust-to-weight ratios are for the
+      pressure and gravity at the vessel's altitude.
+
+
+
+
+.. function:: editorStages(body[, altitude[, mach]])
+
+   The stages of the vessel in the editor, lowest stage number first.
+
+   :param body: The body to launch from.
+   :type body: :class:`SpaceCenter.CelestialBody`
+   :param altitude: The altitude for the atmospheric pressure, in meters. Defaults to ``0.0``.
+   :type altitude: ``number``
+   :param mach: The Mach number, for engines whose thrust depends on it. Defaults to ``0.0``.
+   :type mach: ``number``
+   :rtype: ``Array`` of :class:`KerbalEngineerRedux.Stage`
+   :Game Scenes: Editor Vab, Editor Sph
+
+
+   .. note::
+
+      The last is the first stage to activate, and the list is empty when the editor has no
+      vessel. The thrust-to-weight ratios are for the gravity at the body's surface. The
+      masses leave out the crew.
+
+
+
+
+.. function:: burnTime(vessel, deltaV)
+
+   The time to burn a delta-v, or ``null`` if the vessel has too little delta-v.
+   Throws an exception if the vessel is not the active vessel.
+
+   :param vessel: The active vessel.
+   :type vessel: :class:`SpaceCenter.Vessel`
+   :param deltaV: The delta-v, in :math:`\mathrm{m/s}`.
+   :type deltaV: ``number``
+   :rtype: :class:`KerbalEngineerRedux.BurnTime` or ``null``
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: rendezvous(vessel)
+
+   The transfer to the vessel's target, or ``null`` if it has no target, or the
+   target is the body it orbits. Throws an exception if the vessel is not the active
+   vessel.
+
+   :param vessel: The active vessel.
+   :type vessel: :class:`SpaceCenter.Vessel`
+   :rtype: :class:`KerbalEngineerRedux.Rendezvous` or ``null``
+   :Game Scenes: Flight

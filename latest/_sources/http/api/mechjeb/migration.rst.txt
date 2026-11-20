@@ -1,0 +1,242 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Migration from KRPC.MechJeb 0.7.1
+=================================
+
+kRPC 0.8 adds the MechJeb service, which Genhis' KRPC.MechJeb 0.7.1 provided before. The
+service follows MechJeb's windows, so some 0.7.1 members moved or were renamed. 0.7.1 names
+are given as in C#.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 35 30
+
+   * - 0.7.1
+     - 0.8
+     - Note
+   * - ``MechJeb.AscentAutopilot``
+     - :http:get:`/mech-jeb/ascent-guidance`
+     -
+   * - ``MechJeb.AirplaneAutopilot``
+     - :http:get:`/mech-jeb/aircraft-autopilot`
+     -
+   * - ``MechJeb.LandingAutopilot``
+     - :http:get:`/mech-jeb/landing-guidance`
+     -
+   * - ``MechJeb.ThrustController``
+     - :http:get:`/mech-jeb/utilities/(id)/thrust`
+     -
+   * - ``MechJeb.StagingController``
+     - :http:get:`/mech-jeb/utilities/(id)/staging`
+     -
+   * - ``MechJeb.SolarPanelController``
+     - :http:get:`/mech-jeb/utilities/(id)/solar-panels`
+     -
+   * - ``MechJeb.AntennaController``
+     - :http:get:`/mech-jeb/utilities/(id)/antennas`
+     -
+   * - ``MechJeb.NodeExecutor``
+     - :http:get:`/mech-jeb/maneuver-planner`
+     - Its members move to the maneuver planner, below
+   * - ``MechJeb.RCSController``
+     - :http:get:`/mech-jeb/smart-rcs`
+     - Its members move to Smart RCS, below
+   * - ``MechJeb.APIReady``
+     - :http:get:`/mech-jeb/available` and :http:get:`/mech-jeb/ready`
+     -
+   * - ``AscentAutopilot.Enabled``
+     - :http:get:`/mech-jeb/ascent-guidance/(id)/enabled`
+     -
+   * - ``AscentAutopilot.Status``
+     - :http:get:`/mech-jeb/ascent-guidance/(id)/status`
+     -
+   * - ``AscentAutopilot.DesiredOrbitAltitude``
+     - :http:get:`/mech-jeb/ascent-guidance/(id)/desired-orbit-altitude`
+     -
+   * - ``AscentAutopilot.DesiredInclination``
+     - :http:get:`/mech-jeb/ascent-guidance/(id)/desired-inclination`
+     -
+   * - ``AscentAutopilot.LaunchPhaseAngle``
+     - :http:get:`/mech-jeb/ascent-guidance/(id)/launch-phase-angle`
+     -
+   * - ``AscentAutopilot.LaunchLANDifference``
+     - :http:get:`/mech-jeb/ascent-guidance/(id)/launch-lan-difference`
+     -
+   * - ``AscentAutopilot.WarpCountDown``
+     - :http:get:`/mech-jeb/ascent-guidance/(id)/warp-count-down`
+     -
+   * - ``AscentAutopilot.LaunchMode``
+     - :http:get:`/mech-jeb/ascent-guidance/(id)/launch-mode`
+     -
+   * - ``AscentAutopilot.AbortTimedLaunch``
+     - :http:post:`/mech-jeb/ascent-guidance/(id)/abort-timed-launch`
+     -
+   * - ``AscentAutopilot.LaunchToRendezvous``
+     - :http:post:`/mech-jeb/ascent-guidance/(id)/launch-to-rendezvous`
+     -
+   * - ``AscentAutopilot.LaunchToTargetPlane``
+     - :http:post:`/mech-jeb/ascent-guidance/(id)/launch-to-target-plane`
+     -
+   * - ``AscentAutopilot.AscentPathIndex``
+     - :http:get:`/mech-jeb/ascent-guidance/(id)/ascent-type`
+     - 0 is ``"classic"`` and 2 is ``"pvg"``
+   * - ``AscentAutopilot.AscentPathClassic``
+     - :http:get:`/mech-jeb/ascent-guidance/(id)/classic-path`
+     -
+   * - ``AscentAutopilot.AscentPathPVG``
+     - :http:get:`/mech-jeb/ascent-guidance/(id)/pvg-settings`
+     -
+   * - ``AscentAutopilot.CorrectiveSteering``
+     - :http:get:`/mech-jeb/ascent-settings/(id)/corrective-steering`
+     - Through :http:get:`/mech-jeb/ascent-guidance/(id)/settings`
+   * - ``AscentAutopilot.CorrectiveSteeringGain``
+     - :http:get:`/mech-jeb/ascent-settings/(id)/corrective-steering-gain`
+     - Through :http:get:`/mech-jeb/ascent-guidance/(id)/settings`
+   * - ``AscentAutopilot.ForceRoll``
+     - :http:get:`/mech-jeb/ascent-settings/(id)/force-roll`
+     - Through :http:get:`/mech-jeb/ascent-guidance/(id)/settings`
+   * - ``AscentAutopilot.VerticalRoll``
+     - :http:get:`/mech-jeb/ascent-settings/(id)/vertical-roll`
+     - Through :http:get:`/mech-jeb/ascent-guidance/(id)/settings`
+   * - ``AscentAutopilot.TurnRoll``
+     - :http:get:`/mech-jeb/ascent-settings/(id)/turn-roll`
+     - Through :http:get:`/mech-jeb/ascent-guidance/(id)/settings`
+   * - ``AscentAutopilot.AutodeploySolarPanels``
+     - :http:get:`/mech-jeb/ascent-settings/(id)/autodeploy-solar-panels`
+     - Through :http:get:`/mech-jeb/ascent-guidance/(id)/settings`
+   * - ``AscentAutopilot.AutoDeployAntennas``
+     - :http:get:`/mech-jeb/ascent-settings/(id)/auto-deploy-antennas`
+     - Through :http:get:`/mech-jeb/ascent-guidance/(id)/settings`
+   * - ``AscentAutopilot.SkipCircularization``
+     - :http:get:`/mech-jeb/ascent-settings/(id)/skip-circularization`
+     - Through :http:get:`/mech-jeb/ascent-guidance/(id)/settings`
+   * - ``AscentAutopilot.Autostage``
+     - :http:get:`/mech-jeb/ascent-settings/(id)/autostage`
+     - Through :http:get:`/mech-jeb/ascent-guidance/(id)/settings`
+   * - ``AscentAutopilot.LimitAoA``
+     - :http:get:`/mech-jeb/ascent-settings/(id)/limit-angle-of-attack`
+     - Through :http:get:`/mech-jeb/ascent-guidance/(id)/settings`
+   * - ``AscentAutopilot.MaxAoA``
+     - :http:get:`/mech-jeb/ascent-settings/(id)/max-angle-of-attack`
+     - Through :http:get:`/mech-jeb/ascent-guidance/(id)/settings`
+   * - ``AscentAutopilot.AoALimitFadeoutPressure``
+     - :http:get:`/mech-jeb/ascent-settings/(id)/angle-of-attack-limit-fadeout-pressure`
+     - Through :http:get:`/mech-jeb/ascent-guidance/(id)/settings`
+   * - ``AscentAutopilot.ThrustController``
+     - :http:get:`/mech-jeb/ascent-settings/(id)/thrust`
+     -
+   * - ``AscentAutopilot.StagingController``
+     - :http:get:`/mech-jeb/ascent-settings/(id)/staging`
+     -
+   * - ``AscentAutopilot.AscentPathGT``
+     - Removed
+     - MechJeb 2.15 has no gravity turn path
+   * - ``AscentClassic``
+     - :ref:`ClassicPath <http-MechJeb.ClassicPath>`
+     - Members keep their names
+   * - ``AscentPVG.DesiredApoapsis``
+     - :http:get:`/mech-jeb/ascent-guidance/(id)/desired-apoapsis`
+     -
+   * - ``AscentPVG.AttachAltFlag``
+     - :http:get:`/mech-jeb/ascent-guidance/(id)/attach-alt-flag`
+     -
+   * - ``AscentPVG.DesiredAttachAlt``
+     - :http:get:`/mech-jeb/ascent-guidance/(id)/desired-attach-alt`
+     -
+   * - ``AscentPVG``
+     - :ref:`PVGSettings <http-MechJeb.PVGSettings>`
+     - Its other members keep their names
+   * - ``AscentGT``
+     - Removed
+     - MechJeb 2.15 has no gravity turn path
+   * - ``ThrustController``
+     - :ref:`ThrustLimiter <http-MechJeb.ThrustLimiter>`
+     - Members keep their names
+   * - ``ThrustController.SmoothThrottle, ThrottleSmoothingTime``
+     - Removed
+     - MechJeb 2.15 removed them
+   * - ``StagingController``
+     - :ref:`Autostaging <http-MechJeb.Autostaging>`
+     - Its other members keep their names
+   * - ``StagingController.AutostagingOnce``
+     - :http:post:`/mech-jeb/autostaging/(id)/autostage-once`
+     - :http:get:`/mech-jeb/autostaging/(id)/autostaging-once` is read-only
+   * - ``NodeExecutor.ExecuteOneNode``
+     - :http:post:`/mech-jeb/maneuver-planner/(id)/execute-next-node`
+     -
+   * - ``NodeExecutor.ExecuteAllNodes``
+     - :http:post:`/mech-jeb/maneuver-planner/(id)/execute-all-nodes`
+     -
+   * - ``NodeExecutor.Abort``
+     - :http:post:`/mech-jeb/maneuver-planner/(id)/abort-node-execution`
+     -
+   * - ``NodeExecutor.Enabled``
+     - :http:get:`/mech-jeb/maneuver-planner/(id)/executing-node`
+     -
+   * - ``NodeExecutor.Autowarp``
+     - :http:get:`/mech-jeb/maneuver-planner/(id)/autowarp`
+     -
+   * - ``NodeExecutor.LeadTime``
+     - :http:get:`/mech-jeb/maneuver-planner/(id)/lead-time`
+     -
+   * - ``NodeExecutor.Tolerance``
+     - Removed
+     - MechJeb 2.15 removed it
+   * - ``RCSController.RCSThrottle``
+     - :http:get:`/mech-jeb/smart-rcs/(id)/rcs-throttle`
+     -
+   * - ``RCSController.RCSForRotation``
+     - :http:get:`/mech-jeb/smart-rcs/(id)/rcs-for-rotation`
+     -
+   * - ``SmartRCS.RCSController``
+     - Removed
+     - Its members are on :ref:`SmartRCS <http-MechJeb.SmartRCS>`
+   * - ``LandingAutopilot``
+     - :ref:`LandingGuidance <http-MechJeb.LandingGuidance>`
+     - Its other members keep their names
+   * - ``LandingAutopilot.RcsAdjustment``
+     - :http:get:`/mech-jeb/landing-guidance/(id)/rcs-adjustment`
+     -
+   * - ``LandingAutopilot.LandAtPositionTarget``
+     - :http:post:`/mech-jeb/landing-guidance/(id)/land-at-target`
+     -
+   * - ``LandingAutopilot.LandUntargeted``
+     - :http:post:`/mech-jeb/landing-guidance/(id)/land-somewhere`
+     -
+   * - ``LandingAutopilot.StopLanding``
+     - :http:post:`/mech-jeb/landing-guidance/(id)/abort-autoland`
+     -
+   * - ``TargetController.SetPositionTarget``
+     - :http:post:`/mech-jeb/landing-guidance/(id)/set-target`
+     -
+   * - ``TargetController.PickPositionTargetOnMap``
+     - :http:post:`/mech-jeb/landing-guidance/(id)/pick-target-on-map`
+     -
+   * - ``TargetController.GetPositionTargetString``
+     - :http:post:`/mech-jeb/landing-guidance/(id)/get-target-string`
+     -
+   * - ``TargetController.GetPositionTargetPosition``
+     - :http:post:`/mech-jeb/landing-guidance/(id)/get-target-position`
+     -
+   * - ``AirplaneAutopilot``
+     - :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>`
+     - Members keep their names
+   * - ``Operation.MakeNode``
+     - :http:post:`/mech-jeb/operation-apoapsis/(id)/make-nodes`
+     - On each operation. It returns every node
+   * - ``OperationCourseCorrection.CourseCorrectFinalPeA``
+     - :http:get:`/mech-jeb/operation-course-correction/(id)/final-periapsis-altitude`
+     -
+   * - ``OperationTransfer.InterceptOnly``
+     - :http:get:`/mech-jeb/operation-transfer/(id)/capture`
+     - The inverse
+   * - ``OperationTransfer.SimpleTransfer``
+     - :http:get:`/mech-jeb/operation-transfer/(id)/coplanar`
+     -
+   * - ``OperationTransfer.PeriodOffset``
+     - :http:get:`/mech-jeb/operation-transfer/(id)/lag-time`
+     - A time in seconds, rather than a fraction of the target's period
+
+Members not listed keep their names and classes.

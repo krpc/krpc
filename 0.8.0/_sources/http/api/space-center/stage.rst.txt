@@ -1,0 +1,285 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+.. _http-api-stage:
+
+Stage
+=====
+
+
+.. _http-SpaceCenter.Stage:
+
+.. rubric:: Stage
+
+A single stage of a vessel. Obtain activation (burn) stages from
+``Vessel.Stages`` / ``Vessel.StageAt``, and decouple stages from
+``Vessel.DecoupleStages`` / ``Vessel.DecoupleStageAt``.
+
+.. note::
+
+   Delta-v, thrust, TWR, specific impulse, burn time and mass members are only
+   available on activation stages. On decouple stages those members throw
+   :ref:`KRPC.InvalidOperationException <http-KRPC.InvalidOperationException>` because stock delta-v data does not
+   apply. Thrust is reported in newtons and masses in kilograms (stock values
+   are converted from kilonewtons and tonnes).
+
+
+A ``Stage`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /space-center/stage/(id)/number
+
+   The stage number (activation stage for burn stages, decouple stage otherwise).
+
+
+   :param id: The identifier of the :ref:`Stage <http-SpaceCenter.Stage>` object.
+
+   :resjson int32 value:
+
+
+
+
+.. http:get:: /space-center/stage/(id)/parts
+
+   The parts that belong to this stage.
+
+
+   :param id: The identifier of the :ref:`Stage <http-SpaceCenter.Stage>` object.
+
+   :resjson list<SpaceCenter.Part> value:
+
+
+
+
+.. http:post:: /space-center/stage/(id)/resources
+
+   Returns a :http:post:`/space-center/stage/(id)/resources` object for this stage.
+
+
+   :param id: The identifier of the :ref:`Stage <http-SpaceCenter.Stage>` object.
+
+   :reqjson bool cumulative: When ``false``, only resources assigned to this stage. When ``true``, resources for this stage and all later activation or decouple stage numbers are included. On activation stages, unstaged resource containers (for example fuel tanks) are grouped with the first higher activation stage before they are detached. Optional, defaults to ``true``.
+   :resjson SpaceCenter.Resources value:
+
+   .. note:: This is an RPC method: call ``resources()`` (optional ``cumulative`` argument).
+             For activation stages, unstaged resource containers (for example fuel tanks)
+             are grouped with the first higher activation stage before they detach, matching
+             the C# ``Resources()`` documentation.
+
+
+
+
+.. http:get:: /space-center/stage/(id)/delta-v
+
+   Delta-v for this stage in the current situation, in :math:`\mathrm{m/s}`.
+
+
+   :param id: The identifier of the :ref:`Stage <http-SpaceCenter.Stage>` object.
+
+   :resjson float value:
+
+.. note:: Delta-v is only defined for **activation** stages (``decouple`` is ``false``).
+          Calling this on a decouple stage raises an error.
+
+
+
+
+.. http:get:: /space-center/stage/(id)/vacuum-delta-v
+
+   Vacuum delta-v for this stage, in :math:`\mathrm{m/s}`.
+
+
+   :param id: The identifier of the :ref:`Stage <http-SpaceCenter.Stage>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/stage/(id)/sea-level-delta-v
+
+   Sea-level delta-v for this stage, in :math:`\mathrm{m/s}`.
+
+
+   :param id: The identifier of the :ref:`Stage <http-SpaceCenter.Stage>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/stage/(id)/thrust
+
+   Thrust in the current situation, in newtons.
+
+
+   :param id: The identifier of the :ref:`Stage <http-SpaceCenter.Stage>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/stage/(id)/vacuum-thrust
+
+   Vacuum thrust, in newtons.
+
+
+   :param id: The identifier of the :ref:`Stage <http-SpaceCenter.Stage>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/stage/(id)/sea-level-thrust
+
+   Sea-level thrust, in newtons.
+
+
+   :param id: The identifier of the :ref:`Stage <http-SpaceCenter.Stage>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/stage/(id)/twr
+
+   Thrust-to-weight ratio in the current situation.
+
+
+   :param id: The identifier of the :ref:`Stage <http-SpaceCenter.Stage>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/stage/(id)/vacuum-twr
+
+   Vacuum thrust-to-weight ratio.
+
+
+   :param id: The identifier of the :ref:`Stage <http-SpaceCenter.Stage>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/stage/(id)/sea-level-twr
+
+   Sea-level thrust-to-weight ratio.
+
+
+   :param id: The identifier of the :ref:`Stage <http-SpaceCenter.Stage>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/stage/(id)/specific-impulse
+
+   Specific impulse in the current situation, in seconds.
+
+
+   :param id: The identifier of the :ref:`Stage <http-SpaceCenter.Stage>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/stage/(id)/vacuum-specific-impulse
+
+   Vacuum specific impulse, in seconds.
+
+
+   :param id: The identifier of the :ref:`Stage <http-SpaceCenter.Stage>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/stage/(id)/sea-level-specific-impulse
+
+   Sea-level specific impulse, in seconds.
+
+
+   :param id: The identifier of the :ref:`Stage <http-SpaceCenter.Stage>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/stage/(id)/burn-time
+
+   Burn time for this stage, in seconds.
+
+
+   :param id: The identifier of the :ref:`Stage <http-SpaceCenter.Stage>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/stage/(id)/start-mass
+
+   The mass of the vessel after the stage activates, in :math:`\mathrm{kg}`.
+
+
+   :param id: The identifier of the :ref:`Stage <http-SpaceCenter.Stage>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/stage/(id)/end-mass
+
+   The mass of the vessel when the stage burns out, in :math:`\mathrm{kg}`.
+
+
+   :param id: The identifier of the :ref:`Stage <http-SpaceCenter.Stage>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/stage/(id)/dry-mass
+
+   The dry mass of the vessel after the stage activates, in :math:`\mathrm{kg}`.
+
+   .. note::
+
+      Includes the parts of all later stages.
+
+
+   :param id: The identifier of the :ref:`Stage <http-SpaceCenter.Stage>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/stage/(id)/fuel-mass
+
+   The fuel mass of the vessel when the stage activates, in :math:`\mathrm{kg}`.
+
+   .. note::
+
+      Includes the fuel of all later stages, and the fuel left in the parts the stage
+      decouples. The stage burns :http:get:`/space-center/stage/(id)/start-mass` minus :http:get:`/space-center/stage/(id)/end-mass`.
+
+
+   :param id: The identifier of the :ref:`Stage <http-SpaceCenter.Stage>` object.
+
+   :resjson float value:

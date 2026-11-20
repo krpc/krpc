@@ -1,0 +1,149 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: KerbalAlarmClock
+
+Alarm
+=====
+
+
+.. class:: Alarm
+
+   Represents an alarm. Obtained by calling
+   :attr:`KerbalAlarmClock.alarms`,
+   :meth:`KerbalAlarmClock.alarm_with_name` or
+   :meth:`KerbalAlarmClock.alarms_with_type`.
+
+   .. attribute:: action: KerbalAlarmClock.AlarmAction
+
+      The action that the alarm triggers.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         An alarm that plays a sound has the action :data:`KerbalAlarmClock.AlarmAction.custom`.
+         See :attr:`KerbalAlarmClock.Alarm.play_sound`.
+
+   .. attribute:: margin: number
+
+      The number of seconds before the event that the alarm will fire.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: time: number
+
+      The time at which the alarm will fire.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: type: KerbalAlarmClock.AlarmType
+
+      The type of the alarm.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: id: string
+
+      The unique identifier for the alarm.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: name: string
+
+      The short name of the alarm.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: notes: string
+
+      The long description of the alarm.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: remaining: number
+
+      The number of seconds until the alarm will fire.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: enabled: boolean
+
+      Whether the alarm is enabled. A disabled alarm does not fire.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: play_sound: boolean
+
+      Whether the alarm plays a sound when it fires.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         An alarm that plays a sound has the action :data:`KerbalAlarmClock.AlarmAction.custom`.
+         Setting :attr:`KerbalAlarmClock.Alarm.action` to any other value turns the sound off.
+
+   .. attribute:: triggered: boolean
+
+      Whether the alarm has fired. Remains true once the alarm has fired;
+      stream this or use it in an event expression to react to the alarm
+      firing.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: repeat: boolean
+
+      Whether the alarm will be repeated after it has fired.
+      Only has an effect for alarm types that support repeating
+      (see :attr:`KerbalAlarmClock.Alarm.supports_repeat`).
+
+      :Attribute: Can be read or written
+
+   .. attribute:: supports_repeat: boolean
+
+      Whether this alarm's type supports repeating
+      (see :attr:`KerbalAlarmClock.Alarm.repeat`).
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: repeat_period: number
+
+      The time delay to automatically create an alarm after it has fired.
+      Only has an effect for alarm types that support a repeat period
+      (see :attr:`KerbalAlarmClock.Alarm.supports_repeat_period`).
+
+      :Attribute: Can be read or written
+
+   .. attribute:: supports_repeat_period: boolean
+
+      Whether this alarm's type supports a repeat period
+      (see :attr:`KerbalAlarmClock.Alarm.repeat_period`).
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: vessel: SpaceCenter.Vessel
+
+      The vessel that the alarm is attached to.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: xfer_origin_body: SpaceCenter.CelestialBody
+
+      The celestial body the vessel is departing from.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: xfer_target_body: SpaceCenter.CelestialBody
+
+      The celestial body the vessel is arriving at.
+
+      :Attribute: Can be read or written
+
+   .. method:: remove()
+
+      Removes the alarm. Any further use of this object throws an exception.
+
+
+      .. note::
+
+         Any further use of this object throws an exception.

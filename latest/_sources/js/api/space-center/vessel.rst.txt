@@ -1,0 +1,1454 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: SpaceCenter
+   :no-index:
+
+Vessel
+======
+
+
+.. class:: Vessel
+
+   These objects are used to interact with vessels in KSP. This includes getting
+   orbital and flight data, manipulating control inputs and managing resources.
+   Created using :func:`SpaceCenter.getActiveVessel` or :func:`SpaceCenter.getVessels`.
+
+   .. method:: getName()
+               setName(value)
+
+      The name of the vessel.
+
+      :Property: Can be read or written
+      :rtype: ``string``
+   
+
+   .. method:: getType()
+               setType(value)
+
+      The type of the vessel.
+
+      :Property: Can be read or written
+      :rtype: :class:`SpaceCenter.VesselType`
+   
+
+   .. method:: getSituation()
+
+      The situation the vessel is in.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.VesselSituation`
+   
+
+   .. method:: getLoaded()
+
+      Whether the vessel is loaded, i.e. its parts are instantiated in the scene
+      because it is within loading range of the active vessel. A vessel that is not
+      loaded exists only as orbital data and is always on-rails (see :meth:`SpaceCenter.Vessel.getPacked`).
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+   
+
+   .. method:: getPacked()
+
+      Whether the vessel is packed (on-rails). A packed vessel has its physics
+      simulation suspended and follows its orbit analytically. A vessel that is not
+      loaded (see :meth:`SpaceCenter.Vessel.getLoaded`) is always packed.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+   
+
+   .. method:: getPhysicsRange()
+               setPhysicsRange(value)
+
+      The distance from the active vessel, in meters, out to which this vessel keeps running
+      its physics simulation, and so stays controllable, able to burn its engines and
+      respond to its autopilot. Setting this raises the vessel out of the stock physics
+      bubble, so that it keeps flying while the active vessel is far away. Set to zero to
+      restore the game's default range.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         This always reports the vessel's live range, so reading it when no range has been set
+         gives the game's default for the vessel's current :meth:`SpaceCenter.Vessel.getSituation`, which is
+         much shorter than the distance at which the vessel unloads. In orbit a vessel is put
+         on rails just 350m away, long before it unloads at 2.5km, and a vessel on rails
+         produces no thrust and ignores control input even though it is still loaded.
+
+         There is a 10% margin below the range, so that a vessel hovering at the threshold does
+         not repeatedly drop out of the simulation and rejoin it. The vessel leaves the
+         simulation at the distance set here, and rejoins it at 90% of that distance; in
+         between it keeps whichever state it is already in.
+
+         The requested range applies in every situation. The game's own defaults are not
+         uniform, and a vessel flying in atmosphere stays loaded out to 22.5km, so setting a
+         small range can shorten the range such a vessel would otherwise have had.
+
+         A range lasts until it is set back to zero or the game is exited. Unlike most state a
+         client sets, it is not released when that client disconnects, because dropping a
+         distant vessel back to the default range would put it on-rails part way through a
+         maneuver.
+
+         Holding a vessel off-rails a long way from the active vessel costs performance, and
+         accumulates positional error that can destroy it. Raise the range on the vessels that
+         need it, by as little as they need.
+
+   .. method:: getRecoverable()
+
+      Whether the vessel is recoverable.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+   
+
+   .. method:: recover()
+
+      Recover the vessel. The crew return to the astronaut complex, and the funds and
+      science the vessel is worth are awarded.
+
+   
+
+      .. note::
+
+         Recovering the active vessel ends the flight and returns to the space center, as
+         pressing recover in game does. When a non-active vessel is recovered the current scene
+         is unaffected, and the mission completion dialog is not shown, so a script flying
+         several vessels keeps control of the rest of them.
+
+         Returns immediately, does not wait for the vessel to be recovered.
+
+   .. method:: terminate()
+
+      Terminate the vessel. The vessel and its parts are removed from the game, and its
+      crew are lost, as when the vessel is terminated from the tracking station. Nothing
+      is recovered: no funds, no science and no crew.
+
+   
+
+      .. note::
+
+         The crew are reported missing, and return to the astronaut complex once their
+         respawn timer expires, or never if the game is set up so that missing crews do
+         not respawn.
+
+         The active vessel cannot be terminated, because the vessel being flown cannot be
+         taken out of the scene it is being flown in. Switch to another vessel first, or
+         use :meth:`SpaceCenter.Vessel.recover`, which ends the flight and returns to the space center.
+
+         Returns immediately, does not wait for the vessel to be terminated.
+
+   .. method:: getMET()
+
+      The mission elapsed time in seconds.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getLaunchSite()
+
+      The launch site the vessel was launched from, or ``null`` if the vessel was
+      not launched from a known launch site, such as a vessel spawned by a contract.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.LaunchSite` or ``null``
+   
+
+   .. method:: getBiome()
+
+      The name of the biome the vessel is currently in.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``string``
+   
+
+   .. method:: flight([referenceFrame])
+
+      Returns a :class:`SpaceCenter.Flight` object that can be used to get flight
+      telemetry for the vessel, in the specified reference frame.
+
+      :param referenceFrame: Reference frame. Defaults to the vessel's surface reference frame (:meth:`SpaceCenter.Vessel.getSurfaceReferenceFrame`).
+      :type referenceFrame: :class:`SpaceCenter.ReferenceFrame` or ``null``
+      :rtype: :class:`SpaceCenter.Flight`
+      :Game Scenes: Flight
+
+
+      .. note:: When this is called with no arguments, the vessel's surface reference
+                frame is used. This reference frame moves with the vessel, therefore
+                velocities and speeds returned by the flight object will be zero. See
+                the :rst:ref:`reference frames guide <reference-frames>`
+                for examples of getting :rst:ref:`the orbital and surface speeds of a
+                vessel <reference-frames-vessel-speed>`.
+
+   .. method:: getOrbit()
+
+      The current orbit of the vessel.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Orbit`
+   
+
+   .. method:: getControl()
+
+      Returns a :meth:`SpaceCenter.Vessel.getControl` object that can be used to manipulate
+      the vessel's control inputs. For example, its pitch/yaw/roll controls,
+      RCS and thrust.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Control`
+      :Game Scenes: Flight
+
+   .. method:: getComms()
+
+      Returns a :meth:`SpaceCenter.Vessel.getComms` object that can be used to interact
+      with CommNet for this vessel.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Comms`
+      :Game Scenes: Flight
+
+   .. method:: getAutoPilot()
+
+      An :meth:`SpaceCenter.Vessel.getAutoPilot` object, that can be used to perform
+      simple auto-piloting of the vessel.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.AutoPilot`
+      :Game Scenes: Flight
+
+   .. method:: getCrewCapacity()
+
+      The number of crew that can occupy the vessel.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getCrewCount()
+
+      The number of crew that are occupying the vessel.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getCrew()
+
+      The crew in the vessel.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`SpaceCenter.CrewMember`
+   
+
+   .. method:: getResources()
+
+      A :meth:`SpaceCenter.Vessel.getResources` object, that can used to get information
+      about resources stored in the vessel.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Resources`
+      :Game Scenes: Flight
+
+   .. method:: getStages()
+
+      Activation (burn) stages for this vessel, in ascending stage order. This does
+      not include the -1 stage (parts with no staging icon), as it carries no
+      delta-v; use :meth:`SpaceCenter.Vessel.stageAt` with -1 to get those parts.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`SpaceCenter.Stage`
+      :Game Scenes: Flight
+
+
+      .. note:: Lists activation stages only (``decouple`` is ``false``). See also
+                :rst:ref:`user-guide-parts-staging`.
+
+   .. method:: stageAt(stage)
+
+      The activation stage with the given number. Pass -1 to get the parts that are
+      never activated (those with no staging icon).
+
+      :param stage: Get activation stage at this index.
+      :type stage: ``number``
+      :rtype: :class:`SpaceCenter.Stage`
+      :Game Scenes: Flight
+
+   .. method:: getDecoupleStages()
+
+      Decouple stages for this vessel, in ascending stage order. The -1 stage,
+      containing the parts that are never decoupled and remain on the vessel, is
+      included first when any such parts exist.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`SpaceCenter.Stage`
+      :Game Scenes: Flight
+
+
+      .. note:: Lists decouple stages only. Delta-v is not defined on these stages.
+
+   .. method:: decoupleStageAt(stage)
+
+      The decouple stage with the given number. Pass -1 to get the parts that are
+      never decoupled and remain on the vessel after all stages have fired.
+
+      :param stage: Get decouple stage at this index.
+      :type stage: ``number``
+      :rtype: :class:`SpaceCenter.Stage`
+      :Game Scenes: Flight
+
+   .. method:: getDeltaVReady()
+
+      Whether the vessel's delta-v figures are current.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game calculates delta-v for the active vessel alone, over the several ticks
+         after the vessel changes. A delta-v member reports the figures from the last
+         calculation, and waits only when the game has calculated none.
+
+   .. method:: recalculateDeltaV()
+
+      Recalculates the vessel's delta-v figures, and waits until they are current.
+      Throws an exception if the vessel is not the active vessel.
+
+      :Game Scenes: Flight
+
+   .. method:: getDeltaV()
+
+      Total delta-v for the vessel in the current situation, in :math:`\mathrm{m/s}`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note:: Requires the stock delta-v display to be ready. Units are meters per second.
+
+   .. method:: getVacuumDeltaV()
+
+      Total vacuum delta-v for the vessel, in :math:`\mathrm{m/s}`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getSeaLevelDeltaV()
+
+      Total sea-level delta-v for the vessel, in :math:`\mathrm{m/s}`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getBurnTime()
+
+      Total burn time for the vessel, in seconds.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getParts()
+
+      A :class:`SpaceCenter.Parts` object, that can used to interact with the parts that make up this vessel.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Parts`
+      :Game Scenes: Flight
+
+   .. method:: getMass()
+
+      The total mass of the vessel, including resources, in :math:`\mathrm{kg}`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getDryMass()
+
+      The total mass of the vessel, excluding resources, in :math:`\mathrm{kg}`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getThrust()
+
+      The total thrust currently being produced by the vessel's engines, in
+      Newtons. This is computed by summing :meth:`SpaceCenter.Engine.getThrust` for
+      every engine in the vessel.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getAvailableThrust()
+
+      Gets the total available thrust that can be produced by the vessel's
+      active engines, in Newtons. This is computed by summing
+      :meth:`SpaceCenter.Engine.getAvailableThrust` for every active engine in the vessel.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: availableThrustAt(pressure)
+
+      Gets the total available thrust that can be produced by the vessel's
+      active engines, in Newtons. This is computed by summing
+      :meth:`SpaceCenter.Engine.availableThrustAt` for every active engine in the vessel.
+      Takes the given pressure into account.
+
+      :param pressure: Atmospheric pressure in atmospheres
+      :type pressure: ``number``
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getMaxThrust()
+
+      The total maximum thrust that can be produced by the vessel's active
+      engines, in Newtons. This is computed by summing
+      :meth:`SpaceCenter.Engine.getMaxThrust` for every active engine.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: maxThrustAt(pressure)
+
+      The total maximum thrust that can be produced by the vessel's active
+      engines, in Newtons. This is computed by summing
+      :meth:`SpaceCenter.Engine.maxThrustAt` for every active engine.
+      Takes the given pressure into account.
+
+      :param pressure: Atmospheric pressure in atmospheres
+      :type pressure: ``number``
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getMaxVacuumThrust()
+
+      The total maximum thrust that can be produced by the vessel's active
+      engines when the vessel is in a vacuum, in Newtons. This is computed by
+      summing :meth:`SpaceCenter.Engine.getMaxVacuumThrust` for every active engine.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getAcceleration()
+
+      The acceleration currently produced by the vessel's engines, in
+      :math:`\mathrm{m/s^{2}}`. This is :meth:`SpaceCenter.Vessel.getThrust` divided by the
+      vessel's :meth:`SpaceCenter.Vessel.getMass`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getAvailableAcceleration()
+
+      The total available acceleration that can be produced by the vessel's
+      active engines, in :math:`\mathrm{m/s^{2}}`. This is :meth:`SpaceCenter.Vessel.getAvailableThrust`
+      divided by the vessel's :meth:`SpaceCenter.Vessel.getMass`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: availableAccelerationAt(pressure)
+
+      The total available acceleration that can be produced by the vessel's
+      active engines, in :math:`\mathrm{m/s^{2}}`. This is :meth:`SpaceCenter.Vessel.availableThrustAt`
+      divided by the vessel's :meth:`SpaceCenter.Vessel.getMass`. Takes the given pressure into account.
+
+      :param pressure: Atmospheric pressure in atmospheres
+      :type pressure: ``number``
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getMaxAcceleration()
+
+      The total maximum acceleration that can be produced by the vessel's active
+      engines, in :math:`\mathrm{m/s^{2}}`. This is :meth:`SpaceCenter.Vessel.getMaxThrust` divided by
+      the vessel's :meth:`SpaceCenter.Vessel.getMass`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: maxAccelerationAt(pressure)
+
+      The total maximum acceleration that can be produced by the vessel's active
+      engines, in :math:`\mathrm{m/s^{2}}`. This is :meth:`SpaceCenter.Vessel.maxThrustAt` divided by
+      the vessel's :meth:`SpaceCenter.Vessel.getMass`. Takes the given pressure into account.
+
+      :param pressure: Atmospheric pressure in atmospheres
+      :type pressure: ``number``
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getMaxVacuumAcceleration()
+
+      The total maximum acceleration that can be produced by the vessel's active
+      engines when the vessel is in a vacuum, in :math:`\mathrm{m/s^{2}}`. This is
+      :meth:`SpaceCenter.Vessel.getMaxVacuumThrust` divided by the vessel's :meth:`SpaceCenter.Vessel.getMass`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getSpecificImpulse()
+
+      The combined specific impulse of all active engines, in seconds. This is computed using the formula
+      `described here <https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines>`_.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: specificImpulseAt(pressure)
+
+      The combined specific impulse of all active engines, in seconds. This is computed using the formula
+      `described here <https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines>`_.
+      Takes the given pressure into account.
+
+      :param pressure: Atmospheric pressure in atmospheres
+      :type pressure: ``number``
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getVacuumSpecificImpulse()
+
+      The combined vacuum specific impulse of all active engines, in seconds. This is computed using the formula
+      `described here <https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines>`_.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getKerbinSeaLevelSpecificImpulse()
+
+      The combined specific impulse of all active engines at sea level on Kerbin, in seconds.
+      This is computed using the formula
+      `described here <https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines>`_.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getMomentOfInertia()
+
+      The moment of inertia of the vessel around its center of mass in :math:`\mathrm{kg \cdot m^{2}}`.
+      The inertia values in the returned 3-tuple are around the
+      pitch, roll and yaw directions respectively.
+      This corresponds to the vessels reference frame (:meth:`SpaceCenter.Vessel.getReferenceFrame`).
+
+      :Property: Read-only, cannot be set
+      :rtype: ``[number, number, number]``
+      :Game Scenes: Flight
+
+   .. method:: getInertiaTensor()
+
+      The inertia tensor of the vessel around its center of mass,
+      in the vessels reference frame (:meth:`SpaceCenter.Vessel.getReferenceFrame`).
+      Returns the 3x3 matrix as a list of elements, in row-major order.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of ``number``
+      :Game Scenes: Flight
+
+   .. method:: getAvailableTorque()
+
+      The maximum torque that the vessel generates. Includes contributions from
+      reaction wheels, RCS, gimballed engines and aerodynamic control surfaces.
+      Returns the torques in :math:`\mathrm{N \cdot m}` around each of the coordinate axes of the
+      vessels reference frame (:meth:`SpaceCenter.Vessel.getReferenceFrame`).
+      These axes are equivalent to the pitch, roll and yaw axes of the vessel.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.AxisRange`
+      :Game Scenes: Flight
+
+   .. method:: getAvailableReactionWheelTorque()
+
+      The maximum torque that the currently active and powered reaction wheels can generate.
+      Returns the torques in :math:`\mathrm{N \cdot m}` around each of the coordinate axes of the
+      vessels reference frame (:meth:`SpaceCenter.Vessel.getReferenceFrame`).
+      These axes are equivalent to the pitch, roll and yaw axes of the vessel.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.AxisRange`
+      :Game Scenes: Flight
+
+   .. method:: getAvailableRCSTorque()
+
+      The maximum torque that the currently active RCS thrusters can generate.
+      Returns the torques in :math:`\mathrm{N \cdot m}` around each of the coordinate axes of the
+      vessels reference frame (:meth:`SpaceCenter.Vessel.getReferenceFrame`).
+      These axes are equivalent to the pitch, roll and yaw axes of the vessel.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.AxisRange`
+      :Game Scenes: Flight
+
+   .. method:: getAvailableRCSForce()
+
+      The maximum force that the currently active RCS thrusters can generate.
+      Returns the forces in :math:`\mathrm{N}` along each of the coordinate axes of the
+      vessels reference frame (:meth:`SpaceCenter.Vessel.getReferenceFrame`).
+      These axes are equivalent to the right, forward and bottom directions of the vessel.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.AxisRange`
+      :Game Scenes: Flight
+
+   .. method:: getAvailableRCSAcceleration()
+
+      The maximum acceleration that the currently active RCS thrusters can generate.
+      This is :meth:`SpaceCenter.Vessel.getAvailableRCSForce` divided by the vessel's :meth:`SpaceCenter.Vessel.getMass`.
+      Returns the accelerations in :math:`\mathrm{m/s^{2}}` along each of the coordinate axes of the
+      vessels reference frame (:meth:`SpaceCenter.Vessel.getReferenceFrame`).
+      These axes are equivalent to the right, forward and bottom directions of the vessel.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.AxisRange`
+      :Game Scenes: Flight
+
+   .. method:: getAvailableEngineTorque()
+
+      The maximum torque that the currently active and gimballed engines can generate.
+      Returns the torques in :math:`\mathrm{N \cdot m}` around each of the coordinate axes of the
+      vessels reference frame (:meth:`SpaceCenter.Vessel.getReferenceFrame`).
+      These axes are equivalent to the pitch, roll and yaw axes of the vessel.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.AxisRange`
+      :Game Scenes: Flight
+
+   .. method:: getAvailableControlSurfaceTorque()
+
+      The maximum torque that the aerodynamic control surfaces can generate.
+      Returns the torques in :math:`\mathrm{N \cdot m}` around each of the coordinate axes of the
+      vessels reference frame (:meth:`SpaceCenter.Vessel.getReferenceFrame`).
+      These axes are equivalent to the pitch, roll and yaw axes of the vessel.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.AxisRange`
+      :Game Scenes: Flight
+
+   .. method:: getAvailableOtherTorque()
+
+      The maximum torque that parts (excluding reaction wheels, gimballed engines,
+      RCS and control surfaces) can generate.
+      Returns the torques in :math:`\mathrm{N \cdot m}` around each of the coordinate axes of the
+      vessels reference frame (:meth:`SpaceCenter.Vessel.getReferenceFrame`).
+      These axes are equivalent to the pitch, roll and yaw axes of the vessel.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.AxisRange`
+      :Game Scenes: Flight
+
+   .. method:: getAvailableAngularAcceleration()
+
+      The maximum angular acceleration that the vessel can generate. Includes contributions
+      from reaction wheels, RCS, gimballed engines and aerodynamic control surfaces.
+      This is :meth:`SpaceCenter.Vessel.getAvailableTorque` divided by the vessel's :meth:`SpaceCenter.Vessel.getMomentOfInertia`.
+      Returns the angular accelerations in :math:`\mathrm{rad/s^{2}}` around each of the coordinate
+      axes of the vessels reference frame (:meth:`SpaceCenter.Vessel.getReferenceFrame`).
+      These axes are equivalent to the pitch, roll and yaw axes of the vessel.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.AxisRange`
+      :Game Scenes: Flight
+
+   .. method:: getAvailableReactionWheelAngularAcceleration()
+
+      The maximum angular acceleration that the currently active and powered reaction wheels
+      can generate. This is :meth:`SpaceCenter.Vessel.getAvailableReactionWheelTorque` divided by the vessel's
+      :meth:`SpaceCenter.Vessel.getMomentOfInertia`.
+      Returns the angular accelerations in :math:`\mathrm{rad/s^{2}}` around each of the coordinate
+      axes of the vessels reference frame (:meth:`SpaceCenter.Vessel.getReferenceFrame`).
+      These axes are equivalent to the pitch, roll and yaw axes of the vessel.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.AxisRange`
+      :Game Scenes: Flight
+
+   .. method:: getAvailableRCSAngularAcceleration()
+
+      The maximum angular acceleration that the currently active RCS thrusters can generate.
+      This is :meth:`SpaceCenter.Vessel.getAvailableRCSTorque` divided by the vessel's :meth:`SpaceCenter.Vessel.getMomentOfInertia`.
+      Returns the angular accelerations in :math:`\mathrm{rad/s^{2}}` around each of the coordinate
+      axes of the vessels reference frame (:meth:`SpaceCenter.Vessel.getReferenceFrame`).
+      These axes are equivalent to the pitch, roll and yaw axes of the vessel.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.AxisRange`
+      :Game Scenes: Flight
+
+   .. method:: getAvailableEngineAngularAcceleration()
+
+      The maximum angular acceleration that the currently active and gimballed engines can
+      generate. This is :meth:`SpaceCenter.Vessel.getAvailableEngineTorque` divided by the vessel's
+      :meth:`SpaceCenter.Vessel.getMomentOfInertia`.
+      Returns the angular accelerations in :math:`\mathrm{rad/s^{2}}` around each of the coordinate
+      axes of the vessels reference frame (:meth:`SpaceCenter.Vessel.getReferenceFrame`).
+      These axes are equivalent to the pitch, roll and yaw axes of the vessel.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.AxisRange`
+      :Game Scenes: Flight
+
+   .. method:: getAvailableControlSurfaceAngularAcceleration()
+
+      The maximum angular acceleration that the aerodynamic control surfaces can generate.
+      This is :meth:`SpaceCenter.Vessel.getAvailableControlSurfaceTorque` divided by the vessel's
+      :meth:`SpaceCenter.Vessel.getMomentOfInertia`.
+      Returns the angular accelerations in :math:`\mathrm{rad/s^{2}}` around each of the coordinate
+      axes of the vessels reference frame (:meth:`SpaceCenter.Vessel.getReferenceFrame`).
+      These axes are equivalent to the pitch, roll and yaw axes of the vessel.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.AxisRange`
+      :Game Scenes: Flight
+
+   .. method:: getAvailableOtherAngularAcceleration()
+
+      The maximum angular acceleration that parts (excluding reaction wheels, gimballed engines,
+      RCS and control surfaces) can generate. This is :meth:`SpaceCenter.Vessel.getAvailableOtherTorque` divided
+      by the vessel's :meth:`SpaceCenter.Vessel.getMomentOfInertia`.
+      Returns the angular accelerations in :math:`\mathrm{rad/s^{2}}` around each of the coordinate
+      axes of the vessels reference frame (:meth:`SpaceCenter.Vessel.getReferenceFrame`).
+      These axes are equivalent to the pitch, roll and yaw axes of the vessel.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.AxisRange`
+      :Game Scenes: Flight
+
+   .. method:: getReferenceFrame()
+
+      The reference frame that is fixed relative to the vessel,
+      and orientated with the vessel.
+
+      * The origin is at the center of mass of the vessel.
+      * The axes rotate with the vessel.
+      * The x-axis points out to the right of the vessel.
+      * The y-axis points in the forward direction of the vessel.
+      * The z-axis points out of the bottom off the vessel.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.ReferenceFrame`
+      :Game Scenes: Flight
+
+
+      .. figure:: /images/reference-frames/vessel-aircraft.png
+         :align: center
+
+         Vessel reference frame origin and axes for the Aeris 3A aircraft
+
+      .. figure:: /images/reference-frames/vessel-rocket.png
+         :align: center
+
+         Vessel reference frame origin and axes for the Kerbal-X rocket
+
+   .. method:: getOrbitalReferenceFrame()
+
+      The reference frame that is fixed relative to the vessel,
+      and orientated with the vessels orbital prograde/normal/radial directions.
+
+      * The origin is at the center of mass of the vessel.
+      * The axes rotate with the orbital prograde/normal/radial directions.
+      * The x-axis points in the orbital anti-radial direction.
+      * The y-axis points in the orbital prograde direction.
+      * The z-axis points in the orbital normal direction.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.ReferenceFrame`
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Be careful not to confuse this with 'orbit' mode on the navball.
+
+      .. figure:: /images/reference-frames/vessel-orbital.png
+         :align: center
+
+         Vessel orbital reference frame origin and axes
+
+   .. method:: getSurfaceReferenceFrame()
+
+      The reference frame that is fixed relative to the vessel,
+      and orientated with the surface of the body being orbited.
+
+      * The origin is at the center of mass of the vessel.
+      * The axes rotate with the north and up directions on the surface of the body.
+      * The x-axis points in the `zenith <https://en.wikipedia.org/wiki/Zenith>`_
+        direction (upwards, normal to the body being orbited, from the center of the body towards the center of
+        mass of the vessel).
+      * The y-axis points northwards towards the
+        `astronomical horizon <https://en.wikipedia.org/wiki/Horizon>`_ (north, and tangential to the
+        surface of the body -- the direction in which a compass would point when on the surface).
+      * The z-axis points eastwards towards the
+        `astronomical horizon <https://en.wikipedia.org/wiki/Horizon>`_ (east, and tangential to the
+        surface of the body -- east on a compass when on the surface).
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.ReferenceFrame`
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Be careful not to confuse this with 'surface' mode on the navball.
+
+      .. figure:: /images/reference-frames/vessel-surface.png
+         :align: center
+
+         Vessel surface reference frame origin and axes
+
+   .. method:: getSurfaceVelocityReferenceFrame()
+
+      The reference frame that is fixed relative to the vessel,
+      and orientated with the velocity vector of the vessel relative
+      to the surface of the body being orbited.
+
+      * The origin is at the center of mass of the vessel.
+      * The axes rotate with the vessel's velocity vector.
+      * The y-axis points in the direction of the vessel's velocity vector,
+        relative to the surface of the body being orbited.
+      * The z-axis is in the plane of the
+        `astronomical horizon <https://en.wikipedia.org/wiki/Horizon>`_.
+      * The x-axis is orthogonal to the other two axes.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.ReferenceFrame`
+      :Game Scenes: Flight
+
+
+      .. figure:: /images/reference-frames/vessel-surface-velocity.png
+         :align: center
+
+         Vessel surface velocity reference frame origin and axes
+
+   .. method:: getOrbitSpeedReferenceFrame()
+
+      The reference frame that the navball measures speed against in 'orbit' mode.
+
+      * The origin is at the center of mass of the vessel.
+      * The axes are those of :meth:`SpaceCenter.Vessel.getOrbitalReferenceFrame`, which are
+        the directions the navball marks in this mode: the x-axis points in the orbital
+        anti-radial direction, the y-axis in the orbital prograde direction and the z-axis in
+        the orbital normal direction.
+      * The frame moves with the body being orbited, but does not rotate
+        with it.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.ReferenceFrame`
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The velocity of the vessel in this frame is the one the navball shows in 'orbit' mode:
+         :meth:`SpaceCenter.Flight.getSpeed` is the speed it displays, and :meth:`SpaceCenter.Flight.getVelocity`
+         points along the y-axis, towards its prograde marker.
+
+   .. method:: getSurfaceSpeedReferenceFrame()
+
+      The reference frame that the navball measures speed against in 'surface' mode.
+
+      * The origin is at the center of mass of the vessel.
+      * The axes are the directions the navball marks in this mode, in the
+        same arrangement as :meth:`SpaceCenter.Vessel.getOrbitalReferenceFrame`: the y-axis points in the
+        direction the vessel is moving relative to the surface, which is where the prograde
+        marker points; the z-axis is normal to the plane of that motion; and the x-axis is
+        anti-radial, pointing towards the body and perpendicular to the other
+        two.
+      * The frame moves with the surface of the body being orbited, so it
+        rotates with the body.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.ReferenceFrame`
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The velocity of the vessel in this frame is the one the navball shows in 'surface' mode:
+         :meth:`SpaceCenter.Flight.getSpeed` is the speed it displays, and :meth:`SpaceCenter.Flight.getVelocity`
+         points along the y-axis, towards its prograde marker. The velocity gives the frame its
+         orientation, so, as with :meth:`SpaceCenter.Vessel.getSurfaceVelocityReferenceFrame`, the frame is
+         singular and raises an error when the vessel is stationary relative to the surface.
+
+   .. method:: getTargetSpeedReferenceFrame()
+
+      The reference frame that the navball measures speed against in 'target' mode.
+
+      * The origin is at the center of mass of the vessel.
+      * The axes are the directions the navball marks in this mode, in the
+        same arrangement as :meth:`SpaceCenter.Vessel.getOrbitalReferenceFrame`: the y-axis points in the
+        direction the vessel is moving relative to the target, which is where the prograde
+        marker points; the z-axis is normal to the plane of that motion; and the x-axis is
+        anti-radial, pointing towards the body being orbited and perpendicular to the other
+        two.
+      * The frame moves with the vessels target.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.ReferenceFrame`
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The velocity of the vessel in this frame is the one the navball shows in 'target' mode:
+         :meth:`SpaceCenter.Flight.getSpeed` is the speed it displays, and :meth:`SpaceCenter.Flight.getVelocity`
+         points along the y-axis, towards its prograde marker.
+         The target is the one set for the active vessel, via for example
+         :func:`SpaceCenter.getTargetVessel` or :func:`SpaceCenter.getTargetBody`.
+         This is undefined when no target is set. The velocity gives the frame its orientation,
+         so it is also singular, and raises an error, when the vessel matches the velocity of
+         its target.
+
+   .. method:: position(referenceFrame)
+
+      The position of the center of mass of the vessel, in the given reference frame.
+
+      :param referenceFrame: The reference frame that the returned position vector is in.
+      :type referenceFrame: :class:`SpaceCenter.ReferenceFrame`
+      :returns: The position as a vector.
+      :rtype: ``[number, number, number]``
+      :Game Scenes: Flight
+
+   .. method:: boundingBox(referenceFrame)
+
+      The axis-aligned bounding box of the vessel in the given reference frame.
+
+      :param referenceFrame: The reference frame that the returned position vectors are in.
+      :type referenceFrame: :class:`SpaceCenter.ReferenceFrame`
+      :returns: The positions of the minimum and maximum vertices of the box.
+      :rtype: :class:`SpaceCenter.BoundingBox`
+      :Game Scenes: Flight
+
+   .. method:: velocity(referenceFrame)
+
+      The velocity of the center of mass of the vessel, in the given reference frame.
+
+      :param referenceFrame: The reference frame that the returned velocity vector is in.
+      :type referenceFrame: :class:`SpaceCenter.ReferenceFrame`
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in :math:`\mathrm{m/s}`.
+      :rtype: ``[number, number, number]``
+      :Game Scenes: Flight
+
+   .. method:: rotation(referenceFrame)
+
+      The rotation of the vessel, in the given reference frame.
+
+      :param referenceFrame: The reference frame that the returned rotation is in.
+      :type referenceFrame: :class:`SpaceCenter.ReferenceFrame`
+      :returns: The rotation as a quaternion of the form ``(x, y, z, w)``.
+      :rtype: ``[number, number, number, number]``
+      :Game Scenes: Flight
+
+   .. method:: direction(referenceFrame)
+
+      The direction in which the vessel is pointing, in the given reference frame.
+
+      :param referenceFrame: The reference frame that the returned direction is in.
+      :type referenceFrame: :class:`SpaceCenter.ReferenceFrame`
+      :returns: The direction as a unit vector.
+      :rtype: ``[number, number, number]``
+      :Game Scenes: Flight
+
+   .. method:: angularVelocity(referenceFrame)
+
+      The angular velocity of the vessel, in the given reference frame.
+
+      :param referenceFrame: The reference frame the returned angular velocity is in.
+      :type referenceFrame: :class:`SpaceCenter.ReferenceFrame`
+      :returns: The angular velocity as a vector. The magnitude of the vector is the rotational speed of the vessel, in :math:`\mathrm{rad/s}`. The direction of the vector indicates the axis of rotation, using the right-hand rule.
+      :rtype: ``[number, number, number]``
+      :Game Scenes: Flight
+
+
+
+.. class:: AxisRange(fields)
+
+   The largest value of a quantity, such as a torque or a force, in the positive and the
+   negative direction of each of three axes.
+
+
+   .. attribute:: positive
+
+      The value in the positive direction of each axis.
+
+      :Type: ``[number, number, number]``
+
+   .. attribute:: negative
+
+      The value in the negative direction of each axis, which is zero or less.
+
+      :Type: ``[number, number, number]``
+
+
+.. class:: BoundingBox(fields)
+
+   An axis-aligned bounding box, as the positions of its minimum and maximum vertices.
+
+
+   .. attribute:: min
+
+      The position of the minimum vertex of the box.
+
+      :Type: ``[number, number, number]``
+
+   .. attribute:: max
+
+      The position of the maximum vertex of the box.
+
+      :Type: ``[number, number, number]``
+
+
+.. class:: VesselType
+
+   The type of a vessel.
+   See :meth:`SpaceCenter.Vessel.getType`.
+
+
+   .. attribute:: base
+
+      Base.
+
+
+   .. attribute:: debris
+
+      Debris.
+
+
+   .. attribute:: lander
+
+      Lander.
+
+
+   .. attribute:: plane
+
+      Plane.
+
+
+   .. attribute:: probe
+
+      Probe.
+
+
+   .. attribute:: relay
+
+      Relay.
+
+
+   .. attribute:: rover
+
+      Rover.
+
+
+   .. attribute:: ship
+
+      Ship.
+
+
+   .. attribute:: station
+
+      Station.
+
+
+   .. attribute:: spaceObject
+
+      SpaceObject.
+
+
+   .. attribute:: unknown
+
+      Unknown.
+
+
+   .. attribute:: eva
+
+      EVA.
+
+
+   .. attribute:: flag
+
+      Flag.
+
+
+   .. attribute:: deployedScienceController
+
+      DeployedScienceController.
+
+
+   .. attribute:: deployedSciencePart
+
+      DeploedSciencePart.
+
+
+   .. attribute:: droppedPart
+
+      DroppedPart.
+
+
+   .. attribute:: deployedGroundPart
+
+      DeployedGroundPart.
+
+
+
+.. class:: VesselSituation
+
+   The situation a vessel is in.
+   See :meth:`SpaceCenter.Vessel.getSituation`.
+
+
+   .. attribute:: docked
+
+      Vessel is docked to another.
+
+
+   .. attribute:: escaping
+
+      Escaping.
+
+
+   .. attribute:: flying
+
+      Vessel is flying through an atmosphere.
+
+
+   .. attribute:: landed
+
+      Vessel is landed on the surface of a body.
+
+
+   .. attribute:: orbiting
+
+      Vessel is orbiting a body.
+
+
+   .. attribute:: preLaunch
+
+      Vessel is awaiting launch.
+
+
+   .. attribute:: splashed
+
+      Vessel has splashed down in an ocean.
+
+
+   .. attribute:: subOrbital
+
+      Vessel is on a sub-orbital trajectory.
+
+
+
+.. class:: CrewMember
+
+   A Kerbal in the crew roster. Can be obtained using :meth:`SpaceCenter.Vessel.getCrew`,
+   :func:`SpaceCenter.getKerbals` or :func:`SpaceCenter.getKerbal`.
+
+   .. method:: getName()
+               setName(value)
+
+      The crew members name.
+
+      :Property: Can be read or written
+      :rtype: ``string``
+   
+
+   .. method:: getType()
+
+      The type of crew member.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.CrewMemberType`
+   
+
+   .. method:: getOnMission()
+
+      Whether the crew member is on a mission, assigned to a vessel.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+   
+
+   .. method:: getInactive()
+
+      Whether the crew member is inactive, and so unavailable for a mission until
+      :meth:`SpaceCenter.CrewMember.getInactiveUntil`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+   
+
+   .. method:: getInactiveUntil()
+
+      The universal time at which the crew member stops being inactive, in seconds.
+      Returns ``null`` if the crew member is not inactive.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number`` or ``null``
+   
+
+   .. method:: getCourage()
+               setCourage(value)
+
+      The crew members courage.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+   
+
+   .. method:: getStupidity()
+               setStupidity(value)
+
+      The crew members stupidity.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+   
+
+   .. method:: getExperience()
+               setExperience(value)
+
+      The crew members experience.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+   
+
+   .. method:: getExperienceLevel()
+
+      The crew member's experience level, the number of stars, from 0 to 5.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getBadass()
+               setBadass(value)
+
+      Whether the crew member is a badass.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+   .. method:: getVeteran()
+               setVeteran(value)
+
+      Whether the crew member is a veteran.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+   .. method:: getTrait()
+
+      The crew member's job.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``string``
+   
+
+   .. method:: getGender()
+
+      The crew member's gender.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.CrewMemberGender`
+   
+
+   .. method:: getRosterStatus()
+
+      The crew member's current roster status.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.RosterStatus`
+   
+
+   .. method:: getPart()
+
+      The part containing the crew member. Returns ``null`` if the crew member is not
+      occupying a part, or the vessel containing the part is not loaded.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Part` or ``null``
+      :Game Scenes: Flight
+
+   .. method:: eva()
+
+      Send the crew member outside on EVA, through the hatch of the part it is in, and
+      return the vessel it becomes. The game switches to that vessel, which can then be
+      walked around and flown using its :meth:`SpaceCenter.Vessel.getControl`, and brought back
+      in with :meth:`SpaceCenter.Control.board`. The kerbal climbs out onto the ladder by the
+      hatch, if there is one.
+
+      :rtype: :class:`SpaceCenter.Vessel`
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Throws an exception if EVA is disabled for the game, if the crew member is not in
+         a loaded vessel, if it is already on EVA, or if every hatch out of the part it is
+         in is obstructed.
+
+   .. method:: getSuitType()
+               setSuitType(value)
+
+      The crew member's suit type.
+
+      :Property: Can be read or written
+      :rtype: :class:`SpaceCenter.SuitType`
+   
+
+   .. method:: getCareerLog()
+
+      The entries in the crew member's career flight log.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`SpaceCenter.FlightLogEntry`
+   
+
+
+
+.. class:: FlightLogEntry(fields)
+
+   An entry in a crew member's career flight log.
+
+   .. note::
+
+      See :meth:`SpaceCenter.CrewMember.getCareerLog`.
+   .. attribute:: flight
+
+      The flight identifier of the entry.
+
+      :Type: ``number``
+
+   .. attribute:: type
+
+      The type of the entry, e.g. ``Orbit`` or ``Land``.
+
+      :Type: ``string``
+
+   .. attribute:: target
+
+      The name of the body the entry is for.
+
+      :Type: ``string``
+
+
+.. class:: CrewMemberType
+
+   The type of a crew member.
+   See :meth:`SpaceCenter.CrewMember.getType`.
+
+
+   .. attribute:: applicant
+
+      An applicant for crew.
+
+
+   .. attribute:: crew
+
+      Rocket crew.
+
+
+   .. attribute:: tourist
+
+      A tourist.
+
+
+   .. attribute:: unowned
+
+      An unowned crew member.
+
+
+
+.. class:: CrewMemberGender
+
+   A crew member's gender.
+   See :meth:`SpaceCenter.CrewMember.getGender`.
+
+
+   .. attribute:: male
+
+      Male.
+
+
+   .. attribute:: female
+
+      Female.
+
+
+
+.. class:: RosterStatus
+
+   A crew member's roster status.
+   See :meth:`SpaceCenter.CrewMember.getRosterStatus`.
+
+
+   .. attribute:: available
+
+      Available.
+
+
+   .. attribute:: assigned
+
+      Assigned.
+
+
+   .. attribute:: dead
+
+      Dead.
+
+
+   .. attribute:: missing
+
+      Missing.
+
+
+
+.. class:: SuitType
+
+   A crew member's suit type.
+   See :meth:`SpaceCenter.CrewMember.getSuitType`.
+
+
+   .. attribute:: default
+
+      Default.
+
+
+   .. attribute:: vintage
+
+      Vintage.
+
+
+   .. attribute:: future
+
+      Future.
+
+
+   .. attribute:: slim
+
+      Slim.

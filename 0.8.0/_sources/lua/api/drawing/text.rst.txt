@@ -1,0 +1,110 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: Drawing
+
+Text
+====
+
+
+.. class:: Text
+
+   Text. Created using :meth:`Drawing.add_text`.
+
+   .. attribute:: position: Tuple
+
+      Position of the text.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: rotation: Tuple
+
+      Rotation of the text as a quaternion.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: face_camera: boolean
+
+      Whether the text turns to face the camera, in place of its :attr:`Drawing.Text.rotation`.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: reference_frame: SpaceCenter.ReferenceFrame
+
+      Reference frame for the positions of the object.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: visible: boolean
+
+      Whether the object is visible.
+
+      :Attribute: Can be read or written
+
+   .. method:: remove()
+
+      Remove the object.
+
+   .. attribute:: content: string
+
+      The text string
+
+      :Attribute: Can be read or written
+
+   .. attribute:: font: string
+
+      Name of the font
+
+      :Attribute: Can be read or written
+
+   .. staticmethod:: available_fonts(): List
+
+      A list of all available fonts.
+
+   .. attribute:: size: number
+
+      Font size.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: character_size: number
+
+      Character size.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: style: UI.FontStyle
+
+      Font style.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: color: StdLib.ColorRGB
+
+      Set the color
+
+      :Attribute: Can be read or written
+
+   .. attribute:: material: string
+
+      Material used to render the object.
+      Creates the material from a shader with the given name.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: alignment: UI.TextAlignment
+
+      Alignment.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: line_spacing: number
+
+      Line spacing.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: anchor: UI.TextAnchor
+
+      Anchor.
+
+      :Attribute: Can be read or written

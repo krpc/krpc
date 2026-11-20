@@ -16,6 +16,10 @@ Layout Element
       out to bring elements up to their preferred size, and anything still left over is
       shared between the elements with a flexible size, in proportion to it.
 
+   .. macro:: KRPC_CLASS_UI_LAYOUTELEMENT
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_UI_LayoutElement_MinSize(krpc_connection_t connection, krpc_tuple_double_double_t * returnValue, krpc_UI_LayoutElement_t instance)
    .. function:: krpc_error_t krpc_UI_LayoutElement_set_MinSize(krpc_connection_t connection, krpc_UI_LayoutElement_t instance, const krpc_tuple_double_double_t * value)
 

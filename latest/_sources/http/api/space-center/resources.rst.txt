@@ -1,0 +1,384 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Resources
+=========
+
+
+.. _http-SpaceCenter.Resources:
+
+.. rubric:: Resources
+
+Represents the collection of resources stored in a vessel, stage or part.
+Created by calling :http:get:`/space-center/vessel/(id)/resources`,
+:http:post:`/space-center/stage/(id)/resources`, :http:get:`/space-center/editor-vessel/(id)/resources`
+or :http:get:`/space-center/part/(id)/resources`.
+
+A ``Resources`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /space-center/resources/(id)/all
+
+   All the individual resources that can be stored.
+
+
+   :param id: The identifier of the :ref:`Resources <http-SpaceCenter.Resources>` object.
+
+   :resjson list<SpaceCenter.Resource> value:
+
+
+
+
+.. http:post:: /space-center/resources/(id)/with-resource
+
+   All the individual resources with the given name that can be stored.
+
+
+   :param id: The identifier of the :ref:`Resources <http-SpaceCenter.Resources>` object.
+
+   :reqjson string name:
+   :resjson list<SpaceCenter.Resource> value:
+
+
+
+
+
+.. http:get:: /space-center/resources/(id)/names
+
+   A list of resource names that can be stored.
+
+
+   :param id: The identifier of the :ref:`Resources <http-SpaceCenter.Resources>` object.
+
+   :resjson list<string> value:
+
+
+
+
+.. http:post:: /space-center/resources/(id)/has-resource
+
+   Check whether the named resource can be stored.
+
+
+   :param id: The identifier of the :ref:`Resources <http-SpaceCenter.Resources>` object.
+
+   :reqjson string name: The name of the resource.
+   :resjson bool value:
+
+
+
+
+
+.. http:post:: /space-center/resources/(id)/amount
+
+   Returns the amount of a resource that is currently stored.
+
+
+   :param id: The identifier of the :ref:`Resources <http-SpaceCenter.Resources>` object.
+
+   :reqjson string name: The name of the resource.
+   :resjson float value:
+
+
+
+
+
+.. http:post:: /space-center/resources/(id)/max
+
+   Returns the amount of a resource that can be stored.
+
+
+   :param id: The identifier of the :ref:`Resources <http-SpaceCenter.Resources>` object.
+
+   :reqjson string name: The name of the resource.
+   :resjson float value:
+
+
+
+
+
+.. http:post:: /space-center/resources/density
+
+   Returns the density of a resource, in :math:`\mathrm{kg/l}`.
+
+
+   :reqjson string name: The name of the resource.
+   :resjson float value:
+
+
+
+
+
+.. http:post:: /space-center/resources/flow-mode
+
+   Returns the flow mode of a resource.
+
+
+   :reqjson string name: The name of the resource.
+   :resjson SpaceCenter.ResourceFlowMode value:
+
+
+
+
+
+.. http:get:: /space-center/resources/(id)/enabled
+
+   Whether use of all the resources are enabled.
+
+   .. note::
+
+      This is ``true`` if all of the resources are enabled.
+      If any of the resources are not enabled, this is ``false``.
+
+
+   :param id: The identifier of the :ref:`Resources <http-SpaceCenter.Resources>` object.
+
+   :resjson bool value:
+
+.. http:put:: /space-center/resources/(id)/enabled
+
+   Whether use of all the resources are enabled.
+
+   .. note::
+
+      This is ``true`` if all of the resources are enabled.
+      If any of the resources are not enabled, this is ``false``.
+
+
+   :param id: The identifier of the :ref:`Resources <http-SpaceCenter.Resources>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+
+.. _http-SpaceCenter.Resource:
+
+.. rubric:: Resource
+
+An individual resource stored within a part.
+Created using methods in the :ref:`Resources <http-SpaceCenter.Resources>` class.
+
+A ``Resource`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /space-center/resource/(id)/name
+
+   The name of the resource.
+
+
+   :param id: The identifier of the :ref:`Resource <http-SpaceCenter.Resource>` object.
+
+   :resjson string value:
+
+
+
+
+.. http:get:: /space-center/resource/(id)/part
+
+   The part containing the resource.
+
+
+   :param id: The identifier of the :ref:`Resource <http-SpaceCenter.Resource>` object.
+
+   :resjson SpaceCenter.Part value:
+
+
+
+
+.. http:get:: /space-center/resource/(id)/amount
+
+   The amount of the resource that is currently stored in the part.
+
+
+   :param id: The identifier of the :ref:`Resource <http-SpaceCenter.Resource>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/resource/(id)/max
+
+   The total amount of the resource that can be stored in the part.
+
+
+   :param id: The identifier of the :ref:`Resource <http-SpaceCenter.Resource>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/resource/(id)/density
+
+   The density of the resource, in :math:`\mathrm{kg/l}`.
+
+
+   :param id: The identifier of the :ref:`Resource <http-SpaceCenter.Resource>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/resource/(id)/flow-mode
+
+   The flow mode of the resource.
+
+
+   :param id: The identifier of the :ref:`Resource <http-SpaceCenter.Resource>` object.
+
+   :resjson SpaceCenter.ResourceFlowMode value:
+
+
+
+
+.. http:get:: /space-center/resource/(id)/enabled
+
+   Whether use of this resource is enabled.
+
+
+   :param id: The identifier of the :ref:`Resource <http-SpaceCenter.Resource>` object.
+
+   :resjson bool value:
+
+.. http:put:: /space-center/resource/(id)/enabled
+
+   Whether use of this resource is enabled.
+
+
+   :param id: The identifier of the :ref:`Resource <http-SpaceCenter.Resource>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+
+.. _http-SpaceCenter.ResourceTransfer:
+
+.. rubric:: ResourceTransfer
+
+Transfer resources between parts.
+
+A ``ResourceTransfer`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:post:: /space-center/resource-transfer/start
+
+   Start transferring a resource transfer between a pair of parts. The transfer will move
+   at most *max_amount* units of the resource, depending on how much of
+   the resource is available in the source part and how much storage is available in the
+   destination part.
+   Use :http:get:`/space-center/resource-transfer/(id)/complete` to check if the transfer is complete.
+   Use :http:get:`/space-center/resource-transfer/(id)/amount` to see how much of the resource has been transferred.
+
+   .. note::
+
+      Use :http:post:`/space-center/resource-transfer/(id)/cancel` to stop the transfer before it finishes; a canceled
+      transfer is marked as complete. Use :http:post:`/space-center/resource-transfer/(id)/remove` to release the memory
+      the server holds for a transfer that is done with. A transfer is stopped and
+      removed if the client that started it disconnects, or if the flight it runs in
+      is left.
+
+
+   :reqjson SpaceCenter.Part from_part: The part to transfer to.
+   :reqjson SpaceCenter.Part to_part: The part to transfer from.
+   :reqjson string resource: The name of the resource to transfer.
+   :reqjson float max_amount: The maximum amount of resource to transfer.
+   :resjson SpaceCenter.ResourceTransfer value:
+
+
+
+
+
+.. http:post:: /space-center/resource-transfer/(id)/cancel
+
+   Cancel the transfer. No more of the resource is moved and
+   :http:get:`/space-center/resource-transfer/(id)/complete` becomes true.
+
+
+   :param id: The identifier of the :ref:`ResourceTransfer <http-SpaceCenter.ResourceTransfer>` object.
+
+
+
+
+
+
+.. http:post:: /space-center/resource-transfer/(id)/remove
+
+   Remove the transfer, releasing the memory the server holds for it. The
+   transfer is canceled if it has not finished.
+
+   .. note::
+
+      Any further use of this object throws an exception. A transfer that is left is
+      held until the parts it runs between are gone, the flight it runs in is left,
+      or the client that started it disconnects, whichever comes first; the first of
+      those may be the rest of the flight away.
+
+
+   :param id: The identifier of the :ref:`ResourceTransfer <http-SpaceCenter.ResourceTransfer>` object.
+
+
+
+
+
+
+.. http:get:: /space-center/resource-transfer/(id)/amount
+
+   The amount of the resource that has been transferred.
+
+
+   :param id: The identifier of the :ref:`ResourceTransfer <http-SpaceCenter.ResourceTransfer>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/resource-transfer/(id)/complete
+
+   Whether the transfer has completed. Also becomes true if the transfer is
+   canceled by calling :http:post:`/space-center/resource-transfer/(id)/cancel`.
+
+
+   :param id: The identifier of the :ref:`ResourceTransfer <http-SpaceCenter.ResourceTransfer>` object.
+
+   :resjson bool value:
+
+
+
+
+
+.. _http-SpaceCenter.ResourceFlowMode:
+
+.. rubric:: ResourceFlowMode
+
+The way in which a resource flows between parts. See :http:post:`/space-center/resources/flow-mode`.
+
+Passed and returned as the name of one of its values:
+
+
+``"vessel"``
+   The resource flows to any part in the vessel. For example, electric charge.
+
+
+``"stage"``
+   The resource flows from parts in the first stage, followed by the second,
+   and so on. For example, mono-propellant.
+
+
+``"adjacent"``
+   The resource flows between adjacent parts within the vessel. For example,
+   liquid fuel or oxidizer.
+
+
+``"none"``
+   The resource does not flow. For example, solid fuel.

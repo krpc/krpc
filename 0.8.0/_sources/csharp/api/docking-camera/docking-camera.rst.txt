@@ -1,0 +1,28 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.DockingCamera
+
+Service
+=======
+
+
+.. class:: DockingCamera
+
+   Provides functionality to interact with Docking Camera (KURS).
+
+   .. property:: bool Available { get; }
+
+      Whether Docking Camera (KURS) is available.
+
+      :Game Scenes: All
+
+   .. function:: Camera Camera(SpaceCenter.Part part)
+
+      Get the camera on a part.
+      Throws an exception if the part is not an onboard camera or a docking port.
+
+      :parameters:
+
+       * **part** -- The part.
+
+      :Game Scenes: All

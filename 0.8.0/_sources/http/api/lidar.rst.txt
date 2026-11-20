@@ -1,0 +1,23 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+LIDAR
+=====
+
+.. warning::
+
+   Deprecated. The LIDAR service will be removed in a future release. Use
+   :http:post:`/space-center/raycast-distance` instead.
+
+Provides functionality to interact with the `LiDAR`_ mod.
+
+.. toctree::
+   :includehidden:
+   :maxdepth: 1
+
+   lidar/lidar
+   lidar/laser
+
+
+.. include:: /mods.inc

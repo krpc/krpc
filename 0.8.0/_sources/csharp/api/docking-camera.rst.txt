@@ -1,0 +1,25 @@
+.. default-domain:: cs
+.. highlight:: csharp
+
+Docking Camera
+==============
+
+Provides functionality to interact with the `Docking Camera (KURS)`_ mod.
+|Docking Camera (KURS) tested|
+
+.. toctree::
+   :includehidden:
+   :maxdepth: 1
+
+   docking-camera/docking-camera
+   docking-camera/camera
+
+Example
+-------
+
+The following example saves the image from an onboard camera of the active vessel to a file. The
+camera must be switched on:
+
+.. literalinclude:: /scripts/api/docking-camera/DockingCameraExample.cs
+
+.. include:: /mods.inc

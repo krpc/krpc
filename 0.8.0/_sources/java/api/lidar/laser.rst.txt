@@ -1,0 +1,26 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.LIDAR
+
+Laser
+=====
+
+
+.. type:: public class Laser
+
+   .. warning:: Deprecated. Use :meth:`SpaceCenter.SpaceCenter.raycastDistance(org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>, SpaceCenter.ReferenceFrame)` instead.
+
+   A LiDAR. Obtained by calling :meth:`LIDAR.laser(SpaceCenter.Part)`.
+
+   .. method:: SpaceCenter.Part getPart()
+
+
+      Get the part containing this LiDAR.
+
+   
+
+   .. method:: java.util.List<Double> getCloud()
+
+
+      Get the point cloud from the LiDAR.
+      Returns an empty list on failure.

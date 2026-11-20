@@ -1,0 +1,68 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Service
+=======
+
+
+.. _http-KerbalAlarmClock:
+
+Provides functionality to interact with Kerbal Alarm Clock.
+
+
+.. http:get:: /kerbal-alarm-clock/available
+
+   Whether Kerbal Alarm Clock is available.
+
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /kerbal-alarm-clock/alarms
+
+   A list of all the alarms.
+
+
+   :resjson list<KerbalAlarmClock.Alarm> value:
+
+
+
+
+.. http:post:: /kerbal-alarm-clock/alarm-with-name
+
+   Get the alarm with the given *name*, or ``null``
+   if no alarms have that name. If more than one alarm has the name,
+   only returns one of them.
+
+
+   :reqjson string name: Name of the alarm to search for.
+   :resjson KerbalAlarmClock.Alarm? value:
+
+
+
+
+
+.. http:post:: /kerbal-alarm-clock/alarms-with-type
+
+   Get a list of alarms of the specified *type*.
+
+
+   :reqjson KerbalAlarmClock.AlarmType type: Type of alarm to return.
+   :resjson list<KerbalAlarmClock.Alarm> value:
+
+
+
+
+
+.. http:post:: /kerbal-alarm-clock/create-alarm
+
+   Create a new alarm and return it.
+
+
+   :reqjson KerbalAlarmClock.AlarmType type: Type of the new alarm.
+   :reqjson string name: Name of the new alarm.
+   :reqjson double ut: Time at which the new alarm should trigger.
+   :resjson KerbalAlarmClock.Alarm value:

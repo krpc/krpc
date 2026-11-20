@@ -11,6 +11,10 @@ MapMarker
    A marker drawn in the map view, with one of the game's own map icons. Created using
    :func:`krpc_Drawing_AddMapMarker`.
 
+   .. macro:: KRPC_CLASS_DRAWING_MAPMARKER
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_Drawing_MapMarker_Position(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_Drawing_MapMarker_t instance)
    .. function:: krpc_error_t krpc_Drawing_MapMarker_set_Position(krpc_connection_t connection, krpc_Drawing_MapMarker_t instance, const krpc_tuple_double_double_double_t * value)
 
@@ -73,6 +77,11 @@ MapMarker
 .. type:: krpc_Drawing_MapMarkerIcon_t
 
    The icon a :type:`krpc_Drawing_MapMarker_t` is drawn with, from the game's own map icons.
+
+   .. macro:: KRPC_ENUMERATION_DRAWING_MAPMARKERICON
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_DRAWING_MAPMARKERICON_GENERIC

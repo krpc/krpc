@@ -1,0 +1,35 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::Drawing
+
+Image
+=====
+
+
+.. class:: Image
+
+   An image that markers can be drawn with. Created using :func:`add_image`.
+
+   .. note::
+
+      An image is kept across scene changes, until it is removed or the client that
+      created it disconnects.
+
+   .. function:: int32_t width()
+
+      The width of the image, in pixels.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: int32_t height()
+
+      The height of the image, in pixels.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: void remove()
+
+      Remove the image. A marker drawn with it goes back to its own icon.
+
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph

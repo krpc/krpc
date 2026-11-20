@@ -1,0 +1,216 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::Drawing
+
+MapMarker
+=========
+
+
+.. class:: MapMarker
+
+   A marker drawn in the map view, with one of the game's own map icons. Created using
+   :func:`add_map_marker`.
+
+   .. function:: std::tuple<double, double, double> position()
+   .. function:: void set_position(std::tuple<double, double, double> value)
+
+      Position of the marker.
+
+      :Game Scenes: Flight, Tracking Station
+
+   .. function:: SpaceCenter::ReferenceFrame reference_frame()
+   .. function:: void set_reference_frame(SpaceCenter::ReferenceFrame value)
+
+      Reference frame that the position of the marker is in.
+
+      :Game Scenes: Flight, Tracking Station
+
+   .. function:: bool visible()
+   .. function:: void set_visible(bool value)
+
+      Whether the marker is visible.
+
+      :Game Scenes: Flight, Tracking Station
+
+   .. function:: MapMarkerIcon icon()
+   .. function:: void set_icon(MapMarkerIcon value)
+
+      The icon that the marker is drawn with.
+
+      :Game Scenes: Flight, Tracking Station
+
+   .. function:: std::optional<Image> image()
+   .. function:: void set_image(std::optional<Image> value)
+
+      The image that the marker is drawn with in place of its icon, or null to draw the
+      icon.
+
+      :Game Scenes: Flight, Tracking Station
+
+   .. function:: std::string caption()
+   .. function:: void set_caption(std::string value)
+
+      The caption shown when the mouse is over the marker.
+
+      :Game Scenes: Flight, Tracking Station
+
+   .. function:: StdLib::ColorRGB color()
+   .. function:: void set_color(StdLib::ColorRGB value)
+
+      The color of the marker.
+
+      :Game Scenes: Flight, Tracking Station
+
+   .. function:: void remove()
+
+      Remove the marker.
+
+
+      :Game Scenes: Flight, Tracking Station
+
+
+
+.. namespace:: krpc::services::Drawing
+.. enum-struct:: MapMarkerIcon
+
+   The icon a :class:`MapMarker` is drawn with, from the game's own map icons.
+
+
+   .. enumerator:: generic
+
+      A plain marker.
+
+
+   .. enumerator:: celestial_body
+
+      A celestial body.
+
+
+   .. enumerator:: apoapsis
+
+      An apoapsis.
+
+
+   .. enumerator:: periapsis
+
+      A periapsis.
+
+
+   .. enumerator:: ascending_node
+
+      An ascending node.
+
+
+   .. enumerator:: descending_node
+
+      A descending node.
+
+
+   .. enumerator:: maneuver_node
+
+      A maneuver node.
+
+
+   .. enumerator:: encounter
+
+      An encounter with a sphere of influence.
+
+
+   .. enumerator:: escape
+
+      An escape from a sphere of influence.
+
+
+   .. enumerator:: impact
+
+      An impact with the surface.
+
+
+   .. enumerator:: close_approach
+
+      A closest approach to a target.
+
+
+   .. enumerator:: intersect
+
+      An intersection with the orbit of a target.
+
+
+   .. enumerator:: ship
+
+      A ship.
+
+
+   .. enumerator:: probe
+
+      A probe.
+
+
+   .. enumerator:: relay
+
+      A relay.
+
+
+   .. enumerator:: station
+
+      A station.
+
+
+   .. enumerator:: base
+
+      A base.
+
+
+   .. enumerator:: lander
+
+      A lander.
+
+
+   .. enumerator:: rover
+
+      A rover.
+
+
+   .. enumerator:: plane
+
+      A plane.
+
+
+   .. enumerator:: eva
+
+      A kerbal on EVA.
+
+
+   .. enumerator:: flag
+
+      A flag.
+
+
+   .. enumerator:: debris
+
+      Debris.
+
+
+   .. enumerator:: space_object
+
+      An asteroid or comet.
+
+
+   .. enumerator:: deployed_science
+
+      Deployed science equipment.
+
+
+   .. enumerator:: launch_site
+
+      A launch site.
+
+
+   .. enumerator:: runway
+
+      A runway.
+
+
+   .. enumerator:: ksc
+
+      The Kerbal Space Center.

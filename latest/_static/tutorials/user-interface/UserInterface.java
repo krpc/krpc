@@ -1,7 +1,5 @@
 import krpc.client.Connection;
-import krpc.client.RPCException;
 import krpc.client.Stream;
-import krpc.client.StreamException;
 import krpc.client.services.SpaceCenter;
 import krpc.client.services.SpaceCenter.Vessel;
 import krpc.client.services.StdLib;
@@ -16,21 +14,21 @@ import krpc.client.services.UI.Text;
 
 import org.javatuples.Pair;
 
-import java.io.IOException;
 
 public class UserInterface {
-    public static void main(String[] args)
-        throws IOException, RPCException, InterruptedException, StreamException {
-        Connection connection = Connection.newInstance("User Interface Example");
+    public static void main(String[] args) throws InterruptedException {
+        Connection connection =
+          Connection.newInstance("User Interface Example");
         SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
         UI ui = UI.newInstance(connection);
         Canvas canvas = ui.getStockCanvas();
 
         // Get the size of the game window in pixels
-        Pair<Double, Double> screenSize = canvas.getRectTransform().getSize();
+        Pair<Double, Double> screenSize =
+          canvas.getRectTransform().getSize();
 
-        // Add a panel to contain the UI elements. The user can drag it around
-        // the screen with the mouse.
+        // Add a panel to contain the UI elements. The user can drag it
+        // around the screen with the mouse.
         Panel panel = canvas.addPanel(true);
         panel.setDraggable(true);
 
@@ -49,11 +47,13 @@ public class UserInterface {
         // while the mouse rests on it
         Button button = panel.addButton("Full Throttle", true);
         button.setTooltip("Set the throttle to maximum");
-        button.getLayoutElement().setPreferredSize(new Pair<Double,Double>(-1.0, 30.0));
+        button.getLayoutElement().setPreferredSize(
+          new Pair<Double,Double>(-1.0, 30.0));
 
         // Add a slider to set the throttle by hand
         Slider slider = panel.addSlider(false, true);
-        slider.getLayoutElement().setPreferredSize(new Pair<Double,Double>(-1.0, 20.0));
+        slider.getLayoutElement().setPreferredSize(
+          new Pair<Double,Double>(-1.0, 20.0));
 
         // Add some text displaying the total engine thrust
         Text text = panel.addText("Thrust: 0 kN", true);
@@ -61,8 +61,10 @@ public class UserInterface {
         text.setSize(18);
 
         // Set up streams to monitor the button and the slider
-        Stream<Boolean> buttonClicked = connection.addStream(button, "getClicked");
-        Stream<Boolean> sliderChanged = connection.addStream(slider, "getChanged");
+        Stream<Boolean> buttonClicked =
+          connection.addStream(button, "getClicked");
+        Stream<Boolean> sliderChanged =
+          connection.addStream(slider, "getChanged");
 
         Vessel vessel = spaceCenter.getActiveVessel();
         while (true) {
@@ -80,7 +82,8 @@ public class UserInterface {
             }
 
             // Update the thrust text
-            text.setContent(String.format("Thrust: %.0f kN", (vessel.getThrust()/1000)));
+            text.setContent(String.format(
+              "Thrust: %.0f kN", (vessel.getThrust()/1000)));
 
             Thread.sleep(1000);
         }

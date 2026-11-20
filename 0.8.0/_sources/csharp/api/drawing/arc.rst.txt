@@ -1,0 +1,125 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.Drawing
+
+Arc
+===
+
+
+.. class:: Arc
+
+   An arc of a circle. Created using :meth:`Drawing.AddArc <Drawing.Drawing.AddArc>`.
+
+   .. property:: System.Tuple<double,double,double> Center { get; set; }
+
+      Position of the center of the arc.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: System.Tuple<double,double,double> Normal { get; set; }
+
+      Normal of the plane of the arc.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: System.Tuple<double,double,double> StartDirection { get; set; }
+
+      Direction from the center to the start of the arc.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: double Angle { get; set; }
+
+      Angle of the arc, in radians.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: double Radius { get; set; }
+
+      Radius of the arc, in meters.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: SpaceCenter.ReferenceFrame ReferenceFrame { get; set; }
+
+      Reference frame for the positions of the object.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: bool Visible { get; set; }
+
+      Whether the object is visible.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: StdLib.ColorRGB Color { get; set; }
+
+      The color of the path.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         For a path drawn with more than one color, this is the color at its start.
+
+   .. property:: System.Collections.Generic.IList<StdLib.ColorRGB> Colors { get; set; }
+
+      The colors of the path, blended evenly from its start to its end.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Throws an exception if the list is empty or holds more than 8 colors.
+
+   .. property:: float Thickness { get; set; }
+
+      The thickness of the path.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: bool StartArrow { get; set; }
+
+      Whether an arrow head is drawn at the start.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: bool EndArrow { get; set; }
+
+      Whether an arrow head is drawn at the end.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: float ArrowSize { get; set; }
+
+      The size of the arrow heads, relative to the thickness.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: bool Dashed { get; set; }
+
+      Whether the path is drawn as a dashed line.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: string Label { get; set; }
+
+      Text drawn halfway along the path, facing the camera. Empty for no label.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: string Material { get; set; }
+
+      Material used to render the object.
+      Creates the material from a shader with the given name.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: void Remove()
+
+      Remove the object.
+
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph

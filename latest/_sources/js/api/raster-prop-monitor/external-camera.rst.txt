@@ -1,0 +1,76 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: RasterPropMonitor
+   :no-index:
+
+External Camera
+===============
+
+
+.. class:: ExternalCamera
+
+   A Raster Prop Monitor external camera: a part that the MFD camera pages show, such as
+   the JSI External Radial-mount Camera. Obtained by calling
+   :func:`RasterPropMonitor.cameras`.
+
+   .. method:: getPart()
+
+      The part the camera is on.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Part`
+      :Game Scenes: Flight
+
+   .. method:: getName()
+
+      The camera's identifier, e.g. ``ExtCam1``, which the MFD camera pages select it
+      by. The player sets the number in the part's menu.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``string``
+      :Game Scenes: Flight
+
+   .. method:: getMinFoV()
+
+      The smallest field of view of the camera, in degrees.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getMaxFoV()
+
+      The largest field of view of the camera, in degrees.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getFoV()
+               setFoV(value)
+
+      The field of view that :meth:`RasterPropMonitor.ExternalCamera.image` renders at, in degrees. It starts at
+      :meth:`RasterPropMonitor.ExternalCamera.getMaxFoV`, as on an MFD camera page, and a value set is clamped
+      to the camera's range.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: image(width, height[, format[, quality]])
+
+      The camera's view as an image, rendered now. Streamed at a rate, it is a video of
+      the camera, for which JPEG is smaller and faster.
+      Throws an exception if the camera is not on the active vessel.
+
+      :param width: The width of the image, in pixels.
+      :type width: ``number``
+      :param height: The height of the image, in pixels.
+      :type height: ``number``
+      :param format: The format of the image. Defaults to ``StdLib.ImageFormat.png``.
+      :type format: :class:`StdLib.ImageFormat`
+      :param quality: The quality of a JPEG image, from 1 to 100. Defaults to ``75``.
+      :type quality: ``number``
+      :returns: The image data.
+      :rtype: ``Uint8Array``
+      :Game Scenes: Flight

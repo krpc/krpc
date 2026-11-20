@@ -1,0 +1,215 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+AircraftApproach
+================
+
+
+.. _http-MechJeb.AircraftApproach:
+
+.. rubric:: AircraftApproach
+
+The Aircraft Approach and Autoland window, which lands a plane on a runway.
+
+A ``AircraftApproach`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /mech-jeb/aircraft-approach/(id)/runways
+
+   The names of the runways on the body the vessel is at.
+
+
+   :param id: The identifier of the :ref:`AircraftApproach <http-MechJeb.AircraftApproach>` object.
+
+   :resjson list<string> value:
+
+
+
+
+.. http:get:: /mech-jeb/aircraft-approach/(id)/runway
+
+   The name of the runway to land on. Throws an exception if there is no runway on the
+   body the vessel is at, or when set to the name of no such runway.
+
+
+   :param id: The identifier of the :ref:`AircraftApproach <http-MechJeb.AircraftApproach>` object.
+
+   :resjson string value:
+
+.. http:put:: /mech-jeb/aircraft-approach/(id)/runway
+
+   The name of the runway to land on. Throws an exception if there is no runway on the
+   body the vessel is at, or when set to the name of no such runway.
+
+
+   :param id: The identifier of the :ref:`AircraftApproach <http-MechJeb.AircraftApproach>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/aircraft-approach/(id)/distance-to-runway
+
+   The distance to the start of the runway, in meters.
+
+
+   :param id: The identifier of the :ref:`AircraftApproach <http-MechJeb.AircraftApproach>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:post:: /mech-jeb/aircraft-approach/(id)/autoland
+
+   Land on the runway. Throws an exception if there is no runway on the body the vessel
+   is at.
+
+
+   :param id: The identifier of the :ref:`AircraftApproach <http-MechJeb.AircraftApproach>` object.
+
+
+
+
+
+
+.. http:post:: /mech-jeb/aircraft-approach/(id)/abort
+
+   Stop the autoland.
+
+
+   :param id: The identifier of the :ref:`AircraftApproach <http-MechJeb.AircraftApproach>` object.
+
+
+
+
+
+
+.. http:get:: /mech-jeb/aircraft-approach/(id)/enabled
+
+   Whether the autoland is running.
+
+
+   :param id: The identifier of the :ref:`AircraftApproach <http-MechJeb.AircraftApproach>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /mech-jeb/aircraft-approach/(id)/state
+
+   The stage of the approach, as MechJeb's window describes it.
+
+
+   :param id: The identifier of the :ref:`AircraftApproach <http-MechJeb.AircraftApproach>` object.
+
+   :resjson string value:
+
+
+
+
+.. http:get:: /mech-jeb/aircraft-approach/(id)/glideslope
+
+   The glideslope of the approach, in degrees.
+
+
+   :param id: The identifier of the :ref:`AircraftApproach <http-MechJeb.AircraftApproach>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/aircraft-approach/(id)/glideslope
+
+   The glideslope of the approach, in degrees.
+
+
+   :param id: The identifier of the :ref:`AircraftApproach <http-MechJeb.AircraftApproach>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/aircraft-approach/(id)/approach-speed
+
+   The speed of the approach, in :math:`\mathrm{m/s}`.
+
+
+   :param id: The identifier of the :ref:`AircraftApproach <http-MechJeb.AircraftApproach>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/aircraft-approach/(id)/approach-speed
+
+   The speed of the approach, in :math:`\mathrm{m/s}`.
+
+
+   :param id: The identifier of the :ref:`AircraftApproach <http-MechJeb.AircraftApproach>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/aircraft-approach/(id)/touchdown-speed
+
+   The speed at touchdown, in :math:`\mathrm{m/s}`.
+
+
+   :param id: The identifier of the :ref:`AircraftApproach <http-MechJeb.AircraftApproach>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/aircraft-approach/(id)/touchdown-speed
+
+   The speed at touchdown, in :math:`\mathrm{m/s}`.
+
+
+   :param id: The identifier of the :ref:`AircraftApproach <http-MechJeb.AircraftApproach>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/aircraft-approach/(id)/engage-reverse-if-available
+
+   Whether to reverse the thrust at touchdown, on engines that can.
+
+
+   :param id: The identifier of the :ref:`AircraftApproach <http-MechJeb.AircraftApproach>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/aircraft-approach/(id)/engage-reverse-if-available
+
+   Whether to reverse the thrust at touchdown, on engines that can.
+
+
+   :param id: The identifier of the :ref:`AircraftApproach <http-MechJeb.AircraftApproach>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/aircraft-approach/(id)/brake-as-soon-as-landed
+
+   Whether to brake as soon as the vessel is landed.
+
+
+   :param id: The identifier of the :ref:`AircraftApproach <http-MechJeb.AircraftApproach>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/aircraft-approach/(id)/brake-as-soon-as-landed
+
+   Whether to brake as soon as the vessel is landed.
+
+
+   :param id: The identifier of the :ref:`AircraftApproach <http-MechJeb.AircraftApproach>` object.
+
+   :reqjson bool value: The new value.

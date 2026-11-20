@@ -1,0 +1,110 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: RasterPropMonitor
+
+Computer
+========
+
+
+.. class:: Computer
+
+   The Raster Prop Monitor computer of a part, which holds the variables its props show.
+   Obtained by calling :meth:`computer` or
+   :meth:`computers`.
+
+   .. attribute:: part
+
+      The part the computer is on.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Part`
+      :Game Scenes: Flight
+
+   .. method:: persistent_variable(name)
+
+      The value of a persistent variable of the part, or else of the vessel, or
+      ``None`` if neither is set. Props read it as ``PERSISTENT_name``.
+
+      :param str name: The name of the variable, without the ``PERSISTENT_`` prefix.
+      :rtype: float or None
+      :Game Scenes: Flight
+
+   .. method:: set_persistent_variable(name, value)
+
+      Set a persistent variable of the part. The props that show it update.
+
+      :param str name: The name of the variable, without the ``PERSISTENT_`` prefix.
+      :param float value: The value.
+      :Game Scenes: Flight
+
+   .. method:: remove_persistent_variable(name)
+
+      Remove a persistent variable of the part. The props that show it update.
+
+      :param str name: The name of the variable, without the ``PERSISTENT_`` prefix.
+      :Game Scenes: Flight
+
+   .. method:: persistent_variable_changed(name)
+
+      An event that fires when :meth:`Computer.persistent_variable` changes, such as when a
+      switch in the IVA sets it. The event lasts until it is removed.
+
+      :param str name: The name of the variable, without the ``PERSISTENT_`` prefix.
+      :rtype: :class:`krpc.event.Event`
+      :Game Scenes: Flight
+
+   .. method:: variable_type(name)
+
+      The type of a variable's current value.
+      Throws an exception if Raster Prop Monitor does not recognize the variable.
+
+      :param str name: The name of the variable, e.g. ``ALTITUDE``.
+      :rtype: :class:`VariableType`
+      :Game Scenes: Flight
+
+   .. method:: number_variable(name)
+
+      The value of a number variable. Raster Prop Monitor gives a boolean as 0 or 1.
+      Throws an exception if Raster Prop Monitor does not recognize the variable, or
+      its value is a string.
+
+      :param str name: The name of the variable, e.g. ``ALTITUDE``.
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. method:: string_variable(name)
+
+      The value of a variable as a string. A number gives its invariant culture string.
+      Throws an exception if Raster Prop Monitor does not recognize the variable.
+
+      :param str name: The name of the variable, e.g. ``ALTITUDE``.
+      :rtype: str
+      :Game Scenes: Flight
+
+   .. method:: format_variables(text)
+
+      Text with its variables formatted as a monitor page formats them, e.g.
+      ``{0:SIP6.1}m $&$ ALTITUDE``. Each line takes its own variables.
+      Throws an exception if Raster Prop Monitor does not recognize a variable, or a
+      format is invalid.
+
+      :param str text: The text, in the format of a monitor page.
+      :rtype: str
+      :Game Scenes: Flight
+
+
+
+
+.. class:: VariableType
+
+   The type of a Raster Prop Monitor variable. See :meth:`Computer.variable_type`.
+
+
+   .. data:: number
+
+      A number. Access using :meth:`Computer.number_variable`.
+
+
+   .. data:: string
+
+      A string. Access using :meth:`Computer.string_variable`.

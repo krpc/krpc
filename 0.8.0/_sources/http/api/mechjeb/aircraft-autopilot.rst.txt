@@ -1,0 +1,602 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+AircraftAutopilot
+=================
+
+
+.. _http-MechJeb.AircraftAutopilot:
+
+.. rubric:: AircraftAutopilot
+
+The Aircraft Autopilot window, which holds a heading, altitude, vertical speed, roll and speed.
+
+A ``AircraftAutopilot`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /mech-jeb/aircraft-autopilot/(id)/enabled
+
+   Whether the module is enabled.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/aircraft-autopilot/(id)/enabled
+
+   Whether the module is enabled.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/aircraft-autopilot/(id)/altitude-hold-enabled
+
+   Whether the autopilot holds the altitude.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/aircraft-autopilot/(id)/altitude-hold-enabled
+
+   Whether the autopilot holds the altitude.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/aircraft-autopilot/(id)/altitude-target
+
+   The target altitude, in meters.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/aircraft-autopilot/(id)/altitude-target
+
+   The target altitude, in meters.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/aircraft-autopilot/(id)/bank-angle
+
+   The bank angle of a turn, in degrees.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/aircraft-autopilot/(id)/bank-angle
+
+   The bank angle of a turn, in degrees.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/aircraft-autopilot/(id)/heading-hold-enabled
+
+   Whether the autopilot holds the heading.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/aircraft-autopilot/(id)/heading-hold-enabled
+
+   Whether the autopilot holds the heading.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/aircraft-autopilot/(id)/heading-target
+
+   The target heading, in degrees.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/aircraft-autopilot/(id)/heading-target
+
+   The target heading, in degrees.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/aircraft-autopilot/(id)/roll-hold-enabled
+
+   Whether the autopilot holds the roll.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/aircraft-autopilot/(id)/roll-hold-enabled
+
+   Whether the autopilot holds the roll.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/aircraft-autopilot/(id)/roll-target
+
+   The target roll, in degrees.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/aircraft-autopilot/(id)/roll-target
+
+   The target roll, in degrees.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/aircraft-autopilot/(id)/speed-hold-enabled
+
+   Whether the autopilot holds the speed.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/aircraft-autopilot/(id)/speed-hold-enabled
+
+   Whether the autopilot holds the speed.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/aircraft-autopilot/(id)/speed-target
+
+   The target speed, in :math:`\mathrm{m/s}`.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/aircraft-autopilot/(id)/speed-target
+
+   The target speed, in :math:`\mathrm{m/s}`.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/aircraft-autopilot/(id)/vert-speed-hold-enabled
+
+   Whether the autopilot holds the vertical speed.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/aircraft-autopilot/(id)/vert-speed-hold-enabled
+
+   Whether the autopilot holds the vertical speed.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/aircraft-autopilot/(id)/vert-speed-target
+
+   The target vertical speed, in :math:`\mathrm{m/s}`.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/aircraft-autopilot/(id)/vert-speed-target
+
+   The target vertical speed, in :math:`\mathrm{m/s}`.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/aircraft-autopilot/(id)/acc-kd
+
+   The derivative gain of the speed controller.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/aircraft-autopilot/(id)/acc-kd
+
+   The derivative gain of the speed controller.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/aircraft-autopilot/(id)/acc-ki
+
+   The integral gain of the speed controller.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/aircraft-autopilot/(id)/acc-ki
+
+   The integral gain of the speed controller.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/aircraft-autopilot/(id)/acc-kp
+
+   The proportional gain of the speed controller.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/aircraft-autopilot/(id)/acc-kp
+
+   The proportional gain of the speed controller.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/aircraft-autopilot/(id)/pit-kd
+
+   The derivative gain of the pitch controller.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/aircraft-autopilot/(id)/pit-kd
+
+   The derivative gain of the pitch controller.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/aircraft-autopilot/(id)/pit-ki
+
+   The integral gain of the pitch controller.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/aircraft-autopilot/(id)/pit-ki
+
+   The integral gain of the pitch controller.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/aircraft-autopilot/(id)/pit-kp
+
+   The proportional gain of the pitch controller.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/aircraft-autopilot/(id)/pit-kp
+
+   The proportional gain of the pitch controller.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/aircraft-autopilot/(id)/rol-kd
+
+   The derivative gain of the roll controller.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/aircraft-autopilot/(id)/rol-kd
+
+   The derivative gain of the roll controller.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/aircraft-autopilot/(id)/rol-ki
+
+   The integral gain of the roll controller.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/aircraft-autopilot/(id)/rol-ki
+
+   The integral gain of the roll controller.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/aircraft-autopilot/(id)/rol-kp
+
+   The proportional gain of the roll controller.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/aircraft-autopilot/(id)/rol-kp
+
+   The proportional gain of the roll controller.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/aircraft-autopilot/(id)/yaw-kd
+
+   The derivative gain of the yaw controller.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/aircraft-autopilot/(id)/yaw-kd
+
+   The derivative gain of the yaw controller.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/aircraft-autopilot/(id)/yaw-ki
+
+   The integral gain of the yaw controller.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/aircraft-autopilot/(id)/yaw-ki
+
+   The integral gain of the yaw controller.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/aircraft-autopilot/(id)/yaw-kp
+
+   The proportional gain of the yaw controller.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/aircraft-autopilot/(id)/yaw-kp
+
+   The proportional gain of the yaw controller.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/aircraft-autopilot/(id)/pitch-down-limit
+
+   The largest pitch down, in degrees.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/aircraft-autopilot/(id)/pitch-down-limit
+
+   The largest pitch down, in degrees.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/aircraft-autopilot/(id)/pitch-up-limit
+
+   The largest pitch up, in degrees.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/aircraft-autopilot/(id)/pitch-up-limit
+
+   The largest pitch up, in degrees.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/aircraft-autopilot/(id)/roll-limit
+
+   The largest roll, in degrees.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/aircraft-autopilot/(id)/roll-limit
+
+   The largest roll, in degrees.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/aircraft-autopilot/(id)/yaw-limit
+
+   The largest yaw, in degrees.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/aircraft-autopilot/(id)/yaw-limit
+
+   The largest yaw, in degrees.
+
+
+   :param id: The identifier of the :ref:`AircraftAutopilot <http-MechJeb.AircraftAutopilot>` object.
+
+   :reqjson double value: The new value.

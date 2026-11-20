@@ -1,0 +1,39 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: Drawing
+   :no-index:
+
+Image
+=====
+
+
+.. class:: Image
+
+   An image that markers can be drawn with. Created using :func:`Drawing.addImage`.
+
+   .. note::
+
+      An image is kept across scene changes, until it is removed or the client that
+      created it disconnects.
+
+   .. method:: getWidth()
+
+      The width of the image, in pixels.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: getHeight()
+
+      The height of the image, in pixels.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: remove()
+
+      Remove the image. A marker drawn with it goes back to its own icon.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph

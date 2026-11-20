@@ -44,7 +44,23 @@ AutoPilot
 
       .. note::
 
-         Equivalent to :attr:`Control.sas_mode`
+         Equivalent to :attr:`Control.sas_mode`.
+         Throws an exception if set to a mode not in :attr:`AutoPilot.available_sas_modes`.
+
+   .. attribute:: available_sas_modes
+
+      The SAS modes that :attr:`AutoPilot.sas_mode` can be set to.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: set(:class:`SASMode`)
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Equivalent to :attr:`Control.available_sas_modes`. The modes depend on the SAS
+         level of the vessel's pilot or probe core, the navball speed mode, and whether
+         there is a target and a maneuver node.
 
    .. attribute:: engaged
 
@@ -128,7 +144,9 @@ AutoPilot
          The target and the :attr:`AutoPilot.up_reference` are held as vectors in this frame, so
          changing it re-interprets them in the new frame rather than converting them: the
          orientation the vessel is held in, and what a given :attr:`AutoPilot.target_roll` means,
-         both change. Set the frame first, then the target.
+         both change. Set the frame first, then the target. With a
+         :attr:`AutoPilot.target_smoothing_time`, the vessel turns smoothly to the new target from the
+         orientation it was holding.
 
    .. attribute:: target_pitch
 
@@ -351,9 +369,9 @@ AutoPilot
 
    .. attribute:: stopping_velocity_threshold
 
-      The threshold angular velocity, in rad/s, below which the vessel's angular
-      velocity magnitude must fall for :meth:`AutoPilot.wait` to return.
-      Defaults to 0.05 rad/s.
+      The threshold angular velocity, in :math:`\mathrm{rad/s}`, below which the vessel's angular
+      velocity relative to the target must fall for :meth:`AutoPilot.wait` to return.
+      Defaults to 0.05 :math:`\mathrm{rad/s}`.
 
       :Attribute: Can be read or written
       :rtype: float
@@ -378,7 +396,7 @@ AutoPilot
 
    .. attribute:: attitude_error
 
-      The per-axis attitude error (pitch, yaw, roll), in degrees, between the vessel's current
+      The per-axis attitude error ``(pitch, yaw, roll)``, in degrees, between the vessel's current
       attitude and the commanded target. All three components come from one singularity-free
       residual decomposition, so they stay well-defined near the vertical (unlike a subtraction
       of pitch/heading/roll angles). The scalar :attr:`AutoPilot.pitch_error`,
@@ -452,7 +470,7 @@ AutoPilot
 
    .. attribute:: current_attitude_error
 
-      The per-axis attitude error (pitch, yaw, roll), in degrees, between the vessel's current
+      The per-axis attitude error ``(pitch, yaw, roll)``, in degrees, between the vessel's current
       attitude and the target the auto-pilot is currently tracking (the slewed target, see
       :attr:`AutoPilot.current_target_rotation`). Like :attr:`AutoPilot.attitude_error` but relative to the
       current target, so it stays small while a smoothed change (see
@@ -530,14 +548,29 @@ AutoPilot
 
    .. attribute:: max_angular_velocity
 
-      The maximum angular velocity of the vessel, in rad/s, for each of the pitch, roll
-      and yaw axes. Limits the target angular velocity computed by the bang-bang profile so
-      that vessels with very high torque availability do not spin faster than desired.
-      Defaults to 1 rad/s for each axis.
+      The maximum angular velocity of the vessel, in :math:`\mathrm{rad/s}`, for each of the
+      pitch, roll and yaw axes. Limits the target angular velocity computed by the bang-bang
+      profile so that vessels with very high torque availability do not spin faster than
+      desired. Defaults to 1 :math:`\mathrm{rad/s}` for each axis.
 
       :Attribute: Can be read or written
       :rtype: tuple(float, float, float)
       :Game Scenes: Flight
+
+   .. attribute:: limit_angular_velocity
+
+      Whether to also limit the angular velocity to what the control surfaces hold against
+      the aerodynamic forces. Defaults to ``True``.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         When disabled, only :attr:`AutoPilot.max_angular_velocity` limits the angular velocity. Not
+         applied when Ferram Aerospace Research is installed.
 
    .. attribute:: pitch_yaw_attenuation_angle
 
@@ -545,7 +578,8 @@ AutoPilot
       to the target direction. This sets the high angle of the pitch/yaw pointing deadband: at
       or above this error the target velocity is at full, and below it the target velocity
       ramps linearly to zero at half this angle, so the vessel coasts to a stop. Pitch and yaw
-      are controlled jointly, so a single angle applies to both. Defaults to 1°.
+      are controlled jointly, so a single angle applies to both. Defaults to 1°. The angle in
+      use shrinks in proportion to the share of the torque that comes from control surfaces.
 
       :Attribute: Can be read or written
       :rtype: float
@@ -556,7 +590,9 @@ AutoPilot
       The angle, in degrees, at which the autopilot considers the vessel to be pointing close
       to the target roll. This sets the high angle of the roll-axis pointing deadband: at or
       above this error the target velocity is at full, and below it the target velocity ramps
-      linearly to zero at half this angle, so the roll coasts to a stop. Defaults to 1°.
+      linearly to zero at half this angle, so the roll coasts to a stop. Defaults to 1°. The
+      angle in use shrinks in proportion to the share of the torque that comes from control
+      surfaces.
 
       :Attribute: Can be read or written
       :rtype: float
@@ -734,10 +770,11 @@ AutoPilot
 
    .. attribute:: oscillation_bandwidth_floor
 
-      The inner control loop bandwidth, in rad/s, that an axis is reduced towards while the
-      bandwidth-floor mitigation is engaged on it. Lowering it suppresses oscillation more
-      strongly; raising it keeps more control authority at the cost of allowing more wobble.
-      Defaults to 1 rad/s. This is an advanced tuning parameter.
+      The inner control loop bandwidth, in :math:`\mathrm{rad/s}`, that an axis is reduced
+      towards while the bandwidth-floor mitigation is engaged on it. Lowering it suppresses
+      oscillation more strongly; raising it keeps more control authority at the cost of
+      allowing more wobble. Defaults to 1 :math:`\mathrm{rad/s}`. This is an advanced tuning
+      parameter.
 
       :Attribute: Can be read or written
       :rtype: float

@@ -16,6 +16,10 @@ AutoPilot
       If a client engages the auto-pilot and then closes its connection to the server,
       the auto-pilot will be disengaged. Its configuration and target are left unchanged.
 
+   .. macro:: KRPC_CLASS_SPACECENTER_AUTOPILOT
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_SAS(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_AutoPilot_t instance)
    .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_set_SAS(krpc_connection_t connection, krpc_SpaceCenter_AutoPilot_t instance, bool value)
 
@@ -42,7 +46,21 @@ AutoPilot
 
       .. note::
 
-         Equivalent to :func:`krpc_SpaceCenter_Control_SASMode`
+         Equivalent to :func:`krpc_SpaceCenter_Control_SASMode`.
+         Throws an exception if set to a mode not in :func:`krpc_SpaceCenter_AutoPilot_AvailableSASModes`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_AvailableSASModes(krpc_connection_t connection, krpc_set_enum_t * returnValue, krpc_SpaceCenter_AutoPilot_t instance)
+
+      The SAS modes that :func:`krpc_SpaceCenter_AutoPilot_SASMode` can be set to.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Equivalent to :func:`krpc_SpaceCenter_Control_AvailableSASModes`. The modes depend on the SAS
+         level of the vessel's pilot or probe core, the navball speed mode, and whether
+         there is a target and a maneuver node.
 
    .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_Engaged(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_AutoPilot_t instance)
    .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_set_Engaged(krpc_connection_t connection, krpc_SpaceCenter_AutoPilot_t instance, bool value)
@@ -124,7 +142,9 @@ AutoPilot
          The target and the :func:`krpc_SpaceCenter_AutoPilot_UpReference` are held as vectors in this frame, so
          changing it re-interprets them in the new frame rather than converting them: the
          orientation the vessel is held in, and what a given :func:`krpc_SpaceCenter_AutoPilot_TargetRoll` means,
-         both change. Set the frame first, then the target.
+         both change. Set the frame first, then the target. With a
+         :func:`krpc_SpaceCenter_AutoPilot_TargetSmoothingTime`, the vessel turns smoothly to the new target from the
+         orientation it was holding.
 
    .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_TargetPitch(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_AutoPilot_t instance)
    .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_set_TargetPitch(krpc_connection_t connection, krpc_SpaceCenter_AutoPilot_t instance, float value)
@@ -340,9 +360,9 @@ AutoPilot
    .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_StoppingVelocityThreshold(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_AutoPilot_t instance)
    .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_set_StoppingVelocityThreshold(krpc_connection_t connection, krpc_SpaceCenter_AutoPilot_t instance, float value)
 
-      The threshold angular velocity, in rad/s, below which the vessel's angular
-      velocity magnitude must fall for :func:`krpc_SpaceCenter_AutoPilot_Wait` to return.
-      Defaults to 0.05 rad/s.
+      The threshold angular velocity, in :math:`\mathrm{rad/s}`, below which the vessel's angular
+      velocity relative to the target must fall for :func:`krpc_SpaceCenter_AutoPilot_Wait` to return.
+      Defaults to 0.05 :math:`\mathrm{rad/s}`.
 
       :Game Scenes: Flight
 
@@ -363,7 +383,7 @@ AutoPilot
 
    .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_AttitudeError(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_AutoPilot_t instance)
 
-      The per-axis attitude error (pitch, yaw, roll), in degrees, between the vessel's current
+      The per-axis attitude error ``(pitch, yaw, roll)``, in degrees, between the vessel's current
       attitude and the commanded target. All three components come from one singularity-free
       residual decomposition, so they stay well-defined near the vertical (unlike a subtraction
       of pitch/heading/roll angles). The scalar :func:`krpc_SpaceCenter_AutoPilot_PitchError`,
@@ -427,7 +447,7 @@ AutoPilot
 
    .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_CurrentAttitudeError(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_AutoPilot_t instance)
 
-      The per-axis attitude error (pitch, yaw, roll), in degrees, between the vessel's current
+      The per-axis attitude error ``(pitch, yaw, roll)``, in degrees, between the vessel's current
       attitude and the target the auto-pilot is currently tracking (the slewed target, see
       :func:`krpc_SpaceCenter_AutoPilot_CurrentTargetRotation`). Like :func:`krpc_SpaceCenter_AutoPilot_AttitudeError` but relative to the
       current target, so it stays small while a smoothed change (see
@@ -496,12 +516,26 @@ AutoPilot
    .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_MaxAngularVelocity(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_AutoPilot_t instance)
    .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_set_MaxAngularVelocity(krpc_connection_t connection, krpc_SpaceCenter_AutoPilot_t instance, const krpc_tuple_double_double_double_t * value)
 
-      The maximum angular velocity of the vessel, in rad/s, for each of the pitch, roll
-      and yaw axes. Limits the target angular velocity computed by the bang-bang profile so
-      that vessels with very high torque availability do not spin faster than desired.
-      Defaults to 1 rad/s for each axis.
+      The maximum angular velocity of the vessel, in :math:`\mathrm{rad/s}`, for each of the
+      pitch, roll and yaw axes. Limits the target angular velocity computed by the bang-bang
+      profile so that vessels with very high torque availability do not spin faster than
+      desired. Defaults to 1 :math:`\mathrm{rad/s}` for each axis.
 
       :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_LimitAngularVelocity(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_AutoPilot_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_set_LimitAngularVelocity(krpc_connection_t connection, krpc_SpaceCenter_AutoPilot_t instance, bool value)
+
+      Whether to also limit the angular velocity to what the control surfaces hold against
+      the aerodynamic forces. Defaults to ``true``.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         When disabled, only :func:`krpc_SpaceCenter_AutoPilot_MaxAngularVelocity` limits the angular velocity. Not
+         applied when Ferram Aerospace Research is installed.
 
    .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_PitchYawAttenuationAngle(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_AutoPilot_t instance)
    .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_set_PitchYawAttenuationAngle(krpc_connection_t connection, krpc_SpaceCenter_AutoPilot_t instance, double value)
@@ -510,7 +544,8 @@ AutoPilot
       to the target direction. This sets the high angle of the pitch/yaw pointing deadband: at
       or above this error the target velocity is at full, and below it the target velocity
       ramps linearly to zero at half this angle, so the vessel coasts to a stop. Pitch and yaw
-      are controlled jointly, so a single angle applies to both. Defaults to 1°.
+      are controlled jointly, so a single angle applies to both. Defaults to 1°. The angle in
+      use shrinks in proportion to the share of the torque that comes from control surfaces.
 
       :Game Scenes: Flight
 
@@ -520,7 +555,9 @@ AutoPilot
       The angle, in degrees, at which the autopilot considers the vessel to be pointing close
       to the target roll. This sets the high angle of the roll-axis pointing deadband: at or
       above this error the target velocity is at full, and below it the target velocity ramps
-      linearly to zero at half this angle, so the roll coasts to a stop. Defaults to 1°.
+      linearly to zero at half this angle, so the roll coasts to a stop. Defaults to 1°. The
+      angle in use shrinks in proportion to the share of the torque that comes from control
+      surfaces.
 
       :Game Scenes: Flight
 
@@ -683,10 +720,11 @@ AutoPilot
    .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_OscillationBandwidthFloor(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_AutoPilot_t instance)
    .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_set_OscillationBandwidthFloor(krpc_connection_t connection, krpc_SpaceCenter_AutoPilot_t instance, double value)
 
-      The inner control loop bandwidth, in rad/s, that an axis is reduced towards while the
-      bandwidth-floor mitigation is engaged on it. Lowering it suppresses oscillation more
-      strongly; raising it keeps more control authority at the cost of allowing more wobble.
-      Defaults to 1 rad/s. This is an advanced tuning parameter.
+      The inner control loop bandwidth, in :math:`\mathrm{rad/s}`, that an axis is reduced
+      towards while the bandwidth-floor mitigation is engaged on it. Lowering it suppresses
+      oscillation more strongly; raising it keeps more control authority at the cost of
+      allowing more wobble. Defaults to 1 :math:`\mathrm{rad/s}`. This is an advanced tuning
+      parameter.
 
       :Game Scenes: Flight
 
@@ -803,6 +841,11 @@ AutoPilot
    When the auto-pilot's control loop runs within a server update, relative to the calls
    the update executes. See :func:`krpc_SpaceCenter_AutoPilot_UpdateMode`.
 
+   .. macro:: KRPC_ENUMERATION_SPACECENTER_AUTOPILOTUPDATEMODE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
 
    .. macro:: KRPC_SPACECENTER_AUTOPILOTUPDATEMODE_AFTERCALLS
 
@@ -830,6 +873,11 @@ AutoPilot
    removes a structural oscillation (wobble) from the measured angular velocity before the
    control loops consume it.
    See :func:`krpc_SpaceCenter_AutoPilot_PitchYawRateFilterMode` and :func:`krpc_SpaceCenter_AutoPilot_RollRateFilterMode`.
+
+   .. macro:: KRPC_ENUMERATION_SPACECENTER_RATEFILTERMODE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_SPACECENTER_RATEFILTERMODE_AUTOMATIC
@@ -866,6 +914,11 @@ AutoPilot
    (:func:`krpc_SpaceCenter_AutoPilot_OscillationBandwidthFloorMode`,
    :func:`krpc_SpaceCenter_AutoPilot_OscillationFeedforwardMode`,
    :func:`krpc_SpaceCenter_AutoPilot_OscillationOutputFilterMode`).
+
+   .. macro:: KRPC_ENUMERATION_SPACECENTER_MITIGATIONMODE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_SPACECENTER_MITIGATIONMODE_AUTOMATIC

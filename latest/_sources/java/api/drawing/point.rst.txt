@@ -9,7 +9,7 @@ Point
 .. type:: public class Point
 
    A point, drawn as a dot that keeps its size on screen. Created using
-   :meth:`addPoint(org.javatuples.Triplet<Double,Double,Double>, SpaceCenter.ReferenceFrame, boolean)`.
+   :meth:`Drawing.addPoint(org.javatuples.Triplet<Double,Double,Double>, SpaceCenter.ReferenceFrame, boolean)`.
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> getPosition()
 

@@ -8,7 +8,7 @@ Arc
 
 .. type:: public class Arc
 
-   An arc of a circle. Created using :meth:`addArc(org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>, double, double, SpaceCenter.ReferenceFrame, boolean)`.
+   An arc of a circle. Created using :meth:`Drawing.addArc(org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>, double, double, SpaceCenter.ReferenceFrame, boolean)`.
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> getCenter()
 

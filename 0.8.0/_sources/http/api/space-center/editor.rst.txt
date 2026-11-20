@@ -1,0 +1,876 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+.. _http-api-editor:
+
+Editor
+======
+
+
+.. _http-SpaceCenter.Editor:
+
+.. rubric:: Editor
+
+Provides access to the vehicle assembly building and space plane hangar.
+Obtained by calling :http:get:`/space-center/editor`.
+
+A ``Editor`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /space-center/editor/(id)/facility
+
+   The editor that is currently open.
+
+
+   :param id: The identifier of the :ref:`Editor <http-SpaceCenter.Editor>` object.
+
+   :resjson SpaceCenter.EditorFacility value:
+
+
+
+
+.. http:get:: /space-center/editor/(id)/vessel
+
+   The vessel that is being constructed.
+
+   .. note::
+
+      An editor that has not had a vessel loaded into it holds an empty vessel, with
+      no parts, rather than nothing at all.
+
+
+   :param id: The identifier of the :ref:`Editor <http-SpaceCenter.Editor>` object.
+
+   :resjson SpaceCenter.EditorVessel value:
+
+
+
+
+.. http:post:: /space-center/editor/(id)/load-vessel
+
+   Load a vessel from a craft file into the editor, replacing the vessel that
+   is currently being constructed.
+
+   .. note::
+
+      The vessel is loaded into whichever editor is open, regardless of which
+      directory it came from. Its delta-v figures are recalculated in the
+      background afterwards; see :http:get:`/space-center/editor-vessel/(id)/delta-v-ready`.
+
+
+   :param id: The identifier of the :ref:`Editor <http-SpaceCenter.Editor>` object.
+
+   :reqjson string craft_directory: Name of the directory in the current saves "Ships" directory, that contains the craft file. For example ``"VAB"`` or ``"SPH"``.
+   :reqjson string name: Name of the vessel to load. This is the name of the ".craft" file in the save directory, without the ".craft" file extension.
+
+
+
+
+
+.. http:post:: /space-center/editor/(id)/launch-vessel
+
+   Launch the vessel that is being constructed, from the given launch site.
+
+   .. note::
+
+      The vessel being constructed is not a craft file, so it is written to the editor's
+      auto-saved craft file and that is launched, as the game's own launch button does.
+      The vessel's own craft file, if it was loaded from one, is left alone.
+      The *crew* parameter works as it does for
+      :http:post:`/space-center/launch-vessel`, and takes precedence over the crew assigned
+      in the editor.
+      Throws an exception if any of the games pre-flight checks fail.
+
+
+   :param id: The identifier of the :ref:`Editor <http-SpaceCenter.Editor>` object.
+
+   :reqjson string launch_site: Name of the launch site. For example ``"LaunchPad"`` or ``"Runway"``.
+   :reqjson list<string>? crew: The Kerbals to place in the vessel, by name. Controls how the vessel is crewed, as described in the remarks. Optional, defaults to ``null``.
+   :reqjson bool recover: If true and there is a vessel on the launch site, recover it before launching. Optional, defaults to ``true``.
+   :reqjson string flag_url: If not ``null``, the asset URL of the mission flag to use for the launch. Optional, defaults to ``""``.
+
+
+
+
+
+.. http:get:: /space-center/editor/(id)/delta-v-body
+
+   The body whose gravity and atmosphere the vessel's delta-v, thrust, TWR and
+   specific impulse figures assume.
+
+   .. note::
+
+      This and :http:get:`/space-center/editor/(id)/delta-v-altitude` are what :http:get:`/space-center/editor-vessel/(id)/delta-v`,
+      :http:get:`/space-center/stage/(id)/delta-v` and the other current-situation figures are
+      computed for. The body sets the gravity the thrust-to-weight ratios are
+      against, and, with the altitude, the atmospheric pressure and density the
+      specific impulses and thrusts are against.
+      This is global game state rather than editor state: the same setting backs
+      the game's delta-v readout in flight, and it persists across scene changes.
+      Setting it asks the game to re-run the simulation and returns straight away;
+      the figures are out of date until :http:get:`/space-center/editor-vessel/(id)/delta-v-ready` is
+      true again.
+
+
+   :param id: The identifier of the :ref:`Editor <http-SpaceCenter.Editor>` object.
+
+   :resjson SpaceCenter.CelestialBody value:
+
+.. http:put:: /space-center/editor/(id)/delta-v-body
+
+   The body whose gravity and atmosphere the vessel's delta-v, thrust, TWR and
+   specific impulse figures assume.
+
+   .. note::
+
+      This and :http:get:`/space-center/editor/(id)/delta-v-altitude` are what :http:get:`/space-center/editor-vessel/(id)/delta-v`,
+      :http:get:`/space-center/stage/(id)/delta-v` and the other current-situation figures are
+      computed for. The body sets the gravity the thrust-to-weight ratios are
+      against, and, with the altitude, the atmospheric pressure and density the
+      specific impulses and thrusts are against.
+      This is global game state rather than editor state: the same setting backs
+      the game's delta-v readout in flight, and it persists across scene changes.
+      Setting it asks the game to re-run the simulation and returns straight away;
+      the figures are out of date until :http:get:`/space-center/editor-vessel/(id)/delta-v-ready` is
+      true again.
+
+
+   :param id: The identifier of the :ref:`Editor <http-SpaceCenter.Editor>` object.
+
+   :reqjson SpaceCenter.CelestialBody value: The new value.
+
+
+
+
+.. http:get:: /space-center/editor/(id)/delta-v-altitude
+
+   The altitude above :http:get:`/space-center/editor/(id)/delta-v-body`, in meters, that the vessel's
+   delta-v, thrust, TWR and specific impulse figures assume. The atmospheric
+   pressure and density at this altitude are what the figures are computed for,
+   so raising it from zero to above the body's atmosphere moves them from the
+   vessel's sea-level figures to its vacuum ones.
+   Setting it asks the game to re-run the simulation and returns straight away;
+   the figures are out of date until :http:get:`/space-center/editor-vessel/(id)/delta-v-ready` is
+   true again.
+
+
+   :param id: The identifier of the :ref:`Editor <http-SpaceCenter.Editor>` object.
+
+   :resjson double value:
+
+.. http:put:: /space-center/editor/(id)/delta-v-altitude
+
+   The altitude above :http:get:`/space-center/editor/(id)/delta-v-body`, in meters, that the vessel's
+   delta-v, thrust, TWR and specific impulse figures assume. The atmospheric
+   pressure and density at this altitude are what the figures are computed for,
+   so raising it from zero to above the body's atmosphere moves them from the
+   vessel's sea-level figures to its vacuum ones.
+   Setting it asks the game to re-run the simulation and returns straight away;
+   the figures are out of date until :http:get:`/space-center/editor-vessel/(id)/delta-v-ready` is
+   true again.
+
+
+   :param id: The identifier of the :ref:`Editor <http-SpaceCenter.Editor>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /space-center/editor/(id)/delta-v-situation
+
+   Which situation the game's own delta-v readout shows figures for.
+
+   .. note::
+
+      This selects which column the game's own delta-v app displays, and nothing
+      else. It does not affect anything kRPC reports: the current-situation
+      figures follow :http:get:`/space-center/editor/(id)/delta-v-body` and :http:get:`/space-center/editor/(id)/delta-v-altitude`
+      whatever this is set to, and the sea-level and vacuum figures are reported
+      directly as :http:get:`/space-center/editor-vessel/(id)/sea-level-delta-v` and
+      :http:get:`/space-center/editor-vessel/(id)/vacuum-delta-v`. It is here for completeness with the
+      app.
+
+
+   :param id: The identifier of the :ref:`Editor <http-SpaceCenter.Editor>` object.
+
+   :resjson SpaceCenter.DeltaVSituation value:
+
+.. http:put:: /space-center/editor/(id)/delta-v-situation
+
+   Which situation the game's own delta-v readout shows figures for.
+
+   .. note::
+
+      This selects which column the game's own delta-v app displays, and nothing
+      else. It does not affect anything kRPC reports: the current-situation
+      figures follow :http:get:`/space-center/editor/(id)/delta-v-body` and :http:get:`/space-center/editor/(id)/delta-v-altitude`
+      whatever this is set to, and the sea-level and vacuum figures are reported
+      directly as :http:get:`/space-center/editor-vessel/(id)/sea-level-delta-v` and
+      :http:get:`/space-center/editor-vessel/(id)/vacuum-delta-v`. It is here for completeness with the
+      app.
+
+
+   :param id: The identifier of the :ref:`Editor <http-SpaceCenter.Editor>` object.
+
+   :reqjson SpaceCenter.DeltaVSituation value: The new value.
+
+
+
+
+
+.. _http-SpaceCenter.DeltaVSituation:
+
+.. rubric:: DeltaVSituation
+
+The situation the game's own delta-v readout shows figures for.
+See :http:get:`/space-center/editor/(id)/delta-v-situation`.
+
+Passed and returned as the name of one of its values:
+
+
+``"sea_level"``
+   At sea level on the selected body.
+
+
+``"altitude"``
+   At the selected altitude on the selected body.
+
+
+``"vacuum"``
+   In vacuum.
+
+
+
+.. _http-SpaceCenter.EditorVessel:
+
+.. rubric:: EditorVessel
+
+The vessel that is being constructed in the editor.
+Obtained by calling :http:get:`/space-center/editor/(id)/vessel`.
+
+A ``EditorVessel`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /space-center/editor-vessel/(id)/name
+
+   The name of the vessel.
+
+
+   :param id: The identifier of the :ref:`EditorVessel <http-SpaceCenter.EditorVessel>` object.
+
+   :resjson string value:
+
+.. http:put:: /space-center/editor-vessel/(id)/name
+
+   The name of the vessel.
+
+
+   :param id: The identifier of the :ref:`EditorVessel <http-SpaceCenter.EditorVessel>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:get:: /space-center/editor-vessel/(id)/description
+
+   The description of the vessel.
+
+
+   :param id: The identifier of the :ref:`EditorVessel <http-SpaceCenter.EditorVessel>` object.
+
+   :resjson string value:
+
+.. http:put:: /space-center/editor-vessel/(id)/description
+
+   The description of the vessel.
+
+
+   :param id: The identifier of the :ref:`EditorVessel <http-SpaceCenter.EditorVessel>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:get:: /space-center/editor-vessel/(id)/facility
+
+   The editor the vessel is in.
+
+   .. note::
+
+      This is the editor the vessel is currently loaded into, not the one it was
+      designed in. A vessel moved from the vehicle assembly building to the space
+      plane hangar reports the space plane hangar.
+
+
+   :param id: The identifier of the :ref:`EditorVessel <http-SpaceCenter.EditorVessel>` object.
+
+   :resjson SpaceCenter.EditorFacility value:
+
+
+
+
+.. http:get:: /space-center/editor-vessel/(id)/mass
+
+   The total mass of the vessel, including resources and crew, in :math:`\mathrm{kg}`.
+
+
+   :param id: The identifier of the :ref:`EditorVessel <http-SpaceCenter.EditorVessel>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/editor-vessel/(id)/dry-mass
+
+   The total mass of the vessel, excluding resources, in :math:`\mathrm{kg}`.
+
+
+   :param id: The identifier of the :ref:`EditorVessel <http-SpaceCenter.EditorVessel>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/editor-vessel/(id)/moment-of-inertia
+
+   The moment of inertia of the vessel around its center of mass in :math:`\mathrm{kg \cdot m^{2}}`.
+   The inertia values in the returned 3-tuple are around the
+   pitch, roll and yaw directions respectively.
+   This corresponds to the vessels reference frame (:http:get:`/space-center/editor-vessel/(id)/reference-frame`).
+
+
+   :param id: The identifier of the :ref:`EditorVessel <http-SpaceCenter.EditorVessel>` object.
+
+   :resjson tuple<double, double, double> value:
+
+
+
+
+.. http:get:: /space-center/editor-vessel/(id)/inertia-tensor
+
+   The inertia tensor of the vessel around its center of mass,
+   in the vessels reference frame (:http:get:`/space-center/editor-vessel/(id)/reference-frame`).
+   Returns the 3x3 matrix as a list of elements, in row-major order.
+
+
+   :param id: The identifier of the :ref:`EditorVessel <http-SpaceCenter.EditorVessel>` object.
+
+   :resjson list<double> value:
+
+
+
+
+.. http:get:: /space-center/editor-vessel/(id)/reference-frame
+
+   The reference frame that is fixed relative to the vessel,
+   and orientated with the vessel.
+
+   * The origin is at the center of mass of the vessel.
+   * The axes rotate with the vessel.
+   * The x-axis points out to the right of the vessel.
+   * The y-axis points in the forward direction of the vessel.
+   * The z-axis points out of the bottom off the vessel.
+
+   .. note::
+
+      The axes are those of the root part. This is the frame
+      :http:get:`/space-center/vessel/(id)/reference-frame` gives at launch, with the root part as the
+      control point.
+
+
+   :param id: The identifier of the :ref:`EditorVessel <http-SpaceCenter.EditorVessel>` object.
+
+   :resjson SpaceCenter.ReferenceFrame value:
+
+
+
+
+.. http:get:: /space-center/editor-vessel/(id)/surface-reference-frame
+
+   The reference frame that is fixed relative to the vessel,
+   and orientated with the vertical of the editor.
+
+   * The origin is at the center of mass of the vessel.
+   * The axes are fixed in the editor.
+   * The x-axis points upwards.
+   * The y-axis and z-axis are horizontal.
+
+   .. note::
+
+      This is the vessel as it stands in the editor, and as it stands at launch. The
+      editor has no north or east, so the horizontal axes are fixed in the editor.
+
+
+   :param id: The identifier of the :ref:`EditorVessel <http-SpaceCenter.EditorVessel>` object.
+
+   :resjson SpaceCenter.ReferenceFrame value:
+
+
+
+
+.. http:post:: /space-center/editor-vessel/(id)/flight
+
+   Returns a :ref:`SimulatedFlight <http-SpaceCenter.SimulatedFlight>` object that can be used to simulate the
+   vessel in flight, in the specified reference frame.
+
+   .. note::
+
+      Each call returns a new object, which is kept until the game leaves the editor.
+
+
+   :param id: The identifier of the :ref:`EditorVessel <http-SpaceCenter.EditorVessel>` object.
+
+   :reqjson SpaceCenter.ReferenceFrame? reference_frame: Reference frame. Defaults to the simulated surface reference frame (:http:get:`/space-center/simulated-flight/(id)/surface-reference-frame`), and follows it when it is set. Optional, defaults to ``null``.
+   :resjson SpaceCenter.SimulatedFlight value:
+
+
+
+
+
+.. http:post:: /space-center/editor-vessel/(id)/position
+
+   The position of the center of mass of the vessel, in the given reference frame.
+
+
+   :param id: The identifier of the :ref:`EditorVessel <http-SpaceCenter.EditorVessel>` object.
+
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned position vector is in.
+   :resjson tuple<double, double, double> value: The position as a vector.
+
+
+
+
+
+.. http:post:: /space-center/editor-vessel/(id)/bounding-box
+
+   The axis-aligned bounding box of the vessel in the given reference frame.
+
+
+   :param id: The identifier of the :ref:`EditorVessel <http-SpaceCenter.EditorVessel>` object.
+
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned position vectors are in.
+   :resjson SpaceCenter.BoundingBox value: The positions of the minimum and maximum vertices of the box.
+
+
+
+
+
+.. http:post:: /space-center/editor-vessel/(id)/rotation
+
+   The rotation of the vessel, in the given reference frame.
+
+
+   :param id: The identifier of the :ref:`EditorVessel <http-SpaceCenter.EditorVessel>` object.
+
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned rotation is in.
+   :resjson tuple<double, double, double, double> value: The rotation as a quaternion of the form ``(x, y, z, w)``.
+
+
+
+
+
+.. http:post:: /space-center/editor-vessel/(id)/direction
+
+   The direction in which the vessel is pointing, in the given reference frame.
+
+
+   :param id: The identifier of the :ref:`EditorVessel <http-SpaceCenter.EditorVessel>` object.
+
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned direction is in.
+   :resjson tuple<double, double, double> value: The direction as a unit vector.
+
+
+
+
+
+.. http:get:: /space-center/editor-vessel/(id)/cost
+
+   The total cost of the vessel, including resources, in funds.
+
+
+   :param id: The identifier of the :ref:`EditorVessel <http-SpaceCenter.EditorVessel>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/editor-vessel/(id)/crew-capacity
+
+   The total number of crew that the vessel can hold.
+
+
+   :param id: The identifier of the :ref:`EditorVessel <http-SpaceCenter.EditorVessel>` object.
+
+   :resjson int32 value:
+
+
+
+
+.. http:get:: /space-center/editor-vessel/(id)/parts
+
+   A :ref:`Parts <http-SpaceCenter.Parts>` object, that can be used to interact with the parts
+   that make up the vessel.
+
+
+   :param id: The identifier of the :ref:`EditorVessel <http-SpaceCenter.EditorVessel>` object.
+
+   :resjson SpaceCenter.Parts value:
+
+.. note:: Only the parts of :ref:`Part <http-SpaceCenter.Part>` that describe the design are
+          available in the editor. Those that need a vessel in flight or running physics,
+          such as the thermal members, are restricted to the flight scene.
+          :http:post:`/space-center/part/(id)/position`, :http:post:`/space-center/part/(id)/center-of-mass`,
+          :http:post:`/space-center/part/(id)/direction`, :http:post:`/space-center/part/(id)/rotation`,
+          :http:post:`/space-center/part/(id)/bounding-box`, the part's reference frames,
+          :http:get:`/space-center/part/(id)/moment-of-inertia` and
+          :http:get:`/space-center/part/(id)/inertia-tensor` are available.
+
+
+
+
+.. http:get:: /space-center/editor-vessel/(id)/resources
+
+   A :http:get:`/space-center/editor-vessel/(id)/resources` object for the resources the vessel can hold.
+
+
+   :param id: The identifier of the :ref:`EditorVessel <http-SpaceCenter.EditorVessel>` object.
+
+   :resjson SpaceCenter.Resources value:
+
+.. note:: This is a view of what the vessel can hold as designed. The flow-state
+          members work, as they are part of the design, but nothing here reports how
+          a resource would be drawn on in flight.
+
+
+
+
+.. http:get:: /space-center/editor-vessel/(id)/stages
+
+   Activation (burn) stages for the vessel, in ascending stage order. This does
+   not include the -1 stage (parts with no staging icon), as it carries no
+   delta-v; use :http:post:`/space-center/editor-vessel/(id)/stage-at` with -1 to get those parts.
+
+
+   :param id: The identifier of the :ref:`EditorVessel <http-SpaceCenter.EditorVessel>` object.
+
+   :resjson list<SpaceCenter.Stage> value:
+
+
+
+
+.. http:post:: /space-center/editor-vessel/(id)/stage-at
+
+   The activation stage with the given number. Pass -1 to get the parts that are
+   never activated (those with no staging icon).
+
+
+   :param id: The identifier of the :ref:`EditorVessel <http-SpaceCenter.EditorVessel>` object.
+
+   :reqjson int32 stage: Get activation stage at this index.
+   :resjson SpaceCenter.Stage value:
+
+
+
+
+
+.. http:get:: /space-center/editor-vessel/(id)/decouple-stages
+
+   Decouple stages for the vessel, in ascending stage order. The -1 stage,
+   containing the parts that are never decoupled and remain on the vessel, is
+   included first when any such parts exist.
+
+
+   :param id: The identifier of the :ref:`EditorVessel <http-SpaceCenter.EditorVessel>` object.
+
+   :resjson list<SpaceCenter.Stage> value:
+
+
+
+
+.. http:post:: /space-center/editor-vessel/(id)/decouple-stage-at
+
+   The decouple stage with the given number. Pass -1 to get the parts that are
+   never decoupled and remain on the vessel after all stages have fired.
+
+
+   :param id: The identifier of the :ref:`EditorVessel <http-SpaceCenter.EditorVessel>` object.
+
+   :reqjson int32 stage: Get decouple stage at this index.
+   :resjson SpaceCenter.Stage value:
+
+
+
+
+
+.. http:get:: /space-center/editor-vessel/(id)/delta-v-ready
+
+   Whether the stock delta-v figures for the vessel have been calculated.
+
+   .. note::
+
+      The game recalculates them in the background whenever the vessel changes, and
+      whenever :http:get:`/space-center/editor/(id)/delta-v-body` or :http:get:`/space-center/editor/(id)/delta-v-altitude`
+      is set, and they are out of date until it has finished. Reading
+      :http:get:`/space-center/editor-vessel/(id)/delta-v`, or any delta-v member of a :ref:`Stage <http-SpaceCenter.Stage>`, before
+      then raises an error rather than returning a stale figure. Poll this after
+      changing anything the figures depend on.
+
+
+   :param id: The identifier of the :ref:`EditorVessel <http-SpaceCenter.EditorVessel>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /space-center/editor-vessel/(id)/delta-v
+
+   Total delta-v for the vessel in the situation the game's delta-v readout
+   assumes, in :math:`\mathrm{m/s}`. See :http:get:`/space-center/editor/(id)/delta-v-body`.
+
+
+   :param id: The identifier of the :ref:`EditorVessel <http-SpaceCenter.EditorVessel>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/editor-vessel/(id)/vacuum-delta-v
+
+   Total vacuum delta-v for the vessel, in :math:`\mathrm{m/s}`.
+
+
+   :param id: The identifier of the :ref:`EditorVessel <http-SpaceCenter.EditorVessel>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/editor-vessel/(id)/sea-level-delta-v
+
+   Total sea-level delta-v for the vessel, in :math:`\mathrm{m/s}`.
+
+
+   :param id: The identifier of the :ref:`EditorVessel <http-SpaceCenter.EditorVessel>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/editor-vessel/(id)/burn-time
+
+   Total burn time for the vessel, in seconds.
+
+
+   :param id: The identifier of the :ref:`EditorVessel <http-SpaceCenter.EditorVessel>` object.
+
+   :resjson float value:
+
+
+
+
+
+.. _http-SpaceCenter.SimulatedFlight:
+
+.. rubric:: SimulatedFlight
+
+Used to simulate the vessel in the editor in flight. The counterpart of
+:ref:`Flight <http-SpaceCenter.Flight>`. All of the information returned by this class is given in
+the reference frame passed to :http:post:`/space-center/editor-vessel/(id)/flight`, or in
+:http:get:`/space-center/simulated-flight/(id)/surface-reference-frame` if none was passed.
+Obtained by calling :http:post:`/space-center/editor-vessel/(id)/flight`.
+
+.. note::
+
+   The simulated attitude is set by :http:get:`/space-center/simulated-flight/(id)/surface-reference-frame`, and belongs to
+   this object. The vessel is read from the editor on each call, so the object follows
+   every edit.
+
+
+A ``SimulatedFlight`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /space-center/simulated-flight/(id)/surface-reference-frame
+
+   The reference frame of the surface the vessel is simulated over. Its x-axis
+   points upwards, and gravity acts along the negative x-axis. Defaults to
+   :http:get:`/space-center/editor-vessel/(id)/surface-reference-frame`.
+
+   .. note::
+
+      Only the rotation of the frame is used. A frame created relative to
+      :http:get:`/space-center/editor-vessel/(id)/reference-frame` follows the vessel as it is edited.
+
+
+   :param id: The identifier of the :ref:`SimulatedFlight <http-SpaceCenter.SimulatedFlight>` object.
+
+   :resjson SpaceCenter.ReferenceFrame value:
+
+.. http:put:: /space-center/simulated-flight/(id)/surface-reference-frame
+
+   The reference frame of the surface the vessel is simulated over. Its x-axis
+   points upwards, and gravity acts along the negative x-axis. Defaults to
+   :http:get:`/space-center/editor-vessel/(id)/surface-reference-frame`.
+
+   .. note::
+
+      Only the rotation of the frame is used. A frame created relative to
+      :http:get:`/space-center/editor-vessel/(id)/reference-frame` follows the vessel as it is edited.
+
+
+   :param id: The identifier of the :ref:`SimulatedFlight <http-SpaceCenter.SimulatedFlight>` object.
+
+   :reqjson SpaceCenter.ReferenceFrame value: The new value.
+
+
+
+
+.. http:get:: /space-center/simulated-flight/(id)/center-of-mass
+
+   The position of the center of mass of the vessel,
+   in the reference frame :ref:`ReferenceFrame <http-SpaceCenter.ReferenceFrame>`
+
+
+   :param id: The identifier of the :ref:`SimulatedFlight <http-SpaceCenter.SimulatedFlight>` object.
+
+   :resjson tuple<double, double, double> value: The position as a vector.
+
+
+
+
+.. http:get:: /space-center/simulated-flight/(id)/rotation
+
+   The rotation of the vessel, in the reference frame :ref:`ReferenceFrame <http-SpaceCenter.ReferenceFrame>`
+
+
+   :param id: The identifier of the :ref:`SimulatedFlight <http-SpaceCenter.SimulatedFlight>` object.
+
+   :resjson tuple<double, double, double, double> value: The rotation as a quaternion of the form ``(x, y, z, w)``.
+
+
+
+
+.. http:get:: /space-center/simulated-flight/(id)/direction
+
+   The direction that the vessel is pointing in,
+   in the reference frame :ref:`ReferenceFrame <http-SpaceCenter.ReferenceFrame>`.
+
+
+   :param id: The identifier of the :ref:`SimulatedFlight <http-SpaceCenter.SimulatedFlight>` object.
+
+   :resjson tuple<double, double, double> value: The direction as a unit vector.
+
+
+
+
+.. http:get:: /space-center/simulated-flight/(id)/pitch
+
+   The pitch of the vessel relative to the horizon, in degrees.
+   A value between -90° and +90°.
+
+   .. note::
+
+      An absolute Euler angle, ill-conditioned when the vessel points near vertical (a pitch
+      near -90° or +90°). For an always-defined attitude use :http:get:`/space-center/simulated-flight/(id)/rotation` or
+      :http:get:`/space-center/simulated-flight/(id)/direction`.
+
+
+   :param id: The identifier of the :ref:`SimulatedFlight <http-SpaceCenter.SimulatedFlight>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/simulated-flight/(id)/roll
+
+   The roll of the vessel relative to the horizon, in degrees.
+   A value between -180° and +180°.
+
+   .. note::
+
+      An absolute Euler angle, ill-conditioned when the vessel points near vertical (a pitch
+      near -90° or +90°). For an always-defined attitude use :http:get:`/space-center/simulated-flight/(id)/rotation`.
+
+
+   :param id: The identifier of the :ref:`SimulatedFlight <http-SpaceCenter.SimulatedFlight>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/simulated-flight/(id)/displacement
+
+   The volume of water the vessel displaces when fully submerged, in
+   :math:`\mathrm{m^{3}}`.
+
+
+   :param id: The identifier of the :ref:`SimulatedFlight <http-SpaceCenter.SimulatedFlight>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/simulated-flight/(id)/fully-submerged-center-of-buoyancy
+
+   The point the buoyant force acts through with the vessel fully submerged, in
+   reference frame :ref:`ReferenceFrame <http-SpaceCenter.ReferenceFrame>`. Returns ``null`` if no part of
+   the vessel displaces any water.
+
+   .. note::
+
+      A hull at rest carries this on the same vertical line as
+      :http:get:`/space-center/simulated-flight/(id)/center-of-mass`.
+
+
+   :param id: The identifier of the :ref:`SimulatedFlight <http-SpaceCenter.SimulatedFlight>` object.
+
+   :resjson tuple<double, double, double>? value: The position as a vector.
+
+
+
+
+.. http:post:: /space-center/simulated-flight/(id)/buoyant-force-at
+
+   The buoyant force on the vessel when fully submerged in a fluid of the given
+   density, in Newtons.
+
+
+   :param id: The identifier of the :ref:`SimulatedFlight <http-SpaceCenter.SimulatedFlight>` object.
+
+   :reqjson double density: The density of the fluid, in :math:`\mathrm{kg/m^{3}}`.
+   :reqjson double gravity: The acceleration due to gravity, in :math:`\mathrm{m/s^{2}}`.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /space-center/simulated-flight/(id)/buoyant-torque-at
+
+   The torque the buoyant force exerts about the vessel's center of mass when fully
+   submerged in a fluid of the given density, in reference frame
+   :ref:`ReferenceFrame <http-SpaceCenter.ReferenceFrame>`. Gravity acts along the negative x-axis of
+   :http:get:`/space-center/simulated-flight/(id)/surface-reference-frame`.
+
+
+   :param id: The identifier of the :ref:`SimulatedFlight <http-SpaceCenter.SimulatedFlight>` object.
+
+   :reqjson double density: The density of the fluid, in :math:`\mathrm{kg/m^{3}}`.
+   :reqjson double gravity: The acceleration due to gravity, in :math:`\mathrm{m/s^{2}}`.
+   :resjson tuple<double, double, double> value: A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in :math:`\mathrm{N \cdot m}`.

@@ -8,7 +8,11 @@ Camera
 
 .. type:: krpc_DockingCamera_Camera_t
 
-   A Docking Camera.
+   A camera from Docking Camera (KURS), on an onboard camera part or a docking port.
+
+   .. macro:: KRPC_CLASS_DOCKINGCAMERA_CAMERA
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_DockingCamera_Camera_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_DockingCamera_Camera_t instance)
 
@@ -16,7 +20,21 @@ Camera
 
    
 
-   .. function:: krpc_error_t krpc_DockingCamera_Camera_Image(krpc_connection_t connection, krpc_bytes_t * returnValue, krpc_DockingCamera_Camera_t instance)
+   .. function:: krpc_error_t krpc_DockingCamera_Camera_Image(krpc_connection_t connection, krpc_bytes_t * returnValue, krpc_DockingCamera_Camera_t instance, krpc_StdLib_ImageFormat_t format, int32_t quality)
 
-      Get an image.
-      Returns an empty byte array on failure.
+      The image from the camera, 256 by 256 pixels.
+      Throws an exception if the camera is off or not started.
+
+      :Parameters:
+
+       * **format** -- The format of the image.
+       * **quality** -- The quality of a JPEG image, from 1 to 100.
+
+      :returns: The image data.
+   
+
+      .. note::
+
+         The camera is switched on by setting the ``IsEnabled`` field of its
+         ``PartCameraModule`` or ``DockingCameraModule`` to ``true``, which also opens
+         the camera window.

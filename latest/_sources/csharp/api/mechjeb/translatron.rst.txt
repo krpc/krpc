@@ -1,0 +1,74 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.MechJeb
+
+Translatron
+===========
+
+
+.. class:: Translatron
+
+   The Translatron window, which holds a speed.
+
+   .. property:: TranslatronMode Mode { get; set; }
+
+      The mode. Throws an exception if set to :value:`TranslatronMode.KeepRelative`
+      or :value:`TranslatronMode.Direct`.
+
+      :Game Scenes: Flight
+
+   .. property:: double TranslationSpeed { get; set; }
+
+      The speed to hold, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. property:: bool KillHorizontalSpeed { get; set; }
+
+      Whether to cancel the horizontal speed.
+
+      :Game Scenes: Flight
+
+   .. function:: void PanicSwitch()
+
+      Abort: separate all but the last stage and engage the landing autopilot. A call
+      during an abort cancels it.
+
+
+      :Game Scenes: Flight
+
+
+
+.. enum:: TranslatronMode
+
+   The mode of Translatron. See :prop:`Translatron.Mode`.
+
+
+   .. enumerator:: Off
+
+      Off.
+
+
+   .. enumerator:: KeepOrbital
+
+      Hold the orbital speed.
+
+
+   .. enumerator:: KeepSurface
+
+      Hold the surface speed.
+
+
+   .. enumerator:: KeepVertical
+
+      Hold the vertical speed.
+
+
+   .. enumerator:: KeepRelative
+
+      Unused. MechJeb 2.15 has no such mode.
+
+
+   .. enumerator:: Direct
+
+      Set by MechJeb's autopilots. Cannot be set.

@@ -1,0 +1,50 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.InfernalRobotics
+
+Service
+=======
+
+
+.. type:: public class InfernalRobotics
+
+   Provides functionality to interact with Infernal Robotics Next.
+
+   .. method:: boolean getAvailable()
+
+
+      Whether Infernal Robotics is installed.
+
+   
+
+   .. method:: java.util.List<ServoGroup> servoGroups(SpaceCenter.Vessel vessel)
+
+      A list of all the servo groups in the given *vessel*.
+
+      :param SpaceCenter.Vessel vessel:
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Works for any loaded vessel, not just the active one. Groups on a non-active vessel
+         support movement and per-servo control, but not preset, key, speed-factor or
+         expanded state, which are only tracked by Infernal Robotics for the active vessel.
+
+   .. method:: ServoGroup servoGroupWithName(SpaceCenter.Vessel vessel, String name)
+
+      Returns the servo group in the given *vessel* with the given *name*,
+      or ``null`` if none exists. If multiple servo groups have the same name, only one of them is returned.
+
+      :param SpaceCenter.Vessel vessel: Vessel to check.
+      :param String name: Name of servo group to find.
+      :Game Scenes: Flight
+
+   .. method:: Servo servoWithName(SpaceCenter.Vessel vessel, String name)
+
+      Returns the servo in the given *vessel* with the given *name* or
+      ``null`` if none exists. If multiple servos have the same name, only one of them is returned.
+
+      :param SpaceCenter.Vessel vessel: Vessel to check.
+      :param String name: Name of the servo to find.
+      :Game Scenes: Flight

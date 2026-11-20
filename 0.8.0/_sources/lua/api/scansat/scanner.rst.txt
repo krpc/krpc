@@ -1,0 +1,105 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: ScanSat
+
+Scanner
+=======
+
+
+.. class:: Scanner
+
+   A SCANsat scanner on a part. Obtained by calling :meth:`ScanSat.scanner` or
+   :meth:`ScanSat.scanners`.
+
+   .. attribute:: part: SpaceCenter.Part
+
+      The part containing this scanner.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: scan_types: ScanSat.ScanType
+
+      The scan types of the scanner.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: active: boolean
+
+      Returns whether the scanner is switched on, and switches it on or off, as the buttons
+      of the part do.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         A resource scanner only switches on when :attr:`ScanSat.instant_resource_scan`
+         is off, or :attr:`ScanSat.stock_resource_scan` is off.
+
+   .. attribute:: field_of_view: number
+
+      The field of view of the scanner at its best altitude, in degrees.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: min_altitude: number
+
+      The lowest altitude the scanner scans at, in meters.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: best_altitude: number
+
+      The lowest altitude for the full field of view, in meters.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: max_altitude: number
+
+      The highest altitude the scanner scans at, in meters.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: requires_light: boolean
+
+      Whether the scanner only scans in daylight, when :attr:`ScanSat.daylight_check`
+      is on.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: state: ScanSat.ScannerState
+
+      The state of the scanner.
+
+      :Attribute: Read-only, cannot be set
+
+
+
+
+.. class:: ScannerState
+
+   The state of a scanner. See :attr:`ScanSat.Scanner.state`.
+
+
+   .. data:: off
+
+      Switched off.
+
+
+   .. data:: out_of_range
+
+      Switched on, and outside its minimum and maximum altitudes.
+
+
+   .. data:: in_darkness
+
+      Switched on, and paused as it needs light and the ground below it is in darkness.
+
+
+   .. data:: in_range
+
+      Scanning between its minimum and best altitudes, with a reduced field of view.
+
+
+   .. data:: in_best_range
+
+      Scanning between its best and maximum altitudes, with its full field of view.

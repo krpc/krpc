@@ -1,0 +1,271 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Communications
+==============
+
+
+.. _http-SpaceCenter.Comms:
+
+.. rubric:: Comms
+
+Used to interact with CommNet for a given vessel.
+Obtained by calling :http:get:`/space-center/vessel/(id)/comms`.
+
+A ``Comms`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /space-center/comms/(id)/can-communicate
+
+   Whether the vessel can communicate with KSC.
+
+
+   :param id: The identifier of the :ref:`Comms <http-SpaceCenter.Comms>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /space-center/comms/(id)/can-transmit-science
+
+   Whether the vessel can transmit science data to KSC.
+
+
+   :param id: The identifier of the :ref:`Comms <http-SpaceCenter.Comms>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /space-center/comms/(id)/signal-strength
+
+   Signal strength to KSC.
+
+
+   :param id: The identifier of the :ref:`Comms <http-SpaceCenter.Comms>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/comms/(id)/signal-delay
+
+   Signal delay to KSC in seconds.
+
+
+   :param id: The identifier of the :ref:`Comms <http-SpaceCenter.Comms>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/comms/(id)/power
+
+   The combined power of all active antennae on the vessel.
+
+   .. note::
+
+      Not used by RealAntennas, which replaces the stock range model.
+
+
+   :param id: The identifier of the :ref:`Comms <http-SpaceCenter.Comms>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/comms/(id)/control-path
+
+   The communication path used to control the vessel.
+
+
+   :param id: The identifier of the :ref:`Comms <http-SpaceCenter.Comms>` object.
+
+   :resjson list<SpaceCenter.CommLink> value:
+
+
+
+
+
+.. _http-SpaceCenter.CommLink:
+
+.. rubric:: CommLink
+
+Represents a communication link between two nodes in the network.
+
+A ``CommLink`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /space-center/comm-link/(id)/type
+
+   The type of link.
+
+
+   :param id: The identifier of the :ref:`CommLink <http-SpaceCenter.CommLink>` object.
+
+   :resjson SpaceCenter.CommLinkType value:
+
+
+
+
+.. http:get:: /space-center/comm-link/(id)/signal-strength
+
+   Signal strength of the link.
+
+
+   :param id: The identifier of the :ref:`CommLink <http-SpaceCenter.CommLink>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/comm-link/(id)/start
+
+   Start point of the link.
+
+
+   :param id: The identifier of the :ref:`CommLink <http-SpaceCenter.CommLink>` object.
+
+   :resjson SpaceCenter.CommNode value:
+
+
+
+
+.. http:get:: /space-center/comm-link/(id)/end
+
+   End point of the link.
+
+
+   :param id: The identifier of the :ref:`CommLink <http-SpaceCenter.CommLink>` object.
+
+   :resjson SpaceCenter.CommNode value:
+
+
+
+
+.. http:get:: /space-center/comm-link/(id)/forward-data-rate
+
+   The data rate from :http:get:`/space-center/comm-link/(id)/start` to :http:get:`/space-center/comm-link/(id)/end`, in bits per second.
+
+   .. note::
+
+      Requires RealAntennas.
+
+
+   :param id: The identifier of the :ref:`CommLink <http-SpaceCenter.CommLink>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/comm-link/(id)/reverse-data-rate
+
+   The data rate from :http:get:`/space-center/comm-link/(id)/end` to :http:get:`/space-center/comm-link/(id)/start`, in bits per second.
+
+   .. note::
+
+      Requires RealAntennas.
+
+
+   :param id: The identifier of the :ref:`CommLink <http-SpaceCenter.CommLink>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/comm-link/(id)/start-antenna
+
+   The antenna at :http:get:`/space-center/comm-link/(id)/start` that transmits over the link, or ``null`` if
+   :http:get:`/space-center/comm-link/(id)/start` is a ground station or an unloaded vessel.
+
+   .. note::
+
+      Requires RealAntennas.
+
+
+   :param id: The identifier of the :ref:`CommLink <http-SpaceCenter.CommLink>` object.
+
+   :resjson SpaceCenter.Antenna? value:
+
+
+
+
+.. http:get:: /space-center/comm-link/(id)/end-antenna
+
+   The antenna at :http:get:`/space-center/comm-link/(id)/end` that receives over the link, or ``null`` if
+   :http:get:`/space-center/comm-link/(id)/end` is a ground station or an unloaded vessel.
+
+   .. note::
+
+      Requires RealAntennas.
+
+
+   :param id: The identifier of the :ref:`CommLink <http-SpaceCenter.CommLink>` object.
+
+   :resjson SpaceCenter.Antenna? value:
+
+
+
+
+
+.. _http-SpaceCenter.CommLinkType:
+
+.. rubric:: CommLinkType
+
+The type of a communication link.
+See :http:get:`/space-center/comm-link/(id)/type`.
+
+Passed and returned as the name of one of its values:
+
+
+``"home"``
+   Link is to a base station on Kerbin.
+
+
+``"control"``
+   Link is to a control source, for example a manned spacecraft.
+
+
+``"relay"``
+   Link is to a relay satellite.
+
+
+
+.. _http-SpaceCenter.CommNode:
+
+.. rubric:: CommNode
+
+Represents a communication node in the network. For example, a vessel or the KSC.
+
+Passed and returned as an object with these fields:
+
+
+``name`` (string)
+   Name of the communication node.
+
+
+``is_home`` (bool)
+   Whether the communication node is on Kerbin.
+
+
+``is_control_point`` (bool)
+   Whether the communication node is a control point, for example a manned vessel.
+
+
+``is_vessel`` (bool)
+   Whether the communication node is a vessel.
+
+
+``vessel`` (SpaceCenter.Vessel?)
+   The vessel for this communication node, or null if the node is not a vessel.

@@ -44,7 +44,22 @@ AutoPilot
 
       .. note::
 
-         Equivalent to :meth:`Control.getSASMode()`
+         Equivalent to :meth:`Control.getSASMode()`.
+         Throws an exception if set to a mode not in :meth:`AutoPilot.getAvailableSASModes()`.
+
+   .. method:: java.util.Set<SASMode> getAvailableSASModes()
+
+
+      The SAS modes that :meth:`AutoPilot.getSASMode()` can be set to.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Equivalent to :meth:`Control.getAvailableSASModes()`. The modes depend on the SAS
+         level of the vessel's pilot or probe core, the navball speed mode, and whether
+         there is a target and a maneuver node.
 
    .. method:: boolean getEngaged()
 
@@ -61,7 +76,7 @@ AutoPilot
 
       When the auto-pilot's control loop runs within a server update, relative to the
       calls the update executes. Defaults to
-      :meth:`AutoPilotUpdateMode.AFTER_CALLS`.
+      :field:`AutoPilotUpdateMode.AFTER_CALLS`.
 
       :Game Scenes: Flight
 
@@ -84,7 +99,7 @@ AutoPilot
 
       .. note::
 
-         For :meth:`AutoPilotUpdateMode.MANUAL`, where the loop runs only when this is
+         For :field:`AutoPilotUpdateMode.MANUAL`, where the loop runs only when this is
          called. In the other modes this runs it early; either way it runs once per tick. On a
          tick it is not called for, the vessel keeps the control output of the last tick it did
          run on, and after a tenth of a second of that the auto-pilot stops contributing any
@@ -128,7 +143,9 @@ AutoPilot
          The target and the :meth:`AutoPilot.getUpReference()` are held as vectors in this frame, so
          changing it re-interprets them in the new frame rather than converting them: the
          orientation the vessel is held in, and what a given :meth:`AutoPilot.getTargetRoll()` means,
-         both change. Set the frame first, then the target.
+         both change. Set the frame first, then the target. With a
+         :meth:`AutoPilot.getTargetSmoothingTime()`, the vessel turns smoothly to the new target from the
+         orientation it was holding.
 
    .. method:: float getTargetPitch()
 
@@ -348,9 +365,9 @@ AutoPilot
 
    .. method:: void setStoppingVelocityThreshold(float value)
 
-      The threshold angular velocity, in rad/s, below which the vessel's angular
-      velocity magnitude must fall for :meth:`AutoPilot.wait_(double)` to return.
-      Defaults to 0.05 rad/s.
+      The threshold angular velocity, in :math:`\mathrm{rad/s}`, below which the vessel's angular
+      velocity relative to the target must fall for :meth:`AutoPilot.wait_(double)` to return.
+      Defaults to 0.05 :math:`\mathrm{rad/s}`.
 
       :Game Scenes: Flight
 
@@ -373,7 +390,7 @@ AutoPilot
    .. method:: org.javatuples.Triplet<Double,Double,Double> getAttitudeError()
 
 
-      The per-axis attitude error (pitch, yaw, roll), in degrees, between the vessel's current
+      The per-axis attitude error ``(pitch, yaw, roll)``, in degrees, between the vessel's current
       attitude and the commanded target. All three components come from one singularity-free
       residual decomposition, so they stay well-defined near the vertical (unlike a subtraction
       of pitch/heading/roll angles). The scalar :meth:`AutoPilot.getPitchError()`,
@@ -442,7 +459,7 @@ AutoPilot
    .. method:: org.javatuples.Triplet<Double,Double,Double> getCurrentAttitudeError()
 
 
-      The per-axis attitude error (pitch, yaw, roll), in degrees, between the vessel's current
+      The per-axis attitude error ``(pitch, yaw, roll)``, in degrees, between the vessel's current
       attitude and the target the auto-pilot is currently tracking (the slewed target, see
       :meth:`AutoPilot.getCurrentTargetRotation()`). Like :meth:`AutoPilot.getAttitudeError()` but relative to the
       current target, so it stays small while a smoothed change (see
@@ -517,12 +534,27 @@ AutoPilot
 
    .. method:: void setMaxAngularVelocity(org.javatuples.Triplet<Double,Double,Double> value)
 
-      The maximum angular velocity of the vessel, in rad/s, for each of the pitch, roll
-      and yaw axes. Limits the target angular velocity computed by the bang-bang profile so
-      that vessels with very high torque availability do not spin faster than desired.
-      Defaults to 1 rad/s for each axis.
+      The maximum angular velocity of the vessel, in :math:`\mathrm{rad/s}`, for each of the
+      pitch, roll and yaw axes. Limits the target angular velocity computed by the bang-bang
+      profile so that vessels with very high torque availability do not spin faster than
+      desired. Defaults to 1 :math:`\mathrm{rad/s}` for each axis.
 
       :Game Scenes: Flight
+
+   .. method:: boolean getLimitAngularVelocity()
+
+   .. method:: void setLimitAngularVelocity(boolean value)
+
+      Whether to also limit the angular velocity to what the control surfaces hold against
+      the aerodynamic forces. Defaults to ``true``.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         When disabled, only :meth:`AutoPilot.getMaxAngularVelocity()` limits the angular velocity. Not
+         applied when Ferram Aerospace Research is installed.
 
    .. method:: double getPitchYawAttenuationAngle()
 
@@ -532,7 +564,8 @@ AutoPilot
       to the target direction. This sets the high angle of the pitch/yaw pointing deadband: at
       or above this error the target velocity is at full, and below it the target velocity
       ramps linearly to zero at half this angle, so the vessel coasts to a stop. Pitch and yaw
-      are controlled jointly, so a single angle applies to both. Defaults to 1°.
+      are controlled jointly, so a single angle applies to both. Defaults to 1°. The angle in
+      use shrinks in proportion to the share of the torque that comes from control surfaces.
 
       :Game Scenes: Flight
 
@@ -543,7 +576,9 @@ AutoPilot
       The angle, in degrees, at which the autopilot considers the vessel to be pointing close
       to the target roll. This sets the high angle of the roll-axis pointing deadband: at or
       above this error the target velocity is at full, and below it the target velocity ramps
-      linearly to zero at half this angle, so the roll coasts to a stop. Defaults to 1°.
+      linearly to zero at half this angle, so the roll coasts to a stop. Defaults to 1°. The
+      angle in use shrinks in proportion to the share of the torque that comes from control
+      surfaces.
 
       :Game Scenes: Flight
 
@@ -651,12 +686,12 @@ AutoPilot
 
       Controls the rate-feedback filtering (the wobble-suppression filter on the measured
       angular velocity) for the pitch and yaw axes of a structurally flexible vessel. When
-      :meth:`RateFilterMode.AUTOMATIC` (the default) the auto-pilot detects the
+      :field:`RateFilterMode.AUTOMATIC` (the default) the auto-pilot detects the
       oscillation at runtime, estimates its frequency and routes it to the appropriate tool
       (a notch filter for a low-frequency mode near the control band, a low-pass for a
-      high-frequency mode). :meth:`RateFilterMode.OFF` disables rate filtering only,
-      leaving the other oscillation mitigations unaffected. :meth:`RateFilterMode.NOTCH`
-      and :meth:`RateFilterMode.LOW_PASS` force the respective tool unconditionally at
+      high-frequency mode). :field:`RateFilterMode.OFF` disables rate filtering only,
+      leaving the other oscillation mitigations unaffected. :field:`RateFilterMode.NOTCH`
+      and :field:`RateFilterMode.LOW_PASS` force the respective tool unconditionally at
       :meth:`AutoPilot.getPitchYawOscillationFrequency()`, for a vessel known in advance to be
       flexible.
 
@@ -669,7 +704,7 @@ AutoPilot
       Controls the rate-feedback filtering for the roll axis. Behaves as
       :meth:`AutoPilot.getPitchYawRateFilterMode()` but for roll, using
       :meth:`AutoPilot.getRollOscillationFrequency()`. Defaults to
-      :meth:`RateFilterMode.AUTOMATIC`.
+      :field:`RateFilterMode.AUTOMATIC`.
 
       :Game Scenes: Flight
 
@@ -678,7 +713,7 @@ AutoPilot
    .. method:: void setPitchYawOscillationFrequency(double value)
 
       The structural mode frequency, in Hz, for the pitch/yaw axis group. Used directly as the
-      filter frequency in :meth:`RateFilterMode.NOTCH` / :meth:`RateFilterMode.LOW_PASS`
+      filter frequency in :field:`RateFilterMode.NOTCH` / :field:`RateFilterMode.LOW_PASS`
       mode, and as the seed for the automatic frequency estimator before it acquires. Defaults
       to 1.5 Hz.
 
@@ -710,9 +745,9 @@ AutoPilot
 
       Controls the bandwidth-floor mitigation: the reduction of the inner control loop
       bandwidth on a structurally flexible axis, the primary oscillation stabilizer. When
-      :meth:`MitigationMode.AUTOMATIC` (the default) it engages on a latched axis
-      while holding (and during a detected limit cycle). :meth:`MitigationMode.OFF`
-      never reduces the bandwidth; :meth:`MitigationMode.FORCED` keeps it fully
+      :field:`MitigationMode.AUTOMATIC` (the default) it engages on a latched axis
+      while holding (and during a detected limit cycle). :field:`MitigationMode.OFF`
+      never reduces the bandwidth; :field:`MitigationMode.FORCED` keeps it fully
       reduced at all times.
 
       :Game Scenes: Flight
@@ -721,10 +756,11 @@ AutoPilot
 
    .. method:: void setOscillationBandwidthFloor(double value)
 
-      The inner control loop bandwidth, in rad/s, that an axis is reduced towards while the
-      bandwidth-floor mitigation is engaged on it. Lowering it suppresses oscillation more
-      strongly; raising it keeps more control authority at the cost of allowing more wobble.
-      Defaults to 1 rad/s. This is an advanced tuning parameter.
+      The inner control loop bandwidth, in :math:`\mathrm{rad/s}`, that an axis is reduced
+      towards while the bandwidth-floor mitigation is engaged on it. Lowering it suppresses
+      oscillation more strongly; raising it keeps more control authority at the cost of
+      allowing more wobble. Defaults to 1 :math:`\mathrm{rad/s}`. This is an advanced tuning
+      parameter.
 
       :Game Scenes: Flight
 
@@ -734,9 +770,9 @@ AutoPilot
 
       Controls the feedforward-cut mitigation: removal of the acceleration feedforward on a
       structurally flexible axis while holding, so it cannot re-excite a residual mode at
-      the reduced bandwidth. When :meth:`MitigationMode.AUTOMATIC` (the default) it
-      follows the hold gate on a latched axis. :meth:`MitigationMode.OFF` never cuts
-      the feedforward; :meth:`MitigationMode.FORCED` always cuts it fully.
+      the reduced bandwidth. When :field:`MitigationMode.AUTOMATIC` (the default) it
+      follows the hold gate on a latched axis. :field:`MitigationMode.OFF` never cuts
+      the feedforward; :field:`MitigationMode.FORCED` always cuts it fully.
 
       :Game Scenes: Flight
 
@@ -746,9 +782,9 @@ AutoPilot
 
       Controls the output-smoothing mitigation: a low-pass on the delivered actuator
       command that caps residual control chatter. When
-      :meth:`MitigationMode.AUTOMATIC` (the default) it engages on a latched axis
+      :field:`MitigationMode.AUTOMATIC` (the default) it engages on a latched axis
       (and, lightly, while the oscillation detector is firing on an unlatched one).
-      :meth:`MitigationMode.OFF` never smooths; :meth:`MitigationMode.FORCED`
+      :field:`MitigationMode.OFF` never smooths; :field:`MitigationMode.FORCED`
       smooths fully at all times.
 
       :Game Scenes: Flight

@@ -1,0 +1,517 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+RoverAutopilot
+==============
+
+
+.. _http-MechJeb.RoverAutopilot:
+
+.. rubric:: RoverAutopilot
+
+The Rover Autopilot window, which drives a rover at a heading and speed, or along its
+waypoints.
+
+A ``RoverAutopilot`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /mech-jeb/rover-autopilot/(id)/control-heading
+
+   Whether the autopilot holds :http:get:`/mech-jeb/rover-autopilot/(id)/heading`.
+
+
+   :param id: The identifier of the :ref:`RoverAutopilot <http-MechJeb.RoverAutopilot>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/rover-autopilot/(id)/control-heading
+
+   Whether the autopilot holds :http:get:`/mech-jeb/rover-autopilot/(id)/heading`.
+
+
+   :param id: The identifier of the :ref:`RoverAutopilot <http-MechJeb.RoverAutopilot>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/rover-autopilot/(id)/heading
+
+   The heading to hold, in degrees.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/rover-autopilot/(id)/control-heading`.
+
+
+   :param id: The identifier of the :ref:`RoverAutopilot <http-MechJeb.RoverAutopilot>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/rover-autopilot/(id)/heading
+
+   The heading to hold, in degrees.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/rover-autopilot/(id)/control-heading`.
+
+
+   :param id: The identifier of the :ref:`RoverAutopilot <http-MechJeb.RoverAutopilot>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/rover-autopilot/(id)/heading-error
+
+   The difference between the vessel's heading and the heading to hold, in degrees.
+
+
+   :param id: The identifier of the :ref:`RoverAutopilot <http-MechJeb.RoverAutopilot>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /mech-jeb/rover-autopilot/(id)/control-speed
+
+   Whether the autopilot holds :http:get:`/mech-jeb/rover-autopilot/(id)/speed`.
+
+
+   :param id: The identifier of the :ref:`RoverAutopilot <http-MechJeb.RoverAutopilot>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/rover-autopilot/(id)/control-speed
+
+   Whether the autopilot holds :http:get:`/mech-jeb/rover-autopilot/(id)/speed`.
+
+
+   :param id: The identifier of the :ref:`RoverAutopilot <http-MechJeb.RoverAutopilot>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/rover-autopilot/(id)/speed
+
+   The speed to hold, in :math:`\mathrm{m/s}`.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/rover-autopilot/(id)/control-speed`.
+
+
+   :param id: The identifier of the :ref:`RoverAutopilot <http-MechJeb.RoverAutopilot>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/rover-autopilot/(id)/speed
+
+   The speed to hold, in :math:`\mathrm{m/s}`.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/rover-autopilot/(id)/control-speed`.
+
+
+   :param id: The identifier of the :ref:`RoverAutopilot <http-MechJeb.RoverAutopilot>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/rover-autopilot/(id)/speed-error
+
+   The difference between the vessel's speed and the speed to hold, in :math:`\mathrm{m/s}`.
+
+
+   :param id: The identifier of the :ref:`RoverAutopilot <http-MechJeb.RoverAutopilot>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /mech-jeb/rover-autopilot/(id)/target-speed
+
+   The speed the autopilot drives at now, in :math:`\mathrm{m/s}`.
+
+
+   :param id: The identifier of the :ref:`RoverAutopilot <http-MechJeb.RoverAutopilot>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /mech-jeb/rover-autopilot/(id)/stability-control
+
+   Whether the autopilot keeps the rover upright.
+
+
+   :param id: The identifier of the :ref:`RoverAutopilot <http-MechJeb.RoverAutopilot>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/rover-autopilot/(id)/stability-control
+
+   Whether the autopilot keeps the rover upright.
+
+
+   :param id: The identifier of the :ref:`RoverAutopilot <http-MechJeb.RoverAutopilot>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/rover-autopilot/(id)/brake-on-eject
+
+   Whether to brake when the crew leaves the rover.
+
+
+   :param id: The identifier of the :ref:`RoverAutopilot <http-MechJeb.RoverAutopilot>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/rover-autopilot/(id)/brake-on-eject
+
+   Whether to brake when the crew leaves the rover.
+
+
+   :param id: The identifier of the :ref:`RoverAutopilot <http-MechJeb.RoverAutopilot>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/rover-autopilot/(id)/brake-on-energy-depletion
+
+   Whether to brake when the rover runs out of electric charge.
+
+
+   :param id: The identifier of the :ref:`RoverAutopilot <http-MechJeb.RoverAutopilot>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/rover-autopilot/(id)/brake-on-energy-depletion
+
+   Whether to brake when the rover runs out of electric charge.
+
+
+   :param id: The identifier of the :ref:`RoverAutopilot <http-MechJeb.RoverAutopilot>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/rover-autopilot/(id)/warp-to-daylight
+
+   Whether to warp time to daylight after braking for a lack of electric charge.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/rover-autopilot/(id)/brake-on-energy-depletion`.
+
+
+   :param id: The identifier of the :ref:`RoverAutopilot <http-MechJeb.RoverAutopilot>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/rover-autopilot/(id)/warp-to-daylight
+
+   Whether to warp time to daylight after braking for a lack of electric charge.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/rover-autopilot/(id)/brake-on-energy-depletion`.
+
+
+   :param id: The identifier of the :ref:`RoverAutopilot <http-MechJeb.RoverAutopilot>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/rover-autopilot/(id)/waypoints
+
+   The waypoints, in the order the rover drives to them.
+
+
+   :param id: The identifier of the :ref:`RoverAutopilot <http-MechJeb.RoverAutopilot>` object.
+
+   :resjson list<MechJeb.RoverWaypoint> value:
+
+
+
+
+.. http:get:: /mech-jeb/rover-autopilot/(id)/waypoint-index
+
+   The index of the waypoint the autopilot drives to, or -1 if there is none.
+
+
+   :param id: The identifier of the :ref:`RoverAutopilot <http-MechJeb.RoverAutopilot>` object.
+
+   :resjson int32 value:
+
+
+
+
+.. http:get:: /mech-jeb/rover-autopilot/(id)/loop-waypoints
+
+   Whether to return to the first waypoint after the last one.
+
+
+   :param id: The identifier of the :ref:`RoverAutopilot <http-MechJeb.RoverAutopilot>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/rover-autopilot/(id)/loop-waypoints
+
+   Whether to return to the first waypoint after the last one.
+
+
+   :param id: The identifier of the :ref:`RoverAutopilot <http-MechJeb.RoverAutopilot>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:post:: /mech-jeb/rover-autopilot/(id)/add-waypoint
+
+   Add a waypoint at a position on the surface of the body the vessel is at.
+
+
+   :param id: The identifier of the :ref:`RoverAutopilot <http-MechJeb.RoverAutopilot>` object.
+
+   :reqjson double latitude: The latitude, in degrees.
+   :reqjson double longitude: The longitude, in degrees.
+   :resjson MechJeb.RoverWaypoint value: The waypoint.
+
+
+
+
+
+.. http:post:: /mech-jeb/rover-autopilot/(id)/clear-waypoints
+
+   Remove all the waypoints.
+
+
+   :param id: The identifier of the :ref:`RoverAutopilot <http-MechJeb.RoverAutopilot>` object.
+
+
+
+
+
+
+.. http:post:: /mech-jeb/rover-autopilot/(id)/add-target
+
+   Add a waypoint at the target. Throws an exception if the target is not a vessel or a
+   position on the surface.
+
+
+   :param id: The identifier of the :ref:`RoverAutopilot <http-MechJeb.RoverAutopilot>` object.
+
+   :resjson MechJeb.RoverWaypoint value: The waypoint.
+
+
+
+
+
+.. http:post:: /mech-jeb/rover-autopilot/(id)/drive-to-target
+
+   Replace the waypoints with the target, and drive to it. Throws an exception if the
+   target is not a vessel or a position on the surface.
+
+
+   :param id: The identifier of the :ref:`RoverAutopilot <http-MechJeb.RoverAutopilot>` object.
+
+
+
+
+
+
+.. http:post:: /mech-jeb/rover-autopilot/(id)/drive
+
+   Drive along the waypoints. Throws an exception if there are none.
+
+
+   :param id: The identifier of the :ref:`RoverAutopilot <http-MechJeb.RoverAutopilot>` object.
+
+
+
+
+
+
+.. http:post:: /mech-jeb/rover-autopilot/(id)/stop
+
+   Stop driving along the waypoints.
+
+
+   :param id: The identifier of the :ref:`RoverAutopilot <http-MechJeb.RoverAutopilot>` object.
+
+
+
+
+
+
+
+RoverWaypoint
+-------------
+
+
+.. _http-MechJeb.RoverWaypoint:
+
+.. rubric:: RoverWaypoint
+
+A waypoint of the :ref:`RoverAutopilot <http-MechJeb.RoverAutopilot>`, as the Waypoints window shows it.
+
+.. note::
+
+   The object is destroyed once the waypoints are cleared or replaced, as by
+   :http:post:`/mech-jeb/rover-autopilot/(id)/clear-waypoints` and :http:post:`/mech-jeb/rover-autopilot/(id)/drive-to-target`.
+
+
+A ``RoverWaypoint`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /mech-jeb/rover-waypoint/(id)/latitude
+
+   The latitude of the waypoint, in degrees. Throws an exception when set if the waypoint
+   is at a vessel.
+
+
+   :param id: The identifier of the :ref:`RoverWaypoint <http-MechJeb.RoverWaypoint>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/rover-waypoint/(id)/latitude
+
+   The latitude of the waypoint, in degrees. Throws an exception when set if the waypoint
+   is at a vessel.
+
+
+   :param id: The identifier of the :ref:`RoverWaypoint <http-MechJeb.RoverWaypoint>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/rover-waypoint/(id)/longitude
+
+   The longitude of the waypoint, in degrees. Throws an exception when set if the waypoint
+   is at a vessel.
+
+
+   :param id: The identifier of the :ref:`RoverWaypoint <http-MechJeb.RoverWaypoint>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/rover-waypoint/(id)/longitude
+
+   The longitude of the waypoint, in degrees. Throws an exception when set if the waypoint
+   is at a vessel.
+
+
+   :param id: The identifier of the :ref:`RoverWaypoint <http-MechJeb.RoverWaypoint>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/rover-waypoint/(id)/radius
+
+   The distance from the waypoint at which the rover has reached it, in meters.
+
+
+   :param id: The identifier of the :ref:`RoverWaypoint <http-MechJeb.RoverWaypoint>` object.
+
+   :resjson float value:
+
+.. http:put:: /mech-jeb/rover-waypoint/(id)/radius
+
+   The distance from the waypoint at which the rover has reached it, in meters.
+
+
+   :param id: The identifier of the :ref:`RoverWaypoint <http-MechJeb.RoverWaypoint>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/rover-waypoint/(id)/name
+
+   The name of the waypoint.
+
+
+   :param id: The identifier of the :ref:`RoverWaypoint <http-MechJeb.RoverWaypoint>` object.
+
+   :resjson string value:
+
+.. http:put:: /mech-jeb/rover-waypoint/(id)/name
+
+   The name of the waypoint.
+
+
+   :param id: The identifier of the :ref:`RoverWaypoint <http-MechJeb.RoverWaypoint>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/rover-waypoint/(id)/min-speed
+
+   The lowest speed on the way to the waypoint, in :math:`\mathrm{m/s}`, or 0 for no limit.
+
+
+   :param id: The identifier of the :ref:`RoverWaypoint <http-MechJeb.RoverWaypoint>` object.
+
+   :resjson float value:
+
+.. http:put:: /mech-jeb/rover-waypoint/(id)/min-speed
+
+   The lowest speed on the way to the waypoint, in :math:`\mathrm{m/s}`, or 0 for no limit.
+
+
+   :param id: The identifier of the :ref:`RoverWaypoint <http-MechJeb.RoverWaypoint>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/rover-waypoint/(id)/max-speed
+
+   The highest speed on the way to the waypoint, in :math:`\mathrm{m/s}`, or 0 for no limit.
+
+
+   :param id: The identifier of the :ref:`RoverWaypoint <http-MechJeb.RoverWaypoint>` object.
+
+   :resjson float value:
+
+.. http:put:: /mech-jeb/rover-waypoint/(id)/max-speed
+
+   The highest speed on the way to the waypoint, in :math:`\mathrm{m/s}`, or 0 for no limit.
+
+
+   :param id: The identifier of the :ref:`RoverWaypoint <http-MechJeb.RoverWaypoint>` object.
+
+   :reqjson float value: The new value.

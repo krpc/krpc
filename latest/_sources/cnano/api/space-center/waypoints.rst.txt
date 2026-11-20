@@ -12,6 +12,10 @@ Waypoints
    With this structure, you can obtain coordinate data for the locations of these waypoints.
    Obtained by calling :func:`krpc_SpaceCenter_WaypointManager`.
 
+   .. macro:: KRPC_CLASS_SPACECENTER_WAYPOINTMANAGER
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_SpaceCenter_WaypointManager_Waypoints(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_SpaceCenter_WaypointManager_t instance)
 
       A list of all existing waypoints.
@@ -65,6 +69,10 @@ Waypoints
 .. type:: krpc_SpaceCenter_Waypoint_t
 
    Represents a waypoint. Can be created using :func:`krpc_SpaceCenter_WaypointManager_AddWaypoint`.
+
+   .. macro:: KRPC_CLASS_SPACECENTER_WAYPOINT
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Waypoint_Body(krpc_connection_t connection, krpc_SpaceCenter_CelestialBody_t * returnValue, krpc_SpaceCenter_Waypoint_t instance)
    .. function:: krpc_error_t krpc_SpaceCenter_Waypoint_set_Body(krpc_connection_t connection, krpc_SpaceCenter_Waypoint_t instance, krpc_SpaceCenter_CelestialBody_t value)

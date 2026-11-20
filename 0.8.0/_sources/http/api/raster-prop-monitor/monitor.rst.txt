@@ -1,0 +1,337 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Monitor
+=======
+
+
+.. _http-RasterPropMonitor.Monitor:
+
+.. rubric:: Monitor
+
+A Raster Prop Monitor screen in an IVA, such as an MFD.
+Obtained by calling :http:post:`/raster-prop-monitor/monitors`.
+
+.. note::
+
+   Raster Prop Monitor draws a monitor only while the player is in the IVA of its pod, or
+   the IVA overlay is on. Reading another monitor's text or image updates it, in any camera
+   mode.
+
+
+A ``Monitor`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /raster-prop-monitor/monitor/(id)/part
+
+   The part the monitor is in.
+
+
+   :param id: The identifier of the :ref:`Monitor <http-RasterPropMonitor.Monitor>` object.
+
+   :resjson SpaceCenter.Part value:
+
+
+
+
+.. http:get:: /raster-prop-monitor/monitor/(id)/prop-name
+
+   The name of the prop, e.g. ``RasterPropMonitorBasicMFD``.
+
+
+   :param id: The identifier of the :ref:`Monitor <http-RasterPropMonitor.Monitor>` object.
+
+   :resjson string value:
+
+
+
+
+.. http:get:: /raster-prop-monitor/monitor/(id)/pages
+
+   The names of the pages, in the order of the prop's configuration.
+
+
+   :param id: The identifier of the :ref:`Monitor <http-RasterPropMonitor.Monitor>` object.
+
+   :resjson list<string> value:
+
+
+
+
+.. http:get:: /raster-prop-monitor/monitor/(id)/active-page
+
+   Returns the name of the page the monitor shows, and sets it as a press of the page's
+   button does. Raster Prop Monitor can refuse the switch, or redirect it to another
+   page, as the prop's configuration sets. Throws an exception if the monitor has no page with
+   the name.
+
+
+   :param id: The identifier of the :ref:`Monitor <http-RasterPropMonitor.Monitor>` object.
+
+   :resjson string value:
+
+.. http:put:: /raster-prop-monitor/monitor/(id)/active-page
+
+   Returns the name of the page the monitor shows, and sets it as a press of the page's
+   button does. Raster Prop Monitor can refuse the switch, or redirect it to another
+   page, as the prop's configuration sets. Throws an exception if the monitor has no page with
+   the name.
+
+
+   :param id: The identifier of the :ref:`Monitor <http-RasterPropMonitor.Monitor>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:get:: /raster-prop-monitor/monitor/(id)/buttons
+
+   The names of the monitor's buttons, e.g. ``button_UP``. A button's index in
+   this list is its identifier. A name is empty where the configuration leaves a gap.
+
+   .. note::
+
+      These are the buttons that the active page handles. The buttons that select pages
+      are not in the list.
+
+
+   :param id: The identifier of the :ref:`Monitor <http-RasterPropMonitor.Monitor>` object.
+
+   :resjson list<string> value:
+
+
+
+
+.. http:post:: /raster-prop-monitor/monitor/(id)/press-button
+
+   Press and release a button, as the player does. The release is on the next frame.
+   Throws an exception if the monitor has no button with the identifier.
+
+
+   :param id: The identifier of the :ref:`Monitor <http-RasterPropMonitor.Monitor>` object.
+
+   :reqjson int32 id: The button's index in :http:get:`/raster-prop-monitor/monitor/(id)/buttons`.
+
+
+
+
+
+.. http:get:: /raster-prop-monitor/monitor/(id)/page-buttons
+
+   The names of the prop's buttons that select the monitor's pages, e.g.
+   ``buttonR1``. A captured button is one of them.
+
+
+   :param id: The identifier of the :ref:`Monitor <http-RasterPropMonitor.Monitor>` object.
+
+   :resjson list<string> value:
+
+
+
+
+.. http:post:: /raster-prop-monitor/monitor/(id)/press-page-button
+
+   Press and release a page button, as the player does. The release is on the next
+   frame. A captured button shows the page the script chose.
+   Throws an exception if the button does not select the monitor's pages.
+
+
+   :param id: The identifier of the :ref:`Monitor <http-RasterPropMonitor.Monitor>` object.
+
+   :reqjson string name: The name of the button, from :http:get:`/raster-prop-monitor/monitor/(id)/page-buttons`.
+
+
+
+
+
+.. http:post:: /raster-prop-monitor/monitor/(id)/capture-button
+
+   Take a page button from Raster Prop Monitor. A press of the button then shows the
+   given page, such as the ``krpc`` page of the monitor's own display, in place of
+   the pages Raster Prop Monitor assigns it, and fires ``Monitor.CapturedButtonPressed``.
+   The capture lasts while KSP builds the IVA again, but is not saved with the game.
+   Throws an exception if the button does not select the monitor's pages, or the
+   monitor has no page with the name.
+
+
+   :param id: The identifier of the :ref:`Monitor <http-RasterPropMonitor.Monitor>` object.
+
+   :reqjson string name: The name of the button, from :http:get:`/raster-prop-monitor/monitor/(id)/page-buttons`.
+   :reqjson string page: The name of the page to show.
+
+
+
+
+
+.. http:post:: /raster-prop-monitor/monitor/(id)/release-capture
+
+   Give a captured page button back to Raster Prop Monitor.
+
+
+   :param id: The identifier of the :ref:`Monitor <http-RasterPropMonitor.Monitor>` object.
+
+   :reqjson string name: The name of the button.
+
+
+
+
+
+
+
+
+.. http:get:: /raster-prop-monitor/monitor/(id)/display
+
+   The monitor's own display, which its pages show when their ``KRPCDisplay``
+   handler names no display.
+
+
+   :param id: The identifier of the :ref:`Monitor <http-RasterPropMonitor.Monitor>` object.
+
+   :resjson RasterPropMonitor.Display value:
+
+
+
+
+.. http:get:: /raster-prop-monitor/monitor/(id)/screen-width
+
+   The width of the screen, in characters.
+
+
+   :param id: The identifier of the :ref:`Monitor <http-RasterPropMonitor.Monitor>` object.
+
+   :resjson int32 value:
+
+
+
+
+.. http:get:: /raster-prop-monitor/monitor/(id)/screen-height
+
+   The height of the screen, in lines.
+
+
+   :param id: The identifier of the :ref:`Monitor <http-RasterPropMonitor.Monitor>` object.
+
+   :resjson int32 value:
+
+
+
+
+.. http:get:: /raster-prop-monitor/monitor/(id)/screen-pixel-width
+
+   The width of the screen, in pixels.
+
+
+   :param id: The identifier of the :ref:`Monitor <http-RasterPropMonitor.Monitor>` object.
+
+   :resjson int32 value:
+
+
+
+
+.. http:get:: /raster-prop-monitor/monitor/(id)/screen-pixel-height
+
+   The height of the screen, in pixels.
+
+
+   :param id: The identifier of the :ref:`Monitor <http-RasterPropMonitor.Monitor>` object.
+
+   :resjson int32 value:
+
+
+
+
+.. http:get:: /raster-prop-monitor/monitor/(id)/letter-width
+
+   The width of a character, in pixels.
+
+
+   :param id: The identifier of the :ref:`Monitor <http-RasterPropMonitor.Monitor>` object.
+
+   :resjson int32 value:
+
+
+
+
+.. http:get:: /raster-prop-monitor/monitor/(id)/letter-height
+
+   The height of a character, in pixels.
+
+
+   :param id: The identifier of the :ref:`Monitor <http-RasterPropMonitor.Monitor>` object.
+
+   :resjson int32 value:
+
+
+
+
+.. http:get:: /raster-prop-monitor/monitor/(id)/default-color
+
+   The color of text with no color tag, on the active page.
+
+
+   :param id: The identifier of the :ref:`Monitor <http-RasterPropMonitor.Monitor>` object.
+
+   :resjson StdLib.ColorRGBA value:
+
+
+
+
+.. http:get:: /raster-prop-monitor/monitor/(id)/text
+
+   The text of the active page, as the screen shows it: one line per screen line,
+   holding the characters Raster Prop Monitor draws. The tags it draws nothing for,
+   such as colors, are removed.
+
+
+   :param id: The identifier of the :ref:`Monitor <http-RasterPropMonitor.Monitor>` object.
+
+   :resjson string value:
+
+
+
+
+.. http:get:: /raster-prop-monitor/monitor/(id)/raw-text
+
+   The text of the active page with its variables formatted, and Raster Prop
+   Monitor's markup kept: colors ``[#rrggbb]`` and ``[#rrggbbaa]``, nudges
+   ``[@xN]`` and ``[@yN]`` in pixels, ``[hw]`` and ``[dw]`` for half and
+   double width, ``[sup]``, ``[sub]`` and ``[fontN]``.
+
+   .. note::
+
+      The page's text overlay, drawn over the text, is not included.
+
+
+   :param id: The identifier of the :ref:`Monitor <http-RasterPropMonitor.Monitor>` object.
+
+   :resjson string value:
+
+
+
+
+.. http:get:: /raster-prop-monitor/monitor/(id)/variables
+
+   The names of the variables the active page shows, in the order of its text.
+
+
+   :param id: The identifier of the :ref:`Monitor <http-RasterPropMonitor.Monitor>` object.
+
+   :resjson list<string> value:
+
+
+
+
+.. http:post:: /raster-prop-monitor/monitor/(id)/image
+
+   The screen as an image, at :http:get:`/raster-prop-monitor/monitor/(id)/screen-pixel-width` by
+   :http:get:`/raster-prop-monitor/monitor/(id)/screen-pixel-height` pixels.
+
+
+   :param id: The identifier of the :ref:`Monitor <http-RasterPropMonitor.Monitor>` object.
+
+   :reqjson StdLib.ImageFormat format: The format of the image. Optional, defaults to ``"png"``.
+   :reqjson int32 quality: The quality of a JPEG image, from 1 to 100. Optional, defaults to ``75``.
+   :resjson bytes value: The image data.

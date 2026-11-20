@@ -1,0 +1,875 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: StdLib
+   :no-index:
+
+Standard Library
+================
+
+
+.. module:: StdLib
+
+A standard library of mathematics and printing for server side functions, and of the
+colors other services use.
+
+.. note::
+
+   Vectors are position and direction tuples, and rotations are unit quaternion tuples
+   in the order x, y, z, w the SpaceCenter service uses. Angles are in radians unless
+   stated otherwise.
+
+
+
+.. function:: getPi()
+
+   The constant pi.
+
+   :Property: Read-only, cannot be set
+   :rtype: ``number``
+   
+
+
+
+
+.. function:: getE()
+
+   The constant e, the base of the natural logarithm.
+
+   :Property: Read-only, cannot be set
+   :rtype: ``number``
+   
+
+
+
+
+.. function:: abs(x)
+
+   The absolute value of a number.
+
+   :param x: The number.
+   :type x: ``number``
+   :rtype: ``number``
+   
+
+
+
+
+.. function:: sign(x)
+
+   The sign of a number: -1 if it is negative, 1 if it is positive,
+   and 0 if it is zero or not a number.
+
+   :param x: The number.
+   :type x: ``number``
+   :rtype: ``number``
+   
+
+
+
+
+.. function:: copySign(x, y)
+
+   The magnitude of the first number with the sign of the second.
+
+   :param x: The number giving the magnitude.
+   :type x: ``number``
+   :param y: The number giving the sign.
+   :type y: ``number``
+   :rtype: ``number``
+   
+
+
+
+
+.. function:: isNan(x)
+
+   Whether a number is not a number.
+
+   :param x: The number.
+   :type x: ``number``
+   :rtype: ``boolean``
+   
+
+
+
+
+.. function:: isFinite(x)
+
+   Whether a number is neither infinite nor not a number.
+
+   :param x: The number.
+   :type x: ``number``
+   :rtype: ``boolean``
+   
+
+
+
+
+.. function:: floor(x)
+
+   The largest whole number less than or equal to the given number.
+
+   :param x: The number.
+   :type x: ``number``
+   :rtype: ``number``
+   
+
+
+
+
+.. function:: ceiling(x)
+
+   The smallest whole number greater than or equal to the given number.
+
+   :param x: The number.
+   :type x: ``number``
+   :rtype: ``number``
+   
+
+
+
+
+.. function:: round(x[, digits])
+
+   The given number rounded to the given number of decimal places,
+   with a halfway value rounded to the nearer even number.
+
+   :param x: The number.
+   :type x: ``number``
+   :param digits: The number of decimal places to round to. Negative to round to tens, hundreds and beyond. Defaults to ``0``.
+   :type digits: ``number``
+   :rtype: ``number``
+   
+
+   .. note::
+
+      Throws an exception if the rounded value is too large for a double.
+
+
+
+
+.. function:: roundHalfAwayFromZero(x[, digits])
+
+   The given number rounded to the given number of decimal places,
+   with a halfway value rounded away from zero.
+
+   :param x: The number.
+   :type x: ``number``
+   :param digits: The number of decimal places to round to. Negative to round to tens, hundreds and beyond. Defaults to ``0``.
+   :type digits: ``number``
+   :rtype: ``number``
+   
+
+   .. note::
+
+      Throws an exception if the rounded value is too large for a double.
+
+
+
+
+.. function:: roundHalfUp(x[, digits])
+
+   The given number rounded to the given number of decimal places,
+   with a halfway value rounded toward positive infinity.
+
+   :param x: The number.
+   :type x: ``number``
+   :param digits: The number of decimal places to round to. Negative to round to tens, hundreds and beyond. Defaults to ``0``.
+   :type digits: ``number``
+   :rtype: ``number``
+   
+
+   .. note::
+
+      Throws an exception if the rounded value is too large for a double.
+
+
+
+
+.. function:: sqrt(x)
+
+   The square root of a number.
+
+   :param x: The number.
+   :type x: ``number``
+   :rtype: ``number``
+   
+
+
+
+
+.. function:: hypot(x, y)
+
+   The length of the hypotenuse of a right triangle with the given sides.
+
+   :param x: The first side.
+   :type x: ``number``
+   :param y: The second side.
+   :type y: ``number``
+   :rtype: ``number``
+   
+
+
+
+
+.. function:: sin(x)
+
+   The sine of an angle, in radians.
+
+   :param x: The angle.
+   :type x: ``number``
+   :rtype: ``number``
+   
+
+
+
+
+.. function:: cos(x)
+
+   The cosine of an angle, in radians.
+
+   :param x: The angle.
+   :type x: ``number``
+   :rtype: ``number``
+   
+
+
+
+
+.. function:: tan(x)
+
+   The tangent of an angle, in radians.
+
+   :param x: The angle.
+   :type x: ``number``
+   :rtype: ``number``
+   
+
+
+
+
+.. function:: asin(x)
+
+   The angle, in radians, whose sine is the given number.
+
+   :param x: The number.
+   :type x: ``number``
+   :rtype: ``number``
+   
+
+
+
+
+.. function:: acos(x)
+
+   The angle, in radians, whose cosine is the given number.
+
+   :param x: The number.
+   :type x: ``number``
+   :rtype: ``number``
+   
+
+
+
+
+.. function:: atan(x)
+
+   The angle, in radians, whose tangent is the given number.
+
+   :param x: The number.
+   :type x: ``number``
+   :rtype: ``number``
+   
+
+
+
+
+.. function:: atan2(y, x)
+
+   The angle, in radians, between the positive x axis and the point ``(x, y)``.
+
+   :param y: The y coordinate.
+   :type y: ``number``
+   :param x: The x coordinate.
+   :type x: ``number``
+   :rtype: ``number``
+   
+
+
+
+
+.. function:: log(x[, newBase])
+
+   The logarithm of a number, natural unless another base is given.
+
+   :param x: The number.
+   :type x: ``number``
+   :param newBase: The base of the logarithm. Defaults to ``2.718281828459045``.
+   :type newBase: ``number``
+   :rtype: ``number``
+   
+
+
+
+
+.. function:: log10(x)
+
+   The base 10 logarithm of a number.
+
+   :param x: The number.
+   :type x: ``number``
+   :rtype: ``number``
+   
+
+
+
+
+.. function:: exp(x)
+
+   The number e raised to the given power.
+
+   :param x: The power.
+   :type x: ``number``
+   :rtype: ``number``
+   
+
+
+
+
+.. function:: min(x, y)
+
+   The smaller of two numbers.
+
+   :param x: The first number.
+   :type x: ``number``
+   :param y: The second number.
+   :type y: ``number``
+   :rtype: ``number``
+   
+
+
+
+
+.. function:: max(x, y)
+
+   The larger of two numbers.
+
+   :param x: The first number.
+   :type x: ``number``
+   :param y: The second number.
+   :type y: ``number``
+   :rtype: ``number``
+   
+
+
+
+
+.. function:: clamp(x, min, max)
+
+   The given number limited to the given range.
+
+   :param x: The number.
+   :type x: ``number``
+   :param min: The minimum of the range.
+   :type min: ``number``
+   :param max: The maximum of the range.
+   :type max: ``number``
+   :rtype: ``number``
+   
+
+   .. note::
+
+      Throws an exception if the minimum is greater than the maximum.
+
+
+
+
+.. function:: lerp(a, b, t)
+
+   Linear interpolation between two numbers.
+
+   :param a: The number when t is 0.
+   :type a: ``number``
+   :param b: The number when t is 1.
+   :type b: ``number``
+   :param t: The interpolation parameter.
+   :type t: ``number``
+   :rtype: ``number``
+   
+
+   .. note::
+
+      The parameter is not limited to the range 0 to 1, and a value outside it
+      extrapolates.
+
+
+
+
+.. function:: inverseLerp(a, b, x)
+
+   The interpolation parameter of a number between two others,
+   limited to the range 0 to 1.
+
+   :param a: The number at 0.
+   :type a: ``number``
+   :param b: The number at 1.
+   :type b: ``number``
+   :param x: The number.
+   :type x: ``number``
+   :rtype: ``number``
+   
+
+   .. note::
+
+      Returns 0 if the two numbers are equal.
+
+
+
+
+.. function:: degreesToRadians(x)
+
+   The angle in radians of an angle in degrees.
+
+   :param x: The angle in degrees.
+   :type x: ``number``
+   :rtype: ``number``
+   
+
+
+
+
+.. function:: radiansToDegrees(x)
+
+   The angle in degrees of an angle in radians.
+
+   :param x: The angle in radians.
+   :type x: ``number``
+   :rtype: ``number``
+   
+
+
+
+
+.. function:: vectorAdd(u, v)
+
+   The sum of two vectors.
+
+   :param u: The first vector.
+   :type u: ``[number, number, number]``
+   :param v: The second vector.
+   :type v: ``[number, number, number]``
+   :rtype: ``[number, number, number]``
+   
+
+
+
+
+.. function:: vectorSubtract(u, v)
+
+   The difference of two vectors.
+
+   :param u: The first vector.
+   :type u: ``[number, number, number]``
+   :param v: The second vector.
+   :type v: ``[number, number, number]``
+   :rtype: ``[number, number, number]``
+   
+
+
+
+
+.. function:: vectorScale(v, scale)
+
+   A vector scaled by a number.
+
+   :param v: The vector.
+   :type v: ``[number, number, number]``
+   :param scale: The scaling factor.
+   :type scale: ``number``
+   :rtype: ``[number, number, number]``
+   
+
+
+
+
+.. function:: vectorDot(u, v)
+
+   The dot product of two vectors.
+
+   :param u: The first vector.
+   :type u: ``[number, number, number]``
+   :param v: The second vector.
+   :type v: ``[number, number, number]``
+   :rtype: ``number``
+   
+
+
+
+
+.. function:: vectorCross(u, v)
+
+   The cross product of two vectors.
+
+   :param u: The first vector.
+   :type u: ``[number, number, number]``
+   :param v: The second vector.
+   :type v: ``[number, number, number]``
+   :rtype: ``[number, number, number]``
+   
+
+
+
+
+.. function:: vectorMagnitude(v)
+
+   The magnitude (length) of a vector.
+
+   :param v: The vector.
+   :type v: ``[number, number, number]``
+   :rtype: ``number``
+   
+
+
+
+
+.. function:: vectorNormalize(v)
+
+   A vector scaled to a magnitude of 1.
+
+   :param v: The vector.
+   :type v: ``[number, number, number]``
+   :rtype: ``[number, number, number]``
+   
+
+   .. note::
+
+      Throws an exception if the vector is zero.
+
+
+
+
+.. function:: vectorDistance(u, v)
+
+   The distance between two positions.
+
+   :param u: The first position.
+   :type u: ``[number, number, number]``
+   :param v: The second position.
+   :type v: ``[number, number, number]``
+   :rtype: ``number``
+   
+
+
+
+
+.. function:: vectorAngle(u, v)
+
+   The angle between two vectors, in radians, between 0 and :math:`\pi`.
+
+   :param u: The first vector.
+   :type u: ``[number, number, number]``
+   :param v: The second vector.
+   :type v: ``[number, number, number]``
+   :rtype: ``number``
+   
+
+   .. note::
+
+      Throws an exception if either vector is zero.
+
+
+
+
+.. function:: vectorLerp(u, v, t)
+
+   Linear interpolation between two vectors.
+
+   :param u: The vector when t is 0.
+   :type u: ``[number, number, number]``
+   :param v: The vector when t is 1.
+   :type v: ``[number, number, number]``
+   :param t: The interpolation parameter.
+   :type t: ``number``
+   :rtype: ``[number, number, number]``
+   
+
+   .. note::
+
+      The parameter is not limited to the range 0 to 1, and a value outside it
+      extrapolates.
+
+
+
+
+.. function:: quaternionMultiply(q, r)
+
+   The composition of two rotations: the rotation r followed by the
+   rotation q.
+
+   :param q: The second rotation.
+   :type q: ``[number, number, number, number]``
+   :param r: The first rotation.
+   :type r: ``[number, number, number, number]``
+   :rtype: ``[number, number, number, number]``
+   
+
+   .. note::
+
+      Throws an exception if either quaternion is zero.
+
+
+
+
+.. function:: quaternionInverse(q)
+
+   The inverse of a rotation.
+
+   :param q: The rotation.
+   :type q: ``[number, number, number, number]``
+   :rtype: ``[number, number, number, number]``
+   
+
+   .. note::
+
+      Throws an exception if the quaternion is zero.
+
+
+
+
+.. function:: quaternionRotateVector(q, v)
+
+   A vector rotated by a rotation.
+
+   :param q: The rotation.
+   :type q: ``[number, number, number, number]``
+   :param v: The vector.
+   :type v: ``[number, number, number]``
+   :rtype: ``[number, number, number]``
+   
+
+   .. note::
+
+      Throws an exception if the quaternion is zero.
+
+
+
+
+.. function:: quaternionFromAxisAngle(axis, angle)
+
+   The rotation about an axis by an angle.
+
+   :param axis: The axis of rotation.
+   :type axis: ``[number, number, number]``
+   :param angle: The angle of rotation, in radians.
+   :type angle: ``number``
+   :rtype: ``[number, number, number, number]``
+   
+
+   .. note::
+
+      Throws an exception if the axis is zero.
+
+
+
+
+.. function:: quaternionToAxisAngle(q)
+
+   The axis and angle of a rotation.
+
+   :param q: The rotation.
+   :type q: ``[number, number, number, number]``
+   :rtype: :class:`StdLib.AxisAngle`
+   
+
+   .. note::
+
+      Throws an exception if the quaternion is zero.
+
+
+
+
+.. function:: quaternionFromToRotation(u, v)
+
+   The shortest rotation that takes one direction onto another.
+
+   :param u: The direction to rotate from.
+   :type u: ``[number, number, number]``
+   :param v: The direction to rotate to.
+   :type v: ``[number, number, number]``
+   :rtype: ``[number, number, number, number]``
+   
+
+   .. note::
+
+      Opposite directions give a half turn about an arbitrary perpendicular axis.
+      Throws an exception if either vector is zero.
+
+
+
+
+.. function:: quaternionLookRotation(forward, up)
+
+   The rotation that takes the z axis onto a forward direction, and the y axis
+   toward an up direction.
+
+   :param forward: The direction of the z axis.
+   :type forward: ``[number, number, number]``
+   :param up: The direction the y axis points toward.
+   :type up: ``[number, number, number]``
+   :rtype: ``[number, number, number, number]``
+   
+
+   .. note::
+
+      The up direction need not be perpendicular to the forward direction. Throws an
+      exception if either vector is zero, or if they are parallel.
+
+
+
+
+.. function:: quaternionAngle(q, r)
+
+   The angle of the rotation that takes one rotation to another,
+   in radians, between 0 and :math:`\pi`.
+
+   :param q: The first rotation.
+   :type q: ``[number, number, number, number]``
+   :param r: The second rotation.
+   :type r: ``[number, number, number, number]``
+   :rtype: ``number``
+   
+
+   .. note::
+
+      Throws an exception if either quaternion is zero.
+
+
+
+
+.. function:: quaternionSlerp(q, r, t)
+
+   Spherical linear interpolation between two rotations.
+
+   :param q: The rotation when t is 0.
+   :type q: ``[number, number, number, number]``
+   :param r: The rotation when t is 1.
+   :type r: ``[number, number, number, number]``
+   :param t: The interpolation parameter.
+   :type t: ``number``
+   :rtype: ``[number, number, number, number]``
+   
+
+   .. note::
+
+      The parameter is not limited to the range 0 to 1, and a value outside it
+      extrapolates. Throws an exception if either quaternion is zero.
+
+
+
+
+.. function:: print(message)
+
+   Writes a message to the game's log, for debugging.
+
+   :param message: The message.
+   :type message: ``string``
+   
+
+   .. note::
+
+      A function evaluated by a stream or an event prints on every update. The message is
+      written at the Info level, so a server log level of Warning or Error hides it.
+
+
+
+
+
+.. class:: AxisAngle(fields)
+
+   A rotation as an axis and an angle.
+
+   .. note::
+
+      See :func:`StdLib.quaternionToAxisAngle`.
+   .. attribute:: axis
+
+      The axis of the rotation, as a unit vector, or zero for no rotation.
+
+      :Type: ``[number, number, number]``
+
+   .. attribute:: angle
+
+      The angle of the rotation, in radians between 0 and :math:`\pi`.
+
+      :Type: ``number``
+
+
+.. class:: ColorRGB(fields)
+
+   A color, as red, green and blue components between 0 and 1.
+
+
+   .. attribute:: r
+
+      The red component.
+
+      :Type: ``number``
+
+   .. attribute:: g
+
+      The green component.
+
+      :Type: ``number``
+
+   .. attribute:: b
+
+      The blue component.
+
+      :Type: ``number``
+
+
+.. class:: ColorRGBA(fields)
+
+   A color, as red, green, blue and alpha components between 0 and 1.
+
+   .. note::
+
+      An alpha of 0 is fully transparent and 1 is fully opaque.
+   .. attribute:: r
+
+      The red component.
+
+      :Type: ``number``
+
+   .. attribute:: g
+
+      The green component.
+
+      :Type: ``number``
+
+   .. attribute:: b
+
+      The blue component.
+
+      :Type: ``number``
+
+   .. attribute:: a
+
+      The alpha component.
+
+      :Type: ``number``
+
+
+.. class:: ImageFormat
+
+   The file format of an image.
+
+
+   .. attribute:: png
+
+      PNG, which is lossless.
+
+
+   .. attribute:: jpeg
+
+      JPEG, which is lossy, and smaller and faster to encode than PNG.

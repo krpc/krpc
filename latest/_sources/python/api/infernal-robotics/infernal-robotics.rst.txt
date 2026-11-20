@@ -2,14 +2,13 @@
 .. highlight:: py
 .. currentmodule:: InfernalRobotics
 
-InfernalRobotics
-================
+Service
+=======
 
 
 .. module:: InfernalRobotics
 
-This service provides functionality to interact with
-`Infernal Robotics <https://forum.kerbalspaceprogram.com/topic/184787-infernal-robotics-next/>`_.
+Provides functionality to interact with Infernal Robotics Next.
 
 
 .. attribute:: available
@@ -19,18 +18,6 @@ This service provides functionality to interact with
    :Attribute: Read-only, cannot be set
    :rtype: bool
    
-
-
-
-
-.. attribute:: ready
-
-   Whether Infernal Robotics API is ready.
-
-   :Attribute: Read-only, cannot be set
-   :rtype: bool
-   :Game Scenes: Flight
-
 
 
 

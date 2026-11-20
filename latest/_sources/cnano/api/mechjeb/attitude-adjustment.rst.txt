@@ -1,0 +1,67 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+AttitudeAdjustment
+==================
+
+
+.. type:: krpc_MechJeb_AttitudeAdjustment_t
+
+   The Attitude Adjustment window, which selects the attitude controller that the
+   autopilots steer with.
+
+   .. macro:: KRPC_CLASS_MECHJEB_ATTITUDEADJUSTMENT
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+   .. function:: krpc_error_t krpc_MechJeb_AttitudeAdjustment_RCSAuto(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_AttitudeAdjustment_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AttitudeAdjustment_set_RCSAuto(krpc_connection_t connection, krpc_MechJeb_AttitudeAdjustment_t instance, bool value)
+
+      Whether the attitude controller turns RCS on for a large attitude error, and off once
+      the vessel settles.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AttitudeAdjustment_Controller(krpc_connection_t connection, krpc_MechJeb_AttitudeController_t * returnValue, krpc_MechJeb_AttitudeAdjustment_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AttitudeAdjustment_set_Controller(krpc_connection_t connection, krpc_MechJeb_AttitudeAdjustment_t instance, krpc_MechJeb_AttitudeController_t value)
+
+      The attitude controller.
+
+      :Game Scenes: Flight
+
+
+
+.. type:: krpc_MechJeb_AttitudeController_t
+
+   An attitude controller of MechJeb. See :func:`krpc_MechJeb_AttitudeAdjustment_Controller`.
+
+   .. macro:: KRPC_ENUMERATION_MECHJEB_ATTITUDECONTROLLER
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
+
+   .. macro:: KRPC_MECHJEB_ATTITUDECONTROLLER_MJ
+
+      MechJeb's original attitude controller.
+
+
+   .. macro:: KRPC_MECHJEB_ATTITUDECONTROLLER_KOS
+
+      The attitude controller of kOS.
+
+
+   .. macro:: KRPC_MECHJEB_ATTITUDECONTROLLER_HYBRID
+
+      A hybrid of the MechJeb and kOS controllers.
+
+
+   .. macro:: KRPC_MECHJEB_ATTITUDECONTROLLER_BETTER
+
+      MechJeb's default controller.
+
+
+   .. macro:: KRPC_MECHJEB_ATTITUDECONTROLLER_LQR
+
+      A linear-quadratic regulator.

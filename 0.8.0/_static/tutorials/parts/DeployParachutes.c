@@ -1,0 +1,24 @@
+#include <krpc_cnano.h>
+#include <krpc_cnano/services/space_center.h>
+
+int main() {
+  krpc_connection_t conn;
+  if (krpc_open_serial(&conn, "COM0") != KRPC_OK) return 1;
+  if (krpc_connect(conn, "Deploy parachutes") != KRPC_OK) return 1;
+
+  krpc_SpaceCenter_Vessel_t vessel;
+  krpc_SpaceCenter_ActiveVessel(conn, &vessel);
+
+  krpc_SpaceCenter_Parts_t parts;
+  krpc_SpaceCenter_Vessel_Parts(conn, &parts, vessel);
+
+  krpc_list_object_t parachutes = KRPC_NULL_LIST;
+  krpc_SpaceCenter_Parts_Parachutes(conn, &parachutes, parts);
+  for (size_t i = 0; i < parachutes.size; i++) {
+    krpc_SpaceCenter_Parachute_t parachute = parachutes.items[i];
+    krpc_SpaceCenter_Parachute_Deploy(conn, parachute);
+  }
+  KRPC_FREE_LIST(parachutes);
+
+  krpc_disconnect(conn);
+}

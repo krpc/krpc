@@ -1,0 +1,85 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: UI
+   :no-index:
+
+Toggle Group
+============
+
+
+.. class:: ToggleGroup
+
+   A set of toggles of which only one can be checked at a time, which is what turns
+   a set of :class:`UI.Toggle` controls into radio buttons.
+   Added to a :class:`UI.Canvas` or a :class:`UI.Panel`.
+
+   .. note::
+
+      A group does not contain its toggles, it only refers to them, so toggles can be
+      grouped independently of how they are laid out. A column of radio buttons in a grid
+      of them is one group, even though each row is laid out separately.
+
+   .. method:: getRectTransform()
+
+      The rect transform for the UI object.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`UI.RectTransform`
+   
+
+   .. method:: getLayoutElement()
+
+      How much space the UI object asks a layout for.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`UI.LayoutElement`
+   
+
+      .. note::
+
+         Only has an effect when the object is in a panel that has a layout. A canvas is
+         not inside a layout and does not have one.
+
+   .. method:: getVisible()
+               setVisible(value)
+
+      Whether the UI object is visible.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+      .. note::
+
+         This is the object's own setting, which is what it was last set to. An object is
+         only drawn when everything it is inside is visible as well, so an interface can
+         be built with its parts visible, inside a panel that is not, and shown all at
+         once by making that panel visible.
+
+   .. method:: getSelected()
+
+      The toggle in the group that is checked, or ``null`` if none of them are.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`UI.Toggle` or ``null``
+   
+
+   .. method:: getAllowSwitchOff()
+               setAllowSwitchOff(value)
+
+      Whether all of the toggles in the group are allowed to be unchecked at once.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+      .. note::
+
+         When this is false, the user cannot clear the checked toggle, they can only
+         check a different one. It does not stop a client setting
+         :meth:`UI.Toggle.getChecked`, which is obeyed either way.
+         A group starts out with no toggle checked either way.
+
+   .. method:: remove()
+
+      Remove the UI object.

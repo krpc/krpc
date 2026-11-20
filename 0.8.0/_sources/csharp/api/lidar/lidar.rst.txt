@@ -1,0 +1,29 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.LIDAR
+
+Service
+=======
+
+
+.. class:: LIDAR
+
+   .. warning:: Deprecated. Use :meth:`SpaceCenter.RaycastDistance <SpaceCenter.SpaceCenter.RaycastDistance>` instead.
+
+   Provides functionality to interact with the LiDAR mod.
+
+   .. property:: bool Available { get; }
+
+      Whether the LiDAR mod is installed.
+
+      :Game Scenes: All
+
+   .. function:: Laser Laser(SpaceCenter.Part part)
+
+      Get the LiDAR on a part.
+
+      :parameters:
+
+
+
+      :Game Scenes: All

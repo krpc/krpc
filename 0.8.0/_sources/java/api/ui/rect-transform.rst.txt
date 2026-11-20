@@ -1,0 +1,96 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.UI
+
+Rect Transform
+==============
+
+
+.. type:: public class RectTransform
+
+   A Unity engine Rect Transform for a UI object.
+   See the `Unity manual <https://docs.unity3d.com/Manual/class-RectTransform.html>`_ for more details.
+
+   .. method:: org.javatuples.Pair<Double,Double> getPosition()
+
+   .. method:: void setPosition(org.javatuples.Pair<Double,Double> value)
+
+      Position of the rectangles pivot point relative to the anchors.
+
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getLocalPosition()
+
+   .. method:: void setLocalPosition(org.javatuples.Triplet<Double,Double,Double> value)
+
+      Position of the rectangles pivot point relative to the anchors.
+
+   
+
+   .. method:: org.javatuples.Pair<Double,Double> getSize()
+
+   .. method:: void setSize(org.javatuples.Pair<Double,Double> value)
+
+      Width and height of the rectangle.
+
+   
+
+   .. method:: org.javatuples.Pair<Double,Double> getUpperRight()
+
+   .. method:: void setUpperRight(org.javatuples.Pair<Double,Double> value)
+
+      Position of the rectangles upper right corner relative to the anchors.
+
+   
+
+   .. method:: org.javatuples.Pair<Double,Double> getLowerLeft()
+
+   .. method:: void setLowerLeft(org.javatuples.Pair<Double,Double> value)
+
+      Position of the rectangles lower left corner relative to the anchors.
+
+   
+
+   .. method:: void setAnchor(org.javatuples.Pair<Double,Double> value)
+
+      Set the minimum and maximum anchor points as a fraction of the size of the parent rectangle.
+
+   
+
+   .. method:: org.javatuples.Pair<Double,Double> getAnchorMax()
+
+   .. method:: void setAnchorMax(org.javatuples.Pair<Double,Double> value)
+
+      The anchor point for the lower left corner of the rectangle defined as a fraction of the size of the parent rectangle.
+
+   
+
+   .. method:: org.javatuples.Pair<Double,Double> getAnchorMin()
+
+   .. method:: void setAnchorMin(org.javatuples.Pair<Double,Double> value)
+
+      The anchor point for the upper right corner of the rectangle defined as a fraction of the size of the parent rectangle.
+
+   
+
+   .. method:: org.javatuples.Pair<Double,Double> getPivot()
+
+   .. method:: void setPivot(org.javatuples.Pair<Double,Double> value)
+
+      Location of the pivot point around which the rectangle rotates, defined as a fraction of the size of the rectangle itself.
+
+   
+
+   .. method:: org.javatuples.Quartet<Double,Double,Double,Double> getRotation()
+
+   .. method:: void setRotation(org.javatuples.Quartet<Double,Double,Double,Double> value)
+
+      Rotation, as a quaternion, of the object around its pivot point.
+
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getScale()
+
+   .. method:: void setScale(org.javatuples.Triplet<Double,Double,Double> value)
+
+      Scale factor applied to the object in the x, y and z dimensions.

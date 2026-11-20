@@ -1,0 +1,20 @@
+.. default-domain:: http
+.. highlight:: json
+
+Kerbal Alarm Clock
+==================
+
+Provides functionality to interact with the `Kerbal Alarm Clock`_ mod.
+|Kerbal Alarm Clock tested| Provides the following classes:
+
+.. toctree::
+   :includehidden:
+   :maxdepth: 1
+
+   kerbal-alarm-clock/kerbal-alarm-clock
+   kerbal-alarm-clock/alarm
+   kerbal-alarm-clock/alarm-type
+   kerbal-alarm-clock/alarm-action
+
+
+.. include:: /mods.inc

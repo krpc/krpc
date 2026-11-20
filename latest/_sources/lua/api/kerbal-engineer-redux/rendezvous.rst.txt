@@ -1,0 +1,49 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: KerbalEngineerRedux
+
+Rendezvous
+==========
+
+
+.. class:: Rendezvous
+
+   Angles and times for a transfer to the vessel's target.
+
+   .. note::
+
+      When the vessel and target orbit different bodies, these are for the orbits of the bodies
+      that share a parent.
+   .. attribute:: phase_angle: number
+
+      The angle from the vessel to the target, around the vessel's orbit, in radians.
+
+
+   .. attribute:: intercept_angle: number
+
+      The phase angle at which to start a Hohmann transfer to the target, in radians.
+
+
+   .. attribute:: time_to_intercept_angle: number
+
+      The time until the phase angle equals the intercept angle, in seconds.
+
+
+   .. attribute:: angle_to_ascending_node: number
+
+      The angle to the ascending node with the target's orbit, in radians.
+
+
+   .. attribute:: angle_to_descending_node: number
+
+      The angle to the descending node with the target's orbit, in radians.
+
+
+   .. attribute:: time_to_ascending_node: number
+
+      The time until the ascending node with the target's orbit, in seconds.
+
+
+   .. attribute:: time_to_descending_node: number
+
+      The time until the descending node with the target's orbit, in seconds.

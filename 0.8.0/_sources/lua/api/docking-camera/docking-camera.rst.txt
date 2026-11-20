@@ -1,0 +1,28 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: DockingCamera
+
+Service
+=======
+
+
+.. module:: DockingCamera
+
+Provides functionality to interact with Docking Camera (KURS).
+
+
+.. attribute:: available: boolean
+
+   Whether Docking Camera (KURS) is available.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. staticmethod:: camera(part: SpaceCenter.Part): DockingCamera.Camera
+
+   Get the camera on a part.
+   Throws an exception if the part is not an onboard camera or a docking port.
+
+   :param part: The part.

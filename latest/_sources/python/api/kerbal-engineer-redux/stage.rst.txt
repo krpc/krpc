@@ -1,0 +1,175 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: KerbalEngineerRedux
+
+Stage
+=====
+
+
+.. class:: Stage(number, delta_v, total_delta_v, specific_impulse, thrust, available_thrust, twr, available_twr, max_twr, start_mass, mass_lost, resource_mass, burn_time, total_burn_time, available_thrust_torque, thrust_offset_angle, rcs_specific_impulse, rcs_thrust, rcs_start_delta_v, rcs_end_delta_v, rcs_start_twr, rcs_end_twr, rcs_burn_time, start_cost, cost_lost, start_part_count, dropped_part_count)
+
+   A stage of the vessel, from the simulation of Kerbal Engineer Redux.
+
+
+   .. attribute:: number
+
+      The stage number.
+
+      :rtype: int
+
+   .. attribute:: delta_v
+
+      The delta-v of the stage, in :math:`\mathrm{m/s}`.
+
+      :rtype: float
+
+   .. attribute:: total_delta_v
+
+      The delta-v of the stage and the stages after it, in :math:`\mathrm{m/s}`.
+
+      :rtype: float
+
+   .. attribute:: specific_impulse
+
+      The specific impulse of the stage, in seconds.
+
+      :rtype: float
+
+   .. attribute:: thrust
+
+      The thrust of the stage at the current throttle, in Newtons.
+
+      :rtype: float
+
+   .. attribute:: available_thrust
+
+      The thrust of the stage at full throttle, in Newtons.
+
+      :rtype: float
+
+   .. attribute:: twr
+
+      The thrust-to-weight ratio at the start of the stage, at the current throttle.
+
+      :rtype: float
+
+   .. attribute:: available_twr
+
+      The thrust-to-weight ratio at the start of the stage, at full throttle.
+
+      :rtype: float
+
+   .. attribute:: max_twr
+
+      The highest thrust-to-weight ratio during the stage, at full throttle.
+
+      :rtype: float
+
+   .. attribute:: start_mass
+
+      The mass of the vessel at the start of the stage, in kilograms.
+
+      :rtype: float
+
+   .. attribute:: mass_lost
+
+      The mass the vessel loses over the stage, in kilograms.
+
+      :rtype: float
+
+   .. attribute:: resource_mass
+
+      The mass of the resources the stage burns, in kilograms.
+
+      :rtype: float
+
+   .. attribute:: burn_time
+
+      The burn time of the stage at full throttle, in seconds.
+
+      :rtype: float
+
+   .. attribute:: total_burn_time
+
+      The burn time of the stage and the stages after it, in seconds.
+
+      :rtype: float
+
+   .. attribute:: available_thrust_torque
+
+      The torque from the thrust at full throttle about the center of mass at the start
+      of the stage, in :math:`\mathrm{N \cdot m}`.
+
+      :rtype: float
+
+   .. attribute:: thrust_offset_angle
+
+      The angle between the thrust and the direction to the center of mass, in degrees.
+
+      :rtype: float
+
+   .. attribute:: rcs_specific_impulse
+
+      The specific impulse of the RCS thrusters, in seconds.
+
+      :rtype: float
+
+   .. attribute:: rcs_thrust
+
+      The thrust of the RCS thrusters, in Newtons.
+
+      :rtype: float
+
+   .. attribute:: rcs_start_delta_v
+
+      The RCS delta-v at the start of the stage, in :math:`\mathrm{m/s}`.
+
+      :rtype: float
+
+   .. attribute:: rcs_end_delta_v
+
+      The RCS delta-v at the end of the stage, in :math:`\mathrm{m/s}`.
+
+      :rtype: float
+
+   .. attribute:: rcs_start_twr
+
+      The RCS thrust-to-weight ratio at the start of the stage.
+
+      :rtype: float
+
+   .. attribute:: rcs_end_twr
+
+      The RCS thrust-to-weight ratio at the end of the stage.
+
+      :rtype: float
+
+   .. attribute:: rcs_burn_time
+
+      The burn time of the RCS thrusters, in seconds.
+
+      :rtype: float
+
+   .. attribute:: start_cost
+
+      The cost of the vessel at the start of the stage.
+
+      :rtype: float
+
+   .. attribute:: cost_lost
+
+      The cost the vessel loses over the stage.
+
+      :rtype: float
+
+   .. attribute:: start_part_count
+
+      The number of parts at the start of the stage.
+
+      :rtype: int
+
+   .. attribute:: dropped_part_count
+
+      The number of parts the stage drops.
+
+      :rtype: int

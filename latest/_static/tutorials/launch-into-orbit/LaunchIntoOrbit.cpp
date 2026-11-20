@@ -1,15 +1,17 @@
-#include <iostream>
+#include <algorithm>
 #include <chrono>
 #include <cmath>
-#include <thread>
+#include <iostream>
 #include <krpc.hpp>
 #include <krpc/function_stream.hpp>
 #include <krpc/services/krpc.hpp>
 #include <krpc/services/space_center.hpp>
+#include <string>
+#include <thread>
 
 int main() {
-  krpc::Client conn = krpc::connect("Launch into orbit");
-  krpc::services::SpaceCenter space_center(&conn);
+  krpc::Connection conn = krpc::connect("Launch into orbit");
+  krpc::services::SpaceCenter space_center(conn);
   auto vessel = space_center.active_vessel().value();
 
   float turn_start_altitude = 250;
@@ -20,66 +22,62 @@ int main() {
   auto ut = space_center.ut_stream();
   auto altitude = vessel.flight().mean_altitude_stream();
   auto apoapsis = vessel.orbit().apoapsis_altitude_stream();
-  auto stage_2_resources = vessel.decouple_stage_at(2).resources(false);
-  auto srb_fuel = stage_2_resources.amount_stream("SolidFuel");
+  auto stage_5_resources = vessel.decouple_stage_at(5).resources(false);
+  auto stage_3_resources = vessel.decouple_stage_at(3).resources(false);
 
   // Pre-launch setup
   vessel.control().set_sas(false);
   vessel.control().set_rcs(false);
   vessel.control().set_throttle(1);
 
-  // Countdown...
-  std::cout << "3..." << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(1));
-  std::cout << "2..." << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(1));
-  std::cout << "1..." << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(1));
-  std::cout << "Launch!" << std::endl;
-
   // Activate the first stage
-  vessel.control().activate_next_stage();
   vessel.auto_pilot().set_engaged(true);
   vessel.auto_pilot().target_pitch_and_heading(90, 90);
+  vessel.control().activate_next_stage();
+
+  // Separate each stage when it runs out of fuel
+  auto e = krpc::services::KRPC::Expression::bind(conn);
+  auto separate_when_empty =
+      [&](krpc::services::SpaceCenter::Resources resources,
+          const std::string& fuel, const std::string& name) {
+        auto event = krpc::add_event(e.less_than(
+            e.call(resources.amount_call(fuel)), e.constant_float(0.1)));
+        event.add_callback([event, vessel, name]() mutable {
+          event.remove();
+          vessel.control().activate_next_stage();
+          vessel.control().activate_next_stage();
+          std::cout << name << " stage separated" << std::endl;
+        });
+      };
+  separate_when_empty(stage_5_resources, "SolidFuel", "First");
+  separate_when_empty(stage_3_resources, "LiquidFuel", "Second");
 
   // Main ascent loop
-  bool srbs_separated = false;
-  double turn_angle = 0;
   while (true) {
     // Gravity turn
-    if (altitude() > turn_start_altitude && altitude() < turn_end_altitude) {
-      double frac = (altitude() - turn_start_altitude)
-                    / (turn_end_altitude - turn_start_altitude);
-      double new_turn_angle = frac * 90.0;
-      if (std::abs(new_turn_angle - turn_angle) > 0.5) {
-        turn_angle = new_turn_angle;
-        vessel.auto_pilot().target_pitch_and_heading(90.0 - turn_angle, 90.0);
-      }
+    if (altitude() > turn_start_altitude &&
+        altitude() < turn_end_altitude) {
+      double frac = (altitude() - turn_start_altitude) /
+                    (turn_end_altitude - turn_start_altitude);
+      double turn_angle = frac * 90.0;
+      vessel.auto_pilot().target_pitch_and_heading(90.0 - turn_angle, 90.0);
     }
 
-    // Separate SRBs when finished
-    if (!srbs_separated) {
-      if (srb_fuel() < 0.1) {
-        vessel.control().activate_next_stage();
-        srbs_separated = true;
-        std::cout << "SRBs separated" << std::endl;
-      }
-    }
-
-    // Decrease throttle when approaching target apoapsis
+    // Stop the ascent near the target apoapsis
     if (apoapsis() > target_altitude * 0.9) {
       std::cout << "Approaching target apoapsis" << std::endl;
       break;
     }
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(50));
   }
 
-  // Disable engines when target apoapsis is reached
+  // Fine tune the apoapsis at 25% thrust
   vessel.control().set_throttle(0.25);
-  typedef krpc::services::KRPC::Expression Expr;
   {
-    auto expr = Expr::greater_than_or_equal(
-      conn, Expr::call(conn, vessel.orbit().apoapsis_altitude_call()),
-      Expr::constant_double(conn, target_altitude));
+    auto expr = e.greater_than_or_equal(
+        e.call(vessel.orbit().apoapsis_altitude_call()),
+        e.constant_double(target_altitude));
     auto event = krpc::add_event(expr);
     event.acquire();
     event.wait();
@@ -91,9 +89,9 @@ int main() {
   // Wait until out of atmosphere
   std::cout << "Coasting out of atmosphere" << std::endl;
   {
-    auto expr = Expr::greater_than_or_equal(
-      conn, Expr::call(conn, vessel.flight().mean_altitude_call()),
-      Expr::constant_double(conn, 70500));
+    auto expr = e.greater_than_or_equal(
+        e.call(vessel.flight().mean_altitude_call()),
+        e.constant_double(70500));
     auto event = krpc::add_event(expr);
     event.acquire();
     event.wait();
@@ -110,7 +108,7 @@ int main() {
   double v2 = std::sqrt(mu * ((2.0 / r) - (1.0 / a2)));
   double delta_v = v2 - v1;
   auto node = vessel.control().add_node(
-    ut() + vessel.orbit().time_to_apoapsis(), delta_v);
+      ut() + vessel.orbit().time_to_apoapsis(), delta_v);
 
   // Calculate burn time (using rocket equation)
   double F = vessel.available_thrust();
@@ -120,45 +118,46 @@ int main() {
   double flow_rate = F / Isp;
   double burn_time = (m0 - m1) / flow_rate;
 
-  // Orientate ship
+  // Orientate ship along the burn
   std::cout << "Orientating ship for circularization burn" << std::endl;
-  vessel.auto_pilot().set_reference_frame(node.reference_frame());
-  vessel.auto_pilot().set_target_direction(std::make_tuple(0.0, 1.0, 0.0));
+  auto frame = vessel.orbit().body().non_rotating_reference_frame();
+  vessel.auto_pilot().set_reference_frame(frame);
+  vessel.auto_pilot().set_target_direction(
+      node.remaining_burn_vector(frame));
   vessel.auto_pilot().wait();
 
   // Wait until burn
   std::cout << "Waiting until circularization burn" << std::endl;
-  double burn_ut = ut() + vessel.orbit().time_to_apoapsis() - (burn_time / 2.0);
+  double burn_ut =
+      ut() + vessel.orbit().time_to_apoapsis() - (burn_time / 2.0);
   double lead_time = 5;
   space_center.warp_to(burn_ut - lead_time);
 
   // Execute burn
   std::cout << "Ready to execute burn" << std::endl;
   {
-    auto expr = Expr::less_than_or_equal(
-      conn, Expr::call(conn, vessel.orbit().time_to_apoapsis_call()),
-      Expr::constant_double(conn, burn_time / 2.0));
+    auto expr =
+        e.less_than_or_equal(e.call(vessel.orbit().time_to_apoapsis_call()),
+                             e.constant_double(burn_time / 2.0));
     auto event = krpc::add_event(expr);
     event.acquire();
     event.wait();
     event.release();
   }
   std::cout << "Executing burn" << std::endl;
-  vessel.control().set_throttle(1);
-  std::this_thread::sleep_for(
-    std::chrono::milliseconds(static_cast<int>((burn_time - 0.1) * 1000)));
-  std::cout << "Fine tuning" << std::endl;
-  vessel.control().set_throttle(0.05);
-  {
-    auto remaining_burn = Expr::call(
-      conn, node.remaining_burn_vector_call(node.reference_frame()));
-    auto expr = Expr::less_than_or_equal(
-      conn, Expr::get(conn, remaining_burn, Expr::constant_int(conn, 1)),
-      Expr::constant_double(conn, 0));
-    auto event = krpc::add_event(expr);
-    event.acquire();
-    event.wait();
-    event.release();
+  auto remaining_burn = node.remaining_burn_vector_stream(frame);
+  auto remaining_delta_v = node.remaining_delta_v_stream();
+  double lowest_delta_v = remaining_delta_v();
+  while (remaining_delta_v() > 0.1) {
+    // Steer along the remaining burn, which turns as the vessel moves
+    // around its orbit
+    vessel.auto_pilot().set_target_direction(remaining_burn());
+    // Full throttle, then throttle down for the last few m/s
+    vessel.control().set_throttle(remaining_delta_v() > 5 ? 1.0 : 0.05);
+    // Stop if the burn overshoots, as the remaining delta-v then grows
+    if (remaining_delta_v() > lowest_delta_v + 0.1) break;
+    lowest_delta_v = std::min(lowest_delta_v, remaining_delta_v());
+    std::this_thread::sleep_for(std::chrono::milliseconds(50));
   }
   vessel.control().set_throttle(0);
   node.remove();

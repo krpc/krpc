@@ -2,17 +2,16 @@
 .. highlight:: cpp
 .. namespace:: krpc::services::RemoteTech
 
-RemoteTech
-==========
+Service
+=======
 
 
 .. namespace:: krpc::services
-.. class:: RemoteTech : public krpc::Service
+.. class:: RemoteTech : public krpc::RemoteService
 
-   This service provides functionality to interact with
-   `RemoteTech <https://forum.kerbalspaceprogram.com/topic/139167-111-remotetech-v199-2020-12-19/>`_.
+   Provides functionality to interact with RemoteTech.
 
-   .. function:: RemoteTech(krpc::Client* client)
+   .. function:: RemoteTech(krpc::Connection& connection)
 
       Construct an instance of this service.
 

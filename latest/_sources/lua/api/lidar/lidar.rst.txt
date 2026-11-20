@@ -2,28 +2,26 @@
 .. highlight:: lua
 .. currentmodule:: LIDAR
 
-LIDAR
-=====
+Service
+=======
 
 
 .. module:: LIDAR
 
-LaserDist service.
+.. warning:: Deprecated. Use :meth:`SpaceCenter.raycast_distance` instead.
+
+Provides functionality to interact with the LiDAR mod.
 
 
 .. attribute:: available: boolean
 
-   Check if the LaserDist API is available.
+   Whether the LiDAR mod is installed.
 
    :Attribute: Read-only, cannot be set
-   :rtype: boolean
 
 
 
 
-.. staticmethod:: laser(part)
+.. staticmethod:: laser(part: SpaceCenter.Part): LIDAR.Laser
 
-   Get a LaserDist part.
-
-   :param SpaceCenter.Part part:
-   :rtype: :class:`LIDAR.Laser`
+   Get the LiDAR on a part.

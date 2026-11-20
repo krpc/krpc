@@ -1,0 +1,48 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: KerbalEngineerRedux
+
+Impact
+======
+
+
+.. class:: Impact(ut, time_to, latitude, longitude, elevation, biome)
+
+   The point where the vessel's orbit meets the terrain.
+
+
+   .. attribute:: ut
+
+      The universal time of impact, in seconds.
+
+      :rtype: float
+
+   .. attribute:: time_to
+
+      The time until impact, in seconds.
+
+      :rtype: float
+
+   .. attribute:: latitude
+
+      The latitude of the impact site, in degrees.
+
+      :rtype: float
+
+   .. attribute:: longitude
+
+      The longitude of the impact site, in degrees.
+
+      :rtype: float
+
+   .. attribute:: elevation
+
+      The elevation of the terrain at the impact site above sea level, in meters.
+
+      :rtype: float
+
+   .. attribute:: biome
+
+      The biome of the impact site.
+
+      :rtype: str

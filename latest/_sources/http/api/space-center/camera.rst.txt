@@ -1,0 +1,406 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Camera
+======
+
+
+.. _http-SpaceCenter.Camera:
+
+.. rubric:: Camera
+
+Controls the game's camera.
+Obtained by calling :http:get:`/space-center/camera`.
+
+A ``Camera`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /space-center/camera/(id)/mode
+
+   The current mode of the camera.
+
+   .. note::
+
+      Setting the mode to ``"iva"`` throws an exception if the
+      active vessel has no crew, or none of its crew can be viewed in an interior.
+
+
+   :param id: The identifier of the :ref:`Camera <http-SpaceCenter.Camera>` object.
+
+   :resjson SpaceCenter.CameraMode value:
+
+.. http:put:: /space-center/camera/(id)/mode
+
+   The current mode of the camera.
+
+   .. note::
+
+      Setting the mode to ``"iva"`` throws an exception if the
+      active vessel has no crew, or none of its crew can be viewed in an interior.
+
+
+   :param id: The identifier of the :ref:`Camera <http-SpaceCenter.Camera>` object.
+
+   :reqjson SpaceCenter.CameraMode value: The new value.
+
+
+
+
+.. http:post:: /space-center/camera/(id)/next-camera
+
+   Switch to the next available camera.
+   In flight, this moves to the next flight camera mode. In IVA, it moves the
+   view to the next crew member in the active vessel.
+
+
+   :param id: The identifier of the :ref:`Camera <http-SpaceCenter.Camera>` object.
+
+
+
+
+
+
+.. http:post:: /space-center/camera/(id)/previous-camera
+
+   Switch to the previous available camera.
+   In flight, this moves to the previous flight camera mode. In IVA, it moves
+   the view to the previous crew member in the active vessel.
+
+
+   :param id: The identifier of the :ref:`Camera <http-SpaceCenter.Camera>` object.
+
+
+
+
+
+
+.. http:get:: /space-center/camera/(id)/pitch
+
+   The pitch of the camera, in degrees.
+   A value between :http:get:`/space-center/camera/(id)/min-pitch` and :http:get:`/space-center/camera/(id)/max-pitch`
+
+
+   :param id: The identifier of the :ref:`Camera <http-SpaceCenter.Camera>` object.
+
+   :resjson float value:
+
+.. http:put:: /space-center/camera/(id)/pitch
+
+   The pitch of the camera, in degrees.
+   A value between :http:get:`/space-center/camera/(id)/min-pitch` and :http:get:`/space-center/camera/(id)/max-pitch`
+
+
+   :param id: The identifier of the :ref:`Camera <http-SpaceCenter.Camera>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /space-center/camera/(id)/heading
+
+   The heading of the camera, in degrees.
+
+
+   :param id: The identifier of the :ref:`Camera <http-SpaceCenter.Camera>` object.
+
+   :resjson float value:
+
+.. http:put:: /space-center/camera/(id)/heading
+
+   The heading of the camera, in degrees.
+
+
+   :param id: The identifier of the :ref:`Camera <http-SpaceCenter.Camera>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /space-center/camera/(id)/distance
+
+   The distance from the camera to the subject, in meters.
+   A value between :http:get:`/space-center/camera/(id)/min-distance` and :http:get:`/space-center/camera/(id)/max-distance`.
+
+
+   :param id: The identifier of the :ref:`Camera <http-SpaceCenter.Camera>` object.
+
+   :resjson float value:
+
+.. http:put:: /space-center/camera/(id)/distance
+
+   The distance from the camera to the subject, in meters.
+   A value between :http:get:`/space-center/camera/(id)/min-distance` and :http:get:`/space-center/camera/(id)/max-distance`.
+
+
+   :param id: The identifier of the :ref:`Camera <http-SpaceCenter.Camera>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /space-center/camera/(id)/fov
+
+   The Field of View of the camera, in degrees.
+   A value between :http:get:`/space-center/camera/(id)/min-fov` and :http:get:`/space-center/camera/(id)/max-fov`.
+
+
+   :param id: The identifier of the :ref:`Camera <http-SpaceCenter.Camera>` object.
+
+   :resjson float value:
+
+.. http:put:: /space-center/camera/(id)/fov
+
+   The Field of View of the camera, in degrees.
+   A value between :http:get:`/space-center/camera/(id)/min-fov` and :http:get:`/space-center/camera/(id)/max-fov`.
+
+
+   :param id: The identifier of the :ref:`Camera <http-SpaceCenter.Camera>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /space-center/camera/(id)/min-pitch
+
+   The minimum pitch of the camera.
+
+
+   :param id: The identifier of the :ref:`Camera <http-SpaceCenter.Camera>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/camera/(id)/max-pitch
+
+   The maximum pitch of the camera.
+
+
+   :param id: The identifier of the :ref:`Camera <http-SpaceCenter.Camera>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/camera/(id)/min-distance
+
+   Minimum distance from the camera to the subject, in meters.
+
+
+   :param id: The identifier of the :ref:`Camera <http-SpaceCenter.Camera>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/camera/(id)/max-distance
+
+   Maximum distance from the camera to the subject, in meters.
+
+
+   :param id: The identifier of the :ref:`Camera <http-SpaceCenter.Camera>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/camera/(id)/min-fov
+
+   The minimum field of view the camera in degrees.
+
+
+   :param id: The identifier of the :ref:`Camera <http-SpaceCenter.Camera>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/camera/(id)/max-fov
+
+   The maximum field of view the camera in degrees.
+
+
+   :param id: The identifier of the :ref:`Camera <http-SpaceCenter.Camera>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/camera/(id)/default-distance
+
+   Default distance from the camera to the subject, in meters.
+
+
+   :param id: The identifier of the :ref:`Camera <http-SpaceCenter.Camera>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/camera/(id)/default-fov
+
+   The default field of view the camera in degrees.
+
+
+   :param id: The identifier of the :ref:`Camera <http-SpaceCenter.Camera>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/camera/(id)/focussed-body
+
+   In map mode, the celestial body that the camera is focussed on.
+   Returns ``null`` if the camera is not focussed on a celestial body.
+   Throws :ref:`KRPC.InvalidOperationException <http-KRPC.InvalidOperationException>` if the camera is not in map mode.
+
+
+   :param id: The identifier of the :ref:`Camera <http-SpaceCenter.Camera>` object.
+
+   :resjson SpaceCenter.CelestialBody? value:
+
+.. http:put:: /space-center/camera/(id)/focussed-body
+
+   In map mode, the celestial body that the camera is focussed on.
+   Returns ``null`` if the camera is not focussed on a celestial body.
+   Throws :ref:`KRPC.InvalidOperationException <http-KRPC.InvalidOperationException>` if the camera is not in map mode.
+
+
+   :param id: The identifier of the :ref:`Camera <http-SpaceCenter.Camera>` object.
+
+   :reqjson SpaceCenter.CelestialBody? value: The new value.
+
+
+
+
+.. http:get:: /space-center/camera/(id)/focussed-vessel
+
+   In map mode, the vessel that the camera is focussed on.
+   Returns ``null`` if the camera is not focussed on a vessel.
+   Throws :ref:`KRPC.InvalidOperationException <http-KRPC.InvalidOperationException>` if the camera is not in map mode.
+
+
+   :param id: The identifier of the :ref:`Camera <http-SpaceCenter.Camera>` object.
+
+   :resjson SpaceCenter.Vessel? value:
+
+.. http:put:: /space-center/camera/(id)/focussed-vessel
+
+   In map mode, the vessel that the camera is focussed on.
+   Returns ``null`` if the camera is not focussed on a vessel.
+   Throws :ref:`KRPC.InvalidOperationException <http-KRPC.InvalidOperationException>` if the camera is not in map mode.
+
+
+   :param id: The identifier of the :ref:`Camera <http-SpaceCenter.Camera>` object.
+
+   :reqjson SpaceCenter.Vessel? value: The new value.
+
+
+
+
+.. http:get:: /space-center/camera/(id)/focussed-node
+
+   In map mode, the maneuver node that the camera is focussed on.
+   Returns ``null`` if the camera is not focussed on a maneuver node.
+   Throws :ref:`KRPC.InvalidOperationException <http-KRPC.InvalidOperationException>` if the camera is not in map mode.
+
+
+   :param id: The identifier of the :ref:`Camera <http-SpaceCenter.Camera>` object.
+
+   :resjson SpaceCenter.Node? value:
+
+.. http:put:: /space-center/camera/(id)/focussed-node
+
+   In map mode, the maneuver node that the camera is focussed on.
+   Returns ``null`` if the camera is not focussed on a maneuver node.
+   Throws :ref:`KRPC.InvalidOperationException <http-KRPC.InvalidOperationException>` if the camera is not in map mode.
+
+
+   :param id: The identifier of the :ref:`Camera <http-SpaceCenter.Camera>` object.
+
+   :reqjson SpaceCenter.Node? value: The new value.
+
+
+
+
+.. http:get:: /space-center/camera/(id)/focussed-crew-member
+
+   In IVA mode, the crew member whose view the camera is showing.
+   Returns ``null`` if no crew member is in view.
+   Throws :ref:`KRPC.InvalidOperationException <http-KRPC.InvalidOperationException>` if the camera is not in IVA mode.
+   Setting this moves the view to the given crew member, switching the camera to
+   IVA mode if it is not already. The crew member must be in the active vessel,
+   and in a part whose interior the game has placed them in.
+
+
+   :param id: The identifier of the :ref:`Camera <http-SpaceCenter.Camera>` object.
+
+   :resjson SpaceCenter.CrewMember? value:
+
+.. http:put:: /space-center/camera/(id)/focussed-crew-member
+
+   In IVA mode, the crew member whose view the camera is showing.
+   Returns ``null`` if no crew member is in view.
+   Throws :ref:`KRPC.InvalidOperationException <http-KRPC.InvalidOperationException>` if the camera is not in IVA mode.
+   Setting this moves the view to the given crew member, switching the camera to
+   IVA mode if it is not already. The crew member must be in the active vessel,
+   and in a part whose interior the game has placed them in.
+
+
+   :param id: The identifier of the :ref:`Camera <http-SpaceCenter.Camera>` object.
+
+   :reqjson SpaceCenter.CrewMember? value: The new value.
+
+
+
+
+
+.. _http-SpaceCenter.CameraMode:
+
+.. rubric:: CameraMode
+
+See :http:get:`/space-center/camera/(id)/mode`.
+
+Passed and returned as the name of one of its values:
+
+
+``"automatic"``
+   The camera is showing the active vessel, in "auto" mode.
+
+
+``"free"``
+   The camera is showing the active vessel, in "free" mode.
+
+
+``"chase"``
+   The camera is showing the active vessel, in "chase" mode.
+
+
+``"locked"``
+   The camera is showing the active vessel, in "locked" mode.
+
+
+``"orbital"``
+   The camera is showing the active vessel, in "orbital" mode.
+
+
+``"iva"``
+   The Intra-Vehicular Activity view is being shown.
+
+
+``"map"``
+   The map view is being shown.

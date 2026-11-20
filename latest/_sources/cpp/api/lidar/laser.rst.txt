@@ -8,7 +8,9 @@ Laser
 
 .. class:: Laser
 
-   A LaserDist laser.
+   .. warning:: Deprecated. Use :func:`SpaceCenter::raycast_distance` instead.
+
+   A LiDAR. Obtained by calling :func:`laser`.
 
    .. function:: SpaceCenter::Part part()
 

@@ -1,0 +1,100 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::MechJeb
+
+DockingAutopilot
+================
+
+
+.. class:: DockingAutopilot
+
+   The docking autopilot, which docks with the target docking port.
+
+   .. function:: bool enabled()
+   .. function:: void set_enabled(bool value)
+
+      Whether the module is enabled.
+
+      :Game Scenes: Flight
+
+   .. function:: std::string status()
+
+      The status of the autopilot.
+
+      :Game Scenes: Flight
+
+   .. function:: double speed_limit()
+   .. function:: void set_speed_limit(double value)
+
+      The largest speed relative to the target, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. function:: bool override_safe_distance()
+   .. function:: void set_override_safe_distance(bool value)
+
+      Whether :func:`DockingAutopilot::overriden_safe_distance` replaces the computed safe distance.
+
+      :Game Scenes: Flight
+
+   .. function:: double overriden_safe_distance()
+   .. function:: void set_overriden_safe_distance(double value)
+
+      The safe distance from the target, in meters.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`DockingAutopilot::override_safe_distance`.
+
+   .. function:: bool override_target_size()
+   .. function:: void set_override_target_size(bool value)
+
+      Whether :func:`DockingAutopilot::overriden_target_size` replaces the computed size of the target.
+
+      :Game Scenes: Flight
+
+   .. function:: double overriden_target_size()
+   .. function:: void set_overriden_target_size(double value)
+
+      The size of the target, in meters.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`DockingAutopilot::override_target_size`.
+
+   .. function:: float safe_distance()
+
+      The safe distance from the target that the autopilot uses, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: float target_size()
+
+      The size of the target that the autopilot uses, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: bool force_roll()
+   .. function:: void set_force_roll(bool value)
+
+      Whether the autopilot controls the roll.
+
+      :Game Scenes: Flight
+
+   .. function:: double roll()
+   .. function:: void set_roll(double value)
+
+      The roll, in degrees.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`DockingAutopilot::force_roll`.

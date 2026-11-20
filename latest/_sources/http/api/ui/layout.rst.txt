@@ -1,0 +1,227 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Layout
+======
+
+
+.. _http-UI.Layout:
+
+.. rubric:: Layout
+
+Arranges the elements of a panel automatically, so that they do not have to be
+positioned one by one. See :http:post:`/ui/panel/(id)/add-horizontal-layout`,
+:http:post:`/ui/panel/(id)/add-vertical-layout` and :http:post:`/ui/panel/(id)/add-grid-layout`.
+
+A ``Layout`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ui/layout/(id)/spacing
+
+   The gap left between the elements, in pixels. A grid layout uses it in both
+   directions.
+
+
+   :param id: The identifier of the :ref:`Layout <http-UI.Layout>` object.
+
+   :resjson float value:
+
+.. http:put:: /ui/layout/(id)/spacing
+
+   The gap left between the elements, in pixels. A grid layout uses it in both
+   directions.
+
+
+   :param id: The identifier of the :ref:`Layout <http-UI.Layout>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /ui/layout/(id)/padding
+
+   The gap left inside the edges of the panel.
+
+
+   :param id: The identifier of the :ref:`Layout <http-UI.Layout>` object.
+
+   :resjson UI.Padding value:
+
+.. http:put:: /ui/layout/(id)/padding
+
+   The gap left inside the edges of the panel.
+
+
+   :param id: The identifier of the :ref:`Layout <http-UI.Layout>` object.
+
+   :reqjson UI.Padding value: The new value.
+
+
+
+
+.. http:get:: /ui/layout/(id)/child-alignment
+
+   Where the elements are placed within the space the layout has to fill.
+
+
+   :param id: The identifier of the :ref:`Layout <http-UI.Layout>` object.
+
+   :resjson UI.TextAnchor value:
+
+.. http:put:: /ui/layout/(id)/child-alignment
+
+   Where the elements are placed within the space the layout has to fill.
+
+
+   :param id: The identifier of the :ref:`Layout <http-UI.Layout>` object.
+
+   :reqjson UI.TextAnchor value: The new value.
+
+
+
+
+.. http:get:: /ui/layout/(id)/cell-size
+
+   The size of each cell of a grid layout, in pixels.
+
+   .. note::
+
+      Only applies to a grid layout. Throws an exception for the other layouts, whose
+      elements are sized individually using their layout elements.
+
+
+   :param id: The identifier of the :ref:`Layout <http-UI.Layout>` object.
+
+   :resjson tuple<double, double> value:
+
+.. http:put:: /ui/layout/(id)/cell-size
+
+   The size of each cell of a grid layout, in pixels.
+
+   .. note::
+
+      Only applies to a grid layout. Throws an exception for the other layouts, whose
+      elements are sized individually using their layout elements.
+
+
+   :param id: The identifier of the :ref:`Layout <http-UI.Layout>` object.
+
+   :reqjson tuple<double, double> value: The new value.
+
+
+
+
+.. http:get:: /ui/layout/(id)/constraint
+
+   What fixes the shape of a grid layout.
+
+   .. note::
+
+      Only applies to a grid layout. Throws an exception for the other layouts.
+
+
+   :param id: The identifier of the :ref:`Layout <http-UI.Layout>` object.
+
+   :resjson UI.GridConstraint value:
+
+.. http:put:: /ui/layout/(id)/constraint
+
+   What fixes the shape of a grid layout.
+
+   .. note::
+
+      Only applies to a grid layout. Throws an exception for the other layouts.
+
+
+   :param id: The identifier of the :ref:`Layout <http-UI.Layout>` object.
+
+   :reqjson UI.GridConstraint value: The new value.
+
+
+
+
+.. http:get:: /ui/layout/(id)/constraint-count
+
+   The number of columns or rows that :http:get:`/ui/layout/(id)/constraint` fixes, ignored when
+   the constraint is ``"flexible"``.
+
+   .. note::
+
+      Only applies to a grid layout. Throws an exception for the other layouts.
+
+
+   :param id: The identifier of the :ref:`Layout <http-UI.Layout>` object.
+
+   :resjson int32 value:
+
+.. http:put:: /ui/layout/(id)/constraint-count
+
+   The number of columns or rows that :http:get:`/ui/layout/(id)/constraint` fixes, ignored when
+   the constraint is ``"flexible"``.
+
+   .. note::
+
+      Only applies to a grid layout. Throws an exception for the other layouts.
+
+
+   :param id: The identifier of the :ref:`Layout <http-UI.Layout>` object.
+
+   :reqjson int32 value: The new value.
+
+
+
+
+
+.. _http-UI.Padding:
+
+.. rubric:: Padding
+
+The gap left inside each edge of a layout, in whole pixels.
+
+.. note::
+
+   See :http:get:`/ui/layout/(id)/padding`.
+
+
+Passed and returned as an object with these fields:
+
+
+``left`` (int32)
+   The gap inside the left edge.
+
+
+``right`` (int32)
+   The gap inside the right edge.
+
+
+``top`` (int32)
+   The gap inside the top edge.
+
+
+``bottom`` (int32)
+   The gap inside the bottom edge.
+
+
+
+.. _http-UI.GridConstraint:
+
+.. rubric:: GridConstraint
+
+What fixes the shape of a grid layout.
+
+Passed and returned as the name of one of its values:
+
+
+``"flexible"``
+   Fit as many columns and rows as the size of the panel allows.
+
+
+``"fixed_column_count"``
+   Use a fixed number of columns, and as many rows as are needed.
+
+
+``"fixed_row_count"``
+   Use a fixed number of rows, and as many columns as are needed.

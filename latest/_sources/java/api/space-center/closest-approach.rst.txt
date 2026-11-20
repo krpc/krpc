@@ -49,8 +49,8 @@ Closest Approach
    .. method:: double getRelativeSpeed()
 
 
-      The relative speed of the objects at the closest approach, in meters per
-      second. This is the magnitude of :meth:`ClosestApproach.relativeVelocity(ReferenceFrame)`, and does
+      The relative speed of the objects at the closest approach, in :math:`\mathrm{m/s}`.
+      This is the magnitude of :meth:`ClosestApproach.relativeVelocity(ReferenceFrame)`, and does
       not depend on the choice of reference frame.
 
    

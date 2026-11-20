@@ -1,0 +1,469 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::MechJeb
+
+Utilities
+=========
+
+
+.. class:: Utilities
+
+   The Utilities window, which holds the autostaging and throttle settings, and deploys
+   the solar panels and antennas.
+
+   .. function:: DeployableController antennas()
+
+      The deployable antennas.
+
+      :Game Scenes: Flight
+
+   .. function:: DeployableController solar_panels()
+
+      The solar panels.
+
+      :Game Scenes: Flight
+
+   .. function:: Autostaging staging()
+
+      The autostaging settings. The same object as :func:`AscentSettings::staging`.
+
+      :Game Scenes: Flight
+
+   .. function:: ThrustLimiter thrust()
+
+      The throttle limiters. The same object as :func:`AscentSettings::thrust`.
+
+      :Game Scenes: Flight
+
+
+
+Autostaging
+-----------
+
+
+.. class:: Autostaging
+
+   The autostaging settings, which the Utilities and Ascent Settings windows show.
+
+   .. function:: bool enabled()
+   .. function:: void set_enabled(bool value)
+
+      Whether the module is enabled.
+
+      :Game Scenes: Flight
+
+   .. function:: bool autostaging_once()
+
+      Whether the controller disables itself after the next staging.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         See :func:`Autostaging::autostage_once`.
+
+   .. function:: void autostage_once()
+
+      Enable the controller until the next staging. Throws an exception if the controller is
+      enabled.
+
+
+      :Game Scenes: Flight
+
+   .. function:: int32_t autostage_limit()
+   .. function:: void set_autostage_limit(int32_t value)
+
+      The last stage the controller activates.
+
+      :Game Scenes: Flight
+
+   .. function:: double autostage_post_delay()
+   .. function:: void set_autostage_post_delay(double value)
+
+      The delay after each staging, in seconds.
+
+      :Game Scenes: Flight
+
+   .. function:: double autostage_pre_delay()
+   .. function:: void set_autostage_pre_delay(double value)
+
+      The delay before each staging, in seconds.
+
+      :Game Scenes: Flight
+
+   .. function:: double clamp_auto_stage_thrust_pct()
+   .. function:: void set_clamp_auto_stage_thrust_pct(double value)
+
+      The fraction of full thrust at which the controller releases the launch clamps.
+
+      :Game Scenes: Flight
+
+   .. function:: double fairing_max_aerothermal_flux()
+   .. function:: void set_fairing_max_aerothermal_flux(double value)
+
+      The largest aerothermal flux at which the controller jettisons a fairing, in
+      :math:`\mathrm{W/m^{2}}`.
+
+      :Game Scenes: Flight
+
+   .. function:: double fairing_max_dynamic_pressure()
+   .. function:: void set_fairing_max_dynamic_pressure(double value)
+
+      The largest dynamic pressure at which the controller jettisons a fairing, in pascals.
+
+      :Game Scenes: Flight
+
+   .. function:: double fairing_min_altitude()
+   .. function:: void set_fairing_min_altitude(double value)
+
+      The lowest altitude at which the controller jettisons a fairing, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: bool hot_staging()
+   .. function:: void set_hot_staging(bool value)
+
+      Whether the controller ignites the next stage before the current one burns out.
+
+      :Game Scenes: Flight
+
+   .. function:: double hot_staging_lead_time()
+   .. function:: void set_hot_staging_lead_time(double value)
+
+      The time before burnout at which a hot staging happens, in seconds.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`Autostaging::hot_staging`.
+
+
+
+ThrustLimiter
+-------------
+
+
+.. class:: ThrustLimiter
+
+   The throttle limiters, which the Utilities and Ascent Settings windows show.
+
+   .. function:: bool differential_throttle()
+   .. function:: void set_differential_throttle(bool value)
+
+      Whether the controller throttles the engines differentially to steer.
+
+      :Game Scenes: Flight
+
+   .. function:: DifferentialThrottleStatus differential_throttle_status()
+
+      The result of the differential throttle.
+
+      :Game Scenes: Flight
+
+   .. function:: bool electric_throttle()
+   .. function:: void set_electric_throttle(bool value)
+
+      Whether to limit the throttle of electric engines to the available power.
+
+      :Game Scenes: Flight
+
+   .. function:: double electric_throttle_hi()
+   .. function:: void set_electric_throttle_hi(double value)
+
+      The charge level at which electric engines run at full throttle, between 0 and 1.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`ThrustLimiter::electric_throttle`.
+
+   .. function:: double electric_throttle_lo()
+   .. function:: void set_electric_throttle_lo(double value)
+
+      The charge level at which electric engines stop, between 0 and 1.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`ThrustLimiter::electric_throttle`.
+
+   .. function:: double flameout_safety_pct()
+   .. function:: void set_flameout_safety_pct(double value)
+
+      The safety margin of the jet engines' air intake, as a percentage.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`ThrustLimiter::limit_to_prevent_flameout`.
+
+   .. function:: bool limit_acceleration()
+   .. function:: void set_limit_acceleration(bool value)
+
+      Whether to limit the acceleration.
+
+      :Game Scenes: Flight
+
+   .. function:: bool limit_dynamic_pressure()
+   .. function:: void set_limit_dynamic_pressure(bool value)
+
+      Whether to limit the dynamic pressure.
+
+      :Game Scenes: Flight
+
+   .. function:: bool limit_throttle()
+   .. function:: void set_limit_throttle(bool value)
+
+      Whether to limit the throttle.
+
+      :Game Scenes: Flight
+
+   .. function:: bool limit_to_prevent_flameout()
+   .. function:: void set_limit_to_prevent_flameout(bool value)
+
+      Whether to limit the throttle to keep jet engines from flaming out.
+
+      :Game Scenes: Flight
+
+   .. function:: bool limit_to_prevent_overheats()
+   .. function:: void set_limit_to_prevent_overheats(bool value)
+
+      Whether to limit the throttle to keep parts from overheating.
+
+      :Game Scenes: Flight
+
+   .. function:: bool limiter_min_throttle()
+   .. function:: void set_limiter_min_throttle(bool value)
+
+      Whether to keep the throttle above :func:`ThrustLimiter::min_throttle`.
+
+      :Game Scenes: Flight
+
+   .. function:: bool manage_intakes()
+   .. function:: void set_manage_intakes(bool value)
+
+      Whether the controller opens and closes the air intakes.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`ThrustLimiter::limit_to_prevent_flameout`.
+
+   .. function:: double max_acceleration()
+   .. function:: void set_max_acceleration(double value)
+
+      The largest acceleration, in :math:`\mathrm{m/s^{2}}`.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`ThrustLimiter::limit_acceleration`.
+
+   .. function:: double max_dynamic_pressure()
+   .. function:: void set_max_dynamic_pressure(double value)
+
+      The largest dynamic pressure, in pascals.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`ThrustLimiter::limit_dynamic_pressure`.
+
+   .. function:: double max_throttle()
+   .. function:: void set_max_throttle(double value)
+
+      The largest throttle, between 0 and 1.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`ThrustLimiter::limit_throttle`.
+
+   .. function:: double min_throttle()
+   .. function:: void set_min_throttle(double value)
+
+      The smallest throttle, between 0 and 1.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`ThrustLimiter::limiter_min_throttle`.
+
+   .. function:: bool limit_to_prevent_unstable_ignition()
+   .. function:: void set_limit_to_prevent_unstable_ignition(bool value)
+
+      Whether to hold the throttle at zero while the engines' fuel is unstable.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         MechJeb shows this setting only with Real Fuels, as stock engines have
+         stable fuel.
+
+   .. function:: bool auto_rcs_ullaging()
+   .. function:: void set_auto_rcs_ullaging(bool value)
+
+      Whether to fire the RCS forward to settle the fuel before the engines ignite.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         MechJeb shows this setting only with Real Fuels, as stock engines have
+         stable fuel.
+
+   .. function:: LimitMode limiter()
+
+      The limiter that limits the throttle now.
+
+      :Game Scenes: Flight
+
+
+
+.. namespace:: krpc::services::MechJeb
+.. enum-struct:: LimitMode
+
+   A throttle limiter. See :func:`ThrustLimiter::limiter`.
+
+
+   .. enumerator:: none
+
+      No limiter limits the throttle.
+
+
+   .. enumerator:: terminal_velocity
+
+      The terminal velocity limit.
+
+
+   .. enumerator:: temperature
+
+      :func:`ThrustLimiter::limit_to_prevent_overheats`.
+
+
+   .. enumerator:: flameout
+
+      :func:`ThrustLimiter::limit_to_prevent_flameout`.
+
+
+   .. enumerator:: acceleration
+
+      :func:`ThrustLimiter::limit_acceleration`.
+
+
+   .. enumerator:: throttle
+
+      :func:`ThrustLimiter::limit_throttle`.
+
+
+   .. enumerator:: dynamic_pressure
+
+      :func:`ThrustLimiter::limit_dynamic_pressure`.
+
+
+   .. enumerator:: min_throttle
+
+      :func:`ThrustLimiter::limiter_min_throttle`.
+
+
+   .. enumerator:: electric
+
+      :func:`ThrustLimiter::electric_throttle`.
+
+
+   .. enumerator:: unstable_ignition
+
+      :func:`ThrustLimiter::limit_to_prevent_unstable_ignition`.
+
+
+   .. enumerator:: auto_rcs_ullage
+
+      :func:`ThrustLimiter::auto_rcs_ullaging`.
+
+
+
+.. namespace:: krpc::services::MechJeb
+.. enum-struct:: DifferentialThrottleStatus
+
+   The result of the differential throttle. See
+   :func:`ThrustLimiter::differential_throttle_status`.
+
+
+   .. enumerator:: success
+
+      The throttles balance the thrust.
+
+
+   .. enumerator:: all_engines_off
+
+      All the engines are off.
+
+
+   .. enumerator:: more_engines_required
+
+      The vessel needs more engines.
+
+
+   .. enumerator:: solver_failed
+
+      The solver found no solution.
+
+
+
+DeployableController
+--------------------
+
+
+.. class:: DeployableController
+
+   The controller of one kind of deployable part, such as antennas or solar panels.
+
+   .. function:: bool all_retracted()
+
+      Whether all the parts are retracted.
+
+
+      :Game Scenes: Flight
+
+   .. function:: bool auto_deploy()
+   .. function:: void set_auto_deploy(bool value)
+
+      Whether a MechJeb autopilot deploys the parts.
+
+      :Game Scenes: Flight
+
+   .. function:: void extend_all()
+
+      Extend all the parts.
+
+
+      :Game Scenes: Flight
+
+   .. function:: void retract_all()
+
+      Retract all the parts.
+
+
+      :Game Scenes: Flight

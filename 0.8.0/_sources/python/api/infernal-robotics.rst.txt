@@ -1,0 +1,27 @@
+.. default-domain:: py
+.. highlight:: py
+
+InfernalRobotics
+================
+
+Provides functionality to interact with the `Infernal Robotics Next`_ mod.
+|Infernal Robotics Next tested| Provides the following classes:
+
+.. toctree::
+   :includehidden:
+   :maxdepth: 1
+
+   infernal-robotics/infernal-robotics
+   infernal-robotics/servo-group
+   infernal-robotics/servo
+
+Example
+-------
+
+The following example gets the control group named "MyGroup", prints out the
+names and positions of all of the servos in the group, then moves all of the
+servos to the right for 1 second.
+
+.. literalinclude:: /scripts/api/infernal-robotics/InfernalRoboticsExample.py
+
+.. include:: /mods.inc

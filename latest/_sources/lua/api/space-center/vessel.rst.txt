@@ -10,28 +10,25 @@ Vessel
 
    These objects are used to interact with vessels in KSP. This includes getting
    orbital and flight data, manipulating control inputs and managing resources.
-   Created using :attr:`SpaceCenter.active_vessel <SpaceCenter.SpaceCenter.active_vessel>` or :attr:`SpaceCenter.vessels <SpaceCenter.SpaceCenter.vessels>`.
+   Created using :attr:`SpaceCenter.active_vessel` or :attr:`SpaceCenter.vessels`.
 
    .. attribute:: name: string
 
       The name of the vessel.
 
       :Attribute: Can be read or written
-      :rtype: string
 
    .. attribute:: type: SpaceCenter.VesselType
 
       The type of the vessel.
 
       :Attribute: Can be read or written
-      :rtype: :class:`SpaceCenter.VesselType`
 
    .. attribute:: situation: SpaceCenter.VesselSituation
 
       The situation the vessel is in.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.VesselSituation`
 
    .. attribute:: loaded: boolean
 
@@ -40,7 +37,6 @@ Vessel
       loaded exists only as orbital data and is always on-rails (see :attr:`SpaceCenter.Vessel.packed`).
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean
 
    .. attribute:: packed: boolean
 
@@ -49,7 +45,6 @@ Vessel
       loaded (see :attr:`SpaceCenter.Vessel.loaded`) is always packed.
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean
 
    .. attribute:: physics_range: number
 
@@ -60,7 +55,6 @@ Vessel
       restore the game's default range.
 
       :Attribute: Can be read or written
-      :rtype: number
 
       .. note::
 
@@ -93,7 +87,6 @@ Vessel
       Whether the vessel is recoverable.
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean
 
    .. method:: recover()
 
@@ -134,37 +127,39 @@ Vessel
       The mission elapsed time in seconds.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
+
+   .. attribute:: launch_site: SpaceCenter.LaunchSite | nil
+
+      The launch site the vessel was launched from, or ``nil`` if the vessel was
+      not launched from a known launch site, such as a vessel spawned by a contract.
+
+      :Attribute: Read-only, cannot be set
 
    .. attribute:: biome: string
 
       The name of the biome the vessel is currently in.
 
       :Attribute: Read-only, cannot be set
-      :rtype: string
 
-   .. method:: flight([reference_frame = Types.none])
+   .. method:: flight(reference_frame?: SpaceCenter.ReferenceFrame | Types.none): SpaceCenter.Flight
 
-      Returns a :meth:`SpaceCenter.Vessel.flight` object that can be used to get flight
+      Returns a :class:`SpaceCenter.Flight` object that can be used to get flight
       telemetry for the vessel, in the specified reference frame.
 
       :param reference_frame: Reference frame. Defaults to the vessel's surface reference frame (:attr:`SpaceCenter.Vessel.surface_reference_frame`).
-      :type reference_frame: :class:`SpaceCenter.ReferenceFrame` or ``Types.none``
-      :rtype: :class:`SpaceCenter.Flight`
 
       .. note:: When this is called with no arguments, the vessel's surface reference
                 frame is used. This reference frame moves with the vessel, therefore
                 velocities and speeds returned by the flight object will be zero. See
-                the :rst:ref:`reference frames tutorial <tutorial-reference-frames>`
+                the :rst:ref:`reference frames guide <reference-frames>`
                 for examples of getting :rst:ref:`the orbital and surface speeds of a
-                vessel <tutorial-reference-frames-vessel-speed>`.
+                vessel <reference-frames-vessel-speed>`.
 
    .. attribute:: orbit: SpaceCenter.Orbit
 
       The current orbit of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Orbit`
 
    .. attribute:: control: SpaceCenter.Control
 
@@ -173,7 +168,6 @@ Vessel
       RCS and thrust.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Control`
 
    .. attribute:: comms: SpaceCenter.Comms
 
@@ -181,7 +175,6 @@ Vessel
       with CommNet for this vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Comms`
 
    .. attribute:: auto_pilot: SpaceCenter.AutoPilot
 
@@ -189,28 +182,24 @@ Vessel
       simple auto-piloting of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.AutoPilot`
 
    .. attribute:: crew_capacity: number
 
       The number of crew that can occupy the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: crew_count: number
 
       The number of crew that are occupying the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: crew: List
 
       The crew in the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
    .. attribute:: resources: SpaceCenter.Resources
 
@@ -218,7 +207,6 @@ Vessel
       about resources stored in the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Resources`
 
    .. attribute:: stages: List
 
@@ -227,18 +215,16 @@ Vessel
       delta-v; use :meth:`SpaceCenter.Vessel.stage_at` with -1 to get those parts.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
       .. note:: Lists activation stages only (``decouple`` is ``false``). See also
-                :rst:ref:`lua-api-parts-staging`.
+                :rst:ref:`user-guide-parts-staging`.
 
-   .. method:: stage_at(stage)
+   .. method:: stage_at(stage: number): SpaceCenter.Stage
 
       The activation stage with the given number. Pass -1 to get the parts that are
       never activated (those with no staging icon).
 
-      :param number stage: Get activation stage at this index.
-      :rtype: :class:`SpaceCenter.Stage`
+      :param stage: Get activation stage at this index.
 
    .. attribute:: decouple_stages: List
 
@@ -247,24 +233,21 @@ Vessel
       included first when any such parts exist.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
       .. note:: Lists decouple stages only. Delta-v is not defined on these stages.
 
-   .. method:: decouple_stage_at(stage)
+   .. method:: decouple_stage_at(stage: number): SpaceCenter.Stage
 
       The decouple stage with the given number. Pass -1 to get the parts that are
       never decoupled and remain on the vessel after all stages have fired.
 
-      :param number stage: Get decouple stage at this index.
-      :rtype: :class:`SpaceCenter.Stage`
+      :param stage: Get decouple stage at this index.
 
    .. attribute:: delta_v_ready: boolean
 
       Whether the vessel's delta-v figures are current.
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean
 
       .. note::
 
@@ -279,54 +262,47 @@ Vessel
 
    .. attribute:: delta_v: number
 
-      Total delta-v for the vessel in the current situation, in m/s.
+      Total delta-v for the vessel in the current situation, in :math:`\mathrm{m/s}`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
       .. note:: Requires the stock delta-v display to be ready. Units are meters per second.
 
    .. attribute:: vacuum_delta_v: number
 
-      Total vacuum delta-v for the vessel, in m/s.
+      Total vacuum delta-v for the vessel, in :math:`\mathrm{m/s}`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: sea_level_delta_v: number
 
-      Total sea-level delta-v for the vessel, in m/s.
+      Total sea-level delta-v for the vessel, in :math:`\mathrm{m/s}`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: burn_time: number
 
       Total burn time for the vessel, in seconds.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: parts: SpaceCenter.Parts
 
       A :class:`SpaceCenter.Parts` object, that can used to interact with the parts that make up this vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Parts`
 
    .. attribute:: mass: number
 
-      The total mass of the vessel, including resources, in kg.
+      The total mass of the vessel, including resources, in :math:`\mathrm{kg}`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: dry_mass: number
 
-      The total mass of the vessel, excluding resources, in kg.
+      The total mass of the vessel, excluding resources, in :math:`\mathrm{kg}`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: thrust: number
 
@@ -335,7 +311,6 @@ Vessel
       every engine in the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: available_thrust: number
 
@@ -344,17 +319,15 @@ Vessel
       :attr:`SpaceCenter.Engine.available_thrust` for every active engine in the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
-   .. method:: available_thrust_at(pressure)
+   .. method:: available_thrust_at(pressure: number): number
 
       Gets the total available thrust that can be produced by the vessel's
       active engines, in Newtons. This is computed by summing
       :meth:`SpaceCenter.Engine.available_thrust_at` for every active engine in the vessel.
       Takes the given pressure into account.
 
-      :param number pressure: Atmospheric pressure in atmospheres
-      :rtype: number
+      :param pressure: Atmospheric pressure in atmospheres
 
    .. attribute:: max_thrust: number
 
@@ -363,17 +336,15 @@ Vessel
       :attr:`SpaceCenter.Engine.max_thrust` for every active engine.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
-   .. method:: max_thrust_at(pressure)
+   .. method:: max_thrust_at(pressure: number): number
 
       The total maximum thrust that can be produced by the vessel's active
       engines, in Newtons. This is computed by summing
       :meth:`SpaceCenter.Engine.max_thrust_at` for every active engine.
       Takes the given pressure into account.
 
-      :param number pressure: Atmospheric pressure in atmospheres
-      :rtype: number
+      :param pressure: Atmospheric pressure in atmospheres
 
    .. attribute:: max_vacuum_thrust: number
 
@@ -382,61 +353,54 @@ Vessel
       summing :attr:`SpaceCenter.Engine.max_vacuum_thrust` for every active engine.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: acceleration: number
 
       The acceleration currently produced by the vessel's engines, in
-      :math:`m/s^2`. This is :attr:`SpaceCenter.Vessel.thrust` divided by the
+      :math:`\mathrm{m/s^{2}}`. This is :attr:`SpaceCenter.Vessel.thrust` divided by the
       vessel's :attr:`SpaceCenter.Vessel.mass`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: available_acceleration: number
 
       The total available acceleration that can be produced by the vessel's
-      active engines, in :math:`m/s^2`. This is :attr:`SpaceCenter.Vessel.available_thrust`
+      active engines, in :math:`\mathrm{m/s^{2}}`. This is :attr:`SpaceCenter.Vessel.available_thrust`
       divided by the vessel's :attr:`SpaceCenter.Vessel.mass`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
-   .. method:: available_acceleration_at(pressure)
+   .. method:: available_acceleration_at(pressure: number): number
 
       The total available acceleration that can be produced by the vessel's
-      active engines, in :math:`m/s^2`. This is :meth:`SpaceCenter.Vessel.available_thrust_at`
+      active engines, in :math:`\mathrm{m/s^{2}}`. This is :meth:`SpaceCenter.Vessel.available_thrust_at`
       divided by the vessel's :attr:`SpaceCenter.Vessel.mass`. Takes the given pressure into account.
 
-      :param number pressure: Atmospheric pressure in atmospheres
-      :rtype: number
+      :param pressure: Atmospheric pressure in atmospheres
 
    .. attribute:: max_acceleration: number
 
       The total maximum acceleration that can be produced by the vessel's active
-      engines, in :math:`m/s^2`. This is :attr:`SpaceCenter.Vessel.max_thrust` divided by
+      engines, in :math:`\mathrm{m/s^{2}}`. This is :attr:`SpaceCenter.Vessel.max_thrust` divided by
       the vessel's :attr:`SpaceCenter.Vessel.mass`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
-   .. method:: max_acceleration_at(pressure)
+   .. method:: max_acceleration_at(pressure: number): number
 
       The total maximum acceleration that can be produced by the vessel's active
-      engines, in :math:`m/s^2`. This is :meth:`SpaceCenter.Vessel.max_thrust_at` divided by
+      engines, in :math:`\mathrm{m/s^{2}}`. This is :meth:`SpaceCenter.Vessel.max_thrust_at` divided by
       the vessel's :attr:`SpaceCenter.Vessel.mass`. Takes the given pressure into account.
 
-      :param number pressure: Atmospheric pressure in atmospheres
-      :rtype: number
+      :param pressure: Atmospheric pressure in atmospheres
 
    .. attribute:: max_vacuum_acceleration: number
 
       The total maximum acceleration that can be produced by the vessel's active
-      engines when the vessel is in a vacuum, in :math:`m/s^2`. This is
+      engines when the vessel is in a vacuum, in :math:`\mathrm{m/s^{2}}`. This is
       :attr:`SpaceCenter.Vessel.max_vacuum_thrust` divided by the vessel's :attr:`SpaceCenter.Vessel.mass`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: specific_impulse: number
 
@@ -444,16 +408,14 @@ Vessel
       `described here <https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines>`_.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
-   .. method:: specific_impulse_at(pressure)
+   .. method:: specific_impulse_at(pressure: number): number
 
       The combined specific impulse of all active engines, in seconds. This is computed using the formula
       `described here <https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines>`_.
       Takes the given pressure into account.
 
-      :param number pressure: Atmospheric pressure in atmospheres
-      :rtype: number
+      :param pressure: Atmospheric pressure in atmospheres
 
    .. attribute:: vacuum_specific_impulse: number
 
@@ -461,7 +423,6 @@ Vessel
       `described here <https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines>`_.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: kerbin_sea_level_specific_impulse: number
 
@@ -470,17 +431,15 @@ Vessel
       `described here <https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines>`_.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: moment_of_inertia: Tuple
 
-      The moment of inertia of the vessel around its center of mass in :math:`kg.m^2`.
+      The moment of inertia of the vessel around its center of mass in :math:`\mathrm{kg \cdot m^{2}}`.
       The inertia values in the returned 3-tuple are around the
       pitch, roll and yaw directions respectively.
       This corresponds to the vessels reference frame (:attr:`SpaceCenter.Vessel.reference_frame`).
 
       :Attribute: Read-only, cannot be set
-      :rtype: Tuple
 
    .. attribute:: inertia_tensor: List
 
@@ -489,161 +448,146 @@ Vessel
       Returns the 3x3 matrix as a list of elements, in row-major order.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
    .. attribute:: available_torque: SpaceCenter.AxisRange
 
       The maximum torque that the vessel generates. Includes contributions from
       reaction wheels, RCS, gimballed engines and aerodynamic control surfaces.
-      Returns the torques in :math:`N.m` around each of the coordinate axes of the
+      Returns the torques in :math:`\mathrm{N \cdot m}` around each of the coordinate axes of the
       vessels reference frame (:attr:`SpaceCenter.Vessel.reference_frame`).
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.AxisRange`
 
    .. attribute:: available_reaction_wheel_torque: SpaceCenter.AxisRange
 
       The maximum torque that the currently active and powered reaction wheels can generate.
-      Returns the torques in :math:`N.m` around each of the coordinate axes of the
+      Returns the torques in :math:`\mathrm{N \cdot m}` around each of the coordinate axes of the
       vessels reference frame (:attr:`SpaceCenter.Vessel.reference_frame`).
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.AxisRange`
 
    .. attribute:: available_rcs_torque: SpaceCenter.AxisRange
 
       The maximum torque that the currently active RCS thrusters can generate.
-      Returns the torques in :math:`N.m` around each of the coordinate axes of the
+      Returns the torques in :math:`\mathrm{N \cdot m}` around each of the coordinate axes of the
       vessels reference frame (:attr:`SpaceCenter.Vessel.reference_frame`).
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.AxisRange`
 
    .. attribute:: available_rcs_force: SpaceCenter.AxisRange
 
       The maximum force that the currently active RCS thrusters can generate.
-      Returns the forces in :math:`N` along each of the coordinate axes of the
+      Returns the forces in :math:`\mathrm{N}` along each of the coordinate axes of the
       vessels reference frame (:attr:`SpaceCenter.Vessel.reference_frame`).
       These axes are equivalent to the right, forward and bottom directions of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.AxisRange`
 
    .. attribute:: available_rcs_acceleration: SpaceCenter.AxisRange
 
       The maximum acceleration that the currently active RCS thrusters can generate.
       This is :attr:`SpaceCenter.Vessel.available_rcs_force` divided by the vessel's :attr:`SpaceCenter.Vessel.mass`.
-      Returns the accelerations in :math:`m/s^2` along each of the coordinate axes of the
+      Returns the accelerations in :math:`\mathrm{m/s^{2}}` along each of the coordinate axes of the
       vessels reference frame (:attr:`SpaceCenter.Vessel.reference_frame`).
       These axes are equivalent to the right, forward and bottom directions of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.AxisRange`
 
    .. attribute:: available_engine_torque: SpaceCenter.AxisRange
 
       The maximum torque that the currently active and gimballed engines can generate.
-      Returns the torques in :math:`N.m` around each of the coordinate axes of the
+      Returns the torques in :math:`\mathrm{N \cdot m}` around each of the coordinate axes of the
       vessels reference frame (:attr:`SpaceCenter.Vessel.reference_frame`).
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.AxisRange`
 
    .. attribute:: available_control_surface_torque: SpaceCenter.AxisRange
 
       The maximum torque that the aerodynamic control surfaces can generate.
-      Returns the torques in :math:`N.m` around each of the coordinate axes of the
+      Returns the torques in :math:`\mathrm{N \cdot m}` around each of the coordinate axes of the
       vessels reference frame (:attr:`SpaceCenter.Vessel.reference_frame`).
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.AxisRange`
 
    .. attribute:: available_other_torque: SpaceCenter.AxisRange
 
       The maximum torque that parts (excluding reaction wheels, gimballed engines,
       RCS and control surfaces) can generate.
-      Returns the torques in :math:`N.m` around each of the coordinate axes of the
+      Returns the torques in :math:`\mathrm{N \cdot m}` around each of the coordinate axes of the
       vessels reference frame (:attr:`SpaceCenter.Vessel.reference_frame`).
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.AxisRange`
 
    .. attribute:: available_angular_acceleration: SpaceCenter.AxisRange
 
       The maximum angular acceleration that the vessel can generate. Includes contributions
       from reaction wheels, RCS, gimballed engines and aerodynamic control surfaces.
       This is :attr:`SpaceCenter.Vessel.available_torque` divided by the vessel's :attr:`SpaceCenter.Vessel.moment_of_inertia`.
-      Returns the angular accelerations in :math:`rad/s^2` around each of the coordinate
+      Returns the angular accelerations in :math:`\mathrm{rad/s^{2}}` around each of the coordinate
       axes of the vessels reference frame (:attr:`SpaceCenter.Vessel.reference_frame`).
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.AxisRange`
 
    .. attribute:: available_reaction_wheel_angular_acceleration: SpaceCenter.AxisRange
 
       The maximum angular acceleration that the currently active and powered reaction wheels
       can generate. This is :attr:`SpaceCenter.Vessel.available_reaction_wheel_torque` divided by the vessel's
       :attr:`SpaceCenter.Vessel.moment_of_inertia`.
-      Returns the angular accelerations in :math:`rad/s^2` around each of the coordinate
+      Returns the angular accelerations in :math:`\mathrm{rad/s^{2}}` around each of the coordinate
       axes of the vessels reference frame (:attr:`SpaceCenter.Vessel.reference_frame`).
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.AxisRange`
 
    .. attribute:: available_rcs_angular_acceleration: SpaceCenter.AxisRange
 
       The maximum angular acceleration that the currently active RCS thrusters can generate.
       This is :attr:`SpaceCenter.Vessel.available_rcs_torque` divided by the vessel's :attr:`SpaceCenter.Vessel.moment_of_inertia`.
-      Returns the angular accelerations in :math:`rad/s^2` around each of the coordinate
+      Returns the angular accelerations in :math:`\mathrm{rad/s^{2}}` around each of the coordinate
       axes of the vessels reference frame (:attr:`SpaceCenter.Vessel.reference_frame`).
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.AxisRange`
 
    .. attribute:: available_engine_angular_acceleration: SpaceCenter.AxisRange
 
       The maximum angular acceleration that the currently active and gimballed engines can
       generate. This is :attr:`SpaceCenter.Vessel.available_engine_torque` divided by the vessel's
       :attr:`SpaceCenter.Vessel.moment_of_inertia`.
-      Returns the angular accelerations in :math:`rad/s^2` around each of the coordinate
+      Returns the angular accelerations in :math:`\mathrm{rad/s^{2}}` around each of the coordinate
       axes of the vessels reference frame (:attr:`SpaceCenter.Vessel.reference_frame`).
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.AxisRange`
 
    .. attribute:: available_control_surface_angular_acceleration: SpaceCenter.AxisRange
 
       The maximum angular acceleration that the aerodynamic control surfaces can generate.
       This is :attr:`SpaceCenter.Vessel.available_control_surface_torque` divided by the vessel's
       :attr:`SpaceCenter.Vessel.moment_of_inertia`.
-      Returns the angular accelerations in :math:`rad/s^2` around each of the coordinate
+      Returns the angular accelerations in :math:`\mathrm{rad/s^{2}}` around each of the coordinate
       axes of the vessels reference frame (:attr:`SpaceCenter.Vessel.reference_frame`).
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.AxisRange`
 
    .. attribute:: available_other_angular_acceleration: SpaceCenter.AxisRange
 
       The maximum angular acceleration that parts (excluding reaction wheels, gimballed engines,
       RCS and control surfaces) can generate. This is :attr:`SpaceCenter.Vessel.available_other_torque` divided
       by the vessel's :attr:`SpaceCenter.Vessel.moment_of_inertia`.
-      Returns the angular accelerations in :math:`rad/s^2` around each of the coordinate
+      Returns the angular accelerations in :math:`\mathrm{rad/s^{2}}` around each of the coordinate
       axes of the vessels reference frame (:attr:`SpaceCenter.Vessel.reference_frame`).
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.AxisRange`
 
    .. attribute:: reference_frame: SpaceCenter.ReferenceFrame
 
@@ -657,7 +601,6 @@ Vessel
       * The z-axis points out of the bottom off the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.ReferenceFrame`
 
       .. figure:: /images/reference-frames/vessel-aircraft.png
          :align: center
@@ -681,7 +624,6 @@ Vessel
       * The z-axis points in the orbital normal direction.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.ReferenceFrame`
 
       .. note::
 
@@ -710,7 +652,6 @@ Vessel
         surface of the body -- east on a compass when on the surface).
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.ReferenceFrame`
 
       .. note::
 
@@ -736,7 +677,6 @@ Vessel
       * The x-axis is orthogonal to the other two axes.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.ReferenceFrame`
 
       .. figure:: /images/reference-frames/vessel-surface-velocity.png
          :align: center
@@ -756,7 +696,6 @@ Vessel
         with it.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.ReferenceFrame`
 
       .. note::
 
@@ -779,7 +718,6 @@ Vessel
         rotates with the body.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.ReferenceFrame`
 
       .. note::
 
@@ -803,7 +741,6 @@ Vessel
       * The frame moves with the vessels target.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.ReferenceFrame`
 
       .. note::
 
@@ -811,58 +748,52 @@ Vessel
          :attr:`SpaceCenter.Flight.speed` is the speed it displays, and :attr:`SpaceCenter.Flight.velocity`
          points along the y-axis, towards its prograde marker.
          The target is the one set for the active vessel, via for example
-         :attr:`SpaceCenter.target_vessel <SpaceCenter.SpaceCenter.target_vessel>` or :attr:`SpaceCenter.target_body <SpaceCenter.SpaceCenter.target_body>`.
+         :attr:`SpaceCenter.target_vessel` or :attr:`SpaceCenter.target_body`.
          This is undefined when no target is set. The velocity gives the frame its orientation,
          so it is also singular, and raises an error, when the vessel matches the velocity of
          its target.
 
-   .. method:: position(reference_frame)
+   .. method:: position(reference_frame: SpaceCenter.ReferenceFrame): Tuple
 
       The position of the center of mass of the vessel, in the given reference frame.
 
-      :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned position vector is in.
+      :param reference_frame: The reference frame that the returned position vector is in.
       :returns: The position as a vector.
-      :rtype: Tuple
 
-   .. method:: bounding_box(reference_frame)
+   .. method:: bounding_box(reference_frame: SpaceCenter.ReferenceFrame): SpaceCenter.BoundingBox
 
       The axis-aligned bounding box of the vessel in the given reference frame.
 
-      :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned position vectors are in.
+      :param reference_frame: The reference frame that the returned position vectors are in.
       :returns: The positions of the minimum and maximum vertices of the box.
-      :rtype: :class:`SpaceCenter.BoundingBox`
 
-   .. method:: velocity(reference_frame)
+   .. method:: velocity(reference_frame: SpaceCenter.ReferenceFrame): Tuple
 
       The velocity of the center of mass of the vessel, in the given reference frame.
 
-      :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned velocity vector is in.
-      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in meters per second.
-      :rtype: Tuple
+      :param reference_frame: The reference frame that the returned velocity vector is in.
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in :math:`\mathrm{m/s}`.
 
-   .. method:: rotation(reference_frame)
+   .. method:: rotation(reference_frame: SpaceCenter.ReferenceFrame): Tuple
 
       The rotation of the vessel, in the given reference frame.
 
-      :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned rotation is in.
-      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
-      :rtype: Tuple
+      :param reference_frame: The reference frame that the returned rotation is in.
+      :returns: The rotation as a quaternion of the form ``(x, y, z, w)``.
 
-   .. method:: direction(reference_frame)
+   .. method:: direction(reference_frame: SpaceCenter.ReferenceFrame): Tuple
 
       The direction in which the vessel is pointing, in the given reference frame.
 
-      :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned direction is in.
+      :param reference_frame: The reference frame that the returned direction is in.
       :returns: The direction as a unit vector.
-      :rtype: Tuple
 
-   .. method:: angular_velocity(reference_frame)
+   .. method:: angular_velocity(reference_frame: SpaceCenter.ReferenceFrame): Tuple
 
       The angular velocity of the vessel, in the given reference frame.
 
-      :param SpaceCenter.ReferenceFrame reference_frame: The reference frame the returned angular velocity is in.
-      :returns: The angular velocity as a vector. The magnitude of the vector is the rotational speed of the vessel, in radians per second. The direction of the vector indicates the axis of rotation, using the right-hand rule.
-      :rtype: Tuple
+      :param reference_frame: The reference frame the returned angular velocity is in.
+      :returns: The angular velocity as a vector. The magnitude of the vector is the rotational speed of the vessel, in :math:`\mathrm{rad/s}`. The direction of the vector indicates the axis of rotation, using the right-hand rule.
 
 
 
@@ -876,13 +807,11 @@ Vessel
 
       The value in the positive direction of each axis.
 
-      :rtype: Tuple
 
    .. attribute:: negative: Tuple
 
       The value in the negative direction of each axis, which is zero or less.
 
-      :rtype: Tuple
 
 
 .. class:: BoundingBox
@@ -894,13 +823,11 @@ Vessel
 
       The position of the minimum vertex of the box.
 
-      :rtype: Tuple
 
    .. attribute:: max: Tuple
 
       The position of the maximum vertex of the box.
 
-      :rtype: Tuple
 
 
 .. class:: VesselType
@@ -1044,94 +971,103 @@ Vessel
 
 .. class:: CrewMember
 
-   Represents crew in a vessel. Can be obtained using :attr:`SpaceCenter.Vessel.crew`.
+   A Kerbal in the crew roster. Can be obtained using :attr:`SpaceCenter.Vessel.crew`,
+   :attr:`SpaceCenter.kerbals` or :meth:`SpaceCenter.get_kerbal`.
 
    .. attribute:: name: string
 
       The crew members name.
 
       :Attribute: Can be read or written
-      :rtype: string
 
    .. attribute:: type: SpaceCenter.CrewMemberType
 
       The type of crew member.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.CrewMemberType`
 
    .. attribute:: on_mission: boolean
 
-      Whether the crew member is on a mission.
+      Whether the crew member is on a mission, assigned to a vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean
+
+   .. attribute:: inactive: boolean
+
+      Whether the crew member is inactive, and so unavailable for a mission until
+      :attr:`SpaceCenter.CrewMember.inactive_until`.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: inactive_until: number | nil
+
+      The universal time at which the crew member stops being inactive, in seconds.
+      Returns ``nil`` if the crew member is not inactive.
+
+      :Attribute: Read-only, cannot be set
 
    .. attribute:: courage: number
 
       The crew members courage.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: stupidity: number
 
       The crew members stupidity.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: experience: number
 
       The crew members experience.
 
       :Attribute: Can be read or written
-      :rtype: number
+
+   .. attribute:: experience_level: number
+
+      The crew member's experience level, the number of stars, from 0 to 5.
+
+      :Attribute: Read-only, cannot be set
 
    .. attribute:: badass: boolean
 
       Whether the crew member is a badass.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: veteran: boolean
 
       Whether the crew member is a veteran.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: trait: string
 
       The crew member's job.
 
       :Attribute: Read-only, cannot be set
-      :rtype: string
 
    .. attribute:: gender: SpaceCenter.CrewMemberGender
 
       The crew member's gender.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.CrewMemberGender`
 
    .. attribute:: roster_status: SpaceCenter.RosterStatus
 
       The crew member's current roster status.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.RosterStatus`
 
-   .. attribute:: part: SpaceCenter.Part
+   .. attribute:: part: SpaceCenter.Part | nil
 
       The part containing the crew member. Returns ``nil`` if the crew member is not
       occupying a part, or the vessel containing the part is not loaded.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Part` or ``Types.none``
 
-   .. method:: eva()
+   .. method:: eva(): SpaceCenter.Vessel
 
       Send the crew member outside on EVA, through the hatch of the part it is in, and
       return the vessel it becomes. The game switches to that vessel, which can then be
@@ -1139,7 +1075,6 @@ Vessel
       in with :meth:`SpaceCenter.Control.board`. The kerbal climbs out onto the ladder by the
       hatch, if there is one.
 
-      :rtype: :class:`SpaceCenter.Vessel`
 
       .. note::
 
@@ -1152,14 +1087,12 @@ Vessel
       The crew member's suit type.
 
       :Attribute: Can be read or written
-      :rtype: :class:`SpaceCenter.SuitType`
 
    .. attribute:: career_log: List
 
       The entries in the crew member's career flight log.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
 
 
@@ -1174,19 +1107,16 @@ Vessel
 
       The flight identifier of the entry.
 
-      :rtype: number
 
    .. attribute:: type: string
 
       The type of the entry, e.g. ``Orbit`` or ``Land``.
 
-      :rtype: string
 
    .. attribute:: target: string
 
       The name of the body the entry is for.
 
-      :rtype: string
 
 
 .. class:: CrewMemberType

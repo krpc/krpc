@@ -1,0 +1,74 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: Drawing
+   :no-index:
+
+Point
+=====
+
+
+.. class:: Point
+
+   A point, drawn as a dot that keeps its size on screen. Created using
+   :func:`Drawing.addPoint`.
+
+   .. method:: getPosition()
+               setPosition(value)
+
+      Position of the point.
+
+      :Property: Can be read or written
+      :rtype: ``[number, number, number]``
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: getReferenceFrame()
+               setReferenceFrame(value)
+
+      Reference frame for the positions of the object.
+
+      :Property: Can be read or written
+      :rtype: :class:`SpaceCenter.ReferenceFrame`
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: getVisible()
+               setVisible(value)
+
+      Whether the object is visible.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: getColor()
+               setColor(value)
+
+      The color of the object.
+
+      :Property: Can be read or written
+      :rtype: :class:`StdLib.ColorRGB`
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: getSize()
+               setSize(value)
+
+      Diameter of the point, in pixels.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: getMaterial()
+               setMaterial(value)
+
+      Material used to render the object.
+      Creates the material from a shader with the given name.
+
+      :Property: Can be read or written
+      :rtype: ``string``
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: remove()
+
+      Remove the object.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph

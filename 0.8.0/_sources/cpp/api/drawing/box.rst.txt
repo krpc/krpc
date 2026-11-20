@@ -1,0 +1,75 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::Drawing
+
+Box
+===
+
+
+.. class:: Box
+
+   The edges of a box. Created using :func:`add_box`.
+
+   .. function:: std::tuple<double, double, double> center()
+   .. function:: void set_center(std::tuple<double, double, double> value)
+
+      Position of the center of the box.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: std::tuple<double, double, double> size()
+   .. function:: void set_size(std::tuple<double, double, double> value)
+
+      Lengths of the sides of the box along its x, y and z axes, in meters.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: std::tuple<double, double, double, double> rotation()
+   .. function:: void set_rotation(std::tuple<double, double, double, double> value)
+
+      Rotation of the box, as a quaternion.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: SpaceCenter::ReferenceFrame reference_frame()
+   .. function:: void set_reference_frame(SpaceCenter::ReferenceFrame value)
+
+      Reference frame for the position and rotation of the box.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: bool visible()
+   .. function:: void set_visible(bool value)
+
+      Whether the object is visible.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: StdLib::ColorRGB color()
+   .. function:: void set_color(StdLib::ColorRGB value)
+
+      The color of the edges.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: float thickness()
+   .. function:: void set_thickness(float value)
+
+      The thickness of the edges.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: std::string material()
+   .. function:: void set_material(std::string value)
+
+      Material used to render the object.
+      Creates the material from a shader with the given name.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: void remove()
+
+      Remove the object.
+
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph

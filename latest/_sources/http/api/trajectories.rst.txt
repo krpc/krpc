@@ -1,0 +1,20 @@
+.. default-domain:: http
+.. highlight:: json
+
+Trajectories
+============
+
+Provides functionality to interact with the `Trajectories`_ mod.
+|Trajectories tested|
+
+.. toctree::
+   :includehidden:
+   :maxdepth: 1
+
+   trajectories/trajectories
+   trajectories/patch
+   trajectories/descent-profile
+   trajectories/descent-profile-node
+
+
+.. include:: /mods.inc

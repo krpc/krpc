@@ -1,0 +1,241 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: UI
+   :no-index:
+
+Text
+====
+
+
+.. class:: Text
+
+   A text label.
+   Added to a :class:`UI.Canvas` or a :class:`UI.Panel`.
+
+   .. method:: getRectTransform()
+
+      The rect transform for the UI object.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`UI.RectTransform`
+   
+
+   .. method:: getLayoutElement()
+
+      How much space the UI object asks a layout for.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`UI.LayoutElement`
+   
+
+      .. note::
+
+         Only has an effect when the object is in a panel that has a layout. A canvas is
+         not inside a layout and does not have one.
+
+   .. method:: getVisible()
+               setVisible(value)
+
+      Whether the UI object is visible.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+      .. note::
+
+         This is the object's own setting, which is what it was last set to. An object is
+         only drawn when everything it is inside is visible as well, so an interface can
+         be built with its parts visible, inside a panel that is not, and shown all at
+         once by making that panel visible.
+
+   .. method:: getContent()
+               setContent(value)
+
+      The text string
+
+      :Property: Can be read or written
+      :rtype: ``string``
+   
+
+   .. method:: getWordWrap()
+               setWordWrap(value)
+
+      Whether the text wraps onto further lines when it is wider than the space it
+      has. Text that does not wrap carries on past the edge, and its preferred size
+      is that of a single line, so a changing value leaves a layout in place.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+   .. method:: getFont()
+               setFont(value)
+
+      Name of the font
+
+      :Property: Can be read or written
+      :rtype: ``string``
+   
+
+      .. note::
+
+         Empty if the game provided no font to draw the text with, in which case it is
+         not drawn. See :meth:`UI.Text.getAvailableFonts` for the names that can be set.
+
+   .. method:: getAvailableFonts()
+
+      A list of all available fonts.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of ``string``
+   
+
+   .. method:: getSize()
+               setSize(value)
+
+      Font size.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+   
+
+   .. method:: getStyle()
+               setStyle(value)
+
+      Font style.
+
+      :Property: Can be read or written
+      :rtype: :class:`UI.FontStyle`
+   
+
+   .. method:: getColor()
+               setColor(value)
+
+      The color the text is drawn in.
+
+      :Property: Can be read or written
+      :rtype: :class:`StdLib.ColorRGBA`
+   
+
+   .. method:: getAlignment()
+               setAlignment(value)
+
+      Alignment.
+
+      :Property: Can be read or written
+      :rtype: :class:`UI.TextAnchor`
+   
+
+   .. method:: getLineSpacing()
+               setLineSpacing(value)
+
+      Line spacing.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+   
+
+   .. method:: remove()
+
+      Remove the UI object.
+
+   
+
+
+
+.. class:: FontStyle
+
+   Font style.
+
+
+   .. attribute:: normal
+
+      Normal.
+
+
+   .. attribute:: bold
+
+      Bold.
+
+
+   .. attribute:: italic
+
+      Italic.
+
+
+   .. attribute:: boldAndItalic
+
+      Bold and italic.
+
+
+
+.. class:: TextAlignment
+
+   Text alignment.
+
+
+   .. attribute:: left
+
+      Left aligned.
+
+
+   .. attribute:: right
+
+      Right aligned.
+
+
+   .. attribute:: center
+
+      Center aligned.
+
+
+
+.. class:: TextAnchor
+
+   Text alignment.
+
+
+   .. attribute:: lowerCenter
+
+      Lower center.
+
+
+   .. attribute:: lowerLeft
+
+      Lower left.
+
+
+   .. attribute:: lowerRight
+
+      Lower right.
+
+
+   .. attribute:: middleCenter
+
+      Middle center.
+
+
+   .. attribute:: middleLeft
+
+      Middle left.
+
+
+   .. attribute:: middleRight
+
+      Middle right.
+
+
+   .. attribute:: upperCenter
+
+      Upper center.
+
+
+   .. attribute:: upperLeft
+
+      Upper left.
+
+
+   .. attribute:: upperRight
+
+      Upper right.

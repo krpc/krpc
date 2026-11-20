@@ -9,7 +9,7 @@ Alarms
 .. type:: public class AlarmManager
 
    Alarm manager.
-   Obtained by calling :meth:`getAlarmManager()`.
+   Obtained by calling :meth:`SpaceCenter.getAlarmManager()`.
 
    .. method:: java.util.List<Alarm> getAlarms()
 
@@ -117,7 +117,7 @@ Alarms
 
 .. type:: public class Alarm
 
-   An alarm. Can be accessed using :meth:`getAlarmManager()`.
+   An alarm. Can be accessed using :meth:`SpaceCenter.getAlarmManager()`.
 
    .. method:: int getID()
 
@@ -191,42 +191,42 @@ Alarms
    .. method:: void setNode(Node value)
 
       Maneuver node the alarm references. Only valid for alarms of type
-      :meth:`AlarmType.MANEUVER`.
+      :field:`AlarmType.MANEUVER`.
 
    
 
       .. note::
 
          Throws an exception if the alarm is not of
-         type :meth:`AlarmType.MANEUVER`.
+         type :field:`AlarmType.MANEUVER`.
 
    .. method:: CelestialBody getOriginBody()
 
    .. method:: void setOriginBody(CelestialBody value)
 
       Origin body for the transfer window. Only valid for alarms of type
-      :meth:`AlarmType.TRANSFER_WINDOW`.
+      :field:`AlarmType.TRANSFER_WINDOW`.
 
    
 
       .. note::
 
          Throws an exception if the alarm is not of
-         type :meth:`AlarmType.TRANSFER_WINDOW`.
+         type :field:`AlarmType.TRANSFER_WINDOW`.
 
    .. method:: CelestialBody getDestinationBody()
 
    .. method:: void setDestinationBody(CelestialBody value)
 
       Destination body for the transfer window. Only valid for alarms of type
-      :meth:`AlarmType.TRANSFER_WINDOW`.
+      :field:`AlarmType.TRANSFER_WINDOW`.
 
    
 
       .. note::
 
          Throws an exception if the alarm is not of
-         type :meth:`AlarmType.TRANSFER_WINDOW`.
+         type :field:`AlarmType.TRANSFER_WINDOW`.
 
    .. method:: AlarmWarpAction getWarpAction()
 

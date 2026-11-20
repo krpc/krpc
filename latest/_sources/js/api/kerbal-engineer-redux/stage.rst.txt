@@ -1,0 +1,176 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: KerbalEngineerRedux
+   :no-index:
+
+Stage
+=====
+
+
+.. class:: Stage(fields)
+
+   A stage of the vessel, from the simulation of Kerbal Engineer Redux.
+
+
+   .. attribute:: number
+
+      The stage number.
+
+      :Type: ``number``
+
+   .. attribute:: deltaV
+
+      The delta-v of the stage, in :math:`\mathrm{m/s}`.
+
+      :Type: ``number``
+
+   .. attribute:: totalDeltaV
+
+      The delta-v of the stage and the stages after it, in :math:`\mathrm{m/s}`.
+
+      :Type: ``number``
+
+   .. attribute:: specificImpulse
+
+      The specific impulse of the stage, in seconds.
+
+      :Type: ``number``
+
+   .. attribute:: thrust
+
+      The thrust of the stage at the current throttle, in Newtons.
+
+      :Type: ``number``
+
+   .. attribute:: availableThrust
+
+      The thrust of the stage at full throttle, in Newtons.
+
+      :Type: ``number``
+
+   .. attribute:: twr
+
+      The thrust-to-weight ratio at the start of the stage, at the current throttle.
+
+      :Type: ``number``
+
+   .. attribute:: availableTWR
+
+      The thrust-to-weight ratio at the start of the stage, at full throttle.
+
+      :Type: ``number``
+
+   .. attribute:: maxTWR
+
+      The highest thrust-to-weight ratio during the stage, at full throttle.
+
+      :Type: ``number``
+
+   .. attribute:: startMass
+
+      The mass of the vessel at the start of the stage, in kilograms.
+
+      :Type: ``number``
+
+   .. attribute:: massLost
+
+      The mass the vessel loses over the stage, in kilograms.
+
+      :Type: ``number``
+
+   .. attribute:: resourceMass
+
+      The mass of the resources the stage burns, in kilograms.
+
+      :Type: ``number``
+
+   .. attribute:: burnTime
+
+      The burn time of the stage at full throttle, in seconds.
+
+      :Type: ``number``
+
+   .. attribute:: totalBurnTime
+
+      The burn time of the stage and the stages after it, in seconds.
+
+      :Type: ``number``
+
+   .. attribute:: availableThrustTorque
+
+      The torque from the thrust at full throttle about the center of mass at the start
+      of the stage, in :math:`\mathrm{N \cdot m}`.
+
+      :Type: ``number``
+
+   .. attribute:: thrustOffsetAngle
+
+      The angle between the thrust and the direction to the center of mass, in degrees.
+
+      :Type: ``number``
+
+   .. attribute:: rcsSpecificImpulse
+
+      The specific impulse of the RCS thrusters, in seconds.
+
+      :Type: ``number``
+
+   .. attribute:: rcsThrust
+
+      The thrust of the RCS thrusters, in Newtons.
+
+      :Type: ``number``
+
+   .. attribute:: rcsStartDeltaV
+
+      The RCS delta-v at the start of the stage, in :math:`\mathrm{m/s}`.
+
+      :Type: ``number``
+
+   .. attribute:: rcsEndDeltaV
+
+      The RCS delta-v at the end of the stage, in :math:`\mathrm{m/s}`.
+
+      :Type: ``number``
+
+   .. attribute:: rcsStartTWR
+
+      The RCS thrust-to-weight ratio at the start of the stage.
+
+      :Type: ``number``
+
+   .. attribute:: rcsEndTWR
+
+      The RCS thrust-to-weight ratio at the end of the stage.
+
+      :Type: ``number``
+
+   .. attribute:: rcsBurnTime
+
+      The burn time of the RCS thrusters, in seconds.
+
+      :Type: ``number``
+
+   .. attribute:: startCost
+
+      The cost of the vessel at the start of the stage.
+
+      :Type: ``number``
+
+   .. attribute:: costLost
+
+      The cost the vessel loses over the stage.
+
+      :Type: ``number``
+
+   .. attribute:: startPartCount
+
+      The number of parts at the start of the stage.
+
+      :Type: ``number``
+
+   .. attribute:: droppedPartCount
+
+      The number of parts the stage drops.
+
+      :Type: ``number``

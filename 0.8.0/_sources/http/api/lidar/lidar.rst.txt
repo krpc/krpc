@@ -1,0 +1,32 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Service
+=======
+
+
+.. _http-LIDAR:
+
+.. warning:: Deprecated. Use :http:post:`/space-center/raycast-distance` instead.
+
+Provides functionality to interact with the LiDAR mod.
+
+
+.. http:get:: /lidar/available
+
+   Whether the LiDAR mod is installed.
+
+
+   :resjson bool value:
+
+
+
+
+.. http:post:: /lidar/laser
+
+   Get the LiDAR on a part.
+
+
+   :reqjson SpaceCenter.Part part:
+   :resjson LIDAR.Laser value:

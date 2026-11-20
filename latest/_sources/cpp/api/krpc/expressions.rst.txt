@@ -6,7 +6,7 @@ Expressions
 ===========
 
 The nodes a server side function is built from, and the types they work with. See the
-:rst:ref:`server side functions tutorial <tutorial-server-side-functions>` for how a function is
+:rst:ref:`server side functions guide <server-side-functions>` for how a function is
 assembled and run.
 
 
@@ -52,7 +52,7 @@ assembled and run.
 
          Empty for a function that is not created with :func:`Expression::lambda`.
 
-   .. function:: static Expression constant_double(Client& connection, double value)
+   .. function:: static Expression constant_double(krpc::Connection& connection, double value)
 
       A constant value of double precision floating point type.
 
@@ -62,7 +62,7 @@ assembled and run.
 
    
 
-   .. function:: static Expression constant_float(Client& connection, float value)
+   .. function:: static Expression constant_float(krpc::Connection& connection, float value)
 
       A constant value of single precision floating point type.
 
@@ -72,7 +72,7 @@ assembled and run.
 
    
 
-   .. function:: static Expression constant_int(Client& connection, int32_t value)
+   .. function:: static Expression constant_int(krpc::Connection& connection, int32_t value)
 
       A constant value of integer type.
 
@@ -82,7 +82,7 @@ assembled and run.
 
    
 
-   .. function:: static Expression constant_long(Client& connection, int64_t value)
+   .. function:: static Expression constant_long(krpc::Connection& connection, int64_t value)
 
       A constant value of long integer type.
 
@@ -92,7 +92,7 @@ assembled and run.
 
    
 
-   .. function:: static Expression constant_u_int(Client& connection, uint32_t value)
+   .. function:: static Expression constant_uint(krpc::Connection& connection, uint32_t value)
 
       A constant value of unsigned integer type.
 
@@ -102,7 +102,7 @@ assembled and run.
 
    
 
-   .. function:: static Expression constant_u_long(Client& connection, uint64_t value)
+   .. function:: static Expression constant_ulong(krpc::Connection& connection, uint64_t value)
 
       A constant value of unsigned long integer type.
 
@@ -112,7 +112,7 @@ assembled and run.
 
    
 
-   .. function:: static Expression constant_bool(Client& connection, bool value)
+   .. function:: static Expression constant_bool(krpc::Connection& connection, bool value)
 
       A constant value of boolean type.
 
@@ -122,7 +122,7 @@ assembled and run.
 
    
 
-   .. function:: static Expression constant_string(Client& connection, std::string value)
+   .. function:: static Expression constant_string(krpc::Connection& connection, std::string value)
 
       A constant value of string type.
 
@@ -132,7 +132,7 @@ assembled and run.
 
    
 
-   .. function:: static Expression constant_bytes(Client& connection, std::string value)
+   .. function:: static Expression constant_bytes(krpc::Connection& connection, std::string value)
 
       A constant value of bytes type.
 
@@ -142,7 +142,7 @@ assembled and run.
 
    
 
-   .. function:: static Expression constant_enum(Client& connection, std::string service, std::string name, int32_t value)
+   .. function:: static Expression constant_enum(krpc::Connection& connection, std::string service, std::string name, int32_t value)
 
       A constant value of an enumeration a service defines.
 
@@ -154,7 +154,19 @@ assembled and run.
 
    
 
-   .. function:: static Expression constant_null(Client& connection, Type type)
+   .. function:: static Expression constant_enum_by_id(krpc::Connection& connection, uint32_t service_id, uint32_t enumeration_id, int32_t value)
+
+      A constant value of an enumeration a service defines, named by ids.
+
+      :Parameters:
+
+       * **service_id** -- The id of the service the enumeration is defined in.
+       * **enumeration_id** -- The id of the enumeration.
+       * **value** -- The value of the member of the enumeration.
+
+   
+
+   .. function:: static Expression constant_null(krpc::Connection& connection, Type type)
 
       A null constant of the given type.
 
@@ -168,7 +180,7 @@ assembled and run.
 
          The type is made nullable, as by :func:`Type::nullable_type`.
 
-   .. function:: static Expression constant_object(Client& connection, uint64_t value)
+   .. function:: static Expression constant_object(krpc::Connection& connection, uint64_t value)
 
       A constant object, an instance of a class a service defines.
 
@@ -182,7 +194,7 @@ assembled and run.
 
          The object is given by its object identifier.
 
-   .. function:: static Expression call(Client& connection, krpc::schema::ProcedureCall call)
+   .. function:: static Expression call(krpc::Connection& connection, krpc::schema::ProcedureCall call)
 
       An RPC call.
 
@@ -199,24 +211,26 @@ assembled and run.
          evaluated for its effects, as a statement in a :func:`Expression::block`. A collection the
          procedure returns is copied, as a client would receive it.
 
-   .. function:: static Expression call_with_arguments(Client& connection, krpc::schema::ProcedureCall call, std::map<int32_t, Expression> args)
+   .. function:: static Expression call_with_arguments(krpc::Connection& connection, krpc::schema::ProcedureCall call, std::map<int32_t, Expression> args)
 
-      An RPC call, where some or all of the arguments are computed by expressions.
+      An RPC call, with its arguments computed by expressions.
 
       :Parameters:
 
-       * **call** -- The RPC to call.
+       * **call** -- The call template.
        * **args** -- Expressions computing the call's arguments, by position.
 
    
 
       .. note::
 
+         The call is a call template, which names the procedure and carries no arguments.
          Position 0 is the instance of a class method or property. A position with no
-         expression takes the argument encoded in the call, or the parameter's default. A
-         collection the procedure returns is copied, as a client would receive it.
+         expression takes the parameter's default. A collection the procedure returns is
+         copied, as a client would receive it. Throws an exception if the call carries an
+         argument.
 
-   .. function:: static Expression equal(Client& connection, Expression arg0, Expression arg1)
+   .. function:: static Expression equal(krpc::Connection& connection, Expression arg0, Expression arg1)
 
       Equality comparison.
 
@@ -232,7 +246,7 @@ assembled and run.
          Collections, tuples, bytes and structures compare by their contents. Throws an
          exception if the operands are of unrelated types.
 
-   .. function:: static Expression not_equal(Client& connection, Expression arg0, Expression arg1)
+   .. function:: static Expression not_equal(krpc::Connection& connection, Expression arg0, Expression arg1)
 
       Inequality comparison.
 
@@ -248,7 +262,7 @@ assembled and run.
          Collections, tuples, bytes and structures compare by their contents. Throws an
          exception if the operands are of unrelated types.
 
-   .. function:: static Expression greater_than(Client& connection, Expression arg0, Expression arg1)
+   .. function:: static Expression greater_than(krpc::Connection& connection, Expression arg0, Expression arg1)
 
       Greater than numerical comparison.
 
@@ -259,7 +273,7 @@ assembled and run.
 
    
 
-   .. function:: static Expression greater_than_or_equal(Client& connection, Expression arg0, Expression arg1)
+   .. function:: static Expression greater_than_or_equal(krpc::Connection& connection, Expression arg0, Expression arg1)
 
       Greater than or equal numerical comparison.
 
@@ -270,7 +284,7 @@ assembled and run.
 
    
 
-   .. function:: static Expression less_than(Client& connection, Expression arg0, Expression arg1)
+   .. function:: static Expression less_than(krpc::Connection& connection, Expression arg0, Expression arg1)
 
       Less than numerical comparison.
 
@@ -281,7 +295,7 @@ assembled and run.
 
    
 
-   .. function:: static Expression less_than_or_equal(Client& connection, Expression arg0, Expression arg1)
+   .. function:: static Expression less_than_or_equal(krpc::Connection& connection, Expression arg0, Expression arg1)
 
       Less than or equal numerical comparison.
 
@@ -292,7 +306,7 @@ assembled and run.
 
    
 
-   .. function:: static Expression is_null(Client& connection, Expression value)
+   .. function:: static Expression is_null(krpc::Connection& connection, Expression value)
 
       Whether a value is null. Throws an exception if the type of the value cannot be null.
 
@@ -302,7 +316,7 @@ assembled and run.
 
    
 
-   .. function:: static Expression and_(Client& connection, Expression arg0, Expression arg1)
+   .. function:: static Expression and_(krpc::Connection& connection, Expression arg0, Expression arg1)
 
       Logical or bitwise and, which evaluates both operands.
 
@@ -313,7 +327,11 @@ assembled and run.
 
    
 
-   .. function:: static Expression or_(Client& connection, Expression arg0, Expression arg1)
+      .. note::
+
+         Also takes two values of a flags enumeration, and gives the values they share.
+
+   .. function:: static Expression or_(krpc::Connection& connection, Expression arg0, Expression arg1)
 
       Logical or bitwise or, which evaluates both operands.
 
@@ -324,7 +342,11 @@ assembled and run.
 
    
 
-   .. function:: static Expression conditional_and(Client& connection, Expression arg0, Expression arg1)
+      .. note::
+
+         Also takes two values of a flags enumeration, and gives their combination.
+
+   .. function:: static Expression conditional_and(krpc::Connection& connection, Expression arg0, Expression arg1)
 
       Logical and, which evaluates the second operand only when the first is true.
 
@@ -335,7 +357,7 @@ assembled and run.
 
    
 
-   .. function:: static Expression conditional_or(Client& connection, Expression arg0, Expression arg1)
+   .. function:: static Expression conditional_or(krpc::Connection& connection, Expression arg0, Expression arg1)
 
       Logical or, which evaluates the second operand only when the first is false.
 
@@ -346,7 +368,7 @@ assembled and run.
 
    
 
-   .. function:: static Expression exclusive_or(Client& connection, Expression arg0, Expression arg1)
+   .. function:: static Expression exclusive_or(krpc::Connection& connection, Expression arg0, Expression arg1)
 
       Logical or bitwise exclusive or.
 
@@ -357,7 +379,11 @@ assembled and run.
 
    
 
-   .. function:: static Expression not_(Client& connection, Expression arg)
+      .. note::
+
+         Also takes two values of a flags enumeration, and gives the values in only one of them.
+
+   .. function:: static Expression not_(krpc::Connection& connection, Expression arg)
 
       Logical or bitwise negation.
 
@@ -367,7 +393,11 @@ assembled and run.
 
    
 
-   .. function:: static Expression negate(Client& connection, Expression arg)
+      .. note::
+
+         Also takes a value of a flags enumeration, and gives the declared values it does not hold.
+
+   .. function:: static Expression negate(krpc::Connection& connection, Expression arg)
 
       Numerical negation, which negates a uint as a long.
 
@@ -377,7 +407,7 @@ assembled and run.
 
    
 
-   .. function:: static Expression conditional(Client& connection, Expression condition, Expression if_true, Expression if_false)
+   .. function:: static Expression conditional(krpc::Connection& connection, Expression condition, Expression if_true, Expression if_false)
 
       The second argument if the condition is true, and the third argument otherwise.
 
@@ -393,7 +423,7 @@ assembled and run.
 
          Throws an exception if the two values have no common type.
 
-   .. function:: static Expression add(Client& connection, Expression arg0, Expression arg1)
+   .. function:: static Expression add(krpc::Connection& connection, Expression arg0, Expression arg1)
 
       Numerical addition.
 
@@ -404,7 +434,7 @@ assembled and run.
 
    
 
-   .. function:: static Expression subtract(Client& connection, Expression arg0, Expression arg1)
+   .. function:: static Expression subtract(krpc::Connection& connection, Expression arg0, Expression arg1)
 
       Numerical subtraction.
 
@@ -415,7 +445,7 @@ assembled and run.
 
    
 
-   .. function:: static Expression multiply(Client& connection, Expression arg0, Expression arg1)
+   .. function:: static Expression multiply(krpc::Connection& connection, Expression arg0, Expression arg1)
 
       Numerical multiplication.
 
@@ -426,7 +456,7 @@ assembled and run.
 
    
 
-   .. function:: static Expression divide(Client& connection, Expression arg0, Expression arg1)
+   .. function:: static Expression divide(krpc::Connection& connection, Expression arg0, Expression arg1)
 
       Numerical division.
 
@@ -437,7 +467,7 @@ assembled and run.
 
    
 
-   .. function:: static Expression modulo(Client& connection, Expression arg0, Expression arg1)
+   .. function:: static Expression modulo(krpc::Connection& connection, Expression arg0, Expression arg1)
 
       Numerical modulo operator.
 
@@ -449,7 +479,7 @@ assembled and run.
       :returns: The remainder of arg0 divided by arg1
    
 
-   .. function:: static Expression power(Client& connection, Expression arg0, Expression arg1)
+   .. function:: static Expression power(krpc::Connection& connection, Expression arg0, Expression arg1)
 
       Numerical power operator.
 
@@ -461,7 +491,7 @@ assembled and run.
       :returns: arg0 raised to the power of arg1, at the common type of the operands
    
 
-   .. function:: static Expression left_shift(Client& connection, Expression arg0, Expression arg1)
+   .. function:: static Expression left_shift(krpc::Connection& connection, Expression arg0, Expression arg1)
 
       Bitwise left shift.
 
@@ -477,7 +507,7 @@ assembled and run.
          Only the low 5 bits of the count are used for a 32-bit value, and the low 6 bits
          for a 64-bit value.
 
-   .. function:: static Expression right_shift(Client& connection, Expression arg0, Expression arg1)
+   .. function:: static Expression right_shift(krpc::Connection& connection, Expression arg0, Expression arg1)
 
       Bitwise right shift.
 
@@ -493,7 +523,7 @@ assembled and run.
          Only the low 5 bits of the count are used for a 32-bit value, and the low 6 bits
          for a 64-bit value.
 
-   .. function:: static Expression cast(Client& connection, Expression arg, Type type)
+   .. function:: static Expression cast(krpc::Connection& connection, Expression arg, Type type)
 
       A value cast to the given type.
 
@@ -508,7 +538,7 @@ assembled and run.
 
          A tuple or collection is cast element by element.
 
-   .. function:: static Expression parameter(Client& connection, std::string name, Type type)
+   .. function:: static Expression parameter(krpc::Connection& connection, std::string name, Type type)
 
       A named parameter of a function.
 
@@ -525,7 +555,7 @@ assembled and run.
          A value is bound to it by name with :func:`Expression::invoke`, or by its position in
          the parameters of a :func:`Expression::lambda`.
 
-   .. function:: static Expression lambda(Client& connection, std::vector<Expression> parameters, Expression body)
+   .. function:: static Expression lambda(krpc::Connection& connection, std::vector<Expression> parameters, Expression body)
 
       A function with the given parameters and body.
 
@@ -543,7 +573,7 @@ assembled and run.
          evaluated for its effects. A :func:`Expression::return_` or :func:`Expression::return_nothing`
          statement ends the evaluation.
 
-   .. function:: static Expression invoke(Client& connection, Expression function, std::map<std::string, Expression> args)
+   .. function:: static Expression invoke(krpc::Connection& connection, Expression function, std::map<std::string, Expression> args)
 
       A function call.
 
@@ -555,7 +585,7 @@ assembled and run.
       :returns: A function call.
    
 
-   .. function:: static Expression block(Client& connection, std::vector<Expression> statements)
+   .. function:: static Expression block(krpc::Connection& connection, std::vector<Expression> statements)
 
       A block of statements, whose value is that of its last statement.
 
@@ -565,7 +595,7 @@ assembled and run.
 
    
 
-   .. function:: static Expression block_with_variables(Client& connection, std::vector<Expression> variables, std::vector<Expression> statements)
+   .. function:: static Expression block_with_variables(krpc::Connection& connection, std::vector<Expression> variables, std::vector<Expression> statements)
 
       A block of statements with local variables.
 
@@ -581,7 +611,7 @@ assembled and run.
          The value of the block is that of its last statement. The variables are in scope
          for the statements of the block, including within nested functions.
 
-   .. function:: static Expression variable(Client& connection, std::string name, Type type)
+   .. function:: static Expression variable(krpc::Connection& connection, std::string name, Type type)
 
       A local variable, declared by :func:`Expression::block_with_variables`.
 
@@ -593,7 +623,7 @@ assembled and run.
       :returns: A local variable.
    
 
-   .. function:: static Expression state_variable(Client& connection, std::string name, Expression initial_value)
+   .. function:: static Expression state_variable(krpc::Connection& connection, std::string name, Expression initial_value)
 
       A variable that keeps its value between evaluations of a function.
 
@@ -611,7 +641,7 @@ assembled and run.
          variable its type. The value belongs to the variable, so every function that
          contains it shares it.
 
-   .. function:: static Expression assign(Client& connection, Expression variable, Expression value)
+   .. function:: static Expression assign(krpc::Connection& connection, Expression variable, Expression value)
 
       An assignment to a local variable, state variable or function parameter.
 
@@ -627,7 +657,7 @@ assembled and run.
          The value's type must be assignable to the variable's type. A numeric value of a
          different type is widened, and narrowing it requires a cast.
 
-   .. function:: static Expression if_then(Client& connection, Expression condition, Expression body)
+   .. function:: static Expression if_then(krpc::Connection& connection, Expression condition, Expression body)
 
       An if statement, with no value.
 
@@ -642,7 +672,7 @@ assembled and run.
 
          Use :func:`Expression::conditional` for an if-then-else that produces a value.
 
-   .. function:: static Expression if_then_else(Client& connection, Expression condition, Expression body, Expression else_body)
+   .. function:: static Expression if_then_else(krpc::Connection& connection, Expression condition, Expression body, Expression else_body)
 
       An if-else statement, with no value.
 
@@ -658,7 +688,7 @@ assembled and run.
 
          Use :func:`Expression::conditional` for an if-then-else that produces a value.
 
-   .. function:: static Expression while_(Client& connection, Expression condition, Expression body)
+   .. function:: static Expression while_(krpc::Connection& connection, Expression condition, Expression body)
 
       A while loop, which evaluates the body while the condition is true.
 
@@ -673,7 +703,7 @@ assembled and run.
 
          A :func:`Expression::break_` or :func:`Expression::continue_` in the body applies to this loop.
 
-   .. function:: static Expression for_each(Client& connection, Expression variable, Expression collection, Expression body)
+   .. function:: static Expression for_each(krpc::Connection& connection, Expression variable, Expression collection, Expression body)
 
       A loop that evaluates the body once for each value of a collection.
 
@@ -691,21 +721,55 @@ assembled and run.
          :func:`Expression::block_with_variables`, or a parameter of an enclosing :func:`Expression::lambda`.
          A :func:`Expression::break_` or :func:`Expression::continue_` in the body applies to this loop.
 
-   .. function:: static Expression break_(Client& connection)
+   .. function:: static Expression match(krpc::Connection& connection, Expression value, std::vector<std::vector<Expression>> cases, std::vector<Expression> bodies)
 
-      A break statement, which ends the enclosing loop.
+      A match statement, which evaluates the first matching case.
+
+      :Parameters:
+
+       * **value** -- The value to match.
+       * **cases** -- The test values of each case.
+       * **bodies** -- The statement of each case.
+
+   
+
+      .. note::
+
+         Test values compare as for :func:`Expression::equal`, and a case with none is the default.
+         A :func:`Expression::break_` in a body ends the enclosing loop.
+
+   .. function:: static Expression switch_(krpc::Connection& connection, Expression value, std::vector<std::vector<Expression>> cases, std::vector<Expression> bodies)
+
+      A switch statement, which evaluates from the first matching case on.
+
+      :Parameters:
+
+       * **value** -- The value to match.
+       * **cases** -- The test values of each case.
+       * **bodies** -- The statement of each case.
+
+   
+
+      .. note::
+
+         Test values compare as for :func:`Expression::equal`, and a case with none is the default.
+         A :func:`Expression::break_` in a body ends the switch.
+
+   .. function:: static Expression break_(krpc::Connection& connection)
+
+      A break statement, which ends the enclosing loop or :func:`Expression::switch_`.
 
 
    
 
-   .. function:: static Expression continue_(Client& connection)
+   .. function:: static Expression continue_(krpc::Connection& connection)
 
       A continue statement, which skips to the next iteration of the enclosing loop.
 
 
    
 
-   .. function:: static Expression return_(Client& connection, Expression value)
+   .. function:: static Expression return_(krpc::Connection& connection, Expression value)
 
       A return statement, which ends the enclosing function with a value.
 
@@ -715,14 +779,14 @@ assembled and run.
 
    
 
-   .. function:: static Expression return_nothing(Client& connection)
+   .. function:: static Expression return_nothing(krpc::Connection& connection)
 
       A return statement, which ends the enclosing function with no value.
 
 
    
 
-   .. function:: static Expression throw_(Client& connection, std::string service, std::string name, Expression message)
+   .. function:: static Expression throw_(krpc::Connection& connection, std::string service, std::string name, Expression message)
 
       A throw statement, which raises the named exception.
 
@@ -737,9 +801,28 @@ assembled and run.
       .. note::
 
          The client receives the exception as an error from the function, or from the stream
-         or event evaluating it. Throws an exception if the service does not declare it.
+         or event evaluating it. For example, the service ``KRPC`` and the name
+         ``Error`` raise :class:`Error`. Throws an exception if the service does not
+         declare it.
 
-   .. function:: static Expression try_catch(Client& connection, Expression body, std::string service, std::string name, std::optional<Expression> message, Expression handler)
+   .. function:: static Expression throw_by_id(krpc::Connection& connection, uint32_t service_id, uint32_t exception_id, Expression message)
+
+      A throw statement, which raises the exception with the given ids.
+
+      :Parameters:
+
+       * **service_id** -- The id of the service the exception is defined in.
+       * **exception_id** -- The id of the exception.
+       * **message** -- The message of the exception.
+
+   
+
+      .. note::
+
+         Raises the exception as :func:`Expression::throw_` does. Throws an exception if the
+         service does not declare it.
+
+   .. function:: static Expression try_catch(krpc::Connection& connection, Expression body, std::string service, std::string name, std::optional<Expression> message, Expression handler)
 
       A try-catch statement that handles the named exception.
 
@@ -758,7 +841,26 @@ assembled and run.
          Only an exception a service declares can be named, and :func:`Expression::try_catch_all`
          handles any exception. Throws an exception if the service does not declare it.
 
-   .. function:: static Expression try_catch_all(Client& connection, Expression body, std::optional<Expression> message, Expression handler)
+   .. function:: static Expression try_catch_by_id(krpc::Connection& connection, Expression body, uint32_t service_id, uint32_t exception_id, std::optional<Expression> message, Expression handler)
+
+      A try-catch statement that handles the exception with the given ids.
+
+      :Parameters:
+
+       * **body** -- The statement to evaluate.
+       * **service_id** -- The id of the service the exception is defined in.
+       * **exception_id** -- The id of the exception.
+       * **message** -- A string variable assigned the exception's message, or null.
+       * **handler** -- The statement evaluated when the exception is caught.
+
+   
+
+      .. note::
+
+         Handles the exception as :func:`Expression::try_catch` does. Throws an exception if the
+         service does not declare it.
+
+   .. function:: static Expression try_catch_all(krpc::Connection& connection, Expression body, std::optional<Expression> message, Expression handler)
 
       A try-catch statement that handles any exception.
 
@@ -770,7 +872,7 @@ assembled and run.
 
    
 
-   .. function:: static Expression try_finally(Client& connection, Expression body, Expression finalizer)
+   .. function:: static Expression try_finally(krpc::Connection& connection, Expression body, Expression finalizer)
 
       A try-finally statement.
 
@@ -786,7 +888,7 @@ assembled and run.
          The finalizer is evaluated after the body, whether or not the body raises an
          exception. A break, continue or return cannot leave the finalizer.
 
-   .. function:: static Expression create_tuple(Client& connection, std::vector<Expression> elements)
+   .. function:: static Expression create_tuple(krpc::Connection& connection, std::vector<Expression> elements)
 
       A tuple of the given elements. Throws an exception if there are no elements or more
       than seven.
@@ -798,7 +900,7 @@ assembled and run.
       :returns: The tuple.
    
 
-   .. function:: static Expression create_struct(Client& connection, Type type, std::vector<Expression> field_values)
+   .. function:: static Expression create_struct(krpc::Connection& connection, Type type, std::vector<Expression> field_values)
 
       A structure with the given field values. Throws an exception if the field values do
       not match its fields.
@@ -811,7 +913,7 @@ assembled and run.
       :returns: The structure.
    
 
-   .. function:: static Expression create_list(Client& connection, std::vector<Expression> values)
+   .. function:: static Expression create_list(krpc::Connection& connection, std::vector<Expression> values)
 
       A list of the given values, with numbers widened to their common type. Throws an
       exception if there are no values.
@@ -823,7 +925,7 @@ assembled and run.
       :returns: The list.
    
 
-   .. function:: static Expression create_set(Client& connection, std::set<Expression> values)
+   .. function:: static Expression create_set(krpc::Connection& connection, std::set<Expression> values)
 
       A set of the given values, with numbers widened to their common type. Throws an
       exception if there are no values, or a value is null.
@@ -839,7 +941,7 @@ assembled and run.
 
          The values are evaluated in an unspecified order.
 
-   .. function:: static Expression create_dictionary(Client& connection, std::vector<Expression> keys, std::vector<Expression> values)
+   .. function:: static Expression create_dictionary(krpc::Connection& connection, std::vector<Expression> keys, std::vector<Expression> values)
 
       A dictionary of the given keys and corresponding values, with numbers widened to
       their common type. Throws an exception if there are no keys, the counts differ, the
@@ -857,7 +959,7 @@ assembled and run.
 
          A repeated key takes the last of its values.
 
-   .. function:: static Expression create_empty_list(Client& connection, Type value_type)
+   .. function:: static Expression create_empty_list(krpc::Connection& connection, Type value_type)
 
       An empty list of the given value type.
 
@@ -868,7 +970,7 @@ assembled and run.
       :returns: The empty list.
    
 
-   .. function:: static Expression create_empty_set(Client& connection, Type value_type)
+   .. function:: static Expression create_empty_set(krpc::Connection& connection, Type value_type)
 
       An empty set of the given value type. Throws an exception if the value type is
       nullable.
@@ -880,7 +982,7 @@ assembled and run.
       :returns: The empty set.
    
 
-   .. function:: static Expression create_empty_dictionary(Client& connection, Type key_type, Type value_type)
+   .. function:: static Expression create_empty_dictionary(krpc::Connection& connection, Type key_type, Type value_type)
 
       An empty dictionary of the given key and value types. Throws an exception if the
       key type is nullable or not a valid key type.
@@ -893,7 +995,7 @@ assembled and run.
       :returns: The empty dictionary.
    
 
-   .. function:: static Expression append(Client& connection, Expression collection, Expression value)
+   .. function:: static Expression append(krpc::Connection& connection, Expression collection, Expression value)
 
       A statement adding a value to a list or a set.
 
@@ -908,7 +1010,7 @@ assembled and run.
 
          The value goes on the end of a list. A set holding the value is left unchanged.
 
-   .. function:: static Expression set(Client& connection, Expression collection, Expression index, Expression value)
+   .. function:: static Expression set(krpc::Connection& connection, Expression collection, Expression index, Expression value)
 
       A statement setting an element of a list, or an entry of a dictionary.
 
@@ -925,7 +1027,7 @@ assembled and run.
          A key the dictionary does not hold is added. Throws an exception if the index
          is out of range for the list.
 
-   .. function:: static Expression remove(Client& connection, Expression collection, Expression value)
+   .. function:: static Expression remove(krpc::Connection& connection, Expression collection, Expression value)
 
       A removal of a value from a list or a set, or of an entry from a dictionary.
 
@@ -941,7 +1043,7 @@ assembled and run.
 
          The first occurrence is removed from a list.
 
-   .. function:: static Expression remove_at(Client& connection, Expression list, Expression index)
+   .. function:: static Expression remove_at(krpc::Connection& connection, Expression list, Expression index)
 
       A statement removing the element at an index of a list.
 
@@ -956,7 +1058,7 @@ assembled and run.
 
          Throws an exception if the index is out of range.
 
-   .. function:: static Expression clear(Client& connection, Expression collection)
+   .. function:: static Expression clear(krpc::Connection& connection, Expression collection)
 
       A statement removing every value from a list or a set, or every entry from a dictionary.
 
@@ -966,7 +1068,7 @@ assembled and run.
 
    
 
-   .. function:: static Expression dictionary_keys(Client& connection, Expression dictionary)
+   .. function:: static Expression dictionary_keys(krpc::Connection& connection, Expression dictionary)
 
       The keys of a dictionary, as a list.
 
@@ -982,7 +1084,7 @@ assembled and run.
          The collection operations take the keys of a dictionary from here, and its values
          from :func:`Expression::dictionary_values`.
 
-   .. function:: static Expression dictionary_values(Client& connection, Expression dictionary)
+   .. function:: static Expression dictionary_values(krpc::Connection& connection, Expression dictionary)
 
       The values of a dictionary, as a list.
 
@@ -993,7 +1095,7 @@ assembled and run.
       :returns: The values of the dictionary.
    
 
-   .. function:: static Expression to_list(Client& connection, Expression arg)
+   .. function:: static Expression to_list(krpc::Connection& connection, Expression arg)
 
       A collection as a list.
 
@@ -1004,7 +1106,7 @@ assembled and run.
       :returns: The collection as a list.
    
 
-   .. function:: static Expression to_set(Client& connection, Expression arg)
+   .. function:: static Expression to_set(krpc::Connection& connection, Expression arg)
 
       A collection as a set.
 
@@ -1019,7 +1121,7 @@ assembled and run.
 
          Throws an exception if a value is null.
 
-   .. function:: static Expression build_dictionary(Client& connection, Expression arg, Expression key_func, Expression value_func)
+   .. function:: static Expression build_dictionary(krpc::Connection& connection, Expression arg, Expression key_func, Expression value_func)
 
       A dictionary built from a collection, with a key and a value computed from each
       element.
@@ -1037,7 +1139,7 @@ assembled and run.
 
          A repeated key takes the last of its values.
 
-   .. function:: static Expression get(Client& connection, Expression arg, Expression index)
+   .. function:: static Expression get(krpc::Connection& connection, Expression arg, Expression index)
 
       An element of a tuple, list or dictionary.
 
@@ -1055,7 +1157,7 @@ assembled and run.
          dictionary a key. Throws an exception if the index is out of range or the key is
          missing, and for a tuple when the expression is created.
 
-   .. function:: static Expression get_field(Client& connection, Expression arg, std::string name)
+   .. function:: static Expression get_field(krpc::Connection& connection, Expression arg, std::string name)
 
       The value of a field of a structure. Throws an exception if the value is not a
       structure, or has no field of the given name.
@@ -1068,7 +1170,24 @@ assembled and run.
       :returns: The value of the field.
    
 
-   .. function:: static Expression convert_to_string(Client& connection, Expression arg)
+   .. function:: static Expression get_field_by_index(krpc::Connection& connection, Expression arg, int32_t index)
+
+      The value of a field of a structure, named by its position. Throws an exception if
+      the value is not a structure, or the index is out of range.
+
+      :Parameters:
+
+       * **arg** -- The structure.
+       * **index** -- The position of the field to access.
+
+      :returns: The value of the field.
+   
+
+      .. note::
+
+         The fields are numbered from 0, in the order the structure defines them.
+
+   .. function:: static Expression convert_to_string(krpc::Connection& connection, Expression arg)
 
       The string representation of a value.
 
@@ -1085,7 +1204,7 @@ assembled and run.
          formats it, which for a collection is the name of its type. Throws an exception if
          the value is null.
 
-   .. function:: static Expression string_concat(Client& connection, std::vector<Expression> args)
+   .. function:: static Expression string_concat(krpc::Connection& connection, std::vector<Expression> args)
 
       The concatenation of strings.
 
@@ -1100,7 +1219,7 @@ assembled and run.
 
          Use :func:`Expression::convert_to_string` to convert other values to strings.
 
-   .. function:: static Expression string_length(Client& connection, Expression arg)
+   .. function:: static Expression string_length(krpc::Connection& connection, Expression arg)
 
       The number of characters in a string.
 
@@ -1111,7 +1230,7 @@ assembled and run.
       :returns: The length of the string.
    
 
-   .. function:: static Expression string_get(Client& connection, Expression arg, Expression index)
+   .. function:: static Expression string_get(krpc::Connection& connection, Expression arg, Expression index)
 
       The character at the given position in a string, as a string of length one.
 
@@ -1127,7 +1246,7 @@ assembled and run.
 
          Throws an exception if the index is out of range.
 
-   .. function:: static Expression string_substring(Client& connection, Expression arg, Expression start, Expression length)
+   .. function:: static Expression string_substring(krpc::Connection& connection, Expression arg, Expression start, Expression length)
 
       Part of a string.
 
@@ -1144,7 +1263,7 @@ assembled and run.
 
          Throws an exception if the start or the length is out of range.
 
-   .. function:: static Expression string_index_of(Client& connection, Expression arg, Expression value)
+   .. function:: static Expression string_index_of(krpc::Connection& connection, Expression arg, Expression value)
 
       The position of the first occurrence of one string within another.
 
@@ -1156,7 +1275,7 @@ assembled and run.
       :returns: The position of the value, counting from zero, or -1 if it does not occur.
    
 
-   .. function:: static Expression string_contains(Client& connection, Expression arg, Expression value)
+   .. function:: static Expression string_contains(krpc::Connection& connection, Expression arg, Expression value)
 
       Whether one string occurs within another.
 
@@ -1168,7 +1287,7 @@ assembled and run.
       :returns: Whether the value occurs in the string.
    
 
-   .. function:: static Expression string_starts_with(Client& connection, Expression arg, Expression value)
+   .. function:: static Expression string_starts_with(krpc::Connection& connection, Expression arg, Expression value)
 
       Whether a string starts with another.
 
@@ -1180,7 +1299,7 @@ assembled and run.
       :returns: Whether the string starts with the value.
    
 
-   .. function:: static Expression string_ends_with(Client& connection, Expression arg, Expression value)
+   .. function:: static Expression string_ends_with(krpc::Connection& connection, Expression arg, Expression value)
 
       Whether a string ends with another.
 
@@ -1192,7 +1311,7 @@ assembled and run.
       :returns: Whether the string ends with the value.
    
 
-   .. function:: static Expression string_to_upper(Client& connection, Expression arg)
+   .. function:: static Expression string_to_upper(krpc::Connection& connection, Expression arg)
 
       A string in upper case, independently of the game's language.
 
@@ -1203,7 +1322,7 @@ assembled and run.
       :returns: The string in upper case.
    
 
-   .. function:: static Expression string_to_lower(Client& connection, Expression arg)
+   .. function:: static Expression string_to_lower(krpc::Connection& connection, Expression arg)
 
       A string in lower case, independently of the game's language.
 
@@ -1214,7 +1333,7 @@ assembled and run.
       :returns: The string in lower case.
    
 
-   .. function:: static Expression string_trim(Client& connection, Expression arg)
+   .. function:: static Expression string_trim(krpc::Connection& connection, Expression arg)
 
       A string with white space removed from both ends.
 
@@ -1225,7 +1344,7 @@ assembled and run.
       :returns: The trimmed string.
    
 
-   .. function:: static Expression string_trim_start(Client& connection, Expression arg)
+   .. function:: static Expression string_trim_start(krpc::Connection& connection, Expression arg)
 
       A string with white space removed from its start.
 
@@ -1236,7 +1355,7 @@ assembled and run.
       :returns: The trimmed string.
    
 
-   .. function:: static Expression string_trim_end(Client& connection, Expression arg)
+   .. function:: static Expression string_trim_end(krpc::Connection& connection, Expression arg)
 
       A string with white space removed from its end.
 
@@ -1247,7 +1366,7 @@ assembled and run.
       :returns: The trimmed string.
    
 
-   .. function:: static Expression string_replace(Client& connection, Expression arg, Expression old_value, Expression new_value)
+   .. function:: static Expression string_replace(krpc::Connection& connection, Expression arg, Expression old_value, Expression new_value)
 
       A string with every occurrence of one string replaced by another.
 
@@ -1264,7 +1383,7 @@ assembled and run.
 
          Throws an exception if the string to replace is empty.
 
-   .. function:: static Expression string_split(Client& connection, Expression arg, Expression separator)
+   .. function:: static Expression string_split(krpc::Connection& connection, Expression arg, Expression separator)
 
       The parts of a string separated by another string.
 
@@ -1276,7 +1395,7 @@ assembled and run.
       :returns: The parts of the string.
    
 
-   .. function:: static Expression string_join(Client& connection, Expression separator, Expression values)
+   .. function:: static Expression string_join(krpc::Connection& connection, Expression separator, Expression values)
 
       Strings joined together, separated by another string.
 
@@ -1288,7 +1407,7 @@ assembled and run.
       :returns: The joined string.
    
 
-   .. function:: static Expression count(Client& connection, Expression arg)
+   .. function:: static Expression count(krpc::Connection& connection, Expression arg)
 
       The number of values in a collection.
 
@@ -1299,7 +1418,7 @@ assembled and run.
       :returns: The number of elements in the collection.
    
 
-   .. function:: static Expression sum(Client& connection, Expression arg)
+   .. function:: static Expression sum(krpc::Connection& connection, Expression arg)
 
       The sum of the values of a collection.
 
@@ -1310,7 +1429,7 @@ assembled and run.
       :returns: The sum of the elements in the collection.
    
 
-   .. function:: static Expression max(Client& connection, Expression arg)
+   .. function:: static Expression max(krpc::Connection& connection, Expression arg)
 
       The largest value of a collection.
 
@@ -1325,7 +1444,7 @@ assembled and run.
 
          Throws an exception if the collection is empty and its values are not nullable.
 
-   .. function:: static Expression min(Client& connection, Expression arg)
+   .. function:: static Expression min(krpc::Connection& connection, Expression arg)
 
       The smallest value of a collection.
 
@@ -1340,7 +1459,7 @@ assembled and run.
 
          Throws an exception if the collection is empty and its values are not nullable.
 
-   .. function:: static Expression average(Client& connection, Expression arg)
+   .. function:: static Expression average(krpc::Connection& connection, Expression arg)
 
       The average of the values of a collection.
 
@@ -1355,7 +1474,7 @@ assembled and run.
 
          Throws an exception if the collection is empty and its values are not nullable.
 
-   .. function:: static Expression select(Client& connection, Expression arg, Expression func)
+   .. function:: static Expression select(krpc::Connection& connection, Expression arg, Expression func)
 
       The result of a function for each value of a collection.
 
@@ -1371,7 +1490,7 @@ assembled and run.
 
          The result is lazily evaluated. :func:`Expression::to_list` makes it concrete.
 
-   .. function:: static Expression where(Client& connection, Expression arg, Expression func)
+   .. function:: static Expression where(krpc::Connection& connection, Expression arg, Expression func)
 
       The values of a collection for which a predicate function returns true.
 
@@ -1387,7 +1506,7 @@ assembled and run.
 
          The result is lazily evaluated. :func:`Expression::to_list` makes it concrete.
 
-   .. function:: static Expression select_many(Client& connection, Expression arg, Expression func)
+   .. function:: static Expression select_many(krpc::Connection& connection, Expression arg, Expression func)
 
       The values of the collections a function returns for each value of a collection,
       flattened into one.
@@ -1404,7 +1523,7 @@ assembled and run.
 
          The result is lazily evaluated. :func:`Expression::to_list` makes it concrete.
 
-   .. function:: static Expression contains(Client& connection, Expression arg, Expression value)
+   .. function:: static Expression contains(krpc::Connection& connection, Expression arg, Expression value)
 
       Whether a collection contains a value.
 
@@ -1416,7 +1535,7 @@ assembled and run.
       :returns: Whether the collection contains the value.
    
 
-   .. function:: static Expression contains_key(Client& connection, Expression dictionary, Expression key)
+   .. function:: static Expression contains_key(krpc::Connection& connection, Expression dictionary, Expression key)
 
       Whether a dictionary contains a key.
 
@@ -1428,7 +1547,7 @@ assembled and run.
       :returns: Whether the dictionary contains the key.
    
 
-   .. function:: static Expression aggregate(Client& connection, Expression arg, Expression func)
+   .. function:: static Expression aggregate(krpc::Connection& connection, Expression arg, Expression func)
 
       The result of applying an accumulator function over a collection.
 
@@ -1444,7 +1563,7 @@ assembled and run.
 
          Throws an exception if the collection is empty.
 
-   .. function:: static Expression aggregate_with_seed(Client& connection, Expression arg, Expression seed, Expression func)
+   .. function:: static Expression aggregate_with_seed(krpc::Connection& connection, Expression arg, Expression seed, Expression func)
 
       The result of applying an accumulator function over a collection, starting from a seed.
 
@@ -1461,7 +1580,7 @@ assembled and run.
 
          The seed widens to the type of the accumulated value, the function's result.
 
-   .. function:: static Expression concat(Client& connection, Expression arg1, Expression arg2)
+   .. function:: static Expression concat(krpc::Connection& connection, Expression arg1, Expression arg2)
 
       The values of one collection followed by those of another.
 
@@ -1477,7 +1596,7 @@ assembled and run.
 
          The result is lazily evaluated. :func:`Expression::to_list` makes it concrete.
 
-   .. function:: static Expression skip(Client& connection, Expression arg, Expression count)
+   .. function:: static Expression skip(krpc::Connection& connection, Expression arg, Expression count)
 
       A collection without its first count values.
 
@@ -1493,7 +1612,7 @@ assembled and run.
 
          The result is lazily evaluated. :func:`Expression::to_list` makes it concrete.
 
-   .. function:: static Expression take(Client& connection, Expression arg, Expression count)
+   .. function:: static Expression take(krpc::Connection& connection, Expression arg, Expression count)
 
       The first count values of a collection.
 
@@ -1509,7 +1628,7 @@ assembled and run.
 
          The result is lazily evaluated. :func:`Expression::to_list` makes it concrete.
 
-   .. function:: static Expression order_by(Client& connection, Expression arg, Expression key)
+   .. function:: static Expression order_by(krpc::Connection& connection, Expression arg, Expression key)
 
       The values of a collection ordered by the key a function produces for each of them.
 
@@ -1525,7 +1644,7 @@ assembled and run.
 
          The result is lazily evaluated. :func:`Expression::to_list` makes it concrete.
 
-   .. function:: static Expression all(Client& connection, Expression arg, Expression predicate)
+   .. function:: static Expression all(krpc::Connection& connection, Expression arg, Expression predicate)
 
       Whether a predicate function returns true for every value of a collection.
 
@@ -1537,7 +1656,7 @@ assembled and run.
       :returns: Whether all items satisfy the predicate.
    
 
-   .. function:: static Expression any(Client& connection, Expression arg, Expression predicate)
+   .. function:: static Expression any(krpc::Connection& connection, Expression arg, Expression predicate)
 
       Whether a predicate function returns true for any value of a collection.
 
@@ -1549,7 +1668,7 @@ assembled and run.
       :returns: Whether any item satisfies the predicate.
    
 
-   .. function:: static Expression first(Client& connection, Expression arg)
+   .. function:: static Expression first(krpc::Connection& connection, Expression arg)
 
       The first value of a collection.
 
@@ -1564,7 +1683,7 @@ assembled and run.
 
          Throws an exception if the collection is empty.
 
-   .. function:: static Expression last(Client& connection, Expression arg)
+   .. function:: static Expression last(krpc::Connection& connection, Expression arg)
 
       The last value of a collection.
 
@@ -1579,7 +1698,7 @@ assembled and run.
 
          Throws an exception if the collection is empty.
 
-   .. function:: static Expression element_at(Client& connection, Expression arg, Expression index)
+   .. function:: static Expression element_at(krpc::Connection& connection, Expression arg, Expression index)
 
       The value at the given position in a collection.
 
@@ -1595,7 +1714,7 @@ assembled and run.
 
          Throws an exception if the index is out of range.
 
-   .. function:: static Expression min_by(Client& connection, Expression arg, Expression key)
+   .. function:: static Expression min_by(krpc::Connection& connection, Expression arg, Expression key)
 
       The value of a collection with the smallest key.
 
@@ -1611,7 +1730,7 @@ assembled and run.
 
          Throws an exception if the collection is empty.
 
-   .. function:: static Expression max_by(Client& connection, Expression arg, Expression key)
+   .. function:: static Expression max_by(krpc::Connection& connection, Expression arg, Expression key)
 
       The value of a collection with the largest key.
 
@@ -1627,7 +1746,7 @@ assembled and run.
 
          Throws an exception if the collection is empty.
 
-   .. function:: static Expression distinct(Client& connection, Expression arg)
+   .. function:: static Expression distinct(krpc::Connection& connection, Expression arg)
 
       The values of a collection with duplicates removed, keeping the first
       occurrence of each.
@@ -1643,7 +1762,7 @@ assembled and run.
 
          The result is lazily evaluated. :func:`Expression::to_list` makes it concrete.
 
-   .. function:: static Expression reverse(Client& connection, Expression arg)
+   .. function:: static Expression reverse(krpc::Connection& connection, Expression arg)
 
       The values of a collection in the opposite order.
 
@@ -1658,7 +1777,7 @@ assembled and run.
 
          The result is lazily evaluated. :func:`Expression::to_list` makes it concrete.
 
-   .. function:: static Expression union_(Client& connection, Expression arg1, Expression arg2)
+   .. function:: static Expression union_(krpc::Connection& connection, Expression arg1, Expression arg2)
 
       The values in either of two collections, with duplicates removed.
 
@@ -1674,7 +1793,7 @@ assembled and run.
 
          The result is lazily evaluated. :func:`Expression::to_list` makes it concrete.
 
-   .. function:: static Expression intersect(Client& connection, Expression arg1, Expression arg2)
+   .. function:: static Expression intersect(krpc::Connection& connection, Expression arg1, Expression arg2)
 
       The values in both of two collections, with duplicates removed.
 
@@ -1690,7 +1809,7 @@ assembled and run.
 
          The result is lazily evaluated. :func:`Expression::to_list` makes it concrete.
 
-   .. function:: static Expression except(Client& connection, Expression arg1, Expression arg2)
+   .. function:: static Expression except(krpc::Connection& connection, Expression arg1, Expression arg2)
 
       The values of the first collection that are not in the second, with
       duplicates removed.
@@ -1707,7 +1826,7 @@ assembled and run.
 
          The result is lazily evaluated. :func:`Expression::to_list` makes it concrete.
 
-   .. function:: static Expression zip(Client& connection, Expression arg1, Expression arg2, Expression func)
+   .. function:: static Expression zip(krpc::Connection& connection, Expression arg1, Expression arg2, Expression func)
 
       The results of a function applied to the values of two collections in pairs.
 
@@ -1725,7 +1844,7 @@ assembled and run.
          The result is as long as the shorter of the two collections. It is lazily
          evaluated, and :func:`Expression::to_list` makes it concrete.
 
-   .. function:: static Expression group_by(Client& connection, Expression arg, Expression key)
+   .. function:: static Expression group_by(krpc::Connection& connection, Expression arg, Expression key)
 
       The values of a collection grouped by the key a function produces for each of them.
 
@@ -1743,70 +1862,70 @@ assembled and run.
 
    The type of a value a procedure takes or returns.
 
-   .. function:: static Type double_(Client& connection)
+   .. function:: static Type double_(krpc::Connection& connection)
 
       A double precision floating point number type.
 
 
    
 
-   .. function:: static Type float_(Client& connection)
+   .. function:: static Type float_(krpc::Connection& connection)
 
       A single precision floating point number type.
 
 
    
 
-   .. function:: static Type int_(Client& connection)
+   .. function:: static Type int_(krpc::Connection& connection)
 
       A signed 32-bit integer type.
 
 
    
 
-   .. function:: static Type long_(Client& connection)
+   .. function:: static Type long_(krpc::Connection& connection)
 
       A signed 64-bit integer type.
 
 
    
 
-   .. function:: static Type u_int(Client& connection)
+   .. function:: static Type uint(krpc::Connection& connection)
 
       An unsigned 32-bit integer type.
 
 
    
 
-   .. function:: static Type u_long(Client& connection)
+   .. function:: static Type ulong(krpc::Connection& connection)
 
       An unsigned 64-bit integer type.
 
 
    
 
-   .. function:: static Type bool_(Client& connection)
+   .. function:: static Type bool_(krpc::Connection& connection)
 
       A boolean type.
 
 
    
 
-   .. function:: static Type string(Client& connection)
+   .. function:: static Type string(krpc::Connection& connection)
 
       A string type.
 
 
    
 
-   .. function:: static Type bytes(Client& connection)
+   .. function:: static Type bytes(krpc::Connection& connection)
 
       A byte sequence type.
 
 
    
 
-   .. function:: static Type class_type(Client& connection, std::string service, std::string name)
+   .. function:: static Type class_type(krpc::Connection& connection, std::string service, std::string name)
 
       The type of a class defined by a service.
 
@@ -1817,7 +1936,7 @@ assembled and run.
 
    
 
-   .. function:: static Type enumeration_type(Client& connection, std::string service, std::string name)
+   .. function:: static Type enumeration_type(krpc::Connection& connection, std::string service, std::string name)
 
       The type of an enumeration defined by a service.
 
@@ -1828,7 +1947,7 @@ assembled and run.
 
    
 
-   .. function:: static Type struct_type(Client& connection, std::string service, std::string name)
+   .. function:: static Type struct_type(krpc::Connection& connection, std::string service, std::string name)
 
       The type of a structure defined by a service.
 
@@ -1839,7 +1958,40 @@ assembled and run.
 
    
 
-   .. function:: static Type tuple_type(Client& connection, std::vector<Type> value_types)
+   .. function:: static Type class_type_by_id(krpc::Connection& connection, uint32_t service_id, uint32_t class_id)
+
+      The type of a class defined by a service, named by ids.
+
+      :Parameters:
+
+       * **service_id** -- The id of the service the class is defined in.
+       * **class_id** -- The id of the class.
+
+   
+
+   .. function:: static Type enumeration_type_by_id(krpc::Connection& connection, uint32_t service_id, uint32_t enumeration_id)
+
+      The type of an enumeration defined by a service, named by ids.
+
+      :Parameters:
+
+       * **service_id** -- The id of the service the enumeration is defined in.
+       * **enumeration_id** -- The id of the enumeration.
+
+   
+
+   .. function:: static Type struct_type_by_id(krpc::Connection& connection, uint32_t service_id, uint32_t struct_id)
+
+      The type of a structure defined by a service, named by ids.
+
+      :Parameters:
+
+       * **service_id** -- The id of the service the structure is defined in.
+       * **struct_id** -- The id of the structure.
+
+   
+
+   .. function:: static Type tuple_type(krpc::Connection& connection, std::vector<Type> value_types)
 
       A tuple type. Throws an exception if there are no element types or more than seven.
 
@@ -1849,7 +2001,7 @@ assembled and run.
 
    
 
-   .. function:: static Type list_type(Client& connection, Type value_type)
+   .. function:: static Type list_type(krpc::Connection& connection, Type value_type)
 
       A list type.
 
@@ -1859,7 +2011,7 @@ assembled and run.
 
    
 
-   .. function:: static Type set_type(Client& connection, Type value_type)
+   .. function:: static Type set_type(krpc::Connection& connection, Type value_type)
 
       A set type. Throws an exception if the element type is nullable.
 
@@ -1869,7 +2021,7 @@ assembled and run.
 
    
 
-   .. function:: static Type dictionary_type(Client& connection, Type key_type, Type value_type)
+   .. function:: static Type dictionary_type(krpc::Connection& connection, Type key_type, Type value_type)
 
       A dictionary type. Throws an exception if the key type is nullable or not a valid
       key type.
@@ -1881,7 +2033,7 @@ assembled and run.
 
    
 
-   .. function:: static Type nullable_type(Client& connection, Type value_type)
+   .. function:: static Type nullable_type(krpc::Connection& connection, Type value_type)
 
       A nullable type, holding a value of the given type or null.
 
@@ -1949,22 +2101,22 @@ assembled and run.
       A single precision floating point number.
 
 
-   .. enumerator:: s_int32
+   .. enumerator:: sint32
 
       A signed 32-bit integer.
 
 
-   .. enumerator:: s_int64
+   .. enumerator:: sint64
 
       A signed 64-bit integer.
 
 
-   .. enumerator:: u_int32
+   .. enumerator:: uint32
 
       An unsigned 32-bit integer.
 
 
-   .. enumerator:: u_int64
+   .. enumerator:: uint64
 
       An unsigned 64-bit integer.
 

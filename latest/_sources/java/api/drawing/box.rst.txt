@@ -8,7 +8,7 @@ Box
 
 .. type:: public class Box
 
-   The edges of a box. Created using :meth:`addBox(org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>, SpaceCenter.ReferenceFrame, org.javatuples.Quartet<Double,Double,Double,Double>, boolean)`.
+   The edges of a box. Created using :meth:`Drawing.addBox(org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>, SpaceCenter.ReferenceFrame, org.javatuples.Quartet<Double,Double,Double,Double>, boolean)`.
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> getCenter()
 

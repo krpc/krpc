@@ -1,0 +1,161 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: Drawing
+   :no-index:
+
+Text
+====
+
+
+.. class:: Text
+
+   Text. Created using :func:`Drawing.addText`.
+
+   .. method:: getPosition()
+               setPosition(value)
+
+      Position of the text.
+
+      :Property: Can be read or written
+      :rtype: ``[number, number, number]``
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: getRotation()
+               setRotation(value)
+
+      Rotation of the text as a quaternion.
+
+      :Property: Can be read or written
+      :rtype: ``[number, number, number, number]``
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: getFaceCamera()
+               setFaceCamera(value)
+
+      Whether the text turns to face the camera, in place of its :meth:`Drawing.Text.getRotation`.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: getReferenceFrame()
+               setReferenceFrame(value)
+
+      Reference frame for the positions of the object.
+
+      :Property: Can be read or written
+      :rtype: :class:`SpaceCenter.ReferenceFrame`
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: getVisible()
+               setVisible(value)
+
+      Whether the object is visible.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: remove()
+
+      Remove the object.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: getContent()
+               setContent(value)
+
+      The text string
+
+      :Property: Can be read or written
+      :rtype: ``string``
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: getFont()
+               setFont(value)
+
+      Name of the font
+
+      :Property: Can be read or written
+      :rtype: ``string``
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: availableFonts()
+
+      A list of all available fonts.
+
+      :rtype: ``Array`` of ``string``
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: getSize()
+               setSize(value)
+
+      Font size.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: getCharacterSize()
+               setCharacterSize(value)
+
+      Character size.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: getStyle()
+               setStyle(value)
+
+      Font style.
+
+      :Property: Can be read or written
+      :rtype: :class:`UI.FontStyle`
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: getColor()
+               setColor(value)
+
+      Set the color
+
+      :Property: Can be read or written
+      :rtype: :class:`StdLib.ColorRGB`
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: getMaterial()
+               setMaterial(value)
+
+      Material used to render the object.
+      Creates the material from a shader with the given name.
+
+      :Property: Can be read or written
+      :rtype: ``string``
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: getAlignment()
+               setAlignment(value)
+
+      Alignment.
+
+      :Property: Can be read or written
+      :rtype: :class:`UI.TextAlignment`
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: getLineSpacing()
+               setLineSpacing(value)
+
+      Line spacing.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: getAnchor()
+               setAnchor(value)
+
+      Anchor.
+
+      :Property: Can be read or written
+      :rtype: :class:`UI.TextAnchor`
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph

@@ -7,7 +7,7 @@ Standard Library
 
 
 .. namespace:: krpc::services
-.. class:: StdLib : public krpc::Service
+.. class:: StdLib : public krpc::RemoteService
 
    A standard library of mathematics and printing for server side functions, and of the
    colors other services use.
@@ -18,7 +18,7 @@ Standard Library
       in the order x, y, z, w the SpaceCenter service uses. Angles are in radians unless
       stated otherwise.
 
-   .. function:: StdLib(krpc::Client* client)
+   .. function:: StdLib(krpc::Connection& connection)
 
       Construct an instance of this service.
 
@@ -237,7 +237,7 @@ Standard Library
 
    .. function:: double atan2(double y, double x)
 
-      The angle, in radians, between the positive x axis and the point (x, y).
+      The angle, in radians, between the positive x axis and the point ``(x, y)``.
 
       :Parameters:
 
@@ -461,7 +461,7 @@ Standard Library
 
    .. function:: double vector_angle(std::tuple<double, double, double> u, std::tuple<double, double, double> v)
 
-      The angle between two vectors, in radians, between 0 and pi.
+      The angle between two vectors, in radians, between 0 and :math:`\pi`.
 
       :Parameters:
 
@@ -601,7 +601,7 @@ Standard Library
    .. function:: double quaternion_angle(std::tuple<double, double, double, double> q, std::tuple<double, double, double, double> r)
 
       The angle of the rotation that takes one rotation to another,
-      in radians, between 0 and pi.
+      in radians, between 0 and :math:`\pi`.
 
       :Parameters:
 
@@ -662,7 +662,7 @@ Standard Library
 
    .. member:: double angle
 
-      The angle of the rotation, in radians between 0 and pi.
+      The angle of the rotation, in radians between 0 and :math:`\pi`.
 
 
 .. namespace:: krpc::services::StdLib
@@ -707,3 +707,19 @@ Standard Library
    .. member:: float a
 
       The alpha component.
+
+
+.. namespace:: krpc::services::StdLib
+.. enum-struct:: ImageFormat
+
+   The file format of an image.
+
+
+   .. enumerator:: png
+
+      PNG, which is lossless.
+
+
+   .. enumerator:: jpeg
+
+      JPEG, which is lossy, and smaller and faster to encode than PNG.

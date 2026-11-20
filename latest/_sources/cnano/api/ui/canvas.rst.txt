@@ -10,6 +10,10 @@ Canvas
 
    A canvas for user interface elements. See :func:`krpc_UI_StockCanvas` and :func:`krpc_UI_AddCanvas`.
 
+   .. macro:: KRPC_CLASS_UI_CANVAS
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_UI_Canvas_RectTransform(krpc_connection_t connection, krpc_UI_RectTransform_t * returnValue, krpc_UI_Canvas_t instance)
 
       The rect transform for the UI object.

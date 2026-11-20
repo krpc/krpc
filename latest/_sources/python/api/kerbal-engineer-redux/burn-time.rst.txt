@@ -1,0 +1,24 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: KerbalEngineerRedux
+
+Burn Time
+=========
+
+
+.. class:: BurnTime(duration, half_duration)
+
+   The time to burn a delta-v at full thrust, staging as each stage runs dry.
+
+
+   .. attribute:: duration
+
+      The duration of the burn, in seconds.
+
+      :rtype: float
+
+   .. attribute:: half_duration
+
+      The time to burn half the delta-v, in seconds.
+
+      :rtype: float

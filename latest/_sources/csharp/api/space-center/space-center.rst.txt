@@ -2,8 +2,8 @@
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.SpaceCenter
 
-SpaceCenter
-===========
+Service
+=======
 
 
 .. class:: SpaceCenter
@@ -282,7 +282,7 @@ SpaceCenter
 
    .. property:: double G { get; }
 
-      The value of the `gravitational constant <https://en.wikipedia.org/wiki/Gravitational_constant>`_ G in :math:`N(m/kg)^2`.
+      The value of the `gravitational constant <https://en.wikipedia.org/wiki/Gravitational_constant>`_ G in :math:`\mathrm{N(m/kg)^{2}}`.
 
       :Game Scenes: All
 
@@ -390,7 +390,6 @@ SpaceCenter
        * **maxRailsRate** -- The maximum warp rate in regular "on-rails" time warp.
        * **maxPhysicsRate** -- The maximum warp rate in physical time warp.
 
-      :returns: When the time warp is complete.
       :Game Scenes: Space Center, Flight, Tracking Station
 
 
@@ -431,11 +430,11 @@ SpaceCenter
 
       :parameters:
 
-       * **rotation** -- Rotation, as a quaternion of the form :math:`(x, y, z, w)`, in reference frame *from*.
+       * **rotation** -- Rotation, as a quaternion of the form ``(x, y, z, w)``, in reference frame *from*.
        * **from** -- The reference frame that the rotation is in.
        * **to** -- The reference frame to covert the rotation to.
 
-      :returns: The corresponding rotation, as a quaternion of the form :math:`(x, y, z, w)`, in reference frame *to*.
+      :returns: The corresponding rotation, as a quaternion of the form ``(x, y, z, w)``, in reference frame *to*.
       :Game Scenes: All
 
    .. function:: System.Tuple<double,double,double> TransformVelocity(System.Tuple<double,double,double> position, System.Tuple<double,double,double> velocity, ReferenceFrame from, ReferenceFrame to)
@@ -447,7 +446,7 @@ SpaceCenter
       :parameters:
 
        * **position** -- Position, as a vector, in reference frame *from*.
-       * **velocity** -- Velocity, as a vector that points in the direction of travel and whose magnitude is the speed in meters per second, in reference frame *from*.
+       * **velocity** -- Velocity, as a vector that points in the direction of travel and whose magnitude is the speed in :math:`\mathrm{m/s}`, in reference frame *from*.
        * **from** -- The reference frame that the position and velocity are in.
        * **to** -- The reference frame to covert the velocity to.
 
@@ -484,13 +483,91 @@ SpaceCenter
 
    .. property:: bool FARAvailable { get; }
 
-      Whether `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/>`_ is installed.
+      Whether Ferram Aerospace Research is installed.
+
+      :Game Scenes: All
+
+   .. property:: bool AGExtAvailable { get; }
+
+      Whether Action Groups Extended is installed.
 
       :Game Scenes: All
 
    .. property:: bool RealFuelsAvailable { get; }
 
-      Whether `RealFuels <https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/>`_ is installed.
+      Whether RealFuels is installed.
+
+      :Game Scenes: All
+
+   .. property:: bool RealChuteAvailable { get; }
+
+      Whether RealChute is installed.
+
+      :Game Scenes: All
+
+   .. property:: bool ProceduralFairingsAvailable { get; }
+
+      Whether Procedural Fairings is installed.
+
+      :Game Scenes: All
+
+   .. property:: bool NearFutureSolarAvailable { get; }
+
+      Whether Near Future Solar is installed.
+
+      :Game Scenes: All
+
+   .. property:: bool DMagicAvailable { get; }
+
+      Whether DMagic's DMModuleScienceAnimateGeneric is installed.
+
+      :Game Scenes: All
+
+   .. property:: bool FirespitterAvailable { get; }
+
+      Whether Firespitter is installed.
+
+      :Game Scenes: All
+
+   .. property:: bool KerbalActuatorsAvailable { get; }
+
+      Whether KerbalActuators is installed.
+
+      :Game Scenes: All
+
+   .. property:: bool KSPCommunityPartModulesAvailable { get; }
+
+      Whether KSPCommunityPartModules is installed.
+
+      :Game Scenes: All
+
+   .. property:: bool KOSAvailable { get; }
+
+      Whether kOS is installed.
+
+      :Game Scenes: All
+
+   .. property:: bool B9PartSwitchAvailable { get; }
+
+      Whether B9PartSwitch is installed.
+
+      :Game Scenes: All
+
+   .. property:: bool TweakScaleRescaledAvailable { get; }
+
+      Whether TweakScale Rescaled is installed.
+
+      :Game Scenes: All
+
+   .. property:: bool RealAntennasAvailable { get; }
+
+      Whether RealAntennas is installed.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<CrewMember> Kerbals { get; }
+
+      The Kerbals in the roster.
 
       :Game Scenes: All
 
@@ -667,7 +744,10 @@ SpaceCenter
 .. enum:: MapFilterType
 
    The set of things that are visible in map mode.
-   These may be combined with bitwise logic.
+
+   .. note::
+
+      The values may be combined.   A flags enumeration. :std:ref:`csharp-client-flags` shows how to combine its values.
 
 
    .. enumerator:: All
@@ -761,7 +841,7 @@ SpaceCenter
    A place where craft can be launched from.
    More of these can be added with mods like Kerbal Konstructs.
 
-   .. function:: LaunchSite(string name, CelestialBody body, EditorFacility editorFacility)
+   .. function:: LaunchSite(string name, CelestialBody body, EditorFacility editorFacility, double latitude, double longitude, double altitude)
 
       Construct a LaunchSite from the values of its fields.
 
@@ -777,6 +857,21 @@ SpaceCenter
    .. property:: EditorFacility EditorFacility { get; }
 
       Which editor is normally used for this launch site.
+
+   .. property:: double Latitude { get; }
+
+      The latitude of the point vessels launch from, in degrees, or ``NaN`` if the
+      site has no spawn point.
+
+   .. property:: double Longitude { get; }
+
+      The longitude of the point vessels launch from, in degrees, or ``NaN`` if the
+      site has no spawn point.
+
+   .. property:: double Altitude { get; }
+
+      The altitude above sea level of the point vessels launch from, in meters, or
+      ``NaN`` if the site has no spawn point.
 
 
 .. enum:: EditorFacility

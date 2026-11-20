@@ -1,0 +1,300 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+MapMarker
+=========
+
+
+.. _http-Drawing.MapMarker:
+
+.. rubric:: MapMarker
+
+A marker drawn in the map view, with one of the game's own map icons. Created using
+:http:post:`/drawing/add-map-marker`.
+
+A ``MapMarker`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /drawing/map-marker/(id)/position
+
+   Position of the marker.
+
+
+   :param id: The identifier of the :ref:`MapMarker <http-Drawing.MapMarker>` object.
+
+   :resjson tuple<double, double, double> value:
+
+.. http:put:: /drawing/map-marker/(id)/position
+
+   Position of the marker.
+
+
+   :param id: The identifier of the :ref:`MapMarker <http-Drawing.MapMarker>` object.
+
+   :reqjson tuple<double, double, double> value: The new value.
+
+
+
+
+.. http:get:: /drawing/map-marker/(id)/reference-frame
+
+   Reference frame that the position of the marker is in.
+
+
+   :param id: The identifier of the :ref:`MapMarker <http-Drawing.MapMarker>` object.
+
+   :resjson SpaceCenter.ReferenceFrame value:
+
+.. http:put:: /drawing/map-marker/(id)/reference-frame
+
+   Reference frame that the position of the marker is in.
+
+
+   :param id: The identifier of the :ref:`MapMarker <http-Drawing.MapMarker>` object.
+
+   :reqjson SpaceCenter.ReferenceFrame value: The new value.
+
+
+
+
+.. http:get:: /drawing/map-marker/(id)/visible
+
+   Whether the marker is visible.
+
+
+   :param id: The identifier of the :ref:`MapMarker <http-Drawing.MapMarker>` object.
+
+   :resjson bool value:
+
+.. http:put:: /drawing/map-marker/(id)/visible
+
+   Whether the marker is visible.
+
+
+   :param id: The identifier of the :ref:`MapMarker <http-Drawing.MapMarker>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /drawing/map-marker/(id)/icon
+
+   The icon that the marker is drawn with.
+
+
+   :param id: The identifier of the :ref:`MapMarker <http-Drawing.MapMarker>` object.
+
+   :resjson Drawing.MapMarkerIcon value:
+
+.. http:put:: /drawing/map-marker/(id)/icon
+
+   The icon that the marker is drawn with.
+
+
+   :param id: The identifier of the :ref:`MapMarker <http-Drawing.MapMarker>` object.
+
+   :reqjson Drawing.MapMarkerIcon value: The new value.
+
+
+
+
+.. http:get:: /drawing/map-marker/(id)/image
+
+   The image that the marker is drawn with in place of its icon, or null to draw the
+   icon.
+
+
+   :param id: The identifier of the :ref:`MapMarker <http-Drawing.MapMarker>` object.
+
+   :resjson Drawing.Image? value:
+
+.. http:put:: /drawing/map-marker/(id)/image
+
+   The image that the marker is drawn with in place of its icon, or null to draw the
+   icon.
+
+
+   :param id: The identifier of the :ref:`MapMarker <http-Drawing.MapMarker>` object.
+
+   :reqjson Drawing.Image? value: The new value.
+
+
+
+
+.. http:get:: /drawing/map-marker/(id)/caption
+
+   The caption shown when the mouse is over the marker.
+
+
+   :param id: The identifier of the :ref:`MapMarker <http-Drawing.MapMarker>` object.
+
+   :resjson string value:
+
+.. http:put:: /drawing/map-marker/(id)/caption
+
+   The caption shown when the mouse is over the marker.
+
+
+   :param id: The identifier of the :ref:`MapMarker <http-Drawing.MapMarker>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:get:: /drawing/map-marker/(id)/color
+
+   The color of the marker.
+
+
+   :param id: The identifier of the :ref:`MapMarker <http-Drawing.MapMarker>` object.
+
+   :resjson StdLib.ColorRGB value:
+
+.. http:put:: /drawing/map-marker/(id)/color
+
+   The color of the marker.
+
+
+   :param id: The identifier of the :ref:`MapMarker <http-Drawing.MapMarker>` object.
+
+   :reqjson StdLib.ColorRGB value: The new value.
+
+
+
+
+.. http:post:: /drawing/map-marker/(id)/remove
+
+   Remove the marker.
+
+
+   :param id: The identifier of the :ref:`MapMarker <http-Drawing.MapMarker>` object.
+
+
+
+
+
+
+
+.. _http-Drawing.MapMarkerIcon:
+
+.. rubric:: MapMarkerIcon
+
+The icon a :ref:`MapMarker <http-Drawing.MapMarker>` is drawn with, from the game's own map icons.
+
+Passed and returned as the name of one of its values:
+
+
+``"generic"``
+   A plain marker.
+
+
+``"celestial_body"``
+   A celestial body.
+
+
+``"apoapsis"``
+   An apoapsis.
+
+
+``"periapsis"``
+   A periapsis.
+
+
+``"ascending_node"``
+   An ascending node.
+
+
+``"descending_node"``
+   A descending node.
+
+
+``"maneuver_node"``
+   A maneuver node.
+
+
+``"encounter"``
+   An encounter with a sphere of influence.
+
+
+``"escape"``
+   An escape from a sphere of influence.
+
+
+``"impact"``
+   An impact with the surface.
+
+
+``"close_approach"``
+   A closest approach to a target.
+
+
+``"intersect"``
+   An intersection with the orbit of a target.
+
+
+``"ship"``
+   A ship.
+
+
+``"probe"``
+   A probe.
+
+
+``"relay"``
+   A relay.
+
+
+``"station"``
+   A station.
+
+
+``"base"``
+   A base.
+
+
+``"lander"``
+   A lander.
+
+
+``"rover"``
+   A rover.
+
+
+``"plane"``
+   A plane.
+
+
+``"eva"``
+   A kerbal on EVA.
+
+
+``"flag"``
+   A flag.
+
+
+``"debris"``
+   Debris.
+
+
+``"space_object"``
+   An asteroid or comet.
+
+
+``"deployed_science"``
+   Deployed science equipment.
+
+
+``"launch_site"``
+   A launch site.
+
+
+``"runway"``
+   A runway.
+
+
+``"ksc"``
+   The Kerbal Space Center.

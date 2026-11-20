@@ -1,0 +1,58 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: KerbalAlarmClock
+
+Service
+=======
+
+
+.. module:: KerbalAlarmClock
+
+Provides functionality to interact with Kerbal Alarm Clock.
+
+
+.. attribute:: available: boolean
+
+   Whether Kerbal Alarm Clock is available.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: alarms: List
+
+   A list of all the alarms.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. staticmethod:: alarm_with_name(name: string): KerbalAlarmClock.Alarm | nil
+
+   Get the alarm with the given *name*, or ``nil``
+   if no alarms have that name. If more than one alarm has the name,
+   only returns one of them.
+
+   :param name: Name of the alarm to search for.
+
+
+
+
+.. staticmethod:: alarms_with_type(type: KerbalAlarmClock.AlarmType): List
+
+   Get a list of alarms of the specified *type*.
+
+   :param type: Type of alarm to return.
+
+
+
+
+.. staticmethod:: create_alarm(type: KerbalAlarmClock.AlarmType, name: string, ut: number): KerbalAlarmClock.Alarm
+
+   Create a new alarm and return it.
+
+   :param type: Type of the new alarm.
+   :param name: Name of the new alarm.
+   :param ut: Time at which the new alarm should trigger.

@@ -1,0 +1,128 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Translatron
+===========
+
+
+.. _http-MechJeb.Translatron:
+
+.. rubric:: Translatron
+
+The Translatron window, which holds a speed.
+
+A ``Translatron`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /mech-jeb/translatron/(id)/mode
+
+   The mode. Throws an exception if set to ``"keep_relative"``
+   or ``"direct"``.
+
+
+   :param id: The identifier of the :ref:`Translatron <http-MechJeb.Translatron>` object.
+
+   :resjson MechJeb.TranslatronMode value:
+
+.. http:put:: /mech-jeb/translatron/(id)/mode
+
+   The mode. Throws an exception if set to ``"keep_relative"``
+   or ``"direct"``.
+
+
+   :param id: The identifier of the :ref:`Translatron <http-MechJeb.Translatron>` object.
+
+   :reqjson MechJeb.TranslatronMode value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/translatron/(id)/translation-speed
+
+   The speed to hold, in :math:`\mathrm{m/s}`.
+
+
+   :param id: The identifier of the :ref:`Translatron <http-MechJeb.Translatron>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/translatron/(id)/translation-speed
+
+   The speed to hold, in :math:`\mathrm{m/s}`.
+
+
+   :param id: The identifier of the :ref:`Translatron <http-MechJeb.Translatron>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/translatron/(id)/kill-horizontal-speed
+
+   Whether to cancel the horizontal speed.
+
+
+   :param id: The identifier of the :ref:`Translatron <http-MechJeb.Translatron>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/translatron/(id)/kill-horizontal-speed
+
+   Whether to cancel the horizontal speed.
+
+
+   :param id: The identifier of the :ref:`Translatron <http-MechJeb.Translatron>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:post:: /mech-jeb/translatron/(id)/panic-switch
+
+   Abort: separate all but the last stage and engage the landing autopilot. A call
+   during an abort cancels it.
+
+
+   :param id: The identifier of the :ref:`Translatron <http-MechJeb.Translatron>` object.
+
+
+
+
+
+
+
+.. _http-MechJeb.TranslatronMode:
+
+.. rubric:: TranslatronMode
+
+The mode of Translatron. See :http:get:`/mech-jeb/translatron/(id)/mode`.
+
+Passed and returned as the name of one of its values:
+
+
+``"off"``
+   Off.
+
+
+``"keep_orbital"``
+   Hold the orbital speed.
+
+
+``"keep_surface"``
+   Hold the surface speed.
+
+
+``"keep_vertical"``
+   Hold the vertical speed.
+
+
+``"keep_relative"``
+   Unused. MechJeb 2.15 has no such mode.
+
+
+``"direct"``
+   Set by MechJeb's autopilots. Cannot be set.

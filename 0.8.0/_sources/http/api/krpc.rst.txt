@@ -1,0 +1,14 @@
+.. default-domain:: http
+.. highlight:: json
+
+KRPC
+====
+
+Provides functionality to interact with the server: its status and services, the connected
+clients, the game scene and pause state, and holding the game on a physics tick.
+
+.. toctree::
+   :includehidden:
+   :maxdepth: 1
+
+   krpc/krpc

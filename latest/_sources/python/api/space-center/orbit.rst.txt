@@ -21,7 +21,7 @@ Orbit
 
       :param CelestialBody body: The celestial body being orbited.
       :param tuple position: The position, as a position vector.
-      :param tuple velocity: The velocity, as a vector pointing in the direction of travel, whose magnitude is the speed in meters per second.
+      :param tuple velocity: The velocity, as a vector pointing in the direction of travel, whose magnitude is the speed in :math:`\mathrm{m/s}`.
       :param float ut: The universal time, in seconds, at which the object is at *position* traveling at *velocity*.
       :param ReferenceFrame or None reference_frame: The reference frame that *position* and *velocity* are in. Defaults to :attr:`CelestialBody.non_rotating_reference_frame` of *body*.
       :rtype: :class:`Orbit`
@@ -314,7 +314,7 @@ Orbit
       frame.
 
       :param ReferenceFrame or None reference_frame: The reference frame that the returned velocity vector is in. Defaults to :attr:`CelestialBody.non_rotating_reference_frame` of :attr:`Orbit.body`.
-      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in :math:`\mathrm{m/s}`.
       :rtype: tuple(float, float, float)
    
 
@@ -324,7 +324,7 @@ Orbit
 
       :param float ut: The universal time to measure the velocity at.
       :param ReferenceFrame or None reference_frame: The reference frame that the returned velocity vector is in. Defaults to :attr:`CelestialBody.non_rotating_reference_frame` of :attr:`Orbit.body`.
-      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in :math:`\mathrm{m/s}`.
       :rtype: tuple(float, float, float)
    
 
@@ -335,13 +335,13 @@ Orbit
 
       :param float true_anomaly: The true anomaly.
       :param ReferenceFrame or None reference_frame: The reference frame that the returned velocity vector is in. Defaults to :attr:`CelestialBody.non_rotating_reference_frame` of :attr:`Orbit.body`.
-      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in :math:`\mathrm{m/s}`.
       :rtype: tuple(float, float, float)
    
 
    .. attribute:: speed
 
-      The current orbital speed of the object in meters per second.
+      The current orbital speed of the object in :math:`\mathrm{m/s}`.
 
       :Attribute: Read-only, cannot be set
       :rtype: float
@@ -353,7 +353,7 @@ Orbit
 
    .. method:: speed_at(ut)
 
-      The orbital speed at the given time, in meters per second.
+      The orbital speed at the given time, in :math:`\mathrm{m/s}`.
 
       :param float ut: The universal time to measure the speed at.
       :rtype: float
@@ -361,7 +361,7 @@ Orbit
 
    .. method:: speed_at_radius(radius)
 
-      The orbital speed at the given orbital radius, in meters per second.
+      The orbital speed at the given orbital radius, in :math:`\mathrm{m/s}`.
 
       :param float radius: The orbital radius in meters.
       :rtype: float
@@ -374,8 +374,8 @@ Orbit
 
    .. method:: speed_at_true_anomaly(true_anomaly)
 
-      The orbital speed at the point in the orbit given by the true anomaly, in meters
-      per second.
+      The orbital speed at the point in the orbit given by the true anomaly, in
+      :math:`\mathrm{m/s}`.
 
       :param float true_anomaly: The true anomaly.
       :rtype: float
@@ -383,8 +383,7 @@ Orbit
 
    .. attribute:: specific_energy
 
-      The specific orbital energy, in Joules per kilogram (equivalently,
-      meters squared per second squared).
+      The specific orbital energy, in :math:`\mathrm{J/kg}`.
 
       :Attribute: Read-only, cannot be set
       :rtype: float
@@ -392,12 +391,14 @@ Orbit
 
       .. note::
 
-         This is the sum of the orbit's specific kinetic and potential energy, and
-         is negative for a bound (elliptical) orbit.
+         This is the sum of the orbit's specific kinetic and potential energy,
+         :math:`v^{2}/2 - \mu/r`, where :math:`v` is the orbital speed,
+         :math:`\mu` the gravitational parameter of the body and :math:`r` the
+         orbital radius. It is negative for a bound (elliptical) orbit.
 
    .. attribute:: specific_angular_momentum
 
-      The specific relative angular momentum, in meters squared per second.
+      The specific relative angular momentum, in :math:`\mathrm{m^{2}/s}`.
 
       :Attribute: Read-only, cannot be set
       :rtype: float
@@ -413,7 +414,7 @@ Orbit
 
    .. attribute:: mean_motion
 
-      The mean motion, in radians per second.
+      The mean motion, in :math:`\mathrm{rad/s}`.
 
       :Attribute: Read-only, cannot be set
       :rtype: float
@@ -582,7 +583,7 @@ Orbit
 
       .. warning:: Deprecated. Use :attr:`Orbit.speed` instead.
 
-      The current orbital speed in meters per second.
+      The current orbital speed in :math:`\mathrm{m/s}`.
 
       :Attribute: Read-only, cannot be set
       :rtype: float
@@ -592,7 +593,7 @@ Orbit
 
       .. warning:: Deprecated. Use :meth:`Orbit.speed_at` instead.
 
-      The orbital speed at the given time, in meters per second.
+      The orbital speed at the given time, in :math:`\mathrm{m/s}`.
 
       :param float ut: The universal time to measure the speed at.
       :rtype: float
@@ -602,7 +603,7 @@ Orbit
 
       .. warning:: Deprecated. Use :attr:`Orbit.specific_energy` instead.
 
-      The specific orbital energy of the orbit, in Joules per kilogram.
+      The specific orbital energy of the orbit, in :math:`\mathrm{J/kg}`.
 
       :Attribute: Read-only, cannot be set
       :rtype: float

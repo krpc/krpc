@@ -1,0 +1,1039 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: SpaceCenter
+   :no-index:
+
+AutoPilot
+=========
+
+
+.. class:: AutoPilot
+
+   Provides basic auto-piloting utilities for a vessel.
+   Created by calling :meth:`SpaceCenter.Vessel.getAutoPilot`.
+
+   .. note::
+
+      If a client engages the auto-pilot and then closes its connection to the server,
+      the auto-pilot will be disengaged. Its configuration and target are left unchanged.
+
+   .. method:: getSAS()
+               setSAS(value)
+
+      The state of SAS.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Equivalent to :meth:`SpaceCenter.Control.getSAS`.
+         Throws an exception if set to ``true`` while the auto-pilot is engaged, as the
+         auto-pilot holds SAS off for as long as it is flying the vessel.
+
+   .. method:: getSASMode()
+               setSASMode(value)
+
+      The current :meth:`SpaceCenter.AutoPilot.getSASMode`.
+      These modes are equivalent to the mode buttons to the left of the navball that appear
+      when SAS is enabled.
+
+      :Property: Can be read or written
+      :rtype: :class:`SpaceCenter.SASMode`
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Equivalent to :meth:`SpaceCenter.Control.getSASMode`.
+         Throws an exception if set to a mode not in :meth:`SpaceCenter.AutoPilot.getAvailableSASModes`.
+
+   .. method:: getAvailableSASModes()
+
+      The SAS modes that :meth:`SpaceCenter.AutoPilot.getSASMode` can be set to.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Set`` of :class:`SpaceCenter.SASMode`
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Equivalent to :meth:`SpaceCenter.Control.getAvailableSASModes`. The modes depend on the SAS
+         level of the vessel's pilot or probe core, the navball speed mode, and whether
+         there is a target and a maneuver node.
+
+   .. method:: getEngaged()
+               setEngaged(value)
+
+      Whether the auto-pilot is engaged.
+      Setting to ``true`` engages the auto-pilot; setting to ``false`` disengages it.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getUpdateMode()
+               setUpdateMode(value)
+
+      When the auto-pilot's control loop runs within a server update, relative to the
+      calls the update executes. Defaults to
+      :attr:`SpaceCenter.AutoPilotUpdateMode.afterCalls`.
+
+      :Property: Can be read or written
+      :rtype: :class:`SpaceCenter.AutoPilotUpdateMode`
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The loop runs once per physics tick; this chooses where in the tick that is.
+         Together with ``KRPC.HoldTick`` it lets a program place the loop exactly within
+         its own read, compute and write. When no server is running the loop runs at the
+         point the game takes control inputs at, whatever the mode, so a vessel is never left
+         without control input.
+
+   .. method:: update()
+
+      Run one tick of the auto-pilot's control loop now. Does nothing if it has already run
+      on this physics tick. Throws an exception if the auto-pilot is not engaged.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         For :attr:`SpaceCenter.AutoPilotUpdateMode.manual`, where the loop runs only when this is
+         called. In the other modes this runs it early; either way it runs once per tick. On a
+         tick it is not called for, the vessel keeps the control output of the last tick it did
+         run on, and after a tenth of a second of that the auto-pilot stops contributing any
+         control input at all.
+
+   .. method:: getShowInfoUI()
+               setShowInfoUI(value)
+
+      Whether an in-game window showing the auto-pilot's state (engagement, attitude error,
+      target, angular rate, inner-loop PID gains and oscillation suppression) is displayed for
+      this vessel. Defaults to ``false``. This is a debugging aid; the window is reset to
+      hidden when the game is restarted.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: reset()
+
+      Disengages the auto-pilot and resets all configuration parameters to their defaults.
+      Also resets the target pitch, heading and roll, and clears all internal controller
+      state, including the oscillation detector's structural level, which otherwise
+      persists across engagements so that a craft known to be flexible re-latches quickly.
+
+      :Game Scenes: Flight
+
+   .. method:: getReferenceFrame()
+               setReferenceFrame(value)
+
+      The reference frame for the target direction (:meth:`SpaceCenter.AutoPilot.getTargetDirection`).
+
+      :Property: Can be read or written
+      :rtype: :class:`SpaceCenter.ReferenceFrame`
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         An error will be thrown if this property is set to a reference frame that rotates with
+         the vessel being controlled, as it is impossible to rotate the vessel in such a
+         reference frame.
+
+         The target and the :meth:`SpaceCenter.AutoPilot.getUpReference` are held as vectors in this frame, so
+         changing it re-interprets them in the new frame rather than converting them: the
+         orientation the vessel is held in, and what a given :meth:`SpaceCenter.AutoPilot.getTargetRoll` means,
+         both change. Set the frame first, then the target. With a
+         :meth:`SpaceCenter.AutoPilot.getTargetSmoothingTime`, the vessel turns smoothly to the new target from the
+         orientation it was holding.
+
+   .. method:: getTargetPitch()
+               setTargetPitch(value)
+
+      The target pitch, in degrees, between -90° and +90°.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A convenience for aiming the nose by angle. Heading (and hence roll) is ill-defined when
+         the nose is near vertical (a pitch near -90° or +90°). Near the vertical prefer
+         :meth:`SpaceCenter.AutoPilot.getTargetDirection` or :meth:`SpaceCenter.AutoPilot.setDirectionAndUp`. The setter preserves the
+         current roll relative to :meth:`SpaceCenter.AutoPilot.getUpReference`.
+
+   .. method:: getTargetHeading()
+               setTargetHeading(value)
+
+      The target heading, in degrees, between 0° and 360°.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A convenience for aiming the nose by angle, ill-defined when the nose is near vertical
+         (a pitch near -90° or +90°). See :meth:`SpaceCenter.AutoPilot.getTargetPitch`. The setter preserves the
+         current roll
+         relative to :meth:`SpaceCenter.AutoPilot.getUpReference`.
+
+   .. method:: getTargetRoll()
+               setTargetRoll(value)
+
+      The target roll, in degrees, measured about the vessel's nose relative to the
+      :meth:`SpaceCenter.AutoPilot.getUpReference` (roll 0 aligns the vessel's dorsal/roof axis with the reference;
+      positive roll banks right). ``NaN`` if no target roll is set.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         When left unset (``NaN``) the auto-pilot suppresses roll rotation, driving the roll
+         rate to zero instead of holding a specific roll angle. Setting a value re-rolls the
+         current target to that angle relative to the up reference while keeping the nose direction.
+         With the default reference (the frame's up) this is the roll away from the vertical, and
+         is ill-defined only when the nose points along the reference (near straight up or down).
+         To hold a well-defined roll through the vertical, such as through a gravity turn, set
+         the up reference off the flight path (see
+         :meth:`SpaceCenter.AutoPilot.setDirectionAndUp` / :meth:`SpaceCenter.AutoPilot.getUpReference`).
+
+   .. method:: getUpReference()
+               setUpReference(value)
+
+      The reference direction, in the reference frame specified by :meth:`SpaceCenter.AutoPilot.getReferenceFrame`,
+      that :meth:`SpaceCenter.AutoPilot.getTargetRoll` is measured against: at roll 0 the vessel's dorsal (roof)
+      axis is aligned with this vector's component perpendicular to the nose. Defaults to the
+      frame's up (the zenith / radial-out direction).
+
+      :Property: Can be read or written
+      :rtype: ``[number, number, number]``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Setting this re-anchors how roll is measured without moving the current target, so
+         the reference can be set once and then rolls commanded against it with
+         :meth:`SpaceCenter.AutoPilot.getTargetRoll` while the nose direction changes freely. It is also set as a side
+         effect of :meth:`SpaceCenter.AutoPilot.setDirectionAndUp`. Setting the target rotation, target direction,
+         or the scalar pitch/heading leaves it unchanged. Choosing a reference off the flight path
+         keeps roll well-defined through the vertical.
+
+         Because roll is measured against this reference, changing it changes the angle that
+         :meth:`SpaceCenter.AutoPilot.getTargetRoll` and :meth:`SpaceCenter.AutoPilot.getCurrentTargetRoll` report, even though the
+         vessel is still being held in exactly the same orientation. Set the reference first and
+         the roll afterwards, or set both at once with :meth:`SpaceCenter.AutoPilot.setDirectionAndUp`.
+
+   .. method:: targetPitchAndHeading(pitch, heading)
+
+      Set target pitch and heading angles.
+
+      :param pitch: Target pitch angle, in degrees between -90° and +90°.
+      :type pitch: ``number``
+      :param heading: Target heading angle, in degrees between 0° and 360°.
+      :type heading: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A convenience for aiming the nose by angle; heading is ill-defined when the nose is near
+         vertical (a pitch near -90° or +90°), so near the vertical prefer
+         :meth:`SpaceCenter.AutoPilot.getTargetDirection` or
+         :meth:`SpaceCenter.AutoPilot.setDirectionAndUp`. Preserves the current roll relative to
+         :meth:`SpaceCenter.AutoPilot.getUpReference`.
+
+   .. method:: getTargetDirection()
+               setTargetDirection(value)
+
+      Direction vector corresponding to the target pitch and heading.
+      This is in the reference frame specified by :meth:`SpaceCenter.AutoPilot.getReferenceFrame`.
+
+      :Property: Can be read or written
+      :rtype: ``[number, number, number]``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The setter re-aims the nose and nothing else: it preserves the current
+         :meth:`SpaceCenter.AutoPilot.getTargetRoll` relative to :meth:`SpaceCenter.AutoPilot.getUpReference`, and leaves roll
+         suppressed if no target roll is set. Point the nose repeatedly and a commanded roll is
+         held throughout.
+
+   .. method:: getTargetRotation()
+               setTargetRotation(value)
+
+      The target rotation quaternion. Setting this also sets the target roll.
+      This is in the reference frame specified by :meth:`SpaceCenter.AutoPilot.getReferenceFrame`.
+
+      :Property: Can be read or written
+      :rtype: ``[number, number, number, number]``
+      :Game Scenes: Flight
+
+   .. method:: setDirectionAndUp(direction, up[, roll])
+
+      Set the target attitude from a nose direction and an up vector: point the nose along
+      *direction* and roll so the vessel's dorsal (roof) axis aligns with
+      *up* (its component perpendicular to the nose), then apply an optional
+      *roll* offset about the nose. Both vectors are in the reference frame
+      specified by :meth:`SpaceCenter.AutoPilot.getReferenceFrame`.
+
+      :param direction: The direction to point the nose in.
+      :type direction: ``[number, number, number]``
+      :param up: The reference direction the roof is rolled towards. Need not be normalized or perpendicular to *direction*, as its component perpendicular to the nose is used. Stored as the :meth:`SpaceCenter.AutoPilot.getUpReference`.
+      :type up: ``[number, number, number]``
+      :param roll: An additional roll about the nose, in degrees (positive banks right). Defaults to 0. Defaults to ``0.0``.
+      :type roll: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         This is the way to hold a well-defined orientation through a maneuver such as a
+         gravity turn: pass a fixed *up* (say north) and the roll stays defined the
+         whole way, with no singularity at the vertical. It is well-defined for every nose direction
+         except *up* parallel to *direction* (asking the roof to
+         point where the nose already points), where it falls back to pointing the nose only.
+         Equivalent to setting :meth:`SpaceCenter.AutoPilot.getUpReference` to *up*, aiming at
+         *direction* and setting :meth:`SpaceCenter.AutoPilot.getTargetRoll` to
+         *roll*.
+
+   .. method:: getCurrentTargetPitch()
+
+      The current target pitch the auto-pilot is tracking, in degrees. When
+      :meth:`SpaceCenter.AutoPilot.getTargetSmoothingTime` is non-zero this lags the commanded
+      :meth:`SpaceCenter.AutoPilot.getTargetPitch` while a change is slewed in; otherwise the two are equal.
+      A convenience scalar, ill-defined near the vertical. See :meth:`SpaceCenter.AutoPilot.getTargetPitch`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getCurrentTargetHeading()
+
+      The current target heading the auto-pilot is tracking, in degrees. When
+      :meth:`SpaceCenter.AutoPilot.getTargetSmoothingTime` is non-zero this lags the commanded
+      :meth:`SpaceCenter.AutoPilot.getTargetHeading` while a change is slewed in; otherwise the two are equal.
+      A convenience scalar, ill-defined near the vertical. See :meth:`SpaceCenter.AutoPilot.getTargetHeading`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getCurrentTargetRoll()
+
+      The current target roll the auto-pilot is tracking, in degrees. When
+      :meth:`SpaceCenter.AutoPilot.getTargetSmoothingTime` is non-zero this lags the commanded
+      :meth:`SpaceCenter.AutoPilot.getTargetRoll` while a change is slewed in; otherwise the two are equal.
+      ``NaN`` if no target roll is set.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getCurrentTargetDirection()
+
+      Direction vector corresponding to the current target pitch and heading
+      (see :meth:`SpaceCenter.AutoPilot.getCurrentTargetPitch`), in the reference frame specified by
+      :meth:`SpaceCenter.AutoPilot.getReferenceFrame`. Lags :meth:`SpaceCenter.AutoPilot.getTargetDirection` while a change is
+      slewed in when :meth:`SpaceCenter.AutoPilot.getTargetSmoothingTime` is non-zero.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``[number, number, number]``
+      :Game Scenes: Flight
+
+   .. method:: getCurrentTargetRotation()
+
+      The current target rotation quaternion the auto-pilot is tracking, in the reference frame
+      specified by :meth:`SpaceCenter.AutoPilot.getReferenceFrame`. Lags :meth:`SpaceCenter.AutoPilot.getTargetRotation` while a
+      change is slewed in when :meth:`SpaceCenter.AutoPilot.getTargetSmoothingTime` is non-zero.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``[number, number, number, number]``
+      :Game Scenes: Flight
+
+   .. method:: wait([timeout])
+
+      Blocks until the vessel is pointing in the target direction and has
+      the target roll (if set). Throws an exception if the auto-pilot has not been engaged.
+
+      :param timeout: Maximum time to wait in seconds. If not specified, waits indefinitely. Defaults to ``-1.0``.
+      :type timeout: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getStoppingAngleThreshold()
+               setStoppingAngleThreshold(value)
+
+      The threshold, in degrees, below which the pointing error must fall for
+      :meth:`SpaceCenter.AutoPilot.wait` to return. Defaults to 1 degree.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getStoppingVelocityThreshold()
+               setStoppingVelocityThreshold(value)
+
+      The threshold angular velocity, in :math:`\mathrm{rad/s}`, below which the vessel's angular
+      velocity relative to the target must fall for :meth:`SpaceCenter.AutoPilot.wait` to return.
+      Defaults to 0.05 :math:`\mathrm{rad/s}`.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getError()
+
+      The error, in degrees, between the direction the ship has been asked
+      to point in and the direction it is pointing in. Throws an exception if the auto-pilot
+      has not been engaged and SAS is not enabled or is in stability assist mode.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         This is the error relative to the commanded target. While a change is being slewed in
+         (see :meth:`SpaceCenter.AutoPilot.getTargetSmoothingTime`) it differs from :meth:`SpaceCenter.AutoPilot.getCurrentError`, the
+         error relative to the target the auto-pilot is currently tracking.
+
+   .. method:: getAttitudeError()
+
+      The per-axis attitude error ``(pitch, yaw, roll)``, in degrees, between the vessel's current
+      attitude and the commanded target. All three components come from one singularity-free
+      residual decomposition, so they stay well-defined near the vertical (unlike a subtraction
+      of pitch/heading/roll angles). The scalar :meth:`SpaceCenter.AutoPilot.getPitchError`,
+      :meth:`SpaceCenter.AutoPilot.getHeadingError` and :meth:`SpaceCenter.AutoPilot.getRollError` are the magnitudes of the pitch, yaw
+      and roll components respectively. Throws an exception if the auto-pilot has not been
+      engaged.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``[number, number, number]``
+      :Game Scenes: Flight
+
+   .. method:: getPitchError()
+
+      The error, in degrees, between the vessels current and target pitch.
+      Throws an exception if the auto-pilot has not been engaged.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The pitch component of :meth:`SpaceCenter.AutoPilot.getAttitudeError`, the pitch part of the direction
+         error resolved in the roll-invariant frame, well-defined near the vertical.
+
+   .. method:: getHeadingError()
+
+      The error, in degrees, between the vessels current and target heading.
+      Throws an exception if the auto-pilot has not been engaged.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The yaw component of :meth:`SpaceCenter.AutoPilot.getAttitudeError`, the yaw part of the direction error
+         resolved in the roll-invariant frame, well-defined near the vertical, where the absolute
+         heading is undefined at the pole.
+
+   .. method:: getRollError()
+
+      The error, in degrees, between the vessels current and target roll.
+      Throws an exception if the auto-pilot has not been engaged or no target roll is set.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Measured about the vessel's nose axis, so it stays well-defined near the vertical
+         singularity. A subtraction of pitch, heading and roll angles has a roll term that is
+         ill-conditioned when the vessel points close to straight up or down.
+
+   .. method:: getCurrentError()
+
+      The error, in degrees, between the direction the auto-pilot is currently tracking and the
+      direction the ship is pointing in. Unlike :meth:`SpaceCenter.AutoPilot.getError` (which is relative to the
+      commanded target), this is relative to the slewed target the auto-pilot is currently
+      holding, so it stays small while a smoothed change (see :meth:`SpaceCenter.AutoPilot.getTargetSmoothingTime`)
+      is fed in. Equal to :meth:`SpaceCenter.AutoPilot.getError` when smoothing is off. Throws an exception if the
+      auto-pilot has not been engaged.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getCurrentAttitudeError()
+
+      The per-axis attitude error ``(pitch, yaw, roll)``, in degrees, between the vessel's current
+      attitude and the target the auto-pilot is currently tracking (the slewed target, see
+      :meth:`SpaceCenter.AutoPilot.getCurrentTargetRotation`). Like :meth:`SpaceCenter.AutoPilot.getAttitudeError` but relative to the
+      current target, so it stays small while a smoothed change (see
+      :meth:`SpaceCenter.AutoPilot.getTargetSmoothingTime`) is fed in; equal to :meth:`SpaceCenter.AutoPilot.getAttitudeError` when
+      smoothing is off. Throws an exception if the auto-pilot has not been engaged.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``[number, number, number]``
+      :Game Scenes: Flight
+
+   .. method:: getCurrentPitchError()
+
+      The error, in degrees, between the vessels current pitch and the pitch the auto-pilot is
+      currently tracking (see :meth:`SpaceCenter.AutoPilot.getCurrentTargetPitch`). Throws an exception if the
+      auto-pilot has not been engaged.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The pitch component of :meth:`SpaceCenter.AutoPilot.getCurrentAttitudeError`, well-defined near the vertical.
+
+   .. method:: getCurrentHeadingError()
+
+      The error, in degrees, between the vessels current heading and the heading the auto-pilot
+      is currently tracking (see :meth:`SpaceCenter.AutoPilot.getCurrentTargetHeading`). Throws an exception if the
+      auto-pilot has not been engaged.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The yaw component of :meth:`SpaceCenter.AutoPilot.getCurrentAttitudeError`, well-defined near the vertical.
+
+   .. method:: getCurrentRollError()
+
+      The error, in degrees, between the vessels current roll and the roll the auto-pilot is
+      currently tracking (see :meth:`SpaceCenter.AutoPilot.getCurrentTargetRoll`). Throws an exception if the
+      auto-pilot has not been engaged or no target roll is set.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Measured about the vessel's nose axis, so it stays well-defined near the vertical
+         singularity. See :meth:`SpaceCenter.AutoPilot.getRollError`.
+
+   .. method:: getRollStartAngle()
+               setRollStartAngle(value)
+
+      The direction error, in degrees, above which roll blending is fully suppressed.
+      Defaults to 20 degrees.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getRollEngageAngle()
+               setRollEngageAngle(value)
+
+      The direction error, in degrees, below which roll is fully engaged.
+      Roll blends linearly between :meth:`SpaceCenter.AutoPilot.getRollStartAngle` and this value.
+      Defaults to 15 degrees.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getMaxAngularVelocity()
+               setMaxAngularVelocity(value)
+
+      The maximum angular velocity of the vessel, in :math:`\mathrm{rad/s}`, for each of the
+      pitch, roll and yaw axes. Limits the target angular velocity computed by the bang-bang
+      profile so that vessels with very high torque availability do not spin faster than
+      desired. Defaults to 1 :math:`\mathrm{rad/s}` for each axis.
+
+      :Property: Can be read or written
+      :rtype: ``[number, number, number]``
+      :Game Scenes: Flight
+
+   .. method:: getLimitAngularVelocity()
+               setLimitAngularVelocity(value)
+
+      Whether to also limit the angular velocity to what the control surfaces hold against
+      the aerodynamic forces. Defaults to ``true``.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         When disabled, only :meth:`SpaceCenter.AutoPilot.getMaxAngularVelocity` limits the angular velocity. Not
+         applied when Ferram Aerospace Research is installed.
+
+   .. method:: getPitchYawAttenuationAngle()
+               setPitchYawAttenuationAngle(value)
+
+      The angle, in degrees, at which the autopilot considers the vessel to be pointing close
+      to the target direction. This sets the high angle of the pitch/yaw pointing deadband: at
+      or above this error the target velocity is at full, and below it the target velocity
+      ramps linearly to zero at half this angle, so the vessel coasts to a stop. Pitch and yaw
+      are controlled jointly, so a single angle applies to both. Defaults to 1°. The angle in
+      use shrinks in proportion to the share of the torque that comes from control surfaces.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getRollAttenuationAngle()
+               setRollAttenuationAngle(value)
+
+      The angle, in degrees, at which the autopilot considers the vessel to be pointing close
+      to the target roll. This sets the high angle of the roll-axis pointing deadband: at or
+      above this error the target velocity is at full, and below it the target velocity ramps
+      linearly to zero at half this angle, so the roll coasts to a stop. Defaults to 1°. The
+      angle in use shrinks in proportion to the share of the torque that comes from control
+      surfaces.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getAutoTune()
+               setAutoTune(value)
+
+      Whether the rotation rate controllers PID parameters should be automatically tuned
+      using the vessels moment of inertia and available torque. Defaults to ``true``.
+      See :meth:`SpaceCenter.AutoPilot.getTimeToPeak` and :meth:`SpaceCenter.AutoPilot.getOvershoot`.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getTimeToPeak()
+               setTimeToPeak(value)
+
+      The target time to peak used to autotune the PID controllers.
+      A vector of three times, in seconds, for each of the pitch, roll and yaw axes.
+      Defaults to 1 second for each axis.
+
+      :Property: Can be read or written
+      :rtype: ``[number, number, number]``
+      :Game Scenes: Flight
+
+   .. method:: getSoftStartTime()
+               setSoftStartTime(value)
+
+      The duration, in seconds, over which the control output is faded in when the
+      autopilot is engaged. This soft-start spreads the engagement transient over many
+      physics ticks so engaging (on the pad or mid-flight) does not command a near-maximum
+      control deflection that can excite an oscillation. Defaults to 0.5 seconds.
+      Set to 0 to disable the fade-in.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getTargetSmoothingTime()
+               setTargetSmoothingTime(value)
+
+      The duration, in seconds, over which a change to the target attitude is applied to the
+      control target. When set above zero, changing the target pitch, heading, roll, direction
+      or rotation makes the effective control target ramp smoothly (a constant-rate rotation)
+      from its current value to the new value over this many seconds, rather than jumping
+      instantly. This lets a slow control loop drive a smooth maneuver (for example a gravity
+      turn) without inducing oscillation from stepwise target changes. Defaults to 0
+      (instantaneous).
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getOvershoot()
+               setOvershoot(value)
+
+      The target overshoot percentage used to autotune the PID controllers.
+      A vector of three values, between 0 and 1, for each of the pitch, roll and yaw axes.
+      Defaults to 0.01 for each axis.
+
+      :Property: Can be read or written
+      :rtype: ``[number, number, number]``
+      :Game Scenes: Flight
+
+   .. method:: getPitchPIDGains()
+               setPitchPIDGains(value)
+
+      Gains for the pitch PID controller.
+
+      :Property: Can be read or written
+      :rtype: ``[number, number, number]``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         When :meth:`SpaceCenter.AutoPilot.getAutoTune` is true, these values are updated automatically,
+         which will overwrite any manual changes.
+
+   .. method:: getRollPIDGains()
+               setRollPIDGains(value)
+
+      Gains for the roll PID controller.
+
+      :Property: Can be read or written
+      :rtype: ``[number, number, number]``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         When :meth:`SpaceCenter.AutoPilot.getAutoTune` is true, these values are updated automatically,
+         which will overwrite any manual changes.
+
+   .. method:: getYawPIDGains()
+               setYawPIDGains(value)
+
+      Gains for the yaw PID controller.
+
+      :Property: Can be read or written
+      :rtype: ``[number, number, number]``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         When :meth:`SpaceCenter.AutoPilot.getAutoTune` is true, these values are updated automatically,
+         which will overwrite any manual changes.
+
+   .. method:: getPitchYawRateFilterMode()
+               setPitchYawRateFilterMode(value)
+
+      Controls the rate-feedback filtering (the wobble-suppression filter on the measured
+      angular velocity) for the pitch and yaw axes of a structurally flexible vessel. When
+      :attr:`SpaceCenter.RateFilterMode.automatic` (the default) the auto-pilot detects the
+      oscillation at runtime, estimates its frequency and routes it to the appropriate tool
+      (a notch filter for a low-frequency mode near the control band, a low-pass for a
+      high-frequency mode). :attr:`SpaceCenter.RateFilterMode.off` disables rate filtering only,
+      leaving the other oscillation mitigations unaffected. :attr:`SpaceCenter.RateFilterMode.notch`
+      and :attr:`SpaceCenter.RateFilterMode.lowPass` force the respective tool unconditionally at
+      :meth:`SpaceCenter.AutoPilot.getPitchYawOscillationFrequency`, for a vessel known in advance to be
+      flexible.
+
+      :Property: Can be read or written
+      :rtype: :class:`SpaceCenter.RateFilterMode`
+      :Game Scenes: Flight
+
+   .. method:: getRollRateFilterMode()
+               setRollRateFilterMode(value)
+
+      Controls the rate-feedback filtering for the roll axis. Behaves as
+      :meth:`SpaceCenter.AutoPilot.getPitchYawRateFilterMode` but for roll, using
+      :meth:`SpaceCenter.AutoPilot.getRollOscillationFrequency`. Defaults to
+      :attr:`SpaceCenter.RateFilterMode.automatic`.
+
+      :Property: Can be read or written
+      :rtype: :class:`SpaceCenter.RateFilterMode`
+      :Game Scenes: Flight
+
+   .. method:: getPitchYawOscillationFrequency()
+               setPitchYawOscillationFrequency(value)
+
+      The structural mode frequency, in Hz, for the pitch/yaw axis group. Used directly as the
+      filter frequency in :attr:`SpaceCenter.RateFilterMode.notch` / :attr:`SpaceCenter.RateFilterMode.lowPass`
+      mode, and as the seed for the automatic frequency estimator before it acquires. Defaults
+      to 1.5 Hz.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getRollOscillationFrequency()
+               setRollOscillationFrequency(value)
+
+      The structural mode frequency, in Hz, for the roll axis. Behaves as
+      :meth:`SpaceCenter.AutoPilot.getPitchYawOscillationFrequency` but for roll. Defaults to 1.5 Hz.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getOscillationNotchQ()
+               setOscillationNotchQ(value)
+
+      The quality factor of the notch filter used to suppress a low-frequency structural mode.
+      A higher value gives a narrower notch (less in-band control lag but less tolerance to the
+      mode frequency drifting); a lower value gives a wider notch. Defaults to 2.5. This is an
+      advanced tuning parameter.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getOscillationBandwidthFloorMode()
+               setOscillationBandwidthFloorMode(value)
+
+      Controls the bandwidth-floor mitigation: the reduction of the inner control loop
+      bandwidth on a structurally flexible axis, the primary oscillation stabilizer. When
+      :attr:`SpaceCenter.MitigationMode.automatic` (the default) it engages on a latched axis
+      while holding (and during a detected limit cycle). :attr:`SpaceCenter.MitigationMode.off`
+      never reduces the bandwidth; :attr:`SpaceCenter.MitigationMode.forced` keeps it fully
+      reduced at all times.
+
+      :Property: Can be read or written
+      :rtype: :class:`SpaceCenter.MitigationMode`
+      :Game Scenes: Flight
+
+   .. method:: getOscillationBandwidthFloor()
+               setOscillationBandwidthFloor(value)
+
+      The inner control loop bandwidth, in :math:`\mathrm{rad/s}`, that an axis is reduced
+      towards while the bandwidth-floor mitigation is engaged on it. Lowering it suppresses
+      oscillation more strongly; raising it keeps more control authority at the cost of
+      allowing more wobble. Defaults to 1 :math:`\mathrm{rad/s}`. This is an advanced tuning
+      parameter.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getOscillationFeedforwardMode()
+               setOscillationFeedforwardMode(value)
+
+      Controls the feedforward-cut mitigation: removal of the acceleration feedforward on a
+      structurally flexible axis while holding, so it cannot re-excite a residual mode at
+      the reduced bandwidth. When :attr:`SpaceCenter.MitigationMode.automatic` (the default) it
+      follows the hold gate on a latched axis. :attr:`SpaceCenter.MitigationMode.off` never cuts
+      the feedforward; :attr:`SpaceCenter.MitigationMode.forced` always cuts it fully.
+
+      :Property: Can be read or written
+      :rtype: :class:`SpaceCenter.MitigationMode`
+      :Game Scenes: Flight
+
+   .. method:: getOscillationOutputFilterMode()
+               setOscillationOutputFilterMode(value)
+
+      Controls the output-smoothing mitigation: a low-pass on the delivered actuator
+      command that caps residual control chatter. When
+      :attr:`SpaceCenter.MitigationMode.automatic` (the default) it engages on a latched axis
+      (and, lightly, while the oscillation detector is firing on an unlatched one).
+      :attr:`SpaceCenter.MitigationMode.off` never smooths; :attr:`SpaceCenter.MitigationMode.forced`
+      smooths fully at all times.
+
+      :Property: Can be read or written
+      :rtype: :class:`SpaceCenter.MitigationMode`
+      :Game Scenes: Flight
+
+   .. method:: getPitchYawControlOscillation()
+
+      The current amplitude of control-output oscillation on the pitch/yaw axis group, measured as
+      the deviation of the delivered control about its slowly-varying trim. A settled hold sits
+      near zero; a sustained limit cycle drives it toward 1. Read-only.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getRollControlOscillation()
+
+      The current amplitude of control-output oscillation on the roll axis, measured as the
+      deviation of the delivered control about its slowly-varying trim. Read-only. See
+      :meth:`SpaceCenter.AutoPilot.getPitchYawControlOscillation`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getOscillationLevel()
+
+      A measure, between 0 and 1 for each of the pitch, roll and yaw axes, of how strongly the
+      auto-pilot currently detects structural oscillation (wobble) on that axis. 0 means none
+      detected; values approaching 1 mean a sustained structural oscillation. Read-only.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``[number, number, number]``
+      :Game Scenes: Flight
+
+   .. method:: getPitchYawOscillationLatched()
+
+      Whether the auto-pilot has confirmed the pitch/yaw axes to be structurally flexible and
+      latched oscillation suppression on for them. Read-only. See
+      :meth:`SpaceCenter.AutoPilot.getPitchYawRateFilterMode`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getRollOscillationLatched()
+
+      Whether the auto-pilot has confirmed the roll axis to be structurally flexible and latched
+      oscillation suppression on for it. Read-only. See :meth:`SpaceCenter.AutoPilot.getRollRateFilterMode`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getPitchYawOscillationDetectedFrequency()
+
+      The structural oscillation frequency, in Hz, estimated by the automatic detector for the
+      pitch/yaw axis group, or ``NaN`` until the estimator acquires. The estimator runs in
+      all modes, so this is observable even when suppression is off or forced. Read-only.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getRollOscillationDetectedFrequency()
+
+      The structural oscillation frequency, in Hz, estimated by the automatic detector for the
+      roll axis, or ``NaN`` until the estimator acquires. Read-only. See
+      :meth:`SpaceCenter.AutoPilot.getPitchYawOscillationDetectedFrequency`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getDiagnosticLogging()
+               setDiagnosticLogging(value)
+
+      When ``true``, records one row of diagnostic data per physics tick to an
+      in-memory buffer (see :meth:`SpaceCenter.AutoPilot.getDiagnosticLog`), and echoes each row to
+      Player.log prefixed with ``[KRPC.AP]``. The data is CSV: the first row is a
+      header naming every column, and each subsequent row records the auto-pilot's full
+      control-loop state for one tick (setpoints, errors, measured rates, gains,
+      velocity-profile and feedforward internals, control outputs, and the oscillation
+      detector/gate/mitigation state). The buffer is capped at 3000 data rows (one minute
+      at the 50 Hz physics rate); when full, this property switches itself back to
+      ``false`` and the buffer holds the minute following the enable. Setting to
+      ``true`` clears the buffer. Defaults to ``false``.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getDiagnosticLog()
+
+      The diagnostic log collected since :meth:`SpaceCenter.AutoPilot.getDiagnosticLogging` was last set to
+      ``true``: CSV text whose first line is the column header and each subsequent
+      line records one physics tick. Vector-valued channels use one column per component
+      (suffixed ``.p/.r/.y`` for pitch, roll, yaw); pitch-yaw-group/roll channel pairs
+      are suffixed ``.py/.roll``. Returns an empty string if diagnostic logging has
+      not been enabled or no ticks have occurred.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``string``
+      :Game Scenes: Flight
+
+
+
+
+.. class:: AutoPilotUpdateMode
+
+   When the auto-pilot's control loop runs within a server update, relative to the calls
+   the update executes. See :meth:`SpaceCenter.AutoPilot.getUpdateMode`.
+
+
+   .. attribute:: afterCalls
+
+      The default. The control loop runs once the update has executed the calls it
+      received, so a target set during a tick is flown on that tick.
+
+
+   .. attribute:: beforeCalls
+
+      The control loop runs before the update executes any calls, so calls made during a
+      tick see the attitude error and control output it computed for that tick.
+
+
+   .. attribute:: manual
+
+      The control loop runs only when :meth:`SpaceCenter.AutoPilot.update` is called, so a
+      program chooses where among its own calls it runs.
+
+
+
+
+.. class:: RateFilterMode
+
+   Controls the auto-pilot's rate-feedback filtering for an axis group, the mitigation that
+   removes a structural oscillation (wobble) from the measured angular velocity before the
+   control loops consume it.
+   See :meth:`SpaceCenter.AutoPilot.getPitchYawRateFilterMode` and :meth:`SpaceCenter.AutoPilot.getRollRateFilterMode`.
+
+
+   .. attribute:: automatic
+
+      The default. The auto-pilot detects structural oscillation at runtime, estimates its
+      frequency and routes it to the appropriate filter: a notch for a low-frequency mode
+      near the control band, a low-pass for a high-frequency mode, or a broadband low-pass
+      while the frequency is not yet known. Rigid vessels are left untouched.
+
+
+   .. attribute:: off
+
+      No rate filtering. The other oscillation mitigations are unaffected.
+
+
+   .. attribute:: notch
+
+      Force a notch filter at the manually set frequency
+      (:meth:`SpaceCenter.AutoPilot.getPitchYawOscillationFrequency` /
+      :meth:`SpaceCenter.AutoPilot.getRollOscillationFrequency`), for a vessel whose structural mode
+      is known in advance.
+
+
+   .. attribute:: lowPass
+
+      Force a low-pass filter derived from the manually set frequency.
+
+
+
+
+.. class:: MitigationMode
+
+   Controls one of the auto-pilot's individually-toggleable oscillation mitigations
+   (:meth:`SpaceCenter.AutoPilot.getOscillationBandwidthFloorMode`,
+   :meth:`SpaceCenter.AutoPilot.getOscillationFeedforwardMode`,
+   :meth:`SpaceCenter.AutoPilot.getOscillationOutputFilterMode`).
+
+
+   .. attribute:: automatic
+
+      The default: the mitigation engages automatically, driven by the runtime oscillation
+      detector and the hold gate. Rigid vessels are left untouched.
+
+
+   .. attribute:: off
+
+      The mitigation never engages. The other mitigations are unaffected.
+
+
+   .. attribute:: forced
+
+      The mitigation is fully engaged at all times, regardless of what the oscillation
+      detector reports.

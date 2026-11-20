@@ -1,0 +1,22 @@
+.. default-domain:: lua
+.. highlight:: lua
+
+Debug
+=====
+
+Provides functionality to modify the state of the simulation directly, in ways the game normally
+does not allow. Everything here is cheating: it has the same effect on a save, and the same
+consequences, as the game's own debug menu.
+
+.. toctree::
+   :includehidden:
+   :maxdepth: 1
+
+   debug/debug
+
+Example
+-------
+
+The following example switches on infinite propellant, the cheat from the game's debug menu:
+
+.. literalinclude:: /scripts/api/debug/DebugExample.lua

@@ -10,6 +10,10 @@ Antenna
 
    A RemoteTech antenna. Obtained by calling :func:`krpc_RemoteTech_Comms_Antennas` or :func:`krpc_RemoteTech_Antenna`.
 
+   .. macro:: KRPC_CLASS_REMOTETECH_ANTENNA
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_RemoteTech_Antenna_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_RemoteTech_Antenna_t instance)
 
       Get the part containing this antenna.
@@ -59,6 +63,11 @@ Antenna
 
    The type of object an antenna is targetting.
    See :func:`krpc_RemoteTech_Antenna_Target`.
+
+   .. macro:: KRPC_ENUMERATION_REMOTETECH_TARGET
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_REMOTETECH_TARGET_ACTIVEVESSEL

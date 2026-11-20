@@ -1,0 +1,414 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: ScanSat
+   :no-index:
+
+Service
+=======
+
+
+.. module:: ScanSat
+
+This service provides the scan data, scanners and maps of
+`SCANsat <https://github.com/KSPModStewards/SCANsat>`_.
+
+.. note::
+
+   The readouts at a position return ``null`` where the scans they need have not
+   covered it, as the maps of the mod show nothing there.
+
+
+
+.. function:: getAvailable()
+
+   Whether SCANsat is available.
+
+   :Property: Read-only, cannot be set
+   :rtype: ``boolean``
+   
+
+
+
+
+.. function:: coverage(body, type)
+
+   The fraction of a body covered by scan types, between 0 and 1. For a combination,
+   the mean coverage of its scan types, so 1 only once every one of them is complete.
+   SCANsat reports at most 0.999 until the coverage is complete.
+   Throws an exception if no scan types are given.
+
+   :param body: The body.
+   :type body: :class:`SpaceCenter.CelestialBody`
+   :param type: The scan types.
+   :type type: :class:`ScanSat.ScanType`
+   :rtype: ``number``
+   :Game Scenes: Space Center, Flight, Tracking Station
+
+
+
+
+
+.. function:: isCovered(body, latitude, longitude, type)
+
+   Whether at least one of the scan types covers a position on a body. For a
+   combination, this is ``true`` where any one of its scan types covers the position,
+   and not only where all of them do.
+   Throws an exception if no scan types are given.
+
+   :param body: The body.
+   :type body: :class:`SpaceCenter.CelestialBody`
+   :param latitude: The latitude, in degrees.
+   :type latitude: ``number``
+   :param longitude: The longitude, in degrees.
+   :type longitude: ``number``
+   :param type: The scan types.
+   :type type: :class:`ScanSat.ScanType`
+   :rtype: ``boolean``
+   :Game Scenes: Space Center, Flight, Tracking Station
+
+
+
+
+
+.. function:: elevation(body, latitude, longitude)
+
+   The height of the terrain relative to sea level at a position, in meters, or
+   ``null`` if no altimetry scan covers it. It is negative over the sea floor. With
+   low resolution altimetry only, the height is rounded toward zero to a multiple of
+   500 meters.
+
+   :param body: The body.
+   :type body: :class:`SpaceCenter.CelestialBody`
+   :param latitude: The latitude, in degrees.
+   :type latitude: ``number``
+   :param longitude: The longitude, in degrees.
+   :type longitude: ``number``
+   :rtype: ``number`` or ``null``
+   :Game Scenes: Space Center, Flight, Tracking Station
+
+
+
+
+
+.. function:: slope(body, latitude, longitude)
+
+   The terrain slope at a position, in degrees, or ``null`` if high resolution
+   altimetry does not cover it. The slope is averaged over points 5 meters apart.
+
+   :param body: The body.
+   :type body: :class:`SpaceCenter.CelestialBody`
+   :param latitude: The latitude, in degrees.
+   :type latitude: ``number``
+   :param longitude: The longitude, in degrees.
+   :type longitude: ``number``
+   :rtype: ``number`` or ``null``
+   :Game Scenes: Space Center, Flight, Tracking Station
+
+
+
+
+
+.. function:: biome(body, latitude, longitude)
+
+   The name of the biome at a position, or ``null`` if the biome scan does not
+   cover it.
+   Throws an exception if the body has no biomes.
+
+   :param body: The body.
+   :type body: :class:`SpaceCenter.CelestialBody`
+   :param latitude: The latitude, in degrees.
+   :type latitude: ``number``
+   :param longitude: The longitude, in degrees.
+   :type longitude: ``number``
+   :rtype: ``string`` or ``null``
+   :Game Scenes: Space Center, Flight, Tracking Station
+
+
+
+
+
+.. function:: resourceAbundance(body, latitude, longitude, resource)
+
+   The abundance of a resource at a position, between 0 and 1, or ``null`` if no
+   resource scan covers it. With the low resolution scan only, the abundance is rounded
+   down to a multiple of 0.05.
+   Throws an exception if SCANsat's resource scanning is off, or SCANsat does not map
+   the resource.
+
+   :param body: The body.
+   :type body: :class:`SpaceCenter.CelestialBody`
+   :param latitude: The latitude, in degrees.
+   :type latitude: ``number``
+   :param longitude: The longitude, in degrees.
+   :type longitude: ``number``
+   :param resource: The name of the resource. See :func:`ScanSat.getResources`.
+   :type resource: ``string``
+   :rtype: ``number`` or ``null``
+   :Game Scenes: Space Center, Flight, Tracking Station
+
+
+
+
+
+.. function:: anomalies(body)
+
+   The anomalies on a body found by either anomaly scan.
+
+   :param body: The body.
+   :type body: :class:`SpaceCenter.CelestialBody`
+   :rtype: ``Array`` of :class:`ScanSat.Anomaly`
+   :Game Scenes: Space Center, Flight, Tracking Station
+
+
+
+
+
+.. function:: getResources()
+
+   The names of the resources SCANsat maps. Empty if SCANsat's resource scanning
+   is off.
+
+   :Property: Read-only, cannot be set
+   :rtype: ``Array`` of ``string``
+   
+
+
+
+
+.. function:: map(body, type[, width[, projection[, color[, resource[, format[, quality]]]]]])
+
+   A map of a body from the scan data, as an image. The map is half as high as it is
+   wide. Building it takes several game frames.
+   Throws an exception if SCANsat cannot render the map, as when its visual maps are
+   switched off.
+
+   :param body: The body.
+   :type body: :class:`SpaceCenter.CelestialBody`
+   :param type: The type of map.
+   :type type: :class:`ScanSat.MapType`
+   :param width: The width of the image in pixels, between 360 and 1440. Defaults to ``720``.
+   :type width: ``number``
+   :param projection: The projection. Defaults to ``ScanSat.MapProjection.rectangular``.
+   :type projection: :class:`ScanSat.MapProjection`
+   :param color: Whether the map is in color, or in grayscale. Defaults to ``true``.
+   :type color: ``boolean``
+   :param resource: The name of a resource to overlay, or an empty string for none. See :func:`ScanSat.getResources`. Defaults to ``""``.
+   :type resource: ``string``
+   :param format: The format of the image. Defaults to ``StdLib.ImageFormat.png``.
+   :type format: :class:`StdLib.ImageFormat`
+   :param quality: The quality of a JPEG image, from 1 to 100. Defaults to ``75``.
+   :type quality: ``number``
+   :rtype: ``Uint8Array``
+   :Game Scenes: Space Center, Flight, Tracking Station
+
+
+
+
+
+.. function:: scanner(part)
+
+   The scanner on a part.
+   Throws an exception if the part has no SCANsat scanner.
+
+   :param part: The part.
+   :type part: :class:`SpaceCenter.Part`
+   :rtype: :class:`ScanSat.Scanner`
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: scanners(vessel)
+
+   The SCANsat scanners on a vessel.
+
+   :param vessel: The vessel.
+   :type vessel: :class:`SpaceCenter.Vessel`
+   :rtype: ``Array`` of :class:`ScanSat.Scanner`
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: getBackgroundScanning()
+
+   Whether scanners scan while their vessel is not the active vessel. A setting of
+   SCANsat.
+
+   :Property: Read-only, cannot be set
+   :rtype: ``boolean``
+   
+
+
+
+
+.. function:: getDaylightCheck()
+
+   Whether scanners that need light stop scanning in darkness. A setting of SCANsat.
+
+   :Property: Read-only, cannot be set
+   :rtype: ``boolean``
+   
+
+
+
+
+.. function:: getInstantResourceScan()
+
+   Whether the stock orbital survey fills the high resolution resource scan of a body
+   at once. A setting of SCANsat.
+
+   :Property: Read-only, cannot be set
+   :rtype: ``boolean``
+   
+
+
+
+
+.. function:: getStockResourceScan()
+
+   Whether the stock resource scanners work. A setting of SCANsat.
+
+   :Property: Read-only, cannot be set
+   :rtype: ``boolean``
+   
+
+
+
+
+.. function:: getBiomeLock()
+
+   Whether resource abundances are approximate until a surface sample is taken in the
+   biome. A setting of SCANsat.
+
+   :Property: Read-only, cannot be set
+   :rtype: ``boolean``
+   
+
+
+
+
+.. function:: getRequireNarrowBand()
+
+   Whether a narrow-band scanner is needed on the vessel for exact resource
+   abundances. A setting of SCANsat.
+
+   :Property: Read-only, cannot be set
+   :rtype: ``boolean``
+   
+
+
+
+
+
+
+.. class:: ScanType
+
+   A set of scan types. Each scan type has its own coverage of a body.
+
+   .. note::
+
+      The values may be combined.   A flags enumeration. :std:ref:`js-client-flags` shows how to combine its values.
+
+
+   .. attribute:: none
+
+      No scan types.
+
+
+   .. attribute:: altimetryLoRes
+
+      Low resolution altimetry, the terrain height in steps of 500 meters.
+
+
+   .. attribute:: altimetryHiRes
+
+      High resolution altimetry, the terrain height and slope.
+
+
+   .. attribute:: visualLoRes
+
+      Low resolution visual imaging.
+
+
+   .. attribute:: visualHiRes
+
+      High resolution visual imaging.
+
+
+   .. attribute:: biome
+
+      Biomes.
+
+
+   .. attribute:: anomaly
+
+      The positions of anomalies.
+
+
+   .. attribute:: anomalyDetail
+
+      The positions and names of anomalies, from close range.
+
+
+   .. attribute:: resourceLoRes
+
+      Low resolution resource abundance, in steps of 5%.
+
+
+   .. attribute:: resourceHiRes
+
+      High resolution resource abundance.
+
+
+   .. attribute:: altimetry
+
+      Both altimetry scans.
+
+
+   .. attribute:: visual
+
+      Both visual scans.
+
+
+   .. attribute:: anomalies
+
+      Both anomaly scans.
+
+
+   .. attribute:: resources
+
+      Both resource scans.
+
+
+   .. attribute:: all
+
+      Every scan type.
+
+
+
+
+.. class:: Anomaly(fields)
+
+   An anomaly found by either anomaly scan. See :func:`ScanSat.anomalies`.
+
+
+   .. attribute:: name
+
+      The name of the anomaly, or ``null`` until the anomaly detail scan covers it.
+
+      :Type: ``string`` or ``null``
+
+   .. attribute:: latitude
+
+      The latitude of the anomaly, in degrees.
+
+      :Type: ``number``
+
+   .. attribute:: longitude
+
+      The longitude of the anomaly, in degrees.
+
+      :Type: ``number``

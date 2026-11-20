@@ -1,0 +1,193 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: MechJeb
+
+RoverAutopilot
+==============
+
+
+.. class:: RoverAutopilot
+
+   The Rover Autopilot window, which drives a rover at a heading and speed, or along its
+   waypoints.
+
+   .. attribute:: control_heading: boolean
+
+      Whether the autopilot holds :attr:`MechJeb.RoverAutopilot.heading`.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: heading: number
+
+      The heading to hold, in degrees.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.RoverAutopilot.control_heading`.
+
+   .. attribute:: heading_error: number
+
+      The difference between the vessel's heading and the heading to hold, in degrees.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: control_speed: boolean
+
+      Whether the autopilot holds :attr:`MechJeb.RoverAutopilot.speed`.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: speed: number
+
+      The speed to hold, in :math:`\mathrm{m/s}`.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.RoverAutopilot.control_speed`.
+
+   .. attribute:: speed_error: number
+
+      The difference between the vessel's speed and the speed to hold, in :math:`\mathrm{m/s}`.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: target_speed: number
+
+      The speed the autopilot drives at now, in :math:`\mathrm{m/s}`.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: stability_control: boolean
+
+      Whether the autopilot keeps the rover upright.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: brake_on_eject: boolean
+
+      Whether to brake when the crew leaves the rover.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: brake_on_energy_depletion: boolean
+
+      Whether to brake when the rover runs out of electric charge.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: warp_to_daylight: boolean
+
+      Whether to warp time to daylight after braking for a lack of electric charge.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.RoverAutopilot.brake_on_energy_depletion`.
+
+   .. attribute:: waypoints: List
+
+      The waypoints, in the order the rover drives to them.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: waypoint_index: number
+
+      The index of the waypoint the autopilot drives to, or -1 if there is none.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: loop_waypoints: boolean
+
+      Whether to return to the first waypoint after the last one.
+
+      :Attribute: Can be read or written
+
+   .. method:: add_waypoint(latitude: number, longitude: number): MechJeb.RoverWaypoint
+
+      Add a waypoint at a position on the surface of the body the vessel is at.
+
+      :param latitude: The latitude, in degrees.
+      :param longitude: The longitude, in degrees.
+      :returns: The waypoint.
+
+   .. method:: clear_waypoints()
+
+      Remove all the waypoints.
+
+   .. method:: add_target(): MechJeb.RoverWaypoint
+
+      Add a waypoint at the target. Throws an exception if the target is not a vessel or a
+      position on the surface.
+
+      :returns: The waypoint.
+
+   .. method:: drive_to_target()
+
+      Replace the waypoints with the target, and drive to it. Throws an exception if the
+      target is not a vessel or a position on the surface.
+
+   .. method:: drive()
+
+      Drive along the waypoints. Throws an exception if there are none.
+
+   .. method:: stop()
+
+      Stop driving along the waypoints.
+
+
+
+RoverWaypoint
+-------------
+
+
+.. class:: RoverWaypoint
+
+   A waypoint of the :class:`MechJeb.RoverAutopilot`, as the Waypoints window shows it.
+
+   .. note::
+
+      The object is destroyed once the waypoints are cleared or replaced, as by
+      :meth:`MechJeb.RoverAutopilot.clear_waypoints` and :meth:`MechJeb.RoverAutopilot.drive_to_target`.
+
+   .. attribute:: latitude: number
+
+      The latitude of the waypoint, in degrees. Throws an exception when set if the waypoint
+      is at a vessel.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: longitude: number
+
+      The longitude of the waypoint, in degrees. Throws an exception when set if the waypoint
+      is at a vessel.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: radius: number
+
+      The distance from the waypoint at which the rover has reached it, in meters.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: name: string
+
+      The name of the waypoint.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: min_speed: number
+
+      The lowest speed on the way to the waypoint, in :math:`\mathrm{m/s}`, or 0 for no limit.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: max_speed: number
+
+      The highest speed on the way to the waypoint, in :math:`\mathrm{m/s}`, or 0 for no limit.
+
+      :Attribute: Can be read or written

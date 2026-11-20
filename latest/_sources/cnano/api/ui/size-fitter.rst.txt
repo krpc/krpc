@@ -11,6 +11,10 @@ Size Fitter
    Sizes a panel to fit what it contains, rather than the other way round.
    See :func:`krpc_UI_Panel_SizeFitter`.
 
+   .. macro:: KRPC_CLASS_UI_SIZEFITTER
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_UI_SizeFitter_HorizontalFit(krpc_connection_t connection, krpc_UI_ContentSizeFit_t * returnValue, krpc_UI_SizeFitter_t instance)
    .. function:: krpc_error_t krpc_UI_SizeFitter_set_HorizontalFit(krpc_connection_t connection, krpc_UI_SizeFitter_t instance, krpc_UI_ContentSizeFit_t value)
 
@@ -30,6 +34,11 @@ Size Fitter
 .. type:: krpc_UI_ContentSizeFit_t
 
    How a size fitter sizes a panel along one direction.
+
+   .. macro:: KRPC_ENUMERATION_UI_CONTENTSIZEFIT
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_UI_CONTENTSIZEFIT_UNCONSTRAINED

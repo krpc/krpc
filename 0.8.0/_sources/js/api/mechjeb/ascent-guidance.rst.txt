@@ -1,0 +1,889 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: MechJeb
+   :no-index:
+
+AscentGuidance
+==============
+
+
+.. class:: AscentGuidance
+
+   The Ascent Guidance window, which flies the vessel to orbit.
+
+   .. note::
+
+      See the `MechJeb wiki <https://github.com/MuMech/MechJeb2/wiki/Ascent-Guidance>`_
+      for how to set up this autopilot.
+
+   .. method:: getEnabled()
+               setEnabled(value)
+
+      Whether the module is enabled.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getStatus()
+
+      The autopilot status, which depends on the selected ascent path.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``string``
+      :Game Scenes: Flight
+
+   .. method:: getAscentType()
+               setAscentType(value)
+
+      The ascent path.
+
+      :Property: Can be read or written
+      :rtype: :class:`MechJeb.AscentType`
+      :Game Scenes: Flight
+
+   .. method:: getSettings()
+
+      The Ascent Settings window.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`MechJeb.AscentSettings`
+      :Game Scenes: Flight
+
+   .. method:: getPVGSettings()
+
+      The PVG Settings window, with the settings of the :attr:`MechJeb.AscentType.pvg` path.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`MechJeb.PVGSettings`
+      :Game Scenes: Flight
+
+   .. method:: getClassicPath()
+
+      The Ascent Path Editor window, with the settings of the
+      :attr:`MechJeb.AscentType.classic` path.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`MechJeb.ClassicPath`
+      :Game Scenes: Flight
+
+   .. method:: getDesiredOrbitAltitude()
+               setDesiredOrbitAltitude(value)
+
+      The altitude of the final circular orbit, in meters.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getDesiredApoapsis()
+               setDesiredApoapsis(value)
+
+      The target apoapsis, in meters.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies on the :attr:`MechJeb.AscentType.pvg` path.
+
+   .. method:: getAttachAltFlag()
+               setAttachAltFlag(value)
+
+      Whether the orbit is attached at :meth:`MechJeb.AscentGuidance.getDesiredAttachAlt`.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies on the :attr:`MechJeb.AscentType.pvg` path, with an early shutoff stage, set by
+         :meth:`MechJeb.PVGSettings.getOptimizeStageFlag` and :meth:`MechJeb.PVGSettings.getOptimizeStage`.
+         Without one, MechJeb always attaches the orbit.
+
+   .. method:: getDesiredAttachAlt()
+               setDesiredAttachAlt(value)
+
+      The altitude at which the orbit is attached, in meters.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies on the :attr:`MechJeb.AscentType.pvg` path. Requires :meth:`MechJeb.AscentGuidance.getAttachAltFlag`,
+         unless there is no early shutoff stage. See :meth:`MechJeb.PVGSettings.getOptimizeStage`.
+
+   .. method:: getDesiredFPA()
+               setDesiredFPA(value)
+
+      The flight path angle at orbit insertion, in degrees.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies on the :attr:`MechJeb.AscentType.pvg` path, when there is no early shutoff
+         stage. See :meth:`MechJeb.PVGSettings.getOptimizeStage`.
+
+   .. method:: getDesiredInclination()
+               setDesiredInclination(value)
+
+      The inclination of the final circular orbit, in degrees.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getLaunchMode()
+
+      The launch mode, which gives whether the autopilot is waiting for a timed launch.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`MechJeb.AscentLaunchMode`
+      :Game Scenes: Flight
+
+   .. method:: launchToRendezvous()
+
+      Launch to rendezvous with the target. Throws an exception if there is no target, or
+      the ascent path is PVG.
+
+      :Game Scenes: Flight
+
+   .. method:: getLaunchPhaseAngle()
+               setLaunchPhaseAngle(value)
+
+      The phase angle to the target of a launch to rendezvous, in degrees.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: launchToTargetPlane()
+
+      Launch into the plane of the target. Throws an exception if there is no target.
+
+      :Game Scenes: Flight
+
+   .. method:: getLaunchLANDifference()
+               setLaunchLANDifference(value)
+
+      The difference from the target's longitude of the ascending node of a launch into the
+      target's plane, in degrees.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: launchToMatchLan()
+
+      Launch into the plane of the target, at the time the target's longitude of the
+      ascending node, less :meth:`MechJeb.AscentGuidance.getLaunchLANDifference`, passes overhead. Keeps
+      :meth:`MechJeb.AscentGuidance.getDesiredInclination`. Throws an exception if there is no target, or the
+      ascent path is not :attr:`MechJeb.AscentType.pvg`.
+
+      :Game Scenes: Flight
+
+   .. method:: launchToLan()
+
+      Launch into the plane with longitude of the ascending node :meth:`MechJeb.AscentGuidance.getDesiredLan`
+      and inclination :meth:`MechJeb.AscentGuidance.getDesiredInclination`. Throws an exception if the ascent
+      path is not :attr:`MechJeb.AscentType.pvg`.
+
+      :Game Scenes: Flight
+
+   .. method:: getDesiredLan()
+               setDesiredLan(value)
+
+      The longitude of the ascending node of a launch to a LAN, in degrees.
+      See :meth:`MechJeb.AscentGuidance.launchToLan`.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: abortTimedLaunch()
+
+      Abort a timed launch that has not started yet. Throws an exception if the launch mode
+      is :attr:`MechJeb.AscentLaunchMode.unknown`.
+
+      :Game Scenes: Flight
+
+   .. method:: getWarpCountDown()
+               setWarpCountDown(value)
+
+      The time before a timed launch at which time warp stops, in seconds.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getOverrideWarpToPlane()
+               setOverrideWarpToPlane(value)
+
+      Whether a timed launch launches at once, rather than at the time it computes.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+
+
+.. class:: AscentType
+
+   The ascent path. See :meth:`MechJeb.AscentGuidance.getAscentType`.
+
+
+   .. attribute:: classic
+
+      The classic ascent path. See :meth:`MechJeb.AscentGuidance.getClassicPath`.
+
+
+   .. attribute:: pvg
+
+      Primer Vector Guidance, for RSS/RO. See :meth:`MechJeb.AscentGuidance.getPVGSettings`.
+
+
+
+.. class:: AscentLaunchMode
+
+   The launch mode of the ascent autopilot. See :meth:`MechJeb.AscentGuidance.getLaunchMode`.
+
+
+   .. attribute:: normal
+
+      The autopilot is not performing a timed launch.
+
+
+   .. attribute:: rendezvous
+
+      A timed launch to rendezvous with the target vessel.
+
+
+   .. attribute:: targetPlane
+
+      A timed launch into the plane of the target.
+
+
+   .. attribute:: matchLan
+
+      A timed launch to the target's longitude of the ascending node. See
+      :meth:`MechJeb.AscentGuidance.launchToMatchLan`.
+
+
+   .. attribute:: lan
+
+      A timed launch to a longitude of the ascending node. See
+      :meth:`MechJeb.AscentGuidance.launchToLan`.
+
+
+   .. attribute:: unknown
+
+      A timed launch of another kind, started from MechJeb's window.
+
+
+
+AscentSettings
+--------------
+
+
+.. class:: AscentSettings
+
+   The Ascent Settings window, which holds the settings shared by the ascent paths.
+
+   .. method:: getForceRoll()
+               setForceRoll(value)
+
+      Whether the autopilot controls the roll.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getVerticalRoll()
+               setVerticalRoll(value)
+
+      The roll during the vertical climb, in degrees.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`MechJeb.AscentSettings.getForceRoll`.
+
+   .. method:: getTurnRoll()
+               setTurnRoll(value)
+
+      The roll during the turn, in degrees.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`MechJeb.AscentSettings.getForceRoll`.
+
+   .. method:: getRollAltitude()
+               setRollAltitude(value)
+
+      The altitude above which the autopilot controls the roll, in meters.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`MechJeb.AscentSettings.getForceRoll`.
+
+   .. method:: getLimitAngleOfAttack()
+               setLimitAngleOfAttack(value)
+
+      Whether to limit the angle of attack.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies on the :attr:`MechJeb.AscentType.classic` path.
+
+   .. method:: getMaxAngleOfAttack()
+               setMaxAngleOfAttack(value)
+
+      The largest angle of attack, in degrees.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`MechJeb.AscentSettings.getLimitAngleOfAttack`, and applies on the :attr:`MechJeb.AscentType.classic`
+         path.
+
+   .. method:: getAngleOfAttackLimitFadeoutPressure()
+               setAngleOfAttackLimitFadeoutPressure(value)
+
+      The dynamic pressure below which the angle of attack limit fades out, in pascals.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`MechJeb.AscentSettings.getLimitAngleOfAttack`, and applies on the :attr:`MechJeb.AscentType.classic`
+         path.
+
+   .. method:: getLimitingAngleOfAttack()
+
+      Whether the angle of attack limit is limiting the steering.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getCurrentMaxAngleOfAttack()
+
+      The largest angle of attack the limit allows now, in degrees.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getCorrectiveSteering()
+               setCorrectiveSteering(value)
+
+      Whether the autopilot steers by the velocity vector rather than the position vector.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         It is more accurate, though large craft may do better without it. Applies on the
+         :attr:`MechJeb.AscentType.classic` path.
+
+   .. method:: getCorrectiveSteeringGain()
+               setCorrectiveSteeringGain(value)
+
+      The gain of the corrective steering.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`MechJeb.AscentSettings.getCorrectiveSteering`, and applies on the :attr:`MechJeb.AscentType.classic` path.
+
+   .. method:: getAutostage()
+               setAutostage(value)
+
+      Whether the autopilot stages when the current stage runs out of fuel.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getStaging()
+
+      The autostaging settings. The same object as :meth:`MechJeb.Utilities.getStaging`.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`MechJeb.Autostaging`
+      :Game Scenes: Flight
+
+   .. method:: getThrust()
+
+      The throttle limiters. The same object as :meth:`MechJeb.Utilities.getThrust`.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`MechJeb.ThrustLimiter`
+      :Game Scenes: Flight
+
+   .. method:: getAutodeploySolarPanels()
+               setAutodeploySolarPanels(value)
+
+      Whether to deploy the solar panels when the ascent finishes.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getAutoDeployAntennas()
+               setAutoDeployAntennas(value)
+
+      Whether to deploy the antennas when the ascent finishes.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getAutowarp()
+               setAutowarp(value)
+
+      Whether to warp time during the ascent.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The same setting as :meth:`MechJeb.ManeuverPlanner.getAutowarp`.
+
+   .. method:: getSkipCircularization()
+               setSkipCircularization(value)
+
+      Whether to skip the circularization burn.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+
+
+PVGSettings
+-----------
+
+
+.. class:: PVGSettings
+
+   The PVG Settings window, which holds the settings of the Primer Vector Guidance ascent path.
+
+   .. method:: getDynamicPressureTrigger()
+               setDynamicPressureTrigger(value)
+
+      The dynamic pressure below which guidance starts, in pascals.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getFixedCoast()
+               setFixedCoast(value)
+
+      Whether the coast has a fixed length.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`MechJeb.PVGSettings.getCoastStageFlag`.
+
+   .. method:: getFixedCoastLength()
+               setFixedCoastLength(value)
+
+      The length of the coast, in seconds.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`MechJeb.PVGSettings.getFixedCoast`.
+
+   .. method:: getMinDeltaV()
+               setMinDeltaV(value)
+
+      The smallest delta-v of a stage that guidance plans with, in :math:`\mathrm{m/s}`.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getLastStage()
+               setLastStage(value)
+
+      The last stage that guidance plans with.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getOptimizeStageFlag()
+               setOptimizeStageFlag(value)
+
+      Whether guidance may shut off :meth:`MechJeb.PVGSettings.getOptimizeStage` early.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getOptimizeStage()
+               setOptimizeStage(value)
+
+      The stage that guidance may shut off early.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`MechJeb.PVGSettings.getOptimizeStageFlag`. -1 is no stage.
+
+   .. method:: getUnguidedStagesFlag()
+               setUnguidedStagesFlag(value)
+
+      Whether guidance leaves :meth:`MechJeb.PVGSettings.getUnguidedStages` unguided.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getUnguidedStages()
+               setUnguidedStages(value)
+
+      The stages that guidance leaves unguided.
+
+      :Property: Can be read or written
+      :rtype: ``Array`` of ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`MechJeb.PVGSettings.getUnguidedStagesFlag`.
+
+   .. method:: getCoastStageFlag()
+               setCoastStageFlag(value)
+
+      Whether guidance coasts in :meth:`MechJeb.PVGSettings.getCoastStage`.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getCoastStage()
+               setCoastStage(value)
+
+      The stage before or after which guidance coasts.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`MechJeb.PVGSettings.getCoastStageFlag`.
+
+   .. method:: getCoastBeforeFlag()
+               setCoastBeforeFlag(value)
+
+      Whether the coast comes before :meth:`MechJeb.PVGSettings.getCoastStage`, rather than after it.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`MechJeb.PVGSettings.getCoastStageFlag`.
+
+   .. method:: getUllageLeadTime()
+               setUllageLeadTime(value)
+
+      The time before an ignition at which RCS settles the propellant, in seconds.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getSpinupStageFlag()
+               setSpinupStageFlag(value)
+
+      Whether to spin up the vessel before :meth:`MechJeb.PVGSettings.getSpinupStage`.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getSpinupStage()
+               setSpinupStage(value)
+
+      The stage before which to spin up the vessel.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`MechJeb.PVGSettings.getSpinupStageFlag`.
+
+   .. method:: getSpinupAngularVelocity()
+               setSpinupAngularVelocity(value)
+
+      The angular velocity of the spin-up, in :math:`\mathrm{rad/s}`.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`MechJeb.PVGSettings.getSpinupStageFlag`. MechJeb's window shows it in revolutions per
+         minute.
+
+   .. method:: getSpinupLeadTime()
+               setSpinupLeadTime(value)
+
+      The time before staging at which the spin-up starts, in seconds.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`MechJeb.PVGSettings.getSpinupStageFlag`.
+
+   .. method:: getLimitQa()
+               setLimitQa(value)
+
+      The limit on dynamic pressure times angle of attack, in :math:`\mathrm{Pa \cdot rad}`.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         MechJeb clamps it to between 0 and 10000.
+
+   .. method:: getPitchRate()
+               setPitchRate(value)
+
+      The pitch rate of the booster, in :math:`\mathrm{deg/s}`.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getPitchStartVelocity()
+               setPitchStartVelocity(value)
+
+      The speed at which the booster starts to pitch over, in :math:`\mathrm{m/s}`.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getStagingTrigger()
+               setStagingTrigger(value)
+
+      The stage after which guidance starts.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`MechJeb.PVGSettings.getStagingTriggerFlag`.
+
+   .. method:: getStagingTriggerFlag()
+               setStagingTriggerFlag(value)
+
+      Whether guidance starts after :meth:`MechJeb.PVGSettings.getStagingTrigger`.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+
+
+ClassicPath
+-----------
+
+
+.. class:: ClassicPath
+
+   The Ascent Path Editor window, which holds the settings of the classic ascent path.
+
+   .. method:: getAutoPath()
+               setAutoPath(value)
+
+      Whether the autopilot chooses the turn altitudes and speed.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getAutoTurnPercent()
+               setAutoTurnPercent(value)
+
+      The altitude at which an automatic turn starts, as a fraction of the height of the
+      atmosphere.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`MechJeb.ClassicPath.getAutoPath`.
+
+   .. method:: getAutoTurnSpeedFactor()
+               setAutoTurnSpeedFactor(value)
+
+      The factor that sets the speed at which an automatic turn starts.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`MechJeb.ClassicPath.getAutoPath`.
+
+   .. method:: getAutoTurnStartAltitude()
+
+      The altitude at which an automatic turn starts, in meters.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getAutoTurnStartVelocity()
+
+      The speed at which an automatic turn starts, in :math:`\mathrm{m/s}`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getAutoTurnEndAltitude()
+
+      The altitude at which an automatic turn ends, in meters.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getTurnStartAltitude()
+               setTurnStartAltitude(value)
+
+      The altitude at which the turn starts, in meters.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getTurnStartVelocity()
+               setTurnStartVelocity(value)
+
+      The speed at which the turn starts, in :math:`\mathrm{m/s}`.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getTurnEndAltitude()
+               setTurnEndAltitude(value)
+
+      The altitude at which the turn ends, in meters.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getTurnEndAngle()
+               setTurnEndAngle(value)
+
+      The final flight path angle, in degrees.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getTurnShapeExponent()
+               setTurnShapeExponent(value)
+
+      The steepness of the turn, between 0 and 1.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight

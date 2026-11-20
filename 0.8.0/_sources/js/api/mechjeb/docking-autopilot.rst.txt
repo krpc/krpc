@@ -1,0 +1,123 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: MechJeb
+   :no-index:
+
+DockingAutopilot
+================
+
+
+.. class:: DockingAutopilot
+
+   The docking autopilot, which docks with the target docking port.
+
+   .. method:: getEnabled()
+               setEnabled(value)
+
+      Whether the module is enabled.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getStatus()
+
+      The status of the autopilot.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``string``
+      :Game Scenes: Flight
+
+   .. method:: getSpeedLimit()
+               setSpeedLimit(value)
+
+      The largest speed relative to the target, in :math:`\mathrm{m/s}`.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getOverrideSafeDistance()
+               setOverrideSafeDistance(value)
+
+      Whether :meth:`MechJeb.DockingAutopilot.getOverridenSafeDistance` replaces the computed safe distance.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getOverridenSafeDistance()
+               setOverridenSafeDistance(value)
+
+      The safe distance from the target, in meters.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`MechJeb.DockingAutopilot.getOverrideSafeDistance`.
+
+   .. method:: getOverrideTargetSize()
+               setOverrideTargetSize(value)
+
+      Whether :meth:`MechJeb.DockingAutopilot.getOverridenTargetSize` replaces the computed size of the target.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getOverridenTargetSize()
+               setOverridenTargetSize(value)
+
+      The size of the target, in meters.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`MechJeb.DockingAutopilot.getOverrideTargetSize`.
+
+   .. method:: getSafeDistance()
+
+      The safe distance from the target that the autopilot uses, in meters.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getTargetSize()
+
+      The size of the target that the autopilot uses, in meters.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getForceRoll()
+               setForceRoll(value)
+
+      Whether the autopilot controls the roll.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getRoll()
+               setRoll(value)
+
+      The roll, in degrees.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`MechJeb.DockingAutopilot.getForceRoll`.

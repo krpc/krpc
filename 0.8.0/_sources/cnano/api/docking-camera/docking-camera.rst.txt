@@ -1,0 +1,28 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Service
+=======
+
+
+Provides functionality to interact with Docking Camera (KURS).
+
+
+.. function:: krpc_error_t krpc_DockingCamera_Available(krpc_connection_t connection, bool * returnValue)
+
+   Whether Docking Camera (KURS) is available.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_DockingCamera_Camera(krpc_connection_t connection, krpc_DockingCamera_Camera_t * returnValue, krpc_SpaceCenter_Part_t part)
+
+   Get the camera on a part.
+   Throws an exception if the part is not an onboard camera or a docking port.
+
+   :Parameters:
+
+    * **part** -- The part.

@@ -1,0 +1,65 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: RasterPropMonitor
+
+Display
+=======
+
+
+.. class:: Display
+
+   A screen page that a script draws, and whose button presses it answers. Obtained by
+   calling :attr:`RasterPropMonitor.Monitor.display` or :meth:`RasterPropMonitor.display`.
+
+   .. note::
+
+      A monitor shows a display on a page whose handler is ``KRPCDisplay``. kRPC's
+      optional Module Manager patch adds such a page, named ``krpc``, to every monitor.
+      The content is kept while KSP builds the IVA again, but not saved with the game.
+
+   .. attribute:: name: string | nil
+
+      The name of the display, or ``nil`` for a monitor's own display.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: text: string
+
+      The text of the display, in Raster Prop Monitor's page format. It can hold
+      markup, such as ``[#ff0000]`` for a color, and a line can format variables, as
+      in ``{0:F0} m $&$ ALTITUDE``. Raster Prop Monitor updates the variables as
+      it draws.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: image: string | nil
+
+      The background image of the display, drawn under the text and scaled to the
+      screen, as a PNG or JPEG image. ``nil`` for none.
+      Throws an exception if the image does not decode.
+
+      :Attribute: Can be read or written
+
+   .. method:: clear()
+
+      Clear the text and the image.
+
+   .. attribute:: shown: boolean
+
+      Whether a monitor shows the display now.
+
+      :Attribute: Read-only, cannot be set
+
+   .. method:: button_pressed(id: number): number
+
+      An event that fires when a monitor showing the display has a button pressed.
+      The event lasts until it is removed.
+
+      :param id: The button's index in :attr:`RasterPropMonitor.Monitor.buttons`.
+
+   .. method:: button_released(id: number): number
+
+      An event that fires when a monitor showing the display has a button released.
+      The event lasts until it is removed.
+
+      :param id: The button's index in :attr:`RasterPropMonitor.Monitor.buttons`.

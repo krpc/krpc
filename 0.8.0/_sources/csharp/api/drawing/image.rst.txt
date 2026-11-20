@@ -1,0 +1,35 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.Drawing
+
+Image
+=====
+
+
+.. class:: Image
+
+   An image that markers can be drawn with. Created using :meth:`Drawing.AddImage <Drawing.Drawing.AddImage>`.
+
+   .. note::
+
+      An image is kept across scene changes, until it is removed or the client that
+      created it disconnects.
+
+   .. property:: int Width { get; }
+
+      The width of the image, in pixels.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: int Height { get; }
+
+      The height of the image, in pixels.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: void Remove()
+
+      Remove the image. A marker drawn with it goes back to its own icon.
+
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph

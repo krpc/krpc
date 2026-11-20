@@ -1,0 +1,387 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Waypoints
+=========
+
+
+.. _http-SpaceCenter.WaypointManager:
+
+.. rubric:: WaypointManager
+
+Waypoints are the location markers you can see on the map view showing you where contracts are targeted for.
+With this structure, you can obtain coordinate data for the locations of these waypoints.
+Obtained by calling :http:get:`/space-center/waypoint-manager`.
+
+A ``WaypointManager`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /space-center/waypoint-manager/(id)/waypoints
+
+   A list of all existing waypoints.
+
+
+   :param id: The identifier of the :ref:`WaypointManager <http-SpaceCenter.WaypointManager>` object.
+
+   :resjson list<SpaceCenter.Waypoint> value:
+
+
+
+
+.. http:post:: /space-center/waypoint-manager/(id)/add-waypoint
+
+   Creates a waypoint at the given position at ground level, and returns a
+   :ref:`Waypoint <http-SpaceCenter.Waypoint>` object that can be used to modify it.
+
+
+   :param id: The identifier of the :ref:`WaypointManager <http-SpaceCenter.WaypointManager>` object.
+
+   :reqjson double latitude: Latitude of the waypoint.
+   :reqjson double longitude: Longitude of the waypoint.
+   :reqjson SpaceCenter.CelestialBody body: Celestial body the waypoint is attached to.
+   :reqjson string name: Name of the waypoint.
+   :resjson SpaceCenter.Waypoint value:
+
+
+
+
+
+.. http:post:: /space-center/waypoint-manager/(id)/add-waypoint-at-altitude
+
+   Creates a waypoint at the given position and altitude, and returns a
+   :ref:`Waypoint <http-SpaceCenter.Waypoint>` object that can be used to modify it.
+
+
+   :param id: The identifier of the :ref:`WaypointManager <http-SpaceCenter.WaypointManager>` object.
+
+   :reqjson double latitude: Latitude of the waypoint.
+   :reqjson double longitude: Longitude of the waypoint.
+   :reqjson double altitude: Altitude (above sea level) of the waypoint.
+   :reqjson SpaceCenter.CelestialBody body: Celestial body the waypoint is attached to.
+   :reqjson string name: Name of the waypoint.
+   :resjson SpaceCenter.Waypoint value:
+
+
+
+
+
+.. http:get:: /space-center/waypoint-manager/(id)/colors
+
+   An example map of known color - seed pairs.
+   Any other integers may be used as seed.
+
+
+   :param id: The identifier of the :ref:`WaypointManager <http-SpaceCenter.WaypointManager>` object.
+
+   :resjson dictionary<string, int32> value:
+
+
+
+
+.. http:get:: /space-center/waypoint-manager/(id)/icons
+
+   Returns all available icons (from "GameData/Squad/Contracts/Icons/").
+
+
+   :param id: The identifier of the :ref:`WaypointManager <http-SpaceCenter.WaypointManager>` object.
+
+   :resjson list<string> value:
+
+
+
+
+
+.. _http-SpaceCenter.Waypoint:
+
+.. rubric:: Waypoint
+
+Represents a waypoint. Can be created using :http:post:`/space-center/waypoint-manager/(id)/add-waypoint`.
+
+A ``Waypoint`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /space-center/waypoint/(id)/body
+
+   The celestial body the waypoint is attached to.
+
+
+   :param id: The identifier of the :ref:`Waypoint <http-SpaceCenter.Waypoint>` object.
+
+   :resjson SpaceCenter.CelestialBody value:
+
+.. http:put:: /space-center/waypoint/(id)/body
+
+   The celestial body the waypoint is attached to.
+
+
+   :param id: The identifier of the :ref:`Waypoint <http-SpaceCenter.Waypoint>` object.
+
+   :reqjson SpaceCenter.CelestialBody value: The new value.
+
+
+
+
+.. http:get:: /space-center/waypoint/(id)/name
+
+   The name of the waypoint as it appears on the map and the contract.
+
+
+   :param id: The identifier of the :ref:`Waypoint <http-SpaceCenter.Waypoint>` object.
+
+   :resjson string value:
+
+.. http:put:: /space-center/waypoint/(id)/name
+
+   The name of the waypoint as it appears on the map and the contract.
+
+
+   :param id: The identifier of the :ref:`Waypoint <http-SpaceCenter.Waypoint>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:get:: /space-center/waypoint/(id)/color
+
+   The seed of the icon color. See :http:get:`/space-center/waypoint-manager/(id)/colors` for example colors.
+
+
+   :param id: The identifier of the :ref:`Waypoint <http-SpaceCenter.Waypoint>` object.
+
+   :resjson int32 value:
+
+.. http:put:: /space-center/waypoint/(id)/color
+
+   The seed of the icon color. See :http:get:`/space-center/waypoint-manager/(id)/colors` for example colors.
+
+
+   :param id: The identifier of the :ref:`Waypoint <http-SpaceCenter.Waypoint>` object.
+
+   :reqjson int32 value: The new value.
+
+
+
+
+.. http:get:: /space-center/waypoint/(id)/icon
+
+   The icon of the waypoint.
+
+
+   :param id: The identifier of the :ref:`Waypoint <http-SpaceCenter.Waypoint>` object.
+
+   :resjson string value:
+
+.. http:put:: /space-center/waypoint/(id)/icon
+
+   The icon of the waypoint.
+
+
+   :param id: The identifier of the :ref:`Waypoint <http-SpaceCenter.Waypoint>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:get:: /space-center/waypoint/(id)/latitude
+
+   The latitude of the waypoint.
+
+
+   :param id: The identifier of the :ref:`Waypoint <http-SpaceCenter.Waypoint>` object.
+
+   :resjson double value:
+
+.. http:put:: /space-center/waypoint/(id)/latitude
+
+   The latitude of the waypoint.
+
+
+   :param id: The identifier of the :ref:`Waypoint <http-SpaceCenter.Waypoint>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /space-center/waypoint/(id)/longitude
+
+   The longitude of the waypoint.
+
+
+   :param id: The identifier of the :ref:`Waypoint <http-SpaceCenter.Waypoint>` object.
+
+   :resjson double value:
+
+.. http:put:: /space-center/waypoint/(id)/longitude
+
+   The longitude of the waypoint.
+
+
+   :param id: The identifier of the :ref:`Waypoint <http-SpaceCenter.Waypoint>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /space-center/waypoint/(id)/mean-altitude
+
+   The altitude of the waypoint above sea level, in meters.
+
+
+   :param id: The identifier of the :ref:`Waypoint <http-SpaceCenter.Waypoint>` object.
+
+   :resjson double value:
+
+.. http:put:: /space-center/waypoint/(id)/mean-altitude
+
+   The altitude of the waypoint above sea level, in meters.
+
+
+   :param id: The identifier of the :ref:`Waypoint <http-SpaceCenter.Waypoint>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /space-center/waypoint/(id)/surface-altitude
+
+   The altitude of the waypoint above the surface of the body or sea level,
+   whichever is closer, in meters.
+
+
+   :param id: The identifier of the :ref:`Waypoint <http-SpaceCenter.Waypoint>` object.
+
+   :resjson double value:
+
+.. http:put:: /space-center/waypoint/(id)/surface-altitude
+
+   The altitude of the waypoint above the surface of the body or sea level,
+   whichever is closer, in meters.
+
+
+   :param id: The identifier of the :ref:`Waypoint <http-SpaceCenter.Waypoint>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /space-center/waypoint/(id)/bedrock-altitude
+
+   The altitude of the waypoint above the surface of the body, in meters.
+   When over water, this is the altitude above the sea floor.
+
+
+   :param id: The identifier of the :ref:`Waypoint <http-SpaceCenter.Waypoint>` object.
+
+   :resjson double value:
+
+.. http:put:: /space-center/waypoint/(id)/bedrock-altitude
+
+   The altitude of the waypoint above the surface of the body, in meters.
+   When over water, this is the altitude above the sea floor.
+
+
+   :param id: The identifier of the :ref:`Waypoint <http-SpaceCenter.Waypoint>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /space-center/waypoint/(id)/near-surface
+
+   ``true`` if the waypoint is near to the surface of a body.
+
+
+   :param id: The identifier of the :ref:`Waypoint <http-SpaceCenter.Waypoint>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /space-center/waypoint/(id)/grounded
+
+   ``true`` if the waypoint is attached to the ground.
+
+
+   :param id: The identifier of the :ref:`Waypoint <http-SpaceCenter.Waypoint>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /space-center/waypoint/(id)/index
+
+   The integer index of this waypoint within its cluster of sibling waypoints.
+   In other words, when you have a cluster of waypoints called "Somewhere Alpha",
+   "Somewhere Beta" and "Somewhere Gamma", the alpha site has index 0, the beta
+   site has index 1 and the gamma site has index 2.
+   When :http:get:`/space-center/waypoint/(id)/clustered` is ``false``, this is zero.
+
+
+   :param id: The identifier of the :ref:`Waypoint <http-SpaceCenter.Waypoint>` object.
+
+   :resjson int32 value:
+
+
+
+
+.. http:get:: /space-center/waypoint/(id)/clustered
+
+   ``true`` if this waypoint is part of a set of clustered waypoints with greek letter
+   names appended (Alpha, Beta, Gamma, etc).
+   If ``true``, there is a one-to-one correspondence with the greek letter name and
+   the :http:get:`/space-center/waypoint/(id)/index`.
+
+
+   :param id: The identifier of the :ref:`Waypoint <http-SpaceCenter.Waypoint>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /space-center/waypoint/(id)/has-contract
+
+   Whether the waypoint belongs to a contract.
+
+
+   :param id: The identifier of the :ref:`Waypoint <http-SpaceCenter.Waypoint>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /space-center/waypoint/(id)/contract
+
+   The associated contract.
+
+
+   :param id: The identifier of the :ref:`Waypoint <http-SpaceCenter.Waypoint>` object.
+
+   :resjson SpaceCenter.Contract value:
+
+
+
+
+.. http:post:: /space-center/waypoint/(id)/remove
+
+   Removes the waypoint.
+
+   .. note::
+
+      Any further use of this object throws an exception.
+
+
+   :param id: The identifier of the :ref:`Waypoint <http-SpaceCenter.Waypoint>` object.

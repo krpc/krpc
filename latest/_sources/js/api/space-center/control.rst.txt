@@ -1,0 +1,972 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: SpaceCenter
+   :no-index:
+
+Control
+=======
+
+
+.. class:: Control
+
+   Used to manipulate the controls of a vessel. This includes adjusting the
+   throttle, enabling/disabling systems such as SAS and RCS, or altering the
+   direction in which the vessel is pointing.
+   Obtained by calling :meth:`SpaceCenter.Vessel.getControl`.
+
+   .. note::
+
+      Control inputs (pitch, yaw, roll, translation, wheel throttle, wheel steering
+      and the custom axes) are zeroed when all clients that have set one or more of
+      these inputs are no longer connected. The throttle is an exception: it keeps
+      its value when clients disconnect.
+
+      A kerbal on EVA is a vessel, and is driven by these same controls. The
+      translation inputs move it: :meth:`SpaceCenter.Control.getForward` and :meth:`SpaceCenter.Control.getRight` walk
+      it about, relative to the direction it is facing, and all three translate its
+      jetpack once that is deployed. Walking is not throttled by the size of the
+      input, only started by it. The rotation inputs turn it, at a rate proportional
+      to the input: :meth:`SpaceCenter.Control.getYaw` steers it as it walks, and all three turn its
+      jetpack. Turning the jetpack releases the kerbal from the orientation it was
+      holding; it stops and holds its new orientation once the input returns to zero.
+      :meth:`SpaceCenter.Control.getRCS` deploys and stows the jetpack and :meth:`SpaceCenter.Control.getLights`
+      switches the helmet lamp. The remaining controls do nothing for a kerbal.
+      A kerbal is also sent out and brought back in from here: with
+      :meth:`SpaceCenter.CrewMember.eva` and :meth:`SpaceCenter.Control.board`, and
+      :meth:`SpaceCenter.Control.grabLadder` and :meth:`SpaceCenter.Control.releaseLadder` for the ladders it
+      passes on the way.
+
+   .. method:: getSource()
+
+      The source of the vessels control, for example by a kerbal or a probe core.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.ControlSource`
+      :Game Scenes: Flight
+
+   .. method:: getState()
+
+      The control state of the vessel.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.ControlState`
+      :Game Scenes: Flight
+
+   .. method:: getSAS()
+               setSAS(value)
+
+      The state of SAS.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Equivalent to :meth:`SpaceCenter.AutoPilot.getSAS`.
+         Throws an exception if set to ``true`` while the auto-pilot is engaged, as the
+         auto-pilot holds SAS off for as long as it is flying the vessel.
+
+   .. method:: getSASMode()
+               setSASMode(value)
+
+      The current :meth:`SpaceCenter.Control.getSASMode`.
+      These modes are equivalent to the mode buttons to
+      the left of the navball that appear when SAS is enabled.
+
+      :Property: Can be read or written
+      :rtype: :class:`SpaceCenter.SASMode`
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Equivalent to :meth:`SpaceCenter.AutoPilot.getSASMode`.
+         Throws an exception if set to a mode not in :meth:`SpaceCenter.Control.getAvailableSASModes`.
+
+   .. method:: getAvailableSASModes()
+
+      The SAS modes that :meth:`SpaceCenter.Control.getSASMode` can be set to.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Set`` of :class:`SpaceCenter.SASMode`
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Equivalent to :meth:`SpaceCenter.AutoPilot.getAvailableSASModes`. The modes depend on the SAS
+         level of the vessel's pilot or probe core, the navball speed mode, and whether
+         there is a target and a maneuver node.
+
+   .. method:: getSpeedMode()
+               setSpeedMode(value)
+
+      The current :meth:`SpaceCenter.Control.getSpeedMode` of the navball.
+      This is the mode displayed next to the speed at the top of the navball.
+
+      :Property: Can be read or written
+      :rtype: :class:`SpaceCenter.SpeedMode`
+      :Game Scenes: Flight
+
+   .. method:: getEngineGimbals()
+               setEngineGimbals(value)
+
+      Returns whether all gimballed engines on the vessel have gimbal enabled,
+      and sets the gimbal enabled state of all gimballed engines.
+      See :meth:`SpaceCenter.Engine.getGimbalLocked`.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getThrustReversers()
+               setThrustReversers(value)
+
+      Returns whether all engines with a thrust reverser on the vessel have
+      their thrust reverser engaged, and sets the thrust reverser state of all
+      such engines.
+      See :meth:`SpaceCenter.Engine.getThrustReversed`.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getAeroSurfaces()
+               setAeroSurfaces(value)
+
+      Returns whether all control surfaces on the vessel have pitch, yaw and roll enabled,
+      and sets the pitch, yaw and roll enabled state of all control surfaces.
+      See :meth:`SpaceCenter.ControlSurface.getPitchEnabled`,
+      :meth:`SpaceCenter.ControlSurface.getYawEnabled` and
+      :meth:`SpaceCenter.ControlSurface.getRollEnabled`.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getRCS()
+               setRCS(value)
+
+      The state of RCS.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         For a kerbal on EVA this is whether its jetpack is deployed. Deploying it
+         requires the kerbal to have one and to be the active vessel; otherwise
+         setting this does nothing.
+
+   .. method:: getReactionWheels()
+               setReactionWheels(value)
+
+      Returns whether all reactive wheels on the vessel are active,
+      and sets the active state of all reaction wheels.
+      See :meth:`SpaceCenter.ReactionWheel.getActive`.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getGear()
+               setGear(value)
+
+      The state of the landing gear/legs.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getLegs()
+               setLegs(value)
+
+      Returns whether all landing legs on the vessel are deployed,
+      and sets the deployment state of all landing legs.
+      Does not include wheels (for example landing gear).
+      See :meth:`SpaceCenter.Leg.getDeployed`.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getWheels()
+               setWheels(value)
+
+      Returns whether all wheels on the vessel are deployed,
+      and sets the deployment state of all wheels.
+      Does not include landing legs.
+      See :meth:`SpaceCenter.Wheel.getDeployed`.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getLights()
+               setLights(value)
+
+      The state of the lights.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         For a kerbal on EVA this is its helmet lamp. Switching it requires the
+         kerbal to be the active vessel; otherwise setting this does nothing.
+
+   .. method:: getBrakes()
+               setBrakes(value)
+
+      The state of the wheel brakes.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getAntennas()
+               setAntennas(value)
+
+      Returns whether all antennas on the vessel are deployed,
+      and sets the deployment state of all antennas.
+      See :meth:`SpaceCenter.Antenna.getDeployed`.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getCargoBays()
+               setCargoBays(value)
+
+      Returns whether any of the cargo bays on the vessel are open,
+      and sets the open state of all cargo bays.
+      See :meth:`SpaceCenter.CargoBay.getOpen`.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getIntakes()
+               setIntakes(value)
+
+      Returns whether all of the air intakes on the vessel are open,
+      and sets the open state of all air intakes.
+      See :meth:`SpaceCenter.Intake.getOpen`.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getParachutes()
+               setParachutes(value)
+
+      Returns whether all parachutes on the vessel are deployed,
+      and sets the deployment state of all parachutes.
+      Cannot be set to ``false``.
+      See :meth:`SpaceCenter.Parachute.getDeployed`.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getRadiators()
+               setRadiators(value)
+
+      Returns whether all radiators on the vessel are deployed,
+      and sets the deployment state of all radiators.
+      See :meth:`SpaceCenter.Radiator.getDeployed`.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getResourceHarvesters()
+               setResourceHarvesters(value)
+
+      Returns whether all of the resource harvesters on the vessel are deployed,
+      and sets the deployment state of all resource harvesters.
+      See :meth:`SpaceCenter.ResourceHarvester.getDeployed`.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getResourceHarvestersActive()
+               setResourceHarvestersActive(value)
+
+      Returns whether any of the resource harvesters on the vessel are active,
+      and sets the active state of all resource harvesters.
+      See :meth:`SpaceCenter.ResourceHarvester.getActive`.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getSolarPanels()
+               setSolarPanels(value)
+
+      Returns whether all solar panels on the vessel are deployed,
+      and sets the deployment state of all solar panels.
+      See :meth:`SpaceCenter.SolarPanel.getDeployed`.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getAbort()
+               setAbort(value)
+
+      The state of the abort action group.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getThrottle()
+               setThrottle(value)
+
+      The state of the throttle. A value between 0 and 1.
+      Unlike the other control inputs, the throttle is not zeroed when the
+      clients that set it disconnect.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
+   .. method:: getInputMode()
+               setInputMode(value)
+
+      Sets the behavior of the pitch, yaw, roll and translation control inputs.
+      When set to additive, these inputs are added to the vessels current inputs.
+      This mode is the default.
+      When set to override, these inputs (if non-zero) override the vessels inputs.
+      This mode prevents keyboard control, or SAS, from interfering with the controls when
+      they are set.
+
+      :Property: Can be read or written
+      :rtype: :class:`SpaceCenter.ControlInputMode`
+      :Game Scenes: Flight
+
+   .. method:: getPitch()
+               setPitch(value)
+
+      The state of the pitch control.
+      A value between -1 and 1.
+      Equivalent to the w and s keys.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
+   .. method:: getYaw()
+               setYaw(value)
+
+      The state of the yaw control.
+      A value between -1 and 1.
+      Equivalent to the a and d keys.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
+   .. method:: getRoll()
+               setRoll(value)
+
+      The state of the roll control.
+      A value between -1 and 1.
+      Equivalent to the q and e keys.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
+   .. method:: getPitchTrim()
+               setPitchTrim(value)
+
+      The state of the pitch trim.
+      A value between -1 and 1.
+      Equivalent to the Alt+W and Alt+S keys.
+      This is a persistent trim that remains latched until changed or reset,
+      and can only be accessed for the active vessel.
+      Unlike the pitch, yaw and roll control inputs, the trim is not cleared
+      when clients disconnect.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getYawTrim()
+               setYawTrim(value)
+
+      The state of the yaw trim.
+      A value between -1 and 1.
+      Equivalent to the Alt+A and Alt+D keys.
+      This is a persistent trim that remains latched until changed or reset,
+      and can only be accessed for the active vessel.
+      Unlike the pitch, yaw and roll control inputs, the trim is not cleared
+      when clients disconnect.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getRollTrim()
+               setRollTrim(value)
+
+      The state of the roll trim.
+      A value between -1 and 1.
+      Equivalent to the Alt+Q and Alt+E keys.
+      This is a persistent trim that remains latched until changed or reset,
+      and can only be accessed for the active vessel.
+      Unlike the pitch, yaw and roll control inputs, the trim is not cleared
+      when clients disconnect.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getPrecisionMode()
+               setPrecisionMode(value)
+
+      Whether precision control mode is enabled.
+      Equivalent to the Caps Lock key.
+      This is a game setting rather than a vessel setting,
+      and can only be accessed for the active vessel.
+      Unlike the pitch, yaw and roll control inputs, precision mode is not cleared
+      when clients disconnect.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Precision mode weakens the RCS thrust that the control inputs produce. A block
+         driven by :meth:`SpaceCenter.RCS.getInputOverride` is exempt.
+
+   .. method:: getForward()
+               setForward(value)
+
+      The state of the forward translational control.
+      A value between -1 and 1.
+      Equivalent to the h and n keys.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
+   .. method:: getUp()
+               setUp(value)
+
+      The state of the up translational control.
+      A value between -1 and 1.
+      Equivalent to the i and k keys.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
+   .. method:: getRight()
+               setRight(value)
+
+      The state of the right translational control.
+      A value between -1 and 1.
+      Equivalent to the j and l keys.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
+   .. method:: getWheelThrottle()
+               setWheelThrottle(value)
+
+      The state of the wheel throttle.
+      A value between -1 and 1.
+      A value of 1 rotates the wheels forwards, a value of -1 rotates
+      the wheels backwards.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
+   .. method:: getWheelSteering()
+               setWheelSteering(value)
+
+      The state of the wheel steering.
+      A value between -1 and 1.
+      A value of 1 steers to the left, and a value of -1 steers to the right.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
+   .. method:: getCustomAxis01()
+               setCustomAxis01(value)
+
+      The state of CustomAxis01.
+      A value between -1 and 1.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getCustomAxis02()
+               setCustomAxis02(value)
+
+      The state of CustomAxis02.
+      A value between -1 and 1.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getCustomAxis03()
+               setCustomAxis03(value)
+
+      The state of CustomAxis03.
+      A value between -1 and 1.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getCustomAxis04()
+               setCustomAxis04(value)
+
+      The state of CustomAxis04.
+      A value between -1 and 1.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getCurrentStage()
+
+      The current stage of the vessel. Corresponds to the stage number in
+      the in-game UI.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: activateNextStage()
+
+      Activates the next stage. Equivalent to pressing the space bar in-game.
+
+      :returns: A list of vessel objects that are jettisoned from the active vessel.
+      :rtype: ``Array`` of :class:`SpaceCenter.Vessel`
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         When called, the active vessel may change. It is therefore possible that,
+         after calling this function, the object(s) returned by previous call(s) to
+         :func:`SpaceCenter.getActiveVessel` no longer refer to the active vessel.
+         Throws an exception if staging is locked.
+
+   .. method:: getStageLock()
+               setStageLock(value)
+
+      Whether staging is locked on the vessel.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         This is equivalent to locking the staging using Alt+L
+
+   .. method:: getActionGroup(group)
+
+      Returns ``true`` if the given action group is enabled.
+
+      :param group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when Extended Action Groups is installed.
+      :type group: ``number``
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: setActionGroup(group, state)
+
+      Sets the state of the given action group.
+
+      :param group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when Extended Action Groups is installed.
+      :type group: ``number``
+      :param state:
+      :type state: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: toggleActionGroup(group)
+
+      Toggles the state of the given action group.
+
+      :param group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when Extended Action Groups is installed.
+      :type group: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getActionGroupActions(group)
+
+      Returns a list of all the part actions that are assigned to the given action group.
+      Each entry identifies the part, the part module, and the action's name and identifier.
+      Returns an empty list if no actions are assigned to the group.
+
+      :param group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when Extended Action Groups is installed.
+      :type group: ``number``
+      :rtype: ``Array`` of :class:`SpaceCenter.ActionGroupAction`
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         For stock action groups, the assignments are read from each part action directly.
+         When Extended Action Groups is installed, the assignments are queried from
+         the mod instead, so that actions assigned to its additional groups are included.
+
+   .. method:: addNode(ut[, prograde[, normal[, radial]]])
+
+      Creates a maneuver node at the given universal time, and returns a
+      :class:`SpaceCenter.Node` object that can be used to modify it.
+      Optionally sets the magnitude of the delta-v for the maneuver node
+      in the prograde, normal and radial directions.
+
+      :param ut: Universal time of the maneuver node.
+      :type ut: ``number``
+      :param prograde: Delta-v in the prograde direction. Defaults to ``0.0``.
+      :type prograde: ``number``
+      :param normal: Delta-v in the normal direction. Defaults to ``0.0``.
+      :type normal: ``number``
+      :param radial: Delta-v in the radial direction. Defaults to ``0.0``.
+      :type radial: ``number``
+      :rtype: :class:`SpaceCenter.Node`
+      :Game Scenes: Flight
+
+   .. method:: getNodes()
+
+      Returns a list of all existing maneuver nodes, ordered by time from first to last.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`SpaceCenter.Node`
+      :Game Scenes: Flight
+
+   .. method:: removeNodes()
+
+      Remove all maneuver nodes.
+
+      :Game Scenes: Flight
+
+   .. method:: getAirlock()
+
+      The part whose hatch the kerbal is standing at, and so the one
+      :meth:`SpaceCenter.Control.board` would put it in. ``null`` if it is not at a hatch or the
+      vessel is not a kerbal on EVA.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Part` or ``null``
+      :Game Scenes: Flight
+
+   .. method:: board()
+
+      Climb into the part whose hatch the kerbal is standing at, ending the EVA. The
+      kerbal takes a seat in that part and its own vessel ceases to exist. If the
+      kerbal was the active vessel, the game switches to the vessel it boarded.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A kerbal can only board through a hatch it is already at, which
+         :meth:`SpaceCenter.Control.getAirlock` reports; it does not walk to one. Throws an exception if
+         the vessel is not a kerbal on EVA, if the kerbal is not at a hatch, if boarding
+         is disabled for the game, if the part has no free seat, or if the kerbal is
+         carrying science data that the part cannot store, as the game asks what to do
+         with it in that case.
+
+   .. method:: getLadder()
+
+      The ladder the kerbal is holding on to, or ``null`` if it is not holding one
+      or the vessel is not a kerbal on EVA.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Part` or ``null``
+      :Game Scenes: Flight
+
+   .. method:: grabLadder()
+
+      Take hold of the ladder the kerbal is standing at, as pressing the grab key
+      in-game does. A kerbal can only take hold of a ladder it is already alongside;
+      it does not walk to one. :meth:`SpaceCenter.Control.getLadder` reports the one it ends up
+      holding. Does nothing if the kerbal is already holding a ladder.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Throws an exception if the vessel is not a kerbal on EVA, if there is no ladder
+         within reach, or if the kerbal is doing something it cannot grab a ladder from.
+
+   .. method:: releaseLadder()
+
+      Let go of the ladder the kerbal is holding, as pressing the jump key in-game
+      does. Does nothing if it is not holding one.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Throws an exception if the vessel is not a kerbal on EVA.
+
+
+
+.. class:: ActionGroupAction(fields)
+
+   An action, belonging to a part module, that is assigned to an action group.
+   Obtained by calling :meth:`SpaceCenter.Control.getActionGroupActions`.
+
+
+   .. attribute:: part
+
+      The part that the action acts on.
+
+      :Type: :class:`SpaceCenter.Part`
+
+   .. attribute:: module
+
+      The part module that the action belongs to. Returns ``null`` for a
+      part-level action that is not associated with a module. This only occurs when
+      Extended Action Groups is installed, as it can assign actions defined
+      directly on a part, rather than on one of its modules, to an action group.
+
+      :Type: :class:`SpaceCenter.Module` or ``null``
+
+   .. attribute:: name
+
+      The human-readable name of the action, as shown in the action group editor.
+
+      :Type: ``string``
+
+   .. attribute:: id
+
+      The non-localized identifier for the action.
+
+      :Type: ``string``
+
+
+.. class:: ControlState
+
+   The control state of a vessel.
+   See :meth:`SpaceCenter.Control.getState`.
+
+
+   .. attribute:: full
+
+      Full controllable.
+
+
+   .. attribute:: partial
+
+      Partially controllable.
+
+
+   .. attribute:: none
+
+      Not controllable.
+
+
+
+.. class:: ControlSource
+
+   The control source of a vessel.
+   See :meth:`SpaceCenter.Control.getSource`.
+
+
+   .. attribute:: kerbal
+
+      Vessel is controlled by a Kerbal.
+
+
+   .. attribute:: probe
+
+      Vessel is controlled by a probe core.
+
+
+   .. attribute:: none
+
+      Vessel is not controlled.
+
+
+
+.. class:: SASMode
+
+   The behavior of the SAS auto-pilot. See :meth:`SpaceCenter.AutoPilot.getSASMode`.
+
+
+   .. attribute:: stabilityAssist
+
+      Stability assist mode. Dampen out any rotation.
+
+
+   .. attribute:: maneuver
+
+      Point in the burn direction of the next maneuver node.
+
+
+   .. attribute:: prograde
+
+      Point in the prograde direction.
+
+
+   .. attribute:: retrograde
+
+      Point in the retrograde direction.
+
+
+   .. attribute:: normal
+
+      Point in the orbit normal direction.
+
+
+   .. attribute:: antiNormal
+
+      Point in the orbit anti-normal direction.
+
+
+   .. attribute:: radial
+
+      Point in the orbit radial direction.
+
+
+   .. attribute:: antiRadial
+
+      Point in the orbit anti-radial direction.
+
+
+   .. attribute:: target
+
+      Point in the direction of the current target.
+
+
+   .. attribute:: antiTarget
+
+      Point away from the current target.
+
+
+
+.. class:: SpeedMode
+
+   The mode of the speed reported in the navball.
+   See :meth:`SpaceCenter.Control.getSpeedMode`.
+
+
+   .. attribute:: orbit
+
+      Speed is relative to the vessel's orbit.
+
+
+   .. attribute:: surface
+
+      Speed is relative to the surface of the body being orbited.
+
+
+   .. attribute:: target
+
+      Speed is relative to the current target.
+
+
+
+.. class:: ControlInputMode
+
+   See :meth:`SpaceCenter.Control.getInputMode`.
+
+
+   .. attribute:: additive
+
+      Control inputs are added to the vessels current control inputs.
+
+
+   .. attribute:: override
+
+      Control inputs (when they are non-zero) override the vessels current control inputs.

@@ -1,0 +1,414 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: MechJeb
+
+Utilities
+=========
+
+
+.. class:: Utilities
+
+   The Utilities window, which holds the autostaging and throttle settings, and deploys
+   the solar panels and antennas.
+
+   .. attribute:: antennas: MechJeb.DeployableController
+
+      The deployable antennas.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: solar_panels: MechJeb.DeployableController
+
+      The solar panels.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: staging: MechJeb.Autostaging
+
+      The autostaging settings. The same object as :attr:`MechJeb.AscentSettings.staging`.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: thrust: MechJeb.ThrustLimiter
+
+      The throttle limiters. The same object as :attr:`MechJeb.AscentSettings.thrust`.
+
+      :Attribute: Read-only, cannot be set
+
+
+
+Autostaging
+-----------
+
+
+.. class:: Autostaging
+
+   The autostaging settings, which the Utilities and Ascent Settings windows show.
+
+   .. attribute:: enabled: boolean
+
+      Whether the module is enabled.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: autostaging_once: boolean
+
+      Whether the controller disables itself after the next staging.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         See :meth:`MechJeb.Autostaging.autostage_once`.
+
+   .. method:: autostage_once()
+
+      Enable the controller until the next staging. Throws an exception if the controller is
+      enabled.
+
+   .. attribute:: autostage_limit: number
+
+      The last stage the controller activates.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: autostage_post_delay: number
+
+      The delay after each staging, in seconds.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: autostage_pre_delay: number
+
+      The delay before each staging, in seconds.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: clamp_auto_stage_thrust_pct: number
+
+      The fraction of full thrust at which the controller releases the launch clamps.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: fairing_max_aerothermal_flux: number
+
+      The largest aerothermal flux at which the controller jettisons a fairing, in
+      :math:`\mathrm{W/m^{2}}`.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: fairing_max_dynamic_pressure: number
+
+      The largest dynamic pressure at which the controller jettisons a fairing, in pascals.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: fairing_min_altitude: number
+
+      The lowest altitude at which the controller jettisons a fairing, in meters.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: hot_staging: boolean
+
+      Whether the controller ignites the next stage before the current one burns out.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: hot_staging_lead_time: number
+
+      The time before burnout at which a hot staging happens, in seconds.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.Autostaging.hot_staging`.
+
+
+
+ThrustLimiter
+-------------
+
+
+.. class:: ThrustLimiter
+
+   The throttle limiters, which the Utilities and Ascent Settings windows show.
+
+   .. attribute:: differential_throttle: boolean
+
+      Whether the controller throttles the engines differentially to steer.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: differential_throttle_status: MechJeb.DifferentialThrottleStatus
+
+      The result of the differential throttle.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: electric_throttle: boolean
+
+      Whether to limit the throttle of electric engines to the available power.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: electric_throttle_hi: number
+
+      The charge level at which electric engines run at full throttle, between 0 and 1.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.ThrustLimiter.electric_throttle`.
+
+   .. attribute:: electric_throttle_lo: number
+
+      The charge level at which electric engines stop, between 0 and 1.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.ThrustLimiter.electric_throttle`.
+
+   .. attribute:: flameout_safety_pct: number
+
+      The safety margin of the jet engines' air intake, as a percentage.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.ThrustLimiter.limit_to_prevent_flameout`.
+
+   .. attribute:: limit_acceleration: boolean
+
+      Whether to limit the acceleration.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: limit_dynamic_pressure: boolean
+
+      Whether to limit the dynamic pressure.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: limit_throttle: boolean
+
+      Whether to limit the throttle.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: limit_to_prevent_flameout: boolean
+
+      Whether to limit the throttle to keep jet engines from flaming out.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: limit_to_prevent_overheats: boolean
+
+      Whether to limit the throttle to keep parts from overheating.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: limiter_min_throttle: boolean
+
+      Whether to keep the throttle above :attr:`MechJeb.ThrustLimiter.min_throttle`.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: manage_intakes: boolean
+
+      Whether the controller opens and closes the air intakes.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.ThrustLimiter.limit_to_prevent_flameout`.
+
+   .. attribute:: max_acceleration: number
+
+      The largest acceleration, in :math:`\mathrm{m/s^{2}}`.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.ThrustLimiter.limit_acceleration`.
+
+   .. attribute:: max_dynamic_pressure: number
+
+      The largest dynamic pressure, in pascals.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.ThrustLimiter.limit_dynamic_pressure`.
+
+   .. attribute:: max_throttle: number
+
+      The largest throttle, between 0 and 1.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.ThrustLimiter.limit_throttle`.
+
+   .. attribute:: min_throttle: number
+
+      The smallest throttle, between 0 and 1.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.ThrustLimiter.limiter_min_throttle`.
+
+   .. attribute:: limit_to_prevent_unstable_ignition: boolean
+
+      Whether to hold the throttle at zero while the engines' fuel is unstable.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         MechJeb shows this setting only with Real Fuels, as stock engines have
+         stable fuel.
+
+   .. attribute:: auto_rcs_ullaging: boolean
+
+      Whether to fire the RCS forward to settle the fuel before the engines ignite.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         MechJeb shows this setting only with Real Fuels, as stock engines have
+         stable fuel.
+
+   .. attribute:: limiter: MechJeb.LimitMode
+
+      The limiter that limits the throttle now.
+
+      :Attribute: Read-only, cannot be set
+
+
+
+.. class:: LimitMode
+
+   A throttle limiter. See :attr:`MechJeb.ThrustLimiter.limiter`.
+
+
+   .. data:: none
+
+      No limiter limits the throttle.
+
+
+   .. data:: terminal_velocity
+
+      The terminal velocity limit.
+
+
+   .. data:: temperature
+
+      :attr:`MechJeb.ThrustLimiter.limit_to_prevent_overheats`.
+
+
+   .. data:: flameout
+
+      :attr:`MechJeb.ThrustLimiter.limit_to_prevent_flameout`.
+
+
+   .. data:: acceleration
+
+      :attr:`MechJeb.ThrustLimiter.limit_acceleration`.
+
+
+   .. data:: throttle
+
+      :attr:`MechJeb.ThrustLimiter.limit_throttle`.
+
+
+   .. data:: dynamic_pressure
+
+      :attr:`MechJeb.ThrustLimiter.limit_dynamic_pressure`.
+
+
+   .. data:: min_throttle
+
+      :attr:`MechJeb.ThrustLimiter.limiter_min_throttle`.
+
+
+   .. data:: electric
+
+      :attr:`MechJeb.ThrustLimiter.electric_throttle`.
+
+
+   .. data:: unstable_ignition
+
+      :attr:`MechJeb.ThrustLimiter.limit_to_prevent_unstable_ignition`.
+
+
+   .. data:: auto_rcs_ullage
+
+      :attr:`MechJeb.ThrustLimiter.auto_rcs_ullaging`.
+
+
+
+.. class:: DifferentialThrottleStatus
+
+   The result of the differential throttle. See
+   :attr:`MechJeb.ThrustLimiter.differential_throttle_status`.
+
+
+   .. data:: success
+
+      The throttles balance the thrust.
+
+
+   .. data:: all_engines_off
+
+      All the engines are off.
+
+
+   .. data:: more_engines_required
+
+      The vessel needs more engines.
+
+
+   .. data:: solver_failed
+
+      The solver found no solution.
+
+
+
+DeployableController
+--------------------
+
+
+.. class:: DeployableController
+
+   The controller of one kind of deployable part, such as antennas or solar panels.
+
+   .. method:: all_retracted(): boolean
+
+      Whether all the parts are retracted.
+
+   .. attribute:: auto_deploy: boolean
+
+      Whether a MechJeb autopilot deploys the parts.
+
+      :Attribute: Can be read or written
+
+   .. method:: extend_all()
+
+      Extend all the parts.
+
+   .. method:: retract_all()
+
+      Retract all the parts.

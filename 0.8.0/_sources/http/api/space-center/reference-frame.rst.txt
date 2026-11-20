@@ -1,0 +1,97 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+ReferenceFrame
+==============
+
+
+.. _http-SpaceCenter.ReferenceFrame:
+
+.. rubric:: ReferenceFrame
+
+Represents a reference frame for positions, rotations and
+velocities. Contains:
+
+* The position of the origin.
+* The directions of the x, y and z axes.
+* The linear velocity of the frame.
+* The angular velocity of the frame.
+
+.. note::
+
+   Apart from being created and removed, a reference frame is only used as a
+   parameter to other functions.
+
+
+A ``ReferenceFrame`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:post:: /space-center/reference-frame/create-relative
+
+   Create a relative reference frame. This is a custom reference frame
+   whose components offset the components of a parent reference frame.
+
+   .. note::
+
+      Each call returns a new frame, which is kept until :http:post:`/space-center/reference-frame/(id)/remove` is
+      called on it or the client that created it disconnects, so a script that
+      creates one repeatedly, for example once per update, should remove each one
+      when it is finished with it.
+
+
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: The parent reference frame on which to base this reference frame.
+   :reqjson tuple<double, double, double> position: The offset of the position of the origin, as a position vector. Defaults to ``(0, 0, 0)`` Optional, defaults to ``[0.0, 0.0, 0.0]``.
+   :reqjson tuple<double, double, double, double> rotation: The rotation to apply to the parent frames rotation, as a quaternion of the form ``(x, y, z, w)``. Defaults to ``(0, 0, 0, 1)`` (i.e. no rotation) Optional, defaults to ``[0.0, 0.0, 0.0, 1.0]``.
+   :reqjson tuple<double, double, double> velocity: The linear velocity to offset the parent frame by, as a vector pointing in the direction of travel, whose magnitude is the speed in :math:`\mathrm{m/s}`. Defaults to ``(0, 0, 0)``. Optional, defaults to ``[0.0, 0.0, 0.0]``.
+   :reqjson tuple<double, double, double> angular_velocity: The angular velocity to offset the parent frame by, as a vector. This vector points in the direction of the axis of rotation, and its magnitude is the speed of the rotation in :math:`\mathrm{rad/s}`. Defaults to ``(0, 0, 0)``. Optional, defaults to ``[0.0, 0.0, 0.0]``.
+   :resjson SpaceCenter.ReferenceFrame value:
+
+
+
+
+
+.. http:post:: /space-center/reference-frame/create-hybrid
+
+   Create a hybrid reference frame. This is a custom reference frame
+   whose components inherited from other reference frames.
+
+   .. note::
+
+      The *position* reference frame is required but all other
+      reference frames are optional. If omitted, they are set to the
+      *position* reference frame.
+
+      Each call returns a new frame, which is kept until :http:post:`/space-center/reference-frame/(id)/remove` is
+      called on it or the client that created it disconnects, so a script that
+      creates one repeatedly, for example once per update, should remove each one
+      when it is finished with it.
+
+
+   :reqjson SpaceCenter.ReferenceFrame position: The reference frame providing the position of the origin.
+   :reqjson SpaceCenter.ReferenceFrame? rotation: The reference frame providing the rotation of the frame. Optional, defaults to ``null``.
+   :reqjson SpaceCenter.ReferenceFrame? velocity: The reference frame providing the linear velocity of the frame. Optional, defaults to ``null``.
+   :reqjson SpaceCenter.ReferenceFrame? angular_velocity: The reference frame providing the angular velocity of the frame. Optional, defaults to ``null``.
+   :resjson SpaceCenter.ReferenceFrame value:
+
+
+
+
+
+.. http:post:: /space-center/reference-frame/(id)/remove
+
+   Remove the reference frame, releasing the memory the server holds for it.
+
+   .. note::
+
+      Only a frame created by :http:post:`/space-center/reference-frame/create-relative` or
+      :http:post:`/space-center/reference-frame/create-hybrid` can be removed. Every other frame belongs to
+      something in the game, and the server holds one of each.
+
+      Any further use of this object throws an exception, as does use of a frame
+      built on it, which cannot be evaluated without it. A frame belongs to the
+      client that created it, and is removed when that client disconnects.
+
+
+   :param id: The identifier of the :ref:`ReferenceFrame <http-SpaceCenter.ReferenceFrame>` object.

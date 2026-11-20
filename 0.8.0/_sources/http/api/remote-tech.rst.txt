@@ -1,0 +1,19 @@
+.. default-domain:: http
+.. highlight:: json
+
+RemoteTech
+==========
+
+Provides functionality to interact with the `RemoteTech`_ mod. |RemoteTech tested|
+Provides the following classes:
+
+.. toctree::
+   :includehidden:
+   :maxdepth: 1
+
+   remote-tech/remote-tech
+   remote-tech/comms
+   remote-tech/antenna
+
+
+.. include:: /mods.inc

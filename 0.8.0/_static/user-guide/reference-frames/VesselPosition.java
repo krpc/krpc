@@ -1,0 +1,20 @@
+import krpc.client.Connection;
+import krpc.client.services.SpaceCenter;
+import krpc.client.services.SpaceCenter.Vessel;
+
+import org.javatuples.Triplet;
+
+public class VesselPosition {
+    public static void main(String[] args) {
+        try (Connection connection = Connection.newInstance()) {
+            SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
+            Vessel vessel = spaceCenter.getActiveVessel();
+            Triplet<Double, Double, Double> position = vessel.position(
+                vessel.getOrbit().getBody().getReferenceFrame());
+            System.out.printf("(%.1f, %.1f, %.1f)%n",
+                              position.getValue0(),
+                              position.getValue1(),
+                              position.getValue2());
+        }
+    }
+}

@@ -1,0 +1,655 @@
+Client Design
+=============
+
+How the kRPC clients are built, and why. If you are writing a client, these pages are a starting
+point for your own design. The behavior a client must have is in the :doc:`client specification
+</client-spec>`, and the conformance tests enforce it.
+
+This page covers the design the clients share. Each client's page covers its own decisions, and
+lists where it departs from this page.
+
+A client's departures from the specification, and the reason for each, are in two files under
+``client/<client>/conformance/``. ``unsupported.txt`` lists what the language cannot do, and
+``expected-failures.txt`` lists known failures.
+
+Clients
+-------
+
+.. list-table::
+   :header-rows: 1
+
+   * - Client
+     - Concurrency
+     - Streams and events
+     - Service stubs
+   * - :doc:`Python <client-design/python>`
+     - Threaded
+     - Yes
+     - Dynamic, with generated declarations
+   * - :doc:`C# <client-design/csharp>`
+     - Threaded
+     - Yes
+     - Pre-generated
+   * - :doc:`C++ <client-design/cpp>`
+     - Threaded
+     - Yes
+     - Pre-generated
+   * - :doc:`C-nano <client-design/cnano>`
+     - Single
+     - No
+     - Pre-generated
+   * - :doc:`Java <client-design/java>`
+     - Threaded
+     - Yes
+     - Pre-generated
+   * - :doc:`Lua <client-design/lua>`
+     - Single
+     - No
+     - Dynamic
+   * - :doc:`JavaScript <client-design/js>`
+     - Single, with calls in flight at once
+     - Yes
+     - Dynamic, with generated declarations
+
+Names
+-----
+
+The base class of each kind of generated type is named ``Remote<Kind>``: ``RemoteObject``,
+``RemoteEnum``, ``RemoteFlags``, ``RemoteStruct`` and ``RemoteService``. A client keeps its
+language's own form where it has one, such as an enum and a struct in C++ and C#, and a
+``NamedTuple`` for a Python structure.
+
+.. _client-design-name-case:
+
+Case Conversion
+^^^^^^^^^^^^^^^
+
+Each client converts the names in a service definition to its own case. Every client splits a name
+into words by the same rules, so ``UInt64ToString`` is ``uint64_to_string`` in Python and
+``uint64ToString`` in Java. The test vectors are in ``client/conformance/names.json``. Clients that
+build their services at run time test them through the conformance suite, and the generators test
+them in their own unit tests.
+
+A name is split at each ``_`` into parts, and each part is converted on its own. The
+:ref:`identifier rules <service-api-identifiers>` keep every name in a service definition ASCII,
+with no ``_``, but a client still converts a name that has one.
+
+A part is split into words from left to right. At each position, the first of these rules that
+matches gives the next word:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Rule
+     - Matches
+     - Examples
+   * - 1. Compound word
+     - A compound word, not followed by a lower case letter
+     - ``UInt`` 64, Max ``FoV``
+   * - 2. Plural acronym
+     - Two or more capitals and an ``s``, not followed by a lower case letter
+     - ``EVAs``, ``IDs``
+   * - 3. Acronym
+     - The longest run of capitals not followed by a lower case letter
+     - ``RCS`` Thrust, Mean Anomaly At ``UT``, ``DEFAULT``
+   * - 4. Word
+     - An optional capital, then lower case letters
+     - ``Active`` ``Vessel``, ``reset`` PID
+   * - 5. Number
+     - Digits, and the acronym after them by rule 3 or the lower case letters after them
+     - ``32`` To String, Vector ``3D``, ``3rd`` Party
+   * - 6. Other
+     - Any other character
+     -
+
+Rules 1 to 4 also take the digits after the word and the lower case letters after the digits,
+unless an acronym follows the digits: ``UInt64``, ``UTF8`` String, ``Atan2``, ``Int32s``,
+``Get3rd`` Party. Rule 3 ends a run of capitals before its last capital when a lower case letter
+follows, as that capital starts the next word: ``RCSThrust`` is ``RCS`` and ``Thrust``.
+
+The compound words are ``UInt``, ``ULong``, ``SInt`` and ``FoV``. Each is written with more than one
+capital, and the other rules would split it. Every client holds the same list.
+
+As a regular expression, tried at each position in turn, where ``D`` stands for the digits a word
+takes, ``(?:[0-9]+(?![0-9])(?![A-Z]+(?![a-z]))[a-z]*)?``:
+
+.. code-block:: none
+
+   (?:UInt|ULong|SInt|FoV)(?![a-z])D
+   |[A-Z]{2,}s(?![a-z])D
+   |[A-Z]+(?![a-z])D
+   |[A-Z]?[a-z]+D
+   |[0-9]+(?:[A-Z]+(?![a-z])|[a-z]+)?
+   |.
+
+Each case is built from the words:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Case
+     - From the words
+     - ``UInt64ToString``, ``RCSThrust``, ``EVAs``
+     - Parts joined by
+   * - snake
+     - Lower case, joined by ``_``
+     - ``uint64_to_string``, ``rcs_thrust``, ``evas``
+     - ``__``
+   * - UPPER_SNAKE
+     - Upper case, joined by ``_``
+     - ``UINT64_TO_STRING``, ``RCS_THRUST``, ``EVAS``
+     - ``__``
+   * - lowerCamel
+     - The first word lower case, the others as written
+     - ``uint64ToString``, ``rcsThrust``, ``evas``
+     - ``_``
+   * - UpperCamel
+     - The name unchanged
+     - ``UInt64ToString``, ``RCSThrust``, ``EVAs``
+     - ``_``
+   * - lower
+     - The name lower case, with no words
+     - ``uint64tostring``, ``rcsthrust``, ``evas``
+     - ``_``
+   * - UPPER
+     - The name upper case, with no words
+     - ``UINT64TOSTRING``, ``RCSTHRUST``, ``EVAS``
+     - ``_``
+
+A conversion only changes case and inserts separators. Two names that convert to one client name
+then differ only in case, and the server's :ref:`case-insensitive name rules
+<service-api-identifiers>` keep them apart.
+
+lowerCamel keeps acronyms after the first word in capitals, as in ``meanAnomalyAtUT``, so it stays
+close to the C# name. A property accessor is ``get`` or ``set`` and the UpperCamel name, as in
+``getRCSThrust``. A C-nano macro joins its names with ``_``, as in
+``KRPC_SPACECENTER_SASMODE_STABILITYASSIST``, so it upper cases each name with no words. Splitting
+them would make enumeration ``FooBar`` value ``Baz`` and enumeration ``Foo`` value ``BarBaz`` one
+macro.
+
+The case of each name in each client:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Name
+     - C#
+     - C++
+     - C-nano
+     - Java
+     - Python
+     - Lua
+     - JavaScript
+   * - Service
+     - UpperCamel
+     - UpperCamel, snake header
+     - UpperCamel, snake header
+     - UpperCamel
+     - snake attribute, lower module
+     - snake
+     - lowerCamel
+   * - Type
+     - UpperCamel
+     - UpperCamel
+     - UpperCamel
+     - UpperCamel
+     - UpperCamel
+     - UpperCamel
+     - UpperCamel
+   * - Procedure or method
+     - UpperCamel
+     - snake
+     - UpperCamel
+     - lowerCamel
+     - snake
+     - snake
+     - lowerCamel
+   * - Property
+     - UpperCamel
+     - snake, and ``set_`` and snake
+     - UpperCamel, and ``set_`` and UpperCamel
+     - Accessors
+     - snake
+     - snake
+     - Accessors
+   * - Enumeration value
+     - UpperCamel
+     - snake
+     - UPPER, in a macro
+     - UPPER_SNAKE
+     - snake
+     - snake
+     - lowerCamel
+   * - Structure field
+     - UpperCamel, and lowerCamel constructor parameter
+     - snake
+     - snake
+     - lowerCamel, and ``get`` and UpperCamel
+     - snake
+     - snake
+     - lowerCamel
+   * - Parameter
+     - As written
+     - snake
+     - As written
+     - lowerCamel
+     - snake
+     - snake
+     - lowerCamel
+   * - Exception
+     - UpperCamel
+     - UpperCamel
+     - UPPER, in a macro
+     - UpperCamel
+     - UpperCamel
+     - UpperCamel
+     - UpperCamel
+
+Stream and Call Forms
+---------------------
+
+A program adding a stream needs to name a remote procedure without calling it. The same applies when
+it gets a call as a value, such as to use in an expression. The clients do this in two ways:
+
+* Python, C#, Java and JavaScript have one method for each purpose, ``add_stream`` and
+  ``get_call`` or their equivalents. It takes any property or method, and works out the procedure
+  at run time. Lua has only ``get_call``, as it has no streams. JavaScript's take a function
+  returning the call, as C#'s lambda does.
+* C++ and C-nano cannot look up a method at run time. Their generated stubs instead have extra
+  functions for each procedure. C++ adds ones ending in ``_stream`` and ``_call``. C-nano has no
+  streams, so it adds only ``_call``.
+
+For the ``MeanAltitude`` property of a ``Flight`` object:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Client
+     - Stream
+     - Procedure call
+   * - Python
+     - ``conn.add_stream(getattr, flight, "mean_altitude")``
+     - ``conn.get_call(getattr, flight, "mean_altitude")``
+   * - C#
+     - ``connection.AddStream (() => flight.MeanAltitude)``
+     - ``Connection.GetCall (() => flight.MeanAltitude)``
+   * - C++
+     - ``flight.mean_altitude_stream()``
+     - ``flight.mean_altitude_call()``
+   * - C-nano
+     - None
+     - ``krpc_SpaceCenter_Flight_MeanAltitude_call(&call, flight)``
+   * - Java
+     - ``connection.addStream(flight, "getMeanAltitude")``
+     - ``connection.getCall(flight, "getMeanAltitude")``
+   * - Lua
+     - None
+     - ``conn:get_call(flight.get_mean_altitude, flight)``
+   * - JavaScript
+     - ``conn.addStream(() => flight.getMeanAltitude())``
+     - ``conn.getCall(() => flight.getMeanAltitude())``
+
+In Python, C#, Java and JavaScript, the stream runs on the connection the method is called on,
+whichever connection the object came from. In C++, it runs on the object's client, or for a
+static method the client passed to it.
+
+Call Templates
+--------------
+
+A call template names a procedure through its class or service, with no instance and no
+arguments. ``Expression.CallWithArguments`` supplies every argument, so a function over the
+elements of a collection needs no element to build its call from. ``CallWithArguments`` throws
+an exception for a call that carries arguments, so each argument has one source. A template is
+built on the client, with no remote procedure call.
+
+Each client takes the form of its procedure call, with the class in place of the object, except
+JavaScript, whose design page gives the reason. A client
+without a lookup at run time generates a function per member, as for the procedure call. For the
+``HasFuel`` property of an ``Engine``:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Client
+     - Call template
+   * - Python
+     - ``conn.get_call_template(getattr, Engine, "has_fuel")``
+   * - C#
+     - ``Connection.GetCallTemplate ((Engine x) => x.HasFuel)``
+   * - C++
+     - ``Engine::has_fuel_call_template()``
+   * - C-nano
+     - ``krpc_SpaceCenter_Engine_HasFuel_call_template(&call)``
+   * - Java
+     - ``connection.getCallTemplate(Engine.class, "getHasFuel")``
+   * - Lua
+     - ``conn:get_call_template(Engine.get_has_fuel)``
+   * - JavaScript
+     - ``conn.getCallTemplate(Engine.prototype.getHasFuel)``
+
+A setter takes the same form in each client, except C#, whose design page gives the reason. A
+template is a separate function from the procedure call. A static method has no object to leave
+out, so a procedure call with its arguments missing could not be told from a template.
+
+Python, Lua and JavaScript also convert a member passed where a call is expected, such as
+``Engine.has_fuel`` in Python, to its call template. The conversion happens in the encoder, so
+reading the member from its class still gives the member. A Python property stands for its getter.
+The other clients have no value that names a member: a C# instance member needs an object, and a
+Java method reference and a C++ member pointer carry no name.
+
+Static Methods
+--------------
+
+A static method takes its connection from one place, the one its language gives a class:
+
+* In Python, Lua and JavaScript a class is a value. Each connection builds its own, and a static
+  method runs on the connection of the service the class is reached through.
+* In C#, Java and C++ a class is a type. The connection is the static method's first argument. In
+  C-nano, every function takes the connection first.
+
+A stream or call message of a static method never takes the connection a second time. In C# and
+Java, a stream runs on the connection its ``AddStream`` is called on, and the connection named in
+the call is not used. A call message holds no connection.
+
+C#, Java and C++ also generate ``Bind`` on each class with static methods. It returns a ``Bound``
+object holding the connection, with each static method minus that parameter. It is the counterpart
+of ``conn.krpc.Expression`` in Python, and shortens an expression tree that passes the connection
+at every node. The ``Bound`` methods carry the RPC attribute of the static method, so a C# lambda
+or a Java ``addStream`` takes them as it takes a service's methods. A C++ ``Bound`` is a shorthand
+for the calls that build large expression trees. It has no ``_stream``, ``_call`` or
+``_call_template`` forms, which stay on the static method.
+
+Errors
+------
+
+The :doc:`specification </client-spec/errors>` gives the kinds of error and the situations that
+raise each. The clients name them alike:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Error
+     - Raised for
+   * - ``RemoteError``
+     - Never raised itself. The base of the others
+   * - ``ConnectionError``
+     - The connection error
+   * - ``ServerError``
+     - The server error, when the language has no type for the exception
+   * - ``StreamError``
+     - The stream error
+   * - ``EncodingError``
+     - The encoding error
+   * - ``CompilationError``
+     - Code that does not compile into a server side function, in Python, C# and JavaScript
+
+C++ uses these names in ``krpc::``. C# and Java end each with ``Exception`` in place of ``Error``,
+as their conventions do. Lua has no ``StreamError``, as it has no streams. C-nano returns a code
+per kind.
+
+* **The base follows the generated bases.** ``RemoteError`` is named as ``RemoteObject`` and
+  ``RemoteService`` are. A program catches every error of the client's own with it.
+* **The server error is named for where it comes from.** A server error reaches the program through
+  a call, a stream or an event, so a name for one of them would mislead. It can still be the
+  program's mistake, such as ``KRPC.ArgumentException``.
+* **A mapped server exception is only the language's own type.** It is caught as the same failure
+  in local code would be. Deriving ``ServerError`` as well would take multiple inheritance in
+  Python and C++, which C# and Java lack. A program that handles every error uses the language's
+  catch-all.
+* **No generated class stands for a mapped exception the client never raises.** A ``catch`` naming
+  such a class would never fire. C# and Java generate no class, and C++ generates an alias of the
+  native type. A mapped exception with no native type in a language is a generated class deriving
+  ``ServerError``.
+* **Misuse is the language's own error.** An argument the client rejects raises the language's
+  argument error. A call in a state the client rejects raises its state error, such as Python's
+  ``TypeError`` for calling a declaration. Neither derives ``RemoteError``, as nothing remote has
+  failed.
+
+Deprecation
+-----------
+
+Each client signals the use of a deprecated member with the language's own mechanism:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Client
+     - Signal
+     - Kinds with no signal
+   * - Python
+     - ``DeprecationWarning`` at run time, and ``@deprecated`` for type checkers
+     -
+   * - C#
+     - ``[Obsolete]``
+     -
+   * - C++
+     - ``[[deprecated]]``
+     -
+   * - C-nano
+     - ``KRPC_DEPRECATED``
+     - Services and exceptions, which have no C type
+   * - Java
+     - ``@Deprecated``, which holds no reason
+     - Streams and calls, which name their method in a string
+   * - Lua
+     - A warning on standard error, once per member on a connection
+     - Exceptions, which have no Lua type, and structure fields
+   * - JavaScript
+     - A ``DeprecationWarning`` in Node.js, or a console warning, once per member on a connection,
+       and ``@deprecated`` for editors
+     -
+
+A stream, and the call a server side function makes, use a procedure too. Python, Lua and
+JavaScript warn when the client builds the call or its call template. In C++ and C-nano, the
+``_stream``, ``_call`` and ``_call_template`` functions carry the attribute. In C#, the lambda that
+names the procedure warns.
+
+A member of a deprecated service, class, enumeration or structure is deprecated. A member with no
+reason of its own takes the reason of its nearest deprecated container. ``clientgen`` and the
+Python, Lua and JavaScript clients apply this to their copy of the definitions when they read
+them. The protocol and ``docgen`` keep the attributes as declared, so the API reference has one
+notice per page.
+
+A deprecated service is marked too: the C# extension method and service class, and the C++, Java
+and Python service class. The Python and Lua clients keep it out of the client's attributes, so
+that reading it reaches the attribute-miss hook, which warns. In JavaScript it is a getter on the
+connection, which warns.
+
+Generated C++ and C-nano code uses the deprecated declarations it makes, so each header suppresses
+the warning around its own contents. The suppression goes by the location of the use, so a use in a
+program still warns.
+
+Single-Threaded Clients
+-----------------------
+
+A call writes its request, then reads until the response with its id. Only a call reads the socket.
+These clients have no streams or events, as a stream update needs a thread to read it between calls.
+
+The read loop skips a message case it does not know, and fails the call on a ``disconnect``. Lua and
+C-nano treat any other message as a protocol error, including a ``stream_update``.
+
+JavaScript also runs on one thread, but the socket's ``message`` event reads each message, so
+several calls can wait at once and stream updates arrive between calls. The :doc:`JavaScript page
+<client-design/js>` covers it.
+
+Threaded Clients
+----------------
+
+Python, C#, C++ and Java share this design. A connection is one socket, and each call writes a
+request to it. The server sends three kinds of message back on the same socket:
+
+* A **response** answers one request, and carries the id of that request.
+* A **stream update** carries new values for the connection's streams. A **stream** is a call the
+  server repeats, so an update can arrive at any time, including between calls.
+* A **disconnect** ends the connection, and carries the reason.
+
+A program can also add **callbacks**, which are functions that run on each new value of a stream.
+Each connection therefore runs two background threads, the **reader thread** and the **dispatcher
+thread**.
+
+Layers
+^^^^^^
+
+These clients divide their work into the same parts, with a class for each:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Layer
+     - Work
+     - Class
+   * - Entry point
+     - The object the program makes calls through
+     - ``Connection``
+   * - Transport
+     - Owns the socket, and sends and receives the messages on it, each prefixed with its length
+     - ``Transport``, with ``TCPIPTransport`` and ``LocalTransport`` deriving from it to open the
+       socket
+   * - Session
+     - Matches responses to calls, chooses the thread that reads, and owns the threads and the close
+     - ``Session``
+   * - Stream manager
+     - Holds the connection's streams, and applies stream updates to them
+     - ``StreamManager``
+   * - Stream
+     - Holds one stream's latest value, callbacks and condition
+     - ``StreamImpl``
+   * - Handles
+     - The objects the program holds for a stream
+     - ``Stream``, ``Event``
+
+Threads
+^^^^^^^
+
+One thread at a time reads the socket. This job is the **reader role**, and each thread below can
+hold it. The **role's holder** reads each message and handles it, whichever call or stream it is
+for. A response to another thread's call goes to that call, and wakes its thread.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Thread
+     - Work
+   * - Caller
+     - A program thread making a call. It writes its request and waits for the response, taking the
+       role when no other thread holds it
+   * - Reader thread
+     - Takes the role and reads while streams are open and no call is waiting for a response
+   * - Dispatcher thread
+     - Runs callbacks, wakes threads waiting on a stream, and makes the writes queued by the role's
+       holder
+
+This model has three aims. A call from a single thread stays fast, as it hands off to no other
+thread. Stream updates keep arriving between calls. A callback can make calls and take its time, as
+the thread running it does not need to keep reading the socket.
+
+Four rules shape how these threads work together:
+
+* **Callers read their own responses.** This is faster than a hand-off to the reader thread.
+* **The reader thread waits for data without the role.** A caller then never queues behind it. With
+  no streams open, the reader thread sleeps and the socket has no reader between calls. The next
+  call finds any ``disconnect`` that arrived.
+* **A thread handling a message makes no writes.** It queues them for the dispatcher thread. A
+  caller holds the write lock for a whole write, which blocks while the send buffer is full. A
+  thread waiting on that lock would stop reading the server's messages.
+* **The role's holder runs no user code, and takes no lock user code can hold.** A call made from a
+  callback waits for the role's holder to read its response. If the holder ran that callback, the
+  call would never finish.
+
+Calls
+^^^^^
+
+Each call has a **pending slot**, which is the record of a call waiting for its response. The
+session keeps the slots by request id:
+
+1. The caller adds its slot, before the write, so a response arriving at once finds it.
+2. The caller writes its request. The write lock is held for one whole message, so messages from
+   different threads never interleave.
+3. The caller waits, holding no lock, so other threads can make calls. The role's holder puts the
+   response in the slot.
+
+A caller that stops waiting, such as on an interrupt, abandons its slot. The response is discarded
+when it arrives. If the call added a stream, that stream is removed, as no handle holds it.
+
+Stream Values
+^^^^^^^^^^^^^
+
+A program can read a stream's value, or wait for its next value using the stream's condition. A
+**condition** is a lock with a way to wake the threads waiting on it. A new value takes two steps:
+
+1. The role's holder stores the value, and queues the rest for the dispatcher thread. Messages are
+   handled in the order they arrive. A returning call therefore sees values at least as new as the
+   server state before it.
+2. The dispatcher thread **announces** the value, which wakes the threads waiting on the condition,
+   and runs the callbacks. Callbacks can therefore lag behind the stored values.
+
+A thread holding a stream's condition reads the announced value, not the stored one. The value it
+reads stays the same until it waits.
+
+An event is a stream of a bool, and each true value is a **firing**. The stream counts its firings,
+and each event object keeps the count its last wait saw. A wait returns straight away if the event
+has fired since then.
+
+A remove or a close discards an unseen firing, so the wait raises an error. When the server ends the
+stream, a wait returns an unseen firing before it raises the error.
+
+A stream's first update can arrive straight after the response to the call that added it. A call
+returning a stream or an event therefore marks its slot, and the role's holder registers the stream
+before it reads the next message. The first update then always finds the stream. It stays undecoded
+until a handle gives the value's type.
+
+Callbacks
+^^^^^^^^^
+
+Callbacks normally run on the dispatcher thread, one at a time. The other cases are the first run
+of a new callback, and **end callbacks**, which run once when a stream ends:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Callback
+     - Thread
+   * - Value, event or stream update
+     - Dispatcher thread
+   * - First run of a callback added to a stream that has a value, and the values queued during it
+     - Adding thread
+   * - End callback, from a remove or a close
+     - Thread calling the remove or the close
+   * - End callback, from the server ending the stream or a connection failure
+     - Dispatcher thread, or an adding thread during a first run
+   * - End callback, added after the stream ended
+     - Adding thread
+
+Close and Failure
+^^^^^^^^^^^^^^^^^
+
+These events fail the connection:
+
+* A read or a write fails.
+* A message breaks the protocol.
+* A message **stalls**, which means it stops arriving part way through.
+* The server sends a ``disconnect``.
+
+Calls waiting for a response then fail with that error, and every stream ends.
+
+A close, from the program's ``close`` or equivalent, can run on any thread. This includes the
+dispatcher thread, from a callback:
+
+1. It sends a ``disconnect`` and closes the sending side of the socket. It skips this step if the
+   write lock stays held past a fixed timeout.
+2. It discards incoming data until the server closes the socket, or the same timeout passes.
+3. It ends the streams, which wakes the threads waiting on them.
+4. It waits for the reader and dispatcher threads to finish, except the one it runs on. It skips the
+   dispatcher thread when the closing thread holds a stream's condition, as a callback can be
+   waiting for that condition.
+
+.. toctree::
+   :hidden:
+
+   client-design/python
+   client-design/csharp
+   client-design/cpp
+   client-design/cnano
+   client-design/java
+   client-design/lua
+   client-design/js

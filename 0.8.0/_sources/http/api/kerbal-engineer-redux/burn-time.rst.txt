@@ -1,0 +1,23 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Burn Time
+=========
+
+
+.. _http-KerbalEngineerRedux.BurnTime:
+
+.. rubric:: BurnTime
+
+The time to burn a delta-v at full thrust, staging as each stage runs dry.
+
+Passed and returned as an object with these fields:
+
+
+``duration`` (double)
+   The duration of the burn, in seconds.
+
+
+``half_duration`` (double)
+   The time to burn half the delta-v, in seconds.

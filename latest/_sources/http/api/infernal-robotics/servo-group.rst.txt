@@ -1,0 +1,343 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+ServoGroup
+==========
+
+
+.. _http-InfernalRobotics.ServoGroup:
+
+.. rubric:: ServoGroup
+
+A group of servos, obtained by calling :http:post:`/infernal-robotics/servo-groups`
+or :http:post:`/infernal-robotics/servo-group-with-name`. Represents the "Servo Groups"
+in the InfernalRobotics UI.
+
+A ``ServoGroup`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /infernal-robotics/servo-group/(id)/name
+
+   The name of the group.
+
+   .. note::
+
+      Renaming a group renames it for every servo in it. This object identifies the
+      group by its name, so a rename destroys every object for the group, including the
+      one the rename was made through. Obtain the group again under the new name.
+
+
+   :param id: The identifier of the :ref:`ServoGroup <http-InfernalRobotics.ServoGroup>` object.
+
+   :resjson string value:
+
+.. http:put:: /infernal-robotics/servo-group/(id)/name
+
+   The name of the group.
+
+   .. note::
+
+      Renaming a group renames it for every servo in it. This object identifies the
+      group by its name, so a rename destroys every object for the group, including the
+      one the rename was made through. Obtain the group again under the new name.
+
+
+   :param id: The identifier of the :ref:`ServoGroup <http-InfernalRobotics.ServoGroup>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:get:: /infernal-robotics/servo-group/(id)/forward-key
+
+   The key assigned to be the "forward" key for the group.
+
+
+   :param id: The identifier of the :ref:`ServoGroup <http-InfernalRobotics.ServoGroup>` object.
+
+   :resjson string value:
+
+.. http:put:: /infernal-robotics/servo-group/(id)/forward-key
+
+   The key assigned to be the "forward" key for the group.
+
+
+   :param id: The identifier of the :ref:`ServoGroup <http-InfernalRobotics.ServoGroup>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:get:: /infernal-robotics/servo-group/(id)/reverse-key
+
+   The key assigned to be the "reverse" key for the group.
+
+
+   :param id: The identifier of the :ref:`ServoGroup <http-InfernalRobotics.ServoGroup>` object.
+
+   :resjson string value:
+
+.. http:put:: /infernal-robotics/servo-group/(id)/reverse-key
+
+   The key assigned to be the "reverse" key for the group.
+
+
+   :param id: The identifier of the :ref:`ServoGroup <http-InfernalRobotics.ServoGroup>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:get:: /infernal-robotics/servo-group/(id)/speed
+
+   The speed multiplier for the group.
+
+
+   :param id: The identifier of the :ref:`ServoGroup <http-InfernalRobotics.ServoGroup>` object.
+
+   :resjson float value:
+
+.. http:put:: /infernal-robotics/servo-group/(id)/speed
+
+   The speed multiplier for the group.
+
+
+   :param id: The identifier of the :ref:`ServoGroup <http-InfernalRobotics.ServoGroup>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /infernal-robotics/servo-group/(id)/expanded
+
+   Whether the group is expanded in the InfernalRobotics UI.
+
+
+   :param id: The identifier of the :ref:`ServoGroup <http-InfernalRobotics.ServoGroup>` object.
+
+   :resjson bool value:
+
+.. http:put:: /infernal-robotics/servo-group/(id)/expanded
+
+   Whether the group is expanded in the InfernalRobotics UI.
+
+
+   :param id: The identifier of the :ref:`ServoGroup <http-InfernalRobotics.ServoGroup>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /infernal-robotics/servo-group/(id)/vessel
+
+   The vessel the group belongs to.
+
+
+   :param id: The identifier of the :ref:`ServoGroup <http-InfernalRobotics.ServoGroup>` object.
+
+   :resjson SpaceCenter.Vessel value:
+
+
+
+
+.. http:get:: /infernal-robotics/servo-group/(id)/moving-direction
+
+   The direction the group is currently moving in: -1 for reverse, 0 for stopped
+   and 1 for forward.
+
+
+   :param id: The identifier of the :ref:`ServoGroup <http-InfernalRobotics.ServoGroup>` object.
+
+   :resjson int32 value:
+
+
+
+
+.. http:get:: /infernal-robotics/servo-group/(id)/advanced-mode
+
+   Whether the group is in advanced mode.
+
+
+   :param id: The identifier of the :ref:`ServoGroup <http-InfernalRobotics.ServoGroup>` object.
+
+   :resjson bool value:
+
+.. http:put:: /infernal-robotics/servo-group/(id)/advanced-mode
+
+   Whether the group is in advanced mode.
+
+
+   :param id: The identifier of the :ref:`ServoGroup <http-InfernalRobotics.ServoGroup>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /infernal-robotics/servo-group/(id)/electric-charge-required
+
+   The total rate at which the servos in the group consume electric charge, in units
+   per second, when moving.
+
+
+   :param id: The identifier of the :ref:`ServoGroup <http-InfernalRobotics.ServoGroup>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /infernal-robotics/servo-group/(id)/build-aid
+
+   Whether the build aid is enabled for the group.
+
+
+   :param id: The identifier of the :ref:`ServoGroup <http-InfernalRobotics.ServoGroup>` object.
+
+   :resjson bool value:
+
+.. http:put:: /infernal-robotics/servo-group/(id)/build-aid
+
+   Whether the build aid is enabled for the group.
+
+
+   :param id: The identifier of the :ref:`ServoGroup <http-InfernalRobotics.ServoGroup>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /infernal-robotics/servo-group/(id)/ik-active
+
+   Whether inverse kinematics is active for the group.
+
+
+   :param id: The identifier of the :ref:`ServoGroup <http-InfernalRobotics.ServoGroup>` object.
+
+   :resjson bool value:
+
+.. http:put:: /infernal-robotics/servo-group/(id)/ik-active
+
+   Whether inverse kinematics is active for the group.
+
+
+   :param id: The identifier of the :ref:`ServoGroup <http-InfernalRobotics.ServoGroup>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /infernal-robotics/servo-group/(id)/servos
+
+   The servos that are in the group.
+
+
+   :param id: The identifier of the :ref:`ServoGroup <http-InfernalRobotics.ServoGroup>` object.
+
+   :resjson list<InfernalRobotics.Servo> value:
+
+
+
+
+.. http:post:: /infernal-robotics/servo-group/(id)/servo-with-name
+
+   Returns the servo with the given *name* from this group,
+   or ``null`` if none exists.
+
+
+   :param id: The identifier of the :ref:`ServoGroup <http-InfernalRobotics.ServoGroup>` object.
+
+   :reqjson string name: Name of servo to find.
+   :resjson InfernalRobotics.Servo? value:
+
+
+
+
+
+.. http:get:: /infernal-robotics/servo-group/(id)/parts
+
+   The parts containing the servos in the group.
+
+
+   :param id: The identifier of the :ref:`ServoGroup <http-InfernalRobotics.ServoGroup>` object.
+
+   :resjson list<SpaceCenter.Part> value:
+
+
+
+
+.. http:post:: /infernal-robotics/servo-group/(id)/move-right
+
+   Moves all of the servos in the group to the right.
+
+
+   :param id: The identifier of the :ref:`ServoGroup <http-InfernalRobotics.ServoGroup>` object.
+
+
+
+
+
+
+.. http:post:: /infernal-robotics/servo-group/(id)/move-left
+
+   Moves all of the servos in the group to the left.
+
+
+   :param id: The identifier of the :ref:`ServoGroup <http-InfernalRobotics.ServoGroup>` object.
+
+
+
+
+
+
+.. http:post:: /infernal-robotics/servo-group/(id)/move-center
+
+   Moves all of the servos in the group to the center.
+
+
+   :param id: The identifier of the :ref:`ServoGroup <http-InfernalRobotics.ServoGroup>` object.
+
+
+
+
+
+
+.. http:post:: /infernal-robotics/servo-group/(id)/move-next-preset
+
+   Moves all of the servos in the group to the next preset.
+
+
+   :param id: The identifier of the :ref:`ServoGroup <http-InfernalRobotics.ServoGroup>` object.
+
+
+
+
+
+
+.. http:post:: /infernal-robotics/servo-group/(id)/move-prev-preset
+
+   Moves all of the servos in the group to the previous preset.
+
+
+   :param id: The identifier of the :ref:`ServoGroup <http-InfernalRobotics.ServoGroup>` object.
+
+
+
+
+
+
+.. http:post:: /infernal-robotics/servo-group/(id)/stop
+
+   Stops the servos in the group.
+
+
+   :param id: The identifier of the :ref:`ServoGroup <http-InfernalRobotics.ServoGroup>` object.

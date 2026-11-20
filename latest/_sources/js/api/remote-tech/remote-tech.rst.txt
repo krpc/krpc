@@ -1,0 +1,55 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: RemoteTech
+   :no-index:
+
+Service
+=======
+
+
+.. module:: RemoteTech
+
+Provides functionality to interact with RemoteTech.
+
+
+.. function:: getAvailable()
+
+   Whether RemoteTech is installed.
+
+   :Property: Read-only, cannot be set
+   :rtype: ``boolean``
+   
+
+
+
+
+.. function:: getGroundStations()
+
+   The names of the ground stations.
+
+   :Property: Read-only, cannot be set
+   :rtype: ``Array`` of ``string``
+   
+
+
+
+
+.. function:: antenna(part)
+
+   Get the antenna object for a particular part.
+
+   :param part:
+   :type part: :class:`SpaceCenter.Part`
+   :rtype: :class:`RemoteTech.Antenna`
+   
+
+
+
+
+.. function:: comms(vessel)
+
+   Get a communications object, representing the communication capability of a particular vessel.
+
+   :param vessel:
+   :type vessel: :class:`SpaceCenter.Vessel`
+   :rtype: :class:`RemoteTech.Comms`

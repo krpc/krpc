@@ -1,0 +1,507 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: MechJeb
+
+Utilities
+=========
+
+
+.. class:: Utilities
+
+   The Utilities window, which holds the autostaging and throttle settings, and deploys
+   the solar panels and antennas.
+
+   .. attribute:: antennas
+
+      The deployable antennas.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`DeployableController`
+      :Game Scenes: Flight
+
+   .. attribute:: solar_panels
+
+      The solar panels.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`DeployableController`
+      :Game Scenes: Flight
+
+   .. attribute:: staging
+
+      The autostaging settings. The same object as :attr:`AscentSettings.staging`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Autostaging`
+      :Game Scenes: Flight
+
+   .. attribute:: thrust
+
+      The throttle limiters. The same object as :attr:`AscentSettings.thrust`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`ThrustLimiter`
+      :Game Scenes: Flight
+
+
+
+Autostaging
+-----------
+
+
+.. class:: Autostaging
+
+   The autostaging settings, which the Utilities and Ascent Settings windows show.
+
+   .. attribute:: enabled
+
+      Whether the module is enabled.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: autostaging_once
+
+      Whether the controller disables itself after the next staging.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         See :meth:`Autostaging.autostage_once`.
+
+   .. method:: autostage_once()
+
+      Enable the controller until the next staging. Throws an exception if the controller is
+      enabled.
+
+      :Game Scenes: Flight
+
+   .. attribute:: autostage_limit
+
+      The last stage the controller activates.
+
+      :Attribute: Can be read or written
+      :rtype: int
+      :Game Scenes: Flight
+
+   .. attribute:: autostage_post_delay
+
+      The delay after each staging, in seconds.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: autostage_pre_delay
+
+      The delay before each staging, in seconds.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: clamp_auto_stage_thrust_pct
+
+      The fraction of full thrust at which the controller releases the launch clamps.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: fairing_max_aerothermal_flux
+
+      The largest aerothermal flux at which the controller jettisons a fairing, in
+      :math:`\mathrm{W/m^{2}}`.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: fairing_max_dynamic_pressure
+
+      The largest dynamic pressure at which the controller jettisons a fairing, in pascals.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: fairing_min_altitude
+
+      The lowest altitude at which the controller jettisons a fairing, in meters.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: hot_staging
+
+      Whether the controller ignites the next stage before the current one burns out.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: hot_staging_lead_time
+
+      The time before burnout at which a hot staging happens, in seconds.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :attr:`Autostaging.hot_staging`.
+
+
+
+ThrustLimiter
+-------------
+
+
+.. class:: ThrustLimiter
+
+   The throttle limiters, which the Utilities and Ascent Settings windows show.
+
+   .. attribute:: differential_throttle
+
+      Whether the controller throttles the engines differentially to steer.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: differential_throttle_status
+
+      The result of the differential throttle.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`DifferentialThrottleStatus`
+      :Game Scenes: Flight
+
+   .. attribute:: electric_throttle
+
+      Whether to limit the throttle of electric engines to the available power.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: electric_throttle_hi
+
+      The charge level at which electric engines run at full throttle, between 0 and 1.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :attr:`ThrustLimiter.electric_throttle`.
+
+   .. attribute:: electric_throttle_lo
+
+      The charge level at which electric engines stop, between 0 and 1.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :attr:`ThrustLimiter.electric_throttle`.
+
+   .. attribute:: flameout_safety_pct
+
+      The safety margin of the jet engines' air intake, as a percentage.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :attr:`ThrustLimiter.limit_to_prevent_flameout`.
+
+   .. attribute:: limit_acceleration
+
+      Whether to limit the acceleration.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: limit_dynamic_pressure
+
+      Whether to limit the dynamic pressure.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: limit_throttle
+
+      Whether to limit the throttle.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: limit_to_prevent_flameout
+
+      Whether to limit the throttle to keep jet engines from flaming out.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: limit_to_prevent_overheats
+
+      Whether to limit the throttle to keep parts from overheating.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: limiter_min_throttle
+
+      Whether to keep the throttle above :attr:`ThrustLimiter.min_throttle`.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: manage_intakes
+
+      Whether the controller opens and closes the air intakes.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :attr:`ThrustLimiter.limit_to_prevent_flameout`.
+
+   .. attribute:: max_acceleration
+
+      The largest acceleration, in :math:`\mathrm{m/s^{2}}`.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :attr:`ThrustLimiter.limit_acceleration`.
+
+   .. attribute:: max_dynamic_pressure
+
+      The largest dynamic pressure, in pascals.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :attr:`ThrustLimiter.limit_dynamic_pressure`.
+
+   .. attribute:: max_throttle
+
+      The largest throttle, between 0 and 1.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :attr:`ThrustLimiter.limit_throttle`.
+
+   .. attribute:: min_throttle
+
+      The smallest throttle, between 0 and 1.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :attr:`ThrustLimiter.limiter_min_throttle`.
+
+   .. attribute:: limit_to_prevent_unstable_ignition
+
+      Whether to hold the throttle at zero while the engines' fuel is unstable.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         MechJeb shows this setting only with Real Fuels, as stock engines have
+         stable fuel.
+
+   .. attribute:: auto_rcs_ullaging
+
+      Whether to fire the RCS forward to settle the fuel before the engines ignite.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         MechJeb shows this setting only with Real Fuels, as stock engines have
+         stable fuel.
+
+   .. attribute:: limiter
+
+      The limiter that limits the throttle now.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`LimitMode`
+      :Game Scenes: Flight
+
+
+
+.. class:: LimitMode
+
+   A throttle limiter. See :attr:`ThrustLimiter.limiter`.
+
+
+   .. data:: none
+
+      No limiter limits the throttle.
+
+
+   .. data:: terminal_velocity
+
+      The terminal velocity limit.
+
+
+   .. data:: temperature
+
+      :attr:`ThrustLimiter.limit_to_prevent_overheats`.
+
+
+   .. data:: flameout
+
+      :attr:`ThrustLimiter.limit_to_prevent_flameout`.
+
+
+   .. data:: acceleration
+
+      :attr:`ThrustLimiter.limit_acceleration`.
+
+
+   .. data:: throttle
+
+      :attr:`ThrustLimiter.limit_throttle`.
+
+
+   .. data:: dynamic_pressure
+
+      :attr:`ThrustLimiter.limit_dynamic_pressure`.
+
+
+   .. data:: min_throttle
+
+      :attr:`ThrustLimiter.limiter_min_throttle`.
+
+
+   .. data:: electric
+
+      :attr:`ThrustLimiter.electric_throttle`.
+
+
+   .. data:: unstable_ignition
+
+      :attr:`ThrustLimiter.limit_to_prevent_unstable_ignition`.
+
+
+   .. data:: auto_rcs_ullage
+
+      :attr:`ThrustLimiter.auto_rcs_ullaging`.
+
+
+
+.. class:: DifferentialThrottleStatus
+
+   The result of the differential throttle. See
+   :attr:`ThrustLimiter.differential_throttle_status`.
+
+
+   .. data:: success
+
+      The throttles balance the thrust.
+
+
+   .. data:: all_engines_off
+
+      All the engines are off.
+
+
+   .. data:: more_engines_required
+
+      The vessel needs more engines.
+
+
+   .. data:: solver_failed
+
+      The solver found no solution.
+
+
+
+DeployableController
+--------------------
+
+
+.. class:: DeployableController
+
+   The controller of one kind of deployable part, such as antennas or solar panels.
+
+   .. method:: all_retracted()
+
+      Whether all the parts are retracted.
+
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: auto_deploy
+
+      Whether a MechJeb autopilot deploys the parts.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. method:: extend_all()
+
+      Extend all the parts.
+
+      :Game Scenes: Flight
+
+   .. method:: retract_all()
+
+      Retract all the parts.
+
+      :Game Scenes: Flight

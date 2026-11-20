@@ -1,0 +1,139 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+LandingGuidance
+===============
+
+
+.. type:: krpc_MechJeb_LandingGuidance_t
+
+   The Landing Guidance window, which lands at a target or wherever the vessel comes down.
+
+   .. macro:: KRPC_CLASS_MECHJEB_LANDINGGUIDANCE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+   .. function:: krpc_error_t krpc_MechJeb_LandingGuidance_Enabled(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_LandingGuidance_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_LandingGuidance_set_Enabled(krpc_connection_t connection, krpc_MechJeb_LandingGuidance_t instance, bool value)
+
+      Whether the module is enabled.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_LandingGuidance_Status(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_LandingGuidance_t instance)
+
+      The status of the autopilot.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_LandingGuidance_DeployChutes(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_LandingGuidance_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_LandingGuidance_set_DeployChutes(krpc_connection_t connection, krpc_MechJeb_LandingGuidance_t instance, bool value)
+
+      Whether the autopilot deploys the parachutes.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_LandingGuidance_DeployGears(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_LandingGuidance_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_LandingGuidance_set_DeployGears(krpc_connection_t connection, krpc_MechJeb_LandingGuidance_t instance, bool value)
+
+      Whether the autopilot deploys the landing gear.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_LandingGuidance_LandAtTarget(krpc_connection_t connection, krpc_MechJeb_LandingGuidance_t instance)
+
+      Land at the target. See :func:`krpc_MechJeb_LandingGuidance_SetTarget`.
+      Throws an exception if there is no target, or the vessel is landed or splashed down.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_LandingGuidance_LandSomewhere(krpc_connection_t connection, krpc_MechJeb_LandingGuidance_t instance)
+
+      Land wherever the vessel comes down. Throws an exception if the vessel is landed or
+      splashed down.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_LandingGuidance_LimitChutesStage(krpc_connection_t connection, int32_t * returnValue, krpc_MechJeb_LandingGuidance_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_LandingGuidance_set_LimitChutesStage(krpc_connection_t connection, krpc_MechJeb_LandingGuidance_t instance, int32_t value)
+
+      The last stage in which the autopilot deploys the parachutes.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_LandingGuidance_LimitGearsStage(krpc_connection_t connection, int32_t * returnValue, krpc_MechJeb_LandingGuidance_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_LandingGuidance_set_LimitGearsStage(krpc_connection_t connection, krpc_MechJeb_LandingGuidance_t instance, int32_t value)
+
+      The last stage in which the autopilot deploys the landing gear.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_LandingGuidance_RCSAdjustment(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_LandingGuidance_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_LandingGuidance_set_RCSAdjustment(krpc_connection_t connection, krpc_MechJeb_LandingGuidance_t instance, bool value)
+
+      Whether the autopilot corrects its course with RCS.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_LandingGuidance_AbortAutoland(krpc_connection_t connection, krpc_MechJeb_LandingGuidance_t instance)
+
+      Stop the landing.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_LandingGuidance_TouchdownSpeed(krpc_connection_t connection, double * returnValue, krpc_MechJeb_LandingGuidance_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_LandingGuidance_set_TouchdownSpeed(krpc_connection_t connection, krpc_MechJeb_LandingGuidance_t instance, double value)
+
+      The speed at touchdown, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_LandingGuidance_GetTargetPosition(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_MechJeb_LandingGuidance_t instance)
+
+      The world space position of the landing target. Throws an exception if there is no
+      landing target.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_LandingGuidance_GetTargetString(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_LandingGuidance_t instance)
+
+      The landing target as text.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_LandingGuidance_PickTargetOnMap(krpc_connection_t connection, krpc_MechJeb_LandingGuidance_t instance)
+
+      Let the player pick the landing target on the map.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_LandingGuidance_SetTarget(krpc_connection_t connection, krpc_MechJeb_LandingGuidance_t instance, krpc_SpaceCenter_CelestialBody_t body, double latitude, double longitude)
+
+      Set the landing target to a position on the surface of a body.
+
+      :Parameters:
+
+       * **body** -- The body.
+       * **latitude** -- The latitude, in degrees.
+       * **longitude** -- The longitude, in degrees.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_LandingGuidance_Autowarp(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_LandingGuidance_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_LandingGuidance_set_Autowarp(krpc_connection_t connection, krpc_MechJeb_LandingGuidance_t instance, bool value)
+
+      Whether to warp time during the landing.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The same setting as :func:`krpc_MechJeb_ManeuverPlanner_Autowarp`.

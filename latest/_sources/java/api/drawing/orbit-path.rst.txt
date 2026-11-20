@@ -8,7 +8,7 @@ OrbitPath
 
 .. type:: public class OrbitPath
 
-   The path of an orbit. Created using :meth:`addOrbit(SpaceCenter.Orbit, boolean)`.
+   The path of an orbit. Created using :meth:`Drawing.addOrbit(SpaceCenter.Orbit, boolean)`.
 
    .. method:: SpaceCenter.Orbit getOrbit()
 

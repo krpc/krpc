@@ -2,18 +2,20 @@
 .. highlight:: py
 .. currentmodule:: LIDAR
 
-LIDAR
-=====
+Service
+=======
 
 
 .. module:: LIDAR
 
-LaserDist service.
+.. warning:: Deprecated. Use :meth:`SpaceCenter.raycast_distance` instead.
+
+Provides functionality to interact with the LiDAR mod.
 
 
 .. attribute:: available
 
-   Check if the LaserDist API is available.
+   Whether the LiDAR mod is installed.
 
    :Attribute: Read-only, cannot be set
    :rtype: bool
@@ -24,7 +26,7 @@ LaserDist service.
 
 .. staticmethod:: laser(part)
 
-   Get a LaserDist part.
+   Get the LiDAR on a part.
 
    :param SpaceCenter.Part part:
    :rtype: :class:`Laser`

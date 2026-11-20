@@ -1,0 +1,195 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Service
+=======
+
+
+.. _http-Trajectories:
+
+Provides functionality to interact with Trajectories.
+
+.. note::
+
+   Trajectories predicts the trajectory of the active vessel only.
+
+
+
+.. http:get:: /trajectories/available
+
+   Whether Trajectories is available.
+
+
+   :resjson bool value:
+
+
+
+
+.. http:post:: /trajectories/impact-patch
+
+   The patch of the trajectory that ends in an impact.
+
+
+   :resjson Trajectories.Patch? value: The patch, or ``null`` without an impact.
+
+
+
+
+
+.. http:post:: /trajectories/impact-position
+
+   The position of the impact, or ``null`` without one.
+
+   .. note::
+
+      In a reference frame that rotates with the body, the position includes the
+      rotation of the body until the impact.
+
+
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: The reference frame for the position.
+   :resjson tuple<double, double, double>? value:
+
+
+
+
+
+.. http:post:: /trajectories/impact-velocity
+
+   The velocity at the impact, or ``null`` without one.
+
+   .. note::
+
+      In a reference frame that rotates with the body, the velocity includes the
+      rotation of the body until the impact.
+
+
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: The reference frame for the velocity.
+   :resjson tuple<double, double, double>? value:
+
+
+
+
+
+.. http:post:: /trajectories/patches
+
+   The patches of the trajectory.
+
+
+   :resjson list<Trajectories.Patch> value:
+
+
+
+
+
+.. http:post:: /trajectories/planned-direction
+
+   The direction that the descent profile sets for the vessel.
+
+
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: The reference frame for the direction.
+   :resjson tuple<double, double, double>? value: The direction, or ``null`` without a target.
+
+
+
+
+
+.. http:post:: /trajectories/corrected-direction
+
+   The :http:post:`/trajectories/planned-direction`, corrected to steer towards the target.
+
+   .. note::
+
+      Suitable as the target direction of the auto-pilot.
+
+
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: The reference frame for the direction.
+   :resjson tuple<double, double, double>? value: The direction, or ``null`` without a target.
+
+
+
+
+
+.. http:post:: /trajectories/set-target
+
+   Sets the target.
+
+
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: The reference frame for the position.
+   :reqjson tuple<double, double, double> position: The position of the target.
+   :reqjson SpaceCenter.CelestialBody? body: The body of the target, by default the body the active vessel orbits. Optional, defaults to ``null``.
+
+
+
+
+
+.. http:get:: /trajectories/target-body
+
+   The body of the target, or ``null`` without a target.
+
+
+   :resjson SpaceCenter.CelestialBody? value:
+
+
+
+
+.. http:post:: /trajectories/target-position
+
+   The position of the target, or ``null`` without a target.
+
+
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: The reference frame for the position.
+   :resjson tuple<double, double, double>? value:
+
+
+
+
+
+.. http:post:: /trajectories/clear-target
+
+   Clears the target.
+
+
+
+
+
+
+
+.. http:get:: /trajectories/descent-profile
+
+   The descent profile.
+
+
+   :resjson Trajectories.DescentProfile value:
+
+
+
+
+.. http:get:: /trajectories/always-update
+
+   Whether Trajectories updates the trajectory continuously.
+
+   .. note::
+
+      When ``false``, :http:post:`/trajectories/update-trajectory` updates the trajectory.
+
+
+   :resjson bool value:
+
+.. http:put:: /trajectories/always-update
+
+   Whether Trajectories updates the trajectory continuously.
+
+   .. note::
+
+      When ``false``, :http:post:`/trajectories/update-trajectory` updates the trajectory.
+
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:post:: /trajectories/update-trajectory
+
+   Updates the trajectory.

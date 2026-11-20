@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>JavaScript Client Design &#8212; kRPC v0.8.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/lua.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=6a604523" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=ba67256c" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="../_static/documentation_options.js?v=486e5634"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../_static/design-tabs.js?v=fcb327ea"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'client-design/js';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.24.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.8.0';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../_static/external-links.js?v=e8892020"></script>
+    <script src="../_static/build-info.js?v=19ceb065"></script>
+    <link rel="canonical" href="https://krpc.github.io/krpc/0.8.0/client-design/js.html" />
+    <link rel="icon" href="../_static/logo-mark.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Client Specification" href="../client-spec.html" />
+    <link rel="prev" title="Lua Client Design" href="lua.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.8.0" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo-on-light.svg" class="logo__image only-light" alt="kRPC"/>
+    <img src="../_static/logo-on-dark.svg" class="logo__image only-dark pst-js-only" alt="kRPC"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../clients.html">
+    Clients
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../developer-guide.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://discord.gg/bXuaTrj" title="Discord" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-discord fa-lg" aria-hidden="true"></i><span class="visually-hidden">Discord</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://forum.kerbalspaceprogram.com/topic/130742-1125-krpc-control-the-game-using-c-c-java-lua-python-ruby-haskell-c-arduino-v060/" title="Forum" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-comments fa-lg" aria-hidden="true"></i><span class="visually-hidden">Forum</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page" aria-expanded="false" aria-controls="pst-secondary-sidebar-modal">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../clients.html">
+    Clients
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../developer-guide.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://discord.gg/bXuaTrj" title="Discord" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-discord fa-lg" aria-hidden="true"></i><span class="visually-hidden">Discord</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://forum.kerbalspaceprogram.com/topic/130742-1125-krpc-control-the-game-using-c-c-java-lua-python-ruby-haskell-c-arduino-v060/" title="Forum" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-comments fa-lg" aria-hidden="true"></i><span class="visually-hidden">Forum</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../extending.html">Extending kRPC</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../extending/attributes.html">Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/types.html">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/events.html">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/multi-tick.html">Multi-Tick RPCs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/game-scenes.html">Game Scenes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/deprecation.html">Deprecating Service Members</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/extending-other-services.html">Extending Other Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/other-mods.html">Wrapping Another Mod</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/documentation.html">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/errors.html">Errors and Warnings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/clientgen.html">Generating Service Code for Static Clients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/docgen.html">API Reference Pages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/testing.html">In-Game Tests</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../communication-protocols.html">Communication Protocols</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../communication-protocols/tcpip.html">TCP/IP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../communication-protocols/localsocket.html">Local Socket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../communication-protocols/websockets.html">WebSockets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../communication-protocols/serialio.html">Serial IO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../communication-protocols/messages.html">Messaging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../communication-protocols/http.html">HTTP</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../client-design.html">Client Design</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="python.html">Python Client Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="csharp.html">C# Client Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp.html">C++ Client Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cnano.html">C-nano Client Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="java.html">Java Client Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lua.html">Lua Client Design</a></li>
+<li class="toctree-l2 current active"><a aria-current="page" class="current reference internal" href="#">JavaScript Client Design</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../client-spec.html">Client Specification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/conformance.html">Conformance Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/testserver.html">Test Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/connection.html">Connection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/calls.html">Calls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/values.html">Values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/codec.html">Codec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/errors.html">Errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/objects.html">Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/streams.html">Streams</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/events.html">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/concurrency.html">Concurrency</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/functions.html">Server Side Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/coverage.html">Client Coverage</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../krpctools.html">krpctools</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../krpc-development.html">kRPC Development</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../krpc-development/code-structure.html">Code Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../krpc-development/building.html">Building from Source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../krpc-development/testing.html">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../krpc-development/benchmarks.html">Benchmarks</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-house"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../developer-guide.html" class="nav-link">Developer Guide</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../client-design.html" class="nav-link">Client Design</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">JavaScript Client Design</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="javascript-client-design">
+<h1>JavaScript Client Design<a class="headerlink" href="#javascript-client-design" title="Link to this heading">#</a></h1>
+<p>The internal design of the JavaScript client. This page builds on the <a class="reference internal" href="../client-design.html"><span class="doc">shared client design</span></a> and the <a class="reference internal" href="../client-spec.html"><span class="doc">client specification</span></a>. Usage is in
+the <a class="reference internal" href="../js.html"><span class="doc">JavaScript guide</span></a>. Paths are relative to <code class="docutils literal notranslate"><span class="pre">client/js/</span></code>.</p>
+<section id="services-and-declarations">
+<h2>Services and Declarations<a class="headerlink" href="#services-and-declarations" title="Link to this heading">#</a></h2>
+<p>Every service is built at connect from <code class="docutils literal notranslate"><span class="pre">GetServices</span></code>. The client then has the members of the
+server it connects to.</p>
+<ul class="simple">
+<li><p>A connect registers the types of every service, then the members of every class, then the
+services. A member of a class can belong to another service.</p></li>
+<li><p>Each member is a property set with <code class="docutils literal notranslate"><span class="pre">defineProperty</span></code>. A member naming a type the client does not
+know is left out. An internal procedure is left out too.</p></li>
+<li><p>A kRPC property is a <code class="docutils literal notranslate"><span class="pre">getX</span></code> and a <code class="docutils literal notranslate"><span class="pre">setX</span></code> method. A JavaScript setter cannot return a
+<code class="docutils literal notranslate"><span class="pre">Promise</span></code>, so <code class="docutils literal notranslate"><span class="pre">vessel.name</span> <span class="pre">=</span> <span class="pre">&quot;x&quot;</span></code> would drop the server’s error.</p></li>
+<li><p>A procedure returning an event resolves with an <code class="docutils literal notranslate"><span class="pre">Event</span></code>. One returning a stream, such as
+<code class="docutils literal notranslate"><span class="pre">KRPC.AddStream</span></code>, rejects with a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code> when called, as <code class="docutils literal notranslate"><span class="pre">addStream</span></code> makes that call
+itself.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">clientgen</span></code> and <code class="docutils literal notranslate"><span class="pre">js.tmpl</span></code> in <code class="docutils literal notranslate"><span class="pre">krpctools</span></code> generate a TypeScript module per service, in
+<code class="docutils literal notranslate"><span class="pre">src/services/</span></code>. Its classes and service are declarations. Its enumerations, structures and
+exceptions are values, made by <code class="docutils literal notranslate"><span class="pre">declareEnumeration</span></code>, <code class="docutils literal notranslate"><span class="pre">declareStruct</span></code> and
+<code class="docutils literal notranslate"><span class="pre">declareException</span></code> in <code class="docutils literal notranslate"><span class="pre">declarations.ts</span></code>.</p></li>
+<li><p>Each of those calls registers its type in <code class="docutils literal notranslate"><span class="pre">registry.ts</span></code>, by service and name. <code class="docutils literal notranslate"><span class="pre">connect</span></code> uses
+the registered type where the server’s definition matches, by the rule of the
+<a class="reference internal" href="python.html"><span class="doc">Python client</span></a>. An enumeration matches on its flags,
+names and numbers, a structure on its field names in order, and an exception on the JavaScript
+error it extends. A matched type is also the service’s member, so
+<code class="docutils literal notranslate"><span class="pre">conn.spaceCenter.SASMode</span> <span class="pre">===</span> <span class="pre">SpaceCenter.SASMode</span></code>.</p></li>
+<li><p>The package’s own modules import <code class="docutils literal notranslate"><span class="pre">declarations.js</span></code> by its path, through clientgen’s
+<code class="docutils literal notranslate"><span class="pre">--client-module</span></code>. The package’s name resolves to <code class="docutils literal notranslate"><span class="pre">index.ts</span></code>, which imports the modules,
+and <code class="docutils literal notranslate"><span class="pre">tsc</span></code> leaves the import path as written.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Connection</span></code> merges with the interface <code class="docutils literal notranslate"><span class="pre">Connection</span> <span class="pre">extends</span> <span class="pre">Services</span></code>, which holds the
+services a release ships. A mod’s module adds its service to <code class="docutils literal notranslate"><span class="pre">Services</span></code> with module
+augmentation. <code class="docutils literal notranslate"><span class="pre">DynamicConnection</span></code> types any other service as <code class="docutils literal notranslate"><span class="pre">any</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RemoteObject</span></code>, <code class="docutils literal notranslate"><span class="pre">RemoteEnum</span></code> and <code class="docutils literal notranslate"><span class="pre">RemoteStruct</span></code> take the type’s name as a type parameter. A
+property keyed by a symbol that exists in types only holds it, so two classes with the same
+members do not mix.</p></li>
+<li><p>A procedure with default arguments has two overloads: the positional one, and the required
+arguments followed by an options object.</p></li>
+</ul>
+<p>The library’s <code class="docutils literal notranslate"><span class="pre">tsconfig.json</span></code> leaves out the Node.js types. A Node.js built-in used by mistake
+then fails the type check, as it would in a browser.</p>
+</section>
+<section id="values">
+<h2>Values<a class="headerlink" href="#values" title="Link to this heading">#</a></h2>
+<p>JavaScript has no operator overloading, so <code class="docutils literal notranslate"><span class="pre">===</span></code> is identity. The client interns the values a
+program compares:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ObjectCache</span></code> holds one object per id per connection, as a <code class="docutils literal notranslate"><span class="pre">WeakRef</span></code>. A
+<code class="docutils literal notranslate"><span class="pre">FinalizationRegistry</span></code> removes the entry of a collected object. An object then works as a
+<code class="docutils literal notranslate"><span class="pre">Map</span></code> key or a <code class="docutils literal notranslate"><span class="pre">Set</span></code> element.</p></li>
+<li><p>An <code class="docutils literal notranslate"><span class="pre">Enumeration</span></code> holds one <code class="docutils literal notranslate"><span class="pre">RemoteEnum</span></code> per number. A flags enumeration also holds each
+combination it has made, so combinations compare with <code class="docutils literal notranslate"><span class="pre">===</span></code> too.</p></li>
+<li><p>A structure value is a new object for each result. <code class="docutils literal notranslate"><span class="pre">equals</span></code> compares structures field by field.</p></li>
+<li><p>A structure’s <code class="docutils literal notranslate"><span class="pre">StructDeclaration</span></code> holds its field names and the class of its values, and is
+shared by the connections that match a generated module. The <code class="docutils literal notranslate"><span class="pre">Struct</span></code> of a connection adds the
+field types from the server’s definition.</p></li>
+<li><p>An enumeration value of another <code class="docutils literal notranslate"><span class="pre">Enumeration</span></code> with the same service and name passes as an
+argument by its number. <code class="docutils literal notranslate"><span class="pre">equals</span></code> compares two such values by number, as their <code class="docutils literal notranslate"><span class="pre">===</span></code> is
+false.</p></li>
+</ul>
+<p>Structures are classes, so a plain object is never a value. A trailing plain object, with the
+prototype <code class="docutils literal notranslate"><span class="pre">Object.prototype</span></code> or <code class="docutils literal notranslate"><span class="pre">null</span></code>, then holds arguments by name. A protobuf message, such
+as a <code class="docutils literal notranslate"><span class="pre">ProcedureCall</span></code>, is a plain object too, and <code class="docutils literal notranslate"><span class="pre">isMessage</span></code> tells it apart.</p>
+<p><code class="docutils literal notranslate"><span class="pre">codec.ts</span></code> encodes values with the <code class="docutils literal notranslate"><span class="pre">BinaryReader</span></code> and <code class="docutils literal notranslate"><span class="pre">BinaryWriter</span></code> of
+<code class="docutils literal notranslate"><span class="pre">&#64;bufbuild/protobuf</span></code>. Its 64-bit integers are <code class="docutils literal notranslate"><span class="pre">bigint</span></code>, so a <code class="docutils literal notranslate"><span class="pre">uint64</span></code> above 2^53 round
+trips.</p>
+</section>
+<section id="errors">
+<h2>Errors<a class="headerlink" href="#errors" title="Link to this heading">#</a></h2>
+<p>Each connection builds a class for each exception a service lists, or uses the generated module’s
+class where it matches. <code class="docutils literal notranslate"><span class="pre">KRPC.StreamRemovedException</span></code> is <code class="docutils literal notranslate"><span class="pre">StreamError</span></code>, in the connection and
+the generated module, as the server ends a stream with it. One the server maps to a .NET
+exception extends the matching JavaScript error, such as <code class="docutils literal notranslate"><span class="pre">TypeError</span></code>, and the others extend
+<code class="docutils literal notranslate"><span class="pre">ServerError</span></code>.</p>
+<p>A class that extends a JavaScript error also has the <code class="docutils literal notranslate"><span class="pre">service</span></code>, <code class="docutils literal notranslate"><span class="pre">exception</span></code>, <code class="docutils literal notranslate"><span class="pre">description</span></code>
+and <code class="docutils literal notranslate"><span class="pre">stackTrace</span></code> of a <code class="docutils literal notranslate"><span class="pre">ServerError</span></code>. Its declaration narrows <code class="docutils literal notranslate"><span class="pre">instanceof</span></code> to the JavaScript
+error and <code class="docutils literal notranslate"><span class="pre">ServerErrorDetails</span></code>.</p>
+</section>
+<section id="deprecated-members">
+<h2>Deprecated Members<a class="headerlink" href="#deprecated-members" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">inheritDeprecation</span></code> applies the shared rule to the service definitions at connect. The client
+warns at the use of a member:</p>
+<ul class="simple">
+<li><p>A procedure, method or static method warns when it is called.</p></li>
+<li><p>A deprecated service, class, enumeration, structure, exception or enumeration value is a getter,
+which warns when it is read.</p></li>
+<li><p>A deprecated structure field is a getter on the value. The codec and <code class="docutils literal notranslate"><span class="pre">equals</span></code> read fields
+through <code class="docutils literal notranslate"><span class="pre">RemoteStruct.fieldOf</span></code>, so a value from the server, or one passed to a call, gives no
+warning.</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">Deprecations</span></code> records the warnings a connection has given, so a loop does not repeat one. It
+calls <code class="docutils literal notranslate"><span class="pre">process.emitWarning</span></code> when the runtime has it, and <code class="docutils literal notranslate"><span class="pre">console.warn</span></code> otherwise. It finds
+<code class="docutils literal notranslate"><span class="pre">process</span></code> through <code class="docutils literal notranslate"><span class="pre">globalThis</span></code>, as the library has no Node.js types.</p>
+<p>The generated modules mark each deprecated member with <code class="docutils literal notranslate"><span class="pre">&#64;deprecated</span></code>, for editors. Their
+deprecated enumeration values and structure fields warn when read too, once per process, as
+those values belong to no connection.</p>
+</section>
+<section id="ownership">
+<h2>Ownership<a class="headerlink" href="#ownership" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">connect</span></code> returns a <code class="docutils literal notranslate"><span class="pre">Connection</span></code>. Services and objects hold the connection’s state, and none of
+them owns it:</p>
+<div class="highlight-js notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">connect</span><span class="p">();</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">spaceCenter</span><span class="p">.</span><span class="nx">getActiveVessel</span><span class="p">();</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">vessel</span><span class="p">.</span><span class="nx">getName</span><span class="p">();</span><span class="w">  </span><span class="c1">// Rejects with a ConnectionError</span>
+</pre></div>
+</div>
+<section id="references">
+<h3>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">Connection</span></code> holds its <code class="docutils literal notranslate"><span class="pre">Session</span></code>, and a <code class="docutils literal notranslate"><span class="pre">WeakMap</span></code> in <code class="docutils literal notranslate"><span class="pre">connection.ts</span></code> maps it to its
+<code class="docutils literal notranslate"><span class="pre">Context</span></code>. The context holds the session, the <code class="docutils literal notranslate"><span class="pre">Types</span></code> and the service definitions. The session
+holds the <code class="docutils literal notranslate"><span class="pre">WebSocket</span></code>.</p>
+<p>The objects the program keeps also hold the context. Each connection builds its own classes, whose
+methods are closures over the context. A service holds those closures too. Enumeration and
+structure values hold no connection.</p>
+<p>The open socket holds the session through its event listeners. An unclosed connection is therefore
+never collected.</p>
+</section>
+<section id="lifetime">
+<h3>Lifetime<a class="headerlink" href="#lifetime" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>The connection closes on <code class="docutils literal notranslate"><span class="pre">close()</span></code>, when the server closes the socket or sends a
+<code class="docutils literal notranslate"><span class="pre">disconnect</span></code>, or when a message breaks the protocol.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">close()</span></code> sends a <code class="docutils literal notranslate"><span class="pre">disconnect</span></code> and a close frame, then waits up to a second for the server to
+close the socket. A second <code class="docutils literal notranslate"><span class="pre">close()</span></code> sends nothing.</p></li>
+<li><p>After a close or a failure, <code class="docutils literal notranslate"><span class="pre">Session.ended</span></code> holds the <code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code>. Each call waiting for
+a response rejects with it, and so does each later call. Each stream ends with it, or for a
+failure with a <code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code> whose cause is that error.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Connection</span></code> and objects have no finalizer. An object is an id and its connection’s classes, and
+sends no release to the server.</p></li>
+</ul>
+</section>
+</section>
+<section id="event-loop">
+<h2>Event Loop<a class="headerlink" href="#event-loop" title="Link to this heading">#</a></h2>
+<p>The client runs on one thread, like the <a class="reference internal" href="../client-design.html"><span class="doc">single-threaded clients</span></a>, but no call
+reads the socket. The socket’s <code class="docutils literal notranslate"><span class="pre">message</span></code> event reads each message, so several calls can wait at
+once, and stream updates arrive between calls:</p>
+<ul class="simple">
+<li><p>A call adds its pending slot, keyed by request id, then sends its request. <code class="docutils literal notranslate"><span class="pre">WebSocket.send</span></code>
+queues the whole message, so requests never interleave.</p></li>
+<li><p>The message handler holds no <code class="docutils literal notranslate"><span class="pre">await</span></code>. No other code runs while it handles a message, and it
+settles the <code class="docutils literal notranslate"><span class="pre">Promise</span></code> of the call the response is for.</p></li>
+<li><p>A response with an unknown id is a protocol error, as no call can abandon its slot. JavaScript
+has no way to interrupt a call.</p></li>
+<li><p>The handler passes a <code class="docutils literal notranslate"><span class="pre">stream_update</span></code> to the <code class="docutils literal notranslate"><span class="pre">StreamManager</span></code>, and skips any message case it
+does not know. A <code class="docutils literal notranslate"><span class="pre">connection_request</span></code>, <code class="docutils literal notranslate"><span class="pre">connection_response</span></code> or <code class="docutils literal notranslate"><span class="pre">request</span></code> is a protocol
+error.</p></li>
+<li><p>A WebSocket message arrives whole, so a message never stalls and the client has no stall timeout.
+<code class="docutils literal notranslate"><span class="pre">setTimeout</span></code> bounds the upgrade and the handshake together.</p></li>
+</ul>
+</section>
+<section id="streams-and-events">
+<h2>Streams and Events<a class="headerlink" href="#streams-and-events" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">streams.ts</span></code> holds the streams. A <code class="docutils literal notranslate"><span class="pre">StreamState</span></code> is the state the handles of one stream share,
+and the <code class="docutils literal notranslate"><span class="pre">StreamManager</span></code> holds a connection’s states by id. <code class="docutils literal notranslate"><span class="pre">Stream</span></code> and <code class="docutils literal notranslate"><span class="pre">Event</span></code> are the
+handles. A copy of a handle is a reference to the same object.</p>
+<section id="adding-a-stream">
+<h3>Adding a Stream<a class="headerlink" href="#adding-a-stream" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">addStream</span></code> takes a function that returns one call, as C#’s <code class="docutils literal notranslate"><span class="pre">AddStream</span></code> takes a lambda:</p>
+<div class="highlight-js notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">altitude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">addStream</span><span class="p">(()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">flight</span><span class="p">.</span><span class="nx">getMeanAltitude</span><span class="p">());</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>The client runs the function in a capture mode. A member called then builds its
+<code class="docutils literal notranslate"><span class="pre">ProcedureCall</span></code>, records it and returns a <code class="docutils literal notranslate"><span class="pre">Promise</span></code> that never settles, in place of sending
+the call. <code class="docutils literal notranslate"><span class="pre">addStream</span></code> checks that the function returned that <code class="docutils literal notranslate"><span class="pre">Promise</span></code>, from one call.</p></li>
+<li><p>The member warns of its deprecation as it would for a call, so a stream of a deprecated member
+warns too.</p></li>
+<li><p>The stream’s value type is the call’s result type, so TypeScript infers <code class="docutils literal notranslate"><span class="pre">Stream&lt;number&gt;</span></code> from
+the function’s <code class="docutils literal notranslate"><span class="pre">Promise&lt;number&gt;</span></code>.</p></li>
+<li><p>A stream is added on the connection <code class="docutils literal notranslate"><span class="pre">addStream</span></code> is called on, whichever connection the object
+came from.</p></li>
+</ul>
+<p>A stream’s first update can follow the response to <code class="docutils literal notranslate"><span class="pre">AddStream</span></code> in the same read. The session’s
+<code class="docutils literal notranslate"><span class="pre">call</span></code> takes a function to run on the result in the message handler, before the next message.
+It registers the stream there. A call of a procedure returning an event registers the event’s
+stream the same way.</p>
+</section>
+<section id="values-and-waits">
+<h3>Values and Waits<a class="headerlink" href="#values-and-waits" title="Link to this heading">#</a></h3>
+<p>The message handler stores each value and wakes the waits, with no <code class="docutils literal notranslate"><span class="pre">await</span></code>, so a call that
+returns sees each value sent before its response. <code class="docutils literal notranslate"><span class="pre">get</span></code> waits for the first value, and the
+<code class="docutils literal notranslate"><span class="pre">value</span></code> getter reads the latest one at once. <code class="docutils literal notranslate"><span class="pre">wait</span></code> resolves on the next value after it
+starts.</p>
+<p>An event counts the true values of its stream as its firings. Each <code class="docutils literal notranslate"><span class="pre">Event</span></code> keeps the count its
+last wait returned for, and a wait returns at once for a later firing. A remove or a close discards
+an unseen firing, and an end by the server keeps it.</p>
+<p>The client has no <code class="docutils literal notranslate"><span class="pre">conditions</span></code> profile. A condition holds a stream’s value still while a thread
+reads it and waits. A run of reads with no <code class="docutils literal notranslate"><span class="pre">await</span></code> between them already sees one state, and no
+other code runs during it.</p>
+</section>
+<section id="callbacks">
+<h3>Callbacks<a class="headerlink" href="#callbacks" title="Link to this heading">#</a></h3>
+<p>A microtask after the message handler runs the callbacks of the update’s values, then the update
+callbacks. A callback added in between gets the value through its first call.</p>
+<ul class="simple">
+<li><p><strong>A callback runs one call at a time.</strong> A callback that returns a <code class="docutils literal notranslate"><span class="pre">Promise</span></code> is busy until it
+settles. A value that arrives meanwhile waits, and a newer one replaces it.</p></li>
+<li><p><strong>The first call is made before</strong> <code class="docutils literal notranslate"><span class="pre">addCallback</span></code> <strong>returns</strong>, with the value the stream has. No
+<code class="docutils literal notranslate"><span class="pre">await</span></code> lies between reading the value and the call, so no update passes a newer one first.</p></li>
+<li><p><strong>End callbacks of a server ending wait for the value callbacks.</strong> A value that arrived before
+the ending reaches the callbacks first. A remove or a close drops the waiting values, and calls
+the end callbacks at once.</p></li>
+<li><p><strong>A remove or a close calls the end callbacks itself.</strong> A failure of the connection calls them
+in a microtask, so the message handler runs no program code.</p></li>
+<li><p><strong>An error a callback throws is reported</strong>, through <code class="docutils literal notranslate"><span class="pre">reportError</span></code> where the runtime has it and
+<code class="docutils literal notranslate"><span class="pre">console.error</span></code> otherwise. JavaScript has no kind of error apart from its ordinary ones, so
+none propagates.</p></li>
+</ul>
+</section>
+<section id="lifetime-of-a-stream">
+<h3>Lifetime of a Stream<a class="headerlink" href="#lifetime-of-a-stream" title="Link to this heading">#</a></h3>
+<p>A stream runs until it is removed, or its connection closes. A collected handle leaves its stream on
+the server, as in the other clients. A collection happens at no predictable time, so a stream kept
+only for its callbacks would stop at random.</p>
+<p><code class="docutils literal notranslate"><span class="pre">Stream</span></code> and <code class="docutils literal notranslate"><span class="pre">Event</span></code> have <code class="docutils literal notranslate"><span class="pre">Symbol.asyncDispose</span></code>, so an <code class="docutils literal notranslate"><span class="pre">await</span> <span class="pre">using</span></code> declaration removes the
+stream at the end of its block. Removing a stream ends it before the <code class="docutils literal notranslate"><span class="pre">RemoveStream</span></code> call, so a
+value that arrives during the call is dropped.</p>
+</section>
+</section>
+<section id="server-side-functions">
+<h2>Server Side Functions<a class="headerlink" href="#server-side-functions" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">functions.ts</span></code> adds the server side functions built with the expression API, and
+<code class="docutils literal notranslate"><span class="pre">compiler/</span></code> compiles a JavaScript function into one.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">getCall</span></code> takes a function returning one call, as <code class="docutils literal notranslate"><span class="pre">addStream</span></code> does, and returns the
+<code class="docutils literal notranslate"><span class="pre">ProcedureCall</span></code> it captures. It is synchronous, as the capture sends nothing.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">getCallTemplate</span></code> takes a member function itself, such as <code class="docutils literal notranslate"><span class="pre">Engine.prototype.getHasFuel</span></code>.
+A <code class="docutils literal notranslate"><span class="pre">WeakMap</span></code> holds the procedure of each member function the connection builds. A capture
+would need an object to call the member on, and arguments it cannot encode. The declarations
+give each class value its <code class="docutils literal notranslate"><span class="pre">prototype</span></code>, so TypeScript checks the member’s name.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">addStream</span></code> takes a <code class="docutils literal notranslate"><span class="pre">KRPC.Expression</span></code> in place of a function, and <code class="docutils literal notranslate"><span class="pre">addEvent</span></code> takes one
+too. They call <code class="docutils literal notranslate"><span class="pre">KRPC.AddFunctionStream</span></code> and <code class="docutils literal notranslate"><span class="pre">KRPC.AddEvent</span></code>, which the services leave out as
+internal. The stream is registered in the message handler, as for <code class="docutils literal notranslate"><span class="pre">AddStream</span></code>.</p></li>
+<li><p><strong>The function supplies its types.</strong> <code class="docutils literal notranslate"><span class="pre">run</span></code> and <code class="docutils literal notranslate"><span class="pre">addStream</span></code> read the types of the parameters
+and the value from the <code class="docutils literal notranslate"><span class="pre">KRPC.Expression</span></code>, as in the <a class="reference internal" href="lua.html"><span class="doc">Lua client</span></a>. They read them
+once per function, cached in a <code class="docutils literal notranslate"><span class="pre">WeakMap</span></code> keyed by the object. TypeScript erases a type
+argument, so <code class="docutils literal notranslate"><span class="pre">run&lt;T&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">addStream&lt;T&gt;</span></code> name a type the client cannot check.</p></li>
+<li><p>A function with parameters has no stream or event, as nothing passes its arguments. The client
+rejects one with a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code> before calling the server.</p></li>
+</ul>
+<section id="function-compiler">
+<h3>Function Compiler<a class="headerlink" href="#function-compiler" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">compile</span></code>, <code class="docutils literal notranslate"><span class="pre">run</span></code>, <code class="docutils literal notranslate"><span class="pre">addStream</span></code> and <code class="docutils literal notranslate"><span class="pre">addEvent</span></code> take a JavaScript function. The compiler reads
+its source with <code class="docutils literal notranslate"><span class="pre">Function.prototype.toString</span></code> and parses it with acorn.</p>
+<ul class="simple">
+<li><p><strong>Captures are an object pattern.</strong> JavaScript gives no access to a closure, and a minifier
+renames local names, so every name a function reads is a capture, a parameter or a builtin
+global. A minifier keeps the keys of the pattern <code class="docutils literal notranslate"><span class="pre">({</span> <span class="pre">vessel,</span> <span class="pre">limit</span> <span class="pre">})</span></code>, and renames each
+binding with its uses. Positional captures were ruled out, as a wrong order goes unnoticed.</p></li>
+<li><p><strong>The body is written as it runs on the server.</strong> A property is read as a property, and a method
+returns its value. Calls with <code class="docutils literal notranslate"><span class="pre">await</span></code> would also run on the client, but are unreadable at any
+size.</p></li>
+<li><p><strong>Two stages.</strong> The compiler builds a typed tree on the client with no calls, so every
+<code class="docutils literal notranslate"><span class="pre">CompilationError</span></code> is thrown before anything reaches the server. It then builds the nodes, the
+children of a node concurrently, so a compile takes about one round trip per level of the tree.</p></li>
+<li><p><strong>The compiler gives the function’s types</strong>, so <code class="docutils literal notranslate"><span class="pre">run</span></code> reads none from the server. The native
+tests check them against the server’s.</p></li>
+<li><p><strong>A number is a double, and a</strong> <code class="docutils literal notranslate"><span class="pre">bigint</span></code> <strong>a 64-bit integer</strong>, so arithmetic gives JavaScript’s
+results. A server integer is a <code class="docutils literal notranslate"><span class="pre">number</span></code> in the client, so keeping integer arithmetic would make
+<code class="docutils literal notranslate"><span class="pre">7</span> <span class="pre">/</span> <span class="pre">2</span></code> differ from JavaScript.</p></li>
+<li><p><strong>Type values are values.</strong> A parameter type is <code class="docutils literal notranslate"><span class="pre">types.double</span></code> or a service’s class, checked
+when the program is written. A type string would be checked only when compiling.</p></li>
+<li><p><strong>Each call compiles again.</strong> The captures can differ per call. The parse is cached per function
+object, in a <code class="docutils literal notranslate"><span class="pre">WeakMap</span></code>.</p></li>
+<li><p><strong>The compiler is loaded with</strong> <code class="docutils literal notranslate"><span class="pre">import()</span></code>. acorn is larger than the rest of the client, and a
+bundler splits the compiler into its own chunk.</p></li>
+<li><p>A first parameter that is a name the body does not read, such as <code class="docutils literal notranslate"><span class="pre">_</span></code>, takes no captures, as
+Biome’s recommended rules reject the empty pattern <code class="docutils literal notranslate"><span class="pre">{}</span></code>.</p></li>
+<li><p><strong>A later use types a value with none.</strong> An empty array, <code class="docutils literal notranslate"><span class="pre">Set</span></code> or <code class="docutils literal notranslate"><span class="pre">Map</span></code>, a <code class="docutils literal notranslate"><span class="pre">null</span></code>, and
+the parameters of a local function take their type from a later use or call. The use notes the
+type, and the function is compiled again with it, as in Python. A read of a variable holding
+<code class="docutils literal notranslate"><span class="pre">null</span></code> compiles as <code class="docutils literal notranslate"><span class="pre">null</span></code> until then.</p></li>
+<li><p><strong>Numbers in variables are doubles</strong>, so a variable assigned an integer and then a fraction
+keeps JavaScript’s value.</p></li>
+<li><p><strong>A local function is one Lambda</strong>, built at its first call and called with <code class="docutils literal notranslate"><span class="pre">Invoke</span></code>. It
+checks at each call that every path assigns the variables it reads.</p></li>
+<li><p><strong>A for loop with a continue runs its update at the start of the body</strong>, on every pass but the
+first, as the server’s <code class="docutils literal notranslate"><span class="pre">Continue</span></code> jumps there. A do…while runs its test there the same way.</p></li>
+<li><p><strong>A catch records which branch matched.</strong> Each <code class="docutils literal notranslate"><span class="pre">e</span> <span class="pre">instanceof</span> <span class="pre">X</span></code> branch catches its exceptions
+by name, innermost first, and the branches run after the catches, so an exception from one
+branch is not caught by the next, as in Python.</p></li>
+<li><p><strong>The body is typed by server forms.</strong> Each generated module declares a <code class="docutils literal notranslate"><span class="pre">Server</span></code> namespace,
+with a synchronous form of the service and each class, and adds them to the package’s
+<code class="docutils literal notranslate"><span class="pre">ServerTypes</span></code> and <code class="docutils literal notranslate"><span class="pre">ClientTypes</span></code> interfaces by declaration merging, so mods’ modules join
+in. <code class="docutils literal notranslate"><span class="pre">OnServer</span></code> maps a captured value to its server form through the brands of
+<code class="docutils literal notranslate"><span class="pre">RemoteObject</span></code> and <code class="docutils literal notranslate"><span class="pre">RemoteService</span></code>, and <code class="docutils literal notranslate"><span class="pre">OnClient</span></code> maps a result back.
+<code class="docutils literal notranslate"><span class="pre">ServerFunction&lt;P,</span> <span class="pre">R&gt;</span></code> carries a compiled function’s types, so <code class="docutils literal notranslate"><span class="pre">run</span></code> checks its arguments.</p></li>
+<li><p><strong>Parameter types are inferred from the tuple of type values</strong>, mapped to value types by
+<code class="docutils literal notranslate"><span class="pre">ValuesOf</span></code>. A union of the forms of a type value would also infer from the static methods
+of a class.</p></li>
+<li><p><strong>Strict comparison with null is an error.</strong> The server has one null, and the codec gives it
+as <code class="docutils literal notranslate"><span class="pre">null</span></code>, so <code class="docutils literal notranslate"><span class="pre">===</span> <span class="pre">undefined</span></code> would differ from the client. <code class="docutils literal notranslate"><span class="pre">==</span> <span class="pre">null</span></code> matches both.</p></li>
+<li><p><strong>Sets and maps are the server’s</strong>, with .NET’s order. Insertion order after a delete would need
+ordered collections on the server.</p></li>
+<li><p><strong>A construct the server cannot match is an error</strong>, such as a <code class="docutils literal notranslate"><span class="pre">replaceAll</span></code> pattern, a
+<code class="docutils literal notranslate"><span class="pre">Math.log2</span></code> of a server value or a <code class="docutils literal notranslate"><span class="pre">bigint</span></code> comparator. A result that differs from JavaScript
+goes unnoticed.</p></li>
+<li><p><strong>State is a property of a captured object</strong> that the function assigns or changes, in place
+of Python’s <code class="docutils literal notranslate"><span class="pre">nonlocal</span></code>, as JavaScript has no access to a closure.</p></li>
+</ul>
+</section>
+</section>
+<section id="transports">
+<h2>Transports<a class="headerlink" href="#transports" title="Link to this heading">#</a></h2>
+<p>WebSockets is the only transport, through the global <code class="docutils literal notranslate"><span class="pre">WebSocket</span></code>, which Node.js 22 and browsers
+both have. Its <code class="docutils literal notranslate"><span class="pre">binaryType</span></code> is <code class="docutils literal notranslate"><span class="pre">arraybuffer</span></code>, and a text message ends the connection as
+malformed.</p>
+</section>
+<section id="mapping-the-spec-to-javascript">
+<h2>Mapping the Spec to JavaScript<a class="headerlink" href="#mapping-the-spec-to-javascript" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Spec</p></th>
+<th class="head"><p>JavaScript</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Calls</p></td>
+<td><p>A <code class="docutils literal notranslate"><span class="pre">Promise</span></code> per call, resolved with the result</p></td>
+</tr>
+<tr class="row-odd"><td><p>Streams, events</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Connection.addStream</span></code>, <code class="docutils literal notranslate"><span class="pre">Connection.addEvent</span></code>, <code class="docutils literal notranslate"><span class="pre">Stream</span></code> and <code class="docutils literal notranslate"><span class="pre">Event</span></code>, whose reads and
+waits return a <code class="docutils literal notranslate"><span class="pre">Promise</span></code>. The <code class="docutils literal notranslate"><span class="pre">value</span></code> getter reads a stream’s latest value at once</p></td>
+</tr>
+<tr class="row-even"><td><p>Stream error</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">StreamError</span></code>, extending <code class="docutils literal notranslate"><span class="pre">RemoteError</span></code>. It is also <code class="docutils literal notranslate"><span class="pre">KRPC.StreamRemovedException</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Callbacks</p></td>
+<td><p>Functions called in a microtask after the message handler, one call at a time each</p></td>
+</tr>
+<tr class="row-even"><td><p>Scoping construct</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">await</span> <span class="pre">using</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Closing a connection</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Connection.close()</span></code>, which returns a <code class="docutils literal notranslate"><span class="pre">Promise</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Remote error, and the connection and encoding errors</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">RemoteError</span></code>, and <code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code> and <code class="docutils literal notranslate"><span class="pre">EncodingError</span></code> extending it</p></td>
+</tr>
+<tr class="row-odd"><td><p>Server error with no mapped type</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ServerError</span></code>, the base of each exception class a service lists. For an exception with no
+class, <code class="docutils literal notranslate"><span class="pre">Service.Name:</span></code> comes before the description</p></td>
+</tr>
+<tr class="row-even"><td><p>Server exception with a mapped type</p></td>
+<td><p>A class on the service, extending only <code class="docutils literal notranslate"><span class="pre">TypeError</span></code> or <code class="docutils literal notranslate"><span class="pre">RangeError</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Argument error</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TypeError</span></code>, or <code class="docutils literal notranslate"><span class="pre">RangeError</span></code> for a number outside the range of its type</p></td>
+</tr>
+<tr class="row-even"><td><p>Null object, nullable value</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">null</span></code>. <code class="docutils literal notranslate"><span class="pre">undefined</span></code> at an argument takes its default</p></td>
+</tr>
+<tr class="row-odd"><td><p>Member names</p></td>
+<td><p>lowerCamel, as in <code class="docutils literal notranslate"><span class="pre">httpServer</span></code> for <code class="docutils literal notranslate"><span class="pre">HTTPServer</span></code>. A property is <code class="docutils literal notranslate"><span class="pre">get</span></code> or <code class="docutils literal notranslate"><span class="pre">set</span></code>
+and the name, as in <code class="docutils literal notranslate"><span class="pre">getRCSThrust</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Named arguments</p></td>
+<td><p>A plain object after the positional arguments</p></td>
+</tr>
+<tr class="row-odd"><td><p>64-bit integers</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bigint</span></code> results. Arguments take a <code class="docutils literal notranslate"><span class="pre">number</span></code> or a <code class="docutils literal notranslate"><span class="pre">bigint</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>List, tuple, set, dictionary</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Array</span></code>, <code class="docutils literal notranslate"><span class="pre">Array</span></code>, <code class="docutils literal notranslate"><span class="pre">Set</span></code>, <code class="docutils literal notranslate"><span class="pre">Map</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Timeouts</p></td>
+<td><p>Milliseconds, with <code class="docutils literal notranslate"><span class="pre">Infinity</span></code> for no timeout</p></td>
+</tr>
+<tr class="row-even"><td><p>Static method</p></td>
+<td><p>A function on the class, reached through the service of a connection</p></td>
+</tr>
+<tr class="row-odd"><td><p>Interrupting a call or a wait, hashes</p></td>
+<td><p>Unsupported, as JavaScript has neither</p></td>
+</tr>
+<tr class="row-even"><td><p>Fatal errors from callbacks</p></td>
+<td><p>Unsupported, as JavaScript has no kind of error apart from its ordinary ones</p></td>
+</tr>
+<tr class="row-odd"><td><p>Conditions</p></td>
+<td><p>None. See <a class="reference internal" href="#values-and-waits">Values and Waits</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Getting a call as a value</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Connection.getCall</span></code>, given a function returning one call, or <code class="docutils literal notranslate"><span class="pre">getCallTemplate</span></code>, given a
+member</p></td>
+</tr>
+<tr class="row-odd"><td><p>Value type of a server side function</p></td>
+<td><p>The function’s own type, read from the server. A null value is <code class="docutils literal notranslate"><span class="pre">null</span></code> at any type</p></td>
+</tr>
+<tr class="row-even"><td><p>Flags enumeration</p></td>
+<td><p>A <code class="docutils literal notranslate"><span class="pre">RemoteFlags</span></code>, combined with <code class="docutils literal notranslate"><span class="pre">union</span></code>, <code class="docutils literal notranslate"><span class="pre">intersection</span></code>, <code class="docutils literal notranslate"><span class="pre">difference</span></code> and
+<code class="docutils literal notranslate"><span class="pre">contains</span></code>, as JavaScript has no operator overloading</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="lua.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Lua Client Design</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../client-spec.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Client Specification</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal" tabindex="-1"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#services-and-declarations">Services and Declarations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#values">Values</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#errors">Errors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deprecated-members">Deprecated Members</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ownership">Ownership</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lifetime">Lifetime</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#event-loop">Event Loop</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#streams-and-events">Streams and Events</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-a-stream">Adding a Stream</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#values-and-waits">Values and Waits</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#callbacks">Callbacks</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lifetime-of-a-stream">Lifetime of a Stream</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#server-side-functions">Server Side Functions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#function-compiler">Function Compiler</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#transports">Transports</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mapping-the-spec-to-javascript">Mapping the Spec to JavaScript</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/client-design/js.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2015-2026, kRPC Org.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.1.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

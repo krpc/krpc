@@ -1,0 +1,21 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: KerbalEngineerRedux
+
+Burn Time
+=========
+
+
+.. class:: BurnTime
+
+   The time to burn a delta-v at full thrust, staging as each stage runs dry.
+
+
+   .. attribute:: duration: number
+
+      The duration of the burn, in seconds.
+
+
+   .. attribute:: half_duration: number
+
+      The time to burn half the delta-v, in seconds.

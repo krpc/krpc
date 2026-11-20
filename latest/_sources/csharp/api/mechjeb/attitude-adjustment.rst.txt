@@ -1,0 +1,56 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.MechJeb
+
+AttitudeAdjustment
+==================
+
+
+.. class:: AttitudeAdjustment
+
+   The Attitude Adjustment window, which selects the attitude controller that the
+   autopilots steer with.
+
+   .. property:: bool RCSAuto { get; set; }
+
+      Whether the attitude controller turns RCS on for a large attitude error, and off once
+      the vessel settles.
+
+      :Game Scenes: Flight
+
+   .. property:: AttitudeController Controller { get; set; }
+
+      The attitude controller.
+
+      :Game Scenes: Flight
+
+
+
+.. enum:: AttitudeController
+
+   An attitude controller of MechJeb. See :prop:`AttitudeAdjustment.Controller`.
+
+
+   .. enumerator:: MJ
+
+      MechJeb's original attitude controller.
+
+
+   .. enumerator:: Kos
+
+      The attitude controller of kOS.
+
+
+   .. enumerator:: Hybrid
+
+      A hybrid of the MechJeb and kOS controllers.
+
+
+   .. enumerator:: Better
+
+      MechJeb's default controller.
+
+
+   .. enumerator:: LQR
+
+      A linear-quadratic regulator.

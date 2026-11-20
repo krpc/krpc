@@ -79,7 +79,23 @@ Control
 
       .. note::
 
-         Equivalent to :attr:`AutoPilot.sas_mode`
+         Equivalent to :attr:`AutoPilot.sas_mode`.
+         Throws an exception if set to a mode not in :attr:`Control.available_sas_modes`.
+
+   .. attribute:: available_sas_modes
+
+      The SAS modes that :attr:`Control.sas_mode` can be set to.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: set(:class:`SASMode`)
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Equivalent to :attr:`AutoPilot.available_sas_modes`. The modes depend on the SAS
+         level of the vessel's pilot or probe core, the navball speed mode, and whether
+         there is a target and a maneuver node.
 
    .. attribute:: speed_mode
 
@@ -604,7 +620,7 @@ Control
 
       Returns ``True`` if the given action group is enabled.
 
-      :param int group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+      :param int group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when Extended Action Groups is installed.
       :rtype: bool
       :Game Scenes: Flight
 
@@ -612,7 +628,7 @@ Control
 
       Sets the state of the given action group.
 
-      :param int group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+      :param int group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when Extended Action Groups is installed.
       :param bool state:
       :Game Scenes: Flight
 
@@ -620,7 +636,7 @@ Control
 
       Toggles the state of the given action group.
 
-      :param int group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+      :param int group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when Extended Action Groups is installed.
       :Game Scenes: Flight
 
    .. method:: get_action_group_actions(group)
@@ -629,7 +645,7 @@ Control
       Each entry identifies the part, the part module, and the action's name and identifier.
       Returns an empty list if no actions are assigned to the group.
 
-      :param int group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+      :param int group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when Extended Action Groups is installed.
       :rtype: list(:class:`ActionGroupAction`)
       :Game Scenes: Flight
 
@@ -637,7 +653,7 @@ Control
       .. note::
 
          For stock action groups, the assignments are read from each part action directly.
-         When the Extended Action Groups mod is installed, the assignments are queried from
+         When Extended Action Groups is installed, the assignments are queried from
          the mod instead, so that actions assigned to its additional groups are included.
 
    .. method:: add_node(ut, [prograde = 0.0], [normal = 0.0], [radial = 0.0])
@@ -750,7 +766,7 @@ Control
 
       The part module that the action belongs to. Returns ``None`` for a
       part-level action that is not associated with a module. This only occurs when
-      the Extended Action Groups mod is installed, as it can assign actions defined
+      Extended Action Groups is installed, as it can assign actions defined
       directly on a part, rather than on one of its modules, to an action group.
 
       :rtype: :class:`Module` or None

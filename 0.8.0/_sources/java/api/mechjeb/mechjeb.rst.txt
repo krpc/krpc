@@ -1,0 +1,136 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.MechJeb
+
+Service
+=======
+
+
+.. type:: public class MechJeb
+
+   This service provides functionality to interact with MechJeb 2.
+
+   .. note::
+
+      The objects act on the MechJeb of the active vessel, and stay valid after the active
+      vessel changes.
+
+   .. method:: boolean getAvailable()
+
+
+      Whether MechJeb is installed.
+
+   
+
+   .. method:: boolean getReady()
+
+
+      Whether the active vessel has MechJeb.
+
+      :Game Scenes: Flight
+
+   .. method:: AircraftApproach getAircraftApproach()
+
+
+      The Aircraft Approach and Autoland window.
+
+      :Game Scenes: Flight
+
+   .. method:: AircraftAutopilot getAircraftAutopilot()
+
+
+      The Aircraft Autopilot window.
+
+      :Game Scenes: Flight
+
+   .. method:: AscentGuidance getAscentGuidance()
+
+
+      The Ascent Guidance window.
+
+      :Game Scenes: Flight
+
+   .. method:: AttitudeAdjustment getAttitudeAdjustment()
+
+
+      The Attitude Adjustment window.
+
+      :Game Scenes: Flight
+
+   .. method:: DockingAutopilot getDockingAutopilot()
+
+
+      The Docking Autopilot window.
+
+      :Game Scenes: Flight
+
+   .. method:: LandingGuidance getLandingGuidance()
+
+
+      The Landing Guidance window.
+
+      :Game Scenes: Flight
+
+   .. method:: ManeuverPlanner getManeuverPlanner()
+
+
+      The Maneuver Planner window.
+
+      :Game Scenes: Flight
+
+   .. method:: RendezvousAutopilot getRendezvousAutopilot()
+
+
+      The Rendezvous Autopilot window.
+
+      :Game Scenes: Flight
+
+   .. method:: RoverAutopilot getRoverAutopilot()
+
+
+      The Rover Autopilot window.
+
+      :Game Scenes: Flight
+
+   .. method:: SmartASS getSmartASS()
+
+
+      The Smart A.S.S. window.
+
+      :Game Scenes: Flight
+
+   .. method:: SmartRCS getSmartRCS()
+
+
+      The Smart RCS window.
+
+      :Game Scenes: Flight
+
+   .. method:: TargetController getTargetController()
+
+
+      The target controller, which holds MechJeb's target.
+
+      :Game Scenes: Flight
+
+   .. method:: Translatron getTranslatron()
+
+
+      The Translatron window.
+
+      :Game Scenes: Flight
+
+   .. method:: Utilities getUtilities()
+
+
+      The Utilities window.
+
+      :Game Scenes: Flight
+
+
+
+.. type:: public class MJServiceException
+
+   A general error in the service.
+
+   A subclass of :type:`krpc.client.ServerException`.

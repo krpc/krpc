@@ -1,13 +1,14 @@
+#include <iomanip>
 #include <iostream>
-#include <vector>
 #include <krpc.hpp>
 #include <krpc/services/space_center.hpp>
+#include <vector>
 
 using SpaceCenter = krpc::services::SpaceCenter;
 
 int main() {
   auto conn = krpc::connect();
-  SpaceCenter sc(&conn);
+  SpaceCenter sc(conn);
   auto vessel = sc.active_vessel().value();
 
   auto engines = vessel.parts().engines();
@@ -25,9 +26,11 @@ int main() {
   double thrust = 0;
   double fuel_consumption = 0;
   for (auto engine : active_engines) {
-    thrust += engine.thrust();
-    fuel_consumption += engine.thrust() / engine.specific_impulse();
+    thrust += engine.available_thrust();
+    fuel_consumption +=
+        engine.available_thrust() / engine.specific_impulse();
   }
   double isp = thrust / fuel_consumption;
-  std::cout << "Combined vacuum Isp = " << isp << " seconds" << std::endl;
+  std::cout << "Combined Isp = " << std::fixed << std::setprecision(0)
+            << isp << " seconds" << std::endl;
 }

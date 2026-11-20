@@ -1,8 +1,11 @@
 .. default-domain:: java
 .. highlight:: java
 
-User Interface API
-==================
+User Interface
+==============
+
+Provides functionality for drawing and interacting with in-game user interface elements:
+messages, panels, buttons, text and input fields.
 
 .. toctree::
    :includehidden:
@@ -24,3 +27,10 @@ User Interface API
    ui/layout-element
    ui/size-fitter
    ui/rect-transform
+
+Example
+-------
+
+The following example shows a message at the top of the screen for 10 seconds:
+
+.. literalinclude:: /scripts/api/ui/UIExample.java

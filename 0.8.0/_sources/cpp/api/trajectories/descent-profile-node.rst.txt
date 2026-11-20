@@ -1,0 +1,42 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::Trajectories
+
+DescentProfileNode
+==================
+
+
+.. class:: DescentProfileNode
+
+   A node of the descent profile.
+
+   .. function:: double angle()
+   .. function:: void set_angle(double value)
+
+      The angle in degrees, from -180 to 180.
+
+      :Game Scenes: Flight
+
+   .. function:: DescentProfileMode mode()
+   .. function:: void set_mode(DescentProfileMode value)
+
+      Whether :func:`DescentProfileNode::angle` is the angle of attack or the angle from the horizon.
+
+      :Game Scenes: Flight
+
+
+
+.. namespace:: krpc::services::Trajectories
+.. enum-struct:: DescentProfileMode
+
+   The reference for the angle of a descent profile node.
+
+
+   .. enumerator:: angle_of_attack
+
+      The angle of attack, from prograde.
+
+
+   .. enumerator:: horizon
+
+      The angle from the horizon.

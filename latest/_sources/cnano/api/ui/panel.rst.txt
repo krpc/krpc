@@ -11,6 +11,10 @@ Panel
    A container for user interface elements.
    Added to a :type:`krpc_UI_Canvas_t` or another panel.
 
+   .. macro:: KRPC_CLASS_UI_PANEL
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_UI_Panel_RectTransform(krpc_connection_t connection, krpc_UI_RectTransform_t * returnValue, krpc_UI_Panel_t instance)
 
       The rect transform for the UI object.
@@ -254,6 +258,11 @@ Panel
 .. type:: krpc_UI_PanelStyle_t
 
    How the background of a panel is drawn.
+
+   .. macro:: KRPC_ENUMERATION_UI_PANELSTYLE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_UI_PANELSTYLE_WINDOW

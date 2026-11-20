@@ -11,6 +11,10 @@ InputField
    An input field.
    Added to a :type:`krpc_UI_Canvas_t` or a :type:`krpc_UI_Panel_t`.
 
+   .. macro:: KRPC_CLASS_UI_INPUTFIELD
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_UI_InputField_RectTransform(krpc_connection_t connection, krpc_UI_RectTransform_t * returnValue, krpc_UI_InputField_t instance)
 
       The rect transform for the UI object.
@@ -166,6 +170,11 @@ InputField
 .. type:: krpc_UI_InputContentType_t
 
    What an input field lets the user type into it.
+
+   .. macro:: KRPC_ENUMERATION_UI_INPUTCONTENTTYPE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_UI_INPUTCONTENTTYPE_STANDARD

@@ -2,12 +2,11 @@
 .. highlight:: c
 
 
-InfernalRobotics
-================
+Service
+=======
 
 
-This service provides functionality to interact with
-`Infernal Robotics <https://forum.kerbalspaceprogram.com/topic/184787-infernal-robotics-next/>`_.
+Provides functionality to interact with Infernal Robotics Next.
 
 
 .. function:: krpc_error_t krpc_InfernalRobotics_Available(krpc_connection_t connection, bool * returnValue)
@@ -15,16 +14,6 @@ This service provides functionality to interact with
    Whether Infernal Robotics is installed.
 
    
-
-
-
-
-.. function:: krpc_error_t krpc_InfernalRobotics_Ready(krpc_connection_t connection, bool * returnValue)
-
-   Whether Infernal Robotics API is ready.
-
-   :Game Scenes: Flight
-
 
 
 

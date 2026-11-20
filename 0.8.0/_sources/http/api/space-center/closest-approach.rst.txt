@@ -1,0 +1,215 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Closest Approach
+================
+
+
+.. _http-SpaceCenter.ClosestApproach:
+
+.. rubric:: ClosestApproach
+
+A close approach between an orbit and a target orbit. Obtained by calling
+:http:post:`/space-center/orbit/(id)/next-closest-approach` or :http:post:`/space-center/orbit/(id)/closest-approaches`.
+
+.. note::
+
+   The object names the approach rather than describing it once: each member
+   estimates the time of closest approach from where the two orbits are now, and
+   describes the state at that time. The estimate moves as the game runs, so
+   members read at different moments can differ a little; members read in one
+   physics tick all describe the same estimate. Relative quantities are the target
+   relative to the orbiting object (target minus self).
+
+   The search runs forward over one orbital period from the current time. Once an
+   approach has passed and the two orbits are moving apart, the closest point in
+   that period is the current one, so the object reports the approach as now, at
+   the present separation, until the orbits bring another one within range.
+
+
+A ``ClosestApproach`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /space-center/closest-approach/(id)/ut
+
+   The universal time of the closest approach, in seconds.
+
+
+   :param id: The identifier of the :ref:`ClosestApproach <http-SpaceCenter.ClosestApproach>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/closest-approach/(id)/time-to
+
+   The time until the closest approach, in seconds.
+
+
+   :param id: The identifier of the :ref:`ClosestApproach <http-SpaceCenter.ClosestApproach>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/closest-approach/(id)/distance
+
+   The distance between the objects at the closest approach, in meters.
+
+
+   :param id: The identifier of the :ref:`ClosestApproach <http-SpaceCenter.ClosestApproach>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/closest-approach/(id)/relative-speed
+
+   The relative speed of the objects at the closest approach, in :math:`\mathrm{m/s}`.
+   This is the magnitude of :http:post:`/space-center/closest-approach/(id)/relative-velocity`, and does
+   not depend on the choice of reference frame.
+
+
+   :param id: The identifier of the :ref:`ClosestApproach <http-SpaceCenter.ClosestApproach>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/closest-approach/(id)/vessel
+
+   The vessel doing the approaching, or ``null`` if it is not a vessel.
+
+
+   :param id: The identifier of the :ref:`ClosestApproach <http-SpaceCenter.ClosestApproach>` object.
+
+   :resjson SpaceCenter.Vessel? value:
+
+
+
+
+.. http:get:: /space-center/closest-approach/(id)/body
+
+   The celestial body doing the approaching, or ``null`` if it is not a
+   celestial body.
+
+
+   :param id: The identifier of the :ref:`ClosestApproach <http-SpaceCenter.ClosestApproach>` object.
+
+   :resjson SpaceCenter.CelestialBody? value:
+
+
+
+
+.. http:get:: /space-center/closest-approach/(id)/target-vessel
+
+   The vessel being approached, or ``null`` if the target is not a vessel.
+
+
+   :param id: The identifier of the :ref:`ClosestApproach <http-SpaceCenter.ClosestApproach>` object.
+
+   :resjson SpaceCenter.Vessel? value:
+
+
+
+
+.. http:get:: /space-center/closest-approach/(id)/target-body
+
+   The celestial body being approached, or ``null`` if the target is not a
+   celestial body.
+
+
+   :param id: The identifier of the :ref:`ClosestApproach <http-SpaceCenter.ClosestApproach>` object.
+
+   :resjson SpaceCenter.CelestialBody? value:
+
+
+
+
+.. http:post:: /space-center/closest-approach/(id)/position
+
+   The position of the orbiting object at the closest approach.
+
+
+   :param id: The identifier of the :ref:`ClosestApproach <http-SpaceCenter.ClosestApproach>` object.
+
+   :reqjson SpaceCenter.ReferenceFrame? reference_frame: The reference frame that the returned position vector is in. Defaults to the orbital reference frame of the object the orbit belongs to. Optional, defaults to ``null``.
+   :resjson tuple<double, double, double> value: The position as a vector.
+
+
+
+
+
+.. http:post:: /space-center/closest-approach/(id)/target-position
+
+   The position of the target object at the closest approach.
+
+
+   :param id: The identifier of the :ref:`ClosestApproach <http-SpaceCenter.ClosestApproach>` object.
+
+   :reqjson SpaceCenter.ReferenceFrame? reference_frame: The reference frame that the returned position vector is in. Defaults to the orbital reference frame of the object the orbit belongs to. Optional, defaults to ``null``.
+   :resjson tuple<double, double, double> value: The position as a vector.
+
+
+
+
+
+.. http:post:: /space-center/closest-approach/(id)/velocity
+
+   The velocity of the orbiting object at the closest approach.
+
+
+   :param id: The identifier of the :ref:`ClosestApproach <http-SpaceCenter.ClosestApproach>` object.
+
+   :reqjson SpaceCenter.ReferenceFrame? reference_frame: The reference frame that the returned velocity vector is in. Defaults to the orbital reference frame of the object the orbit belongs to. Optional, defaults to ``null``.
+   :resjson tuple<double, double, double> value: The velocity as a vector.
+
+
+
+
+
+.. http:post:: /space-center/closest-approach/(id)/target-velocity
+
+   The velocity of the target object at the closest approach.
+
+
+   :param id: The identifier of the :ref:`ClosestApproach <http-SpaceCenter.ClosestApproach>` object.
+
+   :reqjson SpaceCenter.ReferenceFrame? reference_frame: The reference frame that the returned velocity vector is in. Defaults to the orbital reference frame of the object the orbit belongs to. Optional, defaults to ``null``.
+   :resjson tuple<double, double, double> value: The velocity as a vector.
+
+
+
+
+
+.. http:post:: /space-center/closest-approach/(id)/relative-position
+
+   The position of the target relative to the orbiting object at the closest
+   approach.
+
+
+   :param id: The identifier of the :ref:`ClosestApproach <http-SpaceCenter.ClosestApproach>` object.
+
+   :reqjson SpaceCenter.ReferenceFrame? reference_frame: The reference frame whose axes the returned vector is expressed in. Defaults to the orbital reference frame of the object the orbit belongs to. Optional, defaults to ``null``.
+   :resjson tuple<double, double, double> value: The relative position as a vector.
+
+
+
+
+
+.. http:post:: /space-center/closest-approach/(id)/relative-velocity
+
+   The velocity of the target relative to the orbiting object at the closest
+   approach.
+
+
+   :param id: The identifier of the :ref:`ClosestApproach <http-SpaceCenter.ClosestApproach>` object.
+
+   :reqjson SpaceCenter.ReferenceFrame? reference_frame: The reference frame whose axes the returned vector is expressed in. Defaults to the orbital reference frame of the object the orbit belongs to. Optional, defaults to ``null``.
+   :resjson tuple<double, double, double> value: The relative velocity as a vector.

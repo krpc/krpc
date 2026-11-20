@@ -1,43 +1,107 @@
-kRPC Documentation
-==================
+Remote Procedure Calls for Kerbal Space Program
+===============================================
 
-kRPC allows you to control Kerbal Space Program from scripts running outside of
-the game.
-It comes with client libraries for many popular languages including
-:doc:`C# <csharp/client>`,
-:doc:`C++ <cpp/client>`,
-:doc:`C <cnano/client>`,
-:doc:`Java <java/client>`,
-:doc:`Lua <lua/client>`,
-:doc:`Python <python/client>`
-and :doc:`others <third-party>`.
-It also supports websockets and serialio (for example on Arduino).
+kRPC lets you control Kerbal Space Program from scripts running outside the game. A server
+inside the game exposes the game's API, and client libraries call it from Python, C#, C++, C,
+Java, Lua and JavaScript. Other languages can call it over HTTP, given an HTTP library. It
+also supports Ferram Aerospace Research, Kerbal Alarm Clock, Infernal Robotics and other
+popular mods.
+
+This script launches the active vessel straight up, then cuts the engines once it reaches
+an altitude of 10 km:
+
+.. tabs::
+
+   .. group-tab:: Python
+
+      .. literalinclude:: /scripts/index/Launch.py
+         :language: python
+
+   .. group-tab:: C#
+
+      .. literalinclude:: /scripts/index/Launch.cs
+         :language: csharp
+
+   .. group-tab:: C++
+
+      .. literalinclude:: /scripts/index/Launch.cpp
+         :language: cpp
+
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/index/Launch.c
+         :language: c
+
+   .. group-tab:: Java
+
+      .. literalinclude:: /scripts/index/Launch.java
+         :language: java
+
+   .. group-tab:: Lua
+
+      .. literalinclude:: /scripts/index/Launch.lua
+         :language: lua
+
+   .. group-tab:: JavaScript
+
+      .. literalinclude:: /scripts/index/Launch.js
+         :language: javascript
+
+   .. group-tab:: HTTP
+
+      .. literalinclude:: /scripts/index/LaunchHTTP.py
+         :language: python
+
+.. grid:: 1 2 3 3
+   :gutter: 3
+
+   .. grid-item-card:: :fas:`rocket` Getting Started
+      :link: getting-started
+      :link-type: doc
+
+      Install the server plugin, install a client and run your first script.
+
+   .. grid-item-card:: :fas:`graduation-cap` Tutorials
+      :link: tutorials
+      :link-type: doc
+
+      Complete scripts that launch into orbit, land, dock and draw in the game.
+
+   .. grid-item-card:: :fas:`book` User Guides
+      :link: user-guide
+      :link-type: doc
+
+      How kRPC and the game behave: parts, scenes, time warp, reference frames, streams and more.
+
+   .. grid-item-card:: :fas:`code` Clients
+      :link: clients
+      :link-type: doc
+
+      The guide and API reference for each client library.
+
+   .. grid-item-card:: :fas:`screwdriver-wrench` Developer Guide
+      :link: developer-guide
+      :link-type: doc
+
+      Write your own services, implement the protocol, or build kRPC from source.
+
+   .. grid-item-card:: :fas:`clock-rotate-left` Changelog
+      :link: changelog
+      :link-type: doc
+
+      The changes in each release of kRPC.
+
+Clients
+-------
+
+.. include:: client-cards.inc
 
 .. toctree::
-   :maxdepth: 1
+   :hidden:
 
    getting-started
    tutorials
-   cnano
-   csharp
-   cpp
-   java
-   lua
-   python
-   third-party
-   compiling
-   extending
-   communication-protocols
-   internals
+   user-guide
+   clients
+   developer-guide
    changelog
-
-The mod exposes most of KSPs API for controlling and interacting with rockets,
-and also includes support several popular mods including Ferram Aerospace
-Research, Kerbal Alarm Clock and Infernal Robotics.
-
-This functionality is provided to client programs via a server running in the
-game. Client scripts connect to this server and use it to execute 'remote
-procedures'. This communication can be done on local machine only, over a local
-network, or even over the wider internet if configured correctly. The server is
-extensible - additional remote procedures (grouped into "services") can be added
-to the server using the :doc:`Service API <extending>`.

@@ -1,0 +1,104 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+TargetController
+================
+
+
+.. type:: krpc_MechJeb_TargetController_t
+
+   The target controller, which holds MechJeb's target.
+
+   .. note::
+
+      Positions and directions are in world space, the coordinate system of the game's
+      physics.
+
+   .. macro:: KRPC_CLASS_MECHJEB_TARGETCONTROLLER
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+   .. function:: krpc_error_t krpc_MechJeb_TargetController_CanAlign(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_TargetController_t instance)
+
+      Whether the vessel can align with the target, which it can with a docking port.
+      Throws an exception if there is no target.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_TargetController_Distance(krpc_connection_t connection, float * returnValue, krpc_MechJeb_TargetController_t instance)
+
+      The distance to the target, in meters. Throws an exception if there is no target.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_TargetController_DockingAxis(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_MechJeb_TargetController_t instance)
+
+      The world space docking axis of the target. Throws an exception if there is no
+      target.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_TargetController_NormalTargetExists(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_TargetController_t instance)
+
+      Whether there is a target that is a vessel, a body or a direction target.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_TargetController_Position(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_MechJeb_TargetController_t instance)
+
+      The world space position of the target. Throws an exception if there is no target.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_TargetController_PositionTargetExists(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_TargetController_t instance)
+
+      Whether there is a target that is a position or a vessel.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_TargetController_RelativePosition(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_MechJeb_TargetController_t instance)
+
+      The world space position of the vessel relative to the target. Throws an exception
+      if there is no target.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_TargetController_RelativeVelocity(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_MechJeb_TargetController_t instance)
+
+      The world space velocity of the vessel relative to the target, in :math:`\mathrm{m/s}`.
+      Throws an exception if there is no target.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_TargetController_SetDirectionTarget(krpc_connection_t connection, krpc_MechJeb_TargetController_t instance, const char * name)
+
+      Set the target to a direction.
+
+      :Parameters:
+
+       * **name** -- The name of the target.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Set the direction with :func:`krpc_MechJeb_TargetController_UpdateDirectionTarget`.
+
+   .. function:: krpc_error_t krpc_MechJeb_TargetController_TargetOrbit(krpc_connection_t connection, krpc_SpaceCenter_Orbit_t * returnValue, krpc_MechJeb_TargetController_t instance)
+
+      The orbit of the target. Throws an exception if there is no target, or the target
+      has no orbit.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_TargetController_UpdateDirectionTarget(krpc_connection_t connection, krpc_MechJeb_TargetController_t instance, const krpc_tuple_double_double_double_t * direction)
+
+      Set the direction of the direction target.
+
+      :Parameters:
+
+       * **direction** -- The world space direction.
+
+      :Game Scenes: Flight

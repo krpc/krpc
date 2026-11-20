@@ -1,0 +1,46 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: SpaceCenter
+
+SpaceCenter
+===========
+
+Provides functionality to interact with Kerbal Space Program: vessels and their parts, celestial
+bodies and orbits, flight control, maneuver nodes and the auto-pilot.
+
+.. toctree::
+   :includehidden:
+   :maxdepth: 1
+
+   space-center/space-center
+   space-center/vessel
+   space-center/stage
+   space-center/editor
+   space-center/celestial-body
+   space-center/flight
+   space-center/orbit
+   space-center/closest-approach
+   space-center/control
+   space-center/comms
+   space-center/parts
+   space-center/resources
+   space-center/node
+   space-center/reference-frame
+   space-center/auto-pilot
+   space-center/camera
+   space-center/waypoints
+   space-center/contracts
+   space-center/alarms
+
+Example
+-------
+
+The following example prints the name of the active vessel:
+
+.. literalinclude:: /scripts/api/space-center/SpaceCenterExample.py
+
+Mods
+----
+
+The SpaceCenter service supports several mods, such as Ferram Aerospace Research. The
+:doc:`mods guide </user-guide/mods>` lists them, with the versions kRPC is tested with.

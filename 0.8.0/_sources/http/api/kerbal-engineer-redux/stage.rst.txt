@@ -1,0 +1,124 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Stage
+=====
+
+
+.. _http-KerbalEngineerRedux.Stage:
+
+.. rubric:: Stage
+
+A stage of the vessel, from the simulation of Kerbal Engineer Redux.
+
+Passed and returned as an object with these fields:
+
+
+``number`` (int32)
+   The stage number.
+
+
+``delta_v`` (double)
+   The delta-v of the stage, in :math:`\mathrm{m/s}`.
+
+
+``total_delta_v`` (double)
+   The delta-v of the stage and the stages after it, in :math:`\mathrm{m/s}`.
+
+
+``specific_impulse`` (double)
+   The specific impulse of the stage, in seconds.
+
+
+``thrust`` (double)
+   The thrust of the stage at the current throttle, in Newtons.
+
+
+``available_thrust`` (double)
+   The thrust of the stage at full throttle, in Newtons.
+
+
+``twr`` (double)
+   The thrust-to-weight ratio at the start of the stage, at the current throttle.
+
+
+``available_twr`` (double)
+   The thrust-to-weight ratio at the start of the stage, at full throttle.
+
+
+``max_twr`` (double)
+   The highest thrust-to-weight ratio during the stage, at full throttle.
+
+
+``start_mass`` (double)
+   The mass of the vessel at the start of the stage, in kilograms.
+
+
+``mass_lost`` (double)
+   The mass the vessel loses over the stage, in kilograms.
+
+
+``resource_mass`` (double)
+   The mass of the resources the stage burns, in kilograms.
+
+
+``burn_time`` (double)
+   The burn time of the stage at full throttle, in seconds.
+
+
+``total_burn_time`` (double)
+   The burn time of the stage and the stages after it, in seconds.
+
+
+``available_thrust_torque`` (double)
+   The torque from the thrust at full throttle about the center of mass at the start
+   of the stage, in :math:`\mathrm{N \cdot m}`.
+
+
+``thrust_offset_angle`` (double)
+   The angle between the thrust and the direction to the center of mass, in degrees.
+
+
+``rcs_specific_impulse`` (double)
+   The specific impulse of the RCS thrusters, in seconds.
+
+
+``rcs_thrust`` (double)
+   The thrust of the RCS thrusters, in Newtons.
+
+
+``rcs_start_delta_v`` (double)
+   The RCS delta-v at the start of the stage, in :math:`\mathrm{m/s}`.
+
+
+``rcs_end_delta_v`` (double)
+   The RCS delta-v at the end of the stage, in :math:`\mathrm{m/s}`.
+
+
+``rcs_start_twr`` (double)
+   The RCS thrust-to-weight ratio at the start of the stage.
+
+
+``rcs_end_twr`` (double)
+   The RCS thrust-to-weight ratio at the end of the stage.
+
+
+``rcs_burn_time`` (double)
+   The burn time of the RCS thrusters, in seconds.
+
+
+``start_cost`` (double)
+   The cost of the vessel at the start of the stage.
+
+
+``cost_lost`` (double)
+   The cost the vessel loses over the stage.
+
+
+``start_part_count`` (int32)
+   The number of parts at the start of the stage.
+
+
+``dropped_part_count`` (int32)
+   The number of parts the stage drops.

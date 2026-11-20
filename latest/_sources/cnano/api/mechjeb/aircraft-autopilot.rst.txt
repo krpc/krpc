@@ -1,0 +1,211 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+AircraftAutopilot
+=================
+
+
+.. type:: krpc_MechJeb_AircraftAutopilot_t
+
+   The Aircraft Autopilot window, which holds a heading, altitude, vertical speed, roll and speed.
+
+   .. macro:: KRPC_CLASS_MECHJEB_AIRCRAFTAUTOPILOT
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_Enabled(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_AircraftAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_set_Enabled(krpc_connection_t connection, krpc_MechJeb_AircraftAutopilot_t instance, bool value)
+
+      Whether the module is enabled.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_AltitudeHoldEnabled(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_AircraftAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_set_AltitudeHoldEnabled(krpc_connection_t connection, krpc_MechJeb_AircraftAutopilot_t instance, bool value)
+
+      Whether the autopilot holds the altitude.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_AltitudeTarget(krpc_connection_t connection, double * returnValue, krpc_MechJeb_AircraftAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_set_AltitudeTarget(krpc_connection_t connection, krpc_MechJeb_AircraftAutopilot_t instance, double value)
+
+      The target altitude, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_BankAngle(krpc_connection_t connection, double * returnValue, krpc_MechJeb_AircraftAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_set_BankAngle(krpc_connection_t connection, krpc_MechJeb_AircraftAutopilot_t instance, double value)
+
+      The bank angle of a turn, in degrees.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_HeadingHoldEnabled(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_AircraftAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_set_HeadingHoldEnabled(krpc_connection_t connection, krpc_MechJeb_AircraftAutopilot_t instance, bool value)
+
+      Whether the autopilot holds the heading.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_HeadingTarget(krpc_connection_t connection, double * returnValue, krpc_MechJeb_AircraftAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_set_HeadingTarget(krpc_connection_t connection, krpc_MechJeb_AircraftAutopilot_t instance, double value)
+
+      The target heading, in degrees.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_RollHoldEnabled(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_AircraftAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_set_RollHoldEnabled(krpc_connection_t connection, krpc_MechJeb_AircraftAutopilot_t instance, bool value)
+
+      Whether the autopilot holds the roll.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_RollTarget(krpc_connection_t connection, double * returnValue, krpc_MechJeb_AircraftAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_set_RollTarget(krpc_connection_t connection, krpc_MechJeb_AircraftAutopilot_t instance, double value)
+
+      The target roll, in degrees.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_SpeedHoldEnabled(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_AircraftAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_set_SpeedHoldEnabled(krpc_connection_t connection, krpc_MechJeb_AircraftAutopilot_t instance, bool value)
+
+      Whether the autopilot holds the speed.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_SpeedTarget(krpc_connection_t connection, double * returnValue, krpc_MechJeb_AircraftAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_set_SpeedTarget(krpc_connection_t connection, krpc_MechJeb_AircraftAutopilot_t instance, double value)
+
+      The target speed, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_VertSpeedHoldEnabled(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_AircraftAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_set_VertSpeedHoldEnabled(krpc_connection_t connection, krpc_MechJeb_AircraftAutopilot_t instance, bool value)
+
+      Whether the autopilot holds the vertical speed.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_VertSpeedTarget(krpc_connection_t connection, double * returnValue, krpc_MechJeb_AircraftAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_set_VertSpeedTarget(krpc_connection_t connection, krpc_MechJeb_AircraftAutopilot_t instance, double value)
+
+      The target vertical speed, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_AccKd(krpc_connection_t connection, double * returnValue, krpc_MechJeb_AircraftAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_set_AccKd(krpc_connection_t connection, krpc_MechJeb_AircraftAutopilot_t instance, double value)
+
+      The derivative gain of the speed controller.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_AccKi(krpc_connection_t connection, double * returnValue, krpc_MechJeb_AircraftAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_set_AccKi(krpc_connection_t connection, krpc_MechJeb_AircraftAutopilot_t instance, double value)
+
+      The integral gain of the speed controller.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_AccKp(krpc_connection_t connection, double * returnValue, krpc_MechJeb_AircraftAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_set_AccKp(krpc_connection_t connection, krpc_MechJeb_AircraftAutopilot_t instance, double value)
+
+      The proportional gain of the speed controller.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_PitKd(krpc_connection_t connection, double * returnValue, krpc_MechJeb_AircraftAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_set_PitKd(krpc_connection_t connection, krpc_MechJeb_AircraftAutopilot_t instance, double value)
+
+      The derivative gain of the pitch controller.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_PitKi(krpc_connection_t connection, double * returnValue, krpc_MechJeb_AircraftAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_set_PitKi(krpc_connection_t connection, krpc_MechJeb_AircraftAutopilot_t instance, double value)
+
+      The integral gain of the pitch controller.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_PitKp(krpc_connection_t connection, double * returnValue, krpc_MechJeb_AircraftAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_set_PitKp(krpc_connection_t connection, krpc_MechJeb_AircraftAutopilot_t instance, double value)
+
+      The proportional gain of the pitch controller.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_RolKd(krpc_connection_t connection, double * returnValue, krpc_MechJeb_AircraftAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_set_RolKd(krpc_connection_t connection, krpc_MechJeb_AircraftAutopilot_t instance, double value)
+
+      The derivative gain of the roll controller.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_RolKi(krpc_connection_t connection, double * returnValue, krpc_MechJeb_AircraftAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_set_RolKi(krpc_connection_t connection, krpc_MechJeb_AircraftAutopilot_t instance, double value)
+
+      The integral gain of the roll controller.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_RolKp(krpc_connection_t connection, double * returnValue, krpc_MechJeb_AircraftAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_set_RolKp(krpc_connection_t connection, krpc_MechJeb_AircraftAutopilot_t instance, double value)
+
+      The proportional gain of the roll controller.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_YawKd(krpc_connection_t connection, double * returnValue, krpc_MechJeb_AircraftAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_set_YawKd(krpc_connection_t connection, krpc_MechJeb_AircraftAutopilot_t instance, double value)
+
+      The derivative gain of the yaw controller.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_YawKi(krpc_connection_t connection, double * returnValue, krpc_MechJeb_AircraftAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_set_YawKi(krpc_connection_t connection, krpc_MechJeb_AircraftAutopilot_t instance, double value)
+
+      The integral gain of the yaw controller.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_YawKp(krpc_connection_t connection, double * returnValue, krpc_MechJeb_AircraftAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_set_YawKp(krpc_connection_t connection, krpc_MechJeb_AircraftAutopilot_t instance, double value)
+
+      The proportional gain of the yaw controller.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_PitchDownLimit(krpc_connection_t connection, double * returnValue, krpc_MechJeb_AircraftAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_set_PitchDownLimit(krpc_connection_t connection, krpc_MechJeb_AircraftAutopilot_t instance, double value)
+
+      The largest pitch down, in degrees.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_PitchUpLimit(krpc_connection_t connection, double * returnValue, krpc_MechJeb_AircraftAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_set_PitchUpLimit(krpc_connection_t connection, krpc_MechJeb_AircraftAutopilot_t instance, double value)
+
+      The largest pitch up, in degrees.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_RollLimit(krpc_connection_t connection, double * returnValue, krpc_MechJeb_AircraftAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_set_RollLimit(krpc_connection_t connection, krpc_MechJeb_AircraftAutopilot_t instance, double value)
+
+      The largest roll, in degrees.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_YawLimit(krpc_connection_t connection, double * returnValue, krpc_MechJeb_AircraftAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_AircraftAutopilot_set_YawLimit(krpc_connection_t connection, krpc_MechJeb_AircraftAutopilot_t instance, double value)
+
+      The largest yaw, in degrees.
+
+      :Game Scenes: Flight

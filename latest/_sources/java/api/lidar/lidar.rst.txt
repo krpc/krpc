@@ -2,23 +2,25 @@
 .. highlight:: java
 .. package:: krpc.client.services.LIDAR
 
-LIDAR
-=====
+Service
+=======
 
 
 .. type:: public class LIDAR
 
-   LaserDist service.
+   .. warning:: Deprecated. Use :meth:`SpaceCenter.SpaceCenter.raycastDistance(org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>, SpaceCenter.ReferenceFrame)` instead.
+
+   Provides functionality to interact with the LiDAR mod.
 
    .. method:: boolean getAvailable()
 
 
-      Check if the LaserDist API is available.
+      Whether the LiDAR mod is installed.
 
    
 
    .. method:: Laser laser(SpaceCenter.Part part)
 
-      Get a LaserDist part.
+      Get the LiDAR on a part.
 
       :param SpaceCenter.Part part:

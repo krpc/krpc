@@ -1,0 +1,91 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: MechJeb
+
+TargetController
+================
+
+
+.. class:: TargetController
+
+   The target controller, which holds MechJeb's target.
+
+   .. note::
+
+      Positions and directions are in world space, the coordinate system of the game's
+      physics.
+
+   .. attribute:: can_align: boolean
+
+      Whether the vessel can align with the target, which it can with a docking port.
+      Throws an exception if there is no target.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: distance: number
+
+      The distance to the target, in meters. Throws an exception if there is no target.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: docking_axis: Tuple
+
+      The world space docking axis of the target. Throws an exception if there is no
+      target.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: normal_target_exists: boolean
+
+      Whether there is a target that is a vessel, a body or a direction target.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: position: Tuple
+
+      The world space position of the target. Throws an exception if there is no target.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: position_target_exists: boolean
+
+      Whether there is a target that is a position or a vessel.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: relative_position: Tuple
+
+      The world space position of the vessel relative to the target. Throws an exception
+      if there is no target.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: relative_velocity: Tuple
+
+      The world space velocity of the vessel relative to the target, in :math:`\mathrm{m/s}`.
+      Throws an exception if there is no target.
+
+      :Attribute: Read-only, cannot be set
+
+   .. method:: set_direction_target(name: string)
+
+      Set the target to a direction.
+
+      :param name: The name of the target.
+
+      .. note::
+
+         Set the direction with :meth:`MechJeb.TargetController.update_direction_target`.
+
+   .. attribute:: target_orbit: SpaceCenter.Orbit
+
+      The orbit of the target. Throws an exception if there is no target, or the target
+      has no orbit.
+
+      :Attribute: Read-only, cannot be set
+
+   .. method:: update_direction_target(direction: Tuple)
+
+      Set the direction of the direction target.
+
+      :param direction: The world space direction.

@@ -1,0 +1,52 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Service
+=======
+
+
+.. _http-RemoteTech:
+
+Provides functionality to interact with RemoteTech.
+
+
+.. http:get:: /remote-tech/available
+
+   Whether RemoteTech is installed.
+
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /remote-tech/ground-stations
+
+   The names of the ground stations.
+
+
+   :resjson list<string> value:
+
+
+
+
+.. http:post:: /remote-tech/antenna
+
+   Get the antenna object for a particular part.
+
+
+   :reqjson SpaceCenter.Part part:
+   :resjson RemoteTech.Antenna value:
+
+
+
+
+
+.. http:post:: /remote-tech/comms
+
+   Get a communications object, representing the communication capability of a particular vessel.
+
+
+   :reqjson SpaceCenter.Vessel vessel:
+   :resjson RemoteTech.Comms value:

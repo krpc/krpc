@@ -15,6 +15,10 @@ Sphere
       The sphere is drawn with an additive material, so a darker color draws it more
       transparent.
 
+   .. macro:: KRPC_CLASS_DRAWING_SPHERE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_Drawing_Sphere_Center(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_Drawing_Sphere_t instance)
    .. function:: krpc_error_t krpc_Drawing_Sphere_set_Center(krpc_connection_t connection, krpc_Drawing_Sphere_t instance, const krpc_tuple_double_double_double_t * value)
 

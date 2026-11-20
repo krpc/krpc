@@ -1,0 +1,499 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.MechJeb
+
+Utilities
+=========
+
+
+.. type:: public class Utilities
+
+   The Utilities window, which holds the autostaging and throttle settings, and deploys
+   the solar panels and antennas.
+
+   .. method:: DeployableController getAntennas()
+
+
+      The deployable antennas.
+
+      :Game Scenes: Flight
+
+   .. method:: DeployableController getSolarPanels()
+
+
+      The solar panels.
+
+      :Game Scenes: Flight
+
+   .. method:: Autostaging getStaging()
+
+
+      The autostaging settings. The same object as :meth:`AscentSettings.getStaging()`.
+
+      :Game Scenes: Flight
+
+   .. method:: ThrustLimiter getThrust()
+
+
+      The throttle limiters. The same object as :meth:`AscentSettings.getThrust()`.
+
+      :Game Scenes: Flight
+
+
+
+Autostaging
+-----------
+
+
+.. type:: public class Autostaging
+
+   The autostaging settings, which the Utilities and Ascent Settings windows show.
+
+   .. method:: boolean getEnabled()
+
+   .. method:: void setEnabled(boolean value)
+
+      Whether the module is enabled.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getAutostagingOnce()
+
+
+      Whether the controller disables itself after the next staging.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         See :meth:`Autostaging.autostageOnce()`.
+
+   .. method:: void autostageOnce()
+
+      Enable the controller until the next staging. Throws an exception if the controller is
+      enabled.
+
+      :Game Scenes: Flight
+
+   .. method:: int getAutostageLimit()
+
+   .. method:: void setAutostageLimit(int value)
+
+      The last stage the controller activates.
+
+      :Game Scenes: Flight
+
+   .. method:: double getAutostagePostDelay()
+
+   .. method:: void setAutostagePostDelay(double value)
+
+      The delay after each staging, in seconds.
+
+      :Game Scenes: Flight
+
+   .. method:: double getAutostagePreDelay()
+
+   .. method:: void setAutostagePreDelay(double value)
+
+      The delay before each staging, in seconds.
+
+      :Game Scenes: Flight
+
+   .. method:: double getClampAutoStageThrustPct()
+
+   .. method:: void setClampAutoStageThrustPct(double value)
+
+      The fraction of full thrust at which the controller releases the launch clamps.
+
+      :Game Scenes: Flight
+
+   .. method:: double getFairingMaxAerothermalFlux()
+
+   .. method:: void setFairingMaxAerothermalFlux(double value)
+
+      The largest aerothermal flux at which the controller jettisons a fairing, in
+      :math:`\mathrm{W/m^{2}}`.
+
+      :Game Scenes: Flight
+
+   .. method:: double getFairingMaxDynamicPressure()
+
+   .. method:: void setFairingMaxDynamicPressure(double value)
+
+      The largest dynamic pressure at which the controller jettisons a fairing, in pascals.
+
+      :Game Scenes: Flight
+
+   .. method:: double getFairingMinAltitude()
+
+   .. method:: void setFairingMinAltitude(double value)
+
+      The lowest altitude at which the controller jettisons a fairing, in meters.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getHotStaging()
+
+   .. method:: void setHotStaging(boolean value)
+
+      Whether the controller ignites the next stage before the current one burns out.
+
+      :Game Scenes: Flight
+
+   .. method:: double getHotStagingLeadTime()
+
+   .. method:: void setHotStagingLeadTime(double value)
+
+      The time before burnout at which a hot staging happens, in seconds.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`Autostaging.getHotStaging()`.
+
+
+
+ThrustLimiter
+-------------
+
+
+.. type:: public class ThrustLimiter
+
+   The throttle limiters, which the Utilities and Ascent Settings windows show.
+
+   .. method:: boolean getDifferentialThrottle()
+
+   .. method:: void setDifferentialThrottle(boolean value)
+
+      Whether the controller throttles the engines differentially to steer.
+
+      :Game Scenes: Flight
+
+   .. method:: DifferentialThrottleStatus getDifferentialThrottleStatus()
+
+
+      The result of the differential throttle.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getElectricThrottle()
+
+   .. method:: void setElectricThrottle(boolean value)
+
+      Whether to limit the throttle of electric engines to the available power.
+
+      :Game Scenes: Flight
+
+   .. method:: double getElectricThrottleHi()
+
+   .. method:: void setElectricThrottleHi(double value)
+
+      The charge level at which electric engines run at full throttle, between 0 and 1.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`ThrustLimiter.getElectricThrottle()`.
+
+   .. method:: double getElectricThrottleLo()
+
+   .. method:: void setElectricThrottleLo(double value)
+
+      The charge level at which electric engines stop, between 0 and 1.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`ThrustLimiter.getElectricThrottle()`.
+
+   .. method:: double getFlameoutSafetyPct()
+
+   .. method:: void setFlameoutSafetyPct(double value)
+
+      The safety margin of the jet engines' air intake, as a percentage.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`ThrustLimiter.getLimitToPreventFlameout()`.
+
+   .. method:: boolean getLimitAcceleration()
+
+   .. method:: void setLimitAcceleration(boolean value)
+
+      Whether to limit the acceleration.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getLimitDynamicPressure()
+
+   .. method:: void setLimitDynamicPressure(boolean value)
+
+      Whether to limit the dynamic pressure.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getLimitThrottle()
+
+   .. method:: void setLimitThrottle(boolean value)
+
+      Whether to limit the throttle.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getLimitToPreventFlameout()
+
+   .. method:: void setLimitToPreventFlameout(boolean value)
+
+      Whether to limit the throttle to keep jet engines from flaming out.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getLimitToPreventOverheats()
+
+   .. method:: void setLimitToPreventOverheats(boolean value)
+
+      Whether to limit the throttle to keep parts from overheating.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getLimiterMinThrottle()
+
+   .. method:: void setLimiterMinThrottle(boolean value)
+
+      Whether to keep the throttle above :meth:`ThrustLimiter.getMinThrottle()`.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getManageIntakes()
+
+   .. method:: void setManageIntakes(boolean value)
+
+      Whether the controller opens and closes the air intakes.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`ThrustLimiter.getLimitToPreventFlameout()`.
+
+   .. method:: double getMaxAcceleration()
+
+   .. method:: void setMaxAcceleration(double value)
+
+      The largest acceleration, in :math:`\mathrm{m/s^{2}}`.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`ThrustLimiter.getLimitAcceleration()`.
+
+   .. method:: double getMaxDynamicPressure()
+
+   .. method:: void setMaxDynamicPressure(double value)
+
+      The largest dynamic pressure, in pascals.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`ThrustLimiter.getLimitDynamicPressure()`.
+
+   .. method:: double getMaxThrottle()
+
+   .. method:: void setMaxThrottle(double value)
+
+      The largest throttle, between 0 and 1.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`ThrustLimiter.getLimitThrottle()`.
+
+   .. method:: double getMinThrottle()
+
+   .. method:: void setMinThrottle(double value)
+
+      The smallest throttle, between 0 and 1.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`ThrustLimiter.getLimiterMinThrottle()`.
+
+   .. method:: boolean getLimitToPreventUnstableIgnition()
+
+   .. method:: void setLimitToPreventUnstableIgnition(boolean value)
+
+      Whether to hold the throttle at zero while the engines' fuel is unstable.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         MechJeb shows this setting only with Real Fuels, as stock engines have
+         stable fuel.
+
+   .. method:: boolean getAutoRCSUllaging()
+
+   .. method:: void setAutoRCSUllaging(boolean value)
+
+      Whether to fire the RCS forward to settle the fuel before the engines ignite.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         MechJeb shows this setting only with Real Fuels, as stock engines have
+         stable fuel.
+
+   .. method:: LimitMode getLimiter()
+
+
+      The limiter that limits the throttle now.
+
+      :Game Scenes: Flight
+
+
+
+.. type:: public enum LimitMode
+
+   A throttle limiter. See :meth:`ThrustLimiter.getLimiter()`.
+
+
+   .. field:: public LimitMode NONE
+
+      No limiter limits the throttle.
+
+
+   .. field:: public LimitMode TERMINAL_VELOCITY
+
+      The terminal velocity limit.
+
+
+   .. field:: public LimitMode TEMPERATURE
+
+      :meth:`ThrustLimiter.getLimitToPreventOverheats()`.
+
+
+   .. field:: public LimitMode FLAMEOUT
+
+      :meth:`ThrustLimiter.getLimitToPreventFlameout()`.
+
+
+   .. field:: public LimitMode ACCELERATION
+
+      :meth:`ThrustLimiter.getLimitAcceleration()`.
+
+
+   .. field:: public LimitMode THROTTLE
+
+      :meth:`ThrustLimiter.getLimitThrottle()`.
+
+
+   .. field:: public LimitMode DYNAMIC_PRESSURE
+
+      :meth:`ThrustLimiter.getLimitDynamicPressure()`.
+
+
+   .. field:: public LimitMode MIN_THROTTLE
+
+      :meth:`ThrustLimiter.getLimiterMinThrottle()`.
+
+
+   .. field:: public LimitMode ELECTRIC
+
+      :meth:`ThrustLimiter.getElectricThrottle()`.
+
+
+   .. field:: public LimitMode UNSTABLE_IGNITION
+
+      :meth:`ThrustLimiter.getLimitToPreventUnstableIgnition()`.
+
+
+   .. field:: public LimitMode AUTO_RCS_ULLAGE
+
+      :meth:`ThrustLimiter.getAutoRCSUllaging()`.
+
+
+
+.. type:: public enum DifferentialThrottleStatus
+
+   The result of the differential throttle. See
+   :meth:`ThrustLimiter.getDifferentialThrottleStatus()`.
+
+
+   .. field:: public DifferentialThrottleStatus SUCCESS
+
+      The throttles balance the thrust.
+
+
+   .. field:: public DifferentialThrottleStatus ALL_ENGINES_OFF
+
+      All the engines are off.
+
+
+   .. field:: public DifferentialThrottleStatus MORE_ENGINES_REQUIRED
+
+      The vessel needs more engines.
+
+
+   .. field:: public DifferentialThrottleStatus SOLVER_FAILED
+
+      The solver found no solution.
+
+
+
+DeployableController
+--------------------
+
+
+.. type:: public class DeployableController
+
+   The controller of one kind of deployable part, such as antennas or solar panels.
+
+   .. method:: boolean allRetracted()
+
+      Whether all the parts are retracted.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getAutoDeploy()
+
+   .. method:: void setAutoDeploy(boolean value)
+
+      Whether a MechJeb autopilot deploys the parts.
+
+      :Game Scenes: Flight
+
+   .. method:: void extendAll()
+
+      Extend all the parts.
+
+      :Game Scenes: Flight
+
+   .. method:: void retractAll()
+
+      Retract all the parts.
+
+      :Game Scenes: Flight

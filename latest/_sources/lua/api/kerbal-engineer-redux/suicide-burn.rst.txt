@@ -1,0 +1,42 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: KerbalEngineerRedux
+
+Suicide Burn
+============
+
+
+.. class:: SuicideBurn
+
+   The latest burn at full thrust, against the surface velocity, that stops the vessel at
+   the terrain.
+
+
+   .. attribute:: ut: number
+
+      The universal time at which the burn starts, in seconds.
+
+
+   .. attribute:: time_to: number
+
+      The time until the burn starts, in seconds.
+
+
+   .. attribute:: altitude: number
+
+      The altitude above sea level at which the burn starts, in meters.
+
+
+   .. attribute:: delta_v: number
+
+      The delta-v of the burn, in :math:`\mathrm{m/s}`.
+
+
+   .. attribute:: distance: number
+
+      The distance along the orbit to the start of the burn, in meters.
+
+
+   .. attribute:: duration: number
+
+      The duration of the burn, in seconds.

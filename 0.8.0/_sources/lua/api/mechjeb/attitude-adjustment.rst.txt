@@ -1,0 +1,56 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: MechJeb
+
+AttitudeAdjustment
+==================
+
+
+.. class:: AttitudeAdjustment
+
+   The Attitude Adjustment window, which selects the attitude controller that the
+   autopilots steer with.
+
+   .. attribute:: rcs_auto: boolean
+
+      Whether the attitude controller turns RCS on for a large attitude error, and off once
+      the vessel settles.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: controller: MechJeb.AttitudeController
+
+      The attitude controller.
+
+      :Attribute: Can be read or written
+
+
+
+.. class:: AttitudeController
+
+   An attitude controller of MechJeb. See :attr:`MechJeb.AttitudeAdjustment.controller`.
+
+
+   .. data:: mj
+
+      MechJeb's original attitude controller.
+
+
+   .. data:: kos
+
+      The attitude controller of kOS.
+
+
+   .. data:: hybrid
+
+      A hybrid of the MechJeb and kOS controllers.
+
+
+   .. data:: better
+
+      MechJeb's default controller.
+
+
+   .. data:: lqr
+
+      A linear-quadratic regulator.

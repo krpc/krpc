@@ -1,0 +1,126 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: UI
+   :no-index:
+
+Image
+=====
+
+
+.. class:: Image
+
+   A picture, or a plain colored rectangle.
+   Added to a :class:`UI.Canvas` or a :class:`UI.Panel`.
+
+   .. method:: getRectTransform()
+
+      The rect transform for the UI object.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`UI.RectTransform`
+   
+
+   .. method:: getLayoutElement()
+
+      How much space the UI object asks a layout for.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`UI.LayoutElement`
+   
+
+      .. note::
+
+         Only has an effect when the object is in a panel that has a layout. A canvas is
+         not inside a layout and does not have one.
+
+   .. method:: getVisible()
+               setVisible(value)
+
+      Whether the UI object is visible.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+      .. note::
+
+         This is the object's own setting, which is what it was last set to. An object is
+         only drawn when everything it is inside is visible as well, so an interface can
+         be built with its parts visible, inside a panel that is not, and shown all at
+         once by making that panel visible.
+
+   .. method:: getContent()
+               setContent(value)
+
+      The picture to show, as the contents of a PNG or JPEG file. Set it to an empty
+      array to show a plain rectangle instead.
+
+      :Property: Can be read or written
+      :rtype: ``Uint8Array``
+   
+
+      .. note::
+
+         Reading this returns what was last set, not what is on the screen, and returns
+         an empty array if no picture has been set. A picture drawn with
+         :meth:`UI.Image.setPixels` is not returned here either.
+
+   .. method:: setPixels(data, width, height)
+
+      Draw the picture from raw pixels rather than a file, so that a client can
+      draw whatever it likes, a graph for instance, and redraw it as often as it
+      likes.
+
+      :param data: The pixels, 4 bytes per pixel: red, green, blue and alpha, each 0 to 255. Pixels run left to right and rows run top to bottom, the way image files store them, so the array must hold width times height times 4 bytes.
+      :type data: ``Uint8Array``
+      :param width: How many pixels wide the picture is.
+      :type width: ``number``
+      :param height: How many pixels tall the picture is.
+      :type height: ``number``
+   
+
+      .. note::
+
+         Redrawing at an unchanged size draws into the picture already there, so a
+         picture redrawn every update does not build a new one each time.
+
+   .. method:: updatePixels(data, x, y, width, height)
+
+      Redraw part of a picture drawn with :meth:`UI.Image.setPixels`: a block of the
+      given size, with its top left corner x pixels in from the left edge and y
+      pixels down from the top. The rest of the picture is left as it is, so a
+      change to a small part of a large picture, one new column of a scrolling
+      graph for instance, only sends the part that changed.
+
+      :param data: The pixels of the block, laid out as for :meth:`UI.Image.setPixels`: 4 bytes per pixel, rows top to bottom, width times height times 4 bytes in all.
+      :type data: ``Uint8Array``
+      :param x: How many pixels the block sits in from the left edge.
+      :type x: ``number``
+      :param y: How many pixels the block sits down from the top.
+      :type y: ``number``
+      :param width: How many pixels wide the block is.
+      :type width: ``number``
+      :param height: How many pixels tall the block is.
+      :type height: ``number``
+   
+
+      .. note::
+
+         The image must already be showing a picture drawn from raw pixels, which is
+         what sets the size, and the block must fit inside it. A picture loaded from
+         a file cannot be redrawn this way: the file contents a client reads back
+         would no longer be what is on the screen.
+
+   .. method:: getColor()
+               setColor(value)
+
+      The color the image is tinted with, or the color of the rectangle when no
+      picture is set.
+
+      :Property: Can be read or written
+      :rtype: :class:`StdLib.ColorRGBA`
+   
+
+   .. method:: remove()
+
+      Remove the UI object.

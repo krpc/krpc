@@ -2,17 +2,8 @@
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.KRPC
 
-KRPC
-====
-
-
-
-
-
-
-
-
-
+Service
+=======
 
 
 .. class:: KRPC
@@ -36,42 +27,24 @@ KRPC
 
    .. property:: System.Collections.Generic.IList<ClientInfo> Clients { get; }
 
-      The RPC clients that are currently connected to the server.
+      The clients that are currently connected to the server.
 
       :Game Scenes: All
 
-   .. function:: KRPC.Schema.KRPC.Status GetStatus()
+   .. function:: ServerStatus GetStatus()
 
-      Returns some information about the server, such as the version.
+      Returns the status of the server, with its version, settings and performance statistics.
 
 
       :Game Scenes: All
 
    .. function:: KRPC.Schema.KRPC.Services GetServices()
 
-      Returns information on all services, procedures, classes, properties etc. provided by the server.
-      Can be used by client libraries to automatically create functionality such as stubs.
+      The services the server provides, with their procedures, classes, enumerations,
+      structures and exceptions.
 
 
       :Game Scenes: All
-
-   .. function:: KRPC.Schema.KRPC.Stream AddFunctionStream(Expression function)
-
-      Add a stream of the value a server side function computes on each update.
-
-      :parameters:
-
-
-
-      :Game Scenes: All
-
-
-      .. note::
-
-         Each call adds a new stream, with values of the type given by
-         :prop:`Expression.ReturnType`. Any exception from the function ends the
-         stream, including one for an object that is not loaded. A procedure that pauses
-         execution to resume on a later tick produces an error on the stream.
 
    .. function:: void HoldTick()
 
@@ -127,43 +100,6 @@ KRPC
 
          Every limit of :meth:`KRPC.HoldTick <KRPC.KRPC.HoldTick>` applies, the timeout included. A hold lost to
          the timeout is not reported, and the next call takes whatever tick it lands on.
-
-   .. function:: void CompileFunction(Expression function)
-
-      Compile a server side function, so that running, streaming or adding it as an
-      event does not compile it.
-
-      :parameters:
-
-
-
-      :Game Scenes: All
-
-
-      .. note::
-
-         Compiling a large function takes time on the game's main thread. Compiling it
-         in advance keeps that time out of its first run.
-
-   .. function:: byte[] RunFunction(Expression function, System.Collections.Generic.IList<byte[]> arguments = null)
-
-      Run a server side function once, within a single physics tick, and return
-      the value it produces.
-
-      :parameters:
-
-       * **function** -- The function to run.
-       * **arguments** -- The encoded arguments, one per parameter. If null, defaults to ``new System.Collections.Generic.List<byte[]> { }``.
-
-      :returns: The encoded value of the function, or no bytes for a function with no value.
-      :Game Scenes: All
-
-
-      .. note::
-
-         The arguments are encoded at the types given by :prop:`Expression.ParameterTypes`.
-         Throws an exception if a procedure the function calls pauses execution, and the
-         effects up to the pause remain.
 
    .. property:: GameScene GameScene { get; set; }
 
@@ -285,10 +221,166 @@ KRPC
       The address of the client.
 
 
+.. struct:: ServerStatus
+
+   The status of the server.
+
+   .. note::
+
+      See :meth:`KRPC.GetStatus <KRPC.KRPC.GetStatus>`.
+
+   .. function:: ServerStatus(string version, uint protocolVersion, ServerSettings settings, ServerStatistics statistics)
+
+      Construct a ServerStatus from the values of its fields.
+
+
+   .. property:: string Version { get; }
+
+      The version of the server, or ``unknown``.
+
+   .. property:: uint ProtocolVersion { get; }
+
+      The protocol version of the connection.
+
+   .. property:: ServerSettings Settings { get; }
+
+      The settings of the server.
+
+   .. property:: ServerStatistics Statistics { get; }
+
+      The performance statistics of the server.
+
+
+.. struct:: ServerSettings
+
+   The settings that control how the server executes calls.
+
+   .. note::
+
+      See :prop:`ServerStatus.Settings`.
+
+   .. function:: ServerSettings(bool adaptiveRateControl, uint targetFrameRate, uint maxTimePerFrame, uint maxCallWait, uint tickHoldTimeout)
+
+      Construct a ServerSettings from the values of its fields.
+
+
+   .. property:: bool AdaptiveRateControl { get; }
+
+      Whether the server adapts its time per frame to hold the frame rate at
+      :prop:`ServerSettings.TargetFrameRate`.
+
+   .. property:: uint TargetFrameRate { get; }
+
+      The lowest frame rate the server's work pushes the game to, in frames per second.
+
+   .. property:: uint MaxTimePerFrame { get; }
+
+      The server's budget per frame, or its ceiling with adaptive rate control, in microseconds.
+
+   .. property:: uint MaxCallWait { get; }
+
+      The longest the server waits for a client's next call, in microseconds.
+
+   .. property:: uint TickHoldTimeout { get; }
+
+      The longest time a client may hold the game on one physics tick, in microseconds.
+
+
+.. struct:: ServerStatistics
+
+   The performance statistics of the server.
+
+   .. note::
+
+      See :prop:`ServerStatus.Statistics`.
+
+   .. function:: ServerStatistics(ulong bytesRead, ulong bytesWritten, float bytesReadRate, float bytesWrittenRate, ulong rpcsExecuted, float rpcRate, float frameRate, float timePerFrame, float execTimePerFrame, float waitTimePerFrame, float streamTimePerFrame, float budgetPerFrame, float medianTurnaround, uint deferredCalls, uint streams, ulong streamEvaluations, float streamEvaluationRate, ulong streamUpdatesSent)
+
+      Construct a ServerStatistics from the values of its fields.
+
+
+   .. property:: ulong BytesRead { get; }
+
+      The number of bytes received from clients.
+
+   .. property:: ulong BytesWritten { get; }
+
+      The number of bytes sent to clients.
+
+   .. property:: float BytesReadRate { get; }
+
+      The rate bytes are received from clients, in bytes per second.
+
+   .. property:: float BytesWrittenRate { get; }
+
+      The rate bytes are sent to clients, in bytes per second.
+
+   .. property:: ulong RpcsExecuted { get; }
+
+      The number of calls executed.
+
+   .. property:: float RpcRate { get; }
+
+      The number of calls executed per second.
+
+   .. property:: float FrameRate { get; }
+
+      The game's frame rate, in frames per second.
+
+   .. property:: float TimePerFrame { get; }
+
+      The server's time per frame, in seconds: executing calls, waiting for them and
+      updating streams.
+
+   .. property:: float ExecTimePerFrame { get; }
+
+      The time spent executing calls per frame, in seconds.
+
+   .. property:: float WaitTimePerFrame { get; }
+
+      The time spent waiting for calls per frame, in seconds.
+
+   .. property:: float StreamTimePerFrame { get; }
+
+      The time spent updating streams per frame, in seconds.
+
+   .. property:: float BudgetPerFrame { get; }
+
+      The time the server may spend per frame, in seconds.
+
+   .. property:: float MedianTurnaround { get; }
+
+      The median time between a response and the client's next call, over the
+      clients' recent calls, in seconds.
+
+   .. property:: uint DeferredCalls { get; }
+
+      The number of calls left for the next update, because the update ran out of time
+      or the call yielded.
+
+   .. property:: uint Streams { get; }
+
+      The number of open streams, events included.
+
+   .. property:: ulong StreamEvaluations { get; }
+
+      The number of stream evaluations, one per stream per update.
+
+   .. property:: float StreamEvaluationRate { get; }
+
+      The number of stream evaluations per second.
+
+   .. property:: ulong StreamUpdatesSent { get; }
+
+      The number of stream updates sent to clients.
+
+
 .. class:: InvalidOperationException
 
    A method call was made to a method that is invalid
    given the current state of the object.
+
+   The client throws :type:`System.InvalidOperationException` for this exception, and has no class for it.
 
 
 
@@ -297,11 +389,15 @@ KRPC
    A method was invoked where at least one of the passed arguments does not
    meet the parameter specification of the method.
 
+   The client throws :type:`System.ArgumentException` for this exception, and has no class for it.
+
 
 
 .. class:: ArgumentNullException
 
    A null reference was passed to a method that does not accept it as a valid argument.
+
+   The client throws :type:`System.ArgumentNullException` for this exception, and has no class for it.
 
 
 
@@ -309,11 +405,15 @@ KRPC
 
    The value of an argument is outside the allowable range of values as defined by the invoked method.
 
+   The client throws :type:`System.ArgumentOutOfRangeException` for this exception, and has no class for it.
+
 
 
 .. class:: NullReferenceException
 
    A value was null where its type does not allow one.
+
+   The client throws :type:`System.NullReferenceException` for this exception, and has no class for it.
 
 
 
@@ -321,11 +421,15 @@ KRPC
 
    A key was not found in a dictionary.
 
+   The client throws :type:`System.Collections.Generic.KeyNotFoundException` for this exception, and has no class for it.
+
 
 
 .. class:: IndexOutOfRangeException
 
    An index was outside the bounds of a collection, string or array.
+
+   The client throws :type:`System.IndexOutOfRangeException` for this exception, and has no class for it.
 
 
 
@@ -333,11 +437,15 @@ KRPC
 
    An integer was divided by zero.
 
+   The client throws :type:`System.DivideByZeroException` for this exception, and has no class for it.
+
 
 
 .. class:: NotSupportedException
 
    A method was invoked that is not supported.
+
+   The client throws :type:`System.NotSupportedException` for this exception, and has no class for it.
 
 
 
@@ -345,11 +453,15 @@ KRPC
 
    An operation did not complete in the time allotted to it.
 
+   The client throws :type:`System.TimeoutException` for this exception, and has no class for it.
+
 
 
 .. class:: OverflowException
 
    An arithmetic or conversion operation overflowed.
+
+   The client throws :type:`System.OverflowException` for this exception, and has no class for it.
 
 
 
@@ -359,18 +471,29 @@ KRPC
    so the object cannot be used. For example, the part it represents
    was destroyed, or the vessel it belongs to was recovered.
 
+   A subclass of :type:`KRPC.Client.ServerException`.
 
+   .. note::
+
+      See :type:`ObjectNotLoadedException` for a game object that exists but is not
+      loaded.
 
 .. class:: ObjectNotLoadedException
 
    The game object that a service object refers to exists, but is not loaded.
    For example, the game is loading, or the vessel carrying the part is unloaded.
 
+   A subclass of :type:`KRPC.Client.ServerException`.
 
+   .. note::
+
+      See :type:`ObjectDestroyedException` for a game object that no longer exists.
 
 .. class:: UnsupportedSceneException
 
    The procedure is not available in the current game scene.
+
+   A subclass of :type:`KRPC.Client.ServerException`.
 
 
 
@@ -378,8 +501,12 @@ KRPC
 
    A stream was removed by the server, e.g. an event that has finished.
 
+   The client throws :type:`KRPC.Client.StreamException` for this exception, and has no class for it.
+
 
 
 .. class:: Error
 
    A general error, described by its message.
+
+   A subclass of :type:`KRPC.Client.ServerException`.

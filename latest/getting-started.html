@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Getting Started &#8212; kRPC v0.7.0 documentation</title>
+    <title>Getting Started &#8212; kRPC v0.8.0 documentation</title>
   
   
   
@@ -26,42 +26,45 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=e540dda1" />
+    <link rel="stylesheet" type="text/css" href="_static/lua.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=6a604523" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=ba67256c" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <script defer src="_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="_static/documentation_options.js?v=fe7df9b0"></script>
+    <script src="_static/documentation_options.js?v=486e5634"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="_static/design-tabs.js?v=fcb327ea"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'getting-started';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
+        DOCUMENTATION_OPTIONS.theme_version = '0.24.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.7.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.8.0';
         DOCUMENTATION_OPTIONS.show_version_warning_banner =
             true;
         </script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <script src="_static/external-links.js?v=e8892020"></script>
     <script src="_static/build-info.js?v=19ceb065"></script>
-    <link rel="canonical" href="https://krpc.github.io/krpc/0.7.0/getting-started.html" />
+    <link rel="canonical" href="https://krpc.github.io/krpc/0.8.0/getting-started.html" />
+    <link rel="icon" href="_static/logo-mark.svg"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Tutorials" href="tutorials.html" />
-    <link rel="prev" title="kRPC Documentation" href="index.html" />
+    <link rel="prev" title="Remote Procedure Calls for Kerbal Space Program" href="index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.7.0" />
+  <meta name="docsearch:version" content="0.8.0" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -109,7 +112,7 @@
   
     <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
     <span class="fa-solid fa-bars"></span>
   </button>
   
@@ -128,8 +131,14 @@
   
   
   
+    
+    
+      
+    
+    
+    <img src="_static/logo-on-light.svg" class="logo__image only-light" alt="kRPC"/>
+    <img src="_static/logo-on-dark.svg" class="logo__image only-dark pst-js-only" alt="kRPC"/>
   
-    <p class="title logo__title">kRPC Documentation</p>
   
 </a></div>
     
@@ -158,98 +167,32 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="cnano.html">
-    C-nano
+  <a class="nav-link nav-internal" href="user-guide.html">
+    User Guides
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="csharp.html">
-    C#
+  <a class="nav-link nav-internal" href="clients.html">
+    Clients
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="cpp.html">
-    C++
+  <a class="nav-link nav-internal" href="developer-guide.html">
+    Developer Guide
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="java.html">
-    Java
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="lua.html">
-    Lua
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="python.html">
-    Python
-  </a>
-</li>
-
-            <li class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button"
-                data-bs-toggle="dropdown" aria-expanded="false"
-                aria-controls="pst-nav-more-links">
-                    More
-                </button>
-                <ul id="pst-nav-more-links" class="dropdown-menu">
-                    
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="third-party.html">
-    Other Clients, Services and Scripts
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="compiling.html">
-    Compiling kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="extending.html">
-    Extending kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="communication-protocols.html">
-    Communication Protocols
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="internals.html">
-    Internals of kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="changelog.html">
+  <a class="nav-link nav-internal" href="changelog.html">
     Changelog
   </a>
 </li>
 
-                </ul>
-            </li>
-            
   </ul>
 </nav></div>
       
@@ -293,14 +236,14 @@
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
   <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
-    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
   </ul>
 </div></div>
       
@@ -316,6 +259,28 @@
           
           
           <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://discord.gg/bXuaTrj" title="Discord" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-discord fa-lg" aria-hidden="true"></i><span class="visually-hidden">Discord</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://forum.kerbalspaceprogram.com/topic/130742-1125-krpc-control-the-game-using-c-c-java-lua-python-ruby-haskell-c-arduino-v060/" title="Forum" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-comments fa-lg" aria-hidden="true"></i><span class="visually-hidden">Forum</span></a>
         </li>
 </ul></div>
       
@@ -335,7 +300,7 @@
   
 
   
-    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page" aria-expanded="false" aria-controls="pst-secondary-sidebar-modal">
       <span class="fa-solid fa-outdent"></span>
     </button>
   
@@ -349,7 +314,7 @@
       
       
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
       <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
@@ -380,78 +345,22 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="cnano.html">
-    C-nano
+  <a class="nav-link nav-internal" href="user-guide.html">
+    User Guides
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="csharp.html">
-    C#
+  <a class="nav-link nav-internal" href="clients.html">
+    Clients
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="cpp.html">
-    C++
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="java.html">
-    Java
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="lua.html">
-    Lua
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="python.html">
-    Python
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="third-party.html">
-    Other Clients, Services and Scripts
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="compiling.html">
-    Compiling kRPC
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="extending.html">
-    Extending kRPC
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="communication-protocols.html">
-    Communication Protocols
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="internals.html">
-    Internals of kRPC
+  <a class="nav-link nav-internal" href="developer-guide.html">
+    Developer Guide
   </a>
 </li>
 
@@ -496,14 +405,14 @@
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
   <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
-    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
   </ul>
 </div></div>
         
@@ -519,6 +428,28 @@
           
           
           <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://discord.gg/bXuaTrj" title="Discord" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-discord fa-lg" aria-hidden="true"></i><span class="visually-hidden">Discord</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://forum.kerbalspaceprogram.com/topic/130742-1125-krpc-control-the-game-using-c-c-java-lua-python-ruby-haskell-c-arduino-v060/" title="Forum" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-comments fa-lg" aria-hidden="true"></i><span class="visually-hidden">Forum</span></a>
         </li>
 </ul></div>
         
@@ -575,7 +506,7 @@
     
     <li class="breadcrumb-item breadcrumb-home">
       <a href="index.html" class="nav-link" aria-label="Home">
-        <i class="fa-solid fa-home"></i>
+        <i class="fa-solid fa-house"></i>
       </a>
     </li>
     <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Getting Started</span></li>
@@ -597,109 +528,119 @@
                   
   <section id="getting-started">
 <span id="id1"></span><h1>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">#</a></h1>
-<p>This short guide explains the basics for getting the kRPC server set up and running, and writing a
-basic Python script to interact with the game.</p>
+<p>This guide sets up the kRPC server in the game, then writes a Python script that talks to it.</p>
 <section id="the-server-plugin">
-<h2>The Server Plugin<a class="headerlink" href="#the-server-plugin" title="Link to this heading">#</a></h2>
+<span id="getting-started-server"></span><h2>The Server Plugin<a class="headerlink" href="#the-server-plugin" title="Link to this heading">#</a></h2>
 <section id="installation">
 <h3>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h3>
 <ol class="arabic">
-<li><p>Download and install the kRPC server plugin from one of these locations:</p>
+<li><p>Download kRPC from one of these places:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://github.com/krpc/krpc/releases">Github</a></p></li>
+<li><p><a class="reference external" href="https://github.com/krpc/krpc/releases">GitHub</a></p></li>
 <li><p><a class="reference external" href="https://spacedock.info/mod/69/kRPC">SpaceDock</a></p></li>
-<li><p><a class="reference external" href="https://www.curseforge.com/kerbal/ksp-mods/krpc-control-the-game-using-c-c-java-lua-python">Curse</a></p></li>
-<li><p>Or the install it using <a class="reference external" href="https://forum.kerbalspaceprogram.com/topic/90246-the-comprehensive-kerbal-archive-network-ckan-package-manager-v1180-19-june-2016/">CKAN</a></p></li>
+<li><p><a class="reference external" href="https://www.curseforge.com/kerbal/ksp-mods/krpc-control-the-game-using-c-c-java-lua-python">CurseForge</a></p></li>
 </ul>
+<p>Copy the <code class="docutils literal notranslate"><span class="pre">GameData</span></code> folder from the zip into your KSP folder. You can also install kRPC with
+<a class="reference external" href="https://github.com/KSP-CKAN/CKAN">CKAN</a>.</p>
 </li>
-<li><p>Start up KSP and load a save game.</p></li>
-<li><p>You should be greeted by the server window:</p>
+<li><p>Start KSP and load a save. The server window appears, with two servers: “TCP/IP Server” on
+port 50000, and “WebSockets Server” on port 50001 for the JavaScript client. The servers start
+when the game loads, and the light next to each turns green:</p>
 <img alt="_images/server-window.png" src="_images/server-window.png" />
 </li>
-<li><p>Click “Start server” to, erm… start the server! If all goes well, the light should turn a happy
-green color.</p></li>
-<li><p>You can hide the window by clicking the close button in the top right. The window can also be
-shown/hidden by clicking on the icon in the top right:</p>
+<li><p>Click a server’s name to show or hide its details: the protocol, the address and the
+connected clients. Its “Stop” and “Start” buttons stop and start it, and “Stop servers” and
+“Start servers” stop and start them all.</p></li>
+<li><p>The close button in the top right hides the window. The kRPC button in the toolbar shows and
+hides it again, and turns green while a server is running:</p>
 <img alt="_images/applauncher.png" src="_images/applauncher.png" />
-<p>This icon will also turn green when the server is online.</p>
 </li>
 </ol>
 </section>
 <section id="configuration">
 <h3>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">#</a></h3>
-<p>The server is configured by clicking edit on the window displayed in-game:</p>
+<p>Stop a server, then click its “Edit” button to change its settings. Click “Save” to keep them:</p>
 <ol class="arabic simple">
-<li><p><strong>Protocol</strong>: this is the protocol used by the server. This affects type of client can connect to
-the server. For Python, and most other clients that communicate over TCP/IP, you want to select
-“Protobuf over TCP”.</p></li>
-<li><p><strong>Address</strong>: this is the IP address that the server will listen on. To only allow connections
-from the local machine, select ‘localhost’ (the default). To allow connections over a network,
-either select the local IP address of your machine, or choose ‘Manual’ and enter the local IP
-address manually.</p></li>
-<li><p><strong>RPC and Stream port numbers</strong>: These need to be set to port numbers that are available on your
-machine. In most cases, they can just be left as the default.</p></li>
+<li><p><strong>Protocol</strong>: How clients connect. The Python client connects over “Protobuf over TCP/IP”,
+the default, or “Protobuf over local socket”. Each client guide lists the protocols its client
+supports.</p></li>
+<li><p><strong>Address</strong>: The address the server listens on. “localhost”, the default, accepts connections
+from the same machine only. To accept connections over a network, select one of the machine’s
+addresses, “Any” for all of them, or “Manual” to type one in.</p></li>
+<li><p><strong>Port</strong>: The TCP port, 50000 by default for TCP/IP, 50001 for WebSockets and 50003 for HTTP.
+Change it only if another program uses that port.</p></li>
+<li><p><strong>Origins</strong>: For WebSockets and HTTP, the web pages on other sites that may connect. See
+<a class="reference internal" href="communication-protocols/websockets.html#communication-protocol-websockets-origins"><span class="std std-ref">Web Pages</span></a> and <a class="reference internal" href="http.html"><span class="doc">the HTTP guide</span></a>.</p></li>
 </ol>
-<p>There are also several advanced settings, which are hidden by default, but can be revealed by
-checking “Show advanced settings”:</p>
+<p>“Show advanced settings” reveals these settings:</p>
 <ol class="arabic simple">
-<li><p><strong>Auto-start server</strong>: When enabled, the server will start automatically when the game loads.</p></li>
-<li><p><strong>Auto-accept new clients</strong>: When enabled, new client connections are automatically allowed. When
-disabled, a pop-up is displayed asking whether the new client connection should be allowed.</p></li>
+<li><p><strong>Auto-start server</strong>: On by default. Starts the servers when the game loads.</p></li>
+<li><p><strong>Auto-accept new clients</strong>: On by default. When off, a pop-up asks whether to allow each new
+client. A client stops waiting after its handshake timeout, 5 seconds by default, so connect
+with no handshake timeout to leave time to answer. HTTP requests need no approval.</p></li>
+<li><p><strong>Confirm disconnecting a client</strong>: Asks before the disconnect button next to a client closes
+its connection.</p></li>
+<li><p><strong>Pause the server when the game pauses</strong>: While the game is paused, calls wait until it
+resumes.</p></li>
+<li><p><strong>Debug logging</strong>: Writes more detail to the game’s log file, <code class="docutils literal notranslate"><span class="pre">KSP.log</span></code>.</p></li>
 </ol>
-<p>The other advanced settings control the <a class="reference internal" href="internals.html#server-performance-settings"><span class="std std-ref">performance of the server</span></a>.</p>
+<p>The other advanced settings control the <a class="reference internal" href="user-guide/server-performance.html#server-performance-settings"><span class="std std-ref">performance of the server</span></a>.</p>
+<p>When a service fails to load, for example after another mod updates, a window lists the problems.
+“Show problems” in the server window opens it again.</p>
 </section>
 </section>
 <section id="the-python-client">
 <h2>The Python Client<a class="headerlink" href="#the-python-client" title="Link to this heading">#</a></h2>
+<p>The Python client needs Python 3.10 or later.</p>
 <section id="on-windows">
 <h3>On Windows<a class="headerlink" href="#on-windows" title="Link to this heading">#</a></h3>
-<ol class="arabic simple">
-<li><p>If you don’t already have python installed, download the python installer and run it:
-<a class="reference external" href="https://www.python.org/downloads/windows">https://www.python.org/downloads/windows</a> When running the installer, make sure that pip is
-installed as well.</p></li>
-<li><p>Install the kRPC python module, by opening command prompt and running the following command:
-<code class="docutils literal notranslate"><span class="pre">C:\Python310\Scripts\pip.exe</span> <span class="pre">install</span> <span class="pre">krpc</span></code> You might need to replace <code class="docutils literal notranslate"><span class="pre">C:\Python310</span></code> with the
-location of your python installation.</p></li>
-<li><p>Run Python IDLE (or your favorite editor) and start coding!</p></li>
+<ol class="arabic">
+<li><p>Download Python from <a class="reference external" href="https://www.python.org/downloads/windows">https://www.python.org/downloads/windows</a> and run the installer.</p></li>
+<li><p>Install the client from a command prompt:</p>
+<div class="highlight-bat notranslate"><div class="highlight"><pre><span></span>py -m pip install krpc
+</pre></div>
+</div>
+</li>
 </ol>
 </section>
-<section id="on-linux">
-<h3>On Linux<a class="headerlink" href="#on-linux" title="Link to this heading">#</a></h3>
-<ol class="arabic simple">
-<li><p>Your linux distribution likely already comes with python installed. If not, install python using
-your favorite package manager, or get it from here: <a class="reference external" href="https://www.python.org/downloads">https://www.python.org/downloads</a></p></li>
-<li><p>You also need to install pip, either using your package manager, or from here:
-<a class="reference external" href="https://pypi.python.org/pypi/pip">https://pypi.python.org/pypi/pip</a></p></li>
-<li><p>Install the kRPC python module by running the following from a terminal:
-<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">krpc</span></code></p></li>
-<li><p>Start coding!</p></li>
+<section id="on-linux-and-macos">
+<h3>On Linux and macOS<a class="headerlink" href="#on-linux-and-macos" title="Link to this heading">#</a></h3>
+<ol class="arabic">
+<li><p>Install Python with your package manager, or from <a class="reference external" href="https://www.python.org/downloads">https://www.python.org/downloads</a>.</p></li>
+<li><p>Install the client into a virtual environment, from a terminal:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>krpc-env
+<span class="nb">source</span><span class="w"> </span>krpc-env/bin/activate
+pip<span class="w"> </span>install<span class="w"> </span>krpc
+</pre></div>
+</div>
+<p>Activate the environment again in each new terminal before you run a script.</p>
+</li>
 </ol>
 </section>
 </section>
 <section id="hello-world-script">
 <h2>‘Hello World’ Script<a class="headerlink" href="#hello-world-script" title="Link to this heading">#</a></h2>
-<p>Run KSP and start the server with the default settings. Then run the following python script.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
-<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">'Hello World'</span><span class="p">)</span>
+<p>With the server running with the default settings, run this script:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"Hello World"</span><span class="p">)</span>
 <span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">vessel</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This loads the kRPC python module, opens a new connection to the server, gets the active vessel and
-prints out the name of the vessel. You should see something like the following:</p>
+<p>It connects to the server, gets the active vessel and prints its name:</p>
 <img alt="_images/hello-world.png" src="_images/hello-world.png" />
-<p>Congratulations! You’ve written your first script that communicates with KSP.</p>
 </section>
 <section id="going-further">
-<h2>Going further…<a class="headerlink" href="#going-further" title="Link to this heading">#</a></h2>
+<h2>Going Further<a class="headerlink" href="#going-further" title="Link to this heading">#</a></h2>
 <ul class="simple">
-<li><p>For some more interesting examples of what you can do with kRPC, check out the
-<a class="reference internal" href="tutorials.html"><span class="doc">tutorials</span></a>.</p></li>
-<li><p>Client libraries are available for other languages too, including <a class="reference internal" href="csharp/client.html"><span class="doc">C#</span></a>,
-<a class="reference internal" href="cpp/client.html"><span class="doc">C++</span></a>, <a class="reference internal" href="cnano/client.html"><span class="doc">C</span></a>, <a class="reference internal" href="java/client.html"><span class="doc">Java</span></a> and
-<a class="reference internal" href="lua/client.html"><span class="doc">Lua</span></a>.</p></li>
-<li><p>It is also possible to <a class="reference internal" href="communication-protocols.html"><span class="doc">communicate with the server manually</span></a> from
-any language you like.</p></li>
+<li><p>The <a class="reference internal" href="python.html"><span class="doc">Python guide</span></a> covers the client in depth.</p></li>
+<li><p>The <a class="reference internal" href="tutorials.html"><span class="doc">tutorials</span></a> show more of what kRPC can do.</p></li>
+<li><p>Clients are also available for <a class="reference internal" href="csharp.html"><span class="doc">C#</span></a>, <a class="reference internal" href="cpp.html"><span class="doc">C++</span></a>, <a class="reference internal" href="cnano.html"><span class="doc">C</span></a>,
+<a class="reference internal" href="java.html"><span class="doc">Java</span></a>, <a class="reference internal" href="lua.html"><span class="doc">Lua</span></a> and <a class="reference internal" href="js.html"><span class="doc">JavaScript</span></a>.</p></li>
+<li><p>Other languages can call the server <a class="reference internal" href="http.html"><span class="doc">over HTTP</span></a>, or speak its
+<a class="reference internal" href="communication-protocols.html"><span class="doc">protocol</span></a> directly.</p></li>
+<li><p>Ask for help on the <a class="reference external" href="https://discord.gg/bXuaTrj">kRPC Discord server</a>.</p></li>
 </ul>
 </section>
 </section>
@@ -720,7 +661,7 @@ any language you like.</p></li>
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">kRPC Documentation</p>
+        <p class="prev-next-title">Remote Procedure Calls for Kerbal Space Program</p>
       </div>
     </a>
     <a class="right-next"
@@ -739,7 +680,7 @@ any language you like.</p></li>
             
             
               
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <dialog id="pst-secondary-sidebar-modal" tabindex="-1"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
@@ -758,11 +699,11 @@ any language you like.</p></li>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-python-client">The Python Client</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#on-windows">On Windows</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#on-linux">On Linux</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#on-linux-and-macos">On Linux and macOS</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hello-world-script">‘Hello World’ Script</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#going-further">Going further…</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#going-further">Going Further</a></li>
 </ul>
   </nav></div>
 
@@ -788,8 +729,8 @@ any language you like.</p></li>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
-<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+  <script defer src="_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -822,7 +763,7 @@ any language you like.</p></li>
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
 </p></div>
       
     </div>

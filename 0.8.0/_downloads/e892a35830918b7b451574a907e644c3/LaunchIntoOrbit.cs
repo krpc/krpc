@@ -1,0 +1,162 @@
+using System;
+using KRPC.Client;
+using KRPC.Client.Services.SpaceCenter;
+
+class LaunchIntoOrbit
+{
+    public static void Main ()
+    {
+        var conn = new Connection ("Launch into orbit");
+        var vessel = conn.SpaceCenter ().ActiveVessel;
+
+        float turnStartAltitude = 250;
+        float turnEndAltitude = 45000;
+        float targetAltitude = 150000;
+
+        // Set up streams for telemetry
+        var ut = conn.AddStream (() => conn.SpaceCenter ().UT);
+        var flight = vessel.Flight ();
+        var altitude = conn.AddStream (() => flight.MeanAltitude);
+        var apoapsis = conn.AddStream (() => vessel.Orbit.ApoapsisAltitude);
+        var stage5Resources =
+            vessel.DecoupleStageAt (stage: 5).Resources (cumulative: false);
+        var stage3Resources =
+            vessel.DecoupleStageAt (stage: 3).Resources (cumulative: false);
+
+        // Pre-launch setup
+        vessel.Control.SAS = false;
+        vessel.Control.RCS = false;
+        vessel.Control.Throttle = 1;
+
+        // Activate the first stage
+        vessel.AutoPilot.Engaged = true;
+        vessel.AutoPilot.TargetPitchAndHeading (90, 90);
+        vessel.Control.ActivateNextStage ();
+
+        // Separate each stage when it runs out of fuel
+        void SeparateWhenEmpty (
+            Resources resources, string fuel, string name)
+        {
+            var evnt = conn.AddEvent (() => resources.Amount (fuel) < 0.1f);
+            evnt.AddCallback (() => {
+                evnt.Remove ();
+                vessel.Control.ActivateNextStage ();
+                vessel.Control.ActivateNextStage ();
+                Console.WriteLine (name + " stage separated");
+            });
+        }
+        SeparateWhenEmpty (stage5Resources, "SolidFuel", "First");
+        SeparateWhenEmpty (stage3Resources, "LiquidFuel", "Second");
+
+        // Main ascent loop
+        while (true) {
+            // Gravity turn
+            if (altitude.Get () > turnStartAltitude &&
+                altitude.Get () < turnEndAltitude) {
+                double frac = (altitude.Get () - turnStartAltitude)
+                              / (turnEndAltitude - turnStartAltitude);
+                double turnAngle = frac * 90.0;
+                vessel.AutoPilot.TargetPitchAndHeading (
+                    (float)(90 - turnAngle), 90);
+            }
+
+            // Stop the ascent near the target apoapsis
+            if (apoapsis.Get () > targetAltitude * 0.9) {
+                Console.WriteLine ("Approaching target apoapsis");
+                break;
+            }
+
+            System.Threading.Thread.Sleep (50);
+        }
+
+        // Fine tune the apoapsis at 25% thrust
+        vessel.Control.Throttle = 0.25f;
+        {
+            var evnt = conn.AddEvent (
+                () => vessel.Orbit.ApoapsisAltitude >= targetAltitude);
+            lock (evnt.Condition) {
+                evnt.Wait ();
+            }
+        }
+        Console.WriteLine ("Target apoapsis reached");
+        vessel.Control.Throttle = 0;
+
+        // Wait until out of atmosphere
+        Console.WriteLine ("Coasting out of atmosphere");
+        {
+            var evnt = conn.AddEvent (() => flight.MeanAltitude >= 70500);
+            lock (evnt.Condition) {
+                evnt.Wait ();
+            }
+        }
+
+        // Plan circularization burn (using vis-viva equation)
+        Console.WriteLine ("Planning circularization burn");
+        double mu = vessel.Orbit.Body.GravitationalParameter;
+        double r = vessel.Orbit.Apoapsis;
+        double a1 = vessel.Orbit.SemiMajorAxis;
+        double a2 = r;
+        double v1 = Math.Sqrt (mu * ((2.0 / r) - (1.0 / a1)));
+        double v2 = Math.Sqrt (mu * ((2.0 / r) - (1.0 / a2)));
+        double deltaV = v2 - v1;
+        var node = vessel.Control.AddNode (
+            ut.Get () + vessel.Orbit.TimeToApoapsis,
+            prograde: (float)deltaV);
+
+        // Calculate burn time (using rocket equation)
+        double F = vessel.AvailableThrust;
+        double Isp = vessel.SpecificImpulse * 9.82;
+        double m0 = vessel.Mass;
+        double m1 = m0 / Math.Exp (deltaV / Isp);
+        double flowRate = F / Isp;
+        double burnTime = (m0 - m1) / flowRate;
+
+        // Orientate ship along the burn
+        Console.WriteLine ("Orientating ship for circularization burn");
+        var frame = vessel.Orbit.Body.NonRotatingReferenceFrame;
+        vessel.AutoPilot.ReferenceFrame = frame;
+        vessel.AutoPilot.TargetDirection = node.RemainingBurnVector (frame);
+        vessel.AutoPilot.Wait ();
+
+        // Wait until burn
+        Console.WriteLine ("Waiting until circularization burn");
+        double burnUT =
+            ut.Get () + vessel.Orbit.TimeToApoapsis - (burnTime / 2.0);
+        double leadTime = 5;
+        conn.SpaceCenter ().WarpTo (burnUT - leadTime);
+
+        // Execute burn
+        Console.WriteLine ("Ready to execute burn");
+        {
+            var evnt = conn.AddEvent (
+                () => vessel.Orbit.TimeToApoapsis <= burnTime / 2.0);
+            lock (evnt.Condition) {
+                evnt.Wait ();
+            }
+        }
+        Console.WriteLine ("Executing burn");
+        var remainingBurn =
+            conn.AddStream (() => node.RemainingBurnVector (frame));
+        var remainingDeltaV = conn.AddStream (() => node.RemainingDeltaV);
+        double lowestDeltaV = remainingDeltaV.Get ();
+        while (remainingDeltaV.Get () > 0.1) {
+            // Steer along the remaining burn, which turns as the vessel
+            // moves around its orbit
+            vessel.AutoPilot.TargetDirection = remainingBurn.Get ();
+            // Full throttle, then throttle down for the last few m/s
+            vessel.Control.Throttle =
+                remainingDeltaV.Get () > 5 ? 1.0f : 0.05f;
+            // Stop if the burn overshoots, as the remaining delta-v then
+            // grows
+            if (remainingDeltaV.Get () > lowestDeltaV + 0.1)
+                break;
+            lowestDeltaV = Math.Min (lowestDeltaV, remainingDeltaV.Get ());
+            System.Threading.Thread.Sleep (50);
+        }
+        vessel.Control.Throttle = 0;
+        node.Remove ();
+
+        Console.WriteLine ("Launch complete");
+        conn.Dispose();
+    }
+}

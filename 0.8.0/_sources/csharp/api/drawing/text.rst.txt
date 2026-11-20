@@ -1,0 +1,116 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.Drawing
+
+Text
+====
+
+
+.. class:: Text
+
+   Text. Created using :meth:`Drawing.AddText <Drawing.Drawing.AddText>`.
+
+   .. property:: System.Tuple<double,double,double> Position { get; set; }
+
+      Position of the text.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: System.Tuple<double,double,double,double> Rotation { get; set; }
+
+      Rotation of the text as a quaternion.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: bool FaceCamera { get; set; }
+
+      Whether the text turns to face the camera, in place of its :prop:`Text.Rotation`.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: SpaceCenter.ReferenceFrame ReferenceFrame { get; set; }
+
+      Reference frame for the positions of the object.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: bool Visible { get; set; }
+
+      Whether the object is visible.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: void Remove()
+
+      Remove the object.
+
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: string Content { get; set; }
+
+      The text string
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: string Font { get; set; }
+
+      Name of the font
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: static System.Collections.Generic.IList<string> AvailableFonts(IConnection connection)
+
+      A list of all available fonts.
+
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: int Size { get; set; }
+
+      Font size.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: float CharacterSize { get; set; }
+
+      Character size.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: UI.FontStyle Style { get; set; }
+
+      Font style.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: StdLib.ColorRGB Color { get; set; }
+
+      Set the color
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: string Material { get; set; }
+
+      Material used to render the object.
+      Creates the material from a shader with the given name.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: UI.TextAlignment Alignment { get; set; }
+
+      Alignment.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: float LineSpacing { get; set; }
+
+      Line spacing.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: UI.TextAnchor Anchor { get; set; }
+
+      Anchor.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph

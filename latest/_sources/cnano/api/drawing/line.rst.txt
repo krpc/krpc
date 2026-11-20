@@ -10,6 +10,10 @@ Line
 
    A line. Created using :func:`krpc_Drawing_AddLine`.
 
+   .. macro:: KRPC_CLASS_DRAWING_LINE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_Drawing_Line_Start(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_Drawing_Line_t instance)
    .. function:: krpc_error_t krpc_Drawing_Line_set_Start(krpc_connection_t connection, krpc_Drawing_Line_t instance, const krpc_tuple_double_double_double_t * value)
 

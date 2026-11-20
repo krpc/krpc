@@ -1,0 +1,30 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+LIDAR
+=====
+
+.. warning::
+
+   Deprecated. The LIDAR service will be removed in a future release. Use
+   :func:`krpc_SpaceCenter_RaycastDistance` instead.
+
+Provides functionality to interact with the `LiDAR`_ mod.
+
+.. toctree::
+   :includehidden:
+   :maxdepth: 1
+
+   lidar/lidar
+   lidar/laser
+
+LiDAR Replacement
+-----------------
+
+A LiDAR casts a fan of rays from its part. :func:`krpc_SpaceCenter_RaycastDistance` casts one
+ray. This example casts 8 rays below the root part of the active vessel:
+
+.. literalinclude:: /scripts/api/lidar/RaycastExample.c
+
+.. include:: /mods.inc

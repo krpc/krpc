@@ -1,0 +1,237 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+RoverAutopilot
+==============
+
+
+.. type:: krpc_MechJeb_RoverAutopilot_t
+
+   The Rover Autopilot window, which drives a rover at a heading and speed, or along its
+   waypoints.
+
+   .. macro:: KRPC_CLASS_MECHJEB_ROVERAUTOPILOT
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+   .. function:: krpc_error_t krpc_MechJeb_RoverAutopilot_ControlHeading(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_RoverAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_RoverAutopilot_set_ControlHeading(krpc_connection_t connection, krpc_MechJeb_RoverAutopilot_t instance, bool value)
+
+      Whether the autopilot holds :func:`krpc_MechJeb_RoverAutopilot_Heading`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_RoverAutopilot_Heading(krpc_connection_t connection, double * returnValue, krpc_MechJeb_RoverAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_RoverAutopilot_set_Heading(krpc_connection_t connection, krpc_MechJeb_RoverAutopilot_t instance, double value)
+
+      The heading to hold, in degrees.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`krpc_MechJeb_RoverAutopilot_ControlHeading`.
+
+   .. function:: krpc_error_t krpc_MechJeb_RoverAutopilot_HeadingError(krpc_connection_t connection, double * returnValue, krpc_MechJeb_RoverAutopilot_t instance)
+
+      The difference between the vessel's heading and the heading to hold, in degrees.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_RoverAutopilot_ControlSpeed(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_RoverAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_RoverAutopilot_set_ControlSpeed(krpc_connection_t connection, krpc_MechJeb_RoverAutopilot_t instance, bool value)
+
+      Whether the autopilot holds :func:`krpc_MechJeb_RoverAutopilot_Speed`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_RoverAutopilot_Speed(krpc_connection_t connection, double * returnValue, krpc_MechJeb_RoverAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_RoverAutopilot_set_Speed(krpc_connection_t connection, krpc_MechJeb_RoverAutopilot_t instance, double value)
+
+      The speed to hold, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`krpc_MechJeb_RoverAutopilot_ControlSpeed`.
+
+   .. function:: krpc_error_t krpc_MechJeb_RoverAutopilot_SpeedError(krpc_connection_t connection, double * returnValue, krpc_MechJeb_RoverAutopilot_t instance)
+
+      The difference between the vessel's speed and the speed to hold, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_RoverAutopilot_TargetSpeed(krpc_connection_t connection, double * returnValue, krpc_MechJeb_RoverAutopilot_t instance)
+
+      The speed the autopilot drives at now, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_RoverAutopilot_StabilityControl(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_RoverAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_RoverAutopilot_set_StabilityControl(krpc_connection_t connection, krpc_MechJeb_RoverAutopilot_t instance, bool value)
+
+      Whether the autopilot keeps the rover upright.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_RoverAutopilot_BrakeOnEject(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_RoverAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_RoverAutopilot_set_BrakeOnEject(krpc_connection_t connection, krpc_MechJeb_RoverAutopilot_t instance, bool value)
+
+      Whether to brake when the crew leaves the rover.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_RoverAutopilot_BrakeOnEnergyDepletion(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_RoverAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_RoverAutopilot_set_BrakeOnEnergyDepletion(krpc_connection_t connection, krpc_MechJeb_RoverAutopilot_t instance, bool value)
+
+      Whether to brake when the rover runs out of electric charge.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_RoverAutopilot_WarpToDaylight(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_RoverAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_RoverAutopilot_set_WarpToDaylight(krpc_connection_t connection, krpc_MechJeb_RoverAutopilot_t instance, bool value)
+
+      Whether to warp time to daylight after braking for a lack of electric charge.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :func:`krpc_MechJeb_RoverAutopilot_BrakeOnEnergyDepletion`.
+
+   .. function:: krpc_error_t krpc_MechJeb_RoverAutopilot_Waypoints(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_MechJeb_RoverAutopilot_t instance)
+
+      The waypoints, in the order the rover drives to them.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_RoverAutopilot_WaypointIndex(krpc_connection_t connection, int32_t * returnValue, krpc_MechJeb_RoverAutopilot_t instance)
+
+      The index of the waypoint the autopilot drives to, or -1 if there is none.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_RoverAutopilot_LoopWaypoints(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_RoverAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_RoverAutopilot_set_LoopWaypoints(krpc_connection_t connection, krpc_MechJeb_RoverAutopilot_t instance, bool value)
+
+      Whether to return to the first waypoint after the last one.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_RoverAutopilot_AddWaypoint(krpc_connection_t connection, krpc_MechJeb_RoverWaypoint_t * returnValue, krpc_MechJeb_RoverAutopilot_t instance, double latitude, double longitude)
+
+      Add a waypoint at a position on the surface of the body the vessel is at.
+
+      :Parameters:
+
+       * **latitude** -- The latitude, in degrees.
+       * **longitude** -- The longitude, in degrees.
+
+      :returns: The waypoint.
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_RoverAutopilot_ClearWaypoints(krpc_connection_t connection, krpc_MechJeb_RoverAutopilot_t instance)
+
+      Remove all the waypoints.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_RoverAutopilot_AddTarget(krpc_connection_t connection, krpc_MechJeb_RoverWaypoint_t * returnValue, krpc_MechJeb_RoverAutopilot_t instance)
+
+      Add a waypoint at the target. Throws an exception if the target is not a vessel or a
+      position on the surface.
+
+
+      :returns: The waypoint.
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_RoverAutopilot_DriveToTarget(krpc_connection_t connection, krpc_MechJeb_RoverAutopilot_t instance)
+
+      Replace the waypoints with the target, and drive to it. Throws an exception if the
+      target is not a vessel or a position on the surface.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_RoverAutopilot_Drive(krpc_connection_t connection, krpc_MechJeb_RoverAutopilot_t instance)
+
+      Drive along the waypoints. Throws an exception if there are none.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_RoverAutopilot_Stop(krpc_connection_t connection, krpc_MechJeb_RoverAutopilot_t instance)
+
+      Stop driving along the waypoints.
+
+
+      :Game Scenes: Flight
+
+
+
+RoverWaypoint
+-------------
+
+
+.. type:: krpc_MechJeb_RoverWaypoint_t
+
+   A waypoint of the :type:`krpc_MechJeb_RoverAutopilot_t`, as the Waypoints window shows it.
+
+   .. note::
+
+      The object is destroyed once the waypoints are cleared or replaced, as by
+      :func:`krpc_MechJeb_RoverAutopilot_ClearWaypoints` and :func:`krpc_MechJeb_RoverAutopilot_DriveToTarget`.
+
+   .. macro:: KRPC_CLASS_MECHJEB_ROVERWAYPOINT
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+   .. function:: krpc_error_t krpc_MechJeb_RoverWaypoint_Latitude(krpc_connection_t connection, double * returnValue, krpc_MechJeb_RoverWaypoint_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_RoverWaypoint_set_Latitude(krpc_connection_t connection, krpc_MechJeb_RoverWaypoint_t instance, double value)
+
+      The latitude of the waypoint, in degrees. Throws an exception when set if the waypoint
+      is at a vessel.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_RoverWaypoint_Longitude(krpc_connection_t connection, double * returnValue, krpc_MechJeb_RoverWaypoint_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_RoverWaypoint_set_Longitude(krpc_connection_t connection, krpc_MechJeb_RoverWaypoint_t instance, double value)
+
+      The longitude of the waypoint, in degrees. Throws an exception when set if the waypoint
+      is at a vessel.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_RoverWaypoint_Radius(krpc_connection_t connection, float * returnValue, krpc_MechJeb_RoverWaypoint_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_RoverWaypoint_set_Radius(krpc_connection_t connection, krpc_MechJeb_RoverWaypoint_t instance, float value)
+
+      The distance from the waypoint at which the rover has reached it, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_RoverWaypoint_Name(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_RoverWaypoint_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_RoverWaypoint_set_Name(krpc_connection_t connection, krpc_MechJeb_RoverWaypoint_t instance, const char * value)
+
+      The name of the waypoint.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_RoverWaypoint_MinSpeed(krpc_connection_t connection, float * returnValue, krpc_MechJeb_RoverWaypoint_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_RoverWaypoint_set_MinSpeed(krpc_connection_t connection, krpc_MechJeb_RoverWaypoint_t instance, float value)
+
+      The lowest speed on the way to the waypoint, in :math:`\mathrm{m/s}`, or 0 for no limit.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_RoverWaypoint_MaxSpeed(krpc_connection_t connection, float * returnValue, krpc_MechJeb_RoverWaypoint_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_RoverWaypoint_set_MaxSpeed(krpc_connection_t connection, krpc_MechJeb_RoverWaypoint_t instance, float value)
+
+      The highest speed on the way to the waypoint, in :math:`\mathrm{m/s}`, or 0 for no limit.
+
+      :Game Scenes: Flight

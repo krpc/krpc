@@ -1,0 +1,467 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: MechJeb
+   :no-index:
+
+SmartASS
+========
+
+
+.. class:: SmartASS
+
+   The Smart A.S.S. window, which points the vessel in a chosen direction.
+
+   .. method:: getInterfaceMode()
+               setInterfaceMode(value)
+
+      The mode of the window, which selects its buttons and nothing else.
+      Throws an exception if set to :attr:`MechJeb.SmartASSInterfaceMode.automatic`.
+
+      :Property: Can be read or written
+      :rtype: :class:`MechJeb.SmartASSInterfaceMode`
+      :Game Scenes: Flight
+
+   .. method:: getAutopilotMode()
+               setAutopilotMode(value)
+
+      The autopilot mode. Throws an exception if set to
+      :attr:`MechJeb.SmartASSAutopilotMode.automatic`.
+
+      :Property: Can be read or written
+      :rtype: :class:`MechJeb.SmartASSAutopilotMode`
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Call :meth:`MechJeb.SmartASS.update` to apply a change.
+
+   .. method:: update(resetPID)
+
+      Apply the settings.
+
+      :param resetPID: Whether to reset the attitude controller. Use it only if the vessel does not follow the new settings.
+      :type resetPID: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getForceYaw()
+               setForceYaw(value)
+
+      Whether the autopilot controls the yaw in the :attr:`MechJeb.SmartASSAutopilotMode.surface`,
+      :attr:`MechJeb.SmartASSAutopilotMode.surfacePrograde` and
+      :attr:`MechJeb.SmartASSAutopilotMode.surfaceRetrograde` modes.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getForcePitch()
+               setForcePitch(value)
+
+      Whether the autopilot controls the pitch in the :attr:`MechJeb.SmartASSAutopilotMode.surface`,
+      :attr:`MechJeb.SmartASSAutopilotMode.surfacePrograde` and
+      :attr:`MechJeb.SmartASSAutopilotMode.surfaceRetrograde` modes.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getForceRoll()
+               setForceRoll(value)
+
+      Whether the autopilot controls the roll.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getRoll()
+               setRoll(value)
+
+      The roll, in degrees. 0 is top side up.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`MechJeb.SmartASS.getForceRoll`, and applies in every mode but
+         :attr:`MechJeb.SmartASSAutopilotMode.killRot` and the surface modes.
+
+   .. method:: getSurfaceHeading()
+               setSurfaceHeading(value)
+
+      The heading, in degrees.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`MechJeb.SmartASS.getForceYaw`, and applies in the :attr:`MechJeb.SmartASSAutopilotMode.surface`
+         mode.
+
+   .. method:: getSurfacePitch()
+               setSurfacePitch(value)
+
+      The pitch above the horizon, in degrees. 90 is straight up.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`MechJeb.SmartASS.getForcePitch`, and applies in the :attr:`MechJeb.SmartASSAutopilotMode.surface`
+         mode.
+
+   .. method:: getSurfaceRoll()
+               setSurfaceRoll(value)
+
+      The roll, in degrees. 0 is top side up.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`MechJeb.SmartASS.getForceRoll`, and applies in the :attr:`MechJeb.SmartASSAutopilotMode.surface`
+         mode.
+
+   .. method:: getSurfaceVelYaw()
+               setSurfaceVelYaw(value)
+
+      The yaw from the surface velocity, in degrees.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`MechJeb.SmartASS.getForceYaw`, and applies in the
+         :attr:`MechJeb.SmartASSAutopilotMode.surfacePrograde` and
+         :attr:`MechJeb.SmartASSAutopilotMode.surfaceRetrograde` modes.
+
+   .. method:: getSurfaceVelPitch()
+               setSurfaceVelPitch(value)
+
+      The pitch from the surface velocity, in degrees.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`MechJeb.SmartASS.getForcePitch`, and applies in the
+         :attr:`MechJeb.SmartASSAutopilotMode.surfacePrograde` and
+         :attr:`MechJeb.SmartASSAutopilotMode.surfaceRetrograde` modes.
+
+   .. method:: getSurfaceVelRoll()
+               setSurfaceVelRoll(value)
+
+      The roll, in degrees. 0 is top side up.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`MechJeb.SmartASS.getForceRoll`, and applies in the
+         :attr:`MechJeb.SmartASSAutopilotMode.surfacePrograde` and
+         :attr:`MechJeb.SmartASSAutopilotMode.surfaceRetrograde` modes.
+
+   .. method:: getAdvancedReference()
+               setAdvancedReference(value)
+
+      The reference frame of :meth:`MechJeb.SmartASS.getAdvancedDirection`. Throws an exception if
+      MechJeb uses a reference this enumeration lacks.
+
+      :Property: Can be read or written
+      :rtype: :class:`MechJeb.AttitudeReference`
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies in the :attr:`MechJeb.SmartASSAutopilotMode.advanced` mode.
+
+   .. method:: getAdvancedDirection()
+               setAdvancedDirection(value)
+
+      The direction in :meth:`MechJeb.SmartASS.getAdvancedReference`.
+
+      :Property: Can be read or written
+      :rtype: :class:`MechJeb.Direction`
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies in the :attr:`MechJeb.SmartASSAutopilotMode.advanced` mode.
+
+
+
+.. class:: SmartASSInterfaceMode
+
+   The mode of the Smart A.S.S. window. See :meth:`MechJeb.SmartASS.getInterfaceMode`.
+
+
+   .. attribute:: orbital
+
+      The orbital modes.
+
+
+   .. attribute:: surface
+
+      The surface modes.
+
+
+   .. attribute:: target
+
+      The target modes.
+
+
+   .. attribute:: advanced
+
+      The advanced mode.
+
+
+   .. attribute:: automatic
+
+      Set by MechJeb's autopilots. Cannot be set.
+
+
+
+.. class:: SmartASSAutopilotMode
+
+   The autopilot mode of Smart A.S.S. See :meth:`MechJeb.SmartASS.getAutopilotMode`.
+
+
+   .. attribute:: off
+
+      Off.
+
+
+   .. attribute:: killRot
+
+      Stop the vessel's rotation.
+
+
+   .. attribute:: node
+
+      Point at the next maneuver node.
+
+
+   .. attribute:: surface
+
+      Point in the direction set by :meth:`MechJeb.SmartASS.getSurfaceHeading`,
+      :meth:`MechJeb.SmartASS.getSurfacePitch` and :meth:`MechJeb.SmartASS.getSurfaceRoll`.
+
+
+   .. attribute:: prograde
+
+      Point orbital prograde.
+
+
+   .. attribute:: retrograde
+
+      Point orbital retrograde.
+
+
+   .. attribute:: normalPlus
+
+      Point orbit normal.
+
+
+   .. attribute:: normalMinus
+
+      Point orbit anti-normal.
+
+
+   .. attribute:: radialPlus
+
+      Point radially outward.
+
+
+   .. attribute:: radialMinus
+
+      Point radially inward.
+
+
+   .. attribute:: relativePlus
+
+      Point along the velocity relative to the target.
+
+
+   .. attribute:: relativeMinus
+
+      Point against the velocity relative to the target.
+
+
+   .. attribute:: targetPlus
+
+      Point at the target.
+
+
+   .. attribute:: targetMinus
+
+      Point away from the target.
+
+
+   .. attribute:: parallelPlus
+
+      Point parallel to the target's orientation. For a docking port, along its axis
+      and away from it.
+
+
+   .. attribute:: parallelMinus
+
+      Point antiparallel to the target's orientation. For a docking port, along its axis
+      and toward it.
+
+
+   .. attribute:: advanced
+
+      Point in the direction set by :meth:`MechJeb.SmartASS.getAdvancedReference` and
+      :meth:`MechJeb.SmartASS.getAdvancedDirection`.
+
+
+   .. attribute:: automatic
+
+      Set by MechJeb's autopilots. Cannot be set.
+
+
+   .. attribute:: surfacePrograde
+
+      Point along the surface velocity.
+
+
+   .. attribute:: surfaceRetrograde
+
+      Point against the surface velocity.
+
+
+   .. attribute:: horizontalPlus
+
+      Point along the horizontal surface velocity.
+
+
+   .. attribute:: horizontalMinus
+
+      Point against the horizontal surface velocity.
+
+
+   .. attribute:: verticalPlus
+
+      Point up, normal to the surface.
+
+
+
+.. class:: AttitudeReference
+
+   A reference frame of Smart A.S.S. See :meth:`MechJeb.SmartASS.getAdvancedReference`.
+
+
+   .. attribute:: inertial
+
+      The world coordinate system.
+
+
+   .. attribute:: orbit
+
+      Forward is prograde, left is normal and up is radial out.
+
+
+   .. attribute:: orbitHorizontal
+
+      Forward is the orbital velocity projected onto the surface, and up is the surface normal.
+
+
+   .. attribute:: surfaceNorth
+
+      Forward is north, left is west and up is the surface normal.
+
+
+   .. attribute:: surfaceVelocity
+
+      Forward is the surface velocity, and up is the surface normal perpendicular to it.
+
+
+   .. attribute:: target
+
+      Forward is toward the target, and up is the vessel's heading perpendicular to it.
+
+
+   .. attribute:: relativeVelocity
+
+      Forward is the velocity relative to the target.
+
+
+   .. attribute:: targetOrientation
+
+      Forward is the direction the target faces, and up is the target's up.
+
+
+   .. attribute:: maneuverNode
+
+      Forward is the burn direction of the next maneuver node.
+
+
+   .. attribute:: sun
+
+      Forward is the orbital velocity of the body that orbits the sun, and up is radial
+      out of that orbit.
+
+
+   .. attribute:: surfaceHorizontal
+
+      Forward is the horizontal surface velocity, and up is the surface normal.
+
+
+
+.. class:: Direction
+
+   A direction of Smart A.S.S. See :meth:`MechJeb.SmartASS.getAdvancedDirection`.
+
+
+   .. attribute:: forward
+
+      Forward.
+
+
+   .. attribute:: back
+
+      Back.
+
+
+   .. attribute:: up
+
+      Up.
+
+
+   .. attribute:: down
+
+      Down.
+
+
+   .. attribute:: right
+
+      Right.
+
+
+   .. attribute:: left
+
+      Left.

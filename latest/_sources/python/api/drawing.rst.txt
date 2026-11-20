@@ -1,8 +1,11 @@
 .. default-domain:: py
 .. highlight:: py
 
-Drawing API
-===========
+Drawing
+=======
+
+Provides functionality for drawing objects in the flight scene, the map view, the editor and the
+tracking station.
 
 .. toctree::
    :includehidden:
@@ -22,3 +25,12 @@ Drawing API
    drawing/polyline
    drawing/sphere
    drawing/text
+
+Example
+-------
+
+The following example draws a line from the center of mass of the active vessel, along the
+direction it points. The server removes a client's drawings when the client disconnects, so the
+example waits 10 seconds before it exits:
+
+.. literalinclude:: /scripts/api/drawing/DrawingExample.py

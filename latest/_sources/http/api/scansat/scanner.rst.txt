@@ -1,0 +1,178 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Scanner
+=======
+
+
+.. _http-ScanSat.Scanner:
+
+.. rubric:: Scanner
+
+A SCANsat scanner on a part. Obtained by calling :http:post:`/scan-sat/scanner` or
+:http:post:`/scan-sat/scanners`.
+
+A ``Scanner`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /scan-sat/scanner/(id)/part
+
+   The part containing this scanner.
+
+
+   :param id: The identifier of the :ref:`Scanner <http-ScanSat.Scanner>` object.
+
+   :resjson SpaceCenter.Part value:
+
+
+
+
+.. http:get:: /scan-sat/scanner/(id)/scan-types
+
+   The scan types of the scanner.
+
+
+   :param id: The identifier of the :ref:`Scanner <http-ScanSat.Scanner>` object.
+
+   :resjson ScanSat.ScanType value:
+
+
+
+
+.. http:get:: /scan-sat/scanner/(id)/active
+
+   Returns whether the scanner is switched on, and switches it on or off, as the buttons
+   of the part do.
+
+   .. note::
+
+      A resource scanner only switches on when :http:get:`/scan-sat/instant-resource-scan`
+      is off, or :http:get:`/scan-sat/stock-resource-scan` is off.
+
+
+   :param id: The identifier of the :ref:`Scanner <http-ScanSat.Scanner>` object.
+
+   :resjson bool value:
+
+.. http:put:: /scan-sat/scanner/(id)/active
+
+   Returns whether the scanner is switched on, and switches it on or off, as the buttons
+   of the part do.
+
+   .. note::
+
+      A resource scanner only switches on when :http:get:`/scan-sat/instant-resource-scan`
+      is off, or :http:get:`/scan-sat/stock-resource-scan` is off.
+
+
+   :param id: The identifier of the :ref:`Scanner <http-ScanSat.Scanner>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /scan-sat/scanner/(id)/field-of-view
+
+   The field of view of the scanner at its best altitude, in degrees.
+
+
+   :param id: The identifier of the :ref:`Scanner <http-ScanSat.Scanner>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /scan-sat/scanner/(id)/min-altitude
+
+   The lowest altitude the scanner scans at, in meters.
+
+
+   :param id: The identifier of the :ref:`Scanner <http-ScanSat.Scanner>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /scan-sat/scanner/(id)/best-altitude
+
+   The lowest altitude for the full field of view, in meters.
+
+
+   :param id: The identifier of the :ref:`Scanner <http-ScanSat.Scanner>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /scan-sat/scanner/(id)/max-altitude
+
+   The highest altitude the scanner scans at, in meters.
+
+
+   :param id: The identifier of the :ref:`Scanner <http-ScanSat.Scanner>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /scan-sat/scanner/(id)/requires-light
+
+   Whether the scanner only scans in daylight, when :http:get:`/scan-sat/daylight-check`
+   is on.
+
+
+   :param id: The identifier of the :ref:`Scanner <http-ScanSat.Scanner>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /scan-sat/scanner/(id)/state
+
+   The state of the scanner.
+
+
+   :param id: The identifier of the :ref:`Scanner <http-ScanSat.Scanner>` object.
+
+   :resjson ScanSat.ScannerState value:
+
+
+
+
+
+
+.. _http-ScanSat.ScannerState:
+
+.. rubric:: ScannerState
+
+The state of a scanner. See :http:get:`/scan-sat/scanner/(id)/state`.
+
+Passed and returned as the name of one of its values:
+
+
+``"off"``
+   Switched off.
+
+
+``"out_of_range"``
+   Switched on, and outside its minimum and maximum altitudes.
+
+
+``"in_darkness"``
+   Switched on, and paused as it needs light and the ground below it is in darkness.
+
+
+``"in_range"``
+   Scanning between its minimum and best altitudes, with a reduced field of view.
+
+
+``"in_best_range"``
+   Scanning between its best and maximum altitudes, with its full field of view.

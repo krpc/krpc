@@ -1,0 +1,61 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+RendezvousAutopilot
+===================
+
+
+.. type:: krpc_MechJeb_RendezvousAutopilot_t
+
+   The rendezvous autopilot, which brings the vessel close to the target vessel.
+
+   .. macro:: KRPC_CLASS_MECHJEB_RENDEZVOUSAUTOPILOT
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+   .. function:: krpc_error_t krpc_MechJeb_RendezvousAutopilot_Enabled(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_RendezvousAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_RendezvousAutopilot_set_Enabled(krpc_connection_t connection, krpc_MechJeb_RendezvousAutopilot_t instance, bool value)
+
+      Whether the module is enabled.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_RendezvousAutopilot_Status(krpc_connection_t connection, char * * returnValue, krpc_MechJeb_RendezvousAutopilot_t instance)
+
+      The status of the autopilot.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_RendezvousAutopilot_DesiredDistance(krpc_connection_t connection, double * returnValue, krpc_MechJeb_RendezvousAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_RendezvousAutopilot_set_DesiredDistance(krpc_connection_t connection, krpc_MechJeb_RendezvousAutopilot_t instance, double value)
+
+      The final distance from the target, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_RendezvousAutopilot_MaxPhasingOrbits(krpc_connection_t connection, double * returnValue, krpc_MechJeb_RendezvousAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_RendezvousAutopilot_set_MaxPhasingOrbits(krpc_connection_t connection, krpc_MechJeb_RendezvousAutopilot_t instance, double value)
+
+      The largest number of orbits to wait for the phase angle.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_RendezvousAutopilot_MaxClosingSpeed(krpc_connection_t connection, double * returnValue, krpc_MechJeb_RendezvousAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_RendezvousAutopilot_set_MaxClosingSpeed(krpc_connection_t connection, krpc_MechJeb_RendezvousAutopilot_t instance, double value)
+
+      The largest speed at which to approach the target, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_MechJeb_RendezvousAutopilot_Autowarp(krpc_connection_t connection, bool * returnValue, krpc_MechJeb_RendezvousAutopilot_t instance)
+   .. function:: krpc_error_t krpc_MechJeb_RendezvousAutopilot_set_Autowarp(krpc_connection_t connection, krpc_MechJeb_RendezvousAutopilot_t instance, bool value)
+
+      Whether to warp time during the rendezvous.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The same setting as :func:`krpc_MechJeb_ManeuverPlanner_Autowarp`.

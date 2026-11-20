@@ -1,0 +1,107 @@
+Serial IO
+=========
+
+This protocol carries the :doc:`messages <messages>` over a serial port, for a microcontroller such
+as an Arduino.
+
+.. note::
+
+   If a client library is available for your language, you do not need to implement this protocol.
+
+.. note::
+
+   Streams and events are not supported over serial IO. The server accepts the stream and event
+   RPCs, but their updates go out as fast as the game makes them and can fill its write buffer,
+   as described under :ref:`communication-protocol-serialio-buffering`.
+
+Configuring the Server
+----------------------
+
+To use this protocol, add a server in the server window and select *Protobuf over SerialIO* as its
+protocol. The window sets the serial port and its line settings: the baud rate, data bits, parity,
+stop bits and flow control. The baud rate defaults to 9600.
+
+.. _communication-protocol-serialio-flow-control:
+
+Flow Control
+------------
+
+The server uses no flow control by default. At high baud rates, a USB serial adapter can drop
+bytes when it receives them faster than its host reads them. Setting *Flow control* to *RTS/CTS*
+pauses each end's sending while the other end is not ready.
+
+RTS/CTS needs both ends set to it, and a cable that carries the RTS and CTS lines. A server set to
+RTS/CTS sends nothing while the client holds its RTS line low, or while its CTS line is
+unconnected. Many microcontroller boards wire only TX and RX, so they cannot use it.
+
+The flow control is hardware only. XON/XOFF would stop the line on bytes that occur in the binary
+messages.
+
+Framing
+-------
+
+The framing is the same as for :doc:`tcpip`. Each message is a ``Message``, prefixed with its size
+in bytes, encoded as a varint.
+
+Sessions
+--------
+
+Open the serial port, then send the
+:ref:`connection handshake <communication-protocol-handshake>`. The server serves one session on
+the port at a time.
+
+A serial line has no connect or disconnect. A session ends with a
+:ref:`disconnect <communication-protocol-disconnect>`, after which the server reads the next
+message as a ``connection_request``. A ``connection_request`` sent during a session also starts a
+new one.
+
+.. _communication-protocol-serialio-resetting:
+
+Resetting Clients
+-----------------
+
+A client that resets, such as an Arduino after a power cycle, can find the line in the state its
+earlier session left it in. The server ends a session whose message stalls for 3 seconds partway,
+and drops the partial message. The client specification states how a client resumes a line. See
+:doc:`/client-spec/connection`.
+
+A server with "Auto-accept new clients" turned off answers a connection request only once the player
+approves it. A client of such a server connects with no handshake timeout, so it recovers from a
+stale partial message only by a manual reset.
+
+.. _communication-protocol-serialio-buffering:
+
+Buffering and Data Rates
+------------------------
+
+A serial port carries data far more slowly than the game produces it. At the default 9600 baud it
+carries roughly a thousand bytes per second. The server buffers up to a megabyte of data it
+receives, and 16 megabytes of data it sends:
+
+* Data received from the port waits in its buffer until the game reads it. A full buffer pauses
+  reading from the port. With :ref:`RTS/CTS <communication-protocol-serialio-flow-control>`, the
+  client's sending then pauses too, and no data is lost. Without it, the port's own small buffer
+  overflows and drops data.
+
+* Data written by the game waits in its buffer until the port has sent it. A single response
+  larger than the buffer is still sent. The buffer fills when a client sends requests faster than
+  it reads their responses. The server then drops the session and stops, and is started again
+  from the server window.
+
+To keep the write buffer from filling, read each response before sending the next request.
+
+Example
+-------
+
+.. note::
+
+   This example shows the protocol, and omits much of the behavior a client library needs, such as
+   handling errors and failed connections. A client library should
+   implement the :doc:`client specification </client-spec>` in its entirety.
+
+The following script connects to a server on the serial port ``/dev/ttyUSB0`` with the name
+"Example", calls ``KRPC.GetStatus`` and prints the server version. It then ends the session with
+a ``disconnect``:
+
+.. literalinclude:: /scripts/communication-protocols/serialio/RPC.py
+   :language: python

@@ -20,14 +20,12 @@ Image
       The width of the image, in pixels.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: height: number
 
       The height of the image, in pixels.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. method:: remove()
 

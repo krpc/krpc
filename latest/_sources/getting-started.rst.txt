@@ -3,8 +3,9 @@
 Getting Started
 ===============
 
-This short guide explains the basics for getting the kRPC server set up and running, and writing a
-basic Python script to interact with the game.
+This guide sets up the kRPC server in the game, then writes a Python script that talks to it.
+
+.. _getting-started-server:
 
 The Server Plugin
 -----------------
@@ -12,111 +13,113 @@ The Server Plugin
 Installation
 ^^^^^^^^^^^^
 
-1. Download and install the kRPC server plugin from one of these locations:
+1. Download kRPC from one of these places:
 
-   * `Github <https://github.com/krpc/krpc/releases>`_
+   * `GitHub <https://github.com/krpc/krpc/releases>`_
    * `SpaceDock <https://spacedock.info/mod/69/kRPC>`_
-   * `Curse <https://www.curseforge.com/kerbal/ksp-mods/krpc-control-the-game-using-c-c-java-lua-python>`_
-   * Or the install it using `CKAN <https://forum.kerbalspaceprogram.com/topic/90246-the-comprehensive-kerbal-archive-network-ckan-package-manager-v1180-19-june-2016/>`_
+   * `CurseForge <https://www.curseforge.com/kerbal/ksp-mods/krpc-control-the-game-using-c-c-java-lua-python>`_
 
-2. Start up KSP and load a save game.
+   Copy the ``GameData`` folder from the zip into your KSP folder. You can also install kRPC with
+   `CKAN <https://github.com/KSP-CKAN/CKAN>`_.
 
-3. You should be greeted by the server window:
+2. Start KSP and load a save. The server window appears, with two servers: "TCP/IP Server" on
+   port 50000, and "WebSockets Server" on port 50001 for the JavaScript client. The servers start
+   when the game loads, and the light next to each turns green:
 
    .. image:: /images/getting-started/server-window.png
 
-4. Click "Start server" to, erm... start the server! If all goes well, the light should turn a happy
-   green color.
+3. Click a server's name to show or hide its details: the protocol, the address and the
+   connected clients. Its "Stop" and "Start" buttons stop and start it, and "Stop servers" and
+   "Start servers" stop and start them all.
 
-5. You can hide the window by clicking the close button in the top right. The window can also be
-   shown/hidden by clicking on the icon in the top right:
+4. The close button in the top right hides the window. The kRPC button in the toolbar shows and
+   hides it again, and turns green while a server is running:
 
    .. image:: /images/getting-started/applauncher.png
-
-   This icon will also turn green when the server is online.
 
 Configuration
 ^^^^^^^^^^^^^
 
-The server is configured by clicking edit on the window displayed in-game:
+Stop a server, then click its "Edit" button to change its settings. Click "Save" to keep them:
 
-1. **Protocol**: this is the protocol used by the server. This affects type of client can connect to
-   the server. For Python, and most other clients that communicate over TCP/IP, you want to select
-   "Protobuf over TCP".
-2. **Address**: this is the IP address that the server will listen on. To only allow connections
-   from the local machine, select 'localhost' (the default). To allow connections over a network,
-   either select the local IP address of your machine, or choose 'Manual' and enter the local IP
-   address manually.
-3. **RPC and Stream port numbers**: These need to be set to port numbers that are available on your
-   machine. In most cases, they can just be left as the default.
+1. **Protocol**: How clients connect. The Python client connects over "Protobuf over TCP/IP",
+   the default, or "Protobuf over local socket". Each client guide lists the protocols its client
+   supports.
+2. **Address**: The address the server listens on. "localhost", the default, accepts connections
+   from the same machine only. To accept connections over a network, select one of the machine's
+   addresses, "Any" for all of them, or "Manual" to type one in.
+3. **Port**: The TCP port, 50000 by default for TCP/IP, 50001 for WebSockets and 50003 for HTTP.
+   Change it only if another program uses that port.
+4. **Origins**: For WebSockets and HTTP, the web pages on other sites that may connect. See
+   :ref:`communication-protocol-websockets-origins` and :doc:`the HTTP guide </http>`.
 
-There are also several advanced settings, which are hidden by default, but can be revealed by
-checking "Show advanced settings":
+"Show advanced settings" reveals these settings:
 
-1. **Auto-start server**: When enabled, the server will start automatically when the game loads.
-2. **Auto-accept new clients**: When enabled, new client connections are automatically allowed. When
-   disabled, a pop-up is displayed asking whether the new client connection should be allowed.
+1. **Auto-start server**: On by default. Starts the servers when the game loads.
+2. **Auto-accept new clients**: On by default. When off, a pop-up asks whether to allow each new
+   client. A client stops waiting after its handshake timeout, 5 seconds by default, so connect
+   with no handshake timeout to leave time to answer. HTTP requests need no approval.
+3. **Confirm disconnecting a client**: Asks before the disconnect button next to a client closes
+   its connection.
+4. **Pause the server when the game pauses**: While the game is paused, calls wait until it
+   resumes.
+5. **Debug logging**: Writes more detail to the game's log file, ``KSP.log``.
 
 The other advanced settings control the :ref:`performance of the server
 <server-performance-settings>`.
 
+When a service fails to load, for example after another mod updates, a window lists the problems.
+"Show problems" in the server window opens it again.
+
 The Python Client
 -----------------
+
+The Python client needs Python 3.10 or later.
 
 On Windows
 ^^^^^^^^^^
 
-1. If you don't already have python installed, download the python installer and run it:
-   https://www.python.org/downloads/windows When running the installer, make sure that pip is
-   installed as well.
+1. Download Python from https://www.python.org/downloads/windows and run the installer.
 
-2. Install the kRPC python module, by opening command prompt and running the following command:
-   ``C:\Python310\Scripts\pip.exe install krpc`` You might need to replace ``C:\Python310`` with the
-   location of your python installation.
+2. Install the client from a command prompt:
 
-3. Run Python IDLE (or your favorite editor) and start coding!
+   .. code-block:: bat
 
-On Linux
-^^^^^^^^
+      py -m pip install krpc
 
-1. Your linux distribution likely already comes with python installed. If not, install python using
-   your favorite package manager, or get it from here: https://www.python.org/downloads
+On Linux and macOS
+^^^^^^^^^^^^^^^^^^
 
-2. You also need to install pip, either using your package manager, or from here:
-   https://pypi.python.org/pypi/pip
+1. Install Python with your package manager, or from https://www.python.org/downloads.
 
-3. Install the kRPC python module by running the following from a terminal:
-   ``pip install krpc``
+2. Install the client into a virtual environment, from a terminal:
 
-4. Start coding!
+   .. code-block:: bash
+
+      python3 -m venv krpc-env
+      source krpc-env/bin/activate
+      pip install krpc
+
+   Activate the environment again in each new terminal before you run a script.
 
 'Hello World' Script
 --------------------
 
-Run KSP and start the server with the default settings. Then run the following python script.
+With the server running with the default settings, run this script:
 
+.. literalinclude:: /scripts/getting-started/HelloWorld.py
 
-.. code-block:: python
-
-   import krpc
-   conn = krpc.connect(name='Hello World')
-   vessel = conn.space_center.active_vessel
-   print(vessel.name)
-
-This loads the kRPC python module, opens a new connection to the server, gets the active vessel and
-prints out the name of the vessel. You should see something like the following:
+It connects to the server, gets the active vessel and prints its name:
 
 .. image:: /images/getting-started/hello-world.png
 
-Congratulations! You've written your first script that communicates with KSP.
+Going Further
+-------------
 
-Going further...
-----------------
-
-* For some more interesting examples of what you can do with kRPC, check out the
-  :doc:`tutorials <tutorials>`.
-* Client libraries are available for other languages too, including :doc:`C# <csharp/client>`,
-  :doc:`C++ <cpp/client>`, :doc:`C <cnano/client>`, :doc:`Java <java/client>` and
-  :doc:`Lua <lua/client>`.
-* It is also possible to :doc:`communicate with the server manually <communication-protocols>` from
-  any language you like.
+* The :doc:`Python guide <python>` covers the client in depth.
+* The :doc:`tutorials <tutorials>` show more of what kRPC can do.
+* Clients are also available for :doc:`C# <csharp>`, :doc:`C++ <cpp>`, :doc:`C <cnano>`,
+  :doc:`Java <java>`, :doc:`Lua <lua>` and :doc:`JavaScript <js>`.
+* Other languages can call the server :doc:`over HTTP <http>`, or speak its
+  :doc:`protocol <communication-protocols>` directly.
+* Ask for help on the `kRPC Discord server <https://discord.gg/bXuaTrj>`_.

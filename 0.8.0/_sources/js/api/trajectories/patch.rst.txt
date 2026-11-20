@@ -1,0 +1,107 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: Trajectories
+   :no-index:
+
+Patch
+=====
+
+
+.. class:: Patch
+
+   A patch of the trajectory, at its position in :func:`Trajectories.patches`.
+
+   .. note::
+
+      Trajectories computes the trajectory again as the vessel flies, and the patch reads
+      the latest one. Throws an exception if the trajectory has fewer patches.
+
+   .. method:: position(referenceFrame)
+
+      The position of the impact, or ``null`` without one.
+
+      :param referenceFrame: The reference frame for the position.
+      :type referenceFrame: :class:`SpaceCenter.ReferenceFrame`
+      :rtype: ``[number, number, number]`` or ``null``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         In a reference frame that rotates with :meth:`Trajectories.Patch.getBody`, the position includes
+         the rotation of the body until the impact.
+
+   .. method:: velocity(referenceFrame)
+
+      The velocity at the impact, or ``null`` without one.
+
+      :param referenceFrame: The reference frame for the velocity.
+      :type referenceFrame: :class:`SpaceCenter.ReferenceFrame`
+      :rtype: ``[number, number, number]`` or ``null``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         In a reference frame that rotates with :meth:`Trajectories.Patch.getBody`, the velocity includes
+         the rotation of the body until the impact.
+
+   .. method:: getBody()
+
+      The celestial body that the patch is relative to.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.CelestialBody`
+      :Game Scenes: Flight
+
+   .. method:: getStartUT()
+
+      The universal time at the start of the patch, in seconds.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getEndUT()
+
+      The universal time at the end of the patch, in seconds.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         For a patch that ends in an impact, this is the time of the impact.
+
+   .. method:: getAtmospheric()
+
+      Whether the patch is inside an atmosphere.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: atmosphericTrajectory(referenceFrame)
+
+      The points of an atmospheric patch, or ``null`` for a patch in space.
+
+      :param referenceFrame: The reference frame for the positions.
+      :type referenceFrame: :class:`SpaceCenter.ReferenceFrame`
+      :rtype: ``Array`` of ``[number, number, number, number]`` or ``null``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Each point is a tuple ``(ut, x, y, z)``. In a reference frame that rotates with
+         :meth:`Trajectories.Patch.getBody`, the positions include the rotation of the body until each point.
+
+   .. method:: getOrbitalTrajectory()
+
+      The orbit of a patch in space, or ``null`` for an atmospheric patch.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Orbit` or ``null``
+      :Game Scenes: Flight

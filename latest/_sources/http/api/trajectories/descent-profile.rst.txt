@@ -1,0 +1,92 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+DescentProfile
+==============
+
+
+.. _http-Trajectories.DescentProfile:
+
+.. rubric:: DescentProfile
+
+The descent profile, which sets the attitude of the vessel during the descent.
+
+.. note::
+
+   Each node covers a band of altitude, as a percentage of the height of the atmosphere.
+   A body without an atmosphere uses :http:get:`/trajectories/descent-profile/(id)/final-approach` throughout.
+
+
+A ``DescentProfile`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /trajectories/descent-profile/(id)/entry
+
+   The node for atmospheric entry, from 50% to 100% of the height of the atmosphere.
+
+
+   :param id: The identifier of the :ref:`DescentProfile <http-Trajectories.DescentProfile>` object.
+
+   :resjson Trajectories.DescentProfileNode value:
+
+
+
+
+.. http:get:: /trajectories/descent-profile/(id)/high-altitude
+
+   The node for high altitude, from 25% to 50% of the height of the atmosphere.
+
+
+   :param id: The identifier of the :ref:`DescentProfile <http-Trajectories.DescentProfile>` object.
+
+   :resjson Trajectories.DescentProfileNode value:
+
+
+
+
+.. http:get:: /trajectories/descent-profile/(id)/low-altitude
+
+   The node for low altitude, from 5% to 25% of the height of the atmosphere.
+
+
+   :param id: The identifier of the :ref:`DescentProfile <http-Trajectories.DescentProfile>` object.
+
+   :resjson Trajectories.DescentProfileNode value:
+
+
+
+
+.. http:get:: /trajectories/descent-profile/(id)/final-approach
+
+   The node for the final approach, below 5% of the height of the atmosphere.
+
+
+   :param id: The identifier of the :ref:`DescentProfile <http-Trajectories.DescentProfile>` object.
+
+   :resjson Trajectories.DescentProfileNode value:
+
+
+
+
+.. http:post:: /trajectories/descent-profile/save
+
+   Saves the descent profile to the active vessel.
+
+   .. note::
+
+      A change to a node applies without saving. Saving keeps it in the saved game.
+
+
+
+
+
+
+
+.. http:post:: /trajectories/descent-profile/reset
+
+   Sets every node to an angle of attack, and saves the descent profile.
+
+
+   :reqjson double aoa: The angle of attack in degrees. The default, 180, is retrograde. Optional, defaults to ``180.0``.

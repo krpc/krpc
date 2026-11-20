@@ -1,0 +1,68 @@
+WebSockets
+==========
+
+This protocol carries the :doc:`messages <messages>` over a websockets connection, for a client in
+a web browser.
+
+.. note:: The :doc:`JavaScript client </js>` implements this protocol, for a web page or
+          Node.js.
+
+Framing
+-------
+
+Each message is a ``Message``, encoded according to the Protocol Buffers binary format and carried
+in one binary websockets message. The websockets message may be split across fragments.
+
+Connecting
+----------
+
+A new install has a server for this protocol in the server window, at address ``127.0.0.1`` and
+port ``50001``. To add another, add a server and select *Protobuf over WebSockets* as its
+protocol.
+
+Open a websockets connection to the server with the path ``/``, for example
+``ws://127.0.0.1:50001/``. The upgrade request names no subprotocol. Then send the
+:ref:`connection handshake <communication-protocol-handshake>`. The upgrade and the
+``connection_request`` together have 3 seconds to arrive, timed from the TCP connection.
+
+The connection carries the requests, the responses and the stream updates. To end it, send a
+:ref:`disconnect <communication-protocol-disconnect>` and then a close frame.
+
+.. _communication-protocol-websockets-origins:
+
+Web Pages
+---------
+
+A web page sends its origin with the upgrade request, and the server refuses a page whose origin it
+does not allow, with status 403. *Origins*, in the server window, lists the origins it allows:
+
+* ``localhost``, the default, allows a page served from ``localhost`` or a loopback address, on
+  any port, such as ``http://localhost:8000`` or ``http://127.0.0.1:5173``.
+* An origin, such as ``http://192.168.1.10:8000``, allows pages from that scheme, host and port.
+* ``*`` allows any page, including one opened as a local file, which has the origin ``null``.
+
+The entries are comma-separated. A client that is not a web page, such as Node.js, sends no
+origin, and the server always accepts it.
+
+Examples
+--------
+
+.. note::
+
+   These examples show the protocol, and omit much of the behavior a client library needs, such as
+   handling errors and failed connections. A client library should
+   implement the :doc:`client specification </client-spec>` in its entirety.
+
+The examples run in Node.js, using the ``ws`` and ``protobufjs`` packages. A web browser provides
+the same ``WebSocket`` interface.
+
+The following script connects to the server with the name "Example", calls ``KRPC.GetStatus`` and
+prints the server version. It then ends the connection:
+
+.. literalinclude:: /scripts/communication-protocols/websockets/RPC.js
+   :language: javascript
+
+The following script adds a stream, then receives its updates on the same connection:
+
+.. literalinclude:: /scripts/communication-protocols/websockets/Stream.js
+   :language: javascript

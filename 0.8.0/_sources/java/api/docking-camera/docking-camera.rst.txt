@@ -1,0 +1,25 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.DockingCamera
+
+Service
+=======
+
+
+.. type:: public class DockingCamera
+
+   Provides functionality to interact with Docking Camera (KURS).
+
+   .. method:: boolean getAvailable()
+
+
+      Whether Docking Camera (KURS) is available.
+
+   
+
+   .. method:: Camera camera(SpaceCenter.Part part)
+
+      Get the camera on a part.
+      Throws an exception if the part is not an onboard camera or a docking port.
+
+      :param SpaceCenter.Part part: The part.

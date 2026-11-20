@@ -18,6 +18,10 @@ Scroll View
       the content a layout and setting its size fitter to the preferred size is the
       simplest way to have it grow to hold what is put in it.
 
+   .. macro:: KRPC_CLASS_UI_SCROLLVIEW
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_UI_ScrollView_RectTransform(krpc_connection_t connection, krpc_UI_RectTransform_t * returnValue, krpc_UI_ScrollView_t instance)
 
       The rect transform for the UI object.

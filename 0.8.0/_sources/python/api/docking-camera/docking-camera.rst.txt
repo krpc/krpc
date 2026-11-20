@@ -1,0 +1,31 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: DockingCamera
+
+Service
+=======
+
+
+.. module:: DockingCamera
+
+Provides functionality to interact with Docking Camera (KURS).
+
+
+.. attribute:: available
+
+   Whether Docking Camera (KURS) is available.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: bool
+   
+
+
+
+
+.. staticmethod:: camera(part)
+
+   Get the camera on a part.
+   Throws an exception if the part is not an onboard camera or a docking port.
+
+   :param SpaceCenter.Part part: The part.
+   :rtype: :class:`Camera`

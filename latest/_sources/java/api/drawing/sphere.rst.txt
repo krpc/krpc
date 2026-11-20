@@ -8,7 +8,7 @@ Sphere
 
 .. type:: public class Sphere
 
-   A solid sphere. Created using :meth:`addSphere(org.javatuples.Triplet<Double,Double,Double>, double, SpaceCenter.ReferenceFrame, boolean)`.
+   A solid sphere. Created using :meth:`Drawing.addSphere(org.javatuples.Triplet<Double,Double,Double>, double, SpaceCenter.ReferenceFrame, boolean)`.
 
    .. note::
 

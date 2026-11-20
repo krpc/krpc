@@ -2,25 +2,16 @@
 .. highlight:: cpp
 .. namespace:: krpc::services::KRPC
 
-KRPC
-====
-
-
-
-
-
-
-
-
-
+Service
+=======
 
 
 .. namespace:: krpc::services
-.. class:: KRPC : public krpc::Service
+.. class:: KRPC : public krpc::RemoteService
 
    Main kRPC service, used by clients to interact with basic server functionality.
 
-   .. function:: KRPC(krpc::Client* client)
+   .. function:: KRPC(krpc::Connection& connection)
 
       Construct an instance of this service.
 
@@ -41,41 +32,24 @@ KRPC
 
    .. function:: std::vector<ClientInfo> clients()
 
-      The RPC clients that are currently connected to the server.
+      The clients that are currently connected to the server.
 
    
 
-   .. function:: krpc::schema::Status get_status()
+   .. function:: ServerStatus get_status()
 
-      Returns some information about the server, such as the version.
+      Returns the status of the server, with its version, settings and performance statistics.
 
 
    
 
    .. function:: krpc::schema::Services get_services()
 
-      Returns information on all services, procedures, classes, properties etc. provided by the server.
-      Can be used by client libraries to automatically create functionality such as stubs.
+      The services the server provides, with their procedures, classes, enumerations,
+      structures and exceptions.
 
 
    
-
-   .. function:: krpc::schema::Stream add_function_stream(Expression function)
-
-      Add a stream of the value a server side function computes on each update.
-
-      :Parameters:
-
-
-
-   
-
-      .. note::
-
-         Each call adds a new stream, with values of the type given by
-         :func:`Expression::return_type`. Any exception from the function ends the
-         stream, including one for an object that is not loaded. A procedure that pauses
-         execution to resume on a later tick produces an error on the stream.
 
    .. function:: void hold_tick()
 
@@ -129,41 +103,6 @@ KRPC
 
          Every limit of :func:`hold_tick` applies, the timeout included. A hold lost to
          the timeout is not reported, and the next call takes whatever tick it lands on.
-
-   .. function:: void compile_function(Expression function)
-
-      Compile a server side function, so that running, streaming or adding it as an
-      event does not compile it.
-
-      :Parameters:
-
-
-
-   
-
-      .. note::
-
-         Compiling a large function takes time on the game's main thread. Compiling it
-         in advance keeps that time out of its first run.
-
-   .. function:: std::optional<std::string> run_function(Expression function, std::vector<std::optional<std::string>> arguments = std::vector<std::optional<std::string>>{})
-
-      Run a server side function once, within a single physics tick, and return
-      the value it produces.
-
-      :Parameters:
-
-       * **function** -- The function to run.
-       * **arguments** -- The encoded arguments, one per parameter.
-
-      :returns: The encoded value of the function, or no bytes for a function with no value.
-   
-
-      .. note::
-
-         The arguments are encoded at the types given by :func:`Expression::parameter_types`.
-         Throws an exception if a procedure the function calls pauses execution, and the
-         effects up to the pause remain.
 
    .. function:: GameScene game_scene()
    .. function:: void set_game_scene(GameScene value)
@@ -283,10 +222,151 @@ KRPC
 
 
 .. namespace:: krpc::services::KRPC
+.. struct:: ServerStatus
+
+   The status of the server.
+
+   .. note::
+
+      See :func:`get_status`.
+   .. member:: std::string version
+
+      The version of the server, or ``unknown``.
+
+   .. member:: uint32_t protocol_version
+
+      The protocol version of the connection.
+
+   .. member:: ServerSettings settings
+
+      The settings of the server.
+
+   .. member:: ServerStatistics statistics
+
+      The performance statistics of the server.
+
+
+.. namespace:: krpc::services::KRPC
+.. struct:: ServerSettings
+
+   The settings that control how the server executes calls.
+
+   .. note::
+
+      See :member:`ServerStatus::settings`.
+   .. member:: bool adaptive_rate_control
+
+      Whether the server adapts its time per frame to hold the frame rate at
+      :member:`ServerSettings::target_frame_rate`.
+
+   .. member:: uint32_t target_frame_rate
+
+      The lowest frame rate the server's work pushes the game to, in frames per second.
+
+   .. member:: uint32_t max_time_per_frame
+
+      The server's budget per frame, or its ceiling with adaptive rate control, in microseconds.
+
+   .. member:: uint32_t max_call_wait
+
+      The longest the server waits for a client's next call, in microseconds.
+
+   .. member:: uint32_t tick_hold_timeout
+
+      The longest time a client may hold the game on one physics tick, in microseconds.
+
+
+.. namespace:: krpc::services::KRPC
+.. struct:: ServerStatistics
+
+   The performance statistics of the server.
+
+   .. note::
+
+      See :member:`ServerStatus::statistics`.
+   .. member:: uint64_t bytes_read
+
+      The number of bytes received from clients.
+
+   .. member:: uint64_t bytes_written
+
+      The number of bytes sent to clients.
+
+   .. member:: float bytes_read_rate
+
+      The rate bytes are received from clients, in bytes per second.
+
+   .. member:: float bytes_written_rate
+
+      The rate bytes are sent to clients, in bytes per second.
+
+   .. member:: uint64_t rpcs_executed
+
+      The number of calls executed.
+
+   .. member:: float rpc_rate
+
+      The number of calls executed per second.
+
+   .. member:: float frame_rate
+
+      The game's frame rate, in frames per second.
+
+   .. member:: float time_per_frame
+
+      The server's time per frame, in seconds: executing calls, waiting for them and
+      updating streams.
+
+   .. member:: float exec_time_per_frame
+
+      The time spent executing calls per frame, in seconds.
+
+   .. member:: float wait_time_per_frame
+
+      The time spent waiting for calls per frame, in seconds.
+
+   .. member:: float stream_time_per_frame
+
+      The time spent updating streams per frame, in seconds.
+
+   .. member:: float budget_per_frame
+
+      The time the server may spend per frame, in seconds.
+
+   .. member:: float median_turnaround
+
+      The median time between a response and the client's next call, over the
+      clients' recent calls, in seconds.
+
+   .. member:: uint32_t deferred_calls
+
+      The number of calls left for the next update, because the update ran out of time
+      or the call yielded.
+
+   .. member:: uint32_t streams
+
+      The number of open streams, events included.
+
+   .. member:: uint64_t stream_evaluations
+
+      The number of stream evaluations, one per stream per update.
+
+   .. member:: float stream_evaluation_rate
+
+      The number of stream evaluations per second.
+
+   .. member:: uint64_t stream_updates_sent
+
+      The number of stream updates sent to clients.
+
+
+.. namespace:: krpc::services::KRPC
 .. class:: InvalidOperationException
 
    A method call was made to a method that is invalid
    given the current state of the object.
+
+   An alias of ``std::logic_error``.
 
 
 
@@ -296,12 +376,16 @@ KRPC
    A method was invoked where at least one of the passed arguments does not
    meet the parameter specification of the method.
 
+   An alias of ``std::invalid_argument``.
+
 
 
 .. namespace:: krpc::services::KRPC
 .. class:: ArgumentNullException
 
    A null reference was passed to a method that does not accept it as a valid argument.
+
+   An alias of ``std::invalid_argument``.
 
 
 
@@ -310,12 +394,16 @@ KRPC
 
    The value of an argument is outside the allowable range of values as defined by the invoked method.
 
+   An alias of ``std::out_of_range``.
+
 
 
 .. namespace:: krpc::services::KRPC
 .. class:: NullReferenceException
 
    A value was null where its type does not allow one.
+
+   A subclass of :class:`krpc::ServerError`.
 
 
 
@@ -324,12 +412,16 @@ KRPC
 
    A key was not found in a dictionary.
 
+   An alias of ``std::out_of_range``.
+
 
 
 .. namespace:: krpc::services::KRPC
 .. class:: IndexOutOfRangeException
 
    An index was outside the bounds of a collection, string or array.
+
+   An alias of ``std::out_of_range``.
 
 
 
@@ -338,12 +430,16 @@ KRPC
 
    An integer was divided by zero.
 
+   An alias of ``std::domain_error``.
+
 
 
 .. namespace:: krpc::services::KRPC
 .. class:: NotSupportedException
 
    A method was invoked that is not supported.
+
+   A subclass of :class:`krpc::ServerError`.
 
 
 
@@ -352,12 +448,16 @@ KRPC
 
    An operation did not complete in the time allotted to it.
 
+   A subclass of :class:`krpc::ServerError`.
+
 
 
 .. namespace:: krpc::services::KRPC
 .. class:: OverflowException
 
    An arithmetic or conversion operation overflowed.
+
+   An alias of ``std::overflow_error``.
 
 
 
@@ -368,7 +468,12 @@ KRPC
    so the object cannot be used. For example, the part it represents
    was destroyed, or the vessel it belongs to was recovered.
 
+   A subclass of :class:`krpc::ServerError`.
 
+   .. note::
+
+      See :class:`ObjectNotLoadedException` for a game object that exists but is not
+      loaded.
 
 .. namespace:: krpc::services::KRPC
 .. class:: ObjectNotLoadedException
@@ -376,12 +481,18 @@ KRPC
    The game object that a service object refers to exists, but is not loaded.
    For example, the game is loading, or the vessel carrying the part is unloaded.
 
+   A subclass of :class:`krpc::ServerError`.
 
+   .. note::
+
+      See :class:`ObjectDestroyedException` for a game object that no longer exists.
 
 .. namespace:: krpc::services::KRPC
 .. class:: UnsupportedSceneException
 
    The procedure is not available in the current game scene.
+
+   A subclass of :class:`krpc::ServerError`.
 
 
 
@@ -390,9 +501,13 @@ KRPC
 
    A stream was removed by the server, e.g. an event that has finished.
 
+   An alias of :class:`krpc::StreamError`.
+
 
 
 .. namespace:: krpc::services::KRPC
 .. class:: Error
 
    A general error, described by its message.
+
+   A subclass of :class:`krpc::ServerError`.

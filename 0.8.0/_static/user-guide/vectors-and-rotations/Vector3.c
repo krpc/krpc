@@ -1,0 +1,18 @@
+#include <krpc_cnano.h>
+#include <krpc_cnano/services/space_center.h>
+#include <stdio.h>
+
+int main() {
+  krpc_connection_t conn;
+  if (krpc_open_serial(&conn, "COM0") != KRPC_OK) return 1;
+  if (krpc_connect(conn, "Vector3") != KRPC_OK) return 1;
+  krpc_SpaceCenter_Vessel_t vessel;
+  krpc_SpaceCenter_ActiveVessel(conn, &vessel);
+  krpc_SpaceCenter_Flight_t flight;
+  krpc_SpaceCenter_Vessel_Flight(conn, &flight, vessel, KRPC_NULL);
+  krpc_tuple_double_double_double_t v;
+  krpc_SpaceCenter_Flight_Prograde(conn, &v, flight);
+  printf("(%.2f, %.2f, %.2f)\n", v.e0, v.e1, v.e2);
+
+  krpc_disconnect(conn);
+}

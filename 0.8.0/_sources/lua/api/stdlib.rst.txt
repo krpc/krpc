@@ -1,0 +1,683 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: StdLib
+
+Standard Library
+================
+
+
+.. module:: StdLib
+
+A standard library of mathematics and printing for server side functions, and of the
+colors other services use.
+
+.. note::
+
+   Vectors are position and direction tuples, and rotations are unit quaternion tuples
+   in the order x, y, z, w the SpaceCenter service uses. Angles are in radians unless
+   stated otherwise.
+
+
+
+.. attribute:: pi: number
+
+   The constant pi.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: e: number
+
+   The constant e, the base of the natural logarithm.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. staticmethod:: abs(x: number): number
+
+   The absolute value of a number.
+
+   :param x: The number.
+
+
+
+
+.. staticmethod:: sign(x: number): number
+
+   The sign of a number: -1 if it is negative, 1 if it is positive,
+   and 0 if it is zero or not a number.
+
+   :param x: The number.
+
+
+
+
+.. staticmethod:: copy_sign(x: number, y: number): number
+
+   The magnitude of the first number with the sign of the second.
+
+   :param x: The number giving the magnitude.
+   :param y: The number giving the sign.
+
+
+
+
+.. staticmethod:: is_nan(x: number): boolean
+
+   Whether a number is not a number.
+
+   :param x: The number.
+
+
+
+
+.. staticmethod:: is_finite(x: number): boolean
+
+   Whether a number is neither infinite nor not a number.
+
+   :param x: The number.
+
+
+
+
+.. staticmethod:: floor(x: number): number
+
+   The largest whole number less than or equal to the given number.
+
+   :param x: The number.
+
+
+
+
+.. staticmethod:: ceiling(x: number): number
+
+   The smallest whole number greater than or equal to the given number.
+
+   :param x: The number.
+
+
+
+
+.. staticmethod:: round(x: number, digits?: number): number
+
+   The given number rounded to the given number of decimal places,
+   with a halfway value rounded to the nearer even number.
+
+   :param x: The number.
+   :param digits: The number of decimal places to round to. Negative to round to tens, hundreds and beyond. Defaults to ``0``.
+
+   .. note::
+
+      Throws an exception if the rounded value is too large for a double.
+
+
+
+
+.. staticmethod:: round_half_away_from_zero(x: number, digits?: number): number
+
+   The given number rounded to the given number of decimal places,
+   with a halfway value rounded away from zero.
+
+   :param x: The number.
+   :param digits: The number of decimal places to round to. Negative to round to tens, hundreds and beyond. Defaults to ``0``.
+
+   .. note::
+
+      Throws an exception if the rounded value is too large for a double.
+
+
+
+
+.. staticmethod:: round_half_up(x: number, digits?: number): number
+
+   The given number rounded to the given number of decimal places,
+   with a halfway value rounded toward positive infinity.
+
+   :param x: The number.
+   :param digits: The number of decimal places to round to. Negative to round to tens, hundreds and beyond. Defaults to ``0``.
+
+   .. note::
+
+      Throws an exception if the rounded value is too large for a double.
+
+
+
+
+.. staticmethod:: sqrt(x: number): number
+
+   The square root of a number.
+
+   :param x: The number.
+
+
+
+
+.. staticmethod:: hypot(x: number, y: number): number
+
+   The length of the hypotenuse of a right triangle with the given sides.
+
+   :param x: The first side.
+   :param y: The second side.
+
+
+
+
+.. staticmethod:: sin(x: number): number
+
+   The sine of an angle, in radians.
+
+   :param x: The angle.
+
+
+
+
+.. staticmethod:: cos(x: number): number
+
+   The cosine of an angle, in radians.
+
+   :param x: The angle.
+
+
+
+
+.. staticmethod:: tan(x: number): number
+
+   The tangent of an angle, in radians.
+
+   :param x: The angle.
+
+
+
+
+.. staticmethod:: asin(x: number): number
+
+   The angle, in radians, whose sine is the given number.
+
+   :param x: The number.
+
+
+
+
+.. staticmethod:: acos(x: number): number
+
+   The angle, in radians, whose cosine is the given number.
+
+   :param x: The number.
+
+
+
+
+.. staticmethod:: atan(x: number): number
+
+   The angle, in radians, whose tangent is the given number.
+
+   :param x: The number.
+
+
+
+
+.. staticmethod:: atan2(y: number, x: number): number
+
+   The angle, in radians, between the positive x axis and the point ``(x, y)``.
+
+   :param y: The y coordinate.
+   :param x: The x coordinate.
+
+
+
+
+.. staticmethod:: log(x: number, new_base?: number): number
+
+   The logarithm of a number, natural unless another base is given.
+
+   :param x: The number.
+   :param new_base: The base of the logarithm. Defaults to ``2.718281828459045``.
+
+
+
+
+.. staticmethod:: log10(x: number): number
+
+   The base 10 logarithm of a number.
+
+   :param x: The number.
+
+
+
+
+.. staticmethod:: exp(x: number): number
+
+   The number e raised to the given power.
+
+   :param x: The power.
+
+
+
+
+.. staticmethod:: min(x: number, y: number): number
+
+   The smaller of two numbers.
+
+   :param x: The first number.
+   :param y: The second number.
+
+
+
+
+.. staticmethod:: max(x: number, y: number): number
+
+   The larger of two numbers.
+
+   :param x: The first number.
+   :param y: The second number.
+
+
+
+
+.. staticmethod:: clamp(x: number, min: number, max: number): number
+
+   The given number limited to the given range.
+
+   :param x: The number.
+   :param min: The minimum of the range.
+   :param max: The maximum of the range.
+
+   .. note::
+
+      Throws an exception if the minimum is greater than the maximum.
+
+
+
+
+.. staticmethod:: lerp(a: number, b: number, t: number): number
+
+   Linear interpolation between two numbers.
+
+   :param a: The number when t is 0.
+   :param b: The number when t is 1.
+   :param t: The interpolation parameter.
+
+   .. note::
+
+      The parameter is not limited to the range 0 to 1, and a value outside it
+      extrapolates.
+
+
+
+
+.. staticmethod:: inverse_lerp(a: number, b: number, x: number): number
+
+   The interpolation parameter of a number between two others,
+   limited to the range 0 to 1.
+
+   :param a: The number at 0.
+   :param b: The number at 1.
+   :param x: The number.
+
+   .. note::
+
+      Returns 0 if the two numbers are equal.
+
+
+
+
+.. staticmethod:: degrees_to_radians(x: number): number
+
+   The angle in radians of an angle in degrees.
+
+   :param x: The angle in degrees.
+
+
+
+
+.. staticmethod:: radians_to_degrees(x: number): number
+
+   The angle in degrees of an angle in radians.
+
+   :param x: The angle in radians.
+
+
+
+
+.. staticmethod:: vector_add(u: Tuple, v: Tuple): Tuple
+
+   The sum of two vectors.
+
+   :param u: The first vector.
+   :param v: The second vector.
+
+
+
+
+.. staticmethod:: vector_subtract(u: Tuple, v: Tuple): Tuple
+
+   The difference of two vectors.
+
+   :param u: The first vector.
+   :param v: The second vector.
+
+
+
+
+.. staticmethod:: vector_scale(v: Tuple, scale: number): Tuple
+
+   A vector scaled by a number.
+
+   :param v: The vector.
+   :param scale: The scaling factor.
+
+
+
+
+.. staticmethod:: vector_dot(u: Tuple, v: Tuple): number
+
+   The dot product of two vectors.
+
+   :param u: The first vector.
+   :param v: The second vector.
+
+
+
+
+.. staticmethod:: vector_cross(u: Tuple, v: Tuple): Tuple
+
+   The cross product of two vectors.
+
+   :param u: The first vector.
+   :param v: The second vector.
+
+
+
+
+.. staticmethod:: vector_magnitude(v: Tuple): number
+
+   The magnitude (length) of a vector.
+
+   :param v: The vector.
+
+
+
+
+.. staticmethod:: vector_normalize(v: Tuple): Tuple
+
+   A vector scaled to a magnitude of 1.
+
+   :param v: The vector.
+
+   .. note::
+
+      Throws an exception if the vector is zero.
+
+
+
+
+.. staticmethod:: vector_distance(u: Tuple, v: Tuple): number
+
+   The distance between two positions.
+
+   :param u: The first position.
+   :param v: The second position.
+
+
+
+
+.. staticmethod:: vector_angle(u: Tuple, v: Tuple): number
+
+   The angle between two vectors, in radians, between 0 and :math:`\pi`.
+
+   :param u: The first vector.
+   :param v: The second vector.
+
+   .. note::
+
+      Throws an exception if either vector is zero.
+
+
+
+
+.. staticmethod:: vector_lerp(u: Tuple, v: Tuple, t: number): Tuple
+
+   Linear interpolation between two vectors.
+
+   :param u: The vector when t is 0.
+   :param v: The vector when t is 1.
+   :param t: The interpolation parameter.
+
+   .. note::
+
+      The parameter is not limited to the range 0 to 1, and a value outside it
+      extrapolates.
+
+
+
+
+.. staticmethod:: quaternion_multiply(q: Tuple, r: Tuple): Tuple
+
+   The composition of two rotations: the rotation r followed by the
+   rotation q.
+
+   :param q: The second rotation.
+   :param r: The first rotation.
+
+   .. note::
+
+      Throws an exception if either quaternion is zero.
+
+
+
+
+.. staticmethod:: quaternion_inverse(q: Tuple): Tuple
+
+   The inverse of a rotation.
+
+   :param q: The rotation.
+
+   .. note::
+
+      Throws an exception if the quaternion is zero.
+
+
+
+
+.. staticmethod:: quaternion_rotate_vector(q: Tuple, v: Tuple): Tuple
+
+   A vector rotated by a rotation.
+
+   :param q: The rotation.
+   :param v: The vector.
+
+   .. note::
+
+      Throws an exception if the quaternion is zero.
+
+
+
+
+.. staticmethod:: quaternion_from_axis_angle(axis: Tuple, angle: number): Tuple
+
+   The rotation about an axis by an angle.
+
+   :param axis: The axis of rotation.
+   :param angle: The angle of rotation, in radians.
+
+   .. note::
+
+      Throws an exception if the axis is zero.
+
+
+
+
+.. staticmethod:: quaternion_to_axis_angle(q: Tuple): StdLib.AxisAngle
+
+   The axis and angle of a rotation.
+
+   :param q: The rotation.
+
+   .. note::
+
+      Throws an exception if the quaternion is zero.
+
+
+
+
+.. staticmethod:: quaternion_from_to_rotation(u: Tuple, v: Tuple): Tuple
+
+   The shortest rotation that takes one direction onto another.
+
+   :param u: The direction to rotate from.
+   :param v: The direction to rotate to.
+
+   .. note::
+
+      Opposite directions give a half turn about an arbitrary perpendicular axis.
+      Throws an exception if either vector is zero.
+
+
+
+
+.. staticmethod:: quaternion_look_rotation(forward: Tuple, up: Tuple): Tuple
+
+   The rotation that takes the z axis onto a forward direction, and the y axis
+   toward an up direction.
+
+   :param forward: The direction of the z axis.
+   :param up: The direction the y axis points toward.
+
+   .. note::
+
+      The up direction need not be perpendicular to the forward direction. Throws an
+      exception if either vector is zero, or if they are parallel.
+
+
+
+
+.. staticmethod:: quaternion_angle(q: Tuple, r: Tuple): number
+
+   The angle of the rotation that takes one rotation to another,
+   in radians, between 0 and :math:`\pi`.
+
+   :param q: The first rotation.
+   :param r: The second rotation.
+
+   .. note::
+
+      Throws an exception if either quaternion is zero.
+
+
+
+
+.. staticmethod:: quaternion_slerp(q: Tuple, r: Tuple, t: number): Tuple
+
+   Spherical linear interpolation between two rotations.
+
+   :param q: The rotation when t is 0.
+   :param r: The rotation when t is 1.
+   :param t: The interpolation parameter.
+
+   .. note::
+
+      The parameter is not limited to the range 0 to 1, and a value outside it
+      extrapolates. Throws an exception if either quaternion is zero.
+
+
+
+
+.. staticmethod:: print(message: string)
+
+   Writes a message to the game's log, for debugging.
+
+   :param message: The message.
+
+   .. note::
+
+      A function evaluated by a stream or an event prints on every update. The message is
+      written at the Info level, so a server log level of Warning or Error hides it.
+
+
+
+
+
+.. class:: AxisAngle
+
+   A rotation as an axis and an angle.
+
+   .. note::
+
+      See :meth:`StdLib.quaternion_to_axis_angle`.
+   .. attribute:: axis: Tuple
+
+      The axis of the rotation, as a unit vector, or zero for no rotation.
+
+
+   .. attribute:: angle: number
+
+      The angle of the rotation, in radians between 0 and :math:`\pi`.
+
+
+
+.. class:: ColorRGB
+
+   A color, as red, green and blue components between 0 and 1.
+
+
+   .. attribute:: r: number
+
+      The red component.
+
+
+   .. attribute:: g: number
+
+      The green component.
+
+
+   .. attribute:: b: number
+
+      The blue component.
+
+
+
+.. class:: ColorRGBA
+
+   A color, as red, green, blue and alpha components between 0 and 1.
+
+   .. note::
+
+      An alpha of 0 is fully transparent and 1 is fully opaque.
+   .. attribute:: r: number
+
+      The red component.
+
+
+   .. attribute:: g: number
+
+      The green component.
+
+
+   .. attribute:: b: number
+
+      The blue component.
+
+
+   .. attribute:: a: number
+
+      The alpha component.
+
+
+
+.. class:: ImageFormat
+
+   The file format of an image.
+
+
+   .. data:: png
+
+      PNG, which is lossless.
+
+
+   .. data:: jpeg
+
+      JPEG, which is lossy, and smaller and faster to encode than PNG.

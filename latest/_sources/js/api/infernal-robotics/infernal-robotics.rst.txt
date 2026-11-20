@@ -1,0 +1,71 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: InfernalRobotics
+   :no-index:
+
+Service
+=======
+
+
+.. module:: InfernalRobotics
+
+Provides functionality to interact with Infernal Robotics Next.
+
+
+.. function:: getAvailable()
+
+   Whether Infernal Robotics is installed.
+
+   :Property: Read-only, cannot be set
+   :rtype: ``boolean``
+   
+
+
+
+
+.. function:: servoGroups(vessel)
+
+   A list of all the servo groups in the given *vessel*.
+
+   :param vessel:
+   :type vessel: :class:`SpaceCenter.Vessel`
+   :rtype: ``Array`` of :class:`InfernalRobotics.ServoGroup`
+   :Game Scenes: Flight
+
+
+   .. note::
+
+      Works for any loaded vessel, not just the active one. Groups on a non-active vessel
+      support movement and per-servo control, but not preset, key, speed-factor or
+      expanded state, which are only tracked by Infernal Robotics for the active vessel.
+
+
+
+
+.. function:: servoGroupWithName(vessel, name)
+
+   Returns the servo group in the given *vessel* with the given *name*,
+   or ``null`` if none exists. If multiple servo groups have the same name, only one of them is returned.
+
+   :param vessel: Vessel to check.
+   :type vessel: :class:`SpaceCenter.Vessel`
+   :param name: Name of servo group to find.
+   :type name: ``string``
+   :rtype: :class:`InfernalRobotics.ServoGroup` or ``null``
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: servoWithName(vessel, name)
+
+   Returns the servo in the given *vessel* with the given *name* or
+   ``null`` if none exists. If multiple servos have the same name, only one of them is returned.
+
+   :param vessel: Vessel to check.
+   :type vessel: :class:`SpaceCenter.Vessel`
+   :param name: Name of the servo to find.
+   :type name: ``string``
+   :rtype: :class:`InfernalRobotics.Servo` or ``null``
+   :Game Scenes: Flight

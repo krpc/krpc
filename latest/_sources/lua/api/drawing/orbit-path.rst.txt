@@ -15,7 +15,6 @@ OrbitPath
       The orbit.
 
       :Attribute: Can be read or written
-      :rtype: :class:`SpaceCenter.Orbit`
 
    .. attribute:: whole_orbit: boolean
 
@@ -24,14 +23,12 @@ OrbitPath
       to :attr:`Drawing.OrbitPath.end_true_anomaly`.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: start_true_anomaly: number
 
       The true anomaly at which the path starts, in radians.
 
       :Attribute: Can be read or written
-      :rtype: number
 
       .. note::
 
@@ -42,7 +39,6 @@ OrbitPath
       The true anomaly at which the path ends, in radians.
 
       :Attribute: Can be read or written
-      :rtype: number
 
       .. note::
 
@@ -53,14 +49,12 @@ OrbitPath
       Whether the object is visible.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: color: StdLib.ColorRGB
 
       The color of the path.
 
       :Attribute: Can be read or written
-      :rtype: :class:`StdLib.ColorRGB`
 
       .. note::
 
@@ -71,7 +65,6 @@ OrbitPath
       The colors of the path, blended evenly from its start to its end.
 
       :Attribute: Can be read or written
-      :rtype: List
 
       .. note::
 
@@ -82,42 +75,36 @@ OrbitPath
       The thickness of the path.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: start_arrow: boolean
 
       Whether an arrow head is drawn at the start.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: end_arrow: boolean
 
       Whether an arrow head is drawn at the end.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: arrow_size: number
 
       The size of the arrow heads, relative to the thickness.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: dashed: boolean
 
       Whether the path is drawn as a dashed line.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: label: string
 
       Text drawn halfway along the path, facing the camera. Empty for no label.
 
       :Attribute: Can be read or written
-      :rtype: string
 
    .. attribute:: material: string
 
@@ -125,7 +112,6 @@ OrbitPath
       Creates the material from a shader with the given name.
 
       :Attribute: Can be read or written
-      :rtype: string
 
    .. method:: remove()
 

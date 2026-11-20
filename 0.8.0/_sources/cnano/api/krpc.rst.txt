@@ -1,0 +1,23 @@
+.. default-domain:: c
+.. highlight:: c
+
+KRPC
+====
+
+Provides functionality to interact with the server: its status and services, the connected
+clients, the game scene and pause state, and holding the game on a physics tick.
+The expressions build server side functions.
+
+.. toctree::
+   :includehidden:
+   :maxdepth: 1
+
+   krpc/krpc
+   krpc/expressions
+
+Example
+-------
+
+The following example prints the version of the server:
+
+.. literalinclude:: /scripts/api/krpc/KRPCExample.c

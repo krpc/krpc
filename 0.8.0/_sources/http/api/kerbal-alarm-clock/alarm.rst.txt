@@ -1,0 +1,387 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Alarm
+=====
+
+
+.. _http-KerbalAlarmClock.Alarm:
+
+.. rubric:: Alarm
+
+Represents an alarm. Obtained by calling
+:http:get:`/kerbal-alarm-clock/alarms`,
+:http:post:`/kerbal-alarm-clock/alarm-with-name` or
+:http:post:`/kerbal-alarm-clock/alarms-with-type`.
+
+A ``Alarm`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /kerbal-alarm-clock/alarm/(id)/action
+
+   The action that the alarm triggers.
+
+   .. note::
+
+      An alarm that plays a sound has the action ``"custom"``.
+      See :http:get:`/kerbal-alarm-clock/alarm/(id)/play-sound`.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-KerbalAlarmClock.Alarm>` object.
+
+   :resjson KerbalAlarmClock.AlarmAction value:
+
+.. http:put:: /kerbal-alarm-clock/alarm/(id)/action
+
+   The action that the alarm triggers.
+
+   .. note::
+
+      An alarm that plays a sound has the action ``"custom"``.
+      See :http:get:`/kerbal-alarm-clock/alarm/(id)/play-sound`.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-KerbalAlarmClock.Alarm>` object.
+
+   :reqjson KerbalAlarmClock.AlarmAction value: The new value.
+
+
+
+
+.. http:get:: /kerbal-alarm-clock/alarm/(id)/margin
+
+   The number of seconds before the event that the alarm will fire.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-KerbalAlarmClock.Alarm>` object.
+
+   :resjson double value:
+
+.. http:put:: /kerbal-alarm-clock/alarm/(id)/margin
+
+   The number of seconds before the event that the alarm will fire.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-KerbalAlarmClock.Alarm>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /kerbal-alarm-clock/alarm/(id)/time
+
+   The time at which the alarm will fire.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-KerbalAlarmClock.Alarm>` object.
+
+   :resjson double value:
+
+.. http:put:: /kerbal-alarm-clock/alarm/(id)/time
+
+   The time at which the alarm will fire.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-KerbalAlarmClock.Alarm>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /kerbal-alarm-clock/alarm/(id)/type
+
+   The type of the alarm.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-KerbalAlarmClock.Alarm>` object.
+
+   :resjson KerbalAlarmClock.AlarmType value:
+
+
+
+
+.. http:get:: /kerbal-alarm-clock/alarm/(id)/id
+
+   The unique identifier for the alarm.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-KerbalAlarmClock.Alarm>` object.
+
+   :resjson string value:
+
+
+
+
+.. http:get:: /kerbal-alarm-clock/alarm/(id)/name
+
+   The short name of the alarm.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-KerbalAlarmClock.Alarm>` object.
+
+   :resjson string value:
+
+.. http:put:: /kerbal-alarm-clock/alarm/(id)/name
+
+   The short name of the alarm.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-KerbalAlarmClock.Alarm>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:get:: /kerbal-alarm-clock/alarm/(id)/notes
+
+   The long description of the alarm.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-KerbalAlarmClock.Alarm>` object.
+
+   :resjson string value:
+
+.. http:put:: /kerbal-alarm-clock/alarm/(id)/notes
+
+   The long description of the alarm.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-KerbalAlarmClock.Alarm>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:get:: /kerbal-alarm-clock/alarm/(id)/remaining
+
+   The number of seconds until the alarm will fire.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-KerbalAlarmClock.Alarm>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /kerbal-alarm-clock/alarm/(id)/enabled
+
+   Whether the alarm is enabled. A disabled alarm does not fire.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-KerbalAlarmClock.Alarm>` object.
+
+   :resjson bool value:
+
+.. http:put:: /kerbal-alarm-clock/alarm/(id)/enabled
+
+   Whether the alarm is enabled. A disabled alarm does not fire.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-KerbalAlarmClock.Alarm>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /kerbal-alarm-clock/alarm/(id)/play-sound
+
+   Whether the alarm plays a sound when it fires.
+
+   .. note::
+
+      An alarm that plays a sound has the action ``"custom"``.
+      Setting :http:get:`/kerbal-alarm-clock/alarm/(id)/action` to any other value turns the sound off.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-KerbalAlarmClock.Alarm>` object.
+
+   :resjson bool value:
+
+.. http:put:: /kerbal-alarm-clock/alarm/(id)/play-sound
+
+   Whether the alarm plays a sound when it fires.
+
+   .. note::
+
+      An alarm that plays a sound has the action ``"custom"``.
+      Setting :http:get:`/kerbal-alarm-clock/alarm/(id)/action` to any other value turns the sound off.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-KerbalAlarmClock.Alarm>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /kerbal-alarm-clock/alarm/(id)/triggered
+
+   Whether the alarm has fired. Remains true once the alarm has fired;
+   stream this or use it in an event expression to react to the alarm
+   firing.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-KerbalAlarmClock.Alarm>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /kerbal-alarm-clock/alarm/(id)/repeat
+
+   Whether the alarm will be repeated after it has fired.
+   Only has an effect for alarm types that support repeating
+   (see :http:get:`/kerbal-alarm-clock/alarm/(id)/supports-repeat`).
+
+
+   :param id: The identifier of the :ref:`Alarm <http-KerbalAlarmClock.Alarm>` object.
+
+   :resjson bool value:
+
+.. http:put:: /kerbal-alarm-clock/alarm/(id)/repeat
+
+   Whether the alarm will be repeated after it has fired.
+   Only has an effect for alarm types that support repeating
+   (see :http:get:`/kerbal-alarm-clock/alarm/(id)/supports-repeat`).
+
+
+   :param id: The identifier of the :ref:`Alarm <http-KerbalAlarmClock.Alarm>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /kerbal-alarm-clock/alarm/(id)/supports-repeat
+
+   Whether this alarm's type supports repeating
+   (see :http:get:`/kerbal-alarm-clock/alarm/(id)/repeat`).
+
+
+   :param id: The identifier of the :ref:`Alarm <http-KerbalAlarmClock.Alarm>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /kerbal-alarm-clock/alarm/(id)/repeat-period
+
+   The time delay to automatically create an alarm after it has fired.
+   Only has an effect for alarm types that support a repeat period
+   (see :http:get:`/kerbal-alarm-clock/alarm/(id)/supports-repeat-period`).
+
+
+   :param id: The identifier of the :ref:`Alarm <http-KerbalAlarmClock.Alarm>` object.
+
+   :resjson double value:
+
+.. http:put:: /kerbal-alarm-clock/alarm/(id)/repeat-period
+
+   The time delay to automatically create an alarm after it has fired.
+   Only has an effect for alarm types that support a repeat period
+   (see :http:get:`/kerbal-alarm-clock/alarm/(id)/supports-repeat-period`).
+
+
+   :param id: The identifier of the :ref:`Alarm <http-KerbalAlarmClock.Alarm>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /kerbal-alarm-clock/alarm/(id)/supports-repeat-period
+
+   Whether this alarm's type supports a repeat period
+   (see :http:get:`/kerbal-alarm-clock/alarm/(id)/repeat-period`).
+
+
+   :param id: The identifier of the :ref:`Alarm <http-KerbalAlarmClock.Alarm>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /kerbal-alarm-clock/alarm/(id)/vessel
+
+   The vessel that the alarm is attached to.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-KerbalAlarmClock.Alarm>` object.
+
+   :resjson SpaceCenter.Vessel value:
+
+.. http:put:: /kerbal-alarm-clock/alarm/(id)/vessel
+
+   The vessel that the alarm is attached to.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-KerbalAlarmClock.Alarm>` object.
+
+   :reqjson SpaceCenter.Vessel value: The new value.
+
+
+
+
+.. http:get:: /kerbal-alarm-clock/alarm/(id)/xfer-origin-body
+
+   The celestial body the vessel is departing from.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-KerbalAlarmClock.Alarm>` object.
+
+   :resjson SpaceCenter.CelestialBody value:
+
+.. http:put:: /kerbal-alarm-clock/alarm/(id)/xfer-origin-body
+
+   The celestial body the vessel is departing from.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-KerbalAlarmClock.Alarm>` object.
+
+   :reqjson SpaceCenter.CelestialBody value: The new value.
+
+
+
+
+.. http:get:: /kerbal-alarm-clock/alarm/(id)/xfer-target-body
+
+   The celestial body the vessel is arriving at.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-KerbalAlarmClock.Alarm>` object.
+
+   :resjson SpaceCenter.CelestialBody value:
+
+.. http:put:: /kerbal-alarm-clock/alarm/(id)/xfer-target-body
+
+   The celestial body the vessel is arriving at.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-KerbalAlarmClock.Alarm>` object.
+
+   :reqjson SpaceCenter.CelestialBody value: The new value.
+
+
+
+
+.. http:post:: /kerbal-alarm-clock/alarm/(id)/remove
+
+   Removes the alarm. Any further use of this object throws an exception.
+
+   .. note::
+
+      Any further use of this object throws an exception.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-KerbalAlarmClock.Alarm>` object.

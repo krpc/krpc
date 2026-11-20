@@ -1,0 +1,91 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: Drawing
+   :no-index:
+
+Box
+===
+
+
+.. class:: Box
+
+   The edges of a box. Created using :func:`Drawing.addBox`.
+
+   .. method:: getCenter()
+               setCenter(value)
+
+      Position of the center of the box.
+
+      :Property: Can be read or written
+      :rtype: ``[number, number, number]``
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: getSize()
+               setSize(value)
+
+      Lengths of the sides of the box along its x, y and z axes, in meters.
+
+      :Property: Can be read or written
+      :rtype: ``[number, number, number]``
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: getRotation()
+               setRotation(value)
+
+      Rotation of the box, as a quaternion.
+
+      :Property: Can be read or written
+      :rtype: ``[number, number, number, number]``
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: getReferenceFrame()
+               setReferenceFrame(value)
+
+      Reference frame for the position and rotation of the box.
+
+      :Property: Can be read or written
+      :rtype: :class:`SpaceCenter.ReferenceFrame`
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: getVisible()
+               setVisible(value)
+
+      Whether the object is visible.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: getColor()
+               setColor(value)
+
+      The color of the edges.
+
+      :Property: Can be read or written
+      :rtype: :class:`StdLib.ColorRGB`
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: getThickness()
+               setThickness(value)
+
+      The thickness of the edges.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: getMaterial()
+               setMaterial(value)
+
+      Material used to render the object.
+      Creates the material from a shader with the given name.
+
+      :Property: Can be read or written
+      :rtype: ``string``
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: remove()
+
+      Remove the object.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph

@@ -1,0 +1,54 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: InfernalRobotics
+
+Service
+=======
+
+
+.. module:: InfernalRobotics
+
+Provides functionality to interact with Infernal Robotics Next.
+
+
+.. attribute:: available: boolean
+
+   Whether Infernal Robotics is installed.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. staticmethod:: servo_groups(vessel: SpaceCenter.Vessel): List
+
+   A list of all the servo groups in the given *vessel*.
+
+
+   .. note::
+
+      Works for any loaded vessel, not just the active one. Groups on a non-active vessel
+      support movement and per-servo control, but not preset, key, speed-factor or
+      expanded state, which are only tracked by Infernal Robotics for the active vessel.
+
+
+
+
+.. staticmethod:: servo_group_with_name(vessel: SpaceCenter.Vessel, name: string): InfernalRobotics.ServoGroup | nil
+
+   Returns the servo group in the given *vessel* with the given *name*,
+   or ``nil`` if none exists. If multiple servo groups have the same name, only one of them is returned.
+
+   :param vessel: Vessel to check.
+   :param name: Name of servo group to find.
+
+
+
+
+.. staticmethod:: servo_with_name(vessel: SpaceCenter.Vessel, name: string): InfernalRobotics.Servo | nil
+
+   Returns the servo in the given *vessel* with the given *name* or
+   ``nil`` if none exists. If multiple servos have the same name, only one of them is returned.
+
+   :param vessel: Vessel to check.
+   :param name: Name of the servo to find.

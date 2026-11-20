@@ -16,14 +16,12 @@ Slider
       The rect transform for the UI object.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`UI.RectTransform`
 
    .. attribute:: layout_element: UI.LayoutElement
 
       How much space the UI object asks a layout for.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`UI.LayoutElement`
 
       .. note::
 
@@ -35,7 +33,6 @@ Slider
       Whether the UI object is visible.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
       .. note::
 
@@ -50,7 +47,6 @@ Slider
       Setting a value outside the range is refused.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: min: number
 
@@ -58,7 +54,6 @@ Slider
       bottom of a vertical slider. Must not be greater than :attr:`UI.Slider.max`.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: max: number
 
@@ -66,14 +61,12 @@ Slider
       top of a vertical slider. Must not be less than :attr:`UI.Slider.min`.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: changed: boolean
 
       Whether the slider has been changed.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
       .. note::
 
@@ -86,7 +79,6 @@ Slider
       Whether the control responds to the user.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
       .. note::
 
@@ -99,7 +91,6 @@ Slider
       as the skin has it.
 
       :Attribute: Can be read or written
-      :rtype: :class:`StdLib.ColorRGBA`
 
       .. note::
 
@@ -116,7 +107,6 @@ Slider
       control. Empty, the default, shows nothing.
 
       :Attribute: Can be read or written
-      :rtype: string
 
    .. method:: remove()
 

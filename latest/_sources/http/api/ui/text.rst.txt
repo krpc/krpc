@@ -1,0 +1,381 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Text
+====
+
+
+.. _http-UI.Text:
+
+.. rubric:: Text
+
+A text label.
+Added to a :ref:`Canvas <http-UI.Canvas>` or a :ref:`Panel <http-UI.Panel>`.
+
+A ``Text`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ui/text/(id)/rect-transform
+
+   The rect transform for the UI object.
+
+
+   :param id: The identifier of the :ref:`Text <http-UI.Text>` object.
+
+   :resjson UI.RectTransform value:
+
+
+
+
+.. http:get:: /ui/text/(id)/layout-element
+
+   How much space the UI object asks a layout for.
+
+   .. note::
+
+      Only has an effect when the object is in a panel that has a layout. A canvas is
+      not inside a layout and does not have one.
+
+
+   :param id: The identifier of the :ref:`Text <http-UI.Text>` object.
+
+   :resjson UI.LayoutElement value:
+
+
+
+
+.. http:get:: /ui/text/(id)/visible
+
+   Whether the UI object is visible.
+
+   .. note::
+
+      This is the object's own setting, which is what it was last set to. An object is
+      only drawn when everything it is inside is visible as well, so an interface can
+      be built with its parts visible, inside a panel that is not, and shown all at
+      once by making that panel visible.
+
+
+   :param id: The identifier of the :ref:`Text <http-UI.Text>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ui/text/(id)/visible
+
+   Whether the UI object is visible.
+
+   .. note::
+
+      This is the object's own setting, which is what it was last set to. An object is
+      only drawn when everything it is inside is visible as well, so an interface can
+      be built with its parts visible, inside a panel that is not, and shown all at
+      once by making that panel visible.
+
+
+   :param id: The identifier of the :ref:`Text <http-UI.Text>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ui/text/(id)/content
+
+   The text string
+
+
+   :param id: The identifier of the :ref:`Text <http-UI.Text>` object.
+
+   :resjson string value:
+
+.. http:put:: /ui/text/(id)/content
+
+   The text string
+
+
+   :param id: The identifier of the :ref:`Text <http-UI.Text>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:get:: /ui/text/(id)/word-wrap
+
+   Whether the text wraps onto further lines when it is wider than the space it
+   has. Text that does not wrap carries on past the edge, and its preferred size
+   is that of a single line, so a changing value leaves a layout in place.
+
+
+   :param id: The identifier of the :ref:`Text <http-UI.Text>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ui/text/(id)/word-wrap
+
+   Whether the text wraps onto further lines when it is wider than the space it
+   has. Text that does not wrap carries on past the edge, and its preferred size
+   is that of a single line, so a changing value leaves a layout in place.
+
+
+   :param id: The identifier of the :ref:`Text <http-UI.Text>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ui/text/(id)/font
+
+   Name of the font
+
+   .. note::
+
+      Empty if the game provided no font to draw the text with, in which case it is
+      not drawn. See :http:get:`/ui/text/(id)/available-fonts` for the names that can be set.
+
+
+   :param id: The identifier of the :ref:`Text <http-UI.Text>` object.
+
+   :resjson string value:
+
+.. http:put:: /ui/text/(id)/font
+
+   Name of the font
+
+   .. note::
+
+      Empty if the game provided no font to draw the text with, in which case it is
+      not drawn. See :http:get:`/ui/text/(id)/available-fonts` for the names that can be set.
+
+
+   :param id: The identifier of the :ref:`Text <http-UI.Text>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:get:: /ui/text/(id)/available-fonts
+
+   A list of all available fonts.
+
+
+   :param id: The identifier of the :ref:`Text <http-UI.Text>` object.
+
+   :resjson list<string> value:
+
+
+
+
+.. http:get:: /ui/text/(id)/size
+
+   Font size.
+
+
+   :param id: The identifier of the :ref:`Text <http-UI.Text>` object.
+
+   :resjson int32 value:
+
+.. http:put:: /ui/text/(id)/size
+
+   Font size.
+
+
+   :param id: The identifier of the :ref:`Text <http-UI.Text>` object.
+
+   :reqjson int32 value: The new value.
+
+
+
+
+.. http:get:: /ui/text/(id)/style
+
+   Font style.
+
+
+   :param id: The identifier of the :ref:`Text <http-UI.Text>` object.
+
+   :resjson UI.FontStyle value:
+
+.. http:put:: /ui/text/(id)/style
+
+   Font style.
+
+
+   :param id: The identifier of the :ref:`Text <http-UI.Text>` object.
+
+   :reqjson UI.FontStyle value: The new value.
+
+
+
+
+.. http:get:: /ui/text/(id)/color
+
+   The color the text is drawn in.
+
+
+   :param id: The identifier of the :ref:`Text <http-UI.Text>` object.
+
+   :resjson StdLib.ColorRGBA value:
+
+.. http:put:: /ui/text/(id)/color
+
+   The color the text is drawn in.
+
+
+   :param id: The identifier of the :ref:`Text <http-UI.Text>` object.
+
+   :reqjson StdLib.ColorRGBA value: The new value.
+
+
+
+
+.. http:get:: /ui/text/(id)/alignment
+
+   Alignment.
+
+
+   :param id: The identifier of the :ref:`Text <http-UI.Text>` object.
+
+   :resjson UI.TextAnchor value:
+
+.. http:put:: /ui/text/(id)/alignment
+
+   Alignment.
+
+
+   :param id: The identifier of the :ref:`Text <http-UI.Text>` object.
+
+   :reqjson UI.TextAnchor value: The new value.
+
+
+
+
+.. http:get:: /ui/text/(id)/line-spacing
+
+   Line spacing.
+
+
+   :param id: The identifier of the :ref:`Text <http-UI.Text>` object.
+
+   :resjson float value:
+
+.. http:put:: /ui/text/(id)/line-spacing
+
+   Line spacing.
+
+
+   :param id: The identifier of the :ref:`Text <http-UI.Text>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:post:: /ui/text/(id)/remove
+
+   Remove the UI object.
+
+
+   :param id: The identifier of the :ref:`Text <http-UI.Text>` object.
+
+
+
+
+
+
+
+.. _http-UI.FontStyle:
+
+.. rubric:: FontStyle
+
+Font style.
+
+Passed and returned as the name of one of its values:
+
+
+``"normal"``
+   Normal.
+
+
+``"bold"``
+   Bold.
+
+
+``"italic"``
+   Italic.
+
+
+``"bold_and_italic"``
+   Bold and italic.
+
+
+
+.. _http-UI.TextAlignment:
+
+.. rubric:: TextAlignment
+
+Text alignment.
+
+Passed and returned as the name of one of its values:
+
+
+``"left"``
+   Left aligned.
+
+
+``"right"``
+   Right aligned.
+
+
+``"center"``
+   Center aligned.
+
+
+
+.. _http-UI.TextAnchor:
+
+.. rubric:: TextAnchor
+
+Text alignment.
+
+Passed and returned as the name of one of its values:
+
+
+``"lower_center"``
+   Lower center.
+
+
+``"lower_left"``
+   Lower left.
+
+
+``"lower_right"``
+   Lower right.
+
+
+``"middle_center"``
+   Middle center.
+
+
+``"middle_left"``
+   Middle left.
+
+
+``"middle_right"``
+   Middle right.
+
+
+``"upper_center"``
+   Upper center.
+
+
+``"upper_left"``
+   Upper left.
+
+
+``"upper_right"``
+   Upper right.

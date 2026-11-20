@@ -1,0 +1,103 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: Trajectories
+
+Patch
+=====
+
+
+.. class:: Patch
+
+   A patch of the trajectory, at its position in :meth:`patches`.
+
+   .. note::
+
+      Trajectories computes the trajectory again as the vessel flies, and the patch reads
+      the latest one. Throws an exception if the trajectory has fewer patches.
+
+   .. method:: position(reference_frame)
+
+      The position of the impact, or ``None`` without one.
+
+      :param SpaceCenter.ReferenceFrame reference_frame: The reference frame for the position.
+      :rtype: tuple(float, float, float) or None
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         In a reference frame that rotates with :attr:`Patch.body`, the position includes
+         the rotation of the body until the impact.
+
+   .. method:: velocity(reference_frame)
+
+      The velocity at the impact, or ``None`` without one.
+
+      :param SpaceCenter.ReferenceFrame reference_frame: The reference frame for the velocity.
+      :rtype: tuple(float, float, float) or None
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         In a reference frame that rotates with :attr:`Patch.body`, the velocity includes
+         the rotation of the body until the impact.
+
+   .. attribute:: body
+
+      The celestial body that the patch is relative to.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.CelestialBody`
+      :Game Scenes: Flight
+
+   .. attribute:: start_ut
+
+      The universal time at the start of the patch, in seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: end_ut
+
+      The universal time at the end of the patch, in seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         For a patch that ends in an impact, this is the time of the impact.
+
+   .. attribute:: atmospheric
+
+      Whether the patch is inside an atmosphere.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. method:: atmospheric_trajectory(reference_frame)
+
+      The points of an atmospheric patch, or ``None`` for a patch in space.
+
+      :param SpaceCenter.ReferenceFrame reference_frame: The reference frame for the positions.
+      :rtype: list(tuple(float, float, float, float)) or None
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Each point is a tuple ``(ut, x, y, z)``. In a reference frame that rotates with
+         :attr:`Patch.body`, the positions include the rotation of the body until each point.
+
+   .. attribute:: orbital_trajectory
+
+      The orbit of a patch in space, or ``None`` for an atmospheric patch.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Orbit` or None
+      :Game Scenes: Flight

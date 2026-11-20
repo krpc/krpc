@@ -1,0 +1,951 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Orbit
+=====
+
+
+.. _http-SpaceCenter.Orbit:
+
+.. rubric:: Orbit
+
+Describes an orbit. For example, the orbit of a vessel, obtained by calling
+:http:get:`/space-center/vessel/(id)/orbit`, or a celestial body, obtained by calling
+:http:get:`/space-center/celestial-body/(id)/orbit`.
+
+A ``Orbit`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:post:: /space-center/orbit/create-from-position-and-velocity
+
+   Create the orbit that passes through a given position at a given velocity.
+   The orbit coasts freely under the gravity of the body being orbited, so it
+   describes where an object left to fall from that position and velocity would
+   be at any later time.
+
+   .. note::
+
+      The orbit is a single conic around *body*. It never changes
+      sphere of influence, so :http:get:`/space-center/orbit/(id)/next-orbit` is ``null``, and no
+      atmosphere slows it. A vessel held on rails follows its own orbit exactly,
+      while one inside the physics bubble is simulated and drifts from it a little.
+
+      :http:get:`/space-center/orbit/(id)/radius`, :http:get:`/space-center/orbit/(id)/speed`, :http:post:`/space-center/orbit/(id)/position`,
+      :http:post:`/space-center/orbit/(id)/velocity` and the like describe the orbit at
+      *ut* and stay there. Use :http:post:`/space-center/orbit/(id)/radius-at`,
+      :http:post:`/space-center/orbit/(id)/speed-at`, :http:post:`/space-center/orbit/(id)/position-at`, :http:post:`/space-center/orbit/(id)/velocity-at` and
+      :http:post:`/space-center/orbit/(id)/true-anomaly-at-ut` for another time, and
+      :http:get:`/space-center/orbit/(id)/reference-frame` and :http:get:`/space-center/orbit/(id)/orbital-reference-frame` to follow
+      the orbit as time passes.
+
+      The orbit is held until :http:post:`/space-center/orbit/(id)/remove` is called on it or the client
+      that created it disconnects. Remove each one created by a script that creates
+      them repeatedly, for example once per update.
+
+
+   :reqjson SpaceCenter.CelestialBody body: The celestial body being orbited.
+   :reqjson tuple<double, double, double> position: The position, as a position vector.
+   :reqjson tuple<double, double, double> velocity: The velocity, as a vector pointing in the direction of travel, whose magnitude is the speed in :math:`\mathrm{m/s}`.
+   :reqjson double ut: The universal time, in seconds, at which the object is at *position* traveling at *velocity*.
+   :reqjson SpaceCenter.ReferenceFrame? reference_frame: The reference frame that *position* and *velocity* are in. Defaults to :http:get:`/space-center/celestial-body/(id)/non-rotating-reference-frame` of *body*. Optional, defaults to ``null``.
+   :resjson SpaceCenter.Orbit value:
+
+
+
+
+
+.. http:post:: /space-center/orbit/create-from-orbital-elements
+
+   Create the orbit with the given
+   `orbital elements <https://en.wikipedia.org/wiki/Orbital_elements>`_
+   around a given body. The orbit coasts freely under the gravity of that body,
+   so it describes where an object on it would be at any time.
+
+   .. note::
+
+      The orbit is a single conic around *body*. It never changes
+      sphere of influence, so :http:get:`/space-center/orbit/(id)/next-orbit` is ``null``, and no
+      atmosphere slows it.
+
+      The angles are measured against the reference plane and direction that
+      :http:get:`/space-center/orbit/(id)/inclination`, :http:get:`/space-center/orbit/(id)/longitude-of-ascending-node` and
+      :http:get:`/space-center/orbit/(id)/argument-of-periapsis` report them against.
+      :http:post:`/space-center/orbit/reference-plane-normal` and :http:post:`/space-center/orbit/reference-plane-direction`
+      give these as vectors in a reference frame.
+
+      :http:get:`/space-center/orbit/(id)/radius`, :http:get:`/space-center/orbit/(id)/speed`, :http:post:`/space-center/orbit/(id)/position`,
+      :http:post:`/space-center/orbit/(id)/velocity` and the like describe the orbit at
+      *epoch* and stay there. Use :http:post:`/space-center/orbit/(id)/radius-at`,
+      :http:post:`/space-center/orbit/(id)/speed-at`, :http:post:`/space-center/orbit/(id)/position-at`, :http:post:`/space-center/orbit/(id)/velocity-at` and
+      :http:post:`/space-center/orbit/(id)/true-anomaly-at-ut` for another time, and
+      :http:get:`/space-center/orbit/(id)/reference-frame` and :http:get:`/space-center/orbit/(id)/orbital-reference-frame` to follow
+      the orbit as time passes.
+
+      The orbit is held until :http:post:`/space-center/orbit/(id)/remove` is called on it or the client
+      that created it disconnects. Remove each one created by a script that creates
+      them repeatedly, for example once per update.
+
+
+   :reqjson SpaceCenter.CelestialBody body: The celestial body being orbited.
+   :reqjson double semi_major_axis: The semi-major axis of the orbit, in meters. Positive for an ellipse and negative for a hyperbola.
+   :reqjson double eccentricity: The eccentricity of the orbit. Below one for an ellipse and above one for a hyperbola.
+   :reqjson double inclination: The inclination of the orbit, in radians.
+   :reqjson double longitude_of_ascending_node: The longitude of the ascending node, in radians.
+   :reqjson double argument_of_periapsis: The argument of periapsis, in radians.
+   :reqjson double mean_anomaly_at_epoch: The mean anomaly at *epoch*, in radians.
+   :reqjson double epoch: The universal time, in seconds, that *mean_anomaly_at_epoch* is measured at.
+   :resjson SpaceCenter.Orbit value:
+
+
+
+
+
+.. http:post:: /space-center/orbit/(id)/remove
+
+   Remove the orbit, releasing the memory the server holds for it.
+
+   .. note::
+
+      Only an orbit created by :http:post:`/space-center/orbit/create-from-position-and-velocity` or
+      :http:post:`/space-center/orbit/create-from-orbital-elements` can be removed. Every other orbit
+      belongs to something in the game, and the server holds one of each.
+
+      Any further use of this object throws an exception, as does use of a
+      reference frame defined against it. An orbit belongs to the client that
+      created it, and is removed when that client disconnects.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+
+
+
+
+
+.. http:get:: /space-center/orbit/(id)/body
+
+   The celestial body (e.g. planet or moon) around which the object is orbiting.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :resjson SpaceCenter.CelestialBody value:
+
+
+
+
+.. http:get:: /space-center/orbit/(id)/reference-frame
+
+   The reference frame that moves along the orbit, and is orientated in a fixed
+   direction.
+
+   * The origin is at the point the orbit has reached at the
+     current time.
+   * The axes do not rotate. They point in the same fixed
+     directions as those of
+     :http:get:`/space-center/celestial-body/(id)/non-rotating-reference-frame` of
+     :http:get:`/space-center/orbit/(id)/body`.
+
+   .. note::
+
+      For the orbit of a vessel, the origin is the point the vessel's orbit has
+      reached rather than the vessel's own center of mass. The two are a few meters
+      apart, as a vessel inside the physics bubble is simulated rather than being
+      held on its orbit.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :resjson SpaceCenter.ReferenceFrame value:
+
+
+
+
+.. http:get:: /space-center/orbit/(id)/orbital-reference-frame
+
+   The reference frame that moves along the orbit, and is orientated with its
+   prograde/normal/radial directions.
+
+   * The origin is at the point the orbit has reached at the
+     current time.
+   * The axes rotate with the orbital prograde/normal/radial
+     directions.
+   * The x-axis points in the orbital anti-radial direction.
+   * The y-axis points in the orbital prograde direction.
+   * The z-axis points in the orbital normal direction.
+
+   .. note::
+
+      For the orbit of a vessel, the origin is the point the vessel's orbit has
+      reached rather than the vessel's own center of mass, which is what
+      :http:get:`/space-center/vessel/(id)/orbital-reference-frame` is centered on.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :resjson SpaceCenter.ReferenceFrame value:
+
+
+
+
+.. http:get:: /space-center/orbit/(id)/apoapsis
+
+   Gets the apoapsis of the orbit, in meters, from the center of mass
+   of the body being orbited.
+
+   .. note::
+
+      For the apoapsis altitude reported on the in-game map view,
+      use :http:get:`/space-center/orbit/(id)/apoapsis-altitude`.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/orbit/(id)/periapsis
+
+   The periapsis of the orbit, in meters, from the center of mass
+   of the body being orbited.
+
+   .. note::
+
+      For the periapsis altitude reported on the in-game map view,
+      use :http:get:`/space-center/orbit/(id)/periapsis-altitude`.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/orbit/(id)/apoapsis-altitude
+
+   The apoapsis of the orbit, in meters, above the sea level of the body being orbited.
+
+   .. note::
+
+      This is equal to :http:get:`/space-center/orbit/(id)/apoapsis` minus the equatorial radius of the body.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/orbit/(id)/periapsis-altitude
+
+   The periapsis of the orbit, in meters, above the sea level of the body being orbited.
+
+   .. note::
+
+      This is equal to :http:get:`/space-center/orbit/(id)/periapsis` minus the equatorial radius of the body.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/orbit/(id)/semi-major-axis
+
+   The semi-major axis of the orbit, in meters.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/orbit/(id)/semi-minor-axis
+
+   The semi-minor axis of the orbit, in meters.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/orbit/(id)/semi-latus-rectum
+
+   The semi-latus rectum of the orbit, in meters.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/orbit/(id)/radius
+
+   The current radius of the orbit, in meters. This is the distance between the center
+   of mass of the object in orbit, and the center of mass of the body around which it
+   is orbiting.
+
+   .. note::
+
+      This value will change over time if the orbit is elliptical.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/orbit/(id)/altitude
+
+   The current altitude of the object, in meters above the sea level of the body
+   being orbited.
+
+   .. note::
+
+      This is equal to :http:get:`/space-center/orbit/(id)/radius` minus the equatorial radius of the body.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:post:: /space-center/orbit/(id)/radius-at
+
+   The orbital radius at the given time, in meters.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :reqjson double ut: The universal time to measure the radius at.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /space-center/orbit/(id)/radius-at-true-anomaly
+
+   The orbital radius at the point in the orbit given by the true anomaly.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :reqjson double true_anomaly: The true anomaly.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /space-center/orbit/(id)/position
+
+   The position the orbit has reached at the current time, in the given reference
+   frame.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :reqjson SpaceCenter.ReferenceFrame? reference_frame: The reference frame that the returned position vector is in. Defaults to :http:get:`/space-center/celestial-body/(id)/non-rotating-reference-frame` of :http:get:`/space-center/orbit/(id)/body`. Optional, defaults to ``null``.
+   :resjson tuple<double, double, double> value: The position as a vector.
+
+
+
+
+
+.. http:post:: /space-center/orbit/(id)/position-at
+
+   The position at a given time, in the specified reference frame.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :reqjson double ut: The universal time to measure the position at.
+   :reqjson SpaceCenter.ReferenceFrame? reference_frame: The reference frame that the returned position vector is in. Defaults to :http:get:`/space-center/celestial-body/(id)/non-rotating-reference-frame` of :http:get:`/space-center/orbit/(id)/body`. Optional, defaults to ``null``.
+   :resjson tuple<double, double, double> value: The position as a vector.
+
+
+
+
+
+.. http:post:: /space-center/orbit/(id)/position-at-true-anomaly
+
+   The position at the point in the orbit given by the true anomaly, in the specified
+   reference frame.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :reqjson double true_anomaly: The true anomaly.
+   :reqjson SpaceCenter.ReferenceFrame? reference_frame: The reference frame that the returned position vector is in. Defaults to :http:get:`/space-center/celestial-body/(id)/non-rotating-reference-frame` of :http:get:`/space-center/orbit/(id)/body`. Optional, defaults to ``null``.
+   :resjson tuple<double, double, double> value: The position as a vector.
+
+
+
+
+
+.. http:post:: /space-center/orbit/(id)/velocity
+
+   The velocity the orbit has reached at the current time, in the given reference
+   frame.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :reqjson SpaceCenter.ReferenceFrame? reference_frame: The reference frame that the returned velocity vector is in. Defaults to :http:get:`/space-center/celestial-body/(id)/non-rotating-reference-frame` of :http:get:`/space-center/orbit/(id)/body`. Optional, defaults to ``null``.
+   :resjson tuple<double, double, double> value: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in :math:`\mathrm{m/s}`.
+
+
+
+
+
+.. http:post:: /space-center/orbit/(id)/velocity-at
+
+   The velocity at a given time, in the specified reference frame.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :reqjson double ut: The universal time to measure the velocity at.
+   :reqjson SpaceCenter.ReferenceFrame? reference_frame: The reference frame that the returned velocity vector is in. Defaults to :http:get:`/space-center/celestial-body/(id)/non-rotating-reference-frame` of :http:get:`/space-center/orbit/(id)/body`. Optional, defaults to ``null``.
+   :resjson tuple<double, double, double> value: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in :math:`\mathrm{m/s}`.
+
+
+
+
+
+.. http:post:: /space-center/orbit/(id)/velocity-at-true-anomaly
+
+   The velocity at the point in the orbit given by the true anomaly, in the specified
+   reference frame.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :reqjson double true_anomaly: The true anomaly.
+   :reqjson SpaceCenter.ReferenceFrame? reference_frame: The reference frame that the returned velocity vector is in. Defaults to :http:get:`/space-center/celestial-body/(id)/non-rotating-reference-frame` of :http:get:`/space-center/orbit/(id)/body`. Optional, defaults to ``null``.
+   :resjson tuple<double, double, double> value: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in :math:`\mathrm{m/s}`.
+
+
+
+
+
+.. http:get:: /space-center/orbit/(id)/speed
+
+   The current orbital speed of the object in :math:`\mathrm{m/s}`.
+
+   .. note::
+
+      This value will change over time if the orbit is elliptical.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:post:: /space-center/orbit/(id)/speed-at
+
+   The orbital speed at the given time, in :math:`\mathrm{m/s}`.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :reqjson double ut: The universal time to measure the speed at.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /space-center/orbit/(id)/speed-at-radius
+
+   The orbital speed at the given orbital radius, in :math:`\mathrm{m/s}`.
+
+   .. note::
+
+      This is the vis-viva speed. A radius the orbit never reaches is accepted. On
+      an ellipse the speed is ``NaN`` above twice the semi-major axis.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :reqjson double radius: The orbital radius in meters.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /space-center/orbit/(id)/speed-at-true-anomaly
+
+   The orbital speed at the point in the orbit given by the true anomaly, in
+   :math:`\mathrm{m/s}`.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :reqjson double true_anomaly: The true anomaly.
+   :resjson double value:
+
+
+
+
+
+.. http:get:: /space-center/orbit/(id)/specific-energy
+
+   The specific orbital energy, in :math:`\mathrm{J/kg}`.
+
+   .. note::
+
+      This is the sum of the orbit's specific kinetic and potential energy,
+      :math:`v^{2}/2 - \mu/r`, where :math:`v` is the orbital speed,
+      :math:`\mu` the gravitational parameter of the body and :math:`r` the
+      orbital radius. It is negative for a bound (elliptical) orbit.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/orbit/(id)/specific-angular-momentum
+
+   The specific relative angular momentum, in :math:`\mathrm{m^{2}/s}`.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/orbit/(id)/period
+
+   The orbital period, in seconds.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/orbit/(id)/mean-motion
+
+   The mean motion, in :math:`\mathrm{rad/s}`.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/orbit/(id)/time-to-apoapsis
+
+   The time until the object reaches apoapsis, in seconds.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/orbit/(id)/time-to-periapsis
+
+   The time until the object reaches periapsis, in seconds.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/orbit/(id)/eccentricity
+
+   The `eccentricity <https://en.wikipedia.org/wiki/Orbital_eccentricity>`_
+   of the orbit.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/orbit/(id)/inclination
+
+   The `inclination <https://en.wikipedia.org/wiki/Orbital_inclination>`_
+   of the orbit,
+   in radians.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/orbit/(id)/longitude-of-ascending-node
+
+   The `longitude of the ascending node <https://en.wikipedia.org/wiki/Longitude_of_the_ascending_node>`_, in radians.
+
+   .. note::
+
+      For a near-equatorial orbit, the ascending node is ill-defined and
+      this value may vary erratically over time.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/orbit/(id)/argument-of-periapsis
+
+   The `argument of periapsis <https://en.wikipedia.org/wiki/Argument_of_periapsis>`_, in radians.
+
+   .. note::
+
+      For a near-circular orbit, the periapsis is ill-defined and
+      this value may vary erratically over time.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/orbit/(id)/mean-anomaly-at-epoch
+
+   The `mean anomaly at epoch <https://en.wikipedia.org/wiki/Mean_anomaly>`_.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/orbit/(id)/epoch
+
+   The universal time, in seconds, at which the
+   `mean anomaly at epoch <https://en.wikipedia.org/wiki/Mean_anomaly>`_
+   is measured.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/orbit/(id)/mean-anomaly
+
+   The `mean anomaly <https://en.wikipedia.org/wiki/Mean_anomaly>`_.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:post:: /space-center/orbit/(id)/mean-anomaly-at-ut
+
+   The mean anomaly at the given time.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :reqjson double ut: The universal time in seconds.
+   :resjson double value:
+
+
+
+
+
+.. http:get:: /space-center/orbit/(id)/eccentric-anomaly
+
+   The `eccentric anomaly <https://en.wikipedia.org/wiki/Eccentric_anomaly>`_.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:post:: /space-center/orbit/(id)/eccentric-anomaly-at-ut
+
+   The eccentric anomaly at the given universal time.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :reqjson double ut: The universal time, in seconds.
+   :resjson double value:
+
+
+
+
+
+.. http:get:: /space-center/orbit/(id)/true-anomaly
+
+   The `true anomaly <https://en.wikipedia.org/wiki/True_anomaly>`_.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:post:: /space-center/orbit/(id)/true-anomaly-at-ut
+
+   The true anomaly at the given time.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :reqjson double ut: The universal time in seconds.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /space-center/orbit/(id)/true-anomaly-at-radius
+
+   The true anomaly at the given orbital radius.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :reqjson double radius: The orbital radius in meters.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /space-center/orbit/(id)/ut-at-true-anomaly
+
+   The universal time, in seconds, corresponding to the given true anomaly.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :reqjson double true_anomaly: True anomaly.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /space-center/orbit/(id)/true-anomaly-at-an
+
+   The true anomaly of the ascending node with the given target orbit.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :reqjson SpaceCenter.Orbit target: Target orbit.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /space-center/orbit/(id)/true-anomaly-at-dn
+
+   The true anomaly of the descending node with the given target orbit.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :reqjson SpaceCenter.Orbit target: Target orbit.
+   :resjson double value:
+
+
+
+
+
+.. http:get:: /space-center/orbit/(id)/orbital-speed
+
+   .. warning:: Deprecated. Use :http:get:`/space-center/orbit/(id)/speed` instead.
+
+   The current orbital speed in :math:`\mathrm{m/s}`.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:post:: /space-center/orbit/(id)/orbital-speed-at
+
+   .. warning:: Deprecated. Use :http:post:`/space-center/orbit/(id)/speed-at` instead.
+
+   The orbital speed at the given time, in :math:`\mathrm{m/s}`.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :reqjson double ut: The universal time to measure the speed at.
+   :resjson double value:
+
+
+
+
+
+.. http:get:: /space-center/orbit/(id)/orbital-energy
+
+   .. warning:: Deprecated. Use :http:get:`/space-center/orbit/(id)/specific-energy` instead.
+
+   The specific orbital energy of the orbit, in :math:`\mathrm{J/kg}`.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:post:: /space-center/orbit/reference-plane-normal
+
+   The direction that is normal to the orbits reference plane,
+   in the given reference frame.
+   The reference plane is the plane from which the orbits inclination is measured.
+
+
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned direction is in.
+   :resjson tuple<double, double, double> value: The direction as a unit vector.
+
+
+
+
+
+.. http:post:: /space-center/orbit/reference-plane-direction
+
+   The direction from which the orbits longitude of ascending node is measured,
+   in the given reference frame.
+
+
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned direction is in.
+   :resjson tuple<double, double, double> value: The direction as a unit vector.
+
+
+
+
+
+.. http:post:: /space-center/orbit/(id)/relative-inclination
+
+   Relative inclination of this orbit and the target orbit, in radians.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :reqjson SpaceCenter.Orbit target: Target orbit.
+   :resjson double value:
+
+
+
+
+
+.. http:get:: /space-center/orbit/(id)/time-to-soi-change
+
+   The time until the object changes sphere of influence, in seconds. Returns ``NaN``
+   if the object is not going to change sphere of influence.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/orbit/(id)/next-orbit
+
+   If the object is going to change sphere of influence in the future, returns the new
+   orbit after the change. Otherwise returns ``null``.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :resjson SpaceCenter.Orbit? value:
+
+
+
+
+.. http:post:: /space-center/orbit/(id)/next-closest-approach
+
+   The next closest approach to a target orbit.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :reqjson SpaceCenter.Orbit target: Target orbit.
+   :resjson SpaceCenter.ClosestApproach value:
+
+
+
+
+
+.. http:post:: /space-center/orbit/(id)/closest-approaches
+
+   A list of the closest approaches to a target orbit, one for each of the next
+   *orbits* orbital periods.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-SpaceCenter.Orbit>` object.
+
+   :reqjson SpaceCenter.Orbit target: Target orbit.
+   :reqjson int32 orbits: The number of future orbits to search.
+   :resjson list<SpaceCenter.ClosestApproach> value:

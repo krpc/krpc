@@ -1,0 +1,78 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::RasterPropMonitor
+
+Display
+=======
+
+
+.. class:: Display
+
+   A screen page that a script draws, and whose button presses it answers. Obtained by
+   calling :func:`Monitor::display` or :func:`display`.
+
+   .. note::
+
+      A monitor shows a display on a page whose handler is ``KRPCDisplay``. kRPC's
+      optional Module Manager patch adds such a page, named ``krpc``, to every monitor.
+      The content is kept while KSP builds the IVA again, but not saved with the game.
+
+   .. function:: std::optional<std::string> name()
+
+      The name of the display, or ``NULL`` for a monitor's own display.
+
+      :Game Scenes: Flight
+
+   .. function:: std::string text()
+   .. function:: void set_text(std::string value)
+
+      The text of the display, in Raster Prop Monitor's page format. It can hold
+      markup, such as ``[#ff0000]`` for a color, and a line can format variables, as
+      in ``{0:F0} m $&$ ALTITUDE``. Raster Prop Monitor updates the variables as
+      it draws.
+
+      :Game Scenes: Flight
+
+   .. function:: std::optional<std::string> image()
+   .. function:: void set_image(std::optional<std::string> value)
+
+      The background image of the display, drawn under the text and scaled to the
+      screen, as a PNG or JPEG image. ``NULL`` for none.
+      Throws an exception if the image does not decode.
+
+      :Game Scenes: Flight
+
+   .. function:: void clear()
+
+      Clear the text and the image.
+
+
+      :Game Scenes: Flight
+
+   .. function:: bool shown()
+
+      Whether a monitor shows the display now.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc::Event button_pressed(int32_t id)
+
+      An event that fires when a monitor showing the display has a button pressed.
+      The event lasts until it is removed.
+
+      :Parameters:
+
+       * **id** -- The button's index in :func:`Monitor::buttons`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc::Event button_released(int32_t id)
+
+      An event that fires when a monitor showing the display has a button released.
+      The event lasts until it is removed.
+
+      :Parameters:
+
+       * **id** -- The button's index in :func:`Monitor::buttons`.
+
+      :Game Scenes: Flight

@@ -1,0 +1,49 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: KerbalEngineerRedux
+   :no-index:
+
+Impact
+======
+
+
+.. class:: Impact(fields)
+
+   The point where the vessel's orbit meets the terrain.
+
+
+   .. attribute:: ut
+
+      The universal time of impact, in seconds.
+
+      :Type: ``number``
+
+   .. attribute:: timeTo
+
+      The time until impact, in seconds.
+
+      :Type: ``number``
+
+   .. attribute:: latitude
+
+      The latitude of the impact site, in degrees.
+
+      :Type: ``number``
+
+   .. attribute:: longitude
+
+      The longitude of the impact site, in degrees.
+
+      :Type: ``number``
+
+   .. attribute:: elevation
+
+      The elevation of the terrain at the impact site above sea level, in meters.
+
+      :Type: ``number``
+
+   .. attribute:: biome
+
+      The biome of the impact site.
+
+      :Type: ``string``

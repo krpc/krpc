@@ -1,0 +1,79 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.MechJeb
+
+Translatron
+===========
+
+
+.. type:: public class Translatron
+
+   The Translatron window, which holds a speed.
+
+   .. method:: TranslatronMode getMode()
+
+   .. method:: void setMode(TranslatronMode value)
+
+      The mode. Throws an exception if set to :field:`TranslatronMode.KEEP_RELATIVE`
+      or :field:`TranslatronMode.DIRECT`.
+
+      :Game Scenes: Flight
+
+   .. method:: double getTranslationSpeed()
+
+   .. method:: void setTranslationSpeed(double value)
+
+      The speed to hold, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getKillHorizontalSpeed()
+
+   .. method:: void setKillHorizontalSpeed(boolean value)
+
+      Whether to cancel the horizontal speed.
+
+      :Game Scenes: Flight
+
+   .. method:: void panicSwitch()
+
+      Abort: separate all but the last stage and engage the landing autopilot. A call
+      during an abort cancels it.
+
+      :Game Scenes: Flight
+
+
+
+.. type:: public enum TranslatronMode
+
+   The mode of Translatron. See :meth:`Translatron.getMode()`.
+
+
+   .. field:: public TranslatronMode OFF
+
+      Off.
+
+
+   .. field:: public TranslatronMode KEEP_ORBITAL
+
+      Hold the orbital speed.
+
+
+   .. field:: public TranslatronMode KEEP_SURFACE
+
+      Hold the surface speed.
+
+
+   .. field:: public TranslatronMode KEEP_VERTICAL
+
+      Hold the vertical speed.
+
+
+   .. field:: public TranslatronMode KEEP_RELATIVE
+
+      Unused. MechJeb 2.15 has no such mode.
+
+
+   .. field:: public TranslatronMode DIRECT
+
+      Set by MechJeb's autopilots. Cannot be set.

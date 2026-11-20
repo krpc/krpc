@@ -21,7 +21,7 @@ ReferenceFrame
       Apart from being created and removed, a reference frame is only used as a
       parameter to other functions.
 
-   .. function:: static ReferenceFrame create_relative(Client& connection, ReferenceFrame reference_frame, std::tuple<double, double, double> position = std::tuple<double, double, double>{0.0, 0.0, 0.0}, std::tuple<double, double, double, double> rotation = std::tuple<double, double, double, double>{0.0, 0.0, 0.0, 1.0}, std::tuple<double, double, double> velocity = std::tuple<double, double, double>{0.0, 0.0, 0.0}, std::tuple<double, double, double> angular_velocity = std::tuple<double, double, double>{0.0, 0.0, 0.0})
+   .. function:: static ReferenceFrame create_relative(krpc::Connection& connection, ReferenceFrame reference_frame, std::tuple<double, double, double> position = std::tuple<double, double, double>{0.0, 0.0, 0.0}, std::tuple<double, double, double, double> rotation = std::tuple<double, double, double, double>{0.0, 0.0, 0.0, 1.0}, std::tuple<double, double, double> velocity = std::tuple<double, double, double>{0.0, 0.0, 0.0}, std::tuple<double, double, double> angular_velocity = std::tuple<double, double, double>{0.0, 0.0, 0.0})
 
       Create a relative reference frame. This is a custom reference frame
       whose components offset the components of a parent reference frame.
@@ -29,10 +29,10 @@ ReferenceFrame
       :Parameters:
 
        * **reference_frame** -- The parent reference frame on which to base this reference frame.
-       * **position** -- The offset of the position of the origin, as a position vector. Defaults to :math:`(0, 0, 0)`
-       * **rotation** -- The rotation to apply to the parent frames rotation, as a quaternion of the form :math:`(x, y, z, w)`. Defaults to :math:`(0, 0, 0, 1)` (i.e. no rotation)
-       * **velocity** -- The linear velocity to offset the parent frame by, as a vector pointing in the direction of travel, whose magnitude is the speed in meters per second. Defaults to :math:`(0, 0, 0)`.
-       * **angular_velocity** -- The angular velocity to offset the parent frame by, as a vector. This vector points in the direction of the axis of rotation, and its magnitude is the speed of the rotation in radians per second. Defaults to :math:`(0, 0, 0)`.
+       * **position** -- The offset of the position of the origin, as a position vector. Defaults to ``(0, 0, 0)``
+       * **rotation** -- The rotation to apply to the parent frames rotation, as a quaternion of the form ``(x, y, z, w)``. Defaults to ``(0, 0, 0, 1)`` (i.e. no rotation)
+       * **velocity** -- The linear velocity to offset the parent frame by, as a vector pointing in the direction of travel, whose magnitude is the speed in :math:`\mathrm{m/s}`. Defaults to ``(0, 0, 0)``.
+       * **angular_velocity** -- The angular velocity to offset the parent frame by, as a vector. This vector points in the direction of the axis of rotation, and its magnitude is the speed of the rotation in :math:`\mathrm{rad/s}`. Defaults to ``(0, 0, 0)``.
 
    
 
@@ -43,7 +43,7 @@ ReferenceFrame
          creates one repeatedly, for example once per update, should remove each one
          when it is finished with it.
 
-   .. function:: static ReferenceFrame create_hybrid(Client& connection, ReferenceFrame position, std::optional<ReferenceFrame> rotation = std::optional<ReferenceFrame>(), std::optional<ReferenceFrame> velocity = std::optional<ReferenceFrame>(), std::optional<ReferenceFrame> angular_velocity = std::optional<ReferenceFrame>())
+   .. function:: static ReferenceFrame create_hybrid(krpc::Connection& connection, ReferenceFrame position, std::optional<ReferenceFrame> rotation = std::optional<ReferenceFrame>(), std::optional<ReferenceFrame> velocity = std::optional<ReferenceFrame>(), std::optional<ReferenceFrame> angular_velocity = std::optional<ReferenceFrame>())
 
       Create a hybrid reference frame. This is a custom reference frame
       whose components inherited from other reference frames.

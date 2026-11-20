@@ -1,0 +1,81 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Size Fitter
+===========
+
+
+.. _http-UI.SizeFitter:
+
+.. rubric:: SizeFitter
+
+Sizes a panel to fit what it contains, rather than the other way round.
+See :http:get:`/ui/panel/(id)/size-fitter`.
+
+A ``SizeFitter`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ui/size-fitter/(id)/horizontal-fit
+
+   How the width of the panel is chosen.
+
+
+   :param id: The identifier of the :ref:`SizeFitter <http-UI.SizeFitter>` object.
+
+   :resjson UI.ContentSizeFit value:
+
+.. http:put:: /ui/size-fitter/(id)/horizontal-fit
+
+   How the width of the panel is chosen.
+
+
+   :param id: The identifier of the :ref:`SizeFitter <http-UI.SizeFitter>` object.
+
+   :reqjson UI.ContentSizeFit value: The new value.
+
+
+
+
+.. http:get:: /ui/size-fitter/(id)/vertical-fit
+
+   How the height of the panel is chosen.
+
+
+   :param id: The identifier of the :ref:`SizeFitter <http-UI.SizeFitter>` object.
+
+   :resjson UI.ContentSizeFit value:
+
+.. http:put:: /ui/size-fitter/(id)/vertical-fit
+
+   How the height of the panel is chosen.
+
+
+   :param id: The identifier of the :ref:`SizeFitter <http-UI.SizeFitter>` object.
+
+   :reqjson UI.ContentSizeFit value: The new value.
+
+
+
+
+
+.. _http-UI.ContentSizeFit:
+
+.. rubric:: ContentSizeFit
+
+How a size fitter sizes a panel along one direction.
+
+Passed and returned as the name of one of its values:
+
+
+``"unconstrained"``
+   Leave the size alone.
+
+
+``"min_size"``
+   Use the smallest size the contents will fit in.
+
+
+``"preferred_size"``
+   Use the size the contents ask for.

@@ -1,0 +1,842 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Standard Library
+================
+
+
+.. _http-StdLib:
+
+A standard library of mathematics and printing for server side functions, and of the
+colors other services use.
+
+.. note::
+
+   Vectors are position and direction tuples, and rotations are unit quaternion tuples
+   in the order x, y, z, w the SpaceCenter service uses. Angles are in radians unless
+   stated otherwise.
+
+
+
+.. http:get:: /std-lib/pi
+
+   The constant pi.
+
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /std-lib/e
+
+   The constant e, the base of the natural logarithm.
+
+
+   :resjson double value:
+
+
+
+
+.. http:post:: /std-lib/abs
+
+   The absolute value of a number.
+
+
+   :reqjson double x: The number.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /std-lib/sign
+
+   The sign of a number: -1 if it is negative, 1 if it is positive,
+   and 0 if it is zero or not a number.
+
+
+   :reqjson double x: The number.
+   :resjson int32 value:
+
+
+
+
+
+.. http:post:: /std-lib/copy-sign
+
+   The magnitude of the first number with the sign of the second.
+
+
+   :reqjson double x: The number giving the magnitude.
+   :reqjson double y: The number giving the sign.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /std-lib/is-nan
+
+   Whether a number is not a number.
+
+
+   :reqjson double x: The number.
+   :resjson bool value:
+
+
+
+
+
+.. http:post:: /std-lib/is-finite
+
+   Whether a number is neither infinite nor not a number.
+
+
+   :reqjson double x: The number.
+   :resjson bool value:
+
+
+
+
+
+.. http:post:: /std-lib/floor
+
+   The largest whole number less than or equal to the given number.
+
+
+   :reqjson double x: The number.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /std-lib/ceiling
+
+   The smallest whole number greater than or equal to the given number.
+
+
+   :reqjson double x: The number.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /std-lib/round
+
+   The given number rounded to the given number of decimal places,
+   with a halfway value rounded to the nearer even number.
+
+   .. note::
+
+      Throws an exception if the rounded value is too large for a double.
+
+
+   :reqjson double x: The number.
+   :reqjson int32 digits: The number of decimal places to round to. Negative to round to tens, hundreds and beyond. Optional, defaults to ``0``.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /std-lib/round-half-away-from-zero
+
+   The given number rounded to the given number of decimal places,
+   with a halfway value rounded away from zero.
+
+   .. note::
+
+      Throws an exception if the rounded value is too large for a double.
+
+
+   :reqjson double x: The number.
+   :reqjson int32 digits: The number of decimal places to round to. Negative to round to tens, hundreds and beyond. Optional, defaults to ``0``.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /std-lib/round-half-up
+
+   The given number rounded to the given number of decimal places,
+   with a halfway value rounded toward positive infinity.
+
+   .. note::
+
+      Throws an exception if the rounded value is too large for a double.
+
+
+   :reqjson double x: The number.
+   :reqjson int32 digits: The number of decimal places to round to. Negative to round to tens, hundreds and beyond. Optional, defaults to ``0``.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /std-lib/sqrt
+
+   The square root of a number.
+
+
+   :reqjson double x: The number.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /std-lib/hypot
+
+   The length of the hypotenuse of a right triangle with the given sides.
+
+
+   :reqjson double x: The first side.
+   :reqjson double y: The second side.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /std-lib/sin
+
+   The sine of an angle, in radians.
+
+
+   :reqjson double x: The angle.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /std-lib/cos
+
+   The cosine of an angle, in radians.
+
+
+   :reqjson double x: The angle.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /std-lib/tan
+
+   The tangent of an angle, in radians.
+
+
+   :reqjson double x: The angle.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /std-lib/asin
+
+   The angle, in radians, whose sine is the given number.
+
+
+   :reqjson double x: The number.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /std-lib/acos
+
+   The angle, in radians, whose cosine is the given number.
+
+
+   :reqjson double x: The number.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /std-lib/atan
+
+   The angle, in radians, whose tangent is the given number.
+
+
+   :reqjson double x: The number.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /std-lib/atan2
+
+   The angle, in radians, between the positive x axis and the point ``(x, y)``.
+
+
+   :reqjson double y: The y coordinate.
+   :reqjson double x: The x coordinate.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /std-lib/log
+
+   The logarithm of a number, natural unless another base is given.
+
+
+   :reqjson double x: The number.
+   :reqjson double new_base: The base of the logarithm. Optional, defaults to ``2.718281828459045``.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /std-lib/log10
+
+   The base 10 logarithm of a number.
+
+
+   :reqjson double x: The number.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /std-lib/exp
+
+   The number e raised to the given power.
+
+
+   :reqjson double x: The power.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /std-lib/min
+
+   The smaller of two numbers.
+
+
+   :reqjson double x: The first number.
+   :reqjson double y: The second number.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /std-lib/max
+
+   The larger of two numbers.
+
+
+   :reqjson double x: The first number.
+   :reqjson double y: The second number.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /std-lib/clamp
+
+   The given number limited to the given range.
+
+   .. note::
+
+      Throws an exception if the minimum is greater than the maximum.
+
+
+   :reqjson double x: The number.
+   :reqjson double min: The minimum of the range.
+   :reqjson double max: The maximum of the range.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /std-lib/lerp
+
+   Linear interpolation between two numbers.
+
+   .. note::
+
+      The parameter is not limited to the range 0 to 1, and a value outside it
+      extrapolates.
+
+
+   :reqjson double a: The number when t is 0.
+   :reqjson double b: The number when t is 1.
+   :reqjson double t: The interpolation parameter.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /std-lib/inverse-lerp
+
+   The interpolation parameter of a number between two others,
+   limited to the range 0 to 1.
+
+   .. note::
+
+      Returns 0 if the two numbers are equal.
+
+
+   :reqjson double a: The number at 0.
+   :reqjson double b: The number at 1.
+   :reqjson double x: The number.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /std-lib/degrees-to-radians
+
+   The angle in radians of an angle in degrees.
+
+
+   :reqjson double x: The angle in degrees.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /std-lib/radians-to-degrees
+
+   The angle in degrees of an angle in radians.
+
+
+   :reqjson double x: The angle in radians.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /std-lib/vector-add
+
+   The sum of two vectors.
+
+
+   :reqjson tuple<double, double, double> u: The first vector.
+   :reqjson tuple<double, double, double> v: The second vector.
+   :resjson tuple<double, double, double> value:
+
+
+
+
+
+.. http:post:: /std-lib/vector-subtract
+
+   The difference of two vectors.
+
+
+   :reqjson tuple<double, double, double> u: The first vector.
+   :reqjson tuple<double, double, double> v: The second vector.
+   :resjson tuple<double, double, double> value:
+
+
+
+
+
+.. http:post:: /std-lib/vector-scale
+
+   A vector scaled by a number.
+
+
+   :reqjson tuple<double, double, double> v: The vector.
+   :reqjson double scale: The scaling factor.
+   :resjson tuple<double, double, double> value:
+
+
+
+
+
+.. http:post:: /std-lib/vector-dot
+
+   The dot product of two vectors.
+
+
+   :reqjson tuple<double, double, double> u: The first vector.
+   :reqjson tuple<double, double, double> v: The second vector.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /std-lib/vector-cross
+
+   The cross product of two vectors.
+
+
+   :reqjson tuple<double, double, double> u: The first vector.
+   :reqjson tuple<double, double, double> v: The second vector.
+   :resjson tuple<double, double, double> value:
+
+
+
+
+
+.. http:post:: /std-lib/vector-magnitude
+
+   The magnitude (length) of a vector.
+
+
+   :reqjson tuple<double, double, double> v: The vector.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /std-lib/vector-normalize
+
+   A vector scaled to a magnitude of 1.
+
+   .. note::
+
+      Throws an exception if the vector is zero.
+
+
+   :reqjson tuple<double, double, double> v: The vector.
+   :resjson tuple<double, double, double> value:
+
+
+
+
+
+.. http:post:: /std-lib/vector-distance
+
+   The distance between two positions.
+
+
+   :reqjson tuple<double, double, double> u: The first position.
+   :reqjson tuple<double, double, double> v: The second position.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /std-lib/vector-angle
+
+   The angle between two vectors, in radians, between 0 and :math:`\pi`.
+
+   .. note::
+
+      Throws an exception if either vector is zero.
+
+
+   :reqjson tuple<double, double, double> u: The first vector.
+   :reqjson tuple<double, double, double> v: The second vector.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /std-lib/vector-lerp
+
+   Linear interpolation between two vectors.
+
+   .. note::
+
+      The parameter is not limited to the range 0 to 1, and a value outside it
+      extrapolates.
+
+
+   :reqjson tuple<double, double, double> u: The vector when t is 0.
+   :reqjson tuple<double, double, double> v: The vector when t is 1.
+   :reqjson double t: The interpolation parameter.
+   :resjson tuple<double, double, double> value:
+
+
+
+
+
+.. http:post:: /std-lib/quaternion-multiply
+
+   The composition of two rotations: the rotation r followed by the
+   rotation q.
+
+   .. note::
+
+      Throws an exception if either quaternion is zero.
+
+
+   :reqjson tuple<double, double, double, double> q: The second rotation.
+   :reqjson tuple<double, double, double, double> r: The first rotation.
+   :resjson tuple<double, double, double, double> value:
+
+
+
+
+
+.. http:post:: /std-lib/quaternion-inverse
+
+   The inverse of a rotation.
+
+   .. note::
+
+      Throws an exception if the quaternion is zero.
+
+
+   :reqjson tuple<double, double, double, double> q: The rotation.
+   :resjson tuple<double, double, double, double> value:
+
+
+
+
+
+.. http:post:: /std-lib/quaternion-rotate-vector
+
+   A vector rotated by a rotation.
+
+   .. note::
+
+      Throws an exception if the quaternion is zero.
+
+
+   :reqjson tuple<double, double, double, double> q: The rotation.
+   :reqjson tuple<double, double, double> v: The vector.
+   :resjson tuple<double, double, double> value:
+
+
+
+
+
+.. http:post:: /std-lib/quaternion-from-axis-angle
+
+   The rotation about an axis by an angle.
+
+   .. note::
+
+      Throws an exception if the axis is zero.
+
+
+   :reqjson tuple<double, double, double> axis: The axis of rotation.
+   :reqjson double angle: The angle of rotation, in radians.
+   :resjson tuple<double, double, double, double> value:
+
+
+
+
+
+.. http:post:: /std-lib/quaternion-to-axis-angle
+
+   The axis and angle of a rotation.
+
+   .. note::
+
+      Throws an exception if the quaternion is zero.
+
+
+   :reqjson tuple<double, double, double, double> q: The rotation.
+   :resjson StdLib.AxisAngle value:
+
+
+
+
+
+.. http:post:: /std-lib/quaternion-from-to-rotation
+
+   The shortest rotation that takes one direction onto another.
+
+   .. note::
+
+      Opposite directions give a half turn about an arbitrary perpendicular axis.
+      Throws an exception if either vector is zero.
+
+
+   :reqjson tuple<double, double, double> u: The direction to rotate from.
+   :reqjson tuple<double, double, double> v: The direction to rotate to.
+   :resjson tuple<double, double, double, double> value:
+
+
+
+
+
+.. http:post:: /std-lib/quaternion-look-rotation
+
+   The rotation that takes the z axis onto a forward direction, and the y axis
+   toward an up direction.
+
+   .. note::
+
+      The up direction need not be perpendicular to the forward direction. Throws an
+      exception if either vector is zero, or if they are parallel.
+
+
+   :reqjson tuple<double, double, double> forward: The direction of the z axis.
+   :reqjson tuple<double, double, double> up: The direction the y axis points toward.
+   :resjson tuple<double, double, double, double> value:
+
+
+
+
+
+.. http:post:: /std-lib/quaternion-angle
+
+   The angle of the rotation that takes one rotation to another,
+   in radians, between 0 and :math:`\pi`.
+
+   .. note::
+
+      Throws an exception if either quaternion is zero.
+
+
+   :reqjson tuple<double, double, double, double> q: The first rotation.
+   :reqjson tuple<double, double, double, double> r: The second rotation.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /std-lib/quaternion-slerp
+
+   Spherical linear interpolation between two rotations.
+
+   .. note::
+
+      The parameter is not limited to the range 0 to 1, and a value outside it
+      extrapolates. Throws an exception if either quaternion is zero.
+
+
+   :reqjson tuple<double, double, double, double> q: The rotation when t is 0.
+   :reqjson tuple<double, double, double, double> r: The rotation when t is 1.
+   :reqjson double t: The interpolation parameter.
+   :resjson tuple<double, double, double, double> value:
+
+
+
+
+
+.. http:post:: /std-lib/print
+
+   Writes a message to the game's log, for debugging.
+
+   .. note::
+
+      A function evaluated by a stream or an event prints on every update. The message is
+      written at the Info level, so a server log level of Warning or Error hides it.
+
+
+   :reqjson string message: The message.
+
+
+
+
+
+
+.. _http-StdLib.AxisAngle:
+
+.. rubric:: AxisAngle
+
+A rotation as an axis and an angle.
+
+.. note::
+
+   See :http:post:`/std-lib/quaternion-to-axis-angle`.
+
+
+Passed and returned as an object with these fields:
+
+
+``axis`` (tuple<double, double, double>)
+   The axis of the rotation, as a unit vector, or zero for no rotation.
+
+
+``angle`` (double)
+   The angle of the rotation, in radians between 0 and :math:`\pi`.
+
+
+
+.. _http-StdLib.ColorRGB:
+
+.. rubric:: ColorRGB
+
+A color, as red, green and blue components between 0 and 1.
+
+Passed and returned as an object with these fields:
+
+
+``r`` (float)
+   The red component.
+
+
+``g`` (float)
+   The green component.
+
+
+``b`` (float)
+   The blue component.
+
+
+
+.. _http-StdLib.ColorRGBA:
+
+.. rubric:: ColorRGBA
+
+A color, as red, green, blue and alpha components between 0 and 1.
+
+.. note::
+
+   An alpha of 0 is fully transparent and 1 is fully opaque.
+
+
+Passed and returned as an object with these fields:
+
+
+``r`` (float)
+   The red component.
+
+
+``g`` (float)
+   The green component.
+
+
+``b`` (float)
+   The blue component.
+
+
+``a`` (float)
+   The alpha component.
+
+
+
+.. _http-StdLib.ImageFormat:
+
+.. rubric:: ImageFormat
+
+The file format of an image.
+
+Passed and returned as the name of one of its values:
+
+
+``"png"``
+   PNG, which is lossless.
+
+
+``"jpeg"``
+   JPEG, which is lossy, and smaller and faster to encode than PNG.

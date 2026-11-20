@@ -9,7 +9,7 @@ Polyline
 .. type:: public class Polyline
 
    A line through a list of vertices, open at its ends. Created using
-   :meth:`addPolyline(java.util.List<org.javatuples.Triplet<Double,Double,Double>>, SpaceCenter.ReferenceFrame, boolean)`.
+   :meth:`Drawing.addPolyline(java.util.List<org.javatuples.Triplet<Double,Double,Double>>, SpaceCenter.ReferenceFrame, boolean)`.
 
    .. method:: java.util.List<org.javatuples.Triplet<Double,Double,Double>> getVertices()
 

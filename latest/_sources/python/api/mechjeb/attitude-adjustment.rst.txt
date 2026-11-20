@@ -1,0 +1,60 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: MechJeb
+
+AttitudeAdjustment
+==================
+
+
+.. class:: AttitudeAdjustment
+
+   The Attitude Adjustment window, which selects the attitude controller that the
+   autopilots steer with.
+
+   .. attribute:: rcs_auto
+
+      Whether the attitude controller turns RCS on for a large attitude error, and off once
+      the vessel settles.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: controller
+
+      The attitude controller.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`AttitudeController`
+      :Game Scenes: Flight
+
+
+
+.. class:: AttitudeController
+
+   An attitude controller of MechJeb. See :attr:`AttitudeAdjustment.controller`.
+
+
+   .. data:: mj
+
+      MechJeb's original attitude controller.
+
+
+   .. data:: kos
+
+      The attitude controller of kOS.
+
+
+   .. data:: hybrid
+
+      A hybrid of the MechJeb and kOS controllers.
+
+
+   .. data:: better
+
+      MechJeb's default controller.
+
+
+   .. data:: lqr
+
+      A linear-quadratic regulator.

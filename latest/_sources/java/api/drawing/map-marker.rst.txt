@@ -9,7 +9,7 @@ MapMarker
 .. type:: public class MapMarker
 
    A marker drawn in the map view, with one of the game's own map icons. Created using
-   :meth:`addMapMarker(org.javatuples.Triplet<Double,Double,Double>, SpaceCenter.ReferenceFrame, MapMarkerIcon, String, boolean)`.
+   :meth:`Drawing.addMapMarker(org.javatuples.Triplet<Double,Double,Double>, SpaceCenter.ReferenceFrame, MapMarkerIcon, String, boolean)`.
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> getPosition()
 

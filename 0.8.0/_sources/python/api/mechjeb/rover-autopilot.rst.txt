@@ -1,0 +1,248 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: MechJeb
+
+RoverAutopilot
+==============
+
+
+.. class:: RoverAutopilot
+
+   The Rover Autopilot window, which drives a rover at a heading and speed, or along its
+   waypoints.
+
+   .. attribute:: control_heading
+
+      Whether the autopilot holds :attr:`RoverAutopilot.heading`.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: heading
+
+      The heading to hold, in degrees.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :attr:`RoverAutopilot.control_heading`.
+
+   .. attribute:: heading_error
+
+      The difference between the vessel's heading and the heading to hold, in degrees.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: control_speed
+
+      Whether the autopilot holds :attr:`RoverAutopilot.speed`.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: speed
+
+      The speed to hold, in :math:`\mathrm{m/s}`.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :attr:`RoverAutopilot.control_speed`.
+
+   .. attribute:: speed_error
+
+      The difference between the vessel's speed and the speed to hold, in :math:`\mathrm{m/s}`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: target_speed
+
+      The speed the autopilot drives at now, in :math:`\mathrm{m/s}`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: stability_control
+
+      Whether the autopilot keeps the rover upright.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: brake_on_eject
+
+      Whether to brake when the crew leaves the rover.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: brake_on_energy_depletion
+
+      Whether to brake when the rover runs out of electric charge.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: warp_to_daylight
+
+      Whether to warp time to daylight after braking for a lack of electric charge.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :attr:`RoverAutopilot.brake_on_energy_depletion`.
+
+   .. attribute:: waypoints
+
+      The waypoints, in the order the rover drives to them.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`RoverWaypoint`)
+      :Game Scenes: Flight
+
+   .. attribute:: waypoint_index
+
+      The index of the waypoint the autopilot drives to, or -1 if there is none.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: int
+      :Game Scenes: Flight
+
+   .. attribute:: loop_waypoints
+
+      Whether to return to the first waypoint after the last one.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. method:: add_waypoint(latitude, longitude)
+
+      Add a waypoint at a position on the surface of the body the vessel is at.
+
+      :param float latitude: The latitude, in degrees.
+      :param float longitude: The longitude, in degrees.
+      :returns: The waypoint.
+      :rtype: :class:`RoverWaypoint`
+      :Game Scenes: Flight
+
+   .. method:: clear_waypoints()
+
+      Remove all the waypoints.
+
+      :Game Scenes: Flight
+
+   .. method:: add_target()
+
+      Add a waypoint at the target. Throws an exception if the target is not a vessel or a
+      position on the surface.
+
+      :returns: The waypoint.
+      :rtype: :class:`RoverWaypoint`
+      :Game Scenes: Flight
+
+   .. method:: drive_to_target()
+
+      Replace the waypoints with the target, and drive to it. Throws an exception if the
+      target is not a vessel or a position on the surface.
+
+      :Game Scenes: Flight
+
+   .. method:: drive()
+
+      Drive along the waypoints. Throws an exception if there are none.
+
+      :Game Scenes: Flight
+
+   .. method:: stop()
+
+      Stop driving along the waypoints.
+
+      :Game Scenes: Flight
+
+
+
+RoverWaypoint
+-------------
+
+
+.. class:: RoverWaypoint
+
+   A waypoint of the :class:`RoverAutopilot`, as the Waypoints window shows it.
+
+   .. note::
+
+      The object is destroyed once the waypoints are cleared or replaced, as by
+      :meth:`RoverAutopilot.clear_waypoints` and :meth:`RoverAutopilot.drive_to_target`.
+
+   .. attribute:: latitude
+
+      The latitude of the waypoint, in degrees. Throws an exception when set if the waypoint
+      is at a vessel.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: longitude
+
+      The longitude of the waypoint, in degrees. Throws an exception when set if the waypoint
+      is at a vessel.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: radius
+
+      The distance from the waypoint at which the rover has reached it, in meters.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: name
+
+      The name of the waypoint.
+
+      :Attribute: Can be read or written
+      :rtype: str
+      :Game Scenes: Flight
+
+   .. attribute:: min_speed
+
+      The lowest speed on the way to the waypoint, in :math:`\mathrm{m/s}`, or 0 for no limit.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: max_speed
+
+      The highest speed on the way to the waypoint, in :math:`\mathrm{m/s}`, or 0 for no limit.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight

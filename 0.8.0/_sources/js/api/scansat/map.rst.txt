@@ -1,0 +1,54 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: ScanSat
+   :no-index:
+
+Map
+===
+
+
+.. class:: MapType
+
+   The type of a map. See :func:`ScanSat.map`.
+
+
+   .. attribute:: altimetry
+
+      Terrain height, from the altimetry scans.
+
+
+   .. attribute:: slope
+
+      Terrain slope, from the altimetry scans.
+
+
+   .. attribute:: biome
+
+      Biomes, from the biome scan, over the terrain height.
+
+
+   .. attribute:: visual
+
+      The surface as seen from orbit, from the visual scans.
+
+
+
+
+.. class:: MapProjection
+
+   The projection of a map. See :func:`ScanSat.map`.
+
+
+   .. attribute:: rectangular
+
+      Equirectangular: longitude and latitude map linearly to the horizontal and vertical.
+
+
+   .. attribute:: kavrayskiyVII
+
+      Kavrayskiy VII, a compromise projection with less distortion at the poles.
+
+
+   .. attribute:: polar
+
+      Two polar views side by side, the southern hemisphere on the left.

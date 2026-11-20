@@ -1,0 +1,72 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.RemoteTech
+
+Comms
+=====
+
+
+.. type:: public class Comms
+
+   Communications for a vessel.
+
+   .. method:: SpaceCenter.Vessel getVessel()
+
+
+      Get the vessel.
+
+   
+
+   .. method:: boolean getHasLocalControl()
+
+
+      Whether the vessel can be controlled locally.
+
+   
+
+   .. method:: boolean getHasFlightComputer()
+
+
+      Whether the vessel has a flight computer on board.
+
+   
+
+   .. method:: boolean getHasConnection()
+
+
+      Whether the vessel has any connection.
+
+   
+
+   .. method:: boolean getHasConnectionToGroundStation()
+
+
+      Whether the vessel has a connection to a ground station.
+
+   
+
+   .. method:: double getSignalDelay()
+
+
+      The shortest signal delay to the vessel, in seconds.
+
+   
+
+   .. method:: double getSignalDelayToGroundStation()
+
+
+      The signal delay between the vessel and the closest ground station, in seconds.
+
+   
+
+   .. method:: double signalDelayToVessel(SpaceCenter.Vessel other)
+
+      The signal delay between the this vessel and another vessel, in seconds.
+
+      :param SpaceCenter.Vessel other:
+   
+
+   .. method:: java.util.List<Antenna> getAntennas()
+
+
+      The antennas for this vessel.

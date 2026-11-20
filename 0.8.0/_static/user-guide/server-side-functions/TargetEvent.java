@@ -1,0 +1,28 @@
+import krpc.client.Connection;
+import krpc.client.Event;
+import krpc.client.RemoteObject;
+import krpc.client.services.KRPC.Expression;
+import krpc.client.services.KRPC.Type;
+import krpc.client.services.SpaceCenter;
+import krpc.client.services.SpaceCenter.Flight;
+import krpc.client.services.SpaceCenter.Vessel;
+import krpc.schema.KRPC.ProcedureCall;
+
+
+public class TargetEvent {
+  public static void main(String[] args) {
+    try (Connection connection = Connection.newInstance()) {
+      SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
+      Vessel someVessel = spaceCenter.getVessels().get(0);
+      // [docs]
+      Expression.Bound e = Expression.bind(connection);
+      ProcedureCall target =
+          connection.getCall(SpaceCenter.class, "getTargetVessel");
+      Expression expr = e.equal(
+          e.call(target),
+          e.constantObject(RemoteObject.getObjectId(someVessel)));
+      Event event = connection.addEvent(expr);
+      // [/docs]
+    }
+  }
+}

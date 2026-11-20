@@ -1,11 +1,11 @@
 #include <krpc_cnano.h>
-#include <krpc_cnano/services/space_center.h>
 #include <krpc_cnano/services/remote_tech.h>
+#include <krpc_cnano/services/space_center.h>
 
 int main() {
   krpc_connection_t conn;
-  krpc_open(&conn, "COM0");
-  krpc_connect(conn, "RemoteTech Example");
+  if (krpc_open_serial(&conn, "COM0") != KRPC_OK) return 1;
+  if (krpc_connect(conn, "RemoteTech Example") != KRPC_OK) return 1;
   krpc_SpaceCenter_Vessel_t vessel;
   krpc_SpaceCenter_ActiveVessel(conn, &vessel);
 
@@ -13,7 +13,8 @@ int main() {
   krpc_SpaceCenter_Parts_t parts;
   krpc_SpaceCenter_Vessel_Parts(conn, &parts, vessel);
   krpc_list_object_t parts_with_title;
-  krpc_SpaceCenter_Parts_WithTitle(conn, &parts_with_title, parts, "Reflectron KR-7");
+  krpc_SpaceCenter_Parts_WithTitle(conn, &parts_with_title, parts,
+                                   "Reflectron KR-7");
   krpc_SpaceCenter_Part_t part = parts_with_title.items[0];
 
   krpc_RemoteTech_Antenna_t antenna;

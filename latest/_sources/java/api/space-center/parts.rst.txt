@@ -2,14 +2,15 @@
 .. highlight:: java
 .. package:: krpc.client.services.SpaceCenter
 
-
-
 .. _java-api-parts:
 
 Parts
 =====
 
-The following classes allow interaction with a vessels individual parts.
+The following classes allow interaction with a vessel's individual parts.
+
+.. seealso:: The :std:ref:`parts guide <user-guide-parts>` walks the tree of parts, and explains
+   fuel lines, stage numbers and part modules.
 
 .. contents::
    :local:
@@ -37,7 +38,7 @@ Parts
 
    
 
-      .. note:: See the discussion on :rst:ref:`java-api-parts-trees-of-parts`.
+      .. note:: See the discussion on :rst:ref:`user-guide-parts-tree`.
 
    .. method:: Part getControlling()
 
@@ -61,21 +62,21 @@ Parts
 
       A list of parts whose :meth:`Part.getName()` is *name*.
 
-      :param String name:
+      :param String name: The name of the part.
    
 
    .. method:: java.util.List<Part> withTitle(String title)
 
       A list of all parts whose :meth:`Part.getTitle()` is *title*.
 
-      :param String title:
+      :param String title: The title of the part.
    
 
    .. method:: java.util.List<Part> withTag(String tag)
 
       A list of all parts whose :meth:`Part.getTag()` is *tag*.
 
-      :param String tag:
+      :param String tag: The name tag of the part.
    
 
    .. method:: java.util.List<Part> withModule(String moduleName)
@@ -83,7 +84,7 @@ Parts
       A list of all parts that contain a :type:`Module` whose
       :meth:`Module.getName()` is *moduleName*.
 
-      :param String moduleName:
+      :param String moduleName: The name of the module.
    
 
    .. method:: java.util.List<Module> modulesWithName(String moduleName)
@@ -91,7 +92,7 @@ Parts
       A list of modules (combined across all parts in the vessel) whose
       :meth:`Module.getName()` is *moduleName*.
 
-      :param String moduleName:
+      :param String moduleName: The name of the module.
    
 
    .. method:: java.util.List<Antenna> getAntennas()
@@ -103,6 +104,7 @@ Parts
 
       .. note::
 
+         A part with several antennas has an entry for each.
          If RemoteTech is installed, this will always return an empty list.
          To interact with RemoteTech antennas, use the RemoteTech service APIs.
 
@@ -343,11 +345,7 @@ Part
 
       .. note::
 
-         The name tag part module is provided by
-         `KSPCommunityPartModules <https://github.com/KSPModdingLibs/KSPCommunityPartModules>`_
-         0.5 or later, or by
-         `kOS <https://forum.kerbalspaceprogram.com/topic/165628-ksp-112x-kos-v1400-kos-scriptable-autopilot-system/>`_,
-         which shares this string.
+         Requires KSPCommunityPartModules 0.5 or later, or kOS, which share one name tag.
 
    .. method:: String getFlagURL()
 
@@ -381,7 +379,7 @@ Part
    .. method:: double getCost()
 
 
-      The cost of the part, in units of funds.
+      The cost of the part with its resources full, in units of funds.
 
    
 
@@ -401,7 +399,7 @@ Part
 
    
 
-      .. note:: See the discussion on :rst:ref:`java-api-parts-trees-of-parts`.
+      .. note:: See the discussion on :rst:ref:`user-guide-parts-tree`.
 
    .. method:: java.util.List<Part> getChildren()
 
@@ -412,7 +410,7 @@ Part
 
    
 
-      .. note:: See the discussion on :rst:ref:`java-api-parts-trees-of-parts`.
+      .. note:: See the discussion on :rst:ref:`user-guide-parts-tree`.
 
    .. method:: boolean getAxiallyAttached()
 
@@ -422,7 +420,7 @@ Part
 
    
 
-      .. note:: See the discussion on :rst:ref:`java-api-parts-attachment-modes`.
+      .. note:: See the discussion on :rst:ref:`user-guide-parts-attachment-modes`.
 
    .. method:: boolean getRadiallyAttached()
 
@@ -432,7 +430,7 @@ Part
 
    
 
-      .. note:: See the discussion on :rst:ref:`java-api-parts-attachment-modes`.
+      .. note:: See the discussion on :rst:ref:`user-guide-parts-attachment-modes`.
 
    .. method:: int getStage()
 
@@ -442,7 +440,7 @@ Part
 
    
 
-      .. note:: See the discussion on :rst:ref:`java-api-parts-staging`.
+      .. note:: See the discussion on :rst:ref:`user-guide-parts-staging`.
 
    .. method:: int getDecoupleStage()
 
@@ -452,7 +450,7 @@ Part
 
    
 
-      .. note:: See the discussion on :rst:ref:`java-api-parts-staging`.
+      .. note:: See the discussion on :rst:ref:`user-guide-parts-staging`.
 
    .. method:: boolean getMassless()
 
@@ -503,7 +501,7 @@ Part
    .. method:: double getDisplacement()
 
 
-      The volume of water the part displaces when fully submerged, in :math:`m^3`.
+      The volume of water the part displaces when fully submerged, in :math:`\mathrm{m^{3}}`.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
@@ -524,14 +522,14 @@ Part
       The buoyant force on the part when fully submerged in a fluid of the given
       density, in Newtons.
 
-      :param double density: The density of the fluid, in :math:`kg/m^3`.
-      :param double gravity: The acceleration due to gravity, in :math:`m/s^2`.
+      :param double density: The density of the fluid, in :math:`\mathrm{kg/m^{3}}`.
+      :param double gravity: The acceleration due to gravity, in :math:`\mathrm{m/s^{2}}`.
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
       .. note::
 
-         Applies :meth:`getBuoyancyScalar()` and
+         Applies :meth:`SpaceCenter.getBuoyancyScalar()` and
          :meth:`Part.getBuoyancyMultiplier()`, so the result is what the game would do to the
          part rather than what
          `Archimedes' principle <https://en.wikipedia.org/wiki/Archimedes%27_principle>`_ alone gives.
@@ -553,7 +551,7 @@ Part
    .. method:: double getDisplacedVolume()
 
 
-      The volume of water the part is displacing, in :math:`m^3`.
+      The volume of water the part is displacing, in :math:`\mathrm{m^{3}}`.
 
       :Game Scenes: Flight
 
@@ -632,9 +630,129 @@ Part
    .. method:: double getImpactTolerance()
 
 
-      The impact tolerance of the part, in meters per second.
+      The crash tolerance of the part, in :math:`\mathrm{m/s}`.
 
    
+
+   .. method:: float getBreakingForce()
+
+
+      The breaking force of the part's attachments, in :math:`\mathrm{kN}`.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         The joint to the parent part takes the lower breaking force of the two parts,
+         scaled by the size of the attachment node. See :meth:`Part.getJointBreakForce()`.
+
+   .. method:: float getBreakingTorque()
+
+
+      The breaking torque of the part's attachments, in :math:`\mathrm{kN \cdot m}`.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         The joint to the parent part takes the lower breaking torque of the two parts,
+         scaled by the size of the attachment node. See :meth:`Part.getJointBreakTorque()`.
+
+   .. method:: float getJointBreakForce()
+
+
+      The force that breaks the joint to the parent part, in :math:`\mathrm{kN}`.
+      Throws an exception if the part has no joint to its parent part.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The sum over the joint's physics joints. It is infinite for a short time after
+         the vessel loads, such as just after launch. The root part and a physicsless
+         part have no joint to their parent.
+
+   .. method:: float getJointBreakTorque()
+
+
+      The torque that breaks the joint to the parent part, in :math:`\mathrm{kN \cdot m}`.
+      Throws an exception if the part has no joint to its parent part.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The sum over the joint's physics joints. It is infinite for a short time after
+         the vessel loads. On a stack node of size 2 or more, the physics joints sit apart
+         around the node. A bending moment then breaks the joint when one physics joint's
+         force exceeds its share of :meth:`Part.getJointBreakForce()`, usually at a much
+         larger moment than this torque.
+
+   .. method:: float getJointSpring()
+
+
+      The spring constant of the joint to the parent part against translation, in
+      :math:`\mathrm{kN/m}`.
+      Throws an exception if the part has no joint to its parent part.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The sum over the joint's physics joints. A rigid attachment locks the joint, and
+         this spring then has no effect.
+
+   .. method:: float getJointDamper()
+
+
+      The damping constant of the joint to the parent part against translation, in
+      :math:`\mathrm{kN \cdot s/m}`.
+      Throws an exception if the part has no joint to its parent part.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The sum over the joint's physics joints. The stock game sets it to zero, and
+         mods such as Kerbal Joint Reinforcement change it.
+
+   .. method:: float getJointAngularSpring()
+
+
+      The spring constant of the joint to the parent part against bending, in
+      :math:`\mathrm{kN \cdot m/rad}`.
+      Throws an exception if the part has no joint to its parent part.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The sum over the joint's physics joints, about the two axes perpendicular to the
+         joint axis. The joint is far stiffer against twisting about its axis. On a stack
+         node of size 2 or more, the physics joints sit apart around the node, and the joint
+         bends much less than this spring gives. A rigid attachment makes it infinite.
+
+   .. method:: float getJointAngularDamper()
+
+
+      The damping constant of the joint to the parent part against bending, in
+      :math:`\mathrm{kN \cdot m \cdot s/rad}`.
+      Throws an exception if the part has no joint to its parent part.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The sum over the joint's physics joints. The stock game sets it to zero, and
+         mods such as Kerbal Joint Reinforcement change it.
 
    .. method:: double getTemperature()
 
@@ -802,7 +920,7 @@ Part
       :Game Scenes: Flight
 
 
-      .. note:: See the discussion on :rst:ref:`java-api-parts-fuel-lines`.
+      .. note:: See the discussion on :rst:ref:`user-guide-parts-fuel-lines`.
 
    .. method:: java.util.List<Part> getFuelLinesTo()
 
@@ -813,7 +931,7 @@ Part
       :Game Scenes: Flight
 
 
-      .. note:: See the discussion on :rst:ref:`java-api-parts-fuel-lines`.
+      .. note:: See the discussion on :rst:ref:`user-guide-parts-fuel-lines`.
 
    .. method:: java.util.List<Module> getModules()
 
@@ -831,6 +949,8 @@ Part
 
       .. note::
 
+         For a part with several antennas, this is the first. :meth:`Parts.getAntennas()`
+         lists them all.
          If RemoteTech is installed, this will always return ``null``.
          To interact with RemoteTech antennas, use the RemoteTech service APIs.
 
@@ -1092,7 +1212,7 @@ Part
       The linear velocity of the part in the given reference frame.
 
       :param ReferenceFrame referenceFrame: The reference frame that the returned velocity vector is in.
-      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in meters per second.
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in :math:`\mathrm{m/s}`.
       :Game Scenes: Flight
 
    .. method:: org.javatuples.Quartet<Double,Double,Double,Double> rotation(ReferenceFrame referenceFrame)
@@ -1100,7 +1220,7 @@ Part
       The rotation of the part, in the given reference frame.
 
       :param ReferenceFrame referenceFrame: The reference frame that the returned rotation is in.
-      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
+      :returns: The rotation as a quaternion of the form ``(x, y, z, w)``.
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> lift(ReferenceFrame referenceFrame)
@@ -1115,7 +1235,7 @@ Part
 
       .. note::
 
-         Not available when the Ferram Aerospace Research mod is installed.
+         Not available when Ferram Aerospace Research is installed.
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> drag(ReferenceFrame referenceFrame)
 
@@ -1129,7 +1249,7 @@ Part
 
       .. note::
 
-         Not available when the Ferram Aerospace Research mod is installed.
+         Not available when Ferram Aerospace Research is installed.
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> centerOfBuoyancy(ReferenceFrame referenceFrame)
 
@@ -1172,7 +1292,7 @@ Part
    .. method:: org.javatuples.Triplet<Double,Double,Double> getMomentOfInertia()
 
 
-      The moment of inertia of the part in :math:`kg.m^2` around its center of mass
+      The moment of inertia of the part in :math:`\mathrm{kg \cdot m^{2}}` around its center of mass
       in the parts center of mass reference frame (:meth:`Part.getCenterOfMassReferenceFrame()`).
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
@@ -1280,8 +1400,7 @@ Part
    .. method:: boolean getHasRealFuelsTank()
 
 
-      Whether the part is a fuel tank managed by
-      `RealFuels <https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/>`_.
+      Whether the part is a fuel tank managed by RealFuels.
       The remaining properties in this section are only available when it is.
 
    
@@ -1295,6 +1414,10 @@ Part
 
    
 
+      .. note::
+
+         Requires RealFuels.
+
    .. method:: double getBoiloffRate()
 
 
@@ -1307,6 +1430,10 @@ Part
       if the part is not a RealFuels fuel tank (see :meth:`Part.getHasRealFuelsTank()`).
 
    
+
+      .. note::
+
+         Requires RealFuels.
 
 
 
@@ -1472,6 +1599,10 @@ Module
 .. type:: public class PartField
 
    A field of a part module. Obtained by calling :meth:`Module.getFieldList()`.
+
+   .. note::
+
+      Setting a field runs the callbacks that the right-click menu of the part runs.
 
    .. method:: Module getModule()
 
@@ -1742,7 +1873,7 @@ Config Node
       .. note::
 
          If a name appears more than once, only the first value is included. Use
-         :meth:`ConfigNode.getValues(String)` to get all of the values with a given name.
+         :meth:`ConfigNode.findValues(String)` to get all of the values with a given name.
 
    .. method:: boolean hasValue(String name)
 
@@ -1760,7 +1891,7 @@ Config Node
       :param String name: Name of the value.
    
 
-   .. method:: java.util.List<String> getValues(String name)
+   .. method:: java.util.List<String> findValues(String name)
 
       Returns all of the values with the given name, as a list.
 
@@ -1790,7 +1921,7 @@ Config Node
       :param String name: Name of the child node.
    
 
-   .. method:: java.util.List<ConfigNode> getNodes(String name)
+   .. method:: java.util.List<ConfigNode> findNodes(String name)
 
       Returns all of the child nodes with the given name, as a list.
 
@@ -1811,7 +1942,7 @@ Antenna
 ^^^^^^^
 
 .. note:: If RemoteTech is installed, use the RemoteTech service APIs to interact with antennas.
-          This class is only for stock KSP antennas.
+          This class covers stock and RealAntennas antennas.
 
 
 .. type:: public class Antenna
@@ -1851,7 +1982,7 @@ Antenna
       .. note::
 
          Fixed antennas are always deployed.
-         Returns an error if you try to deploy a fixed antenna.
+         Throws :type:`KRPC.InvalidOperationException` if set on a fixed antenna.
 
    .. method:: boolean getCanTransmit()
 
@@ -1887,6 +2018,11 @@ Antenna
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
+
+      .. note::
+
+         Not used by RealAntennas, which replaces the stock range model.
+
    .. method:: boolean getCombinable()
 
 
@@ -1895,12 +2031,22 @@ Antenna
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
+
+      .. note::
+
+         Not used by RealAntennas, which replaces the stock range model.
+
    .. method:: double getCombinableExponent()
 
 
       Exponent used to calculate the combined power of multiple antennae on a vessel.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Not used by RealAntennas, which replaces the stock range model.
 
    .. method:: float getPacketInterval()
 
@@ -1922,6 +2068,320 @@ Antenna
       Units of electric charge consumed per packet sent.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. method:: float getGain()
+
+
+      The gain of the antenna, in :math:`\mathrm{dBi}`.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. method:: float getTransmitPower()
+
+   .. method:: void setTransmitPower(float value)
+
+      Returns the transmit power of the antenna, in :math:`\mathrm{dBm}`, and sets it in the editor.
+      Throws an exception if set in flight, or outside zero to :meth:`Antenna.getMaxTransmitPower()`.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. method:: float getMaxTransmitPower()
+
+
+      The largest transmit power the antenna can be set to, in :math:`\mathrm{dBm}`.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. method:: int getTechLevel()
+
+   .. method:: void setTechLevel(int value)
+
+      Returns the tech level of the antenna, and sets it in the editor. Throws an
+      exception if set in flight, or outside zero to :meth:`Antenna.getMaxTechLevel()`.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. method:: int getMaxTechLevel()
+
+
+      The highest tech level the antenna can be set to.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. method:: String getBand()
+
+
+      The name of the radio frequency band the antenna uses, e.g. ``"S"``.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. method:: double getFrequency()
+
+
+      The frequency of the antenna's band, in Hz.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. method:: double getDataRate()
+
+
+      The highest data rate the antenna supports, in bits per second.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. method:: double getBeamwidth()
+
+
+      The half-power beamwidth of the antenna, in degrees.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. method:: double getIdlePowerDraw()
+
+
+      The power the antenna draws while idle, in watts.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. method:: double getActivePowerDraw()
+
+
+      The power the antenna draws while transmitting, in watts. This includes
+      :meth:`Antenna.getIdlePowerDraw()`.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. method:: boolean getEnabled()
+
+   .. method:: void setEnabled(boolean value)
+
+      Returns whether the antenna is enabled, and sets it in the editor. Throws an
+      exception if set in flight.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealAntennas. A disabled antenna does not communicate and draws no power.
+
+   .. method:: void disablePermanently()
+
+      Disable the antenna for the rest of the flight. It then draws no power.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. method:: boolean getCanTarget()
+
+
+      Whether the antenna can be pointed at a target. Omnidirectional antennas
+      cannot.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. method:: AntennaTargetMode getTargetMode()
+
+
+      The kind of target the antenna points at.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. method:: Vessel getTargetVessel()
+
+   .. method:: void setTargetVessel(Vessel value)
+
+      Returns the vessel the antenna points at, and sets the vessel to point at.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealAntennas. ``null`` if the antenna does not point at a vessel. Throws an
+         exception if set to ``null``, or if the antenna cannot be pointed
+         (see :meth:`Antenna.getCanTarget()`).
+
+   .. method:: CelestialBody getTargetBody()
+
+   .. method:: void setTargetBody(CelestialBody value)
+
+      Returns the body the antenna points at, and sets the body to point at the center of.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealAntennas. Also the body of a position the antenna points at, or
+         ``null`` if it points at neither. Throws an exception if set to ``null``, or if
+         the antenna cannot be pointed (see :meth:`Antenna.getCanTarget()`).
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> targetDirection(ReferenceFrame referenceFrame)
+
+      The direction the antenna points in, in the given reference frame. Throws an
+      exception if the antenna has no target (see :meth:`Antenna.getTargetMode()`).
+
+      :param ReferenceFrame referenceFrame: The reference frame that the returned direction is in.
+      :returns: The direction as a unit vector.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. method:: void setTargetPosition(CelestialBody body, double latitude, double longitude, double altitude)
+
+      Point the antenna at a position on or above a body.
+
+      :param CelestialBody body: The body.
+      :param double latitude: The latitude, in degrees.
+      :param double longitude: The longitude, in degrees.
+      :param double altitude: The altitude above sea level, in meters.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealAntennas. Throws an exception if the antenna cannot be pointed
+         (see :meth:`Antenna.getCanTarget()`).
+
+   .. method:: void setTargetAzimuthElevation(double azimuth, double elevation)
+
+      Point the antenna in a direction relative to the vessel's position on the surface.
+
+      :param double azimuth: The azimuth, in degrees clockwise from north, from 0 to 360.
+      :param double elevation: The elevation above the horizon, in degrees, from -90 to 90.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealAntennas. Throws an exception if the antenna cannot be pointed
+         (see :meth:`Antenna.getCanTarget()`).
+
+   .. method:: void setTargetOrbitRelative(double deflection, double elevation)
+
+      Point the antenna in a direction relative to the vessel's orbital velocity.
+
+      :param double deflection: The angle from the orbital velocity in the orbital plane, in degrees, from -180 to 180.
+      :param double elevation: The angle out of the orbital plane, in degrees, from -90 to 90.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealAntennas. Throws an exception if the antenna cannot be pointed
+         (see :meth:`Antenna.getCanTarget()`).
+
+
+
+
+.. type:: public enum AntennaTargetMode
+
+   The kind of target a RealAntennas antenna points at. See :meth:`Antenna.getTargetMode()`.
+
+
+   .. field:: public AntennaTargetMode NONE
+
+      The antenna has no target. Omnidirectional antennas have none.
+
+
+   .. field:: public AntennaTargetMode VESSEL
+
+      A vessel. See :meth:`Antenna.getTargetVessel()`.
+
+
+   .. field:: public AntennaTargetMode BODY
+
+      The center of a body. See :meth:`Antenna.getTargetBody()`.
+
+
+   .. field:: public AntennaTargetMode POSITION
+
+      A position on or above a body. See :meth:`Antenna.setTargetPosition(CelestialBody, double, double, double)`.
+
+
+   .. field:: public AntennaTargetMode AZIMUTH_ELEVATION
+
+      An azimuth and elevation from the vessel's position. See
+      :meth:`Antenna.setTargetAzimuthElevation(double, double)`.
+
+
+   .. field:: public AntennaTargetMode ORBIT_RELATIVE
+
+      A direction relative to the vessel's orbital velocity. See
+      :meth:`Antenna.setTargetOrbitRelative(double, double)`.
 
 
 
@@ -1954,7 +2414,7 @@ Cargo Bay
          inside are sheltered: a bay whose open end has nothing attached to it never shelters
          anything, however tightly shut it is. Use :meth:`Part.getShielded()` for that.
 
-         A cargo bay is never :meth:`DeployableState.BROKEN`, as the game
+         A cargo bay is never :field:`DeployableState.BROKEN`, as the game
          does not track damage for them.
 
    .. method:: boolean getOpen()
@@ -2083,17 +2543,40 @@ Control Surface
 
       :Game Scenes: Flight
 
+   .. method:: float getDeflectionAngle()
+
+
+      The current angle of the control surface from its neutral position, in degrees.
+      Includes the :meth:`ControlSurface.getDeployAngle()` while the surface is deployed.
+
+      :Game Scenes: Flight
+
+   .. method:: float getControlRange()
+
+
+      The angle the control surface deflects by for a full control input, in degrees,
+      before the :meth:`ControlSurface.getAuthorityLimiter()` is applied.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. method:: float getActuatorSpeed()
+
+
+      The rate the control surface deflects at, in degrees per second.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
    .. method:: float getSurfaceArea()
 
 
-      Surface area of the control surface in :math:`m^2`.
+      Surface area of the control surface in :math:`\mathrm{m^{2}}`.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: AxisRange getAvailableTorque()
 
 
-      The available torque, in Newton meters, that can be produced by this control surface,
+      The available torque, in :math:`\mathrm{N \cdot m}`, that can be produced by this control surface,
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
       correspond to the coordinate axes of the :meth:`Vessel.getReferenceFrame()`.
 
@@ -2128,7 +2611,7 @@ Decoupler
 
          When called, the active vessel may change. It is therefore possible that,
          after calling this function, the object(s) returned by previous call(s) to
-         :meth:`getActiveVessel()` no longer refer to the active vessel.
+         :meth:`SpaceCenter.getActiveVessel()` no longer refer to the active vessel.
 
    .. method:: boolean getDecoupled()
 
@@ -2147,7 +2630,7 @@ Decoupler
    .. method:: float getImpulse()
 
 
-      The impulse that the decoupler imparts when it is fired, in Newton seconds.
+      The impulse that the decoupler imparts when it is fired, in :math:`\mathrm{N \cdot s}`.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
@@ -2255,7 +2738,7 @@ Docking Port
 
          When called, the active vessel may change. It is therefore possible that,
          after calling this function, the object(s) returned by previous call(s) to
-         :meth:`getActiveVessel()` no longer refer to the active vessel.
+         :meth:`SpaceCenter.getActiveVessel()` no longer refer to the active vessel.
 
    .. method:: float getReengageDistance()
 
@@ -2343,7 +2826,7 @@ Docking Port
       The rotation of the docking port, in the given reference frame.
 
       :param ReferenceFrame referenceFrame: The reference frame that the returned rotation is in.
-      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
+      :returns: The rotation as a quaternion of the form ``(x, y, z, w)``.
       :Game Scenes: Flight
 
    .. method:: ReferenceFrame getReferenceFrame()
@@ -2722,6 +3205,60 @@ Engine
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
+   .. method:: boolean getGimbalResponseSpeedEnabled()
+
+
+      Whether the gimbal moves toward its commanded deflection at
+      :meth:`Engine.getGimbalResponseSpeed()`. When ``false``, the gimbal reaches its
+      commanded deflection in one physics tick.
+      Throws an exception if the engine is not gimballed.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. method:: float getGimbalResponseSpeed()
+
+
+      The response speed of the gimbal, in :math:`\mathrm{s^{-1}}`.
+      Throws an exception if the engine is not gimballed.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Each physics tick of length :math:`\Delta t`, the gimbal moves a fraction
+         :math:`v \Delta t` of the way from its deflection to the commanded deflection,
+         where :math:`v` is the response speed. The fraction is at most 1, so at high
+         physics warp the gimbal can reach its commanded deflection in one tick. This lag
+         only applies when :meth:`Engine.getGimbalResponseSpeedEnabled()` is ``true``.
+
+   .. method:: boolean getGimbalPitchEnabled()
+
+   .. method:: void setGimbalPitchEnabled(boolean value)
+
+      Whether the gimbal responds to pitch control input.
+      Throws an exception if the engine is not gimballed.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. method:: boolean getGimbalYawEnabled()
+
+   .. method:: void setGimbalYawEnabled(boolean value)
+
+      Whether the gimbal responds to yaw control input.
+      Throws an exception if the engine is not gimballed.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. method:: boolean getGimbalRollEnabled()
+
+   .. method:: void setGimbalRollEnabled(boolean value)
+
+      Whether the gimbal responds to roll control input.
+      Throws an exception if the engine is not gimballed.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
    .. method:: boolean getGimbalOverride()
 
    .. method:: void setGimbalOverride(boolean value)
@@ -2746,26 +3283,43 @@ Engine
 
       :Game Scenes: Flight
 
+
+      .. note::
+
+         The gimbal ignores the component for an axis it is disabled for, such as pitch when
+         :meth:`Engine.getGimbalPitchEnabled()` is ``false``.
+
    .. method:: AxisRange getAvailableTorque()
 
 
-      The available torque, in Newton meters, that can be produced by this engine,
+      The available torque, in :math:`\mathrm{N \cdot m}`, that can be produced by this engine,
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
       correspond to the coordinate axes of the :meth:`Vessel.getReferenceFrame()`.
       Returns zero if the engine is inactive, or not gimballed.
 
       :Game Scenes: Flight
 
+
+      .. note::
+
+         The torque is zero about an axis the gimbal is disabled for, such as pitch when
+         :meth:`Engine.getGimbalPitchEnabled()` is ``false``.
+
    .. method:: boolean getCanReverseThrust()
 
 
       Whether the engine has a recognized thrust reverser. This is ``true`` for
       stock engines with a thrust reverser (such as the J-33 "Wheesley" and
-      J-90 "Goliath" turbofan engines) and for selected mod engines. It is
+      J-90 "Goliath" turbofan engines) and for supported mod engines. It is
       ``false`` for engines whose reverser is not recognized, as KSP provides no
       standard way to detect one.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Recognizes the thrust reversers of Firespitter and KerbalActuators.
 
    .. method:: boolean getThrustReversed()
 
@@ -2790,8 +3344,7 @@ Engine
    .. method:: boolean getHasRealFuels()
 
 
-      Whether the engine is managed by
-      `RealFuels <https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/>`_.
+      Whether the engine is managed by RealFuels.
       The remaining properties in this section are only available when it is.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
@@ -2805,6 +3358,11 @@ Engine
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
+
+      .. note::
+
+         Requires RealFuels.
+
    .. method:: java.util.Map<String,Double> getIgnitionResources()
 
 
@@ -2815,6 +3373,11 @@ Engine
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
+
+      .. note::
+
+         Requires RealFuels.
+
    .. method:: boolean getHasUllage()
 
 
@@ -2823,6 +3386,11 @@ Engine
       managed by RealFuels (see :meth:`Engine.getHasRealFuels()`).
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Requires RealFuels.
 
    .. method:: double getPropellantStability()
 
@@ -2833,6 +3401,11 @@ Engine
       by RealFuels (see :meth:`Engine.getHasRealFuels()`).
 
       :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealFuels.
 
    .. method:: double getPropellantReliability()
 
@@ -2845,6 +3418,11 @@ Engine
 
       :Game Scenes: Flight
 
+
+      .. note::
+
+         Requires RealFuels.
+
    .. method:: boolean getPressureFed()
 
 
@@ -2854,6 +3432,11 @@ Engine
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
+
+      .. note::
+
+         Requires RealFuels.
+
    .. method:: boolean getHasFeedPressure()
 
 
@@ -2862,6 +3445,11 @@ Engine
       engine is not managed by RealFuels (see :meth:`Engine.getHasRealFuels()`).
 
       :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires RealFuels.
 
 
 
@@ -2951,6 +3539,10 @@ Experiment
 .. type:: public class Experiment
 
    Obtained by calling :meth:`Part.getExperiment()`.
+
+   .. note::
+
+      Includes the experiments of DMagic's DMModuleScienceAnimateGeneric.
 
    .. method:: Part getPart()
 
@@ -3135,7 +3727,10 @@ Fairing
 .. type:: public class Fairing
 
    A fairing. Obtained by calling :meth:`Part.getFairing()`.
-   Supports both stock fairings, and those from the ProceduralFairings mod.
+
+   .. note::
+
+      Includes the fairings of ProceduralFairings.
 
    .. method:: Part getPart()
 
@@ -3185,7 +3780,7 @@ Intake
    .. method:: float getSpeed()
 
 
-      Speed of the flow into the intake, in :math:`m/s`.
+      Speed of the flow into the intake, in :math:`\mathrm{m/s}`.
 
       :Game Scenes: Flight
 
@@ -3199,7 +3794,7 @@ Intake
    .. method:: float getArea()
 
 
-      The area of the intake's opening, in square meters.
+      The area of the intake's opening, in :math:`\mathrm{m^{2}}`.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
@@ -3246,7 +3841,7 @@ Leg
       .. note::
 
          Fixed landing legs are always deployed.
-         Returns an error if you try to deploy fixed landing gear.
+         Throws :type:`KRPC.InvalidOperationException` if set on a fixed landing leg.
 
    .. method:: boolean getIsGrounded()
 
@@ -3254,6 +3849,104 @@ Leg
       Returns whether the leg is touching the ground.
 
       :Game Scenes: Flight
+
+   .. method:: float getLoad()
+
+
+      The force pressing the leg's foot into the ground, in :math:`\mathrm{kN}`.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game raises the load of a grounded leg to at least 10 kN.
+         :meth:`Leg.getImpactTolerance()` applies to the rise in this value.
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> contactPosition(ReferenceFrame referenceFrame)
+
+      The position of the bottom of the leg's foot, in the given reference frame. While
+      the leg is grounded, this is where it touches the ground.
+
+      :param ReferenceFrame referenceFrame: The reference frame that the returned position vector is in.
+      :returns: The position as a vector.
+      :Game Scenes: Flight
+
+   .. method:: float getSuspensionSpringStrength()
+
+
+      Suspension spring strength, as set in the editor.
+      Throws an exception if the leg has no suspension.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. method:: float getSuspensionDamperStrength()
+
+
+      Suspension damper strength, as set in the editor.
+      Throws an exception if the leg has no suspension.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. method:: Float getSuspensionSpring()
+
+
+      The spring constant of the suspension, in :math:`\mathrm{kN/m}`, or ``null`` while
+      the leg is not grounded.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game updates it while the leg is grounded, from
+         :meth:`Leg.getSuspensionSpringStrength()`, the vessel's mass, the leg's compression and
+         the local gravity.
+
+   .. method:: Float getSuspensionDamper()
+
+
+      The damping constant of the suspension, in :math:`\mathrm{kN \cdot s/m}`, or ``null``
+      while the leg is not grounded.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game updates it while the leg is grounded, from
+         :meth:`Leg.getSuspensionDamperStrength()` and :meth:`Leg.getSuspensionSpring()`.
+
+   .. method:: float getSuspensionTravel()
+
+
+      The travel of the suspension, in meters.
+
+      :Game Scenes: Flight
+
+   .. method:: float getImpactTolerance()
+
+
+      The rise in :meth:`Leg.getLoad()` over one physics tick that breaks the leg, in
+      :math:`\mathrm{kN}`.
+      Throws an exception if the leg is not breakable.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         The game scales the rise by the local gravity divided by standard gravity before
+         comparing it with this tolerance.
+
+   .. method:: float getExplodeMultiplier()
+
+
+      The multiple of :meth:`Leg.getImpactTolerance()` that destroys the leg, in place of
+      breaking it.
+      Throws an exception if the leg is not breakable.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
 
@@ -3344,6 +4037,10 @@ Parachute
 
    A parachute. Obtained by calling :meth:`Part.getParachute()`.
 
+   .. note::
+
+      Includes the parachutes of RealChute.
+
    .. method:: Part getPart()
 
 
@@ -3416,7 +4113,7 @@ Parachute
       Whether it is currently safe to deploy the parachute, given the vessel's
       flight conditions. Computed by KSP from the current airspeed, pressure and
       temperature. Only applicable to stock parachutes.
-      Note that KSP reports :meth:`ParachuteSafeState.UNSAFE` for the first
+      Note that KSP reports :field:`ParachuteSafeState.UNSAFE` for the first
       second after the vessel unpacks, before its thermal data is valid.
 
       :Game Scenes: Flight
@@ -3523,7 +4220,7 @@ Radiator
 
       .. note::
 
-         A fixed radiator is always :meth:`DeployableState.DEPLOYED`.
+         A fixed radiator is always :field:`DeployableState.DEPLOYED`.
 
 
 
@@ -3692,7 +4389,7 @@ Resource Harvester
 
       .. note::
 
-         A harvester is never :meth:`DeployableState.BROKEN`, as the game
+         A harvester is never :field:`DeployableState.BROKEN`, as the game
          does not track damage for them.
 
    .. method:: boolean getDeployed()
@@ -3723,7 +4420,7 @@ Resource Harvester
    .. method:: float getExtractionRate()
 
 
-      The rate at which the drill is extracting ore, in units per second.
+      The rate at which the drill is extracting ore, in :math:`\mathrm{units/s}`.
 
       :Game Scenes: Flight
 
@@ -3783,7 +4480,7 @@ Reaction Wheel
    .. method:: AxisRange getAvailableTorque()
 
 
-      The available torque, in Newton meters, that can be produced by this reaction wheel,
+      The available torque, in :math:`\mathrm{N \cdot m}`, that can be produced by this reaction wheel,
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
       correspond to the coordinate axes of the :meth:`Vessel.getReferenceFrame()`.
       Returns zero if the reaction wheel is inactive or broken.
@@ -3793,7 +4490,7 @@ Reaction Wheel
    .. method:: AxisRange getMaxTorque()
 
 
-      The maximum torque, in Newton meters, that can be produced by this reaction wheel,
+      The maximum torque, in :math:`\mathrm{N \cdot m}`, that can be produced by this reaction wheel,
       when it is active, in the positive and negative pitch, roll and yaw axes of the vessel.
       These axes correspond to the coordinate axes of the :meth:`Vessel.getReferenceFrame()`.
 
@@ -4088,7 +4785,7 @@ Robotic Hinge
 
    .. method:: void setRate(float value)
 
-      Target movement rate in degrees per second.
+      Target movement rate in :math:`\mathrm{{}^{\circ}/s}`.
 
       :Game Scenes: Flight
 
@@ -4181,7 +4878,7 @@ Robotic Piston
 
    .. method:: void setRate(float value)
 
-      Target movement rate in meters per second.
+      Target movement rate in :math:`\mathrm{m/s}`.
 
       :Game Scenes: Flight
 
@@ -4283,7 +4980,7 @@ Robotic Rotation
 
    .. method:: void setRate(float value)
 
-      Target movement rate in degrees per second.
+      Target movement rate in :math:`\mathrm{{}^{\circ}/s}`.
 
       :Game Scenes: Flight
 
@@ -4475,7 +5172,7 @@ RCS
 
    .. method:: void setForwardEnabled(boolean value)
 
-      Whether the RCS thruster will fire when pitch control input is given.
+      Whether the RCS thruster will fire when forward control input is given.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
@@ -4483,7 +5180,7 @@ RCS
 
    .. method:: void setUpEnabled(boolean value)
 
-      Whether the RCS thruster will fire when yaw control input is given.
+      Whether the RCS thruster will fire when up control input is given.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
@@ -4491,7 +5188,7 @@ RCS
 
    .. method:: void setRightEnabled(boolean value)
 
-      Whether the RCS thruster will fire when roll control input is given.
+      Whether the RCS thruster will fire when right control input is given.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
@@ -4517,6 +5214,12 @@ RCS
 
       :Game Scenes: Flight
 
+
+      .. note::
+
+         The block ignores the component for an axis it is disabled for, such as pitch when
+         :meth:`RCS.getPitchEnabled()` is ``false``.
+
    .. method:: org.javatuples.Triplet<Double,Double,Double> getTranslationOverride()
 
    .. method:: void setTranslationOverride(org.javatuples.Triplet<Double,Double,Double> value)
@@ -4527,10 +5230,16 @@ RCS
 
       :Game Scenes: Flight
 
+
+      .. note::
+
+         The block ignores the component for an axis it is disabled for, such as right when
+         :meth:`RCS.getRightEnabled()` is ``false``.
+
    .. method:: AxisRange getAvailableTorque()
 
 
-      The available torque, in Newton meters, that can be produced by this RCS,
+      The available torque, in :math:`\mathrm{N \cdot m}`, that can be produced by this RCS,
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
       correspond to the coordinate axes of the :meth:`Vessel.getReferenceFrame()`.
       Returns zero if RCS is disable.
@@ -4574,14 +5283,14 @@ RCS
 
 
       The torque being applied by the RCS thrusters about the vessel's center of mass,
-      in Newton meters. The vector is in the vessel's reference frame
+      in :math:`\mathrm{N \cdot m}`. The vector is in the vessel's reference frame
       (:meth:`Vessel.getReferenceFrame()`). Returns zero if the RCS is inactive.
 
       :Game Scenes: Flight
 
    .. method:: Wrench overrideWrench(org.javatuples.Triplet<Double,Double,Double> rotation, org.javatuples.Triplet<Double,Double,Double> translation)
 
-      The force and torque the given demands would produce, in Newtons and Newton meters.
+      The force and torque the given demands would produce, in Newtons and :math:`\mathrm{N \cdot m}`.
 
       :param org.javatuples.Triplet<Double,Double,Double> rotation: A rotation demand, as set by :meth:`RCS.getRotationOverride()`.
       :param org.javatuples.Triplet<Double,Double,Double> translation: A translation demand, as set by :meth:`RCS.getTranslationOverride()`.
@@ -4733,6 +5442,10 @@ Solar Panel
 .. type:: public class SolarPanel
 
    A solar panel. Obtained by calling :meth:`Part.getSolarPanel()`.
+
+   .. note::
+
+      Includes the curved solar panels of Near Future Solar.
 
    .. method:: Part getPart()
 
@@ -5012,7 +5725,8 @@ Wheel
    .. method:: float getMotorOutput()
 
 
-      The output of the motor. This is the torque currently being generated, in Newton meters.
+      The output of the motor. This is the torque currently being generated, in
+      :math:`\mathrm{N \cdot m}`.
 
    
 
@@ -5115,6 +5829,67 @@ Wheel
 
    
 
+   .. method:: Float getSuspensionSpring()
+
+
+      The spring constant of the suspension, in :math:`\mathrm{kN/m}`, or ``null`` while
+      the wheel is not grounded.
+      Throws an exception if the wheel has no suspension.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game updates it while the wheel is grounded, from
+         :meth:`Wheel.getSuspensionSpringStrength()`, the vessel's mass, the wheel's compression and
+         the local gravity.
+
+   .. method:: Float getSuspensionDamper()
+
+
+      The damping constant of the suspension, in :math:`\mathrm{kN \cdot s/m}`, or ``null``
+      while the wheel is not grounded.
+      Throws an exception if the wheel has no suspension.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game updates it while the wheel is grounded, from
+         :meth:`Wheel.getSuspensionDamperStrength()` and :meth:`Wheel.getSuspensionSpring()`.
+
+   .. method:: float getSuspensionTravel()
+
+
+      The travel of the suspension, in meters.
+
+      :Game Scenes: Flight
+
+   .. method:: float getLoad()
+
+
+      The force pressing the wheel into the ground, in :math:`\mathrm{kN}`.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game raises the load of a grounded wheel to at least 0.5 kN, or 10 kN for a wheel
+         with the old friction model. :meth:`Wheel.getImpactTolerance()` applies to the rise in
+         this value.
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> contactPosition(ReferenceFrame referenceFrame)
+
+      The position of the bottom of the wheel, in the given reference frame. While the
+      wheel is grounded, this is where it touches the ground.
+
+      :param ReferenceFrame referenceFrame: The reference frame that the returned position vector is in.
+      :returns: The position as a vector.
+      :Game Scenes: Flight
+
    .. method:: boolean getBroken()
 
 
@@ -5140,6 +5915,29 @@ Wheel
 
 
       Stress tolerance of the wheel.
+
+   
+
+   .. method:: float getImpactTolerance()
+
+
+      The rise in :meth:`Wheel.getLoad()` over one physics tick that breaks the wheel, in
+      :math:`\mathrm{kN}`.
+      Throws an exception if the wheel is not breakable.
+
+   
+
+      .. note::
+
+         The game scales the rise by the local gravity divided by standard gravity before
+         comparing it with this tolerance.
+
+   .. method:: float getExplodeMultiplier()
+
+
+      The multiple of :meth:`Wheel.getImpactTolerance()` that destroys the wheel, in place of
+      breaking it.
+      Throws an exception if the wheel is not breakable.
 
    
 
@@ -5194,279 +5992,3 @@ Wheel
    .. field:: public MotorState NOT_ENOUGH_RESOURCES
 
       The motor does not have enough resources to run.
-
-
-
-.. _java-api-parts-trees-of-parts:
-
-Trees of Parts
---------------
-
-Vessels in KSP are comprised of a number of parts, connected to one another in a
-*tree* structure. An example vessel is shown in Figure 1, and the corresponding
-tree of parts in Figure 2. The craft file for this example can also be
-:download:`downloaded here </crafts/PartsTree.craft>`.
-
-.. only:: html
-
-   .. container:: clearer
-
-      ..
-
-   .. figure:: /images/api/parts.png
-      :align: left
-      :figwidth: 275
-
-      **Figure 1** -- Example parts making up a vessel.
-
-   .. figure:: /images/api/parts-tree.png
-      :align: right
-      :figwidth: 275
-
-      **Figure 2** -- Tree of parts for the vessel in Figure 1. Arrows point from the parent part to the child part.
-
-   .. container:: clearer
-
-      ..
-
-.. only:: latex
-
-   .. figure:: /images/api/parts.png
-      :align: center
-      :width: 55%
-
-      **Figure 1** -- Example parts making up a vessel.
-
-   .. figure:: /images/api/parts-tree.png
-      :align: center
-      :width: 55%
-
-      **Figure 2** -- Tree of parts for the vessel in Figure 1. Arrows point from the parent part to the child part.
-
-
-Traversing the Tree
-^^^^^^^^^^^^^^^^^^^
-
-The tree of parts can be traversed using the attributes :meth:`Parts.getRoot()`,
-:meth:`Part.getParent()` and :meth:`Part.getChildren()`.
-
-The root of the tree is the same as the vessels *root part* (part number 1 in
-the example above) and can be obtained by calling :meth:`Parts.getRoot()`.
-A parts children can be obtained by calling :meth:`Part.getChildren()`.
-If the part does not have any children, :meth:`Part.getChildren()`
-returns an empty list. A parts parent can be obtained by calling
-:meth:`Part.getParent()`. If the part does not have a parent
-(as is the case for the root part), :meth:`Part.getParent()`
-returns ``null``.
-
-The following Java example uses these attributes to perform a
-depth-first traversal over all of the parts in a vessel:
-
-.. literalinclude:: /scripts/api/space-center/parts/TreeTraversal.java
-
-When this code is execute using the craft file for the example vessel pictured
-above, the following is printed out::
-
-    Command Pod Mk1
-     TR-18A Stack Decoupler
-      FL-T400 Fuel Tank
-       LV-909 Liquid Fuel Engine
-        TR-18A Stack Decoupler
-         FL-T800 Fuel Tank
-          LV-909 Liquid Fuel Engine
-          TT-70 Radial Decoupler
-           FL-T400 Fuel Tank
-            TT18-A Launch Stability Enhancer
-            FTX-2 External Fuel Duct
-            LV-909 Liquid Fuel Engine
-            Aerodynamic Nose Cone
-          TT-70 Radial Decoupler
-           FL-T400 Fuel Tank
-            TT18-A Launch Stability Enhancer
-            FTX-2 External Fuel Duct
-            LV-909 Liquid Fuel Engine
-            Aerodynamic Nose Cone
-       LT-1 Landing Struts
-       LT-1 Landing Struts
-     Mk16 Parachute
-
-.. _java-api-parts-attachment-modes:
-
-Attachment Modes
-^^^^^^^^^^^^^^^^
-
-Parts can be attached to other parts either *radially* (on the side of the
-parent part) or *axially* (on the end of the parent part, to form a stack).
-
-For example, in the vessel pictured above, the parachute (part 2) is *axially*
-connected to its parent (the command pod -- part 1), and the landing leg
-(part 5) is *radially* connected to its parent (the fuel tank -- part 4).
-
-The root part of a vessel (for example the command pod -- part 1) does not have
-a parent part, so does not have an attachment mode. However, the part is
-consider to be *axially* attached to nothing.
-
-The following Java example does a depth-first traversal as before,
-but also prints out the attachment mode used by the part:
-
-.. literalinclude:: /scripts/api/space-center/parts/AttachmentModes.java
-
-When this code is execute using the craft file for the example vessel pictured
-above, the following is printed out::
-
- Command Pod Mk1 - axial
-  TR-18A Stack Decoupler - axial
-   FL-T400 Fuel Tank - axial
-    LV-909 Liquid Fuel Engine - axial
-     TR-18A Stack Decoupler - axial
-      FL-T800 Fuel Tank - axial
-       LV-909 Liquid Fuel Engine - axial
-       TT-70 Radial Decoupler - radial
-        FL-T400 Fuel Tank - radial
-         TT18-A Launch Stability Enhancer - radial
-         FTX-2 External Fuel Duct - radial
-         LV-909 Liquid Fuel Engine - axial
-         Aerodynamic Nose Cone - axial
-       TT-70 Radial Decoupler - radial
-        FL-T400 Fuel Tank - radial
-         TT18-A Launch Stability Enhancer - radial
-         FTX-2 External Fuel Duct - radial
-         LV-909 Liquid Fuel Engine - axial
-         Aerodynamic Nose Cone - axial
-    LT-1 Landing Struts - radial
-    LT-1 Landing Struts - radial
-  Mk16 Parachute - axial
-
-.. _java-api-parts-fuel-lines:
-
-Fuel Lines
-----------
-
-.. only:: html
-
-   .. figure:: /images/api/parts-fuel-lines.png
-      :align: right
-      :figwidth: 200
-
-      **Figure 5** -- Fuel lines from the example in Figure 1. Fuel flows from the parts highlighted in green, into the part highlighted in blue.
-
-.. only:: latex
-
-   .. figure:: /images/api/parts-fuel-lines.png
-      :align: center
-      :width: 55%
-
-      **Figure 5** -- Fuel lines from the example in Figure 1. Fuel flows from the parts highlighted in green, into the part highlighted in blue.
-
-
-.. only:: html
-
-   .. figure:: /images/api/parts-fuel-lines-tree.png
-      :align: right
-      :figwidth: 200
-
-      **Figure 4** -- A subset of the parts tree from Figure 2 above.
-
-.. only:: latex
-
-   .. figure:: /images/api/parts-fuel-lines-tree.png
-      :align: center
-      :width: 55%
-
-      **Figure 4** -- A subset of the parts tree from Figure 2 above.
-
-
-Fuel lines are considered parts, and are included in the parts tree (for
-example, as pictured in Figure 4). However, the parts tree does not contain
-information about which parts fuel lines connect to. The parent part of a fuel
-line is the part from which it will take fuel (as shown in Figure 4) however the
-part that it will send fuel to is not represented in the parts tree.
-
-Figure 5 shows the fuel lines from the example vessel pictured earlier. Fuel
-line part 15 (in red) takes fuel from a fuel tank (part 11 -- in green) and
-feeds it into another fuel tank (part 9 -- in blue). The fuel line is therefore
-a child of part 11, but its connection to part 9 is not represented in the tree.
-
-The attributes :meth:`Part.getFuelLinesFrom()` and
-:meth:`Part.getFuelLinesTo()` can be used to discover these
-connections. In the example in Figure 5, when
-:meth:`Part.getFuelLinesTo()` is called on fuel tank part
-11, it will return a list of parts containing just fuel tank part 9 (the blue
-part). When :meth:`Part.getFuelLinesFrom()` is called on
-fuel tank part 9, it will return a list containing fuel tank parts 11 and 17
-(the parts colored green).
-
-.. _java-api-parts-staging:
-
-Staging
--------
-
-For vessel-level summaries (delta-v, thrust, fuel, and resources grouped per
-stage), use the :rst:ref:`java-api-stage` class via
-:meth:`Vessel.getStages()` and
-:meth:`Vessel.getDecoupleStages()`.
-
-.. only:: html
-
-   .. figure:: /images/api/parts-staging.png
-      :align: right
-      :figwidth: 340
-
-      **Figure 6** -- Example vessel from Figure 1 with a staging sequence.
-
-.. only:: latex
-
-   .. figure:: /images/api/parts-staging.png
-      :align: center
-      :width: 55%
-
-      **Figure 6** -- Example vessel from Figure 1 with a staging sequence.
-
-
-Each part has two staging numbers associated with it: the stage in which the
-part is *activated* and the stage in which the part is *decoupled*. These values
-can be obtained using :meth:`Part.getStage()` and
-:meth:`Part.getDecoupleStage()` respectively. For parts that
-are not activated by staging, :meth:`Part.getStage()` returns
--1. For parts that are never decoupled,
-:meth:`Part.getDecoupleStage()` returns a value of -1.
-
-Figure 6 shows an example staging sequence for a vessel. Figure 7 shows the
-stages in which each part of the vessel will be *activated*. Figure 8 shows the
-stages in which each part of the vessel will be *decoupled*.
-
-.. only:: html
-
-   .. container:: clearer
-
-      ..
-
-   .. figure:: /images/api/parts-staging-activate.png
-      :align: left
-      :figwidth: 250
-
-      **Figure 7** -- The stage in which each part is *activated*.
-
-   .. figure:: /images/api/parts-staging-decouple.png
-      :align: right
-      :figwidth: 250
-
-      **Figure 8** -- The stage in which each part is *decoupled*.
-
-   .. container:: clearer
-
-      ..
-
-.. only:: latex
-
-   .. figure:: /images/api/parts-staging-activate.png
-      :align: center
-      :width: 55%
-
-      **Figure 7** -- The stage in which each part is *activated*.
-
-   .. figure:: /images/api/parts-staging-decouple.png
-      :align: center
-      :width: 55%
-
-      **Figure 8** -- The stage in which each part is *decoupled*.

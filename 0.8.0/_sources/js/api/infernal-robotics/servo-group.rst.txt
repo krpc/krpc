@@ -1,0 +1,181 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: InfernalRobotics
+   :no-index:
+
+ServoGroup
+==========
+
+
+.. class:: ServoGroup
+
+   A group of servos, obtained by calling :func:`InfernalRobotics.servoGroups`
+   or :func:`InfernalRobotics.servoGroupWithName`. Represents the "Servo Groups"
+   in the InfernalRobotics UI.
+
+   .. method:: getName()
+               setName(value)
+
+      The name of the group.
+
+      :Property: Can be read or written
+      :rtype: ``string``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Renaming a group renames it for every servo in it. This object identifies the
+         group by its name, so a rename destroys every object for the group, including the
+         one the rename was made through. Obtain the group again under the new name.
+
+   .. method:: getForwardKey()
+               setForwardKey(value)
+
+      The key assigned to be the "forward" key for the group.
+
+      :Property: Can be read or written
+      :rtype: ``string``
+      :Game Scenes: Flight
+
+   .. method:: getReverseKey()
+               setReverseKey(value)
+
+      The key assigned to be the "reverse" key for the group.
+
+      :Property: Can be read or written
+      :rtype: ``string``
+      :Game Scenes: Flight
+
+   .. method:: getSpeed()
+               setSpeed(value)
+
+      The speed multiplier for the group.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getExpanded()
+               setExpanded(value)
+
+      Whether the group is expanded in the InfernalRobotics UI.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getVessel()
+
+      The vessel the group belongs to.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Vessel`
+      :Game Scenes: Flight
+
+   .. method:: getMovingDirection()
+
+      The direction the group is currently moving in: -1 for reverse, 0 for stopped
+      and 1 for forward.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getAdvancedMode()
+               setAdvancedMode(value)
+
+      Whether the group is in advanced mode.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getElectricChargeRequired()
+
+      The total rate at which the servos in the group consume electric charge, in units
+      per second, when moving.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getBuildAid()
+               setBuildAid(value)
+
+      Whether the build aid is enabled for the group.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getIKActive()
+               setIKActive(value)
+
+      Whether inverse kinematics is active for the group.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getServos()
+
+      The servos that are in the group.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`InfernalRobotics.Servo`
+      :Game Scenes: Flight
+
+   .. method:: servoWithName(name)
+
+      Returns the servo with the given *name* from this group,
+      or ``null`` if none exists.
+
+      :param name: Name of servo to find.
+      :type name: ``string``
+      :rtype: :class:`InfernalRobotics.Servo` or ``null``
+      :Game Scenes: Flight
+
+   .. method:: getParts()
+
+      The parts containing the servos in the group.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`SpaceCenter.Part`
+      :Game Scenes: Flight
+
+   .. method:: moveRight()
+
+      Moves all of the servos in the group to the right.
+
+      :Game Scenes: Flight
+
+   .. method:: moveLeft()
+
+      Moves all of the servos in the group to the left.
+
+      :Game Scenes: Flight
+
+   .. method:: moveCenter()
+
+      Moves all of the servos in the group to the center.
+
+      :Game Scenes: Flight
+
+   .. method:: moveNextPreset()
+
+      Moves all of the servos in the group to the next preset.
+
+      :Game Scenes: Flight
+
+   .. method:: movePrevPreset()
+
+      Moves all of the servos in the group to the previous preset.
+
+      :Game Scenes: Flight
+
+   .. method:: stop()
+
+      Stops the servos in the group.
+
+      :Game Scenes: Flight

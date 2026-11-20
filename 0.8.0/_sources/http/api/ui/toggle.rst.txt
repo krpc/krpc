@@ -1,0 +1,300 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Toggle
+======
+
+
+.. _http-UI.Toggle:
+
+.. rubric:: Toggle
+
+A control that is either checked or not.
+Added to a :ref:`Canvas <http-UI.Canvas>` or a :ref:`Panel <http-UI.Panel>`.
+
+.. note::
+
+   On its own a toggle is a check box. Put several of them in the same
+   :ref:`ToggleGroup <http-UI.ToggleGroup>` and they become radio buttons, as only one toggle in a
+   group can be checked at a time.
+
+
+A ``Toggle`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ui/toggle/(id)/rect-transform
+
+   The rect transform for the UI object.
+
+
+   :param id: The identifier of the :ref:`Toggle <http-UI.Toggle>` object.
+
+   :resjson UI.RectTransform value:
+
+
+
+
+.. http:get:: /ui/toggle/(id)/layout-element
+
+   How much space the UI object asks a layout for.
+
+   .. note::
+
+      Only has an effect when the object is in a panel that has a layout. A canvas is
+      not inside a layout and does not have one.
+
+
+   :param id: The identifier of the :ref:`Toggle <http-UI.Toggle>` object.
+
+   :resjson UI.LayoutElement value:
+
+
+
+
+.. http:get:: /ui/toggle/(id)/visible
+
+   Whether the UI object is visible.
+
+   .. note::
+
+      This is the object's own setting, which is what it was last set to. An object is
+      only drawn when everything it is inside is visible as well, so an interface can
+      be built with its parts visible, inside a panel that is not, and shown all at
+      once by making that panel visible.
+
+
+   :param id: The identifier of the :ref:`Toggle <http-UI.Toggle>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ui/toggle/(id)/visible
+
+   Whether the UI object is visible.
+
+   .. note::
+
+      This is the object's own setting, which is what it was last set to. An object is
+      only drawn when everything it is inside is visible as well, so an interface can
+      be built with its parts visible, inside a panel that is not, and shown all at
+      once by making that panel visible.
+
+
+   :param id: The identifier of the :ref:`Toggle <http-UI.Toggle>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ui/toggle/(id)/text
+
+   The text for the toggle.
+
+
+   :param id: The identifier of the :ref:`Toggle <http-UI.Toggle>` object.
+
+   :resjson UI.Text value:
+
+
+
+
+.. http:get:: /ui/toggle/(id)/checked
+
+   Whether the toggle is checked.
+
+   .. note::
+
+      Checking a toggle that belongs to a :ref:`ToggleGroup <http-UI.ToggleGroup>` unchecks the rest
+      of that group, whether or not it is on the screen.
+
+
+   :param id: The identifier of the :ref:`Toggle <http-UI.Toggle>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ui/toggle/(id)/checked
+
+   Whether the toggle is checked.
+
+   .. note::
+
+      Checking a toggle that belongs to a :ref:`ToggleGroup <http-UI.ToggleGroup>` unchecks the rest
+      of that group, whether or not it is on the screen.
+
+
+   :param id: The identifier of the :ref:`Toggle <http-UI.Toggle>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ui/toggle/(id)/group
+
+   The group that the toggle belongs to, or ``null`` if it does not belong to one.
+
+   .. note::
+
+      Only one toggle in a group can be checked at a time, so a group turns a set of
+      toggles into radio buttons. A group does not have to contain the toggles, so
+      they can be grouped independently of how they are laid out.
+
+
+   :param id: The identifier of the :ref:`Toggle <http-UI.Toggle>` object.
+
+   :resjson UI.ToggleGroup? value:
+
+.. http:put:: /ui/toggle/(id)/group
+
+   The group that the toggle belongs to, or ``null`` if it does not belong to one.
+
+   .. note::
+
+      Only one toggle in a group can be checked at a time, so a group turns a set of
+      toggles into radio buttons. A group does not have to contain the toggles, so
+      they can be grouped independently of how they are laid out.
+
+
+   :param id: The identifier of the :ref:`Toggle <http-UI.Toggle>` object.
+
+   :reqjson UI.ToggleGroup? value: The new value.
+
+
+
+
+.. http:get:: /ui/toggle/(id)/changed
+
+   Whether the toggle has been changed.
+
+   .. note::
+
+      This property is set to true when the user changes the toggle, and not when a
+      client checks or unchecks it.
+      A client script should reset the property to false in order to detect subsequent changes.
+
+
+   :param id: The identifier of the :ref:`Toggle <http-UI.Toggle>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ui/toggle/(id)/changed
+
+   Whether the toggle has been changed.
+
+   .. note::
+
+      This property is set to true when the user changes the toggle, and not when a
+      client checks or unchecks it.
+      A client script should reset the property to false in order to detect subsequent changes.
+
+
+   :param id: The identifier of the :ref:`Toggle <http-UI.Toggle>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ui/toggle/(id)/interactable
+
+   Whether the control responds to the user.
+
+   .. note::
+
+      A control that is not interactable is drawn grayed out and ignores the user,
+      but is still visible. Set its visibility to false to hide it instead.
+
+
+   :param id: The identifier of the :ref:`Toggle <http-UI.Toggle>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ui/toggle/(id)/interactable
+
+   Whether the control responds to the user.
+
+   .. note::
+
+      A control that is not interactable is drawn grayed out and ignores the user,
+      but is still visible. Set its visibility to false to hide it instead.
+
+
+   :param id: The identifier of the :ref:`Toggle <http-UI.Toggle>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ui/toggle/(id)/color
+
+   The color the control is tinted with. White, the default, leaves the control drawn
+   as the skin has it.
+
+   .. note::
+
+      The tint multiplies the sprite the control is drawn with, in every state, so
+      a control can show a state of its own, an engaged autopilot for instance, by
+      color. It is applied to the part of the control that responds to the user:
+      the body of a button, dropdown or input field, the box of a toggle, and the
+      handle of a slider. A control's label is tinted through the color of its
+      text.
+
+
+   :param id: The identifier of the :ref:`Toggle <http-UI.Toggle>` object.
+
+   :resjson StdLib.ColorRGBA value:
+
+.. http:put:: /ui/toggle/(id)/color
+
+   The color the control is tinted with. White, the default, leaves the control drawn
+   as the skin has it.
+
+   .. note::
+
+      The tint multiplies the sprite the control is drawn with, in every state, so
+      a control can show a state of its own, an engaged autopilot for instance, by
+      color. It is applied to the part of the control that responds to the user:
+      the body of a button, dropdown or input field, the box of a toggle, and the
+      handle of a slider. A control's label is tinted through the color of its
+      text.
+
+
+   :param id: The identifier of the :ref:`Toggle <http-UI.Toggle>` object.
+
+   :reqjson StdLib.ColorRGBA value: The new value.
+
+
+
+
+.. http:get:: /ui/toggle/(id)/tooltip
+
+   A short piece of text shown beside the pointer while it rests on the
+   control. Empty, the default, shows nothing.
+
+
+   :param id: The identifier of the :ref:`Toggle <http-UI.Toggle>` object.
+
+   :resjson string value:
+
+.. http:put:: /ui/toggle/(id)/tooltip
+
+   A short piece of text shown beside the pointer while it rests on the
+   control. Empty, the default, shows nothing.
+
+
+   :param id: The identifier of the :ref:`Toggle <http-UI.Toggle>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:post:: /ui/toggle/(id)/remove
+
+   Remove the UI object.
+
+
+   :param id: The identifier of the :ref:`Toggle <http-UI.Toggle>` object.

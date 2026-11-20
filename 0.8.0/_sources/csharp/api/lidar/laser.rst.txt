@@ -1,0 +1,26 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.LIDAR
+
+Laser
+=====
+
+
+.. class:: Laser
+
+   .. warning:: Deprecated. Use :meth:`SpaceCenter.RaycastDistance <SpaceCenter.SpaceCenter.RaycastDistance>` instead.
+
+   A LiDAR. Obtained by calling :meth:`LIDAR.Laser <LIDAR.LIDAR.Laser>`.
+
+   .. property:: SpaceCenter.Part Part { get; }
+
+      Get the part containing this LiDAR.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<double> Cloud { get; }
+
+      Get the point cloud from the LiDAR.
+      Returns an empty list on failure.
+
+      :Game Scenes: All

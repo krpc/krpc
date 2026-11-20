@@ -1,0 +1,586 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: KRPC
+   :no-index:
+
+Service
+=======
+
+
+.. module:: KRPC
+
+Main kRPC service, used by clients to interact with basic server functionality.
+
+
+.. function:: getClientID()
+
+   Returns the identifier for the current client.
+
+   :rtype: ``Uint8Array``
+   
+
+
+
+
+.. function:: getClientName()
+
+   Returns the name of the current client.
+   This is an empty string if the client has no name.
+
+   :rtype: ``string``
+   
+
+
+
+
+.. function:: getClients()
+
+   The clients that are currently connected to the server.
+
+   :Property: Read-only, cannot be set
+   :rtype: ``Array`` of :class:`KRPC.ClientInfo`
+   
+
+
+
+
+.. function:: getStatus()
+
+   Returns the status of the server, with its version, settings and performance statistics.
+
+   :rtype: :class:`KRPC.ServerStatus`
+   
+
+
+
+
+.. function:: getServices()
+
+   The services the server provides, with their procedures, classes, enumerations,
+   structures and exceptions.
+
+   :rtype: ``schema.Services``
+   
+
+
+
+
+.. function:: holdTick()
+
+   Hold the game on its current physics tick until :func:`KRPC.releaseTick` is called
+   or the hold times out. Every call made in between is executed before the game
+   advances, so a read, compute and write all happen in the state of one tick.
+
+   
+
+   .. note::
+
+      The game renders no frame, takes no input and runs no physics while the tick is
+      held. Keep a hold as short as possible, and release it even when the code between
+      the two calls fails.
+
+      A tick is held once, so this waits for the next tick when the current one has
+      already been released. One client holds the tick at a time, and only a client
+      making a call can hold it: a stream or an event cannot.
+
+      A hold ends by itself when it times out, when the client disconnects, and when the
+      client calls a procedure that takes more than one tick to finish, such as staging
+      or warping. Stream updates are sent once the tick is released, so waiting for a
+      stream or an event inside a hold waits out the timeout.
+
+
+
+
+.. function:: releaseTick()
+
+   Let the game move on from the tick that :func:`KRPC.holdTick` held it on. Does
+   nothing when no tick is held, which is the case once a hold has timed out.
+
+   
+
+
+
+
+.. function:: nextTick()
+
+   Let the game move on from the tick being held and hold the one after it, so that a
+   program acts on consecutive physics ticks. Holds the soonest tick it can if no tick
+   is currently being held.
+
+   
+
+   .. note::
+
+      A release and a hold made as two separate calls let the game advance between them.
+      This takes the next tick without that gap. Call it at the top of a loop that has to
+      act on every tick, work, and come back to it.
+
+      The game advances one tick per call, so it runs at the rate of the loop for as long
+      as the loop runs. End the loop with :func:`KRPC.releaseTick`.
+
+      Every limit of :func:`KRPC.holdTick` applies, the timeout included. A hold lost to
+      the timeout is not reported, and the next call takes whatever tick it lands on.
+
+
+
+
+.. function:: getGameScene()
+              setGameScene(value)
+
+   The current game scene. Setting this switches the game to the given
+   scene, or opens/closes the corresponding facility for the pseudo-scenes.
+   Scene changes happen asynchronously: setting this property returns
+   immediately, and clients should poll it until it reports the requested
+   scene. Setting it to :attr:`KRPC.GameScene.flight` resumes the save's
+   active vessel, and fails if there is none. Moving between
+   :attr:`KRPC.GameScene.editorVAB` and :attr:`KRPC.GameScene.editorSPH`
+   keeps the vessel that is being constructed, as the game's own switch
+   editor button does. Leaving flight saves the game first, unless the game
+   cannot be saved, e.g. while under acceleration.
+
+   :Property: Can be read or written
+   :rtype: :class:`KRPC.GameScene`
+   
+
+
+
+
+.. function:: getPaused()
+              setPaused(value)
+
+   Whether the game is paused.
+
+   :Property: Can be read or written
+   :rtype: ``boolean``
+   
+
+
+
+
+.. function:: getGameStateLoads()
+
+   The number of game states that have finished loading.
+
+   :Property: Read-only, cannot be set
+   :rtype: ``number``
+   
+
+   .. note::
+
+      Increases once a game load, quickload, revert or scene change has finished.
+
+
+
+
+
+.. class:: GameScene
+
+   The game scene. See :func:`KRPC.getGameScene`.
+
+
+   .. attribute:: spaceCenter
+
+      The game scene showing the Kerbal Space Center buildings.
+
+
+   .. attribute:: flight
+
+      The game scene showing a vessel in flight (or on the launchpad/runway).
+
+
+   .. attribute:: trackingStation
+
+      The tracking station.
+
+
+   .. attribute:: editorVAB
+
+      The Vehicle Assembly Building.
+
+
+   .. attribute:: editorSPH
+
+      The Space Plane Hangar.
+
+
+   .. attribute:: missionBuilder
+
+      The mission builder.
+
+
+   .. attribute:: astronautComplex
+
+      The astronaut complex. This is a pseudo-scene, shown when the
+      astronaut complex facility is open within the space center scene.
+
+
+   .. attribute:: missionControl
+
+      Mission control. This is a pseudo-scene, shown when the
+      mission control facility is open within the space center scene.
+
+
+   .. attribute:: researchAndDevelopment
+
+      Research and development. This is a pseudo-scene, shown when the
+      research and development facility is open within the space center scene.
+
+
+   .. attribute:: administration
+
+      The administration facility. This is a pseudo-scene, shown when the
+      administration facility is open within the space center scene.
+
+
+
+.. class:: ClientInfo(fields)
+
+   A client connected to the server.
+
+   .. note::
+
+      See :func:`KRPC.getClients`.
+   .. attribute:: id
+
+      The identifier of the client.
+
+      :Type: ``Uint8Array``
+
+   .. attribute:: name
+
+      The name of the client, or an empty string if it has no name.
+
+      :Type: ``string``
+
+   .. attribute:: address
+
+      The address of the client.
+
+      :Type: ``string``
+
+
+.. class:: ServerStatus(fields)
+
+   The status of the server.
+
+   .. note::
+
+      See :func:`KRPC.getStatus`.
+   .. attribute:: version
+
+      The version of the server, or ``unknown``.
+
+      :Type: ``string``
+
+   .. attribute:: protocolVersion
+
+      The protocol version of the connection.
+
+      :Type: ``number``
+
+   .. attribute:: settings
+
+      The settings of the server.
+
+      :Type: :class:`KRPC.ServerSettings`
+
+   .. attribute:: statistics
+
+      The performance statistics of the server.
+
+      :Type: :class:`KRPC.ServerStatistics`
+
+
+.. class:: ServerSettings(fields)
+
+   The settings that control how the server executes calls.
+
+   .. note::
+
+      See :attr:`KRPC.ServerStatus.settings`.
+   .. attribute:: adaptiveRateControl
+
+      Whether the server adapts its time per frame to hold the frame rate at
+      :attr:`KRPC.ServerSettings.targetFrameRate`.
+
+      :Type: ``boolean``
+
+   .. attribute:: targetFrameRate
+
+      The lowest frame rate the server's work pushes the game to, in frames per second.
+
+      :Type: ``number``
+
+   .. attribute:: maxTimePerFrame
+
+      The server's budget per frame, or its ceiling with adaptive rate control, in microseconds.
+
+      :Type: ``number``
+
+   .. attribute:: maxCallWait
+
+      The longest the server waits for a client's next call, in microseconds.
+
+      :Type: ``number``
+
+   .. attribute:: tickHoldTimeout
+
+      The longest time a client may hold the game on one physics tick, in microseconds.
+
+      :Type: ``number``
+
+
+.. class:: ServerStatistics(fields)
+
+   The performance statistics of the server.
+
+   .. note::
+
+      See :attr:`KRPC.ServerStatus.statistics`.
+   .. attribute:: bytesRead
+
+      The number of bytes received from clients.
+
+      :Type: ``bigint``
+
+   .. attribute:: bytesWritten
+
+      The number of bytes sent to clients.
+
+      :Type: ``bigint``
+
+   .. attribute:: bytesReadRate
+
+      The rate bytes are received from clients, in bytes per second.
+
+      :Type: ``number``
+
+   .. attribute:: bytesWrittenRate
+
+      The rate bytes are sent to clients, in bytes per second.
+
+      :Type: ``number``
+
+   .. attribute:: rpcsExecuted
+
+      The number of calls executed.
+
+      :Type: ``bigint``
+
+   .. attribute:: rpcRate
+
+      The number of calls executed per second.
+
+      :Type: ``number``
+
+   .. attribute:: frameRate
+
+      The game's frame rate, in frames per second.
+
+      :Type: ``number``
+
+   .. attribute:: timePerFrame
+
+      The server's time per frame, in seconds: executing calls, waiting for them and
+      updating streams.
+
+      :Type: ``number``
+
+   .. attribute:: execTimePerFrame
+
+      The time spent executing calls per frame, in seconds.
+
+      :Type: ``number``
+
+   .. attribute:: waitTimePerFrame
+
+      The time spent waiting for calls per frame, in seconds.
+
+      :Type: ``number``
+
+   .. attribute:: streamTimePerFrame
+
+      The time spent updating streams per frame, in seconds.
+
+      :Type: ``number``
+
+   .. attribute:: budgetPerFrame
+
+      The time the server may spend per frame, in seconds.
+
+      :Type: ``number``
+
+   .. attribute:: medianTurnaround
+
+      The median time between a response and the client's next call, over the
+      clients' recent calls, in seconds.
+
+      :Type: ``number``
+
+   .. attribute:: deferredCalls
+
+      The number of calls left for the next update, because the update ran out of time
+      or the call yielded.
+
+      :Type: ``number``
+
+   .. attribute:: streams
+
+      The number of open streams, events included.
+
+      :Type: ``number``
+
+   .. attribute:: streamEvaluations
+
+      The number of stream evaluations, one per stream per update.
+
+      :Type: ``bigint``
+
+   .. attribute:: streamEvaluationRate
+
+      The number of stream evaluations per second.
+
+      :Type: ``number``
+
+   .. attribute:: streamUpdatesSent
+
+      The number of stream updates sent to clients.
+
+      :Type: ``bigint``
+
+
+.. class:: InvalidOperationException
+
+   A method call was made to a method that is invalid
+   given the current state of the object.
+
+   A subclass of :class:`~@krpc-org/krpc.ServerError`.
+
+
+
+.. class:: ArgumentException
+
+   A method was invoked where at least one of the passed arguments does not
+   meet the parameter specification of the method.
+
+   A subclass of the builtin ``TypeError`` alone.
+
+
+
+.. class:: ArgumentNullException
+
+   A null reference was passed to a method that does not accept it as a valid argument.
+
+   A subclass of the builtin ``TypeError`` alone.
+
+
+
+.. class:: ArgumentOutOfRangeException
+
+   The value of an argument is outside the allowable range of values as defined by the invoked method.
+
+   A subclass of the builtin ``RangeError`` alone.
+
+
+
+.. class:: NullReferenceException
+
+   A value was null where its type does not allow one.
+
+   A subclass of the builtin ``TypeError`` alone.
+
+
+
+.. class:: KeyNotFoundException
+
+   A key was not found in a dictionary.
+
+   A subclass of :class:`~@krpc-org/krpc.ServerError`.
+
+
+
+.. class:: IndexOutOfRangeException
+
+   An index was outside the bounds of a collection, string or array.
+
+   A subclass of the builtin ``RangeError`` alone.
+
+
+
+.. class:: DivideByZeroException
+
+   An integer was divided by zero.
+
+   A subclass of the builtin ``RangeError`` alone.
+
+
+
+.. class:: NotSupportedException
+
+   A method was invoked that is not supported.
+
+   A subclass of :class:`~@krpc-org/krpc.ServerError`.
+
+
+
+.. class:: TimeoutException
+
+   An operation did not complete in the time allotted to it.
+
+   A subclass of :class:`~@krpc-org/krpc.ServerError`.
+
+
+
+.. class:: OverflowException
+
+   An arithmetic or conversion operation overflowed.
+
+   A subclass of the builtin ``RangeError`` alone.
+
+
+
+.. class:: ObjectDestroyedException
+
+   The game object that a service object refers to no longer exists,
+   so the object cannot be used. For example, the part it represents
+   was destroyed, or the vessel it belongs to was recovered.
+
+   A subclass of :class:`~@krpc-org/krpc.ServerError`.
+
+   .. note::
+
+      See :class:`KRPC.ObjectNotLoadedException` for a game object that exists but is not
+      loaded.
+
+.. class:: ObjectNotLoadedException
+
+   The game object that a service object refers to exists, but is not loaded.
+   For example, the game is loading, or the vessel carrying the part is unloaded.
+
+   A subclass of :class:`~@krpc-org/krpc.ServerError`.
+
+   .. note::
+
+      See :class:`KRPC.ObjectDestroyedException` for a game object that no longer exists.
+
+.. class:: UnsupportedSceneException
+
+   The procedure is not available in the current game scene.
+
+   A subclass of :class:`~@krpc-org/krpc.ServerError`.
+
+
+
+.. class:: StreamRemovedException
+
+   A stream was removed by the server, e.g. an event that has finished.
+
+   An alias of :class:`~@krpc-org/krpc.StreamError`.
+
+
+
+.. class:: Error
+
+   A general error, described by its message.
+
+   A subclass of :class:`~@krpc-org/krpc.ServerError`.

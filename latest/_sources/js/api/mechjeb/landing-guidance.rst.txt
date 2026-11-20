@@ -1,0 +1,150 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: MechJeb
+   :no-index:
+
+LandingGuidance
+===============
+
+
+.. class:: LandingGuidance
+
+   The Landing Guidance window, which lands at a target or wherever the vessel comes down.
+
+   .. method:: getEnabled()
+               setEnabled(value)
+
+      Whether the module is enabled.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getStatus()
+
+      The status of the autopilot.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``string``
+      :Game Scenes: Flight
+
+   .. method:: getDeployChutes()
+               setDeployChutes(value)
+
+      Whether the autopilot deploys the parachutes.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getDeployGears()
+               setDeployGears(value)
+
+      Whether the autopilot deploys the landing gear.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: landAtTarget()
+
+      Land at the target. See :meth:`MechJeb.LandingGuidance.setTarget`.
+      Throws an exception if there is no target, or the vessel is landed or splashed down.
+
+      :Game Scenes: Flight
+
+   .. method:: landSomewhere()
+
+      Land wherever the vessel comes down. Throws an exception if the vessel is landed or
+      splashed down.
+
+      :Game Scenes: Flight
+
+   .. method:: getLimitChutesStage()
+               setLimitChutesStage(value)
+
+      The last stage in which the autopilot deploys the parachutes.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getLimitGearsStage()
+               setLimitGearsStage(value)
+
+      The last stage in which the autopilot deploys the landing gear.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getRCSAdjustment()
+               setRCSAdjustment(value)
+
+      Whether the autopilot corrects its course with RCS.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: abortAutoland()
+
+      Stop the landing.
+
+      :Game Scenes: Flight
+
+   .. method:: getTouchdownSpeed()
+               setTouchdownSpeed(value)
+
+      The speed at touchdown, in :math:`\mathrm{m/s}`.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getTargetPosition()
+
+      The world space position of the landing target. Throws an exception if there is no
+      landing target.
+
+      :rtype: ``[number, number, number]``
+      :Game Scenes: Flight
+
+   .. method:: getTargetString()
+
+      The landing target as text.
+
+      :rtype: ``string``
+      :Game Scenes: Flight
+
+   .. method:: pickTargetOnMap()
+
+      Let the player pick the landing target on the map.
+
+      :Game Scenes: Flight
+
+   .. method:: setTarget(body, latitude, longitude)
+
+      Set the landing target to a position on the surface of a body.
+
+      :param body: The body.
+      :type body: :class:`SpaceCenter.CelestialBody`
+      :param latitude: The latitude, in degrees.
+      :type latitude: ``number``
+      :param longitude: The longitude, in degrees.
+      :type longitude: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getAutowarp()
+               setAutowarp(value)
+
+      Whether to warp time during the landing.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The same setting as :meth:`MechJeb.ManeuverPlanner.getAutowarp`.

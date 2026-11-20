@@ -1,0 +1,92 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: UI
+
+Service
+=======
+
+
+.. module:: UI
+
+Provides functionality for drawing and interacting with in-game user interface elements.
+
+.. note::
+
+   For drawing 3D objects in the flight scene, see the Drawing service.
+   User interface elements created by a client are removed when that client
+   disconnects, and when the game scene changes. A client that needs its
+   interface in more than one scene must create it again in each of them.
+
+
+
+.. attribute:: stock_canvas: UI.Canvas
+
+   The stock UI canvas.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. staticmethod:: add_canvas(): UI.Canvas
+
+   Add a new canvas.
+
+
+   .. note::
+
+      If you want to add UI elements to KSPs stock UI canvas, use :attr:`UI.stock_canvas`.
+
+
+
+
+.. staticmethod:: message(content: string, duration?: number, position?: UI.MessagePosition, color?: StdLib.ColorRGBA, size?: number)
+
+   Display a message on the screen.
+
+   :param content: Message content.
+   :param duration: Duration before the message disappears, in seconds. Defaults to ``1.0``.
+   :param position: Position to display the message. Defaults to ``UI.MessagePosition.top_center``.
+   :param color: The color of the message. Defaults to ``{1.0, 0.92, 0.016, 1.0}``.
+   :param size: Size of the message, differs per position. Defaults to ``2e+01``.
+
+   .. note::
+
+      The message appears just like a stock message, for example quicksave or quickload messages.
+
+
+
+
+.. staticmethod:: clear(client_only?: boolean)
+
+   Remove all user interface elements.
+
+   :param client_only: If true, only remove objects created by the calling client. Defaults to ``false``.
+
+
+
+
+
+.. class:: MessagePosition
+
+   Message position.
+
+
+   .. data:: top_left
+
+      Top left.
+
+
+   .. data:: top_center
+
+      Top center.
+
+
+   .. data:: top_right
+
+      Top right.
+
+
+   .. data:: bottom_center
+
+      Bottom center.

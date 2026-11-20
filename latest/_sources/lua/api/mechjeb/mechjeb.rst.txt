@@ -1,0 +1,169 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: MechJeb
+
+Service
+=======
+
+
+.. module:: MechJeb
+
+This service provides functionality to interact with MechJeb 2.
+
+.. note::
+
+   The objects act on the MechJeb of the active vessel, and stay valid after the active
+   vessel changes.
+
+
+
+.. attribute:: available: boolean
+
+   Whether MechJeb is installed.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: ready: boolean
+
+   Whether the active vessel has MechJeb.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: aircraft_approach: MechJeb.AircraftApproach
+
+   The Aircraft Approach and Autoland window.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: aircraft_autopilot: MechJeb.AircraftAutopilot
+
+   The Aircraft Autopilot window.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: ascent_guidance: MechJeb.AscentGuidance
+
+   The Ascent Guidance window.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: attitude_adjustment: MechJeb.AttitudeAdjustment
+
+   The Attitude Adjustment window.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: docking_autopilot: MechJeb.DockingAutopilot
+
+   The Docking Autopilot window.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: landing_guidance: MechJeb.LandingGuidance
+
+   The Landing Guidance window.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: maneuver_planner: MechJeb.ManeuverPlanner
+
+   The Maneuver Planner window.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: rendezvous_autopilot: MechJeb.RendezvousAutopilot
+
+   The Rendezvous Autopilot window.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: rover_autopilot: MechJeb.RoverAutopilot
+
+   The Rover Autopilot window.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: smart_ass: MechJeb.SmartASS
+
+   The Smart A.S.S. window.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: smart_rcs: MechJeb.SmartRCS
+
+   The Smart RCS window.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: target_controller: MechJeb.TargetController
+
+   The target controller, which holds MechJeb's target.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: translatron: MechJeb.Translatron
+
+   The Translatron window.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: utilities: MechJeb.Utilities
+
+   The Utilities window.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+
+.. class:: MJServiceException
+
+   A general error in the service.
+
+   Raised as a :class:`krpc.ServerError` whose ``service`` and ``name`` are ``'MechJeb'`` and ``'MJServiceException'``.

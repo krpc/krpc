@@ -1,10 +1,11 @@
 .. default-domain:: cpp
 .. highlight:: cpp
 
-RemoteTech API
-==============
+RemoteTech
+==========
 
-Provides RPCs to interact with the `RemoteTech`_ mod. Provides the following classes:
+Provides functionality to interact with the `RemoteTech`_ mod. |RemoteTech tested|
+Provides the following classes:
 
 .. toctree::
    :includehidden:
@@ -22,4 +23,4 @@ out the signal delay to the active vessel.
 
 .. literalinclude:: /scripts/api/remote-tech/RemoteTechExample.cpp
 
-.. _RemoteTech: https://forum.kerbalspaceprogram.com/topic/139167-111-remotetech-v199-2020-12-19/
+.. include:: /mods.inc

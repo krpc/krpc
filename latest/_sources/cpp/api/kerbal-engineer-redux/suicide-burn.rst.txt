@@ -1,0 +1,38 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::KerbalEngineerRedux
+
+Suicide Burn
+============
+
+
+.. namespace:: krpc::services::KerbalEngineerRedux
+.. struct:: SuicideBurn
+
+   The latest burn at full thrust, against the surface velocity, that stops the vessel at
+   the terrain.
+
+
+   .. member:: double ut
+
+      The universal time at which the burn starts, in seconds.
+
+   .. member:: double time_to
+
+      The time until the burn starts, in seconds.
+
+   .. member:: double altitude
+
+      The altitude above sea level at which the burn starts, in meters.
+
+   .. member:: double delta_v
+
+      The delta-v of the burn, in :math:`\mathrm{m/s}`.
+
+   .. member:: double distance
+
+      The distance along the orbit to the start of the burn, in meters.
+
+   .. member:: double duration
+
+      The duration of the burn, in seconds.

@@ -1,0 +1,30 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: LIDAR
+   :no-index:
+
+Laser
+=====
+
+
+.. class:: Laser
+
+   .. warning:: Deprecated. Use :func:`SpaceCenter.raycastDistance` instead.
+
+   A LiDAR. Obtained by calling :func:`LIDAR.laser`.
+
+   .. method:: getPart()
+
+      Get the part containing this LiDAR.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Part`
+   
+
+   .. method:: getCloud()
+
+      Get the point cloud from the LiDAR.
+      Returns an empty list on failure.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of ``number``

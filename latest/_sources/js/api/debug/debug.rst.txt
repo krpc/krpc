@@ -1,0 +1,538 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: Debug
+   :no-index:
+
+Service
+=======
+
+
+.. module:: Debug
+
+Provides functionality to modify the state of the simulation directly, in ways
+the game normally does not allow: teleporting a vessel, setting its attitude,
+applying forces to its parts, refilling its tanks and enabling the game's cheat
+options.
+
+.. note::
+
+   Everything in this service is cheating. It has the same effect on a save as the
+   game's own debug menu (Alt+F12), and the same consequences: contracts, records and
+   career progress made with it are not earned. It is intended for setting up a
+   scenario to fly or a script to test, without flying there first.
+
+
+
+.. function:: setCircularOrbit(body, altitude)
+
+   Move the active vessel onto a circular orbit around a body.
+
+   :param body: Body to orbit.
+   :type body: :class:`SpaceCenter.CelestialBody`
+   :param altitude: Altitude of the orbit, in meters above sea level.
+   :type altitude: ``number``
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: setOrbit(body, semiMajorAxis, eccentricity, inclination, longitudeOfAscendingNode, argumentOfPeriapsis, meanAnomalyAtEpoch, epoch)
+
+   Move the active vessel onto the orbit with the given orbital elements. The angles use
+   the same units and conventions as :class:`SpaceCenter.Orbit`.
+
+   :param body: Body to orbit.
+   :type body: :class:`SpaceCenter.CelestialBody`
+   :param semiMajorAxis: Semi-major axis of the orbit, in meters.
+   :type semiMajorAxis: ``number``
+   :param eccentricity: Eccentricity of the orbit.
+   :type eccentricity: ``number``
+   :param inclination: Inclination of the orbit, in radians.
+   :type inclination: ``number``
+   :param longitudeOfAscendingNode: Longitude of the ascending node, in radians.
+   :type longitudeOfAscendingNode: ``number``
+   :param argumentOfPeriapsis: Argument of periapsis, in radians.
+   :type argumentOfPeriapsis: ``number``
+   :param meanAnomalyAtEpoch: Mean anomaly at epoch, in radians.
+   :type meanAnomalyAtEpoch: ``number``
+   :param epoch: Universal time of the epoch, in seconds.
+   :type epoch: ``number``
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: setLanded(body, latitude, longitude[, altitude])
+
+   Place the active vessel on the surface of a body at the given latitude and longitude,
+   and wait for it to come to rest.
+
+   :param body: Body to land on.
+   :type body: :class:`SpaceCenter.CelestialBody`
+   :param latitude: Latitude in degrees.
+   :type latitude: ``number``
+   :param longitude: Longitude in degrees.
+   :type longitude: ``number``
+   :param altitude: Height above the terrain to settle at, in meters. Defaults to 0, resting on the surface. Defaults to ``0.0``.
+   :type altitude: ``number``
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: setFlight(body, latitude, longitude, altitude, speed, heading[, pitch[, roll[, angleOfAttack]]])
+
+   Place the active vessel in atmospheric flight over the given point: at the given altitude
+   and airspeed, pointing along the given heading at the given pitch and roll, and
+   let physics resume so that it is flying. Use this to set up an in-air scenario
+   without flying the craft up from the runway.
+
+   :param body: Body to fly over.
+   :type body: :class:`SpaceCenter.CelestialBody`
+   :param latitude: Latitude in degrees.
+   :type latitude: ``number``
+   :param longitude: Longitude in degrees.
+   :type longitude: ``number``
+   :param altitude: Altitude in meters above sea level.
+   :type altitude: ``number``
+   :param speed: Airspeed in :math:`\mathrm{m/s}`, relative to the surface.
+   :type speed: ``number``
+   :param heading: Compass heading to point along, in degrees (90 is east).
+   :type heading: ``number``
+   :param pitch: Pitch above the horizon, in degrees. Defaults to 0 (level). Defaults to ``0.0``.
+   :type pitch: ``number``
+   :param roll: Roll, in degrees. Defaults to 0 (wings level). Defaults to ``0.0``.
+   :type roll: ``number``
+   :param angleOfAttack: Angle of attack in degrees: how far the airspeed vector sits below the nose, in the pitch plane. 0 (the default) puts the airspeed along the nose; a positive value gives a nose-up attitude relative to the flight path, so the flight-path angle is *pitch* minus this. Defaults to ``0.0``.
+   :type angleOfAttack: ``number``
+   :Game Scenes: Flight
+
+
+   .. note::
+
+      The pitch, heading and roll match those reported by the vessel's
+      :class:`SpaceCenter.Flight`.
+
+
+
+
+.. function:: setPosition(position[, referenceFrame])
+
+   Move the active vessel to the given position, leaving its velocity as it is. To put it
+   alongside another vessel, pass a position in that vessel's reference frame.
+
+   :param position: Position of the vessel's center of mass, in meters.
+   :type position: ``[number, number, number]``
+   :param referenceFrame: Reference frame the position is in. Defaults to the reference frame of the body being orbited.
+   :type referenceFrame: :class:`SpaceCenter.ReferenceFrame` or ``null``
+   :Game Scenes: Flight
+
+
+   .. note::
+
+      This is the inverse of :meth:`SpaceCenter.Vessel.position` in the same
+      reference frame.
+
+
+
+
+.. function:: setVelocity(velocity[, referenceFrame])
+
+   Set the velocity of the active vessel, leaving it where it is. The vessel is moved onto the
+   orbit that passes through its current position at the new velocity, so this works
+   in orbit and in the atmosphere alike.
+
+   :param velocity: Velocity in :math:`\mathrm{m/s}`.
+   :type velocity: ``[number, number, number]``
+   :param referenceFrame: Reference frame the velocity is in. Defaults to the reference frame of the body being orbited, which rotates with it, so a zero velocity leaves the vessel at rest relative to the ground.
+   :type referenceFrame: :class:`SpaceCenter.ReferenceFrame` or ``null``
+   :Game Scenes: Flight
+
+
+   .. note::
+
+      This is the inverse of :meth:`SpaceCenter.Vessel.velocity` in the same
+      reference frame.
+
+
+
+
+.. function:: setPitchHeadingRoll(pitch, heading, roll[, referenceFrame[, vessel]])
+
+   Set the attitude of a vessel to the given pitch, heading and roll in the given
+   reference frame, and stop it rotating. Lets a script start from a fixed, still
+   pose without first flying the autopilot there.
+
+   :param pitch: Target pitch, in degrees.
+   :type pitch: ``number``
+   :param heading: Target heading, in degrees.
+   :type heading: ``number``
+   :param roll: Target roll, in degrees.
+   :type roll: ``number``
+   :param referenceFrame: Reference frame the angles are in. Defaults to the vessel's surface reference frame.
+   :type referenceFrame: :class:`SpaceCenter.ReferenceFrame` or ``null``
+   :param vessel: Vessel to rotate. Defaults to the active vessel.
+   :type vessel: :class:`SpaceCenter.Vessel` or ``null``
+   :Game Scenes: Flight
+
+
+   .. note::
+
+      The angles match those reported by the vessel's
+      :class:`SpaceCenter.Flight`.
+
+
+
+
+.. function:: setDirection(direction, roll[, referenceFrame[, vessel]])
+
+   Point a vessel along the given direction in the given reference frame, and stop it
+   rotating. This is :func:`Debug.setPitchHeadingRoll` with a pointing vector instead
+   of a pitch and heading, matching the attitude the autopilot holds for the same
+   target direction and roll.
+
+   :param direction: Direction to point the nose of the vessel in.
+   :type direction: ``[number, number, number]``
+   :param roll: Target roll, in degrees, or ``NaN`` to leave the roll uncontrolled.
+   :type roll: ``number``
+   :param referenceFrame: Reference frame the direction and roll are in. Defaults to the vessel's surface reference frame.
+   :type referenceFrame: :class:`SpaceCenter.ReferenceFrame` or ``null``
+   :param vessel: Vessel to rotate. Defaults to the active vessel.
+   :type vessel: :class:`SpaceCenter.Vessel` or ``null``
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: applyRotation(angle, axis[, vessel])
+
+   Rotate a vessel about the given axis, in its own reference frame, by the given angle.
+
+   :param angle: Angle to rotate by, in degrees.
+   :type angle: ``number``
+   :param axis: Axis to rotate about.
+   :type axis: ``[number, number, number]``
+   :param vessel: Vessel to rotate. Defaults to the active vessel.
+   :type vessel: :class:`SpaceCenter.Vessel` or ``null``
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: setAngularVelocity(angularVelocity[, referenceFrame[, vessel]])
+
+   Set the angular velocity of a vessel, expressed in the given reference frame. Pass a
+   zero vector to stop the vessel rotating.
+
+   :param angularVelocity: Angular velocity, in :math:`\mathrm{rad/s}`. The direction is the axis of rotation and the magnitude is the rate.
+   :type angularVelocity: ``[number, number, number]``
+   :param referenceFrame: Reference frame the angular velocity is in. Defaults to the vessel's surface reference frame.
+   :type referenceFrame: :class:`SpaceCenter.ReferenceFrame` or ``null``
+   :param vessel: Vessel to rotate. Defaults to the active vessel.
+   :type vessel: :class:`SpaceCenter.Vessel` or ``null``
+   :Game Scenes: Flight
+
+
+   .. note::
+
+      The whole vessel is put into a rigid rotation about its center of mass, so it spins in
+      place rather than shearing apart or translating.
+
+
+
+
+.. function:: addForce(part, force, position, referenceFrame)
+
+   Exert a constant force on a part, acting at the given position.
+
+   :param part: The part to apply the force to.
+   :type part: :class:`SpaceCenter.Part`
+   :param force: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+   :type force: ``[number, number, number]``
+   :param position: The position at which the force acts, as a vector.
+   :type position: ``[number, number, number]``
+   :param referenceFrame: The reference frame that the force and position are in.
+   :type referenceFrame: :class:`SpaceCenter.ReferenceFrame`
+   :returns: An object that can be used to remove or modify the force.
+   :rtype: :class:`SpaceCenter.Force`
+   :Game Scenes: Flight
+
+
+   .. note::
+
+      The force is removed when the client that added it disconnects.
+
+
+
+
+.. function:: instantaneousForce(part, force, position, referenceFrame)
+
+   Exert an instantaneous force on a part, acting at the given position.
+
+   :param part: The part to apply the force to.
+   :type part: :class:`SpaceCenter.Part`
+   :param force: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+   :type force: ``[number, number, number]``
+   :param position: The position at which the force acts, as a vector.
+   :type position: ``[number, number, number]``
+   :param referenceFrame: The reference frame that the force and position are in.
+   :type referenceFrame: :class:`SpaceCenter.ReferenceFrame`
+   :Game Scenes: Flight
+
+
+   .. note::
+
+      The force is applied instantaneously in a single physics update.
+
+
+
+
+.. function:: fillAllResources([vessel])
+
+   Fill every resource tank on a vessel to its maximum capacity.
+
+   :param vessel: Vessel to fill. Defaults to the active vessel.
+   :type vessel: :class:`SpaceCenter.Vessel` or ``null``
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: fillResources(resourceName[, vessel])
+
+   Fill the tanks of a single resource on a vessel to their maximum capacity.
+
+   :param resourceName: Name of the resource to fill, for example ``"LiquidFuel"``.
+   :type resourceName: ``string``
+   :param vessel: Vessel to fill. Defaults to the active vessel.
+   :type vessel: :class:`SpaceCenter.Vessel` or ``null``
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: getInfinitePropellant()
+              setInfinitePropellant(value)
+
+   Whether engines and RCS thrusters draw no propellant.
+
+   :Property: Can be read or written
+   :rtype: ``boolean``
+   
+
+
+
+
+.. function:: getInfiniteElectricity()
+              setInfiniteElectricity(value)
+
+   Whether parts draw no electric charge.
+
+   :Property: Can be read or written
+   :rtype: ``boolean``
+   
+
+
+
+
+.. function:: getNoCrashDamage()
+              setNoCrashDamage(value)
+
+   Whether parts survive collisions that would otherwise destroy them.
+
+   :Property: Can be read or written
+   :rtype: ``boolean``
+   
+
+
+
+
+.. function:: getUnbreakableJoints()
+              setUnbreakableJoints(value)
+
+   Whether the joints between parts are rigid and cannot break.
+
+   :Property: Can be read or written
+   :rtype: ``boolean``
+   
+
+
+
+
+.. function:: getIgnoreMaxTemperature()
+              setIgnoreMaxTemperature(value)
+
+   Whether parts survive temperatures above their maximum, instead of exploding.
+
+   :Property: Can be read or written
+   :rtype: ``boolean``
+   
+
+
+
+
+.. function:: getAllowPartClipping()
+              setAllowPartClipping(value)
+
+   Whether parts may be placed so that they intersect one another in the editor.
+
+   :Property: Can be read or written
+   :rtype: ``boolean``
+   
+
+
+
+
+.. function:: getNonStrictAttachmentOrientation()
+              setNonStrictAttachmentOrientation(value)
+
+   Whether parts may be attached in any orientation, rather than only the ones their
+   attachment nodes allow.
+
+   :Property: Can be read or written
+   :rtype: ``boolean``
+   
+
+
+
+
+.. function:: getIgnoreKerbalInventoryLimits()
+              setIgnoreKerbalInventoryLimits(value)
+
+   Whether a kerbal's inventory may hold more than its slot and mass limits allow.
+
+   :Property: Can be read or written
+   :rtype: ``boolean``
+   
+
+
+
+
+.. function:: getIgnoreEVAConstructionMassLimit()
+              setIgnoreEVAConstructionMassLimit(value)
+
+   Whether EVA construction may move parts heavier than a kerbal can normally carry.
+
+   :Property: Can be read or written
+   :rtype: ``boolean``
+   
+
+
+
+
+.. function:: getIgnoreAgencyMindsetOnContracts()
+              setIgnoreAgencyMindsetOnContracts(value)
+
+   Whether contracts are offered regardless of the agency mindset that normally
+   restricts which ones appear.
+
+   :Property: Can be read or written
+   :rtype: ``boolean``
+   
+
+
+
+
+.. function:: getPauseOnVesselUnpack()
+              setPauseOnVesselUnpack(value)
+
+   Whether the game pauses whenever a vessel comes off rails.
+
+   :Property: Can be read or written
+   :rtype: ``boolean``
+   
+
+
+
+
+.. function:: getBiomesVisible()
+              setBiomesVisible(value)
+
+   Whether biome boundaries are drawn on the surface of bodies.
+
+   :Property: Can be read or written
+   :rtype: ``boolean``
+   
+
+
+
+
+.. function:: getGravityMultiplier()
+              setGravityMultiplier(value)
+
+   Multiplier applied to the force of gravity on every vessel. 1 is normal gravity,
+   0 is weightlessness.
+
+   :Property: Can be read or written
+   :rtype: ``number``
+   
+
+
+
+
+.. function:: getFunds()
+              setFunds(value)
+
+   The number of funds the player has. Only available in career mode.
+
+   :Property: Can be read or written
+   :rtype: ``number``
+   
+
+
+
+
+.. function:: getScience()
+              setScience(value)
+
+   The amount of science the player has. Only available in career and science mode.
+
+   :Property: Can be read or written
+   :rtype: ``number``
+   
+
+
+
+
+.. function:: getReputation()
+              setReputation(value)
+
+   The player's reputation. Only available in career mode.
+
+   :Property: Can be read or written
+   :rtype: ``number``
+   
+
+
+
+
+.. function:: unlockTechnologyTree()
+
+   Research every node in the technology tree and purchase every part in it.
+   Only available in career and science mode.
+
+   
+
+
+
+
+.. function:: upgradeFacilities()
+
+   Upgrade every building at the space center to its highest level.
+   Only available in career mode.
+
+   
+
+
+
+
+.. function:: maxKerbalExperience()
+
+   Raise every kerbal in the roster to the highest experience level.

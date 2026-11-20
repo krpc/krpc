@@ -1,0 +1,54 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Image
+=====
+
+
+.. _http-Drawing.Image:
+
+.. rubric:: Image
+
+An image that markers can be drawn with. Created using :http:post:`/drawing/add-image`.
+
+.. note::
+
+   An image is kept across scene changes, until it is removed or the client that
+   created it disconnects.
+
+
+A ``Image`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /drawing/image/(id)/width
+
+   The width of the image, in pixels.
+
+
+   :param id: The identifier of the :ref:`Image <http-Drawing.Image>` object.
+
+   :resjson int32 value:
+
+
+
+
+.. http:get:: /drawing/image/(id)/height
+
+   The height of the image, in pixels.
+
+
+   :param id: The identifier of the :ref:`Image <http-Drawing.Image>` object.
+
+   :resjson int32 value:
+
+
+
+
+.. http:post:: /drawing/image/(id)/remove
+
+   Remove the image. A marker drawn with it goes back to its own icon.
+
+
+   :param id: The identifier of the :ref:`Image <http-Drawing.Image>` object.

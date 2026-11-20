@@ -1,0 +1,266 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: MechJeb
+   :no-index:
+
+RoverAutopilot
+==============
+
+
+.. class:: RoverAutopilot
+
+   The Rover Autopilot window, which drives a rover at a heading and speed, or along its
+   waypoints.
+
+   .. method:: getControlHeading()
+               setControlHeading(value)
+
+      Whether the autopilot holds :meth:`MechJeb.RoverAutopilot.getHeading`.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getHeading()
+               setHeading(value)
+
+      The heading to hold, in degrees.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`MechJeb.RoverAutopilot.getControlHeading`.
+
+   .. method:: getHeadingError()
+
+      The difference between the vessel's heading and the heading to hold, in degrees.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getControlSpeed()
+               setControlSpeed(value)
+
+      Whether the autopilot holds :meth:`MechJeb.RoverAutopilot.getSpeed`.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getSpeed()
+               setSpeed(value)
+
+      The speed to hold, in :math:`\mathrm{m/s}`.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`MechJeb.RoverAutopilot.getControlSpeed`.
+
+   .. method:: getSpeedError()
+
+      The difference between the vessel's speed and the speed to hold, in :math:`\mathrm{m/s}`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getTargetSpeed()
+
+      The speed the autopilot drives at now, in :math:`\mathrm{m/s}`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getStabilityControl()
+               setStabilityControl(value)
+
+      Whether the autopilot keeps the rover upright.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getBrakeOnEject()
+               setBrakeOnEject(value)
+
+      Whether to brake when the crew leaves the rover.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getBrakeOnEnergyDepletion()
+               setBrakeOnEnergyDepletion(value)
+
+      Whether to brake when the rover runs out of electric charge.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getWarpToDaylight()
+               setWarpToDaylight(value)
+
+      Whether to warp time to daylight after braking for a lack of electric charge.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`MechJeb.RoverAutopilot.getBrakeOnEnergyDepletion`.
+
+   .. method:: getWaypoints()
+
+      The waypoints, in the order the rover drives to them.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`MechJeb.RoverWaypoint`
+      :Game Scenes: Flight
+
+   .. method:: getWaypointIndex()
+
+      The index of the waypoint the autopilot drives to, or -1 if there is none.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getLoopWaypoints()
+               setLoopWaypoints(value)
+
+      Whether to return to the first waypoint after the last one.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: addWaypoint(latitude, longitude)
+
+      Add a waypoint at a position on the surface of the body the vessel is at.
+
+      :param latitude: The latitude, in degrees.
+      :type latitude: ``number``
+      :param longitude: The longitude, in degrees.
+      :type longitude: ``number``
+      :returns: The waypoint.
+      :rtype: :class:`MechJeb.RoverWaypoint`
+      :Game Scenes: Flight
+
+   .. method:: clearWaypoints()
+
+      Remove all the waypoints.
+
+      :Game Scenes: Flight
+
+   .. method:: addTarget()
+
+      Add a waypoint at the target. Throws an exception if the target is not a vessel or a
+      position on the surface.
+
+      :returns: The waypoint.
+      :rtype: :class:`MechJeb.RoverWaypoint`
+      :Game Scenes: Flight
+
+   .. method:: driveToTarget()
+
+      Replace the waypoints with the target, and drive to it. Throws an exception if the
+      target is not a vessel or a position on the surface.
+
+      :Game Scenes: Flight
+
+   .. method:: drive()
+
+      Drive along the waypoints. Throws an exception if there are none.
+
+      :Game Scenes: Flight
+
+   .. method:: stop()
+
+      Stop driving along the waypoints.
+
+      :Game Scenes: Flight
+
+
+
+RoverWaypoint
+-------------
+
+
+.. class:: RoverWaypoint
+
+   A waypoint of the :class:`MechJeb.RoverAutopilot`, as the Waypoints window shows it.
+
+   .. note::
+
+      The object is destroyed once the waypoints are cleared or replaced, as by
+      :meth:`MechJeb.RoverAutopilot.clearWaypoints` and :meth:`MechJeb.RoverAutopilot.driveToTarget`.
+
+   .. method:: getLatitude()
+               setLatitude(value)
+
+      The latitude of the waypoint, in degrees. Throws an exception when set if the waypoint
+      is at a vessel.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getLongitude()
+               setLongitude(value)
+
+      The longitude of the waypoint, in degrees. Throws an exception when set if the waypoint
+      is at a vessel.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getRadius()
+               setRadius(value)
+
+      The distance from the waypoint at which the rover has reached it, in meters.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getName()
+               setName(value)
+
+      The name of the waypoint.
+
+      :Property: Can be read or written
+      :rtype: ``string``
+      :Game Scenes: Flight
+
+   .. method:: getMinSpeed()
+               setMinSpeed(value)
+
+      The lowest speed on the way to the waypoint, in :math:`\mathrm{m/s}`, or 0 for no limit.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getMaxSpeed()
+               setMaxSpeed(value)
+
+      The highest speed on the way to the waypoint, in :math:`\mathrm{m/s}`, or 0 for no limit.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight

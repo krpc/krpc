@@ -1,0 +1,124 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: Drawing
+
+Polygon
+=======
+
+
+.. class:: Polygon
+
+   A polygon. Created using :meth:`add_polygon`.
+
+   .. attribute:: vertices
+
+      Vertices for the polygon.
+
+      :Attribute: Can be read or written
+      :rtype: list(tuple(float, float, float))
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. attribute:: reference_frame
+
+      Reference frame for the positions of the object.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`SpaceCenter.ReferenceFrame`
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. attribute:: visible
+
+      Whether the object is visible.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. attribute:: color
+
+      The color of the path.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`StdLib.ColorRGB`
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         For a path drawn with more than one color, this is the color at its start.
+
+   .. attribute:: colors
+
+      The colors of the path, blended evenly from its start to its end.
+
+      :Attribute: Can be read or written
+      :rtype: list(:class:`StdLib.ColorRGB`)
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Throws an exception if the list is empty or holds more than 8 colors.
+
+   .. attribute:: thickness
+
+      The thickness of the path.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. attribute:: start_arrow
+
+      Whether an arrow head is drawn at the start.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. attribute:: end_arrow
+
+      Whether an arrow head is drawn at the end.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. attribute:: arrow_size
+
+      The size of the arrow heads, relative to the thickness.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. attribute:: dashed
+
+      Whether the path is drawn as a dashed line.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. attribute:: label
+
+      Text drawn halfway along the path, facing the camera. Empty for no label.
+
+      :Attribute: Can be read or written
+      :rtype: str
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. attribute:: material
+
+      Material used to render the object.
+      Creates the material from a shader with the given name.
+
+      :Attribute: Can be read or written
+      :rtype: str
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: remove()
+
+      Remove the object.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph

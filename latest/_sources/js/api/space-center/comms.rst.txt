@@ -1,0 +1,213 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: SpaceCenter
+   :no-index:
+
+Communications
+==============
+
+
+.. class:: Comms
+
+   Used to interact with CommNet for a given vessel.
+   Obtained by calling :meth:`SpaceCenter.Vessel.getComms`.
+
+   .. method:: getCanCommunicate()
+
+      Whether the vessel can communicate with KSC.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getCanTransmitScience()
+
+      Whether the vessel can transmit science data to KSC.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getSignalStrength()
+
+      Signal strength to KSC.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getSignalDelay()
+
+      Signal delay to KSC in seconds.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getPower()
+
+      The combined power of all active antennae on the vessel.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Not used by RealAntennas, which replaces the stock range model.
+
+   .. method:: getControlPath()
+
+      The communication path used to control the vessel.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`SpaceCenter.CommLink`
+      :Game Scenes: Flight
+
+
+
+.. class:: CommLink
+
+   Represents a communication link between two nodes in the network.
+
+   .. method:: getType()
+
+      The type of link.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.CommLinkType`
+   
+
+   .. method:: getSignalStrength()
+
+      Signal strength of the link.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getStart()
+
+      Start point of the link.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.CommNode`
+   
+
+   .. method:: getEnd()
+
+      End point of the link.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.CommNode`
+   
+
+   .. method:: getForwardDataRate()
+
+      The data rate from :meth:`SpaceCenter.CommLink.getStart` to :meth:`SpaceCenter.CommLink.getEnd`, in bits per second.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. method:: getReverseDataRate()
+
+      The data rate from :meth:`SpaceCenter.CommLink.getEnd` to :meth:`SpaceCenter.CommLink.getStart`, in bits per second.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. method:: getStartAntenna()
+
+      The antenna at :meth:`SpaceCenter.CommLink.getStart` that transmits over the link, or ``null`` if
+      :meth:`SpaceCenter.CommLink.getStart` is a ground station or an unloaded vessel.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Antenna` or ``null``
+   
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. method:: getEndAntenna()
+
+      The antenna at :meth:`SpaceCenter.CommLink.getEnd` that receives over the link, or ``null`` if
+      :meth:`SpaceCenter.CommLink.getEnd` is a ground station or an unloaded vessel.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Antenna` or ``null``
+   
+
+      .. note::
+
+         Requires RealAntennas.
+
+
+
+.. class:: CommLinkType
+
+   The type of a communication link.
+   See :meth:`SpaceCenter.CommLink.getType`.
+
+
+   .. attribute:: home
+
+      Link is to a base station on Kerbin.
+
+
+   .. attribute:: control
+
+      Link is to a control source, for example a manned spacecraft.
+
+
+   .. attribute:: relay
+
+      Link is to a relay satellite.
+
+
+
+.. class:: CommNode(fields)
+
+   Represents a communication node in the network. For example, a vessel or the KSC.
+
+
+   .. attribute:: name
+
+      Name of the communication node.
+
+      :Type: ``string``
+
+   .. attribute:: isHome
+
+      Whether the communication node is on Kerbin.
+
+      :Type: ``boolean``
+
+   .. attribute:: isControlPoint
+
+      Whether the communication node is a control point, for example a manned vessel.
+
+      :Type: ``boolean``
+
+   .. attribute:: isVessel
+
+      Whether the communication node is a vessel.
+
+      :Type: ``boolean``
+
+   .. attribute:: vessel
+
+      The vessel for this communication node, or null if the node is not a vessel.
+
+      :Type: :class:`SpaceCenter.Vessel` or ``null``

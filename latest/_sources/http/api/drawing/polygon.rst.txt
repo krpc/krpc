@@ -1,0 +1,294 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Polygon
+=======
+
+
+.. _http-Drawing.Polygon:
+
+.. rubric:: Polygon
+
+A polygon. Created using :http:post:`/drawing/add-polygon`.
+
+A ``Polygon`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /drawing/polygon/(id)/vertices
+
+   Vertices for the polygon.
+
+
+   :param id: The identifier of the :ref:`Polygon <http-Drawing.Polygon>` object.
+
+   :resjson list<tuple<double, double, double>> value:
+
+.. http:put:: /drawing/polygon/(id)/vertices
+
+   Vertices for the polygon.
+
+
+   :param id: The identifier of the :ref:`Polygon <http-Drawing.Polygon>` object.
+
+   :reqjson list<tuple<double, double, double>> value: The new value.
+
+
+
+
+.. http:get:: /drawing/polygon/(id)/reference-frame
+
+   Reference frame for the positions of the object.
+
+
+   :param id: The identifier of the :ref:`Polygon <http-Drawing.Polygon>` object.
+
+   :resjson SpaceCenter.ReferenceFrame value:
+
+.. http:put:: /drawing/polygon/(id)/reference-frame
+
+   Reference frame for the positions of the object.
+
+
+   :param id: The identifier of the :ref:`Polygon <http-Drawing.Polygon>` object.
+
+   :reqjson SpaceCenter.ReferenceFrame value: The new value.
+
+
+
+
+.. http:get:: /drawing/polygon/(id)/visible
+
+   Whether the object is visible.
+
+
+   :param id: The identifier of the :ref:`Polygon <http-Drawing.Polygon>` object.
+
+   :resjson bool value:
+
+.. http:put:: /drawing/polygon/(id)/visible
+
+   Whether the object is visible.
+
+
+   :param id: The identifier of the :ref:`Polygon <http-Drawing.Polygon>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /drawing/polygon/(id)/color
+
+   The color of the path.
+
+   .. note::
+
+      For a path drawn with more than one color, this is the color at its start.
+
+
+   :param id: The identifier of the :ref:`Polygon <http-Drawing.Polygon>` object.
+
+   :resjson StdLib.ColorRGB value:
+
+.. http:put:: /drawing/polygon/(id)/color
+
+   The color of the path.
+
+   .. note::
+
+      For a path drawn with more than one color, this is the color at its start.
+
+
+   :param id: The identifier of the :ref:`Polygon <http-Drawing.Polygon>` object.
+
+   :reqjson StdLib.ColorRGB value: The new value.
+
+
+
+
+.. http:get:: /drawing/polygon/(id)/colors
+
+   The colors of the path, blended evenly from its start to its end.
+
+   .. note::
+
+      Throws an exception if the list is empty or holds more than 8 colors.
+
+
+   :param id: The identifier of the :ref:`Polygon <http-Drawing.Polygon>` object.
+
+   :resjson list<StdLib.ColorRGB> value:
+
+.. http:put:: /drawing/polygon/(id)/colors
+
+   The colors of the path, blended evenly from its start to its end.
+
+   .. note::
+
+      Throws an exception if the list is empty or holds more than 8 colors.
+
+
+   :param id: The identifier of the :ref:`Polygon <http-Drawing.Polygon>` object.
+
+   :reqjson list<StdLib.ColorRGB> value: The new value.
+
+
+
+
+.. http:get:: /drawing/polygon/(id)/thickness
+
+   The thickness of the path.
+
+
+   :param id: The identifier of the :ref:`Polygon <http-Drawing.Polygon>` object.
+
+   :resjson float value:
+
+.. http:put:: /drawing/polygon/(id)/thickness
+
+   The thickness of the path.
+
+
+   :param id: The identifier of the :ref:`Polygon <http-Drawing.Polygon>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /drawing/polygon/(id)/start-arrow
+
+   Whether an arrow head is drawn at the start.
+
+
+   :param id: The identifier of the :ref:`Polygon <http-Drawing.Polygon>` object.
+
+   :resjson bool value:
+
+.. http:put:: /drawing/polygon/(id)/start-arrow
+
+   Whether an arrow head is drawn at the start.
+
+
+   :param id: The identifier of the :ref:`Polygon <http-Drawing.Polygon>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /drawing/polygon/(id)/end-arrow
+
+   Whether an arrow head is drawn at the end.
+
+
+   :param id: The identifier of the :ref:`Polygon <http-Drawing.Polygon>` object.
+
+   :resjson bool value:
+
+.. http:put:: /drawing/polygon/(id)/end-arrow
+
+   Whether an arrow head is drawn at the end.
+
+
+   :param id: The identifier of the :ref:`Polygon <http-Drawing.Polygon>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /drawing/polygon/(id)/arrow-size
+
+   The size of the arrow heads, relative to the thickness.
+
+
+   :param id: The identifier of the :ref:`Polygon <http-Drawing.Polygon>` object.
+
+   :resjson float value:
+
+.. http:put:: /drawing/polygon/(id)/arrow-size
+
+   The size of the arrow heads, relative to the thickness.
+
+
+   :param id: The identifier of the :ref:`Polygon <http-Drawing.Polygon>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /drawing/polygon/(id)/dashed
+
+   Whether the path is drawn as a dashed line.
+
+
+   :param id: The identifier of the :ref:`Polygon <http-Drawing.Polygon>` object.
+
+   :resjson bool value:
+
+.. http:put:: /drawing/polygon/(id)/dashed
+
+   Whether the path is drawn as a dashed line.
+
+
+   :param id: The identifier of the :ref:`Polygon <http-Drawing.Polygon>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /drawing/polygon/(id)/label
+
+   Text drawn halfway along the path, facing the camera. Empty for no label.
+
+
+   :param id: The identifier of the :ref:`Polygon <http-Drawing.Polygon>` object.
+
+   :resjson string value:
+
+.. http:put:: /drawing/polygon/(id)/label
+
+   Text drawn halfway along the path, facing the camera. Empty for no label.
+
+
+   :param id: The identifier of the :ref:`Polygon <http-Drawing.Polygon>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:get:: /drawing/polygon/(id)/material
+
+   Material used to render the object.
+   Creates the material from a shader with the given name.
+
+
+   :param id: The identifier of the :ref:`Polygon <http-Drawing.Polygon>` object.
+
+   :resjson string value:
+
+.. http:put:: /drawing/polygon/(id)/material
+
+   Material used to render the object.
+   Creates the material from a shader with the given name.
+
+
+   :param id: The identifier of the :ref:`Polygon <http-Drawing.Polygon>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:post:: /drawing/polygon/(id)/remove
+
+   Remove the object.
+
+
+   :param id: The identifier of the :ref:`Polygon <http-Drawing.Polygon>` object.

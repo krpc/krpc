@@ -1,0 +1,229 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: Drawing
+   :no-index:
+
+MapMarker
+=========
+
+
+.. class:: MapMarker
+
+   A marker drawn in the map view, with one of the game's own map icons. Created using
+   :func:`Drawing.addMapMarker`.
+
+   .. method:: getPosition()
+               setPosition(value)
+
+      Position of the marker.
+
+      :Property: Can be read or written
+      :rtype: ``[number, number, number]``
+      :Game Scenes: Flight, Tracking Station
+
+   .. method:: getReferenceFrame()
+               setReferenceFrame(value)
+
+      Reference frame that the position of the marker is in.
+
+      :Property: Can be read or written
+      :rtype: :class:`SpaceCenter.ReferenceFrame`
+      :Game Scenes: Flight, Tracking Station
+
+   .. method:: getVisible()
+               setVisible(value)
+
+      Whether the marker is visible.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight, Tracking Station
+
+   .. method:: getIcon()
+               setIcon(value)
+
+      The icon that the marker is drawn with.
+
+      :Property: Can be read or written
+      :rtype: :class:`Drawing.MapMarkerIcon`
+      :Game Scenes: Flight, Tracking Station
+
+   .. method:: getImage()
+               setImage(value)
+
+      The image that the marker is drawn with in place of its icon, or null to draw the
+      icon.
+
+      :Property: Can be read or written
+      :rtype: :class:`Drawing.Image` or ``null``
+      :Game Scenes: Flight, Tracking Station
+
+   .. method:: getCaption()
+               setCaption(value)
+
+      The caption shown when the mouse is over the marker.
+
+      :Property: Can be read or written
+      :rtype: ``string``
+      :Game Scenes: Flight, Tracking Station
+
+   .. method:: getColor()
+               setColor(value)
+
+      The color of the marker.
+
+      :Property: Can be read or written
+      :rtype: :class:`StdLib.ColorRGB`
+      :Game Scenes: Flight, Tracking Station
+
+   .. method:: remove()
+
+      Remove the marker.
+
+      :Game Scenes: Flight, Tracking Station
+
+
+
+.. class:: MapMarkerIcon
+
+   The icon a :class:`Drawing.MapMarker` is drawn with, from the game's own map icons.
+
+
+   .. attribute:: generic
+
+      A plain marker.
+
+
+   .. attribute:: celestialBody
+
+      A celestial body.
+
+
+   .. attribute:: apoapsis
+
+      An apoapsis.
+
+
+   .. attribute:: periapsis
+
+      A periapsis.
+
+
+   .. attribute:: ascendingNode
+
+      An ascending node.
+
+
+   .. attribute:: descendingNode
+
+      A descending node.
+
+
+   .. attribute:: maneuverNode
+
+      A maneuver node.
+
+
+   .. attribute:: encounter
+
+      An encounter with a sphere of influence.
+
+
+   .. attribute:: escape
+
+      An escape from a sphere of influence.
+
+
+   .. attribute:: impact
+
+      An impact with the surface.
+
+
+   .. attribute:: closeApproach
+
+      A closest approach to a target.
+
+
+   .. attribute:: intersect
+
+      An intersection with the orbit of a target.
+
+
+   .. attribute:: ship
+
+      A ship.
+
+
+   .. attribute:: probe
+
+      A probe.
+
+
+   .. attribute:: relay
+
+      A relay.
+
+
+   .. attribute:: station
+
+      A station.
+
+
+   .. attribute:: base
+
+      A base.
+
+
+   .. attribute:: lander
+
+      A lander.
+
+
+   .. attribute:: rover
+
+      A rover.
+
+
+   .. attribute:: plane
+
+      A plane.
+
+
+   .. attribute:: eva
+
+      A kerbal on EVA.
+
+
+   .. attribute:: flag
+
+      A flag.
+
+
+   .. attribute:: debris
+
+      Debris.
+
+
+   .. attribute:: spaceObject
+
+      An asteroid or comet.
+
+
+   .. attribute:: deployedScience
+
+      Deployed science equipment.
+
+
+   .. attribute:: launchSite
+
+      A launch site.
+
+
+   .. attribute:: runway
+
+      A runway.
+
+
+   .. attribute:: ksc
+
+      The Kerbal Space Center.

@@ -1,0 +1,746 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+CelestialBody
+=============
+
+
+.. _http-SpaceCenter.CelestialBody:
+
+.. rubric:: CelestialBody
+
+Represents a celestial body (such as a planet or moon).
+See :http:get:`/space-center/bodies`.
+
+A ``CelestialBody`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /space-center/celestial-body/(id)/name
+
+   The name of the body.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :resjson string value:
+
+
+
+
+.. http:get:: /space-center/celestial-body/(id)/satellites
+
+   A list of celestial bodies that are in orbit around this celestial body.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :resjson list<SpaceCenter.CelestialBody> value:
+
+
+
+
+.. http:get:: /space-center/celestial-body/(id)/orbit
+
+   The orbit of the body.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :resjson SpaceCenter.Orbit? value:
+
+
+
+
+.. http:get:: /space-center/celestial-body/(id)/mass
+
+   The mass of the body, in kilograms.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/celestial-body/(id)/gravitational-parameter
+
+   The `standard gravitational parameter <https://en.wikipedia.org/wiki/Standard_gravitational_parameter>`_ of the body in :math:`\mathrm{m^{3} \cdot s^{-2}}`.
+   This is :math:`GM`, where :math:`G` is the gravitational constant and
+   :math:`M` the mass of the body.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/celestial-body/(id)/surface-gravity
+
+   The acceleration due to gravity at sea level (mean altitude) on the body,
+   in :math:`\mathrm{m/s^{2}}`.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/celestial-body/(id)/rotational-period
+
+   The sidereal rotational period of the body, in seconds.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/celestial-body/(id)/rotational-speed
+
+   The rotational speed of the body, in :math:`\mathrm{rad/s}`.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/celestial-body/(id)/rotation-angle
+
+   The current rotation angle of the body, in radians.
+   A value between 0 and :math:`2\pi`.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/celestial-body/(id)/initial-rotation
+
+   The initial rotation angle of the body (at UT 0), in radians.
+   A value between 0 and :math:`2\pi`.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/celestial-body/(id)/equatorial-radius
+
+   The equatorial radius of the body, in meters.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:post:: /space-center/celestial-body/(id)/surface-height
+
+   The height of the surface relative to mean sea level, in meters,
+   at the given position. When over water this is equal to 0.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :reqjson double latitude: Latitude in degrees.
+   :reqjson double longitude: Longitude in degrees.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /space-center/celestial-body/(id)/bedrock-height
+
+   The height of the surface relative to mean sea level, in meters,
+   at the given position. When over water, this is the height
+   of the sea-bed and is therefore  negative value.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :reqjson double latitude: Latitude in degrees.
+   :reqjson double longitude: Longitude in degrees.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /space-center/celestial-body/(id)/msl-position
+
+   The position at mean sea level at the given latitude and longitude,
+   in the given reference frame.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :reqjson double latitude: Latitude in degrees.
+   :reqjson double longitude: Longitude in degrees.
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: Reference frame for the returned position vector.
+   :resjson tuple<double, double, double> value: Position as a vector.
+
+
+
+
+
+.. http:post:: /space-center/celestial-body/(id)/surface-position
+
+   The position of the surface at the given latitude and longitude, in the given
+   reference frame. When over water, this is the position of the surface of the water.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :reqjson double latitude: Latitude in degrees.
+   :reqjson double longitude: Longitude in degrees.
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: Reference frame for the returned position vector.
+   :resjson tuple<double, double, double> value: Position as a vector.
+
+
+
+
+
+.. http:post:: /space-center/celestial-body/(id)/bedrock-position
+
+   The position of the surface at the given latitude and longitude, in the given
+   reference frame. When over water, this is the position at the bottom of the sea-bed.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :reqjson double latitude: Latitude in degrees.
+   :reqjson double longitude: Longitude in degrees.
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: Reference frame for the returned position vector.
+   :resjson tuple<double, double, double> value: Position as a vector.
+
+
+
+
+
+.. http:post:: /space-center/celestial-body/(id)/position-at-altitude
+
+   The position at the given latitude, longitude and altitude, in the given reference frame.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :reqjson double latitude: Latitude in degrees.
+   :reqjson double longitude: Longitude in degrees.
+   :reqjson double altitude: Altitude in meters above sea level.
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: Reference frame for the returned position vector.
+   :resjson tuple<double, double, double> value: Position as a vector.
+
+
+
+
+
+.. http:post:: /space-center/celestial-body/(id)/surface-reference-frame
+
+   Create a reference frame fixed to the surface at the given latitude and longitude.
+
+   * The origin is the given altitude above the surface, at the
+     given latitude and longitude.
+   * The axes rotate with the body.
+   * The x-axis points out from the center of the body.
+   * The y-axis points north.
+   * The z-axis points east.
+
+   .. note::
+
+      Each call returns a new frame, as for :http:post:`/space-center/reference-frame/create-relative`.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :reqjson double latitude: Latitude in degrees.
+   :reqjson double longitude: Longitude in degrees.
+   :reqjson double altitude: Altitude of the origin above the surface, in meters. Optional, defaults to ``0.0``.
+   :resjson SpaceCenter.ReferenceFrame value:
+
+
+
+
+
+.. http:post:: /space-center/celestial-body/(id)/msl-normal
+
+   The normal to the sphere at mean sea level, at the given latitude and longitude,
+   in the given reference frame. This points straight up, away from the center of
+   the body, and takes no account of the shape of the terrain.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :reqjson double latitude: Latitude in degrees.
+   :reqjson double longitude: Longitude in degrees.
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: Reference frame for the returned normal vector.
+   :resjson tuple<double, double, double> value: The normal as a unit vector.
+
+
+
+
+
+.. http:post:: /space-center/celestial-body/(id)/surface-normal
+
+   The normal to the surface at the given latitude and longitude, in the given reference
+   frame. This describes the slope of the terrain, and is the normal of the surface of
+   the water when over water.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :reqjson double latitude: Latitude in degrees.
+   :reqjson double longitude: Longitude in degrees.
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: Reference frame for the returned normal vector.
+   :resjson tuple<double, double, double> value: The normal as a unit vector.
+
+
+
+
+
+.. http:post:: /space-center/celestial-body/(id)/bedrock-normal
+
+   The normal to the surface at the given latitude and longitude, in the given reference
+   frame. This describes the slope of the terrain, and is the normal of the sea-bed
+   when over water.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :reqjson double latitude: Latitude in degrees.
+   :reqjson double longitude: Longitude in degrees.
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: Reference frame for the returned normal vector.
+   :resjson tuple<double, double, double> value: The normal as a unit vector.
+
+
+
+
+
+.. http:post:: /space-center/celestial-body/(id)/altitude-at-position
+
+   The altitude, in meters, of the given position in the given reference frame.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :reqjson tuple<double, double, double> position: Position as a vector.
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: Reference frame for the position vector.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /space-center/celestial-body/(id)/latitude-at-position
+
+   The latitude of the given position, in the given reference frame.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :reqjson tuple<double, double, double> position: Position as a vector.
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: Reference frame for the position vector.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /space-center/celestial-body/(id)/longitude-at-position
+
+   The longitude of the given position, in the given reference frame.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :reqjson tuple<double, double, double> position: Position as a vector.
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: Reference frame for the position vector.
+   :resjson double value:
+
+
+
+
+
+.. http:get:: /space-center/celestial-body/(id)/sphere-of-influence
+
+   The radius of the sphere of influence of the body, in meters.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/celestial-body/(id)/is-star
+
+   Whether or not the body is a star.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /space-center/celestial-body/(id)/has-solid-surface
+
+   Whether or not the body has a solid surface.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /space-center/celestial-body/(id)/has-atmosphere
+
+   ``true`` if the body has an atmosphere.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /space-center/celestial-body/(id)/atmosphere-depth
+
+   The depth of the atmosphere, in meters.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/celestial-body/(id)/has-ocean
+
+   ``true`` if the body has an ocean.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /space-center/celestial-body/(id)/ocean-density
+
+   The density of the body's ocean, in :math:`\mathrm{kg/m^{3}}`.
+   Returns zero if the body has no ocean.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:post:: /space-center/celestial-body/(id)/atmospheric-density-at-position
+
+   The atmospheric density at the given position, in :math:`\mathrm{kg/m^{3}}`,
+   in the given reference frame.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :reqjson tuple<double, double, double> position: The position vector at which to measure the density.
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: Reference frame that the position vector is in.
+   :resjson double value:
+
+
+
+
+
+.. http:get:: /space-center/celestial-body/(id)/has-atmospheric-oxygen
+
+   ``true`` if there is oxygen in the atmosphere, required for air-breathing engines.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:post:: /space-center/celestial-body/(id)/temperature-at
+
+   The temperature on the body at the given position, in the given reference frame.
+
+   .. note::
+
+      The atmospheric ephemeris is evaluated at the current universal time.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :reqjson tuple<double, double, double> position: Position as a vector.
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: The reference frame that the position is in.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /space-center/celestial-body/(id)/density-at
+
+   Gets the air density, in :math:`\mathrm{kg/m^{3}}`, for the specified
+   altitude above sea level, in meters.
+
+   .. note::
+
+      This is an approximation, because actual calculations, taking sun exposure into account
+      to compute air temperature, require us to know the exact point on the body where the
+      density is to be computed (knowing the altitude is not enough).
+      However, the difference is small for high altitudes, so it makes very little difference
+      for trajectory prediction.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :reqjson double altitude:
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /space-center/celestial-body/(id)/pressure-at
+
+   Gets the static pressure, in Pascals, for the specified
+   altitude above sea level, in meters.
+
+   .. note::
+
+      Below sea level on a body with an ocean, this includes the pressure of the water.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :reqjson double altitude:
+   :resjson double value:
+
+
+
+
+
+.. http:get:: /space-center/celestial-body/(id)/biomes
+
+   The biomes present on this body.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :resjson set<string> value:
+
+
+
+
+.. http:post:: /space-center/celestial-body/(id)/biome-at
+
+   The biome at the given latitude and longitude, in degrees.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :reqjson double latitude:
+   :reqjson double longitude:
+   :resjson string value:
+
+
+
+
+
+.. http:get:: /space-center/celestial-body/(id)/flying-high-altitude-threshold
+
+   The altitude, in meters, above which a vessel is considered to be
+   flying "high" when doing science.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/celestial-body/(id)/space-high-altitude-threshold
+
+   The altitude, in meters, above which a vessel is considered to be
+   in "high" space when doing science.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/celestial-body/(id)/reference-frame
+
+   The reference frame that is fixed relative to the celestial body.
+
+   * The origin is at the center of the body.
+   * The axes rotate with the body.
+   * The x-axis points from the center of the body
+     towards the intersection of the prime meridian and equator (the
+     position at 0° longitude, 0° latitude).
+   * The y-axis points from the center of the body
+     towards the north pole.
+   * The z-axis points from the center of the body
+     towards the equator at 90°E longitude.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :resjson SpaceCenter.ReferenceFrame value:
+
+.. figure:: /images/reference-frames/celestial-body.png
+   :align: center
+
+   Celestial body reference frame origin and axes. The equator is shown in
+   blue, and the prime meridian in red.
+
+
+
+
+.. http:get:: /space-center/celestial-body/(id)/non-rotating-reference-frame
+
+   The reference frame that is fixed relative to this celestial body, and
+   orientated in a fixed direction (it does not rotate with the body).
+
+   * The origin is at the center of the body.
+   * The axes do not rotate.
+   * The x-axis points in an arbitrary direction through the
+     equator.
+   * The y-axis points from the center of the body towards
+     the north pole.
+   * The z-axis points in an arbitrary direction through the
+     equator.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :resjson SpaceCenter.ReferenceFrame value:
+
+
+
+
+.. http:get:: /space-center/celestial-body/(id)/orbital-reference-frame
+
+   The reference frame that is fixed relative to this celestial body, but
+   orientated with the body's orbital prograde/normal/radial directions.
+
+   * The origin is at the center of the body.
+   * The axes rotate with the orbital prograde/normal/radial
+     directions.
+   * The x-axis points in the orbital anti-radial direction.
+   * The y-axis points in the orbital prograde direction.
+   * The z-axis points in the orbital normal direction.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :resjson SpaceCenter.ReferenceFrame value:
+
+
+
+
+.. http:post:: /space-center/celestial-body/(id)/position
+
+   The position of the center of the body, in the specified reference frame.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned position vector is in.
+   :resjson tuple<double, double, double> value: The position as a vector.
+
+
+
+
+
+.. http:post:: /space-center/celestial-body/(id)/velocity
+
+   The linear velocity of the body, in the specified reference frame.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned velocity vector is in.
+   :resjson tuple<double, double, double> value: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in :math:`\mathrm{m/s}`.
+
+
+
+
+
+.. http:post:: /space-center/celestial-body/(id)/rotation
+
+   The rotation of the body, in the specified reference frame.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned rotation is in.
+   :resjson tuple<double, double, double, double> value: The rotation as a quaternion of the form ``(x, y, z, w)``.
+
+
+
+
+
+.. http:post:: /space-center/celestial-body/(id)/direction
+
+   The direction in which the north pole of the celestial body is pointing,
+   in the specified reference frame.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned direction is in.
+   :resjson tuple<double, double, double> value: The direction as a unit vector.
+
+
+
+
+
+.. http:post:: /space-center/celestial-body/(id)/angular-velocity
+
+   The angular velocity of the body in the specified reference frame.
+
+
+   :param id: The identifier of the :ref:`CelestialBody <http-SpaceCenter.CelestialBody>` object.
+
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: The reference frame the returned angular velocity is in.
+   :resjson tuple<double, double, double> value: The angular velocity as a vector. The magnitude of the vector is the rotational speed of the body, in :math:`\mathrm{rad/s}`. The direction of the vector indicates the axis of rotation, using the right-hand rule.

@@ -1,0 +1,657 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: MechJeb
+
+AscentGuidance
+==============
+
+
+.. class:: AscentGuidance
+
+   The Ascent Guidance window, which flies the vessel to orbit.
+
+   .. note::
+
+      See the `MechJeb wiki <https://github.com/MuMech/MechJeb2/wiki/Ascent-Guidance>`_
+      for how to set up this autopilot.
+
+   .. attribute:: enabled: boolean
+
+      Whether the module is enabled.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: status: string
+
+      The autopilot status, which depends on the selected ascent path.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: ascent_type: MechJeb.AscentType
+
+      The ascent path.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: settings: MechJeb.AscentSettings
+
+      The Ascent Settings window.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: pvg_settings: MechJeb.PVGSettings
+
+      The PVG Settings window, with the settings of the :data:`MechJeb.AscentType.pvg` path.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: classic_path: MechJeb.ClassicPath
+
+      The Ascent Path Editor window, with the settings of the
+      :data:`MechJeb.AscentType.classic` path.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: desired_orbit_altitude: number
+
+      The altitude of the final circular orbit, in meters.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: desired_apoapsis: number
+
+      The target apoapsis, in meters.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Applies on the :data:`MechJeb.AscentType.pvg` path.
+
+   .. attribute:: attach_alt_flag: boolean
+
+      Whether the orbit is attached at :attr:`MechJeb.AscentGuidance.desired_attach_alt`.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Applies on the :data:`MechJeb.AscentType.pvg` path, with an early shutoff stage, set by
+         :attr:`MechJeb.PVGSettings.optimize_stage_flag` and :attr:`MechJeb.PVGSettings.optimize_stage`.
+         Without one, MechJeb always attaches the orbit.
+
+   .. attribute:: desired_attach_alt: number
+
+      The altitude at which the orbit is attached, in meters.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Applies on the :data:`MechJeb.AscentType.pvg` path. Requires :attr:`MechJeb.AscentGuidance.attach_alt_flag`,
+         unless there is no early shutoff stage. See :attr:`MechJeb.PVGSettings.optimize_stage`.
+
+   .. attribute:: desired_fpa: number
+
+      The flight path angle at orbit insertion, in degrees.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Applies on the :data:`MechJeb.AscentType.pvg` path, when there is no early shutoff
+         stage. See :attr:`MechJeb.PVGSettings.optimize_stage`.
+
+   .. attribute:: desired_inclination: number
+
+      The inclination of the final circular orbit, in degrees.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: launch_mode: MechJeb.AscentLaunchMode
+
+      The launch mode, which gives whether the autopilot is waiting for a timed launch.
+
+      :Attribute: Read-only, cannot be set
+
+   .. method:: launch_to_rendezvous()
+
+      Launch to rendezvous with the target. Throws an exception if there is no target, or
+      the ascent path is PVG.
+
+   .. attribute:: launch_phase_angle: number
+
+      The phase angle to the target of a launch to rendezvous, in degrees.
+
+      :Attribute: Can be read or written
+
+   .. method:: launch_to_target_plane()
+
+      Launch into the plane of the target. Throws an exception if there is no target.
+
+   .. attribute:: launch_lan_difference: number
+
+      The difference from the target's longitude of the ascending node of a launch into the
+      target's plane, in degrees.
+
+      :Attribute: Can be read or written
+
+   .. method:: launch_to_match_lan()
+
+      Launch into the plane of the target, at the time the target's longitude of the
+      ascending node, less :attr:`MechJeb.AscentGuidance.launch_lan_difference`, passes overhead. Keeps
+      :attr:`MechJeb.AscentGuidance.desired_inclination`. Throws an exception if there is no target, or the
+      ascent path is not :data:`MechJeb.AscentType.pvg`.
+
+   .. method:: launch_to_lan()
+
+      Launch into the plane with longitude of the ascending node :attr:`MechJeb.AscentGuidance.desired_lan`
+      and inclination :attr:`MechJeb.AscentGuidance.desired_inclination`. Throws an exception if the ascent
+      path is not :data:`MechJeb.AscentType.pvg`.
+
+   .. attribute:: desired_lan: number
+
+      The longitude of the ascending node of a launch to a LAN, in degrees.
+      See :meth:`MechJeb.AscentGuidance.launch_to_lan`.
+
+      :Attribute: Can be read or written
+
+   .. method:: abort_timed_launch()
+
+      Abort a timed launch that has not started yet. Throws an exception if the launch mode
+      is :data:`MechJeb.AscentLaunchMode.unknown`.
+
+   .. attribute:: warp_count_down: number
+
+      The time before a timed launch at which time warp stops, in seconds.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: override_warp_to_plane: boolean
+
+      Whether a timed launch launches at once, rather than at the time it computes.
+
+      :Attribute: Can be read or written
+
+
+
+.. class:: AscentType
+
+   The ascent path. See :attr:`MechJeb.AscentGuidance.ascent_type`.
+
+
+   .. data:: classic
+
+      The classic ascent path. See :attr:`MechJeb.AscentGuidance.classic_path`.
+
+
+   .. data:: pvg
+
+      Primer Vector Guidance, for RSS/RO. See :attr:`MechJeb.AscentGuidance.pvg_settings`.
+
+
+
+.. class:: AscentLaunchMode
+
+   The launch mode of the ascent autopilot. See :attr:`MechJeb.AscentGuidance.launch_mode`.
+
+
+   .. data:: normal
+
+      The autopilot is not performing a timed launch.
+
+
+   .. data:: rendezvous
+
+      A timed launch to rendezvous with the target vessel.
+
+
+   .. data:: target_plane
+
+      A timed launch into the plane of the target.
+
+
+   .. data:: match_lan
+
+      A timed launch to the target's longitude of the ascending node. See
+      :meth:`MechJeb.AscentGuidance.launch_to_match_lan`.
+
+
+   .. data:: lan
+
+      A timed launch to a longitude of the ascending node. See
+      :meth:`MechJeb.AscentGuidance.launch_to_lan`.
+
+
+   .. data:: unknown
+
+      A timed launch of another kind, started from MechJeb's window.
+
+
+
+AscentSettings
+--------------
+
+
+.. class:: AscentSettings
+
+   The Ascent Settings window, which holds the settings shared by the ascent paths.
+
+   .. attribute:: force_roll: boolean
+
+      Whether the autopilot controls the roll.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: vertical_roll: number
+
+      The roll during the vertical climb, in degrees.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.AscentSettings.force_roll`.
+
+   .. attribute:: turn_roll: number
+
+      The roll during the turn, in degrees.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.AscentSettings.force_roll`.
+
+   .. attribute:: roll_altitude: number
+
+      The altitude above which the autopilot controls the roll, in meters.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.AscentSettings.force_roll`.
+
+   .. attribute:: limit_angle_of_attack: boolean
+
+      Whether to limit the angle of attack.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Applies on the :data:`MechJeb.AscentType.classic` path.
+
+   .. attribute:: max_angle_of_attack: number
+
+      The largest angle of attack, in degrees.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.AscentSettings.limit_angle_of_attack`, and applies on the :data:`MechJeb.AscentType.classic`
+         path.
+
+   .. attribute:: angle_of_attack_limit_fadeout_pressure: number
+
+      The dynamic pressure below which the angle of attack limit fades out, in pascals.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.AscentSettings.limit_angle_of_attack`, and applies on the :data:`MechJeb.AscentType.classic`
+         path.
+
+   .. attribute:: limiting_angle_of_attack: boolean
+
+      Whether the angle of attack limit is limiting the steering.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: current_max_angle_of_attack: number
+
+      The largest angle of attack the limit allows now, in degrees.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: corrective_steering: boolean
+
+      Whether the autopilot steers by the velocity vector rather than the position vector.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         It is more accurate, though large craft may do better without it. Applies on the
+         :data:`MechJeb.AscentType.classic` path.
+
+   .. attribute:: corrective_steering_gain: number
+
+      The gain of the corrective steering.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.AscentSettings.corrective_steering`, and applies on the :data:`MechJeb.AscentType.classic` path.
+
+   .. attribute:: autostage: boolean
+
+      Whether the autopilot stages when the current stage runs out of fuel.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: staging: MechJeb.Autostaging
+
+      The autostaging settings. The same object as :attr:`MechJeb.Utilities.staging`.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: thrust: MechJeb.ThrustLimiter
+
+      The throttle limiters. The same object as :attr:`MechJeb.Utilities.thrust`.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: autodeploy_solar_panels: boolean
+
+      Whether to deploy the solar panels when the ascent finishes.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: auto_deploy_antennas: boolean
+
+      Whether to deploy the antennas when the ascent finishes.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: autowarp: boolean
+
+      Whether to warp time during the ascent.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         The same setting as :attr:`MechJeb.ManeuverPlanner.autowarp`.
+
+   .. attribute:: skip_circularization: boolean
+
+      Whether to skip the circularization burn.
+
+      :Attribute: Can be read or written
+
+
+
+PVGSettings
+-----------
+
+
+.. class:: PVGSettings
+
+   The PVG Settings window, which holds the settings of the Primer Vector Guidance ascent path.
+
+   .. attribute:: dynamic_pressure_trigger: number
+
+      The dynamic pressure below which guidance starts, in pascals.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: fixed_coast: boolean
+
+      Whether the coast has a fixed length.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.PVGSettings.coast_stage_flag`.
+
+   .. attribute:: fixed_coast_length: number
+
+      The length of the coast, in seconds.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.PVGSettings.fixed_coast`.
+
+   .. attribute:: min_delta_v: number
+
+      The smallest delta-v of a stage that guidance plans with, in :math:`\mathrm{m/s}`.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: last_stage: number
+
+      The last stage that guidance plans with.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: optimize_stage_flag: boolean
+
+      Whether guidance may shut off :attr:`MechJeb.PVGSettings.optimize_stage` early.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: optimize_stage: number
+
+      The stage that guidance may shut off early.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.PVGSettings.optimize_stage_flag`. -1 is no stage.
+
+   .. attribute:: unguided_stages_flag: boolean
+
+      Whether guidance leaves :attr:`MechJeb.PVGSettings.unguided_stages` unguided.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: unguided_stages: List
+
+      The stages that guidance leaves unguided.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.PVGSettings.unguided_stages_flag`.
+
+   .. attribute:: coast_stage_flag: boolean
+
+      Whether guidance coasts in :attr:`MechJeb.PVGSettings.coast_stage`.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: coast_stage: number
+
+      The stage before or after which guidance coasts.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.PVGSettings.coast_stage_flag`.
+
+   .. attribute:: coast_before_flag: boolean
+
+      Whether the coast comes before :attr:`MechJeb.PVGSettings.coast_stage`, rather than after it.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.PVGSettings.coast_stage_flag`.
+
+   .. attribute:: ullage_lead_time: number
+
+      The time before an ignition at which RCS settles the propellant, in seconds.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: spinup_stage_flag: boolean
+
+      Whether to spin up the vessel before :attr:`MechJeb.PVGSettings.spinup_stage`.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: spinup_stage: number
+
+      The stage before which to spin up the vessel.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.PVGSettings.spinup_stage_flag`.
+
+   .. attribute:: spinup_angular_velocity: number
+
+      The angular velocity of the spin-up, in :math:`\mathrm{rad/s}`.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.PVGSettings.spinup_stage_flag`. MechJeb's window shows it in revolutions per
+         minute.
+
+   .. attribute:: spinup_lead_time: number
+
+      The time before staging at which the spin-up starts, in seconds.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.PVGSettings.spinup_stage_flag`.
+
+   .. attribute:: limit_qa: number
+
+      The limit on dynamic pressure times angle of attack, in :math:`\mathrm{Pa \cdot rad}`.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         MechJeb clamps it to between 0 and 10000.
+
+   .. attribute:: pitch_rate: number
+
+      The pitch rate of the booster, in :math:`\mathrm{deg/s}`.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: pitch_start_velocity: number
+
+      The speed at which the booster starts to pitch over, in :math:`\mathrm{m/s}`.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: staging_trigger: number
+
+      The stage after which guidance starts.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.PVGSettings.staging_trigger_flag`.
+
+   .. attribute:: staging_trigger_flag: boolean
+
+      Whether guidance starts after :attr:`MechJeb.PVGSettings.staging_trigger`.
+
+      :Attribute: Can be read or written
+
+
+
+ClassicPath
+-----------
+
+
+.. class:: ClassicPath
+
+   The Ascent Path Editor window, which holds the settings of the classic ascent path.
+
+   .. attribute:: auto_path: boolean
+
+      Whether the autopilot chooses the turn altitudes and speed.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: auto_turn_percent: number
+
+      The altitude at which an automatic turn starts, as a fraction of the height of the
+      atmosphere.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.ClassicPath.auto_path`.
+
+   .. attribute:: auto_turn_speed_factor: number
+
+      The factor that sets the speed at which an automatic turn starts.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Requires :attr:`MechJeb.ClassicPath.auto_path`.
+
+   .. attribute:: auto_turn_start_altitude: number
+
+      The altitude at which an automatic turn starts, in meters.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: auto_turn_start_velocity: number
+
+      The speed at which an automatic turn starts, in :math:`\mathrm{m/s}`.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: auto_turn_end_altitude: number
+
+      The altitude at which an automatic turn ends, in meters.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: turn_start_altitude: number
+
+      The altitude at which the turn starts, in meters.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: turn_start_velocity: number
+
+      The speed at which the turn starts, in :math:`\mathrm{m/s}`.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: turn_end_altitude: number
+
+      The altitude at which the turn ends, in meters.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: turn_end_angle: number
+
+      The final flight path angle, in degrees.
+
+      :Attribute: Can be read or written
+
+   .. attribute:: turn_shape_exponent: number
+
+      The steepness of the turn, between 0 and 1.
+
+      :Attribute: Can be read or written

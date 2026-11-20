@@ -1,0 +1,35 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+MechJeb
+=======
+
+Provides functionality to interact with the `MechJeb`_ mod. |MechJeb tested|
+Originally written by `Genhis <https://github.com/Genhis/KRPC.MechJeb>`_.
+The service acts on the MechJeb of the active vessel, which needs a part with MechJeb. Its
+classes follow MechJeb's windows: a setting is found under the window that shows it.
+
+.. toctree::
+   :includehidden:
+   :maxdepth: 1
+
+   mechjeb/mechjeb
+   mechjeb/ascent-guidance
+   mechjeb/utilities
+   mechjeb/maneuver-planner
+   mechjeb/landing-guidance
+   mechjeb/rendezvous-autopilot
+   mechjeb/docking-autopilot
+   mechjeb/aircraft-autopilot
+   mechjeb/aircraft-approach
+   mechjeb/rover-autopilot
+   mechjeb/smart-ass
+   mechjeb/smart-rcs
+   mechjeb/translatron
+   mechjeb/attitude-adjustment
+   mechjeb/target-controller
+   mechjeb/migration
+
+
+.. include:: /mods.inc

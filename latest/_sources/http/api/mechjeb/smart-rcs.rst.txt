@@ -1,0 +1,124 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+SmartRCS
+========
+
+
+.. _http-MechJeb.SmartRCS:
+
+.. rubric:: SmartRCS
+
+The Smart RCS window, which holds a velocity with RCS.
+
+A ``SmartRCS`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /mech-jeb/smart-rcs/(id)/auto-disable-smart-rcs
+
+   Whether Smart RCS turns off when an autopilot takes control.
+
+
+   :param id: The identifier of the :ref:`SmartRCS <http-MechJeb.SmartRCS>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/smart-rcs/(id)/auto-disable-smart-rcs
+
+   Whether Smart RCS turns off when an autopilot takes control.
+
+
+   :param id: The identifier of the :ref:`SmartRCS <http-MechJeb.SmartRCS>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/smart-rcs/(id)/mode
+
+   The mode. Throws an exception if set to ``"zero_velocity"``,
+   which MechJeb 2.15 removed.
+
+
+   :param id: The identifier of the :ref:`SmartRCS <http-MechJeb.SmartRCS>` object.
+
+   :resjson MechJeb.SmartRCSMode value:
+
+.. http:put:: /mech-jeb/smart-rcs/(id)/mode
+
+   The mode. Throws an exception if set to ``"zero_velocity"``,
+   which MechJeb 2.15 removed.
+
+
+   :param id: The identifier of the :ref:`SmartRCS <http-MechJeb.SmartRCS>` object.
+
+   :reqjson MechJeb.SmartRCSMode value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/smart-rcs/(id)/rcs-for-rotation
+
+   Whether to use the RCS for rotation.
+
+
+   :param id: The identifier of the :ref:`SmartRCS <http-MechJeb.SmartRCS>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/smart-rcs/(id)/rcs-for-rotation
+
+   Whether to use the RCS for rotation.
+
+
+   :param id: The identifier of the :ref:`SmartRCS <http-MechJeb.SmartRCS>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/smart-rcs/(id)/rcs-throttle
+
+   Whether to throttle the RCS when the engines are off.
+
+
+   :param id: The identifier of the :ref:`SmartRCS <http-MechJeb.SmartRCS>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/smart-rcs/(id)/rcs-throttle
+
+   Whether to throttle the RCS when the engines are off.
+
+
+   :param id: The identifier of the :ref:`SmartRCS <http-MechJeb.SmartRCS>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+
+.. _http-MechJeb.SmartRCSMode:
+
+.. rubric:: SmartRCSMode
+
+The mode of Smart RCS. See :http:get:`/mech-jeb/smart-rcs/(id)/mode`.
+
+Passed and returned as the name of one of its values:
+
+
+``"off"``
+   Off.
+
+
+``"zero_relative_velocity"``
+   Hold zero velocity relative to the target.
+
+
+``"zero_velocity"``
+   Hold zero velocity. MechJeb 2.15 removed this mode.

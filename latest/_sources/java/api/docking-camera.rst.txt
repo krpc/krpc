@@ -1,10 +1,11 @@
 .. default-domain:: java
 .. highlight:: java
 
-Docking Camera API
-==================
+Docking Camera
+==============
 
-Provides RPCs to interact with the `Docking Camera <https://github.com/nullprofile/DockingCam>`_ mod.
+Provides functionality to interact with the `Docking Camera (KURS)`_ mod.
+|Docking Camera (KURS) tested|
 
 .. toctree::
    :includehidden:
@@ -12,3 +13,13 @@ Provides RPCs to interact with the `Docking Camera <https://github.com/nullprofi
 
    docking-camera/docking-camera
    docking-camera/camera
+
+Example
+-------
+
+The following example saves the image from an onboard camera of the active vessel to a file. The
+camera must be switched on:
+
+.. literalinclude:: /scripts/api/docking-camera/DockingCameraExample.java
+
+.. include:: /mods.inc

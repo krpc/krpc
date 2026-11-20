@@ -1,0 +1,161 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Antenna
+=======
+
+
+.. _http-RemoteTech.Antenna:
+
+.. rubric:: Antenna
+
+A RemoteTech antenna. Obtained by calling :http:get:`/remote-tech/comms/(id)/antennas` or :http:post:`/remote-tech/antenna`.
+
+A ``Antenna`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /remote-tech/antenna/(id)/part
+
+   Get the part containing this antenna.
+
+
+   :param id: The identifier of the :ref:`Antenna <http-RemoteTech.Antenna>` object.
+
+   :resjson SpaceCenter.Part value:
+
+
+
+
+.. http:get:: /remote-tech/antenna/(id)/has-connection
+
+   Whether the antenna has a connection.
+
+
+   :param id: The identifier of the :ref:`Antenna <http-RemoteTech.Antenna>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /remote-tech/antenna/(id)/target
+
+   The object that the antenna is targetting.
+   This property can be used to set the target to ``"none"`` or ``"active_vessel"``.
+   To set the target to a celestial body, ground station or vessel see :http:get:`/remote-tech/antenna/(id)/target-body`,
+   :http:get:`/remote-tech/antenna/(id)/target-ground-station` and :http:get:`/remote-tech/antenna/(id)/target-vessel`.
+
+
+   :param id: The identifier of the :ref:`Antenna <http-RemoteTech.Antenna>` object.
+
+   :resjson RemoteTech.Target value:
+
+.. http:put:: /remote-tech/antenna/(id)/target
+
+   The object that the antenna is targetting.
+   This property can be used to set the target to ``"none"`` or ``"active_vessel"``.
+   To set the target to a celestial body, ground station or vessel see :http:get:`/remote-tech/antenna/(id)/target-body`,
+   :http:get:`/remote-tech/antenna/(id)/target-ground-station` and :http:get:`/remote-tech/antenna/(id)/target-vessel`.
+
+
+   :param id: The identifier of the :ref:`Antenna <http-RemoteTech.Antenna>` object.
+
+   :reqjson RemoteTech.Target value: The new value.
+
+
+
+
+.. http:get:: /remote-tech/antenna/(id)/target-body
+
+   The celestial body the antenna is targetting.
+
+
+   :param id: The identifier of the :ref:`Antenna <http-RemoteTech.Antenna>` object.
+
+   :resjson SpaceCenter.CelestialBody value:
+
+.. http:put:: /remote-tech/antenna/(id)/target-body
+
+   The celestial body the antenna is targetting.
+
+
+   :param id: The identifier of the :ref:`Antenna <http-RemoteTech.Antenna>` object.
+
+   :reqjson SpaceCenter.CelestialBody value: The new value.
+
+
+
+
+.. http:get:: /remote-tech/antenna/(id)/target-ground-station
+
+   The ground station the antenna is targetting.
+
+
+   :param id: The identifier of the :ref:`Antenna <http-RemoteTech.Antenna>` object.
+
+   :resjson string value:
+
+.. http:put:: /remote-tech/antenna/(id)/target-ground-station
+
+   The ground station the antenna is targetting.
+
+
+   :param id: The identifier of the :ref:`Antenna <http-RemoteTech.Antenna>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:get:: /remote-tech/antenna/(id)/target-vessel
+
+   The vessel the antenna is targetting.
+
+
+   :param id: The identifier of the :ref:`Antenna <http-RemoteTech.Antenna>` object.
+
+   :resjson SpaceCenter.Vessel value:
+
+.. http:put:: /remote-tech/antenna/(id)/target-vessel
+
+   The vessel the antenna is targetting.
+
+
+   :param id: The identifier of the :ref:`Antenna <http-RemoteTech.Antenna>` object.
+
+   :reqjson SpaceCenter.Vessel value: The new value.
+
+
+
+
+
+.. _http-RemoteTech.Target:
+
+.. rubric:: Target
+
+The type of object an antenna is targetting.
+See :http:get:`/remote-tech/antenna/(id)/target`.
+
+Passed and returned as the name of one of its values:
+
+
+``"active_vessel"``
+   The active vessel.
+
+
+``"celestial_body"``
+   A celestial body.
+
+
+``"ground_station"``
+   A ground station.
+
+
+``"vessel"``
+   A specific vessel.
+
+
+``"none"``
+   No target.

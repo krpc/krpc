@@ -1,0 +1,52 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: RemoteTech
+
+Service
+=======
+
+
+.. module:: RemoteTech
+
+Provides functionality to interact with RemoteTech.
+
+
+.. attribute:: available
+
+   Whether RemoteTech is installed.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: bool
+   
+
+
+
+
+.. attribute:: ground_stations
+
+   The names of the ground stations.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: list(str)
+   
+
+
+
+
+.. staticmethod:: antenna(part)
+
+   Get the antenna object for a particular part.
+
+   :param SpaceCenter.Part part:
+   :rtype: :class:`Antenna`
+   
+
+
+
+
+.. staticmethod:: comms(vessel)
+
+   Get a communications object, representing the communication capability of a particular vessel.
+
+   :param SpaceCenter.Vessel vessel:
+   :rtype: :class:`Comms`

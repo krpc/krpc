@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Protocol Buffers over WebSockets &#8212; kRPC v0.7.0 documentation</title>
+    <title>WebSockets &#8212; kRPC v0.8.0 documentation</title>
   
   
   
@@ -26,42 +26,45 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e540dda1" />
+    <link rel="stylesheet" type="text/css" href="../_static/lua.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=6a604523" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=ba67256c" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <script defer src="../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../_static/documentation_options.js?v=fe7df9b0"></script>
+    <script src="../_static/documentation_options.js?v=486e5634"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../_static/design-tabs.js?v=fcb327ea"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'communication-protocols/websockets';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
+        DOCUMENTATION_OPTIONS.theme_version = '0.24.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.7.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.8.0';
         DOCUMENTATION_OPTIONS.show_version_warning_banner =
             true;
         </script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <script src="../_static/external-links.js?v=e8892020"></script>
     <script src="../_static/build-info.js?v=19ceb065"></script>
-    <link rel="canonical" href="https://krpc.github.io/krpc/0.7.0/communication-protocols/websockets.html" />
+    <link rel="canonical" href="https://krpc.github.io/krpc/0.8.0/communication-protocols/websockets.html" />
+    <link rel="icon" href="../_static/logo-mark.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Protocol Buffers over Serial IO" href="serialio.html" />
-    <link rel="prev" title="Protocol Buffers over a Local Socket" href="localsocket.html" />
+    <link rel="next" title="Serial IO" href="serialio.html" />
+    <link rel="prev" title="Local Socket" href="localsocket.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.7.0" />
+  <meta name="docsearch:version" content="0.8.0" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -109,7 +112,7 @@
   
     <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
     <span class="fa-solid fa-bars"></span>
   </button>
   
@@ -128,8 +131,14 @@
   
   
   
+    
+    
+      
+    
+    
+    <img src="../_static/logo-on-light.svg" class="logo__image only-light" alt="kRPC"/>
+    <img src="../_static/logo-on-dark.svg" class="logo__image only-dark pst-js-only" alt="kRPC"/>
   
-    <p class="title logo__title">kRPC Documentation</p>
   
 </a></div>
     
@@ -158,98 +167,32 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cnano.html">
-    C-nano
+  <a class="nav-link nav-internal" href="../user-guide.html">
+    User Guides
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../csharp.html">
-    C#
+  <a class="nav-link nav-internal" href="../clients.html">
+    Clients
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../developer-guide.html">
+    Developer Guide
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cpp.html">
-    C++
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../java.html">
-    Java
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../lua.html">
-    Lua
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../python.html">
-    Python
-  </a>
-</li>
-
-            <li class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button"
-                data-bs-toggle="dropdown" aria-expanded="false"
-                aria-controls="pst-nav-more-links">
-                    More
-                </button>
-                <ul id="pst-nav-more-links" class="dropdown-menu">
-                    
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../third-party.html">
-    Other Clients, Services and Scripts
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../compiling.html">
-    Compiling kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../extending.html">
-    Extending kRPC
-  </a>
-</li>
-
-
-<li class=" current active">
-  <a class="nav-link dropdown-item nav-internal" href="../communication-protocols.html">
-    Communication Protocols
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../internals.html">
-    Internals of kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../changelog.html">
+  <a class="nav-link nav-internal" href="../changelog.html">
     Changelog
   </a>
 </li>
 
-                </ul>
-            </li>
-            
   </ul>
 </nav></div>
       
@@ -293,14 +236,14 @@
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
   <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
-    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
   </ul>
 </div></div>
       
@@ -316,6 +259,28 @@
           
           
           <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://discord.gg/bXuaTrj" title="Discord" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-discord fa-lg" aria-hidden="true"></i><span class="visually-hidden">Discord</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://forum.kerbalspaceprogram.com/topic/130742-1125-krpc-control-the-game-using-c-c-java-lua-python-ruby-haskell-c-arduino-v060/" title="Forum" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-comments fa-lg" aria-hidden="true"></i><span class="visually-hidden">Forum</span></a>
         </li>
 </ul></div>
       
@@ -335,7 +300,7 @@
   
 
   
-    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page" aria-expanded="false" aria-controls="pst-secondary-sidebar-modal">
       <span class="fa-solid fa-outdent"></span>
     </button>
   
@@ -349,7 +314,7 @@
       
       
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
       <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
@@ -380,78 +345,22 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cnano.html">
-    C-nano
+  <a class="nav-link nav-internal" href="../user-guide.html">
+    User Guides
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../csharp.html">
-    C#
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cpp.html">
-    C++
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../java.html">
-    Java
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../lua.html">
-    Lua
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../python.html">
-    Python
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../third-party.html">
-    Other Clients, Services and Scripts
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../compiling.html">
-    Compiling kRPC
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../extending.html">
-    Extending kRPC
+  <a class="nav-link nav-internal" href="../clients.html">
+    Clients
   </a>
 </li>
 
 
 <li class="nav-item current active">
-  <a class="nav-link nav-internal" href="../communication-protocols.html">
-    Communication Protocols
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../internals.html">
-    Internals of kRPC
+  <a class="nav-link nav-internal" href="../developer-guide.html">
+    Developer Guide
   </a>
 </li>
 
@@ -496,14 +405,14 @@
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
   <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
-    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
   </ul>
 </div></div>
         
@@ -519,6 +428,28 @@
           
           
           <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://discord.gg/bXuaTrj" title="Discord" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-discord fa-lg" aria-hidden="true"></i><span class="visually-hidden">Discord</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://forum.kerbalspaceprogram.com/topic/130742-1125-krpc-control-the-game-using-c-c-java-lua-python-ruby-haskell-c-arduino-v060/" title="Forum" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-comments fa-lg" aria-hidden="true"></i><span class="visually-hidden">Forum</span></a>
         </li>
 </ul></div>
         
@@ -540,11 +471,65 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="tcpip.html">Protocol Buffers over TCP/IP</a></li>
-<li class="toctree-l1"><a class="reference internal" href="localsocket.html">Protocol Buffers over a Local Socket</a></li>
-<li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#">Protocol Buffers over WebSockets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="serialio.html">Protocol Buffers over Serial IO</a></li>
-<li class="toctree-l1"><a class="reference internal" href="messages.html">Messaging Protocol</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../extending.html">Extending kRPC</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../extending/attributes.html">Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/types.html">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/events.html">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/multi-tick.html">Multi-Tick RPCs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/game-scenes.html">Game Scenes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/deprecation.html">Deprecating Service Members</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/extending-other-services.html">Extending Other Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/other-mods.html">Wrapping Another Mod</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/documentation.html">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/errors.html">Errors and Warnings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/clientgen.html">Generating Service Code for Static Clients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/docgen.html">API Reference Pages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/testing.html">In-Game Tests</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../communication-protocols.html">Communication Protocols</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="tcpip.html">TCP/IP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="localsocket.html">Local Socket</a></li>
+<li class="toctree-l2 current active"><a aria-current="page" class="current reference internal" href="#">WebSockets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="serialio.html">Serial IO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="messages.html">Messaging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="http.html">HTTP</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../client-design.html">Client Design</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../client-design/python.html">Python Client Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-design/csharp.html">C# Client Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-design/cpp.html">C++ Client Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-design/cnano.html">C-nano Client Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-design/java.html">Java Client Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-design/lua.html">Lua Client Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-design/js.html">JavaScript Client Design</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../client-spec.html">Client Specification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/conformance.html">Conformance Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/testserver.html">Test Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/connection.html">Connection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/calls.html">Calls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/values.html">Values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/codec.html">Codec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/errors.html">Errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/objects.html">Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/streams.html">Streams</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/events.html">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/concurrency.html">Concurrency</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/functions.html">Server Side Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/coverage.html">Client Coverage</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../krpctools.html">krpctools</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../krpc-development.html">kRPC Development</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../krpc-development/code-structure.html">Code Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../krpc-development/building.html">Building from Source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../krpc-development/testing.html">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../krpc-development/benchmarks.html">Benchmarks</a></li>
+</ul>
+</details></li>
 </ul>
 </div>
 </nav></div>
@@ -582,13 +567,16 @@
     
     <li class="breadcrumb-item breadcrumb-home">
       <a href="../index.html" class="nav-link" aria-label="Home">
-        <i class="fa-solid fa-home"></i>
+        <i class="fa-solid fa-house"></i>
       </a>
     </li>
     
+    <li class="breadcrumb-item"><a href="../developer-guide.html" class="nav-link">Developer Guide</a></li>
+    
+    
     <li class="breadcrumb-item"><a href="../communication-protocols.html" class="nav-link">Communication Protocols</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Protocol Buffers over WebSockets</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">WebSockets</span></li>
   </ul>
 </nav>
 </div>
@@ -605,140 +593,217 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="protocol-buffers-over-websockets">
-<h1>Protocol Buffers over WebSockets<a class="headerlink" href="#protocol-buffers-over-websockets" title="Link to this heading">#</a></h1>
-<p>This communication protocol allows web browsers to communicate with kRPC over a websockets
-connection, for example from Javascript in a web browser.</p>
+  <section id="websockets">
+<h1>WebSockets<a class="headerlink" href="#websockets" title="Link to this heading">#</a></h1>
+<p>This protocol carries the <a class="reference internal" href="messages.html"><span class="doc">messages</span></a> over a websockets connection, for a client in
+a web browser.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>If a client library is available for your language, you do not need to implement this
+<p>The <a class="reference internal" href="../js.html"><span class="doc">JavaScript client</span></a> implements this protocol, for a web page or
+Node.js.</p>
+</div>
+<section id="framing">
+<h2>Framing<a class="headerlink" href="#framing" title="Link to this heading">#</a></h2>
+<p>Each message is a <code class="docutils literal notranslate"><span class="pre">Message</span></code>, encoded according to the Protocol Buffers binary format and carried
+in one binary websockets message. The websockets message may be split across fragments.</p>
+</section>
+<section id="connecting">
+<h2>Connecting<a class="headerlink" href="#connecting" title="Link to this heading">#</a></h2>
+<p>A new install has a server for this protocol in the server window, at address <code class="docutils literal notranslate"><span class="pre">127.0.0.1</span></code> and
+port <code class="docutils literal notranslate"><span class="pre">50001</span></code>. To add another, add a server and select <em>Protobuf over WebSockets</em> as its
 protocol.</p>
-</div>
-<section id="connecting-to-the-rpc-server">
-<h2>Connecting to the RPC Server<a class="headerlink" href="#connecting-to-the-rpc-server" title="Link to this heading">#</a></h2>
-<p>A client invokes remote procedures by communicating with the <em>RPC server</em>. To establish a
-connection, open a websockets connection to the server on its RPC port (which defaults to
-50000). The connection URI can also contain a <code class="docutils literal notranslate"><span class="pre">name</span></code> parameter with the name of the client to
-display in the on the in-game UI. For example: <code class="docutils literal notranslate"><span class="pre">ws://localhost:50000/?name=Jeb</span></code></p>
-<p>Request the subprotocol <code class="docutils literal notranslate"><span class="pre">krpc.1</span></code>, which names protocol version 1. In Javascript:</p>
-<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="ow">new</span><span class="w"> </span><span class="nx">WebSocket</span><span class="p">(</span><span class="s1">'ws://localhost:50000/?name=Jeb'</span><span class="p">,</span><span class="w"> </span><span class="s1">'krpc.1'</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>The server names the subprotocol in its response. It rejects an unsupported version with HTTP
-status 400 and a message in the body. A server from before kRPC 0.7 names no subprotocol, so a
-client that requests <code class="docutils literal notranslate"><span class="pre">krpc.1</span></code> fails to connect to it. See <a class="reference internal" href="../communication-protocols.html#communication-protocol-version"><span class="std std-ref">Protocol Version</span></a>.</p>
+<p>Open a websockets connection to the server with the path <code class="docutils literal notranslate"><span class="pre">/</span></code>, for example
+<code class="docutils literal notranslate"><span class="pre">ws://127.0.0.1:50001/</span></code>. The upgrade request names no subprotocol. Then send the
+<a class="reference internal" href="messages.html#communication-protocol-handshake"><span class="std std-ref">connection handshake</span></a>. The upgrade and the
+<code class="docutils literal notranslate"><span class="pre">connection_request</span></code> together have 3 seconds to arrive, timed from the TCP connection.</p>
+<p>The connection carries the requests, the responses and the stream updates. To end it, send a
+<a class="reference internal" href="messages.html#communication-protocol-disconnect"><span class="std std-ref">disconnect</span></a> and then a close frame.</p>
 </section>
-<section id="connecting-to-the-stream-server">
-<h2>Connecting to the Stream Server<a class="headerlink" href="#connecting-to-the-stream-server" title="Link to this heading">#</a></h2>
-<p>Clients can receive <a class="reference internal" href="messages.html#communication-protocol-streams"><span class="std std-ref">Streams</span></a> from the <em>stream server</em>. To establish a
-connection, a client must first connect to the RPC server (as above) then do the following:</p>
-<ol class="arabic simple">
-<li><p>Get the identifier of the client by calling the <code class="docutils literal notranslate"><span class="pre">KRPC.GetClientID</span></code> remote procedure.</p></li>
-<li><p>Open a websockets connection to the server on its stream port (which defaults to 50001), with an
-<code class="docutils literal notranslate"><span class="pre">id</span></code> query parameter set to the client identifier encoded in base64, and requesting the
-subprotocol <code class="docutils literal notranslate"><span class="pre">krpc.1</span></code>. For example: <code class="docutils literal notranslate"><span class="pre">ws://localhost:50001/?id=Eeh8Vbj2DkWTcJZTkYlEhQ==</span></code></p></li>
-</ol>
-<p>Connecting to the stream server is optional. If the client doesn’t require stream functionality,
-there is no need to connect.</p>
-</section>
-<section id="sending-and-receiving-messages">
-<h2>Sending and Receiving Messages<a class="headerlink" href="#sending-and-receiving-messages" title="Link to this heading">#</a></h2>
-<p>Communication with the server is performed via Protocol Buffer messages, encoded according to the
-protobuf binary format.</p>
-<p>To send a message to the server:</p>
-<ol class="arabic simple">
-<li><p>Encode the message using the Protocol Buffers format.</p></li>
-<li><p>Send a binary websockets message to the server, with payload containing the encoded message
-data.</p></li>
-</ol>
-<p>To receive a message from the server, do the reverse:</p>
-<ol class="arabic simple">
-<li><p>Receive a binary websockets message from the server.</p></li>
-<li><p>Decode the messages payload using the Protocol Buffers format.</p></li>
-</ol>
-</section>
-<section id="invoking-remote-procedures">
-<h2>Invoking Remote Procedures<a class="headerlink" href="#invoking-remote-procedures" title="Link to this heading">#</a></h2>
-<p>See <a class="reference internal" href="messages.html"><span class="doc">Messaging Protocol</span></a>.</p>
+<section id="web-pages">
+<span id="communication-protocol-websockets-origins"></span><h2>Web Pages<a class="headerlink" href="#web-pages" title="Link to this heading">#</a></h2>
+<p>A web page sends its origin with the upgrade request, and the server refuses a page whose origin it
+does not allow, with status 403. <em>Origins</em>, in the server window, lists the origins it allows:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">localhost</span></code>, the default, allows a page served from <code class="docutils literal notranslate"><span class="pre">localhost</span></code> or a loopback address, on
+any port, such as <code class="docutils literal notranslate"><span class="pre">http://localhost:8000</span></code> or <code class="docutils literal notranslate"><span class="pre">http://127.0.0.1:5173</span></code>.</p></li>
+<li><p>An origin, such as <code class="docutils literal notranslate"><span class="pre">http://192.168.1.10:8000</span></code>, allows pages from that scheme, host and port.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> allows any page, including one opened as a local file, which has the origin <code class="docutils literal notranslate"><span class="pre">null</span></code>.</p></li>
+</ul>
+<p>The entries are comma-separated. A client that is not a web page, such as Node.js, sends no
+origin, and the server always accepts it.</p>
 </section>
 <section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h2>
-<p>The following code connects to the RPC server at address 127.0.0.1 and port 50000 using
-the name “Jeb”. Next, it connects to the stream server on port 50001. It then invokes the
-<code class="docutils literal notranslate"><span class="pre">KRPC.GetStatus</span></code> RPC, receives and decodes the result and prints out the server version number
-from the response.</p>
-<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span><span class="w"> </span><span class="nx">websocket</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">'ws'</span><span class="p">);</span>
-<span class="kd">var</span><span class="w"> </span><span class="nx">protobufjs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">'protobufjs'</span><span class="p">)</span>
-<span class="kd">var</span><span class="w"> </span><span class="nx">ByteBuffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">'bytebuffer'</span><span class="p">)</span>
-<span class="kd">var</span><span class="w"> </span><span class="nx">proto</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">protobufjs</span><span class="p">.</span><span class="nx">loadProtoFile</span><span class="p">(</span><span class="s1">'krpc.proto'</span><span class="p">).</span><span class="nx">build</span><span class="p">();</span>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>These examples show the protocol, and omit much of the behavior a client library needs, such as
+handling errors and failed connections. A client library should
+implement the <a class="reference internal" href="../client-spec.html"><span class="doc">client specification</span></a> in its entirety.</p>
+</div>
+<p>The examples run in Node.js, using the <code class="docutils literal notranslate"><span class="pre">ws</span></code> and <code class="docutils literal notranslate"><span class="pre">protobufjs</span></code> packages. A web browser provides
+the same <code class="docutils literal notranslate"><span class="pre">WebSocket</span></code> interface.</p>
+<p>The following script connects to the server with the name “Example”, calls <code class="docutils literal notranslate"><span class="pre">KRPC.GetStatus</span></code> and
+prints the server version. It then ends the connection:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">"use strict"</span><span class="p">;</span>
 
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Connecting to RPC server'</span><span class="p">)</span>
-<span class="kd">let</span><span class="w"> </span><span class="nx">rpcConn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">websocket</span><span class="p">(</span><span class="s1">'ws://127.0.0.1:50000'</span><span class="p">,</span><span class="w"> </span><span class="s1">'krpc.1'</span><span class="p">)</span>
-<span class="nx">rpcConn</span><span class="p">.</span><span class="nx">binaryType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'arraybuffer'</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">WebSocket</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"ws"</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">protobuf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"protobufjs"</span><span class="p">);</span>
 
-<span class="nx">rpcConn</span><span class="p">.</span><span class="nx">onopen</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nx">e</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Successfully connected'</span><span class="p">)</span>
-<span class="w">  </span><span class="kd">let</span><span class="w"> </span><span class="nx">call</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">proto</span><span class="p">.</span><span class="nx">krpc</span><span class="p">.</span><span class="nx">schema</span><span class="p">.</span><span class="nx">ProcedureCall</span><span class="p">(</span><span class="s1">'KRPC'</span><span class="p">,</span><span class="w"> </span><span class="s1">'GetStatus'</span><span class="p">);</span>
-<span class="w">  </span><span class="kd">let</span><span class="w"> </span><span class="nx">request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">proto</span><span class="p">.</span><span class="nx">krpc</span><span class="p">.</span><span class="nx">schema</span><span class="p">.</span><span class="nx">Request</span><span class="p">([</span><span class="nx">call</span><span class="p">]);</span>
-<span class="w">  </span><span class="nx">rpcConn</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">request</span><span class="p">.</span><span class="nx">toArrayBuffer</span><span class="p">());</span>
-<span class="w">  </span><span class="nx">rpcConn</span><span class="p">.</span><span class="nx">onmessage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nx">e</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">proto</span><span class="p">.</span><span class="nx">krpc</span><span class="p">.</span><span class="nx">schema</span><span class="p">.</span><span class="nx">Response</span><span class="p">.</span><span class="nx">decode</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span>
-<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="nx">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">proto</span><span class="p">.</span><span class="nx">krpc</span><span class="p">.</span><span class="nx">schema</span><span class="p">.</span><span class="nx">Status</span><span class="p">.</span><span class="nx">decode</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">results</span><span class="p">[</span><span class="mf">0</span><span class="p">].</span><span class="nx">value</span><span class="p">)</span>
-<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">status</span><span class="p">);</span>
-<span class="w">    </span><span class="nx">process</span><span class="p">.</span><span class="nx">exit</span><span class="p">(</span><span class="mf">0</span><span class="p">);</span>
-<span class="w">  </span><span class="p">};</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">protobuf</span><span class="p">.</span><span class="nx">loadSync</span><span class="p">(</span><span class="s2">"krpc.proto"</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">Message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">root</span><span class="p">.</span><span class="nx">lookupType</span><span class="p">(</span><span class="s2">"krpc.schema.Message"</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">Tuple</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">root</span><span class="p">.</span><span class="nx">lookupType</span><span class="p">(</span><span class="s2">"krpc.schema.Tuple"</span><span class="p">);</span>
+
+<span class="kd">function</span><span class="w"> </span><span class="nx">send</span><span class="p">(</span><span class="nx">conn</span><span class="p">,</span><span class="w"> </span><span class="nx">message</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">conn</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">Message</span><span class="p">.</span><span class="nx">encode</span><span class="p">(</span><span class="nx">Message</span><span class="p">.</span><span class="nx">fromObject</span><span class="p">(</span><span class="nx">message</span><span class="p">)).</span><span class="nx">finish</span><span class="p">());</span>
+<span class="p">}</span>
+
+<span class="kd">function</span><span class="w"> </span><span class="nx">receive</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Message</span><span class="p">.</span><span class="nx">decode</span><span class="p">(</span><span class="ow">new</span><span class="w"> </span><span class="nb">Uint8Array</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">data</span><span class="p">));</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">Message</span><span class="p">.</span><span class="nx">toObject</span><span class="p">(</span><span class="nx">message</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">enums</span><span class="o">:</span><span class="w"> </span><span class="nb">String</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">longs</span><span class="o">:</span><span class="w"> </span><span class="nb">Number</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">defaults</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">  </span><span class="p">});</span>
+<span class="p">}</span>
+
+<span class="c1">// Open a websockets connection to the server</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">WebSocket</span><span class="p">(</span><span class="s2">"ws://127.0.0.1:50001/"</span><span class="p">);</span>
+<span class="nx">conn</span><span class="p">.</span><span class="nx">binaryType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"arraybuffer"</span><span class="p">;</span>
+
+<span class="nx">conn</span><span class="p">.</span><span class="nx">onopen</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// Send a connection request</span>
+<span class="w">  </span><span class="nx">send</span><span class="p">(</span><span class="nx">conn</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">connectionRequest</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">clientName</span><span class="o">:</span><span class="w"> </span><span class="s2">"Example"</span><span class="p">,</span><span class="w"> </span><span class="nx">protocolVersion</span><span class="o">:</span><span class="w"> </span><span class="mf">2</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="p">});</span>
+<span class="p">};</span>
+
+<span class="nx">conn</span><span class="p">.</span><span class="nx">onmessage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nx">event</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">receive</span><span class="p">(</span><span class="nx">event</span><span class="p">);</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">message</span><span class="p">.</span><span class="nx">connectionResponse</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Check the connection was successful</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">message</span><span class="p">.</span><span class="nx">connectionResponse</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span><span class="w"> </span><span class="o">!==</span><span class="w"> </span><span class="s2">"OK"</span><span class="p">)</span>
+<span class="w">      </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span><span class="sb">`Connection failed: </span><span class="si">${</span><span class="nx">response</span><span class="p">.</span><span class="nx">message</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">protocolVersion</span><span class="w"> </span><span class="o">!==</span><span class="w"> </span><span class="mf">2</span><span class="p">)</span>
+<span class="w">      </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span><span class="s2">"The server does not support protocol version 2"</span><span class="p">);</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Connected to the server"</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// Invoke the KRPC.GetStatus RPC, in a request with the id 1</span>
+<span class="w">    </span><span class="nx">send</span><span class="p">(</span><span class="nx">conn</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">request</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">id</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span>
+<span class="w">        </span><span class="nx">calls</span><span class="o">:</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nx">service</span><span class="o">:</span><span class="w"> </span><span class="s2">"KRPC"</span><span class="p">,</span><span class="w"> </span><span class="nx">procedure</span><span class="o">:</span><span class="w"> </span><span class="s2">"GetStatus"</span><span class="w"> </span><span class="p">}],</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">    </span><span class="p">});</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">message</span><span class="p">.</span><span class="nx">response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Check for an error in the response, and in the results</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">message</span><span class="p">.</span><span class="nx">response</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">error</span><span class="p">)</span>
+<span class="w">      </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span><span class="sb">`ERROR: </span><span class="si">${</span><span class="nx">response</span><span class="p">.</span><span class="nx">error</span><span class="p">.</span><span class="nx">description</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">results</span><span class="p">[</span><span class="mf">0</span><span class="p">].</span><span class="nx">error</span><span class="p">)</span>
+<span class="w">      </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span><span class="sb">`ERROR: </span><span class="si">${</span><span class="nx">response</span><span class="p">.</span><span class="nx">results</span><span class="p">[</span><span class="mf">0</span><span class="p">].</span><span class="nx">error</span><span class="p">.</span><span class="nx">description</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// Decode the return value, a ServerStatus structure sent as a Tuple of</span>
+<span class="w">    </span><span class="c1">// its fields, and print out the server version, the first field</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Tuple</span><span class="p">.</span><span class="nx">decode</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">results</span><span class="p">[</span><span class="mf">0</span><span class="p">].</span><span class="nx">value</span><span class="p">);</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">protobuf</span><span class="p">.</span><span class="nx">Reader</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">status</span><span class="p">.</span><span class="nx">items</span><span class="p">[</span><span class="mf">0</span><span class="p">]).</span><span class="nx">string</span><span class="p">());</span>
+
+<span class="w">    </span><span class="c1">// End the connection with a disconnect, then a close frame</span>
+<span class="w">    </span><span class="nx">send</span><span class="p">(</span><span class="nx">conn</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">disconnect</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">reason</span><span class="o">:</span><span class="w"> </span><span class="s2">"CLOSED"</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">});</span>
+<span class="w">    </span><span class="nx">conn</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
+<span class="w">  </span><span class="p">}</span>
 <span class="p">};</span>
 </pre></div>
 </div>
-<p>The following example demonstrates how to set up and receive data from the server over a stream:</p>
-<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s1">'use strict'</span>
+<p>The following script adds a stream, then receives its updates on the same connection:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">"use strict"</span><span class="p">;</span>
 
-<span class="kd">var</span><span class="w"> </span><span class="nx">websocket</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">'ws'</span><span class="p">);</span>
-<span class="kd">var</span><span class="w"> </span><span class="nx">protobufjs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">'protobufjs'</span><span class="p">)</span>
-<span class="kd">var</span><span class="w"> </span><span class="nx">proto</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">protobufjs</span><span class="p">.</span><span class="nx">loadProtoFile</span><span class="p">(</span><span class="s1">'krpc.proto'</span><span class="p">).</span><span class="nx">build</span><span class="p">();</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">WebSocket</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"ws"</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">protobuf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"protobufjs"</span><span class="p">);</span>
 
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Connecting to RPC server'</span><span class="p">)</span>
-<span class="kd">let</span><span class="w"> </span><span class="nx">rpcConn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">websocket</span><span class="p">(</span><span class="s1">'ws://127.0.0.1:50000'</span><span class="p">,</span><span class="w"> </span><span class="s1">'krpc.1'</span><span class="p">)</span>
-<span class="nx">rpcConn</span><span class="p">.</span><span class="nx">binaryType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'arraybuffer'</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">protobuf</span><span class="p">.</span><span class="nx">loadSync</span><span class="p">(</span><span class="s2">"krpc.proto"</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">Message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">root</span><span class="p">.</span><span class="nx">lookupType</span><span class="p">(</span><span class="s2">"krpc.schema.Message"</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">ProcedureCall</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">root</span><span class="p">.</span><span class="nx">lookupType</span><span class="p">(</span><span class="s2">"krpc.schema.ProcedureCall"</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">Tuple</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">root</span><span class="p">.</span><span class="nx">lookupType</span><span class="p">(</span><span class="s2">"krpc.schema.Tuple"</span><span class="p">);</span>
 
-<span class="nx">rpcConn</span><span class="p">.</span><span class="nx">onopen</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nx">evnt</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Successfully connected'</span><span class="p">)</span>
-<span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Calling KRPC.GetClientID'</span><span class="p">)</span>
-<span class="w">  </span><span class="kd">let</span><span class="w"> </span><span class="nx">call</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">proto</span><span class="p">.</span><span class="nx">krpc</span><span class="p">.</span><span class="nx">schema</span><span class="p">.</span><span class="nx">ProcedureCall</span><span class="p">(</span><span class="s1">'KRPC'</span><span class="p">,</span><span class="w"> </span><span class="s1">'GetClientID'</span><span class="p">);</span>
-<span class="w">  </span><span class="kd">let</span><span class="w"> </span><span class="nx">request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">proto</span><span class="p">.</span><span class="nx">krpc</span><span class="p">.</span><span class="nx">schema</span><span class="p">.</span><span class="nx">Request</span><span class="p">([</span><span class="nx">call</span><span class="p">]);</span>
-<span class="w">  </span><span class="nx">rpcConn</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">request</span><span class="p">.</span><span class="nx">toArrayBuffer</span><span class="p">());</span>
+<span class="kd">function</span><span class="w"> </span><span class="nx">send</span><span class="p">(</span><span class="nx">conn</span><span class="p">,</span><span class="w"> </span><span class="nx">message</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">conn</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">Message</span><span class="p">.</span><span class="nx">encode</span><span class="p">(</span><span class="nx">Message</span><span class="p">.</span><span class="nx">fromObject</span><span class="p">(</span><span class="nx">message</span><span class="p">)).</span><span class="nx">finish</span><span class="p">());</span>
+<span class="p">}</span>
+
+<span class="kd">function</span><span class="w"> </span><span class="nx">receive</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Message</span><span class="p">.</span><span class="nx">decode</span><span class="p">(</span><span class="ow">new</span><span class="w"> </span><span class="nb">Uint8Array</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">data</span><span class="p">));</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">Message</span><span class="p">.</span><span class="nx">toObject</span><span class="p">(</span><span class="nx">message</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">enums</span><span class="o">:</span><span class="w"> </span><span class="nb">String</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">longs</span><span class="o">:</span><span class="w"> </span><span class="nb">Number</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">defaults</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">  </span><span class="p">});</span>
+<span class="p">}</span>
+
+<span class="c1">// Open a websockets connection to the server</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">WebSocket</span><span class="p">(</span><span class="s2">"ws://127.0.0.1:50001/"</span><span class="p">);</span>
+<span class="nx">conn</span><span class="p">.</span><span class="nx">binaryType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"arraybuffer"</span><span class="p">;</span>
+
+<span class="nx">conn</span><span class="p">.</span><span class="nx">onopen</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// Send a connection request</span>
+<span class="w">  </span><span class="nx">send</span><span class="p">(</span><span class="nx">conn</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">connectionRequest</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">clientName</span><span class="o">:</span><span class="w"> </span><span class="s2">"Example"</span><span class="p">,</span><span class="w"> </span><span class="nx">protocolVersion</span><span class="o">:</span><span class="w"> </span><span class="mf">2</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="p">});</span>
 <span class="p">};</span>
 
-<span class="nx">rpcConn</span><span class="p">.</span><span class="nx">onmessage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nx">evnt</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="kd">let</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">proto</span><span class="p">.</span><span class="nx">krpc</span><span class="p">.</span><span class="nx">schema</span><span class="p">.</span><span class="nx">Response</span><span class="p">.</span><span class="nx">decode</span><span class="p">(</span><span class="nx">evnt</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
-<span class="w">  </span><span class="nx">response</span><span class="p">.</span><span class="nx">results</span><span class="p">[</span><span class="mf">0</span><span class="p">].</span><span class="nx">value</span><span class="p">.</span><span class="nx">readVarint32</span><span class="p">();</span><span class="w"> </span><span class="c1">// skip size</span>
-<span class="w">  </span><span class="kd">let</span><span class="w"> </span><span class="nx">client_identifier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">response</span><span class="p">.</span><span class="nx">results</span><span class="p">[</span><span class="mf">0</span><span class="p">].</span><span class="nx">value</span><span class="p">.</span><span class="nx">toBase64</span><span class="p">();</span>
-<span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Client identifier ='</span><span class="p">,</span><span class="w"> </span><span class="nx">client_identifier</span><span class="p">);</span>
+<span class="kd">let</span><span class="w"> </span><span class="nx">streamId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
 
-<span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Connecting to Stream server'</span><span class="p">);</span>
-<span class="w">  </span><span class="kd">let</span><span class="w"> </span><span class="nx">streamConn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">websocket</span><span class="p">(</span><span class="s1">'ws://127.0.0.1:50001?id='</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">client_identifier</span><span class="p">,</span><span class="w"> </span><span class="s1">'krpc.1'</span><span class="p">);</span>
-<span class="w">  </span><span class="nx">streamConn</span><span class="p">.</span><span class="nx">binaryType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'arraybuffer'</span><span class="p">;</span>
+<span class="nx">conn</span><span class="p">.</span><span class="nx">onmessage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nx">event</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">receive</span><span class="p">(</span><span class="nx">event</span><span class="p">);</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">message</span><span class="p">.</span><span class="nx">connectionResponse</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Check the connection was successful</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">message</span><span class="p">.</span><span class="nx">connectionResponse</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span><span class="w"> </span><span class="o">!==</span><span class="w"> </span><span class="s2">"OK"</span><span class="p">)</span>
+<span class="w">      </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span><span class="sb">`Connection failed: </span><span class="si">${</span><span class="nx">response</span><span class="p">.</span><span class="nx">message</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">protocolVersion</span><span class="w"> </span><span class="o">!==</span><span class="w"> </span><span class="mf">2</span><span class="p">)</span>
+<span class="w">      </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span><span class="s2">"The server does not support protocol version 2"</span><span class="p">);</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Connected to the server"</span><span class="p">);</span>
 
-<span class="w">  </span><span class="nx">streamConn</span><span class="p">.</span><span class="nx">onopen</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nx">evnt</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Successfully connected'</span><span class="p">);</span>
+<span class="w">    </span><span class="c1">// Build a KRPC.GetStatus call to be streamed</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">streamCall</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ProcedureCall</span><span class="p">.</span><span class="nx">encode</span><span class="p">({</span>
+<span class="w">      </span><span class="nx">service</span><span class="o">:</span><span class="w"> </span><span class="s2">"KRPC"</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">procedure</span><span class="o">:</span><span class="w"> </span><span class="s2">"GetStatus"</span><span class="p">,</span>
+<span class="w">    </span><span class="p">}).</span><span class="nx">finish</span><span class="p">();</span>
 
-<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="nx">call_to_stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">proto</span><span class="p">.</span><span class="nx">krpc</span><span class="p">.</span><span class="nx">schema</span><span class="p">.</span><span class="nx">ProcedureCall</span><span class="p">(</span><span class="s1">'KRPC'</span><span class="p">,</span><span class="w"> </span><span class="s1">'GetStatus'</span><span class="p">);</span>
-<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="nx">arg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">proto</span><span class="p">.</span><span class="nx">krpc</span><span class="p">.</span><span class="nx">schema</span><span class="p">.</span><span class="nx">Argument</span><span class="p">(</span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="nx">call_to_stream</span><span class="p">.</span><span class="nx">toArrayBuffer</span><span class="p">());</span>
-<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="nx">call</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">proto</span><span class="p">.</span><span class="nx">krpc</span><span class="p">.</span><span class="nx">schema</span><span class="p">.</span><span class="nx">ProcedureCall</span><span class="p">(</span><span class="s1">'KRPC'</span><span class="p">,</span><span class="w"> </span><span class="s1">'AddStream'</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="nx">arg</span><span class="p">]);</span>
-<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="nx">request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">proto</span><span class="p">.</span><span class="nx">krpc</span><span class="p">.</span><span class="nx">schema</span><span class="p">.</span><span class="nx">Request</span><span class="p">([</span><span class="nx">call</span><span class="p">]);</span>
-<span class="w">    </span><span class="nx">rpcConn</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">request</span><span class="p">.</span><span class="nx">toArrayBuffer</span><span class="p">());</span>
-<span class="w">    </span><span class="nx">rpcConn</span><span class="p">.</span><span class="nx">onmessage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nx">evnt</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="kd">let</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">proto</span><span class="p">.</span><span class="nx">krpc</span><span class="p">.</span><span class="nx">schema</span><span class="p">.</span><span class="nx">Response</span><span class="p">.</span><span class="nx">decode</span><span class="p">(</span><span class="nx">evnt</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
-<span class="w">      </span><span class="kd">let</span><span class="w"> </span><span class="nx">stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">proto</span><span class="p">.</span><span class="nx">krpc</span><span class="p">.</span><span class="nx">schema</span><span class="p">.</span><span class="nx">Stream</span><span class="p">.</span><span class="nx">decode</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">results</span><span class="p">[</span><span class="mf">0</span><span class="p">].</span><span class="nx">value</span><span class="p">);</span>
-<span class="w">      </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"added stream id ="</span><span class="p">,</span><span class="w"> </span><span class="nx">stream</span><span class="p">.</span><span class="nx">id</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
+<span class="w">    </span><span class="c1">// Call KRPC.AddStream to add the stream, in a request with the id 1</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">call</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">service</span><span class="o">:</span><span class="w"> </span><span class="s2">"KRPC"</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">procedure</span><span class="o">:</span><span class="w"> </span><span class="s2">"AddStream"</span><span class="p">,</span>
+<span class="w">      </span><span class="nb">arguments</span><span class="o">:</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nx">position</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="nx">value</span><span class="o">:</span><span class="w"> </span><span class="nx">streamCall</span><span class="w"> </span><span class="p">}],</span>
 <span class="w">    </span><span class="p">};</span>
-<span class="w">  </span><span class="p">};</span>
+<span class="w">    </span><span class="nx">send</span><span class="p">(</span><span class="nx">conn</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">request</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">id</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="nx">calls</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="nx">call</span><span class="p">]</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">});</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">message</span><span class="p">.</span><span class="nx">response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Check for an error in the response, and in the results</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">message</span><span class="p">.</span><span class="nx">response</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">error</span><span class="p">)</span>
+<span class="w">      </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span><span class="sb">`ERROR: </span><span class="si">${</span><span class="nx">response</span><span class="p">.</span><span class="nx">error</span><span class="p">.</span><span class="nx">description</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">results</span><span class="p">[</span><span class="mf">0</span><span class="p">].</span><span class="nx">error</span><span class="p">)</span>
+<span class="w">      </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span><span class="sb">`ERROR: </span><span class="si">${</span><span class="nx">response</span><span class="p">.</span><span class="nx">results</span><span class="p">[</span><span class="mf">0</span><span class="p">].</span><span class="nx">error</span><span class="p">.</span><span class="nx">description</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
 
-<span class="w">  </span><span class="nx">streamConn</span><span class="p">.</span><span class="nx">onmessage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nx">evnt</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="nx">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">proto</span><span class="p">.</span><span class="nx">krpc</span><span class="p">.</span><span class="nx">schema</span><span class="p">.</span><span class="nx">StreamUpdate</span><span class="p">.</span><span class="nx">decode</span><span class="p">(</span><span class="nx">evnt</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
-<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="nx">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">proto</span><span class="p">.</span><span class="nx">krpc</span><span class="p">.</span><span class="nx">schema</span><span class="p">.</span><span class="nx">Status</span><span class="p">.</span><span class="nx">decode</span><span class="p">(</span><span class="nx">value</span><span class="p">.</span><span class="nx">results</span><span class="p">[</span><span class="mf">0</span><span class="p">].</span><span class="nx">result</span><span class="p">.</span><span class="nx">value</span><span class="p">)</span>
-<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">status</span><span class="p">);</span>
-<span class="w">  </span><span class="p">};</span>
+<span class="w">    </span><span class="c1">// Decode the return value, which is the stream id as a uint64. The</span>
+<span class="w">    </span><span class="c1">// stream's first update follows it.</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">protobuf</span><span class="p">.</span><span class="nx">Reader</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">results</span><span class="p">[</span><span class="mf">0</span><span class="p">].</span><span class="nx">value</span><span class="p">).</span><span class="nx">uint64</span><span class="p">();</span>
+<span class="w">    </span><span class="nx">streamId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">protobuf</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">longToNumber</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">message</span><span class="p">.</span><span class="nx">streamUpdate</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Decode and print the return value of each stream update</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">const</span><span class="w"> </span><span class="nx">result</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="nx">message</span><span class="p">.</span><span class="nx">streamUpdate</span><span class="p">.</span><span class="nx">results</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">id</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="nx">streamId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// The value is a ServerStatus structure sent as a Tuple of its</span>
+<span class="w">        </span><span class="c1">// fields. Its fourth field is the server statistics, another</span>
+<span class="w">        </span><span class="c1">// structure, whose second field is the number of bytes the server</span>
+<span class="w">        </span><span class="c1">// has written.</span>
+<span class="w">        </span><span class="kd">const</span><span class="w"> </span><span class="nx">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Tuple</span><span class="p">.</span><span class="nx">decode</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">result</span><span class="p">.</span><span class="nx">value</span><span class="p">);</span>
+<span class="w">        </span><span class="kd">const</span><span class="w"> </span><span class="nx">statistics</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Tuple</span><span class="p">.</span><span class="nx">decode</span><span class="p">(</span><span class="nx">status</span><span class="p">.</span><span class="nx">items</span><span class="p">[</span><span class="mf">3</span><span class="p">]);</span>
+<span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span>
+<span class="w">          </span><span class="nx">protobuf</span><span class="p">.</span><span class="nx">Reader</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">statistics</span><span class="p">.</span><span class="nx">items</span><span class="p">[</span><span class="mf">1</span><span class="p">]).</span><span class="nx">uint64</span><span class="p">().</span><span class="nx">toString</span><span class="p">(),</span>
+<span class="w">        </span><span class="p">);</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
 <span class="p">};</span>
 </pre></div>
 </div>
@@ -761,7 +826,7 @@ from the response.</p>
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Protocol Buffers over a Local Socket</p>
+        <p class="prev-next-title">Local Socket</p>
       </div>
     </a>
     <a class="right-next"
@@ -769,7 +834,7 @@ from the response.</p>
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Protocol Buffers over Serial IO</p>
+        <p class="prev-next-title">Serial IO</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -780,7 +845,7 @@ from the response.</p>
             
             
               
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <dialog id="pst-secondary-sidebar-modal" tabindex="-1"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
@@ -792,10 +857,9 @@ from the response.</p>
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#connecting-to-the-rpc-server">Connecting to the RPC Server</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#connecting-to-the-stream-server">Connecting to the Stream Server</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sending-and-receiving-messages">Sending and Receiving Messages</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#invoking-remote-procedures">Invoking Remote Procedures</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#framing">Framing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#connecting">Connecting</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#web-pages">Web Pages</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a></li>
 </ul>
   </nav></div>
@@ -822,8 +886,8 @@ from the response.</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -856,7 +920,7 @@ from the response.</p>
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
 </p></div>
       
     </div>

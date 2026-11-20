@@ -1,0 +1,208 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.Drawing
+
+MapMarker
+=========
+
+
+.. class:: MapMarker
+
+   A marker drawn in the map view, with one of the game's own map icons. Created using
+   :meth:`Drawing.AddMapMarker <Drawing.Drawing.AddMapMarker>`.
+
+   .. property:: System.Tuple<double,double,double> Position { get; set; }
+
+      Position of the marker.
+
+      :Game Scenes: Flight, Tracking Station
+
+   .. property:: SpaceCenter.ReferenceFrame ReferenceFrame { get; set; }
+
+      Reference frame that the position of the marker is in.
+
+      :Game Scenes: Flight, Tracking Station
+
+   .. property:: bool Visible { get; set; }
+
+      Whether the marker is visible.
+
+      :Game Scenes: Flight, Tracking Station
+
+   .. property:: MapMarkerIcon Icon { get; set; }
+
+      The icon that the marker is drawn with.
+
+      :Game Scenes: Flight, Tracking Station
+
+   .. property:: Image Image { get; set; }
+
+      The image that the marker is drawn with in place of its icon, or null to draw the
+      icon.
+
+      :Game Scenes: Flight, Tracking Station
+
+   .. property:: string Caption { get; set; }
+
+      The caption shown when the mouse is over the marker.
+
+      :Game Scenes: Flight, Tracking Station
+
+   .. property:: StdLib.ColorRGB Color { get; set; }
+
+      The color of the marker.
+
+      :Game Scenes: Flight, Tracking Station
+
+   .. function:: void Remove()
+
+      Remove the marker.
+
+
+      :Game Scenes: Flight, Tracking Station
+
+
+
+.. enum:: MapMarkerIcon
+
+   The icon a :type:`MapMarker` is drawn with, from the game's own map icons.
+
+
+   .. enumerator:: Generic
+
+      A plain marker.
+
+
+   .. enumerator:: CelestialBody
+
+      A celestial body.
+
+
+   .. enumerator:: Apoapsis
+
+      An apoapsis.
+
+
+   .. enumerator:: Periapsis
+
+      A periapsis.
+
+
+   .. enumerator:: AscendingNode
+
+      An ascending node.
+
+
+   .. enumerator:: DescendingNode
+
+      A descending node.
+
+
+   .. enumerator:: ManeuverNode
+
+      A maneuver node.
+
+
+   .. enumerator:: Encounter
+
+      An encounter with a sphere of influence.
+
+
+   .. enumerator:: Escape
+
+      An escape from a sphere of influence.
+
+
+   .. enumerator:: Impact
+
+      An impact with the surface.
+
+
+   .. enumerator:: CloseApproach
+
+      A closest approach to a target.
+
+
+   .. enumerator:: Intersect
+
+      An intersection with the orbit of a target.
+
+
+   .. enumerator:: Ship
+
+      A ship.
+
+
+   .. enumerator:: Probe
+
+      A probe.
+
+
+   .. enumerator:: Relay
+
+      A relay.
+
+
+   .. enumerator:: Station
+
+      A station.
+
+
+   .. enumerator:: Base
+
+      A base.
+
+
+   .. enumerator:: Lander
+
+      A lander.
+
+
+   .. enumerator:: Rover
+
+      A rover.
+
+
+   .. enumerator:: Plane
+
+      A plane.
+
+
+   .. enumerator:: EVA
+
+      A kerbal on EVA.
+
+
+   .. enumerator:: Flag
+
+      A flag.
+
+
+   .. enumerator:: Debris
+
+      Debris.
+
+
+   .. enumerator:: SpaceObject
+
+      An asteroid or comet.
+
+
+   .. enumerator:: DeployedScience
+
+      Deployed science equipment.
+
+
+   .. enumerator:: LaunchSite
+
+      A launch site.
+
+
+   .. enumerator:: Runway
+
+      A runway.
+
+
+   .. enumerator:: KSC
+
+      The Kerbal Space Center.

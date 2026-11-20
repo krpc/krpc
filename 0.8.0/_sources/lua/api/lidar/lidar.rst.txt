@@ -1,0 +1,27 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: LIDAR
+
+Service
+=======
+
+
+.. module:: LIDAR
+
+.. warning:: Deprecated. Use :meth:`SpaceCenter.raycast_distance` instead.
+
+Provides functionality to interact with the LiDAR mod.
+
+
+.. attribute:: available: boolean
+
+   Whether the LiDAR mod is installed.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. staticmethod:: laser(part: SpaceCenter.Part): LIDAR.Laser
+
+   Get the LiDAR on a part.

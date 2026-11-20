@@ -11,6 +11,10 @@ Slider
    A control for choosing a number by dragging a handle along a track.
    Added to a :type:`krpc_UI_Canvas_t` or a :type:`krpc_UI_Panel_t`.
 
+   .. macro:: KRPC_CLASS_UI_SLIDER
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_UI_Slider_RectTransform(krpc_connection_t connection, krpc_UI_RectTransform_t * returnValue, krpc_UI_Slider_t instance)
 
       The rect transform for the UI object.

@@ -1,0 +1,187 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Service
+=======
+
+
+.. _http-MechJeb:
+
+This service provides functionality to interact with MechJeb 2.
+
+.. note::
+
+   The objects act on the MechJeb of the active vessel, and stay valid after the active
+   vessel changes.
+
+
+
+.. http:get:: /mech-jeb/available
+
+   Whether MechJeb is installed.
+
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /mech-jeb/ready
+
+   Whether the active vessel has MechJeb.
+
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /mech-jeb/aircraft-approach
+
+   The Aircraft Approach and Autoland window.
+
+
+   :resjson MechJeb.AircraftApproach value:
+
+
+
+
+.. http:get:: /mech-jeb/aircraft-autopilot
+
+   The Aircraft Autopilot window.
+
+
+   :resjson MechJeb.AircraftAutopilot value:
+
+
+
+
+.. http:get:: /mech-jeb/ascent-guidance
+
+   The Ascent Guidance window.
+
+
+   :resjson MechJeb.AscentGuidance value:
+
+
+
+
+.. http:get:: /mech-jeb/attitude-adjustment
+
+   The Attitude Adjustment window.
+
+
+   :resjson MechJeb.AttitudeAdjustment value:
+
+
+
+
+.. http:get:: /mech-jeb/docking-autopilot
+
+   The Docking Autopilot window.
+
+
+   :resjson MechJeb.DockingAutopilot value:
+
+
+
+
+.. http:get:: /mech-jeb/landing-guidance
+
+   The Landing Guidance window.
+
+
+   :resjson MechJeb.LandingGuidance value:
+
+
+
+
+.. http:get:: /mech-jeb/maneuver-planner
+
+   The Maneuver Planner window.
+
+
+   :resjson MechJeb.ManeuverPlanner value:
+
+
+
+
+.. http:get:: /mech-jeb/rendezvous-autopilot
+
+   The Rendezvous Autopilot window.
+
+
+   :resjson MechJeb.RendezvousAutopilot value:
+
+
+
+
+.. http:get:: /mech-jeb/rover-autopilot
+
+   The Rover Autopilot window.
+
+
+   :resjson MechJeb.RoverAutopilot value:
+
+
+
+
+.. http:get:: /mech-jeb/smart-ass
+
+   The Smart A.S.S. window.
+
+
+   :resjson MechJeb.SmartASS value:
+
+
+
+
+.. http:get:: /mech-jeb/smart-rcs
+
+   The Smart RCS window.
+
+
+   :resjson MechJeb.SmartRCS value:
+
+
+
+
+.. http:get:: /mech-jeb/target-controller
+
+   The target controller, which holds MechJeb's target.
+
+
+   :resjson MechJeb.TargetController value:
+
+
+
+
+.. http:get:: /mech-jeb/translatron
+
+   The Translatron window.
+
+
+   :resjson MechJeb.Translatron value:
+
+
+
+
+.. http:get:: /mech-jeb/utilities
+
+   The Utilities window.
+
+
+   :resjson MechJeb.Utilities value:
+
+
+
+
+
+.. _http-MechJeb.MJServiceException:
+
+.. rubric:: MJServiceException
+
+A general error in the service.
+
+Returned as an error whose ``service`` and ``name`` are ``"MechJeb"`` and ``"MJServiceException"``.

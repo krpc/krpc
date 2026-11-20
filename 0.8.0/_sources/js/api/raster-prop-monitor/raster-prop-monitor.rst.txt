@@ -1,0 +1,167 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: RasterPropMonitor
+   :no-index:
+
+Service
+=======
+
+
+.. module:: RasterPropMonitor
+
+This service provides the IVA screens, variables and external cameras of
+`Raster Prop Monitor <https://github.com/FirstPersonKSP/RasterPropMonitor>`_.
+
+.. note::
+
+   A persistent variable is a number a script and the props share: a prop shows it, and a
+   switch or numeric input sets it. Raster Prop Monitor updates the variables that depend
+   on the vessel only for the active vessel.
+
+
+
+.. function:: getAvailable()
+
+   Whether Raster Prop Monitor is installed.
+
+   :Property: Read-only, cannot be set
+   :rtype: ``boolean``
+   
+
+
+
+
+.. function:: computer(part)
+
+   The computer of a part.
+   Throws an exception if the part has no Raster Prop Monitor computer.
+
+   :param part: The part.
+   :type part: :class:`SpaceCenter.Part`
+   :rtype: :class:`RasterPropMonitor.Computer`
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: computers(vessel)
+
+   The computers of the parts of a vessel.
+
+   :param vessel: The vessel.
+   :type vessel: :class:`SpaceCenter.Vessel`
+   :rtype: ``Array`` of :class:`RasterPropMonitor.Computer`
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: globalPersistentVariable(vessel, name)
+
+   The value of a persistent variable of a vessel, or ``null`` if it is not set.
+   Throws an exception if the vessel has no Raster Prop Monitor computer.
+
+   :param vessel: The vessel.
+   :type vessel: :class:`SpaceCenter.Vessel`
+   :param name: The name of the variable, without the ``PERSISTENT_`` prefix.
+   :type name: ``string``
+   :rtype: ``number`` or ``null``
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: setGlobalPersistentVariable(vessel, name, value)
+
+   Set a persistent variable of a vessel. The props that show it update.
+   Throws an exception if the vessel has no Raster Prop Monitor computer.
+
+   :param vessel: The vessel.
+   :type vessel: :class:`SpaceCenter.Vessel`
+   :param name: The name of the variable, without the ``PERSISTENT_`` prefix.
+   :type name: ``string``
+   :param value: The value.
+   :type value: ``number``
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: removeGlobalPersistentVariable(vessel, name)
+
+   Remove a persistent variable of a vessel. The props that show it update.
+   Throws an exception if the vessel has no Raster Prop Monitor computer.
+
+   :param vessel: The vessel.
+   :type vessel: :class:`SpaceCenter.Vessel`
+   :param name: The name of the variable, without the ``PERSISTENT_`` prefix.
+   :type name: ``string``
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: globalPersistentVariableChanged(vessel, name)
+
+   An event that fires when :func:`RasterPropMonitor.globalPersistentVariable` changes.
+   The event lasts until it is removed.
+   Throws an exception if the vessel has no Raster Prop Monitor computer.
+
+   :param vessel: The vessel.
+   :type vessel: :class:`SpaceCenter.Vessel`
+   :param name: The name of the variable, without the ``PERSISTENT_`` prefix.
+   :type name: ``string``
+   :rtype: :class:`~@krpc-org/krpc.Event`
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: monitors(vessel)
+
+   The monitors in the IVAs of a vessel's parts.
+   Throws an exception if the vessel is not the active vessel.
+
+   :param vessel: The active vessel.
+   :type vessel: :class:`SpaceCenter.Vessel`
+   :rtype: ``Array`` of :class:`RasterPropMonitor.Monitor`
+   :Game Scenes: Flight
+
+
+   .. note::
+
+      KSP builds IVAs only for the active vessel.
+
+
+
+
+.. function:: display(vessel, name)
+
+   The display of a vessel with the given name, which every page whose
+   ``KRPCDisplay`` handler names it shows.
+
+   :param vessel: The vessel.
+   :type vessel: :class:`SpaceCenter.Vessel`
+   :param name: The name of the display.
+   :type name: ``string``
+   :rtype: :class:`RasterPropMonitor.Display`
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: cameras(vessel)
+
+   The external cameras on a vessel's parts.
+
+   :param vessel: The vessel.
+   :type vessel: :class:`SpaceCenter.Vessel`
+   :rtype: ``Array`` of :class:`RasterPropMonitor.ExternalCamera`
+   :Game Scenes: Flight

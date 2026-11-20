@@ -1,0 +1,177 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: SpaceCenter
+
+Communications
+==============
+
+
+.. class:: Comms
+
+   Used to interact with CommNet for a given vessel.
+   Obtained by calling :attr:`SpaceCenter.Vessel.comms`.
+
+   .. attribute:: can_communicate: boolean
+
+      Whether the vessel can communicate with KSC.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: can_transmit_science: boolean
+
+      Whether the vessel can transmit science data to KSC.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: signal_strength: number
+
+      Signal strength to KSC.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: signal_delay: number
+
+      Signal delay to KSC in seconds.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: power: number
+
+      The combined power of all active antennae on the vessel.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         Not used by RealAntennas, which replaces the stock range model.
+
+   .. attribute:: control_path: List
+
+      The communication path used to control the vessel.
+
+      :Attribute: Read-only, cannot be set
+
+
+
+.. class:: CommLink
+
+   Represents a communication link between two nodes in the network.
+
+   .. attribute:: type: SpaceCenter.CommLinkType
+
+      The type of link.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: signal_strength: number
+
+      Signal strength of the link.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: start: SpaceCenter.CommNode
+
+      Start point of the link.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: end: SpaceCenter.CommNode
+
+      End point of the link.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: forward_data_rate: number
+
+      The data rate from :attr:`SpaceCenter.CommLink.start` to :attr:`SpaceCenter.CommLink.end`, in bits per second.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. attribute:: reverse_data_rate: number
+
+      The data rate from :attr:`SpaceCenter.CommLink.end` to :attr:`SpaceCenter.CommLink.start`, in bits per second.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. attribute:: start_antenna: SpaceCenter.Antenna | nil
+
+      The antenna at :attr:`SpaceCenter.CommLink.start` that transmits over the link, or ``nil`` if
+      :attr:`SpaceCenter.CommLink.start` is a ground station or an unloaded vessel.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         Requires RealAntennas.
+
+   .. attribute:: end_antenna: SpaceCenter.Antenna | nil
+
+      The antenna at :attr:`SpaceCenter.CommLink.end` that receives over the link, or ``nil`` if
+      :attr:`SpaceCenter.CommLink.end` is a ground station or an unloaded vessel.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         Requires RealAntennas.
+
+
+
+.. class:: CommLinkType
+
+   The type of a communication link.
+   See :attr:`SpaceCenter.CommLink.type`.
+
+
+   .. data:: home
+
+      Link is to a base station on Kerbin.
+
+
+   .. data:: control
+
+      Link is to a control source, for example a manned spacecraft.
+
+
+   .. data:: relay
+
+      Link is to a relay satellite.
+
+
+
+.. class:: CommNode
+
+   Represents a communication node in the network. For example, a vessel or the KSC.
+
+
+   .. attribute:: name: string
+
+      Name of the communication node.
+
+
+   .. attribute:: is_home: boolean
+
+      Whether the communication node is on Kerbin.
+
+
+   .. attribute:: is_control_point: boolean
+
+      Whether the communication node is a control point, for example a manned vessel.
+
+
+   .. attribute:: is_vessel: boolean
+
+      Whether the communication node is a vessel.
+
+
+   .. attribute:: vessel: SpaceCenter.Vessel | Types.none
+
+      The vessel for this communication node, or null if the node is not a vessel.

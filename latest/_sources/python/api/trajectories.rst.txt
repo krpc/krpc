@@ -1,0 +1,27 @@
+.. default-domain:: py
+.. highlight:: py
+
+Trajectories
+============
+
+Provides functionality to interact with the `Trajectories`_ mod.
+|Trajectories tested|
+
+.. toctree::
+   :includehidden:
+   :maxdepth: 1
+
+   trajectories/trajectories
+   trajectories/patch
+   trajectories/descent-profile
+   trajectories/descent-profile-node
+
+Example
+-------
+
+The following example prints the predicted impact position of the active vessel, in the
+reference frame of the body it orbits:
+
+.. literalinclude:: /scripts/api/trajectories/TrajectoriesExample.py
+
+.. include:: /mods.inc

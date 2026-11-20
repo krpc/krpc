@@ -1,0 +1,135 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.MechJeb
+
+LandingGuidance
+===============
+
+
+.. type:: public class LandingGuidance
+
+   The Landing Guidance window, which lands at a target or wherever the vessel comes down.
+
+   .. method:: boolean getEnabled()
+
+   .. method:: void setEnabled(boolean value)
+
+      Whether the module is enabled.
+
+      :Game Scenes: Flight
+
+   .. method:: String getStatus()
+
+
+      The status of the autopilot.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getDeployChutes()
+
+   .. method:: void setDeployChutes(boolean value)
+
+      Whether the autopilot deploys the parachutes.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getDeployGears()
+
+   .. method:: void setDeployGears(boolean value)
+
+      Whether the autopilot deploys the landing gear.
+
+      :Game Scenes: Flight
+
+   .. method:: void landAtTarget()
+
+      Land at the target. See :meth:`LandingGuidance.setTarget(SpaceCenter.CelestialBody, double, double)`.
+      Throws an exception if there is no target, or the vessel is landed or splashed down.
+
+      :Game Scenes: Flight
+
+   .. method:: void landSomewhere()
+
+      Land wherever the vessel comes down. Throws an exception if the vessel is landed or
+      splashed down.
+
+      :Game Scenes: Flight
+
+   .. method:: int getLimitChutesStage()
+
+   .. method:: void setLimitChutesStage(int value)
+
+      The last stage in which the autopilot deploys the parachutes.
+
+      :Game Scenes: Flight
+
+   .. method:: int getLimitGearsStage()
+
+   .. method:: void setLimitGearsStage(int value)
+
+      The last stage in which the autopilot deploys the landing gear.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getRCSAdjustment()
+
+   .. method:: void setRCSAdjustment(boolean value)
+
+      Whether the autopilot corrects its course with RCS.
+
+      :Game Scenes: Flight
+
+   .. method:: void abortAutoland()
+
+      Stop the landing.
+
+      :Game Scenes: Flight
+
+   .. method:: double getTouchdownSpeed()
+
+   .. method:: void setTouchdownSpeed(double value)
+
+      The speed at touchdown, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getTargetPosition()
+
+      The world space position of the landing target. Throws an exception if there is no
+      landing target.
+
+      :Game Scenes: Flight
+
+   .. method:: String getTargetString()
+
+      The landing target as text.
+
+      :Game Scenes: Flight
+
+   .. method:: void pickTargetOnMap()
+
+      Let the player pick the landing target on the map.
+
+      :Game Scenes: Flight
+
+   .. method:: void setTarget(SpaceCenter.CelestialBody body, double latitude, double longitude)
+
+      Set the landing target to a position on the surface of a body.
+
+      :param SpaceCenter.CelestialBody body: The body.
+      :param double latitude: The latitude, in degrees.
+      :param double longitude: The longitude, in degrees.
+      :Game Scenes: Flight
+
+   .. method:: boolean getAutowarp()
+
+   .. method:: void setAutowarp(boolean value)
+
+      Whether to warp time during the landing.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The same setting as :meth:`ManeuverPlanner.getAutowarp()`.

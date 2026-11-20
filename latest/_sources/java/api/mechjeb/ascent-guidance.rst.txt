@@ -1,0 +1,819 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.MechJeb
+
+AscentGuidance
+==============
+
+
+.. type:: public class AscentGuidance
+
+   The Ascent Guidance window, which flies the vessel to orbit.
+
+   .. note::
+
+      See the `MechJeb wiki <https://github.com/MuMech/MechJeb2/wiki/Ascent-Guidance>`_
+      for how to set up this autopilot.
+
+   .. method:: boolean getEnabled()
+
+   .. method:: void setEnabled(boolean value)
+
+      Whether the module is enabled.
+
+      :Game Scenes: Flight
+
+   .. method:: String getStatus()
+
+
+      The autopilot status, which depends on the selected ascent path.
+
+      :Game Scenes: Flight
+
+   .. method:: AscentType getAscentType()
+
+   .. method:: void setAscentType(AscentType value)
+
+      The ascent path.
+
+      :Game Scenes: Flight
+
+   .. method:: AscentSettings getSettings()
+
+
+      The Ascent Settings window.
+
+      :Game Scenes: Flight
+
+   .. method:: PVGSettings getPVGSettings()
+
+
+      The PVG Settings window, with the settings of the :field:`AscentType.PVG` path.
+
+      :Game Scenes: Flight
+
+   .. method:: ClassicPath getClassicPath()
+
+
+      The Ascent Path Editor window, with the settings of the
+      :field:`AscentType.CLASSIC` path.
+
+      :Game Scenes: Flight
+
+   .. method:: double getDesiredOrbitAltitude()
+
+   .. method:: void setDesiredOrbitAltitude(double value)
+
+      The altitude of the final circular orbit, in meters.
+
+      :Game Scenes: Flight
+
+   .. method:: double getDesiredApoapsis()
+
+   .. method:: void setDesiredApoapsis(double value)
+
+      The target apoapsis, in meters.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies on the :field:`AscentType.PVG` path.
+
+   .. method:: boolean getAttachAltFlag()
+
+   .. method:: void setAttachAltFlag(boolean value)
+
+      Whether the orbit is attached at :meth:`AscentGuidance.getDesiredAttachAlt()`.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies on the :field:`AscentType.PVG` path, with an early shutoff stage, set by
+         :meth:`PVGSettings.getOptimizeStageFlag()` and :meth:`PVGSettings.getOptimizeStage()`.
+         Without one, MechJeb always attaches the orbit.
+
+   .. method:: double getDesiredAttachAlt()
+
+   .. method:: void setDesiredAttachAlt(double value)
+
+      The altitude at which the orbit is attached, in meters.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies on the :field:`AscentType.PVG` path. Requires :meth:`AscentGuidance.getAttachAltFlag()`,
+         unless there is no early shutoff stage. See :meth:`PVGSettings.getOptimizeStage()`.
+
+   .. method:: double getDesiredFPA()
+
+   .. method:: void setDesiredFPA(double value)
+
+      The flight path angle at orbit insertion, in degrees.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies on the :field:`AscentType.PVG` path, when there is no early shutoff
+         stage. See :meth:`PVGSettings.getOptimizeStage()`.
+
+   .. method:: double getDesiredInclination()
+
+   .. method:: void setDesiredInclination(double value)
+
+      The inclination of the final circular orbit, in degrees.
+
+      :Game Scenes: Flight
+
+   .. method:: AscentLaunchMode getLaunchMode()
+
+
+      The launch mode, which gives whether the autopilot is waiting for a timed launch.
+
+      :Game Scenes: Flight
+
+   .. method:: void launchToRendezvous()
+
+      Launch to rendezvous with the target. Throws an exception if there is no target, or
+      the ascent path is PVG.
+
+      :Game Scenes: Flight
+
+   .. method:: double getLaunchPhaseAngle()
+
+   .. method:: void setLaunchPhaseAngle(double value)
+
+      The phase angle to the target of a launch to rendezvous, in degrees.
+
+      :Game Scenes: Flight
+
+   .. method:: void launchToTargetPlane()
+
+      Launch into the plane of the target. Throws an exception if there is no target.
+
+      :Game Scenes: Flight
+
+   .. method:: double getLaunchLANDifference()
+
+   .. method:: void setLaunchLANDifference(double value)
+
+      The difference from the target's longitude of the ascending node of a launch into the
+      target's plane, in degrees.
+
+      :Game Scenes: Flight
+
+   .. method:: void launchToMatchLan()
+
+      Launch into the plane of the target, at the time the target's longitude of the
+      ascending node, less :meth:`AscentGuidance.getLaunchLANDifference()`, passes overhead. Keeps
+      :meth:`AscentGuidance.getDesiredInclination()`. Throws an exception if there is no target, or the
+      ascent path is not :field:`AscentType.PVG`.
+
+      :Game Scenes: Flight
+
+   .. method:: void launchToLan()
+
+      Launch into the plane with longitude of the ascending node :meth:`AscentGuidance.getDesiredLan()`
+      and inclination :meth:`AscentGuidance.getDesiredInclination()`. Throws an exception if the ascent
+      path is not :field:`AscentType.PVG`.
+
+      :Game Scenes: Flight
+
+   .. method:: double getDesiredLan()
+
+   .. method:: void setDesiredLan(double value)
+
+      The longitude of the ascending node of a launch to a LAN, in degrees.
+      See :meth:`AscentGuidance.launchToLan()`.
+
+      :Game Scenes: Flight
+
+   .. method:: void abortTimedLaunch()
+
+      Abort a timed launch that has not started yet. Throws an exception if the launch mode
+      is :field:`AscentLaunchMode.UNKNOWN`.
+
+      :Game Scenes: Flight
+
+   .. method:: int getWarpCountDown()
+
+   .. method:: void setWarpCountDown(int value)
+
+      The time before a timed launch at which time warp stops, in seconds.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getOverrideWarpToPlane()
+
+   .. method:: void setOverrideWarpToPlane(boolean value)
+
+      Whether a timed launch launches at once, rather than at the time it computes.
+
+      :Game Scenes: Flight
+
+
+
+.. type:: public enum AscentType
+
+   The ascent path. See :meth:`AscentGuidance.getAscentType()`.
+
+
+   .. field:: public AscentType CLASSIC
+
+      The classic ascent path. See :meth:`AscentGuidance.getClassicPath()`.
+
+
+   .. field:: public AscentType PVG
+
+      Primer Vector Guidance, for RSS/RO. See :meth:`AscentGuidance.getPVGSettings()`.
+
+
+
+.. type:: public enum AscentLaunchMode
+
+   The launch mode of the ascent autopilot. See :meth:`AscentGuidance.getLaunchMode()`.
+
+
+   .. field:: public AscentLaunchMode NORMAL
+
+      The autopilot is not performing a timed launch.
+
+
+   .. field:: public AscentLaunchMode RENDEZVOUS
+
+      A timed launch to rendezvous with the target vessel.
+
+
+   .. field:: public AscentLaunchMode TARGET_PLANE
+
+      A timed launch into the plane of the target.
+
+
+   .. field:: public AscentLaunchMode MATCH_LAN
+
+      A timed launch to the target's longitude of the ascending node. See
+      :meth:`AscentGuidance.launchToMatchLan()`.
+
+
+   .. field:: public AscentLaunchMode LAN
+
+      A timed launch to a longitude of the ascending node. See
+      :meth:`AscentGuidance.launchToLan()`.
+
+
+   .. field:: public AscentLaunchMode UNKNOWN
+
+      A timed launch of another kind, started from MechJeb's window.
+
+
+
+AscentSettings
+--------------
+
+
+.. type:: public class AscentSettings
+
+   The Ascent Settings window, which holds the settings shared by the ascent paths.
+
+   .. method:: boolean getForceRoll()
+
+   .. method:: void setForceRoll(boolean value)
+
+      Whether the autopilot controls the roll.
+
+      :Game Scenes: Flight
+
+   .. method:: double getVerticalRoll()
+
+   .. method:: void setVerticalRoll(double value)
+
+      The roll during the vertical climb, in degrees.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`AscentSettings.getForceRoll()`.
+
+   .. method:: double getTurnRoll()
+
+   .. method:: void setTurnRoll(double value)
+
+      The roll during the turn, in degrees.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`AscentSettings.getForceRoll()`.
+
+   .. method:: double getRollAltitude()
+
+   .. method:: void setRollAltitude(double value)
+
+      The altitude above which the autopilot controls the roll, in meters.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`AscentSettings.getForceRoll()`.
+
+   .. method:: boolean getLimitAngleOfAttack()
+
+   .. method:: void setLimitAngleOfAttack(boolean value)
+
+      Whether to limit the angle of attack.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Applies on the :field:`AscentType.CLASSIC` path.
+
+   .. method:: double getMaxAngleOfAttack()
+
+   .. method:: void setMaxAngleOfAttack(double value)
+
+      The largest angle of attack, in degrees.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`AscentSettings.getLimitAngleOfAttack()`, and applies on the :field:`AscentType.CLASSIC`
+         path.
+
+   .. method:: double getAngleOfAttackLimitFadeoutPressure()
+
+   .. method:: void setAngleOfAttackLimitFadeoutPressure(double value)
+
+      The dynamic pressure below which the angle of attack limit fades out, in pascals.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`AscentSettings.getLimitAngleOfAttack()`, and applies on the :field:`AscentType.CLASSIC`
+         path.
+
+   .. method:: boolean getLimitingAngleOfAttack()
+
+
+      Whether the angle of attack limit is limiting the steering.
+
+      :Game Scenes: Flight
+
+   .. method:: double getCurrentMaxAngleOfAttack()
+
+
+      The largest angle of attack the limit allows now, in degrees.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getCorrectiveSteering()
+
+   .. method:: void setCorrectiveSteering(boolean value)
+
+      Whether the autopilot steers by the velocity vector rather than the position vector.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         It is more accurate, though large craft may do better without it. Applies on the
+         :field:`AscentType.CLASSIC` path.
+
+   .. method:: double getCorrectiveSteeringGain()
+
+   .. method:: void setCorrectiveSteeringGain(double value)
+
+      The gain of the corrective steering.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`AscentSettings.getCorrectiveSteering()`, and applies on the :field:`AscentType.CLASSIC` path.
+
+   .. method:: boolean getAutostage()
+
+   .. method:: void setAutostage(boolean value)
+
+      Whether the autopilot stages when the current stage runs out of fuel.
+
+      :Game Scenes: Flight
+
+   .. method:: Autostaging getStaging()
+
+
+      The autostaging settings. The same object as :meth:`Utilities.getStaging()`.
+
+      :Game Scenes: Flight
+
+   .. method:: ThrustLimiter getThrust()
+
+
+      The throttle limiters. The same object as :meth:`Utilities.getThrust()`.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getAutodeploySolarPanels()
+
+   .. method:: void setAutodeploySolarPanels(boolean value)
+
+      Whether to deploy the solar panels when the ascent finishes.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getAutoDeployAntennas()
+
+   .. method:: void setAutoDeployAntennas(boolean value)
+
+      Whether to deploy the antennas when the ascent finishes.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getAutowarp()
+
+   .. method:: void setAutowarp(boolean value)
+
+      Whether to warp time during the ascent.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The same setting as :meth:`ManeuverPlanner.getAutowarp()`.
+
+   .. method:: boolean getSkipCircularization()
+
+   .. method:: void setSkipCircularization(boolean value)
+
+      Whether to skip the circularization burn.
+
+      :Game Scenes: Flight
+
+
+
+PVGSettings
+-----------
+
+
+.. type:: public class PVGSettings
+
+   The PVG Settings window, which holds the settings of the Primer Vector Guidance ascent path.
+
+   .. method:: double getDynamicPressureTrigger()
+
+   .. method:: void setDynamicPressureTrigger(double value)
+
+      The dynamic pressure below which guidance starts, in pascals.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getFixedCoast()
+
+   .. method:: void setFixedCoast(boolean value)
+
+      Whether the coast has a fixed length.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`PVGSettings.getCoastStageFlag()`.
+
+   .. method:: double getFixedCoastLength()
+
+   .. method:: void setFixedCoastLength(double value)
+
+      The length of the coast, in seconds.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`PVGSettings.getFixedCoast()`.
+
+   .. method:: double getMinDeltaV()
+
+   .. method:: void setMinDeltaV(double value)
+
+      The smallest delta-v of a stage that guidance plans with, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. method:: int getLastStage()
+
+   .. method:: void setLastStage(int value)
+
+      The last stage that guidance plans with.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getOptimizeStageFlag()
+
+   .. method:: void setOptimizeStageFlag(boolean value)
+
+      Whether guidance may shut off :meth:`PVGSettings.getOptimizeStage()` early.
+
+      :Game Scenes: Flight
+
+   .. method:: int getOptimizeStage()
+
+   .. method:: void setOptimizeStage(int value)
+
+      The stage that guidance may shut off early.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`PVGSettings.getOptimizeStageFlag()`. -1 is no stage.
+
+   .. method:: boolean getUnguidedStagesFlag()
+
+   .. method:: void setUnguidedStagesFlag(boolean value)
+
+      Whether guidance leaves :meth:`PVGSettings.getUnguidedStages()` unguided.
+
+      :Game Scenes: Flight
+
+   .. method:: java.util.List<Integer> getUnguidedStages()
+
+   .. method:: void setUnguidedStages(java.util.List<Integer> value)
+
+      The stages that guidance leaves unguided.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`PVGSettings.getUnguidedStagesFlag()`.
+
+   .. method:: boolean getCoastStageFlag()
+
+   .. method:: void setCoastStageFlag(boolean value)
+
+      Whether guidance coasts in :meth:`PVGSettings.getCoastStage()`.
+
+      :Game Scenes: Flight
+
+   .. method:: int getCoastStage()
+
+   .. method:: void setCoastStage(int value)
+
+      The stage before or after which guidance coasts.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`PVGSettings.getCoastStageFlag()`.
+
+   .. method:: boolean getCoastBeforeFlag()
+
+   .. method:: void setCoastBeforeFlag(boolean value)
+
+      Whether the coast comes before :meth:`PVGSettings.getCoastStage()`, rather than after it.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`PVGSettings.getCoastStageFlag()`.
+
+   .. method:: double getUllageLeadTime()
+
+   .. method:: void setUllageLeadTime(double value)
+
+      The time before an ignition at which RCS settles the propellant, in seconds.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getSpinupStageFlag()
+
+   .. method:: void setSpinupStageFlag(boolean value)
+
+      Whether to spin up the vessel before :meth:`PVGSettings.getSpinupStage()`.
+
+      :Game Scenes: Flight
+
+   .. method:: int getSpinupStage()
+
+   .. method:: void setSpinupStage(int value)
+
+      The stage before which to spin up the vessel.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`PVGSettings.getSpinupStageFlag()`.
+
+   .. method:: double getSpinupAngularVelocity()
+
+   .. method:: void setSpinupAngularVelocity(double value)
+
+      The angular velocity of the spin-up, in :math:`\mathrm{rad/s}`.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`PVGSettings.getSpinupStageFlag()`. MechJeb's window shows it in revolutions per
+         minute.
+
+   .. method:: double getSpinupLeadTime()
+
+   .. method:: void setSpinupLeadTime(double value)
+
+      The time before staging at which the spin-up starts, in seconds.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`PVGSettings.getSpinupStageFlag()`.
+
+   .. method:: double getLimitQa()
+
+   .. method:: void setLimitQa(double value)
+
+      The limit on dynamic pressure times angle of attack, in :math:`\mathrm{Pa \cdot rad}`.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         MechJeb clamps it to between 0 and 10000.
+
+   .. method:: double getPitchRate()
+
+   .. method:: void setPitchRate(double value)
+
+      The pitch rate of the booster, in :math:`\mathrm{deg/s}`.
+
+      :Game Scenes: Flight
+
+   .. method:: double getPitchStartVelocity()
+
+   .. method:: void setPitchStartVelocity(double value)
+
+      The speed at which the booster starts to pitch over, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. method:: int getStagingTrigger()
+
+   .. method:: void setStagingTrigger(int value)
+
+      The stage after which guidance starts.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`PVGSettings.getStagingTriggerFlag()`.
+
+   .. method:: boolean getStagingTriggerFlag()
+
+   .. method:: void setStagingTriggerFlag(boolean value)
+
+      Whether guidance starts after :meth:`PVGSettings.getStagingTrigger()`.
+
+      :Game Scenes: Flight
+
+
+
+ClassicPath
+-----------
+
+
+.. type:: public class ClassicPath
+
+   The Ascent Path Editor window, which holds the settings of the classic ascent path.
+
+   .. method:: boolean getAutoPath()
+
+   .. method:: void setAutoPath(boolean value)
+
+      Whether the autopilot chooses the turn altitudes and speed.
+
+      :Game Scenes: Flight
+
+   .. method:: float getAutoTurnPercent()
+
+   .. method:: void setAutoTurnPercent(float value)
+
+      The altitude at which an automatic turn starts, as a fraction of the height of the
+      atmosphere.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`ClassicPath.getAutoPath()`.
+
+   .. method:: float getAutoTurnSpeedFactor()
+
+   .. method:: void setAutoTurnSpeedFactor(float value)
+
+      The factor that sets the speed at which an automatic turn starts.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :meth:`ClassicPath.getAutoPath()`.
+
+   .. method:: double getAutoTurnStartAltitude()
+
+
+      The altitude at which an automatic turn starts, in meters.
+
+      :Game Scenes: Flight
+
+   .. method:: double getAutoTurnStartVelocity()
+
+
+      The speed at which an automatic turn starts, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. method:: double getAutoTurnEndAltitude()
+
+
+      The altitude at which an automatic turn ends, in meters.
+
+      :Game Scenes: Flight
+
+   .. method:: double getTurnStartAltitude()
+
+   .. method:: void setTurnStartAltitude(double value)
+
+      The altitude at which the turn starts, in meters.
+
+      :Game Scenes: Flight
+
+   .. method:: double getTurnStartVelocity()
+
+   .. method:: void setTurnStartVelocity(double value)
+
+      The speed at which the turn starts, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. method:: double getTurnEndAltitude()
+
+   .. method:: void setTurnEndAltitude(double value)
+
+      The altitude at which the turn ends, in meters.
+
+      :Game Scenes: Flight
+
+   .. method:: double getTurnEndAngle()
+
+   .. method:: void setTurnEndAngle(double value)
+
+      The final flight path angle, in degrees.
+
+      :Game Scenes: Flight
+
+   .. method:: double getTurnShapeExponent()
+
+   .. method:: void setTurnShapeExponent(double value)
+
+      The steepness of the turn, between 0 and 1.
+
+      :Game Scenes: Flight

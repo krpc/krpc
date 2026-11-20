@@ -1,0 +1,236 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Canvas
+======
+
+
+.. _http-UI.Canvas:
+
+.. rubric:: Canvas
+
+A canvas for user interface elements. See :http:get:`/ui/stock-canvas` and :http:post:`/ui/add-canvas`.
+
+A ``Canvas`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ui/canvas/(id)/rect-transform
+
+   The rect transform for the UI object.
+
+
+   :param id: The identifier of the :ref:`Canvas <http-UI.Canvas>` object.
+
+   :resjson UI.RectTransform value:
+
+
+
+
+.. http:get:: /ui/canvas/(id)/layout-element
+
+   How much space the UI object asks a layout for.
+
+   .. note::
+
+      Only has an effect when the object is in a panel that has a layout. A canvas is
+      not inside a layout and does not have one.
+
+
+   :param id: The identifier of the :ref:`Canvas <http-UI.Canvas>` object.
+
+   :resjson UI.LayoutElement value:
+
+
+
+
+.. http:get:: /ui/canvas/(id)/visible
+
+   Whether the UI object is visible.
+
+   .. note::
+
+      This is the object's own setting, which is what it was last set to. An object is
+      only drawn when everything it is inside is visible as well, so an interface can
+      be built with its parts visible, inside a panel that is not, and shown all at
+      once by making that panel visible.
+
+
+   :param id: The identifier of the :ref:`Canvas <http-UI.Canvas>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ui/canvas/(id)/visible
+
+   Whether the UI object is visible.
+
+   .. note::
+
+      This is the object's own setting, which is what it was last set to. An object is
+      only drawn when everything it is inside is visible as well, so an interface can
+      be built with its parts visible, inside a panel that is not, and shown all at
+      once by making that panel visible.
+
+
+   :param id: The identifier of the :ref:`Canvas <http-UI.Canvas>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:post:: /ui/canvas/(id)/add-panel
+
+   Create a panel within this object.
+
+
+   :param id: The identifier of the :ref:`Canvas <http-UI.Canvas>` object.
+
+   :reqjson bool visible: Whether the new panel is visible. Optional, defaults to ``true``.
+   :resjson UI.Panel value:
+
+
+
+
+
+.. http:post:: /ui/canvas/(id)/add-text
+
+   Add text to this object.
+
+
+   :param id: The identifier of the :ref:`Canvas <http-UI.Canvas>` object.
+
+   :reqjson string content: The text.
+   :reqjson bool visible: Whether the text is visible. Optional, defaults to ``true``.
+   :resjson UI.Text value:
+
+
+
+
+
+.. http:post:: /ui/canvas/(id)/add-input-field
+
+   Add an input field to this object.
+
+
+   :param id: The identifier of the :ref:`Canvas <http-UI.Canvas>` object.
+
+   :reqjson bool visible: Whether the input field is visible. Optional, defaults to ``true``.
+   :resjson UI.InputField value:
+
+
+
+
+
+.. http:post:: /ui/canvas/(id)/add-button
+
+   Add a button to this object.
+
+
+   :param id: The identifier of the :ref:`Canvas <http-UI.Canvas>` object.
+
+   :reqjson string content: The label for the button.
+   :reqjson bool visible: Whether the button is visible. Optional, defaults to ``true``.
+   :resjson UI.Button value:
+
+
+
+
+
+.. http:post:: /ui/canvas/(id)/add-toggle
+
+   Add a toggle to this object.
+
+
+   :param id: The identifier of the :ref:`Canvas <http-UI.Canvas>` object.
+
+   :reqjson string content: The label for the toggle.
+   :reqjson bool visible: Whether the toggle is visible. Optional, defaults to ``true``.
+   :resjson UI.Toggle value:
+
+
+
+
+
+.. http:post:: /ui/canvas/(id)/add-toggle-group
+
+   Add a toggle group to this object, to make a set of toggles into radio buttons.
+
+   .. note::
+
+      The group is not drawn and does not take up any space. The toggles that belong
+      to it can be added anywhere.
+
+
+   :param id: The identifier of the :ref:`Canvas <http-UI.Canvas>` object.
+
+   :resjson UI.ToggleGroup value:
+
+
+
+
+
+.. http:post:: /ui/canvas/(id)/add-slider
+
+   Add a slider to this object.
+
+
+   :param id: The identifier of the :ref:`Canvas <http-UI.Canvas>` object.
+
+   :reqjson bool vertical: Whether the slider runs from bottom to top, rather than from left to right. Optional, defaults to ``false``.
+   :reqjson bool visible: Whether the slider is visible. Optional, defaults to ``true``.
+   :resjson UI.Slider value:
+
+
+
+
+
+.. http:post:: /ui/canvas/(id)/add-dropdown
+
+   Add a dropdown to this object.
+
+
+   :param id: The identifier of the :ref:`Canvas <http-UI.Canvas>` object.
+
+   :reqjson bool visible: Whether the dropdown is visible. Optional, defaults to ``true``.
+   :resjson UI.Dropdown value:
+
+
+
+
+
+.. http:post:: /ui/canvas/(id)/add-image
+
+   Add an image to this object.
+
+
+   :param id: The identifier of the :ref:`Canvas <http-UI.Canvas>` object.
+
+   :reqjson bool visible: Whether the image is visible. Optional, defaults to ``true``.
+   :resjson UI.Image value:
+
+
+
+
+
+.. http:post:: /ui/canvas/(id)/add-scroll-view
+
+   Add a scroll view to this object.
+
+
+   :param id: The identifier of the :ref:`Canvas <http-UI.Canvas>` object.
+
+   :reqjson bool visible: Whether the scroll view is visible. Optional, defaults to ``true``.
+   :resjson UI.ScrollView value:
+
+
+
+
+
+.. http:post:: /ui/canvas/(id)/remove
+
+   Remove the UI object.
+
+
+   :param id: The identifier of the :ref:`Canvas <http-UI.Canvas>` object.

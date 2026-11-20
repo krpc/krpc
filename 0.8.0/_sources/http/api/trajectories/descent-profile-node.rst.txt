@@ -1,0 +1,76 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+DescentProfileNode
+==================
+
+
+.. _http-Trajectories.DescentProfileNode:
+
+.. rubric:: DescentProfileNode
+
+A node of the descent profile.
+
+A ``DescentProfileNode`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /trajectories/descent-profile-node/(id)/angle
+
+   The angle in degrees, from -180 to 180.
+
+
+   :param id: The identifier of the :ref:`DescentProfileNode <http-Trajectories.DescentProfileNode>` object.
+
+   :resjson double value:
+
+.. http:put:: /trajectories/descent-profile-node/(id)/angle
+
+   The angle in degrees, from -180 to 180.
+
+
+   :param id: The identifier of the :ref:`DescentProfileNode <http-Trajectories.DescentProfileNode>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /trajectories/descent-profile-node/(id)/mode
+
+   Whether :http:get:`/trajectories/descent-profile-node/(id)/angle` is the angle of attack or the angle from the horizon.
+
+
+   :param id: The identifier of the :ref:`DescentProfileNode <http-Trajectories.DescentProfileNode>` object.
+
+   :resjson Trajectories.DescentProfileMode value:
+
+.. http:put:: /trajectories/descent-profile-node/(id)/mode
+
+   Whether :http:get:`/trajectories/descent-profile-node/(id)/angle` is the angle of attack or the angle from the horizon.
+
+
+   :param id: The identifier of the :ref:`DescentProfileNode <http-Trajectories.DescentProfileNode>` object.
+
+   :reqjson Trajectories.DescentProfileMode value: The new value.
+
+
+
+
+
+.. _http-Trajectories.DescentProfileMode:
+
+.. rubric:: DescentProfileMode
+
+The reference for the angle of a descent profile node.
+
+Passed and returned as the name of one of its values:
+
+
+``"angle_of_attack"``
+   The angle of attack, from prograde.
+
+
+``"horizon"``
+   The angle from the horizon.

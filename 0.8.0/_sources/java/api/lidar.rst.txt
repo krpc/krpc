@@ -1,0 +1,30 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.LIDAR
+
+LIDAR
+=====
+
+.. warning::
+
+   Deprecated. The LIDAR service will be removed in a future release. Use
+   :meth:`SpaceCenter.SpaceCenter.raycastDistance(org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>, SpaceCenter.ReferenceFrame)` instead.
+
+Provides functionality to interact with the `LiDAR`_ mod.
+
+.. toctree::
+   :includehidden:
+   :maxdepth: 1
+
+   lidar/lidar
+   lidar/laser
+
+LiDAR Replacement
+-----------------
+
+A LiDAR casts a fan of rays from its part. :meth:`SpaceCenter.SpaceCenter.raycastDistance(org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>, SpaceCenter.ReferenceFrame)` casts one
+ray. This example casts 8 rays below the root part of the active vessel:
+
+.. literalinclude:: /scripts/api/lidar/RaycastExample.java
+
+.. include:: /mods.inc

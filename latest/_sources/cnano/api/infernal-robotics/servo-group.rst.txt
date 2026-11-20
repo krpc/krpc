@@ -12,6 +12,10 @@ ServoGroup
    or :func:`krpc_InfernalRobotics_ServoGroupWithName`. Represents the "Servo Groups"
    in the InfernalRobotics UI.
 
+   .. macro:: KRPC_CLASS_INFERNALROBOTICS_SERVOGROUP
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_InfernalRobotics_ServoGroup_Name(krpc_connection_t connection, char * * returnValue, krpc_InfernalRobotics_ServoGroup_t instance)
    .. function:: krpc_error_t krpc_InfernalRobotics_ServoGroup_set_Name(krpc_connection_t connection, krpc_InfernalRobotics_ServoGroup_t instance, const char * value)
 

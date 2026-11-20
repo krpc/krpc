@@ -1,0 +1,34 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.DockingCamera
+
+Camera
+======
+
+
+.. type:: public class Camera
+
+   A camera from Docking Camera (KURS), on an onboard camera part or a docking port.
+
+   .. method:: SpaceCenter.Part getPart()
+
+
+      Get the part containing this camera.
+
+   
+
+   .. method:: byte[] image(StdLib.ImageFormat format, int quality)
+
+      The image from the camera, 256 by 256 pixels.
+      Throws an exception if the camera is off or not started.
+
+      :param StdLib.ImageFormat format: The format of the image.
+      :param int quality: The quality of a JPEG image, from 1 to 100.
+      :returns: The image data.
+   
+
+      .. note::
+
+         The camera is switched on by setting the ``IsEnabled`` field of its
+         ``PartCameraModule`` or ``DockingCameraModule`` to ``true``, which also opens
+         the camera window.

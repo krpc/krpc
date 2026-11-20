@@ -1,0 +1,49 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Rendezvous
+==========
+
+
+.. _http-KerbalEngineerRedux.Rendezvous:
+
+.. rubric:: Rendezvous
+
+Angles and times for a transfer to the vessel's target.
+
+.. note::
+
+   When the vessel and target orbit different bodies, these are for the orbits of the bodies
+   that share a parent.
+
+
+Passed and returned as an object with these fields:
+
+
+``phase_angle`` (double)
+   The angle from the vessel to the target, around the vessel's orbit, in radians.
+
+
+``intercept_angle`` (double)
+   The phase angle at which to start a Hohmann transfer to the target, in radians.
+
+
+``time_to_intercept_angle`` (double)
+   The time until the phase angle equals the intercept angle, in seconds.
+
+
+``angle_to_ascending_node`` (double)
+   The angle to the ascending node with the target's orbit, in radians.
+
+
+``angle_to_descending_node`` (double)
+   The angle to the descending node with the target's orbit, in radians.
+
+
+``time_to_ascending_node`` (double)
+   The time until the ascending node with the target's orbit, in seconds.
+
+
+``time_to_descending_node`` (double)
+   The time until the descending node with the target's orbit, in seconds.

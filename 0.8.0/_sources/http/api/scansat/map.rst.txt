@@ -1,0 +1,54 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Map
+===
+
+
+.. _http-ScanSat.MapType:
+
+.. rubric:: MapType
+
+The type of a map. See :http:post:`/scan-sat/map`.
+
+Passed and returned as the name of one of its values:
+
+
+``"altimetry"``
+   Terrain height, from the altimetry scans.
+
+
+``"slope"``
+   Terrain slope, from the altimetry scans.
+
+
+``"biome"``
+   Biomes, from the biome scan, over the terrain height.
+
+
+``"visual"``
+   The surface as seen from orbit, from the visual scans.
+
+
+
+
+.. _http-ScanSat.MapProjection:
+
+.. rubric:: MapProjection
+
+The projection of a map. See :http:post:`/scan-sat/map`.
+
+Passed and returned as the name of one of its values:
+
+
+``"rectangular"``
+   Equirectangular: longitude and latitude map linearly to the horizontal and vertical.
+
+
+``"kavrayskiy_vii"``
+   Kavrayskiy VII, a compromise projection with less distortion at the poles.
+
+
+``"polar"``
+   Two polar views side by side, the southern hemisphere on the left.

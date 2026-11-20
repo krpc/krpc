@@ -1,0 +1,52 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: UI
+   :no-index:
+
+Size Fitter
+===========
+
+
+.. class:: SizeFitter
+
+   Sizes a panel to fit what it contains, rather than the other way round.
+   See :meth:`UI.Panel.getSizeFitter`.
+
+   .. method:: getHorizontalFit()
+               setHorizontalFit(value)
+
+      How the width of the panel is chosen.
+
+      :Property: Can be read or written
+      :rtype: :class:`UI.ContentSizeFit`
+   
+
+   .. method:: getVerticalFit()
+               setVerticalFit(value)
+
+      How the height of the panel is chosen.
+
+      :Property: Can be read or written
+      :rtype: :class:`UI.ContentSizeFit`
+   
+
+
+
+.. class:: ContentSizeFit
+
+   How a size fitter sizes a panel along one direction.
+
+
+   .. attribute:: unconstrained
+
+      Leave the size alone.
+
+
+   .. attribute:: minSize
+
+      Use the smallest size the contents will fit in.
+
+
+   .. attribute:: preferredSize
+
+      Use the size the contents ask for.

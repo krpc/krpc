@@ -1,0 +1,92 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.MechJeb
+
+DockingAutopilot
+================
+
+
+.. class:: DockingAutopilot
+
+   The docking autopilot, which docks with the target docking port.
+
+   .. property:: bool Enabled { get; set; }
+
+      Whether the module is enabled.
+
+      :Game Scenes: Flight
+
+   .. property:: string Status { get; }
+
+      The status of the autopilot.
+
+      :Game Scenes: Flight
+
+   .. property:: double SpeedLimit { get; set; }
+
+      The largest speed relative to the target, in :math:`\mathrm{m/s}`.
+
+      :Game Scenes: Flight
+
+   .. property:: bool OverrideSafeDistance { get; set; }
+
+      Whether :prop:`DockingAutopilot.OverridenSafeDistance` replaces the computed safe distance.
+
+      :Game Scenes: Flight
+
+   .. property:: double OverridenSafeDistance { get; set; }
+
+      The safe distance from the target, in meters.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :prop:`DockingAutopilot.OverrideSafeDistance`.
+
+   .. property:: bool OverrideTargetSize { get; set; }
+
+      Whether :prop:`DockingAutopilot.OverridenTargetSize` replaces the computed size of the target.
+
+      :Game Scenes: Flight
+
+   .. property:: double OverridenTargetSize { get; set; }
+
+      The size of the target, in meters.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :prop:`DockingAutopilot.OverrideTargetSize`.
+
+   .. property:: float SafeDistance { get; }
+
+      The safe distance from the target that the autopilot uses, in meters.
+
+      :Game Scenes: Flight
+
+   .. property:: float TargetSize { get; }
+
+      The size of the target that the autopilot uses, in meters.
+
+      :Game Scenes: Flight
+
+   .. property:: bool ForceRoll { get; set; }
+
+      Whether the autopilot controls the roll.
+
+      :Game Scenes: Flight
+
+   .. property:: double Roll { get; set; }
+
+      The roll, in degrees.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires :prop:`DockingAutopilot.ForceRoll`.

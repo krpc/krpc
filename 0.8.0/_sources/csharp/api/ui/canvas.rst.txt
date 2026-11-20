@@ -1,0 +1,157 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.UI
+
+Canvas
+======
+
+
+.. class:: Canvas
+
+   A canvas for user interface elements. See :prop:`UI.StockCanvas <UI.UI.StockCanvas>` and :meth:`UI.AddCanvas <UI.UI.AddCanvas>`.
+
+   .. property:: RectTransform RectTransform { get; }
+
+      The rect transform for the UI object.
+
+      :Game Scenes: All
+
+   .. property:: LayoutElement LayoutElement { get; }
+
+      How much space the UI object asks a layout for.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Only has an effect when the object is in a panel that has a layout. A canvas is
+         not inside a layout and does not have one.
+
+   .. property:: bool Visible { get; set; }
+
+      Whether the UI object is visible.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         This is the object's own setting, which is what it was last set to. An object is
+         only drawn when everything it is inside is visible as well, so an interface can
+         be built with its parts visible, inside a panel that is not, and shown all at
+         once by making that panel visible.
+
+   .. function:: Panel AddPanel(bool visible = true)
+
+      Create a panel within this object.
+
+      :parameters:
+
+       * **visible** -- Whether the new panel is visible.
+
+      :Game Scenes: All
+
+   .. function:: Text AddText(string content, bool visible = true)
+
+      Add text to this object.
+
+      :parameters:
+
+       * **content** -- The text.
+       * **visible** -- Whether the text is visible.
+
+      :Game Scenes: All
+
+   .. function:: InputField AddInputField(bool visible = true)
+
+      Add an input field to this object.
+
+      :parameters:
+
+       * **visible** -- Whether the input field is visible.
+
+      :Game Scenes: All
+
+   .. function:: Button AddButton(string content, bool visible = true)
+
+      Add a button to this object.
+
+      :parameters:
+
+       * **content** -- The label for the button.
+       * **visible** -- Whether the button is visible.
+
+      :Game Scenes: All
+
+   .. function:: Toggle AddToggle(string content, bool visible = true)
+
+      Add a toggle to this object.
+
+      :parameters:
+
+       * **content** -- The label for the toggle.
+       * **visible** -- Whether the toggle is visible.
+
+      :Game Scenes: All
+
+   .. function:: ToggleGroup AddToggleGroup()
+
+      Add a toggle group to this object, to make a set of toggles into radio buttons.
+
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The group is not drawn and does not take up any space. The toggles that belong
+         to it can be added anywhere.
+
+   .. function:: Slider AddSlider(bool vertical = false, bool visible = true)
+
+      Add a slider to this object.
+
+      :parameters:
+
+       * **vertical** -- Whether the slider runs from bottom to top, rather than from left to right.
+       * **visible** -- Whether the slider is visible.
+
+      :Game Scenes: All
+
+   .. function:: Dropdown AddDropdown(bool visible = true)
+
+      Add a dropdown to this object.
+
+      :parameters:
+
+       * **visible** -- Whether the dropdown is visible.
+
+      :Game Scenes: All
+
+   .. function:: Image AddImage(bool visible = true)
+
+      Add an image to this object.
+
+      :parameters:
+
+       * **visible** -- Whether the image is visible.
+
+      :Game Scenes: All
+
+   .. function:: ScrollView AddScrollView(bool visible = true)
+
+      Add a scroll view to this object.
+
+      :parameters:
+
+       * **visible** -- Whether the scroll view is visible.
+
+      :Game Scenes: All
+
+   .. function:: void Remove()
+
+      Remove the UI object.
+
+
+      :Game Scenes: All

@@ -1,0 +1,99 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: RemoteTech
+   :no-index:
+
+Antenna
+=======
+
+
+.. class:: Antenna
+
+   A RemoteTech antenna. Obtained by calling :meth:`RemoteTech.Comms.getAntennas` or :func:`RemoteTech.antenna`.
+
+   .. method:: getPart()
+
+      Get the part containing this antenna.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Part`
+   
+
+   .. method:: getHasConnection()
+
+      Whether the antenna has a connection.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+   
+
+   .. method:: getTarget()
+               setTarget(value)
+
+      The object that the antenna is targetting.
+      This property can be used to set the target to :attr:`RemoteTech.Target.none` or :attr:`RemoteTech.Target.activeVessel`.
+      To set the target to a celestial body, ground station or vessel see :meth:`RemoteTech.Antenna.getTargetBody`,
+      :meth:`RemoteTech.Antenna.getTargetGroundStation` and :meth:`RemoteTech.Antenna.getTargetVessel`.
+
+      :Property: Can be read or written
+      :rtype: :class:`RemoteTech.Target`
+   
+
+   .. method:: getTargetBody()
+               setTargetBody(value)
+
+      The celestial body the antenna is targetting.
+
+      :Property: Can be read or written
+      :rtype: :class:`SpaceCenter.CelestialBody`
+   
+
+   .. method:: getTargetGroundStation()
+               setTargetGroundStation(value)
+
+      The ground station the antenna is targetting.
+
+      :Property: Can be read or written
+      :rtype: ``string``
+   
+
+   .. method:: getTargetVessel()
+               setTargetVessel(value)
+
+      The vessel the antenna is targetting.
+
+      :Property: Can be read or written
+      :rtype: :class:`SpaceCenter.Vessel`
+   
+
+
+
+.. class:: Target
+
+   The type of object an antenna is targetting.
+   See :meth:`RemoteTech.Antenna.getTarget`.
+
+
+   .. attribute:: activeVessel
+
+      The active vessel.
+
+
+   .. attribute:: celestialBody
+
+      A celestial body.
+
+
+   .. attribute:: groundStation
+
+      A ground station.
+
+
+   .. attribute:: vessel
+
+      A specific vessel.
+
+
+   .. attribute:: none
+
+      No target.
