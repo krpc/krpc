@@ -216,6 +216,7 @@ reversers
 rotationally
 rsvg
 runtime
+sandboxed
 serialio
 serializable
 setpoint

@@ -15,6 +15,13 @@ namespace KRPC.Server.HTTP
     {
         const string ErrorSchema = "#/components/schemas/Error";
 
+        /// <summary>
+        /// The server URL in the document, as JSON, which a response replaces with the URL the
+        /// request reached the server at. A tool given the document as a file sends its calls
+        /// to that URL.
+        /// </summary>
+        public const string ServerUrl = "\"%SERVER%\"";
+
         public static string Document (Schema.KRPC.Services services, IEnumerable<Route> routes, string version)
         {
             var paths = new List<KeyValuePair<string, object>> ();
@@ -38,7 +45,7 @@ namespace KRPC.Server.HTTP
                     "title", "kRPC",
                     "version", version ?? string.Empty,
                     "description", "Calls the procedures of a kRPC server over HTTP, with JSON bodies."),
-                "servers", new List<object> { Routes.Entries ("url", "/") },
+                "servers", new List<object> { Routes.Entries ("url", "%SERVER%") },
                 "tags", services.Services_.Select (x => (object)Routes.Entries (
                     "name", x.Name, "description", Text (x.Documentation, "summary"))).ToList (),
                 "paths", paths,

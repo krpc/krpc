@@ -93,6 +93,7 @@
     <Compile Include="Server\SocketClient.cs" />
     <Compile Include="Server\SocketServer.cs" />
     <Compile Include="Server\SocketStream.cs" />
+    <Compile Include="Server\AllowedOrigins.cs" />
     <Compile Include="Server\HTTP\Codec.cs" />
     <Compile Include="Server\HTTP\Connection.cs" />
     <Compile Include="Server\HTTP\Definitions.cs" />

@@ -99,6 +99,20 @@ namespace KRPC.Test
             var server = config.Create ();
             Assert.IsInstanceOf<KRPC.Server.HTTP.Server> (server.InnerServer);
             Assert.AreEqual ("http://127.0.0.1:50003", server.Address);
+            Assert.IsTrue (((KRPC.Server.HTTP.Server)server.InnerServer).AllowedOrigins.None);
+        }
+
+        [Test]
+        public void HTTPServerAllowedOrigins ()
+        {
+            var config = new Configuration.Server (Protocol.JSONOverHTTP);
+            config.Settings ["http_allowed_origins"] = "http://localhost:8080";
+            var origins = ((KRPC.Server.HTTP.Server)config.Create ().InnerServer).AllowedOrigins;
+            Assert.IsTrue (origins.Allows ("http://localhost:8080"));
+            // An invalid setting allows no other origin
+            config.Settings ["http_allowed_origins"] = "localhost:8080";
+            origins = ((KRPC.Server.HTTP.Server)config.Create ().InnerServer).AllowedOrigins;
+            Assert.IsTrue (origins.None);
         }
 
         [Test]

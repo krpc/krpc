@@ -3,7 +3,8 @@
   run_client_test.py CONFIG
 
 CONFIG is the json file written by the client_test rule, naming the server and
-test executables (runfiles-root-relative) and the server transport to use.
+test executables (runfiles-root-relative), the server transport to use, and any
+further arguments for the server.
 
 The server picks its ports at startup and reports them on stdout, so the harness
 starts it, waits for it to say it is up, and passes the ports it printed to the
@@ -66,7 +67,7 @@ def run(config):
     server_process = None
     sockets = None
     try:
-        arguments = ["--type=" + config["server_type"]]
+        arguments = ["--type=" + config["server_type"], *config.get("server_args", [])]
         test_environment = dict(environment)
         if serial:
             socat, server_port, client_port = start_socat()

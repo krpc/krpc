@@ -32,6 +32,8 @@ py_binary(
 client_test(
     name = "client",
     size = "medium",
+    # The origins the origin and CORS tests expect the server to allow
+    server_args = ["--http-allowed-origins=http://allowed.example,http://localhost:8080"],
     server_executable = "//tools/TestServer",
     server_type = "http",
     tags = ["requires-network"],

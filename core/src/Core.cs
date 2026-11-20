@@ -224,6 +224,9 @@ namespace KRPC
                 text.Append (", serialio_stop_bits = ").Append (serial.StopBits);
                 text.Append (", serialio_flow_control = ").Append (serial.FlowControl);
             }
+            var http = server.InnerServer as Server.HTTP.Server;
+            if (http != null)
+                text.Append (", http_allowed_origins = ").Append (http.AllowedOrigins);
             text.Append (", logLevel = ").Append (Logger.Level);
             text.Append (", autoStartServers = ").Append (config.AutoStartServers);
             text.Append (", autoAcceptConnections = ").Append (config.AutoAcceptConnections);

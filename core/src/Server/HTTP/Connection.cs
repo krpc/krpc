@@ -31,6 +31,8 @@ namespace KRPC.Server.HTTP
         {
             internal byte[] Response;
             internal bool Close;
+            // The origin of a cross-origin request the server allows, which its response names
+            internal string Origin;
         }
 
         public Connection (IClient<IByteStream> byteClient)

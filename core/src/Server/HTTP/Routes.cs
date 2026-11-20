@@ -102,11 +102,36 @@ namespace KRPC.Server.HTTP
         }
 
         /// <summary>
+        /// The methods a path takes, joined by ", ". Throws a <see cref="RequestException"/>
+        /// if no procedure has the path.
+        /// </summary>
+        public string Methods (string path)
+        {
+            ulong id;
+            return Methods (Lookup (path, out id));
+        }
+
+        static string Methods (Dictionary<string, Route> methods)
+        {
+            return string.Join (", ", methods.Keys.OrderBy (x => x, StringComparer.Ordinal));
+        }
+
+        /// <summary>
         /// The route for a request. A class member's path holds the object identifier, which
         /// is returned in <paramref name="id"/>. Throws a <see cref="RequestException"/> if
         /// no procedure has the path, or none takes the method.
         /// </summary>
         public Route Find (string method, string path, out ulong id)
+        {
+            var methods = Lookup (path, out id);
+            Route route;
+            if (!methods.TryGetValue (method, out route))
+                throw new RequestException (405, path + " takes " + Methods (methods)) { Allow = Methods (methods) };
+            return route;
+        }
+
+        // The routes of a path, by method
+        Dictionary<string, Route> Lookup (string path, out ulong id)
         {
             id = 0;
             var segments = path.Split ('/');
@@ -115,17 +140,11 @@ namespace KRPC.Server.HTTP
                 if (!ulong.TryParse (segments [3], NumberStyles.None, CultureInfo.InvariantCulture, out id))
                     throw new RequestException (404, "No procedure has the path " + path);
                 segments [3] = "{id}";
-                path = string.Join ("/", segments);
             }
             Dictionary<string, Route> methods;
-            if (!routes.TryGetValue (path, out methods))
+            if (!routes.TryGetValue (string.Join ("/", segments), out methods))
                 throw new RequestException (404, "No procedure has the path " + path);
-            Route route;
-            if (!methods.TryGetValue (method, out route))
-                throw new RequestException (405, path + " takes " + string.Join (", ", methods.Keys.OrderBy (x => x, StringComparer.Ordinal))) {
-                    Allow = string.Join (", ", methods.Keys.OrderBy (x => x, StringComparer.Ordinal))
-                };
-            return route;
+            return methods;
         }
     }
 }

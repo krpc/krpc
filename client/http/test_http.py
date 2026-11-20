@@ -464,6 +464,134 @@ class TestErrors(TestCase):
         self.assertEqual(403, status)
 
 
+# The origins the server is started with, in client/http/BUILD.bazel
+ALLOWED = "http://allowed.example"
+
+
+class TestOrigins(unittest.TestCase):
+    """The checks on a request from a web page, which names its origin"""
+
+    def exchange(
+        self, method: str, path: str, headers: dict[str, str], body: bytes | None = None
+    ) -> tuple[int, dict[str, str], bytes]:
+        connection = http.client.HTTPConnection("127.0.0.1", PORT, timeout=30)
+        try:
+            connection.request(method, path, body, headers)
+            response = connection.getresponse()
+            return response.status, dict(response.getheaders()), response.read()
+        finally:
+            connection.close()
+
+    def test_same_origin(self) -> None:
+        host = "127.0.0.1:%d" % PORT
+        status, headers, _ = self.exchange(
+            "GET", "/krpc/clients", {"Host": host, "Origin": "http://" + host}
+        )
+        self.assertEqual(200, status)
+        self.assertNotIn("Access-Control-Allow-Origin", headers)
+
+    def test_refused_origin(self) -> None:
+        status, headers, _ = self.exchange(
+            "GET", "/krpc/clients", {"Origin": "http://other.example"}
+        )
+        self.assertEqual(403, status)
+        self.assertNotIn("Access-Control-Allow-Origin", headers)
+
+    def test_allowed_origin(self) -> None:
+        status, headers, _ = self.exchange("GET", "/krpc/clients", {"Origin": ALLOWED})
+        self.assertEqual(200, status)
+        self.assertEqual(ALLOWED, headers["Access-Control-Allow-Origin"])
+        self.assertEqual("Origin", headers["Vary"])
+
+    def test_allowed_origin_with_a_port(self) -> None:
+        origin = "http://localhost:8080"
+        status, headers, _ = self.exchange("GET", "/krpc/clients", {"Origin": origin})
+        self.assertEqual(200, status)
+        self.assertEqual(origin, headers["Access-Control-Allow-Origin"])
+        status, _, _ = self.exchange(
+            "GET", "/krpc/clients", {"Origin": "http://localhost:8081"}
+        )
+        self.assertEqual(403, status)
+
+    def test_error_names_the_origin(self) -> None:
+        status, headers, _ = self.exchange("GET", "/no-such-path", {"Origin": ALLOWED})
+        self.assertEqual(404, status)
+        self.assertEqual(ALLOWED, headers["Access-Control-Allow-Origin"])
+
+    def test_null_origin(self) -> None:
+        status, _, _ = self.exchange("GET", "/krpc/clients", {"Origin": "null"})
+        self.assertEqual(403, status)
+
+    def test_preflight(self) -> None:
+        status, headers, body = self.exchange(
+            "OPTIONS",
+            SERVICE + "/string-property",
+            {
+                "Origin": ALLOWED,
+                "Access-Control-Request-Method": "PUT",
+                "Access-Control-Request-Headers": "content-type",
+            },
+        )
+        self.assertEqual(204, status)
+        self.assertEqual(b"", body)
+        self.assertNotIn("Content-Length", headers)
+        self.assertEqual(ALLOWED, headers["Access-Control-Allow-Origin"])
+        self.assertEqual("GET, PUT", headers["Access-Control-Allow-Methods"])
+        self.assertEqual("Content-Type", headers["Access-Control-Allow-Headers"])
+        self.assertEqual("600", headers["Access-Control-Max-Age"])
+
+    def test_preflight_from_a_refused_origin(self) -> None:
+        status, headers, _ = self.exchange(
+            "OPTIONS",
+            SERVICE + "/string-property",
+            {"Origin": "http://other.example", "Access-Control-Request-Method": "PUT"},
+        )
+        self.assertEqual(403, status)
+        self.assertNotIn("Access-Control-Allow-Origin", headers)
+
+    def test_preflight_of_documents_and_objects(self) -> None:
+        for path, methods in (
+            ("/openapi.json", "GET"),
+            ("/", "GET"),
+            (SERVICE + "/test-class/1/get-value", "POST"),
+        ):
+            status, headers, _ = self.exchange("OPTIONS", path, {"Origin": ALLOWED})
+            self.assertEqual(204, status, path)
+            self.assertEqual(methods, headers["Access-Control-Allow-Methods"], path)
+
+    def test_preflight_of_an_unknown_path(self) -> None:
+        status, _, _ = self.exchange("OPTIONS", "/no-such-path", {"Origin": ALLOWED})
+        self.assertEqual(404, status)
+
+    def test_options_without_an_origin(self) -> None:
+        status, headers, _ = self.exchange("OPTIONS", SERVICE + "/string-property", {})
+        self.assertEqual(204, status)
+        self.assertEqual("GET, PUT", headers["Allow"])
+
+    def test_cross_origin_call(self) -> None:
+        status, headers, body = self.exchange(
+            "POST",
+            SERVICE + "/int32-to-string",
+            {"Origin": ALLOWED, "Content-Type": "application/json"},
+            b'{"value": 42}',
+        )
+        self.assertEqual(200, status)
+        self.assertEqual(ALLOWED, headers["Access-Control-Allow-Origin"])
+        self.assertEqual({"value": "42"}, json.loads(body))
+
+    def test_machine_name(self) -> None:
+        for name in (socket.gethostname(), socket.gethostname() + ".local"):
+            status, _, _ = self.exchange(
+                "GET", "/krpc/clients", {"Host": "%s:%d" % (name, PORT)}
+            )
+            self.assertEqual(200, status, name)
+
+    def test_openapi_server_url(self) -> None:
+        for host in ("127.0.0.1:%d" % PORT, "localhost:%d" % PORT):
+            _, _, body = self.exchange("GET", "/openapi.json", {"Host": host})
+            self.assertEqual([{"url": "http://" + host}], json.loads(body)["servers"])
+
+
 class TestConnection(unittest.TestCase):
     def exchange(self, data: bytes) -> bytes:
         with socket.create_connection(("127.0.0.1", PORT), timeout=30) as sock:

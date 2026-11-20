@@ -121,6 +121,15 @@ namespace KRPC
             }
 
             /// <summary>
+            /// The origins a server of the protocol allows when its settings leave them out:
+            /// none for HTTP, which allows the pages it serves itself.
+            /// </summary>
+            public static string DefaultAllowedOrigins (Protocol protocol)
+            {
+                return string.Empty;
+            }
+
+            /// <summary>
             /// The prefix of the address and port settings of a protocol that listens on a
             /// TCP/IP port, or null for any other protocol.
             /// </summary>
@@ -135,6 +144,22 @@ namespace KRPC
                     return "http_";
                 default:
                     return null;
+                }
+            }
+
+            /// <summary>
+            /// The origins whose web pages may connect to the server. An invalid setting allows
+            /// none, as the server then fails safe.
+            /// </summary>
+            KRPC.Server.AllowedOrigins AllowedOrigins ()
+            {
+                var setting = Settings.GetValueOrDefault (
+                    SettingsPrefix (Protocol) + "allowed_origins", DefaultAllowedOrigins (Protocol));
+                try {
+                    return new KRPC.Server.AllowedOrigins (setting);
+                } catch (ArgumentException e) {
+                    Logger.WriteLine ("Server '" + Name + "' has invalid allowed origins, allowing none: " + e.Message, Logger.Severity.Warning);
+                    return new KRPC.Server.AllowedOrigins (null);
                 }
             }
 
@@ -158,7 +183,7 @@ namespace KRPC
                     else if (serverProtocol == Protocol.ProtocolBuffersOverWebsockets)
                         messageServer = new KRPC.Server.WebSockets.Server (tcpServer);
                     else
-                        messageServer = new KRPC.Server.HTTP.Server (tcpServer);
+                        messageServer = new KRPC.Server.HTTP.Server (tcpServer, AllowedOrigins ());
                 } else if (serverProtocol == Protocol.ProtocolBuffersOverLocalSocket) {
                     var socketServer = new KRPC.Server.LocalSocket.LocalSocketServer (
                         Settings.GetValueOrDefault ("localsocket_path", KRPC.Server.LocalSocket.LocalSocketServer.DefaultPath ()));

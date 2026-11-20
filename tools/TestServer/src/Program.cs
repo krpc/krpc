@@ -33,6 +33,9 @@ namespace TestServer
         static readonly Option<ushort> httpPortOption = new Option<ushort> ("--http-port") {
             Description = "For the http protocol, the port number to use. If unspecified, use an ephemeral port."
         };
+        static readonly Option<string> httpAllowedOriginsOption = new Option<string> ("--http-allowed-origins") {
+            Description = "For the http protocol, the origins whose web pages may call it: a comma-separated list, or * for any."
+        };
         static readonly Option<string> localsocketPathOption = new Option<string> ("--localsocket-path") {
             Description = "For local socket protocols, the path of the socket to use.",
             DefaultValueFactory = _ => string.Empty
@@ -98,6 +101,7 @@ namespace TestServer
                 tcpipPortOption,
                 websocketsPortOption,
                 httpPortOption,
+                httpAllowedOriginsOption,
                 localsocketPathOption,
                 serialioPortOption,
                 baudRateOption,
@@ -140,6 +144,7 @@ namespace TestServer
             ushort tcpipPort = result.GetValue (tcpipPortOption);
             ushort websocketsPort = result.GetValue (websocketsPortOption);
             ushort httpPort = result.GetValue (httpPortOption);
+            string httpAllowedOrigins = result.GetValue (httpAllowedOriginsOption);
             string serialioPort = result.GetValue (serialioPortOption);
             string localsocketPath = result.GetValue (localsocketPathOption);
             uint baudRate = result.GetValue (baudRateOption);
@@ -201,7 +206,14 @@ namespace TestServer
                     server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverWebsockets, "TestServer", messageServer);
                 } else if (serverType == "http") {
                     httpServer = new TCPServer (bindAddress, httpPort);
-                    var messageServer = new KRPC.Server.HTTP.Server (httpServer);
+                    KRPC.Server.AllowedOrigins origins;
+                    try {
+                        origins = new KRPC.Server.AllowedOrigins (httpAllowedOrigins);
+                    } catch (ArgumentException e) {
+                        Logger.WriteLine (e.Message, Logger.Severity.Error);
+                        return;
+                    }
+                    var messageServer = new KRPC.Server.HTTP.Server (httpServer, origins);
                     server = new Server (Guid.NewGuid (), Protocol.JSONOverHTTP, "TestServer", messageServer);
                 } else if (serverType == "serialio") {
                     serialServer = new KRPC.Server.SerialIO.ByteServer (

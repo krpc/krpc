@@ -27,6 +27,7 @@ namespace KRPC.UI
         public event EventHandler<ServerEventArgs> OnStopServerPressed;
 
         readonly IDictionary<Guid, EditServer> editServers = new Dictionary<Guid, EditServer> ();
+        readonly Dictionary<string, string> allowedOriginsTexts = new Dictionary<string, string> ();
         readonly IDictionary<IClient, long> lastClientActivity = new Dictionary<IClient, long> ();
         const long lastActivityMillisecondsInterval = 100;
 
@@ -67,6 +68,8 @@ namespace KRPC.UI
         const string saveServerText = "Save";
         const string protocolText = "Protocol";
         const string addressText = "Address";
+        const string originsText = "Origins";
+        const string sameOriginText = "Same origin only";
         // The name of each protocol, indexed by its Protocol value
         internal static readonly string[] protocolNames = {
             "Protobuf over TCP/IP",
@@ -302,6 +305,8 @@ namespace KRPC.UI
             } else if (expanded) {
                 DrawServerInfoRow (protocolText, protocolNames [(int)server.Protocol]);
                 DrawServerInfoRow (addressText, server.Address);
+                if (server.Protocol == Protocol.JSONOverHTTP)
+                    DrawServerInfoRow (originsText, AllowedOriginsText (server));
                 DrawServerInfoLines (server.Info);
                 if (listsClients)
                     DrawClients (server);
@@ -343,6 +348,30 @@ namespace KRPC.UI
             }
             GUI.enabled = true;
             GUILayout.EndHorizontal ();
+        }
+
+        // The origins a server allows, from its saved settings. The text is cached by
+        // setting, as the window is drawn every frame.
+        string AllowedOriginsText (KRPC.Server.Server server)
+        {
+            var saved = config.Configuration.Servers.FirstOrDefault (x => x.Id == server.Id);
+            var setting = Configuration.Server.DefaultAllowedOrigins (server.Protocol);
+            if (saved != null) {
+                string value;
+                if (saved.Settings.TryGetValue (Configuration.Server.SettingsPrefix (server.Protocol) + "allowed_origins", out value))
+                    setting = value;
+            }
+            string text;
+            if (!allowedOriginsTexts.TryGetValue (setting, out text)) {
+                text = sameOriginText;
+                if (KRPC.Server.AllowedOrigins.IsValid (setting)) {
+                    var origins = new KRPC.Server.AllowedOrigins (setting);
+                    if (!origins.None)
+                        text = origins.ToString ();
+                }
+                allowedOriginsTexts [setting] = text;
+            }
+            return text;
         }
 
         // Draw a name/value row with an aligned name column, for the server details

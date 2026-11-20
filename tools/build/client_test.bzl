@@ -10,6 +10,7 @@ def _config_impl(ctx):
             "server": ctx.executable.server_executable.short_path,
             "test": ctx.executable.test_executable.short_path,
             "server_type": ctx.attr.server_type,
+            "server_args": ctx.attr.server_args,
         }),
     )
     return DefaultInfo(files = depset([config]))
@@ -23,6 +24,7 @@ _client_test_config = rule(
         "test_executable": attr.label(executable = True, cfg = "target"),
         "server_executable": attr.label(executable = True, cfg = "target"),
         "server_type": attr.string(default = "protobuf"),
+        "server_args": attr.string_list(),
     },
 )
 
@@ -32,6 +34,7 @@ def client_test(
         test_executable,
         server_executable,
         server_type = "protobuf",
+        server_args = [],
         target_compatible_with = None,
         **kwargs):
     # The serial transport is tested over a pair of pseudo-terminals that socat
@@ -48,6 +51,7 @@ def client_test(
         test_executable = test_executable,
         server_executable = server_executable,
         server_type = server_type,
+        server_args = server_args,
         testonly = True,
     )
     py_test(

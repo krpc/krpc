@@ -133,7 +133,8 @@ The status is:
      - A malformed request, a missing or invalid argument, or an argument exception from the
        procedure.
    * - 403
-     - A request from a web page on another site, or for another host name. See `Web Pages`_.
+     - A request from a web page whose origin the server does not allow, or for another host name.
+       See `Allowed Origins`_.
    * - 404
      - The path does not map to a procedure.
    * - 405
@@ -197,11 +198,14 @@ path, with the types of its parameters and results:
    curl -o krpc.json http://127.0.0.1:50003/openapi.json
 
 The document covers the services of the server it comes from, including those of the mods
-installed in the game.
+installed in the game. Its server URL is the address it was fetched from, so tools send their
+calls there.
 
 Tools that read OpenAPI documents work with it:
 
 * Postman and Insomnia import it as a collection of requests.
+* Swagger UI lists the paths and tries out calls, once the server allows its origin, as
+  `Allowed Origins`_ describes.
 * `OpenAPI Generator <https://openapi-generator.tech>`_ generates a client from it, in many
   languages:
 
@@ -209,15 +213,37 @@ Tools that read OpenAPI documents work with it:
 
      openapi-generator generate -i krpc.json -g go -o krpc-go
 
-Web Pages
----------
+.. _http-allowed-origins:
 
-A web page on another site cannot call the server. A request with an ``Origin`` header for
-another site gets status 403. The check applies to web pages only, as curl and other tools send
-no ``Origin`` header.
+Allowed Origins
+---------------
 
-A request gets status 403 unless its ``Host`` header names ``localhost`` or an IP address. See
-:ref:`http-security` for more details.
+A web page on another site can call the server only if the server allows the page's origin. To
+allow origins, edit the HTTP server in the server window, and set *Origins*. It is a
+comma-separated list of origins, each a scheme, a host and an optional port, or ``*`` for any
+origin. It is empty by default, which allows the server's own origin only.
+
+A response to a page from an allowed origin carries the CORS headers the browser needs. A request
+from any other origin gets status 403. The check applies to web pages only, as curl and other
+tools send no ``Origin`` header.
+
+A request gets status 403 unless its ``Host`` header names ``localhost``, an IP address or the
+name of the machine running the game. See :ref:`http-security` for more details.
+
+For example, this runs Swagger UI on ``localhost:8080``, to browse the paths and try out calls:
+
+.. code-block:: sh
+
+   docker run -p 8080:8080 \
+     -e URL=http://127.0.0.1:50003/openapi.json swaggerapi/swagger-ui
+
+Its page calls the server once *Origins* holds ``http://localhost:8080``.
+
+.. note:: A page opened from a file has the origin ``null``, which only ``*`` allows. Serve the
+          page from a local web server instead, and add its origin.
+
+.. note:: A page from a public site, such as ``editor.swagger.io``, also needs your browser's
+          permission to reach a local address. Chrome asks for it the first time.
 
 .. _http-client-reference:
 

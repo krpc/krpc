@@ -64,11 +64,15 @@ Security
 
 Any web page can send a request to ``127.0.0.1``. A ``POST`` with no body needs no CORS preflight.
 A page on another site could then call ``activate-next-stage``, even with no access to the result.
-A request with an ``Origin`` header for another site gets status 403.
+A request from an origin the server does not allow gets status 403, as the guide's
+:ref:`http-allowed-origins` section describes.
+
+A page opened from a file has the origin ``null``. So does a page in a sandboxed frame, which any
+site can create. Only ``*`` allows ``null``, as allowing it would allow every site.
 
 DNS rebinding points the name of the page's own site at ``127.0.0.1``. Its requests are then
-same-origin, and pass the ``Origin`` check. A request whose ``Host`` header is neither ``localhost``
-nor an IP address gets status 403. The attacker's name is neither, so this check stops rebinding.
+same-origin, and pass the ``Origin`` check. A request whose ``Host`` header names another machine
+gets status 403. The attacker's name is never the machine's own, so this check stops rebinding.
 
 The server takes a body only with ``Content-Type: application/json``. A cross-site request with
 that content type always sends a preflight first.
