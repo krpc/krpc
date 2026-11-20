@@ -34,10 +34,6 @@ DEPLOYMENTS_PAGE = "https://central.sonatype.com/publishing/deployments"
 CREDENTIAL_KEYS = tuple(key for key in lib.CREDENTIAL_KEYS if key.startswith("MAVEN_"))
 
 
-class DeploymentTimeout(lib.ReleaseError):
-    """A deployment did not reach the state waited for in time."""
-
-
 # The key servers the Central Portal looks up signing keys on. A key on any
 # one of them is enough.
 KEY_SERVERS = (
@@ -279,7 +275,7 @@ def wait(credentials, deployment, states, timeout=1800):
             errors = json.dumps(deployment_status.get("errors", {}), indent=2)
             raise lib.ReleaseError(f"the Central Portal rejected the bundle:\n{errors}")
         if time.monotonic() > deadline:
-            raise DeploymentTimeout(
+            raise lib.ReleaseError(
                 f"deployment {deployment} is still {state} after {timeout} s; "
                 f"check {DEPLOYMENTS_PAGE}"
             )

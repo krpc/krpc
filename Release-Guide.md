@@ -50,9 +50,10 @@ A release preparation pull request takes `main` from the version being released 
      npm and SpaceDock, and imports the GPG key. The PyPI and nuget.org keys get a format check
      only, as an upload is their only test.
    * The version is not already on npm or Maven Central, where it cannot be published again.
-7. `tools/release/20-build-and-test.py` - builds everything and runs the full headless test and
-   lint suites, plus `//doc:linkcheck`, which needs network access. Pass `--expunge` to start from
-   a pristine Bazel state.
+7. `tools/release/20-build-and-test.py` - builds everything from a clean output tree and runs the
+   full headless test and lint suites, plus `//doc:linkcheck`, which needs network access. Every
+   test runs, with no cached results. Check the build log is clean, with no warnings. Pass
+   `--expunge` to also discard the downloaded toolchains.
 
 ## 2. Tag
 
@@ -67,13 +68,14 @@ A release preparation pull request takes `main` from the version being released 
    generated C# sources for opening `kRPC.sln` without a build. GitHub records the SHA-256 digest
    of each asset.
 10. `tools/release/50-release-github.py` - creates a **draft** GitHub release for the tag with the
-   changelog as release notes and the assets attached. Review the draft on GitHub and publish it
-   from there.
+   changelog as release notes and the assets attached. The release is not marked as latest, as the
+   KSA mod releases from the same repository. Review the draft on GitHub and publish it from there.
 
 ## 4. Release the mod, clients and tools
 
-Each script releases one package, and they can be run in any order. The Python, krpctools, C#,
-Lua, Java and JavaScript scripts build and re-test the component first. Each script prompts
+Each script releases one package, and they can be run in any order, except that the npm approval
+follows the npm staging. The Python, krpctools, C#, Lua, Java and JavaScript scripts build and
+re-test the component first. Each script prompts
 before publishing. Every step needs the whole credentials file, even the keys it does not use, so
 a release with a missing key stops before it publishes anything.
 
@@ -86,15 +88,16 @@ a release with a missing key stops before it publishes anything.
 17. `tools/release/66-release-vcpkg-cpp.py` - C++ client port to `microsoft/vcpkg`.
 18. `tools/release/67-release-vcpkg-cnano.py` - C-nano client port to `microsoft/vcpkg`.
 19. `tools/release/68-release-ckan.py` - confirms the mod reached CKAN.
-20. `tools/release/69-release-npm.py` - JavaScript client to npm.
-21. `tools/release/70-release-spacedock.py` - the mod to SpaceDock, emailing its followers.
+20. `tools/release/69-stage-npm.py` - stages the JavaScript client on npm.
+21. `tools/release/70-approve-npm.py` - publishes the staged JavaScript client.
+22. `tools/release/71-release-spacedock.py` - the mod to SpaceDock, emailing its followers.
 
 Two steps are done by hand:
 
-22. Upload `assets/krpc-x.x.x.zip` to
+23. Upload `assets/krpc-x.x.x.zip` to
     [CurseForge](https://www.curseforge.com/kerbal/ksp-mods/krpc-control-the-game-using-c-c-java-lua-python)
     by hand, linking the changelog at `https://krpc.github.io/krpc/<version>/changelog.html`.
-23. Bump the version number on [KSP-AVC online](https://ksp-avc.cybutek.net/).
+24. Bump the version number on [KSP-AVC online](https://ksp-avc.cybutek.net/).
 
 The Arduino step builds the C-nano client and lays it out as an Arduino library. It then pushes
 the library and tags it, and the Arduino Library Manager indexes the tag. No CI job compiles the
@@ -113,7 +116,8 @@ kRPC library installed in `~/Arduino/libraries`.
 
 The Maven Central step uploads the signed bundle to the Central Portal, which validates it without
 publishing. The step publishes it only once validation passes and you confirm. A version on Maven
-Central cannot be removed or replaced. Declining drops the upload, so the step can be re-run.
+Central cannot be removed or replaced. Declining drops the upload, so the step can be re-run. The
+step returns once publishing starts, and prints the Central Portal page to check it finishes.
 
 The two vcpkg steps hash the archive attached to the published GitHub release and open a pull
 request to `microsoft/vcpkg` from your fork, so run them after step 10's release has been published,
@@ -125,11 +129,12 @@ publishes nothing: it waits for the NetKAN bot's generated metadata to appear in
 check back on later. It too needs step 10's release published, not just drafted. If the metadata has
 not landed within the wait (inflation can lag by a few hours), re-run the step later to re-check.
 
-The npm step publishes the package as `@krpc-org/krpc`, so the release account must be a member of
-the `@krpc-org` organization on npm. It needs npm 11.15.0 or later, which preflight checks. The
-step stages the package with the token, then approves it with `npm stage approve`, which asks for
-your 2FA. A re-run approves a version staged earlier. A version on npm cannot be published
-again, even after it is unpublished.
+The npm steps publish the package as `@krpc-org/krpc`, so the release account must be a member of
+the `@krpc-org` organization on npm. They need npm 11.15.0 or later, which preflight checks. The
+first step stages the package with the token. npm then reviews the staged package for a few
+minutes, and shows no progress. The second step approves the package with `npm stage approve`,
+which asks for your 2FA. A 409 error from npm means the review is still running, so wait and
+re-run the step. A version on npm cannot be published again, even after it is unpublished.
 
 SpaceDock has no API keys, so its step logs in with the account's username and password. The email
 to followers cannot be recalled, and a version can only be deleted by hand on the site. The step
@@ -138,7 +143,7 @@ docs, so it checks that the docs workflow of the tag has published that page.
 
 ## 5. Announce the release
 
-24. `tools/release/71-announcements.py` - prints the checklist of announcements:
+25. `tools/release/72-announcements.py` - prints the checklist of announcements:
     * Update the forum release thread, and post an update notice to it.
     * Post on Discord and Reddit.
 

@@ -43,6 +43,9 @@ def main():
         lib.TAG,
         "--verify-tag",
         "--draft",
+        # Other release trains publish to this repository too, so the newest
+        # release is not always this train's
+        "--latest=false",
         "--title",
         f"kRPC {lib.TAG}",
         "--notes",
@@ -54,7 +57,7 @@ def main():
     lib.banner("Done")
     print(f"Draft created: {url}")
     print("Review it on GitHub and publish it from there.")
-    print("Next: the 6x and 7x scripts, in any order")
+    print("Next: the 6x and 7x scripts, in any order, with 70 after 69")
 
 
 if __name__ == "__main__":
