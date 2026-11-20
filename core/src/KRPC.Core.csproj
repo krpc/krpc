@@ -93,6 +93,9 @@
     <Compile Include="Server\SocketClient.cs" />
     <Compile Include="Server\SocketServer.cs" />
     <Compile Include="Server\SocketStream.cs" />
+    <Compile Include="Server\HTTP\Json.cs" />
+    <Compile Include="Server\HTTP\JsonException.cs" />
+    <Compile Include="Server\HTTP\JsonNumber.cs" />
     <Compile Include="Server\LocalSocket\LocalSocketServer.cs" />
     <Compile Include="Server\LocalSocket\UnixEndPoint.cs" />
     <Compile Include="Server\LocalSocket\UnixSocket.cs" />
