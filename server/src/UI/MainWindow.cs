@@ -72,7 +72,8 @@ namespace KRPC.UI
             "Protobuf over TCP/IP",
             "Protobuf over WebSockets",
             "Protobuf over SerialIO",
-            "Protobuf over local socket"
+            "Protobuf over local socket",
+            "JSON over HTTP"
         };
         const string unknownClientNameText = "<unknown>";
         const string noClientsConnectedText = "No clients connected";
@@ -273,7 +274,9 @@ namespace KRPC.UI
                 GUILayout.Label (server.Name, labelStyle);
             else
                 editServers [server.Id].DrawName ();
-            var clients = server.Clients.Count ();
+            // An HTTP server's requests share one internal client, so it lists no clients
+            var listsClients = server.Protocol != Protocol.JSONOverHTTP;
+            var clients = listsClients ? server.Clients.Count () : 0;
             if (clients > 0) {
                 GUILayout.FlexibleSpace ();
                 GUILayout.Label (clients.ToString (CultureInfo.CurrentCulture) + (clients == 1 ? " client" : " clients"), labelStyle);
@@ -300,7 +303,8 @@ namespace KRPC.UI
                 DrawServerInfoRow (protocolText, protocolNames [(int)server.Protocol]);
                 DrawServerInfoRow (addressText, server.Address);
                 DrawServerInfoLines (server.Info);
-                DrawClients (server);
+                if (listsClients)
+                    DrawClients (server);
             }
 
             GUILayout.BeginHorizontal();

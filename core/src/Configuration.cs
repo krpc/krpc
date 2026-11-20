@@ -103,17 +103,17 @@ namespace KRPC
             }
 
             /// <summary>
-            /// Construct default settings for a TCP/IP or WebSockets server, which listens on
-            /// the loopback address and the protocol's default port
+            /// Construct default settings for a TCP/IP, WebSockets or HTTP server, which listens
+            /// on the loopback address and the protocol's default port
             /// </summary>
             public Server(Protocol protocol)
             {
-                if (protocol != Protocol.ProtocolBuffersOverTCP && protocol != Protocol.ProtocolBuffersOverWebsockets)
+                var prefix = SettingsPrefix (protocol);
+                if (prefix == null)
                     throw new ArgumentException ("No default settings for " + protocol, nameof (protocol));
-                var websockets = protocol == Protocol.ProtocolBuffersOverWebsockets;
-                var prefix = websockets ? "ws_" : "tcpip_";
                 Id = Guid.NewGuid();
-                Name = websockets ? "WebSockets Server" : "TCP/IP Server";
+                Name = protocol == Protocol.ProtocolBuffersOverWebsockets ? "WebSockets Server" :
+                    protocol == Protocol.JSONOverHTTP ? "HTTP Server" : "TCP/IP Server";
                 Protocol = protocol;
                 Settings = new Dictionary<string, string>{
                     {prefix + "address", IPAddress.Loopback.ToString()},
@@ -121,16 +121,33 @@ namespace KRPC
             }
 
             /// <summary>
+            /// The prefix of the address and port settings of a protocol that listens on a
+            /// TCP/IP port, or null for any other protocol.
+            /// </summary>
+            public static string SettingsPrefix (Protocol protocol)
+            {
+                switch (protocol) {
+                case Protocol.ProtocolBuffersOverTCP:
+                    return "tcpip_";
+                case Protocol.ProtocolBuffersOverWebsockets:
+                    return "ws_";
+                case Protocol.JSONOverHTTP:
+                    return "http_";
+                default:
+                    return null;
+                }
+            }
+
+            /// <summary>
             /// Create a server instance from this configuration
             /// </summary>
             public KRPC.Server.Server Create ()
             {
-                KRPC.Server.Message.Server messageServer = null;
+                IMessageServer messageServer = null;
 
                 var serverProtocol = Protocol;
-                if (serverProtocol == Protocol.ProtocolBuffersOverTCP ||
-                    serverProtocol == Protocol.ProtocolBuffersOverWebsockets) {
-                    var prefix = serverProtocol == Protocol.ProtocolBuffersOverTCP ? "tcpip_" : "ws_";
+                var prefix = SettingsPrefix (serverProtocol);
+                if (prefix != null) {
                     var serverAddress = IPAddress.Loopback;
                     IPAddress.TryParse(Settings.GetValueOrDefault(prefix + "address", IPAddress.Loopback.ToString()), out serverAddress);
                     ushort port = 0;
@@ -138,8 +155,10 @@ namespace KRPC
                     var tcpServer = new TCPServer (serverAddress, port);
                     if (serverProtocol == Protocol.ProtocolBuffersOverTCP)
                         messageServer = new KRPC.Server.Delimited.Server (tcpServer);
-                    else
+                    else if (serverProtocol == Protocol.ProtocolBuffersOverWebsockets)
                         messageServer = new KRPC.Server.WebSockets.Server (tcpServer);
+                    else
+                        messageServer = new KRPC.Server.HTTP.Server (tcpServer);
                 } else if (serverProtocol == Protocol.ProtocolBuffersOverLocalSocket) {
                     var socketServer = new KRPC.Server.LocalSocket.LocalSocketServer (
                         Settings.GetValueOrDefault ("localsocket_path", KRPC.Server.LocalSocket.LocalSocketServer.DefaultPath ()));
@@ -173,8 +192,8 @@ namespace KRPC
         }
 
         /// <summary>
-        /// The port a server of the protocol listens on by default: 50000 for TCP/IP and
-        /// 50001 for WebSockets. Zero for a protocol with no port.
+        /// The port a server of the protocol listens on by default: 50000 for TCP/IP,
+        /// 50001 for WebSockets and 50003 for HTTP. Zero for a protocol with no port.
         /// </summary>
         public static ushort DefaultPort (Protocol protocol)
         {
@@ -183,6 +202,8 @@ namespace KRPC
                 return 50000;
             case Protocol.ProtocolBuffersOverWebsockets:
                 return 50001;
+            case Protocol.JSONOverHTTP:
+                return 50003;
             default:
                 return 0;
             }

@@ -52,6 +52,7 @@ stage_files(
         "src/_static/clients/c.svg",
         "src/_static/clients/cpp.svg",
         "src/_static/clients/csharp.svg",
+        "src/_static/clients/http.svg",
         "src/_static/clients/java.svg",
         "src/_static/clients/javascript.svg",
         "src/_static/clients/lua.svg",

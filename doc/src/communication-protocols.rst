@@ -9,17 +9,20 @@ kRPC provides various communication protocols:
   which carries the same messages over a cheaper path than TCP/IP.
 * :doc:`communication-protocols/websockets` for web browsers.
 * :doc:`communication-protocols/serialio` for microcontrollers like Arduino.
+* :doc:`communication-protocols/http` for tools and languages that make HTTP requests, with no
+  client library.
 
-In each protocol, clients invoke remote procedure calls by :doc:`sending and receiving protobuf
-messages <communication-protocols/messages>`.
+In each protocol except HTTP, clients invoke remote procedure calls by :doc:`sending and
+receiving protobuf messages <communication-protocols/messages>`. HTTP carries each call as a
+request with a JSON body.
 
 .. _communication-protocol-version:
 
 Protocol Version
 ----------------
 
-Each connection handshake carries the version of the protocol, an integer. The client sends the
-version it uses, and the server replies with the version it accepted:
+The connection handshake of each protocol except HTTP carries the version of the protocol, an
+integer. The client sends the version it uses, and the server replies with the version it accepted:
 
 .. list-table::
    :header-rows: 1
@@ -48,3 +51,4 @@ status ``WRONG_PROTOCOL_VERSION`` in its connection response, or may fail to con
    communication-protocols/websockets
    communication-protocols/serialio
    communication-protocols/messages
+   communication-protocols/http

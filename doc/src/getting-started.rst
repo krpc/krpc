@@ -48,18 +48,15 @@ Stop a server, then click its "Edit" button to change its settings. Click "Save"
 2. **Address**: The address the server listens on. "localhost", the default, accepts connections
    from the same machine only. To accept connections over a network, select one of the machine's
    addresses, "Any" for all of them, or "Manual" to type one in.
-3. **Port**: The TCP port, 50000 by default for TCP/IP and 50001 for WebSockets. Change it only
-   if another program uses that port.
-
-"Add server" adds another server, for example one over a local socket. It is named "Server",
-"Server 2" and so on.
+3. **Port**: The TCP port, 50000 by default for TCP/IP, 50001 for WebSockets and 50003 for HTTP.
+   Change it only if another program uses that port.
 
 "Show advanced settings" reveals these settings:
 
 1. **Auto-start server**: On by default. Starts the servers when the game loads.
 2. **Auto-accept new clients**: On by default. When off, a pop-up asks whether to allow each new
    client. A client stops waiting after its handshake timeout, 5 seconds by default, so connect
-   with no handshake timeout to leave time to answer.
+   with no handshake timeout to leave time to answer. HTTP requests need no approval.
 3. **Confirm disconnecting a client**: Asks before the disconnect button next to a client closes
    its connection.
 4. **Pause the server when the game pauses**: While the game is paused, calls wait until it
@@ -121,5 +118,6 @@ Going Further
 * The :doc:`tutorials <tutorials>` show more of what kRPC can do.
 * Clients are also available for :doc:`C# <csharp>`, :doc:`C++ <cpp>`, :doc:`C <cnano>`,
   :doc:`Java <java>`, :doc:`Lua <lua>` and :doc:`JavaScript <js>`.
-* Any language can :doc:`talk to the server directly <communication-protocols>`.
+* Other languages can call the server :doc:`over HTTP <http>`, or speak its
+  :doc:`protocol <communication-protocols>` directly.
 * Ask for help on the `kRPC Discord server <https://discord.gg/bXuaTrj>`_.

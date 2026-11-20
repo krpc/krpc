@@ -108,9 +108,9 @@ namespace KRPC.UI
             GUILayout.Label (text, window.labelStyle, GUILayout.Width (labelWidth * GameSettings.UI_SCALE));
         }
 
-        // The prefix of the address and port keys, which differs between TCP/IP and WebSockets
+        // The prefix of the address and port keys, which differs between TCP/IP, WebSockets and HTTP
         string SettingsPrefix {
-            get { return protocol == Protocol.ProtocolBuffersOverWebsockets ? "ws_" : "tcpip_"; }
+            get { return Configuration.Server.SettingsPrefix (protocol); }
         }
 
         public void Draw ()
@@ -120,8 +120,7 @@ namespace KRPC.UI
             protocol = (Protocol)GUILayoutExtensions.ComboBox (protocolComboId, (int)protocol, MainWindow.protocolNames, window.buttonStyle, window.comboOptionsStyle, window.comboOptionStyle);
             GUILayout.EndHorizontal ();
 
-            if (protocol == Protocol.ProtocolBuffersOverTCP ||
-                protocol == Protocol.ProtocolBuffersOverWebsockets) {
+            if (SettingsPrefix != null) {
                 var addressKey = SettingsPrefix + "address";
                 var portKey = SettingsPrefix + "port";
                 GUILayout.BeginHorizontal();
@@ -267,8 +266,7 @@ namespace KRPC.UI
         {
             window.Errors.Clear();
             IList<string> allowedKeys = null;
-            if (protocol == Protocol.ProtocolBuffersOverTCP ||
-                protocol == Protocol.ProtocolBuffersOverWebsockets)
+            if (SettingsPrefix != null)
             {
                 var addressKey = SettingsPrefix + "address";
                 var portKey = SettingsPrefix + "port";
