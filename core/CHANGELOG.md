@@ -1,40 +1,123 @@
-## [v0.8.0] - unreleased
+## [v0.8.0]
 
-- **Breaking:** Refuse a service whose parameter defaults to a value its enumeration does not
-  declare (#1192)
-- Close a WebSockets connection whose frame is too large to buffer, which threw
-  `OverflowException` (#1193)
-- Update a stream when its value changes between 0.0 and -0.0, or a collection it returns
-  changes in place (#1199)
-- **Breaking:** Fire a `KRPC.AddEvent` event once each time its function becomes true (#1234)
-- Connections
+- Protocol
   - **Breaking:** Carry each client on one connection, as protocol version 2, where every
     message is a `Message`. Clients from earlier releases cannot connect (#1219)
   - Add an id to each request, which the server copies onto its response (#1219)
-  - End a connection with a `Disconnect` message giving the reason (#1219)
-  - Refuse a connection the player denies with the status `DENIED` (#1219)
+  - End a connection with a `Disconnect` message giving the reason, and refuse one the player
+    denies with the status `DENIED` (#1219)
   - Start a new session on a `ConnectionRequest` sent during a session, on every transport
     (#1219)
-  - Accept the stream RPCs over serial IO, which returned an error, with no flow control for
-    their updates (#1219)
-  - End a connection whose message stalls partway, after 3 seconds over serial IO and 30
-    seconds otherwise (#1219)
-  - Name a client in log lines by its address and the start of its identifier (#1219)
-  - Log each request at the debug level as one line naming its calls and their errors, and
-    stop logging each stream update (#1219)
-  - Move the default local socket to `krpc.sock` in `XDG_RUNTIME_DIR` or `LOCALAPPDATA`, or
-    to `/tmp/krpc-<user>.sock` (#1219)
-
-- Exceptions
+  - **Breaking:** Encode a stream or an event as the `uint64` id of its stream, and remove the
+    `Stream` and `Event` messages (#1266)
+  - Add `internal` to the `Procedure` message, set for the stream, event and server side
+    function procedures of the `KRPC` service (#1269)
+  - **Breaking:** Rename `name` in the `Error` message to `exception`, and add `service_id` and
+    `exception_id` (#1324)
   - Report the .NET exception each kRPC exception stands for, as `mapped_type` in
     `KRPC.Exception` (#1172)
-  - Allow a `<see cref>` in service documentation to link to an exception, including a .NET
-    exception that a kRPC exception maps (#1185)
+
+- Procedure and type ids
+  - **Breaking:** Derive each procedure id from a hash of its name, which changes every id (#1265)
+  - Give each class, enumeration, structure and exception an id, a hash of its name (#1324)
+  - Add `id` to the `Service`, `Procedure`, `Class`, `Enumeration`, `Struct` and `Exception`
+    messages, and `service_id` and `id` to the `Type` message (#1265, #1324)
+
+- Calls and arguments
+  - **Breaking:** Reject an argument with bytes left over, an unknown field, a 32-bit number out
+    of range, a tuple with the wrong number of items, an undeclared enum value, or a bool other
+    than 0 or 1 (#1280)
+  - **Breaking:** Fail a call with an argument position past the procedure's last parameter, or
+    with two arguments at one position (#1290)
+  - Fail only the call whose argument the server cannot decode, and run the other calls in the
+    request (#1280)
+
+- Connections and performance
+  - Wait for a client's next call by its measured time between calls, so a client that pauses
+    briefly between calls gets several calls per frame (#1376)
+  - Read and write each connection on threads of its own, so a client that stops reading cannot
+    freeze the game (#1376)
+  - Read up to 16 requests ahead of the one running, and end the connection of a client that
+    leaves more than 16 MB of messages unread (#1376)
+  - Read from a serial port as bytes arrive, and accept the stream RPCs over serial IO (#1219,
+    #1376)
+  - End a connection whose message stalls partway, after 3 seconds over serial IO and 30 seconds
+    otherwise (#1219)
+  - Move the default local socket to `krpc.sock` in `XDG_RUNTIME_DIR` or `LOCALAPPDATA`, or to
+    `/tmp/krpc-<user>.sock` (#1219)
+  - Start the remaining servers when one fails to start (#1330)
+  - Load the services faster in games with many mods (#1353)
+  - Fix a serial IO server stopping when it sends a response over a megabyte (#1386)
+  - Fix a WebSockets connection with a frame too large to buffer throwing
+    `OverflowException` (#1193)
+  - Fix RPCs stopping on .NET after a client disconnects during a yielding call (#1189)
+
+- HTTP and WebSockets
+  - Add a JSON over HTTP server, with an OpenAPI document, for calling procedures with no client
+    library (#1391)
+  - **Breaking:** Refuse WebSockets connections from web pages whose origin is not allowed, by
+    default any page not served from this machine (#1392)
+
+- Streams and events
+  - **Breaking:** Fire a `KRPC.AddEvent` event once each time its function becomes true (#1234)
+  - Update a stream when its value changes between 0.0 and -0.0, or a collection it returns
+    changes in place (#1199)
+  - Run a stream of a call or server side function with no value on each update, for its
+    effects (#1198)
+  - Fix rate limited streams updating at as little as half their rate (#1310)
+
+- Server side functions
+  - Add the `KRPC.Expression.Match` and `KRPC.Expression.Switch` statements (#1334)
+  - Combine flags enumeration values with `KRPC.Expression.And`, `Or`, `ExclusiveOr` and `Not`
+    (#1311, #1313)
+  - Add variants of the procedures that take ids in place of names, such as
+    `KRPC.Type.ClassTypeById` and `KRPC.Expression.GetFieldByIndex` (#1336)
+  - **Breaking:** `KRPC.Expression.CallWithArguments` takes a call template, and throws an
+    exception for a call that carries arguments (#1352)
+  - Fail when a function is built, in place of when it runs, for a null constant passed to a
+    parameter that cannot be null (#1352)
+
+- Server status and settings
+  - **Breaking:** Return `KRPC.GetStatus` as the struct `KRPC.ServerStatus`, with the settings
+    and statistics in nested structs, and remove the `Status` message (#1244)
+  - **Breaking:** Replace the statistics per update with statistics per frame, adding
+    `FrameRate`, `BudgetPerFrame` and `MedianTurnaround` (#1376)
+  - **Breaking:** Rename the stream counters to `Streams`, `StreamEvaluations` and
+    `StreamEvaluationRate`, and add `TickHoldTimeout`, `DeferredCalls` and `StreamUpdatesSent`
+    (#1244)
+  - **Breaking:** Replace the settings `MaxTimePerUpdate`, `BlockingRecv` and `RecvTimeout` with
+    `TargetFrameRate`, `MaxTimePerFrame` and `MaxCallWait` (#1376)
+  - **Breaking:** Remove the "One RPC per update" setting and
+    `KRPC.ServerSettings.OneRpcPerUpdate` (#1349)
+  - Turn on "Auto-start server" by default (#1349)
+
+- Writing services
+  - Support flags enumerations, a `KRPCEnum` with `[Flags]` whose values a client can combine,
+    marked by `flags` in the `Enumeration` message (#1311)
+  - Add `Id` to the attributes, with `GetterId` and `SetterId` on `KRPCProperty`, to resolve an
+    id clash, and `KRPCProcedureId` for a procedure a class inherits (#1265, #1324)
+  - Add `ModAPI`, `ModBinder`, `MemberBinder` and the `RequiresMod` attribute, for a service
+    that binds to another mod by name (#1341, #1342, #1382)
+  - Add `StdLib.ImageFormat`, the format of the images from the camera services (#1341)
+  - Allow a `<see cref>` in service documentation to link to an exception, or a member of a
+    service with a custom name (#1185, #1188)
+  - **Breaking:** Reject two services, two types of a service, or two members, values, fields or
+    parameters that share a name, ignoring case (#1324, #1325, #1338)
+  - **Breaking:** Reject a type named after its service, a method `GetFoo` or `SetFoo` beside a
+    property `Foo`, or a parameter or value name that is not ASCII letters and digits (#1325,
+    #1338)
+  - **Breaking:** Reject a service declared by more than one class, or a parameter defaulting to
+    a value its enumeration does not declare (#1192, #1325)
+  - **Breaking:** Reject a stream or an event outside a return value, or a stream returned by a
+    procedure that is not internal (#1269)
 
 - Logging
+  - Log each request at the debug level as one line naming its calls and their errors, and stop
+    logging each stream update (#1219)
   - Log the transport connection lines and object store sweeps at the debug level (#1235)
   - Log the address and settings of a server when it starts (#1235)
-  - Leave the time out of log lines, which the game log adds (#1235)
+  - Name a client in log lines by its address and the start of its identifier, and leave out
+    the time, which the game log adds (#1219, #1235)
 
 ## [v0.7.0]
 

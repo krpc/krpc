@@ -1,38 +1,98 @@
-## [v0.8.0] - unreleased
+## [v0.8.0]
 
 - Connections
   - **Breaking:** Connect over one connection, removing the `stream_port` and `stream_path`
     parameters of `connect` and `connect_local`. A server from before 0.8 refuses the
     connection (#1219)
-  - **Breaking:** Rename the `rpc_port` and `rpc_path` parameters of `connect` and
-    `connect_local` to `port` and `path` (#1219)
+  - **Breaking:** Rename the `rpc_port` and `rpc_path` parameters to `port` and `path` (#1219)
   - **Breaking:** Give up after 5 seconds if the server does not accept the connection. Pass
     `handshake_timeout=None` to wait for the player to approve it (#1219)
-  - Add `handshake_timeout` and `stall_timeout` parameters to `connect` and `connect_local`
-    (#1219)
+  - Add the `handshake_timeout` and `stall_timeout` parameters (#1219)
   - Send calls from several threads without waiting for each other's responses (#1219)
+  - Tell the server when the connection closes (#1219)
   - Fix later calls reading the wrong response after a call is interrupted by an exception
     (#1219)
-  - Tell the server when the connection closes (#1219)
+
+- Naming
+  - **Breaking:** Rename `krpc.Client` to `krpc.Connection`, and each `<Service>Client` to
+    `<Service>Connection`, such as `krpc.ksp.KSPConnection` (#1332)
+  - **Breaking:** Rename the transports `krpc.Connection` and `krpc.LocalConnection` to
+    `krpc.TCPIPTransport` and `krpc.LocalTransport` (#1332)
+  - **Breaking:** Rename the base classes of generated types to `RemoteObject`, `RemoteEnum`,
+    `RemoteFlags` and `RemoteService` (#1332)
+  - **Breaking:** Move the modules of the KSP services from `krpc.services` to `krpc.ksp`, such
+    as `krpc.ksp.spacecenter` (#1304)
+  - **Breaking:** Convert names with `UInt`, `FoV`, a plural acronym or digits next to an
+    acronym as written, e.g. `Type.uint`, `Camera.fov` and `MapFilterType.evas` (#1339)
+
+- Services and types
+  - Add `connect[T]` and `connect_local[T]`, which type the connection as `T`, and a connection
+    type per service module to combine in a subclass (#1303)
+  - Support `isinstance` with a class accessed through a connection, such as
+    `isinstance(vessel, conn.space_center.Vessel)` (#1279)
+  - Support flags enumerations, such as `SpaceCenter.MapFilterType`, as an `enum.Flag` (#1311)
+  - **Breaking:** Remove `use_pregenerated_stubs`, and raise an `AttributeError` for a service
+    the server lacks (#1302)
+  - **Breaking:** Raise a `TypeError` for a static method called on a class imported from a
+    service's module (#1302)
+  - **Breaking:** Leave internal procedures, such as `KRPC.add_stream`, out of the services
+    (#1269)
+  - **Breaking:** Return `KRPC.get_status` as the named tuple `ServerStatus` (#1244)
+  - Warn on a use of a deprecated member, including through a stream or `get_call`, and mark
+    them with `@deprecated` in the stubs (#1322)
+  - Deprecate each member of a deprecated service, class, enumeration or structure (#1322)
+  - Keep the parameters of a deprecated procedure in its signature (#1301)
+
+- Arguments
+  - Raise `ValueError` for a tuple or structure of the wrong length, a negative unsigned value,
+    or a local socket path that is too long (#1333)
+  - Raise an error for a number out of range of its type, or for a string, bytes or a dictionary
+    passed for a list, tuple or structure (#1377)
+  - Raise `TypeError` for `None` passed for a parameter that cannot be null, before the call is
+    sent (#1333, #1377)
+
+- Errors
+  - **Breaking:** Derive every error of the client from the new `krpc.error.RemoteError` (#1333)
+  - **Breaking:** Rename `krpc.error.RPCError` to `ServerError`, and `FunctionCompilationError`
+    to `CompilationError` (#1333)
+  - Raise each exception a service declares as its own class, derived from `ServerError` or the
+    builtin it maps, so `except conn.krpc.ArgumentException` catches it (#1172, #1300, #1333)
+  - **Breaking:** Raise `ConnectionError` when the server cannot be reached, with the `OSError`
+    as its cause, or sends malformed service definitions (#1219, #1333)
   - Add `status` and `reason` to `ConnectionError` for a refused or ended connection (#1219)
-  - **Breaking:** Raise `ConnectionError` when the server cannot be reached, with the
-    `OSError` as its cause (#1219)
+  - Raise `EncodingError` for every value that fails to decode, including an enumeration value
+    the enumeration does not declare (#1311, #1333)
 
 - Streams and events
   - **Breaking:** Raise `ValueError` from `Stream.wait` and `Event.wait` for a negative or NaN
     timeout, and wait with no deadline for an infinite one (#1219)
+  - **Breaking:** Raise `StreamError` when the server removes a stream or event, or for a stream
+    of a procedure that returns an event (#1333, #1377)
+  - **Breaking:** Raise `ValueError` in place of `StreamError` for arguments to a streamed
+    function, and for a compiled function with parameters (#1333)
+  - Remove a stream or an event at the end of a `with` statement on it (#1291)
+  - **Deprecated:** `Client.stream`, superseded by `add_stream` in a `with` statement (#1291)
+  - Stream a procedure, property setter or server side function with no value as a stream of
+    `None`, and build the call of a property setter with `get_call` (#1198)
   - Keep a stream running when a value fails to decode, dropping the value (#1219)
   - Fix `Stream.wait` and `Event.wait` returning before the timeout on Windows (#1220)
 
-- Link the references in service docstrings with Sphinx roles (#1185)
-- Fix the lists and parameter references in service docstrings, which were invalid
-  reStructuredText (#1185)
-- Write the units and formulas in service documentation as Unicode text in docstrings (#1169)
-- Fix a `SyntaxWarning` for an invalid escape sequence on importing the `SpaceCenter` stubs (#1169)
+- Server side functions
+  - Compile `match` statements, and `|`, `&`, `^`, `~`, `in` and truth tests on flags
+    enumeration values (#1313, #1337)
+  - Accept a function built with the expression API in `Connection.compile` (#1269)
+  - Add `Connection.get_call_template`, and take a member such as `Engine.has_fuel` as its call
+    template, for `Expression.call_with_arguments` (#1352)
+  - Type the functions `compile`, `run`, `add_stream` and `add_event` take, and the
+    `KRPC.Expression` object `compile` returns (#1306)
 
-- Exceptions
-  - Raise a `KRPC` exception as its own class, derived from the builtin it was raised as
-    before, so `except conn.krpc.ArgumentException` catches it (#1172)
+- Documentation and packaging
+  - Link the references in service docstrings with Sphinx roles, and fix their invalid
+    reStructuredText (#1185)
+  - Write the units and formulas in docstrings as Unicode text (#1169)
+  - Fix a `SyntaxWarning` for an invalid escape sequence on importing the `SpaceCenter` stubs
+    (#1169)
+  - Publish a wheel in place of an sdist (#1289)
 
 ## [v0.7.0]
 
