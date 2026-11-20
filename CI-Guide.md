@@ -74,7 +74,8 @@ The .NET SDK for the `KRPC.sln` build comes from `actions/setup-dotnet`. The con
 the `runner` user, so it owns the files the checkout writes.
 
 The CMake and vcpkg consumer jobs run on the bare runner. They need only a compiler and the
-packages the `vcpkg-linux` action installs.
+packages the `vcpkg-linux` action installs. The CMake fetch scenarios unset `CMAKE_PREFIX_PATH`,
+so they build only with the dependencies they download.
 
 ### Windows
 
