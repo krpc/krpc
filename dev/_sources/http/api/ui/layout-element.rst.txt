@@ -1,0 +1,111 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Layout Element
+==============
+
+
+.. _http-UI.LayoutElement:
+
+.. rubric:: LayoutElement
+
+How much space a user interface element asks a :ref:`Layout <http-UI.Layout>` for.
+
+.. note::
+
+   A layout gives every element its minimum size first. Any space left over is shared
+   out to bring elements up to their preferred size, and anything still left over is
+   shared between the elements with a flexible size, in proportion to it.
+
+
+A ``LayoutElement`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ui/layout-element/(id)/min-size
+
+   The smallest size the element can be given, in pixels. A negative value in either
+   direction leaves that direction unconstrained.
+
+
+   :param id: The identifier of the :ref:`LayoutElement <http-UI.LayoutElement>` object.
+
+   :resjson tuple<double, double> value:
+
+.. http:put:: /ui/layout-element/(id)/min-size
+
+   The smallest size the element can be given, in pixels. A negative value in either
+   direction leaves that direction unconstrained.
+
+
+   :param id: The identifier of the :ref:`LayoutElement <http-UI.LayoutElement>` object.
+
+   :reqjson tuple<double, double> value: The new value.
+
+
+
+
+.. http:get:: /ui/layout-element/(id)/preferred-size
+
+   The size the element asks for, in pixels. A negative value in either direction
+   leaves that direction unconstrained.
+
+
+   :param id: The identifier of the :ref:`LayoutElement <http-UI.LayoutElement>` object.
+
+   :resjson tuple<double, double> value:
+
+.. http:put:: /ui/layout-element/(id)/preferred-size
+
+   The size the element asks for, in pixels. A negative value in either direction
+   leaves that direction unconstrained.
+
+
+   :param id: The identifier of the :ref:`LayoutElement <http-UI.LayoutElement>` object.
+
+   :reqjson tuple<double, double> value: The new value.
+
+
+
+
+.. http:get:: /ui/layout-element/(id)/flexible-size
+
+   The share the element takes of the space left over once every element has its
+   preferred size. A negative value in either direction takes no share.
+
+
+   :param id: The identifier of the :ref:`LayoutElement <http-UI.LayoutElement>` object.
+
+   :resjson tuple<double, double> value:
+
+.. http:put:: /ui/layout-element/(id)/flexible-size
+
+   The share the element takes of the space left over once every element has its
+   preferred size. A negative value in either direction takes no share.
+
+
+   :param id: The identifier of the :ref:`LayoutElement <http-UI.LayoutElement>` object.
+
+   :reqjson tuple<double, double> value: The new value.
+
+
+
+
+.. http:get:: /ui/layout-element/(id)/ignore-layout
+
+   Whether the layout leaves the element out and lets it be positioned by hand.
+
+
+   :param id: The identifier of the :ref:`LayoutElement <http-UI.LayoutElement>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ui/layout-element/(id)/ignore-layout
+
+   Whether the layout leaves the element out and lets it be positioned by hand.
+
+
+   :param id: The identifier of the :ref:`LayoutElement <http-UI.LayoutElement>` object.
+
+   :reqjson bool value: The new value.

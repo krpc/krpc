@@ -493,6 +493,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../communication-protocols/websockets.html">WebSockets</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../communication-protocols/serialio.html">Serial IO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../communication-protocols/messages.html">Messaging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../communication-protocols/http.html">HTTP</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../client-design.html">Client Design</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -619,7 +620,9 @@ package:</p>
 <p>The first four lines set up the page for the client language. <code class="docutils literal notranslate"><span class="pre">macros.service</span></code> documents the
 service’s procedures and properties. A class, enumeration, structure or exception has a macro of
 its own, such as <code class="docutils literal notranslate"><span class="pre">macros.class(services['SpaceCenter'].classes['Vessel'])</span></code>. The templates are
-<a class="reference external" href="https://jinja.palletsprojects.com">Jinja</a>, so a page can hold any other text as well.</p>
+<a class="reference external" href="https://jinja.palletsprojects.com">Jinja</a>, so a page can hold any other text as well.
+<code class="docutils literal notranslate"><span class="pre">domain.codeext</span></code> is the file extension of the language’s examples. It is empty for <code class="docutils literal notranslate"><span class="pre">http</span></code>,
+which has no examples, so <code class="docutils literal notranslate"><span class="pre">{%</span> <span class="pre">if</span> <span class="pre">domain.codeext</span> <span class="pre">%}</span></code> leaves an example out of those pages.</p>
 <p>The ordering file lists each member of the service by its full name, in the order the pages
 document them:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>LaunchControl.Throttle
@@ -640,21 +643,23 @@ krpc-docgen<span class="w"> </span>python<span class="w"> </span>order.txt<span 
 <span class="w">    </span>--page<span class="w"> </span>launch-control.tmpl<span class="w"> </span>python/launch-control.rst
 </pre></div>
 </div>
-<p>Run <code class="docutils literal notranslate"><span class="pre">krpc-docgen</span></code> once for each language: <code class="docutils literal notranslate"><span class="pre">cnano</span></code>, <code class="docutils literal notranslate"><span class="pre">cpp</span></code>, <code class="docutils literal notranslate"><span class="pre">csharp</span></code>, <code class="docutils literal notranslate"><span class="pre">java</span></code>, <code class="docutils literal notranslate"><span class="pre">lua</span></code> or
-<code class="docutils literal notranslate"><span class="pre">python</span></code>. Pass the definitions of every service the documentation links to, as well as the
-service’s own. <code class="docutils literal notranslate"><span class="pre">--documented</span></code> writes the full name of each member the pages document, to check
-that none is left out.</p>
+<p>Run <code class="docutils literal notranslate"><span class="pre">krpc-docgen</span></code> once for each language: <code class="docutils literal notranslate"><span class="pre">cnano</span></code>, <code class="docutils literal notranslate"><span class="pre">cpp</span></code>, <code class="docutils literal notranslate"><span class="pre">csharp</span></code>, <code class="docutils literal notranslate"><span class="pre">http</span></code>, <code class="docutils literal notranslate"><span class="pre">java</span></code>,
+<code class="docutils literal notranslate"><span class="pre">js</span></code>, <code class="docutils literal notranslate"><span class="pre">lua</span></code> or <code class="docutils literal notranslate"><span class="pre">python</span></code>. <code class="docutils literal notranslate"><span class="pre">http</span></code> documents the path of each procedure on the
+<a class="reference internal" href="../http.html"><span class="doc">HTTP server</span></a>. Pass the definitions of every service the documentation links to, as
+well as the service’s own. <code class="docutils literal notranslate"><span class="pre">--documented</span></code> writes the full name of each member the pages
+document, to check that none is left out.</p>
 <p>The text of the pages is the service’s <a class="reference internal" href="documentation.html"><span class="doc">documentation</span></a>.
 <code class="docutils literal notranslate"><span class="pre">krpc-servicedefs</span></code> reads it from the XML documentation file beside the assembly. Build the
 assembly with <code class="docutils literal notranslate"><span class="pre">&lt;GenerateDocumentationFile&gt;true&lt;/GenerateDocumentationFile&gt;</span></code> to write that file.</p>
 </section>
 <section id="sphinx-setup">
 <h2>Sphinx Setup<a class="headerlink" href="#sphinx-setup" title="Link to this heading">#</a></h2>
-<p>The Python, C++ and C pages use the domains built into Sphinx. The C#, Java and Lua pages need the
-<a class="reference external" href="https://pypi.org/project/sphinx-csharp">sphinx-csharp</a>,
-<a class="reference external" href="https://pypi.org/project/sphinx-java">sphinx-java</a> and
-<a class="reference external" href="https://pypi.org/project/sphinx-lua-ls">sphinx-lua-ls</a> extensions. A service whose
-documentation has units or formulas also needs <code class="docutils literal notranslate"><span class="pre">sphinx.ext.mathjax</span></code>.</p>
+<p>The Python, C++, C and JavaScript pages use the domains built into Sphinx. The C#, Java, Lua and
+HTTP pages need the <a class="reference external" href="https://pypi.org/project/sphinx-csharp">sphinx-csharp</a>,
+<a class="reference external" href="https://pypi.org/project/sphinx-java">sphinx-java</a>,
+<a class="reference external" href="https://pypi.org/project/sphinx-lua-ls">sphinx-lua-ls</a> and
+<a class="reference external" href="https://pypi.org/project/sphinxcontrib-httpdomain">sphinxcontrib-httpdomain</a> extensions. A
+service whose documentation has units or formulas also needs <code class="docutils literal notranslate"><span class="pre">sphinx.ext.mathjax</span></code>.</p>
 </section>
 </section>
 

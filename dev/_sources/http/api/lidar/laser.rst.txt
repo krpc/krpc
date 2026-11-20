@@ -1,0 +1,41 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Laser
+=====
+
+
+.. _http-LIDAR.Laser:
+
+.. rubric:: Laser
+
+.. warning:: Deprecated. Use :http:post:`/space-center/raycast-distance` instead.
+
+A LiDAR. Obtained by calling :http:post:`/lidar/laser`.
+
+A ``Laser`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /lidar/laser/(id)/part
+
+   Get the part containing this LiDAR.
+
+
+   :param id: The identifier of the :ref:`Laser <http-LIDAR.Laser>` object.
+
+   :resjson SpaceCenter.Part value:
+
+
+
+
+.. http:get:: /lidar/laser/(id)/cloud
+
+   Get the point cloud from the LiDAR.
+   Returns an empty list on failure.
+
+
+   :param id: The identifier of the :ref:`Laser <http-LIDAR.Laser>` object.
+
+   :resjson list<double> value:

@@ -5,8 +5,8 @@ KRPC
 ====
 
 Provides functionality to interact with the server: its status and services, the connected
-clients, the game scene and pause state, and holding the game on a physics tick. The expressions
-build server side functions.
+clients, the game scene and pause state, and holding the game on a physics tick.
+The expressions build server side functions.
 
 .. toctree::
    :includehidden:

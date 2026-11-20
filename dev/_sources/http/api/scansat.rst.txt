@@ -1,0 +1,18 @@
+.. default-domain:: http
+.. highlight:: json
+
+SCANsat
+=======
+
+Provides functionality to interact with the `SCANsat`_ mod. |SCANsat tested|
+
+.. toctree::
+   :includehidden:
+   :maxdepth: 1
+
+   scansat/scansat
+   scansat/scanner
+   scansat/map
+
+
+.. include:: /mods.inc

@@ -1,0 +1,1758 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+AscentGuidance
+==============
+
+
+.. _http-MechJeb.AscentGuidance:
+
+.. rubric:: AscentGuidance
+
+The Ascent Guidance window, which flies the vessel to orbit.
+
+.. note::
+
+   See the `MechJeb wiki <https://github.com/MuMech/MechJeb2/wiki/Ascent-Guidance>`_
+   for how to set up this autopilot.
+
+
+A ``AscentGuidance`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /mech-jeb/ascent-guidance/(id)/enabled
+
+   Whether the module is enabled.
+
+
+   :param id: The identifier of the :ref:`AscentGuidance <http-MechJeb.AscentGuidance>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/ascent-guidance/(id)/enabled
+
+   Whether the module is enabled.
+
+
+   :param id: The identifier of the :ref:`AscentGuidance <http-MechJeb.AscentGuidance>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/ascent-guidance/(id)/status
+
+   The autopilot status, which depends on the selected ascent path.
+
+
+   :param id: The identifier of the :ref:`AscentGuidance <http-MechJeb.AscentGuidance>` object.
+
+   :resjson string value:
+
+
+
+
+.. http:get:: /mech-jeb/ascent-guidance/(id)/ascent-type
+
+   The ascent path.
+
+
+   :param id: The identifier of the :ref:`AscentGuidance <http-MechJeb.AscentGuidance>` object.
+
+   :resjson MechJeb.AscentType value:
+
+.. http:put:: /mech-jeb/ascent-guidance/(id)/ascent-type
+
+   The ascent path.
+
+
+   :param id: The identifier of the :ref:`AscentGuidance <http-MechJeb.AscentGuidance>` object.
+
+   :reqjson MechJeb.AscentType value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/ascent-guidance/(id)/settings
+
+   The Ascent Settings window.
+
+
+   :param id: The identifier of the :ref:`AscentGuidance <http-MechJeb.AscentGuidance>` object.
+
+   :resjson MechJeb.AscentSettings value:
+
+
+
+
+.. http:get:: /mech-jeb/ascent-guidance/(id)/pvg-settings
+
+   The PVG Settings window, with the settings of the ``"pvg"`` path.
+
+
+   :param id: The identifier of the :ref:`AscentGuidance <http-MechJeb.AscentGuidance>` object.
+
+   :resjson MechJeb.PVGSettings value:
+
+
+
+
+.. http:get:: /mech-jeb/ascent-guidance/(id)/classic-path
+
+   The Ascent Path Editor window, with the settings of the
+   ``"classic"`` path.
+
+
+   :param id: The identifier of the :ref:`AscentGuidance <http-MechJeb.AscentGuidance>` object.
+
+   :resjson MechJeb.ClassicPath value:
+
+
+
+
+.. http:get:: /mech-jeb/ascent-guidance/(id)/desired-orbit-altitude
+
+   The altitude of the final circular orbit, in meters.
+
+
+   :param id: The identifier of the :ref:`AscentGuidance <http-MechJeb.AscentGuidance>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/ascent-guidance/(id)/desired-orbit-altitude
+
+   The altitude of the final circular orbit, in meters.
+
+
+   :param id: The identifier of the :ref:`AscentGuidance <http-MechJeb.AscentGuidance>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/ascent-guidance/(id)/desired-apoapsis
+
+   The target apoapsis, in meters.
+
+   .. note::
+
+      Applies on the ``"pvg"`` path.
+
+
+   :param id: The identifier of the :ref:`AscentGuidance <http-MechJeb.AscentGuidance>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/ascent-guidance/(id)/desired-apoapsis
+
+   The target apoapsis, in meters.
+
+   .. note::
+
+      Applies on the ``"pvg"`` path.
+
+
+   :param id: The identifier of the :ref:`AscentGuidance <http-MechJeb.AscentGuidance>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/ascent-guidance/(id)/attach-alt-flag
+
+   Whether the orbit is attached at :http:get:`/mech-jeb/ascent-guidance/(id)/desired-attach-alt`.
+
+   .. note::
+
+      Applies on the ``"pvg"`` path, with an early shutoff stage, set by
+      :http:get:`/mech-jeb/pvg-settings/(id)/optimize-stage-flag` and :http:get:`/mech-jeb/pvg-settings/(id)/optimize-stage`.
+      Without one, MechJeb always attaches the orbit.
+
+
+   :param id: The identifier of the :ref:`AscentGuidance <http-MechJeb.AscentGuidance>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/ascent-guidance/(id)/attach-alt-flag
+
+   Whether the orbit is attached at :http:get:`/mech-jeb/ascent-guidance/(id)/desired-attach-alt`.
+
+   .. note::
+
+      Applies on the ``"pvg"`` path, with an early shutoff stage, set by
+      :http:get:`/mech-jeb/pvg-settings/(id)/optimize-stage-flag` and :http:get:`/mech-jeb/pvg-settings/(id)/optimize-stage`.
+      Without one, MechJeb always attaches the orbit.
+
+
+   :param id: The identifier of the :ref:`AscentGuidance <http-MechJeb.AscentGuidance>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/ascent-guidance/(id)/desired-attach-alt
+
+   The altitude at which the orbit is attached, in meters.
+
+   .. note::
+
+      Applies on the ``"pvg"`` path. Requires :http:get:`/mech-jeb/ascent-guidance/(id)/attach-alt-flag`,
+      unless there is no early shutoff stage. See :http:get:`/mech-jeb/pvg-settings/(id)/optimize-stage`.
+
+
+   :param id: The identifier of the :ref:`AscentGuidance <http-MechJeb.AscentGuidance>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/ascent-guidance/(id)/desired-attach-alt
+
+   The altitude at which the orbit is attached, in meters.
+
+   .. note::
+
+      Applies on the ``"pvg"`` path. Requires :http:get:`/mech-jeb/ascent-guidance/(id)/attach-alt-flag`,
+      unless there is no early shutoff stage. See :http:get:`/mech-jeb/pvg-settings/(id)/optimize-stage`.
+
+
+   :param id: The identifier of the :ref:`AscentGuidance <http-MechJeb.AscentGuidance>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/ascent-guidance/(id)/desired-fpa
+
+   The flight path angle at orbit insertion, in degrees.
+
+   .. note::
+
+      Applies on the ``"pvg"`` path, when there is no early shutoff
+      stage. See :http:get:`/mech-jeb/pvg-settings/(id)/optimize-stage`.
+
+
+   :param id: The identifier of the :ref:`AscentGuidance <http-MechJeb.AscentGuidance>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/ascent-guidance/(id)/desired-fpa
+
+   The flight path angle at orbit insertion, in degrees.
+
+   .. note::
+
+      Applies on the ``"pvg"`` path, when there is no early shutoff
+      stage. See :http:get:`/mech-jeb/pvg-settings/(id)/optimize-stage`.
+
+
+   :param id: The identifier of the :ref:`AscentGuidance <http-MechJeb.AscentGuidance>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/ascent-guidance/(id)/desired-inclination
+
+   The inclination of the final circular orbit, in degrees.
+
+
+   :param id: The identifier of the :ref:`AscentGuidance <http-MechJeb.AscentGuidance>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/ascent-guidance/(id)/desired-inclination
+
+   The inclination of the final circular orbit, in degrees.
+
+
+   :param id: The identifier of the :ref:`AscentGuidance <http-MechJeb.AscentGuidance>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/ascent-guidance/(id)/launch-mode
+
+   The launch mode, which gives whether the autopilot is waiting for a timed launch.
+
+
+   :param id: The identifier of the :ref:`AscentGuidance <http-MechJeb.AscentGuidance>` object.
+
+   :resjson MechJeb.AscentLaunchMode value:
+
+
+
+
+.. http:post:: /mech-jeb/ascent-guidance/(id)/launch-to-rendezvous
+
+   Launch to rendezvous with the target. Throws an exception if there is no target, or
+   the ascent path is PVG.
+
+
+   :param id: The identifier of the :ref:`AscentGuidance <http-MechJeb.AscentGuidance>` object.
+
+
+
+
+
+
+.. http:get:: /mech-jeb/ascent-guidance/(id)/launch-phase-angle
+
+   The phase angle to the target of a launch to rendezvous, in degrees.
+
+
+   :param id: The identifier of the :ref:`AscentGuidance <http-MechJeb.AscentGuidance>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/ascent-guidance/(id)/launch-phase-angle
+
+   The phase angle to the target of a launch to rendezvous, in degrees.
+
+
+   :param id: The identifier of the :ref:`AscentGuidance <http-MechJeb.AscentGuidance>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:post:: /mech-jeb/ascent-guidance/(id)/launch-to-target-plane
+
+   Launch into the plane of the target. Throws an exception if there is no target.
+
+
+   :param id: The identifier of the :ref:`AscentGuidance <http-MechJeb.AscentGuidance>` object.
+
+
+
+
+
+
+.. http:get:: /mech-jeb/ascent-guidance/(id)/launch-lan-difference
+
+   The difference from the target's longitude of the ascending node of a launch into the
+   target's plane, in degrees.
+
+
+   :param id: The identifier of the :ref:`AscentGuidance <http-MechJeb.AscentGuidance>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/ascent-guidance/(id)/launch-lan-difference
+
+   The difference from the target's longitude of the ascending node of a launch into the
+   target's plane, in degrees.
+
+
+   :param id: The identifier of the :ref:`AscentGuidance <http-MechJeb.AscentGuidance>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:post:: /mech-jeb/ascent-guidance/(id)/launch-to-match-lan
+
+   Launch into the plane of the target, at the time the target's longitude of the
+   ascending node, less :http:get:`/mech-jeb/ascent-guidance/(id)/launch-lan-difference`, passes overhead. Keeps
+   :http:get:`/mech-jeb/ascent-guidance/(id)/desired-inclination`. Throws an exception if there is no target, or the
+   ascent path is not ``"pvg"``.
+
+
+   :param id: The identifier of the :ref:`AscentGuidance <http-MechJeb.AscentGuidance>` object.
+
+
+
+
+
+
+.. http:post:: /mech-jeb/ascent-guidance/(id)/launch-to-lan
+
+   Launch into the plane with longitude of the ascending node :http:get:`/mech-jeb/ascent-guidance/(id)/desired-lan`
+   and inclination :http:get:`/mech-jeb/ascent-guidance/(id)/desired-inclination`. Throws an exception if the ascent
+   path is not ``"pvg"``.
+
+
+   :param id: The identifier of the :ref:`AscentGuidance <http-MechJeb.AscentGuidance>` object.
+
+
+
+
+
+
+.. http:get:: /mech-jeb/ascent-guidance/(id)/desired-lan
+
+   The longitude of the ascending node of a launch to a LAN, in degrees.
+   See :http:post:`/mech-jeb/ascent-guidance/(id)/launch-to-lan`.
+
+
+   :param id: The identifier of the :ref:`AscentGuidance <http-MechJeb.AscentGuidance>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/ascent-guidance/(id)/desired-lan
+
+   The longitude of the ascending node of a launch to a LAN, in degrees.
+   See :http:post:`/mech-jeb/ascent-guidance/(id)/launch-to-lan`.
+
+
+   :param id: The identifier of the :ref:`AscentGuidance <http-MechJeb.AscentGuidance>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:post:: /mech-jeb/ascent-guidance/(id)/abort-timed-launch
+
+   Abort a timed launch that has not started yet. Throws an exception if the launch mode
+   is ``"unknown"``.
+
+
+   :param id: The identifier of the :ref:`AscentGuidance <http-MechJeb.AscentGuidance>` object.
+
+
+
+
+
+
+.. http:get:: /mech-jeb/ascent-guidance/(id)/warp-count-down
+
+   The time before a timed launch at which time warp stops, in seconds.
+
+
+   :param id: The identifier of the :ref:`AscentGuidance <http-MechJeb.AscentGuidance>` object.
+
+   :resjson int32 value:
+
+.. http:put:: /mech-jeb/ascent-guidance/(id)/warp-count-down
+
+   The time before a timed launch at which time warp stops, in seconds.
+
+
+   :param id: The identifier of the :ref:`AscentGuidance <http-MechJeb.AscentGuidance>` object.
+
+   :reqjson int32 value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/ascent-guidance/(id)/override-warp-to-plane
+
+   Whether a timed launch launches at once, rather than at the time it computes.
+
+
+   :param id: The identifier of the :ref:`AscentGuidance <http-MechJeb.AscentGuidance>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/ascent-guidance/(id)/override-warp-to-plane
+
+   Whether a timed launch launches at once, rather than at the time it computes.
+
+
+   :param id: The identifier of the :ref:`AscentGuidance <http-MechJeb.AscentGuidance>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+
+.. _http-MechJeb.AscentType:
+
+.. rubric:: AscentType
+
+The ascent path. See :http:get:`/mech-jeb/ascent-guidance/(id)/ascent-type`.
+
+Passed and returned as the name of one of its values:
+
+
+``"classic"``
+   The classic ascent path. See :http:get:`/mech-jeb/ascent-guidance/(id)/classic-path`.
+
+
+``"pvg"``
+   Primer Vector Guidance, for RSS/RO. See :http:get:`/mech-jeb/ascent-guidance/(id)/pvg-settings`.
+
+
+
+.. _http-MechJeb.AscentLaunchMode:
+
+.. rubric:: AscentLaunchMode
+
+The launch mode of the ascent autopilot. See :http:get:`/mech-jeb/ascent-guidance/(id)/launch-mode`.
+
+Passed and returned as the name of one of its values:
+
+
+``"normal"``
+   The autopilot is not performing a timed launch.
+
+
+``"rendezvous"``
+   A timed launch to rendezvous with the target vessel.
+
+
+``"target_plane"``
+   A timed launch into the plane of the target.
+
+
+``"match_lan"``
+   A timed launch to the target's longitude of the ascending node. See
+   :http:post:`/mech-jeb/ascent-guidance/(id)/launch-to-match-lan`.
+
+
+``"lan"``
+   A timed launch to a longitude of the ascending node. See
+   :http:post:`/mech-jeb/ascent-guidance/(id)/launch-to-lan`.
+
+
+``"unknown"``
+   A timed launch of another kind, started from MechJeb's window.
+
+
+
+AscentSettings
+--------------
+
+
+.. _http-MechJeb.AscentSettings:
+
+.. rubric:: AscentSettings
+
+The Ascent Settings window, which holds the settings shared by the ascent paths.
+
+A ``AscentSettings`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /mech-jeb/ascent-settings/(id)/force-roll
+
+   Whether the autopilot controls the roll.
+
+
+   :param id: The identifier of the :ref:`AscentSettings <http-MechJeb.AscentSettings>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/ascent-settings/(id)/force-roll
+
+   Whether the autopilot controls the roll.
+
+
+   :param id: The identifier of the :ref:`AscentSettings <http-MechJeb.AscentSettings>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/ascent-settings/(id)/vertical-roll
+
+   The roll during the vertical climb, in degrees.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/ascent-settings/(id)/force-roll`.
+
+
+   :param id: The identifier of the :ref:`AscentSettings <http-MechJeb.AscentSettings>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/ascent-settings/(id)/vertical-roll
+
+   The roll during the vertical climb, in degrees.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/ascent-settings/(id)/force-roll`.
+
+
+   :param id: The identifier of the :ref:`AscentSettings <http-MechJeb.AscentSettings>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/ascent-settings/(id)/turn-roll
+
+   The roll during the turn, in degrees.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/ascent-settings/(id)/force-roll`.
+
+
+   :param id: The identifier of the :ref:`AscentSettings <http-MechJeb.AscentSettings>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/ascent-settings/(id)/turn-roll
+
+   The roll during the turn, in degrees.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/ascent-settings/(id)/force-roll`.
+
+
+   :param id: The identifier of the :ref:`AscentSettings <http-MechJeb.AscentSettings>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/ascent-settings/(id)/roll-altitude
+
+   The altitude above which the autopilot controls the roll, in meters.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/ascent-settings/(id)/force-roll`.
+
+
+   :param id: The identifier of the :ref:`AscentSettings <http-MechJeb.AscentSettings>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/ascent-settings/(id)/roll-altitude
+
+   The altitude above which the autopilot controls the roll, in meters.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/ascent-settings/(id)/force-roll`.
+
+
+   :param id: The identifier of the :ref:`AscentSettings <http-MechJeb.AscentSettings>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/ascent-settings/(id)/limit-angle-of-attack
+
+   Whether to limit the angle of attack.
+
+   .. note::
+
+      Applies on the ``"classic"`` path.
+
+
+   :param id: The identifier of the :ref:`AscentSettings <http-MechJeb.AscentSettings>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/ascent-settings/(id)/limit-angle-of-attack
+
+   Whether to limit the angle of attack.
+
+   .. note::
+
+      Applies on the ``"classic"`` path.
+
+
+   :param id: The identifier of the :ref:`AscentSettings <http-MechJeb.AscentSettings>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/ascent-settings/(id)/max-angle-of-attack
+
+   The largest angle of attack, in degrees.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/ascent-settings/(id)/limit-angle-of-attack`, and applies on the ``"classic"``
+      path.
+
+
+   :param id: The identifier of the :ref:`AscentSettings <http-MechJeb.AscentSettings>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/ascent-settings/(id)/max-angle-of-attack
+
+   The largest angle of attack, in degrees.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/ascent-settings/(id)/limit-angle-of-attack`, and applies on the ``"classic"``
+      path.
+
+
+   :param id: The identifier of the :ref:`AscentSettings <http-MechJeb.AscentSettings>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/ascent-settings/(id)/angle-of-attack-limit-fadeout-pressure
+
+   The dynamic pressure below which the angle of attack limit fades out, in pascals.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/ascent-settings/(id)/limit-angle-of-attack`, and applies on the ``"classic"``
+      path.
+
+
+   :param id: The identifier of the :ref:`AscentSettings <http-MechJeb.AscentSettings>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/ascent-settings/(id)/angle-of-attack-limit-fadeout-pressure
+
+   The dynamic pressure below which the angle of attack limit fades out, in pascals.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/ascent-settings/(id)/limit-angle-of-attack`, and applies on the ``"classic"``
+      path.
+
+
+   :param id: The identifier of the :ref:`AscentSettings <http-MechJeb.AscentSettings>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/ascent-settings/(id)/limiting-angle-of-attack
+
+   Whether the angle of attack limit is limiting the steering.
+
+
+   :param id: The identifier of the :ref:`AscentSettings <http-MechJeb.AscentSettings>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /mech-jeb/ascent-settings/(id)/current-max-angle-of-attack
+
+   The largest angle of attack the limit allows now, in degrees.
+
+
+   :param id: The identifier of the :ref:`AscentSettings <http-MechJeb.AscentSettings>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /mech-jeb/ascent-settings/(id)/corrective-steering
+
+   Whether the autopilot steers by the velocity vector rather than the position vector.
+
+   .. note::
+
+      It is more accurate, though large craft may do better without it. Applies on the
+      ``"classic"`` path.
+
+
+   :param id: The identifier of the :ref:`AscentSettings <http-MechJeb.AscentSettings>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/ascent-settings/(id)/corrective-steering
+
+   Whether the autopilot steers by the velocity vector rather than the position vector.
+
+   .. note::
+
+      It is more accurate, though large craft may do better without it. Applies on the
+      ``"classic"`` path.
+
+
+   :param id: The identifier of the :ref:`AscentSettings <http-MechJeb.AscentSettings>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/ascent-settings/(id)/corrective-steering-gain
+
+   The gain of the corrective steering.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/ascent-settings/(id)/corrective-steering`, and applies on the ``"classic"`` path.
+
+
+   :param id: The identifier of the :ref:`AscentSettings <http-MechJeb.AscentSettings>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/ascent-settings/(id)/corrective-steering-gain
+
+   The gain of the corrective steering.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/ascent-settings/(id)/corrective-steering`, and applies on the ``"classic"`` path.
+
+
+   :param id: The identifier of the :ref:`AscentSettings <http-MechJeb.AscentSettings>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/ascent-settings/(id)/autostage
+
+   Whether the autopilot stages when the current stage runs out of fuel.
+
+
+   :param id: The identifier of the :ref:`AscentSettings <http-MechJeb.AscentSettings>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/ascent-settings/(id)/autostage
+
+   Whether the autopilot stages when the current stage runs out of fuel.
+
+
+   :param id: The identifier of the :ref:`AscentSettings <http-MechJeb.AscentSettings>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/ascent-settings/(id)/staging
+
+   The autostaging settings. The same object as :http:get:`/mech-jeb/utilities/(id)/staging`.
+
+
+   :param id: The identifier of the :ref:`AscentSettings <http-MechJeb.AscentSettings>` object.
+
+   :resjson MechJeb.Autostaging value:
+
+
+
+
+.. http:get:: /mech-jeb/ascent-settings/(id)/thrust
+
+   The throttle limiters. The same object as :http:get:`/mech-jeb/utilities/(id)/thrust`.
+
+
+   :param id: The identifier of the :ref:`AscentSettings <http-MechJeb.AscentSettings>` object.
+
+   :resjson MechJeb.ThrustLimiter value:
+
+
+
+
+.. http:get:: /mech-jeb/ascent-settings/(id)/autodeploy-solar-panels
+
+   Whether to deploy the solar panels when the ascent finishes.
+
+
+   :param id: The identifier of the :ref:`AscentSettings <http-MechJeb.AscentSettings>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/ascent-settings/(id)/autodeploy-solar-panels
+
+   Whether to deploy the solar panels when the ascent finishes.
+
+
+   :param id: The identifier of the :ref:`AscentSettings <http-MechJeb.AscentSettings>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/ascent-settings/(id)/auto-deploy-antennas
+
+   Whether to deploy the antennas when the ascent finishes.
+
+
+   :param id: The identifier of the :ref:`AscentSettings <http-MechJeb.AscentSettings>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/ascent-settings/(id)/auto-deploy-antennas
+
+   Whether to deploy the antennas when the ascent finishes.
+
+
+   :param id: The identifier of the :ref:`AscentSettings <http-MechJeb.AscentSettings>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/ascent-settings/(id)/autowarp
+
+   Whether to warp time during the ascent.
+
+   .. note::
+
+      The same setting as :http:get:`/mech-jeb/maneuver-planner/(id)/autowarp`.
+
+
+   :param id: The identifier of the :ref:`AscentSettings <http-MechJeb.AscentSettings>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/ascent-settings/(id)/autowarp
+
+   Whether to warp time during the ascent.
+
+   .. note::
+
+      The same setting as :http:get:`/mech-jeb/maneuver-planner/(id)/autowarp`.
+
+
+   :param id: The identifier of the :ref:`AscentSettings <http-MechJeb.AscentSettings>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/ascent-settings/(id)/skip-circularization
+
+   Whether to skip the circularization burn.
+
+
+   :param id: The identifier of the :ref:`AscentSettings <http-MechJeb.AscentSettings>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/ascent-settings/(id)/skip-circularization
+
+   Whether to skip the circularization burn.
+
+
+   :param id: The identifier of the :ref:`AscentSettings <http-MechJeb.AscentSettings>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+
+PVGSettings
+-----------
+
+
+.. _http-MechJeb.PVGSettings:
+
+.. rubric:: PVGSettings
+
+The PVG Settings window, which holds the settings of the Primer Vector Guidance ascent path.
+
+A ``PVGSettings`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /mech-jeb/pvg-settings/(id)/dynamic-pressure-trigger
+
+   The dynamic pressure below which guidance starts, in pascals.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/pvg-settings/(id)/dynamic-pressure-trigger
+
+   The dynamic pressure below which guidance starts, in pascals.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/pvg-settings/(id)/fixed-coast
+
+   Whether the coast has a fixed length.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/pvg-settings/(id)/coast-stage-flag`.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/pvg-settings/(id)/fixed-coast
+
+   Whether the coast has a fixed length.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/pvg-settings/(id)/coast-stage-flag`.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/pvg-settings/(id)/fixed-coast-length
+
+   The length of the coast, in seconds.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/pvg-settings/(id)/fixed-coast`.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/pvg-settings/(id)/fixed-coast-length
+
+   The length of the coast, in seconds.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/pvg-settings/(id)/fixed-coast`.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/pvg-settings/(id)/min-delta-v
+
+   The smallest delta-v of a stage that guidance plans with, in :math:`\mathrm{m/s}`.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/pvg-settings/(id)/min-delta-v
+
+   The smallest delta-v of a stage that guidance plans with, in :math:`\mathrm{m/s}`.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/pvg-settings/(id)/last-stage
+
+   The last stage that guidance plans with.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :resjson int32 value:
+
+.. http:put:: /mech-jeb/pvg-settings/(id)/last-stage
+
+   The last stage that guidance plans with.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :reqjson int32 value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/pvg-settings/(id)/optimize-stage-flag
+
+   Whether guidance may shut off :http:get:`/mech-jeb/pvg-settings/(id)/optimize-stage` early.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/pvg-settings/(id)/optimize-stage-flag
+
+   Whether guidance may shut off :http:get:`/mech-jeb/pvg-settings/(id)/optimize-stage` early.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/pvg-settings/(id)/optimize-stage
+
+   The stage that guidance may shut off early.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/pvg-settings/(id)/optimize-stage-flag`. -1 is no stage.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :resjson int32 value:
+
+.. http:put:: /mech-jeb/pvg-settings/(id)/optimize-stage
+
+   The stage that guidance may shut off early.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/pvg-settings/(id)/optimize-stage-flag`. -1 is no stage.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :reqjson int32 value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/pvg-settings/(id)/unguided-stages-flag
+
+   Whether guidance leaves :http:get:`/mech-jeb/pvg-settings/(id)/unguided-stages` unguided.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/pvg-settings/(id)/unguided-stages-flag
+
+   Whether guidance leaves :http:get:`/mech-jeb/pvg-settings/(id)/unguided-stages` unguided.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/pvg-settings/(id)/unguided-stages
+
+   The stages that guidance leaves unguided.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/pvg-settings/(id)/unguided-stages-flag`.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :resjson list<int32> value:
+
+.. http:put:: /mech-jeb/pvg-settings/(id)/unguided-stages
+
+   The stages that guidance leaves unguided.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/pvg-settings/(id)/unguided-stages-flag`.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :reqjson list<int32> value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/pvg-settings/(id)/coast-stage-flag
+
+   Whether guidance coasts in :http:get:`/mech-jeb/pvg-settings/(id)/coast-stage`.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/pvg-settings/(id)/coast-stage-flag
+
+   Whether guidance coasts in :http:get:`/mech-jeb/pvg-settings/(id)/coast-stage`.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/pvg-settings/(id)/coast-stage
+
+   The stage before or after which guidance coasts.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/pvg-settings/(id)/coast-stage-flag`.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :resjson int32 value:
+
+.. http:put:: /mech-jeb/pvg-settings/(id)/coast-stage
+
+   The stage before or after which guidance coasts.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/pvg-settings/(id)/coast-stage-flag`.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :reqjson int32 value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/pvg-settings/(id)/coast-before-flag
+
+   Whether the coast comes before :http:get:`/mech-jeb/pvg-settings/(id)/coast-stage`, rather than after it.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/pvg-settings/(id)/coast-stage-flag`.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/pvg-settings/(id)/coast-before-flag
+
+   Whether the coast comes before :http:get:`/mech-jeb/pvg-settings/(id)/coast-stage`, rather than after it.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/pvg-settings/(id)/coast-stage-flag`.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/pvg-settings/(id)/ullage-lead-time
+
+   The time before an ignition at which RCS settles the propellant, in seconds.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/pvg-settings/(id)/ullage-lead-time
+
+   The time before an ignition at which RCS settles the propellant, in seconds.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/pvg-settings/(id)/spinup-stage-flag
+
+   Whether to spin up the vessel before :http:get:`/mech-jeb/pvg-settings/(id)/spinup-stage`.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/pvg-settings/(id)/spinup-stage-flag
+
+   Whether to spin up the vessel before :http:get:`/mech-jeb/pvg-settings/(id)/spinup-stage`.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/pvg-settings/(id)/spinup-stage
+
+   The stage before which to spin up the vessel.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/pvg-settings/(id)/spinup-stage-flag`.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :resjson int32 value:
+
+.. http:put:: /mech-jeb/pvg-settings/(id)/spinup-stage
+
+   The stage before which to spin up the vessel.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/pvg-settings/(id)/spinup-stage-flag`.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :reqjson int32 value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/pvg-settings/(id)/spinup-angular-velocity
+
+   The angular velocity of the spin-up, in :math:`\mathrm{rad/s}`.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/pvg-settings/(id)/spinup-stage-flag`. MechJeb's window shows it in revolutions per
+      minute.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/pvg-settings/(id)/spinup-angular-velocity
+
+   The angular velocity of the spin-up, in :math:`\mathrm{rad/s}`.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/pvg-settings/(id)/spinup-stage-flag`. MechJeb's window shows it in revolutions per
+      minute.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/pvg-settings/(id)/spinup-lead-time
+
+   The time before staging at which the spin-up starts, in seconds.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/pvg-settings/(id)/spinup-stage-flag`.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/pvg-settings/(id)/spinup-lead-time
+
+   The time before staging at which the spin-up starts, in seconds.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/pvg-settings/(id)/spinup-stage-flag`.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/pvg-settings/(id)/limit-qa
+
+   The limit on dynamic pressure times angle of attack, in :math:`\mathrm{Pa \cdot rad}`.
+
+   .. note::
+
+      MechJeb clamps it to between 0 and 10000.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/pvg-settings/(id)/limit-qa
+
+   The limit on dynamic pressure times angle of attack, in :math:`\mathrm{Pa \cdot rad}`.
+
+   .. note::
+
+      MechJeb clamps it to between 0 and 10000.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/pvg-settings/(id)/pitch-rate
+
+   The pitch rate of the booster, in :math:`\mathrm{deg/s}`.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/pvg-settings/(id)/pitch-rate
+
+   The pitch rate of the booster, in :math:`\mathrm{deg/s}`.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/pvg-settings/(id)/pitch-start-velocity
+
+   The speed at which the booster starts to pitch over, in :math:`\mathrm{m/s}`.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/pvg-settings/(id)/pitch-start-velocity
+
+   The speed at which the booster starts to pitch over, in :math:`\mathrm{m/s}`.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/pvg-settings/(id)/staging-trigger
+
+   The stage after which guidance starts.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/pvg-settings/(id)/staging-trigger-flag`.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :resjson int32 value:
+
+.. http:put:: /mech-jeb/pvg-settings/(id)/staging-trigger
+
+   The stage after which guidance starts.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/pvg-settings/(id)/staging-trigger-flag`.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :reqjson int32 value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/pvg-settings/(id)/staging-trigger-flag
+
+   Whether guidance starts after :http:get:`/mech-jeb/pvg-settings/(id)/staging-trigger`.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/pvg-settings/(id)/staging-trigger-flag
+
+   Whether guidance starts after :http:get:`/mech-jeb/pvg-settings/(id)/staging-trigger`.
+
+
+   :param id: The identifier of the :ref:`PVGSettings <http-MechJeb.PVGSettings>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+
+ClassicPath
+-----------
+
+
+.. _http-MechJeb.ClassicPath:
+
+.. rubric:: ClassicPath
+
+The Ascent Path Editor window, which holds the settings of the classic ascent path.
+
+A ``ClassicPath`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /mech-jeb/classic-path/(id)/auto-path
+
+   Whether the autopilot chooses the turn altitudes and speed.
+
+
+   :param id: The identifier of the :ref:`ClassicPath <http-MechJeb.ClassicPath>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/classic-path/(id)/auto-path
+
+   Whether the autopilot chooses the turn altitudes and speed.
+
+
+   :param id: The identifier of the :ref:`ClassicPath <http-MechJeb.ClassicPath>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/classic-path/(id)/auto-turn-percent
+
+   The altitude at which an automatic turn starts, as a fraction of the height of the
+   atmosphere.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/classic-path/(id)/auto-path`.
+
+
+   :param id: The identifier of the :ref:`ClassicPath <http-MechJeb.ClassicPath>` object.
+
+   :resjson float value:
+
+.. http:put:: /mech-jeb/classic-path/(id)/auto-turn-percent
+
+   The altitude at which an automatic turn starts, as a fraction of the height of the
+   atmosphere.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/classic-path/(id)/auto-path`.
+
+
+   :param id: The identifier of the :ref:`ClassicPath <http-MechJeb.ClassicPath>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/classic-path/(id)/auto-turn-speed-factor
+
+   The factor that sets the speed at which an automatic turn starts.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/classic-path/(id)/auto-path`.
+
+
+   :param id: The identifier of the :ref:`ClassicPath <http-MechJeb.ClassicPath>` object.
+
+   :resjson float value:
+
+.. http:put:: /mech-jeb/classic-path/(id)/auto-turn-speed-factor
+
+   The factor that sets the speed at which an automatic turn starts.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/classic-path/(id)/auto-path`.
+
+
+   :param id: The identifier of the :ref:`ClassicPath <http-MechJeb.ClassicPath>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/classic-path/(id)/auto-turn-start-altitude
+
+   The altitude at which an automatic turn starts, in meters.
+
+
+   :param id: The identifier of the :ref:`ClassicPath <http-MechJeb.ClassicPath>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /mech-jeb/classic-path/(id)/auto-turn-start-velocity
+
+   The speed at which an automatic turn starts, in :math:`\mathrm{m/s}`.
+
+
+   :param id: The identifier of the :ref:`ClassicPath <http-MechJeb.ClassicPath>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /mech-jeb/classic-path/(id)/auto-turn-end-altitude
+
+   The altitude at which an automatic turn ends, in meters.
+
+
+   :param id: The identifier of the :ref:`ClassicPath <http-MechJeb.ClassicPath>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /mech-jeb/classic-path/(id)/turn-start-altitude
+
+   The altitude at which the turn starts, in meters.
+
+
+   :param id: The identifier of the :ref:`ClassicPath <http-MechJeb.ClassicPath>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/classic-path/(id)/turn-start-altitude
+
+   The altitude at which the turn starts, in meters.
+
+
+   :param id: The identifier of the :ref:`ClassicPath <http-MechJeb.ClassicPath>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/classic-path/(id)/turn-start-velocity
+
+   The speed at which the turn starts, in :math:`\mathrm{m/s}`.
+
+
+   :param id: The identifier of the :ref:`ClassicPath <http-MechJeb.ClassicPath>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/classic-path/(id)/turn-start-velocity
+
+   The speed at which the turn starts, in :math:`\mathrm{m/s}`.
+
+
+   :param id: The identifier of the :ref:`ClassicPath <http-MechJeb.ClassicPath>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/classic-path/(id)/turn-end-altitude
+
+   The altitude at which the turn ends, in meters.
+
+
+   :param id: The identifier of the :ref:`ClassicPath <http-MechJeb.ClassicPath>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/classic-path/(id)/turn-end-altitude
+
+   The altitude at which the turn ends, in meters.
+
+
+   :param id: The identifier of the :ref:`ClassicPath <http-MechJeb.ClassicPath>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/classic-path/(id)/turn-end-angle
+
+   The final flight path angle, in degrees.
+
+
+   :param id: The identifier of the :ref:`ClassicPath <http-MechJeb.ClassicPath>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/classic-path/(id)/turn-end-angle
+
+   The final flight path angle, in degrees.
+
+
+   :param id: The identifier of the :ref:`ClassicPath <http-MechJeb.ClassicPath>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/classic-path/(id)/turn-shape-exponent
+
+   The steepness of the turn, between 0 and 1.
+
+
+   :param id: The identifier of the :ref:`ClassicPath <http-MechJeb.ClassicPath>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/classic-path/(id)/turn-shape-exponent
+
+   The steepness of the turn, between 0 and 1.
+
+
+   :param id: The identifier of the :ref:`ClassicPath <http-MechJeb.ClassicPath>` object.
+
+   :reqjson double value: The new value.

@@ -1,0 +1,139 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+RendezvousAutopilot
+===================
+
+
+.. _http-MechJeb.RendezvousAutopilot:
+
+.. rubric:: RendezvousAutopilot
+
+The rendezvous autopilot, which brings the vessel close to the target vessel.
+
+A ``RendezvousAutopilot`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /mech-jeb/rendezvous-autopilot/(id)/enabled
+
+   Whether the module is enabled.
+
+
+   :param id: The identifier of the :ref:`RendezvousAutopilot <http-MechJeb.RendezvousAutopilot>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/rendezvous-autopilot/(id)/enabled
+
+   Whether the module is enabled.
+
+
+   :param id: The identifier of the :ref:`RendezvousAutopilot <http-MechJeb.RendezvousAutopilot>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/rendezvous-autopilot/(id)/status
+
+   The status of the autopilot.
+
+
+   :param id: The identifier of the :ref:`RendezvousAutopilot <http-MechJeb.RendezvousAutopilot>` object.
+
+   :resjson string value:
+
+
+
+
+.. http:get:: /mech-jeb/rendezvous-autopilot/(id)/desired-distance
+
+   The final distance from the target, in meters.
+
+
+   :param id: The identifier of the :ref:`RendezvousAutopilot <http-MechJeb.RendezvousAutopilot>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/rendezvous-autopilot/(id)/desired-distance
+
+   The final distance from the target, in meters.
+
+
+   :param id: The identifier of the :ref:`RendezvousAutopilot <http-MechJeb.RendezvousAutopilot>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/rendezvous-autopilot/(id)/max-phasing-orbits
+
+   The largest number of orbits to wait for the phase angle.
+
+
+   :param id: The identifier of the :ref:`RendezvousAutopilot <http-MechJeb.RendezvousAutopilot>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/rendezvous-autopilot/(id)/max-phasing-orbits
+
+   The largest number of orbits to wait for the phase angle.
+
+
+   :param id: The identifier of the :ref:`RendezvousAutopilot <http-MechJeb.RendezvousAutopilot>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/rendezvous-autopilot/(id)/max-closing-speed
+
+   The largest speed at which to approach the target, in :math:`\mathrm{m/s}`.
+
+
+   :param id: The identifier of the :ref:`RendezvousAutopilot <http-MechJeb.RendezvousAutopilot>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/rendezvous-autopilot/(id)/max-closing-speed
+
+   The largest speed at which to approach the target, in :math:`\mathrm{m/s}`.
+
+
+   :param id: The identifier of the :ref:`RendezvousAutopilot <http-MechJeb.RendezvousAutopilot>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/rendezvous-autopilot/(id)/autowarp
+
+   Whether to warp time during the rendezvous.
+
+   .. note::
+
+      The same setting as :http:get:`/mech-jeb/maneuver-planner/(id)/autowarp`.
+
+
+   :param id: The identifier of the :ref:`RendezvousAutopilot <http-MechJeb.RendezvousAutopilot>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/rendezvous-autopilot/(id)/autowarp
+
+   Whether to warp time during the rendezvous.
+
+   .. note::
+
+      The same setting as :http:get:`/mech-jeb/maneuver-planner/(id)/autowarp`.
+
+
+   :param id: The identifier of the :ref:`RendezvousAutopilot <http-MechJeb.RendezvousAutopilot>` object.
+
+   :reqjson bool value: The new value.

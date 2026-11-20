@@ -1,0 +1,294 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+LandingGuidance
+===============
+
+
+.. _http-MechJeb.LandingGuidance:
+
+.. rubric:: LandingGuidance
+
+The Landing Guidance window, which lands at a target or wherever the vessel comes down.
+
+A ``LandingGuidance`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /mech-jeb/landing-guidance/(id)/enabled
+
+   Whether the module is enabled.
+
+
+   :param id: The identifier of the :ref:`LandingGuidance <http-MechJeb.LandingGuidance>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/landing-guidance/(id)/enabled
+
+   Whether the module is enabled.
+
+
+   :param id: The identifier of the :ref:`LandingGuidance <http-MechJeb.LandingGuidance>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/landing-guidance/(id)/status
+
+   The status of the autopilot.
+
+
+   :param id: The identifier of the :ref:`LandingGuidance <http-MechJeb.LandingGuidance>` object.
+
+   :resjson string value:
+
+
+
+
+.. http:get:: /mech-jeb/landing-guidance/(id)/deploy-chutes
+
+   Whether the autopilot deploys the parachutes.
+
+
+   :param id: The identifier of the :ref:`LandingGuidance <http-MechJeb.LandingGuidance>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/landing-guidance/(id)/deploy-chutes
+
+   Whether the autopilot deploys the parachutes.
+
+
+   :param id: The identifier of the :ref:`LandingGuidance <http-MechJeb.LandingGuidance>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/landing-guidance/(id)/deploy-gears
+
+   Whether the autopilot deploys the landing gear.
+
+
+   :param id: The identifier of the :ref:`LandingGuidance <http-MechJeb.LandingGuidance>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/landing-guidance/(id)/deploy-gears
+
+   Whether the autopilot deploys the landing gear.
+
+
+   :param id: The identifier of the :ref:`LandingGuidance <http-MechJeb.LandingGuidance>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:post:: /mech-jeb/landing-guidance/(id)/land-at-target
+
+   Land at the target. See :http:post:`/mech-jeb/landing-guidance/(id)/set-target`.
+   Throws an exception if there is no target, or the vessel is landed or splashed down.
+
+
+   :param id: The identifier of the :ref:`LandingGuidance <http-MechJeb.LandingGuidance>` object.
+
+
+
+
+
+
+.. http:post:: /mech-jeb/landing-guidance/(id)/land-somewhere
+
+   Land wherever the vessel comes down. Throws an exception if the vessel is landed or
+   splashed down.
+
+
+   :param id: The identifier of the :ref:`LandingGuidance <http-MechJeb.LandingGuidance>` object.
+
+
+
+
+
+
+.. http:get:: /mech-jeb/landing-guidance/(id)/limit-chutes-stage
+
+   The last stage in which the autopilot deploys the parachutes.
+
+
+   :param id: The identifier of the :ref:`LandingGuidance <http-MechJeb.LandingGuidance>` object.
+
+   :resjson int32 value:
+
+.. http:put:: /mech-jeb/landing-guidance/(id)/limit-chutes-stage
+
+   The last stage in which the autopilot deploys the parachutes.
+
+
+   :param id: The identifier of the :ref:`LandingGuidance <http-MechJeb.LandingGuidance>` object.
+
+   :reqjson int32 value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/landing-guidance/(id)/limit-gears-stage
+
+   The last stage in which the autopilot deploys the landing gear.
+
+
+   :param id: The identifier of the :ref:`LandingGuidance <http-MechJeb.LandingGuidance>` object.
+
+   :resjson int32 value:
+
+.. http:put:: /mech-jeb/landing-guidance/(id)/limit-gears-stage
+
+   The last stage in which the autopilot deploys the landing gear.
+
+
+   :param id: The identifier of the :ref:`LandingGuidance <http-MechJeb.LandingGuidance>` object.
+
+   :reqjson int32 value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/landing-guidance/(id)/rcs-adjustment
+
+   Whether the autopilot corrects its course with RCS.
+
+
+   :param id: The identifier of the :ref:`LandingGuidance <http-MechJeb.LandingGuidance>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/landing-guidance/(id)/rcs-adjustment
+
+   Whether the autopilot corrects its course with RCS.
+
+
+   :param id: The identifier of the :ref:`LandingGuidance <http-MechJeb.LandingGuidance>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:post:: /mech-jeb/landing-guidance/(id)/abort-autoland
+
+   Stop the landing.
+
+
+   :param id: The identifier of the :ref:`LandingGuidance <http-MechJeb.LandingGuidance>` object.
+
+
+
+
+
+
+.. http:get:: /mech-jeb/landing-guidance/(id)/touchdown-speed
+
+   The speed at touchdown, in :math:`\mathrm{m/s}`.
+
+
+   :param id: The identifier of the :ref:`LandingGuidance <http-MechJeb.LandingGuidance>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/landing-guidance/(id)/touchdown-speed
+
+   The speed at touchdown, in :math:`\mathrm{m/s}`.
+
+
+   :param id: The identifier of the :ref:`LandingGuidance <http-MechJeb.LandingGuidance>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:post:: /mech-jeb/landing-guidance/(id)/get-target-position
+
+   The world space position of the landing target. Throws an exception if there is no
+   landing target.
+
+
+   :param id: The identifier of the :ref:`LandingGuidance <http-MechJeb.LandingGuidance>` object.
+
+   :resjson tuple<double, double, double> value:
+
+
+
+
+
+.. http:post:: /mech-jeb/landing-guidance/(id)/get-target-string
+
+   The landing target as text.
+
+
+   :param id: The identifier of the :ref:`LandingGuidance <http-MechJeb.LandingGuidance>` object.
+
+   :resjson string value:
+
+
+
+
+
+.. http:post:: /mech-jeb/landing-guidance/(id)/pick-target-on-map
+
+   Let the player pick the landing target on the map.
+
+
+   :param id: The identifier of the :ref:`LandingGuidance <http-MechJeb.LandingGuidance>` object.
+
+
+
+
+
+
+.. http:post:: /mech-jeb/landing-guidance/(id)/set-target
+
+   Set the landing target to a position on the surface of a body.
+
+
+   :param id: The identifier of the :ref:`LandingGuidance <http-MechJeb.LandingGuidance>` object.
+
+   :reqjson SpaceCenter.CelestialBody body: The body.
+   :reqjson double latitude: The latitude, in degrees.
+   :reqjson double longitude: The longitude, in degrees.
+
+
+
+
+
+.. http:get:: /mech-jeb/landing-guidance/(id)/autowarp
+
+   Whether to warp time during the landing.
+
+   .. note::
+
+      The same setting as :http:get:`/mech-jeb/maneuver-planner/(id)/autowarp`.
+
+
+   :param id: The identifier of the :ref:`LandingGuidance <http-MechJeb.LandingGuidance>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/landing-guidance/(id)/autowarp
+
+   Whether to warp time during the landing.
+
+   .. note::
+
+      The same setting as :http:get:`/mech-jeb/maneuver-planner/(id)/autowarp`.
+
+
+   :param id: The identifier of the :ref:`LandingGuidance <http-MechJeb.LandingGuidance>` object.
+
+   :reqjson bool value: The new value.

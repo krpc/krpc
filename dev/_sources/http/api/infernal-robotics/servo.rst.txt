@@ -1,0 +1,693 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Servo
+=====
+
+
+.. _http-InfernalRobotics.Servo:
+
+.. rubric:: Servo
+
+Represents a servo. Obtained using
+:http:get:`/infernal-robotics/servo-group/(id)/servos`,
+:http:post:`/infernal-robotics/servo-group/(id)/servo-with-name`
+or :http:post:`/infernal-robotics/servo-with-name`.
+
+A ``Servo`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /infernal-robotics/servo/(id)/name
+
+   The name of the servo.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :resjson string value:
+
+.. http:put:: /infernal-robotics/servo/(id)/name
+
+   The name of the servo.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:get:: /infernal-robotics/servo/(id)/uid
+
+   The unique identifier of the servo.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :resjson uint32 value:
+
+
+
+
+.. http:get:: /infernal-robotics/servo/(id)/part
+
+   The part containing the servo.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :resjson SpaceCenter.Part value:
+
+
+
+
+.. http:get:: /infernal-robotics/servo/(id)/mode
+
+   Whether the part acts as a servo or a rotor.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :resjson InfernalRobotics.ServoMode value:
+
+
+
+
+.. http:put:: /infernal-robotics/servo/(id)/highlight
+
+   Whether the servo should be highlighted in-game.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /infernal-robotics/servo/(id)/position
+
+   The position of the servo.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /infernal-robotics/servo/(id)/min-config-position
+
+   The minimum position of the servo, specified by the part configuration.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /infernal-robotics/servo/(id)/max-config-position
+
+   The maximum position of the servo, specified by the part configuration.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /infernal-robotics/servo/(id)/min-position
+
+   The minimum position of the servo, specified by the in-game tweak menu.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :resjson float value:
+
+.. http:put:: /infernal-robotics/servo/(id)/min-position
+
+   The minimum position of the servo, specified by the in-game tweak menu.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /infernal-robotics/servo/(id)/max-position
+
+   The maximum position of the servo, specified by the in-game tweak menu.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :resjson float value:
+
+.. http:put:: /infernal-robotics/servo/(id)/max-position
+
+   The maximum position of the servo, specified by the in-game tweak menu.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /infernal-robotics/servo/(id)/config-speed
+
+   The speed multiplier of the servo, specified by the part configuration.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /infernal-robotics/servo/(id)/speed
+
+   The speed multiplier of the servo, specified by the in-game tweak menu.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :resjson float value:
+
+.. http:put:: /infernal-robotics/servo/(id)/speed
+
+   The speed multiplier of the servo, specified by the in-game tweak menu.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /infernal-robotics/servo/(id)/current-speed
+
+   The current speed at which the servo is moving.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /infernal-robotics/servo/(id)/acceleration
+
+   The current speed multiplier set in the UI.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :resjson float value:
+
+.. http:put:: /infernal-robotics/servo/(id)/acceleration
+
+   The current speed multiplier set in the UI.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /infernal-robotics/servo/(id)/is-moving
+
+   Whether the servo is moving.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /infernal-robotics/servo/(id)/is-free-moving
+
+   Whether the servo is freely moving.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /infernal-robotics/servo/(id)/is-locked
+
+   Whether the servo is locked.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :resjson bool value:
+
+.. http:put:: /infernal-robotics/servo/(id)/is-locked
+
+   Whether the servo is locked.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /infernal-robotics/servo/(id)/is-axis-inverted
+
+   Whether the servos axis is inverted.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :resjson bool value:
+
+.. http:put:: /infernal-robotics/servo/(id)/is-axis-inverted
+
+   Whether the servos axis is inverted.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /infernal-robotics/servo/(id)/target-position
+
+   The target position the servo is moving towards.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /infernal-robotics/servo/(id)/target-speed
+
+   The target speed the servo is moving at.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /infernal-robotics/servo/(id)/commanded-position
+
+   The position the servo is currently being commanded to move to.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /infernal-robotics/servo/(id)/default-position
+
+   The default (built) position of the servo.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /infernal-robotics/servo/(id)/force-limit
+
+   The force limit of the servo, as a percentage of the maximum force.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :resjson float value:
+
+.. http:put:: /infernal-robotics/servo/(id)/force-limit
+
+   The force limit of the servo, as a percentage of the maximum force.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /infernal-robotics/servo/(id)/max-force
+
+   The maximum force the servo can generate.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /infernal-robotics/servo/(id)/max-acceleration
+
+   The maximum acceleration the servo can achieve.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /infernal-robotics/servo/(id)/max-speed
+
+   The maximum speed the servo can achieve.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /infernal-robotics/servo/(id)/electric-charge-required
+
+   The rate at which the servo consumes electric charge, in :math:`\mathrm{units/s}`,
+   when moving.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /infernal-robotics/servo/(id)/spring-power
+
+   The strength of the servo's spring, when it has one.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :resjson float value:
+
+.. http:put:: /infernal-robotics/servo/(id)/spring-power
+
+   The strength of the servo's spring, when it has one.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /infernal-robotics/servo/(id)/damping-power
+
+   The strength of the servo's damping.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :resjson float value:
+
+.. http:put:: /infernal-robotics/servo/(id)/damping-power
+
+   The strength of the servo's damping.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /infernal-robotics/servo/(id)/rotor-acceleration
+
+   The acceleration of the servo when operating as a rotor.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :resjson float value:
+
+.. http:put:: /infernal-robotics/servo/(id)/rotor-acceleration
+
+   The acceleration of the servo when operating as a rotor.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /infernal-robotics/servo/(id)/is-limited
+
+   Whether the servo's range of movement is limited to the configured minimum and
+   maximum positions.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :resjson bool value:
+
+.. http:put:: /infernal-robotics/servo/(id)/is-limited
+
+   Whether the servo's range of movement is limited to the configured minimum and
+   maximum positions.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /infernal-robotics/servo/(id)/is-rotational
+
+   Whether the servo moves rotationally (as opposed to linearly).
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /infernal-robotics/servo/(id)/is-servo
+
+   Whether the part is operating as a servo (rather than a rotor).
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /infernal-robotics/servo/(id)/can-have-limits
+
+   Whether the servo can have its range of movement limited.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /infernal-robotics/servo/(id)/has-spring
+
+   Whether the servo has a spring.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /infernal-robotics/servo/(id)/is-running
+
+   Whether the servo is running, when operating as a rotor.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /infernal-robotics/servo/(id)/preset-positions
+
+   The list of preset positions configured for the servo.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :resjson list<float> value:
+
+
+
+
+.. http:post:: /infernal-robotics/servo/(id)/move-right
+
+   Moves the servo to the right.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+
+
+
+
+
+.. http:post:: /infernal-robotics/servo/(id)/move-left
+
+   Moves the servo to the left.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+
+
+
+
+
+.. http:post:: /infernal-robotics/servo/(id)/move-center
+
+   Moves the servo to the center.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+
+
+
+
+
+.. http:post:: /infernal-robotics/servo/(id)/move-to
+
+   Moves the servo to *position* and sets the
+   speed multiplier to *speed*.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :reqjson float position: The position to move the servo to.
+   :reqjson float speed: Speed multiplier for the movement.
+
+
+
+
+
+.. http:post:: /infernal-robotics/servo/(id)/stop
+
+   Stops the servo.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+
+
+
+
+
+.. http:post:: /infernal-robotics/servo/(id)/add-preset
+
+   Adds a preset position to the servo.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :reqjson float position: The position of the preset.
+
+
+
+
+
+.. http:post:: /infernal-robotics/servo/(id)/remove-preset-at
+
+   Removes the preset position at the given index.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+   :reqjson int32 index: The index of the preset to remove.
+
+
+
+
+
+.. http:post:: /infernal-robotics/servo/(id)/sort-presets
+
+   Sorts the preset positions of the servo into ascending order.
+
+
+   :param id: The identifier of the :ref:`Servo <http-InfernalRobotics.Servo>` object.
+
+
+
+
+
+
+
+.. _http-InfernalRobotics.ServoMode:
+
+.. rubric:: ServoMode
+
+The mode a servo is operating in. See :http:get:`/infernal-robotics/servo/(id)/mode`.
+
+Passed and returned as the name of one of its values:
+
+
+``"servo"``
+   The part acts as a servo, driving towards a target position.
+
+
+``"rotor"``
+   The part acts as a rotor, spinning continuously.

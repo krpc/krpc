@@ -631,6 +631,8 @@
 <li><p>Read from a serial port as bytes arrive, so a client over serial gets several calls per update (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1376">#1376</a>)</p></li>
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">MemberBinder.ReadOnlyField</span></code>, for a mod setting that the mod declares read-only (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1382">#1382</a>)</p></li>
 <li><p>Fix a serial IO server stopping when it sends a response over a megabyte, such as <code class="docutils literal notranslate"><span class="pre">KRPC.GetServices</span></code> with every service installed (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1386">#1386</a>)</p></li>
+<li><p>Add a JSON over HTTP server, for calling procedures with no client library (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1391">#1391</a>)</p></li>
+<li><p>Serve an OpenAPI document of the HTTP server’s paths (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1391">#1391</a>)</p></li>
 </ul>
 </section>
 <section id="server">
@@ -672,6 +674,7 @@
 <li><p>Show the number of connected clients beside each server in the server window (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1385">#1385</a>)</p></li>
 <li><p>Add RTS/CTS flow control to serial IO servers, set in the server window (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1386">#1386</a>)</p></li>
 <li><p>Build the serial port code into <code class="docutils literal notranslate"><span class="pre">KRPC.Core.dll</span></code>, in place of a separate <code class="docutils literal notranslate"><span class="pre">KRPC.IO.Ports.dll</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1386">#1386</a>)</p></li>
+<li><p>Add *JSON over HTTP* to the protocols in the server window, on port 50003 by default, with the origins whose web pages may call it (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1391">#1391</a>)</p></li>
 </ul>
 </section>
 <section id="spacecenter-service">
@@ -1309,6 +1312,8 @@
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">--frame-limit</span></code>, <code class="docutils literal notranslate"><span class="pre">--fixed-rate</span></code>, <code class="docutils literal notranslate"><span class="pre">--tick-work-us</span></code> and <code class="docutils literal notranslate"><span class="pre">--frame-work-us</span></code> to <code class="docutils literal notranslate"><span class="pre">krpc-testserver</span></code>, which model a game’s frame loop (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1376">#1376</a>)</p></li>
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">--preset</span></code> to <code class="docutils literal notranslate"><span class="pre">krpc-testserver</span></code>, for its rate settings (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1376">#1376</a>)</p></li>
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">--flow-control</span></code> to the <code class="docutils literal notranslate"><span class="pre">TestServer</span></code>, for RTS/CTS over serial IO (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1386">#1386</a>)</p></li>
+<li><p>Add the <code class="docutils literal notranslate"><span class="pre">http</span></code> server type, <code class="docutils literal notranslate"><span class="pre">--http-port</span></code> and <code class="docutils literal notranslate"><span class="pre">--http-allowed-origins</span></code> to <code class="docutils literal notranslate"><span class="pre">krpc-testserver</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1391">#1391</a>)</p></li>
+<li><p>Add the <code class="docutils literal notranslate"><span class="pre">http</span></code> language to <code class="docutils literal notranslate"><span class="pre">krpc-docgen</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1391">#1391</a>)</p></li>
 </ul>
 </section>
 </section>

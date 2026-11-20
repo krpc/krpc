@@ -1,0 +1,600 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Service
+=======
+
+
+.. _http-KRPC:
+
+Main kRPC service, used by clients to interact with basic server functionality.
+
+
+.. http:post:: /krpc/get-client-id
+
+   Returns the identifier for the current client.
+
+
+   :resjson bytes value:
+
+
+
+
+
+.. http:post:: /krpc/get-client-name
+
+   Returns the name of the current client.
+   This is an empty string if the client has no name.
+
+
+   :resjson string value:
+
+
+
+
+
+.. http:get:: /krpc/clients
+
+   The clients that are currently connected to the server.
+
+
+   :resjson list<KRPC.ClientInfo> value:
+
+
+
+
+.. http:post:: /krpc/get-status
+
+   Returns the status of the server, with its version, settings and performance statistics.
+
+
+   :resjson KRPC.ServerStatus value:
+
+
+
+
+
+
+
+
+.. http:post:: /krpc/hold-tick
+
+   Hold the game on its current physics tick until :http:post:`/krpc/release-tick` is called
+   or the hold times out. Every call made in between is executed before the game
+   advances, so a read, compute and write all happen in the state of one tick.
+
+   .. note::
+
+      The game renders no frame, takes no input and runs no physics while the tick is
+      held. Keep a hold as short as possible, and release it even when the code between
+      the two calls fails.
+
+      A tick is held once, so this waits for the next tick when the current one has
+      already been released. One client holds the tick at a time, and only a client
+      making a call can hold it: a stream or an event cannot.
+
+      A hold ends by itself when it times out, when the client disconnects, and when the
+      client calls a procedure that takes more than one tick to finish, such as staging
+      or warping. Stream updates are sent once the tick is released, so waiting for a
+      stream or an event inside a hold waits out the timeout.
+
+
+
+
+
+
+
+.. http:post:: /krpc/release-tick
+
+   Let the game move on from the tick that :http:post:`/krpc/hold-tick` held it on. Does
+   nothing when no tick is held, which is the case once a hold has timed out.
+
+
+
+
+
+
+
+.. http:post:: /krpc/next-tick
+
+   Let the game move on from the tick being held and hold the one after it, so that a
+   program acts on consecutive physics ticks. Holds the soonest tick it can if no tick
+   is currently being held.
+
+   .. note::
+
+      A release and a hold made as two separate calls let the game advance between them.
+      This takes the next tick without that gap. Call it at the top of a loop that has to
+      act on every tick, work, and come back to it.
+
+      The game advances one tick per call, so it runs at the rate of the loop for as long
+      as the loop runs. End the loop with :http:post:`/krpc/release-tick`.
+
+      Every limit of :http:post:`/krpc/hold-tick` applies, the timeout included. A hold lost to
+      the timeout is not reported, and the next call takes whatever tick it lands on.
+
+
+
+
+
+
+
+.. http:get:: /krpc/game-scene
+
+   The current game scene. Setting this switches the game to the given
+   scene, or opens/closes the corresponding facility for the pseudo-scenes.
+   Scene changes happen asynchronously: setting this property returns
+   immediately, and clients should poll it until it reports the requested
+   scene. Setting it to ``"flight"`` resumes the save's
+   active vessel, and fails if there is none. Moving between
+   ``"editor_vab"`` and ``"editor_sph"``
+   keeps the vessel that is being constructed, as the game's own switch
+   editor button does. Leaving flight saves the game first, unless the game
+   cannot be saved, e.g. while under acceleration.
+
+
+   :resjson KRPC.GameScene value:
+
+.. http:put:: /krpc/game-scene
+
+   The current game scene. Setting this switches the game to the given
+   scene, or opens/closes the corresponding facility for the pseudo-scenes.
+   Scene changes happen asynchronously: setting this property returns
+   immediately, and clients should poll it until it reports the requested
+   scene. Setting it to ``"flight"`` resumes the save's
+   active vessel, and fails if there is none. Moving between
+   ``"editor_vab"`` and ``"editor_sph"``
+   keeps the vessel that is being constructed, as the game's own switch
+   editor button does. Leaving flight saves the game first, unless the game
+   cannot be saved, e.g. while under acceleration.
+
+
+   :reqjson KRPC.GameScene value: The new value.
+
+
+
+
+.. http:get:: /krpc/paused
+
+   Whether the game is paused.
+
+
+   :resjson bool value:
+
+.. http:put:: /krpc/paused
+
+   Whether the game is paused.
+
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /krpc/game-state-loads
+
+   The number of game states that have finished loading.
+
+   .. note::
+
+      Increases once a game load, quickload, revert or scene change has finished.
+
+
+   :resjson uint32 value:
+
+
+
+
+
+.. _http-KRPC.GameScene:
+
+.. rubric:: GameScene
+
+The game scene. See :http:get:`/krpc/game-scene`.
+
+Passed and returned as the name of one of its values:
+
+
+``"space_center"``
+   The game scene showing the Kerbal Space Center buildings.
+
+
+``"flight"``
+   The game scene showing a vessel in flight (or on the launchpad/runway).
+
+
+``"tracking_station"``
+   The tracking station.
+
+
+``"editor_vab"``
+   The Vehicle Assembly Building.
+
+
+``"editor_sph"``
+   The Space Plane Hangar.
+
+
+``"mission_builder"``
+   The mission builder.
+
+
+``"astronaut_complex"``
+   The astronaut complex. This is a pseudo-scene, shown when the
+   astronaut complex facility is open within the space center scene.
+
+
+``"mission_control"``
+   Mission control. This is a pseudo-scene, shown when the
+   mission control facility is open within the space center scene.
+
+
+``"research_and_development"``
+   Research and development. This is a pseudo-scene, shown when the
+   research and development facility is open within the space center scene.
+
+
+``"administration"``
+   The administration facility. This is a pseudo-scene, shown when the
+   administration facility is open within the space center scene.
+
+
+
+.. _http-KRPC.ClientInfo:
+
+.. rubric:: ClientInfo
+
+A client connected to the server.
+
+.. note::
+
+   See :http:get:`/krpc/clients`.
+
+
+Passed and returned as an object with these fields:
+
+
+``id`` (bytes)
+   The identifier of the client.
+
+
+``name`` (string)
+   The name of the client, or an empty string if it has no name.
+
+
+``address`` (string)
+   The address of the client.
+
+
+
+.. _http-KRPC.ServerStatus:
+
+.. rubric:: ServerStatus
+
+The status of the server.
+
+.. note::
+
+   See :http:post:`/krpc/get-status`.
+
+
+Passed and returned as an object with these fields:
+
+
+``version`` (string)
+   The version of the server, or ``unknown``.
+
+
+``protocol_version`` (uint32)
+   The protocol version of the connection.
+
+
+``settings`` (KRPC.ServerSettings)
+   The settings of the server.
+
+
+``statistics`` (KRPC.ServerStatistics)
+   The performance statistics of the server.
+
+
+
+.. _http-KRPC.ServerSettings:
+
+.. rubric:: ServerSettings
+
+The settings that control how the server executes calls.
+
+.. note::
+
+   See ``settings``.
+
+
+Passed and returned as an object with these fields:
+
+
+``adaptive_rate_control`` (bool)
+   Whether the server adapts its time per frame to hold the frame rate at
+   ``target_frame_rate``.
+
+
+``target_frame_rate`` (uint32)
+   The lowest frame rate the server's work pushes the game to, in frames per second.
+
+
+``max_time_per_frame`` (uint32)
+   The server's budget per frame, or its ceiling with adaptive rate control, in microseconds.
+
+
+``max_call_wait`` (uint32)
+   The longest the server waits for a client's next call, in microseconds.
+
+
+``tick_hold_timeout`` (uint32)
+   The longest time a client may hold the game on one physics tick, in microseconds.
+
+
+
+.. _http-KRPC.ServerStatistics:
+
+.. rubric:: ServerStatistics
+
+The performance statistics of the server.
+
+.. note::
+
+   See ``statistics``.
+
+
+Passed and returned as an object with these fields:
+
+
+``bytes_read`` (uint64)
+   The number of bytes received from clients.
+
+
+``bytes_written`` (uint64)
+   The number of bytes sent to clients.
+
+
+``bytes_read_rate`` (float)
+   The rate bytes are received from clients, in bytes per second.
+
+
+``bytes_written_rate`` (float)
+   The rate bytes are sent to clients, in bytes per second.
+
+
+``rpcs_executed`` (uint64)
+   The number of calls executed.
+
+
+``rpc_rate`` (float)
+   The number of calls executed per second.
+
+
+``frame_rate`` (float)
+   The game's frame rate, in frames per second.
+
+
+``time_per_frame`` (float)
+   The server's time per frame, in seconds: executing calls, waiting for them and
+   updating streams.
+
+
+``exec_time_per_frame`` (float)
+   The time spent executing calls per frame, in seconds.
+
+
+``wait_time_per_frame`` (float)
+   The time spent waiting for calls per frame, in seconds.
+
+
+``stream_time_per_frame`` (float)
+   The time spent updating streams per frame, in seconds.
+
+
+``budget_per_frame`` (float)
+   The time the server may spend per frame, in seconds.
+
+
+``median_turnaround`` (float)
+   The median time between a response and the client's next call, over the
+   clients' recent calls, in seconds.
+
+
+``deferred_calls`` (uint32)
+   The number of calls left for the next update, because the update ran out of time
+   or the call yielded.
+
+
+``streams`` (uint32)
+   The number of open streams, events included.
+
+
+``stream_evaluations`` (uint64)
+   The number of stream evaluations, one per stream per update.
+
+
+``stream_evaluation_rate`` (float)
+   The number of stream evaluations per second.
+
+
+``stream_updates_sent`` (uint64)
+   The number of stream updates sent to clients.
+
+
+
+.. _http-KRPC.InvalidOperationException:
+
+.. rubric:: InvalidOperationException
+
+A method call was made to a method that is invalid
+given the current state of the object.
+
+Returned as an error whose ``service`` and ``name`` are ``"KRPC"`` and ``"InvalidOperationException"``.
+
+
+
+.. _http-KRPC.ArgumentException:
+
+.. rubric:: ArgumentException
+
+A method was invoked where at least one of the passed arguments does not
+meet the parameter specification of the method.
+
+Returned as an error whose ``service`` and ``name`` are ``"KRPC"`` and ``"ArgumentException"``.
+
+
+
+.. _http-KRPC.ArgumentNullException:
+
+.. rubric:: ArgumentNullException
+
+A null reference was passed to a method that does not accept it as a valid argument.
+
+Returned as an error whose ``service`` and ``name`` are ``"KRPC"`` and ``"ArgumentNullException"``.
+
+
+
+.. _http-KRPC.ArgumentOutOfRangeException:
+
+.. rubric:: ArgumentOutOfRangeException
+
+The value of an argument is outside the allowable range of values as defined by the invoked method.
+
+Returned as an error whose ``service`` and ``name`` are ``"KRPC"`` and ``"ArgumentOutOfRangeException"``.
+
+
+
+.. _http-KRPC.NullReferenceException:
+
+.. rubric:: NullReferenceException
+
+A value was null where its type does not allow one.
+
+Returned as an error whose ``service`` and ``name`` are ``"KRPC"`` and ``"NullReferenceException"``.
+
+
+
+.. _http-KRPC.KeyNotFoundException:
+
+.. rubric:: KeyNotFoundException
+
+A key was not found in a dictionary.
+
+Returned as an error whose ``service`` and ``name`` are ``"KRPC"`` and ``"KeyNotFoundException"``.
+
+
+
+.. _http-KRPC.IndexOutOfRangeException:
+
+.. rubric:: IndexOutOfRangeException
+
+An index was outside the bounds of a collection, string or array.
+
+Returned as an error whose ``service`` and ``name`` are ``"KRPC"`` and ``"IndexOutOfRangeException"``.
+
+
+
+.. _http-KRPC.DivideByZeroException:
+
+.. rubric:: DivideByZeroException
+
+An integer was divided by zero.
+
+Returned as an error whose ``service`` and ``name`` are ``"KRPC"`` and ``"DivideByZeroException"``.
+
+
+
+.. _http-KRPC.NotSupportedException:
+
+.. rubric:: NotSupportedException
+
+A method was invoked that is not supported.
+
+Returned as an error whose ``service`` and ``name`` are ``"KRPC"`` and ``"NotSupportedException"``.
+
+
+
+.. _http-KRPC.TimeoutException:
+
+.. rubric:: TimeoutException
+
+An operation did not complete in the time allotted to it.
+
+Returned as an error whose ``service`` and ``name`` are ``"KRPC"`` and ``"TimeoutException"``.
+
+
+
+.. _http-KRPC.OverflowException:
+
+.. rubric:: OverflowException
+
+An arithmetic or conversion operation overflowed.
+
+Returned as an error whose ``service`` and ``name`` are ``"KRPC"`` and ``"OverflowException"``.
+
+
+
+.. _http-KRPC.ObjectDestroyedException:
+
+.. rubric:: ObjectDestroyedException
+
+The game object that a service object refers to no longer exists,
+so the object cannot be used. For example, the part it represents
+was destroyed, or the vessel it belongs to was recovered.
+
+Returned as an error whose ``service`` and ``name`` are ``"KRPC"`` and ``"ObjectDestroyedException"``.
+
+.. note::
+
+   See :ref:`ObjectNotLoadedException <http-KRPC.ObjectNotLoadedException>` for a game object that exists but is not
+   loaded.
+
+
+
+
+.. _http-KRPC.ObjectNotLoadedException:
+
+.. rubric:: ObjectNotLoadedException
+
+The game object that a service object refers to exists, but is not loaded.
+For example, the game is loading, or the vessel carrying the part is unloaded.
+
+Returned as an error whose ``service`` and ``name`` are ``"KRPC"`` and ``"ObjectNotLoadedException"``.
+
+.. note::
+
+   See :ref:`ObjectDestroyedException <http-KRPC.ObjectDestroyedException>` for a game object that no longer exists.
+
+
+
+
+.. _http-KRPC.UnsupportedSceneException:
+
+.. rubric:: UnsupportedSceneException
+
+The procedure is not available in the current game scene.
+
+Returned as an error whose ``service`` and ``name`` are ``"KRPC"`` and ``"UnsupportedSceneException"``.
+
+
+
+.. _http-KRPC.StreamRemovedException:
+
+.. rubric:: StreamRemovedException
+
+A stream was removed by the server, e.g. an event that has finished.
+
+Returned as an error whose ``service`` and ``name`` are ``"KRPC"`` and ``"StreamRemovedException"``.
+
+
+
+.. _http-KRPC.Error:
+
+.. rubric:: Error
+
+A general error, described by its message.
+
+Returned as an error whose ``service`` and ``name`` are ``"KRPC"`` and ``"Error"``.

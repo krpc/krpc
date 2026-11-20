@@ -18,3 +18,4 @@ and the `Discord server <https://discord.gg/bXuaTrj>`_.
    java
    lua
    js
+   http

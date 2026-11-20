@@ -492,12 +492,13 @@
 <h1>Remote Procedure Calls for Kerbal Space Program<a class="headerlink" href="#remote-procedure-calls-for-kerbal-space-program" title="Link to this heading">#</a></h1>
 <p>kRPC lets you control Kerbal Space Program from scripts running outside the game. A server
 inside the game exposes the game’s API, and client libraries call it from Python, C#, C++, C,
-Java, Lua and JavaScript. It also supports Ferram Aerospace Research, Kerbal Alarm Clock, Infernal
-Robotics and other popular mods.</p>
+Java, Lua and JavaScript. Other languages can call it over HTTP, given an HTTP library. It
+also supports Ferram Aerospace Research, Kerbal Alarm Clock, Infernal Robotics and other
+popular mods.</p>
 <p>This script launches the active vessel straight up, then cuts the engines once it reaches
 an altitude of 10 km:</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-0-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-0-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-0-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-0-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-0-Qw==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-Qw==" name="Qw==" role="tab" tabindex="-1">C</button><button aria-controls="panel-0-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-0-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-THVh" name="THVh" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-0-SmF2YVNjcmlwdA==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tab" tabindex="-1">JavaScript</button></div><div aria-labelledby="tab-0-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-0-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-0-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-0-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-0-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-0-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-0-Qw==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-Qw==" name="Qw==" role="tab" tabindex="-1">C</button><button aria-controls="panel-0-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-0-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-THVh" name="THVh" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-0-SmF2YVNjcmlwdA==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-SmF2YVNjcmlwdA==" name="SmF2YVNjcmlwdA==" role="tab" tabindex="-1">JavaScript</button><button aria-controls="panel-0-SFRUUA==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-SFRUUA==" name="SFRUUA==" role="tab" tabindex="-1">HTTP</button></div><div aria-labelledby="tab-0-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-0-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
 
 <span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"Launch"</span><span class="p">)</span>
 <span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
@@ -721,6 +722,53 @@ an altitude of 10 km:</p>
 <span class="k">await</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
 </pre></div>
 </div>
+</div><div aria-labelledby="tab-0-SFRUUA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-SFRUUA==" name="SFRUUA==" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">urllib.request</span>
+
+<span class="n">SERVER</span> <span class="o">=</span> <span class="s2">"http://127.0.0.1:50003"</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">call</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">body</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">body</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
+    <span class="n">request</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span>
+        <span class="n">SERVER</span> <span class="o">+</span> <span class="n">path</span><span class="p">,</span>
+        <span class="n">data</span><span class="p">,</span>
+        <span class="p">{</span><span class="s2">"Content-Type"</span><span class="p">:</span> <span class="s2">"application/json"</span><span class="p">},</span>
+        <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">with</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">request</span><span class="p">)</span> <span class="k">as</span> <span class="n">response</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">response</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"value"</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">path</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">"/space-center/</span><span class="si">{</span><span class="bp">cls</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">obj</span><span class="si">}</span><span class="s2">"</span>
+
+
+<span class="n">vessel</span> <span class="o">=</span> <span class="n">path</span><span class="p">(</span><span class="s2">"vessel"</span><span class="p">,</span> <span class="n">call</span><span class="p">(</span><span class="s2">"GET"</span><span class="p">,</span> <span class="s2">"/space-center/active-vessel"</span><span class="p">))</span>
+<span class="n">name</span> <span class="o">=</span> <span class="n">call</span><span class="p">(</span><span class="s2">"GET"</span><span class="p">,</span> <span class="n">vessel</span> <span class="o">+</span> <span class="s2">"/name"</span><span class="p">)</span>
+<span class="n">auto_pilot</span> <span class="o">=</span> <span class="n">path</span><span class="p">(</span><span class="s2">"auto-pilot"</span><span class="p">,</span> <span class="n">call</span><span class="p">(</span><span class="s2">"GET"</span><span class="p">,</span> <span class="n">vessel</span> <span class="o">+</span> <span class="s2">"/auto-pilot"</span><span class="p">))</span>
+<span class="n">control</span> <span class="o">=</span> <span class="n">path</span><span class="p">(</span><span class="s2">"control"</span><span class="p">,</span> <span class="n">call</span><span class="p">(</span><span class="s2">"GET"</span><span class="p">,</span> <span class="n">vessel</span> <span class="o">+</span> <span class="s2">"/control"</span><span class="p">))</span>
+<span class="n">flight</span> <span class="o">=</span> <span class="n">path</span><span class="p">(</span><span class="s2">"flight"</span><span class="p">,</span> <span class="n">call</span><span class="p">(</span><span class="s2">"POST"</span><span class="p">,</span> <span class="n">vessel</span> <span class="o">+</span> <span class="s2">"/flight"</span><span class="p">))</span>
+
+<span class="n">call</span><span class="p">(</span>
+    <span class="s2">"POST"</span><span class="p">,</span>
+    <span class="n">auto_pilot</span> <span class="o">+</span> <span class="s2">"/target-pitch-and-heading"</span><span class="p">,</span>
+    <span class="p">{</span><span class="s2">"pitch"</span><span class="p">:</span> <span class="mi">90</span><span class="p">,</span> <span class="s2">"heading"</span><span class="p">:</span> <span class="mi">90</span><span class="p">},</span>
+<span class="p">)</span>
+<span class="n">call</span><span class="p">(</span><span class="s2">"PUT"</span><span class="p">,</span> <span class="n">auto_pilot</span> <span class="o">+</span> <span class="s2">"/engaged"</span><span class="p">,</span> <span class="p">{</span><span class="s2">"value"</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
+<span class="n">call</span><span class="p">(</span><span class="s2">"PUT"</span><span class="p">,</span> <span class="n">control</span> <span class="o">+</span> <span class="s2">"/throttle"</span><span class="p">,</span> <span class="p">{</span><span class="s2">"value"</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+<span class="n">call</span><span class="p">(</span><span class="s2">"POST"</span><span class="p">,</span> <span class="n">control</span> <span class="o">+</span> <span class="s2">"/activate-next-stage"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> has launched"</span><span class="p">)</span>
+
+<span class="k">while</span> <span class="n">call</span><span class="p">(</span><span class="s2">"GET"</span><span class="p">,</span> <span class="n">flight</span> <span class="o">+</span> <span class="s2">"/mean-altitude"</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">10000</span><span class="p">:</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+
+<span class="n">call</span><span class="p">(</span><span class="s2">"PUT"</span><span class="p">,</span> <span class="n">control</span> <span class="o">+</span> <span class="s2">"/throttle"</span><span class="p">,</span> <span class="p">{</span><span class="s2">"value"</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
+<span class="n">call</span><span class="p">(</span><span class="s2">"PUT"</span><span class="p">,</span> <span class="n">auto_pilot</span> <span class="o">+</span> <span class="s2">"/engaged"</span><span class="p">,</span> <span class="p">{</span><span class="s2">"value"</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> reached 10 km"</span><span class="p">)</span>
+</pre></div>
+</div>
 </div></div>
 <div class="sd-container-fluid sd-sphinx-override sd-mb-4 docutils">
 <div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-2 sd-row-cols-md-3 sd-row-cols-lg-3 sd-g-3 sd-g-xs-3 sd-g-sm-3 sd-g-md-3 sd-g-lg-3 docutils">
@@ -846,6 +894,15 @@ Lua</div>
 JavaScript</div>
 </div>
 <a class="sd-stretched-link sd-hide-link-text reference internal" href="js.html"><span class="doc">JavaScript</span></a></div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover sd-text-center client-card docutils">
+<img alt="" class="sd-card-img-top" src="_images/http.svg" />
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+HTTP</div>
+</div>
+<a class="sd-stretched-link sd-hide-link-text reference internal" href="http.html"><span class="doc">HTTP</span></a></div>
 </div>
 </div>
 </div>

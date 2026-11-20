@@ -1,0 +1,110 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Display
+=======
+
+
+.. _http-RasterPropMonitor.Display:
+
+.. rubric:: Display
+
+A screen page that a script draws, and whose button presses it answers. Obtained by
+calling :http:get:`/raster-prop-monitor/monitor/(id)/display` or :http:post:`/raster-prop-monitor/display`.
+
+.. note::
+
+   A monitor shows a display on a page whose handler is ``KRPCDisplay``. kRPC's
+   optional Module Manager patch adds such a page, named ``krpc``, to every monitor.
+   The content is kept while KSP builds the IVA again, but not saved with the game.
+
+
+A ``Display`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /raster-prop-monitor/display/(id)/name
+
+   The name of the display, or ``null`` for a monitor's own display.
+
+
+   :param id: The identifier of the :ref:`Display <http-RasterPropMonitor.Display>` object.
+
+   :resjson string? value:
+
+
+
+
+.. http:get:: /raster-prop-monitor/display/(id)/text
+
+   The text of the display, in Raster Prop Monitor's page format. It can hold
+   markup, such as ``[#ff0000]`` for a color, and a line can format variables, as
+   in ``{0:F0} m $&$ ALTITUDE``. Raster Prop Monitor updates the variables as
+   it draws.
+
+
+   :param id: The identifier of the :ref:`Display <http-RasterPropMonitor.Display>` object.
+
+   :resjson string value:
+
+.. http:put:: /raster-prop-monitor/display/(id)/text
+
+   The text of the display, in Raster Prop Monitor's page format. It can hold
+   markup, such as ``[#ff0000]`` for a color, and a line can format variables, as
+   in ``{0:F0} m $&$ ALTITUDE``. Raster Prop Monitor updates the variables as
+   it draws.
+
+
+   :param id: The identifier of the :ref:`Display <http-RasterPropMonitor.Display>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:get:: /raster-prop-monitor/display/(id)/image
+
+   The background image of the display, drawn under the text and scaled to the
+   screen, as a PNG or JPEG image. ``null`` for none.
+   Throws an exception if the image does not decode.
+
+
+   :param id: The identifier of the :ref:`Display <http-RasterPropMonitor.Display>` object.
+
+   :resjson bytes? value:
+
+.. http:put:: /raster-prop-monitor/display/(id)/image
+
+   The background image of the display, drawn under the text and scaled to the
+   screen, as a PNG or JPEG image. ``null`` for none.
+   Throws an exception if the image does not decode.
+
+
+   :param id: The identifier of the :ref:`Display <http-RasterPropMonitor.Display>` object.
+
+   :reqjson bytes? value: The new value.
+
+
+
+
+.. http:post:: /raster-prop-monitor/display/(id)/clear
+
+   Clear the text and the image.
+
+
+   :param id: The identifier of the :ref:`Display <http-RasterPropMonitor.Display>` object.
+
+
+
+
+
+
+.. http:get:: /raster-prop-monitor/display/(id)/shown
+
+   Whether a monitor shows the display now.
+
+
+   :param id: The identifier of the :ref:`Display <http-RasterPropMonitor.Display>` object.
+
+   :resjson bool value:

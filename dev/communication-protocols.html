@@ -493,6 +493,7 @@
 <li class="toctree-l2"><a class="reference internal" href="communication-protocols/websockets.html">WebSockets</a></li>
 <li class="toctree-l2"><a class="reference internal" href="communication-protocols/serialio.html">Serial IO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="communication-protocols/messages.html">Messaging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="communication-protocols/http.html">HTTP</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="client-design.html">Client Design</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -599,13 +600,16 @@ TCP/IP socket.</p></li>
 which carries the same messages over a cheaper path than TCP/IP.</p></li>
 <li><p><a class="reference internal" href="communication-protocols/websockets.html"><span class="doc">WebSockets</span></a> for web browsers.</p></li>
 <li><p><a class="reference internal" href="communication-protocols/serialio.html"><span class="doc">Serial IO</span></a> for microcontrollers like Arduino.</p></li>
+<li><p><a class="reference internal" href="communication-protocols/http.html"><span class="doc">HTTP</span></a> for tools and languages that make HTTP requests, with no
+client library.</p></li>
 </ul>
-<p>In each protocol, clients invoke remote procedure calls by <a class="reference internal" href="communication-protocols/messages.html"><span class="doc">sending and receiving protobuf
-messages</span></a>.</p>
+<p>In each protocol except HTTP, clients invoke remote procedure calls by <a class="reference internal" href="communication-protocols/messages.html"><span class="doc">sending and
+receiving protobuf messages</span></a>. HTTP carries each call as a
+request with a JSON body.</p>
 <section id="protocol-version">
 <span id="communication-protocol-version"></span><h2>Protocol Version<a class="headerlink" href="#protocol-version" title="Link to this heading">#</a></h2>
-<p>Each connection handshake carries the version of the protocol, an integer. The client sends the
-version it uses, and the server replies with the version it accepted:</p>
+<p>The connection handshake of each protocol except HTTP carries the version of the protocol, an
+integer. The client sends the version it uses, and the server replies with the version it accepted:</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Protocol version</p></th>

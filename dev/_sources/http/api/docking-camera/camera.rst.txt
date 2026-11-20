@@ -1,0 +1,47 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Camera
+======
+
+
+.. _http-DockingCamera.Camera:
+
+.. rubric:: Camera
+
+A camera from Docking Camera (KURS), on an onboard camera part or a docking port.
+
+A ``Camera`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /docking-camera/camera/(id)/part
+
+   Get the part containing this camera.
+
+
+   :param id: The identifier of the :ref:`Camera <http-DockingCamera.Camera>` object.
+
+   :resjson SpaceCenter.Part value:
+
+
+
+
+.. http:post:: /docking-camera/camera/(id)/image
+
+   The image from the camera, 256 by 256 pixels.
+   Throws an exception if the camera is off or not started.
+
+   .. note::
+
+      The camera is switched on by setting the ``IsEnabled`` field of its
+      ``PartCameraModule`` or ``DockingCameraModule`` to ``true``, which also opens
+      the camera window.
+
+
+   :param id: The identifier of the :ref:`Camera <http-DockingCamera.Camera>` object.
+
+   :reqjson StdLib.ImageFormat format: The format of the image. Optional, defaults to ``"png"``.
+   :reqjson int32 quality: The quality of a JPEG image, from 1 to 100. Optional, defaults to ``75``.
+   :resjson bytes value: The image data.

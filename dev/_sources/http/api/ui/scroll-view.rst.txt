@@ -1,0 +1,151 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Scroll View
+===========
+
+
+.. _http-UI.ScrollView:
+
+.. rubric:: ScrollView
+
+A view onto a panel that is larger than the space available for it, with scroll bars
+to move around it.
+Added to a :ref:`Canvas <http-UI.Canvas>` or a :ref:`Panel <http-UI.Panel>`.
+
+.. note::
+
+   Add the elements to :http:get:`/ui/scroll-view/(id)/content`, not to the scroll view itself. Giving
+   the content a layout and setting its size fitter to the preferred size is the
+   simplest way to have it grow to hold what is put in it.
+
+
+A ``ScrollView`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ui/scroll-view/(id)/rect-transform
+
+   The rect transform for the UI object.
+
+
+   :param id: The identifier of the :ref:`ScrollView <http-UI.ScrollView>` object.
+
+   :resjson UI.RectTransform value:
+
+
+
+
+.. http:get:: /ui/scroll-view/(id)/layout-element
+
+   How much space the UI object asks a layout for.
+
+   .. note::
+
+      Only has an effect when the object is in a panel that has a layout. A canvas is
+      not inside a layout and does not have one.
+
+
+   :param id: The identifier of the :ref:`ScrollView <http-UI.ScrollView>` object.
+
+   :resjson UI.LayoutElement value:
+
+
+
+
+.. http:get:: /ui/scroll-view/(id)/visible
+
+   Whether the UI object is visible.
+
+   .. note::
+
+      This is the object's own setting, which is what it was last set to. An object is
+      only drawn when everything it is inside is visible as well, so an interface can
+      be built with its parts visible, inside a panel that is not, and shown all at
+      once by making that panel visible.
+
+
+   :param id: The identifier of the :ref:`ScrollView <http-UI.ScrollView>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ui/scroll-view/(id)/visible
+
+   Whether the UI object is visible.
+
+   .. note::
+
+      This is the object's own setting, which is what it was last set to. An object is
+      only drawn when everything it is inside is visible as well, so an interface can
+      be built with its parts visible, inside a panel that is not, and shown all at
+      once by making that panel visible.
+
+
+   :param id: The identifier of the :ref:`ScrollView <http-UI.ScrollView>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ui/scroll-view/(id)/content
+
+   The panel that is scrolled, which the elements to show are added to.
+
+
+   :param id: The identifier of the :ref:`ScrollView <http-UI.ScrollView>` object.
+
+   :resjson UI.Panel value:
+
+
+
+
+.. http:get:: /ui/scroll-view/(id)/horizontal
+
+   Whether the view can be scrolled from side to side.
+
+
+   :param id: The identifier of the :ref:`ScrollView <http-UI.ScrollView>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ui/scroll-view/(id)/horizontal
+
+   Whether the view can be scrolled from side to side.
+
+
+   :param id: The identifier of the :ref:`ScrollView <http-UI.ScrollView>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ui/scroll-view/(id)/vertical
+
+   Whether the view can be scrolled up and down.
+
+
+   :param id: The identifier of the :ref:`ScrollView <http-UI.ScrollView>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ui/scroll-view/(id)/vertical
+
+   Whether the view can be scrolled up and down.
+
+
+   :param id: The identifier of the :ref:`ScrollView <http-UI.ScrollView>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:post:: /ui/scroll-view/(id)/remove
+
+   Remove the UI object.
+
+
+   :param id: The identifier of the :ref:`ScrollView <http-UI.ScrollView>` object.

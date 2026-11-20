@@ -1,0 +1,153 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Point
+=====
+
+
+.. _http-Drawing.Point:
+
+.. rubric:: Point
+
+A point, drawn as a dot that keeps its size on screen. Created using
+:http:post:`/drawing/add-point`.
+
+A ``Point`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /drawing/point/(id)/position
+
+   Position of the point.
+
+
+   :param id: The identifier of the :ref:`Point <http-Drawing.Point>` object.
+
+   :resjson tuple<double, double, double> value:
+
+.. http:put:: /drawing/point/(id)/position
+
+   Position of the point.
+
+
+   :param id: The identifier of the :ref:`Point <http-Drawing.Point>` object.
+
+   :reqjson tuple<double, double, double> value: The new value.
+
+
+
+
+.. http:get:: /drawing/point/(id)/reference-frame
+
+   Reference frame for the positions of the object.
+
+
+   :param id: The identifier of the :ref:`Point <http-Drawing.Point>` object.
+
+   :resjson SpaceCenter.ReferenceFrame value:
+
+.. http:put:: /drawing/point/(id)/reference-frame
+
+   Reference frame for the positions of the object.
+
+
+   :param id: The identifier of the :ref:`Point <http-Drawing.Point>` object.
+
+   :reqjson SpaceCenter.ReferenceFrame value: The new value.
+
+
+
+
+.. http:get:: /drawing/point/(id)/visible
+
+   Whether the object is visible.
+
+
+   :param id: The identifier of the :ref:`Point <http-Drawing.Point>` object.
+
+   :resjson bool value:
+
+.. http:put:: /drawing/point/(id)/visible
+
+   Whether the object is visible.
+
+
+   :param id: The identifier of the :ref:`Point <http-Drawing.Point>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /drawing/point/(id)/color
+
+   The color of the object.
+
+
+   :param id: The identifier of the :ref:`Point <http-Drawing.Point>` object.
+
+   :resjson StdLib.ColorRGB value:
+
+.. http:put:: /drawing/point/(id)/color
+
+   The color of the object.
+
+
+   :param id: The identifier of the :ref:`Point <http-Drawing.Point>` object.
+
+   :reqjson StdLib.ColorRGB value: The new value.
+
+
+
+
+.. http:get:: /drawing/point/(id)/size
+
+   Diameter of the point, in pixels.
+
+
+   :param id: The identifier of the :ref:`Point <http-Drawing.Point>` object.
+
+   :resjson float value:
+
+.. http:put:: /drawing/point/(id)/size
+
+   Diameter of the point, in pixels.
+
+
+   :param id: The identifier of the :ref:`Point <http-Drawing.Point>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /drawing/point/(id)/material
+
+   Material used to render the object.
+   Creates the material from a shader with the given name.
+
+
+   :param id: The identifier of the :ref:`Point <http-Drawing.Point>` object.
+
+   :resjson string value:
+
+.. http:put:: /drawing/point/(id)/material
+
+   Material used to render the object.
+   Creates the material from a shader with the given name.
+
+
+   :param id: The identifier of the :ref:`Point <http-Drawing.Point>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:post:: /drawing/point/(id)/remove
+
+   Remove the object.
+
+
+   :param id: The identifier of the :ref:`Point <http-Drawing.Point>` object.

@@ -493,6 +493,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../communication-protocols/websockets.html">WebSockets</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../communication-protocols/serialio.html">Serial IO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../communication-protocols/messages.html">Messaging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../communication-protocols/http.html">HTTP</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../client-design.html">Client Design</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -605,6 +606,8 @@ is laid out as follows:</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">client/</span></code> - the client libraries, one directory per language.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">client/conformance/</span></code> - the conformance tests, which check every client library against the
 <a class="reference internal" href="../client-spec.html"><span class="doc">client specification</span></a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">client/http/</span></code> - the tests of the <a class="reference internal" href="../http.html"><span class="doc">HTTP server</span></a>, with
+a minimal Python client built on the standard library.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">doc/</span></code> - the sources for this documentation. The API reference for each client is generated
 by the <code class="docutils literal notranslate"><span class="pre">docgen</span></code> tool.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">media/</span></code> - the logos and banners, and the script that generates them.</p></li>

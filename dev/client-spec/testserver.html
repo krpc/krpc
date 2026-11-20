@@ -493,6 +493,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../communication-protocols/websockets.html">WebSockets</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../communication-protocols/serialio.html">Serial IO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../communication-protocols/messages.html">Messaging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../communication-protocols/http.html">HTTP</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../client-design.html">Client Design</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -612,15 +613,17 @@ free port, and prints it as <code class="docutils literal notranslate"><span cla
 <section id="protocols">
 <h2>Protocols<a class="headerlink" href="#protocols" title="Link to this heading">#</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">--type</span></code> picks the <a class="reference internal" href="../communication-protocols.html"><span class="doc">communication protocol</span></a>: <code class="docutils literal notranslate"><span class="pre">protobuf</span></code> for
-TCP/IP (the default), <code class="docutils literal notranslate"><span class="pre">localsocket</span></code>, <code class="docutils literal notranslate"><span class="pre">websockets</span></code> or <code class="docutils literal notranslate"><span class="pre">serialio</span></code>. Here the server takes
-clients over websockets and TCP/IP at the same time:</p>
+TCP/IP (the default), <code class="docutils literal notranslate"><span class="pre">localsocket</span></code>, <code class="docutils literal notranslate"><span class="pre">websockets</span></code>, <code class="docutils literal notranslate"><span class="pre">serialio</span></code> or <code class="docutils literal notranslate"><span class="pre">http</span></code>. Here the server
+takes clients over websockets and TCP/IP at the same time:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>krpc-testserver<span class="w"> </span>--type<span class="o">=</span>websockets,protobuf<span class="w"> </span>--websockets-port<span class="o">=</span><span class="m">50001</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--tcpip-port<span class="o">=</span><span class="m">50000</span>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">--localsocket-path</span></code> names the socket of a local socket server, and <code class="docutils literal notranslate"><span class="pre">--serialio-port</span></code> the
-port of a serial IO server. <code class="docutils literal notranslate"><span class="pre">krpc-testserver</span> <span class="pre">--help</span></code> lists every option, including the bind
-address, the serial port settings and the log level.</p>
+port of a serial IO server. <code class="docutils literal notranslate"><span class="pre">--http-port</span></code> sets the port of an HTTP server, which prints it as
+<code class="docutils literal notranslate"><span class="pre">http_port</span> <span class="pre">=</span> <span class="pre">&lt;port&gt;</span></code>, and <code class="docutils literal notranslate"><span class="pre">--http-allowed-origins</span></code> the origins whose web pages may call it.
+<code class="docutils literal notranslate"><span class="pre">krpc-testserver</span> <span class="pre">--help</span></code> lists every option, including the bind address, the serial port
+settings and the log level.</p>
 </section>
 <section id="services">
 <h2>Services<a class="headerlink" href="#services" title="Link to this heading">#</a></h2>

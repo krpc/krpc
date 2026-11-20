@@ -37,6 +37,9 @@ Each client's ``:test`` suite groups its tests by what they depend on:
   on.
 * ``:lint`` - the language's linters, where it has them.
 
+``//client/http:test`` tests the :doc:`HTTP server </http>` against a ``TestServer``, through a
+minimal Python client in ``client/http/``.
+
 ``//:test`` includes each language's linters. ``//doc:linkcheck`` checks the external links in
 the documentation. It needs network access and is in no suite. Run it by name, as the release
 checks do.

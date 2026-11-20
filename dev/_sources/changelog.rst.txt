@@ -108,6 +108,8 @@ Core
 * Read from a serial port as bytes arrive, so a client over serial gets several calls per update (:issue:`1376`)
 * Add ``MemberBinder.ReadOnlyField``, for a mod setting that the mod declares read-only (:issue:`1382`)
 * Fix a serial IO server stopping when it sends a response over a megabyte, such as ``KRPC.GetServices`` with every service installed (:issue:`1386`)
+* Add a JSON over HTTP server, for calling procedures with no client library (:issue:`1391`)
+* Serve an OpenAPI document of the HTTP server's paths (:issue:`1391`)
 
 
 Server
@@ -149,6 +151,7 @@ Server
 * Show the number of connected clients beside each server in the server window (:issue:`1385`)
 * Add RTS/CTS flow control to serial IO servers, set in the server window (:issue:`1386`)
 * Build the serial port code into ``KRPC.Core.dll``, in place of a separate ``KRPC.IO.Ports.dll`` (:issue:`1386`)
+* Add \*JSON over HTTP\* to the protocols in the server window, on port 50003 by default, with the origins whose web pages may call it (:issue:`1391`)
 
 
 SpaceCenter service
@@ -757,6 +760,8 @@ krpctools
 * Add ``--frame-limit``, ``--fixed-rate``, ``--tick-work-us`` and ``--frame-work-us`` to ``krpc-testserver``, which model a game's frame loop (:issue:`1376`)
 * Add ``--preset`` to ``krpc-testserver``, for its rate settings (:issue:`1376`)
 * Add ``--flow-control`` to the ``TestServer``, for RTS/CTS over serial IO (:issue:`1386`)
+* Add the ``http`` server type, ``--http-port`` and ``--http-allowed-origins`` to ``krpc-testserver`` (:issue:`1391`)
+* Add the ``http`` language to ``krpc-docgen`` (:issue:`1391`)
 
 
 v0.7.0

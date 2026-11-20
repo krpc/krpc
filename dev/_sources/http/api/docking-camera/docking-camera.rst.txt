@@ -1,0 +1,31 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Service
+=======
+
+
+.. _http-DockingCamera:
+
+Provides functionality to interact with Docking Camera (KURS).
+
+
+.. http:get:: /docking-camera/available
+
+   Whether Docking Camera (KURS) is available.
+
+
+   :resjson bool value:
+
+
+
+
+.. http:post:: /docking-camera/camera
+
+   Get the camera on a part.
+   Throws an exception if the part is not an onboard camera or a docking port.
+
+
+   :reqjson SpaceCenter.Part part: The part.
+   :resjson DockingCamera.Camera value:

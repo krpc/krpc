@@ -12,6 +12,8 @@ is laid out as follows:
 * ``client/`` - the client libraries, one directory per language.
 * ``client/conformance/`` - the conformance tests, which check every client library against the
   :doc:`client specification </client-spec>`.
+* ``client/http/`` - the tests of the :doc:`HTTP server </http>`, with
+  a minimal Python client built on the standard library.
 * ``doc/`` - the sources for this documentation. The API reference for each client is generated
   by the ``docgen`` tool.
 * ``media/`` - the logos and banners, and the script that generates them.

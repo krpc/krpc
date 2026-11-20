@@ -1,0 +1,336 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Circle
+======
+
+
+.. _http-Drawing.Circle:
+
+.. rubric:: Circle
+
+A circle. Created using :http:post:`/drawing/add-circle`.
+
+A ``Circle`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /drawing/circle/(id)/center
+
+   Position of the center of the circle.
+
+
+   :param id: The identifier of the :ref:`Circle <http-Drawing.Circle>` object.
+
+   :resjson tuple<double, double, double> value:
+
+.. http:put:: /drawing/circle/(id)/center
+
+   Position of the center of the circle.
+
+
+   :param id: The identifier of the :ref:`Circle <http-Drawing.Circle>` object.
+
+   :reqjson tuple<double, double, double> value: The new value.
+
+
+
+
+.. http:get:: /drawing/circle/(id)/normal
+
+   Normal of the plane of the circle.
+
+
+   :param id: The identifier of the :ref:`Circle <http-Drawing.Circle>` object.
+
+   :resjson tuple<double, double, double> value:
+
+.. http:put:: /drawing/circle/(id)/normal
+
+   Normal of the plane of the circle.
+
+
+   :param id: The identifier of the :ref:`Circle <http-Drawing.Circle>` object.
+
+   :reqjson tuple<double, double, double> value: The new value.
+
+
+
+
+.. http:get:: /drawing/circle/(id)/radius
+
+   Radius of the circle, in meters.
+
+
+   :param id: The identifier of the :ref:`Circle <http-Drawing.Circle>` object.
+
+   :resjson double value:
+
+.. http:put:: /drawing/circle/(id)/radius
+
+   Radius of the circle, in meters.
+
+
+   :param id: The identifier of the :ref:`Circle <http-Drawing.Circle>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /drawing/circle/(id)/reference-frame
+
+   Reference frame for the positions of the object.
+
+
+   :param id: The identifier of the :ref:`Circle <http-Drawing.Circle>` object.
+
+   :resjson SpaceCenter.ReferenceFrame value:
+
+.. http:put:: /drawing/circle/(id)/reference-frame
+
+   Reference frame for the positions of the object.
+
+
+   :param id: The identifier of the :ref:`Circle <http-Drawing.Circle>` object.
+
+   :reqjson SpaceCenter.ReferenceFrame value: The new value.
+
+
+
+
+.. http:get:: /drawing/circle/(id)/visible
+
+   Whether the object is visible.
+
+
+   :param id: The identifier of the :ref:`Circle <http-Drawing.Circle>` object.
+
+   :resjson bool value:
+
+.. http:put:: /drawing/circle/(id)/visible
+
+   Whether the object is visible.
+
+
+   :param id: The identifier of the :ref:`Circle <http-Drawing.Circle>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /drawing/circle/(id)/color
+
+   The color of the path.
+
+   .. note::
+
+      For a path drawn with more than one color, this is the color at its start.
+
+
+   :param id: The identifier of the :ref:`Circle <http-Drawing.Circle>` object.
+
+   :resjson StdLib.ColorRGB value:
+
+.. http:put:: /drawing/circle/(id)/color
+
+   The color of the path.
+
+   .. note::
+
+      For a path drawn with more than one color, this is the color at its start.
+
+
+   :param id: The identifier of the :ref:`Circle <http-Drawing.Circle>` object.
+
+   :reqjson StdLib.ColorRGB value: The new value.
+
+
+
+
+.. http:get:: /drawing/circle/(id)/colors
+
+   The colors of the path, blended evenly from its start to its end.
+
+   .. note::
+
+      Throws an exception if the list is empty or holds more than 8 colors.
+
+
+   :param id: The identifier of the :ref:`Circle <http-Drawing.Circle>` object.
+
+   :resjson list<StdLib.ColorRGB> value:
+
+.. http:put:: /drawing/circle/(id)/colors
+
+   The colors of the path, blended evenly from its start to its end.
+
+   .. note::
+
+      Throws an exception if the list is empty or holds more than 8 colors.
+
+
+   :param id: The identifier of the :ref:`Circle <http-Drawing.Circle>` object.
+
+   :reqjson list<StdLib.ColorRGB> value: The new value.
+
+
+
+
+.. http:get:: /drawing/circle/(id)/thickness
+
+   The thickness of the path.
+
+
+   :param id: The identifier of the :ref:`Circle <http-Drawing.Circle>` object.
+
+   :resjson float value:
+
+.. http:put:: /drawing/circle/(id)/thickness
+
+   The thickness of the path.
+
+
+   :param id: The identifier of the :ref:`Circle <http-Drawing.Circle>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /drawing/circle/(id)/start-arrow
+
+   Whether an arrow head is drawn at the start.
+
+
+   :param id: The identifier of the :ref:`Circle <http-Drawing.Circle>` object.
+
+   :resjson bool value:
+
+.. http:put:: /drawing/circle/(id)/start-arrow
+
+   Whether an arrow head is drawn at the start.
+
+
+   :param id: The identifier of the :ref:`Circle <http-Drawing.Circle>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /drawing/circle/(id)/end-arrow
+
+   Whether an arrow head is drawn at the end.
+
+
+   :param id: The identifier of the :ref:`Circle <http-Drawing.Circle>` object.
+
+   :resjson bool value:
+
+.. http:put:: /drawing/circle/(id)/end-arrow
+
+   Whether an arrow head is drawn at the end.
+
+
+   :param id: The identifier of the :ref:`Circle <http-Drawing.Circle>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /drawing/circle/(id)/arrow-size
+
+   The size of the arrow heads, relative to the thickness.
+
+
+   :param id: The identifier of the :ref:`Circle <http-Drawing.Circle>` object.
+
+   :resjson float value:
+
+.. http:put:: /drawing/circle/(id)/arrow-size
+
+   The size of the arrow heads, relative to the thickness.
+
+
+   :param id: The identifier of the :ref:`Circle <http-Drawing.Circle>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /drawing/circle/(id)/dashed
+
+   Whether the path is drawn as a dashed line.
+
+
+   :param id: The identifier of the :ref:`Circle <http-Drawing.Circle>` object.
+
+   :resjson bool value:
+
+.. http:put:: /drawing/circle/(id)/dashed
+
+   Whether the path is drawn as a dashed line.
+
+
+   :param id: The identifier of the :ref:`Circle <http-Drawing.Circle>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /drawing/circle/(id)/label
+
+   Text drawn halfway along the path, facing the camera. Empty for no label.
+
+
+   :param id: The identifier of the :ref:`Circle <http-Drawing.Circle>` object.
+
+   :resjson string value:
+
+.. http:put:: /drawing/circle/(id)/label
+
+   Text drawn halfway along the path, facing the camera. Empty for no label.
+
+
+   :param id: The identifier of the :ref:`Circle <http-Drawing.Circle>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:get:: /drawing/circle/(id)/material
+
+   Material used to render the object.
+   Creates the material from a shader with the given name.
+
+
+   :param id: The identifier of the :ref:`Circle <http-Drawing.Circle>` object.
+
+   :resjson string value:
+
+.. http:put:: /drawing/circle/(id)/material
+
+   Material used to render the object.
+   Creates the material from a shader with the given name.
+
+
+   :param id: The identifier of the :ref:`Circle <http-Drawing.Circle>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:post:: /drawing/circle/(id)/remove
+
+   Remove the object.
+
+
+   :param id: The identifier of the :ref:`Circle <http-Drawing.Circle>` object.

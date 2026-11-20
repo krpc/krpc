@@ -1,0 +1,158 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Sphere
+======
+
+
+.. _http-Drawing.Sphere:
+
+.. rubric:: Sphere
+
+A solid sphere. Created using :http:post:`/drawing/add-sphere`.
+
+.. note::
+
+   The sphere is drawn with an additive material, so a darker color draws it more
+   transparent.
+
+
+A ``Sphere`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /drawing/sphere/(id)/center
+
+   Position of the center of the sphere.
+
+
+   :param id: The identifier of the :ref:`Sphere <http-Drawing.Sphere>` object.
+
+   :resjson tuple<double, double, double> value:
+
+.. http:put:: /drawing/sphere/(id)/center
+
+   Position of the center of the sphere.
+
+
+   :param id: The identifier of the :ref:`Sphere <http-Drawing.Sphere>` object.
+
+   :reqjson tuple<double, double, double> value: The new value.
+
+
+
+
+.. http:get:: /drawing/sphere/(id)/radius
+
+   Radius of the sphere, in meters.
+
+
+   :param id: The identifier of the :ref:`Sphere <http-Drawing.Sphere>` object.
+
+   :resjson double value:
+
+.. http:put:: /drawing/sphere/(id)/radius
+
+   Radius of the sphere, in meters.
+
+
+   :param id: The identifier of the :ref:`Sphere <http-Drawing.Sphere>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /drawing/sphere/(id)/reference-frame
+
+   Reference frame for the positions of the object.
+
+
+   :param id: The identifier of the :ref:`Sphere <http-Drawing.Sphere>` object.
+
+   :resjson SpaceCenter.ReferenceFrame value:
+
+.. http:put:: /drawing/sphere/(id)/reference-frame
+
+   Reference frame for the positions of the object.
+
+
+   :param id: The identifier of the :ref:`Sphere <http-Drawing.Sphere>` object.
+
+   :reqjson SpaceCenter.ReferenceFrame value: The new value.
+
+
+
+
+.. http:get:: /drawing/sphere/(id)/visible
+
+   Whether the object is visible.
+
+
+   :param id: The identifier of the :ref:`Sphere <http-Drawing.Sphere>` object.
+
+   :resjson bool value:
+
+.. http:put:: /drawing/sphere/(id)/visible
+
+   Whether the object is visible.
+
+
+   :param id: The identifier of the :ref:`Sphere <http-Drawing.Sphere>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /drawing/sphere/(id)/color
+
+   The color of the object.
+
+
+   :param id: The identifier of the :ref:`Sphere <http-Drawing.Sphere>` object.
+
+   :resjson StdLib.ColorRGB value:
+
+.. http:put:: /drawing/sphere/(id)/color
+
+   The color of the object.
+
+
+   :param id: The identifier of the :ref:`Sphere <http-Drawing.Sphere>` object.
+
+   :reqjson StdLib.ColorRGB value: The new value.
+
+
+
+
+.. http:get:: /drawing/sphere/(id)/material
+
+   Material used to render the object.
+   Creates the material from a shader with the given name.
+
+
+   :param id: The identifier of the :ref:`Sphere <http-Drawing.Sphere>` object.
+
+   :resjson string value:
+
+.. http:put:: /drawing/sphere/(id)/material
+
+   Material used to render the object.
+   Creates the material from a shader with the given name.
+
+
+   :param id: The identifier of the :ref:`Sphere <http-Drawing.Sphere>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:post:: /drawing/sphere/(id)/remove
+
+   Remove the object.
+
+
+   :param id: The identifier of the :ref:`Sphere <http-Drawing.Sphere>` object.

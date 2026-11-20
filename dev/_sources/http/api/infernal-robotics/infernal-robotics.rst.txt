@@ -1,0 +1,64 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Service
+=======
+
+
+.. _http-InfernalRobotics:
+
+Provides functionality to interact with Infernal Robotics Next.
+
+
+.. http:get:: /infernal-robotics/available
+
+   Whether Infernal Robotics is installed.
+
+
+   :resjson bool value:
+
+
+
+
+.. http:post:: /infernal-robotics/servo-groups
+
+   A list of all the servo groups in the given *vessel*.
+
+   .. note::
+
+      Works for any loaded vessel, not just the active one. Groups on a non-active vessel
+      support movement and per-servo control, but not preset, key, speed-factor or
+      expanded state, which are only tracked by Infernal Robotics for the active vessel.
+
+
+   :reqjson SpaceCenter.Vessel vessel:
+   :resjson list<InfernalRobotics.ServoGroup> value:
+
+
+
+
+
+.. http:post:: /infernal-robotics/servo-group-with-name
+
+   Returns the servo group in the given *vessel* with the given *name*,
+   or ``null`` if none exists. If multiple servo groups have the same name, only one of them is returned.
+
+
+   :reqjson SpaceCenter.Vessel vessel: Vessel to check.
+   :reqjson string name: Name of servo group to find.
+   :resjson InfernalRobotics.ServoGroup? value:
+
+
+
+
+
+.. http:post:: /infernal-robotics/servo-with-name
+
+   Returns the servo in the given *vessel* with the given *name* or
+   ``null`` if none exists. If multiple servos have the same name, only one of them is returned.
+
+
+   :reqjson SpaceCenter.Vessel vessel: Vessel to check.
+   :reqjson string name: Name of the servo to find.
+   :resjson InfernalRobotics.Servo? value:

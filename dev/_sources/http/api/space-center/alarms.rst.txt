@@ -1,0 +1,639 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Alarms
+======
+
+
+.. _http-SpaceCenter.AlarmManager:
+
+.. rubric:: AlarmManager
+
+Alarm manager.
+Obtained by calling :http:get:`/space-center/alarm-manager`.
+
+A ``AlarmManager`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /space-center/alarm-manager/(id)/alarms
+
+   A list of all alarms.
+
+
+   :param id: The identifier of the :ref:`AlarmManager <http-SpaceCenter.AlarmManager>` object.
+
+   :resjson list<SpaceCenter.Alarm> value:
+
+
+
+
+.. http:post:: /space-center/alarm-manager/(id)/alarms-with-type
+
+   A list of all alarms of the given type.
+
+
+   :param id: The identifier of the :ref:`AlarmManager <http-SpaceCenter.AlarmManager>` object.
+
+   :reqjson SpaceCenter.AlarmType type: The type of alarm to return.
+   :resjson list<SpaceCenter.Alarm> value:
+
+
+
+
+
+.. http:post:: /space-center/alarm-manager/(id)/alarm-with-name
+
+   Returns the first alarm with the given title, or ``null`` if no such
+   alarm exists. Alarm titles are not guaranteed to be unique; if more than
+   one alarm shares the given title, the first one found is returned.
+
+
+   :param id: The identifier of the :ref:`AlarmManager <http-SpaceCenter.AlarmManager>` object.
+
+   :reqjson string name: The title of the alarm to return.
+   :resjson SpaceCenter.Alarm? value:
+
+
+
+
+
+.. http:post:: /space-center/alarm-manager/add-alarm
+
+   Create an alarm.
+
+
+   :reqjson double time: Number of seconds from now that the alarm should trigger.
+   :reqjson string title: Title for the alarm. Optional, defaults to ``"Alarm"``.
+   :reqjson string description: Description for the alarm. Optional, defaults to ``""``.
+   :resjson SpaceCenter.Alarm value:
+
+
+
+
+
+.. http:post:: /space-center/alarm-manager/add-vessel-alarm
+
+   Create an alarm linked to a vessel.
+
+
+   :reqjson double time: Number of seconds from now that the alarm should trigger.
+   :reqjson SpaceCenter.Vessel vessel: Vessel to link the alarm to.
+   :reqjson string title: Title for the alarm. Optional, defaults to ``"Vessel Alarm"``.
+   :reqjson string description: Description for the alarm. Optional, defaults to ``""``.
+   :resjson SpaceCenter.Alarm value:
+
+
+
+
+
+.. http:post:: /space-center/alarm-manager/add-apoapsis-alarm
+
+   Create an alarm for the given vessel's next apoapsis.
+
+
+   :reqjson SpaceCenter.Vessel vessel: The vessel.
+   :reqjson double offset: Time in seconds to offset the alarm by. Optional, defaults to ``60.0``.
+   :reqjson string title: Title for the alarm. Optional, defaults to ``"Apoapsis Alarm"``.
+   :reqjson string description: Description for the alarm. Optional, defaults to ``""``.
+   :resjson SpaceCenter.Alarm value:
+
+
+
+
+
+.. http:post:: /space-center/alarm-manager/add-periapsis-alarm
+
+   Create an alarm for the given vessel's next periapsis.
+
+
+   :reqjson SpaceCenter.Vessel vessel: The vessel.
+   :reqjson double offset: Time in seconds to offset the alarm by. Optional, defaults to ``60.0``.
+   :reqjson string title: Title for the alarm. Optional, defaults to ``"Periapsis Alarm"``.
+   :reqjson string description: Description for the alarm. Optional, defaults to ``""``.
+   :resjson SpaceCenter.Alarm value:
+
+
+
+
+
+.. http:post:: /space-center/alarm-manager/add-maneuver-node-alarm
+
+   Create an alarm for the given vessel and maneuver node.
+
+
+   :reqjson SpaceCenter.Vessel vessel: The vessel.
+   :reqjson SpaceCenter.Node node: The maneuver node.
+   :reqjson double offset: Time in seconds to offset the alarm by. Optional, defaults to ``60.0``.
+   :reqjson bool add_burn_time: Whether the node's burn time should be included in the alarm. Optional, defaults to ``true``.
+   :reqjson string title: Title for the alarm. Optional, defaults to ``"Maneuver Node Alarm"``.
+   :reqjson string description: Description for the alarm. Optional, defaults to ``""``.
+   :resjson SpaceCenter.Alarm value:
+
+
+
+
+
+.. http:post:: /space-center/alarm-manager/add-soi-alarm
+
+   Create an alarm for the given vessel's next sphere of influence change.
+
+
+   :reqjson SpaceCenter.Vessel vessel: The vessel.
+   :reqjson double offset: Time in seconds to offset the alarm by. Optional, defaults to ``60.0``.
+   :reqjson string title: Title for the alarm. Optional, defaults to ``"SOI Change Alarm"``.
+   :reqjson string description: Description for the alarm. Optional, defaults to ``""``.
+   :resjson SpaceCenter.Alarm value:
+
+
+
+
+
+.. http:post:: /space-center/alarm-manager/add-transfer-window-alarm
+
+   Create an alarm for the next planetary transfer window from the vessel's
+   current parent body to the target body.
+
+   .. note::
+
+      This relies on KSP's stock transfer-window alarm logic. If KSP cannot
+      compute a transfer from the vessel's current parent body to the target,
+      the resulting alarm may not fire at a useful time; in that case the
+      properties on the returned alarm can still be used to inspect or adjust it.
+
+
+   :reqjson SpaceCenter.Vessel vessel: The vessel.
+   :reqjson SpaceCenter.CelestialBody target: The target body.
+   :reqjson string title: Title for the alarm. Optional, defaults to ``"Transfer Window Alarm"``.
+   :reqjson string description: Description for the alarm. Optional, defaults to ``""``.
+   :resjson SpaceCenter.Alarm value:
+
+
+
+
+
+
+.. _http-SpaceCenter.Alarm:
+
+.. rubric:: Alarm
+
+An alarm. Can be accessed using :http:get:`/space-center/alarm-manager`.
+
+A ``Alarm`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /space-center/alarm/(id)/id
+
+   Unique identifier of the alarm.
+   KSP destroys and recreates an alarm when it is edited.
+   This id will remain constant between the old and new alarms.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-SpaceCenter.Alarm>` object.
+
+   :resjson uint32 value:
+
+
+
+
+.. http:get:: /space-center/alarm/(id)/type
+
+   Type of alarm.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-SpaceCenter.Alarm>` object.
+
+   :resjson SpaceCenter.AlarmType value:
+
+
+
+
+.. http:get:: /space-center/alarm/(id)/title
+
+   Title of the alarm.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-SpaceCenter.Alarm>` object.
+
+   :resjson string value:
+
+.. http:put:: /space-center/alarm/(id)/title
+
+   Title of the alarm.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-SpaceCenter.Alarm>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:get:: /space-center/alarm/(id)/description
+
+   Description of the alarm.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-SpaceCenter.Alarm>` object.
+
+   :resjson string value:
+
+.. http:put:: /space-center/alarm/(id)/description
+
+   Description of the alarm.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-SpaceCenter.Alarm>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:get:: /space-center/alarm/(id)/time
+
+   Time the alarm will trigger, in seconds since epoch.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-SpaceCenter.Alarm>` object.
+
+   :resjson double value:
+
+.. http:put:: /space-center/alarm/(id)/time
+
+   Time the alarm will trigger, in seconds since epoch.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-SpaceCenter.Alarm>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /space-center/alarm/(id)/time-until
+
+   Time until the alarm triggers, in seconds.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-SpaceCenter.Alarm>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/alarm/(id)/event-offset
+
+   Seconds between the alarm going off and the event it references.
+
+   .. note::
+
+      For a maneuver alarm that includes the burn time, setting this sets the margin
+      before the start of the burn, and the value read back includes half the burn time.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-SpaceCenter.Alarm>` object.
+
+   :resjson double value:
+
+.. http:put:: /space-center/alarm/(id)/event-offset
+
+   Seconds between the alarm going off and the event it references.
+
+   .. note::
+
+      For a maneuver alarm that includes the burn time, setting this sets the margin
+      before the start of the burn, and the value read back includes half the burn time.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-SpaceCenter.Alarm>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /space-center/alarm/(id)/vessel
+
+   Vessel the alarm references. ``null`` if it does not reference a vessel.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-SpaceCenter.Alarm>` object.
+
+   :resjson SpaceCenter.Vessel? value:
+
+
+
+
+.. http:get:: /space-center/alarm/(id)/node
+
+   Maneuver node the alarm references. Only valid for alarms of type
+   ``"maneuver"``.
+
+   .. note::
+
+      Throws an exception if the alarm is not of
+      type ``"maneuver"``.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-SpaceCenter.Alarm>` object.
+
+   :resjson SpaceCenter.Node value:
+
+.. http:put:: /space-center/alarm/(id)/node
+
+   Maneuver node the alarm references. Only valid for alarms of type
+   ``"maneuver"``.
+
+   .. note::
+
+      Throws an exception if the alarm is not of
+      type ``"maneuver"``.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-SpaceCenter.Alarm>` object.
+
+   :reqjson SpaceCenter.Node value: The new value.
+
+
+
+
+.. http:get:: /space-center/alarm/(id)/origin-body
+
+   Origin body for the transfer window. Only valid for alarms of type
+   ``"transfer_window"``.
+
+   .. note::
+
+      Throws an exception if the alarm is not of
+      type ``"transfer_window"``.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-SpaceCenter.Alarm>` object.
+
+   :resjson SpaceCenter.CelestialBody value:
+
+.. http:put:: /space-center/alarm/(id)/origin-body
+
+   Origin body for the transfer window. Only valid for alarms of type
+   ``"transfer_window"``.
+
+   .. note::
+
+      Throws an exception if the alarm is not of
+      type ``"transfer_window"``.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-SpaceCenter.Alarm>` object.
+
+   :reqjson SpaceCenter.CelestialBody value: The new value.
+
+
+
+
+.. http:get:: /space-center/alarm/(id)/destination-body
+
+   Destination body for the transfer window. Only valid for alarms of type
+   ``"transfer_window"``.
+
+   .. note::
+
+      Throws an exception if the alarm is not of
+      type ``"transfer_window"``.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-SpaceCenter.Alarm>` object.
+
+   :resjson SpaceCenter.CelestialBody value:
+
+.. http:put:: /space-center/alarm/(id)/destination-body
+
+   Destination body for the transfer window. Only valid for alarms of type
+   ``"transfer_window"``.
+
+   .. note::
+
+      Throws an exception if the alarm is not of
+      type ``"transfer_window"``.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-SpaceCenter.Alarm>` object.
+
+   :reqjson SpaceCenter.CelestialBody value: The new value.
+
+
+
+
+.. http:get:: /space-center/alarm/(id)/warp-action
+
+   The action taken on time warp when the alarm fires.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-SpaceCenter.Alarm>` object.
+
+   :resjson SpaceCenter.AlarmWarpAction value:
+
+.. http:put:: /space-center/alarm/(id)/warp-action
+
+   The action taken on time warp when the alarm fires.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-SpaceCenter.Alarm>` object.
+
+   :reqjson SpaceCenter.AlarmWarpAction value: The new value.
+
+
+
+
+.. http:get:: /space-center/alarm/(id)/message-action
+
+   The on-screen message behavior when the alarm fires.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-SpaceCenter.Alarm>` object.
+
+   :resjson SpaceCenter.AlarmMessageAction value:
+
+.. http:put:: /space-center/alarm/(id)/message-action
+
+   The on-screen message behavior when the alarm fires.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-SpaceCenter.Alarm>` object.
+
+   :reqjson SpaceCenter.AlarmMessageAction value: The new value.
+
+
+
+
+.. http:get:: /space-center/alarm/(id)/play-sound
+
+   Whether the alarm plays a sound when it fires.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-SpaceCenter.Alarm>` object.
+
+   :resjson bool value:
+
+.. http:put:: /space-center/alarm/(id)/play-sound
+
+   Whether the alarm plays a sound when it fires.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-SpaceCenter.Alarm>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /space-center/alarm/(id)/delete-on-dismiss
+
+   Whether the alarm is deleted automatically once the player has dismissed
+   the triggered message.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-SpaceCenter.Alarm>` object.
+
+   :resjson bool value:
+
+.. http:put:: /space-center/alarm/(id)/delete-on-dismiss
+
+   Whether the alarm is deleted automatically once the player has dismissed
+   the triggered message.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-SpaceCenter.Alarm>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /space-center/alarm/(id)/triggered
+
+   Whether the time of the alarm has passed and its actions have been triggered.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-SpaceCenter.Alarm>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /space-center/alarm/(id)/actioned
+
+   Whether the alarm's actions were triggered and then completed or closed.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-SpaceCenter.Alarm>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:post:: /space-center/alarm/(id)/remove
+
+   Removes the alarm.
+
+   .. note::
+
+      Any further use of this object throws an exception.
+
+
+   :param id: The identifier of the :ref:`Alarm <http-SpaceCenter.Alarm>` object.
+
+
+
+
+
+
+
+.. _http-SpaceCenter.AlarmType:
+
+.. rubric:: AlarmType
+
+The type of an alarm. See :http:get:`/space-center/alarm/(id)/type`.
+
+Passed and returned as the name of one of its values:
+
+
+``"raw"``
+   An alarm for a specific date/time or a specific period in the future.
+
+
+``"apoapsis"``
+   An alarm for the next apoapsis of a vessel.
+
+
+``"periapsis"``
+   An alarm for the next periapsis of a vessel.
+
+
+``"maneuver"``
+   An alarm based on a maneuver node on the vessel's flight path.
+
+
+``"soi_change"``
+   An alarm for the next sphere of influence change on the vessel's flight path.
+
+
+``"transfer_window"``
+   An alarm for the next planetary transfer window from the vessel's current
+   orbit to a target body.
+
+
+``"unknown"``
+   The alarm is of a type not recognized by kRPC. Typically this is a type
+   introduced by a mod.
+
+
+
+.. _http-SpaceCenter.AlarmWarpAction:
+
+.. rubric:: AlarmWarpAction
+
+The warp action taken when an alarm fires.
+See :http:get:`/space-center/alarm/(id)/warp-action`.
+
+Passed and returned as the name of one of its values:
+
+
+``"no_change"``
+   Do not change time warp when the alarm fires.
+
+
+``"stop_warp"``
+   Drop out of time warp when the alarm fires.
+
+
+``"pause_game"``
+   Pause the game when the alarm fires.
+
+
+
+.. _http-SpaceCenter.AlarmMessageAction:
+
+.. rubric:: AlarmMessageAction
+
+The on-screen message action taken when an alarm fires.
+See :http:get:`/space-center/alarm/(id)/message-action`.
+
+Passed and returned as the name of one of its values:
+
+
+``"no_message"``
+   Do not display a message when the alarm fires.
+
+
+``"message"``
+   Display a message when the alarm fires.
+
+
+``"message_if_not_active_vessel"``
+   Display a message only if the alarm's vessel is not the currently active vessel.

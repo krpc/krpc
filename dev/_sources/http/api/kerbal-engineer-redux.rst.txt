@@ -1,0 +1,22 @@
+.. default-domain:: http
+.. highlight:: json
+
+Kerbal Engineer Redux
+=====================
+
+Provides functionality to interact with the `Kerbal Engineer Redux`_ mod.
+|Kerbal Engineer Redux tested|
+
+.. toctree::
+   :includehidden:
+   :maxdepth: 1
+
+   kerbal-engineer-redux/kerbal-engineer-redux
+   kerbal-engineer-redux/impact
+   kerbal-engineer-redux/suicide-burn
+   kerbal-engineer-redux/stage
+   kerbal-engineer-redux/burn-time
+   kerbal-engineer-redux/rendezvous
+
+
+.. include:: /mods.inc

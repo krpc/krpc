@@ -1,0 +1,138 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Service
+=======
+
+
+.. _http-RasterPropMonitor:
+
+This service provides the IVA screens, variables and external cameras of
+`Raster Prop Monitor <https://github.com/FirstPersonKSP/RasterPropMonitor>`_.
+
+.. note::
+
+   A persistent variable is a number a script and the props share: a prop shows it, and a
+   switch or numeric input sets it. Raster Prop Monitor updates the variables that depend
+   on the vessel only for the active vessel.
+
+
+
+.. http:get:: /raster-prop-monitor/available
+
+   Whether Raster Prop Monitor is installed.
+
+
+   :resjson bool value:
+
+
+
+
+.. http:post:: /raster-prop-monitor/computer
+
+   The computer of a part.
+   Throws an exception if the part has no Raster Prop Monitor computer.
+
+
+   :reqjson SpaceCenter.Part part: The part.
+   :resjson RasterPropMonitor.Computer value:
+
+
+
+
+
+.. http:post:: /raster-prop-monitor/computers
+
+   The computers of the parts of a vessel.
+
+
+   :reqjson SpaceCenter.Vessel vessel: The vessel.
+   :resjson list<RasterPropMonitor.Computer> value:
+
+
+
+
+
+.. http:post:: /raster-prop-monitor/global-persistent-variable
+
+   The value of a persistent variable of a vessel, or ``null`` if it is not set.
+   Throws an exception if the vessel has no Raster Prop Monitor computer.
+
+
+   :reqjson SpaceCenter.Vessel vessel: The vessel.
+   :reqjson string name: The name of the variable, without the ``PERSISTENT_`` prefix.
+   :resjson double? value:
+
+
+
+
+
+.. http:post:: /raster-prop-monitor/set-global-persistent-variable
+
+   Set a persistent variable of a vessel. The props that show it update.
+   Throws an exception if the vessel has no Raster Prop Monitor computer.
+
+
+   :reqjson SpaceCenter.Vessel vessel: The vessel.
+   :reqjson string name: The name of the variable, without the ``PERSISTENT_`` prefix.
+   :reqjson double value: The value.
+
+
+
+
+
+.. http:post:: /raster-prop-monitor/remove-global-persistent-variable
+
+   Remove a persistent variable of a vessel. The props that show it update.
+   Throws an exception if the vessel has no Raster Prop Monitor computer.
+
+
+   :reqjson SpaceCenter.Vessel vessel: The vessel.
+   :reqjson string name: The name of the variable, without the ``PERSISTENT_`` prefix.
+
+
+
+
+
+
+
+
+.. http:post:: /raster-prop-monitor/monitors
+
+   The monitors in the IVAs of a vessel's parts.
+   Throws an exception if the vessel is not the active vessel.
+
+   .. note::
+
+      KSP builds IVAs only for the active vessel.
+
+
+   :reqjson SpaceCenter.Vessel vessel: The active vessel.
+   :resjson list<RasterPropMonitor.Monitor> value:
+
+
+
+
+
+.. http:post:: /raster-prop-monitor/display
+
+   The display of a vessel with the given name, which every page whose
+   ``KRPCDisplay`` handler names it shows.
+
+
+   :reqjson SpaceCenter.Vessel vessel: The vessel.
+   :reqjson string name: The name of the display.
+   :resjson RasterPropMonitor.Display value:
+
+
+
+
+
+.. http:post:: /raster-prop-monitor/cameras
+
+   The external cameras on a vessel's parts.
+
+
+   :reqjson SpaceCenter.Vessel vessel: The vessel.
+   :resjson list<RasterPropMonitor.ExternalCamera> value:

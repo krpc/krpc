@@ -1,0 +1,100 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Service
+=======
+
+
+.. _http-UI:
+
+Provides functionality for drawing and interacting with in-game user interface elements.
+
+.. note::
+
+   For drawing 3D objects in the flight scene, see the Drawing service.
+   User interface elements created by a client are removed when that client
+   disconnects, and when the game scene changes. A client that needs its
+   interface in more than one scene must create it again in each of them.
+
+
+
+.. http:get:: /ui/stock-canvas
+
+   The stock UI canvas.
+
+
+   :resjson UI.Canvas value:
+
+
+
+
+.. http:post:: /ui/add-canvas
+
+   Add a new canvas.
+
+   .. note::
+
+      If you want to add UI elements to KSPs stock UI canvas, use :http:get:`/ui/stock-canvas`.
+
+
+   :resjson UI.Canvas value:
+
+
+
+
+
+.. http:post:: /ui/message
+
+   Display a message on the screen.
+
+   .. note::
+
+      The message appears just like a stock message, for example quicksave or quickload messages.
+
+
+   :reqjson string content: Message content.
+   :reqjson float duration: Duration before the message disappears, in seconds. Optional, defaults to ``1.0``.
+   :reqjson UI.MessagePosition position: Position to display the message. Optional, defaults to ``"top_center"``.
+   :reqjson StdLib.ColorRGBA color: The color of the message. Optional, defaults to ``{"r": 1.0, "g": 0.92, "b": 0.016, "a": 1.0}``.
+   :reqjson float size: Size of the message, differs per position. Optional, defaults to ``2e+01``.
+
+
+
+
+
+.. http:post:: /ui/clear
+
+   Remove all user interface elements.
+
+
+   :reqjson bool client_only: If true, only remove objects created by the calling client. Optional, defaults to ``false``.
+
+
+
+
+
+
+.. _http-UI.MessagePosition:
+
+.. rubric:: MessagePosition
+
+Message position.
+
+Passed and returned as the name of one of its values:
+
+
+``"top_left"``
+   Top left.
+
+
+``"top_center"``
+   Top center.
+
+
+``"top_right"``
+   Top right.
+
+
+``"bottom_center"``
+   Bottom center.

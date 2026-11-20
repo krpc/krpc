@@ -9,6 +9,7 @@ clients:
    bazel run //tools/benchmarks:testserver  # the server, without the game
    bazel run //tools/benchmarks:update-loop # the update loop, without the game
    bazel run //tools/benchmarks:python      # one client, against a TestServer
+   bazel run //tools/benchmarks:http        # the HTTP server, against a TestServer
    bazel run //tools/benchmarks:clients     # every client, in one table
    bazel run //tools/benchmarks:server      # the server, in the game
 
@@ -71,9 +72,13 @@ The client targets run the server with ``--no-frame-pacing``, so its update loop
 it can. A paced server adds the rest of each update to a round trip. It also serves a client that
 is slower than its max call wait once per update, which measures 16.7 ms and not the client.
 
+``:http`` measures the same round trips over the HTTP server, with Python's ``http.client``, and
+a round trip on a new connection for each call, as ``curl`` makes. Read against the Python client,
+it compares the two protocols from one language.
+
 ``:clients`` runs every client in turn, each with its own server, and reports one column per
-language. Its JSON file holds every client's results, and ``:compare`` shows it as one block per
-client.
+language, with HTTP in the TCP/IP block. Its JSON file holds every client's results, and
+``:compare`` shows it as one block per client.
 
 ``:server`` measures calls to ``SpaceCenter`` procedures in a running game, object access, and a
 stream over a few hundred parts. It is a pytest suite, so arguments go to pytest:
@@ -84,6 +89,8 @@ stream over a few hundred parts. It is a pytest suite, so arguments go to pytest
 
 ``test_update_loop.py`` runs the update loop shapes of ``:update-loop`` in the game, to check the
 model against it.
+
+``test_http.py`` measures round trips in the game, from the Python client and over HTTP.
 
 ``test_steps.py`` times the steps of ``--steps`` in the game, with calls on the reference craft
 added.

@@ -1,0 +1,1703 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Control
+=======
+
+
+.. _http-SpaceCenter.Control:
+
+.. rubric:: Control
+
+Used to manipulate the controls of a vessel. This includes adjusting the
+throttle, enabling/disabling systems such as SAS and RCS, or altering the
+direction in which the vessel is pointing.
+Obtained by calling :http:get:`/space-center/vessel/(id)/control`.
+
+.. note::
+
+   Control inputs (pitch, yaw, roll, translation, wheel throttle, wheel steering
+   and the custom axes) are zeroed when all clients that have set one or more of
+   these inputs are no longer connected. The throttle is an exception: it keeps
+   its value when clients disconnect.
+
+   A kerbal on EVA is a vessel, and is driven by these same controls. The
+   translation inputs move it: :http:get:`/space-center/control/(id)/forward` and :http:get:`/space-center/control/(id)/right` walk
+   it about, relative to the direction it is facing, and all three translate its
+   jetpack once that is deployed. Walking is not throttled by the size of the
+   input, only started by it. The rotation inputs turn it, at a rate proportional
+   to the input: :http:get:`/space-center/control/(id)/yaw` steers it as it walks, and all three turn its
+   jetpack. Turning the jetpack releases the kerbal from the orientation it was
+   holding; it stops and holds its new orientation once the input returns to zero.
+   :http:get:`/space-center/control/(id)/rcs` deploys and stows the jetpack and :http:get:`/space-center/control/(id)/lights`
+   switches the helmet lamp. The remaining controls do nothing for a kerbal.
+   A kerbal is also sent out and brought back in from here: with
+   :http:post:`/space-center/crew-member/(id)/eva` and :http:post:`/space-center/control/(id)/board`, and
+   :http:post:`/space-center/control/(id)/grab-ladder` and :http:post:`/space-center/control/(id)/release-ladder` for the ladders it
+   passes on the way.
+
+
+A ``Control`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /space-center/control/(id)/source
+
+   The source of the vessels control, for example by a kerbal or a probe core.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson SpaceCenter.ControlSource value:
+
+
+
+
+.. http:get:: /space-center/control/(id)/state
+
+   The control state of the vessel.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson SpaceCenter.ControlState value:
+
+
+
+
+.. http:get:: /space-center/control/(id)/sas
+
+   The state of SAS.
+
+   .. note::
+
+      Equivalent to :http:get:`/space-center/auto-pilot/(id)/sas`.
+      Throws an exception if set to ``true`` while the auto-pilot is engaged, as the
+      auto-pilot holds SAS off for as long as it is flying the vessel.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson bool value:
+
+.. http:put:: /space-center/control/(id)/sas
+
+   The state of SAS.
+
+   .. note::
+
+      Equivalent to :http:get:`/space-center/auto-pilot/(id)/sas`.
+      Throws an exception if set to ``true`` while the auto-pilot is engaged, as the
+      auto-pilot holds SAS off for as long as it is flying the vessel.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /space-center/control/(id)/sas-mode
+
+   The current :http:get:`/space-center/control/(id)/sas-mode`.
+   These modes are equivalent to the mode buttons to
+   the left of the navball that appear when SAS is enabled.
+
+   .. note::
+
+      Equivalent to :http:get:`/space-center/auto-pilot/(id)/sas-mode`.
+      Throws an exception if set to a mode not in :http:get:`/space-center/control/(id)/available-sas-modes`.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson SpaceCenter.SASMode value:
+
+.. http:put:: /space-center/control/(id)/sas-mode
+
+   The current :http:get:`/space-center/control/(id)/sas-mode`.
+   These modes are equivalent to the mode buttons to
+   the left of the navball that appear when SAS is enabled.
+
+   .. note::
+
+      Equivalent to :http:get:`/space-center/auto-pilot/(id)/sas-mode`.
+      Throws an exception if set to a mode not in :http:get:`/space-center/control/(id)/available-sas-modes`.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson SpaceCenter.SASMode value: The new value.
+
+
+
+
+.. http:get:: /space-center/control/(id)/available-sas-modes
+
+   The SAS modes that :http:get:`/space-center/control/(id)/sas-mode` can be set to.
+
+   .. note::
+
+      Equivalent to :http:get:`/space-center/auto-pilot/(id)/available-sas-modes`. The modes depend on the SAS
+      level of the vessel's pilot or probe core, the navball speed mode, and whether
+      there is a target and a maneuver node.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson set<SpaceCenter.SASMode> value:
+
+
+
+
+.. http:get:: /space-center/control/(id)/speed-mode
+
+   The current :http:get:`/space-center/control/(id)/speed-mode` of the navball.
+   This is the mode displayed next to the speed at the top of the navball.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson SpaceCenter.SpeedMode value:
+
+.. http:put:: /space-center/control/(id)/speed-mode
+
+   The current :http:get:`/space-center/control/(id)/speed-mode` of the navball.
+   This is the mode displayed next to the speed at the top of the navball.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson SpaceCenter.SpeedMode value: The new value.
+
+
+
+
+.. http:get:: /space-center/control/(id)/engine-gimbals
+
+   Returns whether all gimballed engines on the vessel have gimbal enabled,
+   and sets the gimbal enabled state of all gimballed engines.
+   See :http:get:`/space-center/engine/(id)/gimbal-locked`.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson bool value:
+
+.. http:put:: /space-center/control/(id)/engine-gimbals
+
+   Returns whether all gimballed engines on the vessel have gimbal enabled,
+   and sets the gimbal enabled state of all gimballed engines.
+   See :http:get:`/space-center/engine/(id)/gimbal-locked`.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /space-center/control/(id)/thrust-reversers
+
+   Returns whether all engines with a thrust reverser on the vessel have
+   their thrust reverser engaged, and sets the thrust reverser state of all
+   such engines.
+   See :http:get:`/space-center/engine/(id)/thrust-reversed`.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson bool value:
+
+.. http:put:: /space-center/control/(id)/thrust-reversers
+
+   Returns whether all engines with a thrust reverser on the vessel have
+   their thrust reverser engaged, and sets the thrust reverser state of all
+   such engines.
+   See :http:get:`/space-center/engine/(id)/thrust-reversed`.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /space-center/control/(id)/aero-surfaces
+
+   Returns whether all control surfaces on the vessel have pitch, yaw and roll enabled,
+   and sets the pitch, yaw and roll enabled state of all control surfaces.
+   See :http:get:`/space-center/control-surface/(id)/pitch-enabled`,
+   :http:get:`/space-center/control-surface/(id)/yaw-enabled` and
+   :http:get:`/space-center/control-surface/(id)/roll-enabled`.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson bool value:
+
+.. http:put:: /space-center/control/(id)/aero-surfaces
+
+   Returns whether all control surfaces on the vessel have pitch, yaw and roll enabled,
+   and sets the pitch, yaw and roll enabled state of all control surfaces.
+   See :http:get:`/space-center/control-surface/(id)/pitch-enabled`,
+   :http:get:`/space-center/control-surface/(id)/yaw-enabled` and
+   :http:get:`/space-center/control-surface/(id)/roll-enabled`.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /space-center/control/(id)/rcs
+
+   The state of RCS.
+
+   .. note::
+
+      For a kerbal on EVA this is whether its jetpack is deployed. Deploying it
+      requires the kerbal to have one and to be the active vessel; otherwise
+      setting this does nothing.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson bool value:
+
+.. http:put:: /space-center/control/(id)/rcs
+
+   The state of RCS.
+
+   .. note::
+
+      For a kerbal on EVA this is whether its jetpack is deployed. Deploying it
+      requires the kerbal to have one and to be the active vessel; otherwise
+      setting this does nothing.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /space-center/control/(id)/reaction-wheels
+
+   Returns whether all reactive wheels on the vessel are active,
+   and sets the active state of all reaction wheels.
+   See :http:get:`/space-center/reaction-wheel/(id)/active`.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson bool value:
+
+.. http:put:: /space-center/control/(id)/reaction-wheels
+
+   Returns whether all reactive wheels on the vessel are active,
+   and sets the active state of all reaction wheels.
+   See :http:get:`/space-center/reaction-wheel/(id)/active`.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /space-center/control/(id)/gear
+
+   The state of the landing gear/legs.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson bool value:
+
+.. http:put:: /space-center/control/(id)/gear
+
+   The state of the landing gear/legs.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /space-center/control/(id)/legs
+
+   Returns whether all landing legs on the vessel are deployed,
+   and sets the deployment state of all landing legs.
+   Does not include wheels (for example landing gear).
+   See :http:get:`/space-center/leg/(id)/deployed`.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson bool value:
+
+.. http:put:: /space-center/control/(id)/legs
+
+   Returns whether all landing legs on the vessel are deployed,
+   and sets the deployment state of all landing legs.
+   Does not include wheels (for example landing gear).
+   See :http:get:`/space-center/leg/(id)/deployed`.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /space-center/control/(id)/wheels
+
+   Returns whether all wheels on the vessel are deployed,
+   and sets the deployment state of all wheels.
+   Does not include landing legs.
+   See :http:get:`/space-center/wheel/(id)/deployed`.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson bool value:
+
+.. http:put:: /space-center/control/(id)/wheels
+
+   Returns whether all wheels on the vessel are deployed,
+   and sets the deployment state of all wheels.
+   Does not include landing legs.
+   See :http:get:`/space-center/wheel/(id)/deployed`.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /space-center/control/(id)/lights
+
+   The state of the lights.
+
+   .. note::
+
+      For a kerbal on EVA this is its helmet lamp. Switching it requires the
+      kerbal to be the active vessel; otherwise setting this does nothing.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson bool value:
+
+.. http:put:: /space-center/control/(id)/lights
+
+   The state of the lights.
+
+   .. note::
+
+      For a kerbal on EVA this is its helmet lamp. Switching it requires the
+      kerbal to be the active vessel; otherwise setting this does nothing.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /space-center/control/(id)/brakes
+
+   The state of the wheel brakes.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson bool value:
+
+.. http:put:: /space-center/control/(id)/brakes
+
+   The state of the wheel brakes.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /space-center/control/(id)/antennas
+
+   Returns whether all antennas on the vessel are deployed,
+   and sets the deployment state of all antennas.
+   See :http:get:`/space-center/antenna/(id)/deployed`.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson bool value:
+
+.. http:put:: /space-center/control/(id)/antennas
+
+   Returns whether all antennas on the vessel are deployed,
+   and sets the deployment state of all antennas.
+   See :http:get:`/space-center/antenna/(id)/deployed`.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /space-center/control/(id)/cargo-bays
+
+   Returns whether any of the cargo bays on the vessel are open,
+   and sets the open state of all cargo bays.
+   See :http:get:`/space-center/cargo-bay/(id)/open`.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson bool value:
+
+.. http:put:: /space-center/control/(id)/cargo-bays
+
+   Returns whether any of the cargo bays on the vessel are open,
+   and sets the open state of all cargo bays.
+   See :http:get:`/space-center/cargo-bay/(id)/open`.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /space-center/control/(id)/intakes
+
+   Returns whether all of the air intakes on the vessel are open,
+   and sets the open state of all air intakes.
+   See :http:get:`/space-center/intake/(id)/open`.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson bool value:
+
+.. http:put:: /space-center/control/(id)/intakes
+
+   Returns whether all of the air intakes on the vessel are open,
+   and sets the open state of all air intakes.
+   See :http:get:`/space-center/intake/(id)/open`.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /space-center/control/(id)/parachutes
+
+   Returns whether all parachutes on the vessel are deployed,
+   and sets the deployment state of all parachutes.
+   Cannot be set to ``false``.
+   See :http:get:`/space-center/parachute/(id)/deployed`.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson bool value:
+
+.. http:put:: /space-center/control/(id)/parachutes
+
+   Returns whether all parachutes on the vessel are deployed,
+   and sets the deployment state of all parachutes.
+   Cannot be set to ``false``.
+   See :http:get:`/space-center/parachute/(id)/deployed`.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /space-center/control/(id)/radiators
+
+   Returns whether all radiators on the vessel are deployed,
+   and sets the deployment state of all radiators.
+   See :http:get:`/space-center/radiator/(id)/deployed`.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson bool value:
+
+.. http:put:: /space-center/control/(id)/radiators
+
+   Returns whether all radiators on the vessel are deployed,
+   and sets the deployment state of all radiators.
+   See :http:get:`/space-center/radiator/(id)/deployed`.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /space-center/control/(id)/resource-harvesters
+
+   Returns whether all of the resource harvesters on the vessel are deployed,
+   and sets the deployment state of all resource harvesters.
+   See :http:get:`/space-center/resource-harvester/(id)/deployed`.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson bool value:
+
+.. http:put:: /space-center/control/(id)/resource-harvesters
+
+   Returns whether all of the resource harvesters on the vessel are deployed,
+   and sets the deployment state of all resource harvesters.
+   See :http:get:`/space-center/resource-harvester/(id)/deployed`.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /space-center/control/(id)/resource-harvesters-active
+
+   Returns whether any of the resource harvesters on the vessel are active,
+   and sets the active state of all resource harvesters.
+   See :http:get:`/space-center/resource-harvester/(id)/active`.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson bool value:
+
+.. http:put:: /space-center/control/(id)/resource-harvesters-active
+
+   Returns whether any of the resource harvesters on the vessel are active,
+   and sets the active state of all resource harvesters.
+   See :http:get:`/space-center/resource-harvester/(id)/active`.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /space-center/control/(id)/solar-panels
+
+   Returns whether all solar panels on the vessel are deployed,
+   and sets the deployment state of all solar panels.
+   See :http:get:`/space-center/solar-panel/(id)/deployed`.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson bool value:
+
+.. http:put:: /space-center/control/(id)/solar-panels
+
+   Returns whether all solar panels on the vessel are deployed,
+   and sets the deployment state of all solar panels.
+   See :http:get:`/space-center/solar-panel/(id)/deployed`.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /space-center/control/(id)/abort
+
+   The state of the abort action group.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson bool value:
+
+.. http:put:: /space-center/control/(id)/abort
+
+   The state of the abort action group.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /space-center/control/(id)/throttle
+
+   The state of the throttle. A value between 0 and 1.
+   Unlike the other control inputs, the throttle is not zeroed when the
+   clients that set it disconnect.
+
+   .. note::
+
+      The getter returns the input currently applied to the vessel, which
+      combines the input set by kRPC with any keyboard, SAS and trim input.
+      It refreshes one physics tick after a set, so a read immediately after
+      a set returns the previously applied value rather than the value just set.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson float value:
+
+.. http:put:: /space-center/control/(id)/throttle
+
+   The state of the throttle. A value between 0 and 1.
+   Unlike the other control inputs, the throttle is not zeroed when the
+   clients that set it disconnect.
+
+   .. note::
+
+      The getter returns the input currently applied to the vessel, which
+      combines the input set by kRPC with any keyboard, SAS and trim input.
+      It refreshes one physics tick after a set, so a read immediately after
+      a set returns the previously applied value rather than the value just set.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /space-center/control/(id)/input-mode
+
+   Sets the behavior of the pitch, yaw, roll and translation control inputs.
+   When set to additive, these inputs are added to the vessels current inputs.
+   This mode is the default.
+   When set to override, these inputs (if non-zero) override the vessels inputs.
+   This mode prevents keyboard control, or SAS, from interfering with the controls when
+   they are set.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson SpaceCenter.ControlInputMode value:
+
+.. http:put:: /space-center/control/(id)/input-mode
+
+   Sets the behavior of the pitch, yaw, roll and translation control inputs.
+   When set to additive, these inputs are added to the vessels current inputs.
+   This mode is the default.
+   When set to override, these inputs (if non-zero) override the vessels inputs.
+   This mode prevents keyboard control, or SAS, from interfering with the controls when
+   they are set.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson SpaceCenter.ControlInputMode value: The new value.
+
+
+
+
+.. http:get:: /space-center/control/(id)/pitch
+
+   The state of the pitch control.
+   A value between -1 and 1.
+   Equivalent to the w and s keys.
+
+   .. note::
+
+      The getter returns the input currently applied to the vessel, which
+      combines the input set by kRPC with any keyboard, SAS and trim input.
+      It refreshes one physics tick after a set, so a read immediately after
+      a set returns the previously applied value rather than the value just set.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson float value:
+
+.. http:put:: /space-center/control/(id)/pitch
+
+   The state of the pitch control.
+   A value between -1 and 1.
+   Equivalent to the w and s keys.
+
+   .. note::
+
+      The getter returns the input currently applied to the vessel, which
+      combines the input set by kRPC with any keyboard, SAS and trim input.
+      It refreshes one physics tick after a set, so a read immediately after
+      a set returns the previously applied value rather than the value just set.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /space-center/control/(id)/yaw
+
+   The state of the yaw control.
+   A value between -1 and 1.
+   Equivalent to the a and d keys.
+
+   .. note::
+
+      The getter returns the input currently applied to the vessel, which
+      combines the input set by kRPC with any keyboard, SAS and trim input.
+      It refreshes one physics tick after a set, so a read immediately after
+      a set returns the previously applied value rather than the value just set.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson float value:
+
+.. http:put:: /space-center/control/(id)/yaw
+
+   The state of the yaw control.
+   A value between -1 and 1.
+   Equivalent to the a and d keys.
+
+   .. note::
+
+      The getter returns the input currently applied to the vessel, which
+      combines the input set by kRPC with any keyboard, SAS and trim input.
+      It refreshes one physics tick after a set, so a read immediately after
+      a set returns the previously applied value rather than the value just set.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /space-center/control/(id)/roll
+
+   The state of the roll control.
+   A value between -1 and 1.
+   Equivalent to the q and e keys.
+
+   .. note::
+
+      The getter returns the input currently applied to the vessel, which
+      combines the input set by kRPC with any keyboard, SAS and trim input.
+      It refreshes one physics tick after a set, so a read immediately after
+      a set returns the previously applied value rather than the value just set.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson float value:
+
+.. http:put:: /space-center/control/(id)/roll
+
+   The state of the roll control.
+   A value between -1 and 1.
+   Equivalent to the q and e keys.
+
+   .. note::
+
+      The getter returns the input currently applied to the vessel, which
+      combines the input set by kRPC with any keyboard, SAS and trim input.
+      It refreshes one physics tick after a set, so a read immediately after
+      a set returns the previously applied value rather than the value just set.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /space-center/control/(id)/pitch-trim
+
+   The state of the pitch trim.
+   A value between -1 and 1.
+   Equivalent to the Alt+W and Alt+S keys.
+   This is a persistent trim that remains latched until changed or reset,
+   and can only be accessed for the active vessel.
+   Unlike the pitch, yaw and roll control inputs, the trim is not cleared
+   when clients disconnect.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson float value:
+
+.. http:put:: /space-center/control/(id)/pitch-trim
+
+   The state of the pitch trim.
+   A value between -1 and 1.
+   Equivalent to the Alt+W and Alt+S keys.
+   This is a persistent trim that remains latched until changed or reset,
+   and can only be accessed for the active vessel.
+   Unlike the pitch, yaw and roll control inputs, the trim is not cleared
+   when clients disconnect.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /space-center/control/(id)/yaw-trim
+
+   The state of the yaw trim.
+   A value between -1 and 1.
+   Equivalent to the Alt+A and Alt+D keys.
+   This is a persistent trim that remains latched until changed or reset,
+   and can only be accessed for the active vessel.
+   Unlike the pitch, yaw and roll control inputs, the trim is not cleared
+   when clients disconnect.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson float value:
+
+.. http:put:: /space-center/control/(id)/yaw-trim
+
+   The state of the yaw trim.
+   A value between -1 and 1.
+   Equivalent to the Alt+A and Alt+D keys.
+   This is a persistent trim that remains latched until changed or reset,
+   and can only be accessed for the active vessel.
+   Unlike the pitch, yaw and roll control inputs, the trim is not cleared
+   when clients disconnect.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /space-center/control/(id)/roll-trim
+
+   The state of the roll trim.
+   A value between -1 and 1.
+   Equivalent to the Alt+Q and Alt+E keys.
+   This is a persistent trim that remains latched until changed or reset,
+   and can only be accessed for the active vessel.
+   Unlike the pitch, yaw and roll control inputs, the trim is not cleared
+   when clients disconnect.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson float value:
+
+.. http:put:: /space-center/control/(id)/roll-trim
+
+   The state of the roll trim.
+   A value between -1 and 1.
+   Equivalent to the Alt+Q and Alt+E keys.
+   This is a persistent trim that remains latched until changed or reset,
+   and can only be accessed for the active vessel.
+   Unlike the pitch, yaw and roll control inputs, the trim is not cleared
+   when clients disconnect.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /space-center/control/(id)/precision-mode
+
+   Whether precision control mode is enabled.
+   Equivalent to the Caps Lock key.
+   This is a game setting rather than a vessel setting,
+   and can only be accessed for the active vessel.
+   Unlike the pitch, yaw and roll control inputs, precision mode is not cleared
+   when clients disconnect.
+
+   .. note::
+
+      Precision mode weakens the RCS thrust that the control inputs produce. A block
+      driven by :http:get:`/space-center/rcs/(id)/input-override` is exempt.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson bool value:
+
+.. http:put:: /space-center/control/(id)/precision-mode
+
+   Whether precision control mode is enabled.
+   Equivalent to the Caps Lock key.
+   This is a game setting rather than a vessel setting,
+   and can only be accessed for the active vessel.
+   Unlike the pitch, yaw and roll control inputs, precision mode is not cleared
+   when clients disconnect.
+
+   .. note::
+
+      Precision mode weakens the RCS thrust that the control inputs produce. A block
+      driven by :http:get:`/space-center/rcs/(id)/input-override` is exempt.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /space-center/control/(id)/forward
+
+   The state of the forward translational control.
+   A value between -1 and 1.
+   Equivalent to the h and n keys.
+
+   .. note::
+
+      The getter returns the input currently applied to the vessel, which
+      combines the input set by kRPC with any keyboard, SAS and trim input.
+      It refreshes one physics tick after a set, so a read immediately after
+      a set returns the previously applied value rather than the value just set.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson float value:
+
+.. http:put:: /space-center/control/(id)/forward
+
+   The state of the forward translational control.
+   A value between -1 and 1.
+   Equivalent to the h and n keys.
+
+   .. note::
+
+      The getter returns the input currently applied to the vessel, which
+      combines the input set by kRPC with any keyboard, SAS and trim input.
+      It refreshes one physics tick after a set, so a read immediately after
+      a set returns the previously applied value rather than the value just set.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /space-center/control/(id)/up
+
+   The state of the up translational control.
+   A value between -1 and 1.
+   Equivalent to the i and k keys.
+
+   .. note::
+
+      The getter returns the input currently applied to the vessel, which
+      combines the input set by kRPC with any keyboard, SAS and trim input.
+      It refreshes one physics tick after a set, so a read immediately after
+      a set returns the previously applied value rather than the value just set.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson float value:
+
+.. http:put:: /space-center/control/(id)/up
+
+   The state of the up translational control.
+   A value between -1 and 1.
+   Equivalent to the i and k keys.
+
+   .. note::
+
+      The getter returns the input currently applied to the vessel, which
+      combines the input set by kRPC with any keyboard, SAS and trim input.
+      It refreshes one physics tick after a set, so a read immediately after
+      a set returns the previously applied value rather than the value just set.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /space-center/control/(id)/right
+
+   The state of the right translational control.
+   A value between -1 and 1.
+   Equivalent to the j and l keys.
+
+   .. note::
+
+      The getter returns the input currently applied to the vessel, which
+      combines the input set by kRPC with any keyboard, SAS and trim input.
+      It refreshes one physics tick after a set, so a read immediately after
+      a set returns the previously applied value rather than the value just set.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson float value:
+
+.. http:put:: /space-center/control/(id)/right
+
+   The state of the right translational control.
+   A value between -1 and 1.
+   Equivalent to the j and l keys.
+
+   .. note::
+
+      The getter returns the input currently applied to the vessel, which
+      combines the input set by kRPC with any keyboard, SAS and trim input.
+      It refreshes one physics tick after a set, so a read immediately after
+      a set returns the previously applied value rather than the value just set.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /space-center/control/(id)/wheel-throttle
+
+   The state of the wheel throttle.
+   A value between -1 and 1.
+   A value of 1 rotates the wheels forwards, a value of -1 rotates
+   the wheels backwards.
+
+   .. note::
+
+      The getter returns the input currently applied to the vessel, which
+      combines the input set by kRPC with any keyboard, SAS and trim input.
+      It refreshes one physics tick after a set, so a read immediately after
+      a set returns the previously applied value rather than the value just set.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson float value:
+
+.. http:put:: /space-center/control/(id)/wheel-throttle
+
+   The state of the wheel throttle.
+   A value between -1 and 1.
+   A value of 1 rotates the wheels forwards, a value of -1 rotates
+   the wheels backwards.
+
+   .. note::
+
+      The getter returns the input currently applied to the vessel, which
+      combines the input set by kRPC with any keyboard, SAS and trim input.
+      It refreshes one physics tick after a set, so a read immediately after
+      a set returns the previously applied value rather than the value just set.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /space-center/control/(id)/wheel-steering
+
+   The state of the wheel steering.
+   A value between -1 and 1.
+   A value of 1 steers to the left, and a value of -1 steers to the right.
+
+   .. note::
+
+      The getter returns the input currently applied to the vessel, which
+      combines the input set by kRPC with any keyboard, SAS and trim input.
+      It refreshes one physics tick after a set, so a read immediately after
+      a set returns the previously applied value rather than the value just set.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson float value:
+
+.. http:put:: /space-center/control/(id)/wheel-steering
+
+   The state of the wheel steering.
+   A value between -1 and 1.
+   A value of 1 steers to the left, and a value of -1 steers to the right.
+
+   .. note::
+
+      The getter returns the input currently applied to the vessel, which
+      combines the input set by kRPC with any keyboard, SAS and trim input.
+      It refreshes one physics tick after a set, so a read immediately after
+      a set returns the previously applied value rather than the value just set.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /space-center/control/(id)/custom-axis01
+
+   The state of CustomAxis01.
+   A value between -1 and 1.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson float value:
+
+.. http:put:: /space-center/control/(id)/custom-axis01
+
+   The state of CustomAxis01.
+   A value between -1 and 1.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /space-center/control/(id)/custom-axis02
+
+   The state of CustomAxis02.
+   A value between -1 and 1.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson float value:
+
+.. http:put:: /space-center/control/(id)/custom-axis02
+
+   The state of CustomAxis02.
+   A value between -1 and 1.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /space-center/control/(id)/custom-axis03
+
+   The state of CustomAxis03.
+   A value between -1 and 1.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson float value:
+
+.. http:put:: /space-center/control/(id)/custom-axis03
+
+   The state of CustomAxis03.
+   A value between -1 and 1.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /space-center/control/(id)/custom-axis04
+
+   The state of CustomAxis04.
+   A value between -1 and 1.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson float value:
+
+.. http:put:: /space-center/control/(id)/custom-axis04
+
+   The state of CustomAxis04.
+   A value between -1 and 1.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /space-center/control/(id)/current-stage
+
+   The current stage of the vessel. Corresponds to the stage number in
+   the in-game UI.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson int32 value:
+
+
+
+
+.. http:post:: /space-center/control/(id)/activate-next-stage
+
+   Activates the next stage. Equivalent to pressing the space bar in-game.
+
+   .. note::
+
+      When called, the active vessel may change. It is therefore possible that,
+      after calling this function, the object(s) returned by previous call(s) to
+      :http:get:`/space-center/active-vessel` no longer refer to the active vessel.
+      Throws an exception if staging is locked.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson list<SpaceCenter.Vessel> value: A list of vessel objects that are jettisoned from the active vessel.
+
+
+
+
+
+.. http:get:: /space-center/control/(id)/stage-lock
+
+   Whether staging is locked on the vessel.
+
+   .. note::
+
+      This is equivalent to locking the staging using Alt+L
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson bool value:
+
+.. http:put:: /space-center/control/(id)/stage-lock
+
+   Whether staging is locked on the vessel.
+
+   .. note::
+
+      This is equivalent to locking the staging using Alt+L
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:post:: /space-center/control/(id)/get-action-group
+
+   Returns ``true`` if the given action group is enabled.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson uint32 group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when Extended Action Groups is installed.
+   :resjson bool value:
+
+
+
+
+
+.. http:post:: /space-center/control/(id)/set-action-group
+
+   Sets the state of the given action group.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson uint32 group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when Extended Action Groups is installed.
+   :reqjson bool state:
+
+
+
+
+
+.. http:post:: /space-center/control/(id)/toggle-action-group
+
+   Toggles the state of the given action group.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson uint32 group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when Extended Action Groups is installed.
+
+
+
+
+
+.. http:post:: /space-center/control/(id)/get-action-group-actions
+
+   Returns a list of all the part actions that are assigned to the given action group.
+   Each entry identifies the part, the part module, and the action's name and identifier.
+   Returns an empty list if no actions are assigned to the group.
+
+   .. note::
+
+      For stock action groups, the assignments are read from each part action directly.
+      When Extended Action Groups is installed, the assignments are queried from
+      the mod instead, so that actions assigned to its additional groups are included.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson uint32 group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when Extended Action Groups is installed.
+   :resjson list<SpaceCenter.ActionGroupAction> value:
+
+
+
+
+
+.. http:post:: /space-center/control/(id)/add-node
+
+   Creates a maneuver node at the given universal time, and returns a
+   :ref:`Node <http-SpaceCenter.Node>` object that can be used to modify it.
+   Optionally sets the magnitude of the delta-v for the maneuver node
+   in the prograde, normal and radial directions.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :reqjson double ut: Universal time of the maneuver node.
+   :reqjson float prograde: Delta-v in the prograde direction. Optional, defaults to ``0.0``.
+   :reqjson float normal: Delta-v in the normal direction. Optional, defaults to ``0.0``.
+   :reqjson float radial: Delta-v in the radial direction. Optional, defaults to ``0.0``.
+   :resjson SpaceCenter.Node value:
+
+
+
+
+
+.. http:get:: /space-center/control/(id)/nodes
+
+   Returns a list of all existing maneuver nodes, ordered by time from first to last.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson list<SpaceCenter.Node> value:
+
+
+
+
+.. http:post:: /space-center/control/(id)/remove-nodes
+
+   Remove all maneuver nodes.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+
+
+
+
+
+.. http:get:: /space-center/control/(id)/airlock
+
+   The part whose hatch the kerbal is standing at, and so the one
+   :http:post:`/space-center/control/(id)/board` would put it in. ``null`` if it is not at a hatch or the
+   vessel is not a kerbal on EVA.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson SpaceCenter.Part? value:
+
+
+
+
+.. http:post:: /space-center/control/(id)/board
+
+   Climb into the part whose hatch the kerbal is standing at, ending the EVA. The
+   kerbal takes a seat in that part and its own vessel ceases to exist. If the
+   kerbal was the active vessel, the game switches to the vessel it boarded.
+
+   .. note::
+
+      A kerbal can only board through a hatch it is already at, which
+      :http:get:`/space-center/control/(id)/airlock` reports; it does not walk to one. Throws an exception if
+      the vessel is not a kerbal on EVA, if the kerbal is not at a hatch, if boarding
+      is disabled for the game, if the part has no free seat, or if the kerbal is
+      carrying science data that the part cannot store, as the game asks what to do
+      with it in that case.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+
+
+
+
+
+.. http:get:: /space-center/control/(id)/ladder
+
+   The ladder the kerbal is holding on to, or ``null`` if it is not holding one
+   or the vessel is not a kerbal on EVA.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+   :resjson SpaceCenter.Part? value:
+
+
+
+
+.. http:post:: /space-center/control/(id)/grab-ladder
+
+   Take hold of the ladder the kerbal is standing at, as pressing the grab key
+   in-game does. A kerbal can only take hold of a ladder it is already alongside;
+   it does not walk to one. :http:get:`/space-center/control/(id)/ladder` reports the one it ends up
+   holding. Does nothing if the kerbal is already holding a ladder.
+
+   .. note::
+
+      Throws an exception if the vessel is not a kerbal on EVA, if there is no ladder
+      within reach, or if the kerbal is doing something it cannot grab a ladder from.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+
+
+
+
+
+.. http:post:: /space-center/control/(id)/release-ladder
+
+   Let go of the ladder the kerbal is holding, as pressing the jump key in-game
+   does. Does nothing if it is not holding one.
+
+   .. note::
+
+      Throws an exception if the vessel is not a kerbal on EVA.
+
+
+   :param id: The identifier of the :ref:`Control <http-SpaceCenter.Control>` object.
+
+
+
+
+
+
+
+.. _http-SpaceCenter.ActionGroupAction:
+
+.. rubric:: ActionGroupAction
+
+An action, belonging to a part module, that is assigned to an action group.
+Obtained by calling :http:post:`/space-center/control/(id)/get-action-group-actions`.
+
+Passed and returned as an object with these fields:
+
+
+``part`` (SpaceCenter.Part)
+   The part that the action acts on.
+
+
+``module`` (SpaceCenter.Module?)
+   The part module that the action belongs to. Returns ``null`` for a
+   part-level action that is not associated with a module. This only occurs when
+   Extended Action Groups is installed, as it can assign actions defined
+   directly on a part, rather than on one of its modules, to an action group.
+
+
+``name`` (string)
+   The human-readable name of the action, as shown in the action group editor.
+
+
+``id`` (string)
+   The non-localized identifier for the action.
+
+
+
+.. _http-SpaceCenter.ControlState:
+
+.. rubric:: ControlState
+
+The control state of a vessel.
+See :http:get:`/space-center/control/(id)/state`.
+
+Passed and returned as the name of one of its values:
+
+
+``"full"``
+   Full controllable.
+
+
+``"partial"``
+   Partially controllable.
+
+
+``"none"``
+   Not controllable.
+
+
+
+.. _http-SpaceCenter.ControlSource:
+
+.. rubric:: ControlSource
+
+The control source of a vessel.
+See :http:get:`/space-center/control/(id)/source`.
+
+Passed and returned as the name of one of its values:
+
+
+``"kerbal"``
+   Vessel is controlled by a Kerbal.
+
+
+``"probe"``
+   Vessel is controlled by a probe core.
+
+
+``"none"``
+   Vessel is not controlled.
+
+
+
+.. _http-SpaceCenter.SASMode:
+
+.. rubric:: SASMode
+
+The behavior of the SAS auto-pilot. See :http:get:`/space-center/auto-pilot/(id)/sas-mode`.
+
+Passed and returned as the name of one of its values:
+
+
+``"stability_assist"``
+   Stability assist mode. Dampen out any rotation.
+
+
+``"maneuver"``
+   Point in the burn direction of the next maneuver node.
+
+
+``"prograde"``
+   Point in the prograde direction.
+
+
+``"retrograde"``
+   Point in the retrograde direction.
+
+
+``"normal"``
+   Point in the orbit normal direction.
+
+
+``"anti_normal"``
+   Point in the orbit anti-normal direction.
+
+
+``"radial"``
+   Point in the orbit radial direction.
+
+
+``"anti_radial"``
+   Point in the orbit anti-radial direction.
+
+
+``"target"``
+   Point in the direction of the current target.
+
+
+``"anti_target"``
+   Point away from the current target.
+
+
+
+.. _http-SpaceCenter.SpeedMode:
+
+.. rubric:: SpeedMode
+
+The mode of the speed reported in the navball.
+See :http:get:`/space-center/control/(id)/speed-mode`.
+
+Passed and returned as the name of one of its values:
+
+
+``"orbit"``
+   Speed is relative to the vessel's orbit.
+
+
+``"surface"``
+   Speed is relative to the surface of the body being orbited.
+
+
+``"target"``
+   Speed is relative to the current target.
+
+
+
+.. _http-SpaceCenter.ControlInputMode:
+
+.. rubric:: ControlInputMode
+
+See :http:get:`/space-center/control/(id)/input-mode`.
+
+Passed and returned as the name of one of its values:
+
+
+``"additive"``
+   Control inputs are added to the vessels current control inputs.
+
+
+``"override"``
+   Control inputs (when they are non-zero) override the vessels current control inputs.

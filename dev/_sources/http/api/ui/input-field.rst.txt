@@ -1,0 +1,393 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+InputField
+==========
+
+
+.. _http-UI.InputField:
+
+.. rubric:: InputField
+
+An input field.
+Added to a :ref:`Canvas <http-UI.Canvas>` or a :ref:`Panel <http-UI.Panel>`.
+
+A ``InputField`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ui/input-field/(id)/rect-transform
+
+   The rect transform for the UI object.
+
+
+   :param id: The identifier of the :ref:`InputField <http-UI.InputField>` object.
+
+   :resjson UI.RectTransform value:
+
+
+
+
+.. http:get:: /ui/input-field/(id)/layout-element
+
+   How much space the UI object asks a layout for.
+
+   .. note::
+
+      Only has an effect when the object is in a panel that has a layout. A canvas is
+      not inside a layout and does not have one.
+
+
+   :param id: The identifier of the :ref:`InputField <http-UI.InputField>` object.
+
+   :resjson UI.LayoutElement value:
+
+
+
+
+.. http:get:: /ui/input-field/(id)/visible
+
+   Whether the UI object is visible.
+
+   .. note::
+
+      This is the object's own setting, which is what it was last set to. An object is
+      only drawn when everything it is inside is visible as well, so an interface can
+      be built with its parts visible, inside a panel that is not, and shown all at
+      once by making that panel visible.
+
+
+   :param id: The identifier of the :ref:`InputField <http-UI.InputField>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ui/input-field/(id)/visible
+
+   Whether the UI object is visible.
+
+   .. note::
+
+      This is the object's own setting, which is what it was last set to. An object is
+      only drawn when everything it is inside is visible as well, so an interface can
+      be built with its parts visible, inside a panel that is not, and shown all at
+      once by making that panel visible.
+
+
+   :param id: The identifier of the :ref:`InputField <http-UI.InputField>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ui/input-field/(id)/value
+
+   The value of the input field.
+
+
+   :param id: The identifier of the :ref:`InputField <http-UI.InputField>` object.
+
+   :resjson string value:
+
+.. http:put:: /ui/input-field/(id)/value
+
+   The value of the input field.
+
+
+   :param id: The identifier of the :ref:`InputField <http-UI.InputField>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:get:: /ui/input-field/(id)/text
+
+   The text component of the input field.
+
+   .. note::
+
+      Use :http:get:`/ui/input-field/(id)/value` to get and set the value in the field.
+      This object can be used to alter the style of the input field's text.
+
+
+   :param id: The identifier of the :ref:`InputField <http-UI.InputField>` object.
+
+   :resjson UI.Text value:
+
+
+
+
+.. http:get:: /ui/input-field/(id)/placeholder
+
+   The placeholder text component of the input field.
+
+   .. note::
+
+      Set its :http:get:`/ui/text/(id)/content` to the hint to show while the field is empty.
+      The hint is hidden as soon as the field has a value.
+
+
+   :param id: The identifier of the :ref:`InputField <http-UI.InputField>` object.
+
+   :resjson UI.Text value:
+
+
+
+
+.. http:get:: /ui/input-field/(id)/content-type
+
+   The content the field accepts from the user. Keystrokes that do not fit are
+   ignored as they are typed, so a numeric field only ever shows a number.
+
+   .. note::
+
+      The filter applies to typing alone. A value set by a client is shown as it is
+      given.
+
+
+   :param id: The identifier of the :ref:`InputField <http-UI.InputField>` object.
+
+   :resjson UI.InputContentType value:
+
+.. http:put:: /ui/input-field/(id)/content-type
+
+   The content the field accepts from the user. Keystrokes that do not fit are
+   ignored as they are typed, so a numeric field only ever shows a number.
+
+   .. note::
+
+      The filter applies to typing alone. A value set by a client is shown as it is
+      given.
+
+
+   :param id: The identifier of the :ref:`InputField <http-UI.InputField>` object.
+
+   :reqjson UI.InputContentType value: The new value.
+
+
+
+
+.. http:get:: /ui/input-field/(id)/character-limit
+
+   The most characters the user can type into the field, or 0 for no limit.
+
+
+   :param id: The identifier of the :ref:`InputField <http-UI.InputField>` object.
+
+   :resjson int32 value:
+
+.. http:put:: /ui/input-field/(id)/character-limit
+
+   The most characters the user can type into the field, or 0 for no limit.
+
+
+   :param id: The identifier of the :ref:`InputField <http-UI.InputField>` object.
+
+   :reqjson int32 value: The new value.
+
+
+
+
+.. http:get:: /ui/input-field/(id)/read-only
+
+   Whether the user is stopped from editing the field. The value can still be
+   selected and copied, and a client can still set it.
+
+   .. note::
+
+      A read-only field is drawn as normal. Make the field not interactable instead
+      to gray it out and stop the user selecting it.
+
+
+   :param id: The identifier of the :ref:`InputField <http-UI.InputField>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ui/input-field/(id)/read-only
+
+   Whether the user is stopped from editing the field. The value can still be
+   selected and copied, and a client can still set it.
+
+   .. note::
+
+      A read-only field is drawn as normal. Make the field not interactable instead
+      to gray it out and stop the user selecting it.
+
+
+   :param id: The identifier of the :ref:`InputField <http-UI.InputField>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ui/input-field/(id)/changed
+
+   Whether the input field has been changed.
+
+   .. note::
+
+      This property is set to true when the user modifies the value of the input field,
+      and not when a client sets it.
+      A client script should reset the property to false in order to detect subsequent changes.
+
+
+   :param id: The identifier of the :ref:`InputField <http-UI.InputField>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ui/input-field/(id)/changed
+
+   Whether the input field has been changed.
+
+   .. note::
+
+      This property is set to true when the user modifies the value of the input field,
+      and not when a client sets it.
+      A client script should reset the property to false in order to detect subsequent changes.
+
+
+   :param id: The identifier of the :ref:`InputField <http-UI.InputField>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ui/input-field/(id)/interactable
+
+   Whether the control responds to the user.
+
+   .. note::
+
+      A control that is not interactable is drawn grayed out and ignores the user,
+      but is still visible. Set its visibility to false to hide it instead.
+
+
+   :param id: The identifier of the :ref:`InputField <http-UI.InputField>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ui/input-field/(id)/interactable
+
+   Whether the control responds to the user.
+
+   .. note::
+
+      A control that is not interactable is drawn grayed out and ignores the user,
+      but is still visible. Set its visibility to false to hide it instead.
+
+
+   :param id: The identifier of the :ref:`InputField <http-UI.InputField>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ui/input-field/(id)/color
+
+   The color the control is tinted with. White, the default, leaves the control drawn
+   as the skin has it.
+
+   .. note::
+
+      The tint multiplies the sprite the control is drawn with, in every state, so
+      a control can show a state of its own, an engaged autopilot for instance, by
+      color. It is applied to the part of the control that responds to the user:
+      the body of a button, dropdown or input field, the box of a toggle, and the
+      handle of a slider. A control's label is tinted through the color of its
+      text.
+
+
+   :param id: The identifier of the :ref:`InputField <http-UI.InputField>` object.
+
+   :resjson StdLib.ColorRGBA value:
+
+.. http:put:: /ui/input-field/(id)/color
+
+   The color the control is tinted with. White, the default, leaves the control drawn
+   as the skin has it.
+
+   .. note::
+
+      The tint multiplies the sprite the control is drawn with, in every state, so
+      a control can show a state of its own, an engaged autopilot for instance, by
+      color. It is applied to the part of the control that responds to the user:
+      the body of a button, dropdown or input field, the box of a toggle, and the
+      handle of a slider. A control's label is tinted through the color of its
+      text.
+
+
+   :param id: The identifier of the :ref:`InputField <http-UI.InputField>` object.
+
+   :reqjson StdLib.ColorRGBA value: The new value.
+
+
+
+
+.. http:get:: /ui/input-field/(id)/tooltip
+
+   A short piece of text shown beside the pointer while it rests on the
+   control. Empty, the default, shows nothing.
+
+
+   :param id: The identifier of the :ref:`InputField <http-UI.InputField>` object.
+
+   :resjson string value:
+
+.. http:put:: /ui/input-field/(id)/tooltip
+
+   A short piece of text shown beside the pointer while it rests on the
+   control. Empty, the default, shows nothing.
+
+
+   :param id: The identifier of the :ref:`InputField <http-UI.InputField>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:post:: /ui/input-field/(id)/remove
+
+   Remove the UI object.
+
+
+   :param id: The identifier of the :ref:`InputField <http-UI.InputField>` object.
+
+
+
+
+
+
+
+.. _http-UI.InputContentType:
+
+.. rubric:: InputContentType
+
+What an input field lets the user type into it.
+
+Passed and returned as the name of one of its values:
+
+
+``"standard"``
+   Any text.
+
+
+``"integer"``
+   A whole number: digits, with a leading minus sign.
+
+
+``"decimal"``
+   A number: digits, with a decimal separator and a leading minus sign.
+
+
+``"alphanumeric"``
+   Letters and digits.
+
+
+``"password"``
+   Any text, drawn as asterisks so that it cannot be read off the screen.

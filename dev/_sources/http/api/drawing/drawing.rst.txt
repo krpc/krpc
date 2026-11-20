@@ -1,0 +1,282 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Service
+=======
+
+
+.. _http-Drawing:
+
+Provides functionality for drawing objects in the flight scene, the map view, the editor
+and the tracking station.
+
+.. note::
+
+   For drawing and interacting with the user interface, see the UI service.
+   Objects drawn by a client are removed when that client disconnects.
+
+
+
+.. http:post:: /drawing/add-line
+
+   Draw a line in the scene.
+
+
+   :reqjson tuple<double, double, double> start: Position of the start of the line.
+   :reqjson tuple<double, double, double> end: Position of the end of the line.
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: Reference frame that the positions are in.
+   :reqjson bool visible: Whether the line is visible. Optional, defaults to ``true``.
+   :resjson Drawing.Line value:
+
+
+
+
+
+.. http:post:: /drawing/add-direction
+
+   Draw a direction vector in the scene, starting from the origin of the given reference frame.
+
+
+   :reqjson tuple<double, double, double> direction: Direction to draw the line in.
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: Reference frame that the direction is in and defines the start position.
+   :reqjson float length: The length of the line. Optional, defaults to ``1e+01``.
+   :reqjson bool visible: Whether the line is visible. Optional, defaults to ``true``.
+   :resjson Drawing.Line value:
+
+
+
+
+
+.. http:post:: /drawing/add-direction-from-com
+
+   Draw a direction vector in the scene, from the center of mass of the active vessel.
+
+
+   :reqjson tuple<double, double, double> direction: Direction to draw the line in.
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: Reference frame that the direction is in.
+   :reqjson float length: The length of the line. Optional, defaults to ``1e+01``.
+   :reqjson bool visible: Whether the line is visible. Optional, defaults to ``true``.
+   :resjson Drawing.Line value:
+
+
+
+
+
+.. http:post:: /drawing/add-axes
+
+   Draw the axes of a reference frame in the scene, as arrows from its origin.
+
+
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: The reference frame.
+   :reqjson float length: The length of each axis. Optional, defaults to ``1e+01``.
+   :reqjson bool visible: Whether the axes are visible. Optional, defaults to ``true``.
+   :resjson list<Drawing.Line> value: The lines for the x, y and z axes, colored red, green and blue.
+
+
+
+
+
+.. http:post:: /drawing/add-polygon
+
+   Draw a polygon in the scene, defined by a list of vertices.
+
+
+   :reqjson list<tuple<double, double, double>> vertices: Vertices of the polygon.
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: Reference frame that the vertices are in.
+   :reqjson bool visible: Whether the polygon is visible. Optional, defaults to ``true``.
+   :resjson Drawing.Polygon value:
+
+
+
+
+
+.. http:post:: /drawing/add-polyline
+
+   Draw an open line through a list of vertices in the scene.
+
+
+   :reqjson list<tuple<double, double, double>> vertices: Vertices of the line.
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: Reference frame that the vertices are in.
+   :reqjson bool visible: Whether the line is visible. Optional, defaults to ``true``.
+   :resjson Drawing.Polyline value:
+
+
+
+
+
+.. http:post:: /drawing/add-circle
+
+   Draw a circle in the scene.
+
+   .. note::
+
+      Throws an exception if the normal is zero.
+
+
+   :reqjson tuple<double, double, double> center: Position of the center of the circle.
+   :reqjson tuple<double, double, double> normal: Normal of the plane of the circle.
+   :reqjson double radius: Radius of the circle, in meters.
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: Reference frame that the position and normal are in.
+   :reqjson bool visible: Whether the circle is visible. Optional, defaults to ``true``.
+   :resjson Drawing.Circle value:
+
+
+
+
+
+.. http:post:: /drawing/add-arc
+
+   Draw an arc of a circle in the scene.
+
+   .. note::
+
+      The arc turns counterclockwise about the normal, seen from the side it points to.
+      Throws an exception if the normal is zero, or the start direction is parallel to it.
+
+
+   :reqjson tuple<double, double, double> center: Position of the center of the arc.
+   :reqjson tuple<double, double, double> normal: Normal of the plane of the arc.
+   :reqjson tuple<double, double, double> start_direction: Direction from the center to the start of the arc.
+   :reqjson double angle: Angle of the arc, in radians.
+   :reqjson double radius: Radius of the arc, in meters.
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: Reference frame that the position and directions are in.
+   :reqjson bool visible: Whether the arc is visible. Optional, defaults to ``true``.
+   :resjson Drawing.Arc value:
+
+
+
+
+
+.. http:post:: /drawing/add-orbit
+
+   Draw the path of an orbit in the scene.
+
+   .. note::
+
+      The path follows the orbit as it changes, and ends where the orbit leaves the
+      sphere of influence of its body.
+
+
+   :reqjson SpaceCenter.Orbit orbit: The orbit.
+   :reqjson bool visible: Whether the path is visible. Optional, defaults to ``true``.
+   :resjson Drawing.OrbitPath value:
+
+
+
+
+
+.. http:post:: /drawing/add-point
+
+   Draw a point in the scene, as a dot that keeps its size on screen.
+
+
+   :reqjson tuple<double, double, double> position: Position of the point.
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: Reference frame that the position is in.
+   :reqjson bool visible: Whether the point is visible. Optional, defaults to ``true``.
+   :resjson Drawing.Point value:
+
+
+
+
+
+.. http:post:: /drawing/add-box
+
+   Draw the edges of a box in the scene.
+
+
+   :reqjson tuple<double, double, double> center: Position of the center of the box.
+   :reqjson tuple<double, double, double> size: Lengths of the sides of the box along its x, y and z axes, in meters.
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: Reference frame that the position and rotation are in.
+   :reqjson tuple<double, double, double, double> rotation: Rotation of the box, as a quaternion. Optional, defaults to ``[0.0, 0.0, 0.0, 1.0]``.
+   :reqjson bool visible: Whether the box is visible. Optional, defaults to ``true``.
+   :resjson Drawing.Box value:
+
+
+
+
+
+.. http:post:: /drawing/add-sphere
+
+   Draw a solid sphere in the scene.
+
+
+   :reqjson tuple<double, double, double> center: Position of the center of the sphere.
+   :reqjson double radius: Radius of the sphere, in meters.
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: Reference frame that the position is in.
+   :reqjson bool visible: Whether the sphere is visible. Optional, defaults to ``true``.
+   :resjson Drawing.Sphere value:
+
+
+
+
+
+.. http:post:: /drawing/add-text
+
+   Draw text in the scene.
+
+
+   :reqjson string text: The string to draw.
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: Reference frame that the text position is in.
+   :reqjson tuple<double, double, double> position: Position of the text.
+   :reqjson tuple<double, double, double, double> rotation: Rotation of the text, as a quaternion.
+   :reqjson bool visible: Whether the text is visible. Optional, defaults to ``true``.
+   :resjson Drawing.Text value:
+
+
+
+
+
+.. http:post:: /drawing/add-navball-marker
+
+   Draw a marker on the navball, pointing in the given direction.
+
+
+   :reqjson tuple<double, double, double> direction: Direction that the marker points in.
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: Reference frame that the direction is in.
+   :reqjson bool visible: Whether the marker is visible. Optional, defaults to ``true``.
+   :resjson Drawing.NavballMarker value:
+
+
+
+
+
+.. http:post:: /drawing/add-map-marker
+
+   Draw a marker in the map view, with one of the game's own map icons.
+
+
+   :reqjson tuple<double, double, double> position: Position of the marker.
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: Reference frame that the position is in.
+   :reqjson Drawing.MapMarkerIcon icon: The icon that the marker is drawn with. Optional, defaults to ``"generic"``.
+   :reqjson string caption: The caption shown when the mouse is over the marker. Optional, defaults to ``""``.
+   :reqjson bool visible: Whether the marker is visible. Optional, defaults to ``true``.
+   :resjson Drawing.MapMarker value:
+
+
+
+
+
+.. http:post:: /drawing/add-image
+
+   Load an image that markers can be drawn with, from the contents of a PNG or JPEG
+   file. The transparency of a PNG image is kept.
+
+   .. note::
+
+      Throws an exception if the data is not a PNG or JPEG image.
+
+
+   :reqjson bytes data: The contents of the image file.
+   :resjson Drawing.Image value:
+
+
+
+
+
+.. http:post:: /drawing/clear
+
+   Remove all objects being drawn.
+
+
+   :reqjson bool client_only: If true, only remove objects created by the calling client. Optional, defaults to ``false``.

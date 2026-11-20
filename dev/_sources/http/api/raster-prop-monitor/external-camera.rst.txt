@@ -1,0 +1,108 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+External Camera
+===============
+
+
+.. _http-RasterPropMonitor.ExternalCamera:
+
+.. rubric:: ExternalCamera
+
+A Raster Prop Monitor external camera: a part that the MFD camera pages show, such as
+the JSI External Radial-mount Camera. Obtained by calling
+:http:post:`/raster-prop-monitor/cameras`.
+
+A ``ExternalCamera`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /raster-prop-monitor/external-camera/(id)/part
+
+   The part the camera is on.
+
+
+   :param id: The identifier of the :ref:`ExternalCamera <http-RasterPropMonitor.ExternalCamera>` object.
+
+   :resjson SpaceCenter.Part value:
+
+
+
+
+.. http:get:: /raster-prop-monitor/external-camera/(id)/name
+
+   The camera's identifier, e.g. ``ExtCam1``, which the MFD camera pages select it
+   by. The player sets the number in the part's menu.
+
+
+   :param id: The identifier of the :ref:`ExternalCamera <http-RasterPropMonitor.ExternalCamera>` object.
+
+   :resjson string value:
+
+
+
+
+.. http:get:: /raster-prop-monitor/external-camera/(id)/min-fov
+
+   The smallest field of view of the camera, in degrees.
+
+
+   :param id: The identifier of the :ref:`ExternalCamera <http-RasterPropMonitor.ExternalCamera>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /raster-prop-monitor/external-camera/(id)/max-fov
+
+   The largest field of view of the camera, in degrees.
+
+
+   :param id: The identifier of the :ref:`ExternalCamera <http-RasterPropMonitor.ExternalCamera>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /raster-prop-monitor/external-camera/(id)/fov
+
+   The field of view that :http:post:`/raster-prop-monitor/external-camera/(id)/image` renders at, in degrees. It starts at
+   :http:get:`/raster-prop-monitor/external-camera/(id)/max-fov`, as on an MFD camera page, and a value set is clamped
+   to the camera's range.
+
+
+   :param id: The identifier of the :ref:`ExternalCamera <http-RasterPropMonitor.ExternalCamera>` object.
+
+   :resjson float value:
+
+.. http:put:: /raster-prop-monitor/external-camera/(id)/fov
+
+   The field of view that :http:post:`/raster-prop-monitor/external-camera/(id)/image` renders at, in degrees. It starts at
+   :http:get:`/raster-prop-monitor/external-camera/(id)/max-fov`, as on an MFD camera page, and a value set is clamped
+   to the camera's range.
+
+
+   :param id: The identifier of the :ref:`ExternalCamera <http-RasterPropMonitor.ExternalCamera>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:post:: /raster-prop-monitor/external-camera/(id)/image
+
+   The camera's view as an image, rendered now. Streamed at a rate, it is a video of
+   the camera, for which JPEG is smaller and faster.
+   Throws an exception if the camera is not on the active vessel.
+
+
+   :param id: The identifier of the :ref:`ExternalCamera <http-RasterPropMonitor.ExternalCamera>` object.
+
+   :reqjson int32 width: The width of the image, in pixels.
+   :reqjson int32 height: The height of the image, in pixels.
+   :reqjson StdLib.ImageFormat format: The format of the image. Optional, defaults to ``"png"``.
+   :reqjson int32 quality: The quality of a JPEG image, from 1 to 100. Optional, defaults to ``75``.
+   :resjson bytes value: The image data.

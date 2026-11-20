@@ -1,0 +1,124 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Comms
+=====
+
+
+.. _http-RemoteTech.Comms:
+
+.. rubric:: Comms
+
+Communications for a vessel.
+
+A ``Comms`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /remote-tech/comms/(id)/vessel
+
+   Get the vessel.
+
+
+   :param id: The identifier of the :ref:`Comms <http-RemoteTech.Comms>` object.
+
+   :resjson SpaceCenter.Vessel value:
+
+
+
+
+.. http:get:: /remote-tech/comms/(id)/has-local-control
+
+   Whether the vessel can be controlled locally.
+
+
+   :param id: The identifier of the :ref:`Comms <http-RemoteTech.Comms>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /remote-tech/comms/(id)/has-flight-computer
+
+   Whether the vessel has a flight computer on board.
+
+
+   :param id: The identifier of the :ref:`Comms <http-RemoteTech.Comms>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /remote-tech/comms/(id)/has-connection
+
+   Whether the vessel has any connection.
+
+
+   :param id: The identifier of the :ref:`Comms <http-RemoteTech.Comms>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /remote-tech/comms/(id)/has-connection-to-ground-station
+
+   Whether the vessel has a connection to a ground station.
+
+
+   :param id: The identifier of the :ref:`Comms <http-RemoteTech.Comms>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /remote-tech/comms/(id)/signal-delay
+
+   The shortest signal delay to the vessel, in seconds.
+
+
+   :param id: The identifier of the :ref:`Comms <http-RemoteTech.Comms>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /remote-tech/comms/(id)/signal-delay-to-ground-station
+
+   The signal delay between the vessel and the closest ground station, in seconds.
+
+
+   :param id: The identifier of the :ref:`Comms <http-RemoteTech.Comms>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:post:: /remote-tech/comms/(id)/signal-delay-to-vessel
+
+   The signal delay between the this vessel and another vessel, in seconds.
+
+
+   :param id: The identifier of the :ref:`Comms <http-RemoteTech.Comms>` object.
+
+   :reqjson SpaceCenter.Vessel other:
+   :resjson double value:
+
+
+
+
+
+.. http:get:: /remote-tech/comms/(id)/antennas
+
+   The antennas for this vessel.
+
+
+   :param id: The identifier of the :ref:`Comms <http-RemoteTech.Comms>` object.
+
+   :resjson list<RemoteTech.Antenna> value:

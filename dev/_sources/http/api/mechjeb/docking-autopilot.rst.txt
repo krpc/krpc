@@ -1,0 +1,242 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+DockingAutopilot
+================
+
+
+.. _http-MechJeb.DockingAutopilot:
+
+.. rubric:: DockingAutopilot
+
+The docking autopilot, which docks with the target docking port.
+
+A ``DockingAutopilot`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /mech-jeb/docking-autopilot/(id)/enabled
+
+   Whether the module is enabled.
+
+
+   :param id: The identifier of the :ref:`DockingAutopilot <http-MechJeb.DockingAutopilot>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/docking-autopilot/(id)/enabled
+
+   Whether the module is enabled.
+
+
+   :param id: The identifier of the :ref:`DockingAutopilot <http-MechJeb.DockingAutopilot>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/docking-autopilot/(id)/status
+
+   The status of the autopilot.
+
+
+   :param id: The identifier of the :ref:`DockingAutopilot <http-MechJeb.DockingAutopilot>` object.
+
+   :resjson string value:
+
+
+
+
+.. http:get:: /mech-jeb/docking-autopilot/(id)/speed-limit
+
+   The largest speed relative to the target, in :math:`\mathrm{m/s}`.
+
+
+   :param id: The identifier of the :ref:`DockingAutopilot <http-MechJeb.DockingAutopilot>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/docking-autopilot/(id)/speed-limit
+
+   The largest speed relative to the target, in :math:`\mathrm{m/s}`.
+
+
+   :param id: The identifier of the :ref:`DockingAutopilot <http-MechJeb.DockingAutopilot>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/docking-autopilot/(id)/override-safe-distance
+
+   Whether :http:get:`/mech-jeb/docking-autopilot/(id)/overriden-safe-distance` replaces the computed safe distance.
+
+
+   :param id: The identifier of the :ref:`DockingAutopilot <http-MechJeb.DockingAutopilot>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/docking-autopilot/(id)/override-safe-distance
+
+   Whether :http:get:`/mech-jeb/docking-autopilot/(id)/overriden-safe-distance` replaces the computed safe distance.
+
+
+   :param id: The identifier of the :ref:`DockingAutopilot <http-MechJeb.DockingAutopilot>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/docking-autopilot/(id)/overriden-safe-distance
+
+   The safe distance from the target, in meters.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/docking-autopilot/(id)/override-safe-distance`.
+
+
+   :param id: The identifier of the :ref:`DockingAutopilot <http-MechJeb.DockingAutopilot>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/docking-autopilot/(id)/overriden-safe-distance
+
+   The safe distance from the target, in meters.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/docking-autopilot/(id)/override-safe-distance`.
+
+
+   :param id: The identifier of the :ref:`DockingAutopilot <http-MechJeb.DockingAutopilot>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/docking-autopilot/(id)/override-target-size
+
+   Whether :http:get:`/mech-jeb/docking-autopilot/(id)/overriden-target-size` replaces the computed size of the target.
+
+
+   :param id: The identifier of the :ref:`DockingAutopilot <http-MechJeb.DockingAutopilot>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/docking-autopilot/(id)/override-target-size
+
+   Whether :http:get:`/mech-jeb/docking-autopilot/(id)/overriden-target-size` replaces the computed size of the target.
+
+
+   :param id: The identifier of the :ref:`DockingAutopilot <http-MechJeb.DockingAutopilot>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/docking-autopilot/(id)/overriden-target-size
+
+   The size of the target, in meters.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/docking-autopilot/(id)/override-target-size`.
+
+
+   :param id: The identifier of the :ref:`DockingAutopilot <http-MechJeb.DockingAutopilot>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/docking-autopilot/(id)/overriden-target-size
+
+   The size of the target, in meters.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/docking-autopilot/(id)/override-target-size`.
+
+
+   :param id: The identifier of the :ref:`DockingAutopilot <http-MechJeb.DockingAutopilot>` object.
+
+   :reqjson double value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/docking-autopilot/(id)/safe-distance
+
+   The safe distance from the target that the autopilot uses, in meters.
+
+
+   :param id: The identifier of the :ref:`DockingAutopilot <http-MechJeb.DockingAutopilot>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /mech-jeb/docking-autopilot/(id)/target-size
+
+   The size of the target that the autopilot uses, in meters.
+
+
+   :param id: The identifier of the :ref:`DockingAutopilot <http-MechJeb.DockingAutopilot>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /mech-jeb/docking-autopilot/(id)/force-roll
+
+   Whether the autopilot controls the roll.
+
+
+   :param id: The identifier of the :ref:`DockingAutopilot <http-MechJeb.DockingAutopilot>` object.
+
+   :resjson bool value:
+
+.. http:put:: /mech-jeb/docking-autopilot/(id)/force-roll
+
+   Whether the autopilot controls the roll.
+
+
+   :param id: The identifier of the :ref:`DockingAutopilot <http-MechJeb.DockingAutopilot>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /mech-jeb/docking-autopilot/(id)/roll
+
+   The roll, in degrees.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/docking-autopilot/(id)/force-roll`.
+
+
+   :param id: The identifier of the :ref:`DockingAutopilot <http-MechJeb.DockingAutopilot>` object.
+
+   :resjson double value:
+
+.. http:put:: /mech-jeb/docking-autopilot/(id)/roll
+
+   The roll, in degrees.
+
+   .. note::
+
+      Requires :http:get:`/mech-jeb/docking-autopilot/(id)/force-roll`.
+
+
+   :param id: The identifier of the :ref:`DockingAutopilot <http-MechJeb.DockingAutopilot>` object.
+
+   :reqjson double value: The new value.

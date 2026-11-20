@@ -1,0 +1,354 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Text
+====
+
+
+.. _http-Drawing.Text:
+
+.. rubric:: Text
+
+Text. Created using :http:post:`/drawing/add-text`.
+
+A ``Text`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /drawing/text/(id)/position
+
+   Position of the text.
+
+
+   :param id: The identifier of the :ref:`Text <http-Drawing.Text>` object.
+
+   :resjson tuple<double, double, double> value:
+
+.. http:put:: /drawing/text/(id)/position
+
+   Position of the text.
+
+
+   :param id: The identifier of the :ref:`Text <http-Drawing.Text>` object.
+
+   :reqjson tuple<double, double, double> value: The new value.
+
+
+
+
+.. http:get:: /drawing/text/(id)/rotation
+
+   Rotation of the text as a quaternion.
+
+
+   :param id: The identifier of the :ref:`Text <http-Drawing.Text>` object.
+
+   :resjson tuple<double, double, double, double> value:
+
+.. http:put:: /drawing/text/(id)/rotation
+
+   Rotation of the text as a quaternion.
+
+
+   :param id: The identifier of the :ref:`Text <http-Drawing.Text>` object.
+
+   :reqjson tuple<double, double, double, double> value: The new value.
+
+
+
+
+.. http:get:: /drawing/text/(id)/face-camera
+
+   Whether the text turns to face the camera, in place of its :http:get:`/drawing/text/(id)/rotation`.
+
+
+   :param id: The identifier of the :ref:`Text <http-Drawing.Text>` object.
+
+   :resjson bool value:
+
+.. http:put:: /drawing/text/(id)/face-camera
+
+   Whether the text turns to face the camera, in place of its :http:get:`/drawing/text/(id)/rotation`.
+
+
+   :param id: The identifier of the :ref:`Text <http-Drawing.Text>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /drawing/text/(id)/reference-frame
+
+   Reference frame for the positions of the object.
+
+
+   :param id: The identifier of the :ref:`Text <http-Drawing.Text>` object.
+
+   :resjson SpaceCenter.ReferenceFrame value:
+
+.. http:put:: /drawing/text/(id)/reference-frame
+
+   Reference frame for the positions of the object.
+
+
+   :param id: The identifier of the :ref:`Text <http-Drawing.Text>` object.
+
+   :reqjson SpaceCenter.ReferenceFrame value: The new value.
+
+
+
+
+.. http:get:: /drawing/text/(id)/visible
+
+   Whether the object is visible.
+
+
+   :param id: The identifier of the :ref:`Text <http-Drawing.Text>` object.
+
+   :resjson bool value:
+
+.. http:put:: /drawing/text/(id)/visible
+
+   Whether the object is visible.
+
+
+   :param id: The identifier of the :ref:`Text <http-Drawing.Text>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:post:: /drawing/text/(id)/remove
+
+   Remove the object.
+
+
+   :param id: The identifier of the :ref:`Text <http-Drawing.Text>` object.
+
+
+
+
+
+
+.. http:get:: /drawing/text/(id)/content
+
+   The text string
+
+
+   :param id: The identifier of the :ref:`Text <http-Drawing.Text>` object.
+
+   :resjson string value:
+
+.. http:put:: /drawing/text/(id)/content
+
+   The text string
+
+
+   :param id: The identifier of the :ref:`Text <http-Drawing.Text>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:get:: /drawing/text/(id)/font
+
+   Name of the font
+
+
+   :param id: The identifier of the :ref:`Text <http-Drawing.Text>` object.
+
+   :resjson string value:
+
+.. http:put:: /drawing/text/(id)/font
+
+   Name of the font
+
+
+   :param id: The identifier of the :ref:`Text <http-Drawing.Text>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:post:: /drawing/text/available-fonts
+
+   A list of all available fonts.
+
+
+   :resjson list<string> value:
+
+
+
+
+
+.. http:get:: /drawing/text/(id)/size
+
+   Font size.
+
+
+   :param id: The identifier of the :ref:`Text <http-Drawing.Text>` object.
+
+   :resjson int32 value:
+
+.. http:put:: /drawing/text/(id)/size
+
+   Font size.
+
+
+   :param id: The identifier of the :ref:`Text <http-Drawing.Text>` object.
+
+   :reqjson int32 value: The new value.
+
+
+
+
+.. http:get:: /drawing/text/(id)/character-size
+
+   Character size.
+
+
+   :param id: The identifier of the :ref:`Text <http-Drawing.Text>` object.
+
+   :resjson float value:
+
+.. http:put:: /drawing/text/(id)/character-size
+
+   Character size.
+
+
+   :param id: The identifier of the :ref:`Text <http-Drawing.Text>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /drawing/text/(id)/style
+
+   Font style.
+
+
+   :param id: The identifier of the :ref:`Text <http-Drawing.Text>` object.
+
+   :resjson UI.FontStyle value:
+
+.. http:put:: /drawing/text/(id)/style
+
+   Font style.
+
+
+   :param id: The identifier of the :ref:`Text <http-Drawing.Text>` object.
+
+   :reqjson UI.FontStyle value: The new value.
+
+
+
+
+.. http:get:: /drawing/text/(id)/color
+
+   Set the color
+
+
+   :param id: The identifier of the :ref:`Text <http-Drawing.Text>` object.
+
+   :resjson StdLib.ColorRGB value:
+
+.. http:put:: /drawing/text/(id)/color
+
+   Set the color
+
+
+   :param id: The identifier of the :ref:`Text <http-Drawing.Text>` object.
+
+   :reqjson StdLib.ColorRGB value: The new value.
+
+
+
+
+.. http:get:: /drawing/text/(id)/material
+
+   Material used to render the object.
+   Creates the material from a shader with the given name.
+
+
+   :param id: The identifier of the :ref:`Text <http-Drawing.Text>` object.
+
+   :resjson string value:
+
+.. http:put:: /drawing/text/(id)/material
+
+   Material used to render the object.
+   Creates the material from a shader with the given name.
+
+
+   :param id: The identifier of the :ref:`Text <http-Drawing.Text>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:get:: /drawing/text/(id)/alignment
+
+   Alignment.
+
+
+   :param id: The identifier of the :ref:`Text <http-Drawing.Text>` object.
+
+   :resjson UI.TextAlignment value:
+
+.. http:put:: /drawing/text/(id)/alignment
+
+   Alignment.
+
+
+   :param id: The identifier of the :ref:`Text <http-Drawing.Text>` object.
+
+   :reqjson UI.TextAlignment value: The new value.
+
+
+
+
+.. http:get:: /drawing/text/(id)/line-spacing
+
+   Line spacing.
+
+
+   :param id: The identifier of the :ref:`Text <http-Drawing.Text>` object.
+
+   :resjson float value:
+
+.. http:put:: /drawing/text/(id)/line-spacing
+
+   Line spacing.
+
+
+   :param id: The identifier of the :ref:`Text <http-Drawing.Text>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /drawing/text/(id)/anchor
+
+   Anchor.
+
+
+   :param id: The identifier of the :ref:`Text <http-Drawing.Text>` object.
+
+   :resjson UI.TextAnchor value:
+
+.. http:put:: /drawing/text/(id)/anchor
+
+   Anchor.
+
+
+   :param id: The identifier of the :ref:`Text <http-Drawing.Text>` object.
+
+   :reqjson UI.TextAnchor value: The new value.

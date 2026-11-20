@@ -1,0 +1,1948 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Vessel
+======
+
+
+.. _http-SpaceCenter.Vessel:
+
+.. rubric:: Vessel
+
+These objects are used to interact with vessels in KSP. This includes getting
+orbital and flight data, manipulating control inputs and managing resources.
+Created using :http:get:`/space-center/active-vessel` or :http:get:`/space-center/vessels`.
+
+A ``Vessel`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /space-center/vessel/(id)/name
+
+   The name of the vessel.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson string value:
+
+.. http:put:: /space-center/vessel/(id)/name
+
+   The name of the vessel.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/type
+
+   The type of the vessel.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson SpaceCenter.VesselType value:
+
+.. http:put:: /space-center/vessel/(id)/type
+
+   The type of the vessel.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :reqjson SpaceCenter.VesselType value: The new value.
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/situation
+
+   The situation the vessel is in.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson SpaceCenter.VesselSituation value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/loaded
+
+   Whether the vessel is loaded, i.e. its parts are instantiated in the scene
+   because it is within loading range of the active vessel. A vessel that is not
+   loaded exists only as orbital data and is always on-rails (see :http:get:`/space-center/vessel/(id)/packed`).
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/packed
+
+   Whether the vessel is packed (on-rails). A packed vessel has its physics
+   simulation suspended and follows its orbit analytically. A vessel that is not
+   loaded (see :http:get:`/space-center/vessel/(id)/loaded`) is always packed.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/physics-range
+
+   The distance from the active vessel, in meters, out to which this vessel keeps running
+   its physics simulation, and so stays controllable, able to burn its engines and
+   respond to its autopilot. Setting this raises the vessel out of the stock physics
+   bubble, so that it keeps flying while the active vessel is far away. Set to zero to
+   restore the game's default range.
+
+   .. note::
+
+      This always reports the vessel's live range, so reading it when no range has been set
+      gives the game's default for the vessel's current :http:get:`/space-center/vessel/(id)/situation`, which is
+      much shorter than the distance at which the vessel unloads. In orbit a vessel is put
+      on rails just 350m away, long before it unloads at 2.5km, and a vessel on rails
+      produces no thrust and ignores control input even though it is still loaded.
+
+      There is a 10% margin below the range, so that a vessel hovering at the threshold does
+      not repeatedly drop out of the simulation and rejoin it. The vessel leaves the
+      simulation at the distance set here, and rejoins it at 90% of that distance; in
+      between it keeps whichever state it is already in.
+
+      The requested range applies in every situation. The game's own defaults are not
+      uniform, and a vessel flying in atmosphere stays loaded out to 22.5km, so setting a
+      small range can shorten the range such a vessel would otherwise have had.
+
+      A range lasts until it is set back to zero or the game is exited. Unlike most state a
+      client sets, it is not released when that client disconnects, because dropping a
+      distant vessel back to the default range would put it on-rails part way through a
+      maneuver.
+
+      Holding a vessel off-rails a long way from the active vessel costs performance, and
+      accumulates positional error that can destroy it. Raise the range on the vessels that
+      need it, by as little as they need.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson float value:
+
+.. http:put:: /space-center/vessel/(id)/physics-range
+
+   The distance from the active vessel, in meters, out to which this vessel keeps running
+   its physics simulation, and so stays controllable, able to burn its engines and
+   respond to its autopilot. Setting this raises the vessel out of the stock physics
+   bubble, so that it keeps flying while the active vessel is far away. Set to zero to
+   restore the game's default range.
+
+   .. note::
+
+      This always reports the vessel's live range, so reading it when no range has been set
+      gives the game's default for the vessel's current :http:get:`/space-center/vessel/(id)/situation`, which is
+      much shorter than the distance at which the vessel unloads. In orbit a vessel is put
+      on rails just 350m away, long before it unloads at 2.5km, and a vessel on rails
+      produces no thrust and ignores control input even though it is still loaded.
+
+      There is a 10% margin below the range, so that a vessel hovering at the threshold does
+      not repeatedly drop out of the simulation and rejoin it. The vessel leaves the
+      simulation at the distance set here, and rejoins it at 90% of that distance; in
+      between it keeps whichever state it is already in.
+
+      The requested range applies in every situation. The game's own defaults are not
+      uniform, and a vessel flying in atmosphere stays loaded out to 22.5km, so setting a
+      small range can shorten the range such a vessel would otherwise have had.
+
+      A range lasts until it is set back to zero or the game is exited. Unlike most state a
+      client sets, it is not released when that client disconnects, because dropping a
+      distant vessel back to the default range would put it on-rails part way through a
+      maneuver.
+
+      Holding a vessel off-rails a long way from the active vessel costs performance, and
+      accumulates positional error that can destroy it. Raise the range on the vessels that
+      need it, by as little as they need.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/recoverable
+
+   Whether the vessel is recoverable.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:post:: /space-center/vessel/(id)/recover
+
+   Recover the vessel. The crew return to the astronaut complex, and the funds and
+   science the vessel is worth are awarded.
+
+   .. note::
+
+      Recovering the active vessel ends the flight and returns to the space center, as
+      pressing recover in game does. When a non-active vessel is recovered the current scene
+      is unaffected, and the mission completion dialog is not shown, so a script flying
+      several vessels keeps control of the rest of them.
+
+      Returns immediately, does not wait for the vessel to be recovered.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+
+
+
+
+
+.. http:post:: /space-center/vessel/(id)/terminate
+
+   Terminate the vessel. The vessel and its parts are removed from the game, and its
+   crew are lost, as when the vessel is terminated from the tracking station. Nothing
+   is recovered: no funds, no science and no crew.
+
+   .. note::
+
+      The crew are reported missing, and return to the astronaut complex once their
+      respawn timer expires, or never if the game is set up so that missing crews do
+      not respawn.
+
+      The active vessel cannot be terminated, because the vessel being flown cannot be
+      taken out of the scene it is being flown in. Switch to another vessel first, or
+      use :http:post:`/space-center/vessel/(id)/recover`, which ends the flight and returns to the space center.
+
+      Returns immediately, does not wait for the vessel to be terminated.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/met
+
+   The mission elapsed time in seconds.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/launch-site
+
+   The launch site the vessel was launched from, or ``null`` if the vessel was
+   not launched from a known launch site, such as a vessel spawned by a contract.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson SpaceCenter.LaunchSite? value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/biome
+
+   The name of the biome the vessel is currently in.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson string value:
+
+
+
+
+.. http:post:: /space-center/vessel/(id)/flight
+
+   Returns a :ref:`Flight <http-SpaceCenter.Flight>` object that can be used to get flight
+   telemetry for the vessel, in the specified reference frame.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :reqjson SpaceCenter.ReferenceFrame? reference_frame: Reference frame. Defaults to the vessel's surface reference frame (:http:get:`/space-center/vessel/(id)/surface-reference-frame`). Optional, defaults to ``null``.
+   :resjson SpaceCenter.Flight value:
+
+   .. note:: When this is called with no arguments, the vessel's surface reference
+             frame is used. This reference frame moves with the vessel, therefore
+             velocities and speeds returned by the flight object will be zero. See
+             the :rst:ref:`reference frames guide <reference-frames>`
+             for examples of getting :rst:ref:`the orbital and surface speeds of a
+             vessel <reference-frames-vessel-speed>`.
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/orbit
+
+   The current orbit of the vessel.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson SpaceCenter.Orbit value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/control
+
+   Returns a :http:get:`/space-center/vessel/(id)/control` object that can be used to manipulate
+   the vessel's control inputs. For example, its pitch/yaw/roll controls,
+   RCS and thrust.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson SpaceCenter.Control value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/comms
+
+   Returns a :http:get:`/space-center/vessel/(id)/comms` object that can be used to interact
+   with CommNet for this vessel.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson SpaceCenter.Comms value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/auto-pilot
+
+   An :http:get:`/space-center/vessel/(id)/auto-pilot` object, that can be used to perform
+   simple auto-piloting of the vessel.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson SpaceCenter.AutoPilot value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/crew-capacity
+
+   The number of crew that can occupy the vessel.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson int32 value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/crew-count
+
+   The number of crew that are occupying the vessel.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson int32 value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/crew
+
+   The crew in the vessel.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson list<SpaceCenter.CrewMember> value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/resources
+
+   A :http:get:`/space-center/vessel/(id)/resources` object, that can used to get information
+   about resources stored in the vessel.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson SpaceCenter.Resources value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/stages
+
+   Activation (burn) stages for this vessel, in ascending stage order. This does
+   not include the -1 stage (parts with no staging icon), as it carries no
+   delta-v; use :http:post:`/space-center/vessel/(id)/stage-at` with -1 to get those parts.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson list<SpaceCenter.Stage> value:
+
+.. note:: Lists activation stages only (``decouple`` is ``false``). See also
+          :rst:ref:`user-guide-parts-staging`.
+
+
+
+
+.. http:post:: /space-center/vessel/(id)/stage-at
+
+   The activation stage with the given number. Pass -1 to get the parts that are
+   never activated (those with no staging icon).
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :reqjson int32 stage: Get activation stage at this index.
+   :resjson SpaceCenter.Stage value:
+
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/decouple-stages
+
+   Decouple stages for this vessel, in ascending stage order. The -1 stage,
+   containing the parts that are never decoupled and remain on the vessel, is
+   included first when any such parts exist.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson list<SpaceCenter.Stage> value:
+
+.. note:: Lists decouple stages only. Delta-v is not defined on these stages.
+
+
+
+
+.. http:post:: /space-center/vessel/(id)/decouple-stage-at
+
+   The decouple stage with the given number. Pass -1 to get the parts that are
+   never decoupled and remain on the vessel after all stages have fired.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :reqjson int32 stage: Get decouple stage at this index.
+   :resjson SpaceCenter.Stage value:
+
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/delta-v-ready
+
+   Whether the vessel's delta-v figures are current.
+
+   .. note::
+
+      The game calculates delta-v for the active vessel alone, over the several ticks
+      after the vessel changes. A delta-v member reports the figures from the last
+      calculation, and waits only when the game has calculated none.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:post:: /space-center/vessel/(id)/recalculate-delta-v
+
+   Recalculates the vessel's delta-v figures, and waits until they are current.
+   Throws an exception if the vessel is not the active vessel.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/delta-v
+
+   Total delta-v for the vessel in the current situation, in :math:`\mathrm{m/s}`.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson float value:
+
+.. note:: Requires the stock delta-v display to be ready. Units are meters per second.
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/vacuum-delta-v
+
+   Total vacuum delta-v for the vessel, in :math:`\mathrm{m/s}`.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/sea-level-delta-v
+
+   Total sea-level delta-v for the vessel, in :math:`\mathrm{m/s}`.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/burn-time
+
+   Total burn time for the vessel, in seconds.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/parts
+
+   A :ref:`Parts <http-SpaceCenter.Parts>` object, that can used to interact with the parts that make up this vessel.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson SpaceCenter.Parts value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/mass
+
+   The total mass of the vessel, including resources, in :math:`\mathrm{kg}`.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/dry-mass
+
+   The total mass of the vessel, excluding resources, in :math:`\mathrm{kg}`.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/thrust
+
+   The total thrust currently being produced by the vessel's engines, in
+   Newtons. This is computed by summing :http:get:`/space-center/engine/(id)/thrust` for
+   every engine in the vessel.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/available-thrust
+
+   Gets the total available thrust that can be produced by the vessel's
+   active engines, in Newtons. This is computed by summing
+   :http:get:`/space-center/engine/(id)/available-thrust` for every active engine in the vessel.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:post:: /space-center/vessel/(id)/available-thrust-at
+
+   Gets the total available thrust that can be produced by the vessel's
+   active engines, in Newtons. This is computed by summing
+   :http:post:`/space-center/engine/(id)/available-thrust-at` for every active engine in the vessel.
+   Takes the given pressure into account.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :reqjson double pressure: Atmospheric pressure in atmospheres
+   :resjson float value:
+
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/max-thrust
+
+   The total maximum thrust that can be produced by the vessel's active
+   engines, in Newtons. This is computed by summing
+   :http:get:`/space-center/engine/(id)/max-thrust` for every active engine.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:post:: /space-center/vessel/(id)/max-thrust-at
+
+   The total maximum thrust that can be produced by the vessel's active
+   engines, in Newtons. This is computed by summing
+   :http:post:`/space-center/engine/(id)/max-thrust-at` for every active engine.
+   Takes the given pressure into account.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :reqjson double pressure: Atmospheric pressure in atmospheres
+   :resjson float value:
+
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/max-vacuum-thrust
+
+   The total maximum thrust that can be produced by the vessel's active
+   engines when the vessel is in a vacuum, in Newtons. This is computed by
+   summing :http:get:`/space-center/engine/(id)/max-vacuum-thrust` for every active engine.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/acceleration
+
+   The acceleration currently produced by the vessel's engines, in
+   :math:`\mathrm{m/s^{2}}`. This is :http:get:`/space-center/vessel/(id)/thrust` divided by the
+   vessel's :http:get:`/space-center/vessel/(id)/mass`.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/available-acceleration
+
+   The total available acceleration that can be produced by the vessel's
+   active engines, in :math:`\mathrm{m/s^{2}}`. This is :http:get:`/space-center/vessel/(id)/available-thrust`
+   divided by the vessel's :http:get:`/space-center/vessel/(id)/mass`.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:post:: /space-center/vessel/(id)/available-acceleration-at
+
+   The total available acceleration that can be produced by the vessel's
+   active engines, in :math:`\mathrm{m/s^{2}}`. This is :http:post:`/space-center/vessel/(id)/available-thrust-at`
+   divided by the vessel's :http:get:`/space-center/vessel/(id)/mass`. Takes the given pressure into account.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :reqjson double pressure: Atmospheric pressure in atmospheres
+   :resjson float value:
+
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/max-acceleration
+
+   The total maximum acceleration that can be produced by the vessel's active
+   engines, in :math:`\mathrm{m/s^{2}}`. This is :http:get:`/space-center/vessel/(id)/max-thrust` divided by
+   the vessel's :http:get:`/space-center/vessel/(id)/mass`.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:post:: /space-center/vessel/(id)/max-acceleration-at
+
+   The total maximum acceleration that can be produced by the vessel's active
+   engines, in :math:`\mathrm{m/s^{2}}`. This is :http:post:`/space-center/vessel/(id)/max-thrust-at` divided by
+   the vessel's :http:get:`/space-center/vessel/(id)/mass`. Takes the given pressure into account.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :reqjson double pressure: Atmospheric pressure in atmospheres
+   :resjson float value:
+
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/max-vacuum-acceleration
+
+   The total maximum acceleration that can be produced by the vessel's active
+   engines when the vessel is in a vacuum, in :math:`\mathrm{m/s^{2}}`. This is
+   :http:get:`/space-center/vessel/(id)/max-vacuum-thrust` divided by the vessel's :http:get:`/space-center/vessel/(id)/mass`.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/specific-impulse
+
+   The combined specific impulse of all active engines, in seconds. This is computed using the formula
+   `described here <https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines>`_.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:post:: /space-center/vessel/(id)/specific-impulse-at
+
+   The combined specific impulse of all active engines, in seconds. This is computed using the formula
+   `described here <https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines>`_.
+   Takes the given pressure into account.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :reqjson double pressure: Atmospheric pressure in atmospheres
+   :resjson float value:
+
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/vacuum-specific-impulse
+
+   The combined vacuum specific impulse of all active engines, in seconds. This is computed using the formula
+   `described here <https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines>`_.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/kerbin-sea-level-specific-impulse
+
+   The combined specific impulse of all active engines at sea level on Kerbin, in seconds.
+   This is computed using the formula
+   `described here <https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines>`_.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/moment-of-inertia
+
+   The moment of inertia of the vessel around its center of mass in :math:`\mathrm{kg \cdot m^{2}}`.
+   The inertia values in the returned 3-tuple are around the
+   pitch, roll and yaw directions respectively.
+   This corresponds to the vessels reference frame (:http:get:`/space-center/vessel/(id)/reference-frame`).
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson tuple<double, double, double> value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/inertia-tensor
+
+   The inertia tensor of the vessel around its center of mass,
+   in the vessels reference frame (:http:get:`/space-center/vessel/(id)/reference-frame`).
+   Returns the 3x3 matrix as a list of elements, in row-major order.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson list<double> value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/available-torque
+
+   The maximum torque that the vessel generates. Includes contributions from
+   reaction wheels, RCS, gimballed engines and aerodynamic control surfaces.
+   Returns the torques in :math:`\mathrm{N \cdot m}` around each of the coordinate axes of the
+   vessels reference frame (:http:get:`/space-center/vessel/(id)/reference-frame`).
+   These axes are equivalent to the pitch, roll and yaw axes of the vessel.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson SpaceCenter.AxisRange value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/available-reaction-wheel-torque
+
+   The maximum torque that the currently active and powered reaction wheels can generate.
+   Returns the torques in :math:`\mathrm{N \cdot m}` around each of the coordinate axes of the
+   vessels reference frame (:http:get:`/space-center/vessel/(id)/reference-frame`).
+   These axes are equivalent to the pitch, roll and yaw axes of the vessel.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson SpaceCenter.AxisRange value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/available-rcs-torque
+
+   The maximum torque that the currently active RCS thrusters can generate.
+   Returns the torques in :math:`\mathrm{N \cdot m}` around each of the coordinate axes of the
+   vessels reference frame (:http:get:`/space-center/vessel/(id)/reference-frame`).
+   These axes are equivalent to the pitch, roll and yaw axes of the vessel.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson SpaceCenter.AxisRange value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/available-rcs-force
+
+   The maximum force that the currently active RCS thrusters can generate.
+   Returns the forces in :math:`\mathrm{N}` along each of the coordinate axes of the
+   vessels reference frame (:http:get:`/space-center/vessel/(id)/reference-frame`).
+   These axes are equivalent to the right, forward and bottom directions of the vessel.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson SpaceCenter.AxisRange value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/available-rcs-acceleration
+
+   The maximum acceleration that the currently active RCS thrusters can generate.
+   This is :http:get:`/space-center/vessel/(id)/available-rcs-force` divided by the vessel's :http:get:`/space-center/vessel/(id)/mass`.
+   Returns the accelerations in :math:`\mathrm{m/s^{2}}` along each of the coordinate axes of the
+   vessels reference frame (:http:get:`/space-center/vessel/(id)/reference-frame`).
+   These axes are equivalent to the right, forward and bottom directions of the vessel.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson SpaceCenter.AxisRange value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/available-engine-torque
+
+   The maximum torque that the currently active and gimballed engines can generate.
+   Returns the torques in :math:`\mathrm{N \cdot m}` around each of the coordinate axes of the
+   vessels reference frame (:http:get:`/space-center/vessel/(id)/reference-frame`).
+   These axes are equivalent to the pitch, roll and yaw axes of the vessel.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson SpaceCenter.AxisRange value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/available-control-surface-torque
+
+   The maximum torque that the aerodynamic control surfaces can generate.
+   Returns the torques in :math:`\mathrm{N \cdot m}` around each of the coordinate axes of the
+   vessels reference frame (:http:get:`/space-center/vessel/(id)/reference-frame`).
+   These axes are equivalent to the pitch, roll and yaw axes of the vessel.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson SpaceCenter.AxisRange value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/available-other-torque
+
+   The maximum torque that parts (excluding reaction wheels, gimballed engines,
+   RCS and control surfaces) can generate.
+   Returns the torques in :math:`\mathrm{N \cdot m}` around each of the coordinate axes of the
+   vessels reference frame (:http:get:`/space-center/vessel/(id)/reference-frame`).
+   These axes are equivalent to the pitch, roll and yaw axes of the vessel.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson SpaceCenter.AxisRange value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/available-angular-acceleration
+
+   The maximum angular acceleration that the vessel can generate. Includes contributions
+   from reaction wheels, RCS, gimballed engines and aerodynamic control surfaces.
+   This is :http:get:`/space-center/vessel/(id)/available-torque` divided by the vessel's :http:get:`/space-center/vessel/(id)/moment-of-inertia`.
+   Returns the angular accelerations in :math:`\mathrm{rad/s^{2}}` around each of the coordinate
+   axes of the vessels reference frame (:http:get:`/space-center/vessel/(id)/reference-frame`).
+   These axes are equivalent to the pitch, roll and yaw axes of the vessel.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson SpaceCenter.AxisRange value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/available-reaction-wheel-angular-acceleration
+
+   The maximum angular acceleration that the currently active and powered reaction wheels
+   can generate. This is :http:get:`/space-center/vessel/(id)/available-reaction-wheel-torque` divided by the vessel's
+   :http:get:`/space-center/vessel/(id)/moment-of-inertia`.
+   Returns the angular accelerations in :math:`\mathrm{rad/s^{2}}` around each of the coordinate
+   axes of the vessels reference frame (:http:get:`/space-center/vessel/(id)/reference-frame`).
+   These axes are equivalent to the pitch, roll and yaw axes of the vessel.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson SpaceCenter.AxisRange value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/available-rcs-angular-acceleration
+
+   The maximum angular acceleration that the currently active RCS thrusters can generate.
+   This is :http:get:`/space-center/vessel/(id)/available-rcs-torque` divided by the vessel's :http:get:`/space-center/vessel/(id)/moment-of-inertia`.
+   Returns the angular accelerations in :math:`\mathrm{rad/s^{2}}` around each of the coordinate
+   axes of the vessels reference frame (:http:get:`/space-center/vessel/(id)/reference-frame`).
+   These axes are equivalent to the pitch, roll and yaw axes of the vessel.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson SpaceCenter.AxisRange value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/available-engine-angular-acceleration
+
+   The maximum angular acceleration that the currently active and gimballed engines can
+   generate. This is :http:get:`/space-center/vessel/(id)/available-engine-torque` divided by the vessel's
+   :http:get:`/space-center/vessel/(id)/moment-of-inertia`.
+   Returns the angular accelerations in :math:`\mathrm{rad/s^{2}}` around each of the coordinate
+   axes of the vessels reference frame (:http:get:`/space-center/vessel/(id)/reference-frame`).
+   These axes are equivalent to the pitch, roll and yaw axes of the vessel.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson SpaceCenter.AxisRange value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/available-control-surface-angular-acceleration
+
+   The maximum angular acceleration that the aerodynamic control surfaces can generate.
+   This is :http:get:`/space-center/vessel/(id)/available-control-surface-torque` divided by the vessel's
+   :http:get:`/space-center/vessel/(id)/moment-of-inertia`.
+   Returns the angular accelerations in :math:`\mathrm{rad/s^{2}}` around each of the coordinate
+   axes of the vessels reference frame (:http:get:`/space-center/vessel/(id)/reference-frame`).
+   These axes are equivalent to the pitch, roll and yaw axes of the vessel.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson SpaceCenter.AxisRange value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/available-other-angular-acceleration
+
+   The maximum angular acceleration that parts (excluding reaction wheels, gimballed engines,
+   RCS and control surfaces) can generate. This is :http:get:`/space-center/vessel/(id)/available-other-torque` divided
+   by the vessel's :http:get:`/space-center/vessel/(id)/moment-of-inertia`.
+   Returns the angular accelerations in :math:`\mathrm{rad/s^{2}}` around each of the coordinate
+   axes of the vessels reference frame (:http:get:`/space-center/vessel/(id)/reference-frame`).
+   These axes are equivalent to the pitch, roll and yaw axes of the vessel.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson SpaceCenter.AxisRange value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/reference-frame
+
+   The reference frame that is fixed relative to the vessel,
+   and orientated with the vessel.
+
+   * The origin is at the center of mass of the vessel.
+   * The axes rotate with the vessel.
+   * The x-axis points out to the right of the vessel.
+   * The y-axis points in the forward direction of the vessel.
+   * The z-axis points out of the bottom off the vessel.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson SpaceCenter.ReferenceFrame value:
+
+.. figure:: /images/reference-frames/vessel-aircraft.png
+   :align: center
+
+   Vessel reference frame origin and axes for the Aeris 3A aircraft
+
+.. figure:: /images/reference-frames/vessel-rocket.png
+   :align: center
+
+   Vessel reference frame origin and axes for the Kerbal-X rocket
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/orbital-reference-frame
+
+   The reference frame that is fixed relative to the vessel,
+   and orientated with the vessels orbital prograde/normal/radial directions.
+
+   * The origin is at the center of mass of the vessel.
+   * The axes rotate with the orbital prograde/normal/radial directions.
+   * The x-axis points in the orbital anti-radial direction.
+   * The y-axis points in the orbital prograde direction.
+   * The z-axis points in the orbital normal direction.
+
+   .. note::
+
+      Be careful not to confuse this with 'orbit' mode on the navball.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson SpaceCenter.ReferenceFrame value:
+
+.. figure:: /images/reference-frames/vessel-orbital.png
+   :align: center
+
+   Vessel orbital reference frame origin and axes
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/surface-reference-frame
+
+   The reference frame that is fixed relative to the vessel,
+   and orientated with the surface of the body being orbited.
+
+   * The origin is at the center of mass of the vessel.
+   * The axes rotate with the north and up directions on the surface of the body.
+   * The x-axis points in the `zenith <https://en.wikipedia.org/wiki/Zenith>`_
+     direction (upwards, normal to the body being orbited, from the center of the body towards the center of
+     mass of the vessel).
+   * The y-axis points northwards towards the
+     `astronomical horizon <https://en.wikipedia.org/wiki/Horizon>`_ (north, and tangential to the
+     surface of the body -- the direction in which a compass would point when on the surface).
+   * The z-axis points eastwards towards the
+     `astronomical horizon <https://en.wikipedia.org/wiki/Horizon>`_ (east, and tangential to the
+     surface of the body -- east on a compass when on the surface).
+
+   .. note::
+
+      Be careful not to confuse this with 'surface' mode on the navball.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson SpaceCenter.ReferenceFrame value:
+
+.. figure:: /images/reference-frames/vessel-surface.png
+   :align: center
+
+   Vessel surface reference frame origin and axes
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/surface-velocity-reference-frame
+
+   The reference frame that is fixed relative to the vessel,
+   and orientated with the velocity vector of the vessel relative
+   to the surface of the body being orbited.
+
+   * The origin is at the center of mass of the vessel.
+   * The axes rotate with the vessel's velocity vector.
+   * The y-axis points in the direction of the vessel's velocity vector,
+     relative to the surface of the body being orbited.
+   * The z-axis is in the plane of the
+     `astronomical horizon <https://en.wikipedia.org/wiki/Horizon>`_.
+   * The x-axis is orthogonal to the other two axes.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson SpaceCenter.ReferenceFrame value:
+
+.. figure:: /images/reference-frames/vessel-surface-velocity.png
+   :align: center
+
+   Vessel surface velocity reference frame origin and axes
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/orbit-speed-reference-frame
+
+   The reference frame that the navball measures speed against in 'orbit' mode.
+
+   * The origin is at the center of mass of the vessel.
+   * The axes are those of :http:get:`/space-center/vessel/(id)/orbital-reference-frame`, which are
+     the directions the navball marks in this mode: the x-axis points in the orbital
+     anti-radial direction, the y-axis in the orbital prograde direction and the z-axis in
+     the orbital normal direction.
+   * The frame moves with the body being orbited, but does not rotate
+     with it.
+
+   .. note::
+
+      The velocity of the vessel in this frame is the one the navball shows in 'orbit' mode:
+      :http:get:`/space-center/flight/(id)/speed` is the speed it displays, and :http:get:`/space-center/flight/(id)/velocity`
+      points along the y-axis, towards its prograde marker.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson SpaceCenter.ReferenceFrame value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/surface-speed-reference-frame
+
+   The reference frame that the navball measures speed against in 'surface' mode.
+
+   * The origin is at the center of mass of the vessel.
+   * The axes are the directions the navball marks in this mode, in the
+     same arrangement as :http:get:`/space-center/vessel/(id)/orbital-reference-frame`: the y-axis points in the
+     direction the vessel is moving relative to the surface, which is where the prograde
+     marker points; the z-axis is normal to the plane of that motion; and the x-axis is
+     anti-radial, pointing towards the body and perpendicular to the other
+     two.
+   * The frame moves with the surface of the body being orbited, so it
+     rotates with the body.
+
+   .. note::
+
+      The velocity of the vessel in this frame is the one the navball shows in 'surface' mode:
+      :http:get:`/space-center/flight/(id)/speed` is the speed it displays, and :http:get:`/space-center/flight/(id)/velocity`
+      points along the y-axis, towards its prograde marker. The velocity gives the frame its
+      orientation, so, as with :http:get:`/space-center/vessel/(id)/surface-velocity-reference-frame`, the frame is
+      singular and raises an error when the vessel is stationary relative to the surface.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson SpaceCenter.ReferenceFrame value:
+
+
+
+
+.. http:get:: /space-center/vessel/(id)/target-speed-reference-frame
+
+   The reference frame that the navball measures speed against in 'target' mode.
+
+   * The origin is at the center of mass of the vessel.
+   * The axes are the directions the navball marks in this mode, in the
+     same arrangement as :http:get:`/space-center/vessel/(id)/orbital-reference-frame`: the y-axis points in the
+     direction the vessel is moving relative to the target, which is where the prograde
+     marker points; the z-axis is normal to the plane of that motion; and the x-axis is
+     anti-radial, pointing towards the body being orbited and perpendicular to the other
+     two.
+   * The frame moves with the vessels target.
+
+   .. note::
+
+      The velocity of the vessel in this frame is the one the navball shows in 'target' mode:
+      :http:get:`/space-center/flight/(id)/speed` is the speed it displays, and :http:get:`/space-center/flight/(id)/velocity`
+      points along the y-axis, towards its prograde marker.
+      The target is the one set for the active vessel, via for example
+      :http:get:`/space-center/target-vessel` or :http:get:`/space-center/target-body`.
+      This is undefined when no target is set. The velocity gives the frame its orientation,
+      so it is also singular, and raises an error, when the vessel matches the velocity of
+      its target.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :resjson SpaceCenter.ReferenceFrame value:
+
+
+
+
+.. http:post:: /space-center/vessel/(id)/position
+
+   The position of the center of mass of the vessel, in the given reference frame.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned position vector is in.
+   :resjson tuple<double, double, double> value: The position as a vector.
+
+
+
+
+
+.. http:post:: /space-center/vessel/(id)/bounding-box
+
+   The axis-aligned bounding box of the vessel in the given reference frame.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned position vectors are in.
+   :resjson SpaceCenter.BoundingBox value: The positions of the minimum and maximum vertices of the box.
+
+
+
+
+
+.. http:post:: /space-center/vessel/(id)/velocity
+
+   The velocity of the center of mass of the vessel, in the given reference frame.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned velocity vector is in.
+   :resjson tuple<double, double, double> value: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in :math:`\mathrm{m/s}`.
+
+
+
+
+
+.. http:post:: /space-center/vessel/(id)/rotation
+
+   The rotation of the vessel, in the given reference frame.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned rotation is in.
+   :resjson tuple<double, double, double, double> value: The rotation as a quaternion of the form ``(x, y, z, w)``.
+
+
+
+
+
+.. http:post:: /space-center/vessel/(id)/direction
+
+   The direction in which the vessel is pointing, in the given reference frame.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned direction is in.
+   :resjson tuple<double, double, double> value: The direction as a unit vector.
+
+
+
+
+
+.. http:post:: /space-center/vessel/(id)/angular-velocity
+
+   The angular velocity of the vessel, in the given reference frame.
+
+
+   :param id: The identifier of the :ref:`Vessel <http-SpaceCenter.Vessel>` object.
+
+   :reqjson SpaceCenter.ReferenceFrame reference_frame: The reference frame the returned angular velocity is in.
+   :resjson tuple<double, double, double> value: The angular velocity as a vector. The magnitude of the vector is the rotational speed of the vessel, in :math:`\mathrm{rad/s}`. The direction of the vector indicates the axis of rotation, using the right-hand rule.
+
+
+
+
+
+
+.. _http-SpaceCenter.AxisRange:
+
+.. rubric:: AxisRange
+
+The largest value of a quantity, such as a torque or a force, in the positive and the
+negative direction of each of three axes.
+
+Passed and returned as an object with these fields:
+
+
+``positive`` (tuple<double, double, double>)
+   The value in the positive direction of each axis.
+
+
+``negative`` (tuple<double, double, double>)
+   The value in the negative direction of each axis, which is zero or less.
+
+
+
+.. _http-SpaceCenter.BoundingBox:
+
+.. rubric:: BoundingBox
+
+An axis-aligned bounding box, as the positions of its minimum and maximum vertices.
+
+Passed and returned as an object with these fields:
+
+
+``min`` (tuple<double, double, double>)
+   The position of the minimum vertex of the box.
+
+
+``max`` (tuple<double, double, double>)
+   The position of the maximum vertex of the box.
+
+
+
+.. _http-SpaceCenter.VesselType:
+
+.. rubric:: VesselType
+
+The type of a vessel.
+See :http:get:`/space-center/vessel/(id)/type`.
+
+Passed and returned as the name of one of its values:
+
+
+``"base"``
+   Base.
+
+
+``"debris"``
+   Debris.
+
+
+``"lander"``
+   Lander.
+
+
+``"plane"``
+   Plane.
+
+
+``"probe"``
+   Probe.
+
+
+``"relay"``
+   Relay.
+
+
+``"rover"``
+   Rover.
+
+
+``"ship"``
+   Ship.
+
+
+``"station"``
+   Station.
+
+
+``"space_object"``
+   SpaceObject.
+
+
+``"unknown"``
+   Unknown.
+
+
+``"eva"``
+   EVA.
+
+
+``"flag"``
+   Flag.
+
+
+``"deployed_science_controller"``
+   DeployedScienceController.
+
+
+``"deployed_science_part"``
+   DeploedSciencePart.
+
+
+``"dropped_part"``
+   DroppedPart.
+
+
+``"deployed_ground_part"``
+   DeployedGroundPart.
+
+
+
+.. _http-SpaceCenter.VesselSituation:
+
+.. rubric:: VesselSituation
+
+The situation a vessel is in.
+See :http:get:`/space-center/vessel/(id)/situation`.
+
+Passed and returned as the name of one of its values:
+
+
+``"docked"``
+   Vessel is docked to another.
+
+
+``"escaping"``
+   Escaping.
+
+
+``"flying"``
+   Vessel is flying through an atmosphere.
+
+
+``"landed"``
+   Vessel is landed on the surface of a body.
+
+
+``"orbiting"``
+   Vessel is orbiting a body.
+
+
+``"pre_launch"``
+   Vessel is awaiting launch.
+
+
+``"splashed"``
+   Vessel has splashed down in an ocean.
+
+
+``"sub_orbital"``
+   Vessel is on a sub-orbital trajectory.
+
+
+
+.. _http-SpaceCenter.CrewMember:
+
+.. rubric:: CrewMember
+
+A Kerbal in the crew roster. Can be obtained using :http:get:`/space-center/vessel/(id)/crew`,
+:http:get:`/space-center/kerbals` or :http:post:`/space-center/get-kerbal`.
+
+A ``CrewMember`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /space-center/crew-member/(id)/name
+
+   The crew members name.
+
+
+   :param id: The identifier of the :ref:`CrewMember <http-SpaceCenter.CrewMember>` object.
+
+   :resjson string value:
+
+.. http:put:: /space-center/crew-member/(id)/name
+
+   The crew members name.
+
+
+   :param id: The identifier of the :ref:`CrewMember <http-SpaceCenter.CrewMember>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:get:: /space-center/crew-member/(id)/type
+
+   The type of crew member.
+
+
+   :param id: The identifier of the :ref:`CrewMember <http-SpaceCenter.CrewMember>` object.
+
+   :resjson SpaceCenter.CrewMemberType value:
+
+
+
+
+.. http:get:: /space-center/crew-member/(id)/on-mission
+
+   Whether the crew member is on a mission, assigned to a vessel.
+
+
+   :param id: The identifier of the :ref:`CrewMember <http-SpaceCenter.CrewMember>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /space-center/crew-member/(id)/inactive
+
+   Whether the crew member is inactive, and so unavailable for a mission until
+   :http:get:`/space-center/crew-member/(id)/inactive-until`.
+
+
+   :param id: The identifier of the :ref:`CrewMember <http-SpaceCenter.CrewMember>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /space-center/crew-member/(id)/inactive-until
+
+   The universal time at which the crew member stops being inactive, in seconds.
+   Returns ``null`` if the crew member is not inactive.
+
+
+   :param id: The identifier of the :ref:`CrewMember <http-SpaceCenter.CrewMember>` object.
+
+   :resjson double? value:
+
+
+
+
+.. http:get:: /space-center/crew-member/(id)/courage
+
+   The crew members courage.
+
+
+   :param id: The identifier of the :ref:`CrewMember <http-SpaceCenter.CrewMember>` object.
+
+   :resjson float value:
+
+.. http:put:: /space-center/crew-member/(id)/courage
+
+   The crew members courage.
+
+
+   :param id: The identifier of the :ref:`CrewMember <http-SpaceCenter.CrewMember>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /space-center/crew-member/(id)/stupidity
+
+   The crew members stupidity.
+
+
+   :param id: The identifier of the :ref:`CrewMember <http-SpaceCenter.CrewMember>` object.
+
+   :resjson float value:
+
+.. http:put:: /space-center/crew-member/(id)/stupidity
+
+   The crew members stupidity.
+
+
+   :param id: The identifier of the :ref:`CrewMember <http-SpaceCenter.CrewMember>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /space-center/crew-member/(id)/experience
+
+   The crew members experience.
+
+
+   :param id: The identifier of the :ref:`CrewMember <http-SpaceCenter.CrewMember>` object.
+
+   :resjson float value:
+
+.. http:put:: /space-center/crew-member/(id)/experience
+
+   The crew members experience.
+
+
+   :param id: The identifier of the :ref:`CrewMember <http-SpaceCenter.CrewMember>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /space-center/crew-member/(id)/experience-level
+
+   The crew member's experience level, the number of stars, from 0 to 5.
+
+
+   :param id: The identifier of the :ref:`CrewMember <http-SpaceCenter.CrewMember>` object.
+
+   :resjson int32 value:
+
+
+
+
+.. http:get:: /space-center/crew-member/(id)/badass
+
+   Whether the crew member is a badass.
+
+
+   :param id: The identifier of the :ref:`CrewMember <http-SpaceCenter.CrewMember>` object.
+
+   :resjson bool value:
+
+.. http:put:: /space-center/crew-member/(id)/badass
+
+   Whether the crew member is a badass.
+
+
+   :param id: The identifier of the :ref:`CrewMember <http-SpaceCenter.CrewMember>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /space-center/crew-member/(id)/veteran
+
+   Whether the crew member is a veteran.
+
+
+   :param id: The identifier of the :ref:`CrewMember <http-SpaceCenter.CrewMember>` object.
+
+   :resjson bool value:
+
+.. http:put:: /space-center/crew-member/(id)/veteran
+
+   Whether the crew member is a veteran.
+
+
+   :param id: The identifier of the :ref:`CrewMember <http-SpaceCenter.CrewMember>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /space-center/crew-member/(id)/trait
+
+   The crew member's job.
+
+
+   :param id: The identifier of the :ref:`CrewMember <http-SpaceCenter.CrewMember>` object.
+
+   :resjson string value:
+
+
+
+
+.. http:get:: /space-center/crew-member/(id)/gender
+
+   The crew member's gender.
+
+
+   :param id: The identifier of the :ref:`CrewMember <http-SpaceCenter.CrewMember>` object.
+
+   :resjson SpaceCenter.CrewMemberGender value:
+
+
+
+
+.. http:get:: /space-center/crew-member/(id)/roster-status
+
+   The crew member's current roster status.
+
+
+   :param id: The identifier of the :ref:`CrewMember <http-SpaceCenter.CrewMember>` object.
+
+   :resjson SpaceCenter.RosterStatus value:
+
+
+
+
+.. http:get:: /space-center/crew-member/(id)/part
+
+   The part containing the crew member. Returns ``null`` if the crew member is not
+   occupying a part, or the vessel containing the part is not loaded.
+
+
+   :param id: The identifier of the :ref:`CrewMember <http-SpaceCenter.CrewMember>` object.
+
+   :resjson SpaceCenter.Part? value:
+
+
+
+
+.. http:post:: /space-center/crew-member/(id)/eva
+
+   Send the crew member outside on EVA, through the hatch of the part it is in, and
+   return the vessel it becomes. The game switches to that vessel, which can then be
+   walked around and flown using its :http:get:`/space-center/vessel/(id)/control`, and brought back
+   in with :http:post:`/space-center/control/(id)/board`. The kerbal climbs out onto the ladder by the
+   hatch, if there is one.
+
+   .. note::
+
+      Throws an exception if EVA is disabled for the game, if the crew member is not in
+      a loaded vessel, if it is already on EVA, or if every hatch out of the part it is
+      in is obstructed.
+
+
+   :param id: The identifier of the :ref:`CrewMember <http-SpaceCenter.CrewMember>` object.
+
+   :resjson SpaceCenter.Vessel value:
+
+
+
+
+
+.. http:get:: /space-center/crew-member/(id)/suit-type
+
+   The crew member's suit type.
+
+
+   :param id: The identifier of the :ref:`CrewMember <http-SpaceCenter.CrewMember>` object.
+
+   :resjson SpaceCenter.SuitType value:
+
+.. http:put:: /space-center/crew-member/(id)/suit-type
+
+   The crew member's suit type.
+
+
+   :param id: The identifier of the :ref:`CrewMember <http-SpaceCenter.CrewMember>` object.
+
+   :reqjson SpaceCenter.SuitType value: The new value.
+
+
+
+
+.. http:get:: /space-center/crew-member/(id)/career-log
+
+   The entries in the crew member's career flight log.
+
+
+   :param id: The identifier of the :ref:`CrewMember <http-SpaceCenter.CrewMember>` object.
+
+   :resjson list<SpaceCenter.FlightLogEntry> value:
+
+
+
+
+
+.. _http-SpaceCenter.FlightLogEntry:
+
+.. rubric:: FlightLogEntry
+
+An entry in a crew member's career flight log.
+
+.. note::
+
+   See :http:get:`/space-center/crew-member/(id)/career-log`.
+
+
+Passed and returned as an object with these fields:
+
+
+``flight`` (int32)
+   The flight identifier of the entry.
+
+
+``type`` (string)
+   The type of the entry, e.g. ``Orbit`` or ``Land``.
+
+
+``target`` (string)
+   The name of the body the entry is for.
+
+
+
+.. _http-SpaceCenter.CrewMemberType:
+
+.. rubric:: CrewMemberType
+
+The type of a crew member.
+See :http:get:`/space-center/crew-member/(id)/type`.
+
+Passed and returned as the name of one of its values:
+
+
+``"applicant"``
+   An applicant for crew.
+
+
+``"crew"``
+   Rocket crew.
+
+
+``"tourist"``
+   A tourist.
+
+
+``"unowned"``
+   An unowned crew member.
+
+
+
+.. _http-SpaceCenter.CrewMemberGender:
+
+.. rubric:: CrewMemberGender
+
+A crew member's gender.
+See :http:get:`/space-center/crew-member/(id)/gender`.
+
+Passed and returned as the name of one of its values:
+
+
+``"male"``
+   Male.
+
+
+``"female"``
+   Female.
+
+
+
+.. _http-SpaceCenter.RosterStatus:
+
+.. rubric:: RosterStatus
+
+A crew member's roster status.
+See :http:get:`/space-center/crew-member/(id)/roster-status`.
+
+Passed and returned as the name of one of its values:
+
+
+``"available"``
+   Available.
+
+
+``"assigned"``
+   Assigned.
+
+
+``"dead"``
+   Dead.
+
+
+``"missing"``
+   Missing.
+
+
+
+.. _http-SpaceCenter.SuitType:
+
+.. rubric:: SuitType
+
+A crew member's suit type.
+See :http:get:`/space-center/crew-member/(id)/suit-type`.
+
+Passed and returned as the name of one of its values:
+
+
+``"default"``
+   Default.
+
+
+``"vintage"``
+   Vintage.
+
+
+``"future"``
+   Future.
+
+
+``"slim"``
+   Slim.
