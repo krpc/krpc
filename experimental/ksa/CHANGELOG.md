@@ -90,6 +90,7 @@
 
 - Clients
   - Add stubs and documentation for the JavaScript client
+  - Add documentation for calling the server over HTTP, with its API reference
   - Add a WebSockets server on port 50001 to the default settings, for the JavaScript client
 - Release
   - Move the example scripts out of the release archive, into the tutorials in the

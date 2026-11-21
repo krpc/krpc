@@ -55,7 +55,7 @@ server's address and connected clients, and edits its protocol, address and port
 WebSockets or HTTP server, **Origins** lists the other sites whose web pages may connect, as the
 `WebSockets protocol page
 <https://krpc.github.io/krpc/@KRPC_VERSION@/communication-protocols/websockets.html#web-pages>`_
-describes. **Advanced settings** at the bottom of the window holds the connection and rate
+and the :ref:`HTTP page <ksa-http-origins>` describe. **Advanced settings** at the bottom of the window holds the connection and rate
 control settings, and shows the server info window. The kRPC documentation describes the
 `rate control settings
 <https://krpc.github.io/krpc/@KRPC_VERSION@/user-guide/server-performance.html#settings>`_ in

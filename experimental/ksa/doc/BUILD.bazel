@@ -42,6 +42,7 @@ DOC_LANGUAGES = [
     "cnano",
     "cpp",
     "csharp",
+    "http",
     "java",
     "js",
     "lua",
@@ -130,6 +131,19 @@ stage_files(
         "//:media/logo-on-dark.svg",
         "//:media/logo-on-light.svg",
         "//doc:spelling_hunspell.py",
+    ] + [
+        "//doc:src/_static/clients/" + x
+        for x in [
+            "LICENSE",
+            "c.svg",
+            "cpp.svg",
+            "csharp.svg",
+            "http.svg",
+            "java.svg",
+            "javascript.svg",
+            "lua.svg",
+            "python.svg",
+        ]
     ] + [":%s-api" % x for x in DOC_LANGUAGES] + [
         ":grpc-api-" + template.removesuffix(".tmpl").replace("/", "-")
         for template in templates
@@ -140,6 +154,7 @@ stage_files(
         "experimental/ksa/doc/gen/src/": "",
         "experimental/ksa/doc/src/": "",
         "doc/spelling_hunspell.py": "_ext/spelling_hunspell.py",
+        "doc/src/_static/": "_static/",
         "media/": "_static/",
     },
 )
