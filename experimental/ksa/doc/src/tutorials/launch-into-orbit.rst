@@ -2,7 +2,7 @@ Launching into Orbit
 ====================
 
 This tutorial launches the game's Rocket from Cape Canaveral into a circular orbit
-200 km up. The script flies the ascent, stages when the first stage runs out of
+500 km up. The script flies the ascent, stages when the first stage runs out of
 propellant, and has the flight computer execute the circularization burn.
 
 The complete script is :download:`launch_into_orbit.py </scripts/tutorials/launch-into-orbit/launch_into_orbit.py>`.
