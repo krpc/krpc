@@ -2,7 +2,7 @@ Lua
 ===
 
 This page covers using the kRPC Lua client with the ``KSA`` service. The
-`kRPC Lua client guide <https://krpc.github.io/krpc/@KRPC_VERSION@/lua/client.html>`_ covers the client in full.
+`kRPC Lua client guide <https://krpc.github.io/krpc/@KRPC_VERSION@/lua.html>`_ covers the client in full.
 
 .. note::
 
@@ -19,7 +19,7 @@ Install the kRPC Lua client @KRPC_VERSION@ from `LuaRocks
 
    luarocks install krpc @KRPC_VERSION@
 
-The `kRPC Lua client guide <https://krpc.github.io/krpc/@KRPC_VERSION@/lua/client.html#installing>`_ covers other ways to
+The `kRPC Lua client guide <https://krpc.github.io/krpc/@KRPC_VERSION@/lua.html#installing-the-library>`_ covers other ways to
 install the client.
 
 Connecting to the Server
@@ -34,7 +34,7 @@ so the service is ``conn.ksa``:
    local conn = krpc.connect('Example')
    print(conn.ksa.active_vehicle.name)
 
-The `kRPC Lua client guide <https://krpc.github.io/krpc/@KRPC_VERSION@/lua/client.html>`_ covers connecting, streams and the
+The `kRPC Lua client guide <https://krpc.github.io/krpc/@KRPC_VERSION@/lua.html>`_ covers connecting, streams and the
 client's other features.
 
 API Reference

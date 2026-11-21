@@ -9,6 +9,21 @@ py_binary(
     srcs = ["protogen.py"],
 )
 
+# The gRPC API pages of the documentation, from the templates of the client API pages
+py_binary(
+    name = "docgen",
+    srcs = [
+        "docgen.py",
+        "protogen.py",
+    ],
+    data = ["grpc.tmpl"],
+    main = "docgen.py",
+    deps = [
+        "//client/python:krpc_base_lib",
+        "//tools/krpctools:krpctools_lib",
+    ],
+)
+
 py_binary(
     name = "grpc-protoc",
     srcs = ["grpc_protoc.py"],

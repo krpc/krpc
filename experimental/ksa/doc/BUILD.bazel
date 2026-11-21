@@ -1,0 +1,175 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
+load("@rules_java//java:defs.bzl", "java_library")
+load("@rules_python//python:defs.bzl", "py_binary")
+load("//:config.bzl", "version")
+load("//experimental/ksa:config.bzl", "ksa_version", "mod_version", "starmap_version")
+load("//tools/build:csharp.bzl", "csharp_library")
+load("//tools/build:pkg.bzl", "stage_files")
+load("//tools/build:sphinx.bzl", "sphinx_build")
+load("//tools/krpctools:docgen.bzl", "docgen")
+load(":docs.bzl", "expand_files")
+
+# The kRPC for KSA documentation: bazel build //experimental/ksa/doc:html, or
+# bazel run //experimental/ksa/doc:serve
+
+# The pages, with the versions filled in
+expand_files(
+    name = "pages",
+    srcs = glob(["src/**/*.rst"]) + ["conf.py"],
+    prefix = "gen",
+    substitutions = {
+        "@KRPC_VERSION@": version,
+        "@KSA_VERSION@": ksa_version,
+        "@STARMAP_VERSION@": starmap_version,
+        "@VERSION@": mod_version,
+    },
+)
+
+defs = ["//experimental/ksa/service/KSA:KSA-definitions"]
+
+templates = glob(["api/**/*.tmpl"])
+
+# One API page per template, under each language's api folder
+[
+    docgen(
+        name = language + "-api",
+        srcs = templates,
+        defs = defs,
+        language = language,
+        order = "order.txt",
+        outdir = "gen/" + language,
+    )
+    for language in [
+        "cnano",
+        "cpp",
+        "csharp",
+        "java",
+        "lua",
+        "python",
+    ]
+]
+
+# The gRPC API pages, from the same templates
+[
+    genrule(
+        name = "grpc-api-" + template.removesuffix(".tmpl").replace("/", "-"),
+        srcs = [
+            template,
+            "order.txt",
+        ] + defs,
+        outs = ["gen/grpc/" + template.removesuffix(".tmpl") + ".rst"],
+        cmd = ("$(execpath //experimental/ksa/tools/grpc:docgen) $(execpath %s) " +
+               "$(execpath order.txt) $@ $(execpath %s)") % (
+            template,
+            defs[0],
+        ),
+        tools = ["//experimental/ksa/tools/grpc:docgen"],
+    )
+    for template in templates
+]
+
+genrule(
+    name = "grpc-messages",
+    srcs = defs + ["//core:StdLibServiceDefinitions"],
+    outs = ["gen/grpc/api/messages.rst"],
+    cmd = "$(execpath //experimental/ksa/tools/grpc:docgen) --messages KSA $@ $(SRCS)",
+    tools = ["//experimental/ksa/tools/grpc:docgen"],
+)
+
+py_binary(
+    name = "changelog-page",
+    srcs = ["changelog_page.py"],
+    main = "changelog_page.py",
+    deps = ["//doc:changeloggen_lib"],
+)
+
+genrule(
+    name = "changelog",
+    srcs = ["//experimental/ksa:CHANGELOG.md"],
+    outs = ["gen/changelog.rst"],
+    cmd = "$(execpath :changelog-page) $@ $<",
+    tools = [":changelog-page"],
+)
+
+stage_files(
+    name = "srcs",
+    srcs = glob(
+        ["src/**/*"],
+        exclude = ["src/**/*.rst"],
+    ) + [
+        ":changelog",
+        ":grpc-messages",
+        ":pages",
+        "//:media/logo-mark.svg",
+        "//:media/logo-on-dark.svg",
+        "//:media/logo-on-light.svg",
+    ] + [":%s-api" % x for x in [
+        "cnano",
+        "cpp",
+        "csharp",
+        "java",
+        "lua",
+        "python",
+    ]] + [
+        ":grpc-api-" + template.removesuffix(".tmpl").replace("/", "-")
+        for template in templates
+    ],
+    exclude = ["*.documented.txt"],
+    path_map = {
+        "experimental/ksa/doc/gen/": "",
+        "experimental/ksa/doc/gen/src/": "",
+        "experimental/ksa/doc/src/": "",
+        "media/": "_static/",
+    },
+)
+
+sphinx_build(
+    name = "html",
+    srcs = [":srcs"],
+    out = "html.zip",
+    sphinx_build = "//doc:sphinx-build",
+)
+
+# Live-build and serve the documentation, with the tool that serves the kRPC documentation
+py_binary(
+    name = "serve",
+    srcs = ["//doc:serve_docs.py"],
+    args = ["--srcs=//experimental/ksa/doc:srcs"],
+    main = "//doc:serve_docs.py",
+    deps = ["//doc:serve-lib"],
+)
+
+# The example scripts, compiled against the stubs to check them. They are never run.
+
+csharp_library(
+    name = "compile-scripts-csharp",
+    srcs = glob(["src/scripts/**/*.cs"]),
+    target_frameworks = ["net10.0"],
+    deps = [
+        "//client/csharp:KRPC.Client",
+        "//experimental/ksa/service/KSA:csharp-library",
+        "@paket.main//google.protobuf",
+    ],
+)
+
+cc_library(
+    name = "compile-scripts-cpp",
+    srcs = glob(["src/scripts/**/*.cpp"]),
+    deps = ["//experimental/ksa/service/KSA:cpp-library"],
+)
+
+cc_library(
+    name = "compile-scripts-cnano",
+    srcs = glob(["src/scripts/**/*.c"]),
+    deps = ["//experimental/ksa/service/KSA:cnano-library"],
+)
+
+java_library(
+    name = "compile-scripts-java",
+    srcs = glob(["src/scripts/**/*.java"]),
+    deps = [
+        "//client/java:krpc",
+        "//experimental/ksa/service/KSA:java-library",
+        "@maven//:com_google_protobuf_protobuf_java",
+    ],
+)

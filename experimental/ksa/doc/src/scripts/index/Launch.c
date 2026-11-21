@@ -1,13 +1,12 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include <krpc_cnano.h>
 #include <krpc_cnano/services/ksa.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 int main() {
   krpc_connection_t conn;
-  krpc_connection_config_t config = {"127.0.0.1", 50000};
-  krpc_open(&conn, &config);
-  krpc_connect(conn, "Launch");
+  if (krpc_open_tcp(&conn, "127.0.0.1", 50000) != KRPC_OK) return 1;
+  if (krpc_connect(conn, "Launch") != KRPC_OK) return 1;
 
   krpc_KSA_Vehicle_t vehicle;
   krpc_KSA_LaunchVehicle(conn, &vehicle, "Rocket", "CCSFS LC-39A");
@@ -17,7 +16,7 @@ int main() {
   krpc_KSA_Vehicle_Control(conn, &control, vehicle);
   krpc_KSA_Flight_t flight;
   krpc_KSA_Vehicle_Flight(conn, &flight, vehicle);
-  char * name = NULL;
+  char* name = NULL;
   krpc_KSA_Vehicle_Name(conn, &name, vehicle);
 
   krpc_KSA_AutoPilot_TargetPitchAndHeading(conn, auto_pilot, 90, 90);

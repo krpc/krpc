@@ -2,7 +2,7 @@ C++
 ===
 
 This page covers using the kRPC C++ client with the ``KSA`` service. The
-`kRPC C++ client guide <https://krpc.github.io/krpc/@KRPC_VERSION@/cpp/client.html>`_ covers the client in full.
+`kRPC C++ client guide <https://krpc.github.io/krpc/@KRPC_VERSION@/cpp.html>`_ covers the client in full.
 
 .. note::
 
@@ -22,7 +22,7 @@ Install the kRPC C++ client @KRPC_VERSION@, for example from `vcpkg <https://vcp
 Add ``cpp/include`` from the ``stubs`` folder of the release archive to the include
 path.
 
-The `kRPC C++ client guide <https://krpc.github.io/krpc/@KRPC_VERSION@/cpp/client.html#installing>`_ covers other ways to
+The `kRPC C++ client guide <https://krpc.github.io/krpc/@KRPC_VERSION@/cpp.html#installing-the-library>`_ covers other ways to
 install the client.
 
 Connecting to the Server
@@ -36,11 +36,11 @@ The service is ``krpc::services::KSA``:
    #include <krpc.hpp>
    #include <krpc/services/ksa.hpp>
 
-   krpc::Client conn = krpc::connect("Example");
-   krpc::services::KSA ksa(&conn);
+   krpc::Connection conn = krpc::connect("Example");
+   krpc::services::KSA ksa(conn);
    std::cout << ksa.active_vehicle()->name() << std::endl;
 
-The `kRPC C++ client guide <https://krpc.github.io/krpc/@KRPC_VERSION@/cpp/client.html>`_ covers connecting, streams, events
+The `kRPC C++ client guide <https://krpc.github.io/krpc/@KRPC_VERSION@/cpp.html>`_ covers connecting, streams, events
 and the client's other features.
 
 API Reference

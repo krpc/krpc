@@ -2,7 +2,7 @@ C#
 ==
 
 This page covers using the kRPC C# client with the ``KSA`` service. The
-`kRPC C# client guide <https://krpc.github.io/krpc/@KRPC_VERSION@/csharp/client.html>`_ covers the client in full.
+`kRPC C# client guide <https://krpc.github.io/krpc/@KRPC_VERSION@/csharp.html>`_ covers the client in full.
 
 .. note::
 
@@ -17,7 +17,7 @@ Add the `KRPC.Client <https://www.nuget.org/packages/KRPC.Client>`_ @KRPC_VERSIO
 package to the project, and ``csharp/KSA.cs`` from the ``stubs`` folder of the release
 archive.
 
-The `kRPC C# client guide <https://krpc.github.io/krpc/@KRPC_VERSION@/csharp/client.html#installing>`_ covers other ways to
+The `kRPC C# client guide <https://krpc.github.io/krpc/@KRPC_VERSION@/csharp.html#installing-the-library>`_ covers other ways to
 install the client.
 
 Connecting to the Server
@@ -34,7 +34,7 @@ The service is ``connection.KSA ()``:
    var vehicle = connection.KSA ().ActiveVehicle;
    Console.WriteLine (vehicle.Name);
 
-The `kRPC C# client guide <https://krpc.github.io/krpc/@KRPC_VERSION@/csharp/client.html>`_ covers connecting, streams, events
+The `kRPC C# client guide <https://krpc.github.io/krpc/@KRPC_VERSION@/csharp.html>`_ covers connecting, streams, events
 and the client's other features.
 
 API Reference

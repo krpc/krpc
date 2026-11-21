@@ -2,7 +2,7 @@ C-nano
 ======
 
 This page covers using the kRPC C-nano client with the ``KSA`` service. The
-`kRPC C-nano client guide <https://krpc.github.io/krpc/@KRPC_VERSION@/cnano/client.html>`_ covers the client in full.
+`kRPC C-nano client guide <https://krpc.github.io/krpc/@KRPC_VERSION@/cnano.html>`_ covers the client in full.
 
 .. note::
 
@@ -23,13 +23,13 @@ The server listens over TCP/IP, so build the kRPC C-nano client @KRPC_VERSION@ w
 Add ``cnano/include`` from the ``stubs`` folder of the release archive to the include
 path.
 
-The `kRPC C-nano client guide <https://krpc.github.io/krpc/@KRPC_VERSION@/cnano/client.html#installing>`_ covers other ways to
+The `kRPC C-nano client guide <https://krpc.github.io/krpc/@KRPC_VERSION@/cnano.html#installing-the-library>`_ covers other ways to
 install the client.
 
 Connecting to the Server
 ------------------------
 
-Open the connection with the address and RPC port of the server. Include ``krpc_cnano.h``
+Open the connection with the address and port of the server. Include ``krpc_cnano.h``
 before the service header:
 
 .. code-block:: c
@@ -40,8 +40,7 @@ before the service header:
    #include <krpc_cnano/services/ksa.h>
 
    krpc_connection_t conn;
-   krpc_connection_config_t config = {"127.0.0.1", 50000};
-   krpc_open(&conn, &config);
+   krpc_open_tcp(&conn, "127.0.0.1", 50000);
    krpc_connect(conn, "Example");
 
    krpc_KSA_Vehicle_t vehicle;
@@ -51,7 +50,7 @@ before the service header:
    printf("%s\n", name);
    free(name);
 
-The `kRPC C-nano client guide <https://krpc.github.io/krpc/@KRPC_VERSION@/cnano/client.html>`_ covers the build options and the
+The `kRPC C-nano client guide <https://krpc.github.io/krpc/@KRPC_VERSION@/cnano.html>`_ covers the build options and the
 client's other features.
 
 API Reference

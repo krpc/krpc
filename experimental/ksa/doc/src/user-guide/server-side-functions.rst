@@ -122,6 +122,6 @@ More
 ----
 
 The `kRPC server side functions guide
-<https://krpc.github.io/krpc/@KRPC_VERSION@/tutorials/server-side-functions.html>`_ covers the
+<https://krpc.github.io/krpc/@KRPC_VERSION@/user-guide/server-side-functions.html>`_ covers the
 rest of what a function can do: arguments, state kept between updates, strings, exceptions,
 printing, and the expression API that clients without a compiler use.

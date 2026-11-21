@@ -55,7 +55,7 @@ and starts and stops the server. The server window shows each server's address a
 clients, and edits its protocol, address and ports. **Advanced settings** at the bottom of the
 window holds the connection and rate control settings. The kRPC documentation describes the
 `rate control settings
-<https://krpc.github.io/krpc/@KRPC_VERSION@/internals.html#server-performance-settings>`_ in
+<https://krpc.github.io/krpc/@KRPC_VERSION@/user-guide/server-performance.html#settings>`_ in
 more detail.
 
 Set the address to **Any** to accept connections from other machines.

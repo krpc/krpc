@@ -2,7 +2,7 @@ Python
 ======
 
 This page covers using the kRPC Python client with the ``KSA`` service. The
-`kRPC Python client guide <https://krpc.github.io/krpc/@KRPC_VERSION@/python/client.html>`_ covers the client in full.
+`kRPC Python client guide <https://krpc.github.io/krpc/@KRPC_VERSION@/python.html>`_ covers the client in full.
 
 .. note::
 
@@ -19,7 +19,7 @@ Install the kRPC Python client from `PyPI <https://pypi.org/project/krpc/>`_:
 
    pip install krpc==@KRPC_VERSION@
 
-The `kRPC Python client guide <https://krpc.github.io/krpc/@KRPC_VERSION@/python/client.html#installing-the-library>`_ covers other ways to
+The `kRPC Python client guide <https://krpc.github.io/krpc/@KRPC_VERSION@/python.html#installing-the-library>`_ covers other ways to
 install the client.
 
 Connecting to the Server
@@ -35,7 +35,7 @@ so the service is ``conn.ksa``:
    vehicle = conn.ksa.active_vehicle
    print(vehicle.name, vehicle.flight.mean_altitude)
 
-The `kRPC Python client guide <https://krpc.github.io/krpc/@KRPC_VERSION@/python/client.html>`_ covers connecting, streams, events
+The `kRPC Python client guide <https://krpc.github.io/krpc/@KRPC_VERSION@/python.html>`_ covers connecting, streams, events
 and the client's other features.
 
 API Reference
