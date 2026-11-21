@@ -42,6 +42,10 @@ These services cover other mods:
 
 .. include:: /mod-services.inc
 
+The MechJeb service supports MechJeb's releases. For MechJeb's development builds,
+`krpc-mechjeb-dev <https://krpc.github.io/krpc-mechjeb-dev/>`_ is a best-effort replacement of
+it, released on its own.
+
 Other Tested Mods
 -----------------
 
