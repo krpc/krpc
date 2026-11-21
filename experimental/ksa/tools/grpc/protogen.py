@@ -33,6 +33,8 @@ import re
 import sys
 from pathlib import Path
 
+from krpc.docmath import to_text
+
 SCALARS = {
     "DOUBLE": "double",
     "FLOAT": "float",
@@ -86,6 +88,16 @@ def summary(documentation):
         r'<see cref="[A-Z]:(?:[^".]*\.)*([^".]*)"\s*/>', r"\1", match.group(1)
     )
     text = re.sub(r'<paramref name="([^"]*)"\s*/>', r"\1", text)
+    # Math and units as Unicode text, as a generated docstring cannot hold LaTeX
+    text = re.sub(
+        r"<math>(.*?)</math>", lambda m: to_text(m.group(1)), text, flags=re.S
+    )
+    text = re.sub(
+        r"<unit>(.*?)</unit>",
+        lambda m: to_text(m.group(1), unit=True),
+        text,
+        flags=re.S,
+    )
     text = re.sub(r"<[^>]+>", "", text)
     return " ".join(text.split())
 
