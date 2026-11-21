@@ -233,6 +233,7 @@ test_suite(
     tests = [
         ":pyright",
         ":ruff",
+        "//experimental/ksa/doc:test",
         "//experimental/ksa/server:test",
         "//experimental/ksa/service/KSA:test",
         "//experimental/ksa/tools/game:test",

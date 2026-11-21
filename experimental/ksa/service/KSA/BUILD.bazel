@@ -1,3 +1,4 @@
+load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
 load("@bazel_skylib//rules:expand_template.bzl", "expand_template")
 load("@bazel_skylib//rules:write_file.bzl", "write_file")
 load("@rules_cc//cc:defs.bzl", "cc_library")
@@ -9,7 +10,7 @@ load("//experimental/ksa:config.bzl", "mod_version")
 load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
 load("//tools/build:csharp.bzl", "csharp_library")
 load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
-load("//tools/krpctools:clientgen.bzl", "clientgen_cnano", "clientgen_cpp", "clientgen_csharp", "clientgen_java")
+load("//tools/krpctools:clientgen.bzl", "clientgen_cnano", "clientgen_cpp", "clientgen_csharp", "clientgen_java", "clientgen_js")
 load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
 
 package(default_visibility = ["//experimental/ksa:__subpackages__"])
@@ -88,6 +89,59 @@ clientgen_cnano(
     deps = [":StdLib-cnano"],
 )
 
+# The JavaScript stubs: the declarations clientgen generates, and the declaration that gives
+# a connection the service's types, compiled to a module and its type declarations
+clientgen_js(
+    name = "KSA-js-declarations",
+    out = "js-gen/KSA.ts",
+    client_module = None,
+    defs = ":KSA-definitions",
+    service = "KSA",
+)
+
+write_file(
+    name = "KSA-js-services",
+    out = "js-gen/services.ts",
+    content = [
+        "",
+        "declare module \"@krpc-org/krpc\" {",
+        "  interface Services {",
+        "    readonly ksa: Service;",
+        "  }",
+        "}",
+    ],
+)
+
+genrule(
+    name = "KSA-js-src",
+    srcs = [
+        ":KSA-js-declarations",
+        ":KSA-js-services",
+    ],
+    outs = ["js-src/KSA.ts"],
+    cmd = "cat $(SRCS) > $@",
+)
+
+ts_project(
+    name = "KSA-js",
+    srcs = [":KSA-js-src"],
+    declaration = True,
+    out_dir = "js",
+    root_dir = "js-src",
+    transpiler = "tsc",
+    tsconfig = "tsconfig-stubs.json",
+    deps = [
+        "//client/js:lib",
+        "//client/js:node_modules/@bufbuild/protobuf",
+    ],
+)
+
+filegroup(
+    name = "KSA-js-types",
+    srcs = [":KSA-js"],
+    output_group = "types",
+)
+
 clientgen_java(
     name = "KSA-java",
     out = "java/krpc/client/services/KSA.java",
@@ -126,6 +180,8 @@ pkg_files(
         ":KSA-csharp",
         ":KSA-definitions",
         ":KSA-java",
+        ":KSA-js",
+        ":KSA-js-types",
         ":KSA-proto",
         ":StdLib-proto",
     ],

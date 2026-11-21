@@ -2,7 +2,7 @@
 
 Generated code for the `KSA` service, for the kRPC clients that need it. Use them with the kRPC
 client libraries version @CLIENT_VERSION@. Python and Lua build the service when they connect, and
-need no stubs.
+need no stubs. JavaScript builds it too, and its stubs add the service's types and values.
 
 ## C#
 
@@ -49,4 +49,20 @@ import krpc.client.services.KSA;
 
 KSA ksa = KSA.newInstance(connection);
 System.out.println(ksa.getActiveVehicle().getName());
+```
+
+## JavaScript
+
+Copy `js/KSA.js` and `js/KSA.d.ts` beside your script, which uses the `@krpc-org/krpc` package.
+Import `KSA.js` before you connect, and the connection has the service as `conn.ksa`. The client
+connects over WebSockets, so add a server with the "Protobuf over WebSockets" protocol in the
+server window in the game:
+
+```js
+import { connect } from "@krpc-org/krpc";
+import "./KSA.js";
+
+const conn = await connect();
+const vehicle = await conn.ksa.getActiveVehicle();
+console.log(await vehicle.getName());
 ```

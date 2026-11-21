@@ -30,6 +30,12 @@ tcpip_address = "127.0.0.1"
 tcpip_port = 50000
 
 [[servers]]
+name = "WebSockets Server"
+protocol = "ProtocolBuffersOverWebsockets"
+ws_address = "127.0.0.1"
+ws_port = 50001
+
+[[servers]]
 name = "gRPC Server"
 protocol = "gRPC"
 grpc_address = "127.0.0.1"

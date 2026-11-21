@@ -3,7 +3,7 @@ Remote Procedure Calls for Kitten Space Agency
 
 kRPC for KSA lets you control Kitten Space Agency from scripts running outside the game. A
 server inside the game exposes the game's API, and the `kRPC <https://krpc.github.io/krpc/>`_
-@KRPC_VERSION@ client libraries call it from Python, C#, C++, C, Java and Lua.
+@KRPC_VERSION@ client libraries call it from Python, C#, C++, C, Java, JavaScript and Lua.
 
 .. note::
 
@@ -11,8 +11,8 @@ server inside the game exposes the game's API, and the `kRPC <https://krpc.githu
 
 .. note::
 
-   kRPC for KSA uses the kRPC client libraries for KSP. The C#, C++, C-nano and Java clients
-   also need the ``KSA`` :doc:`service stubs <clients>` from the release archive, which you add
+   kRPC for KSA uses the kRPC client libraries for KSP. The C#, C++, C-nano, Java and
+   JavaScript clients also need the ``KSA`` :doc:`service stubs <clients>` from the release archive, which you add
    by hand until a later release makes this easier.
 
 This script launches a rocket from Cape Canaveral straight up, then cuts the engines once it
@@ -44,6 +44,11 @@ reaches an altitude of 10 km:
 
       .. literalinclude:: /scripts/index/Launch.java
          :language: java
+
+   .. tab:: JavaScript
+
+      .. literalinclude:: /scripts/index/Launch.js
+         :language: javascript
 
    .. tab:: Lua
 

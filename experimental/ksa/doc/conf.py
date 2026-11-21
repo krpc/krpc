@@ -91,6 +91,7 @@ nitpick_ignore = [
     ("java:type", "Connection"),
     ("java:type", "StdLib"),
     ("java:type", "StdLib.ColorRGB"),
+    ("js:class", "StdLib.ColorRGB"),
     ("py:class", "StdLib.ColorRGB"),
 ]
 

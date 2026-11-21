@@ -1,3 +1,6 @@
+load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
+load("@bazel_skylib//rules:build_test.bzl", "build_test")
+load("@bazel_skylib//rules:copy_file.bzl", "copy_file")
 load("@rules_cc//cc:defs.bzl", "cc_library")
 load("@rules_java//java:defs.bzl", "java_library")
 load("@rules_python//python:defs.bzl", "py_binary")
@@ -44,6 +47,7 @@ templates = glob(["api/**/*.tmpl"])
         "cpp",
         "csharp",
         "java",
+        "js",
         "lua",
         "python",
     ]
@@ -108,6 +112,7 @@ stage_files(
         "cpp",
         "csharp",
         "java",
+        "js",
         "lua",
         "python",
     ]] + [
@@ -172,4 +177,43 @@ java_library(
         "//experimental/ksa/service/KSA:java-library",
         "@maven//:com_google_protobuf_protobuf_java",
     ],
+)
+
+# The JavaScript stubs' declarations beside the example scripts, which import them as
+# ./KSA.js, as a script beside the stubs does
+copy_file(
+    name = "scripts-ksa-js-types",
+    src = "//experimental/ksa/service/KSA:KSA-js-types",
+    out = "src/scripts/index/KSA.d.ts",
+)
+
+# Type-check the JavaScript example scripts with tsc, against the client and the stubs
+ts_project(
+    name = "check-scripts-js-project",
+    srcs = glob(["src/scripts/**/*.js"]) + [":scripts-ksa-js-types"],
+    allow_js = True,
+    no_emit = True,
+    transpiler = "tsc",
+    tsconfig = "tsconfig-scripts.json",
+    deps = [
+        "//client/js:lib",
+        "//client/js:node_modules/@bufbuild/protobuf",
+    ],
+)
+
+# The type check, which a ts_project with no outputs runs only for this output group
+filegroup(
+    name = "check-scripts-js-typecheck",
+    srcs = [":check-scripts-js-project"],
+    output_group = "typecheck",
+)
+
+build_test(
+    name = "check-scripts-js",
+    targets = [":check-scripts-js-typecheck"],
+)
+
+test_suite(
+    name = "test",
+    tests = [":check-scripts-js"],
 )
