@@ -6,11 +6,11 @@ auto_accept_connections = true
 confirm_remove_client = true
 pause_server_with_game = false
 
-# Rate control. Times are in microseconds
-max_time_per_update = 5000
+# Rate control. Times are in microseconds, and the frame rate in frames per second
 adaptive_rate_control = true
-blocking_recv = true
-recv_timeout = 1000
+target_frame_rate = 60
+max_time_per_frame = 10000
+max_call_wait = 5000
 tick_hold_timeout = 1000000
 
 verbose_errors = true

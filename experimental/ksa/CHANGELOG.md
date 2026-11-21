@@ -7,6 +7,8 @@
     apply to every save and are kept when the mod updates
   - Create the settings file with the defaults when it is missing, and replace settings in it
     that are not valid with their defaults
+  - Budget the server's time per frame, and choose the rate control settings from a preset in
+    the server window
 - Clients
   - Add stubs and documentation for the JavaScript client
   - Add a WebSockets server on port 50001 to the default settings, for the JavaScript client

@@ -69,7 +69,7 @@ namespace KRPC.KSA.UI
         {
             DrawTextRow ("Name", "name", ref name, true);
             var selected = Array.IndexOf (Protocols, protocol);
-            if (DrawComboRow ("Protocol", "protocol", ProtocolNames, ref selected)) {
+            if (ConsoleWindow.DrawComboRow ("Protocol", "protocol", ProtocolNames, ref selected)) {
                 protocol = Protocols [selected];
                 // Each protocol has its own address setting
                 manualAddress = IsManualAddress ();
@@ -122,7 +122,7 @@ namespace KRPC.KSA.UI
                 selected = availableAddresses.IndexOf (address);
             else
                 selected = availableAddresses.Count - 1;
-            if (DrawComboRow ("Address", "address", availableAddresses, ref selected)) {
+            if (ConsoleWindow.DrawComboRow ("Address", "address", availableAddresses, ref selected)) {
                 manualAddress = selected == availableAddresses.Count - 1;
                 if (selected == 0)
                     address = IPAddress.Loopback.ToString ();
@@ -147,30 +147,13 @@ namespace KRPC.KSA.UI
         void DrawOptionRow (string label, string key, string defaultValue, IList<string> options)
         {
             var selected = Math.Max (0, options.IndexOf (settings.GetValueOrDefault (key, defaultValue)));
-            DrawComboRow (label, key, options, ref selected);
+            ConsoleWindow.DrawComboRow (label, key, options, ref selected);
             settings [key] = options [selected];
         }
 
         static void DrawTextRow (string label, string id, ref string value, bool valid, bool number = false)
         {
             ConsoleWindow.DrawTextRow (label, id, ref value, !valid, number);
-        }
-
-        static bool DrawComboRow (string label, string id, IList<string> options, ref int selected)
-        {
-            var changed = false;
-            ConsoleWidgets.BeginRow (label);
-            if (ConsoleWidgets.BeginComboControl (id, options [selected], false)) {
-                for (var i = 0; i < options.Count; i++) {
-                    if (ImGui.Selectable (options [i], i == selected)) {
-                        changed = i != selected;
-                        selected = i;
-                    }
-                }
-                ConsoleWidgets.EndComboControl ();
-            }
-            ConsoleWidgets.EndRow ();
-            return changed;
         }
 
         static bool ValidAddress (string value)

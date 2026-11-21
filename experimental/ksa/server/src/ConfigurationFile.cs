@@ -115,11 +115,13 @@ namespace KRPC.KSA
             config.ConfirmRemoveClient = GetBoolean (document, "confirm_remove_client", config.ConfirmRemoveClient);
             config.PauseServerWithGame = GetBoolean (document, "pause_server_with_game", config.PauseServerWithGame);
             IgnoredGameVersion = Get (document, "ignored_ksa_version", null, x => ((TomlString)x).Value);
-            config.MaxTimePerUpdate = GetMicroseconds (document, "max_time_per_update", config.MaxTimePerUpdate);
             config.AdaptiveRateControl = GetBoolean (document, "adaptive_rate_control", config.AdaptiveRateControl);
-            config.BlockingRecv = GetBoolean (document, "blocking_recv", config.BlockingRecv);
-            config.RecvTimeout = GetMicroseconds (document, "recv_timeout", config.RecvTimeout);
-            config.TickHoldTimeout = GetMicroseconds (document, "tick_hold_timeout", config.TickHoldTimeout);
+            config.TargetFrameRate = Math.Clamp (GetUInt (document, "target_frame_rate", config.TargetFrameRate),
+                Configuration.TargetFrameRateMin, Configuration.TargetFrameRateMax);
+            config.MaxTimePerFrame = Math.Clamp (GetUInt (document, "max_time_per_frame", config.MaxTimePerFrame),
+                Configuration.MaxTimePerFrameMin, Configuration.MaxTimePerFrameMax);
+            config.MaxCallWait = GetUInt (document, "max_call_wait", config.MaxCallWait);
+            config.TickHoldTimeout = GetUInt (document, "tick_hold_timeout", config.TickHoldTimeout);
             config.VerboseErrors = GetBoolean (document, "verbose_errors", config.VerboseErrors);
             config.DebugLogging = GetBoolean (document, "debug_logging", config.DebugLogging);
             config.MainWindowVisible = GetBoolean (document, "main_window_visible", config.MainWindowVisible);
@@ -154,7 +156,7 @@ namespace KRPC.KSA
             return Get (table, key, defaultValue, x => ((TomlBoolean)x).Value);
         }
 
-        static uint GetMicroseconds (TomlTable table, string key, uint defaultValue)
+        static uint GetUInt (TomlTable table, string key, uint defaultValue)
         {
             return Get (table, key, defaultValue, x => checked ((uint)((TomlLong)x).Value));
         }
@@ -213,11 +215,11 @@ namespace KRPC.KSA
                 AppendValue (toml, "ignored_ksa_version", IgnoredGameVersion);
             }
             toml.Append ('\n');
-            toml.Append ("# Rate control. Times are in microseconds\n");
-            AppendValue (toml, "max_time_per_update", config.MaxTimePerUpdate);
+            toml.Append ("# Rate control. Times are in microseconds, and the frame rate in frames per second\n");
             AppendValue (toml, "adaptive_rate_control", config.AdaptiveRateControl);
-            AppendValue (toml, "blocking_recv", config.BlockingRecv);
-            AppendValue (toml, "recv_timeout", config.RecvTimeout);
+            AppendValue (toml, "target_frame_rate", config.TargetFrameRate);
+            AppendValue (toml, "max_time_per_frame", config.MaxTimePerFrame);
+            AppendValue (toml, "max_call_wait", config.MaxCallWait);
             AppendValue (toml, "tick_hold_timeout", config.TickHoldTimeout);
             toml.Append ('\n');
             AppendValue (toml, "verbose_errors", config.VerboseErrors);

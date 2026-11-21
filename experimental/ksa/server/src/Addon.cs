@@ -279,6 +279,10 @@ namespace KRPC.KSA
             if (!updatedThisFrame)
                 Update ();
             updatedThisFrame = false;
+            // The frame's length runs from the end of the previous frame, as the server updates
+            // at the solver step or here
+            if (core != null)
+                core.EndFrame ();
             Utils.AfterFrame.RunAll ();
         }
 
