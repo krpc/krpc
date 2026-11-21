@@ -13,7 +13,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from doc.test.harness import ExampleTestCase as TestCase
+    from tools.doc_examples.harness import ExampleRunner as TestCase
 
 # Samples per second of wall clock time
 RATE = 10

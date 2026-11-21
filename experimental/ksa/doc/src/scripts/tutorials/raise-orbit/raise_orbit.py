@@ -8,7 +8,7 @@ import math
 
 import krpc
 
-TARGET_ALTITUDE = 400_000
+TARGET_ALTITUDE = 1_000_000
 
 conn = krpc.connect(name="Raise orbit")
 ksa = conn.ksa

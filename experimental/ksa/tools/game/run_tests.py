@@ -40,6 +40,7 @@ def main():
         args += [
             os.path.join(ksa, "server", "test"),
             os.path.join(ksa, "service"),
+            os.path.join(ksa, "doc", "test"),
         ]
     return pytest.main(
         [

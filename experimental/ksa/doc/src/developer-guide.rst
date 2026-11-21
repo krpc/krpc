@@ -90,7 +90,7 @@ The in-game tests are Python scripts that drive a live game, run with pytest. Ar
 
    bazel run //experimental/ksa/tools/game:test-ksa                       # launch KSA, run every test
    bazel run //experimental/ksa/tools/game:test-ksa -- -k test_rename     # by name
-   bazel run //experimental/ksa/tools/game:test-ksa -- -m "not slow"      # skip the tutorials
+   bazel run //experimental/ksa/tools/game:test-ksa -- -m "not slow"      # skip the tutorial flights
    bazel run //experimental/ksa/tools/game:run-ksa                        # run KSA on its own
    bazel run //experimental/ksa/tools/game:test-ksa -- --no-launch        # against that game
 
@@ -100,10 +100,26 @@ it at the end. Each test class starts from a save of the game's start state.
 
 * A launched game is saved as ``krpctest`` once it has loaded. ``--no-launch`` needs that
   save from an earlier run.
-* ``test_tutorials.py`` flies the launch into orbit and launch with kFS tutorials, and is
-  marked ``slow``.
 * ``TestingTools.RegisterVehicle`` adds a vehicle from ``tools/TestingTools/vehicles`` to the
   game's default vehicles.
+
+Documentation Examples
+^^^^^^^^^^^^^^^^^^^^^^
+
+The tests in ``doc/test/`` run the example programs in ``doc/src/scripts/`` against the game, in
+every language. Each test is marked ``example`` and its language, and the tutorial flights
+``slow``:
+
+.. code-block:: bash
+
+   bazel run //experimental/ksa/tools/game:test-ksa -- \
+       experimental/ksa/doc/test -m "python and not slow"
+
+``doc/test/examples.py`` declares how each example runs, and which game setup it starts from,
+such as the save or the Rocket on the launch pad. ``doc/test/unsupported.txt`` lists the
+examples the tests cannot run. ``//experimental/ksa/doc:test`` checks that every example is
+declared or listed, so a new example needs an entry. The tests build on the kRPC documentation
+example tests, in ``tools/doc_examples/``.
 
 Documentation
 -------------

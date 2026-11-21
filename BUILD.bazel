@@ -218,6 +218,7 @@ test_suite(
         "//tools/build:test",
         "//tools/ci:test",
         "//tools/deps:test",
+        "//tools/doc_examples:test",
         "//tools/game:test",
         "//tools/krpctools:test",
     ] + service_targets("test"),

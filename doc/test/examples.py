@@ -6,18 +6,8 @@ that every example file is either declared here or listed in unsupported.txt."""
 from __future__ import annotations
 
 from doc.test import checks, flights
-from doc.test.spec import (
-    NUMBER,
-    Example,
-    Exit,
-    Flight,
-    Interactive,
-    Loop,
-    Pad,
-    Setup,
-    Splashed,
-    Values,
-)
+from doc.test.spec import Flight, Pad, Setup, Splashed
+from tools.doc_examples.spec import NUMBER, Example, Exit, Interactive, Loop, Values
 
 DOC_CRAFT = "doc/src/crafts"
 # The game's own craft, in its Ships folder

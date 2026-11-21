@@ -58,7 +58,10 @@ clientgen_js_index(
 js_library(
     name = "package_json",
     srcs = ["package.json"],
-    visibility = ["//doc/test:__pkg__"],
+    visibility = [
+        "//doc/test:__pkg__",
+        "//experimental/ksa/doc/test:__pkg__",
+    ],
 )
 
 ts_config(

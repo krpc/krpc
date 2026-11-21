@@ -1,4 +1,4 @@
-"""The examples the tests cannot run, listed in unsupported.txt.
+"""The examples a game's tests cannot run, listed in its unsupported.txt.
 
 Each line is "<language> <key>  # reason", where the language is "*" for every language that
 has the example. Blank lines and lines starting with "#" are ignored."""
@@ -9,9 +9,7 @@ import pathlib
 import re
 from dataclasses import dataclass
 
-from doc.test.spec import CLIENT_FOLDERS
-
-LISTING = pathlib.Path(__file__).parent / "unsupported.txt"
+from tools.doc_examples.spec import CLIENT_FOLDERS
 
 _LINE = re.compile(r"^(?P<language>\S+)\s+(?P<key>\S+)\s+#\s*(?P<reason>\S.*)$")
 
@@ -31,10 +29,10 @@ class ListingError(Exception):
     pass
 
 
-def read() -> list[Entry]:
-    name = LISTING.name
+def read(listing: pathlib.Path) -> list[Entry]:
+    name = listing.name
     entries = []
-    for number, text in enumerate(LISTING.read_text().splitlines(), 1):
+    for number, text in enumerate(listing.read_text().splitlines(), 1):
         text = text.strip()
         if not text or text.startswith("#"):
             continue

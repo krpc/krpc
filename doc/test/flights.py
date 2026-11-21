@@ -5,7 +5,7 @@ from __future__ import annotations
 import math
 from typing import Any
 
-from doc.test.monitor import Monitor, Sample, angle_difference, magnitude
+from tools.doc_examples.monitor import Monitor, Sample, angle_difference, magnitude
 
 # The physics warp the coasts run at, 4x, the highest in an atmosphere
 COAST_WARP = 3

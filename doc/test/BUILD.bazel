@@ -1,7 +1,7 @@
-load("@aspect_rules_js//js:defs.bzl", "js_binary")
 load("@rules_cc//cc:defs.bzl", "cc_library")
 load("@rules_python//python:defs.bzl", "py_library", "py_test")
 load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
+load("//tools/doc_examples:defs.bzl", "example_js_runner")
 
 # The in-game tests of the documentation examples. The game runs them with
 # bazel run //tools/game:test-ksp -- doc/test
@@ -23,12 +23,11 @@ py_library(
         "checks.py",
         "examples.py",
         "flights.py",
-        "listing.py",
-        "monitor.py",
         "spec.py",
     ],
     data = ["unsupported.txt"],
     imports = ["../.."],
+    deps = ["//tools/doc_examples"],
 )
 
 py_test(
@@ -54,7 +53,9 @@ py_pyright_test(
     disable = ["reportOptionalMemberAccess"],
     deps = [
         "//client/python:krpc_lib",
+        "//tools/doc_examples",
         "//tools/krpctools:krpctools_lib",
+        "@krpc_pypi//pytest",
     ],
 )
 
@@ -68,14 +69,8 @@ cc_library(
 )
 
 # Runs a JavaScript example against the game's WebSockets server
-js_binary(
+example_js_runner(
     name = "run-example-js",
-    testonly = True,
-    data = [
-        "example_hooks.mjs",
-        "//client/js:lib",
-        "//client/js:package_json",
-        "//doc:scripts-js",
-    ],
-    entry_point = "run_example.mjs",
+    data = ["//doc:scripts-js"],
+    scripts = "doc/src/scripts",
 )

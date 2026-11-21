@@ -1,5 +1,5 @@
 # kRPC for KSA server settings for the tests, which install.py --testing installs. The
-# server window opens at the left, clear of the windows the tests open.
+# server window opens at the lower left, clear of the game's windows and those the tests open.
 
 auto_start = true
 auto_accept_connections = true
@@ -18,7 +18,7 @@ debug_logging = false
 main_window_visible = true
 info_window_visible = false
 # Window (x, y, width, height) in pixels, with a zero width for the default
-main_window_rect = [388, 325, 400, 590]
+main_window_rect = [400, 825, 400, 590]
 info_window_rect = [0, 0, 0, 0]
 
 [[servers]]
@@ -40,3 +40,9 @@ name = "gRPC Server"
 protocol = "gRPC"
 grpc_address = "127.0.0.1"
 grpc_port = 50002
+
+[[servers]]
+name = "HTTP Server"
+protocol = "JSONOverHTTP"
+http_address = "127.0.0.1"
+http_port = 50003

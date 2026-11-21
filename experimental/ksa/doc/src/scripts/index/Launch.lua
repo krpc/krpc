@@ -1,7 +1,7 @@
 local krpc = require 'krpc'
-local platform = require 'krpc.platform'
+local socket = require 'socket'
 local conn = krpc.connect('Launch')
-local vehicle = conn.ksa:launch_vehicle('Rocket', 'CCSFS LC-39A')
+local vehicle = conn.ksa.launch_vehicle('Rocket', 'CCSFS LC-39A')
 local flight = vehicle.flight
 
 vehicle.auto_pilot:target_pitch_and_heading(90, 90)
@@ -12,7 +12,7 @@ vehicle.control.engine_on = true
 print(vehicle.name .. ' has launched')
 
 while flight.mean_altitude < 10000 do
-    platform.sleep(0.1)
+    socket.sleep(0.1)
 end
 
 vehicle.control.engine_on = false

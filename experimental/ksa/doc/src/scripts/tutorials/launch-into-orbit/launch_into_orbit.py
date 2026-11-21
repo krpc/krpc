@@ -15,7 +15,7 @@ import krpc
 # dense lower atmosphere before it pitches over far
 TURN_START_ALTITUDE = 1_000
 TURN_END_ALTITUDE = 150_000
-TARGET_ALTITUDE = 200_000
+TARGET_ALTITUDE = 500_000
 
 conn = krpc.connect(name="Launch into orbit")
 ksa = conn.ksa

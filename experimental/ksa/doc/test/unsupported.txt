@@ -1,0 +1,3 @@
+# The examples this harness cannot run, one per line, as "<language> <key>  # reason". The
+# language is * for every language that has the example.
+cnano tutorials/launch-with-kfs/ascent  # A kC program, which launch_with_kfs.py loads onto the flight computer
