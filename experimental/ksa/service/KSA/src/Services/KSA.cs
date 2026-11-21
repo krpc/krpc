@@ -134,12 +134,18 @@ namespace KRPC.KSA.Services
         /// <summary>
         /// The simulation speed, as a multiple of real time. Zero when paused.
         /// </summary>
+        /// <remarks>
+        /// Setting it stops a warp in progress, such as one started by <see cref="WarpTo"/>.
+        /// </remarks>
         [KRPCProperty]
         public static float SimulationSpeed {
             get { return (float)Universe.SimulationSpeed; }
             set {
                 if (!(value >= 0))
                     throw new ArgumentOutOfRangeException (nameof (SimulationSpeed));
+                // The game's warp sets the speed again each frame
+                if (Universe.IsAutoWarpActive)
+                    Universe.AutoWarpStop (false);
                 Universe.SetSimulationSpeed (value, alert: false);
             }
         }
@@ -397,6 +403,77 @@ namespace KRPC.KSA.Services
             } catch (IOException) {
                 return false;
             }
+        }
+
+        /// <summary>
+        /// The distance from a position to the first part of a vehicle along a ray, in
+        /// meters. Infinite if the ray hits no part.
+        /// </summary>
+        /// <param name="position">The start of the ray, in meters.</param>
+        /// <param name="direction">The direction of the ray.</param>
+        /// <param name="referenceFrame">The reference frame of the position and direction.</param>
+        /// <remarks>
+        /// The ray tests the meshes of the parts, as picking a part with the mouse does.
+        /// It passes through terrain and kittens on EVA.
+        /// </remarks>
+        [KRPCProcedure]
+        public static double RaycastDistance (
+            Tuple<double, double, double> position, Tuple<double, double, double> direction,
+            ReferenceFrame referenceFrame)
+        {
+            Raycast (position, direction, referenceFrame, out var distance);
+            return distance;
+        }
+
+        /// <summary>
+        /// The first part of a vehicle along a ray, or <c>null</c> if the ray hits no part.
+        /// </summary>
+        /// <param name="position">The start of the ray, in meters.</param>
+        /// <param name="direction">The direction of the ray.</param>
+        /// <param name="referenceFrame">The reference frame of the position and direction.</param>
+        /// <remarks>
+        /// The ray tests the meshes of the parts, as picking a part with the mouse does.
+        /// It passes through terrain and kittens on EVA.
+        /// </remarks>
+        [KRPCProcedure (Nullable = true)]
+        public static Part RaycastPart (
+            Tuple<double, double, double> position, Tuple<double, double, double> direction,
+            ReferenceFrame referenceFrame)
+        {
+            var part = Raycast (position, direction, referenceFrame, out _);
+            return part == null ? null : new Part (part);
+        }
+
+        static global::KSA.Part Raycast (
+            Tuple<double, double, double> position, Tuple<double, double, double> direction,
+            ReferenceFrame referenceFrame, out double distance)
+        {
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException (nameof (referenceFrame));
+            var directionEcl = referenceFrame.DirectionToEcl (Vectors.ToVector (direction));
+            if (directionEcl.LengthSquared () == 0)
+                throw new ArgumentException ("The direction is zero");
+            var originEcl = referenceFrame.PositionToEcl (Vectors.ToVector (position));
+            // The game tests parts in a frame with ecliptic axes and its origin at the camera.
+            // We put that origin at the start of the ray.
+            var ray = new Ray (double3.Zero, directionEcl);
+            distance = double.PositiveInfinity;
+            global::KSA.Part result = null;
+            foreach (var vehicle in Utils.Vehicles.All) {
+                var tree = vehicle.Parts;
+                if (tree == null)
+                    continue;
+                var parts = tree.Parts;
+                var matrix = vehicle.GetMatrixAsmb2Ego (vehicle.GetPositionEcl () - originEcl);
+                for (var i = 0; i < parts.Length; i++) {
+                    if (parts [i].RayCastEgo (in matrix, ray, out var near, out _, out _, out _, out _, out _, out _, out _) &&
+                        near < distance) {
+                        distance = near;
+                        result = parts [i];
+                    }
+                }
+            }
+            return result;
         }
 
         /// <summary>

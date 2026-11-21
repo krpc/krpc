@@ -86,8 +86,13 @@ class TestPart(ksatest.TestCase):
             for x in part.velocity(self.vehicle.reference_frame):
                 self.assertAlmostEqual(0, x, delta=1e-3)
         frame = self.ksa.bodies["Earth"].non_rotating_reference_frame
-        expected = self.vehicle.velocity(frame)
-        actual = self.vehicle.root_part.velocity(frame)
+        # Paused, so both calls see the same game time
+        self.ksa.simulation_speed = 0
+        try:
+            expected = self.vehicle.velocity(frame)
+            actual = self.vehicle.root_part.velocity(frame)
+        finally:
+            self.ksa.simulation_speed = 1
         for x, y in zip(expected, actual):
             self.assertAlmostEqual(x, y, delta=0.1)
 
@@ -314,3 +319,32 @@ class TestDecoupler(ksatest.TestCase):
         self.assertEqual(parts, len(self.vehicle.parts) + len(separated[0].parts))
         with self.assertRaises(RuntimeError):
             decoupler.decouple()
+
+
+class TestPartHighlight(ksatest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.load_save()
+        cls.parts = cls.find_vehicle("Gemini7").parts
+
+    def tearDown(self):
+        for part in self.parts:
+            part.highlight = self.ksa.HighlightColor.none
+
+    def test_highlight(self):
+        part = self.parts[0]
+        self.assertEqual(self.ksa.HighlightColor.none, part.highlight)
+        for color in (
+            self.ksa.HighlightColor.green,
+            self.ksa.HighlightColor.yellow,
+            self.ksa.HighlightColor.red,
+            self.ksa.HighlightColor.purple,
+        ):
+            part.highlight = color
+            self.assertEqual(color, part.highlight)
+        # Other parts keep their highlight
+        for other in self.parts[1:]:
+            self.assertEqual(self.ksa.HighlightColor.none, other.highlight)
+        part.highlight = self.ksa.HighlightColor.none
+        self.assertEqual(self.ksa.HighlightColor.none, part.highlight)

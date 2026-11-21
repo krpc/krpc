@@ -33,12 +33,54 @@
     add `Kitten.CanGoOnEva` and `Kitten.CanBoard`
   - Add the life support of a kitten's suit, and taking and stowing supplies on EVA
   - Add `DockingPort.HatchOpen`
+  - Add `Vehicle.CrewEvents` and `NextCrewEvent`, each kitten's most urgent coming event, as
+    the game's crew clock shows them
+  - Add the time until a kitten's condition worsens, it gets radiation sickness, or it takes a
+    lethal dose
+  - Add the habitat zones linked through closed hatches, and the hatches to open
+  - Add `Vehicle.Mission`, the mission planned in the editor, with the times of its legs
+  - Add whether a habitat zone's supplies last the mission, and the kittens planned for each leg
+- Engines and mass properties
+  - Add solid rocket motors to `Engine`, with their grain mass, and the chamber pressure of
+    every engine
+  - Add the thrust and specific impulse of an engine at a given pressure, and its maximum
+    thrust
+  - Fix `Engine.Thrust` and `Vehicle.Thrust` to include solid rocket motors, which fire
+    whatever the throttle
+  - Add the dry mass, inertia, RCS torque and accelerations of a vehicle
+- Control and power
+  - Add `Vehicle.ControlState`, the reason a vehicle cannot be flown
+  - Add the power switch of a probe core: its mode, storm standby and power status
+  - Add `Part.PowerForecast`, the charge, draw and time left of a part's electrical circuit
+  - Add the radiation dose, health and reboots of a probe core's avionics
 
 - Flight and orbits
   - **Breaking:** Return the scale height at sea level from `Body.ScaleHeight`
   - Add the air temperature, speed of sound, Mach number and breathable air to `Flight`
   - Add the temperature, speed of sound, oxygen fraction and molar mass of an atmosphere to
     `Body`
+  - Add the depth, submerged portion and buoyant force of a vehicle to `Flight`
+  - Add the aerodynamic force, torque, lift and drag on a vehicle to `Flight`, and the force at
+    another position and velocity
+  - Add `Orbit.SpeedAt`, `MeanAnomalyAtUT`, `EccentricAnomalyAtUT`, `TrueAnomalyAtRadius`,
+    `SemiLatusRectum` and `SpecificAngularMomentum`
+  - Add creating an orbit from its elements, or from a position and velocity
+  - Move a burn by setting `Burn.UT`, and add `Burn.BurnVector` and `RemainingBurnVector`
+
+- Parts
+  - Add `KSA.RaycastDistance` and `KSA.RaycastPart`, to find the parts along a ray
+  - Add `Part.Highlight`, to highlight a part in one of the game's colors
+
+- Radiation and space weather
+  - Add the radiation shielding of a part, its cover by the vehicle's tanks, and the dose rate
+    behind them
+  - Add the solar wind and radiation storm at a vehicle, and the coronal mass ejections heading
+    for it, with their forecast arrival
+  - Add the geomagnetic storm of a body, and the activity and recent coronal mass ejections of
+    a star
+
+- Game
+  - Stop a warp in progress when `KSA.SimulationSpeed` is set
 
 - Clients
   - Add stubs and documentation for the JavaScript client

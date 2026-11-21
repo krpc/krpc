@@ -103,6 +103,56 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// Whether the zone's supplies last its crew through the vehicle's mission. <c>null</c>
+        /// without a feasible mission with time left, or while
+        /// <see cref="KSA.LifeSupportEnabled"/> is false.
+        /// </summary>
+        [KRPCProperty (Nullable = true)]
+        public MissionSupplies MissionSupplies {
+            get { return Services.MissionSupplies.Compute (this) == null ? null : new MissionSupplies (this); }
+        }
+
+        /// <summary>
+        /// The number of kittens planned in the zone for a leg of the vehicle's mission. The
+        /// plan defaults to the kittens seated in the zone.
+        /// </summary>
+        /// <param name="leg">The leg.</param>
+        [KRPCMethod]
+        public int PlannedKittens (MissionLeg leg)
+        {
+            var internalZone = InternalZone;
+            return CrewPlan.GetKittens (internalZone, (global::KSA.MissionLeg)leg, internalZone.CountKittens ());
+        }
+
+        /// <summary>
+        /// The zones that join this one when closed docking port hatches between them open.
+        /// </summary>
+        /// <remarks>
+        /// <see cref="HatchesTo"/> gives the hatches to open.
+        /// </remarks>
+        [KRPCProperty]
+        public IList<HabitatZone> LinkedZones {
+            get { return InternalZone.Links.Select (link => new HabitatZone (vehicle, link.Zone.Lead)).ToList (); }
+        }
+
+        /// <summary>
+        /// The closed docking port hatches that join this zone to a linked zone when they
+        /// open.
+        /// </summary>
+        /// <param name="zone">A zone in <see cref="LinkedZones"/>.</param>
+        /// <remarks>
+        /// Throws an exception if the zone is not linked to this one.
+        /// </remarks>
+        [KRPCMethod]
+        public IList<DockingPort> HatchesTo (HabitatZone zone)
+        {
+            if (ReferenceEquals (zone, null))
+                throw new ArgumentNullException (nameof (zone));
+            var link = InternalZone.FindLink (zone.InternalZone) ?? throw new ArgumentException ("The zone is not linked to this one");
+            return link.Hatches.Select (port => new DockingPort (new Part (port.Parent.FullPart), port)).ToList ();
+        }
+
+        /// <summary>
         /// The kittens in the zone's seats.
         /// </summary>
         [KRPCProperty]

@@ -159,6 +159,114 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The mass of the vehicle's parts, without propellant or supplies, in kilograms.
+        /// </summary>
+        [KRPCProperty]
+        public float DryMass {
+            get { return Parts.Sum (part => part.DryMass); }
+        }
+
+        /// <summary>
+        /// The vehicle's inertia tensor about its center of mass, along the axes of
+        /// <see cref="ReferenceFrame"/>, in <unit>kg.m^2</unit>, as its three rows.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Tuple<double, double, double>> InertiaTensor {
+            get {
+                var tensor = Inertia ();
+                var result = new List<Tuple<double, double, double>> (3);
+                for (var i = 0; i < 3; i++)
+                    result.Add (new Tuple<double, double, double> (tensor [i, 0], tensor [i, 1], tensor [i, 2]));
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// The vehicle's moments of inertia about the axes of <see cref="ReferenceFrame"/>
+        /// through its center of mass, in <unit>kg.m^2</unit>.
+        /// </summary>
+        [KRPCProperty]
+        public Tuple<double, double, double> MomentOfInertia {
+            get {
+                var tensor = Inertia ();
+                return new Tuple<double, double, double> (tensor [0, 0], tensor [1, 1], tensor [2, 2]);
+            }
+        }
+
+        // The game's inertia tensor is along the vehicle's body axes, and the vehicle's
+        // reference frame has the axes of its control part
+        double[,] Inertia ()
+        {
+            var v = InternalVehicle;
+            var inertia = v.TotalMassPropsBody.Inertia;
+            var axes = new [] { double3.UnitX, double3.UnitY, double3.UnitZ };
+            var helmAxes = axes.Select (axis => axis.Transform (v.Helm2Body)).ToArray ();
+            var result = new double [3, 3];
+            for (var j = 0; j < 3; j++) {
+                var a = helmAxes [j];
+                var product = new double3 (
+                    inertia.XX * a.X + inertia.YX * a.Y + inertia.ZX * a.Z,
+                    inertia.YX * a.X + inertia.YY * a.Y + inertia.ZY * a.Z,
+                    inertia.ZX * a.X + inertia.ZY * a.Y + inertia.ZZ * a.Z);
+                for (var i = 0; i < 3; i++)
+                    result [i, j] = double3.Dot (helmAxes [i], product);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// The torque the vehicle's RCS thrusters can give about each axis of its control
+        /// frame, in <unit>N.m</unit>. Each is the smaller of the torques in the two
+        /// directions about the axis.
+        /// </summary>
+        /// <remarks>
+        /// The control frame has the axes of <see cref="ReferenceFrame"/>, unless the flight
+        /// computer steers along the thrust. The thrusters give this torque while
+        /// <see cref="Control.RCS"/> is on.
+        /// </remarks>
+        [KRPCProperty]
+        public Tuple<double, double, double> AvailableRCSTorque {
+            get {
+                if (!ModuleStateful<ThrusterController, ThrusterControllerState, ThrusterControllerGlobalState, EmptyStruct>.TryGetFrom (
+                    InternalVehicle.Parts.States, out var states))
+                    return new Tuple<double, double, double> (0, 0, 0);
+                var torque = states.GlobalState.Authority.TotalTorque;
+                return new Tuple<double, double, double> (torque.X, torque.Y, torque.Z);
+            }
+        }
+
+        /// <summary>
+        /// The vehicle's acceleration from the forces on it other than gravity, in
+        /// <unit>m/s^2</unit>.
+        /// </summary>
+        /// <param name="referenceFrame">The reference frame of the acceleration.</param>
+        /// <remarks>
+        /// The game measures it over the last physics step. Its length divided by standard
+        /// gravity is <see cref="Flight.GForce"/>.
+        /// </remarks>
+        [KRPCMethod]
+        public Tuple<double, double, double> Acceleration (ReferenceFrame referenceFrame)
+        {
+            var v = InternalVehicle;
+            return Vectors.ToTuple (referenceFrame.DirectionFromEcl (v.AccelerationBody.Transform (v.Body2Cce)));
+        }
+
+        /// <summary>
+        /// The vehicle's angular acceleration, in <unit>rad/s^2</unit>. The vector points
+        /// along the axis of rotation.
+        /// </summary>
+        /// <param name="referenceFrame">The reference frame of the angular acceleration.</param>
+        /// <remarks>
+        /// The game measures it over the last physics step.
+        /// </remarks>
+        [KRPCMethod]
+        public Tuple<double, double, double> AngularAcceleration (ReferenceFrame referenceFrame)
+        {
+            var v = InternalVehicle;
+            return Vectors.ToTuple (referenceFrame.DirectionFromEcl (v.AngularAccelerationBody.Transform (v.Body2Cce)));
+        }
+
+        /// <summary>
         /// The mass of the propellant in the vehicle, in kilograms.
         /// </summary>
         [KRPCProperty]
@@ -250,11 +358,81 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The mission planned for the vehicle, or <c>null</c> if it has none.
+        /// </summary>
+        [KRPCProperty (Nullable = true)]
+        public Mission Mission {
+            get { return InternalVehicle.Parts.Mission == null ? null : new Mission (this); }
+        }
+
+        /// <summary>
+        /// The most urgent coming event of each kitten in the vehicle, most urgent first.
+        /// </summary>
+        /// <remarks>
+        /// The order is the game's crew clock's: events within a day come first, the worst
+        /// first. Empty while <see cref="KSA.LifeSupportEnabled"/> and
+        /// <see cref="KSA.RadiationEnabled"/> are both false.
+        /// </remarks>
+        [KRPCProperty]
+        public IList<CrewEvent> CrewEvents {
+            get { return CrewEvent.Of (this); }
+        }
+
+        /// <summary>
+        /// The most urgent of <see cref="CrewEvents"/>, or <c>null</c> if there is none.
+        /// </summary>
+        [KRPCProperty (Nullable = true)]
+        public CrewEvent NextCrewEvent {
+            get {
+                var crewEvents = CrewEvent.Of (this);
+                return crewEvents.Count == 0 ? null : crewEvents [0];
+            }
+        }
+
+        /// <summary>
         /// Whether the vehicle has a control module, such as a capsule or a probe core.
         /// </summary>
         [KRPCProperty]
         public bool HasControlModule {
             get { return InternalVehicle.HasControlModule; }
+        }
+
+        static readonly Func<global::KSA.Vehicle, VehicleControl> control =
+            Accessor.Getter<global::KSA.Vehicle, VehicleControl> ("_control");
+
+        /// <summary>
+        /// Whether the vehicle can be flown, or why not.
+        /// </summary>
+        /// <remarks>
+        /// This is the reason the game gives when the vehicle does not respond to its controls.
+        /// </remarks>
+        [KRPCProperty]
+        public ControlState ControlState {
+            get {
+                var v = InternalVehicle;
+                if (!v.HasControlModule)
+                    return ControlState.NoControlModule;
+                if (v.IsControllable)
+                    return ControlState.Controllable;
+                switch (control (v)) {
+                case VehicleControl.NoCrew:
+                    return ControlState.NoCrew;
+                case VehicleControl.CrewIncapacitated:
+                    return ControlState.CrewIncapacitated;
+                case VehicleControl.ProbeCoreUnpowered:
+                    return ControlState.ProbeCoreUnpowered;
+                case VehicleControl.ProbeCoreOff:
+                    return ControlState.ProbeCoreOff;
+                case VehicleControl.ProbeCoreFailed:
+                    return ControlState.ProbeCoreFailed;
+                case VehicleControl.ProbeCoreStormStandby:
+                    return ControlState.ProbeCoreStormStandby;
+                case VehicleControl.ProbeCoreRebooting:
+                    return ControlState.ProbeCoreRebooting;
+                default:
+                    return ControlState.Controllable;
+                }
+            }
         }
 
         /// <summary>
@@ -363,6 +541,14 @@ namespace KRPC.KSA.Services
         [KRPCProperty]
         public IList<PowerConsumer> PowerConsumers {
             get { return Parts.SelectMany (part => part.PowerConsumers).ToList (); }
+        }
+
+        /// <summary>
+        /// The avionics of the vehicle's probe cores.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Avionics> Avionics {
+            get { return Parts.Select (part => part.Avionics).Where (avionics => avionics != null).ToList (); }
         }
 
         /// <summary>

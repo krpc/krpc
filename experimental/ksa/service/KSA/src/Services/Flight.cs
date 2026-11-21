@@ -306,6 +306,63 @@ namespace KRPC.KSA.Services
             }
         }
 
+        SolarWindReading SolarWind {
+            get { return Radiation.ComputeSolarWindAt (InternalVehicle.GetPositionEcl (), Universe.GetElapsedSeconds ()); }
+        }
+
+        /// <summary>
+        /// The speed of the solar wind at the vehicle, in <unit>m/s</unit>. Zero if no star
+        /// has a solar wind.
+        /// </summary>
+        [KRPCProperty]
+        public float SolarWindSpeed {
+            get { return (float)(SolarWind.Speed * 1000); }
+        }
+
+        /// <summary>
+        /// The dynamic pressure of the solar wind at the vehicle, in pascals.
+        /// </summary>
+        [KRPCProperty]
+        public float SolarWindPressure {
+            get { return (float)SolarWind.Pressure; }
+        }
+
+        /// <summary>
+        /// The northward component of the magnetic field carried by the solar wind at the
+        /// vehicle, in teslas. A southward field, a negative value, drives geomagnetic storms.
+        /// </summary>
+        [KRPCProperty]
+        public float SolarWindNorthwardField {
+            get { return (float)(SolarWind.NorthwardField * 1e-9); }
+        }
+
+        /// <summary>
+        /// The flux of solar energetic protons at the vehicle during a solar particle event, in
+        /// protons per square centimeter per second per steradian. Zero outside an event.
+        /// </summary>
+        [KRPCProperty]
+        public float ProtonFlux {
+            get { return (float)SpaceWeatherAlerts.ComputeStormFlux (InternalVehicle.GetPositionEcl (), Universe.GetElapsedSeconds ()); }
+        }
+
+        /// <summary>
+        /// The level of the radiation storm at the vehicle, from 0 for none to 5 for the
+        /// most severe. The S level of the game's space weather window.
+        /// </summary>
+        [KRPCProperty]
+        public int RadiationStormLevel {
+            get { return SpaceWeatherAlerts.GetSLevel (ProtonFlux); }
+        }
+
+        /// <summary>
+        /// The coronal mass ejections heading for the vehicle, as the game's space weather
+        /// window lists them.
+        /// </summary>
+        [KRPCProperty]
+        public IList<CoronalMassEjection> IncomingCoronalMassEjections {
+            get { return CoronalMassEjection.Incoming (InternalVehicle.GetPositionEcl ()); }
+        }
+
         /// <summary>
         /// The dynamic pressure acting on the vehicle, in pascals.
         /// </summary>
@@ -344,6 +401,163 @@ namespace KRPC.KSA.Services
                     return 0;
                 return celestial.GetTerrainHeightFromDirCcf (PositionCcf.NormalizeOrZero ());
             }
+        }
+
+        /// <summary>
+        /// The depth of the vehicle's center of mass below the ocean surface, in meters. Zero
+        /// above the surface.
+        /// </summary>
+        /// <remarks>
+        /// The ocean surface includes its waves.
+        /// </remarks>
+        [KRPCProperty]
+        public double Depth {
+            get {
+                ref readonly var environment = ref InternalVehicle.PhysicsEnvironment;
+                if (environment.OceanRadius <= environment.TerrainRadius)
+                    return 0;
+                return Math.Max (0, environment.OceanRadius - PositionCcf.Length ());
+            }
+        }
+
+        /// <summary>
+        /// The fraction of the vehicle's volume below the ocean surface, between 0 and 1.
+        /// </summary>
+        [KRPCProperty]
+        public float SubmergedPortion {
+            get {
+                var v = InternalVehicle;
+                var volume = v.Props.TotalVolume;
+                return volume > 0 ? (float)Math.Min (1, v.PhysicsEnvironment.OceanVolume / volume) : 0;
+            }
+        }
+
+        /// <summary>
+        /// The buoyant force on the vehicle from the ocean and the atmosphere, in newtons. It
+        /// acts against gravity.
+        /// </summary>
+        [KRPCProperty]
+        public float BuoyantForce {
+            get {
+                // As the game's physics step applies it
+                var v = InternalVehicle;
+                ref readonly var environment = ref v.PhysicsEnvironment;
+                if (!environment.InPhysicsRadius)
+                    return 0;
+                var oceanVolume = environment.OceanVolume;
+                var airVolume = Math.Max (0, v.Props.TotalVolume - oceanVolume);
+                var displaced = environment.OceanDensity * oceanVolume + environment.AtmosphericDensity * airVolume;
+                return (float)(environment.GravitationBub.Length () * displaced);
+            }
+        }
+
+        // The aerodynamic force and torque on the vehicle in its body axes, as the physics
+        // step applies them, and the direction of the airflow
+        void AerodynamicLoads (out double3 forceBody, out double3 torqueBody, out double3 flowDirectionBody)
+        {
+            var v = InternalVehicle;
+            ref readonly var environment = ref v.PhysicsEnvironment;
+            var airVelocityBody = v.GetSurfaceVelocityCci ().Transform (v.Orbit.Parent.GetCci2Cce ()).Transform (v.Body2Cce.Inverse ());
+            flowDirectionBody = -airVelocityBody.NormalizeOrZero ();
+            forceBody = double3.Zero;
+            torqueBody = double3.Zero;
+            if (!environment.InPhysicsRadius || environment.AtmosphericDensity <= 0)
+                return;
+            AeroLoads.Compute (
+                v, v.Orbit.Parent.GetPhysicalAtmosphere (), environment.AtmosphericDensity,
+                environment.AtmosphericTemperature, environment.SpeedOfSound, airVelocityBody, v.BodyRates,
+                out forceBody, out torqueBody);
+        }
+
+        /// <summary>
+        /// The aerodynamic force on the vehicle, in newtons.
+        /// </summary>
+        /// <param name="referenceFrame">The reference frame of the force.</param>
+        /// <remarks>
+        /// The game computes the force from the surfaces of the vehicle's hull.
+        /// </remarks>
+        [KRPCMethod]
+        public Tuple<double, double, double> AerodynamicForce (ReferenceFrame referenceFrame)
+        {
+            AerodynamicLoads (out var force, out _, out _);
+            return Vectors.ToTuple (referenceFrame.DirectionFromEcl (force.Transform (InternalVehicle.Body2Cce)));
+        }
+
+        /// <summary>
+        /// The aerodynamic torque on the vehicle about its center of mass, in
+        /// <unit>N.m</unit>. The vector points along the axis of the torque.
+        /// </summary>
+        /// <param name="referenceFrame">The reference frame of the torque.</param>
+        [KRPCMethod]
+        public Tuple<double, double, double> AerodynamicTorque (ReferenceFrame referenceFrame)
+        {
+            AerodynamicLoads (out _, out var torque, out _);
+            return Vectors.ToTuple (referenceFrame.DirectionFromEcl (torque.Transform (InternalVehicle.Body2Cce)));
+        }
+
+        /// <summary>
+        /// The part of the aerodynamic force along the airflow, in newtons.
+        /// </summary>
+        [KRPCProperty]
+        public float Drag {
+            get {
+                AerodynamicLoads (out var force, out _, out var flow);
+                return (float)double3.Dot (force, flow);
+            }
+        }
+
+        /// <summary>
+        /// The part of the aerodynamic force across the airflow, in newtons.
+        /// </summary>
+        [KRPCProperty]
+        public float Lift {
+            get {
+                AerodynamicLoads (out var force, out _, out var flow);
+                return (float)(force - double3.Dot (force, flow) * flow).Length ();
+            }
+        }
+
+        /// <summary>
+        /// The aerodynamic force the vehicle would have at a given position and velocity, in
+        /// its current attitude and rotation, in newtons.
+        /// </summary>
+        /// <param name="body">The body whose atmosphere the vehicle flies through.</param>
+        /// <param name="position">The position, in meters.</param>
+        /// <param name="velocity">The velocity, in meters per second.</param>
+        /// <param name="referenceFrame">The reference frame of the position, velocity and
+        /// force.</param>
+        /// <remarks>
+        /// The atmosphere moves with the body's rotation.
+        /// </remarks>
+        [KRPCMethod]
+        public Tuple<double, double, double> SimulateAerodynamicForceAt (
+            Body body, Tuple<double, double, double> position, Tuple<double, double, double> velocity,
+            ReferenceFrame referenceFrame)
+        {
+            if (ReferenceEquals (body, null))
+                throw new ArgumentNullException (nameof (body));
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException (nameof (referenceFrame));
+            var v = InternalVehicle;
+            var parent = body.InternalBody;
+            var positionEcl = referenceFrame.PositionToEcl (Vectors.ToVector (position));
+            var velocityEcl = referenceFrame.VelocityToEcl (positionEcl, Vectors.ToVector (velocity));
+            var relativePosition = positionEcl - parent.GetPositionEcl ();
+            var airVelocityEcl = velocityEcl - parent.GetVelocityEcl () -
+                double3.Cross (parent.GetAngularVelocityCce (), relativePosition);
+            var force = double3.Zero;
+            var atmosphere = parent.GetPhysicalAtmosphere ();
+            var altitude = relativePosition.Length () - parent.MeanRadius;
+            if (atmosphere != null && altitude < atmosphere.Height) {
+                var conditions = atmosphere.ComputeConditionsAtAltitude (Math.Max (altitude, 0));
+                var speedOfSound = atmosphere.Mixture.ComputeSpeedOfSound (conditions.Temperature);
+                var airVelocityBody = airVelocityEcl.Transform (v.Body2Cce.Inverse ());
+                AeroLoads.Compute (
+                    v, atmosphere, conditions.Density, conditions.Temperature, speedOfSound, airVelocityBody, v.BodyRates,
+                    out var forceBody, out _);
+                force = forceBody.Transform (v.Body2Cce);
+            }
+            return Vectors.ToTuple (referenceFrame.DirectionFromEcl (force));
         }
 
         /// <summary>

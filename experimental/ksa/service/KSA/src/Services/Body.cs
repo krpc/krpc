@@ -231,6 +231,124 @@ namespace KRPC.KSA.Services
             get { return (float)(InternalBody.GetOceanReference ()?.Density.KgPerM3 ?? 0); }
         }
 
+        // The geomagnetic storm of a body with a magnetosphere driven by the solar wind, or null
+        Storm? GeomagneticStorm {
+            get {
+                if (!(InternalBody is Celestial celestial))
+                    return null;
+                var magnetosphere = celestial.BodyTemplate?.MagnetosphereReference;
+                // The game's space weather window skips magnetospheres driven by corotating flow,
+                // such as a gas giant's
+                if (magnetosphere == null || magnetosphere.CorotatingFlowPressure != null)
+                    return null;
+                return StormState.Get (celestial, Universe.GetElapsedSeconds ());
+            }
+        }
+
+        /// <summary>
+        /// The level of the geomagnetic storm at the body, from 0 for none to 5 for the most
+        /// severe. The G level of the game's space weather window. Zero for a body with no
+        /// magnetosphere.
+        /// </summary>
+        [KRPCProperty]
+        public int GeomagneticStormLevel {
+            get {
+                var storm = GeomagneticStorm;
+                return storm.HasValue ? SpaceWeatherAlerts.GetGLevel (storm.Value.RingCurrent) : 0;
+            }
+        }
+
+        /// <summary>
+        /// The disturbance storm time index of the body, in teslas. It falls below zero in a
+        /// geomagnetic storm. Zero for a body with no magnetosphere.
+        /// </summary>
+        [KRPCProperty]
+        public float DstIndex {
+            get { return (float)((GeomagneticStorm?.RingCurrent ?? 0) * 1e-9); }
+        }
+
+        global::KSA.SpaceWeather SpaceWeather {
+            get { return (InternalBody as StellarBody)?.BodyTemplate.SpaceWeather; }
+        }
+
+        /// <summary>
+        /// The activity of a star, from 0 at the minimum of its cycle to 1 at the maximum.
+        /// Zero for a body that is not a star.
+        /// </summary>
+        [KRPCProperty]
+        public float SolarActivity {
+            get { return (float)(SpaceWeather?.GetActivity (Universe.GetElapsedSeconds ()) ?? 0); }
+        }
+
+        /// <summary>
+        /// Whether the activity of a star is rising toward the maximum of its cycle.
+        /// False for a body that is not a star, or a star with no cycle.
+        /// </summary>
+        [KRPCProperty]
+        public bool SolarActivityRising {
+            get {
+                var cycle = SpaceWeather?.Cycle;
+                if (cycle == null)
+                    return false;
+                cycle.GetTimeToTurn (Universe.GetElapsedSeconds (), out var rising);
+                return rising;
+            }
+        }
+
+        /// <summary>
+        /// The time until the activity of a star reaches the maximum or minimum of its cycle,
+        /// in seconds. Not a number for a body that is not a star, or a star with no cycle.
+        /// </summary>
+        [KRPCProperty]
+        public float TimeToSolarActivityTurn {
+            get {
+                var cycle = SpaceWeather?.Cycle;
+                if (cycle == null)
+                    return float.NaN;
+                return (float)cycle.GetTimeToTurn (Universe.GetElapsedSeconds (), out _);
+            }
+        }
+
+        /// <summary>
+        /// The mean number of coronal mass ejections a star throws out per day, at its
+        /// current activity. Zero for a body that is not a star.
+        /// </summary>
+        [KRPCProperty]
+        public float CoronalMassEjectionsPerDay {
+            get { return (float)(SpaceWeather?.GetCmesPerDay (Universe.GetElapsedSeconds ()) ?? 0); }
+        }
+
+        static readonly List<ActiveRegion> activeRegions = new List<ActiveRegion> ();
+
+        /// <summary>
+        /// The number of active regions on a star, the sources of its eruptions. Zero for a
+        /// body that is not a star.
+        /// </summary>
+        [KRPCProperty]
+        public int ActiveRegionCount {
+            get {
+                var weather = SpaceWeather;
+                if (weather == null)
+                    return 0;
+                activeRegions.Clear ();
+                EruptionHistory.GetRegions (weather, Universe.GetElapsedSeconds (), activeRegions);
+                return activeRegions.Count;
+            }
+        }
+
+        /// <summary>
+        /// The fast coronal mass ejections a star threw out in the last three days, as the
+        /// game's space weather window lists them. Empty for a body that is not a star.
+        /// </summary>
+        [KRPCProperty]
+        public IList<CoronalMassEjection> RecentCoronalMassEjections {
+            get {
+                if (!(InternalBody is StellarBody star))
+                    return new List<CoronalMassEjection> ();
+                return CoronalMassEjection.Recent (star);
+            }
+        }
+
         /// <summary>
         /// The acceleration due to gravity at the body's mean radius, in meters per second
         /// squared.

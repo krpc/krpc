@@ -138,3 +138,49 @@ class TestScreenshot(ksatest.TestCase):
             self.ksa.take_screenshot(0)
         with self.assertRaises(ValueError):
             self.ksa.take_screenshot(9)
+
+
+class TestRaycast(ksatest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.load_save()
+        cls.vehicle = cls.find_vehicle("Gemini7")
+
+    def test_hit(self):
+        frame = self.vehicle.reference_frame
+        for axis in range(3):
+            for sign in (1, -1):
+                position = [0, 0, 0]
+                position[axis] = 100 * sign
+                direction = [0, 0, 0]
+                direction[axis] = -sign
+                distance = self.ksa.raycast_distance(position, direction, frame)
+                part = self.ksa.raycast_part(position, direction, frame)
+                self.assertGreater(distance, 85)
+                self.assertLess(distance, 100)
+                self.assertIn(part, self.vehicle.parts)
+
+    def test_hit_part(self):
+        # A ray from beside each part toward it hits that part or one in front of it
+        frame = self.vehicle.reference_frame
+        for part in self.vehicle.parts:
+            position = part.position(frame)
+            start = (position[0], position[1], position[2] + 100)
+            distance = self.ksa.raycast_distance(start, (0, 0, -1), frame)
+            self.assertLessEqual(distance, 100)
+
+    def test_miss(self):
+        frame = self.vehicle.reference_frame
+        position = (100, 0, 0)
+        direction = (1, 0, 0)
+        self.assertEqual(
+            float("inf"), self.ksa.raycast_distance(position, direction, frame)
+        )
+        self.assertIsNone(self.ksa.raycast_part(position, direction, frame))
+
+    def test_zero_direction(self):
+        with self.assertRaises(ValueError):
+            self.ksa.raycast_distance(
+                (100, 0, 0), (0, 0, 0), self.vehicle.reference_frame
+            )

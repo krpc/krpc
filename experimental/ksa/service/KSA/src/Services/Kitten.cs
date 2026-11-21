@@ -143,6 +143,18 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The further time the kitten can go without a supply before its condition from the
+        /// supply worsens, in seconds. Infinite once the kitten is dead.
+        /// </summary>
+        /// <param name="supply">The supply.</param>
+        [KRPCMethod]
+        public float TimeToNextCondition (LifeSupportSupply supply)
+        {
+            var time = Entry.Condition.GetTimeToNextRung ((global::KSA.LifeSupportSupply)supply, Universe.GetElapsedTime (), out _);
+            return time.IsEndOfTime () ? float.PositiveInfinity : (float)time.Seconds ();
+        }
+
+        /// <summary>
         /// The kitten's worst condition across its supplies.
         /// </summary>
         [KRPCProperty]
@@ -225,6 +237,40 @@ namespace KRPC.KSA.Services
         [KRPCProperty]
         public float DoseRate {
             get { return (float)Entry.DoseRate.Value (); }
+        }
+
+        /// <summary>
+        /// The time until the kitten gets radiation sickness at its current dose rate, in
+        /// seconds. Infinite if it never does, or the kitten already has it.
+        /// </summary>
+        /// <remarks>
+        /// The game forecasts it for a kitten on a mission while
+        /// <see cref="KSA.RadiationEnabled"/> is true.
+        /// </remarks>
+        [KRPCProperty]
+        public float TimeToRadiationSickness {
+            get { return TimeUntil (Entry.RadiationSicknessAt); }
+        }
+
+        /// <summary>
+        /// The time until the kitten takes a lethal radiation dose at its current dose rate, in
+        /// seconds. Infinite if it never does.
+        /// </summary>
+        /// <remarks>
+        /// The game forecasts it for a kitten on a mission while
+        /// <see cref="KSA.RadiationEnabled"/> is true, and only within a day of radiation
+        /// sickness.
+        /// </remarks>
+        [KRPCProperty]
+        public float TimeToLethalDose {
+            get { return TimeUntil (Entry.LethalDoseAt); }
+        }
+
+        static float TimeUntil (UniverseTime time)
+        {
+            if (time.IsEndOfTime ())
+                return float.PositiveInfinity;
+            return (float)Math.Max (0, (time - Universe.GetElapsedTime ()).Seconds ());
         }
 
         /// <summary>
