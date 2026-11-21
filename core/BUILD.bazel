@@ -49,6 +49,9 @@ internals_visible_to = [
     "DynamicProxyGenAssembly2",
     # The Benchmark service runs a call through Services, the server's own dispatch path
     "KRPC.Benchmark",
+    # The gRPC server of kRPC for KSA calls procedures through the service signatures and
+    # the object store
+    "KRPC.KSA.Grpc",
 ]
 
 csharp_library(
