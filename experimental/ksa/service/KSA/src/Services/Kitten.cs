@@ -129,7 +129,7 @@ namespace KRPC.KSA.Services
         [KRPCMethod]
         public float TimeWithout (LifeSupportSupply supply)
         {
-            return (float)Entry.Condition.GetSecondsWithout ((global::KSA.LifeSupportSupply)supply, Universe.GetElapsedTime ());
+            return (float)Entry.Condition.GetTimeWithout ((global::KSA.LifeSupportSupply)supply, Universe.GetElapsedTime ()).Seconds ();
         }
 
         /// <summary>

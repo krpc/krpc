@@ -7,7 +7,7 @@ tools/release/publish-docs.sh reads mod_version from this file too.
 mod_version = "0.2.0"
 
 # The KSA build the mod is compiled and tested against
-ksa_version = "2026.11.10.5801"
+ksa_version = "2026.11.16.5901"
 
 # The StarMap release, and the sha256 of its zip
 starmap_version = "0.5.4"
