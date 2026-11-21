@@ -72,8 +72,17 @@ vehicle solver runs on a worker thread from there until the next frame.
 Testing
 -------
 
-The tests are Python scripts that drive a live game, run with pytest. Arguments after ``--``
-go to pytest:
+The tests that need no game are the linters, type checks and docs checks:
+
+.. code-block:: bash
+
+   bazel test //experimental/ksa:test
+
+``//:test`` and CI run them too. Without ``KSA_DIR``, the suite skips the tests that compile
+against KSA.
+
+The in-game tests are Python scripts that drive a live game, run with pytest. Arguments after
+``--`` go to pytest:
 
 .. code-block:: bash
 

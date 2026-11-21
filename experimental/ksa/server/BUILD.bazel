@@ -39,6 +39,14 @@ csharp_library(
     ],
 )
 
+test_suite(
+    name = "test",
+    tests = [
+        ":pyright",
+        ":ruff",
+    ],
+)
+
 py_ruff_test(
     name = "ruff",
     size = "small",

@@ -51,6 +51,9 @@ address a single matrix entry.
 examples, each parsing every generated service header, and takes about 8 minutes. Inside
 `test-docs` it would make that the slowest job of the workflow.
 
+`test-ksa` runs the kRPC for KSA tests that need no game. KSA is closed source, so CI has no
+install, and `//experimental/ksa:test` skips the targets that compile against it.
+
 Windows runs everything Linux runs, except these:
 
 - **The serial transport tests.** They link two pseudo-terminals with socat, which has no Windows

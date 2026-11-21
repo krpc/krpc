@@ -226,6 +226,20 @@ pkg_zip(
     out = "krpc-ksa-%s.zip" % mod_version,
 )
 
+# The tests that need no game: bazel test //experimental/ksa:test. The in-game tests run with
+# //experimental/ksa/tools/game:test-ksa.
+test_suite(
+    name = "test",
+    tests = [
+        ":pyright",
+        ":ruff",
+        "//experimental/ksa/server:test",
+        "//experimental/ksa/service/KSA:test",
+        "//experimental/ksa/tools/game:test",
+        "//experimental/ksa/tools/grpc:test",
+    ],
+)
+
 py_ruff_test(
     name = "ruff",
     size = "small",

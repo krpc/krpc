@@ -212,6 +212,7 @@ test_suite(
         "//client/python:test",
         "//core:test",
         "//doc:test",
+        "//experimental/ksa:test",
         "//service:test",
         "//tools/benchmarks:test",
         "//tools/build:test",

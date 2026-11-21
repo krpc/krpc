@@ -95,6 +95,8 @@ jobs:
             test: //client/http:test
           - name: test-tools
             test: //client/conformance:test //tools/benchmarks:test //tools/game:test //tools/krpctools:test
+          - name: test-ksa
+            test: //experimental/ksa:test
           - name: test-build-scripts
             test: >-
               //:buildifier
@@ -189,6 +191,8 @@ jobs:
             test: //client/http:test
           - name: test-tools
             test: //client/conformance:test //tools/benchmarks:test //tools/game:test //tools/krpctools:test
+          - name: test-ksa
+            test: //experimental/ksa:test
           - name: test-build-scripts
             test: >-
               //:buildifier
