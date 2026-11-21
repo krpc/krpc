@@ -77,7 +77,7 @@ namespace KRPC.KSA.UI
 
             if (protocol == Protocol.ProtocolBuffersOverTCP || protocol == Protocol.ProtocolBuffersOverWebsockets) {
                 DrawAddress ();
-                DrawSettingRow ("Port", Prefix + "port", "50000", ValidPort, true);
+                DrawSettingRow ("Port", Prefix + "port", Configuration.DefaultPort (protocol).ToString (CultureInfo.InvariantCulture), ValidPort, true);
             } else if (protocol == ConfigurationFile.GrpcProtocol) {
                 DrawAddress ();
                 DrawSettingRow ("Port", Prefix + "port", "50002", ValidPort, true);

@@ -22,7 +22,7 @@ main_window_rect = [388, 325, 400, 590]
 info_window_rect = [0, 0, 0, 0]
 
 [[servers]]
-name = "Default Server"
+name = "TCP/IP Server"
 # ProtocolBuffersOverTCP, ProtocolBuffersOverWebsockets, ProtocolBuffersOverLocalSocket,
 # ProtocolBuffersOverSerialIO or gRPC
 protocol = "ProtocolBuffersOverTCP"

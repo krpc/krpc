@@ -5,6 +5,7 @@
   - **Breaking:** Rename the server settings in `kRPC/settings.toml`, with one port per server
 - Clients
   - Add stubs and documentation for the JavaScript client
+  - Add a WebSockets server on port 50001 to the default settings, for the JavaScript client
 - Release
   - Move the example scripts out of the release archive, into the tutorials in the
     documentation

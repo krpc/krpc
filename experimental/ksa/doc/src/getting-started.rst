@@ -35,8 +35,8 @@ To install the mod by hand:
    Version 0.1.0 named the mod ``kRPC.KSA``. To upgrade from it, delete the ``mods/kRPC.KSA``
    folder, and change its ``manifest.toml`` entry to ``id = "kRPC"``.
 
-The server starts once the game has loaded its mods. It listens on ``127.0.0.1``, port 50000,
-and accepts every connection.
+The servers start once the game has loaded its mods. They listen on ``127.0.0.1``, with TCP/IP on
+port 50000 and WebSockets on port 50001, and accept every connection.
 
 Game Versions
 ^^^^^^^^^^^^^

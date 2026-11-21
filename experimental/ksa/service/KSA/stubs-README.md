@@ -55,8 +55,7 @@ System.out.println(ksa.getActiveVehicle().getName());
 
 Copy `js/KSA.js` and `js/KSA.d.ts` beside your script, which uses the `@krpc-org/krpc` package.
 Import `KSA.js` before you connect, and the connection has the service as `conn.ksa`. The client
-connects over WebSockets, so add a server with the "Protobuf over WebSockets" protocol in the
-server window in the game:
+connects to the server's WebSockets server, on port 50001:
 
 ```js
 import { connect } from "@krpc-org/krpc";

@@ -49,7 +49,8 @@ namespace KRPC.KSA
             config.Servers.Clear ();
             if (!File.Exists (path)) {
                 Logger.WriteLine ("No settings file at " + path + ", using the defaults", Logger.Severity.Warning);
-                config.Servers.Add (new Configuration.Server ());
+                foreach (var server in Configuration.DefaultServers ())
+                    config.Servers.Add (server);
                 return;
             }
             var document = new TomlParser ().Parse (File.ReadAllText (path));
@@ -75,8 +76,10 @@ namespace KRPC.KSA
                         config.Servers.Add (ParseServer (table));
                 }
             }
-            if (config.Servers.Count == 0)
-                config.Servers.Add (new Configuration.Server ());
+            if (config.Servers.Count == 0) {
+                foreach (var server in Configuration.DefaultServers ())
+                    config.Servers.Add (server);
+            }
         }
 
         static bool GetBoolean (TomlTable table, string key, bool defaultValue)

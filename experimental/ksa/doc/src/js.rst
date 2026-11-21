@@ -26,8 +26,7 @@ it the service's types and values.
 Connecting to the Server
 ------------------------
 
-The client connects over WebSockets. In the server window in the game, add a server and select
-"Protobuf over WebSockets" as its protocol.
+The client connects over WebSockets, to the server's WebSockets server on port 50001.
 
 Import ``KSA.js`` before you connect, and the service is ``conn.ksa``:
 

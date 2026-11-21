@@ -21,9 +21,15 @@ main_window_rect = [0, 0, 0, 0]
 info_window_rect = [0, 0, 0, 0]
 
 [[servers]]
-name = "Default Server"
+name = "TCP/IP Server"
 # ProtocolBuffersOverTCP, ProtocolBuffersOverWebsockets, ProtocolBuffersOverLocalSocket,
 # ProtocolBuffersOverSerialIO or gRPC
 protocol = "ProtocolBuffersOverTCP"
 tcpip_address = "127.0.0.1"
 tcpip_port = 50000
+
+[[servers]]
+name = "WebSockets Server"
+protocol = "ProtocolBuffersOverWebsockets"
+ws_address = "127.0.0.1"
+ws_port = 50001

@@ -38,9 +38,9 @@ launches the game through StarMap.
 Upgrading from 0.1.0, where the mod was named kRPC.KSA: delete the mods/kRPC.KSA folder,
 and change its manifest.toml entry to id = "kRPC".
 
-The server starts when the game has loaded its mods. By default it listens on 127.0.0.1,
-port 50000, and accepts every connection. The settings are in
-kRPC/settings.toml.
+The servers start when the game has loaded its mods. By default they listen on 127.0.0.1,
+with TCP/IP on port 50000 and WebSockets on port 50001, and accept every connection. The
+settings are in kRPC/settings.toml.
 
 
 CONNECT
