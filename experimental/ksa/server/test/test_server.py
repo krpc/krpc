@@ -46,6 +46,11 @@ class TestServer(ksatest.TestCase):
         with krpc.connect(name="after killed client") as conn:
             ksa = conn.ksa
             self.assertIsNotNone(ksa.active_vehicle)
+        # The client's warp carries on until the speed is set
+        self.ksa.simulation_speed = 1
+        ut = self.ksa.ut
+        ksatest.wait_until(lambda: self.ksa.ut > ut + 1)
+        self.assertEqual(1, self.ksa.simulation_speed)
 
 
 class TestGameCompatibility(ksatest.TestCase):

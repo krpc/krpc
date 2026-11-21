@@ -134,12 +134,18 @@ namespace KRPC.KSA.Services
         /// <summary>
         /// The simulation speed, as a multiple of real time. Zero when paused.
         /// </summary>
+        /// <remarks>
+        /// Setting it stops a warp in progress, such as one started by <see cref="WarpTo"/>.
+        /// </remarks>
         [KRPCProperty]
         public static float SimulationSpeed {
             get { return (float)Universe.SimulationSpeed; }
             set {
                 if (!(value >= 0))
                     throw new ArgumentOutOfRangeException (nameof (SimulationSpeed));
+                // The game's warp sets the speed again each frame
+                if (Universe.IsAutoWarpActive)
+                    Universe.AutoWarpStop (false);
                 Universe.SetSimulationSpeed (value, alert: false);
             }
         }

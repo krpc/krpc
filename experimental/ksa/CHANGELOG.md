@@ -79,6 +79,9 @@
   - Add the geomagnetic storm of a body, and the activity and recent coronal mass ejections of
     a star
 
+- Game
+  - Stop a warp in progress when `KSA.SimulationSpeed` is set
+
 - Clients
   - Add stubs and documentation for the JavaScript client
   - Add a WebSockets server on port 50001 to the default settings, for the JavaScript client
