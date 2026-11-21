@@ -28,8 +28,7 @@ namespace KRPC.KSA.Grpc
         /// </summary>
         public static KRPC.Server.Server Create (Guid id, Protocol protocol, string name, IPAddress address, ushort port)
         {
-            return new KRPC.Server.Server (
-                id, protocol, name, new GrpcServer (address, port), new KRPC.Server.SerialIO.StreamServer ());
+            return new KRPC.Server.Server (id, protocol, name, new GrpcServer (address, port));
         }
 
         /// <summary>

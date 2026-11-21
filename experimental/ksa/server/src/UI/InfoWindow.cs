@@ -43,8 +43,8 @@ namespace KRPC.KSA.UI
             ConsoleWidgets.RegionHeader ("RPC Execution");
             DrawInfo ("RPCs executed", core.RPCsExecuted.ToString (CultureInfo.CurrentCulture));
             DrawInfo ("RPC rate", Math.Round (core.RPCRate).ToString (CultureInfo.CurrentCulture) + " RPC/s");
-            DrawInfo ("Execution mode", config.OneRPCPerUpdate ? "One RPC per update" : (config.AdaptiveRateControl ? "Adaptive" : "Static"));
-            DrawInfo ("Max. time per update", config.OneRPCPerUpdate ? NotApplicableText : Microseconds (config.MaxTimePerUpdate));
+            DrawInfo ("Execution mode", config.AdaptiveRateControl ? "Adaptive" : "Static");
+            DrawInfo ("Max. time per update", Microseconds (config.MaxTimePerUpdate));
             DrawInfo ("Receive mode", config.BlockingRecv ? "Blocking" : "Non-blocking");
             DrawInfo ("Receive timeout", config.BlockingRecv ? Microseconds (config.RecvTimeout) : NotApplicableText);
             DrawInfo ("Time per update", Seconds (core.TimePerRPCUpdate));
@@ -52,9 +52,10 @@ namespace KRPC.KSA.UI
             DrawInfo ("Exec time per update", Seconds (core.ExecTimePerRPCUpdate));
 
             ConsoleWidgets.RegionHeader ("Stream Execution");
-            DrawInfo ("Current streams", core.StreamRPCs.ToString (CultureInfo.CurrentCulture));
-            DrawInfo ("Stream RPCs executed", core.StreamRPCsExecuted.ToString (CultureInfo.CurrentCulture));
-            DrawInfo ("Stream RPC rate", Math.Round (core.StreamRPCRate).ToString (CultureInfo.CurrentCulture) + " RPC/s");
+            DrawInfo ("Current streams", core.Streams.ToString (CultureInfo.CurrentCulture));
+            DrawInfo ("Stream evaluations", core.StreamEvaluations.ToString (CultureInfo.CurrentCulture));
+            DrawInfo ("Stream evaluation rate", Math.Round (core.StreamEvaluationRate).ToString (CultureInfo.CurrentCulture) + "/s");
+            DrawInfo ("Stream updates sent", core.StreamUpdatesSent.ToString (CultureInfo.CurrentCulture));
             DrawInfo ("Time per update", Seconds (core.TimePerStreamUpdate), "stream");
 
             ConsoleWidgets.Rule ();

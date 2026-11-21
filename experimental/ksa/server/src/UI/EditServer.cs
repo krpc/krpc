@@ -20,11 +20,8 @@ namespace KRPC.KSA.UI
         const string AnyText = "Any";
         const string ManualText = "Manual";
         const string InvalidAddressText = "Invalid IP address. Must be in dot-decimal notation, e.g. \"192.168.1.0\"";
-        static readonly string InvalidRPCPathText =
-            "RPC socket path must not be empty, and must take at most " +
-            LocalSocketServer.MaximumPathLength + " bytes";
-        static readonly string InvalidStreamPathText =
-            "Stream socket path must not be empty, and must take at most " +
+        static readonly string InvalidPathText =
+            "Socket path must not be empty, and must take at most " +
             LocalSocketServer.MaximumPathLength + " bytes";
         static readonly Protocol [] Protocols = {
             Protocol.ProtocolBuffersOverTCP,
@@ -57,9 +54,15 @@ namespace KRPC.KSA.UI
             availableAddresses = new List<string> { LocalhostText, AnyText };
             availableAddresses.AddRange (interfaceAddresses);
             availableAddresses.Add (ManualText);
-            var address = settings.GetValueOrDefault ("address", IPAddress.Loopback.ToString ());
-            manualAddress = address != IPAddress.Loopback.ToString () && address != IPAddress.Any.ToString () &&
-                !interfaceAddresses.Contains (address);
+            manualAddress = IsManualAddress ();
+        }
+
+        // Whether the address of the protocol is one the address combo box does not list
+        bool IsManualAddress ()
+        {
+            var address = settings.GetValueOrDefault (Prefix + "address", IPAddress.Loopback.ToString ());
+            return !availableAddresses.Contains (address) && address != IPAddress.Loopback.ToString () &&
+                address != IPAddress.Any.ToString ();
         }
 
         public void Draw ()
@@ -67,34 +70,49 @@ namespace KRPC.KSA.UI
             DrawTextRow ("Name", "name", ref name, true);
             var selected = Array.IndexOf (Protocols, protocol);
             if (DrawComboRow ("Protocol", "protocol", ProtocolNames, ref selected)) {
-                // The port is a device name for serial IO and a number for gRPC
-                if (protocol == Protocol.ProtocolBuffersOverSerialIO || protocol == ConfigurationFile.GrpcProtocol)
-                    settings.Remove ("port");
                 protocol = Protocols [selected];
+                // Each protocol has its own address setting
+                manualAddress = IsManualAddress ();
             }
 
             if (protocol == Protocol.ProtocolBuffersOverTCP || protocol == Protocol.ProtocolBuffersOverWebsockets) {
                 DrawAddress ();
-                DrawSettingRow ("RPC port", "rpc_port", "50000", ValidPort, true);
-                DrawSettingRow ("Stream port", "stream_port", "50001", ValidPort, true);
+                DrawSettingRow ("Port", Prefix + "port", "50000", ValidPort, true);
             } else if (protocol == ConfigurationFile.GrpcProtocol) {
                 DrawAddress ();
-                DrawSettingRow ("Port", "port", "50002", ValidPort, true);
+                DrawSettingRow ("Port", Prefix + "port", "50002", ValidPort, true);
             } else if (protocol == Protocol.ProtocolBuffersOverLocalSocket) {
-                DrawSettingRow ("RPC socket", "rpc_path", LocalSocketServer.DefaultPath ("rpc"), ValidPath);
-                DrawSettingRow ("Stream socket", "stream_path", LocalSocketServer.DefaultPath ("stream"), ValidPath);
+                DrawSettingRow ("Socket", Prefix + "path", LocalSocketServer.DefaultPath (), ValidPath);
             } else {
-                DrawSettingRow ("Port", "port", new System.IO.Ports.SerialPort ().PortName, x => x.Length > 0);
-                DrawSettingRow ("Baud rate", "baud_rate", "9600", ValidBaudRate, true);
-                DrawSettingRow ("Data bits", "data_bits", "8", ValidDataBits, true);
-                DrawOptionRow ("Parity", "parity", "None", ParityOptions);
-                DrawOptionRow ("Stop bits", "stop_bits", "One", StopBitsOptions);
+                DrawSettingRow ("Port", Prefix + "port", new System.IO.Ports.SerialPort ().PortName, x => x.Length > 0);
+                DrawSettingRow ("Baud rate", Prefix + "baud_rate", "9600", ValidBaudRate, true);
+                DrawSettingRow ("Data bits", Prefix + "data_bits", "8", ValidDataBits, true);
+                DrawOptionRow ("Parity", Prefix + "parity", "None", ParityOptions);
+                DrawOptionRow ("Stop bits", Prefix + "stop_bits", "One", StopBitsOptions);
+            }
+        }
+
+        // The prefix of the protocol's setting keys
+        string Prefix {
+            get {
+                switch (protocol) {
+                case Protocol.ProtocolBuffersOverTCP:
+                    return "tcpip_";
+                case Protocol.ProtocolBuffersOverWebsockets:
+                    return "ws_";
+                case Protocol.ProtocolBuffersOverLocalSocket:
+                    return "localsocket_";
+                case ConfigurationFile.GrpcProtocol:
+                    return "grpc_";
+                default:
+                    return "serialio_";
+                }
             }
         }
 
         void DrawAddress ()
         {
-            var address = settings.GetValueOrDefault ("address", IPAddress.Loopback.ToString ());
+            var address = settings.GetValueOrDefault (Prefix + "address", IPAddress.Loopback.ToString ());
             int selected;
             if (!manualAddress && address == IPAddress.Loopback.ToString ())
                 selected = 0;
@@ -115,7 +133,7 @@ namespace KRPC.KSA.UI
             }
             if (manualAddress)
                 DrawTextRow ("Manual address", "manual_address", ref address, ValidAddress (address));
-            settings ["address"] = address;
+            settings [Prefix + "address"] = address;
         }
 
         void DrawSettingRow (string label, string key, string defaultValue, Func<string, bool> valid, bool number = false)
@@ -188,33 +206,25 @@ namespace KRPC.KSA.UI
         public Configuration.Server Save (IList<string> errors)
         {
             errors.Clear ();
+            var prefix = Prefix;
             string [] keys;
-            if (protocol == Protocol.ProtocolBuffersOverTCP || protocol == Protocol.ProtocolBuffersOverWebsockets) {
-                if (!ValidAddress (settings ["address"]))
+            if (protocol == Protocol.ProtocolBuffersOverTCP || protocol == Protocol.ProtocolBuffersOverWebsockets ||
+                protocol == ConfigurationFile.GrpcProtocol) {
+                if (!ValidAddress (settings [prefix + "address"]))
                     errors.Add (InvalidAddressText);
-                if (!ValidPort (settings ["rpc_port"]))
-                    errors.Add ("RPC port must be between 0 and 65535");
-                if (!ValidPort (settings ["stream_port"]))
-                    errors.Add ("Stream port must be between 0 and 65535");
-                keys = new [] { "address", "rpc_port", "stream_port" };
-            } else if (protocol == ConfigurationFile.GrpcProtocol) {
-                if (!ValidAddress (settings ["address"]))
-                    errors.Add (InvalidAddressText);
-                if (!ValidPort (settings ["port"]))
+                if (!ValidPort (settings [prefix + "port"]))
                     errors.Add ("Port must be between 0 and 65535");
                 keys = new [] { "address", "port" };
             } else if (protocol == Protocol.ProtocolBuffersOverLocalSocket) {
-                if (!ValidPath (settings ["rpc_path"]))
-                    errors.Add (InvalidRPCPathText);
-                if (!ValidPath (settings ["stream_path"]))
-                    errors.Add (InvalidStreamPathText);
-                keys = new [] { "rpc_path", "stream_path" };
+                if (!ValidPath (settings [prefix + "path"]))
+                    errors.Add (InvalidPathText);
+                keys = new [] { "path" };
             } else {
-                if (settings ["port"].Length == 0)
+                if (settings [prefix + "port"].Length == 0)
                     errors.Add ("Port name is empty");
-                if (!ValidBaudRate (settings ["baud_rate"]))
+                if (!ValidBaudRate (settings [prefix + "baud_rate"]))
                     errors.Add ("Baud rate is not an integer");
-                if (!ValidDataBits (settings ["data_bits"]))
+                if (!ValidDataBits (settings [prefix + "data_bits"]))
                     errors.Add ("Data bits must be between 5 and 8 inclusive");
                 keys = new [] { "port", "baud_rate", "data_bits", "parity", "stop_bits" };
             }
@@ -224,7 +234,7 @@ namespace KRPC.KSA.UI
                 Id = id,
                 Protocol = protocol,
                 Name = name,
-                Settings = keys.ToDictionary (x => x, x => settings [x])
+                Settings = keys.ToDictionary (x => prefix + x, x => settings [prefix + x])
             };
         }
     }

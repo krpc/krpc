@@ -1,0 +1,33 @@
+load("//:config.bzl", "author")
+load("//experimental/ksa:config.bzl", "mod_version")
+load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
+load("//tools/build:csharp.bzl", "csharp_library")
+
+exports_files(["settings.toml"])
+
+csharp_assembly_info(
+    name = "AssemblyInfo",
+    cls_compliant = False,
+    copyright = author,
+    description = "Services for the kRPC for KSA tests",
+    title = "KRPC.KSA.TestingTools",
+    version = mod_version,
+)
+
+csharp_library(
+    name = "KRPC.KSA.TestingTools",
+    srcs = glob(["src/**/*.cs"]) + [":AssemblyInfo"],
+    generate_documentation_file = True,
+    target_frameworks = ["net10.0"],
+    treat_warnings_as_errors = True,
+    visibility = ["//experimental/ksa:__subpackages__"],
+    warning_level = 4,
+    deps = [
+        "//core:KRPC.Core.net10",
+        "//experimental/ksa/server:KRPC.KSA",
+        "//experimental/ksa/service/KSA:KRPC.KSA.Service",
+        "@ksa//:Brutal",
+        "@ksa//:KSA",
+        "@paket.main//lib.harmony",
+    ],
+)

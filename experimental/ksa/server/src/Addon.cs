@@ -89,13 +89,6 @@ namespace KRPC.KSA
                 harmony.Patch (Required (typeof (Universe), nameof (Universe.ExecuteNextVehicleSolvers)),
                     prefix: Hook (nameof (BeforeVehicleSolvers))));
 
-            // On .NET, closing a TcpClient sets its socket to null, so KRPC.Core's connected check
-            // throws for a client that disconnected during a call that yields. We treat it as
-            // disconnected, as the check does for a disposed socket on Mono
-            TryPatch ("TCPClient.Connected", "a client that disconnects during a call may stop the server", () =>
-                harmony.Patch (Required (AccessTools.TypeByName ("KRPC.Server.TCP.TCPClient"), "get_Connected"),
-                    finalizer: Hook (nameof (TCPClientConnectedFinalizer))));
-
             // A save load replaces every vehicle, which the core counts as a new game state
             TryPatch ("Universe.DeserializeSave", new [] { "KRPC.GameStateLoads" }, () =>
                 harmony.Patch (Required (typeof (Universe), nameof (Universe.DeserializeSave)),
@@ -383,14 +376,6 @@ namespace KRPC.KSA
             return result;
         }
 
-        static Exception TCPClientConnectedFinalizer (Exception __exception, ref bool __result)
-        {
-            if (__exception is not NullReferenceException)
-                return __exception;
-            __result = false;
-            return null;
-        }
-
         static void AfterSaveLoaded ()
         {
             GameState.Changed ();
@@ -523,8 +508,8 @@ namespace KRPC.KSA
             grpcContext ??= new GrpcLoadContext (
                 Path.Combine (modDirectory, "grpc"), AssemblyLoadContext.GetLoadContext (typeof (Addon).Assembly));
             var type = grpcContext.LoadFromAssemblyName (new AssemblyName ("KRPC.KSA.Grpc")).GetType ("KRPC.KSA.Grpc.GrpcServer");
-            var address = IPAddress.Parse (config.Settings.GetValueOrDefault ("address", IPAddress.Loopback.ToString ()));
-            var port = ushort.Parse (config.Settings.GetValueOrDefault ("port", "50002"), CultureInfo.InvariantCulture);
+            var address = IPAddress.Parse (config.Settings.GetValueOrDefault ("grpc_address", IPAddress.Loopback.ToString ()));
+            var port = ushort.Parse (config.Settings.GetValueOrDefault ("grpc_port", "50002"), CultureInfo.InvariantCulture);
             return (KRPC.Server.Server)type.GetMethod ("Create").Invoke (
                 null, BindingFlags.DoNotWrapExceptions, null,
                 new object [] { config.Id, config.Protocol, config.Name, address, port }, CultureInfo.InvariantCulture);

@@ -39,7 +39,7 @@ Upgrading from 0.1.0, where the mod was named kRPC.KSA: delete the mods/kRPC.KSA
 and change its manifest.toml entry to id = "kRPC".
 
 The server starts when the game has loaded its mods. By default it listens on 127.0.0.1,
-ports 50000 and 50001, and accepts every connection. The settings are in
+port 50000, and accepts every connection. The settings are in
 kRPC/settings.toml.
 
 

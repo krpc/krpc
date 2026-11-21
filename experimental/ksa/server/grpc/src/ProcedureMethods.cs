@@ -123,7 +123,7 @@ namespace KRPC.KSA.Grpc
         static (StatusCode, string, Metadata) ErrorStatus (Error error)
         {
             StatusCode code;
-            switch (error.Name) {
+            switch (error.Exception) {
             case "ArgumentException":
             case "ArgumentNullException":
             case "ArgumentOutOfRangeException":
@@ -139,8 +139,8 @@ namespace KRPC.KSA.Grpc
             var trailers = new Metadata ();
             if (!string.IsNullOrEmpty (error.Service))
                 trailers.Add ("krpc-error-service", error.Service);
-            if (!string.IsNullOrEmpty (error.Name))
-                trailers.Add ("krpc-error-name", error.Name);
+            if (!string.IsNullOrEmpty (error.Exception))
+                trailers.Add ("krpc-error-name", error.Exception);
             if (!string.IsNullOrEmpty (error.StackTrace))
                 trailers.Add ("krpc-error-stack-trace-bin", Encoding.UTF8.GetBytes (error.StackTrace));
             return (code, error.Description, trailers);

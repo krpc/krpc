@@ -23,7 +23,7 @@ Add `cpp/include` to the include path, beside the kRPC C++ client:
 #include <krpc.hpp>
 #include <krpc/services/ksa.hpp>
 
-krpc::services::KSA ksa(&conn);
+krpc::services::KSA ksa(conn);
 std::cout << ksa.active_vehicle()->name() << std::endl;
 ```
 

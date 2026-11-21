@@ -1,0 +1,39 @@
+load("//:config.bzl", "author")
+load("//experimental/ksa:config.bzl", "mod_version")
+load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
+load("//tools/build:csharp.bzl", "csharp_library")
+
+exports_files([
+    "mod.toml",
+    "settings.toml",
+])
+
+csharp_assembly_info(
+    name = "AssemblyInfo",
+    cls_compliant = False,
+    copyright = author,
+    description = "RPC server for Kitten Space Agency",
+    title = "KRPC.KSA",
+    version = mod_version,
+)
+
+csharp_library(
+    name = "KRPC.KSA",
+    srcs = glob(["src/**/*.cs"]) + [":AssemblyInfo"],
+    generate_documentation_file = True,
+    target_frameworks = ["net10.0"],
+    treat_warnings_as_errors = True,
+    visibility = ["//experimental/ksa:__subpackages__"],
+    warning_level = 4,
+    deps = [
+        "//core:KRPC.Core.net10",
+        "//experimental/ksa/service/KSA:KRPC.KSA.Service",
+        "@ksa//:Brutal",
+        "@ksa//:KSA",
+        "@ksa//:Tomlet",
+        "@paket.main//google.protobuf",
+        "@paket.main//lib.harmony",
+        "@paket.main//starmap.api",
+        "@paket.main//system.io.ports",
+    ],
+)

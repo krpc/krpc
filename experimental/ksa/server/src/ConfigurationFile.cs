@@ -58,7 +58,6 @@ namespace KRPC.KSA
             config.ConfirmRemoveClient = GetBoolean (document, "confirm_remove_client", config.ConfirmRemoveClient);
             config.PauseServerWithGame = GetBoolean (document, "pause_server_with_game", config.PauseServerWithGame);
             IgnoredGameVersion = document.ContainsKey ("ignored_ksa_version") ? document.GetString ("ignored_ksa_version") : null;
-            config.OneRPCPerUpdate = GetBoolean (document, "one_rpc_per_update", config.OneRPCPerUpdate);
             config.MaxTimePerUpdate = GetMicroseconds (document, "max_time_per_update", config.MaxTimePerUpdate);
             config.AdaptiveRateControl = GetBoolean (document, "adaptive_rate_control", config.AdaptiveRateControl);
             config.BlockingRecv = GetBoolean (document, "blocking_recv", config.BlockingRecv);
@@ -102,7 +101,6 @@ namespace KRPC.KSA
         static Configuration.Server ParseServer (TomlTable table)
         {
             var server = new Configuration.Server ();
-            var defaults = server.Settings;
             server.Settings = new Dictionary<string, string> ();
             foreach (var entry in table) {
                 switch (entry.Key) {
@@ -122,11 +120,6 @@ namespace KRPC.KSA
                     break;
                 }
             }
-            // The default address and ports, for a TCP or WebSockets server that leaves them out
-            if (server.Protocol == Protocol.ProtocolBuffersOverTCP || server.Protocol == Protocol.ProtocolBuffersOverWebsockets) {
-                foreach (var setting in defaults)
-                    server.Settings.TryAdd (setting.Key, setting.Value);
-            }
             return server;
         }
 
@@ -145,7 +138,6 @@ namespace KRPC.KSA
             }
             toml.Append ('\n');
             toml.Append ("# Rate control. Times are in microseconds\n");
-            AppendValue (toml, "one_rpc_per_update", config.OneRPCPerUpdate);
             AppendValue (toml, "max_time_per_update", config.MaxTimePerUpdate);
             AppendValue (toml, "adaptive_rate_control", config.AdaptiveRateControl);
             AppendValue (toml, "blocking_recv", config.BlockingRecv);

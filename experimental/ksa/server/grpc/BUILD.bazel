@@ -1,0 +1,32 @@
+load("//:config.bzl", "author")
+load("//experimental/ksa:config.bzl", "mod_version")
+load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
+load("//tools/build:csharp.bzl", "csharp_library")
+
+csharp_assembly_info(
+    name = "AssemblyInfo",
+    cls_compliant = False,
+    copyright = author,
+    description = "gRPC server for kRPC for KSA",
+    title = "KRPC.KSA.Grpc",
+    version = mod_version,
+)
+
+# Built against ASP.NET Core and not the game assemblies, as the game references newer
+# Microsoft.Extensions builds than ASP.NET Core
+csharp_library(
+    name = "KRPC.KSA.Grpc",
+    srcs = glob(["src/**/*.cs"]) + [":AssemblyInfo"],
+    generate_documentation_file = True,
+    project_sdk = "web",
+    target_frameworks = ["net10.0"],
+    treat_warnings_as_errors = True,
+    visibility = ["//experimental/ksa:__subpackages__"],
+    warning_level = 4,
+    deps = [
+        "//core:KRPC.Core.net10",
+        "@paket.main//google.protobuf",
+        "@paket.main//grpc.aspnetcore.server",
+        "@paket.main//grpc.core.api",
+    ],
+)

@@ -191,6 +191,7 @@ at = [
   'tools/build/python/BUILD.bazel: python_version = "{version}"',
   'tools/ci/BUILD.bazel: python_version = "{version}"',
   'tools/deps/BUILD.bazel: python_version = "{version}"',
+  'experimental/ksa/tools/grpc/BUILD.bazel: python_version = "{version}"',
 ]
 
 # The oldest Python the packages support
@@ -246,6 +247,7 @@ at = [
   "tools/build/python/requirements.in: protobuf==7.{version}",
   'client/python/pyproject.toml: "protobuf >= 7.{version}"',
   "tools/build/dotnet/paket.dependencies: nuget Google.Protobuf 3.{version}",
+  'experimental/ksa/BUILD.bazel: protobuf_version = "3.{version}"',
   { file = "tools/build/dotnet/paket.main.bzl", text = '{"name": "Google.Protobuf", "id": "Google.Protobuf", "version": "3.{version}"', generated = true },
   'MODULE.bazel: "nuget.google.protobuf.v3.{version}"',
   "tools/build/dotnet/BUILD.bazel: @nuget.google.protobuf.v3.{version}//",
@@ -392,6 +394,67 @@ at = [
   "tools/build/dotnet/paket.dependencies: nuget System.IO.Ports {version}",
   { file = "tools/build/dotnet/paket.main.bzl", text = '{"name": "System.IO.Ports", "id": "System.IO.Ports", "version": "{version}"', generated = true },
   'core/src/KRPC.Core.csproj: <PackageReference Include="System.IO.Ports" Version="{version}"',
+  'MODULE.bazel: "nuget.system.io.ports.v{version}"',
+  'MODULE.bazel: "nuget.runtime.linux-x64.runtime.native.system.io.ports.v{version}"',
+  'experimental/ksa/BUILD.bazel: ports_version = "{version}"',
+]
+
+# The kRPC for KSA mod
+[[dep]]
+name = "StarMap"
+version = "0.4.8"
+source = "github-release:StarMapLoader/StarMap"
+hold = "experimental/ksa/tools/release/01-update-ksa.py --starmap moves it, with its sha256"
+at = ['experimental/ksa/config.bzl: starmap_version = "{version}"']
+
+[[dep]]
+name = "Grpc.AspNetCore.Server"
+version = "2.71.0"
+source = "nuget:Grpc.AspNetCore.Server"
+regen = ["nuget"]
+at = [
+  "tools/build/dotnet/paket.dependencies: nuget Grpc.AspNetCore.Server {version}",
+  { file = "tools/build/dotnet/paket.main.bzl", text = '{"name": "Grpc.AspNetCore.Server", "id": "Grpc.AspNetCore.Server", "version": "{version}"', generated = true },
+  'MODULE.bazel: "nuget.grpc.aspnetcore.server.v{version}"',
+  'MODULE.bazel: "nuget.grpc.core.api.v{version}"',
+  'MODULE.bazel: "nuget.grpc.net.common.v{version}"',
+  'experimental/ksa/BUILD.bazel: grpc_version = "{version}"',
+]
+
+[[dep]]
+name = "Lib.Harmony"
+version = "2.4.2"
+source = "nuget:Lib.Harmony"
+regen = ["nuget"]
+at = [
+  "tools/build/dotnet/paket.dependencies: nuget Lib.Harmony {version}",
+  { file = "tools/build/dotnet/paket.main.bzl", text = '{"name": "Lib.Harmony", "id": "Lib.Harmony", "version": "{version}"', generated = true },
+]
+
+[[dep]]
+name = "StarMap.API"
+version = "0.3.6"
+source = "nuget:StarMap.API"
+regen = ["nuget"]
+at = [
+  "tools/build/dotnet/paket.dependencies: nuget StarMap.API {version}",
+  { file = "tools/build/dotnet/paket.main.bzl", text = '{"name": "StarMap.API", "id": "StarMap.API", "version": "{version}"', generated = true },
+]
+
+[[dep]]
+name = "Microsoft.AspNetCore.App.Runtime"
+version = "10.0.13"
+source = "nuget:Microsoft.AspNetCore.App.Runtime.linux-x64"
+below = "11"
+regen = ["nuget"]
+at = [
+  "tools/build/dotnet/paket.dependencies: nuget Microsoft.AspNetCore.App.Runtime.linux-x64 {version}",
+  "tools/build/dotnet/paket.dependencies: nuget Microsoft.AspNetCore.App.Runtime.win-x64 {version}",
+  { file = "tools/build/dotnet/paket.main.bzl", text = '{"name": "Microsoft.AspNetCore.App.Runtime.linux-x64", "id": "Microsoft.AspNetCore.App.Runtime.linux-x64", "version": "{version}"', generated = true },
+  { file = "tools/build/dotnet/paket.main.bzl", text = '{"name": "Microsoft.AspNetCore.App.Runtime.win-x64", "id": "Microsoft.AspNetCore.App.Runtime.win-x64", "version": "{version}"', generated = true },
+  'MODULE.bazel: "nuget.microsoft.aspnetcore.app.runtime.linux-x64.v{version}"',
+  'MODULE.bazel: "nuget.microsoft.aspnetcore.app.runtime.win-x64.v{version}"',
+  'experimental/ksa/BUILD.bazel: aspnetcore_version = "{version}"',
 ]
 
 # Dependencies of Google.Protobuf, whose versions it sets

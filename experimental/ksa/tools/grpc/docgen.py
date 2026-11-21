@@ -102,19 +102,19 @@ class GrpcDomain(Domain):
                     "request": [
                         (
                             snake_case(p["name"]),
-                            self.field_type(p["type"], "default_value" in p),
+                            self.rpc_field_type(p["type"], "default_value" in p),
                             node,
                         )
                         for p, node in zip(parameters, nodes)
                     ],
-                    "response": self.field_type(info["return_type"], False)
+                    "response": self.rpc_field_type(info["return_type"], False)
                     if "return_type" in info
                     else None,
                 }
             )
         return rpcs
 
-    def field_type(self, typ, has_default):
+    def rpc_field_type(self, typ, has_default):
         """The type of a request or response field, as protogen.py declares it."""
         code = typ["code"]
         if code in ("LIST", "SET"):

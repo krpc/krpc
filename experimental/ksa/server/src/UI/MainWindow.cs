@@ -82,7 +82,7 @@ namespace KRPC.KSA.UI
 
         protected override void DrawConsoleFooter ()
         {
-            var clients = core.RPCClients.Count ();
+            var clients = core.Clients.Count ();
             var status = (core.AnyRunning ? "ONLINE" : "OFFLINE") + "  " +
                 clients.ToString (CultureInfo.InvariantCulture) + (clients == 1 ? " CLIENT" : " CLIENTS");
             ConsoleStyle.FooterStatus (status, false);
@@ -271,7 +271,6 @@ namespace KRPC.KSA.UI
             changed |= DrawCheckboxRow ("Auto-accept new clients", "auto_accept", c.AutoAcceptConnections, v => c.AutoAcceptConnections = v);
             changed |= DrawCheckboxRow ("Confirm disconnecting a client", "confirm_remove", c.ConfirmRemoveClient, v => c.ConfirmRemoveClient = v);
             changed |= DrawCheckboxRow ("Pause the server with the game", "pause", c.PauseServerWithGame, v => c.PauseServerWithGame = v);
-            changed |= DrawCheckboxRow ("One RPC per update", "one_rpc", c.OneRPCPerUpdate, v => c.OneRPCPerUpdate = v);
             changed |= DrawMicrosecondsRow ("Max. time per update", "max_time", ref maxTimePerUpdate, v => c.MaxTimePerUpdate = v);
             changed |= DrawCheckboxRow ("Adaptive rate control", "adaptive", c.AdaptiveRateControl, v => c.AdaptiveRateControl = v);
             changed |= DrawCheckboxRow ("Blocking receives", "blocking_recv", c.BlockingRecv, v => c.BlockingRecv = v);

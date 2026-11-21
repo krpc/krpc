@@ -1,0 +1,166 @@
+load("@bazel_skylib//rules:write_file.bzl", "write_file")
+load("@rules_pkg//pkg:mappings.bzl", "pkg_files", "strip_prefix")
+load("@rules_pkg//pkg:zip.bzl", "pkg_zip")
+load("//:config.bzl", "assembly_version")
+load("//experimental/ksa/tools/build:mod.bzl", "deps_json", "files_in")
+load(":config.bzl", "mod_version")
+
+exports_files(["CHANGELOG.md"])
+
+# The kRPC for KSA mod and release archives. The game assemblies come from @ksa, the KSA
+# install at KSA_DIR.
+
+# The versions of the NuGet packages in the mod folder, as locked in
+# //tools/build/dotnet:paket.lock
+protobuf_version = "3.36.2"
+
+ports_version = "10.0.15"
+
+aspnetcore_version = "10.0.13"
+
+grpc_version = "2.71.0"
+
+write_file(
+    name = "deps-json",
+    out = "KRPC.KSA.deps.json",
+    content = [deps_json(mod_version, assembly_version, protobuf_version, ports_version)],
+)
+
+# Loaded by StarMap into its own load context, as a component
+write_file(
+    name = "runtimeconfig-json",
+    out = "KRPC.KSA.runtimeconfig.json",
+    content = [json.encode_indent(
+        {
+            "runtimeOptions": {
+                "tfm": "net10.0",
+                "rollForward": "LatestMinor",
+                "framework": {
+                    "name": "Microsoft.NETCore.App",
+                    "version": "10.0.0",
+                },
+            },
+        },
+        indent = "  ",
+    )],
+)
+
+pkg_files(
+    name = "mod-root",
+    srcs = [
+        ":deps-json",
+        ":runtimeconfig-json",
+        "//core:KRPC.Core.net10",
+        "//experimental/ksa/server:KRPC.KSA",
+        "//experimental/ksa/server:mod.toml",
+        "//experimental/ksa/service/KSA:KRPC.KSA.Service",
+        "@nuget.google.protobuf.v%s//:lib/net8.0/Google.Protobuf.dll" % protobuf_version,
+        "@nuget.system.io.ports.v%s//:lib/net10.0/System.IO.Ports.dll" % ports_version,
+    ],
+    prefix = "kRPC",
+    strip_prefix = strip_prefix.files_only(),
+)
+
+[
+    pkg_files(
+        name = "mod-ports-" + rid,
+        srcs = ["@nuget.system.io.ports.v%s//:runtimes/%s/lib/net10.0/System.IO.Ports.dll" % (ports_version, rid)],
+        prefix = "kRPC/runtimes/%s/lib/net10.0" % rid,
+        strip_prefix = strip_prefix.files_only(),
+    )
+    for rid in [
+        "unix",
+        "win",
+    ]
+]
+
+pkg_files(
+    name = "mod-ports-native",
+    srcs = [
+        "@nuget.runtime.linux-x64.runtime.native.system.io.ports.v%s//:runtimes/linux-x64/native/libSystem.IO.Ports.Native.so" % ports_version,
+    ],
+    prefix = "kRPC/runtimes/linux-x64/native",
+    strip_prefix = strip_prefix.files_only(),
+)
+
+pkg_files(
+    name = "mod-settings",
+    srcs = ["//experimental/ksa/server:settings.toml"],
+    prefix = "kRPC",
+    strip_prefix = strip_prefix.files_only(),
+)
+
+pkg_files(
+    name = "mod-grpc",
+    srcs = [
+        "//experimental/ksa/server/grpc:KRPC.KSA.Grpc",
+        "@nuget.grpc.aspnetcore.server.v%s//:lib/net9.0/Grpc.AspNetCore.Server.dll" % grpc_version,
+        "@nuget.grpc.core.api.v%s//:lib/netstandard2.1/Grpc.Core.Api.dll" % grpc_version,
+        "@nuget.grpc.net.common.v%s//:lib/net8.0/Grpc.Net.Common.dll" % grpc_version,
+    ],
+    prefix = "kRPC/grpc",
+    strip_prefix = strip_prefix.files_only(),
+)
+
+# KSA ships no ASP.NET Core, which the gRPC server runs on. The mod carries the assemblies of
+# its runtime pack for each platform, as they are compiled ahead of time for one platform each.
+[
+    files_in(
+        name = "aspnetcore-" + rid,
+        srcs = ["@nuget.microsoft.aspnetcore.app.runtime.%s.v%s//:files" % (rid, aspnetcore_version)],
+        directory = "runtimes/%s/lib/net10.0" % rid,
+    )
+    for rid in [
+        "linux-x64",
+        "win-x64",
+    ]
+]
+
+[
+    pkg_files(
+        name = "mod-aspnetcore-" + rid,
+        srcs = [":aspnetcore-" + rid],
+        prefix = "kRPC/grpc/" + rid,
+        strip_prefix = strip_prefix.files_only(),
+    )
+    for rid in [
+        "linux-x64",
+        "win-x64",
+    ]
+]
+
+mod_files = [
+    ":mod-root",
+    ":mod-ports-unix",
+    ":mod-ports-win",
+    ":mod-ports-native",
+    ":mod-grpc",
+    ":mod-aspnetcore-linux-x64",
+    ":mod-aspnetcore-win-x64",
+]
+
+# The mod folder, kRPC/, as installed in the KSA mods folder
+pkg_zip(
+    name = "mod",
+    srcs = mod_files + [":mod-settings"],
+    out = "kRPC-mod.zip",
+    visibility = ["//visibility:public"],
+)
+
+pkg_files(
+    name = "mod-testing-files",
+    srcs = [
+        "//experimental/ksa/tools/TestingTools:KRPC.KSA.TestingTools",
+        "//experimental/ksa/tools/TestingTools:settings.toml",
+    ],
+    prefix = "kRPC",
+    strip_prefix = strip_prefix.files_only(),
+)
+
+# The mod folder for the tests, with the TestingTools service and the test settings
+pkg_zip(
+    name = "mod-testing",
+    srcs = mod_files + [":mod-testing-files"],
+    out = "kRPC-mod-testing.zip",
+    visibility = ["//visibility:public"],
+)

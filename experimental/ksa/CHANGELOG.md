@@ -1,3 +1,9 @@
+## [v0.3.0] - unreleased
+
+- Mod
+  - **Breaking:** Use the kRPC 0.8 protocol, so clients and client stubs need kRPC 0.8
+  - **Breaking:** Rename the server settings in `kRPC/settings.toml`, with one port per server
+
 ## [v0.2.0]
 
 - Mod
