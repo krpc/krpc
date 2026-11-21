@@ -5,8 +5,8 @@ load("@rules_cc//cc:defs.bzl", "cc_library")
 load("@rules_java//java:defs.bzl", "java_library")
 load("@rules_pkg//pkg:mappings.bzl", "pkg_files", "strip_prefix")
 load("@rules_pkg//pkg:zip.bzl", "pkg_zip")
-load("//:config.bzl", "author", "version")
-load("//experimental/ksa:config.bzl", "mod_version")
+load("//:config.bzl", "author")
+load("//experimental/ksa:config.bzl", "client_version", "mod_version")
 load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
 load("//tools/build:csharp.bzl", "csharp_library")
 load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
@@ -169,7 +169,7 @@ genrule(
 expand_template(
     name = "readme",
     out = "stubs-readme/README.md",
-    substitutions = {"@CLIENT_VERSION@": version},
+    substitutions = {"@CLIENT_VERSION@": client_version},
     template = "stubs-README.md",
 )
 

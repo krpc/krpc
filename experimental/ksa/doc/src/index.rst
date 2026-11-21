@@ -4,6 +4,7 @@ Remote Procedure Calls for Kitten Space Agency
 kRPC for KSA lets you control Kitten Space Agency from scripts running outside the game. A
 server inside the game exposes the game's API, and the `kRPC <https://krpc.github.io/krpc/>`_
 @KRPC_VERSION@ client libraries call it from Python, C#, C++, C, Java, JavaScript and Lua.
+Other languages can call it over HTTP, given an HTTP library.
 
 .. note::
 
@@ -54,6 +55,11 @@ reaches an altitude of 10 km:
 
       .. literalinclude:: /scripts/index/Launch.lua
          :language: lua
+
+   .. tab:: HTTP (Python)
+
+      .. literalinclude:: /scripts/index/LaunchHTTP.py
+         :language: python
 
    .. tab:: gRPC (Python)
 
@@ -109,43 +115,80 @@ reaches an altitude of 10 km:
 Clients
 -------
 
-.. grid:: 2 4 7 7
+.. grid:: 2 3 3 3
    :gutter: 2
 
    .. grid-item-card:: Python
       :link: python
       :link-type: doc
       :text-align: center
+      :img-top: _static/clients/python.svg
+      :img-alt:
+      :class-card: client-card
 
    .. grid-item-card:: C#
       :link: csharp
       :link-type: doc
       :text-align: center
+      :img-top: _static/clients/csharp.svg
+      :img-alt:
+      :class-card: client-card
 
    .. grid-item-card:: C++
       :link: cpp
       :link-type: doc
       :text-align: center
+      :img-top: _static/clients/cpp.svg
+      :img-alt:
+      :class-card: client-card
 
    .. grid-item-card:: C-nano
       :link: cnano
       :link-type: doc
       :text-align: center
+      :img-top: _static/clients/c.svg
+      :img-alt:
+      :class-card: client-card
 
    .. grid-item-card:: Java
       :link: java
       :link-type: doc
       :text-align: center
+      :img-top: _static/clients/java.svg
+      :img-alt:
+      :class-card: client-card
 
    .. grid-item-card:: Lua
       :link: lua
       :link-type: doc
       :text-align: center
+      :img-top: _static/clients/lua.svg
+      :img-alt:
+      :class-card: client-card
+
+   .. grid-item-card:: JavaScript
+      :link: js
+      :link-type: doc
+      :text-align: center
+      :img-top: _static/clients/javascript.svg
+      :img-alt:
+      :class-card: client-card
+
+   .. grid-item-card:: HTTP
+      :link: http
+      :link-type: doc
+      :text-align: center
+      :img-top: _static/clients/http.svg
+      :img-alt:
+      :class-card: client-card
 
    .. grid-item-card:: gRPC
       :link: grpc
       :link-type: doc
       :text-align: center
+      :img-top: _static/clients/grpc.svg
+      :img-alt:
+      :class-card: client-card
 
 .. toctree::
    :hidden:

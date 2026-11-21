@@ -42,8 +42,10 @@ A KSA update needs a release only when it breaks the mod.
 7. `02-prepare.py [version]` - on a release preparation branch off an up to date `main`,
    releases the unreleased section of `CHANGELOG.md`, sets `mod_version` in `config.bzl`, and
    commits them as `Release kRPC for KSA X.Y.Z`. A release that only follows a KSA update is the
-   patch version the update started. Pass a version for a minor release. Push the branch, open
-   the release preparation pull request and merge it, then check out the release commit.
+   patch version the update started. Pass a version for a minor release. Check that
+   `client_version` in `config.bzl` names the kRPC client release whose protocol the mod speaks,
+   as the docs and the stubs readme name it. Push the branch, open the release preparation pull
+   request and merge it, then check out the release commit.
 8. `10-preflight.py` - checks the tree, the release commit, the tools, the KSA install, the
    credentials, SpaceDock and the Borea listing. Read-only, so run it as often as you like.
 9. `20-borea-listing.py [--game-min <build>] [--loader-min <version>]` - sets the KSA and StarMap

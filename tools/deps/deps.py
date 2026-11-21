@@ -367,9 +367,9 @@ PIN_FORMS: list[tuple[tuple[str, ...], re.Pattern[str]]] = [
 NOT_PINS: list[tuple[str, re.Pattern[str]]] = [
     ("config.bzl", re.compile(r'(?m)^version = "')),  # kRPC's own version
     ("tools/krpctools/pyproject.toml", re.compile(r'"krpc >= ')),  # set by the build
-    # kRPC for KSA's own version, and the KSA build, which is closed source and has no
-    # release to check. 01-update-ksa.py moves it.
-    ("experimental/ksa/config.bzl", re.compile(r'(?m)^(mod|ksa)_version = "')),
+    # kRPC for KSA's own version, the kRPC client release it works with, and the KSA build,
+    # which is closed source and has no release to check. 01-update-ksa.py moves the KSA build.
+    ("experimental/ksa/config.bzl", re.compile(r'(?m)^(mod|client|ksa)_version = "')),
 ]
 
 # Not scanned: lock files the regenerators write, and the KSP mods (the mods command and

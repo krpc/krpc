@@ -209,6 +209,12 @@ exports_files(
     visibility = ["//experimental/ksa/doc:__pkg__"],
 )
 
+# The client logos, for the other documentation sites' client cards
+exports_files(
+    glob(["src/_static/clients/*"]),
+    visibility = ["//experimental/ksa/doc:__pkg__"],
+)
+
 # The spellchecker, dictionary, documented members check and example lint
 # configurations, which the other documentation sites share
 exports_files(

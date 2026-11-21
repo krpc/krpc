@@ -21,6 +21,7 @@ extensions = [
     "sphinx_csharp",
     "sphinx_java",
     "grpcdomain",
+    "sphinxcontrib.httpdomain",
 ]
 suppress_warnings = ["design.fa-build"]
 

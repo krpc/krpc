@@ -30,22 +30,18 @@ To install the mod by hand:
 
 4. Launch the game through StarMap.
 
-.. note::
-
-   Version 0.1.0 named the mod ``kRPC.KSA``. To upgrade from it, delete the ``mods/kRPC.KSA``
-   folder, and change its ``manifest.toml`` entry to ``id = "kRPC"``.
-
 The servers start once the game has loaded its mods. They listen on ``127.0.0.1``, with TCP/IP on
 port 50000 and WebSockets on port 50001, and accept every connection.
 
 Game Versions
 ^^^^^^^^^^^^^
 
-kRPC for KSA @VERSION@ is built for KSA @KSA_VERSION@, and may run on other versions. If the mod
-detects that the game version is not supported, a pop-up warns you, and lists the RPCs that use
-game code missing from it. Those RPCs throw an exception when called. Other RPCs may still
-behave differently, as the check finds only missing code. **Don't show again for this version**
-hides the pop-up until the game updates.
+kRPC for KSA @VERSION@ is built for KSA @KSA_VERSION@, and may run on other versions. On another
+version, a pop-up warns you, and lists the RPCs that use game code missing from it, or that rely
+on a patch to the game that failed. An RPC that uses missing code throws an exception when
+called, and one that relies on a failed patch may not take effect. Other RPCs may still behave
+differently, as the check finds only missing code. **Don't show again for this version** hides
+the pop-up until the game updates.
 
 Configuration
 ^^^^^^^^^^^^^
@@ -55,7 +51,7 @@ server's address and connected clients, and edits its protocol, address and port
 WebSockets or HTTP server, **Origins** lists the other sites whose web pages may connect, as the
 `WebSockets protocol page
 <https://krpc.github.io/krpc/@KRPC_VERSION@/communication-protocols/websockets.html#web-pages>`_
-describes. **Advanced settings** at the bottom of the window holds the connection and rate
+and the :ref:`HTTP page <ksa-http-origins>` describe. **Advanced settings** at the bottom of the window holds the connection and rate
 control settings, and shows the server info window. The kRPC documentation describes the
 `rate control settings
 <https://krpc.github.io/krpc/@KRPC_VERSION@/user-guide/server-performance.html#settings>`_ in

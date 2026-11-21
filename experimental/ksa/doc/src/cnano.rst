@@ -13,12 +13,12 @@ This page covers using the kRPC C-nano client with the ``KSA`` service. The
 Installing
 ----------
 
-The server listens over TCP/IP, so build the kRPC C-nano client @KRPC_VERSION@ with its
-``tcp`` feature, for example from `vcpkg <https://vcpkg.io>`_:
+Install the kRPC C-nano client @KRPC_VERSION@, for example from `vcpkg <https://vcpkg.io>`_.
+It includes the TCP/IP transport the server listens on:
 
 .. code-block:: bash
 
-   vcpkg install "krpc-cnano[tcp]"
+   vcpkg install krpc-cnano
 
 Add ``cnano/include`` from the ``stubs`` folder of the release archive to the include
 path.
