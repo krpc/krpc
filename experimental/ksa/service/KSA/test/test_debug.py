@@ -157,10 +157,12 @@ class TestVehicles(DebugCase):
             self.debug.duplicate_vehicle(self.vehicle, "Rocket")
 
     def test_explode_vehicle(self):
-        (kitten,) = self.vehicle.crew
+        crew = self.vehicle.crew
+        self.assertEqual(2, len(crew))
         self.debug.explode_vehicle(self.vehicle)
         self.assertNotIn("Gemini7", [v.name for v in self.ksa.vehicles])
-        self.assertTrue(kitten.killed_in_action)
+        for kitten in crew:
+            self.assertTrue(kitten.killed_in_action)
 
     def test_velocity_arrows(self):
         self.debug.show_velocity_arrows(True)

@@ -279,6 +279,10 @@ class TestPart(ksatest.TestCase):
         self.assertIsNone(port.docked_part)
         with self.assertRaises(RuntimeError):
             port.undock()
+        self.assertFalse(port.hatch_open)
+        with self.assertRaises(RuntimeError):
+            port.hatch_open = True
+        self.assertFalse(port.hatch_open)
 
 
 class TestDecoupler(ksatest.TestCase):

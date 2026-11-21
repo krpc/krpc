@@ -71,6 +71,24 @@ class TestLaunch(ksatest.TestCase):
         self.assertAlmostEqual(90, self.flight.pitch, delta=1)
         self.assertLess(self.flight.speed, 1)
 
+    def test_atmosphere_on_the_pad(self):
+        # Sea level air at Cape Canaveral
+        self.assertAlmostEqual(288, self.flight.static_air_temperature, delta=15)
+        self.assertAlmostEqual(340, self.flight.speed_of_sound, delta=15)
+        self.assertLess(self.flight.mach, 0.01)
+        self.assertEqual(self.ksa.OutsideAir.breathable, self.flight.outside_air)
+        altitude = self.flight.mean_altitude
+        self.assertAlmostEqual(
+            self.earth.temperature_at(altitude),
+            self.flight.static_air_temperature,
+            delta=0.5,
+        )
+        self.assertAlmostEqual(
+            self.earth.speed_of_sound_at(altitude),
+            self.flight.speed_of_sound,
+            delta=0.5,
+        )
+
     def test_invalid_launch(self):
         with self.assertRaises(ValueError):
             self.ksa.launch_vehicle("No such vehicle", SITE)
@@ -97,6 +115,9 @@ class TestHop(ksatest.TestCase):
         control.activate_next_sequence()
         control.engine_on = True
         ksatest.wait_until(lambda: self.flight.surface_altitude > 200, timeout=30)
+        self.assertAlmostEqual(
+            self.flight.speed / self.flight.speed_of_sound, self.flight.mach, delta=0.01
+        )
         control.engine_on = False
         # The vehicle settles onto the pad after launch, and the prediction made while it
         # settled can still say impact, so wait for one in the future

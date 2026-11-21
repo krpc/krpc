@@ -18,6 +18,7 @@ using KRPC.Service;
 using KRPC.Utils;
 using KSA;
 using StarMap.API;
+using StarMap.API.Services;
 using Logger = KRPC.Utils.Logger;
 
 namespace KRPC.KSA
@@ -35,6 +36,7 @@ namespace KRPC.KSA
 
         readonly Harmony harmony = new Harmony ("kRPC");
         readonly string modDirectory;
+        readonly IModMenuService menu;
         Core core;
         ConfigurationFile config;
         ClientRequestingConnectionEventArgs connectionRequest;
@@ -47,11 +49,12 @@ namespace KRPC.KSA
         bool showCompatibilityWarning;
 
         /// <summary>
-        /// Construct the addon. StarMap creates one instance.
+        /// Construct the addon. StarMap creates one instance, and passes its mod menu.
         /// </summary>
-        public Addon ()
+        public Addon (IModMenuService menu)
         {
             instance = this;
+            this.menu = menu;
             modDirectory = Path.GetDirectoryName (typeof (Addon).Assembly.Location);
         }
 
@@ -105,7 +108,9 @@ namespace KRPC.KSA
                 "KSA.Drawing.AddArc", "KSA.Drawing.AddBox", "KSA.Drawing.AddSphere"
             }, () => harmony.Patch (Required (typeof (Program), "OnPreRender"), prefix: Hook (nameof (BeforePreRender))));
 
-            TryPatch ("Program.DrawMenuBar", "the kRPC menu is not shown", () => MenuBar.Patch (harmony, this));
+            // The kRPC item in StarMap's Mods menu, kept for the life of the game
+            menu.AddModMenuItem ("kRPC", () => MainWindow?.SetShown (true));
+
             TryPatch ("ImGuiWindow.OnDrawUiConsole", "kRPC windows open at the game's size", () => ConsoleWindow.Patch (harmony));
 
             if (config.Configuration.AutoStartServers) {

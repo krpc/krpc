@@ -3,9 +3,6 @@ import math
 import ksatest
 from test_parachute import SITE
 
-# The kittens the game starts on EVA. The roster names the others at random
-EVA_KITTENS = ("Hunter", "Banjo", "Polaris")
-
 
 def distance(position):
     return math.sqrt(sum(x * x for x in position))
@@ -23,7 +20,8 @@ class CrewCase(ksatest.TestCase):
 
     def setUp(self):
         self.vehicle = self.find_vehicle("Gemini7")
-        (self.kitten,) = self.vehicle.crew
+        # The game starts with a kitten in each of the vehicle's two seats
+        self.kitten, self.crewmate = self.vehicle.crew
 
     def free_kitten(self):
         """A kitten that is not in a seat or on EVA."""
@@ -40,13 +38,12 @@ class CrewCase(ksatest.TestCase):
 class TestCrew(CrewCase):
     def test_kittens(self):
         kittens = self.ksa.kittens
-        for name in EVA_KITTENS:
-            self.assertIn(name, kittens)
         for name, kitten in kittens.items():
             self.assertEqual(name, kitten.name)
         indices = sorted(kitten.roster_index for kitten in kittens.values())
         self.assertEqual(list(range(len(kittens))), indices)
         self.assertIn(self.kitten, kittens.values())
+        self.assertIn(self.crewmate, kittens.values())
 
     def test_vehicle_crew(self):
         self.assertEqual(2, self.vehicle.crew_capacity)
@@ -54,7 +51,8 @@ class TestCrew(CrewCase):
         self.assertEqual(self.vehicle, self.kitten.vehicle)
         self.assertIn(self.kitten.seat, self.vehicle.seats)
         self.assertIn(self.kitten.seat.part, self.vehicle.parts)
-        self.assertEqual([self.kitten], self.kitten.seat.part.crew)
+        self.assertIn(self.kitten, self.kitten.seat.part.crew)
+        self.assertNotEqual(self.kitten.seat, self.crewmate.seat)
         self.assertFalse(self.kitten.on_eva)
 
     def test_part_seats(self):
@@ -99,9 +97,8 @@ class TestSeats(CrewCase):
     def setUp(self):
         self.load_save()
         super().setUp()
-        (self.empty_seat,) = [
-            seat for seat in self.vehicle.seats if seat.kitten is None
-        ]
+        self.empty_seat = self.crewmate.seat
+        self.empty_seat.kitten = None
 
     def test_assign(self):
         kitten = self.free_kitten()
@@ -123,11 +120,12 @@ class TestSeats(CrewCase):
         self.assertEqual([self.kitten], self.vehicle.crew)
 
     def test_kitten_on_eva(self):
+        self.kitten.go_on_eva()
         with self.assertRaises(RuntimeError):
-            self.empty_seat.kitten = self.ksa.kittens["Hunter"]
+            self.empty_seat.kitten = self.kitten
 
     def test_kitten_in_another_vehicle(self):
-        (kitten,) = self.find_vehicle("Rocket").crew
+        kitten = self.find_vehicle("Rocket").crew[0]
         with self.assertRaises(RuntimeError):
             self.empty_seat.kitten = kitten
         self.assertEqual(self.find_vehicle("Rocket"), kitten.vehicle)
@@ -139,17 +137,15 @@ class TestEva(CrewCase):
         super().setUp()
         self.frame = self.vehicle.reference_frame
 
-    def test_kittens_on_eva(self):
-        for name in EVA_KITTENS:
-            with self.subTest(kitten=name):
-                kitten = self.ksa.kittens[name]
-                self.assertTrue(kitten.on_eva)
-                self.assertIsNone(kitten.vehicle)
-                self.assertIsNone(kitten.seat)
-                self.assertEqual(self.ksa.LocomotionMode.mmu, kitten.locomotion_mode)
-                self.assertLess(distance(kitten.position(self.frame)), 10000)
-                self.assertLess(distance(kitten.velocity(self.frame)), 10)
-                self.assertNotIn(name, [vehicle.name for vehicle in self.ksa.vehicles])
+    def test_on_eva(self):
+        self.kitten.go_on_eva()
+        self.assertTrue(self.kitten.on_eva)
+        self.assertIsNone(self.kitten.vehicle)
+        self.assertIsNone(self.kitten.seat)
+        self.assertLess(distance(self.kitten.position(self.frame)), 10)
+        self.assertLess(distance(self.kitten.velocity(self.frame)), 10)
+        names = [vehicle.name for vehicle in self.ksa.vehicles]
+        self.assertNotIn(self.kitten.name, names)
 
     def test_not_on_eva(self):
         # A kitten in a seat is where the seat's part is
@@ -176,7 +172,7 @@ class TestEva(CrewCase):
         self.kitten.go_on_eva()
         self.assertTrue(self.kitten.on_eva)
         self.assertIsNone(self.kitten.seat)
-        self.assertEqual([], self.vehicle.crew)
+        self.assertEqual([self.crewmate], self.vehicle.crew)
         self.assertEqual(self.kitten, self.ksa.active_kitten)
         self.assertIsNone(self.ksa.active_vehicle)
         self.assertLess(distance(self.kitten.position(self.frame)), 10)
@@ -187,7 +183,7 @@ class TestEva(CrewCase):
         self.assertEqual(self.vehicle, self.kitten.board())
         self.assertFalse(self.kitten.on_eva)
         self.assertEqual(self.vehicle, self.kitten.vehicle)
-        self.assertEqual([self.kitten], self.vehicle.crew)
+        self.assertCountEqual([self.kitten, self.crewmate], self.vehicle.crew)
         self.assertEqual(self.vehicle, self.ksa.active_vehicle)
         self.assertIsNone(self.ksa.active_kitten)
 
@@ -195,19 +191,89 @@ class TestEva(CrewCase):
         with self.assertRaises(RuntimeError):
             self.free_kitten().go_on_eva()
 
-    def test_board_out_of_range(self):
+    def test_board_with_no_free_seat(self):
+        seat = self.kitten.seat
+        self.kitten.go_on_eva()
+        mode = self.ksa.LocomotionMode
+        ksatest.wait_until(lambda: self.kitten.locomotion_mode == mode.ladder)
+        seat.kitten = self.free_kitten()
         with self.assertRaises(RuntimeError):
-            self.ksa.kittens["Banjo"].board()
+            self.kitten.board()
 
     def test_active_kitten(self):
         self.assertIsNone(self.ksa.active_kitten)
-        kitten = self.ksa.kittens["Hunter"]
-        self.ksa.active_kitten = kitten
-        ksatest.wait_until(lambda: self.ksa.active_kitten == kitten)
-        self.assertIsNone(self.ksa.active_vehicle)
+        self.kitten.go_on_eva()
         self.ksa.active_vehicle = self.vehicle
         ksatest.wait_until(lambda: self.ksa.active_vehicle == self.vehicle)
         self.assertIsNone(self.ksa.active_kitten)
+        self.ksa.active_kitten = self.kitten
+        ksatest.wait_until(lambda: self.ksa.active_kitten == self.kitten)
+        self.assertIsNone(self.ksa.active_vehicle)
+
+    def test_can_go_on_eva(self):
+        self.assertTrue(self.kitten.can_go_on_eva)
+        self.assertFalse(self.free_kitten().can_go_on_eva)
+        self.assertIsNone(self.kitten.life_support)
+        self.kitten.go_on_eva()
+        self.assertFalse(self.kitten.can_go_on_eva)
+
+    def test_no_suit_supplies(self):
+        # Outside the atmosphere the suit fills from the zone's supplies
+        self.ksa.Debug.empty_resources(self.vehicle)
+        # The game updates the vehicle's forecast of its supplies each frame
+        ksatest.wait_until(lambda: not self.kitten.can_go_on_eva)
+        with self.assertRaises(RuntimeError):
+            self.kitten.go_on_eva()
+        self.assertFalse(self.kitten.on_eva)
+
+    def test_suit(self):
+        self.kitten.go_on_eva()
+        life_support = self.kitten.life_support
+        self.assertEqual(1, life_support.kittens)
+        # Eight hours of oxygen and scrubber in the suit
+        self.assertGreater(life_support.air_time, 0)
+        self.assertLessEqual(life_support.air_time, 8 * 3600 + 60)
+        self.assertGreater(life_support.scrubber_time, 0)
+        self.assertLessEqual(life_support.scrubber_time, 8 * 3600 + 60)
+        self.assertLessEqual(life_support.time, life_support.air_time)
+        self.assertEqual(self.ksa.LifeSupportLevel.ok, life_support.level)
+
+    def test_can_board(self):
+        self.assertFalse(self.kitten.can_board)
+        self.kitten.go_on_eva()
+        mode = self.ksa.LocomotionMode
+        ksatest.wait_until(lambda: self.kitten.locomotion_mode == mode.ladder)
+        self.assertTrue(self.kitten.can_board)
+
+    def test_carry(self):
+        habitats = self.vehicle.habitats
+        (cabin,) = [h for h in habitats if h.storage_volume > 0]
+        (bay,) = [h for h in habitats if h.storage_volume == 0]
+        with self.assertRaises(RuntimeError):
+            self.kitten.take(cabin, meals=1)
+        self.assertFalse(self.kitten.can_carry(cabin))
+        self.kitten.go_on_eva()
+        mode = self.ksa.LocomotionMode
+        ksatest.wait_until(lambda: self.kitten.locomotion_mode == mode.ladder)
+        self.assertEqual(0, self.kitten.carried_meals)
+        self.assertEqual(0, self.kitten.carried_canisters)
+        self.assertTrue(self.kitten.can_carry(cabin))
+        self.assertFalse(self.kitten.can_carry(bay))
+        with self.assertRaises(RuntimeError):
+            self.kitten.take(bay, meals=1)
+
+        meals = cabin.meals
+        canisters = cabin.canisters
+        self.kitten.take(cabin, meals=2, canisters=1)
+        self.assertEqual(2, self.kitten.carried_meals)
+        self.assertEqual(1, self.kitten.carried_canisters)
+        self.assertEqual(meals - 2, cabin.meals)
+        self.assertEqual(canisters - 1, cabin.canisters)
+        self.kitten.stow(cabin, meals=2, canisters=1)
+        self.assertEqual(0, self.kitten.carried_meals)
+        self.assertEqual(0, self.kitten.carried_canisters)
+        self.assertEqual(meals, cabin.meals)
+        self.assertEqual(canisters, cabin.canisters)
 
     def test_active_kitten_not_on_eva(self):
         with self.assertRaises(RuntimeError):

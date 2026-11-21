@@ -97,8 +97,8 @@ namespace KRPC.KSA.Services
             get { return InternalBody is Astronomical astronomical && astronomical.IsStar (); }
         }
 
-        PhysicalAtmosphereReference Atmosphere {
-            get { return InternalBody.GetAtmosphereReference ()?.Physical; }
+        PhysicalAtmosphere Atmosphere {
+            get { return InternalBody.GetPhysicalAtmosphere (); }
         }
 
         /// <summary>
@@ -128,12 +128,17 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
-        /// The height over which the atmospheric pressure falls by a factor of <c>e</c>, in
-        /// meters. Zero for a body with no atmosphere.
+        /// The height over which the atmospheric pressure falls by a factor of <c>e</c> at
+        /// sea level, in meters. Zero for a body with no atmosphere.
         /// </summary>
         [KRPCProperty]
         public float ScaleHeight {
-            get { return (float)(Atmosphere?.ScaleHeight.InMeters () ?? 0); }
+            get {
+                // Hydrostatic scale height, p / (rho g)
+                if (Atmosphere == null)
+                    return 0;
+                return SeaLevelPressure / (SeaLevelDensity * SurfaceGravity);
+            }
         }
 
         /// <summary>
@@ -144,7 +149,7 @@ namespace KRPC.KSA.Services
         [KRPCMethod]
         public float PressureAt (double altitude)
         {
-            return (float)(Atmosphere?.GetAtmosphericPressureAtAltitude (altitude) ?? 0);
+            return (float)(Atmosphere?.ComputePressureAtAltitude (altitude) ?? 0);
         }
 
         /// <summary>
@@ -155,7 +160,58 @@ namespace KRPC.KSA.Services
         [KRPCMethod]
         public float DensityAt (double altitude)
         {
-            return (float)(Atmosphere?.GetAtmosphericDensityAtAltitude (altitude) ?? 0);
+            return (float)(Atmosphere?.ComputeDensityAtAltitude (altitude) ?? 0);
+        }
+
+        /// <summary>
+        /// The temperature of the atmosphere at an altitude, in kelvin. Zero for a body with
+        /// no atmosphere, or above the atmosphere.
+        /// </summary>
+        /// <param name="altitude">Altitude above the body's mean radius, in meters.</param>
+        [KRPCMethod]
+        public float TemperatureAt (double altitude)
+        {
+            var atmosphere = AtmosphereAt (altitude);
+            return atmosphere == null ? 0 : (float)atmosphere.ComputeTemperatureAtAltitude (altitude);
+        }
+
+        /// <summary>
+        /// The speed of sound in the atmosphere at an altitude, in meters per second. Zero for
+        /// a body with no atmosphere, or above the atmosphere.
+        /// </summary>
+        /// <param name="altitude">Altitude above the body's mean radius, in meters.</param>
+        [KRPCMethod]
+        public float SpeedOfSoundAt (double altitude)
+        {
+            var atmosphere = AtmosphereAt (altitude);
+            if (atmosphere == null)
+                return 0;
+            return (float)atmosphere.Mixture.ComputeSpeedOfSound (atmosphere.ComputeTemperatureAtAltitude (altitude));
+        }
+
+        // The atmosphere at an altitude, or null at or above its top, as in Flight
+        PhysicalAtmosphere AtmosphereAt (double altitude)
+        {
+            var atmosphere = Atmosphere;
+            return atmosphere != null && altitude < atmosphere.Height ? atmosphere : null;
+        }
+
+        /// <summary>
+        /// The fraction of the atmosphere that is oxygen, by volume. Zero for a body with no
+        /// atmosphere.
+        /// </summary>
+        [KRPCProperty]
+        public float AtmosphereOxygenFraction {
+            get { return (float)(Atmosphere?.OxygenVolumeFraction ?? 0); }
+        }
+
+        /// <summary>
+        /// The mean molar mass of the atmosphere, in kilograms per mole. Zero for a body with
+        /// no atmosphere.
+        /// </summary>
+        [KRPCProperty]
+        public float AtmosphereMolarMass {
+            get { return (float)(Atmosphere?.Mixture.MolarMass ?? 0); }
         }
 
         /// <summary>
@@ -252,7 +308,7 @@ namespace KRPC.KSA.Services
                 if (InternalBody is not Celestial celestial)
                     return new List<string> ();
                 return celestial.BodyTemplate.Locations.OfType<LandmarkReference> ()
-                    .Where (landmark => landmark.IsLaunchPad).Select (landmark => landmark.Id).ToList ();
+                    .Where (landmark => landmark.IsLaunchPad).Select (landmark => landmark.Key).ToList ();
             }
         }
 
@@ -358,7 +414,7 @@ namespace KRPC.KSA.Services
                 var biomes = (InternalBody as Celestial)?.BodyTemplate.BiomesReference;
                 if (biomes == null)
                     return new List<string> ();
-                return biomes.Biomes.Select (biome => biome.Alias).ToList ();
+                return biomes.Biomes.Select (biome => biome.Key).ToList ();
             }
         }
 

@@ -1,6 +1,8 @@
 import ksatest
-from test_crew import EVA_KITTENS
 from test_parachute import SITE
+
+# The game's designs for kittens on EVA, which are not vehicle designs
+KITTEN_DESIGNS = ("Hunter", "Banjo", "Polaris")
 
 
 class TestVehicleDesign(ksatest.TestCase):
@@ -16,7 +18,7 @@ class TestVehicleDesign(ksatest.TestCase):
 
     def test_designs(self):
         self.assertIn("Rocket", self.designs)
-        for name in EVA_KITTENS:
+        for name in KITTEN_DESIGNS:
             self.assertNotIn(name, self.designs)
         for name, design in self.designs.items():
             self.assertEqual(name, design.name)

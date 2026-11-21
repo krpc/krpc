@@ -52,7 +52,7 @@ sequences, the decoupler that drops the spent stage and the engine of the next o
 .. literalinclude:: /scripts/tutorials/launch-into-orbit/launch_into_orbit.py
    :language: python
    :start-at: def stage():
-   :end-before: def execute_burn
+   :end-before: def circularization_burn
 
 Circularizing
 -------------
@@ -67,18 +67,19 @@ altitude once, and the server compares the rocket's altitude with it every frame
 
 :doc:`/user-guide/server-side-functions` covers events, and the other server side functions.
 Once the rocket is out of the atmosphere, we plan a burn at the apoapsis that makes the
-orbit circular, as in :doc:`circularize`, and warp to it:
+orbit circular, as in :doc:`circularize`:
 
 .. literalinclude:: /scripts/tutorials/launch-into-orbit/launch_into_orbit.py
    :language: python
-   :start-at: mu = body.gravitational_parameter
-   :end-at: ksa.warp_to
+   :start-at: def circularization_burn(ut):
+   :end-at: return vehicle.add_burn
 
-The flight computer turns the auto-burn off when the burn is complete, or when the engines run
-out of propellant. An event waits for either. The first stage can run dry during the burn, so
-we then stage and continue the burn:
+We warp to the burn, and turn on the auto-burn. The flight computer turns it off when the burn
+is complete, or when the engines run out of propellant, and an event waits for either. A stage
+can run dry during the burn. The game then removes the burn, so we stage and plan the rest of
+it. The script stops if no stage is left to fire:
 
 .. literalinclude:: /scripts/tutorials/launch-into-orbit/launch_into_orbit.py
    :language: python
-   :start-at: def execute_burn(burn):
-   :end-at: stage()
+   :start-at: burn = circularization_burn(ksa.ut + orbit.time_to_apoapsis)
+   :end-at: burn.remove()

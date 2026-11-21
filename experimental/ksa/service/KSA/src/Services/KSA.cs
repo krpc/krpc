@@ -116,6 +116,22 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// Whether the crew use up supplies, as set when the game was created.
+        /// </summary>
+        [KRPCProperty]
+        public static bool LifeSupportEnabled {
+            get { return Universe.Rules.LifeSupport; }
+        }
+
+        /// <summary>
+        /// Whether radiation harms the crew, as set when the game was created.
+        /// </summary>
+        [KRPCProperty]
+        public static bool RadiationEnabled {
+            get { return Universe.Rules.Radiation; }
+        }
+
+        /// <summary>
         /// The simulation speed, as a multiple of real time. Zero when paused.
         /// </summary>
         [KRPCProperty]
@@ -135,7 +151,7 @@ namespace KRPC.KSA.Services
         /// <param name="ut">The universal time to warp to, in seconds.</param>
         /// <remarks>
         /// Does nothing when the time is in the past. Returns early if the game stops the
-        /// warp, for example when its menu pauses the game.
+        /// warp, for example when its menu pauses the game, or a vehicle's supplies run out.
         /// </remarks>
         [KRPCProcedure]
         public static void WarpTo (double ut)

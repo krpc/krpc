@@ -80,6 +80,15 @@ class TestBody(ksatest.TestCase):
         )
         self.assertLess(self.earth.pressure_at(50e3), self.earth.pressure_at(10e3))
         self.assertLess(self.earth.density_at(50e3), self.earth.density_at(10e3))
+        self.assertAlmostEqual(288, self.earth.temperature_at(0), delta=15)
+        self.assertAlmostEqual(340, self.earth.speed_of_sound_at(0), delta=15)
+        # The temperature falls through the troposphere
+        self.assertLess(self.earth.temperature_at(10e3), self.earth.temperature_at(0))
+        self.assertLess(
+            self.earth.speed_of_sound_at(10e3), self.earth.speed_of_sound_at(0)
+        )
+        self.assertAlmostEqual(0.21, self.earth.atmosphere_oxygen_fraction, delta=0.01)
+        self.assertAlmostEqual(0.029, self.earth.atmosphere_molar_mass, delta=0.001)
 
     def test_no_atmosphere(self):
         luna = self.ksa.bodies["Luna"]
@@ -89,6 +98,10 @@ class TestBody(ksatest.TestCase):
         self.assertEqual(0, luna.scale_height)
         self.assertEqual(0, luna.pressure_at(0))
         self.assertEqual(0, luna.density_at(0))
+        self.assertEqual(0, luna.temperature_at(0))
+        self.assertEqual(0, luna.speed_of_sound_at(0))
+        self.assertEqual(0, luna.atmosphere_oxygen_fraction)
+        self.assertEqual(0, luna.atmosphere_molar_mass)
 
     def test_ocean(self):
         self.assertTrue(self.earth.has_ocean)

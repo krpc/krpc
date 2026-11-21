@@ -173,8 +173,7 @@ namespace KRPC.KSA.Services
         [KRPCProperty]
         public float AvailableThrust {
             get {
-                var v = InternalVehicle;
-                return v.ComputeActiveThrust (v.PhysicsEnvironment.AtmosphericPressure);
+                return (float)Utils.Engines.Performance (InternalVehicle, fullThrottle: true).thrust;
             }
         }
 
@@ -239,6 +238,51 @@ namespace KRPC.KSA.Services
         [KRPCProperty]
         public int CrewCapacity {
             get { return InternalVehicle.Crew.Length; }
+        }
+
+        /// <summary>
+        /// Whether the vehicle can be flown. A vehicle needs a control module, and a crewed
+        /// vehicle with every kitten incapacitated also needs a probe core.
+        /// </summary>
+        [KRPCProperty]
+        public bool Controllable {
+            get { return InternalVehicle.IsControllable; }
+        }
+
+        /// <summary>
+        /// Whether the vehicle has a control module, such as a capsule or a probe core.
+        /// </summary>
+        [KRPCProperty]
+        public bool HasControlModule {
+            get { return InternalVehicle.HasControlModule; }
+        }
+
+        /// <summary>
+        /// How long the supplies of the vehicle's worst habitat zone last its crew, or
+        /// <c>null</c> if the vehicle has no habitats.
+        /// </summary>
+        [KRPCProperty (Nullable = true)]
+        public LifeSupport LifeSupport {
+            get { return InternalVehicle.Parts.Modules.Get<global::KSA.Habitat> ().IsEmpty ? null : new LifeSupport (this); }
+        }
+
+        /// <summary>
+        /// The vehicle's habitat zones.
+        /// </summary>
+        [KRPCProperty]
+        public IList<HabitatZone> HabitatZones {
+            get {
+                var zones = InternalVehicle.Parts.EnsureHabitatZones ().ToArray ();
+                return zones.Select (zone => new HabitatZone (this, zone.Lead)).ToList ();
+            }
+        }
+
+        /// <summary>
+        /// The vehicle's habitats.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Habitat> Habitats {
+            get { return Parts.SelectMany (part => part.Habitats).ToList (); }
         }
 
         /// <summary>

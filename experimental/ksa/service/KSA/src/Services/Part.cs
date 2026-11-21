@@ -242,6 +242,14 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The part's habitats.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Habitat> Habitats {
+            get { return InternalPart.SubtreeModules.Get<global::KSA.Habitat> ().ToArray ().Select (module => new Habitat (this, module)).ToList (); }
+        }
+
+        /// <summary>
         /// The part's batteries.
         /// </summary>
         [KRPCProperty]

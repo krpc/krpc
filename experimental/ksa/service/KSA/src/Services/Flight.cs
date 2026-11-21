@@ -210,6 +210,63 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The temperature of the atmosphere at the vehicle, in kelvin. Zero outside the
+        /// atmosphere.
+        /// </summary>
+        [KRPCProperty]
+        public float StaticAirTemperature {
+            get {
+                var atmosphere = AtmosphereAtVehicle (out var altitude);
+                return atmosphere == null ? 0 : (float)atmosphere.ComputeTemperatureAtAltitude (altitude);
+            }
+        }
+
+        /// <summary>
+        /// The speed of sound in the atmosphere at the vehicle, in meters per second. Zero
+        /// outside the atmosphere.
+        /// </summary>
+        [KRPCProperty]
+        public float SpeedOfSound {
+            get {
+                var atmosphere = AtmosphereAtVehicle (out var altitude);
+                if (atmosphere == null)
+                    return 0;
+                return (float)atmosphere.Mixture.ComputeSpeedOfSound (atmosphere.ComputeTemperatureAtAltitude (altitude));
+            }
+        }
+
+        // The atmosphere at the vehicle and the vehicle's altitude, or null outside it. The
+        // game's physics environment leaves its temperature stale outside the physics radius.
+        PhysicalAtmosphere AtmosphereAtVehicle (out double altitude)
+        {
+            var v = InternalVehicle;
+            var body = v.Orbit.Parent;
+            altitude = Math.Max (v.GetPositionCci ().Length () - body.MeanRadius, 0);
+            var atmosphere = body.GetPhysicalAtmosphere ();
+            return atmosphere != null && altitude < atmosphere.Height ? atmosphere : null;
+        }
+
+        /// <summary>
+        /// The speed of the vehicle relative to the surface, as a multiple of the speed of
+        /// sound. Zero outside the atmosphere.
+        /// </summary>
+        [KRPCProperty]
+        public float Mach {
+            get {
+                var speedOfSound = SpeedOfSound;
+                return speedOfSound > 0 ? Speed / speedOfSound : 0;
+            }
+        }
+
+        /// <summary>
+        /// Whether a kitten can breathe the air outside the vehicle.
+        /// </summary>
+        [KRPCProperty]
+        public OutsideAir OutsideAir {
+            get { return (OutsideAir)InternalVehicle.GetOutsideAir (); }
+        }
+
+        /// <summary>
         /// The radiation dose rate at the vehicle, in sieverts per second. Includes any solar
         /// particle event under way.
         /// </summary>
@@ -240,8 +297,10 @@ namespace KRPC.KSA.Services
             get {
                 // As the game's orbit dose gauge computes it
                 var v = InternalVehicle;
-                if (!Radiation.TryComputeOrbitDoseRates (v, orbitDoseAverages, out var rates))
+                var dose = Radiation.ComputeOrbitDoseRates (v, orbitDoseAverages);
+                if (dose.Status != OrbitDoseStatus.Averaged)
                     return (float)double.NaN;
+                var rates = dose.Rates;
                 var events = ParticleEvents.ComputeDoseRate (v.GetPositionEcl (), null, rates.StarExposure, Universe.GetElapsedSeconds (), doseTerms);
                 return (float)((rates.Total + events).Value ());
             }
@@ -252,7 +311,7 @@ namespace KRPC.KSA.Services
         /// </summary>
         [KRPCProperty]
         public float DynamicPressure {
-            get { return (float)PhysicalAtmosphereReference.GetDynamicPressure (InternalVehicle); }
+            get { return (float)InternalVehicle.ComputeDynamicPressure (); }
         }
 
         /// <summary>

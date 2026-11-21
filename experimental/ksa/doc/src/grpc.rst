@@ -14,7 +14,7 @@ Configuring the Server
 
 The gRPC server is not enabled by default. To add it in the server window:
 
-1. Open the server window from **kRPC > Server** in the game's menu bar at the top.
+1. Open the server window from **Mods > kRPC** in the game's menu bar at the top.
 2. Click **Add server**, then **Edit** on the new server.
 3. Set **Protocol** to **gRPC**, and the **Port**, by default 50002. Click **Save**.
 4. Start the servers with **Start servers**.

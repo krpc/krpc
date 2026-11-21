@@ -19,6 +19,27 @@
     window
   - Fix serial servers failing to start on Linux and macOS, with the native serial port library
     not found
+  - Support KSA v2026.11.10.5801
+  - Move the kRPC menu to a `kRPC` item in the game's Mods menu, which opens the server window
+
+- Crew and life support
+  - Add life support: the supplies of a vehicle and its habitat zones, how long they last,
+    and moving meals and canisters between habitats
+  - Add `KSA.LifeSupportEnabled` and `KSA.RadiationEnabled`
+  - Add the condition and cause of death of kittens, and whether a vehicle can be flown
+  - **Breaking:** Move a kitten in `Seat.Kitten` only within its habitat zone, and refuse an
+    incapacitated or retired kitten
+  - Refuse `Kitten.GoOnEva` for a kitten too weak to go, or without supplies for its suit, and
+    add `Kitten.CanGoOnEva` and `Kitten.CanBoard`
+  - Add the life support of a kitten's suit, and taking and stowing supplies on EVA
+  - Add `DockingPort.HatchOpen`
+
+- Flight and orbits
+  - **Breaking:** Return the scale height at sea level from `Body.ScaleHeight`
+  - Add the air temperature, speed of sound, Mach number and breathable air to `Flight`
+  - Add the temperature, speed of sound, oxygen fraction and molar mass of an atmosphere to
+    `Body`
+
 - Clients
   - Add stubs and documentation for the JavaScript client
   - Add a WebSockets server on port 50001 to the default settings, for the JavaScript client
