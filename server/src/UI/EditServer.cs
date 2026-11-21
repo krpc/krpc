@@ -123,8 +123,14 @@ namespace KRPC.UI
         {
             GUILayout.BeginHorizontal ();
             DrawFieldLabel (protocolLabelText);
-            protocol = (Protocol)GUILayoutExtensions.ComboBox (protocolComboId, (int)protocol, MainWindow.protocolNames, window.buttonStyle, window.comboOptionsStyle, window.comboOptionStyle);
+            var selectedProtocol = (Protocol)GUILayoutExtensions.ComboBox (protocolComboId, (int)protocol, MainWindow.protocolNames, window.buttonStyle, window.comboOptionsStyle, window.comboOptionStyle);
             GUILayout.EndHorizontal ();
+            // Each protocol has its own address setting, and an address the combo box does
+            // not list selects "Manual" without the flag
+            if (selectedProtocol != protocol) {
+                protocol = selectedProtocol;
+                manualAddress = false;
+            }
 
             if (SettingsPrefix != null) {
                 var addressKey = SettingsPrefix + "address";
