@@ -93,7 +93,8 @@ function run_scenario {
   local options=()
 
   case "$name" in
-    fetch)  options+=(-DKRPC_FETCH_DEPS=ON) ;;
+    # Nothing installed is in reach, so the build cannot pick up a dependency it should fetch
+    fetch)  options+=(-DKRPC_FETCH_DEPS=ON); unset CMAKE_PREFIX_PATH ;;
     system) ;;
     *) echo "unknown scenario '$name'"; exit 1 ;;
   esac
@@ -117,7 +118,8 @@ function run_scenario {
 
 if [[ "$scenario" == "all" ]]; then
   for name in $scenarios; do
-    run_scenario "$name"
+    # A subshell, so the environment one scenario changes does not reach the next
+    ( run_scenario "$name" )
   done
 else
   run_scenario "$scenario"

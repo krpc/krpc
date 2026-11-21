@@ -115,6 +115,12 @@ if(WIN32)
   target_compile_definitions(krpc PUBLIC _WIN32_WINNT=0x0601)
 endif()
 target_link_libraries(krpc PRIVATE protobuf::libprotobuf-lite)
+if(KRPC_FETCH_PROTOBUF)
+  # protobuf's headers include utf8_validity.h, and its targets in the build tree leave out the
+  # directory that holds it
+  target_include_directories(krpc PRIVATE
+    "$<BUILD_INTERFACE:${protobuf_SOURCE_DIR}/third_party/utf8_range>")
+endif()
 target_link_libraries(krpc PUBLIC asio::asio)
 
 set_target_properties(krpc PROPERTIES
