@@ -104,8 +104,8 @@ def write_port(root, port, overlay, sha512):
             existing.unlink()
     else:
         destination.mkdir(parents=True)
-    for name in ("portfile.cmake", "vcpkg.json", "usage"):
-        (destination / name).write_text((overlay / name).read_text())
+    for source in overlay.iterdir():
+        (destination / source.name).write_text(source.read_text())
 
     portfile = destination / "portfile.cmake"
     text, count = re.subn(
