@@ -8,6 +8,16 @@ Changelog
 =========
 
 
+v1.0.0 - unreleased
+-------------------
+
+
+C++ client
+^^^^^^^^^^
+
+* Fix the build with ``KRPC_FETCH_PROTOBUF`` failing with ``utf8_validity.h: No such file or directory`` when protobuf is not installed (:issue:`1396`)
+
+
 v0.8.0
 ------
 
