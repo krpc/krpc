@@ -2,10 +2,10 @@ load("@bazel_skylib//rules:expand_template.bzl", "expand_template")
 load("@bazel_skylib//rules:write_file.bzl", "write_file")
 load("@rules_pkg//pkg:mappings.bzl", "pkg_filegroup", "pkg_files", "strip_prefix")
 load("@rules_pkg//pkg:zip.bzl", "pkg_zip")
-load("//:config.bzl", "assembly_version", "version")
+load("//:config.bzl", "assembly_version")
 load("//experimental/ksa/tools/build:mod.bzl", "ASPNETCORE_RIDS", "NATIVE_PORTS", "deps_json", "files_in")
 load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
-load(":config.bzl", "ksa_version", "mod_version", "starmap_version")
+load(":config.bzl", "client_version", "ksa_version", "mod_version", "starmap_version")
 
 exports_files(["CHANGELOG.md"])
 
@@ -167,7 +167,7 @@ expand_template(
     name = "release-readme",
     out = "release-readme/README.txt",
     substitutions = {
-        "@KRPC_VERSION@": version,
+        "@KRPC_VERSION@": client_version,
         "@KSA_VERSION@": ksa_version,
         "@STARMAP_VERSION@": starmap_version,
         "@VERSION@": mod_version,

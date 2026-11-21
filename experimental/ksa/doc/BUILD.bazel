@@ -5,9 +5,8 @@ load("@npm//client/js:@biomejs/biome/package_json.bzl", biome = "bin")
 load("@rules_cc//cc:defs.bzl", "cc_library")
 load("@rules_java//java:defs.bzl", "java_library")
 load("@rules_python//python:defs.bzl", "py_binary")
-load("//:config.bzl", "version")
 load("//doc:check_documented.bzl", "check_documented_test")
-load("//experimental/ksa:config.bzl", "ksa_version", "mod_version", "starmap_version")
+load("//experimental/ksa:config.bzl", "client_version", "ksa_version", "mod_version", "starmap_version")
 load("//tools/build:cpp.bzl", "clang_format_test")
 load("//tools/build:csharp.bzl", "csharp_library")
 load("//tools/build:lua.bzl", "lua_luacheck_test")
@@ -26,7 +25,7 @@ expand_files(
     srcs = glob(["src/**/*.rst"]) + ["conf.py"],
     prefix = "gen",
     substitutions = {
-        "@KRPC_VERSION@": version,
+        "@KRPC_VERSION@": client_version,
         "@KSA_VERSION@": ksa_version,
         "@STARMAP_VERSION@": starmap_version,
         "@VERSION@": mod_version,
