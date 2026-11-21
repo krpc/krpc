@@ -7,6 +7,7 @@ using System.Net;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Runtime.Loader;
 using Brutal.ImGuiApi;
 using Brutal.Logging;
@@ -61,6 +62,7 @@ namespace KRPC.KSA
         public void OnAllModsLoaded ()
         {
             InitLogger ();
+            ResolveSerialPortsNative ();
             LoadServiceAssemblies ();
 
             core = Core.Instance;
@@ -473,6 +475,36 @@ namespace KRPC.KSA
         void Unpause ()
         {
             Universe.SetSimulationSpeed (unpausedSpeed);
+        }
+
+        /// <summary>
+        /// Load the native library of System.IO.Ports from the mod's runtimes folder. StarMap
+        /// resolves the mod's managed assemblies through its deps.json, but not its native
+        /// libraries.
+        /// </summary>
+        void ResolveSerialPortsNative ()
+        {
+            string os, extension;
+            if (OperatingSystem.IsLinux ()) {
+                os = "linux";
+                extension = ".so";
+            } else if (OperatingSystem.IsMacOS ()) {
+                os = "osx";
+                extension = ".dylib";
+            } else {
+                // System.IO.Ports calls the Windows API directly
+                return;
+            }
+            // A platform the mod carries no library for has no folder, and falls through to the
+            // default probing
+            var rid = os + "-" + RuntimeInformation.ProcessArchitecture.ToString ().ToLowerInvariant ();
+            var context = AssemblyLoadContext.GetLoadContext (typeof (System.IO.Ports.SerialPort).Assembly);
+            context.ResolvingUnmanagedDll += (assembly, name) => {
+                if (name != "libSystem.IO.Ports.Native")
+                    return IntPtr.Zero;
+                var path = Path.Combine (modDirectory, "runtimes", rid, "native", name + extension);
+                return NativeLibrary.TryLoad (path, out var handle) ? handle : IntPtr.Zero;
+            };
         }
 
         static void InitLogger ()

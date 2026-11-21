@@ -16,6 +16,8 @@
   - Add JSON over HTTP servers to the server window
   - Set the origins whose web pages may connect to a WebSockets or HTTP server in the server
     window
+  - Fix serial servers failing to start on Linux and macOS, with the native serial port library
+    not found
 - Clients
   - Add stubs and documentation for the JavaScript client
   - Add a WebSockets server on port 50001 to the default settings, for the JavaScript client
