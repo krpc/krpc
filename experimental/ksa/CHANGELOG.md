@@ -12,6 +12,7 @@
   - Name a server added in the server window "Server", "Server 2" and so on
   - Remember which servers are expanded in the server window
   - Show the number of connected clients beside each server in the server window
+  - Add RTS/CTS flow control to serial servers, set in the server window
 - Clients
   - Add stubs and documentation for the JavaScript client
   - Add a WebSockets server on port 50001 to the default settings, for the JavaScript client

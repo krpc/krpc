@@ -33,6 +33,9 @@ namespace KRPC.KSA.UI
         static readonly string [] ProtocolNames = Protocols.Select (MainWindow.ProtocolName).ToArray ();
         static readonly string [] ParityOptions = { "None", "Odd", "Even", "Mark", "Space" };
         static readonly string [] StopBitsOptions = { "None", "One", "Two", "OnePointFive" };
+        // The setting values, and the names the combo box shows for them
+        static readonly string [] FlowControlOptions = { "None", "RequestToSend" };
+        static readonly string [] FlowControlNames = { "None", "RTS/CTS" };
 
         readonly Guid id;
         readonly List<string> availableAddresses;
@@ -89,6 +92,7 @@ namespace KRPC.KSA.UI
                 DrawSettingRow ("Data bits", Prefix + "data_bits", "8", ValidDataBits, true);
                 DrawOptionRow ("Parity", Prefix + "parity", "None", ParityOptions);
                 DrawOptionRow ("Stop bits", Prefix + "stop_bits", "One", StopBitsOptions);
+                DrawOptionRow ("Flow control", Prefix + "flow_control", "None", FlowControlOptions, FlowControlNames);
             }
         }
 
@@ -144,10 +148,10 @@ namespace KRPC.KSA.UI
             settings [key] = value;
         }
 
-        void DrawOptionRow (string label, string key, string defaultValue, IList<string> options)
+        void DrawOptionRow (string label, string key, string defaultValue, IList<string> options, IList<string> names = null)
         {
             var selected = Math.Max (0, options.IndexOf (settings.GetValueOrDefault (key, defaultValue)));
-            ConsoleWindow.DrawComboRow (label, key, options, ref selected);
+            ConsoleWindow.DrawComboRow (label, key, names ?? options, ref selected);
             settings [key] = options [selected];
         }
 
@@ -209,7 +213,7 @@ namespace KRPC.KSA.UI
                     errors.Add ("Baud rate is not an integer");
                 if (!ValidDataBits (settings [prefix + "data_bits"]))
                     errors.Add ("Data bits must be between 5 and 8 inclusive");
-                keys = new [] { "port", "baud_rate", "data_bits", "parity", "stop_bits" };
+                keys = new [] { "port", "baud_rate", "data_bits", "parity", "stop_bits", "flow_control" };
             }
             if (errors.Count > 0)
                 return null;
