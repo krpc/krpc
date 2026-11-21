@@ -1,0 +1,5 @@
+# The readme of the release archive, a template for the versions
+exports_files(
+    ["README.txt"],
+    visibility = ["//experimental/ksa:__pkg__"],
+)

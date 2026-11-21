@@ -1,10 +1,11 @@
+load("@bazel_skylib//rules:expand_template.bzl", "expand_template")
 load("@bazel_skylib//rules:write_file.bzl", "write_file")
-load("@rules_pkg//pkg:mappings.bzl", "pkg_files", "strip_prefix")
+load("@rules_pkg//pkg:mappings.bzl", "pkg_filegroup", "pkg_files", "strip_prefix")
 load("@rules_pkg//pkg:zip.bzl", "pkg_zip")
-load("//:config.bzl", "assembly_version")
+load("//:config.bzl", "assembly_version", "version")
 load("//experimental/ksa/tools/build:mod.bzl", "deps_json", "files_in")
 load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
-load(":config.bzl", "mod_version")
+load(":config.bzl", "ksa_version", "mod_version", "starmap_version")
 
 exports_files(["CHANGELOG.md"])
 
@@ -164,6 +165,65 @@ pkg_zip(
     srcs = mod_files + [":mod-testing-files"],
     out = "kRPC-mod-testing.zip",
     visibility = ["//visibility:public"],
+)
+
+licenses = [
+    "LICENSE",
+    "//experimental/ksa/tools/build/dotnet:LICENSE.AspNetCore",
+    "//experimental/ksa/tools/build/dotnet:LICENSE.Grpc",
+    "//experimental/ksa/tools/build/dotnet:LICENSE.System.IO.Ports",
+    "//experimental/ksa/tools/build/dotnet:THIRD-PARTY-NOTICES.AspNetCore",
+    "//:COPYING",
+    "//:COPYING.LESSER",
+    "//tools/build/protobuf:LICENSE.Google.Protobuf",
+]
+
+expand_template(
+    name = "release-readme",
+    out = "release-readme/README.txt",
+    substitutions = {
+        "@KRPC_VERSION@": version,
+        "@KSA_VERSION@": ksa_version,
+        "@STARMAP_VERSION@": starmap_version,
+        "@VERSION@": mod_version,
+    },
+    template = "//experimental/ksa/tools/release:README.txt",
+)
+
+pkg_files(
+    name = "release-root",
+    srcs = licenses + [":release-readme"],
+    strip_prefix = strip_prefix.files_only(),
+)
+
+# The mod folder carries the licenses too, as the Borea mod manager installs only that folder
+pkg_files(
+    name = "release-mod-licenses",
+    srcs = licenses,
+    prefix = "kRPC",
+    strip_prefix = strip_prefix.files_only(),
+)
+
+pkg_filegroup(
+    name = "release-stubs",
+    srcs = [
+        "//experimental/ksa/service/KSA:readme-file",
+        "//experimental/ksa/service/KSA:stub-files",
+    ],
+    prefix = "stubs",
+)
+
+# The release archive: the mod folder at the top, where Borea finds the one folder holding a
+# mod.toml, the client stubs, the licenses and a readme
+pkg_zip(
+    name = "release",
+    srcs = mod_files + [
+        ":mod-settings",
+        ":release-mod-licenses",
+        ":release-root",
+        ":release-stubs",
+    ],
+    out = "krpc-ksa-%s.zip" % mod_version,
 )
 
 py_ruff_test(

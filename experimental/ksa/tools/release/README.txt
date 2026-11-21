@@ -10,9 +10,8 @@ Built for Kitten Space Agency @KSA_VERSION@, and requires the StarMap @STARMAP_V
 code mod loader. On another KSA version, the mod warns that it is not supported and lists
 the RPCs it found broken.
 
-    kRPC/   the mod
+    kRPC/       the mod
     stubs/      client stubs for C#, C++, C and Java, and the service definitions
-    examples/   example Python scripts
 
 
 INSTALL
@@ -52,7 +51,7 @@ Install the Python client with "pip install krpc==@KRPC_VERSION@", then:
     conn = krpc.connect()
     print(conn.ksa.active_vehicle.name)
 
-The examples folder has scripts that print telemetry, launch the Rocket into orbit, and
+The tutorials in the documentation have scripts that launch the Rocket into orbit, and
 plan and execute burns. The clients for C#, C++, C and Java compile against the stubs in
 the stubs folder. Its README.md shows each language.
 
