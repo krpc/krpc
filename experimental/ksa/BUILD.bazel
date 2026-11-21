@@ -221,6 +221,7 @@ test_suite(
         "//experimental/ksa/service/KSA:test",
         "//experimental/ksa/tools/game:test",
         "//experimental/ksa/tools/grpc:test",
+        "//experimental/ksa/tools/release:test",
     ],
 )
 

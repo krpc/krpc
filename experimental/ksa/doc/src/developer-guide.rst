@@ -23,8 +23,8 @@ The folders mirror those at the root of the repository:
 * ``tools/build/`` - the ``@ksa`` repository of the KSA install, and the rules for the mod.
 * ``tools/game/`` - the in-game test harness, and the install, run and test targets.
 * ``tools/grpc/`` - the generators of the ``.proto`` files and the gRPC API pages.
-* ``tools/release/`` - the readme of the release archive, and the script that publishes this
-  documentation.
+* ``tools/release/`` - the release scripts, the readme of the release archive, and the script
+  that publishes this documentation.
 * ``tools/TestingTools/`` - the ``TestingTools`` service, its server settings and test
   vehicles, installed only for the tests.
 * ``config.bzl`` - the versions of the mod, KSA and StarMap.
@@ -132,3 +132,6 @@ Releasing
 mod folder, the client stubs, a readme and the licenses. The mod folder
 sits at the top, with its own copy of the licenses, so that the Borea mod manager installs it.
 The mod is under the LGPL v3, as ``KRPC.Core`` is.
+
+`Release-Guide.md <https://github.com/krpc/krpc/blob/main/experimental/ksa/Release-Guide.md>`_
+lists the steps of a release, which the scripts in ``tools/release/`` carry out.

@@ -249,6 +249,18 @@ py_library(
     visibility = ["//visibility:public"],
 )
 
+# The release scripts' helpers, for the type check of the kRPC for KSA release scripts
+py_library(
+    name = "release-lib",
+    srcs = [
+        "tools/release/lib.py",
+        "tools/release/spacedock.py",
+    ],
+    imports = ["tools/release"],
+    visibility = ["//experimental/ksa/tools/release:__pkg__"],
+    deps = [":changelog"],
+)
+
 # The unreleased changelog entries, one file per pull request. Absent after a
 # release, until the next fragment is added.
 filegroup(
