@@ -80,13 +80,13 @@ Your First Script
 
 This script connects to the game, and prints the bodies of the system and the active vehicle:
 
-.. literalinclude:: /scripts/telemetry.py
+.. literalinclude:: /scripts/getting-started/telemetry.py
    :language: python
    :start-at: conn = krpc.connect
    :end-at: print(f"Active vehicle
 
 The complete script, :download:`telemetry.py
-</scripts/telemetry.py>`, goes on to print the vehicle's altitude, apoapsis and attitude once a
+</scripts/getting-started/telemetry.py>`, goes on to print the vehicle's altitude, apoapsis and attitude once a
 second.
 
 Next Steps

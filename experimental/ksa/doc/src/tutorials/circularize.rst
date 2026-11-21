@@ -5,7 +5,7 @@ This tutorial circularizes a vehicle's orbit at its apoapsis. The script plans t
 and the vehicle's flight computer executes it, as when the player plans a burn in the game.
 The vehicle needs an engine and the propellant for the burn.
 
-The complete script is :download:`circularize.py </scripts/circularize.py>`.
+The complete script is :download:`circularize.py </scripts/tutorials/circularize/circularize.py>`.
 
 Planning the Burn
 -----------------
@@ -13,7 +13,7 @@ Planning the Burn
 The vis-viva equation gives the speed at apoapsis now, and the speed of a circular orbit
 there. We plan a prograde burn of the difference at the apoapsis:
 
-.. literalinclude:: /scripts/circularize.py
+.. literalinclude:: /scripts/tutorials/circularize/circularize.py
    :language: python
    :start-at: mu = orbit.body
    :end-at: print(f"Circularization burn
@@ -29,7 +29,7 @@ the vehicle along the burn, fires the engines at the ignition time and stops onc
 complete, and then turns the auto-burn off. An event, a :doc:`server side function
 </user-guide/server-side-functions>`, waits for that:
 
-.. literalinclude:: /scripts/circularize.py
+.. literalinclude:: /scripts/tutorials/circularize/circularize.py
    :language: python
    :start-at: ksa.warp_to
    :end-at: burn.remove()
