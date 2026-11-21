@@ -505,7 +505,11 @@ class JsGenerator(Generator[JsLanguage]):
                 if not p["optional"]
             ]
             options = "; ".join("%s?: %s" % (p["key"], p["type"]) for p in optional)
-            arguments = ", ".join(required + ["options: { %s }" % options])
+            # The named arguments take a name no parameter has
+            named = "options"
+            while any(p["name"] == named for p in parameters):
+                named += "_"
+            arguments = ", ".join(required + ["%s: { %s }" % (named, options)])
             lines.append("%s(%s): %s;" % (name, arguments, returned))
         return lines
 

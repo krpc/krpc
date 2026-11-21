@@ -32,6 +32,37 @@ class TestClientGenJs(ClientGenTestCase, unittest.TestCase):
             actual,
         )
 
+    def test_parameter_named_options(self):
+        # The parameter of the named arguments takes another name than a parameter's
+        defs = {
+            "Service": {
+                "id": 1,
+                "documentation": "",
+                "procedures": {
+                    "Choose": {
+                        "id": 1,
+                        "parameters": [
+                            {"name": "options", "type": {"code": "STRING"}},
+                            {
+                                "name": "label",
+                                "type": {"code": "STRING"},
+                                "default_value": "AA==",
+                            },
+                        ],
+                        "documentation": "",
+                    }
+                },
+                "classes": {},
+                "enumerations": {},
+                "exceptions": {},
+            }
+        }
+        actual = self.generate("Service", defs)
+        self.assertIn(
+            "choose(options: string, options_: { label?: string }): Promise<void>;",
+            actual,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
