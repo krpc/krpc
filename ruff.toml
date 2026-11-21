@@ -21,7 +21,7 @@ ignore = [
 ]
 
 [lint.isort]
-known-first-party = ["krpc", "krpctools"]
+known-first-party = ["doc", "experimental", "krpc", "krpctools", "tools"]
 
 [lint.pylint]
 max-args = 10

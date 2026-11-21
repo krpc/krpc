@@ -2,7 +2,11 @@
 // and an example is an ES module, which no package.json beside it says.
 
 const client = new URL("../../client/js/dist/index.js", import.meta.url);
-const scripts = new URL("../src/scripts/", import.meta.url);
+let scripts;
+
+export async function initialize(data) {
+  scripts = data.scripts;
+}
 
 export async function resolve(specifier, context, next) {
   if (specifier === "@krpc-org/krpc") {
@@ -12,7 +16,7 @@ export async function resolve(specifier, context, next) {
 }
 
 export async function load(url, context, next) {
-  if (url.startsWith(scripts.href) && url.endsWith(".js")) {
+  if (url.startsWith(scripts) && url.endsWith(".js")) {
     return next(url, { ...context, format: "module" });
   }
   return next(url, context);

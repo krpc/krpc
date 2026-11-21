@@ -1,0 +1,46 @@
+load("@aspect_rules_js//js:defs.bzl", "js_library")
+load("@rules_python//python:defs.bzl", "py_library")
+load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
+
+# The game-agnostic parts of the in-game tests of the documentation examples, which each game's
+# manifest and setups build on: //doc/test for KSP and //experimental/ksa/doc/test for KSA
+
+package(default_visibility = ["//visibility:public"])
+
+py_library(
+    name = "doc_examples",
+    srcs = glob(["*.py"]),
+    imports = ["../.."],
+)
+
+# The program that runs a JavaScript example, for example_js_runner in defs.bzl
+js_library(
+    name = "run-example",
+    srcs = ["run_example.mjs"],
+)
+
+js_library(
+    name = "example-hooks",
+    srcs = ["example_hooks.mjs"],
+)
+
+test_suite(
+    name = "test",
+    tests = [
+        ":pyright",
+        ":ruff",
+    ],
+)
+
+py_ruff_test(
+    name = "ruff",
+    size = "small",
+    srcs = glob(["*.py"]),
+)
+
+py_pyright_test(
+    name = "pyright",
+    size = "medium",
+    srcs = glob(["*.py"]),
+    deps = ["@krpc_pypi//pytest"],
+)

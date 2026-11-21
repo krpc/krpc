@@ -5,16 +5,8 @@ from __future__ import annotations
 
 import pytest
 
-from doc.test import languages
+from tools.doc_examples.classes import build_examples
 
 
 def pytest_collection_finish(session: pytest.Session) -> None:
-    if session.config.option.collectonly:
-        return
-    examples = []
-    for item in session.items:
-        function = getattr(item, "obj", None)
-        example = getattr(function, "example", None)
-        if example is not None:
-            examples.append(example)
-    languages.build(examples)
+    build_examples(session)

@@ -162,7 +162,8 @@ bazel run //tools/game:test-ksp -- -k test_camera_mode                          
 `doc/test` runs every example in `doc/src/scripts` in game, marked `example`, the language and
 `slow` for long flights: `-m "python and not slow"`, or `-m "not example"` for the service tests
 alone. `doc/test/examples.py` declares how each runs, `unsupported.txt` lists the rest, and
-`//doc:test` fails on an example in neither.
+`//doc:test` fails on an example in neither. The game-agnostic parts are in
+`tools/doc_examples/`.
 
 ### Mods
 
