@@ -193,6 +193,7 @@ at = [
   'tools/deps/BUILD.bazel: python_version = "{version}"',
   'experimental/ksa/BUILD.bazel: python_version = "{version}"',
   'experimental/ksa/doc/BUILD.bazel: python_version = "{version}"',
+  'experimental/ksa/doc/test/BUILD.bazel: python_version = "{version}"',
   'experimental/ksa/tools/release/BUILD.bazel: python_version = "{version}"',
   'experimental/ksa/server/BUILD.bazel: python_version = "{version}"',
   'experimental/ksa/service/KSA/BUILD.bazel: python_version = "{version}"',

@@ -1,18 +1,17 @@
+load("@aspect_rules_js//js:defs.bzl", "js_library")
 load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
 load("@bazel_skylib//rules:build_test.bzl", "build_test")
 load("@bazel_skylib//rules:copy_file.bzl", "copy_file")
 load("@npm//client/js:@biomejs/biome/package_json.bzl", biome = "bin")
-load("@rules_cc//cc:defs.bzl", "cc_library")
-load("@rules_java//java:defs.bzl", "java_library")
 load("@rules_python//python:defs.bzl", "py_binary")
 load("//doc:check_documented.bzl", "check_documented_test")
 load("//experimental/ksa:config.bzl", "client_version", "ksa_version", "mod_version", "starmap_version")
 load("//tools/build:cpp.bzl", "clang_format_test")
-load("//tools/build:csharp.bzl", "csharp_library")
 load("//tools/build:lua.bzl", "lua_luacheck_test")
 load("//tools/build:pkg.bzl", "stage_files")
 load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
 load("//tools/build:sphinx.bzl", "sphinx_build", "sphinx_linkcheck_test", "sphinx_spelling_test")
+load("//tools/doc_examples:defs.bzl", "cc_binary_multiple", "csharp_binary_multiple", "java_binary_multiple", "lua_binary_multiple")
 load("//tools/krpctools:docgen.bzl", "docgen")
 load(":docs.bzl", "expand_files")
 
@@ -175,12 +174,13 @@ py_binary(
     deps = ["//doc:serve-lib"],
 )
 
-# The example scripts, compiled against the stubs to check them. They are never run.
+# The example programs, one target per file, compiled against the stubs. The in-game tests in
+# //experimental/ksa/doc/test run them.
 
-csharp_library(
-    name = "compile-scripts-csharp",
+csharp_binary_multiple(
+    name = "compile-scripts-csharp-exes",
     srcs = glob(["src/scripts/**/*.cs"]),
-    target_frameworks = ["net10.0"],
+    target_framework = "net10.0",
     deps = [
         "//client/csharp:KRPC.Client",
         "//experimental/ksa/service/KSA:csharp-library",
@@ -188,14 +188,14 @@ csharp_library(
     ],
 )
 
-cc_library(
+cc_binary_multiple(
     name = "compile-scripts-cpp",
     srcs = glob(["src/scripts/**/*.cpp"]),
     deps = ["//experimental/ksa/service/KSA:cpp-library"],
 )
 
 # The kFS tutorial's program is kC, which runs on the game's flight computer
-cc_library(
+cc_binary_multiple(
     name = "compile-scripts-cnano",
     srcs = glob(
         ["src/scripts/**/*.c"],
@@ -204,10 +204,10 @@ cc_library(
     deps = ["//experimental/ksa/service/KSA:cnano-library"],
 )
 
-java_library(
+java_binary_multiple(
     name = "compile-scripts-java",
     srcs = glob(["src/scripts/**/*.java"]),
-    javacopts = [
+    copts = [
         "-Werror",
         "-Xlint:all",
     ],
@@ -216,6 +216,51 @@ java_library(
         "//experimental/ksa/service/KSA:java-library",
         "@maven//:com_google_protobuf_protobuf_java",
     ],
+)
+
+# The Lua examples, which build the services when they connect
+lua_binary_multiple(
+    name = "run-scripts-lua",
+    testonly = True,
+    srcs = glob(["src/scripts/**/*.lua"]),
+    deps = [
+        "//client/lua:modules",
+        "//tools/build/lua:luasocket",
+        "//tools/build/lua:penlight",
+    ],
+)
+
+filegroup(
+    name = "compile-scripts",
+    srcs = [
+        ":compile-scripts-cnano",
+        ":compile-scripts-cpp",
+        ":compile-scripts-csharp-exes",
+        ":compile-scripts-java",
+    ],
+)
+
+# The example programs, which //experimental/ksa/doc/test checks are each run in game or listed
+filegroup(
+    name = "scripts",
+    srcs = glob(["src/scripts/**/*.%s" % ext for ext in ("c", "cpp", "cs", "java", "js", "lua", "py")]),
+    visibility = ["//experimental/ksa/doc/test:__pkg__"],
+)
+
+# The JavaScript examples, with the stubs beside them as they import them, for the program
+# //experimental/ksa/doc/test runs them with
+genrule(
+    name = "scripts-ksa-js",
+    srcs = ["//experimental/ksa/service/KSA:KSA-js"],
+    outs = ["src/scripts/index/KSA.js"],
+    # The stub's module, from beside its declarations
+    cmd = "for f in $(SRCS); do case $$f in *.js) cp $$f $@ ;; esac; done",
+)
+
+js_library(
+    name = "scripts-js",
+    srcs = glob(["src/scripts/**/*.js"]) + [":scripts-ksa-js"],
+    visibility = ["//experimental/ksa/doc/test:__pkg__"],
 )
 
 # The JavaScript stubs' declarations beside the example scripts, which import them as
@@ -259,6 +304,7 @@ test_suite(
         ":check-scripts-js",
         ":lint",
         ":spelling",
+        "//experimental/ksa/doc/test",
     ],
 )
 

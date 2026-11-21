@@ -74,6 +74,7 @@ py_binary(
         ":bazel_ksa",
         ":ksatest",
         "//experimental/ksa/tools/grpc:grpc-python",
+        "//tools/doc_examples",
         "@krpc_pypi//grpcio",
         "@krpc_pypi//pillow",
         "@krpc_pypi//pytest",

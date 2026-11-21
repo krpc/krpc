@@ -40,3 +40,9 @@ name = "gRPC Server"
 protocol = "gRPC"
 grpc_address = "127.0.0.1"
 grpc_port = 50002
+
+[[servers]]
+name = "HTTP Server"
+protocol = "JSONOverHTTP"
+http_address = "127.0.0.1"
+http_port = 50003
