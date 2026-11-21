@@ -32,7 +32,6 @@ namespace KRPC.KSA.UI
         readonly Core core;
         readonly ConfigurationFile config;
         readonly Addon addon;
-        readonly HashSet<Guid> expandServers = new HashSet<Guid> ();
         readonly Dictionary<Guid, EditServer> editServers = new Dictionary<Guid, EditServer> ();
         readonly Dictionary<IClient, long> lastClientActivity = new Dictionary<IClient, long> ();
         string targetFrameRate;
@@ -54,8 +53,6 @@ namespace KRPC.KSA.UI
             this.config = config;
             ShowRateSettings ();
             tickHoldTimeout = config.Configuration.TickHoldTimeout.ToString (CultureInfo.InvariantCulture);
-            if (core.Servers.Count == 1)
-                expandServers.Add (core.Servers [0].Id);
             core.OnClientActivity += (s, e) => lastClientActivity [e.Client] = Environment.TickCount64;
             core.OnClientDisconnected += (s, e) => lastClientActivity.Remove (e.Client);
         }
@@ -69,11 +66,11 @@ namespace KRPC.KSA.UI
                 ConsoleWidgets.Rule ();
             }
             if (ConsoleWidgets.Button ("Add server")) {
-                var server = new Configuration.Server ();
+                var server = config.Configuration.NewServer (Protocol.ProtocolBuffersOverTCP);
                 config.Configuration.Servers.Add (server);
+                config.Configuration.ExpandedServers.Add (server.Id);
                 config.Save ();
                 core.Add (addon.CreateServer (server));
-                expandServers.Add (server.Id);
             }
             if (Errors.Count > 0) {
                 ConsoleWidgets.Rule ();
@@ -117,13 +114,25 @@ namespace KRPC.KSA.UI
             editServers.TryGetValue (server.Id, out var edit);
             ImGui.PushID (server.Id.ToString ());
 
-            ImGui.SetNextItemOpen (expandServers.Contains (server.Id));
+            var expandedServers = config.Configuration.ExpandedServers;
+            var wasExpanded = expandedServers.Contains (server.Id);
+            ImGui.SetNextItemOpen (wasExpanded);
             var expanded = ImGui.CollapsingHeader (server.Name + "###header");
-            if (expanded)
-                expandServers.Add (server.Id);
-            else
-                expandServers.Remove (server.Id);
-            ImGui.SameLine (ImGui.GetContentRegionAvail ().X - ImGui.CalcTextSize ("OFFLINE").X);
+            if (expanded != wasExpanded) {
+                if (expanded)
+                    expandedServers.Add (server.Id);
+                else
+                    expandedServers.Remove (server.Id);
+                config.Save ();
+            }
+            var statusWidth = ImGui.CalcTextSize ("OFFLINE").X;
+            var clients = server.Clients.Count ();
+            if (clients > 0) {
+                var text = clients.ToString (CultureInfo.InvariantCulture) + (clients == 1 ? " client" : " clients");
+                ImGui.SameLine (ImGui.GetContentRegionAvail ().X - statusWidth - ImGui.CalcTextSize (text + "  ").X);
+                ImGui.TextColored (ConsoleStyle.TextMuted, text);
+            }
+            ImGui.SameLine (ImGui.GetContentRegionAvail ().X - statusWidth);
             if (running)
                 ImGui.TextColored (ConsoleStyle.Positive, "ONLINE");
             else
@@ -165,7 +174,8 @@ namespace KRPC.KSA.UI
                 } else {
                     Errors.Clear ();
                     editServers [server.Id] = new EditServer (config.Configuration.GetServer (server.Id));
-                    expandServers.Add (server.Id);
+                    if (expandedServers.Add (server.Id))
+                        config.Save ();
                 }
             }
             ImGui.EndDisabled ();
@@ -182,7 +192,6 @@ namespace KRPC.KSA.UI
                 config.Configuration.RemoveServer (server.Id);
                 config.Save ();
                 core.Remove (server.Id);
-                expandServers.Remove (server.Id);
             }
             ImGui.EndDisabled ();
             ImGui.PopID ();

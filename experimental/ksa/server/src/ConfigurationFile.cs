@@ -66,6 +66,7 @@ namespace KRPC.KSA
         {
             var config = Configuration;
             config.Servers.Clear ();
+            config.ExpandedServers.Clear ();
             var document = Read (out keepFile);
             if (document != null)
                 Load (document);
@@ -73,6 +74,8 @@ namespace KRPC.KSA
                 foreach (var server in Configuration.DefaultServers ())
                     config.Servers.Add (server);
             }
+            if (document != null)
+                LoadExpandedServers (document);
             Save ();
         }
 
@@ -136,6 +139,20 @@ namespace KRPC.KSA
                 else
                     Logger.WriteLine ("Ignoring a server in the settings file that is not valid", Logger.Severity.Warning);
             }
+            // After the named servers, so a new name is clear of every one of them
+            foreach (var server in config.Servers.Where (x => x.Name == null))
+                server.Name = NewServerName (config);
+        }
+
+        // After the servers, as an id that names no server is left out
+        void LoadExpandedServers (TomlDocument document)
+        {
+            var config = Configuration;
+            var ids = Get<IEnumerable<TomlValue>> (document, "expanded_servers", Array.Empty<TomlValue> (), x => (TomlArray)x);
+            foreach (var value in ids) {
+                if (value is TomlString id && Guid.TryParse (id.Value, out var guid) && config.Servers.Any (x => x.Id == guid))
+                    config.ExpandedServers.Add (guid);
+            }
         }
 
         // The value of a setting, or the default when it is missing or does not convert
@@ -172,8 +189,8 @@ namespace KRPC.KSA
             });
         }
 
-        // A server, or null when its protocol is missing or unknown. A missing or invalid id or
-        // name takes a new one.
+        // A server, or null when its protocol is missing or unknown. A missing or invalid id takes
+        // a new one, and a missing or invalid name is null.
         static Configuration.Server ParseServer (TomlTable table)
         {
             Protocol protocol;
@@ -186,7 +203,7 @@ namespace KRPC.KSA
             server.Protocol = protocol;
             server.Settings = new Dictionary<string, string> ();
             server.Id = Get (table, "id", server.Id, x => new Guid (((TomlString)x).Value));
-            server.Name = Get (table, "name", server.Name, x => ((TomlString)x).Value);
+            server.Name = Get<string> (table, "name", null, x => ((TomlString)x).Value);
             foreach (var entry in table) {
                 if (entry.Key == "id" || entry.Key == "name" || entry.Key == "protocol")
                     continue;
@@ -194,9 +211,19 @@ namespace KRPC.KSA
                 if (entry.Value is TomlString || entry.Value is TomlLong || entry.Value is TomlBoolean)
                     server.Settings [entry.Key] = entry.Value.StringValue;
                 else
-                    Logger.WriteLine ("The setting " + entry.Key + " of server " + server.Name + " in the settings file is not valid, leaving it out", Logger.Severity.Warning);
+                    Logger.WriteLine ("The setting " + entry.Key + " of server " + (server.Name ?? server.Id.ToString ()) + " in the settings file is not valid, leaving it out", Logger.Severity.Warning);
             }
             return server;
+        }
+
+        // The name of a new server, as Configuration.NewServer gives: "Server", numbered when a
+        // server already has that name
+        static string NewServerName (Configuration config)
+        {
+            var name = "Server";
+            for (var i = 2; config.Servers.Any (x => x.Name == name); i++)
+                name = "Server " + i.ToString (CultureInfo.InvariantCulture);
+            return name;
         }
 
         public void Save ()
@@ -229,6 +256,8 @@ namespace KRPC.KSA
             toml.Append ("# Window (x, y, width, height) in pixels, with a zero width for the default\n");
             AppendValue (toml, "main_window_rect", config.MainWindowPosition);
             AppendValue (toml, "info_window_rect", config.InfoWindowPosition);
+            toml.Append ("# The ids of the servers expanded in the server window\n");
+            AppendValue (toml, "expanded_servers", config.ExpandedServers.Select (x => x.ToString ()));
             foreach (var server in config.Servers) {
                 toml.Append ("\n[[servers]]\n");
                 AppendValue (toml, "id", server.Id.ToString ());
@@ -272,9 +301,29 @@ namespace KRPC.KSA
             toml.Append (key).Append (" = ").Append (value.ToString (CultureInfo.InvariantCulture)).Append ('\n');
         }
 
+        static void AppendValue (StringBuilder toml, string key, IEnumerable<string> values)
+        {
+            toml.Append (key).Append (" = [");
+            var first = true;
+            foreach (var value in values) {
+                if (!first)
+                    toml.Append (", ");
+                AppendString (toml, value);
+                first = false;
+            }
+            toml.Append ("]\n");
+        }
+
         static void AppendValue (StringBuilder toml, string key, string value)
         {
-            toml.Append (key).Append (" = \"");
+            toml.Append (key).Append (" = ");
+            AppendString (toml, value);
+            toml.Append ('\n');
+        }
+
+        static void AppendString (StringBuilder toml, string value)
+        {
+            toml.Append ('"');
             foreach (var c in value) {
                 if (c == '"' || c == '\\')
                     toml.Append ('\\').Append (c);
@@ -283,7 +332,7 @@ namespace KRPC.KSA
                 else
                     toml.Append (c);
             }
-            toml.Append ("\"\n");
+            toml.Append ('"');
         }
     }
 }
