@@ -146,6 +146,8 @@ namespace KRPC.KSA.Services
 
         // The roll, pitch and yaw of the vehicle's control frame in the game's attitude
         // frame, in radians, in the convention of the flight computer's custom target
+        // Note: the flight computer steers the thrust frame while the engines burn, which
+        // matches the control frame on the Rocket and may differ on other vehicles
         internal static double3 AttitudeOf (global::KSA.Vehicle v)
         {
             var enu2Cci = VehicleReferenceFrameEx.GetEnuBody2Cci (v.Orbit.StateVectors.PositionCci);
