@@ -12,8 +12,8 @@ This license (LGPL v3) applies to all parts of kRPC except for the following:
 
   - service/MechJeb/* is under the GPLv3 license.
 
-  - experimental/ksa/release/ holds the license files of the kRPC for KSA release,
-    which cover the third-party binaries it ships.
+  - experimental/ksa/LICENSE and experimental/ksa/tools/build/dotnet/ hold the license
+    files of the kRPC for KSA release, which cover the third-party binaries it ships.
 
   - As an additional permission under section 7 of the GNU GPL v3, code that krpctools
     generates for a client, including the service stubs shipped with each client and
