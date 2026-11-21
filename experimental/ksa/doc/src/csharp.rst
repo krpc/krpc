@@ -44,3 +44,4 @@ API Reference
    :maxdepth: 1
 
    csharp/api/ksa
+   csharp/api/kfs

@@ -71,6 +71,7 @@ clientgen_csharp(
     out = "csharp/KSA.cs",
     defs = ":KSA-definitions",
     service = "KSA",
+    visibility = ["//experimental/ksa:__subpackages__"],
 )
 
 clientgen_cpp(
@@ -200,6 +201,7 @@ pkg_zip(
     srcs = [
         ":readme-file",
         ":stub-files",
+        "//experimental/ksa/service/KFS:stub-files",
     ],
     out = "kRPC-stubs.zip",
     visibility = ["//visibility:public"],

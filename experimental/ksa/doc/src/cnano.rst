@@ -60,3 +60,4 @@ API Reference
    :maxdepth: 1
 
    cnano/api/ksa
+   cnano/api/kfs

@@ -35,10 +35,10 @@ def _impl(ctx):
                     ["--output=%s" % output.path] + includes,
     )
 
-    # The include path is relative to the package's include directory
+    # The include path is relative to the include directory the output is in
     include = ctx.attr.out.name
-    if include.startswith("include/"):
-        include = include[len("include/"):]
+    if "include/" in include:
+        include = include.rpartition("include/")[2]
     if language == "js":
         # A JavaScript module imports one beside it by the path of its compiled output
         include = "./%s.js" % include.rpartition("/")[2].removesuffix(".ts")

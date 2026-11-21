@@ -79,6 +79,12 @@
   - Add the geomagnetic storm of a body, and the activity and recent coronal mass ejections of
     a star
 
+- kFS
+  - Add a `KFS` service, to build, load, start and stop programs on kFS, the game's prototype
+    flight software
+  - Add reading and writing a program's global variables, and its log and trace channels
+  - Refuse changes to `AutoPilot` while a kFS program controls the vehicle
+
 - Game
   - Stop a warp in progress when `KSA.SimulationSpeed` is set
 

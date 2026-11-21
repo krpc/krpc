@@ -55,6 +55,7 @@ pkg_files(
         "//core:KRPC.Core.net10",
         "//experimental/ksa/server:KRPC.KSA",
         "//experimental/ksa/server:mod.toml",
+        "//experimental/ksa/service/KFS:KRPC.KSA.KFS",
         "//experimental/ksa/service/KSA:KRPC.KSA.Service",
         "@nuget.google.protobuf.v%s//:lib/net8.0/Google.Protobuf.dll" % protobuf_version,
         "@nuget.system.io.ports.v%s//:lib/net10.0/System.IO.Ports.dll" % ports_version,
@@ -191,6 +192,7 @@ pkg_files(
 pkg_filegroup(
     name = "release-stubs",
     srcs = [
+        "//experimental/ksa/service/KFS:stub-files",
         "//experimental/ksa/service/KSA:readme-file",
         "//experimental/ksa/service/KSA:stub-files",
     ],
@@ -218,6 +220,7 @@ test_suite(
         ":ruff",
         "//experimental/ksa/doc:test",
         "//experimental/ksa/server:test",
+        "//experimental/ksa/service/KFS:test",
         "//experimental/ksa/service/KSA:test",
         "//experimental/ksa/tools/game:test",
         "//experimental/ksa/tools/grpc:test",

@@ -18,13 +18,14 @@ grpc/src/ProtoCodec.cs:
    the return value as field 1.
  * A tuple is a message holding item i as field i + 1.
  * Structure T is `message T`, holding its field i as field i + 1, named in snake
-   case. A structure of another service S is imported from S.proto.
+   case.
+ * A class, enumeration or structure of another service S is imported from S.proto,
+   and named with its package, as krpc.s.T.
  * A list or set is a repeated field, and a dictionary a map.
  * A nullable scalar, or a scalar parameter with a default value, is optional.
 
 A procedure with a type that has no typed form is left out, as the server leaves it
-out: nested containers, nullable scalars or structures inside a container, and
-classes and enumerations of other services.
+out: nested containers, and nullable scalars or structures inside a container.
 """
 
 import json
@@ -118,13 +119,7 @@ class Generator:
         code = typ["code"]
         if code in SCALARS:
             return SCALARS[code]
-        if code in ("CLASS", "ENUMERATION"):
-            if typ["service"] != self.service_name:
-                raise Unsupported(
-                    f"{typ['service']}.{typ['name']} is in another service"
-                )
-            return typ["name"]
-        if code == "STRUCT":
+        if code in ("CLASS", "ENUMERATION", "STRUCT"):
             if typ["service"] == self.service_name:
                 return typ["name"]
             self.imports.add(typ["service"])
@@ -150,7 +145,8 @@ class Generator:
                 + "_"
                 + "_".join(self.type_name(x) for x in typ["types"])
             )
-        return self.element_type(typ)
+        # A type of another service, as krpc_s_T
+        return self.element_type(typ).replace(".", "_")
 
     def element(self, typ):
         if typ["code"] in CONTAINERS:

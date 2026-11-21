@@ -4,6 +4,9 @@ classpath
 freefall
 gRPC
 javatuples
+kASM
+kC
+kFS
 lifecycle
 millisievert
 readme
@@ -12,6 +15,7 @@ sieverts
 steradian
 teslas
 unburned
+underflowed
 undock
 unshielded
 untick
