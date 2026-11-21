@@ -21,7 +21,7 @@ namespace KRPC.KSA.Grpc
     /// calls on its own threads. They reach the server core through the queues read in
     /// <see cref="Update"/>, on the game thread.
     /// </summary>
-    public sealed class GrpcServer : IServer<Request,Response>
+    public sealed class GrpcServer : IMessageServer
     {
         /// <summary>
         /// Create a server core server for gRPC clients.
@@ -44,17 +44,17 @@ namespace KRPC.KSA.Grpc
         /// <summary>
         /// Event triggered when a client requests a connection.
         /// </summary>
-        public event EventHandler<ClientRequestingConnectionEventArgs<Request,Response>> OnClientRequestingConnection;
+        public event EventHandler<ClientRequestingConnectionEventArgs<IMessageStream>> OnClientRequestingConnection;
 
         /// <summary>
         /// Event triggered when a client has connected.
         /// </summary>
-        public event EventHandler<ClientConnectedEventArgs<Request,Response>> OnClientConnected;
+        public event EventHandler<ClientConnectedEventArgs<IMessageStream>> OnClientConnected;
 
         /// <summary>
         /// Event triggered when a client has disconnected.
         /// </summary>
-        public event EventHandler<ClientDisconnectedEventArgs<Request,Response>> OnClientDisconnected;
+        public event EventHandler<ClientDisconnectedEventArgs<IMessageStream>> OnClientDisconnected;
 
         readonly IPAddress address;
         readonly ushort port;
@@ -159,7 +159,7 @@ namespace KRPC.KSA.Grpc
         /// </summary>
         bool RequestConnection (GrpcClient client)
         {
-            var args = new ClientRequestingConnectionEventArgs<Request,Response> (client);
+            var args = new ClientRequestingConnectionEventArgs<IMessageStream> (client);
             var handler = OnClientRequestingConnection;
             if (handler == null)
                 args.Request.Allow ();
@@ -168,7 +168,7 @@ namespace KRPC.KSA.Grpc
             if (args.Request.ShouldAllow) {
                 clients [client.Guid] = client;
                 client.Allow ();
-                EventHandlerExtensions.Invoke (OnClientConnected, this, new ClientConnectedEventArgs<Request,Response> (client));
+                EventHandlerExtensions.Invoke (OnClientConnected, this, new ClientConnectedEventArgs<IMessageStream> (client));
                 return true;
             }
             if (args.Request.ShouldDeny) {
@@ -180,11 +180,11 @@ namespace KRPC.KSA.Grpc
 
         void Disconnected (GrpcClient client)
         {
-            client.Close ();
+            client.End ();
             clients.Remove (client.Guid);
-            closedBytesRead += client.Stream.BytesRead;
-            closedBytesWritten += client.Stream.BytesWritten;
-            EventHandlerExtensions.Invoke (OnClientDisconnected, this, new ClientDisconnectedEventArgs<Request,Response> (client));
+            closedBytesRead += client.GrpcStream.BytesRead;
+            closedBytesWritten += client.GrpcStream.BytesWritten;
+            EventHandlerExtensions.Invoke (OnClientDisconnected, this, new ClientDisconnectedEventArgs<IMessageStream> (client));
         }
 
         /// <summary>
@@ -194,7 +194,7 @@ namespace KRPC.KSA.Grpc
         internal GrpcClient GetClient (string connectionId, string name, string peer)
         {
             return connections.GetOrAdd (connectionId, _ => {
-                var client = new GrpcClient (name, peer);
+                var client = new GrpcClient (name, peer, this);
                 connecting.Enqueue (client);
                 return client;
             });
@@ -205,7 +205,26 @@ namespace KRPC.KSA.Grpc
             if (connections.TryRemove (connectionId, out var client)) {
                 client.Disconnect ();
                 disconnecting.Enqueue (client);
+                Arrivals.Set ();
             }
+        }
+
+        /// <summary>
+        /// End a client's session on the server's next update.
+        /// </summary>
+        internal void Remove (GrpcClient client)
+        {
+            client.End ();
+            disconnecting.Enqueue (client);
+            Arrivals.Set ();
+        }
+
+        /// <summary>
+        /// Send the held back responses. A response completes its call as it is written, so
+        /// none are held back.
+        /// </summary>
+        public void Flush ()
+        {
         }
 
         /// <summary>
@@ -232,7 +251,7 @@ namespace KRPC.KSA.Grpc
         /// <summary>
         /// The connected clients.
         /// </summary>
-        public IEnumerable<IClient<Request,Response>> Clients {
+        public IEnumerable<IClient<IMessageStream>> Clients {
             get { return clients.Values; }
         }
 
@@ -243,7 +262,7 @@ namespace KRPC.KSA.Grpc
             get {
                 var read = closedBytesRead;
                 foreach (var client in clients.Values)
-                    read += client.Stream.BytesRead;
+                    read += client.GrpcStream.BytesRead;
                 return read;
             }
         }
@@ -255,7 +274,7 @@ namespace KRPC.KSA.Grpc
             get {
                 var written = closedBytesWritten;
                 foreach (var client in clients.Values)
-                    written += client.Stream.BytesWritten;
+                    written += client.GrpcStream.BytesWritten;
                 return written;
             }
         }
@@ -268,7 +287,7 @@ namespace KRPC.KSA.Grpc
             closedBytesRead = 0;
             closedBytesWritten = 0;
             foreach (var client in clients.Values)
-                client.Stream.ClearStats ();
+                client.GrpcStream.ClearStats ();
         }
     }
 }

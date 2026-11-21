@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Grpc.Core;
 using KRPC.Server;
@@ -21,7 +22,13 @@ namespace KRPC.KSA.Grpc
         {
             Procedure = procedure;
             Message = message;
+            Arrived = Stopwatch.GetTimestamp ();
         }
+
+        /// <summary>
+        /// The <see cref="Stopwatch.GetTimestamp"/> at which the call arrived.
+        /// </summary>
+        public long Arrived { get; }
 
         public ProcedureSignature Procedure { get; }
 
@@ -50,18 +57,20 @@ namespace KRPC.KSA.Grpc
     /// <summary>
     /// The client for one HTTP/2 connection.
     /// </summary>
-    sealed class GrpcClient : IClient<Request,Response>
+    sealed class GrpcClient : IClient<IMessageStream>
     {
         enum State { Pending, Allowed, Denied, Closed }
 
         volatile State state = State.Pending;
+        readonly GrpcServer server;
         readonly GrpcStream stream;
 
-        public GrpcClient (string name, string address)
+        public GrpcClient (string name, string address, GrpcServer server)
         {
             Name = name;
             Address = address;
             Guid = Guid.NewGuid ();
+            this.server = server;
             stream = new GrpcStream (this);
         }
 
@@ -75,7 +84,11 @@ namespace KRPC.KSA.Grpc
             get { return state == State.Allowed; }
         }
 
-        public IStream<Request,Response> Stream {
+        public IMessageStream Stream {
+            get { return stream; }
+        }
+
+        internal GrpcStream GrpcStream {
             get { return stream; }
         }
 
@@ -88,6 +101,8 @@ namespace KRPC.KSA.Grpc
             // The game thread may have drained the queue before the call reached it
             if (state == State.Denied || state == State.Closed)
                 FailQueued ();
+            else
+                Arrivals.Set ();
         }
 
         public void Allow ()
@@ -102,7 +117,7 @@ namespace KRPC.KSA.Grpc
         }
 
         /// <summary>
-        /// Mark the connection as gone. Called from a Kestrel thread; <see cref="Close"/>
+        /// Mark the connection as gone. Called from a Kestrel thread; <see cref="End"/>
         /// follows on the game thread.
         /// </summary>
         public void Disconnect ()
@@ -111,7 +126,19 @@ namespace KRPC.KSA.Grpc
                 state = State.Closed;
         }
 
+        /// <summary>
+        /// End the session, from the server window or the server core. The server removes the
+        /// client on its next update.
+        /// </summary>
         public void Close ()
+        {
+            server.Remove (this);
+        }
+
+        /// <summary>
+        /// Fail the client's calls, and any it makes later.
+        /// </summary>
+        internal void End ()
         {
             if (state != State.Denied)
                 state = State.Closed;
@@ -128,14 +155,14 @@ namespace KRPC.KSA.Grpc
                 call.Fail (code, message);
         }
 
-        public bool Equals (IClient<Request,Response> other)
+        public bool Equals (IClient<IMessageStream> other)
         {
             return other != null && Guid == other.Guid;
         }
 
         public override bool Equals (object obj)
         {
-            return Equals (obj as IClient<Request,Response>);
+            return Equals (obj as IClient<IMessageStream>);
         }
 
         public override int GetHashCode ()
@@ -148,7 +175,7 @@ namespace KRPC.KSA.Grpc
     /// The requests and responses of a client. The server core reads and writes it on the game
     /// thread, one request at a time, so responses arrive in request order.
     /// </summary>
-    sealed class GrpcStream : IStream<Request,Response>
+    sealed class GrpcStream : IMessageStream
     {
         readonly GrpcClient client;
         readonly Queue<PendingCall> inFlight = new Queue<PendingCall> ();
@@ -187,6 +214,7 @@ namespace KRPC.KSA.Grpc
                 throw new InvalidOperationException ("No request to read");
             inFlight.Enqueue (call);
             BytesRead += (ulong)call.Message.Length;
+            call.Request.Arrived = call.Arrived;
             return call.Request;
         }
 
@@ -229,24 +257,18 @@ namespace KRPC.KSA.Grpc
             BytesWritten = 0;
         }
 
-        public int Read (Request[] buffer, int offset)
+        // The gRPC methods leave out the KRPC service's streams, so no stream updates are sent
+        public void Write (StreamUpdate value)
         {
-            throw new NotSupportedException ();
         }
 
-        public int Read (Request[] buffer, int offset, int size)
+        public void StreamRemoved (ulong id)
         {
-            throw new NotSupportedException ();
         }
 
-        public void Write (Response[] buffer)
+        public void Disconnect (DisconnectReason reason, string message)
         {
-            throw new NotSupportedException ();
-        }
-
-        public void Write (Response[] buffer, int offset, int size)
-        {
-            throw new NotSupportedException ();
+            client.Close ();
         }
     }
 }
