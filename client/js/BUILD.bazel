@@ -279,7 +279,10 @@ filegroup(
 js_library(
     name = "biome-config",
     srcs = ["biome.jsonc"],
-    visibility = ["//doc:__pkg__"],
+    visibility = [
+        "//doc:__pkg__",
+        "//experimental/ksa/doc:__pkg__",
+    ],
 )
 
 # Formatting and lint, from biome.jsonc. The files are named one by one, as Biome skips the

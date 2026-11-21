@@ -21,6 +21,12 @@ openapi-spec-validator==0.9.0
 pytest
 ruff==0.17.5
 
+# The kRPC for KSA in-game tests: the gRPC client and its code generator, and image
+# checks of screenshots
+grpcio
+grpcio-tools
+pillow
+
 # Rasterizing the SVG icons and diagrams. pyvips-binary carries libvips and the
 # librsvg that renders them, as wheels for every platform the build runs on, so
 # no system install is involved.
