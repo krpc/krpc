@@ -6,8 +6,9 @@ This license (LGPL v3) applies to all parts of kRPC for KSA except for the follo
   - kRPC/System.IO.Ports.dll and kRPC/runtimes/ are binaries from the .NET
     project. See LICENSE.System.IO.Ports
 
-  - The kRPC/grpc/win-x64/ and kRPC/grpc/linux-x64/ folders are binaries from
-    the ASP.NET Core project. See LICENSE.AspNetCore and THIRD-PARTY-NOTICES.AspNetCore
+  - The kRPC/grpc/win-x64/, kRPC/grpc/linux-x64/ and kRPC/grpc/osx-arm64/
+    folders are binaries from the ASP.NET Core project. See LICENSE.AspNetCore
+    and THIRD-PARTY-NOTICES.AspNetCore
 
   - kRPC/grpc/Grpc.*.dll are binaries from the gRPC for .NET project.
     See LICENSE.Grpc

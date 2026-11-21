@@ -7,6 +7,7 @@
     apply to every save and are kept when the mod updates
   - Create the settings file with the defaults when it is missing, and replace settings in it
     that are not valid with their defaults
+  - Run on Apple silicon Macs, including the gRPC and serial servers
   - Budget the server's time per frame, and choose the rate control settings from a preset in
     the server window
   - Name a server added in the server window "Server", "Server 2" and so on

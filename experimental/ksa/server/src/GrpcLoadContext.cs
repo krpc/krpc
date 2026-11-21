@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Runtime.Loader;
 
 namespace KRPC.KSA
@@ -24,14 +25,20 @@ namespace KRPC.KSA
         {
             // The ASP.NET Core assemblies are compiled ahead of time for one platform, and do
             // not load on another
-            string rid;
+            string os;
             if (OperatingSystem.IsWindows ())
-                rid = "win-x64";
+                os = "win";
             else if (OperatingSystem.IsLinux ())
-                rid = "linux-x64";
+                os = "linux";
+            else if (OperatingSystem.IsMacOS ())
+                os = "osx";
             else
-                throw new PlatformNotSupportedException ("The gRPC server runs on Windows and Linux only");
-            directories = new [] { directory, Path.Combine (directory, rid) };
+                os = null;
+            var rid = os + "-" + RuntimeInformation.ProcessArchitecture.ToString ().ToLowerInvariant ();
+            var platformDirectory = Path.Combine (directory, rid);
+            if (os == null || !Directory.Exists (platformDirectory))
+                throw new PlatformNotSupportedException ("The gRPC server does not run on " + RuntimeInformation.RuntimeIdentifier);
+            directories = new [] { directory, platformDirectory };
             this.parent = parent;
         }
 

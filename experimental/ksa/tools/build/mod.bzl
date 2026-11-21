@@ -17,6 +17,15 @@ files_in = rule(
     },
 )
 
+# The native library of System.IO.Ports for each platform the mod ships it for
+NATIVE_PORTS = {
+    "linux-x64": "libSystem.IO.Ports.Native.so",
+    "osx-arm64": "libSystem.IO.Ports.Native.dylib",
+}
+
+# The platforms the mod ships the ASP.NET Core runtime pack for, which the gRPC server runs on
+ASPNETCORE_RIDS = ["linux-x64", "osx-arm64", "win-x64"]
+
 def deps_json(mod_version, core_version, protobuf_version, ports_version):
     """The deps.json of KRPC.KSA, from which StarMap's load context resolves the mod's assemblies.
 
@@ -31,7 +40,7 @@ def deps_json(mod_version, core_version, protobuf_version, ports_version):
     Returns:
       The file content.
     """
-    native_ports = "runtime.linux-x64.runtime.native.System.IO.Ports"
+    native_ports = {rid: "runtime.%s.runtime.native.System.IO.Ports" % rid for rid in NATIVE_PORTS}
     targets = {
         "KRPC.KSA/" + mod_version: {
             "dependencies": {
@@ -46,19 +55,20 @@ def deps_json(mod_version, core_version, protobuf_version, ports_version):
         "KRPC.Core/" + core_version: {"runtime": {"KRPC.Core.dll": {}}},
         "Google.Protobuf/" + protobuf_version: {"runtime": {"lib/net8.0/Google.Protobuf.dll": {}}},
         "System.IO.Ports/" + ports_version: {
-            "dependencies": {native_ports: ports_version},
+            "dependencies": {package: ports_version for package in native_ports.values()},
             "runtime": {"lib/net10.0/System.IO.Ports.dll": {}},
             "runtimeTargets": {
                 "runtimes/%s/lib/net10.0/System.IO.Ports.dll" % rid: {"rid": rid, "assetType": "runtime"}
                 for rid in ["unix", "win"]
             },
         },
-        native_ports + "/" + ports_version: {
-            "runtimeTargets": {
-                "runtimes/linux-x64/native/libSystem.IO.Ports.Native.so": {"rid": "linux-x64", "assetType": "native"},
-            },
-        },
     }
+    for rid, package in native_ports.items():
+        targets[package + "/" + ports_version] = {
+            "runtimeTargets": {
+                "runtimes/%s/native/%s" % (rid, NATIVE_PORTS[rid]): {"rid": rid, "assetType": "native"},
+            },
+        }
     libraries = {}
     for name in targets:
         project = name.startswith("KRPC.")

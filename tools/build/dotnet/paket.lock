@@ -15,6 +15,7 @@ NUGET
       Grpc.Core.Api (>= 2.71)
     Lib.Harmony (2.4.2) - restriction: == net10.0
     Microsoft.AspNetCore.App.Runtime.linux-x64 (10.0.13) - restriction: == net10.0
+    Microsoft.AspNetCore.App.Runtime.osx-arm64 (10.0.13) - restriction: == net10.0
     Microsoft.AspNetCore.App.Runtime.win-x64 (10.0.13) - restriction: == net10.0
     Microsoft.CodeAnalysis.NetAnalyzers (10.0.404)
     Moq (4.21) - restriction: == net10.0

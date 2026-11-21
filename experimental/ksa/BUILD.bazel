@@ -3,7 +3,7 @@ load("@bazel_skylib//rules:write_file.bzl", "write_file")
 load("@rules_pkg//pkg:mappings.bzl", "pkg_filegroup", "pkg_files", "strip_prefix")
 load("@rules_pkg//pkg:zip.bzl", "pkg_zip")
 load("//:config.bzl", "assembly_version", "version")
-load("//experimental/ksa/tools/build:mod.bzl", "deps_json", "files_in")
+load("//experimental/ksa/tools/build:mod.bzl", "ASPNETCORE_RIDS", "NATIVE_PORTS", "deps_json", "files_in")
 load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
 load(":config.bzl", "ksa_version", "mod_version", "starmap_version")
 
@@ -76,14 +76,15 @@ pkg_files(
     ]
 ]
 
-pkg_files(
-    name = "mod-ports-native",
-    srcs = [
-        "@nuget.runtime.linux-x64.runtime.native.system.io.ports.v%s//:runtimes/linux-x64/native/libSystem.IO.Ports.Native.so" % ports_version,
-    ],
-    prefix = "kRPC/runtimes/linux-x64/native",
-    strip_prefix = strip_prefix.files_only(),
-)
+[
+    pkg_files(
+        name = "mod-ports-native-" + rid,
+        srcs = ["@nuget.runtime.%s.runtime.native.system.io.ports.v%s//:runtimes/%s/native/%s" % (rid, ports_version, rid, library)],
+        prefix = "kRPC/runtimes/%s/native" % rid,
+        strip_prefix = strip_prefix.files_only(),
+    )
+    for rid, library in NATIVE_PORTS.items()
+]
 
 pkg_files(
     name = "mod-grpc",
@@ -105,10 +106,7 @@ pkg_files(
         srcs = ["@nuget.microsoft.aspnetcore.app.runtime.%s.v%s//:files" % (rid, aspnetcore_version)],
         directory = "runtimes/%s/lib/net10.0" % rid,
     )
-    for rid in [
-        "linux-x64",
-        "win-x64",
-    ]
+    for rid in ASPNETCORE_RIDS
 ]
 
 [
@@ -118,21 +116,15 @@ pkg_files(
         prefix = "kRPC/grpc/" + rid,
         strip_prefix = strip_prefix.files_only(),
     )
-    for rid in [
-        "linux-x64",
-        "win-x64",
-    ]
+    for rid in ASPNETCORE_RIDS
 ]
 
 mod_files = [
     ":mod-root",
     ":mod-ports-unix",
     ":mod-ports-win",
-    ":mod-ports-native",
     ":mod-grpc",
-    ":mod-aspnetcore-linux-x64",
-    ":mod-aspnetcore-win-x64",
-]
+] + [":mod-ports-native-" + rid for rid in NATIVE_PORTS] + [":mod-aspnetcore-" + rid for rid in ASPNETCORE_RIDS]
 
 # The mod folder, kRPC/, as installed in the KSA mods folder. The mod writes its settings in
 # the game's user folder on first run.
