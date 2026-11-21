@@ -7,6 +7,7 @@ using System.Net;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Runtime.Loader;
 using Brutal.ImGuiApi;
 using Brutal.Logging;
@@ -61,12 +62,13 @@ namespace KRPC.KSA
         public void OnAllModsLoaded ()
         {
             InitLogger ();
+            ResolveSerialPortsNative ();
             LoadServiceAssemblies ();
 
             core = Core.Instance;
             var version = typeof (Addon).Assembly.GetName ().Version;
             core.Version = version.Major + "." + version.Minor + "." + version.Build;
-            config = new ConfigurationFile (Path.Combine (modDirectory, "settings.toml"));
+            config = new ConfigurationFile (ConfigurationFile.DefaultPath);
             config.Load ();
             foreach (var server in config.Configuration.Servers) {
                 try {
@@ -88,13 +90,6 @@ namespace KRPC.KSA
             TryPatch ("Universe.ExecuteNextVehicleSolvers", "the server updates after each frame instead", () =>
                 harmony.Patch (Required (typeof (Universe), nameof (Universe.ExecuteNextVehicleSolvers)),
                     prefix: Hook (nameof (BeforeVehicleSolvers))));
-
-            // On .NET, closing a TcpClient sets its socket to null, so KRPC.Core's connected check
-            // throws for a client that disconnected during a call that yields. We treat it as
-            // disconnected, as the check does for a disposed socket on Mono
-            TryPatch ("TCPClient.Connected", "a client that disconnects during a call may stop the server", () =>
-                harmony.Patch (Required (AccessTools.TypeByName ("KRPC.Server.TCP.TCPClient"), "get_Connected"),
-                    finalizer: Hook (nameof (TCPClientConnectedFinalizer))));
 
             // A save load replaces every vehicle, which the core counts as a new game state
             TryPatch ("Universe.DeserializeSave", new [] { "KRPC.GameStateLoads" }, () =>
@@ -286,6 +281,10 @@ namespace KRPC.KSA
             if (!updatedThisFrame)
                 Update ();
             updatedThisFrame = false;
+            // The frame's length runs from the end of the previous frame, as the server updates
+            // at the solver step or here
+            if (core != null)
+                core.EndFrame ();
             Utils.AfterFrame.RunAll ();
         }
 
@@ -383,14 +382,6 @@ namespace KRPC.KSA
             return result;
         }
 
-        static Exception TCPClientConnectedFinalizer (Exception __exception, ref bool __result)
-        {
-            if (__exception is not NullReferenceException)
-                return __exception;
-            __result = false;
-            return null;
-        }
-
         static void AfterSaveLoaded ()
         {
             GameState.Changed ();
@@ -486,6 +477,36 @@ namespace KRPC.KSA
             Universe.SetSimulationSpeed (unpausedSpeed);
         }
 
+        /// <summary>
+        /// Load the native library of System.IO.Ports from the mod's runtimes folder. StarMap
+        /// resolves the mod's managed assemblies through its deps.json, but not its native
+        /// libraries.
+        /// </summary>
+        void ResolveSerialPortsNative ()
+        {
+            string os, extension;
+            if (OperatingSystem.IsLinux ()) {
+                os = "linux";
+                extension = ".so";
+            } else if (OperatingSystem.IsMacOS ()) {
+                os = "osx";
+                extension = ".dylib";
+            } else {
+                // System.IO.Ports calls the Windows API directly
+                return;
+            }
+            // A platform the mod carries no library for has no folder, and falls through to the
+            // default probing
+            var rid = os + "-" + RuntimeInformation.ProcessArchitecture.ToString ().ToLowerInvariant ();
+            var context = AssemblyLoadContext.GetLoadContext (typeof (System.IO.Ports.SerialPort).Assembly);
+            context.ResolvingUnmanagedDll += (assembly, name) => {
+                if (name != "libSystem.IO.Ports.Native")
+                    return IntPtr.Zero;
+                var path = Path.Combine (modDirectory, "runtimes", rid, "native", name + extension);
+                return NativeLibrary.TryLoad (path, out var handle) ? handle : IntPtr.Zero;
+            };
+        }
+
         static void InitLogger ()
         {
             Logger.Writer = (message, severity) => {
@@ -523,8 +544,8 @@ namespace KRPC.KSA
             grpcContext ??= new GrpcLoadContext (
                 Path.Combine (modDirectory, "grpc"), AssemblyLoadContext.GetLoadContext (typeof (Addon).Assembly));
             var type = grpcContext.LoadFromAssemblyName (new AssemblyName ("KRPC.KSA.Grpc")).GetType ("KRPC.KSA.Grpc.GrpcServer");
-            var address = IPAddress.Parse (config.Settings.GetValueOrDefault ("address", IPAddress.Loopback.ToString ()));
-            var port = ushort.Parse (config.Settings.GetValueOrDefault ("port", "50002"), CultureInfo.InvariantCulture);
+            var address = IPAddress.Parse (config.Settings.GetValueOrDefault ("grpc_address", IPAddress.Loopback.ToString ()));
+            var port = ushort.Parse (config.Settings.GetValueOrDefault ("grpc_port", "50002"), CultureInfo.InvariantCulture);
             return (KRPC.Server.Server)type.GetMethod ("Create").Invoke (
                 null, BindingFlags.DoNotWrapExceptions, null,
                 new object [] { config.Id, config.Protocol, config.Name, address, port }, CultureInfo.InvariantCulture);

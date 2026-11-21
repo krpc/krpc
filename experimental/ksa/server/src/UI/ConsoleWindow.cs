@@ -105,6 +105,26 @@ namespace KRPC.KSA.UI
         }
 
         /// <summary>
+        /// Draw a labeled combo box. Returns whether the selection changed.
+        /// </summary>
+        internal static bool DrawComboRow (string label, string id, IList<string> options, ref int selected)
+        {
+            var changed = false;
+            ConsoleWidgets.BeginRow (label);
+            if (ConsoleWidgets.BeginComboControl (id, options [selected], false)) {
+                for (var i = 0; i < options.Count; i++) {
+                    if (ImGui.Selectable (options [i], i == selected)) {
+                        changed = i != selected;
+                        selected = i;
+                    }
+                }
+                ConsoleWidgets.EndComboControl ();
+            }
+            ConsoleWidgets.EndRow ();
+            return changed;
+        }
+
+        /// <summary>
         /// Draw a labeled text field that takes every edit, and marks a value that cannot be
         /// saved. <c>ConsoleWidgets.TextLine</c> takes an edit only when Enter is pressed.
         /// </summary>

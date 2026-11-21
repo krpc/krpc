@@ -1,0 +1,288 @@
+load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
+load("@bazel_skylib//rules:expand_template.bzl", "expand_template")
+load("@bazel_skylib//rules:write_file.bzl", "write_file")
+load("@rules_cc//cc:defs.bzl", "cc_library")
+load("@rules_java//java:defs.bzl", "java_library")
+load("@rules_pkg//pkg:mappings.bzl", "pkg_files", "strip_prefix")
+load("@rules_pkg//pkg:zip.bzl", "pkg_zip")
+load("//:config.bzl", "author", "version")
+load("//experimental/ksa:config.bzl", "mod_version")
+load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
+load("//tools/build:csharp.bzl", "csharp_library")
+load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
+load("//tools/krpctools:clientgen.bzl", "clientgen_cnano", "clientgen_cpp", "clientgen_csharp", "clientgen_java", "clientgen_js")
+load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
+
+package(default_visibility = ["//experimental/ksa:__subpackages__"])
+
+csharp_assembly_info(
+    name = "AssemblyInfo",
+    cls_compliant = False,
+    copyright = author,
+    description = "The KSA service of kRPC for KSA",
+    title = "KRPC.KSA.Service",
+    version = mod_version,
+)
+
+csharp_library(
+    name = "KRPC.KSA.Service",
+    srcs = glob(["src/**/*.cs"]) + [":AssemblyInfo"],
+    generate_documentation_file = True,
+    target_frameworks = ["net10.0"],
+    treat_warnings_as_errors = True,
+    warning_level = 4,
+    deps = [
+        "//core:KRPC.Core.net10",
+        "@ksa//:BepuUtilities",
+        "@ksa//:Brutal",
+        "@ksa//:KSA",
+        "@ksa//:Planet.Core",
+        "@ksa//:Planet.Render.Core",
+    ],
+)
+
+# The service definitions, and the client stubs of the service, which ship with the mod
+
+service_definitions(
+    name = "KSA-definitions",
+    out = "KRPC.KSA.json",
+    assemblies = [":KRPC.KSA.Service"],
+    references = ["@ksa//:assemblies"],
+    service = "KSA",
+)
+
+# The StdLib code the stubs include, which the clients ship
+clientgen_cpp(
+    name = "StdLib-cpp",
+    out = "include/krpc/services/std_lib.hpp",
+    defs = "//core:StdLibServiceDefinitions",
+    service = "StdLib",
+)
+
+clientgen_cnano(
+    name = "StdLib-cnano",
+    out = "include/krpc_cnano/services/std_lib.h",
+    defs = "//core:StdLibServiceDefinitions",
+    service = "StdLib",
+)
+
+clientgen_csharp(
+    name = "KSA-csharp",
+    out = "csharp/KSA.cs",
+    defs = ":KSA-definitions",
+    service = "KSA",
+)
+
+clientgen_cpp(
+    name = "KSA-cpp",
+    out = "cpp/include/krpc/services/ksa.hpp",
+    defs = ":KSA-definitions",
+    service = "KSA",
+    deps = [":StdLib-cpp"],
+)
+
+clientgen_cnano(
+    name = "KSA-cnano",
+    out = "cnano/include/krpc_cnano/services/ksa.h",
+    defs = ":KSA-definitions",
+    service = "KSA",
+    deps = [":StdLib-cnano"],
+)
+
+# The JavaScript stubs: the declarations clientgen generates, and the declaration that gives
+# a connection the service's types, compiled to a module and its type declarations
+clientgen_js(
+    name = "KSA-js-declarations",
+    out = "js-gen/KSA.ts",
+    client_module = None,
+    defs = ":KSA-definitions",
+    service = "KSA",
+)
+
+write_file(
+    name = "KSA-js-services",
+    out = "js-gen/services.ts",
+    content = [
+        "",
+        "declare module \"@krpc-org/krpc\" {",
+        "  interface Services {",
+        "    readonly ksa: Service;",
+        "  }",
+        "}",
+    ],
+)
+
+genrule(
+    name = "KSA-js-src",
+    srcs = [
+        ":KSA-js-declarations",
+        ":KSA-js-services",
+    ],
+    outs = ["js-src/KSA.ts"],
+    cmd = "cat $(SRCS) > $@",
+)
+
+ts_project(
+    name = "KSA-js",
+    srcs = [":KSA-js-src"],
+    declaration = True,
+    out_dir = "js",
+    root_dir = "js-src",
+    transpiler = "tsc",
+    tsconfig = "tsconfig-stubs.json",
+    deps = [
+        "//client/js:lib",
+        "//client/js:node_modules/@bufbuild/protobuf",
+    ],
+)
+
+filegroup(
+    name = "KSA-js-types",
+    srcs = [":KSA-js"],
+    output_group = "types",
+)
+
+clientgen_java(
+    name = "KSA-java",
+    out = "java/krpc/client/services/KSA.java",
+    defs = ":KSA-definitions",
+    service = "KSA",
+)
+
+genrule(
+    name = "KSA-proto",
+    srcs = [":KSA-definitions"],
+    outs = ["grpc/KSA.proto"],
+    cmd = "$(execpath //experimental/ksa/tools/grpc:protogen) $< KSA $@",
+    tools = ["//experimental/ksa/tools/grpc:protogen"],
+)
+
+genrule(
+    name = "StdLib-proto",
+    srcs = ["//core:StdLibServiceDefinitions"],
+    outs = ["grpc/StdLib.proto"],
+    cmd = "$(execpath //experimental/ksa/tools/grpc:protogen) $< StdLib $@",
+    tools = ["//experimental/ksa/tools/grpc:protogen"],
+)
+
+expand_template(
+    name = "readme",
+    out = "stubs-readme/README.md",
+    substitutions = {"@CLIENT_VERSION@": version},
+    template = "stubs-README.md",
+)
+
+pkg_files(
+    name = "stub-files",
+    srcs = [
+        ":KSA-cnano",
+        ":KSA-cpp",
+        ":KSA-csharp",
+        ":KSA-definitions",
+        ":KSA-java",
+        ":KSA-js",
+        ":KSA-js-types",
+        ":KSA-proto",
+        ":StdLib-proto",
+    ],
+    strip_prefix = strip_prefix.from_pkg(),
+)
+
+pkg_files(
+    name = "readme-file",
+    srcs = [":readme"],
+    strip_prefix = strip_prefix.files_only(),
+)
+
+# The stubs, laid out as each client includes them
+pkg_zip(
+    name = "stubs",
+    srcs = [
+        ":readme-file",
+        ":stub-files",
+    ],
+    out = "kRPC-stubs.zip",
+    visibility = ["//visibility:public"],
+)
+
+# The stubs as libraries, compiled against the clients
+
+csharp_library(
+    name = "csharp-library",
+    srcs = [":KSA-csharp"],
+    target_frameworks = ["net10.0"],
+    deps = [
+        "//client/csharp:KRPC.Client",
+        "@paket.main//google.protobuf",
+    ],
+)
+
+write_file(
+    name = "compile-cpp-src",
+    out = "compile-cpp.cpp",
+    content = ["#include <krpc/services/ksa.hpp>"],
+)
+
+cc_library(
+    name = "cpp-library",
+    srcs = [":compile-cpp-src"],
+    hdrs = [":KSA-cpp"],
+    includes = ["cpp/include"],
+    deps = ["//client/cpp:krpc"],
+)
+
+write_file(
+    name = "compile-cnano-src",
+    out = "compile-cnano.c",
+    content = [
+        "#include <krpc_cnano.h>",
+        "#include <krpc_cnano/services/ksa.h>",
+    ],
+)
+
+cc_library(
+    name = "cnano-library",
+    srcs = [":compile-cnano-src"],
+    hdrs = [":KSA-cnano"],
+    includes = ["cnano/include"],
+    deps = ["//client/cnano:krpc_cnano"],
+)
+
+java_library(
+    name = "java-library",
+    srcs = [":KSA-java"],
+    deps = [
+        "//client/java:krpc",
+        "@maven//:com_google_protobuf_protobuf_java",
+        "@maven//:org_javatuples_javatuples",
+    ],
+)
+
+test_suite(
+    name = "test",
+    tests = [
+        ":pyright",
+        ":ruff",
+    ],
+)
+
+py_ruff_test(
+    name = "ruff",
+    size = "small",
+    srcs = glob(["test/*.py"]),
+)
+
+# The tests use the KSA service as the client builds it at run time, so their attribute
+# accesses on it are unchecked
+py_pyright_test(
+    name = "pyright",
+    size = "medium",
+    srcs = glob(["test/*.py"]),
+    disable = ["reportAttributeAccessIssue"],
+    python_version = "3.12",
+    deps = [
+        "//experimental/ksa/tools/game:ksatest",
+        "@krpc_pypi//pillow",
+        "@krpc_pypi//pytest",
+    ],
+)

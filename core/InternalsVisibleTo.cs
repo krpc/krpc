@@ -12,3 +12,6 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("TestService")]
 // The Benchmark service runs a call through Services, the server's own dispatch path
 [assembly: InternalsVisibleTo("KRPC.Benchmark")]
+// The gRPC server of kRPC for KSA calls procedures through the service signatures and
+// the object store
+[assembly: InternalsVisibleTo("KRPC.KSA.Grpc")]

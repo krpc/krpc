@@ -1,0 +1,43 @@
+load("@rules_python//python:defs.bzl", "py_test")
+load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
+
+# The readme of the release archive, a template for the versions
+exports_files(
+    ["README.txt"],
+    visibility = ["//experimental/ksa:__pkg__"],
+)
+
+test_suite(
+    name = "test",
+    tests = [
+        ":changelog-test",
+        ":pyright",
+        ":ruff",
+    ],
+)
+
+# The changelog, which the docs build also parses, checked without a KSA install
+py_test(
+    name = "changelog-test",
+    size = "small",
+    srcs = ["check_changelog.py"],
+    args = ["$(rootpath //experimental/ksa:CHANGELOG.md)"],
+    data = ["//experimental/ksa:CHANGELOG.md"],
+    main = "check_changelog.py",
+    deps = ["//:changelog"],
+)
+
+# The release scripts, which Release-Guide.md describes
+py_ruff_test(
+    name = "ruff",
+    size = "small",
+    srcs = glob(["*.py"]),
+)
+
+py_pyright_test(
+    name = "pyright",
+    size = "medium",
+    srcs = glob(["*.py"]),
+    python_version = "3.12",
+    deps = ["//:release-lib"],
+)

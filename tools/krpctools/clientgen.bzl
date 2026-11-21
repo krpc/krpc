@@ -199,7 +199,7 @@ def clientgen_python(name, service, defs, out = None, deps = []):
     )
 
 # buildifier: disable=function-docstring
-def clientgen_js(name, service, defs, out = None, deps = []):
+def clientgen_js(name, service, defs, out = None, deps = [], client_module = "../declarations.js"):
     if out == None:
         out = "src/services/%s.ts" % service
     clientgen(
@@ -210,8 +210,9 @@ def clientgen_js(name, service, defs, out = None, deps = []):
         out = out,
         language = "js",
         # A module inside the package imports the client by its path, as the package's own
-        # name resolves to a module that imports this one
-        client_module = "../declarations.js",
+        # name resolves to a module that imports this one. A module outside the package
+        # passes None, to import the client by the package's name.
+        client_module = client_module,
     )
 
 def _lower_camel_case(name):

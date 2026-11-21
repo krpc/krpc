@@ -1,0 +1,107 @@
+Getting Started
+===============
+
+This guide sets up the kRPC for KSA server, and runs a Python script that reads telemetry from
+the game.
+
+The Server Mod
+--------------
+
+Installation
+^^^^^^^^^^^^
+
+The server is a code mod, which runs in the game through StarMap, the KSA code mod loader.
+The simplest way to install it is with the `Borea <https://github.com/KSAModding/Borea>`_ mod
+manager. Borea installs StarMap and the mod, and launches the game through StarMap.
+
+To install the mod by hand:
+
+1. Install `StarMap <https://github.com/StarMapLoader/StarMap/releases>`_
+   @STARMAP_VERSION@.
+2. Copy the ``kRPC`` folder from the release archive into the KSA mods folder,
+   ``<Documents>/My Games/Kitten Space Agency/mods``.
+3. Enable the mod in ``<Documents>/My Games/Kitten Space Agency/manifest.toml``:
+
+   .. code-block:: toml
+
+      [[mods]]
+      id = "kRPC"
+      enabled = true
+
+4. Launch the game through StarMap.
+
+.. note::
+
+   Version 0.1.0 named the mod ``kRPC.KSA``. To upgrade from it, delete the ``mods/kRPC.KSA``
+   folder, and change its ``manifest.toml`` entry to ``id = "kRPC"``.
+
+The servers start once the game has loaded its mods. They listen on ``127.0.0.1``, with TCP/IP on
+port 50000 and WebSockets on port 50001, and accept every connection.
+
+Game Versions
+^^^^^^^^^^^^^
+
+kRPC for KSA @VERSION@ is built for KSA @KSA_VERSION@, and may run on other versions. If the mod
+detects that the game version is not supported, a pop-up warns you, and lists the RPCs that use
+game code missing from it. Those RPCs throw an exception when called. Other RPCs may still
+behave differently, as the check finds only missing code. **Don't show again for this version**
+hides the pop-up until the game updates.
+
+Configuration
+^^^^^^^^^^^^^
+
+The **kRPC** menu in the game's menu bar opens the server window and the server info window,
+and starts and stops the server. The server window shows each server's address and connected
+clients, and edits its protocol, address and ports. For a WebSockets or HTTP server,
+**Origins** lists the other sites whose web pages may connect, as the
+`WebSockets protocol page
+<https://krpc.github.io/krpc/@KRPC_VERSION@/communication-protocols/websockets.html#web-pages>`_
+describes. **Advanced settings** at the bottom of the window holds the connection and rate
+control settings. The kRPC documentation describes the
+`rate control settings
+<https://krpc.github.io/krpc/@KRPC_VERSION@/user-guide/server-performance.html#settings>`_ in
+more detail.
+
+Set the address to **Any** to accept connections from other machines.
+
+The window saves its settings to ``<Documents>/My Games/Kitten Space Agency/kRPC/settings.toml``,
+beside the game's own settings. They apply to every save, and are kept when you update the mod.
+Delete the file to restore the default settings.
+
+The Python Client
+-----------------
+
+Installation
+^^^^^^^^^^^^
+
+Install the kRPC Python client from PyPI:
+
+.. code-block:: bash
+
+   pip install krpc==@KRPC_VERSION@
+
+Your First Script
+^^^^^^^^^^^^^^^^^
+
+This script connects to the game, and prints the bodies of the system and the active vehicle:
+
+.. literalinclude:: /scripts/getting-started/telemetry.py
+   :language: python
+   :start-at: conn = krpc.connect
+   :end-at: print(f"Active vehicle
+
+The complete script, :download:`telemetry.py
+</scripts/getting-started/telemetry.py>`, goes on to print the vehicle's altitude, apoapsis and attitude once a
+second.
+
+Next Steps
+----------
+
+* The :doc:`tutorials` walk through complete scripts, from :doc:`tutorials/launch-into-orbit`
+  to planning and executing burns.
+* The :doc:`user-guide` describe how the server and the game behave, from reference frames to
+  the auto-pilot. They cover running code in the game using :doc:`server side functions
+  </user-guide/server-side-functions>`, the :doc:`timing </user-guide/timing>` of calls, and
+  the :doc:`lifetime </user-guide/object-lifetime>` of the objects the server returns.
+* The :doc:`clients` pages cover installing and using each client language, with its API
+  reference.

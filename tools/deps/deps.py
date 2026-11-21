@@ -367,16 +367,18 @@ PIN_FORMS: list[tuple[tuple[str, ...], re.Pattern[str]]] = [
 NOT_PINS: list[tuple[str, re.Pattern[str]]] = [
     ("config.bzl", re.compile(r'(?m)^version = "')),  # kRPC's own version
     ("tools/krpctools/pyproject.toml", re.compile(r'"krpc >= ')),  # set by the build
+    # kRPC for KSA's own version, and the KSA build, which is closed source and has no
+    # release to check. 01-update-ksa.py moves it.
+    ("experimental/ksa/config.bzl", re.compile(r'(?m)^(mod|ksa)_version = "')),
 ]
 
-# Not scanned: lock files the regenerators write, the KSP mods (the mods command and
-# service/registry.bzl's own checks cover them) and the experimental projects
+# Not scanned: lock files the regenerators write, and the KSP mods (the mods command and
+# service/registry.bzl's own checks cover them)
 SKIPPED_FILES = {
     "service/registry.bzl",
     "tools/build/dotnet/paket.main.bzl",
     "tools/build/dotnet/paket.tools.bzl",
 }
-SKIPPED_DIRS = {"experimental"}
 
 
 def source_files(root: Path) -> list[str]:
@@ -403,13 +405,7 @@ def source_files(root: Path) -> list[str]:
             ]
             relative = Path(directory).relative_to(root)
             paths.extend((relative / name).as_posix() for name in files)
-    return [
-        path
-        for path in paths
-        if path
-        and path.split("/", 1)[0] not in SKIPPED_DIRS
-        and (root / path).is_file()
-    ]
+    return [path for path in paths if path and (root / path).is_file()]
 
 
 def untracked(root: Path, deps: list[Dep]) -> list[str]:

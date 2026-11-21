@@ -6,7 +6,13 @@ strategy: min
 nuget Google.Protobuf 3.36.2
 nuget Microsoft.CodeAnalysis.NetAnalyzers 10.0.404
 
+nuget Grpc.AspNetCore.Server 2.71.0 framework: net10.0
+nuget Lib.Harmony 2.4.2 framework: net10.0
+nuget Microsoft.AspNetCore.App.Runtime.linux-x64 10.0.13 framework: net10.0
+nuget Microsoft.AspNetCore.App.Runtime.osx-arm64 10.0.13 framework: net10.0
+nuget Microsoft.AspNetCore.App.Runtime.win-x64 10.0.13 framework: net10.0
 nuget Moq 4.21.0 framework: net10.0
+nuget StarMap.API 0.3.6 framework: net10.0
 nuget System.CommandLine 3.0.0 framework: net10.0
 nuget System.IO.Ports 10.0.15 framework: net10.0
 

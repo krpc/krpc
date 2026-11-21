@@ -1,0 +1,10 @@
+# The licenses of the NuGet packages the mod carries
+exports_files(
+    [
+        "LICENSE.AspNetCore",
+        "LICENSE.Grpc",
+        "LICENSE.System.IO.Ports",
+        "THIRD-PARTY-NOTICES.AspNetCore",
+    ],
+    visibility = ["//experimental/ksa:__pkg__"],
+)

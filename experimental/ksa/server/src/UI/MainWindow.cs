@@ -19,20 +19,25 @@ namespace KRPC.KSA.UI
         internal const string ProtobufOverWebSocketsText = "Protobuf over WebSockets";
         internal const string ProtobufOverSerialIOText = "Protobuf over SerialIO";
         internal const string ProtobufOverLocalSocketText = "Protobuf over local socket";
+        internal const string JsonOverHttpText = "JSON over HTTP";
         internal const string GrpcText = "gRPC";
         const string UnknownClientNameText = "<unknown>";
         const string MicrosecondsUnitText = "us";
+        const string FramesPerSecondUnitText = "fps";
+        // The presets' names, then the entry for settings that match none
+        static readonly string[] PresetNames =
+            Configuration.Presets.Select (x => x.Name).Concat (new [] { "Custom" }).ToArray ();
         // Milliseconds a client stays marked active after it sends or receives
         const long ActivityInterval = 100;
 
         readonly Core core;
         readonly ConfigurationFile config;
         readonly Addon addon;
-        readonly HashSet<Guid> expandServers = new HashSet<Guid> ();
         readonly Dictionary<Guid, EditServer> editServers = new Dictionary<Guid, EditServer> ();
         readonly Dictionary<IClient, long> lastClientActivity = new Dictionary<IClient, long> ();
-        string maxTimePerUpdate;
-        string recvTimeout;
+        string targetFrameRate;
+        string maxTimePerFrame;
+        string maxCallWait;
         string tickHoldTimeout;
 
         /// <summary>
@@ -47,11 +52,8 @@ namespace KRPC.KSA.UI
             this.addon = addon;
             this.core = core;
             this.config = config;
-            maxTimePerUpdate = config.Configuration.MaxTimePerUpdate.ToString (CultureInfo.InvariantCulture);
-            recvTimeout = config.Configuration.RecvTimeout.ToString (CultureInfo.InvariantCulture);
+            ShowRateSettings ();
             tickHoldTimeout = config.Configuration.TickHoldTimeout.ToString (CultureInfo.InvariantCulture);
-            if (core.Servers.Count == 1)
-                expandServers.Add (core.Servers [0].Id);
             core.OnClientActivity += (s, e) => lastClientActivity [e.Client] = Environment.TickCount64;
             core.OnClientDisconnected += (s, e) => lastClientActivity.Remove (e.Client);
         }
@@ -65,11 +67,11 @@ namespace KRPC.KSA.UI
                 ConsoleWidgets.Rule ();
             }
             if (ConsoleWidgets.Button ("Add server")) {
-                var server = new Configuration.Server ();
+                var server = config.Configuration.NewServer (Protocol.ProtocolBuffersOverTCP);
                 config.Configuration.Servers.Add (server);
+                config.Configuration.ExpandedServers.Add (server.Id);
                 config.Save ();
                 core.Add (addon.CreateServer (server));
-                expandServers.Add (server.Id);
             }
             if (Errors.Count > 0) {
                 ConsoleWidgets.Rule ();
@@ -82,7 +84,7 @@ namespace KRPC.KSA.UI
 
         protected override void DrawConsoleFooter ()
         {
-            var clients = core.RPCClients.Count ();
+            var clients = core.Clients.Count ();
             var status = (core.AnyRunning ? "ONLINE" : "OFFLINE") + "  " +
                 clients.ToString (CultureInfo.InvariantCulture) + (clients == 1 ? " CLIENT" : " CLIENTS");
             ConsoleStyle.FooterStatus (status, false);
@@ -113,13 +115,25 @@ namespace KRPC.KSA.UI
             editServers.TryGetValue (server.Id, out var edit);
             ImGui.PushID (server.Id.ToString ());
 
-            ImGui.SetNextItemOpen (expandServers.Contains (server.Id));
+            var expandedServers = config.Configuration.ExpandedServers;
+            var wasExpanded = expandedServers.Contains (server.Id);
+            ImGui.SetNextItemOpen (wasExpanded);
             var expanded = ImGui.CollapsingHeader (server.Name + "###header");
-            if (expanded)
-                expandServers.Add (server.Id);
-            else
-                expandServers.Remove (server.Id);
-            ImGui.SameLine (ImGui.GetContentRegionAvail ().X - ImGui.CalcTextSize ("OFFLINE").X);
+            if (expanded != wasExpanded) {
+                if (expanded)
+                    expandedServers.Add (server.Id);
+                else
+                    expandedServers.Remove (server.Id);
+                config.Save ();
+            }
+            var statusWidth = ImGui.CalcTextSize ("OFFLINE").X;
+            var clients = server.Clients.Count ();
+            if (clients > 0) {
+                var text = clients.ToString (CultureInfo.InvariantCulture) + (clients == 1 ? " client" : " clients");
+                ImGui.SameLine (ImGui.GetContentRegionAvail ().X - statusWidth - ImGui.CalcTextSize (text + "  ").X);
+                ImGui.TextColored (ConsoleStyle.TextMuted, text);
+            }
+            ImGui.SameLine (ImGui.GetContentRegionAvail ().X - statusWidth);
             if (running)
                 ImGui.TextColored (ConsoleStyle.Positive, "ONLINE");
             else
@@ -130,6 +144,8 @@ namespace KRPC.KSA.UI
             } else if (expanded) {
                 ConsoleWidgets.Readout ("Protocol", ProtocolName (server.Protocol));
                 DrawServerInfoLines (server.Address);
+                if (server.Protocol == Protocol.ProtocolBuffersOverWebsockets || server.Protocol == Protocol.JSONOverHTTP)
+                    ConsoleWidgets.Readout ("Origins", AllowedOriginsText (server));
                 DrawServerInfoLines (server.Info);
                 DrawClients (server);
             }
@@ -161,7 +177,8 @@ namespace KRPC.KSA.UI
                 } else {
                     Errors.Clear ();
                     editServers [server.Id] = new EditServer (config.Configuration.GetServer (server.Id));
-                    expandServers.Add (server.Id);
+                    if (expandedServers.Add (server.Id))
+                        config.Save ();
                 }
             }
             ImGui.EndDisabled ();
@@ -178,7 +195,6 @@ namespace KRPC.KSA.UI
                 config.Configuration.RemoveServer (server.Id);
                 config.Save ();
                 core.Remove (server.Id);
-                expandServers.Remove (server.Id);
             }
             ImGui.EndDisabled ();
             ImGui.PopID ();
@@ -193,11 +209,25 @@ namespace KRPC.KSA.UI
                 return ProtobufOverWebSocketsText;
             case Protocol.ProtocolBuffersOverLocalSocket:
                 return ProtobufOverLocalSocketText;
+            case Protocol.JSONOverHTTP:
+                return JsonOverHttpText;
             case ConfigurationFile.GrpcProtocol:
                 return GrpcText;
             default:
                 return ProtobufOverSerialIOText;
             }
+        }
+
+        // The origins a WebSockets or HTTP server allows, from its saved settings
+        string AllowedOriginsText (Server.Server server)
+        {
+            var key = Configuration.Server.SettingsPrefix (server.Protocol) + "allowed_origins";
+            if (!config.Configuration.GetServer (server.Id).Settings.TryGetValue (key, out var setting))
+                setting = Configuration.Server.DefaultAllowedOrigins (server.Protocol);
+            var origins = new AllowedOrigins (AllowedOrigins.IsValid (setting) ? setting : null);
+            if (!origins.None)
+                return origins.ToString ();
+            return server.Protocol == Protocol.JSONOverHTTP ? "Same origin only" : "No web pages";
         }
 
         // Split a multi-line server detail, such as Server.Address or Server.Info, into
@@ -271,13 +301,21 @@ namespace KRPC.KSA.UI
             changed |= DrawCheckboxRow ("Auto-accept new clients", "auto_accept", c.AutoAcceptConnections, v => c.AutoAcceptConnections = v);
             changed |= DrawCheckboxRow ("Confirm disconnecting a client", "confirm_remove", c.ConfirmRemoveClient, v => c.ConfirmRemoveClient = v);
             changed |= DrawCheckboxRow ("Pause the server with the game", "pause", c.PauseServerWithGame, v => c.PauseServerWithGame = v);
-            changed |= DrawCheckboxRow ("One RPC per update", "one_rpc", c.OneRPCPerUpdate, v => c.OneRPCPerUpdate = v);
-            changed |= DrawMicrosecondsRow ("Max. time per update", "max_time", ref maxTimePerUpdate, v => c.MaxTimePerUpdate = v);
-            changed |= DrawCheckboxRow ("Adaptive rate control", "adaptive", c.AdaptiveRateControl, v => c.AdaptiveRateControl = v);
-            changed |= DrawCheckboxRow ("Blocking receives", "blocking_recv", c.BlockingRecv, v => c.BlockingRecv = v);
-            changed |= DrawMicrosecondsRow ("Receive timeout", "recv_timeout", ref recvTimeout, v => c.RecvTimeout = v);
-            changed |= DrawMicrosecondsRow ("Tick hold timeout", "tick_hold", ref tickHoldTimeout, v => c.TickHoldTimeout = v);
             changed |= DrawCheckboxRow ("Debug logging", "debug_logging", c.DebugLogging, v => c.DebugLogging = v);
+            changed |= DrawNumberRow ("Tick hold timeout", MicrosecondsUnitText, "tick_hold", ref tickHoldTimeout,
+                0, uint.MaxValue, v => c.TickHoldTimeout = v);
+            // The rows below the preset are the settings a preset sets
+            changed |= DrawPreset ();
+            changed |= DrawCheckboxRow ("Adaptive rate control", "adaptive", c.AdaptiveRateControl, v => c.AdaptiveRateControl = v);
+            // The target applies only with adaptive rate control
+            ImGui.BeginDisabled (!c.AdaptiveRateControl);
+            changed |= DrawNumberRow ("Target frame rate", FramesPerSecondUnitText, "target_frame_rate", ref targetFrameRate,
+                Configuration.TargetFrameRateMin, Configuration.TargetFrameRateMax, v => c.TargetFrameRate = v);
+            ImGui.EndDisabled ();
+            changed |= DrawNumberRow ("Max. time per frame", MicrosecondsUnitText, "max_time_per_frame", ref maxTimePerFrame,
+                Configuration.MaxTimePerFrameMin, Configuration.MaxTimePerFrameMax, v => c.MaxTimePerFrame = v);
+            changed |= DrawNumberRow ("Max. call wait", MicrosecondsUnitText, "max_call_wait", ref maxCallWait,
+                0, uint.MaxValue, v => c.MaxCallWait = v);
             if (changed)
                 config.Save ();
             DrawCheckboxRow ("Show info", "show_info", addon.InfoWindow.IsShown, addon.InfoWindow.SetShown);
@@ -293,19 +331,47 @@ namespace KRPC.KSA.UI
             return changed;
         }
 
-        // A time in microseconds, applied whenever the text holds a valid value
-        static bool DrawMicrosecondsRow (string label, string id, ref string text, Action<uint> set)
+        bool DrawPreset ()
         {
-            var valid = uint.TryParse (text, NumberStyles.None, CultureInfo.InvariantCulture, out var value);
-            var changed = DrawTextRow (label + " (" + MicrosecondsUnitText + ")", id, ref text, !valid, true);
-            valid = uint.TryParse (text, NumberStyles.None, CultureInfo.InvariantCulture, out value);
-            if (!valid) {
-                ImGui.TextColored (ConsoleStyle.Danger, label + " must be a whole number of microseconds");
+            var c = config.Configuration;
+            var current = c.CurrentPreset;
+            var selected = current == null ? PresetNames.Length - 1 : Configuration.Presets.IndexOf (current);
+            // Choosing the custom entry leaves the settings as they are
+            if (!DrawComboRow ("Preset", "preset", PresetNames, ref selected) || selected >= Configuration.Presets.Count)
+                return false;
+            Configuration.Presets [selected].Apply (c);
+            ShowRateSettings ();
+            return true;
+        }
+
+        // Set the text of the rate settings' fields from the configuration
+        void ShowRateSettings ()
+        {
+            var c = config.Configuration;
+            targetFrameRate = c.TargetFrameRate.ToString (CultureInfo.InvariantCulture);
+            maxTimePerFrame = c.MaxTimePerFrame.ToString (CultureInfo.InvariantCulture);
+            maxCallWait = c.MaxCallWait.ToString (CultureInfo.InvariantCulture);
+        }
+
+        // A whole number from min to max, applied whenever the text holds a valid value
+        static bool DrawNumberRow (string label, string unit, string id, ref string text, uint min, uint max, Action<uint> set)
+        {
+            var changed = DrawTextRow (label + " (" + unit + ")", id, ref text, !Valid (text, min, max), true);
+            if (!Valid (text, min, max)) {
+                var range = max == uint.MaxValue ? string.Empty :
+                    string.Format (CultureInfo.InvariantCulture, " from {0} to {1}", min, max);
+                ImGui.TextColored (ConsoleStyle.Danger, label + " must be a whole number" + range);
                 return false;
             }
             if (changed)
-                set (value);
+                set (uint.Parse (text, NumberStyles.None, CultureInfo.InvariantCulture));
             return changed;
+        }
+
+        static bool Valid (string text, uint min, uint max)
+        {
+            return uint.TryParse (text, NumberStyles.None, CultureInfo.InvariantCulture, out var value) &&
+                value >= min && value <= max;
         }
     }
 }

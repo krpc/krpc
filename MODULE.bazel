@@ -191,6 +191,14 @@ http_archive(
     url = "https://github.com/krpc/ksp-lib/raw/main/ksp/ksp-1.12.5.zip",
 )
 
+# ----------------------- KSA libraries --------------------------------------------------
+
+# The KSA game assemblies, from the install at KSA_DIR. KSA is closed source, so there is
+# nothing to download. With KSA_DIR unset, the KSA targets are skipped. StarMap is the
+# loader the game runs under, pinned in experimental/ksa/config.bzl.
+ksa = use_extension("//experimental/ksa/tools/build/ksa:ksa.bzl", "ksa")
+use_repo(ksa, "ksa", "starmap")
+
 # ----------------------- Protobuf Compiler ----------------------------------------------
 
 http_archive(
@@ -265,6 +273,15 @@ paket_main_extension = use_extension("//tools/build/dotnet:paket.main_extension.
 use_repo(
     paket_main_extension,
     "nuget.google.protobuf.v3.36.2",
+    "nuget.grpc.aspnetcore.server.v2.71.0",
+    "nuget.grpc.core.api.v2.71.0",
+    "nuget.grpc.net.common.v2.71.0",
+    "nuget.microsoft.aspnetcore.app.runtime.linux-x64.v10.0.13",
+    "nuget.microsoft.aspnetcore.app.runtime.osx-arm64.v10.0.13",
+    "nuget.microsoft.aspnetcore.app.runtime.win-x64.v10.0.13",
+    "nuget.runtime.linux-x64.runtime.native.system.io.ports.v10.0.15",
+    "nuget.runtime.osx-arm64.runtime.native.system.io.ports.v10.0.15",
+    "nuget.system.io.ports.v10.0.15",
     "nuget.system.memory.v4.5.3",
     "nuget.system.runtime.compilerservices.unsafe.v4.5.2",
     "paket.main",

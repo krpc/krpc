@@ -1,0 +1,86 @@
+load("@rules_python//python:defs.bzl", "py_binary", "py_library")
+load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
+
+package(default_visibility = ["//experimental/ksa:__subpackages__"])
+
+# The gRPC .proto file of a service, from its service definitions
+py_binary(
+    name = "protogen",
+    srcs = ["protogen.py"],
+)
+
+# The gRPC API pages of the documentation, from the templates of the client API pages
+py_binary(
+    name = "docgen",
+    srcs = [
+        "docgen.py",
+        "protogen.py",
+    ],
+    data = ["grpc.tmpl"],
+    main = "docgen.py",
+    deps = [
+        "//client/python:krpc_base_lib",
+        "//tools/krpctools:krpctools_lib",
+    ],
+)
+
+py_binary(
+    name = "grpc-protoc",
+    srcs = ["grpc_protoc.py"],
+    main = "grpc_protoc.py",
+    deps = ["@krpc_pypi//grpcio_tools"],
+)
+
+# The Python gRPC modules of the services, for the gRPC tests
+genrule(
+    name = "grpc-python-src",
+    srcs = [
+        "//experimental/ksa/service/KSA:KSA-proto",
+        "//experimental/ksa/service/KSA:StdLib-proto",
+    ],
+    outs = [
+        "grpc-python/KSA_pb2.py",
+        "grpc-python/KSA_pb2_grpc.py",
+        "grpc-python/StdLib_pb2.py",
+        "grpc-python/StdLib_pb2_grpc.py",
+    ],
+    cmd = "$(execpath :grpc-protoc) $(RULEDIR)/grpc-python " +
+          "$$(dirname $(execpath //experimental/ksa/service/KSA:KSA-proto)) $(SRCS)",
+    tools = [":grpc-protoc"],
+)
+
+py_library(
+    name = "grpc-python",
+    srcs = [":grpc-python-src"],
+    imports = ["grpc-python"],
+    deps = [
+        "@krpc_pypi//grpcio",
+        "@krpc_pypi//protobuf",
+    ],
+)
+
+test_suite(
+    name = "test",
+    tests = [
+        ":pyright",
+        ":ruff",
+    ],
+)
+
+py_ruff_test(
+    name = "ruff",
+    size = "small",
+    srcs = glob(["*.py"]),
+)
+
+py_pyright_test(
+    name = "pyright",
+    size = "medium",
+    srcs = glob(["*.py"]),
+    python_version = "3.12",
+    deps = [
+        "//client/python:krpc_base_lib",
+        "//tools/krpctools:krpctools_lib",
+        "@krpc_pypi//grpcio_tools",
+    ],
+)

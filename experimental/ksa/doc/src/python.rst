@@ -1,0 +1,47 @@
+Python
+======
+
+This page covers using the kRPC Python client with the ``KSA`` service. The
+`kRPC Python client guide <https://krpc.github.io/krpc/@KRPC_VERSION@/python.html>`_ covers the client in full.
+
+.. note::
+
+   kRPC for KSA is experimental, and the client package does not yet include type stubs for
+   the ``KSA`` service, so a type checker reports its members as unknown. A later release will
+   add them.
+
+Installing
+----------
+
+Install the kRPC Python client from `PyPI <https://pypi.org/project/krpc/>`_:
+
+.. code-block:: bash
+
+   pip install krpc==@KRPC_VERSION@
+
+The `kRPC Python client guide <https://krpc.github.io/krpc/@KRPC_VERSION@/python.html#installing-the-library>`_ covers other ways to
+install the client.
+
+Connecting to the Server
+------------------------
+
+The client builds the ``KSA`` service from the definitions the server sends when it connects,
+so the service is ``conn.ksa``:
+
+.. code-block:: python
+
+   import krpc
+   conn = krpc.connect(name="Example")
+   vehicle = conn.ksa.active_vehicle
+   print(vehicle.name, vehicle.flight.mean_altitude)
+
+The `kRPC Python client guide <https://krpc.github.io/krpc/@KRPC_VERSION@/python.html>`_ covers connecting, streams, events
+and the client's other features.
+
+API Reference
+-------------
+
+.. toctree::
+   :maxdepth: 1
+
+   python/api/ksa

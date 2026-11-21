@@ -1,3 +1,31 @@
+## [v0.3.0] - unreleased
+
+- Mod
+  - **Breaking:** Use the kRPC 0.8 protocol, so clients and client stubs need kRPC 0.8
+  - **Breaking:** Rename the server settings in `kRPC/settings.toml`, with one port per server
+  - **Breaking:** Keep the settings in `kRPC/settings.toml` in the game's user folder, so they
+    apply to every save and are kept when the mod updates
+  - Create the settings file with the defaults when it is missing, and replace settings in it
+    that are not valid with their defaults
+  - Run on Apple silicon Macs, including the gRPC and serial servers
+  - Budget the server's time per frame, and choose the rate control settings from a preset in
+    the server window
+  - Name a server added in the server window "Server", "Server 2" and so on
+  - Remember which servers are expanded in the server window
+  - Show the number of connected clients beside each server in the server window
+  - Add RTS/CTS flow control to serial servers, set in the server window
+  - Add JSON over HTTP servers to the server window
+  - Set the origins whose web pages may connect to a WebSockets or HTTP server in the server
+    window
+  - Fix serial servers failing to start on Linux and macOS, with the native serial port library
+    not found
+- Clients
+  - Add stubs and documentation for the JavaScript client
+  - Add a WebSockets server on port 50001 to the default settings, for the JavaScript client
+- Release
+  - Move the example scripts out of the release archive, into the tutorials in the
+    documentation
+
 ## [v0.2.0]
 
 - Mod

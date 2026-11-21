@@ -5,9 +5,14 @@ load("@rules_dotnet//dotnet/private:providers.bzl", "DotnetAssemblyRuntimeInfo")
 load("//tools/build/ksp:build.bzl", "ksp_unity_libs")
 
 def _impl(ctx):
-    # The service assemblies reference UnityEngine and KSP assemblies, which
-    # the tool must be able to resolve while scanning them
-    reference_libs = [lib for x in ctx.attr._references for lib in x[DotnetAssemblyRuntimeInfo].libs]
+    # The service assemblies reference the game assemblies, which the tool must be able to
+    # resolve while scanning them
+    reference_libs = []
+    for x in ctx.attr.references:
+        if DotnetAssemblyRuntimeInfo in x:
+            reference_libs.extend(x[DotnetAssemblyRuntimeInfo].libs)
+        else:
+            reference_libs.extend(x.files.to_list())
     reference_dirs = {lib.dirname: None for lib in reference_libs}.keys()
     args = ["--output=%s" % ctx.outputs.out.path]
     args += ["--reference-dir=%s" % d for d in reference_dirs]
@@ -26,7 +31,8 @@ service_definitions = rule(
         "assemblies": attr.label_list(allow_files = True),
         "service": attr.string(mandatory = True),
         "out": attr.output(mandatory = True),
-        "_references": attr.label_list(default = [Label(x) for x in ksp_unity_libs]),
+        # The game assemblies, by default those of KSP
+        "references": attr.label_list(allow_files = True, default = [Label(x) for x in ksp_unity_libs]),
         "_service_definitions_tool": attr.label(
             executable = True,
             cfg = "exec",

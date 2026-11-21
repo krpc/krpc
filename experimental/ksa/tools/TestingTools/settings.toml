@@ -1,0 +1,42 @@
+# kRPC for KSA server settings for the tests, which install.py --testing installs. The
+# server window opens at the left, clear of the windows the tests open.
+
+auto_start = true
+auto_accept_connections = true
+confirm_remove_client = true
+pause_server_with_game = false
+
+# Rate control. Times are in microseconds, and the frame rate in frames per second
+adaptive_rate_control = true
+target_frame_rate = 60
+max_time_per_frame = 10000
+max_call_wait = 5000
+tick_hold_timeout = 1000000
+
+verbose_errors = true
+debug_logging = false
+main_window_visible = true
+info_window_visible = false
+# Window (x, y, width, height) in pixels, with a zero width for the default
+main_window_rect = [388, 325, 400, 590]
+info_window_rect = [0, 0, 0, 0]
+
+[[servers]]
+name = "TCP/IP Server"
+# ProtocolBuffersOverTCP, ProtocolBuffersOverWebsockets, ProtocolBuffersOverLocalSocket,
+# ProtocolBuffersOverSerialIO, JSONOverHTTP or gRPC
+protocol = "ProtocolBuffersOverTCP"
+tcpip_address = "127.0.0.1"
+tcpip_port = 50000
+
+[[servers]]
+name = "WebSockets Server"
+protocol = "ProtocolBuffersOverWebsockets"
+ws_address = "127.0.0.1"
+ws_port = 50001
+
+[[servers]]
+name = "gRPC Server"
+protocol = "gRPC"
+grpc_address = "127.0.0.1"
+grpc_port = 50002

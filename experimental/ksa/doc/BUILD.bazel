@@ -1,0 +1,387 @@
+load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
+load("@bazel_skylib//rules:build_test.bzl", "build_test")
+load("@bazel_skylib//rules:copy_file.bzl", "copy_file")
+load("@npm//client/js:@biomejs/biome/package_json.bzl", biome = "bin")
+load("@rules_cc//cc:defs.bzl", "cc_library")
+load("@rules_java//java:defs.bzl", "java_library")
+load("@rules_python//python:defs.bzl", "py_binary")
+load("//:config.bzl", "version")
+load("//doc:check_documented.bzl", "check_documented_test")
+load("//experimental/ksa:config.bzl", "ksa_version", "mod_version", "starmap_version")
+load("//tools/build:cpp.bzl", "clang_format_test")
+load("//tools/build:csharp.bzl", "csharp_library")
+load("//tools/build:lua.bzl", "lua_luacheck_test")
+load("//tools/build:pkg.bzl", "stage_files")
+load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
+load("//tools/build:sphinx.bzl", "sphinx_build", "sphinx_linkcheck_test", "sphinx_spelling_test")
+load("//tools/krpctools:docgen.bzl", "docgen")
+load(":docs.bzl", "expand_files")
+
+# The kRPC for KSA documentation: bazel build //experimental/ksa/doc:html, or
+# bazel run //experimental/ksa/doc:serve
+
+# The pages, with the versions filled in
+expand_files(
+    name = "pages",
+    srcs = glob(["src/**/*.rst"]) + ["conf.py"],
+    prefix = "gen",
+    substitutions = {
+        "@KRPC_VERSION@": version,
+        "@KSA_VERSION@": ksa_version,
+        "@STARMAP_VERSION@": starmap_version,
+        "@VERSION@": mod_version,
+    },
+)
+
+defs = ["//experimental/ksa/service/KSA:KSA-definitions"]
+
+# The client languages with API pages
+DOC_LANGUAGES = [
+    "cnano",
+    "cpp",
+    "csharp",
+    "java",
+    "js",
+    "lua",
+    "python",
+]
+
+templates = glob(["api/**/*.tmpl"])
+
+# One API page per template, under each language's api folder
+[
+    docgen(
+        name = language + "-api",
+        srcs = templates,
+        defs = defs,
+        language = language,
+        order = "order.txt",
+        outdir = "gen/" + language,
+    )
+    for language in DOC_LANGUAGES
+]
+
+# The gRPC API pages, from the same templates
+[
+    genrule(
+        name = "grpc-api-" + template.removesuffix(".tmpl").replace("/", "-"),
+        srcs = [
+            template,
+            "order.txt",
+        ] + defs,
+        outs = ["gen/grpc/" + template.removesuffix(".tmpl") + ".rst"],
+        cmd = ("$(execpath //experimental/ksa/tools/grpc:docgen) $(execpath %s) " +
+               "$(execpath order.txt) $@ $(execpath %s)") % (
+            template,
+            defs[0],
+        ),
+        tools = ["//experimental/ksa/tools/grpc:docgen"],
+    )
+    for template in templates
+]
+
+genrule(
+    name = "grpc-messages",
+    srcs = defs + ["//core:StdLibServiceDefinitions"],
+    outs = ["gen/grpc/api/messages.rst"],
+    cmd = "$(execpath //experimental/ksa/tools/grpc:docgen) --messages KSA $@ $(SRCS)",
+    tools = ["//experimental/ksa/tools/grpc:docgen"],
+)
+
+py_binary(
+    name = "changelog-page",
+    srcs = ["changelog_page.py"],
+    main = "changelog_page.py",
+    deps = ["//doc:changeloggen_lib"],
+)
+
+genrule(
+    name = "changelog",
+    srcs = ["//experimental/ksa:CHANGELOG.md"],
+    outs = ["gen/changelog.rst"],
+    cmd = "$(execpath :changelog-page) $@ $<",
+    tools = [":changelog-page"],
+)
+
+# The kRPC documentation's word list, with the words of these pages
+genrule(
+    name = "dictionary",
+    srcs = [
+        "//doc:src/dictionary.txt",
+        "dictionary.txt",
+    ],
+    outs = ["gen/dictionary.txt"],
+    cmd = "cat $(SRCS) > $@",
+)
+
+stage_files(
+    name = "srcs",
+    srcs = glob(
+        ["src/**/*"],
+        exclude = ["src/**/*.rst"],
+    ) + [
+        ":changelog",
+        ":dictionary",
+        ":grpc-messages",
+        ":pages",
+        "//:media/logo-mark.svg",
+        "//:media/logo-on-dark.svg",
+        "//:media/logo-on-light.svg",
+        "//doc:spelling_hunspell.py",
+    ] + [":%s-api" % x for x in DOC_LANGUAGES] + [
+        ":grpc-api-" + template.removesuffix(".tmpl").replace("/", "-")
+        for template in templates
+    ],
+    exclude = ["*.documented.txt"],
+    path_map = {
+        "experimental/ksa/doc/gen/": "",
+        "experimental/ksa/doc/gen/src/": "",
+        "experimental/ksa/doc/src/": "",
+        "doc/spelling_hunspell.py": "_ext/spelling_hunspell.py",
+        "media/": "_static/",
+    },
+)
+
+sphinx_build(
+    name = "html",
+    srcs = [":srcs"],
+    out = "html.zip",
+    sphinx_build = "//doc:sphinx-build",
+)
+
+# Live-build and serve the documentation, with the tool that serves the kRPC documentation
+py_binary(
+    name = "serve",
+    srcs = ["//doc:serve_docs.py"],
+    args = ["--srcs=//experimental/ksa/doc:srcs"],
+    main = "//doc:serve_docs.py",
+    deps = ["//doc:serve-lib"],
+)
+
+# The example scripts, compiled against the stubs to check them. They are never run.
+
+csharp_library(
+    name = "compile-scripts-csharp",
+    srcs = glob(["src/scripts/**/*.cs"]),
+    target_frameworks = ["net10.0"],
+    deps = [
+        "//client/csharp:KRPC.Client",
+        "//experimental/ksa/service/KSA:csharp-library",
+        "@paket.main//google.protobuf",
+    ],
+)
+
+cc_library(
+    name = "compile-scripts-cpp",
+    srcs = glob(["src/scripts/**/*.cpp"]),
+    deps = ["//experimental/ksa/service/KSA:cpp-library"],
+)
+
+cc_library(
+    name = "compile-scripts-cnano",
+    srcs = glob(["src/scripts/**/*.c"]),
+    deps = ["//experimental/ksa/service/KSA:cnano-library"],
+)
+
+java_library(
+    name = "compile-scripts-java",
+    srcs = glob(["src/scripts/**/*.java"]),
+    javacopts = [
+        "-Werror",
+        "-Xlint:all",
+    ],
+    deps = [
+        "//client/java:krpc",
+        "//experimental/ksa/service/KSA:java-library",
+        "@maven//:com_google_protobuf_protobuf_java",
+    ],
+)
+
+# The JavaScript stubs' declarations beside the example scripts, which import them as
+# ./KSA.js, as a script beside the stubs does
+copy_file(
+    name = "scripts-ksa-js-types",
+    src = "//experimental/ksa/service/KSA:KSA-js-types",
+    out = "src/scripts/index/KSA.d.ts",
+)
+
+# Type-check the JavaScript example scripts with tsc, against the client and the stubs
+ts_project(
+    name = "check-scripts-js-project",
+    srcs = glob(["src/scripts/**/*.js"]) + [":scripts-ksa-js-types"],
+    allow_js = True,
+    no_emit = True,
+    transpiler = "tsc",
+    tsconfig = "tsconfig-scripts.json",
+    deps = [
+        "//client/js:lib",
+        "//client/js:node_modules/@bufbuild/protobuf",
+    ],
+)
+
+# The type check, which a ts_project with no outputs runs only for this output group
+filegroup(
+    name = "check-scripts-js-typecheck",
+    srcs = [":check-scripts-js-project"],
+    output_group = "typecheck",
+)
+
+build_test(
+    name = "check-scripts-js",
+    targets = [":check-scripts-js-typecheck"],
+)
+
+test_suite(
+    name = "test",
+    tests = [
+        ":check-documented",
+        ":check-scripts-js",
+        ":lint",
+        ":spelling",
+    ],
+)
+
+test_suite(
+    name = "lint",
+    tests = [
+        ":biome",
+        ":clangformat",
+        ":luacheck",
+        ":pyright",
+        ":pyright-scripts",
+        ":pyright-scripts-grpc",
+        ":ruff",
+        ":ruff-scripts",
+    ],
+)
+
+# The example linters of the kRPC documentation, with its configurations
+biome.biome_test(
+    name = "biome",
+    size = "small",
+    args = [
+        "ci",
+        "--colors=off",
+        "--config-path=doc/src/scripts/biome-scripts.jsonc",
+        "$(rootpaths :biome-srcs)",
+    ],
+    data = [
+        ":biome-srcs",
+        "//client/js:biome-config",
+        "//doc:biome-scripts-config",
+    ],
+)
+
+filegroup(
+    name = "biome-srcs",
+    srcs = glob(["src/scripts/**/*.js"]),
+)
+
+clang_format_test(
+    name = "clangformat",
+    size = "small",
+    srcs = glob([
+        "src/scripts/**/*.c",
+        "src/scripts/**/*.cpp",
+    ]),
+    config = "//doc:src/scripts/.clang-format",
+)
+
+lua_luacheck_test(
+    name = "luacheck",
+    srcs = glob(["src/scripts/**/*.lua"]),
+)
+
+py_ruff_test(
+    name = "ruff",
+    size = "small",
+    srcs = glob([
+        "*.py",
+        "src/_ext/*.py",
+    ]),
+)
+
+py_pyright_test(
+    name = "pyright",
+    size = "medium",
+    srcs = glob([
+        "*.py",
+        "src/_ext/*.py",
+    ]),
+    python_version = "3.12",
+    deps = [
+        "//doc:changeloggen_lib",
+        "@krpc_pypi//sphinx",
+    ],
+)
+
+grpc_scripts = glob(["src/scripts/**/*Grpc.py"]) + glob(["src/scripts/grpc/*.py"])
+
+py_ruff_test(
+    name = "ruff-scripts",
+    size = "small",
+    srcs = glob(["src/scripts/**/*.py"]),
+    config = "//doc:src/scripts/ruff.toml",
+    config_deps = ["//:ruff.toml"],
+)
+
+# The scripts use the KSA service as the client builds it at run time, so their attribute
+# accesses on it are unchecked
+py_pyright_test(
+    name = "pyright-scripts",
+    size = "medium",
+    srcs = glob(
+        ["src/scripts/**/*.py"],
+        exclude = grpc_scripts,
+    ),
+    disable = ["reportAttributeAccessIssue"],
+    python_version = "3.12",
+    deps = ["//client/python:krpc_lib"],
+)
+
+# The gRPC scripts, against the modules generated from the stubs' .proto files. The modules
+# have no type stubs, so their attribute accesses are unchecked.
+py_pyright_test(
+    name = "pyright-scripts-grpc",
+    size = "medium",
+    srcs = grpc_scripts,
+    disable = ["reportAttributeAccessIssue"],
+    python_version = "3.12",
+    deps = [
+        "//experimental/ksa/tools/grpc:grpc-python",
+        "@krpc_pypi//grpcio",
+    ],
+)
+
+sphinx_spelling_test(
+    name = "spelling",
+    size = "medium",
+    srcs = [":srcs"],
+    aff = "@hunspell_en_us_aff//file",
+    dic = "@hunspell_en_us_dic//file",
+    sphinx_build = "//doc:sphinx-build",
+)
+
+# The external links, which no suite checks: bazel test //experimental/ksa/doc:linkcheck
+sphinx_linkcheck_test(
+    name = "linkcheck",
+    srcs = [":srcs"],
+    sphinx_build = "//doc:sphinx-build",
+    tags = ["requires-network"],
+)
+
+# Every RPC has a page in each language: order.txt lists them all
+test_suite(
+    name = "check-documented",
+    tests = [":check-documented-" + language for language in DOC_LANGUAGES],
+)
+
+[
+    check_documented_test(
+        name = "check-documented-" + language,
+        size = "small",
+        srcs = [":%s-api" % language],
+        members = "order.txt",
+    )
+    for language in DOC_LANGUAGES
+]

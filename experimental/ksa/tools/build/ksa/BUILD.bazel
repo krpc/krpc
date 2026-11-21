@@ -1,0 +1,11 @@
+# The KSA game assemblies come from @ksa, the KSA install at KSA_DIR, which ksa.bzl finds.
+
+# The KSA targets require this constraint while KSA_DIR is unset. No platform has it, so they
+# are skipped. Set KSA_DIR to the absolute path of a KSA install to build them.
+constraint_setting(name = "ksa_install")
+
+constraint_value(
+    name = "ksa_dir_is_set",
+    constraint_setting = ":ksa_install",
+    visibility = ["//visibility:public"],
+)
