@@ -46,6 +46,6 @@ Orbits
 ------
 
 A vehicle's ``Orbit`` follows the vehicle as its trajectory changes. ``NextOrbit`` and
-``Burn.Orbit`` are the game's prediction at the time they are obtained. The game updates its
-prediction on a worker thread, so get them again for an updated prediction. Bodies and their
-orbits last as long as the system.
+``Burn.Orbit`` follow the game's prediction as it updates. They raise an exception while the
+predicted trajectory is too short to reach them. Bodies and their orbits last as long as the
+system.

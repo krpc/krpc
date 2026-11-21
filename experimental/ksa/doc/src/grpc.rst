@@ -17,7 +17,7 @@ The gRPC server is not enabled by default. To add it in the server window:
 1. Open the server window from **Mods > kRPC** in the game's menu bar at the top.
 2. Click **Add server**, then **Edit** on the new server.
 3. Set **Protocol** to **gRPC**, and the **Port**, by default 50002. Click **Save**.
-4. Start the servers with **Start servers**.
+4. Click **Start** on the new server.
 
 The server auto-accepts a new client as the other servers do. With **Auto-accept new clients** turned
 off, the game asks before a client's first call runs.
@@ -25,10 +25,10 @@ off, the game asks before a client's first call runs.
 Generating a Client
 -------------------
 
-The ``stubs/grpc`` folder of the release archive holds a ``.proto`` file for each kRPC service.
-A service that uses the types of another imports its ``.proto``, as ``KFS.proto`` imports
-``KSA.proto``. Generate a client from them with ``protoc`` and the gRPC plugin for your
-language.
+The ``stubs/grpc`` folder of the release archive holds ``KSA.proto`` and ``KFS.proto``, one for
+each service. ``StdLib.proto`` holds the standard types they use, such as colors. A service that
+uses the types of another imports its ``.proto``, as ``KFS.proto`` imports ``KSA.proto``.
+Generate a client from them with ``protoc`` and the gRPC plugin for your language.
 
 The `gRPC documentation <https://grpc.io/docs/languages/>`_ has a quick start and a basics
 tutorial for each supported language, covering code generation, channels and calls.

@@ -2,7 +2,7 @@ Auto-Pilot
 ==========
 
 ``Vehicle.AutoPilot`` is the game's flight computer, which steers the vehicle to a target
-attitude with its reaction wheels, engines and RCS. This script points the active vehicle 30
+attitude with its RCS thrusters and engine gimbals. This script points the active vehicle 30
 degrees above the eastern horizon, then prograde:
 
 .. literalinclude:: /scripts/user-guide/autopilot/Point.py
@@ -39,5 +39,6 @@ the engines run out of propellant. :doc:`/tutorials/circularize` walks through i
 Manual Rotation
 ---------------
 
-KSA's pitch, yaw and roll inputs are on and off flags, which the game clears unless the player
-is flying the vehicle. A script steers with the auto-pilot instead.
+``Control.Pitch``, ``Yaw`` and ``Roll`` act as held keys, each -1, 0 or 1, with no partial
+strength. A held input overrides the auto-pilot on its axis. The game releases the inputs when
+its window gains or loses focus, or the active vehicle changes.

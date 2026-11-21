@@ -108,12 +108,13 @@ Procedures That Wait
 
 A function runs within a single frame, so it cannot call a procedure that waits for a later
 frame. The call raises an error, and the effects the procedure made before it waited still
-happen. These procedures wait:
+happen. Procedures that wait include:
 
-* ``KSA.WarpTo`` and ``KSA.LaunchVehicle``.
+* ``KSA.WarpTo``, ``KSA.LaunchVehicle`` and ``KSA.Load``.
+* ``Vehicle.Destroy`` and ``Vehicle.Recover``.
 * ``Vehicle.AddBurn`` and ``AutoPilot.Wait``.
 * ``Control.ActivateNextSequence``.
-* The part module setters and actions, such as ``Engine.Active``, ``Decoupler.Decouple`` and
+* Some part module setters and actions, such as ``Engine.Active``, ``Decoupler.Decouple`` and
   ``Parachute.Deploy``.
 
 Call these from your script, between functions.
