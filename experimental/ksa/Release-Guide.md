@@ -20,7 +20,7 @@ The guide starts from a `main` that holds the code to release.
 
 ## 1. Prepare
 
-1. `02-prepare.py [version]` - on a release preparation branch off an up to date `main`,
+1. `01-prepare.py [version]` - on a release preparation branch off an up to date `main`,
    releases the unreleased section of `CHANGELOG.md`, sets `mod_version` in `config.bzl`, and
    commits them as `Release kRPC for KSA X.Y.Z`. A release that only follows a KSA update is the
    patch version the update started. Pass a version for a minor release. Check that

@@ -9,8 +9,8 @@ downloads the release zip to take its sha256.
 Commits nothing: the change goes in a pull request with the fixes the new
 build needs.
 
-    01-update-ksa.py <ksa build>
-    01-update-ksa.py <ksa build> --starmap <starmap release>
+    update-ksa.py <ksa build>
+    update-ksa.py <ksa build> --starmap <starmap release>
 """
 
 import argparse

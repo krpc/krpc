@@ -9,8 +9,8 @@ minor version for a section the update script started as a patch.
 Run on a branch off an up to date main. The release commit reaches main through
 the release preparation pull request, and 40-tag.py tags it there.
 
-    02-prepare.py
-    02-prepare.py 0.3.0
+    01-prepare.py
+    01-prepare.py 0.3.0
 """
 
 import argparse

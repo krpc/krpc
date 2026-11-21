@@ -413,7 +413,7 @@ at = [
 name = "StarMap"
 version = "0.5.4"
 source = "github-release:StarMapLoader/StarMap"
-hold = "experimental/ksa/tools/release/01-update-ksa.py --starmap moves it, with its sha256"
+hold = "experimental/ksa/tools/release/update-ksa.py --starmap moves it, with its sha256"
 at = ['experimental/ksa/config.bzl: starmap_version = "{version}"']
 
 [[dep]]
