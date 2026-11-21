@@ -734,6 +734,9 @@ craft on the launch pad.</p>
 <p><code class="docutils literal notranslate"><span class="pre">doc/test/unsupported.txt</span></code> lists the examples the tests cannot run. Each line names the
 language, or <code class="docutils literal notranslate"><span class="pre">*</span></code> for every language, and the example, with the reason as a comment.
 <code class="docutils literal notranslate"><span class="pre">//doc:test</span></code> checks that every example is declared or listed, so a new example needs an entry.</p>
+<p>The parts that do not depend on the game are in <code class="docutils literal notranslate"><span class="pre">tools/doc_examples/</span></code>: running an example in
+each language, the test classes, the coverage check and the per-example Bazel macros. The kRPC
+for KSA examples use them too, with their own manifest and setups.</p>
 </section>
 </section>
 
