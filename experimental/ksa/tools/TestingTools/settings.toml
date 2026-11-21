@@ -24,7 +24,7 @@ info_window_rect = [0, 0, 0, 0]
 [[servers]]
 name = "TCP/IP Server"
 # ProtocolBuffersOverTCP, ProtocolBuffersOverWebsockets, ProtocolBuffersOverLocalSocket,
-# ProtocolBuffersOverSerialIO or gRPC
+# ProtocolBuffersOverSerialIO, JSONOverHTTP or gRPC
 protocol = "ProtocolBuffersOverTCP"
 tcpip_address = "127.0.0.1"
 tcpip_port = 50000

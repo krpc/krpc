@@ -23,11 +23,14 @@ namespace KRPC.KSA.UI
         static readonly string InvalidPathText =
             "Socket path must not be empty, and must take at most " +
             LocalSocketServer.MaximumPathLength + " bytes";
+        const string InvalidOriginsText =
+            "Origins must be \"*\", or a comma-separated list of \"localhost\" and origins such as \"http://example.com:8080\"";
         static readonly Protocol [] Protocols = {
             Protocol.ProtocolBuffersOverTCP,
             Protocol.ProtocolBuffersOverWebsockets,
             Protocol.ProtocolBuffersOverSerialIO,
             Protocol.ProtocolBuffersOverLocalSocket,
+            Protocol.JSONOverHTTP,
             ConfigurationFile.GrpcProtocol
         };
         static readonly string [] ProtocolNames = Protocols.Select (MainWindow.ProtocolName).ToArray ();
@@ -78,9 +81,11 @@ namespace KRPC.KSA.UI
                 manualAddress = IsManualAddress ();
             }
 
-            if (protocol == Protocol.ProtocolBuffersOverTCP || protocol == Protocol.ProtocolBuffersOverWebsockets) {
+            if (Configuration.Server.SettingsPrefix (protocol) != null) {
                 DrawAddress ();
                 DrawSettingRow ("Port", Prefix + "port", Configuration.DefaultPort (protocol).ToString (CultureInfo.InvariantCulture), ValidPort, true);
+                if (HasOrigins)
+                    DrawSettingRow ("Origins", Prefix + "allowed_origins", Configuration.Server.DefaultAllowedOrigins (protocol), AllowedOrigins.IsValid);
             } else if (protocol == ConfigurationFile.GrpcProtocol) {
                 DrawAddress ();
                 DrawSettingRow ("Port", Prefix + "port", "50002", ValidPort, true);
@@ -99,11 +104,10 @@ namespace KRPC.KSA.UI
         // The prefix of the protocol's setting keys
         string Prefix {
             get {
+                var prefix = Configuration.Server.SettingsPrefix (protocol);
+                if (prefix != null)
+                    return prefix;
                 switch (protocol) {
-                case Protocol.ProtocolBuffersOverTCP:
-                    return "tcpip_";
-                case Protocol.ProtocolBuffersOverWebsockets:
-                    return "ws_";
                 case Protocol.ProtocolBuffersOverLocalSocket:
                     return "localsocket_";
                 case ConfigurationFile.GrpcProtocol:
@@ -112,6 +116,11 @@ namespace KRPC.KSA.UI
                     return "serialio_";
                 }
             }
+        }
+
+        // Whether the protocol takes the origins of the web pages that may connect
+        bool HasOrigins {
+            get { return protocol == Protocol.ProtocolBuffersOverWebsockets || protocol == Protocol.JSONOverHTTP; }
         }
 
         void DrawAddress ()
@@ -195,13 +204,17 @@ namespace KRPC.KSA.UI
             errors.Clear ();
             var prefix = Prefix;
             string [] keys;
-            if (protocol == Protocol.ProtocolBuffersOverTCP || protocol == Protocol.ProtocolBuffersOverWebsockets ||
-                protocol == ConfigurationFile.GrpcProtocol) {
+            if (Configuration.Server.SettingsPrefix (protocol) != null || protocol == ConfigurationFile.GrpcProtocol) {
                 if (!ValidAddress (settings [prefix + "address"]))
                     errors.Add (InvalidAddressText);
                 if (!ValidPort (settings [prefix + "port"]))
                     errors.Add ("Port must be between 0 and 65535");
                 keys = new [] { "address", "port" };
+                if (HasOrigins) {
+                    if (!AllowedOrigins.IsValid (settings [prefix + "allowed_origins"]))
+                        errors.Add (InvalidOriginsText);
+                    keys = new [] { "address", "port", "allowed_origins" };
+                }
             } else if (protocol == Protocol.ProtocolBuffersOverLocalSocket) {
                 if (!ValidPath (settings [prefix + "path"]))
                     errors.Add (InvalidPathText);

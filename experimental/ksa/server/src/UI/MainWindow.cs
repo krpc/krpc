@@ -19,6 +19,7 @@ namespace KRPC.KSA.UI
         internal const string ProtobufOverWebSocketsText = "Protobuf over WebSockets";
         internal const string ProtobufOverSerialIOText = "Protobuf over SerialIO";
         internal const string ProtobufOverLocalSocketText = "Protobuf over local socket";
+        internal const string JsonOverHttpText = "JSON over HTTP";
         internal const string GrpcText = "gRPC";
         const string UnknownClientNameText = "<unknown>";
         const string MicrosecondsUnitText = "us";
@@ -143,6 +144,8 @@ namespace KRPC.KSA.UI
             } else if (expanded) {
                 ConsoleWidgets.Readout ("Protocol", ProtocolName (server.Protocol));
                 DrawServerInfoLines (server.Address);
+                if (server.Protocol == Protocol.ProtocolBuffersOverWebsockets || server.Protocol == Protocol.JSONOverHTTP)
+                    ConsoleWidgets.Readout ("Origins", AllowedOriginsText (server));
                 DrawServerInfoLines (server.Info);
                 DrawClients (server);
             }
@@ -206,11 +209,25 @@ namespace KRPC.KSA.UI
                 return ProtobufOverWebSocketsText;
             case Protocol.ProtocolBuffersOverLocalSocket:
                 return ProtobufOverLocalSocketText;
+            case Protocol.JSONOverHTTP:
+                return JsonOverHttpText;
             case ConfigurationFile.GrpcProtocol:
                 return GrpcText;
             default:
                 return ProtobufOverSerialIOText;
             }
+        }
+
+        // The origins a WebSockets or HTTP server allows, from its saved settings
+        string AllowedOriginsText (Server.Server server)
+        {
+            var key = Configuration.Server.SettingsPrefix (server.Protocol) + "allowed_origins";
+            if (!config.Configuration.GetServer (server.Id).Settings.TryGetValue (key, out var setting))
+                setting = Configuration.Server.DefaultAllowedOrigins (server.Protocol);
+            var origins = new AllowedOrigins (AllowedOrigins.IsValid (setting) ? setting : null);
+            if (!origins.None)
+                return origins.ToString ();
+            return server.Protocol == Protocol.JSONOverHTTP ? "Same origin only" : "No web pages";
         }
 
         // Split a multi-line server detail, such as Server.Address or Server.Info, into

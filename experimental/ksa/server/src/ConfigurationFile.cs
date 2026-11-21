@@ -263,7 +263,7 @@ namespace KRPC.KSA
                 AppendValue (toml, "id", server.Id.ToString ());
                 AppendValue (toml, "name", server.Name);
                 toml.Append ("# ProtocolBuffersOverTCP, ProtocolBuffersOverWebsockets, ProtocolBuffersOverLocalSocket,\n");
-                toml.Append ("# ProtocolBuffersOverSerialIO or gRPC\n");
+                toml.Append ("# ProtocolBuffersOverSerialIO, JSONOverHTTP or gRPC\n");
                 AppendValue (toml, "protocol", server.Protocol == GrpcProtocol ? "gRPC" : server.Protocol.ToString ());
                 foreach (var setting in server.Settings) {
                     // Ports and the like are numbers, as in the shipped file
