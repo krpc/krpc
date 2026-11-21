@@ -1,7 +1,7 @@
 import ksatest
 
 SITE = "CCSFS LC-39A"
-VEHICLES = ksatest.ROOT / "testing" / "vehicles"
+VEHICLES = ksatest.ROOT / "tools" / "TestingTools" / "vehicles"
 
 
 class ParachuteTestCase(ksatest.TestCase):

@@ -21,6 +21,7 @@ class TestExamples(ksatest.TestCase):
     def run_example(self, name):
         result = subprocess.run(
             [sys.executable, str(EXAMPLES / name)],
+            env=ksatest.python_env(),
             capture_output=True,
             text=True,
             timeout=1800,

@@ -3,6 +3,7 @@ load("@rules_pkg//pkg:mappings.bzl", "pkg_files", "strip_prefix")
 load("@rules_pkg//pkg:zip.bzl", "pkg_zip")
 load("//:config.bzl", "assembly_version")
 load("//experimental/ksa/tools/build:mod.bzl", "deps_json", "files_in")
+load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
 load(":config.bzl", "mod_version")
 
 exports_files(["CHANGELOG.md"])
@@ -163,4 +164,18 @@ pkg_zip(
     srcs = mod_files + [":mod-testing-files"],
     out = "kRPC-mod-testing.zip",
     visibility = ["//visibility:public"],
+)
+
+py_ruff_test(
+    name = "ruff",
+    size = "small",
+    srcs = ["conftest.py"],
+)
+
+py_pyright_test(
+    name = "pyright",
+    size = "medium",
+    srcs = ["conftest.py"],
+    python_version = "3.12",
+    deps = ["//tools/krpctools:krpctools_lib"],
 )

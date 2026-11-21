@@ -1,16 +1,13 @@
 import math
-import sys
 import threading
 
+# Generated from the stubs' KSA.proto and StdLib.proto, by //experimental/ksa/tools/grpc:grpc-python
 import grpc
+import KSA_pb2 as pb
+import KSA_pb2_grpc
 import ksatest
-
-# Generated from bin/stubs/grpc/KSA.proto and StdLib.proto by test.sh
-sys.path.insert(0, str(ksatest.ROOT / "bin" / "grpc-python"))
-import KSA_pb2 as pb  # noqa: E402
-import KSA_pb2_grpc  # noqa: E402
-import StdLib_pb2 as stdlib_pb  # noqa: E402
-import StdLib_pb2_grpc  # noqa: E402
+import StdLib_pb2 as stdlib_pb
+import StdLib_pb2_grpc
 
 ADDRESS = "127.0.0.1:50002"
 

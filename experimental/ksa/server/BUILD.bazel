@@ -2,6 +2,7 @@ load("//:config.bzl", "author")
 load("//experimental/ksa:config.bzl", "mod_version")
 load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
 load("//tools/build:csharp.bzl", "csharp_library")
+load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
 
 exports_files([
     "mod.toml",
@@ -35,5 +36,25 @@ csharp_library(
         "@paket.main//lib.harmony",
         "@paket.main//starmap.api",
         "@paket.main//system.io.ports",
+    ],
+)
+
+py_ruff_test(
+    name = "ruff",
+    size = "small",
+    srcs = glob(["test/*.py"]),
+)
+
+py_pyright_test(
+    name = "pyright",
+    size = "medium",
+    srcs = glob(["test/*.py"]),
+    disable = ["reportAttributeAccessIssue"],
+    python_version = "3.12",
+    deps = [
+        "//experimental/ksa/tools/game:ksatest",
+        "//experimental/ksa/tools/grpc:grpc-python",
+        "@krpc_pypi//grpcio",
+        "@krpc_pypi//pytest",
     ],
 )

@@ -1,0 +1,105 @@
+load("@rules_python//python:defs.bzl", "py_binary", "py_library")
+load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
+
+package(default_visibility = ["//experimental/ksa:__subpackages__"])
+
+# The KSA user mods folder, and installing the mod into it
+py_library(
+    name = "mods_folder",
+    srcs = ["mods_folder.py"],
+    imports = ["."],
+)
+
+# The game the KSA in-game tests run against: KSA under StarMap, with the mod built from the
+# sources. starmap.py launches it, as a script.
+py_library(
+    name = "bazel_ksa",
+    srcs = ["bazel_ksa.py"],
+    data = [
+        "starmap.py",
+        "@starmap//:files",
+    ],
+    imports = ["."],
+    deps = [
+        ":mods_folder",
+        "//client/python:krpc_lib",
+        "//tools/krpctools:krpctools_lib",
+        "@rules_python//python/runfiles",
+    ],
+)
+
+# The base class of the in-game tests
+py_library(
+    name = "ksatest",
+    srcs = ["ksatest.py"],
+    imports = ["."],
+    deps = [
+        ":bazel_ksa",
+        "//tools/krpctools:krpctools_lib",
+    ],
+)
+
+# Install the mod into the KSA mods folder:
+# bazel run //experimental/ksa/tools/game:install [-- --testing]
+py_binary(
+    name = "install",
+    srcs = ["install.py"],
+    args = [
+        "--mod=$(rlocationpath //experimental/ksa:mod)",
+        "--mod-testing=$(rlocationpath //experimental/ksa:mod-testing)",
+    ],
+    data = [
+        "//experimental/ksa:mod",
+        "//experimental/ksa:mod-testing",
+    ],
+    deps = [
+        ":mods_folder",
+        "@rules_python//python/runfiles",
+    ],
+)
+
+# The in-game tests, which //:test does not cover. test-ksa runs them, and run-ksa runs the
+# game on its own, to test against without a restart.
+
+# Run the tests against KSA: `bazel run //experimental/ksa/tools/game:test-ksa -- [pytest
+# args]`. The tests are read from the repository, as the runner works there.
+py_binary(
+    name = "test-ksa",
+    srcs = ["run_tests.py"],
+    main = "run_tests.py",
+    deps = [
+        ":bazel_ksa",
+        ":ksatest",
+        "//experimental/ksa/tools/grpc:grpc-python",
+        "@krpc_pypi//grpcio",
+        "@krpc_pypi//pillow",
+        "@krpc_pypi//pytest",
+    ],
+)
+
+# Install the mod and run KSA: `bazel run //experimental/ksa/tools/game:run-ksa`. This is
+# `krpc-game run` against BazelKSA.
+py_binary(
+    name = "run-ksa",
+    srcs = ["run_ksa.py"],
+    main = "run_ksa.py",
+    deps = [":bazel_ksa"],
+)
+
+py_ruff_test(
+    name = "ruff",
+    size = "small",
+    srcs = glob(["*.py"]),
+)
+
+py_pyright_test(
+    name = "pyright",
+    size = "medium",
+    srcs = glob(["*.py"]),
+    disable = ["reportAttributeAccessIssue"],
+    python_version = "3.12",
+    deps = [
+        ":bazel_ksa",
+        "@krpc_pypi//pytest",
+    ],
+)

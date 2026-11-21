@@ -27,7 +27,10 @@ class TestServer(ksatest.TestCase):
 
     def test_client_killed_during_call(self):
         client = subprocess.Popen(
-            [sys.executable, "-c", WARP_CLIENT], stdout=subprocess.PIPE, text=True
+            [sys.executable, "-c", WARP_CLIENT],
+            stdout=subprocess.PIPE,
+            text=True,
+            env=ksatest.python_env(),
         )
         try:
             assert client.stdout is not None
@@ -41,7 +44,7 @@ class TestServer(ksatest.TestCase):
         ut = self.ksa.ut
         ksatest.wait_until(lambda: self.ksa.ut > ut)
         with krpc.connect(name="after killed client") as conn:
-            ksa = conn.ksa  # pyright: ignore[reportAttributeAccessIssue]
+            ksa = conn.ksa
             self.assertIsNotNone(ksa.active_vehicle)
 
 

@@ -8,6 +8,7 @@ load("//:config.bzl", "author", "version")
 load("//experimental/ksa:config.bzl", "mod_version")
 load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
 load("//tools/build:csharp.bzl", "csharp_library")
+load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
 load("//tools/krpctools:clientgen.bzl", "clientgen_cnano", "clientgen_cpp", "clientgen_csharp", "clientgen_java")
 load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
 
@@ -198,5 +199,26 @@ java_library(
         "//client/java:krpc",
         "@maven//:com_google_protobuf_protobuf_java",
         "@maven//:org_javatuples_javatuples",
+    ],
+)
+
+py_ruff_test(
+    name = "ruff",
+    size = "small",
+    srcs = glob(["test/*.py"]),
+)
+
+# The tests use the KSA service as the client builds it at run time, so their attribute
+# accesses on it are unchecked
+py_pyright_test(
+    name = "pyright",
+    size = "medium",
+    srcs = glob(["test/*.py"]),
+    disable = ["reportAttributeAccessIssue"],
+    python_version = "3.12",
+    deps = [
+        "//experimental/ksa/tools/game:ksatest",
+        "@krpc_pypi//pillow",
+        "@krpc_pypi//pytest",
     ],
 )
