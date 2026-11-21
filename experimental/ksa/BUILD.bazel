@@ -86,13 +86,6 @@ pkg_files(
 )
 
 pkg_files(
-    name = "mod-settings",
-    srcs = ["//experimental/ksa/server:settings.toml"],
-    prefix = "kRPC",
-    strip_prefix = strip_prefix.files_only(),
-)
-
-pkg_files(
     name = "mod-grpc",
     srcs = [
         "//experimental/ksa/server/grpc:KRPC.KSA.Grpc",
@@ -141,25 +134,24 @@ mod_files = [
     ":mod-aspnetcore-win-x64",
 ]
 
-# The mod folder, kRPC/, as installed in the KSA mods folder
+# The mod folder, kRPC/, as installed in the KSA mods folder. The mod writes its settings in
+# the game's user folder on first run.
 pkg_zip(
     name = "mod",
-    srcs = mod_files + [":mod-settings"],
+    srcs = mod_files,
     out = "kRPC-mod.zip",
     visibility = ["//visibility:public"],
 )
 
 pkg_files(
     name = "mod-testing-files",
-    srcs = [
-        "//experimental/ksa/tools/TestingTools:KRPC.KSA.TestingTools",
-        "//experimental/ksa/tools/TestingTools:settings.toml",
-    ],
+    srcs = ["//experimental/ksa/tools/TestingTools:KRPC.KSA.TestingTools"],
     prefix = "kRPC",
     strip_prefix = strip_prefix.files_only(),
 )
 
-# The mod folder for the tests, with the TestingTools service and the test settings
+# The mod folder for the tests, with the TestingTools service. The test harness installs the
+# test settings.
 pkg_zip(
     name = "mod-testing",
     srcs = mod_files + [":mod-testing-files"],
@@ -218,7 +210,6 @@ pkg_filegroup(
 pkg_zip(
     name = "release",
     srcs = mod_files + [
-        ":mod-settings",
         ":release-mod-licenses",
         ":release-root",
         ":release-stubs",

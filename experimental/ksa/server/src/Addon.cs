@@ -66,7 +66,7 @@ namespace KRPC.KSA
             core = Core.Instance;
             var version = typeof (Addon).Assembly.GetName ().Version;
             core.Version = version.Major + "." + version.Minor + "." + version.Build;
-            config = new ConfigurationFile (Path.Combine (modDirectory, "settings.toml"));
+            config = new ConfigurationFile (ConfigurationFile.DefaultPath);
             config.Load ();
             foreach (var server in config.Configuration.Servers) {
                 try {

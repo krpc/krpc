@@ -17,6 +17,7 @@ py_library(
     srcs = ["bazel_ksa.py"],
     data = [
         "starmap.py",
+        "//experimental/ksa/tools/TestingTools:settings.toml",
         "@starmap//:files",
     ],
     imports = ["."],
@@ -47,10 +48,12 @@ py_binary(
     args = [
         "--mod=$(rlocationpath //experimental/ksa:mod)",
         "--mod-testing=$(rlocationpath //experimental/ksa:mod-testing)",
+        "--settings-testing=$(rlocationpath //experimental/ksa/tools/TestingTools:settings.toml)",
     ],
     data = [
         "//experimental/ksa:mod",
         "//experimental/ksa:mod-testing",
+        "//experimental/ksa/tools/TestingTools:settings.toml",
     ],
     deps = [
         ":mods_folder",

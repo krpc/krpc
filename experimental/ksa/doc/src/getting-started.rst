@@ -60,8 +60,9 @@ more detail.
 
 Set the address to **Any** to accept connections from other machines.
 
-The window saves its settings to ``kRPC/settings.toml`` in the mods folder. Installing the
-mod again restores the default settings.
+The window saves its settings to ``<Documents>/My Games/Kitten Space Agency/kRPC/settings.toml``,
+beside the game's own settings. They apply to every save, and are kept when you update the mod.
+Delete the file to restore the default settings.
 
 The Python Client
 -----------------

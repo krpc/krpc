@@ -6,13 +6,15 @@ using System.Linq;
 using System.Text;
 using KRPC.Server;
 using Tomlet;
+using Tomlet.Exceptions;
 using Tomlet.Models;
 using Logger = KRPC.Utils.Logger;
 
 namespace KRPC.KSA
 {
     /// <summary>
-    /// Server settings, stored in settings.toml in the mod folder. Loads them into
+    /// Server settings, stored in kRPC/settings.toml in the game's user folder, beside the game's
+    /// own settings, so they apply to every save and survive updates of the mod. Loads them into
     /// <see cref="Configuration.Instance"/>, and saves them from it.
     /// </summary>
     sealed class ConfigurationFile
@@ -24,6 +26,9 @@ namespace KRPC.KSA
         public const Protocol GrpcProtocol = (Protocol)100;
 
         readonly string path;
+        // Whether the file could not be read when the settings loaded, so saving would replace
+        // the player's settings with the defaults
+        bool keepFile;
 
         public ConfigurationFile (string path)
         {
@@ -32,6 +37,13 @@ namespace KRPC.KSA
             Configuration.AutoStartServers = true;
             Configuration.AutoAcceptConnections = true;
             Configuration.MainWindowVisible = false;
+        }
+
+        /// <summary>
+        /// The settings file in the game's user folder.
+        /// </summary>
+        public static string DefaultPath {
+            get { return Path.Combine (global::KSA.Constants.DocumentsFolderPath, "kRPC", "settings.toml"); }
         }
 
         public Configuration Configuration {
@@ -43,22 +55,66 @@ namespace KRPC.KSA
         /// </summary>
         public string IgnoredGameVersion { get; set; }
 
+        /// <summary>
+        /// Load the settings, then save them. A missing file, or one that does not parse, gives
+        /// the defaults. A setting or server that does not parse takes its default, or is left
+        /// out. Saving writes the settings in use over the file. A file that does not parse is
+        /// first copied to settings.toml.bak. A file that could not be read is kept, and the
+        /// settings are not saved until the next load.
+        /// </summary>
         public void Load ()
         {
             var config = Configuration;
             config.Servers.Clear ();
-            if (!File.Exists (path)) {
-                Logger.WriteLine ("No settings file at " + path + ", using the defaults", Logger.Severity.Warning);
+            var document = Read (out keepFile);
+            if (document != null)
+                Load (document);
+            if (config.Servers.Count == 0) {
                 foreach (var server in Configuration.DefaultServers ())
                     config.Servers.Add (server);
-                return;
             }
-            var document = new TomlParser ().Parse (File.ReadAllText (path));
+            Save ();
+        }
+
+        // The settings document, or null for the defaults. Whether the file is to be kept: it could
+        // not be read, such as while another program holds it open, or not be backed up.
+        TomlDocument Read (out bool unreadable)
+        {
+            unreadable = false;
+            if (!File.Exists (path)) {
+                Logger.WriteLine ("No settings file at " + path + ", creating one with the defaults");
+                return null;
+            }
+            string text;
+            try {
+                text = File.ReadAllText (path);
+            } catch (Exception e) when (e is IOException || e is UnauthorizedAccessException) {
+                Logger.WriteLine ("Failed to read the settings file " + path + ", using the defaults and keeping the file: " + e.Message, Logger.Severity.Warning);
+                unreadable = true;
+                return null;
+            }
+            try {
+                return new TomlParser ().Parse (text);
+            } catch (TomlException e) {
+                try {
+                    File.Copy (path, path + ".bak", true);
+                    Logger.WriteLine ("Failed to parse the settings file " + path + ", copied it to " + path + ".bak and replacing it with the defaults: " + e.Message, Logger.Severity.Warning);
+                } catch (Exception copyError) when (copyError is IOException || copyError is UnauthorizedAccessException) {
+                    Logger.WriteLine ("Failed to parse the settings file " + path + ", using the defaults and keeping the file, as it could not be copied: " + copyError.Message, Logger.Severity.Warning);
+                    unreadable = true;
+                }
+                return null;
+            }
+        }
+
+        void Load (TomlDocument document)
+        {
+            var config = Configuration;
             config.AutoStartServers = GetBoolean (document, "auto_start", config.AutoStartServers);
             config.AutoAcceptConnections = GetBoolean (document, "auto_accept_connections", config.AutoAcceptConnections);
             config.ConfirmRemoveClient = GetBoolean (document, "confirm_remove_client", config.ConfirmRemoveClient);
             config.PauseServerWithGame = GetBoolean (document, "pause_server_with_game", config.PauseServerWithGame);
-            IgnoredGameVersion = document.ContainsKey ("ignored_ksa_version") ? document.GetString ("ignored_ksa_version") : null;
+            IgnoredGameVersion = Get (document, "ignored_ksa_version", null, x => ((TomlString)x).Value);
             config.MaxTimePerUpdate = GetMicroseconds (document, "max_time_per_update", config.MaxTimePerUpdate);
             config.AdaptiveRateControl = GetBoolean (document, "adaptive_rate_control", config.AdaptiveRateControl);
             config.BlockingRecv = GetBoolean (document, "blocking_recv", config.BlockingRecv);
@@ -70,64 +126,81 @@ namespace KRPC.KSA
             config.InfoWindowVisible = GetBoolean (document, "info_window_visible", config.InfoWindowVisible);
             config.MainWindowPosition = GetRect (document, "main_window_rect", config.MainWindowPosition);
             config.InfoWindowPosition = GetRect (document, "info_window_rect", config.InfoWindowPosition);
-            if (document.ContainsKey ("servers")) {
-                foreach (var value in document.GetArray ("servers")) {
-                    if (value is TomlTable table)
-                        config.Servers.Add (ParseServer (table));
-                }
-            }
-            if (config.Servers.Count == 0) {
-                foreach (var server in Configuration.DefaultServers ())
+            var servers = Get<IEnumerable<TomlValue>> (document, "servers", Array.Empty<TomlValue> (), x => (TomlArray)x);
+            foreach (var value in servers) {
+                var server = value is TomlTable table ? ParseServer (table) : null;
+                if (server != null)
                     config.Servers.Add (server);
+                else
+                    Logger.WriteLine ("Ignoring a server in the settings file that is not valid", Logger.Severity.Warning);
+            }
+        }
+
+        // The value of a setting, or the default when it is missing or does not convert
+        static T Get<T> (TomlTable table, string key, T defaultValue, Func<TomlValue, T> convert)
+        {
+            if (!table.ContainsKey (key))
+                return defaultValue;
+            try {
+                return convert (table.GetValue (key));
+            } catch (Exception e) when (e is InvalidCastException || e is FormatException || e is OverflowException) {
+                Logger.WriteLine ("The setting " + key + " in the settings file is not valid, using the default", Logger.Severity.Warning);
+                return defaultValue;
             }
         }
 
         static bool GetBoolean (TomlTable table, string key, bool defaultValue)
         {
-            return table.ContainsKey (key) ? table.GetBoolean (key) : defaultValue;
+            return Get (table, key, defaultValue, x => ((TomlBoolean)x).Value);
         }
 
         static uint GetMicroseconds (TomlTable table, string key, uint defaultValue)
         {
-            return table.ContainsKey (key) ? checked ((uint)table.GetLong (key)) : defaultValue;
+            return Get (table, key, defaultValue, x => checked ((uint)((TomlLong)x).Value));
         }
 
         // A window's (x, y, width, height) in pixels
         static Tuple<float, float, float, float> GetRect (TomlTable table, string key, Tuple<float, float, float, float> defaultValue)
         {
-            if (!table.ContainsKey (key))
-                return defaultValue;
-            var values = table.GetArray (key).Select (x => float.Parse (x.StringValue, CultureInfo.InvariantCulture)).ToArray ();
-            return values.Length == 4 ? Tuple.Create (values [0], values [1], values [2], values [3]) : defaultValue;
+            return Get (table, key, defaultValue, x => {
+                var values = ((TomlArray)x).Select (y => float.Parse (y.StringValue, CultureInfo.InvariantCulture)).ToArray ();
+                if (values.Length != 4)
+                    throw new FormatException ();
+                return Tuple.Create (values [0], values [1], values [2], values [3]);
+            });
         }
 
+        // A server, or null when its protocol is missing or unknown. A missing or invalid id or
+        // name takes a new one.
         static Configuration.Server ParseServer (TomlTable table)
         {
+            Protocol protocol;
+            var protocolName = Get<string> (table, "protocol", null, x => ((TomlString)x).Value);
+            if (protocolName == "gRPC")
+                protocol = GrpcProtocol;
+            else if (protocolName == null || !Enum.TryParse (protocolName, out protocol) || !Enum.IsDefined (protocol))
+                return null;
             var server = new Configuration.Server ();
+            server.Protocol = protocol;
             server.Settings = new Dictionary<string, string> ();
+            server.Id = Get (table, "id", server.Id, x => new Guid (((TomlString)x).Value));
+            server.Name = Get (table, "name", server.Name, x => ((TomlString)x).Value);
             foreach (var entry in table) {
-                switch (entry.Key) {
-                case "id":
-                    server.Id = new Guid (entry.Value.StringValue);
-                    break;
-                case "name":
-                    server.Name = entry.Value.StringValue;
-                    break;
-                case "protocol":
-                    var protocol = entry.Value.StringValue;
-                    server.Protocol = protocol == "gRPC" ? GrpcProtocol : Enum.Parse<Protocol> (protocol);
-                    break;
-                default:
-                    // Protocol settings, keyed as Configuration.Server.Create expects
+                if (entry.Key == "id" || entry.Key == "name" || entry.Key == "protocol")
+                    continue;
+                // Protocol settings, keyed as Configuration.Server.Create expects
+                if (entry.Value is TomlString || entry.Value is TomlLong || entry.Value is TomlBoolean)
                     server.Settings [entry.Key] = entry.Value.StringValue;
-                    break;
-                }
+                else
+                    Logger.WriteLine ("The setting " + entry.Key + " of server " + server.Name + " in the settings file is not valid, leaving it out", Logger.Severity.Warning);
             }
             return server;
         }
 
         public void Save ()
         {
+            if (keepFile)
+                return;
             var config = Configuration;
             var toml = new StringBuilder ();
             toml.Append ("# kRPC for KSA server settings, also set from the kRPC window in game.\n\n");
@@ -170,11 +243,12 @@ namespace KRPC.KSA
                 }
             }
             try {
+                Directory.CreateDirectory (Path.GetDirectoryName (path));
                 File.WriteAllText (path, toml.ToString ());
             } catch (IOException e) {
-                Logger.WriteLine ("Failed to save settings to " + path + ": " + e.Message, Logger.Severity.Error);
+                Logger.WriteLine ("Failed to save settings to " + path + ": " + e.Message, Logger.Severity.Warning);
             } catch (UnauthorizedAccessException e) {
-                Logger.WriteLine ("Failed to save settings to " + path + ": " + e.Message, Logger.Severity.Error);
+                Logger.WriteLine ("Failed to save settings to " + path + ": " + e.Message, Logger.Severity.Warning);
             }
         }
 

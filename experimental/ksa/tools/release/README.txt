@@ -40,7 +40,7 @@ and change its manifest.toml entry to id = "kRPC".
 
 The servers start when the game has loaded its mods. By default they listen on 127.0.0.1,
 with TCP/IP on port 50000 and WebSockets on port 50001, and accept every connection. The
-settings are in kRPC/settings.toml.
+settings are in <Documents>/My Games/Kitten Space Agency/kRPC/settings.toml.
 
 
 CONNECT

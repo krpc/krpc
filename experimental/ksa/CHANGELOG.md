@@ -3,6 +3,10 @@
 - Mod
   - **Breaking:** Use the kRPC 0.8 protocol, so clients and client stubs need kRPC 0.8
   - **Breaking:** Rename the server settings in `kRPC/settings.toml`, with one port per server
+  - **Breaking:** Keep the settings in `kRPC/settings.toml` in the game's user folder, so they
+    apply to every save and are kept when the mod updates
+  - Create the settings file with the defaults when it is missing, and replace settings in it
+    that are not valid with their defaults
 - Clients
   - Add stubs and documentation for the JavaScript client
   - Add a WebSockets server on port 50001 to the default settings, for the JavaScript client

@@ -44,7 +44,8 @@ documentation, generates the stubs with ``krpc-clientgen``, and compiles the exa
 against them. Without a KSA install, ``bazel build //...`` skips these targets.
 
 The install target puts the mod into ``<Documents>/My Games/Kitten Space Agency/mods``, or
-``KSA_MODS_DIR``, and enables it. ``-- --testing`` adds the ``TestingTools`` service.
+``KSA_MODS_DIR``, and enables it. ``-- --testing`` adds the ``TestingTools`` service, and
+replaces the settings in the game's user folder with the test settings.
 
 Running
 -------

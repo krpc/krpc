@@ -18,7 +18,7 @@ from krpctools.game import game
 
 log = logging.getLogger("krpctools.game")
 
-# The mod with the TestingTools service and the test settings
+# The mod with the TestingTools service
 _MOD_TARGET = "//experimental/ksa:mod-testing"
 
 # The save each test class starts from, written once a launched game has loaded its system
@@ -42,6 +42,18 @@ def repo_root():
                 % Path.cwd()
             )
         path = path.parent
+    return path
+
+
+def _test_settings():
+    r = runfiles.Create()
+    path = (
+        r.Rlocation("_main/experimental/ksa/tools/TestingTools/settings.toml", "")
+        if r is not None
+        else None
+    )
+    if path is None or not os.path.exists(path):
+        raise RuntimeError("The test settings are not in the runfiles")
     return path
 
 
@@ -97,8 +109,9 @@ class BazelKSA(game.Game):
         mods_folder.install(path)
 
     def install_addon(self):
-        # The mod archive holds the TestingTools service and the test settings
-        pass
+        # The mod archive holds the TestingTools service. The test settings replace the
+        # settings in the game's user folder.
+        mods_folder.install_settings(_test_settings())
 
     def install_mod(self, mod, path):
         raise NotImplementedError("KSA has no mods to install")

@@ -1,4 +1,4 @@
-"""The KSA user mods folder, and installing the kRPC mod into it."""
+"""The KSA user mods folder, and installing the kRPC mod and its settings into it."""
 
 import os
 import re
@@ -35,11 +35,29 @@ def documents_dir() -> Path:
         return Path.home() / "Documents"
 
 
+def user_dir() -> Path:
+    """The game's user folder, <Documents>/My Games/Kitten Space Agency."""
+    return documents_dir() / "My Games" / "Kitten Space Agency"
+
+
 def mods_dir() -> Path:
-    """KSA_MODS_DIR, else <Documents>/My Games/Kitten Space Agency/mods."""
+    """KSA_MODS_DIR, else the mods folder in the game's user folder."""
     if "KSA_MODS_DIR" in os.environ:
         return Path(os.environ["KSA_MODS_DIR"])
-    return documents_dir() / "My Games" / "Kitten Space Agency" / "mods"
+    return user_dir() / "mods"
+
+
+def settings_path() -> Path:
+    """The mod's settings file, in the game's user folder."""
+    return user_dir() / "kRPC" / "settings.toml"
+
+
+def install_settings(settings: str | os.PathLike) -> Path:
+    """Replace the mod's settings file with a copy of the given one. Returns its path."""
+    path = settings_path()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(settings, path)
+    return path
 
 
 def install(archive: str | os.PathLike) -> Path:

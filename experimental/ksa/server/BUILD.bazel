@@ -4,10 +4,7 @@ load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
 load("//tools/build:csharp.bzl", "csharp_library")
 load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
 
-exports_files([
-    "mod.toml",
-    "settings.toml",
-])
+exports_files(["mod.toml"])
 
 csharp_assembly_info(
     name = "AssemblyInfo",
