@@ -16,7 +16,7 @@ there. We plan a prograde burn of the difference at the apoapsis:
 .. literalinclude:: /scripts/tutorials/circularize/circularize.py
    :language: python
    :start-at: mu = orbit.body
-   :end-at: print(f"Circularization burn
+   :end-before: print("Coasting to the burn")
 
 The flight computer works out the burn time from the vehicle's engines, and centers the
 burn on its time.

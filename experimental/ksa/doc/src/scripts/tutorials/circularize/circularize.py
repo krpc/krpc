@@ -19,7 +19,9 @@ r = orbit.apoapsis
 v1 = math.sqrt(mu * (2 / r - 1 / orbit.semi_major_axis))
 v2 = math.sqrt(mu / r)
 burn = vehicle.add_burn(ksa.ut + orbit.time_to_apoapsis, prograde=v2 - v1)
-print(f"Circularization burn: {burn.delta_v:.1f} m/s, {burn.burn_time:.1f} s")
+print(
+    f"Circularization burn: {burn.delta_v:.1f} m/s, {burn.burn_time:.1f} s"
+)
 
 print("Coasting to the burn")
 ksa.warp_to(burn.ignition_time - 30)

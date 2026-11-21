@@ -67,7 +67,9 @@ class GrpcObject(ObjectDescription):
 
     def add_target_and_index(self, name, sig, signode):
         signode["ids"].append(name)
-        self.env.domains["grpc"].note_object(name, self.objtype, self.get_location())
+        domain = self.env.domains["grpc"]
+        assert isinstance(domain, GrpcDomain)
+        domain.note_object(name, self.objtype, self.get_location())
         short = name.rsplit(".", 1)[-1]
         self.indexnode["entries"].append(
             ("single", f"{short} ({self.objtype})", name, "", None)

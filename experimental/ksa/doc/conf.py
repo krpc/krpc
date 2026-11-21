@@ -24,6 +24,19 @@ extensions = [
 ]
 suppress_warnings = ["design.fa-build"]
 
+# The spellchecker of the kRPC documentation, for the spelling builder (sphinx-build -t
+# spelling)
+if tags.has("spelling"):  # noqa: F821  # pyright: ignore[reportUndefinedVariable]
+    import spelling_hunspell  # pyright: ignore[reportMissingImports]
+
+    spelling_hunspell.enable(extensions)
+
+# The kRPC documentation's words, with the KSA ones. The changelog page is dense with API
+# identifiers, so it is left out.
+spelling_word_list_filename = "dictionary.txt"
+spelling_ignore_contributor_names = False
+spelling_exclude_patterns = ["changelog.rst"]
+
 # The Lua API is written with the domain's directives, so sphinx-lua-ls needs no language
 # server to analyze Lua sources
 lua_ls_backend = "disable"
@@ -56,7 +69,10 @@ html_theme_options = {
 }
 
 javadoc_url_map = {
-    "org.javatuples": ("https://javadoc.io/static/org.javatuples/javatuples/1.2/", "javadoc"),
+    "org.javatuples": (
+        "https://javadoc.io/static/org.javatuples/javatuples/1.2/",
+        "javadoc",
+    ),
 }
 
 # The C-nano references, as in the kRPC documentation. The C domain scopes a function to the
@@ -106,7 +122,9 @@ def setup(app):
     import logging
 
     logging.getLogger("sphinx.sphinx_lua_ls").addFilter(
-        lambda record: not record.getMessage().startswith(
-            "apidoc requested, but the language server backend is disabled"
+        lambda record: (
+            not record.getMessage().startswith(
+                "apidoc requested, but the language server backend is disabled"
+            )
         )
     )

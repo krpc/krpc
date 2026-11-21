@@ -114,7 +114,12 @@ Build this documentation, or serve it on http://localhost:8080 with rebuild on e
    bazel run //experimental/ksa/doc:serve
 
 ``krpc-docgen`` generates the API pages from the service definitions. ``doc/order.txt`` orders
-the members, and lists every one of them.
+the members, and lists every one of them, which ``//experimental/ksa/doc:check-documented``
+checks.
+
+The examples are held to the kRPC documentation's formatting and lint, with its 76-column limit,
+and the pages to its spelling check. ``doc/dictionary.txt`` adds the words of these pages to its
+word list. ``//experimental/ksa/doc:linkcheck`` checks the external links, and is in no suite.
 
 ``tools/release/publish-docs.sh`` commits the documentation to the ``gh-pages`` branch, under
 ``experimental/ksa/``. ``--push`` pushes the commit.

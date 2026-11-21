@@ -1,7 +1,8 @@
 """Launch a rocket from Cape Canaveral into a circular orbit.
 
-The script flies the ascent with a gravity turn, stages when the first stage runs out of
-propellant, and circularizes with a burn that the flight computer executes.
+The script flies the ascent with a gravity turn, stages when the first
+stage runs out of propellant, and circularizes with a burn that the flight
+computer executes.
 """
 
 import math
@@ -10,8 +11,8 @@ from typing import Any
 
 import krpc
 
-# The turn spans most of Earth's atmosphere, so the rocket climbs out of the dense lower
-# atmosphere before it pitches over far
+# The turn spans most of Earth's atmosphere, so the rocket climbs out of the
+# dense lower atmosphere before it pitches over far
 TURN_START_ALTITUDE = 1_000
 TURN_END_ALTITUDE = 150_000
 TARGET_ALTITUDE = 200_000
@@ -28,7 +29,9 @@ body = orbit.body
 # Streams for the values the ascent loop reads
 altitude: Any = conn.add_stream(getattr, flight, "mean_altitude")
 apoapsis: Any = conn.add_stream(getattr, orbit, "apoapsis_altitude")
-available_thrust: Any = conn.add_stream(getattr, vehicle, "available_thrust")
+available_thrust: Any = conn.add_stream(
+    getattr, vehicle, "available_thrust"
+)
 
 
 def stage():
@@ -39,14 +42,16 @@ def stage():
 
 
 def execute_burn(burn):
-    """Execute a burn with the flight computer, staging when a stage runs dry."""
+    """Execute a burn with the flight computer, staging when a stage runs
+    dry."""
     while True:
         auto_pilot.auto_burn = True
         finished = conn.add_event(lambda: not auto_pilot.auto_burn)
         with finished.condition:
             finished.wait()
         finished.remove()
-        # The flight computer stops the burn when the engines run out of propellant
+        # The flight computer stops the burn when the engines run out of
+        # propellant
         if burn.remaining_delta_v < 1:
             break
         stage()
@@ -78,7 +83,9 @@ control.engine_on = False
 
 print("Coasting out of the atmosphere")
 atmosphere_altitude = body.atmosphere_radius - body.radius
-above_atmosphere = conn.add_event(lambda: flight.mean_altitude > atmosphere_altitude)
+above_atmosphere = conn.add_event(
+    lambda: flight.mean_altitude > atmosphere_altitude
+)
 with above_atmosphere.condition:
     above_atmosphere.wait()
 

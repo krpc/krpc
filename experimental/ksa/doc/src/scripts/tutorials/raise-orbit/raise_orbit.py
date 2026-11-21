@@ -1,7 +1,7 @@
 """Raise the active vehicle's circular orbit to a higher circular orbit.
 
-The first burn raises the apoapsis to the target altitude. The second burn, at the
-apoapsis, raises the periapsis to match.
+The first burn raises the apoapsis to the target altitude. The second burn,
+at the apoapsis, raises the periapsis to match.
 """
 
 import math
@@ -25,7 +25,9 @@ auto_pilot.wait()
 print("Raising apoapsis")
 control.throttle = 1
 control.engine_on = True
-apoapsis_reached = conn.add_event(lambda: orbit.apoapsis_altitude > TARGET_ALTITUDE)
+apoapsis_reached = conn.add_event(
+    lambda: orbit.apoapsis_altitude > TARGET_ALTITUDE
+)
 with apoapsis_reached.condition:
     apoapsis_reached.wait()
 control.engine_on = False
@@ -57,7 +59,9 @@ print("Raising periapsis")
 control.engine_on = True
 burn_end = burn_ut + burn_time
 burn_done = conn.add_event(
-    lambda: ksa.ut >= burn_end or orbit.periapsis_altitude >= TARGET_ALTITUDE
+    lambda: (
+        ksa.ut >= burn_end or orbit.periapsis_altitude >= TARGET_ALTITUDE
+    )
 )
 with burn_done.condition:
     burn_done.wait()

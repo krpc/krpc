@@ -14,7 +14,9 @@ vehicles = KSA_pb2_grpc.VehicleServiceStub(channel)
 vehicle = service.GetActiveVehicle(
     ksa.KSA.GetActiveVehicleRequest(), metadata=metadata
 ).value
-name = vehicles.GetName(ksa.Vehicle.GetNameRequest(this=vehicle), metadata=metadata)
+name = vehicles.GetName(
+    ksa.Vehicle.GetNameRequest(this=vehicle), metadata=metadata
+)
 print(name.value)
 
 ut = service.GetUT(ksa.KSA.GetUTRequest(), metadata=metadata)
