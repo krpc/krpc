@@ -48,9 +48,10 @@ lines each. A job stays outside a matrix when it produces more than one artifact
 other than Bazel, saves a cache on a push, runs on other events than the matrix, or is named in
 another job's `needs`. A job-level `if` and `needs` cannot address a single matrix entry.
 
-The doc examples are compiled and clang-tidied in Linux jobs of their own, and compiled on
-Windows in `build-docs-examples`. The C++ examples take most of the Linux time, as each parses
-every generated service header. `test-docs-examples` takes the other languages.
+The doc examples are compiled and clang-tidied in Linux jobs of their own. The C++ examples take
+most of that time, as each parses every generated service header. `build-docs-examples` compiles
+the other languages on Linux, and every language on Windows. `test-docs-clangtidy-cnano`
+clang-tidies the C-nano examples.
 
 `doc/BUILD.bazel` splits the C++ examples into `CPP_SHARDS` shards, each a job,
 `test-docs-examples-cpp-<n>`. A job builds its shard's `compile-scripts-cpp-<n>` and tests its

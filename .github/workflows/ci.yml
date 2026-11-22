@@ -73,12 +73,13 @@ jobs:
             build: //doc:compile-scripts-cpp-4
             test: //doc:clangtidy-cpp-4
             cpp-cache: restore
-          - name: test-docs-examples
+          - name: build-docs-examples
             build: >-
               //doc:compile-scripts-cnano //doc:compile-scripts-csharp
               //doc:compile-scripts-docgen //doc:compile-scripts-java
-            test: //doc:clangtidy-cnano
             cpp-cache: restore
+          - name: test-docs-clangtidy-cnano
+            test: //doc:clangtidy-cnano
           - name: build-docs-html
             build: //doc:html
             artifact: docs-html
