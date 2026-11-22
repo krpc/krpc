@@ -1,6 +1,6 @@
 name: daily
 
-# Runs ci on main once a day, with the Windows jobs that pull requests skip,
+# Runs ci on main once a day, with the daily jobs that pull requests skip,
 # when main has moved since the last daily run. GitHub emails a failed
 # scheduled run to the last person to change the schedule below.
 on:

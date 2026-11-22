@@ -28,7 +28,9 @@ The guide starts from a `main` that holds the code to release.
    the kRPC release guide's fold step does. Check that
    `client_version` in `config.bzl` names the kRPC client release whose protocol the mod speaks,
    as the docs and the stubs readme name it. Push the branch, open the release preparation pull
-   request and merge it, then check out the release commit.
+   request, and run every CI job on it by hand with `gh workflow run ci.yml --ref <branch>`. The
+   pull request and the merge queue skip the daily jobs, such as Windows. Merge it once its checks
+   and the manual run pass, then check out the release commit.
 2. `10-preflight.py` - checks the tree, the release commit, the tools, the KSA install, the
    credentials, SpaceDock and the Borea listing. Read-only, so run it as often as you like.
 3. `20-borea-listing.py [--game-min <build>] [--loader-min <version>]` - sets the KSA and StarMap
