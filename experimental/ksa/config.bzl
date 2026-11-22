@@ -5,7 +5,7 @@ tools/release/publish-docs.sh reads mod_version from this file too.
 """
 
 # The version of the mod
-mod_version = "0.2.0"
+mod_version = "0.3.0"
 
 # The release of the kRPC client libraries the mod works with
 client_version = "0.8.0"

@@ -1,4 +1,4 @@
-## [v0.3.0] - unreleased
+## [v0.3.0]
 
 - Mod
   - **Breaking:** Use the kRPC 0.8 protocol, so clients and client stubs need kRPC 0.8 (#1399)
