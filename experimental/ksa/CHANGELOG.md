@@ -23,6 +23,8 @@
   - Support KSA v2026.11.16.5901 (#1401)
   - Move the kRPC menu to a `kRPC` item in the game's Mods menu, which opens the server window
     (#1400)
+  - Fix every call failing with no vehicle under control, e.g. after the vehicle is destroyed
+    (#1407)
 
 - Crew and life support
   - Add life support: the supplies of a vehicle and its habitat zones, how long they last,

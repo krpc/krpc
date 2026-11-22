@@ -19,8 +19,8 @@ namespace KRPC.KSA.Services
     public static class KSA
     {
         /// <summary>
-        /// The vehicle under the player's control, or <c>null</c> if the player controls a
-        /// kitten on EVA.
+        /// The vehicle under the player's control, or <c>null</c> if there is none or the
+        /// player controls a kitten on EVA.
         /// </summary>
         /// <remarks>
         /// Setting it moves the camera to the vehicle, as the switch vehicle key does. See
