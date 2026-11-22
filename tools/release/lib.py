@@ -148,6 +148,58 @@ def require_clean_tree():
         raise ReleaseError("the working tree has uncommitted changes")
 
 
+CONFIG = Path("config.bzl")
+
+# The sources compiled into KRPC.Core.dll
+CORE_SOURCES = "core/src"
+
+
+def bump_core_version():
+    """Bump core_version in config.bzl, if KRPC.Core changed since its last bump.
+
+    Lists the commits that changed core, and asks which part of the version to
+    bump. Only the maintainer knows whether a change breaks the API the server
+    and service assemblies compile against. Leaves config.bzl uncommitted, and
+    returns the new version, or None if the version stays.
+    """
+    text = CONFIG.read_text()
+    match = re.search(r'^core_version = "(\d+)\.(\d+)\.(\d+)"$', text, re.MULTILINE)
+    if match is None:
+        raise ReleaseError(f"no x.y.z core_version found in {CONFIG}")
+    current = ".".join(match.groups())
+    last = capture(
+        "git", "log", "-1", "--format=%H", "-G", "^core_version = ", "--", str(CONFIG)
+    )
+    if not last:
+        raise ReleaseError(f"no commit sets core_version in {CONFIG}")
+    changes = capture("git", "log", "--oneline", f"{last}..HEAD", "--", CORE_SOURCES)
+    if not changes:
+        print(f"KRPC.Core is unchanged since {current}, and keeps its version")
+        return None
+
+    banner(f"KRPC.Core changes since {current}")
+    print(changes)
+    major, minor, patch = (int(part) for part in match.groups())
+    versions = {
+        "major": f"{major + 1}.0.0",
+        "minor": f"{major}.{minor + 1}.0",
+        "patch": f"{major}.{minor}.{patch + 1}",
+        "none": None,
+    }
+    answer = input("Bump KRPC.Core by major, minor, patch or none? [minor] ")
+    answer = answer.strip().lower() or "minor"
+    if answer not in versions:
+        raise ReleaseError(f"'{answer}' is not major, minor, patch or none")
+    version = versions[answer]
+    if version is None:
+        return None
+    CONFIG.write_text(
+        text[: match.start()] + f'core_version = "{version}"' + text[match.end() :]
+    )
+    print(f"KRPC.Core {current} -> {version}")
+    return version
+
+
 def changelogs():
     """The CHANGELOG.md of every component the release notes show, in the
     order shown."""

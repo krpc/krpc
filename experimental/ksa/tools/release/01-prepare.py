@@ -4,7 +4,9 @@
 Releases the unreleased section of CHANGELOG.md, sets mod_version in
 config.bzl to its version, and commits both as "Release kRPC for KSA
 X.Y.Z". Pass a version to release the section under another version, e.g. a
-minor version for a section the update script started as a patch.
+minor version for a section the update script started as a patch. If KRPC.Core
+changed since its version was last bumped, the step asks how to bump it, and
+the release commit includes the bump.
 
 Run on a branch off an up to date main. The release commit reaches main through
 the release preparation pull request, and 40-tag.py tags it there.
@@ -54,9 +56,10 @@ def main():
     )
     ksalib.CHANGELOG.write_text(text)
     ksalib.set_pin("mod_version", version)
+    lib.bump_core_version()
 
     lib.banner(f"Release commit for kRPC for KSA {version}")
-    lib.run("git", "add", ksalib.CHANGELOG, ksalib.VERSIONS)
+    lib.run("git", "add", ksalib.CHANGELOG, ksalib.VERSIONS, lib.CONFIG)
     lib.run("git", "commit", "-q", "-m", f"Release kRPC for KSA {version}")
 
     lib.banner("Done")

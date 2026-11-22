@@ -4,7 +4,8 @@ version released.
 
 The first step of the release preparation branch. Each fragment's entries are
 written into the unreleased section of its components, the fragments are
-deleted, and the ' - unreleased' suffix is dropped. The changes are left
+deleted, and the ' - unreleased' suffix is dropped. If KRPC.Core changed since
+its version was last bumped, the step asks how to bump it. The changes are left
 uncommitted, to be reordered and edited by hand before committing.
 """
 
@@ -41,11 +42,13 @@ def main():
         path.write_text(text)
         print(path)
     shutil.rmtree(changelog.FRAGMENT_DIR, ignore_errors=True)
+    core_version = lib.bump_core_version()
 
     lib.banner("Done")
+    bumped = f", {lib.CONFIG}" if core_version else ""
     print(
-        "Reorder and edit the entries, then commit the changelogs and the "
-        f"removal of {changelog.FRAGMENT_DIR}/ as one commit."
+        f"Reorder and edit the entries, then commit the changelogs{bumped} and "
+        f"the removal of {changelog.FRAGMENT_DIR}/ as one commit."
     )
     print("Next: tools/release/02-bump-version.py")
 

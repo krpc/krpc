@@ -33,7 +33,11 @@ A release preparation pull request takes `main` from the version being released 
 2. `tools/release/01-fold-changelogs.py` - writes the fragments in `changelog.d/` into each
    component's `CHANGELOG.md`, deletes them, and drops the ` - unreleased` suffix. Reorder and edit
    the merged entries by hand, then commit everything as one commit, the fold commit. Components
-   without user-facing changes get no section and are omitted from the release notes.
+   without user-facing changes get no section and are omitted from the release notes. If
+   `core/src` changed since `core_version` in `config.bzl` was last bumped, the step lists the
+   commits and asks how to bump it: major for a change that breaks the API the server and service
+   assemblies compile against, minor for an addition, patch for a fix. `core_version` is the
+   assembly version of `KRPC.Core.dll`, which every game mod ships.
 3. `tools/release/02-bump-version.py` - sets `version` in `config.bzl` to the next version to work
    towards, and commits. Builds from `main` are then stamped as pre-releases of that version.
 4. Push the branch, open the pull request, and add it to the merge queue once its checks pass. A

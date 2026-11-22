@@ -23,7 +23,9 @@ The guide starts from a `main` that holds the code to release.
 1. `01-prepare.py [version]` - on a release preparation branch off an up to date `main`,
    releases the unreleased section of `CHANGELOG.md`, sets `mod_version` in `config.bzl`, and
    commits them as `Release kRPC for KSA X.Y.Z`. A release that only follows a KSA update is the
-   patch version the update started. Pass a version for a minor release. Check that
+   patch version the update started. Pass a version for a minor release. If `core/src` changed
+   since `core_version` in the root `config.bzl` was last bumped, the step asks how to bump it, as
+   the kRPC release guide's fold step does. Check that
    `client_version` in `config.bzl` names the kRPC client release whose protocol the mod speaks,
    as the docs and the stubs readme name it. Push the branch, open the release preparation pull
    request and merge it, then check out the release commit.
