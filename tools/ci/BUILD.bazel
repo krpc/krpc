@@ -47,6 +47,18 @@ py_test(
 )
 
 py_test(
+    name = "prune-caches-test",
+    size = "small",
+    srcs = [
+        "prune_caches.py",
+        "prune_caches_test.py",
+    ],
+    imports = ["."],
+    main = "prune_caches_test.py",
+    deps = [":gh_cli"],
+)
+
+py_test(
     name = "gh-cli-test",
     size = "small",
     srcs = ["gh_cli_test.py"],
@@ -62,6 +74,7 @@ test_suite(
         ":daily-due-test",
         ":flaky-tests-test",
         ":gh-cli-test",
+        ":prune-caches-test",
         ":pyright",
         ":ruff",
     ],

@@ -1,0 +1,35 @@
+name: prune-caches
+
+# Deletes the caches that no later run can restore: those of closed pull
+# requests and of deleted branches, such as merge queue branches. Left in place,
+# they count towards the repository's cache limit, and push out the caches of
+# main that only the daily run touches. A workflow of its own, so ci keeps a
+# read-only token, which the daily workflow's call to it requires.
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  contents: read
+  pull-requests: read
+
+# Runs one at a time, as two would list and delete the same caches
+concurrency:
+  group: prune-caches
+
+jobs:
+  prune:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: checkout
+        uses: actions/checkout@v7
+        with:
+          sparse-checkout: tools/ci
+      - name: prune
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 tools/ci/prune_caches.py --repo "$GITHUB_REPOSITORY"

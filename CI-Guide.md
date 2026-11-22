@@ -10,6 +10,7 @@ configs of `.bazelrc`.
 | --- | --- | --- |
 | `ci` | pull request, merge queue, push to `main`, manual, `daily` | Builds and tests everything, and keeps the caches |
 | `daily` | 04:37 UTC each day, manual | Runs `ci` on `main` with the daily jobs |
+| `prune-caches` | push to `main`, manual | Deletes the caches no later run can restore |
 | `flaky-tests` | completion of a `ci` run | Comments on the pull request when a test passed only on a retry |
 | `changelog-hints` | pull request (`pull_request_target`) | Comments on the pull request about its changelog fragment |
 | `docs` | push to `main`, `v*` tag | Publishes the documentation site to `gh-pages` |
@@ -124,7 +125,9 @@ causes in fastbuild.
 
 ### Limits
 
-The workflow token is read-only. A new push to a pull request cancels the run it superseded.
+The workflow token is read-only, except in `prune-caches`, which deletes caches. It is a
+workflow of its own, as a workflow that `daily` calls cannot be granted more than `daily` has. A
+new push to a pull request cancels the run it superseded.
 Every job times out after 30 minutes, about twice the longest job on a cache miss, so a hung job
 gives its runner back instead of holding it for six hours.
 
@@ -185,8 +188,13 @@ by the push run on `main`, which builds only to fill a missing cache. The daily 
 `main` only in the daily run, which saves their caches.
 
 The daily jobs' caches are touched once a day at most, so they are the least recently used, and
-the first evicted. A daily run calls `ci` at least every six days, even with `main` unchanged,
-which keeps them inside the 7-day expiry.
+the first evicted. Two things keep them:
+
+- **`prune-caches`.** A push to `main` deletes the caches of closed pull requests and of deleted
+  branches, such as merge queue branches (`tools/ci/prune_caches.py`). No later run can restore
+  them, but they count towards the 10 GB.
+- **The five-day rule.** A daily run calls `ci` at least every five days, even with `main`
+  unchanged.
 
 GitHub updates its runner images often, the Windows image about once a week. A cache keyed on
 the image version would then go stale every week. A vcpkg cache miss rebuilds protobuf from
@@ -307,7 +315,8 @@ cancel each other, as a release moves a tag and `main` together and both push to
   by the daily run.
 - `pull_request_target` and `workflow_run` workflows run from `main`, so `changelog-hints` and
   `flaky-tests` cannot be tested by the pull request that changes them. Test them after merge.
-- The push run's cache jobs and `copy-artifacts` also run only after merge.
+- The push run's cache jobs, `copy-artifacts` and `prune-caches` also run only after merge.
+  `prune-caches` can be run by hand.
 - A Windows job, or one whose checks can wait a day, takes the condition of the other daily jobs.
 - `flaky-tests` reports the flakes of a pull request or merge queue run. A daily run's flakes are
   in the job summaries only.
