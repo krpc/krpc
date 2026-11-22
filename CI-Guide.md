@@ -47,9 +47,14 @@ lines each. A job stays outside a matrix when it produces more than one artifact
 other than Bazel, saves a cache on a push, or is named in another job's `needs`, which cannot
 address a single matrix entry.
 
-`//doc:clangtidy` runs in a Linux job of its own, `test-docs-clangtidy`. It checks about 190
-examples, each parsing every generated service header, and takes about 8 minutes. Inside
-`test-docs` it would make that the slowest job of the workflow.
+The doc examples are compiled and clang-tidied in Linux jobs of their own, and compiled on
+Windows in `build-docs-examples`. The C++ examples take most of the Linux time, as each parses
+every generated service header. `test-docs-examples` takes the other languages.
+
+`doc/BUILD.bazel` splits the C++ examples into `CPP_SHARDS` shards, each a job,
+`test-docs-examples-cpp-<n>`. A job builds its shard's `compile-scripts-cpp-<n>` and tests its
+`clangtidy-cpp-<n>`, so the two share the job's setup. A change to `CPP_SHARDS` adds or removes
+jobs to match.
 
 `test-ksa` runs the kRPC for KSA tests that need no game. KSA is closed source, so CI has no
 install, and `//experimental/ksa:test` skips the targets that compile against it.
@@ -95,6 +100,10 @@ causes in fastbuild.
 The workflow token is read-only. A new push to a pull request cancels the run it superseded.
 Every job times out after 30 minutes, about twice the longest job on a cache miss, so a hung job
 gives its runner back instead of holding it for six hours.
+
+The free plan runs at most 20 jobs at once. A run has more jobs than that, so jobs queue for a
+runner. A run then takes at least its total job time divided by 20. A new job adds its setup to
+that total, which is why `CPP_SHARDS` is small.
 
 ### Version Stamping
 

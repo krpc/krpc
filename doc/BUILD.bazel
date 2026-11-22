@@ -577,6 +577,7 @@ check_documented_test(
     members = "order.txt",
 )
 
+# A new entry needs a job in .github/workflows/ci.yml
 filegroup(
     name = "compile-scripts",
     srcs = [
@@ -671,6 +672,18 @@ cpp_scripts = cc_binary_multiple(
     deps = ["//client/cpp:krpc"],
 )
 
+# The C++ examples take most of the compile and clang-tidy time.
+# .github/workflows/ci.yml runs each shard in a job of its own.
+CPP_SHARDS = 4
+
+[
+    filegroup(
+        name = "compile-scripts-cpp-%d" % (i + 1),
+        srcs = cpp_scripts[i::CPP_SHARDS],
+    )
+    for i in range(CPP_SHARDS)
+]
+
 java_binary_multiple(
     name = "compile-scripts-java",
     srcs = glob(["src/scripts/**/*.java"]),
@@ -732,12 +745,26 @@ clang_format_test(
     config = "src/scripts/.clang-format",
 )
 
-clang_tidy_test(
+test_suite(
     name = "clangtidy",
+    tests = [":clangtidy-cnano"] + [":clangtidy-cpp-%d" % (i + 1) for i in range(CPP_SHARDS)],
+)
+
+clang_tidy_test(
+    name = "clangtidy-cnano",
     size = "large",
     conlyopts = ["-std=c99"],
-    programs = cnano_scripts + cpp_scripts,
+    programs = cnano_scripts,
 )
+
+[
+    clang_tidy_test(
+        name = "clangtidy-cpp-%d" % (i + 1),
+        size = "large",
+        programs = cpp_scripts[i::CPP_SHARDS],
+    )
+    for i in range(CPP_SHARDS)
+]
 
 # The Lua examples as the in-game tests in //doc/test run them
 lua_binary_multiple(
