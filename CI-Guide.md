@@ -42,10 +42,10 @@ new run. This is why CI retries the steps that fail for reasons outside the chan
 
 ### One Job per Thing Built or Tested
 
-Each component is built and tested in a job of its own, on Linux and on Windows. A broken
+Each component is built and tested in a job of its own, on Linux, Windows and macOS. A broken
 component then shows as the job that failed, and the jobs run in parallel. Jobs that differ only
-in their Bazel targets and artifact are entries of the `linux` and `windows` matrices, a few
-lines each. A job stays outside a matrix when it produces more than one artifact, runs something
+in their Bazel targets and artifact are entries of the `linux`, `windows` and `macos` matrices, a
+few lines each. A job stays outside a matrix when it produces more than one artifact, runs something
 other than Bazel, saves a cache on a push, runs on other events than the matrix, or is named in
 another job's `needs`. A job-level `if` and `needs` cannot address a single matrix entry.
 
@@ -74,14 +74,22 @@ Windows runs everything Linux runs, except these:
   that build is uncached and takes the job past 30 minutes. Windows builds the system scenario,
   which shows the client compiles there.
 
+macOS runs what Windows runs, less these:
+
+- **The serial transport tests and clang-tidy**, as on Windows.
+- **clang-format and cog.** The build pins a clang-format for Linux and Windows only, so the lint
+  checks that use it are skipped.
+- **`KRPC.sln`.** The solution build checks project files that the Linux and Windows jobs already
+  cover.
+
 Releases are built on Linux, so only the Linux jobs upload artifacts.
 
 ### Daily Jobs
 
 Some jobs run once a day, and in a manual run, but not for a pull request or in the merge queue:
 
-- **The Windows jobs.** They check on Windows what the Linux jobs check, so a failure only
-  Windows catches is rare enough to find a day later.
+- **The Windows and macOS jobs.** They check on those systems what the Linux jobs check, so a
+  failure only one of them catches is rare enough to find a day later.
 - **The jobs that check what only a release uses.** These are the CMake and vcpkg consumer
   builds and `test-tool-packages`.
 - **`linux-build-benchmarks`.** The benchmarks only need to keep compiling.
@@ -109,8 +117,9 @@ that the Linux jobs use in place of Bazel's own (see [Bazel Configuration](#baze
 The .NET SDK for the `KRPC.sln` build comes from `actions/setup-dotnet`. The container runs as
 the `runner` user, so it owns the files the checkout writes.
 
-The CMake and vcpkg consumer jobs run on the bare runner. They need only a compiler and the
-packages the `vcpkg-linux` action installs. The CMake fetch scenarios unset `CMAKE_PREFIX_PATH`,
+The CMake and vcpkg consumer jobs run on the bare runner, on Linux and macOS. They need only a
+compiler and the packages the `vcpkg-unix` action installs. The macOS image may have no vcpkg, so
+the action clones and bootstraps one. The CMake fetch scenarios unset `CMAKE_PREFIX_PATH`,
 so they build only with the dependencies they download.
 
 ### Windows
@@ -122,6 +131,14 @@ sphinx-build runfiles past `MAX_PATH`. The action also sets `MSYS2_ARG_CONV_EXCL
 Bash otherwise rewrites `//pkg:target` patterns as paths.
 The jobs build in `dbg` mode, whose `/DEBUG:FULL` link flag avoids the LNK4315 warning rules_cc
 causes in fastbuild.
+
+### macOS
+
+The macOS jobs run on the arm64 runner, with the Bazelisk and Xcode the image ships. They use the
+`bazel-fetch` action, as the Linux jobs do, with the `ci-macos` config. Docker does not run on
+the macOS runners, so no image can supply an LLVM. `ci-macos` builds with Xcode's clang instead,
+through `apple_support`, which keeps the hermetic LLVM release out of the download cache. The
+protoc of the KSP build has no arm64 release, so the action installs Rosetta.
 
 ### Limits
 
@@ -136,7 +153,8 @@ gives its runner back instead of holding it for six hours.
 
 The free plan runs at most 20 jobs at once. A run has more jobs than that, so jobs queue for a
 runner. A run then takes at least its total job time divided by 20. A new job adds its setup to
-that total, which is why `CPP_SHARDS` is small.
+that total, which is why `CPP_SHARDS` is small. At most 5 of the 20 can be macOS jobs, so the
+macOS jobs take several rounds of a daily run.
 
 ### Version Stamping
 
@@ -148,8 +166,8 @@ all-digit sha as a number. `KRPC.Core` takes `core_version`, which the action le
 
 ### The Tool Packages
 
-`test-tool-packages` installs the krpctools and Python client wheels with pip, on bare Linux
-and Windows runners with Python and .NET but no Bazel. `tools/ci/smoke_test_tools.py` then runs
+`test-tool-packages` installs the krpctools and Python client wheels with pip, on bare Linux,
+Windows and macOS runners with Python and .NET but no Bazel. `tools/ci/smoke_test_tools.py` then runs
 each krpctools command once, as a user would. It checks what the Bazel tests cannot: the package
 installs, its entry points run, and the bundled .NET tools start on the runner's dotnet host.
 The conformance command drives the Python client's testee, whose protobuf module the job
@@ -164,8 +182,8 @@ which a compile cannot always see.
 
 ## Bazel Configuration
 
-The `bazel-fetch` actions turn on `ci-linux` or `ci-windows`, from a user or system rc file, so
-every later Bazel command in a job uses it. Both include `ci`. Keeping the settings in
+The `bazel-fetch` actions turn on `ci-linux`, `ci-macos` or `ci-windows`, from a user or system
+rc file, so every later Bazel command in a job uses it. Each includes `ci`. Keeping the settings in
 `.bazelrc` lets a developer reproduce CI with `--config=ci-linux`.
 
 - **Sandboxed.** CI builds in the processwrapper sandbox, as a developer does, so an action
@@ -176,6 +194,7 @@ every later Bazel command in a job uses it. Both include `ci`. Keeping the setti
 - **System LLVM on Linux.** `ci-linux` builds with the buildenv image's LLVM in place of the
   hermetic LLVM release Bazel would download. That release is about 2 GB, and GitHub keeps
   10 GB of caches per repository, so CI stores LLVM in the image instead of the download cache.
+- **Xcode on macOS.** `ci-macos` builds with Xcode's clang, for the same reason.
 - **No `parse_headers`.** Abseil compiles each of its headers on its own as a check. That is a
   third of the compile actions a client's conformance testee needs.
 - **Download retries.** A failed download is retried for about three and a half minutes, at most
@@ -213,7 +232,7 @@ changes one of those, such as the compiler.
 | --- | --- | --- |
 | Bazel downloads | OS, Bazel version, `MODULE.bazel` and the Python lock file | Every job that misses it |
 | Bazelisk | OS and `.bazelversion` | Every job that misses it |
-| Third-party C++ libraries | The libraries' Bazel actions | `linux-test-client-cpp`, `windows-test-client-cpp` |
+| Third-party C++ libraries | The libraries' Bazel actions | `linux-test-client-cpp`, `windows-test-client-cpp`, `macos-test-client-cpp` |
 | vcpkg binaries | Package set, runner image and ABI hashes | The vcpkg actions |
 | ccache | Job, compiler, CMake template and vcpkg ABI hashes | The CMake consumer jobs |
 
@@ -324,7 +343,8 @@ cancel each other, as a release moves a tag and `main` together and both push to
   `flaky-tests` cannot be tested by the pull request that changes them. Test them after merge.
 - The push run's cache jobs, `copy-artifacts` and `prune-caches` also run only after merge.
   `prune-caches` can be run by hand.
-- A Windows job, or one whose checks can wait a day, takes the condition of the other daily jobs.
+- A Windows or macOS job, or one whose checks can wait a day, takes the condition of the other
+  daily jobs.
 - `flaky-tests` reports the flakes of a pull request or merge queue run. A daily run's flakes are
   in the job summaries only.
 - `//tools/ci:test` tests the CI scripts, and runs in `test-build-scripts`.

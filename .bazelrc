@@ -109,8 +109,8 @@ build:windows --compilation_mode=dbg
 common:system-llvm --//tools/build/llvm:toolchain=system
 common:system-llvm --extra_toolchains=@llvm_system//:all
 
-# The CI jobs. The bazel-fetch actions turn on ci-linux or ci-windows from a
-# user or system rc file, so every bazel command in the job picks it up.
+# The CI jobs. The bazel-fetch actions turn on ci-linux, ci-macos or ci-windows
+# from a user or system rc file, so every bazel command in the job picks it up.
 test:ci --test_output=errors
 # Run every test, even one whose result the disk cache holds, so CI keeps
 # catching flaky tests

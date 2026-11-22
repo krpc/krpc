@@ -165,7 +165,7 @@ def publish(port, overlay, credentials):
 
     login, _ = lib.github_user(token)
     fork = f"git@github.com:{login}/vcpkg.git"
-    test_script = overlay.parent / "test-vcpkg-linux.sh"
+    test_script = overlay.parent / "test-vcpkg-unix.sh"
 
     lib.banner(f"Opening the pull request to {UPSTREAM}")
     print(f"To try the port first: {test_script}")

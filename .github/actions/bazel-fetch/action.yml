@@ -1,12 +1,26 @@
+inputs:
+  bazel:
+    description: The command that runs Bazel
+    default: bazel
+  config:
+    description: The CI config in .bazelrc
+    default: ci-linux
 runs:
   using: composite
   steps:
+    # The protoc of the KSP build has no Apple silicon release
+    - name: rosetta
+      if: runner.os == 'macOS'
+      shell: bash
+      run: sudo softwareupdate --install-rosetta --agree-to-license
     - name: get-bazel-version
       shell: bash
       run: |
-        # Turn on the ci-linux config for every later bazel command in the job
-        echo "common --config=ci-linux" >> ~/.bazelrc
+        # Turn on the CI config for every later bazel command in the job
+        echo "common --config=${{ inputs.config }}" >> ~/.bazelrc
         echo "BAZEL_VERSION=$(cat .bazelversion)" >> "$GITHUB_ENV"
+        # The Linux default, which macOS would otherwise keep under ~/Library
+        echo "BAZELISK_HOME=$HOME/.cache/bazelisk" >> "$GITHUB_ENV"
     # Bazelisk downloads Bazel itself on the first bazel command in a job
     - name: restore-bazelisk
       id: bazelisk-cache
@@ -20,8 +34,9 @@ runs:
         # Cache only the download archives, in the content_addressable subdir of the
         # repository cache. Bazel 9 also keeps a "repo contents cache" of extracted
         # repositories in a sibling contents/ dir, which must stay out of the GitHub
-        # cache. CI uses a system LLVM, so no ~2 GB LLVM archive lands here.
-        echo "BAZEL_DOWNLOAD_CACHE=$(bazel info repository_cache)/content_addressable" >> "$GITHUB_ENV"
+        # cache. Linux uses a system LLVM, so only the macOS cache holds an LLVM
+        # archive.
+        echo "BAZEL_DOWNLOAD_CACHE=$(${{ inputs.bazel }} info repository_cache)/content_addressable" >> "$GITHUB_ENV"
     - name: save-bazelisk
       if: steps.bazelisk-cache.outputs.cache-hit != 'true'
       uses: actions/cache/save@v6
@@ -42,7 +57,7 @@ runs:
       shell: bash
       run: |
         touch "$RUNNER_TEMP/bazel-fetch-start"
-        bazel fetch //...
+        ${{ inputs.bazel }} fetch //...
         # Bazel updates the mtime of each archive it reads from the cache, so an
         # archive older than the fetch is one the dependencies no longer use. We
         # remove its directory, which also holds the archive's id files.

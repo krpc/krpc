@@ -1,7 +1,7 @@
 #!/bin/bash
-# Test installing the kRPC C-nano client via vcpkg overlay port.
+# Test installing the kRPC C++ client via vcpkg overlay port.
 # Builds the release archive with Bazel, or uses a provided archive.
-# Usage: test-vcpkg.sh [/path/to/krpc-cnano-VERSION.zip]
+# Usage: test-vcpkg-unix.sh [/path/to/krpc-cpp-VERSION.zip]
 # Requires: VCPKG_ROOT environment variable pointing to a vcpkg installation.
 set -e
 set -o pipefail
@@ -25,36 +25,41 @@ toolchain="${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
 # Use a provided archive or build one with Bazel
 if [ -n "${1:-}" ]; then
   archive="$(realpath "$1")"
-  version=$(basename "$archive" .zip | sed 's/krpc-cnano-//')
+  version=$(basename "$archive" .zip | sed 's/krpc-cpp-//')
 else
-  bazel build //client/cnano:cnano
+  bazel build //client/cpp:cpp
   bazel_bin=$(bazel info bazel-bin)
   version=$(tools/krpc-version.sh)
-  archive="$bazel_bin/client/cnano/krpc-cnano-$version.zip"
+  archive="$bazel_bin/client/cpp/krpc-cpp-$version.zip"
 fi
 # Strip any dev suffix (e.g. 0.5.4-12345-abc) to get a valid semver for vcpkg.json.
 version_semver=$(echo "$version" | grep -oE '^[0-9]+\.[0-9]+\.[0-9]+')
 
 # Create a temporary overlay port that points to the local archive
-sha512=$(sha512sum "$archive" | awk '{print $1}')
+sha512=$(shasum -a 512 "$archive" | awk '{print $1}')
 tmpport=$(mktemp -d)
 trap 'rm -rf "$tmpport"' EXIT
 cp "$scriptroot/vcpkg-port/"* "$tmpport/"
-sed -i \
+# GNU and BSD sed both take an attached backup suffix, which we then remove
+sed -i.orig \
   -e "s|URLS \"https://[^\"]*\"|URLS \"file://${archive}\"|" \
-  -e "s|FILENAME \"krpc-cnano-[^\"]*\"|FILENAME \"krpc-cnano-$version.zip\"|" \
+  -e "s|FILENAME \"krpc-cpp-[^\"]*\"|FILENAME \"krpc-cpp-$version.zip\"|" \
   -e "s|SHA512 0|SHA512 $sha512|" \
   "$tmpport/portfile.cmake"
-sed -i "s/\"version\": \"[^\"]*\"/\"version\": \"$version_semver\"/" "$tmpport/vcpkg.json"
+sed -i.orig "s/\"version\": \"[^\"]*\"/\"version\": \"$version_semver\"/" "$tmpport/vcpkg.json"
+rm "$tmpport"/*.orig
 
-# Install via the overlay port and build the consumer project against it
-dir=$(pwd)/bazel-bin/client/cnano/test-vcpkg
-rm -rf "$dir"
-mkdir -p "$dir"
-"$vcpkg_bin" install krpc-cnano --overlay-ports="$tmpport" \
-  --x-install-root="$dir/vcpkg_installed"
-cmake -S "$scriptroot/test-consumer" -B "$dir/consumer" \
+# Install via the overlay port into a local directory
+out=$(pwd)/bazel-bin/client/cpp/test-vcpkg
+rm -rf "$out"
+mkdir -p "$out"
+"$vcpkg_bin" install krpc --overlay-ports="$tmpport" --x-install-root="$out/vcpkg_installed"
+
+# Build the consumer project against it, to verify the package config and targets work
+# end-to-end. The program opens a connection over each of the transports the client offers,
+# which is what proves both of them reach a program through the package vcpkg installed.
+cmake -S "$scriptroot/test-consumer" -B "$out/consumer" \
   "-DCMAKE_TOOLCHAIN_FILE=$toolchain" \
-  "-DVCPKG_INSTALLED_DIR=$dir/vcpkg_installed" \
+  "-DVCPKG_INSTALLED_DIR=$out/vcpkg_installed" \
   -DCMAKE_BUILD_TYPE=Release
-cmake --build "$dir/consumer" --parallel "$(nproc)"
+cmake --build "$out/consumer" --parallel "$(getconf _NPROCESSORS_ONLN)"
