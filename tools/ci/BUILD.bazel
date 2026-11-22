@@ -23,6 +23,18 @@ py_test(
 )
 
 py_test(
+    name = "daily-due-test",
+    size = "small",
+    srcs = [
+        "daily_due.py",
+        "daily_due_test.py",
+    ],
+    imports = ["."],
+    main = "daily_due_test.py",
+    deps = [":gh_cli"],
+)
+
+py_test(
     name = "flaky-tests-test",
     size = "small",
     srcs = [
@@ -47,6 +59,7 @@ test_suite(
     name = "test",
     tests = [
         ":changelog-hints-test",
+        ":daily-due-test",
         ":flaky-tests-test",
         ":gh-cli-test",
         ":pyright",

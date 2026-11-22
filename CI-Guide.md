@@ -9,7 +9,7 @@ configs of `.bazelrc`.
 | Workflow | Runs on | Does |
 | --- | --- | --- |
 | `ci` | pull request, merge queue, push to `main`, manual, `daily` | Builds and tests everything, and keeps the caches |
-| `daily` | 12:00 UTC each day, manual | Runs `ci` on `main` with the daily jobs, when `main` has moved |
+| `daily` | 04:37 UTC each day, manual | Runs `ci` on `main` with the daily jobs |
 | `flaky-tests` | completion of a `ci` run | Comments on the pull request when a test passed only on a retry |
 | `changelog-hints` | pull request (`pull_request_target`) | Comments on the pull request about its changelog fragment |
 | `docs` | push to `main`, `v*` tag | Publishes the documentation site to `gh-pages` |
@@ -89,10 +89,16 @@ The daily jobs make up much of a full run's job time, which the concurrency limi
 [Limits](#limits)) turns into wall time. A release runs them by hand before its release
 preparation pull request merges, as the release guides say.
 
-`daily` calls `ci` as a reusable workflow, so the daily jobs run with the rest of `ci`. It skips
-`ci` when `main` is at the commit of the last daily run. GitHub emails a failed scheduled run to
-the last person to change its schedule. A manual run of `ci` on a branch also runs the daily
-jobs, which tests a change to them before it merges.
+`daily` calls `ci` as a reusable workflow with the `daily` input, which the daily jobs' conditions
+test. A scheduled run calls `ci` unless the last daily run that passed it tested the commit
+`main` is at, and is under five days old (`tools/ci/daily_due.py`). A failed or cancelled run
+does not count, so a red commit runs again the next day. The five days keep the daily jobs'
+caches inside the 7-day expiry (see [Caches](#caches)), with a day to spare for a late or dropped
+scheduled run.
+
+A manual run of `daily` always calls `ci`. A manual run of `ci` on a branch also runs the daily
+jobs, which tests a change to them before it merges. GitHub emails a failed scheduled run to the
+last person to change its schedule.
 
 ### Linux
 
@@ -176,7 +182,11 @@ GitHub evicts a cache unused for 7 days, and the least recently used ones over t
 10 GB. A cache saved by a pull request run is visible only to that pull request, and one saved
 by a merge queue run is lost with the queue's branch. So the caches later runs restore are saved
 by the push run on `main`, which builds only to fill a missing cache. The daily jobs run on
-`main` only in the daily run, which saves the caches of the daily jobs.
+`main` only in the daily run, which saves their caches.
+
+The daily jobs' caches are touched once a day at most, so they are the least recently used, and
+the first evicted. A daily run calls `ci` at least every six days, even with `main` unchanged,
+which keeps them inside the 7-day expiry.
 
 GitHub updates its runner images often, the Windows image about once a week. A cache keyed on
 the image version would then go stale every week. A vcpkg cache miss rebuilds protobuf from

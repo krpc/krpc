@@ -1,12 +1,12 @@
 name: daily
 
-# Runs ci on main once a day, with the daily jobs that pull requests skip,
-# when main has moved since the last daily run. GitHub emails a failed
-# scheduled run to the last person to change the schedule below.
+# Runs ci on main with its daily jobs, which pull requests and the merge queue
+# skip. tools/ci/daily_due.py decides whether a scheduled run calls ci. A
+# manual run always does.
 on:
   schedule:
-    # 12:00 UTC; cron schedules have no time zone
-    - cron: "0 12 * * *"
+    # 04:37 UTC, off peak and away from the start of the hour, which is busiest
+    - cron: "37 4 * * *"
   workflow_dispatch:
 
 permissions:
@@ -15,31 +15,27 @@ permissions:
   packages: read
 
 jobs:
-  main-changed:
+  due:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     outputs:
-      changed: ${{ steps.check.outputs.changed }}
+      due: ${{ github.event_name != 'schedule' || steps.check.outputs.due == 'true' }}
     steps:
-      # A manual run always runs ci. A failed lookup runs it too.
+      - name: checkout
+        if: github.event_name == 'schedule'
+        uses: actions/checkout@v7
+        with:
+          sparse-checkout: tools/ci
       - name: check
         id: check
+        if: github.event_name == 'schedule'
         env:
           GH_TOKEN: ${{ github.token }}
-        run: |
-          last=""
-          if [[ "$GITHUB_EVENT_NAME" == schedule ]]; then
-            last=$(gh run list --repo "$GITHUB_REPOSITORY" --workflow daily.yml --branch main \
-              --status completed --limit 1 --json headSha --jq '.[0].headSha // ""') || last=""
-          fi
-          if [[ "$last" == "$GITHUB_SHA" ]]; then
-            echo "main is at $GITHUB_SHA, as in the last daily run"
-            echo "changed=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "changed=true" >> "$GITHUB_OUTPUT"
-          fi
+        run: python3 tools/ci/daily_due.py --repo "$GITHUB_REPOSITORY" --sha "$GITHUB_SHA"
 
   ci:
-    needs: main-changed
-    if: needs.main-changed.outputs.changed == 'true'
+    needs: due
+    if: needs.due.outputs.due == 'true'
     uses: ./.github/workflows/ci.yml
+    with:
+      daily: true
