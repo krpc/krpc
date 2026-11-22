@@ -3,16 +3,16 @@ kRPC for KSA @VERSION@
 
 Control Kitten Space Agency from scripts running outside the game. A server inside the
 game exposes the game's API, and the kRPC @KRPC_VERSION@ client libraries call it from
-Python, C#, C++, C, Java, JavaScript and Lua. kRPC for KSA is experimental, and its API
-may change between releases.
+Python, C#, C++, C, Java, JavaScript and Lua. Other languages can call it over HTTP or gRPC.
+kRPC for KSA is experimental, and its API may change between releases.
 
 Built for Kitten Space Agency @KSA_VERSION@, and requires the StarMap @STARMAP_VERSION@
 code mod loader. On another KSA version, the mod warns that it is not supported and lists
 the RPCs it found broken.
 
     kRPC/       the mod
-    stubs/      client stubs for C#, C++, C, Java and JavaScript, and the service
-                definitions
+    stubs/      client stubs for C#, C++, C, Java and JavaScript, the gRPC .proto files,
+                and the service definitions
 
 
 INSTALL

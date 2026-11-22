@@ -49,7 +49,7 @@ def check_repository(report):
     else:
         report.fail(
             f"the top section of {ksalib.CHANGELOG} does not release "
-            f"v{ksalib.VERSION} (run 02-prepare.py)"
+            f"v{ksalib.VERSION} (run 01-prepare.py)"
         )
 
     if lib.succeeds("git", "rev-parse", "-q", "--verify", f"refs/tags/{ksalib.TAG}"):

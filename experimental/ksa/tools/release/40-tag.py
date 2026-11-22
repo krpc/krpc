@@ -16,7 +16,7 @@ def main():
     if not ksalib.is_released():
         raise lib.ReleaseError(
             f"the top section of {ksalib.CHANGELOG} does not release "
-            f"v{ksalib.VERSION} (run 02-prepare.py)"
+            f"v{ksalib.VERSION} (run 01-prepare.py)"
         )
 
     lib.run("git", "fetch", "-q", "origin", "main")
