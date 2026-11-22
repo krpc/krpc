@@ -1,0 +1,45 @@
+name: daily
+
+# Runs ci on main once a day, with the Windows jobs that pull requests skip,
+# when main has moved since the last daily run. GitHub emails a failed
+# scheduled run to the last person to change the schedule below.
+on:
+  schedule:
+    # 12:00 UTC; cron schedules have no time zone
+    - cron: "0 12 * * *"
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+  packages: read
+
+jobs:
+  main-changed:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      changed: ${{ steps.check.outputs.changed }}
+    steps:
+      # A manual run always runs ci. A failed lookup runs it too.
+      - name: check
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          last=""
+          if [[ "$GITHUB_EVENT_NAME" == schedule ]]; then
+            last=$(gh run list --repo "$GITHUB_REPOSITORY" --workflow daily.yml --branch main \
+              --status completed --limit 1 --json headSha --jq '.[0].headSha // ""') || last=""
+          fi
+          if [[ "$last" == "$GITHUB_SHA" ]]; then
+            echo "main is at $GITHUB_SHA, as in the last daily run"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  ci:
+    needs: main-changed
+    if: needs.main-changed.outputs.changed == 'true'
+    uses: ./.github/workflows/ci.yml

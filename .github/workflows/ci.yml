@@ -1,9 +1,10 @@
 name: ci
 
-# A pull request and the merge queue run every job. The queue fast-forwards
-# main to the commit its run tested, so a push to main runs only the jobs that
-# save the caches later runs restore, as a cache saved by a merge_group run is
-# lost with the queue's branch. Each checks its keys without restoring them,
+# A pull request and the merge queue run the Linux jobs. The daily workflow
+# and a manual run also run the Windows jobs, which save their own caches. The
+# queue fast-forwards main to the commit its run tested, so a push to main runs
+# only the Linux jobs that save the caches later runs restore, as a cache saved
+# by a merge_group run is lost with the queue's branch. Each checks its keys without restoring them,
 # and builds only to fill a missing cache. The Bazel repository cache is the
 # exception: it is restored, as computing the C++ disk cache key fetches
 # repositories. copy-artifacts gives the push run the merge queue run's
@@ -17,6 +18,7 @@ on:
     branches:
       - main
   workflow_dispatch:
+  workflow_call:
 
 permissions:
   actions: read
@@ -165,7 +167,7 @@ jobs:
   # client is windows-test-client-cpp, which saves the C++ cache.
   windows:
     name: windows-${{ matrix.name }}
-    if: github.event_name != 'push'
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     strategy:
       fail-fast: false
       matrix:
@@ -247,6 +249,7 @@ jobs:
           name: windows-${{ matrix.name }}
 
   windows-test-client-cpp:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     runs-on: windows-latest
     timeout-minutes: 30
     steps:
@@ -260,13 +263,10 @@ jobs:
         with:
           bazel: bazelisk
           bazelrc: C:/ProgramData/bazel.bazelrc
-          lookup-only: ${{ github.event_name == 'push' }}
       - name: build
-        if: github.event_name != 'push' || steps.cpp-cache.outputs.cache-hit != 'true'
         shell: bash
         run: bazelisk build //client/cpp:cpp
       - name: test
-        if: github.event_name != 'push' || steps.cpp-cache.outputs.cache-hit != 'true'
         shell: bash
         run: bazelisk test //client/cpp:test
       - name: flaky-tests
@@ -355,12 +355,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - os: linux
-            runner: ubuntu-latest
-          - os: windows
-            runner: windows-latest
-    runs-on: ${{ matrix.runner }}
+        # Windows only in a daily or manual run, as the Windows jobs
+        os: >-
+          ${{ fromJSON((github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+          && '["linux", "windows"]' || '["linux"]') }}
+    runs-on: ${{ matrix.os == 'windows' && 'windows-latest' || 'ubuntu-latest' }}
     timeout-minutes: 30
     steps:
       - name: checkout
@@ -450,7 +449,7 @@ jobs:
 
   windows-build-csharp-sln:
     needs: linux-build-genfiles
-    if: github.event_name != 'push'
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     runs-on: windows-latest
     timeout-minutes: 30
     steps:
@@ -588,15 +587,13 @@ jobs:
 
   windows-build-client-cnano-cmake:
     needs: linux-test-client-cnano
-    # Also on a push, which skips linux-test-client-cnano
-    if: ${{ !cancelled() && !failure() }}
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     runs-on: windows-latest
     timeout-minutes: 30
     steps:
       - name: checkout
         uses: actions/checkout@v7
       - name: download-artifact
-        if: github.event_name != 'push'
         uses: actions/download-artifact@v8
         with:
           name: client-cnano
@@ -605,11 +602,9 @@ jobs:
         with:
           packages: nanopb:x64-windows
       - name: build-system
-        if: github.event_name != 'push'
         shell: bash
         run: client/cnano/test-cmake-windows.sh system
       - name: build-fetch
-        if: github.event_name != 'push'
         shell: bash
         run: client/cnano/test-cmake-windows.sh fetch
 
@@ -639,15 +634,13 @@ jobs:
 
   windows-build-client-cnano-vcpkg:
     needs: linux-test-client-cnano
-    # Also on a push, which skips linux-test-client-cnano
-    if: ${{ !cancelled() && !failure() }}
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     runs-on: windows-latest
     timeout-minutes: 30
     steps:
       - name: checkout
         uses: actions/checkout@v7
       - name: download-artifact
-        if: github.event_name != 'push'
         uses: actions/download-artifact@v8
         with:
           name: client-cnano
@@ -656,7 +649,6 @@ jobs:
         with:
           packages: nanopb:x64-windows
       - name: test-vcpkg
-        if: github.event_name != 'push'
         shell: bash
         env:
           VCPKG_DEFAULT_BINARY_CACHE: C:\vcpkg-binary-cache
@@ -783,13 +775,13 @@ jobs:
   # both platforms, so Linux covers it.
   windows-build-client-cpp-cmake:
     needs: linux-test-client-cpp
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     runs-on: windows-latest
     timeout-minutes: 30
     steps:
       - name: checkout
         uses: actions/checkout@v7
       - name: download-artifact
-        if: github.event_name != 'push'
         uses: actions/download-artifact@v8
         with:
           name: client-cpp
@@ -798,7 +790,6 @@ jobs:
         with:
           packages: protobuf:x64-windows asio:x64-windows
       - name: test-build
-        if: github.event_name != 'push'
         shell: bash
         run: client/cpp/test-cmake-windows.sh
 
@@ -826,13 +817,13 @@ jobs:
 
   windows-build-client-cpp-vcpkg:
     needs: linux-test-client-cpp
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     runs-on: windows-latest
     timeout-minutes: 30
     steps:
       - name: checkout
         uses: actions/checkout@v7
       - name: download-artifact
-        if: github.event_name != 'push'
         uses: actions/download-artifact@v8
         with:
           name: client-cpp
@@ -841,7 +832,6 @@ jobs:
         with:
           packages: protobuf:x64-windows asio:x64-windows
       - name: test-vcpkg
-        if: github.event_name != 'push'
         shell: bash
         env:
           VCPKG_DEFAULT_BINARY_CACHE: C:\vcpkg-binary-cache

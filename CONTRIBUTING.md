@@ -31,7 +31,7 @@ the code.
 5. Open a pull request that says what it changes and why, and links the issue it fixes. Tick "Allow
    edits by maintainers".
 
-CI runs the full test suite on every pull request. Draft pull requests are welcome if you want
+CI builds and tests every pull request on Linux. Draft pull requests are welcome if you want
 early feedback.
 
 A few things make a pull request easier to review:
