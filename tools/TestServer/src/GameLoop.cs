@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Threading;
 using KRPC;
+using KRPC.Utils;
 
 namespace TestServer
 {
@@ -113,14 +114,19 @@ namespace TestServer
         }
 
         // Sleep most of the remaining time, so that the process does not burn a core during
-        // profiling and benchmarks, then spin to the end
+        // profiling and benchmarks, then spin to the end. Where timed waits wake late, spin
+        // all of it.
         static void WaitUntil (long end)
         {
-            var remaining = end - Stopwatch.GetTimestamp ();
-            if (remaining > Stopwatch.Frequency / 1000) {
+            var now = Stopwatch.GetTimestamp ();
+            var remaining = end - now;
+            var waits = TimedWaits.Shared;
+            if (!waits.Spin && remaining > Stopwatch.Frequency / 1000) {
                 var sleepMs = (int)(remaining * 1000L / Stopwatch.Frequency) - 1;
-                if (sleepMs > 0)
+                if (sleepMs > 0) {
                     Thread.Sleep (sleepMs);
+                    waits.Record (now, sleepMs, Stopwatch.GetTimestamp ());
+                }
             }
             while (Stopwatch.GetTimestamp () < end) {
             }

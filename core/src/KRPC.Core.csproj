@@ -264,5 +264,6 @@
     <Compile Include="Utils\Reflection.cs" />
     <Compile Include="Utils\StopwatchExtensions.cs" />
     <Compile Include="Utils\Text.cs" />
+    <Compile Include="Utils\TimedWaits.cs" />
   </ItemGroup>
 </Project>
