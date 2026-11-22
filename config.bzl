@@ -2,6 +2,11 @@
 
 author = "djungelorm"
 version = "1.0.0"
+
+# The version of KRPC.Core. Each game mod ships core as it stands on main, and the release
+# preparation of a mod bumps this when core changed since the last bump
+core_version = "1.0.0"
+
 ksp_version_max = "1.12.5.3190"
 ksp_version_min = "1.12.5.3190"
 ksp_version_max_parts = ksp_version_max.split(".")

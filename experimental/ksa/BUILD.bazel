@@ -2,7 +2,7 @@ load("@bazel_skylib//rules:expand_template.bzl", "expand_template")
 load("@bazel_skylib//rules:write_file.bzl", "write_file")
 load("@rules_pkg//pkg:mappings.bzl", "pkg_filegroup", "pkg_files", "strip_prefix")
 load("@rules_pkg//pkg:zip.bzl", "pkg_zip")
-load("//:config.bzl", "assembly_version")
+load("//:config.bzl", "core_version")
 load("//experimental/ksa/tools/build:mod.bzl", "ASPNETCORE_RIDS", "NATIVE_PORTS", "deps_json", "files_in")
 load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
 load(":config.bzl", "client_version", "ksa_version", "mod_version", "starmap_version")
@@ -25,7 +25,7 @@ grpc_version = "2.71.0"
 write_file(
     name = "deps-json",
     out = "KRPC.KSA.deps.json",
-    content = [deps_json(mod_version, assembly_version, protobuf_version, ports_version)],
+    content = [deps_json(mod_version, core_version, protobuf_version, ports_version)],
 )
 
 # Loaded by StarMap into its own load context, as a component
