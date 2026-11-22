@@ -9,8 +9,9 @@ changed since its version was last bumped, the step asks how to bump it, and
 the release commit includes the bump.
 
 Run on a branch off an up to date release branch: main, or a maintenance branch
-such as release/0.8. The release commit reaches the release branch through the
-release preparation pull request, and 40-tag.py tags it there.
+such as release/0.8. 02-test.py tests the branch. The release commit reaches the
+release branch through the release preparation pull request, and 40-tag.py tags
+it there.
 
     01-prepare.py
     01-prepare.py 0.3.0
@@ -65,11 +66,7 @@ def main():
     lib.run("git", "commit", "-q", "-m", f"Release kRPC for KSA {version}")
 
     lib.banner("Done")
-    print(
-        f"Push {branch} and open the release preparation pull request against "
-        f"{' or '.join(bases)}. Once it merges, check out the release commit "
-        "and run experimental/ksa/tools/release/10-preflight.py."
-    )
+    print("Next: experimental/ksa/tools/release/02-test.py")
 
 
 if __name__ == "__main__":
