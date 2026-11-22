@@ -409,9 +409,9 @@ namespace KRPC.KSA
                 return;
             if (config.Configuration.PauseServerWithGame && Universe.IsPaused ())
                 return;
-            CallContext.GameScene =
-                Universe.CurrentSystem != null && Program.ControlledVehicle != null
-                ? GameScene.Flight : GameScene.None;
+            // Flight covers a loaded system with no vehicle under control, e.g. after the
+            // controlled vehicle is destroyed
+            CallContext.GameScene = Universe.CurrentSystem != null ? GameScene.Flight : GameScene.None;
             try {
                 Utils.ObjectSweep.Update ();
                 core.Update ();

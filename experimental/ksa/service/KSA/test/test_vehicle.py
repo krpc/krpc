@@ -176,6 +176,15 @@ class TestDestroy(ksatest.TestCase):
         self.assertNotIn(name, [v.name for v in self.ksa.vehicles])
         self.assertNotEqual(vehicle, self.ksa.active_vehicle)
 
+    def test_destroy_every_vehicle(self):
+        for vehicle in self.ksa.vehicles:
+            vehicle.destroy()
+        self.assertIsNone(self.ksa.active_vehicle)
+        self.assertEqual([], self.ksa.vehicles)
+        self.assertEqual(self.conn.krpc.GameScene.flight, self.conn.krpc.game_scene)
+        vehicle = self.ksa.launch_vehicle("Rocket", SITE)
+        self.assertEqual(vehicle, self.ksa.active_vehicle)
+
     def test_recover(self):
         vehicle = self.ksa.launch_vehicle("Rocket", SITE)
         crew = vehicle.crew
