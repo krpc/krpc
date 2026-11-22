@@ -134,6 +134,16 @@ common:ci-linux --config=ci --config=system-llvm
 # compile actions a client's conformance testee needs.
 build:ci-linux --features=-parse_headers --host_features=-parse_headers
 
+# Build the C/C++ clients with Xcode's clang, in place of the hermetic LLVM
+# release. The LLVM tools the lint rules use are then the system ones, which
+# macOS skips anyway.
+common:xcode --//tools/build/llvm:toolchain=system
+common:xcode --extra_toolchains=@local_config_apple_cc_toolchains//:all
+
+# The macOS CI jobs, on the runner image's Xcode. Docker does not run on the
+# macOS runners, so a system LLVM cannot come from the buildenv image.
+common:ci-macos --config=ci --config=xcode
+
 # The Windows CI jobs. D: is the workspace disk of a GitHub Windows runner.
 # The bazel-fetch-windows action sets the output root, as a config cannot hold
 # a startup option.

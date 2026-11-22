@@ -81,6 +81,23 @@ Bazel caches the compiler it finds. If Bazel ran before the install, set ``BAZEL
 Under Git Bash, set ``MSYS2_ARG_CONV_EXCL="*"``. Without it, Git Bash rewrites ``//core:test`` into
 the path ``/core:test``.
 
+macOS
+^^^^^
+
+Install Bazel with ``brew install bazelisk``. Bazel skips the targets that need Linux, or a
+binary the build pins for Linux and Windows only: the serial IO tests, clang-tidy, clang-format
+and the Python lock file check.
+
+The protoc that compiles the mod's protocol buffers has no Apple silicon release, so it runs
+under Rosetta:
+
+.. code-block:: bash
+
+   softwareupdate --install-rosetta --agree-to-license
+
+The C and C++ clients build with the LLVM toolchain that Bazel downloads. Pass
+``--config=xcode`` to build them with Xcode's clang, as the CI builds do.
+
 Building
 --------
 

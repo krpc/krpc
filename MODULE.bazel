@@ -65,6 +65,12 @@ llvm.toolchain_root(
 # mode come from wrapper scripts in //tools/build/llvm, not from here.
 use_repo(llvm, "llvm_system", "llvm_toolchain", "llvm_toolchain_llvm")
 
+# Xcode's clang, which the macOS CI jobs build with through --config=xcode
+bazel_dep(name = "apple_support", version = "2.12.0")
+
+apple_cc_configure = use_extension("@apple_support//crosstool:setup.bzl", "apple_cc_configure_extension")
+use_repo(apple_cc_configure, "local_config_apple_cc_toolchains")
+
 register_toolchains("@llvm_toolchain//:all")
 
 # clang-format for the lint rules on Windows, where toolchains_llvm downloads no
@@ -87,6 +93,14 @@ http_archive(
     sha256 = "14fa81bdc34171edb5f1f02b1d60e74802f0439b77fa44e592565d517d72df90",
     strip_prefix = "doxygen-1.18.0",
     url = "https://github.com/doxygen/doxygen/releases/download/Release_1_18_0/doxygen-1.18.0.linux.bin.tar.gz",
+)
+
+http_archive(
+    name = "doxygen_macos",
+    build_file_content = "exports_files(['doxygen'])",
+    sha256 = "31d1c74467a9f6f456b4e6a4eff0c03e93d1ffa92da5fdf2d53a2f14ebaabbd7",
+    strip_prefix = "doxygen-1.18.0",
+    url = "https://github.com/doxygen/doxygen/releases/download/Release_1_18_0/doxygen-1.18.0-mac-arm.zip",
 )
 
 http_archive(
@@ -213,6 +227,13 @@ http_archive(
     build_file_content = "exports_files(['bin/protoc'])",
     sha256 = "121f6c7afe1d4d0e3ea6aab9432038599250134cbf4474cb1167d2c7decd4278",
     url = "https://github.com/protocolbuffers/protobuf/releases/download/v36.2/protoc-36.2-linux-x86_64.zip",
+)
+
+http_archive(
+    name = "protoc_osx_aarch_64",
+    build_file_content = "exports_files(['bin/protoc'])",
+    sha256 = "9cd98a532c5c5e0c4161314de0225de27e4c8a323917b6ea7b1b714d3ae23466",
+    url = "https://github.com/protocolbuffers/protobuf/releases/download/v36.2/protoc-36.2-osx-aarch_64.zip",
 )
 
 http_archive(

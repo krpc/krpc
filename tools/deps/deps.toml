@@ -108,6 +108,12 @@ source = "bcr:toolchains_llvm"
 at = ['MODULE.bazel: bazel_dep(name = "toolchains_llvm", version = "{version}")']
 
 [[dep]]
+name = "apple_support"
+version = "2.12.0"
+source = "bcr:apple_support"
+at = ['MODULE.bazel: bazel_dep(name = "apple_support", version = "{version}")']
+
+[[dep]]
 name = "rules_jvm_external"
 version = "7.2"
 source = "bcr:rules_jvm_external"
@@ -248,6 +254,7 @@ at = [
   'MODULE.bazel: bazel_dep(name = "protobuf", version = "{version}")',
   { file = "MODULE.bazel", text = "https://github.com/protocolbuffers/protobuf/releases/download/v{version}/protoc-{version}-linux-x86_32.zip", sha256 = true, strict = false },
   { file = "MODULE.bazel", text = "https://github.com/protocolbuffers/protobuf/releases/download/v{version}/protoc-{version}-linux-x86_64.zip", sha256 = true, strict = false },
+  { file = "MODULE.bazel", text = "https://github.com/protocolbuffers/protobuf/releases/download/v{version}/protoc-{version}-osx-aarch_64.zip", sha256 = true, strict = false },
   { file = "MODULE.bazel", text = "https://github.com/protocolbuffers/protobuf/releases/download/v{version}/protoc-{version}-osx-x86_64.zip", sha256 = true, strict = false },
   { file = "MODULE.bazel", text = "https://github.com/protocolbuffers/protobuf/releases/download/v{version}/protoc-{version}-win32.zip", sha256 = true, strict = false },
   "MODULE.bazel: com.google.protobuf:protobuf-java:4.{version}",
@@ -334,6 +341,7 @@ tag = 'Release_(\d+_\d+_\d+)'
 at = [
   { file = "MODULE.bazel", text = "https://github.com/doxygen/doxygen/releases/download/Release_{version:_}/doxygen-{version}.linux.bin.tar.gz", sha256 = true, strict = false },
   { file = "MODULE.bazel", text = "https://github.com/doxygen/doxygen/releases/download/Release_{version:_}/doxygen-{version}.windows.x64.bin.zip", sha256 = true, strict = false },
+  { file = "MODULE.bazel", text = "https://github.com/doxygen/doxygen/releases/download/Release_{version:_}/doxygen-{version}-mac-arm.zip", sha256 = true, strict = false },
   'MODULE.bazel: strip_prefix = "doxygen-{version}"',
 ]
 
