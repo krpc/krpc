@@ -102,7 +102,7 @@ The `build-setup` action stamps `config.bzl` with `x.y.z-<count>-g<sha>`, where 
 number of commits since the last release tag. The count orders dev builds and stays inside the
 16-bit build field of a .NET assembly version. The checkout is shallow, so the action deepens it
 first, fetching commits but no trees or blobs. The `g` prefix stops Python packaging reading an
-all-digit sha as a number.
+all-digit sha as a number. `KRPC.Core` takes `core_version`, which the action leaves as it is.
 
 ### The Tool Packages
 

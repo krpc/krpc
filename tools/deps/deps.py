@@ -365,7 +365,8 @@ PIN_FORMS: list[tuple[tuple[str, ...], re.Pattern[str]]] = [
 
 # Matches of the forms above that are not dependencies
 NOT_PINS: list[tuple[str, re.Pattern[str]]] = [
-    ("config.bzl", re.compile(r'(?m)^version = "')),  # kRPC's own version
+    # kRPC's own version, and the version of KRPC.Core
+    ("config.bzl", re.compile(r'(?m)^(core_)?version = "')),
     ("tools/krpctools/pyproject.toml", re.compile(r'"krpc >= ')),  # set by the build
     # kRPC for KSA's own version, the kRPC client release it works with, and the KSA build,
     # which is closed source and has no release to check. update-ksa.py moves the KSA build.
