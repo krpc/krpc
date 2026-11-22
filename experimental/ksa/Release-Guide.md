@@ -34,11 +34,12 @@ branch such as `release/0.8` ([release branches](../../Release-Guide.md#release-
    and the manual run pass, then check out the release commit.
 2. `10-preflight.py` - checks the tree, the release commit, the tools, the KSA install, the
    credentials, SpaceDock and the Borea listing. Read-only, so run it as often as you like.
-3. `20-borea-listing.py [--game-min <build>] [--loader-min <version>]` - sets the KSA and StarMap
-   minimums of the `kRPC` listing in the Borea content index. They default to the KSA build and
-   StarMap release in `config.bzl`. The step opens a pull request from your fork of
-   `KSAModding/content-index`, and waits for it to merge itself. The Borea watcher stamps a
-   release with the listing's bounds at the time, so this comes before the GitHub release.
+3. `20-borea-listing.py` - sets the KSA and StarMap minimums of the `kRPC` listing in the Borea
+   content index to the KSA build and StarMap release in `config.bzl`. KSA is in early access, so
+   each release requires the versions it was built and tested against. The step opens a pull
+   request from your fork of `KSAModding/content-index`, and waits for it to merge itself. The
+   Borea watcher stamps a release with the listing's bounds at the time, so this comes before the
+   GitHub release.
 
 ## 2. Build and Tag
 

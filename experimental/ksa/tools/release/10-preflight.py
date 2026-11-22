@@ -135,20 +135,13 @@ def check_listing(report, pins):
     except lib.ReleaseError as exception:
         report.fail(str(exception))
         return
-    if game_min == pins["ksa_version"]:
-        report.ok(f"game_min is {game_min}, the KSA build the release is built against")
+    pinned = (pins["ksa_version"], pins["starmap_version"])
+    if (game_min, loader_min) == pinned:
+        report.ok(f"the listing requires KSA {game_min} and StarMap {loader_min}")
     else:
-        report.warn(
-            f"game_min is {game_min}, and the release is built against "
-            f"{pins['ksa_version']} (20-borea-listing.py updates it)"
-        )
-    if loader_min == pins["starmap_version"]:
-        report.ok(f"the StarMap min is {loader_min}, the pinned StarMap")
-    else:
-        report.warn(
-            f"the StarMap min is {loader_min}, and the pinned StarMap is "
-            f"{pins['starmap_version']}; check the min is the oldest StarMap the "
-            f"release runs on"
+        report.ok(
+            f"the listing requires KSA {game_min} and StarMap {loader_min}; "
+            f"20-borea-listing.py sets {pinned[0]} and {pinned[1]}"
         )
 
 
