@@ -50,23 +50,41 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          # The doc examples are compiled and clang-tidied in jobs of their
+          # own, the C++ ones in the shards of doc/BUILD.bazel
+          - name: test-docs-examples-cpp-1
+            build: //doc:compile-scripts-cpp-1
+            test: //doc:clangtidy-cpp-1
+            cpp-cache: restore
+          - name: test-docs-examples-cpp-2
+            build: //doc:compile-scripts-cpp-2
+            test: //doc:clangtidy-cpp-2
+            cpp-cache: restore
+          - name: test-docs-examples-cpp-3
+            build: //doc:compile-scripts-cpp-3
+            test: //doc:clangtidy-cpp-3
+            cpp-cache: restore
+          - name: test-docs-examples-cpp-4
+            build: //doc:compile-scripts-cpp-4
+            test: //doc:clangtidy-cpp-4
+            cpp-cache: restore
+          - name: test-docs-examples
+            build: >-
+              //doc:compile-scripts-cnano //doc:compile-scripts-csharp
+              //doc:compile-scripts-docgen //doc:compile-scripts-java
+            test: //doc:clangtidy-cnano
+            cpp-cache: restore
           - name: build-docs-html
             build: //doc:html
             artifact: docs-html
             path: bazel-bin/doc/html.zip
-          - name: build-docs-examples
-            build: //doc:compile-scripts
-            cpp-cache: restore
           - name: build-benchmarks
             build: //tools/benchmarks/...
             cpp-cache: restore
-          # The doc examples' clang-tidy takes longer than the rest of
-          # //doc:test, so it has a job of its own. --build_tests_only stops
-          # the test_suite building the clang-tidy check as a dependency.
+          # --build_tests_only stops //doc:test building the clang-tidy
+          # checks as dependencies
           - name: test-docs
             test: --build_tests_only -- //doc:test -//doc:clangtidy
-          - name: test-docs-clangtidy
-            test: //doc:clangtidy
           - name: test-core
             test: //core:test
           - name: test-service
