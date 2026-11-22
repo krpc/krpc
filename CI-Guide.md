@@ -126,8 +126,11 @@ causes in fastbuild.
 ### Limits
 
 The workflow token is read-only, except in `prune-caches`, which deletes caches. It is a
-workflow of its own, as a workflow that `daily` calls cannot be granted more than `daily` has. A
-new push to a pull request cancels the run it superseded.
+workflow of its own, as a workflow that `daily` calls cannot be granted more than `daily` has.
+
+A new push to a pull request cancels the run it superseded. The concurrency group is the pull
+request's head ref. Merge queue runs, pushes and manual runs have none, and take the run id, so
+nothing cancels them.
 Every job times out after 30 minutes, about twice the longest job on a cache miss, so a hung job
 gives its runner back instead of holding it for six hours.
 
@@ -149,6 +152,8 @@ all-digit sha as a number. `KRPC.Core` takes `core_version`, which the action le
 and Windows runners with Python and .NET but no Bazel. `tools/ci/smoke_test_tools.py` then runs
 each krpctools command once, as a user would. It checks what the Bazel tests cannot: the package
 installs, its entry points run, and the bundled .NET tools start on the runner's dotnet host.
+The conformance command drives the Python client's testee, whose protobuf module the job
+generates with `grpcio-tools`.
 
 ### The Solution Build
 
@@ -184,8 +189,10 @@ every later Bazel command in a job uses it. Both include `ci`. Keeping the setti
 GitHub evicts a cache unused for 7 days, and the least recently used ones over the repository's
 10 GB. A cache saved by a pull request run is visible only to that pull request, and one saved
 by a merge queue run is lost with the queue's branch. So the caches later runs restore are saved
-by the push run on `main`, which builds only to fill a missing cache. The daily jobs run on
-`main` only in the daily run, which saves their caches.
+by the push run on `main`, which builds only to fill a missing cache. Each of its jobs checks its
+keys without restoring them. The Bazel download cache is the exception: it is restored, as
+computing the C++ disk cache key fetches repositories. The daily jobs run on `main` only in the
+daily run, which saves their caches.
 
 The daily jobs' caches are touched once a day at most, so they are the least recently used, and
 the first evicted. Two things keep them:

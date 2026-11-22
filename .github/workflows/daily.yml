@@ -1,8 +1,7 @@
 name: daily
 
-# Runs ci on main with its daily jobs, which pull requests and the merge queue
-# skip. tools/ci/daily_due.py decides whether a scheduled run calls ci. A
-# manual run always does.
+# Runs ci with its daily jobs. tools/ci/daily_due.py decides whether a scheduled
+# run calls ci.
 on:
   schedule:
     # 04:37 UTC, off peak and away from the start of the hour, which is busiest
